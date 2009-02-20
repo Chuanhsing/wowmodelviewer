@@ -1,0 +1,39 @@
+
+/*
+WoW model viewer uses
+wxWidgets(2.8.0), OpenGL, zlib, CxImage(5.99c), MPQLib, DDSLib, GLEW(1.3.3)
+
+You MUST have those libs to be able to compile.   OpenGL libs should come with Visual C++, 
+if it doesn't then you will need to download the Windows Platform SDK.
+So first compile wxWidgets lib. You will also need to compile CxImage lib/dll. 
+
+If you don't know where to get them,  just google for them.  Most likely the very first result is the
+one you want.
+
+Once you have all these libs/dll's compiled,  you will need to make sure that their Header Include paths
+and Lib paths have been added to the project path list.
+
+As for the program "flow",  it all starts with App.cpp,  these initiates the program using
+wxWidgets to handle all events, etc.  Once the program has initiated it will then create a
+window frame, this being "modelviewer.cpp".   So essentially The flow could be read as something like...
+
+App.cpp		---> Modelviewer.cpp	--->	Modelcanvas.cpp		--->	model.cpp			---> Particle.cpp
+																--->	wmo.cpp
+									--->	Modelcontrol.cpp
+									--->	Modelexport.cpp
+									--->	AnimExporter.cpp
+									--->	lightcontrol.cpp
+									--->	Animcontrol.cpp
+									--->	charcontrol.cpp
+									--->	database.cpp		--->	mpq_libmpq.cpp
+																--->	dbcfile.cpp
+			---> Video.cpp			--->	ddslib.cpp
+			---> util.cpp
+			
+Of course it isn't 'exactly' like that since a lot of the controls/objects interlink with each other, 
+but you get the idea.
+
+Its a bit of a mess... actually thats an understatement, but thats to be expected when there
+wasn't any actual program design.  Instead it used and relied on the "evolutionary design process".
+
+*/
