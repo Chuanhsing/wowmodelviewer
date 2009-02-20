@@ -1,0 +1,324 @@
+2004-02-12
+
+	GNU mpq-tools 0.3.0 was released.
+
+2004-02-12   Maik Broemme <mbroemme@plusserver.de>
+
+	* FAQ: updated the example with information about
+	  libmpq_listfile_open()
+
+	* README: updated for the new functions
+
+	* configure.ac: added db/Makefile and db/diablo2/Makefile target,
+	  updated libmpq version information
+
+	* Makefile.am: added new subdir db to target
+
+	* TODO: added error handling to TODO
+
+	* libmpq/mpq.c: added function libmpq_file_number(),
+	  libmpq_file_check(), libmpq_listfile_open() and
+	  libmpq_listfile_close()
+
+	* libmpq/parser.c: added function libmpq_conf_parse_line() and
+	  libmpq_conf_get_array()
+
+	* libmpq/mpq.h: - added LIBMPQ_FILE_TYPE_INT and
+	  LIBMPQ_FILE_TYPE_CHAR to define which type a file has - added
+	  LIBMPQ_CONF_EFILE_OPEN, LIBMPQ_CONF_EFILE_CORRUPT,
+	  LIBMPQ_CONF_EFILE_LIST_CORRUPT, LIBMPQ_CONF_EFILE_NOT_FOUND and
+	  LIBMPQ_CONF_EFILE_VERSION - exported all new library functions.
+
+	* libmpq/common.c: added function libmpq_read_listfile() to parse
+	  list database file and removed no longer needed
+	  libmpq_get_listfile()
+
+	* libmpq/common.h: renamed LIBMPQ_CONF_EVALUE to
+	  LIBMPQ_CONF_EVALUE_NOT_FOUND
+
+	* src/Makefile.am: added -DLIBMPQ_LISTDB_PATH to CFLAGS
+
+	* src/mpq-extract.c: - added function mpq_extract_file_extract() to
+	  extract files from mpq archive - added support for using internal
+	  listfile database or specific listfile - added support for
+	  namebased and numberbased extraction - added support for
+	  extracting specific file
+
+	* src/mpq-extract.h: added members listfile, number, file and
+	  filename to the mpq_extract_options_s structure
+
+	* src/mpq-info.h: increased patchlevel to 1 :)
+
+	* src/mpq-info.c: removed mpq_a->header memory allocation because
+	  it is not needed
+
+	* db/: diablo2/Makefile.am, Makefile.am: initial checkin
+
+	* db/diablo2/setup.mpq.conf: changed names again for final release
+	  of libmpq 0.3.0
+
+2004-01-31   Maik Broemme <mbroemme@plusserver.de>
+
+	* libmpq/common.h: merged with parser.h
+
+	* libmpq/parser.c: renamed some defines
+
+	* libmpq/common.c: renamed some defines
+
+	* src/mpq-extract.c: added libmpq_get_listfile()
+
+	* libmpq/parser.h: merged with common.h
+
+	* libmpq/common.c: small bugfixes
+
+	* libmpq/parser.c: fixed int return
+
+	* libmpq/common.c: added union for the return values
+
+	* libmpq/parser.c: added types to libmpq_conf_get_value()
+
+	* libmpq/parser.h: initial checkin
+
+	* db/diablo2/setup.mpq.conf: version 2 of config file
+
+	* libmpq/parser.c: initial checkin
+
+	* libmpq/Makefile.am: added parser.c
+
+	* libmpq/common.c: changed the complete libmpq_get_listfile_rec()
+	  function
+
+	* libmpq/common.h: added some new defines
+
+	* libmpq/mpq.c: changed listfile detection
+
+	* libmpq/mpq.h: file descriptor in mpq_list is not needed
+
+2004-01-29   Maik Broemme <mbroemme@plusserver.de>
+
+	* libmpq/common.c: replaced a strcmp() with strncmp()
+
+	* libmpq/common.c: added function libmpq_free_listfile() to free
+	  memory used for getting all listdb files and
+	  libmpq_get_listfile_rec() to return a record from listdb
+	  directory
+
+	* libmpq/Makefile.am: added common.h to noinst_HEADERS
+
+	* libmpq/common.h: initial checkin
+
+2004-01-28   Maik Broemme <mbroemme@plusserver.de>
+
+	* libmpq/mpq.c: fixed a misunderstanding comment :)
+
+	* libmpq/mpq.h: added members mpq_name, mpq_type, mpq_game and
+	  mpq_game_version to struct mpq_list
+
+	* libmpq/common.c: added function libmpq_get_listfile() to retrieve
+	  filelist of available listfiles
+
+	* src/: mpq-info.h, mpq-extract.h: added some #ifndef for header
+	  already included
+
+2004-01-24   Maik Broemme <mbroemme@plusserver.de>
+
+	* src/mpq-extract.c: updated for use of libmpq_file_name()
+
+	* libmpq/common.c: added function libmpq_detect_listfile() which
+	  reads some file information and decide which listfile should be
+	  used
+
+	* libmpq/mpq.h: added filename member to mpq_file.
+
+	* libmpq/mpq.c: added function libmpq_file_name() to retrieve
+	  filename by given number
+
+2004-01-23   Maik Broemme <mbroemme@plusserver.de>
+
+	* src/mpq-extract.c: maybe a broken td tag :)
+
+	* src/mpq-extract.c: added the id tag
+
+	* libmpq/mpq.h: added new defines used by libmpq_file_info()
+
+	* libmpq/mpq.c: added the libmpq_file_info() function to get some
+	  useful information about a file inside an archive
+
+	* src/mpq-extract.c: added the file information for compressed and
+	  uncompressed size and the compression type
+
+	* TODO: added the job for bruting all unknown filenames in
+	  blizzards mpq archives
+
+2004-01-22   Maik Broemme <mbroemme@plusserver.de>
+
+	* db/diablo2/setup.mpq.conf: added the rest of the known files for
+	  that archive
+
+2004-01-21   Maik Broemme <mbroemme@plusserver.de>
+
+	* db/diablo2/setup.mpq.conf: added new files to the german filelist
+
+	* src/mpq-extract.c: massive rewrite for use with listfile support
+	  in libmpq-0.3.0
+
+	* src/mpq-extract.h: added commandline option structure
+
+	* libmpq/common.c: removed all external library functions
+
+	* libmpq/mpq.c: all functions, developer should use stay now here
+
+	* libmpq/Makefile.am: updated for mpq.c
+
+	* db/diablo2/setup.mpq.conf: initial checkin
+
+2004-01-17
+
+	GNU mpq-tools 0.2.1 was released.
+
+2004-01-17   Maik Broemme <mbroemme@plusserver.de>
+
+	* libmpq/Makefile.am: fixed for installing the mpq.h
+
+	* AUTHORS, COPYING, FAQ, INSTALL, README, THANKS, TODO: initial
+	  checkin for first public release
+
+	* src/: mpq-extract.c, mpq-info.c: upgraded for common naming
+	  scheme
+
+	* libmpq/: common.c, explode.c, explode.h, extract.c, huffman.c,
+	  mpq.h, wave.c, wave.h: upgraded for common naming scheme
+
+2004-01-16   Maik Broemme <mbroemme@plusserver.de>
+
+	* libmpq/Makefile.am: added noinst_HEADERS
+
+	* configure.ac: disable default built of shared libraries
+
+	* src/Makefile.am: some better dependency handling
+
+	* src/mpq-extract.h: initial checkin with default defines for
+	  mpq-extract.c
+
+	* src/mpq-extract.c: first usable command line version for
+	  extracting
+
+	* src/mpq-info.c: changed some defines to fit the naming scheme
+
+	* src/mpq-info.h: changed some defines to fit the naming scheme
+
+2004-01-09   Maik Broemme <mbroemme@plusserver.de>
+
+	* libmpq/Makefile.am: libmpq would be installed from now on
+
+	* configure.ac: libmpq would be installed from now on
+
+	* src/: mpq-info.c, mpq-info.h: verbose mode removed because it is
+	  not needed for that small utility
+
+2004-01-07   Maik Broemme <mbroemme@plusserver.de>
+
+	* configure.ac: added zlib check and ability to disable zlib.
+
+	* src/mpq-info.c: added functions to get mpq archive informations.
+
+	* src/mpq-info.h: added structure which saves the command line
+	  arguments for later use
+
+	* src/mpq-extract.c: updated to only extract files from archive,
+	  nothing more or less
+
+	* src/Makefile.am: removed mpq-common.c from build rules.
+
+	* src/mpq-common.c: common functions moved to libmpq/common.c
+
+	* src/Makefile.am: updated for mpq-info.c and mpq-info.h
+
+	* libmpq/: wave.c, wave.h: functions for wave file decompression
+	  used by blizzard in storm.dll
+
+	* libmpq/: huffman.c, huffman.h: functions for the huffman
+	  decompression used by blizzard in storm.dll
+
+	* libmpq/explode.h: added structures for the PKWARE decompression
+	  routines
+
+	* libmpq/common.c: common functions used and exported with libmpq
+
+	* libmpq/extract.c: added wave, zlib and huffman decompression
+	  functions.
+
+	* libmpq/explode.c: changed copyright and removed no longer needed
+	  include files.
+
+	* libmpq/Makefile.am: updated for new source files.
+
+	* libmpq/mpq.h: updated for wave, zlib and huffman decompression
+
+	* libmpq/mpqpkzip.h: no longer needed, because moved to explode.h
+
+2003-12-03   Maik Broemme <mbroemme@plusserver.de>
+
+	* src/mpq-tools.h: mpq-tools.h moved to libmpq and named mpq.h
+
+	* libmpq/mpq.h: old mpq-tools.h renamed to mpq.h and put to libmpq,
+	  also some updates fpr the PKWARE compression.
+
+	* libmpq/: explode.c, extract.c, mpqpkzip.h: initial checkin for
+	  libmpq library
+
+	* Makefile.am, configure.ac, src/Makefile.am, src/mpq-common.c,
+	  src/mpq-extract.c: All files updated for seperate libmpq and
+	  PKWARE data compression
+
+2003-11-30   Maik Broemme <mbroemme@plusserver.de>
+
+	* src/mpq-tools.h: some new defines for MPQ handling
+
+	* src/mpq-extract.c: updates fore new functions
+
+	* src/mpq-common.c: added more extracting code
+
+2003-11-29   Maik Broemme <mbroemme@plusserver.de>
+
+	* src/mpq-extract.c: updated for new mpq-common.c
+
+	* src/mpq-tools.h: added more error replies
+
+	* src/mpq-common.c: added mpq_extract_file()
+
+2003-11-16   Maik Broemme <mbroemme@plusserver.de>
+
+	* src/mpq-tools.h: more defines and some changes to archive
+	  structure
+
+	* src/mpq-extract.c: updated for new functions
+
+	* src/mpq-common.c: added decrypt functions for hash- and
+	  blocktable
+
+2003-11-05   Maik Broemme <mbroemme@plusserver.de>
+
+	* src/mpq-extract.c: added some debug infos
+
+	* src/mpq-tools.h: more defines :)
+
+	* src/mpq-common.c: added the hash header handling
+
+2003-11-04   Maik Broemme <mbroemme@plusserver.de>
+
+	* src/mpq-common.c: changes for the new structs and replaced the
+	  dirty for (;;)
+
+	* src/mpq-extract.c: changes for the new structs
+
+	* src/mpq-tools.h: changed the struct definitions
+
+	* src/: Makefile.am, mpq-common.c, mpq-extract.c, mpq-tools.h:
+	  initial checkin
+
+2003-11-02   Maik Broemme <mbroemme@plusserver.de>
+
+	* Makefile.am, autogen.sh, configure.ac, src/Makefile.am,
+	  src/mpq-extract.c: initial checkin
+
