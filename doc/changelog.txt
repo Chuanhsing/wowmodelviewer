@@ -1,0 +1,6 @@
+@ 2009-05-24 19:35 Anthony
+
+Added this changelog
+
+Added a copy of wxWidgets under src/wx
+ (simply added entire content of wxMSW-2.8.9.zip)
