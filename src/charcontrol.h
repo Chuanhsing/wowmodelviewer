@@ -66,7 +66,7 @@ struct CharTexture
 	std::vector<CharTextureComponent> components;
 	void addLayer(wxString fn, int region, int layer)
 	{
-		if (fn==0 || fn.length()==0)
+		if (!fn || fn.length()==0)
 			return;
 
 		CharTextureComponent ct;

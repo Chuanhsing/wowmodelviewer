@@ -1363,7 +1363,7 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 			// load the cape texture
 			const char *tex = r.getString(ItemDisplayDB::Skin);
 			if (tex && strlen(tex)) 
-				capeTex = texturemanager.add(AnimControl::makeSkinTexture("Item\\ObjectComponents\\Cape\\",tex));
+				capeTex = texturemanager.add((std::string)AnimControl::makeSkinTexture("Item\\ObjectComponents\\Cape\\",tex));
 		}
 
 		// robe
@@ -1709,7 +1709,7 @@ void CharTexture::compose(TextureID texID)
 {
 	// if we only have one texture then don't bother with compositing
 	if (components.size()==1) {
-		Texture temp(components[0].name);
+		Texture temp((std::string)components[0].name);
 		texturemanager.LoadBLP(texID, &temp);
 		return;
 	}
@@ -1721,7 +1721,7 @@ void CharTexture::compose(TextureID texID)
 	for (std::vector<CharTextureComponent>::iterator it = components.begin(); it != components.end(); ++it) {
 		CharTextureComponent &comp = *it;
 		const CharRegionCoords &coords = regions[comp.region];
-		TextureID temptex = texturemanager.add(comp.name);
+		TextureID temptex = texturemanager.add((std::string)comp.name);
 		Texture &tex = *((Texture*)texturemanager.items[temptex]);
 
 		tex.getPixels(tempbuf);
@@ -2056,7 +2056,7 @@ void CharControl::selectMount()
 			wxString str((*it).fn);
 			str.MakeLower();
 			creaturemodels.push_back(str);
-			ridablelist.push_back(knownRidable.find(str)!=knownRidable.end());
+			ridablelist.push_back(knownRidable.find((std::string)str)!=knownRidable.end());
 		}
 		filelistInitialized = true;
 	}
@@ -2231,7 +2231,7 @@ void CharControl::OnUpdateItem(int type, int id)
 			g_animControl->UpdateModel(model);
 		} else {
 			//wxString fn(creaturemodels[id-1].c_str());
-			Model *m = new Model(creaturemodels[id-1], false);
+			Model *m = new Model((std::string)creaturemodels[id-1], false);
 			m->isMount = true;
 
 			// TODO: check if model is ridable

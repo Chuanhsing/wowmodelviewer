@@ -27,16 +27,6 @@
 #else
 #	include <GL/gl.h>
 #	include <GL/glu.h>
-// #	include <GL/glut.h>
-#	ifdef _WIN32
-#		include <GL/glaux.h>
-//#		include "wglext.h"		//WGL extensions
-//#		include "glext.h"		//GL extensions
-#	else
-#		include <stdarg.h>
-#		include <GL/glext.h>
-#		include <GL/glx.h>
-#	endif
 #endif
 
 

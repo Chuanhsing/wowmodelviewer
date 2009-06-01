@@ -305,7 +305,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 
 	// see if this model has skins
 	try {
-		CreatureModelDB::Record rec = modeldb.getByFilename(fn);
+		CreatureModelDB::Record rec = modeldb.getByFilename((std::string)fn);
 		// for character models, don't use skins
 		if (rec.getUInt(CreatureModelDB::Type) != 4) {
 			//TextureSet skins;
@@ -837,7 +837,7 @@ void AnimControl::SetSkin(int num)
 	for (int i=0; i<grp->count; i++) {
 		if (g_selModel->useReplaceTextures[grp->base+i]) {
 			texturemanager.del(g_selModel->replaceTextures[grp->base+i]);
-			g_selModel->replaceTextures[grp->base+i] = texturemanager.add(makeSkinTexture(g_selModel->name.c_str(), grp->tex[i].c_str()));
+			g_selModel->replaceTextures[grp->base+i] = texturemanager.add((std::string)makeSkinTexture(g_selModel->name.c_str(), grp->tex[i].c_str()));
 		}
 	}
 

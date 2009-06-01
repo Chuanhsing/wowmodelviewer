@@ -13,6 +13,7 @@
 
 #include "vec3d.h"
 #include "enums.h"
+#include <vector>
 
 struct ModelBank
 {

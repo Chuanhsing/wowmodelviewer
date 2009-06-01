@@ -1,3 +1,42 @@
+@ 2009-06-01 19:50 Anthony
+
+Minimum changes to make the solution build without needing extra
+configuration in Visual Studio Express 2008 with Windows Platform SDK
+on my Win XP box. Hoping that others will find Debug and Release
+configs build out the box also.
+
+Could be much cleaner - builds slow because of poor #includes and no
+pre-compiled headers, still has build warnings, contains unnecessary
+projects, configs, and some prebuilt binaries - but one step at a time.
+
+Changes performed:
+
+Updated old dsps and existing vcproj's to MSVC9.0,
+and bundled them into the main solution.
+
+animcontrol.cpp, charcontrol.cpp:
+A few grotty casts to std::string. Have a feeling these should not
+be needed and that wxString is not being built quite right.
+charcontrol.h:
+Can't compare wxString with 0 - use operator(!) instead.
+
+OpenGLHeaders.h:
+Removed unused GL aux and extensions. The former is deprecated from
+at least MSVC8.0 and the libs are no longer supplied.
+app.h
+Similar changes to link correct glew libs rather than gl aux.
+
+modelbankcontrol.h:
+Added missing #include of <vector>
+
+util.cpp:
+#include wx/msw/winundef.h to avoid macro clash with CreateDialog.
+
+Also attempted to add sufficient svn:ignores to cover build artifacts
+etc. This included svn rm of some build dirs too, should know if it
+worked properly following commit.
+
+
 @ 2009-05-24 19:35 Anthony
 
 Added this changelog

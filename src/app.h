@@ -28,12 +28,13 @@
 #pragma comment( lib, "opengl32.lib" )	// OpenGL API
 #pragma message("     Adding library: glu32.lib" ) 
 #pragma comment( lib, "glu32.lib" ) // OpenGL Utilities
-#pragma message("     Adding library: gluax.lib" ) 
-#pragma comment( lib, "glaux.lib" ) // OpenGL Auxiallary support
-#pragma message("     Adding library: glew32.lib" ) 
-#pragma comment( lib, "glew32.lib" ) // GLEW lib
-//#pragma message("     Adding library: fmod32.lib" ) 
-//#pragma comment( lib, "fmodvc.lib" ) // FMOD (sound) lib
+#ifdef _DEBUG // GLEW lib
+	#pragma message("     Adding library: glew32d.lib" ) 
+	#pragma comment( lib, "glew32d.lib" )
+#else
+	#pragma message("     Adding library: glew32.lib" ) 
+	#pragma comment( lib, "glew32.lib" )
+#endif
 
 #pragma message("     Adding library: uxtheme.lib" ) 
 #pragma comment( lib, "uxtheme.lib" ) // WinXP Theme Engine

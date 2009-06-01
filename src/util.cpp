@@ -1,5 +1,6 @@
 #include "util.h"
 #include "CxImage/ximage.h"
+#include <wx/msw/winundef.h>
 #include <wx/choicdlg.h>
 #include <wx/dir.h>
 
