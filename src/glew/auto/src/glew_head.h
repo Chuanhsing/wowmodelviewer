@@ -64,7 +64,7 @@ typedef unsigned short wchar_t;
 #endif
 /* <stddef.h> */
 #if !defined(_W64)
-#  if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300
+#  if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && defined(_MSC_VER) && _MSC_VER >= 1300
 #    define _W64 __w64
 #  else
 #    define _W64
@@ -118,6 +118,7 @@ typedef _W64 int ptrdiff_t;
  */
 
 #include <stddef.h>
+#include <stdint.h>
 
 #define GLEW_APIENTRY_DEFINED
 #define APIENTRY
@@ -142,19 +143,11 @@ extern "C" {
 #ifndef GL_VERSION_1_1
 #define GL_VERSION_1_1 1
 
-#if defined(__APPLE__)
-typedef unsigned long GLenum;
-typedef unsigned long GLbitfield;
-typedef unsigned long GLuint;
-typedef long GLint;
-typedef long GLsizei;
-#else
 typedef unsigned int GLenum;
 typedef unsigned int GLbitfield;
 typedef unsigned int GLuint;
 typedef int GLint;
 typedef int GLsizei;
-#endif
 typedef unsigned char GLboolean;
 typedef signed char GLbyte;
 typedef short GLshort;
@@ -166,12 +159,20 @@ typedef float GLclampf;
 typedef double GLdouble;
 typedef double GLclampd;
 typedef void GLvoid;
-#if defined(_MSC_VER) && _MSC_VER < 1400
+#if defined(_MSC_VER)
+#  if _MSC_VER < 1400
 typedef __int64 GLint64EXT;
 typedef unsigned __int64 GLuint64EXT;
-#else
+#  else
 typedef signed long long GLint64EXT;
 typedef unsigned long long GLuint64EXT;
+#  endif
+#else
+#  if defined(__MINGW32__)
+#include <inttypes.h>
+#  endif
+typedef int64_t GLint64EXT;
+typedef uint64_t GLuint64EXT;
 #endif
 
 #define GL_ACCUM 0x0100
