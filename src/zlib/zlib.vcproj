@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="big5"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="zlib"
 	ProjectGUID="{D3F9754D-071C-4E58-847B-DDE9D564EF72}"
 	Keyword="MFCProj"

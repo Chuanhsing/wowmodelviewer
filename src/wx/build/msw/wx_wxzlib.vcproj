@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="wxzlib"
 	ProjectGUID="{A811B0C4-440C-4771-949C-8FD515FF6D34}"
 	TargetFrameworkVersion="0"

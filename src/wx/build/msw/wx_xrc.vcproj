@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="xrc"
 	ProjectGUID="{951D26C4-385C-44DC-8D36-B0DD66338EF8}"
 	TargetFrameworkVersion="0"

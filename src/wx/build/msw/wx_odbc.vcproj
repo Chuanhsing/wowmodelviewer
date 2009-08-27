@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="odbc"
 	ProjectGUID="{9A54957B-F844-4739-A592-B00F8C16D7E4}"
 	TargetFrameworkVersion="0"

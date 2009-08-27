@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="big5"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="glew_shared"
 	ProjectGUID="{9D92BED5-F738-4B9B-9CE8-A4D427263277}"
 	TargetFrameworkVersion="131072"

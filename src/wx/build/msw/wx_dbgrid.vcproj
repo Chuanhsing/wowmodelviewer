@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="dbgrid"
 	ProjectGUID="{54523BE0-0841-4C89-B3E1-0C446AEBEA48}"
 	TargetFrameworkVersion="0"

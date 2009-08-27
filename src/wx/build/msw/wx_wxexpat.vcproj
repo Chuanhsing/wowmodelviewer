@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="wxexpat"
 	ProjectGUID="{C8679A3D-084A-4CD8-BFD2-13C451473E2D}"
 	TargetFrameworkVersion="0"

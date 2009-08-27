@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="gl"
 	ProjectGUID="{99A85E75-FB11-4746-9B21-940791594E15}"
 	TargetFrameworkVersion="0"

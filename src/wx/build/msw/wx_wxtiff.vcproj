@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="wxtiff"
 	ProjectGUID="{4C8C28BB-4A63-4621-8B23-C854DAF4A6DC}"
 	TargetFrameworkVersion="0"

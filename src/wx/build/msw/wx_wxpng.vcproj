@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="wxpng"
 	ProjectGUID="{99E29FAB-D3D6-4F34-B895-E7D4AD33C932}"
 	TargetFrameworkVersion="0"

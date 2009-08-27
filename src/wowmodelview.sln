@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C++ Express 2008
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wowmodelview", "wowmodelview.vcproj", "{DCA0C667-2A7A-4FCE-AD02-466F7A380E0C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D3F9754D-071C-4E58-847B-DDE9D564EF72} = {D3F9754D-071C-4E58-847B-DDE9D564EF72}

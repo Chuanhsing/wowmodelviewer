@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="media"
 	ProjectGUID="{C41A0E55-1F88-495D-8146-5EAC674866C2}"
 	TargetFrameworkVersion="0"
