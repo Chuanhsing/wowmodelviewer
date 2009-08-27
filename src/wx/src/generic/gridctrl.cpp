@@ -4,7 +4,7 @@
 // Author:      Paul Gammans, Roger Gammans
 // Modified by:
 // Created:     11/04/2001
-// RCS-ID:      $Id: gridctrl.cpp 54421 2008-06-29 15:15:19Z SN $
+// RCS-ID:      $Id: gridctrl.cpp 59121 2009-02-25 00:09:23Z VZ $
 // Copyright:   (c) The Computer Surgery (paul@compsurg.co.uk)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -357,9 +357,19 @@ wxGridCellAutoWrapStringRenderer::GetTextLines(wxGrid& grid,
         dc.GetTextExtent(tok, &x, &y);
         if ( curr_x + x > max_x)
         {
-            lines.Add( wxString(thisline) );
-            thisline = tok;
-            curr_x=x;
+            if ( curr_x == 0 )
+            {
+                // this means that a single token is wider than the maximal
+                // width -- still use it as is as we need to show at least the
+                // part of it which fits
+                lines.Add(tok);
+            }
+            else
+            {
+                lines.Add(thisline);
+                thisline = tok;
+                curr_x = x;
+            }
         }
         else
         {

@@ -4,7 +4,7 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     2005-09-30
-// RCS-ID:      $Id: richtexthtml.cpp 51375 2008-01-25 16:38:18Z JS $
+// RCS-ID:      $Id: richtexthtml.cpp 56989 2008-11-28 12:20:12Z JS $
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -239,8 +239,9 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttrEx& WXUNUSE
                 int listType = TypeOfList(thisStyle, tag);
                 m_listTypes.Add(listType);
 
-                wxString align = GetAlignment(thisStyle);
-                str << wxString::Format(wxT("<p align=\"%s\">"), align.c_str());
+                // wxHTML needs an extra <p> before a list when using <p> ... </p> in previous paragraphs.
+                // TODO: pass a flag that indicates we're using wxHTML.
+                str << wxT("<p>\n");
 
                 str << tag;
             }
@@ -290,7 +291,7 @@ void wxRichTextHTMLHandler::EndParagraphFormatting(const wxTextAttrEx& WXUNUSED(
         stream << wxT("</td></tr></table></p>\n");
         m_inTable = false;
     }
-    else
+    else if (!thisStyle.HasBulletStyle())
         stream << wxT("</p>\n");
 }
 

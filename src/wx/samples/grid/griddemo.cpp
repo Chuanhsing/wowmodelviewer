@@ -3,7 +3,7 @@
 // Purpose:     Grid control wxWidgets sample
 // Author:      Michael Bedward
 // Modified by: Santiago Palacios
-// RCS-ID:      $Id: griddemo.cpp 52411 2008-03-09 12:59:26Z VZ $
+// RCS-ID:      $Id: griddemo.cpp 57655 2008-12-30 11:14:12Z VZ $
 // Copyright:   (c) Michael Bedward, Julian Smart, Vadim Zeitlin
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -297,7 +297,6 @@ GridFrame::GridFrame()
     grid->SetCellAlignment(4, 4, wxALIGN_CENTRE, wxALIGN_CENTRE);
     grid->SetCellRenderer(4, 4, new MyGridCellRenderer);
 
-    grid->SetCellValue(3, 0, _T("0"));
     grid->SetCellRenderer(3, 0, new wxGridCellBoolRenderer);
     grid->SetCellEditor(3, 0, new wxGridCellBoolEditor);
 

@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Id: configure.in 55278 2008-08-26 09:53:00Z CE $)dnl
+AC_REVISION($Id: configure.in 58872 2009-02-13 09:18:23Z CE $)dnl
 
 AC_PREREQ(2.58)
 
@@ -10,14 +10,14 @@ dnl Vadim Zeitlin and Ron Lee
 dnl
 dnl This script is under the wxWidgets licence.
 dnl
-dnl Version: $Id: configure.in 55278 2008-08-26 09:53:00Z CE $
+dnl Version: $Id: configure.in 58872 2009-02-13 09:18:23Z CE $
 dnl ---------------------------------------------------------------------------
 
 dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [2.8.9], [wx-dev@lists.wxwidgets.org])
+AC_INIT([wxWidgets], [2.8.10], [wx-dev@lists.wxwidgets.org])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -34,7 +34,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=2
 wx_minor_version_number=8
-wx_release_number=9
+wx_release_number=10
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -7778,7 +7778,7 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
             dnl CC-specific "-mt" in its flags, remove it for gcc compilation
             case "${host}" in
                 *-*-solaris2* )
-                    if "$GCC" = yes; then
+                    if test "$GCC" = yes; then
                         GST_CFLAGS=`echo $GST_CFLAGS | sed 's/-mt//'`
                         GST_LIBS=`echo $GST_LIBS | sed 's/-mt//'`
                     fi

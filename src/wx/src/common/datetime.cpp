@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     11.05.99
-// RCS-ID:      $Id: datetime.cpp 55222 2008-08-24 04:08:10Z RD $
+// RCS-ID:      $Id: datetime.cpp 58486 2009-01-28 21:52:37Z VZ $
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 //              parts of code taken from sndcal library by Scott E. Lee:
 //
@@ -1239,6 +1239,17 @@ wxDateTime wxDateTime::GetBeginDST(int year, Country country)
                             wxFAIL_MSG( _T("no first Sunday in April?") );
                         }
                     }
+                    else if ( year > 2006 )
+                    // Energy Policy Act of 2005, Pub. L. no. 109-58, 119 Stat 594 (2005).
+                    // Starting in 2007, daylight time begins in the United States on the
+                    // second Sunday in March and ends on the first Sunday in November
+                    {
+                        if ( !dt.SetToWeekDay(Sun, 2, Mar, year) )
+                        {
+                            // weird...
+                            wxFAIL_MSG( _T("no second Sunday in March?") );
+                        }
+                    }
                     else
                     {
                         if ( !dt.SetToWeekDay(Sun, 1, Apr, year) )
@@ -1318,21 +1329,36 @@ wxDateTime wxDateTime::GetEndDST(int year, Country country)
                     dt.Set(30, Sep, year);
                     break;
 
-                default:
-                    // DST ends at 2 a.m. on the last Sunday of October
-                    if ( !dt.SetToLastWeekDay(Sun, Oct, year) )
+                default: // default for switch (year)
+                    if ( year > 2006 )
+                      // Energy Policy Act of 2005, Pub. L. no. 109-58, 119 Stat 594 (2005).
+                      // Starting in 2007, daylight time begins in the United States on the
+                      // second Sunday in March and ends on the first Sunday in November
                     {
-                        // weirder and weirder...
-                        wxFAIL_MSG( _T("no last Sunday in October?") );
+                        if ( !dt.SetToWeekDay(Sun, 1, Nov, year) )
+                        {
+                            // weird...
+                            wxFAIL_MSG( _T("no first Sunday in November?") );
+                        }
+                    }
+                    else
+                     // pre-2007
+                     // DST ends at 2 a.m. on the last Sunday of October
+                    {
+                        if ( !dt.SetToLastWeekDay(Sun, Oct, year) )
+                        {
+                            // weirder and weirder...
+                            wxFAIL_MSG( _T("no last Sunday in October?") );
+                        }
                     }
 
                     dt += wxTimeSpan::Hours(2);
 
-                    // TODO what about timezone??
+            // TODO: what about timezone??
             }
             break;
 
-        default:
+        default: // default for switch (country)
             // assume October 26th as the end of the DST - totally bogus too
             dt.Set(26, Oct, year);
     }
@@ -4271,7 +4297,16 @@ enum TimeSpanPart
 //  %l          milliseconds (000 - 999)
 wxString wxTimeSpan::Format(const wxChar *format) const
 {
-    wxCHECK_MSG( format, wxEmptyString, _T("NULL format in wxTimeSpan::Format") );
+    // we deal with only positive time spans here and just add the sign in
+    // front for the negative ones
+    if ( IsNegative() )
+    {
+        wxString str(Negate().Format(format));
+        return _T("-") + str;
+    }
+
+    wxCHECK_MSG( format, wxEmptyString,
+                 _T("NULL format in wxTimeSpan::Format") );
 
     wxString str;
     str.Alloc(wxStrlen(format));
@@ -4341,13 +4376,6 @@ wxString wxTimeSpan::Format(const wxChar *format) const
                     n = GetHours();
                     if ( partBiggest < Part_Hour )
                     {
-                        if ( n < 0 )
-                        {
-                            // the sign has already been taken into account
-                            // when outputting the biggest part
-                            n = -n;
-                        }
-
                         n %= HOURS_PER_DAY;
                     }
                     else
@@ -4362,9 +4390,6 @@ wxString wxTimeSpan::Format(const wxChar *format) const
                     n = GetMilliseconds().ToLong();
                     if ( partBiggest < Part_MSec )
                     {
-                        if ( n < 0 )
-                            n = -n;
-
                         n %= 1000;
                     }
                     //else: no need to reset partBiggest to Part_MSec, it is
@@ -4377,9 +4402,6 @@ wxString wxTimeSpan::Format(const wxChar *format) const
                     n = GetMinutes();
                     if ( partBiggest < Part_Min )
                     {
-                        if ( n < 0 )
-                            n = -n;
-
                         n %= MIN_PER_HOUR;
                     }
                     else
@@ -4394,9 +4416,6 @@ wxString wxTimeSpan::Format(const wxChar *format) const
                     n = GetSeconds().ToLong();
                     if ( partBiggest < Part_Sec )
                     {
-                        if ( n < 0 )
-                            n = -n;
-
                         n %= SEC_PER_MIN;
                     }
                     else
@@ -4410,10 +4429,6 @@ wxString wxTimeSpan::Format(const wxChar *format) const
 
             if ( digits )
             {
-                // negative numbers need one extra position for '-' display
-                if ( n < 0 )
-                    digits++;
-
                 fmtPrefix << _T("0") << digits;
             }
 

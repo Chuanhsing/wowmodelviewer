@@ -2,7 +2,7 @@
 // Name:        src/html/winpars.cpp
 // Purpose:     wxHtmlParser class (generic parser)
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id: winpars.cpp 53457 2008-05-05 10:53:58Z VS $
+// RCS-ID:      $Id: winpars.cpp 58846 2009-02-12 19:38:20Z VS $
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -145,13 +145,25 @@ wxString wxHtmlWordWithTabsCell::GetPartAsText(int begin, int end) const
 // wxHtmlWinParser
 //-----------------------------------------------------------------------------
 
+struct wxHtmlWinParser_TextParsingState
+{
+    // current whitespace handling mode
+    wxHtmlWinParser::WhitespaceMode m_whitespaceMode;
+
+    wxHtmlWordCell *m_lastWordCell;
+
+    // current position on line, in num. of characters; used to properly
+    // expand TABs; only updated while inside <pre>
+    int m_posColumn;
+};
+
 IMPLEMENT_ABSTRACT_CLASS(wxHtmlWinParser, wxHtmlParser)
 
 wxList wxHtmlWinParser::m_Modules;
 
 wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindowInterface *wndIface)
 {
-    m_textParsingState = new TextParsingState;
+    m_textParsingState = new wxHtmlWinParser_TextParsingState;
     m_textParsingState->m_whitespaceMode = Whitespace_Normal;
     m_textParsingState->m_lastWordCell = NULL;
     m_textParsingState->m_posColumn = 0;

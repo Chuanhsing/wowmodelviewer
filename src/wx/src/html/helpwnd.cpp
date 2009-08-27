@@ -4,7 +4,7 @@
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
 // Author:      Harm van der Heijden and Vaclav Slavik
-// RCS-ID:      $Id: helpwnd.cpp 54370 2008-06-26 10:55:16Z JS $
+// RCS-ID:      $Id: helpwnd.cpp 59342 2009-03-05 15:54:25Z JS $
 // Copyright:   (c) Harm van der Heijden and Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -563,10 +563,12 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     // showtime
     if ( m_NavigPan && m_Splitter )
     {
-        if (m_NavigPan)
-            m_Splitter->SetMinimumPaneSize(m_NavigPan->GetBestSize().x);
-        else
-            m_Splitter->SetMinimumPaneSize(20);
+        // The panel will have its own min size which the splitter
+        // should respect
+        //if (m_NavigPan)
+        //    m_Splitter->SetMinimumPaneSize(m_NavigPan->GetBestSize().x);
+        //else
+        m_Splitter->SetMinimumPaneSize(20);
 
         if ( m_Cfg.navig_on )
         {

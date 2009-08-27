@@ -4,7 +4,7 @@
 // Author:      Mattia Barbon
 // Modified by:
 // Created:     29/01/2002
-// RCS-ID:      $Id: hashmap.h 55215 2008-08-23 18:54:04Z VZ $
+// RCS-ID:      $Id: hashmap.h 57388 2008-12-17 09:34:48Z VZ $
 // Copyright:   (c) Mattia Barbon
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -660,8 +660,6 @@ public: \
         Node *node = GetOrCreateNode( \
                 CLASSNAME##_wxImplementation_Pair( v.first, v.second ), \
                 created); \
-        if ( !created ) \
-            node->m_value.second = v.second; \
         return Insert_Result(iterator(node, this), created); \
     } \
  \

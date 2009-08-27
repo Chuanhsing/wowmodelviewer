@@ -2,7 +2,7 @@
 // Name:        src/common/image.cpp
 // Purpose:     wxImage
 // Author:      Robert Roebling
-// RCS-ID:      $Id: image.cpp 55371 2008-08-30 13:18:33Z VZ $
+// RCS-ID:      $Id: image.cpp 59197 2009-02-28 15:44:53Z VZ $
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -234,6 +234,7 @@ bool wxImage::Create( int width, int height, unsigned char* data, unsigned char*
     M_IMGDATA->m_height = height;
     M_IMGDATA->m_ok = true;
     M_IMGDATA->m_static = static_data;
+    M_IMGDATA->m_staticAlpha = static_data;
 
     return true;
 }

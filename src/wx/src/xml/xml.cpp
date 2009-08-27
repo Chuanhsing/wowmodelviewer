@@ -3,7 +3,7 @@
 // Purpose:     wxXmlDocument - XML parser & data holder class
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
-// RCS-ID:      $Id: xml.cpp 52976 2008-04-02 10:06:54Z VS $
+// RCS-ID:      $Id: xml.cpp 56216 2008-10-10 16:15:17Z VZ $
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -759,6 +759,8 @@ inline static void OutputString(wxOutputStream& stream, const wxString& str,
     wxUnusedVar(convMem);
 
     const wxWX2MBbuf buf(str.mb_str(*(convFile ? convFile : &wxConvUTF8)));
+    if ( !buf )
+        return;
     stream.Write((const char*)buf, strlen((const char*)buf));
 #else // !wxUSE_UNICODE
     if ( convFile && convMem )

@@ -4,7 +4,7 @@
 // Author:      Hajo Kirchhoff
 // Modified by:
 // Created:     06/11/2003
-// RCS-ID:      $Id: urlmsw.cpp 55213 2008-08-23 18:44:03Z VZ $
+// RCS-ID:      $Id: urlmsw.cpp 58116 2009-01-15 12:45:22Z VZ $
 // Copyright:   (c) 2003 Hajo Kirchhoff
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -23,6 +23,7 @@
     #include "wx/string.h"
     #include "wx/utils.h"
     #include "wx/module.h"
+    #include "wx/log.h"
 #endif
 
 #if !wxUSE_PROTOCOL_HTTP
@@ -173,7 +174,7 @@ size_t wxWinINetInputStream::OnSysRead(void *buffer, size_t bufsize)
             );
 
             wxLogError(wxT("Read failed with error %d: %s"),
-                       iError, errorString);
+                       iError, errorString.c_str());
         }
     }
 

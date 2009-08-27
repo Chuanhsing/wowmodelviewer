@@ -3,7 +3,7 @@
 // Purpose:     wxDateTime unit test
 // Author:      Vadim Zeitlin
 // Created:     2004-06-23 (extracted from samples/console/console.cpp)
-// RCS-ID:      $Id: datetimetest.cpp 53917 2008-06-01 20:32:26Z VZ $
+// RCS-ID:      $Id: datetimetest.cpp 57474 2008-12-21 12:16:06Z VZ $
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -26,7 +26,7 @@
 #include "wx/ioswrap.h"
 
 // need this to be able to use CPPUNIT_ASSERT_EQUAL with wxDateTime objects
-static wxSTD ostream& operator<<(wxSTD ostream& ostr, const wxDateTime& dt)
+static std::ostream& operator<<(std::ostream& ostr, const wxDateTime& dt)
 {
     ostr << dt.FormatISODate() << " " << dt.FormatISOTime();
 
@@ -706,6 +706,8 @@ void DateTimeTestCase::TestTimeSpanFormat()
         {  219,  0,  0,   0, _T("%H"),            _T("219")                   },
         {  219,  0,  0,   0, _T("%D, %H"),        _T("9, 03")                 },
         {  219,  0,  0,   0, _T("%E, %D, %H"),    _T("1, 2, 03")              },
+        {    0, -1,  0,   0, _T("%H:%M:%S"),      _T("-00:01:00")             },
+        {    0,  0, -1,   0, _T("%H:%M:%S"),      _T("-00:00:01")             },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(testSpans); n++ )

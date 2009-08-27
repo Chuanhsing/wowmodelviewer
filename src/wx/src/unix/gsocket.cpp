@@ -8,7 +8,7 @@
  *              Guillermo Rodriguez Garcia <guille@iies.es>
  * Purpose:     GSocket main Unix and OS/2 file
  * Licence:     The wxWindows licence
- * CVSID:       $Id: gsocket.cpp 51623 2008-02-09 23:51:38Z VZ $
+ * CVSID:       $Id: gsocket.cpp 58386 2009-01-25 12:45:29Z VZ $
  * -------------------------------------------------------------------------
  */
 
@@ -2068,6 +2068,7 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
     struct hostent h;
 #if defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
     struct hostent_data buffer;
+    memset(&buffer, 0, sizeof(buffer));
 #else
     char buffer[1024];
 #endif
@@ -2125,6 +2126,7 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
 
 #if defined(HAVE_FUNC_GETSERVBYNAME_R_4)
     struct servent_data buffer;
+    memset(&buffer, 0, sizeof(buffer));
 #else
   char buffer[1024];
 #endif
@@ -2183,6 +2185,7 @@ GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname, size_t
   struct hostent temphost;
 #if defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
   struct hostent_data buffer;
+  memset(&buffer, 0, sizeof(buffer));
 #else
   char buffer[1024];
 #endif

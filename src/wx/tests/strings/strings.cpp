@@ -3,7 +3,7 @@
 // Purpose:     wxString unit test
 // Author:      Vadim Zeitlin, Wlodzimierz ABX Skiba
 // Created:     2004-04-19
-// RCS-ID:      $Id: strings.cpp 54660 2008-07-16 03:02:19Z VZ $
+// RCS-ID:      $Id: strings.cpp 58428 2009-01-26 12:59:01Z VZ $
 // Copyright:   (c) 2004 Vadim Zeitlin, Wlodzimierz Skiba
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -52,7 +52,9 @@ private:
         CPPUNIT_TEST( ToULongLong );
 #endif // wxHAS_STRTOLL
         CPPUNIT_TEST( ToDouble );
+#if !wxUSE_STL
         CPPUNIT_TEST( WriteBuf );
+#endif //!wxUSE_STL
         CPPUNIT_TEST( CharStr );
     CPPUNIT_TEST_SUITE_END();
 
@@ -76,7 +78,9 @@ private:
     void ToULongLong();
 #endif // wxHAS_STRTOLL
     void ToDouble();
+#if !wxUSE_STL
     void WriteBuf();
+#endif //!wxUSE_STL
     void CharStr();
 
     DECLARE_NO_COPY_CLASS(StringTestCase)
@@ -635,6 +639,7 @@ void StringTestCase::ToDouble()
     }
 }
 
+#if !wxUSE_STL
 void StringTestCase::WriteBuf()
 {
     wxString s;
@@ -659,6 +664,7 @@ void StringTestCase::WriteBuf()
         CPPUNIT_ASSERT_EQUAL( 0, wxStrcmp(_T("barr"), s) );
     }
 }
+#endif //!wxUSE_STL
 
 
 static bool IsFoo(/* non-const */ char *s)

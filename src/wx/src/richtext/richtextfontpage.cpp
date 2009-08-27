@@ -4,7 +4,7 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     2006-10-02
-// RCS-ID:      $Id: richtextfontpage.cpp 53622 2008-05-17 17:54:51Z JS $
+// RCS-ID:      $Id: richtextfontpage.cpp 56993 2008-11-28 12:47:00Z JS $
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -808,8 +808,6 @@ void wxRichTextFontPage::OnRichtextfontpageSuperscriptClick( wxCommandEvent& WXU
 {
     if ( m_superscriptCtrl->Get3StateValue() == wxCHK_CHECKED)
         m_subscriptCtrl->Set3StateValue( wxCHK_UNCHECKED );
-    else
-        m_subscriptCtrl->Set3StateValue( wxCHK_CHECKED );
 
     UpdatePreview();
 }
@@ -822,8 +820,6 @@ void wxRichTextFontPage::OnRichtextfontpageSubscriptClick( wxCommandEvent& WXUNU
 {
     if ( m_subscriptCtrl->Get3StateValue() == wxCHK_CHECKED)
         m_superscriptCtrl->Set3StateValue( wxCHK_UNCHECKED );
-    else
-        m_superscriptCtrl->Set3StateValue( wxCHK_CHECKED );
 
     UpdatePreview();
 }

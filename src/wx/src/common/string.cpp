@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin, Ryan Norton
 // Modified by:
 // Created:     29/01/98
-// RCS-ID:      $Id: string.cpp 55034 2008-08-09 20:34:36Z VZ $
+// RCS-ID:      $Id: string.cpp 56758 2008-11-13 22:32:21Z VS $
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 //              (c) 2004 Ryan Norton <wxprojects@comcast.net>
 // Licence:     wxWindows licence
@@ -2644,4 +2644,11 @@ int wxCMPFUNC_CONV wxStringSortAscending(wxString* s1, wxString* s2)
 int wxCMPFUNC_CONV wxStringSortDescending(wxString* s1, wxString* s2)
 {
     return -s1->Cmp(*s2);
+}
+
+wxString* wxCArrayString::Release()
+{
+    wxString *r = GetStrings();
+    m_strings = NULL;
+    return r;
 }

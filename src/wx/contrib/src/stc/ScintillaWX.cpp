@@ -9,7 +9,7 @@
 // Author:      Robin Dunn
 //
 // Created:     13-Jan-2000
-// RCS-ID:      $Id: ScintillaWX.cpp 55221 2008-08-24 04:06:41Z RD $
+// RCS-ID:      $Id: ScintillaWX.cpp 57851 2009-01-06 09:39:13Z SC $
 // Copyright:   (c) 2000 by Total Control Software
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -91,7 +91,7 @@ void  wxSTCDropTarget::OnLeave() {
 #define param2 -1 // wxWindow's 2nd param is ID
 #endif
 
-#include <wx/dcbuffer.h>
+#include "wx/dcbuffer.h"
 
 class wxSTCCallTip : public wxSTCCallTipBase {
 public:

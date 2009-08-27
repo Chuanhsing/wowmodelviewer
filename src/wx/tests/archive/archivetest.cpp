@@ -2,7 +2,7 @@
 // Name:        tests/archive/archive.cpp
 // Purpose:     Test the archive classes
 // Author:      Mike Wetherell
-// RCS-ID:      $Id: archivetest.cpp 42512 2006-10-27 10:11:46Z MW $
+// RCS-ID:      $Id: archivetest.cpp 56144 2008-10-07 09:29:45Z MW $
 // Copyright:   (c) 2004 Mike Wetherell
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -1200,9 +1200,10 @@ void CorruptionTestCase::runTest()
     CreateArchive(out);
     TestInputStream in(out, 0);
     wxFileOffset len = in.GetLength();
+    int pos, size;
 
     // try flipping one byte in the archive
-    for (int pos = 0; pos < len; pos++) {
+    for (pos = 0; pos < len; pos++) {
         char n = in[pos];
         in[pos] = ~n;
         ExtractArchive(in);
@@ -1211,7 +1212,7 @@ void CorruptionTestCase::runTest()
     }
 
     // try zeroing one byte in the archive
-    for (int pos = 0; pos < len; pos++) {
+    for (pos = 0; pos < len; pos++) {
         char n = in[pos];
         in[pos] = 0;
         ExtractArchive(in);
@@ -1220,7 +1221,7 @@ void CorruptionTestCase::runTest()
     }
 
     // try chopping the archive off
-    for (int size = 1; size <= len; size++) {
+    for (size = 1; size <= len; size++) {
         in.Chop(size);
         ExtractArchive(in);
         in.Rewind();

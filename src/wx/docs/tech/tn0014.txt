@@ -1,7 +1,17 @@
                       XRC resources format specification
                       ==================================
 
-                         !!!!! NOT YET FINISHED !!!!!
+
+  +-------------------------------------------------------------------------+
+  |                                                                         |
+  |                           !!! CAUTION !!!                               |
+  |              This document is incomplete and out of date.               |
+  |                                                                         |
+  |   Please see http://docs.wxwidgets.org/trunk/xrc_format.html for the    |
+  |   authoritative version of XRC format specification.                    |
+  |                                                                         |
+  +-------------------------------------------------------------------------+
+
 
 0. Introduction
 ===============
@@ -518,4 +528,4 @@ FIXME -- "platform" property handling
 
 === EOF ===
 
-Version: $Id: tn0014.txt 50473 2007-12-04 19:06:09Z VS $
+Version: $Id: tn0014.txt 56005 2008-10-01 10:24:42Z VS $

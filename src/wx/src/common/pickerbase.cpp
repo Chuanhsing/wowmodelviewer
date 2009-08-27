@@ -4,7 +4,7 @@
 // Author:      Francesco Montorsi
 // Modified by:
 // Created:     15/04/2006
-// RCS-ID:      $Id: pickerbase.cpp 54520 2008-07-06 23:57:23Z VZ $
+// RCS-ID:      $Id: pickerbase.cpp 58463 2009-01-27 17:39:50Z BP $
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -149,7 +149,7 @@ void wxPickerBase::OnTextCtrlKillFocus(wxFocusEvent& event)
     event.Skip();
 
     // don't leave the textctrl empty
-    if (m_text->GetValue().empty())
+    if (m_text && m_text->GetValue().empty())
         UpdateTextCtrlFromPicker();
 }
 

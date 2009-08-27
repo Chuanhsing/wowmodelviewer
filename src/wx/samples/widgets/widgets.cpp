@@ -4,7 +4,7 @@
 // Purpose:     Sample showing most of the simple wxWidgets widgets
 // Author:      Vadim Zeitlin
 // Created:     27.03.01
-// Id:          $Id: widgets.cpp 51519 2008-02-03 13:48:11Z VZ $
+// Id:          $Id: widgets.cpp 58192 2009-01-18 12:29:22Z JS $
 // Copyright:   (c) 2001 Vadim Zeitlin
 // License:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -809,6 +809,8 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 void WidgetsFrame::OnEnable(wxCommandEvent& event)
 {
     CurrentPage()->GetWidget()->Enable(event.IsChecked());
+    if (CurrentPage()->GetWidget2())
+        CurrentPage()->GetWidget2()->Enable(event.IsChecked());
 }
 
 void WidgetsFrame::OnSetBorder(wxCommandEvent& event)

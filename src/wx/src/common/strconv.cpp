@@ -5,7 +5,7 @@
 //              Ryan Norton, Fredrik Roubert (UTF7)
 // Modified by:
 // Created:     29/01/98
-// RCS-ID:      $Id: strconv.cpp 55255 2008-08-25 14:34:23Z VZ $
+// RCS-ID:      $Id: strconv.cpp 56394 2008-10-17 11:31:22Z VZ $
 // Copyright:   (c) 1999 Ove Kaaven, Robert Roebling, Vaclav Slavik
 //              (c) 2000-2003 Vadim Zeitlin
 //              (c) 2004 Ryan Norton, Fredrik Roubert
@@ -2735,7 +2735,8 @@ public:
 #if wxUSE_FONTMAP
     wxMBConv_mac(const wxChar* name)
     {
-        Init( wxMacGetSystemEncFromFontEnc( wxFontMapperBase::Get()->CharsetToEncoding(name, false) ) );
+        wxFontEncoding enc = wxFontMapperBase::Get()->CharsetToEncoding(name, false);
+        Init( (enc != wxFONTENCODING_SYSTEM) ? wxMacGetSystemEncFromFontEnc( enc ) : kTextEncodingUnknown);
     }
 #endif
 
@@ -2758,13 +2759,22 @@ public:
     {
         m_MB2WC_converter = NULL ;
         m_WC2MB_converter = NULL ;
-        m_char_encoding = CreateTextEncoding(encoding, encodingVariant, encodingFormat) ;
-        m_unicode_encoding = CreateTextEncoding(kTextEncodingUnicodeDefault, 0, kUnicode16BitFormat) ;
+        if ( encoding != kTextEncodingUnknown )
+        {
+            m_char_encoding = CreateTextEncoding(encoding, encodingVariant, encodingFormat) ;
+            m_unicode_encoding = CreateTextEncoding(kTextEncodingUnicodeDefault, 0, kUnicode16BitFormat) ;
+        }
+        else
+        {
+            m_char_encoding = kTextEncodingUnknown;
+            m_unicode_encoding = kTextEncodingUnknown;
+        }
     }
 
     virtual void CreateIfNeeded() const
     {
-        if ( m_MB2WC_converter == NULL && m_WC2MB_converter == NULL )
+        if ( m_MB2WC_converter == NULL && m_WC2MB_converter == NULL && 
+            m_char_encoding != kTextEncodingUnknown && m_unicode_encoding != kTextEncodingUnknown )
         {
             OSStatus status = noErr ;
             status = TECCreateConverter(&m_MB2WC_converter,

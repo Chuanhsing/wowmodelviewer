@@ -1,5 +1,5 @@
 #
-# $Id: version-script.in 55514 2008-09-07 17:09:38Z VZ $
+# $Id: version-script.in 59168 2009-02-26 19:04:21Z KO $
 #
 # Notes:
 #
@@ -23,15 +23,28 @@
 # released with the generic branch version due to the final wildcard below,
 # and once released its version cannot be changed.
 
+# public symbols added in 2.8.10 (please keep in alphabetical order):
+@WX_VERSION_TAG@.10 {
+        *wxAboutDialog*GetCopyrightToDisplay*;
+        *wxArtProvider*PushBack*;
+        *wxAuiManager*DoEndResizeAction*;
+        *wxCArrayString*Release*;
+        *wxDCBase*GetFontPointSizeAdjustment*;
+        *wxGraphicsBitmap*;
+        *wxGraphicsContext*CreateBitmap*;
+        *wxGraphicsContext*DrawGraphicsBitmap*;
+        *wxGraphicsRenderer*CreateBitmap*;
+        *wxWindowBase*DragAcceptFiles*;
+};
 
 # public symbols added in 2.8.9 (please keep in alphabetical order):
-# public symbols added in 2.8.8 (please keep in alphabetical order):
 @WX_VERSION_TAG@.9 {
         *wxAuiTabCtrl*OnCaptureLost*;
         *wxAuiToolBar*;
         *wxWindow*UnsetToolTip*;
 };
 
+# public symbols added in 2.8.8 (please keep in alphabetical order):
 @WX_VERSION_TAG@.8 {
     global:
         *TimeZone*Make*;

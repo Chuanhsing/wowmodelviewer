@@ -2,7 +2,7 @@
 // Name:        tests/streams/backfile.cpp
 // Purpose:     Test wxBackingFile
 // Author:      Mike Wetherell
-// RCS-ID:      $Id: fileback.cpp 42681 2006-10-29 22:38:26Z MW $
+// RCS-ID:      $Id: fileback.cpp 56654 2008-11-02 23:21:03Z VZ $
 // Copyright:   (c) 2006 Mike Wetherell
 // Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -17,6 +17,7 @@
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
+
 
 #include "wx/mstream.h"
 #include "wx/private/fileback.h"
@@ -173,21 +174,21 @@ void backStream::Read(wxInputStream& in,
 
 void backStream::Len(wxBackedInputStream& in)
 {
-    CPPUNIT_ASSERT_EQUAL(wxFileOffset(TESTSIZE), in.FindLength());
+    CPPUNIT_ASSERT_EQUAL(TESTSIZE, size_t(in.FindLength()));
 }
 
 void backStream::Seek(wxInputStream& in)
 {
-    CPPUNIT_ASSERT_EQUAL(wxFileOffset(TESTSIZE), in.SeekI(TESTSIZE));
+    CPPUNIT_ASSERT_EQUAL(TESTSIZE, size_t(in.SeekI(TESTSIZE)));
     in.GetC();
-    CPPUNIT_ASSERT_EQUAL(size_t(0), in.LastRead());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), size_t(in.LastRead()));
     CPPUNIT_ASSERT(in.Eof());
 
-    for (wxFileOffset i = TESTSIZE - 1; i >= 0; i--) {
-        CPPUNIT_ASSERT_EQUAL(i, in.SeekI(i));
-        CPPUNIT_ASSERT_EQUAL(i, in.TellI());
-        CPPUNIT_ASSERT_EQUAL(int(i), in.GetC());
-        CPPUNIT_ASSERT_EQUAL(size_t(1), in.LastRead());
+    for (size_t i = TESTSIZE; i > 0; i--) {
+        CPPUNIT_ASSERT_EQUAL(i - 1, size_t(in.SeekI(i - 1)));
+        CPPUNIT_ASSERT_EQUAL(i - 1, size_t(in.TellI()));
+        CPPUNIT_ASSERT_EQUAL(int(i - 1), in.GetC());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), size_t(in.LastRead()));
         CPPUNIT_ASSERT(in.IsOk());
     }
 }

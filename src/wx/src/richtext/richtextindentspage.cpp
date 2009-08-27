@@ -4,7 +4,7 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/3/2006 2:28:21 PM
-// RCS-ID:      $Id: richtextindentspage.cpp 54423 2008-06-29 17:04:04Z JS $
+// RCS-ID:      $Id: richtextindentspage.cpp 57881 2009-01-07 11:45:05Z JS $
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -199,7 +199,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
 
     itemBoxSizer20->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL, 5);
 
-    wxFlexGridSizer* itemFlexGridSizer22 = new wxFlexGridSizer(2, 2, 0, 0);
+    wxFlexGridSizer* itemFlexGridSizer22 = new wxFlexGridSizer(4, 2, 0, 0);
     itemBoxSizer20->Add(itemFlexGridSizer22, 0, wxALIGN_CENTER_VERTICAL, 5);
 
     wxStaticText* itemStaticText23 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Left:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -277,7 +277,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
 
     itemBoxSizer39->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL, 5);
 
-    wxFlexGridSizer* itemFlexGridSizer41 = new wxFlexGridSizer(2, 2, 0, 0);
+    wxFlexGridSizer* itemFlexGridSizer41 = new wxFlexGridSizer(3, 2, 0, 0);
     itemFlexGridSizer41->AddGrowableCol(1);
     itemBoxSizer39->Add(itemFlexGridSizer41, 0, wxALIGN_CENTER_VERTICAL, 5);
 

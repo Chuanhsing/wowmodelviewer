@@ -3,7 +3,7 @@
 // Purpose:     wxRect unit test
 // Author:      Vadim Zeitlin
 // Created:     2004-12-11
-// RCS-ID:      $Id: rect.cpp 37435 2006-02-10 00:01:19Z VZ $
+// RCS-ID:      $Id: rect.cpp 56161 2008-10-08 16:06:36Z VZ $
 // Copyright:   (c) 2004 wxWindows
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -28,7 +28,7 @@
 // ----------------------------------------------------------------------------
 
 // this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxRects
-wxSTD ostream& operator<<(wxSTD ostream& os, const wxRect& r)
+std::ostream& operator<<(std::ostream& os, const wxRect& r)
 {
     os << "{"
         << r.x << ", " << r.y << ", " << r.width << ", " << r.height

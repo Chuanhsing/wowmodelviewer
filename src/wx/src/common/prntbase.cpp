@@ -4,7 +4,7 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id: prntbase.cpp 55152 2008-08-21 20:42:40Z VS $
+// RCS-ID:      $Id: prntbase.cpp 58209 2009-01-18 21:31:36Z RD $
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -532,6 +532,7 @@ void wxPrintAbortDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
     wxPrinterBase::sm_abortIt = true;
     wxPrinterBase::sm_abortWindow->Show(false);
     wxPrinterBase::sm_abortWindow->Close(true);
+    wxPrinterBase::sm_abortWindow->Destroy();
     wxPrinterBase::sm_abortWindow = (wxWindow *) NULL;
 }
 

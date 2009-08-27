@@ -4,7 +4,7 @@
 // Author:      Michael Bedward (based on code by Julian Smart, Robin Dunn)
 // Modified by: Robin Dunn, Vadim Zeitlin, Santiago Palacios
 // Created:     1/08/1999
-// RCS-ID:      $Id: grid.cpp 55632 2008-09-15 00:28:15Z VZ $
+// RCS-ID:      $Id: grid.cpp 58753 2009-02-08 10:23:19Z VZ $
 // Copyright:   (c) Michael Bedward (mbedward@ozemail.com.au)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -4315,6 +4315,14 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
 
 wxGrid::~wxGrid()
 {
+    if ( m_winCapture && m_winCapture->HasCapture() )
+        m_winCapture->ReleaseMouse();
+
+    // Ensure that the editor control is destroyed before the grid is,
+    // otherwise we crash later when the editor tries to do something with the
+    // half destroyed grid
+    HideCellEditControl();
+
     // Must do this or ~wxScrollHelper will pop the wrong event handler
     SetTargetWindow(this);
     ClearAttrCache();
@@ -7851,7 +7859,27 @@ void wxGrid::DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells)
     size_t count = cells.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        if ( cells[n] == m_currentCellCoords )
+        wxGridCellCoords cell = cells[n];
+
+        // If we are using attributes, then we may have just exposed another
+        // cell in a partially-visible merged cluster of cells. If the "anchor"
+        // (upper left) cell of this merged cluster is the cell indicated by
+        // m_currentCellCoords, then we need to refresh the cell highlight even
+        // though the "anchor" itself is not part of our update segment.
+        if ( CanHaveAttributes() )
+        {
+            int rows = 0,
+                cols = 0;
+            GetCellSize(cell.GetRow(), cell.GetCol(), &rows, &cols);
+
+            if ( rows < 0 )
+                cell.SetRow(cell.GetRow() + rows);
+
+            if ( cols < 0 )
+                cell.SetCol(cell.GetCol() + cols);
+        }
+
+        if ( cell == m_currentCellCoords )
         {
             wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
             DrawCellHighlight(dc, attr);

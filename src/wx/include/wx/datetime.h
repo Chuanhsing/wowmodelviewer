@@ -5,7 +5,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     10.02.99
-// RCS-ID:      $Id: datetime.h 54669 2008-07-17 20:03:11Z VZ $
+// RCS-ID:      $Id: datetime.h 57502 2008-12-22 19:52:20Z VZ $
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -1100,13 +1100,8 @@ public:
     // another one to get the current time broken down
     static struct tm *GetTmNow()
     {
-#ifdef __WXWINCE__
         static struct tm l_CurrentTime;
         return GetTmNow(&l_CurrentTime);
-#else
-        time_t t = GetTimeNow();
-        return localtime(&t);
-#endif
     }
 
     // get current time using thread-safe function

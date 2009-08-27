@@ -4,7 +4,7 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id: bitmap.cpp 55449 2008-09-03 20:45:52Z VZ $
+// RCS-ID:      $Id: bitmap.cpp 56488 2008-10-22 17:01:02Z RR $
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -813,13 +813,15 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
 
     const bool hasAlpha = image.HasAlpha();
 
+    if (depth == -1)
+      depth = dib.GetDepth();
+      
     // store the bitmap parameters
     wxBitmapRefData * const refData = new wxBitmapRefData;
     refData->m_width = w;
     refData->m_height = h;
     refData->m_hasAlpha = hasAlpha;
-    refData->m_depth = depth == -1 ? (hasAlpha ? 32 : 24)
-                                   : depth;
+    refData->m_depth = depth;
 
     m_refData = refData;
 
