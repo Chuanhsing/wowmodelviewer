@@ -22,6 +22,7 @@ struct ModelData {
 	float tv;
 	Vertex3f normal;
 	unsigned short groupIndex;
+	char boneid;
 };
 
 struct GroupData {
@@ -153,9 +154,10 @@ void AddVertices(Model *m, Attachment *att)
 				}
 
 				verts[vertIndex].tu = m->origVertices[a].texcoords.x;
-				verts[vertIndex].tv = m->origVertices[a].texcoords.y;				
+				verts[vertIndex].tv = m->origVertices[a].texcoords.y;
 
 				verts[vertIndex].groupIndex = grpIndex;
+				verts[vertIndex].boneid = m->origVertices[a].bones[0];
 
 				vertIndex++;
 			}
@@ -440,11 +442,11 @@ void ExportM2to3DS(Model *m, const char *fn)
 	wxDELETEA(verts);
 }
 
-void ExportM2toMS3D(Attachment *att, const char *fn)
+void ExportM2toMS3D(Attachment *att, Model *m, const char *fn)
 {
-	ofstream f(fn, ios::out | ios::binary | ios::trunc);
+	wxFFileOutputStream f(fn, "w+b");
 
-	if (!f.is_open()) {
+	if (!f.IsOk()) {
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
@@ -457,32 +459,32 @@ void ExportM2toMS3D(Attachment *att, const char *fn)
 	header.version = 4;
 
 	// Header
-	f.write(reinterpret_cast<char *>(&header), sizeof(ms3d_header_t));
+	f.Write(reinterpret_cast<char *>(&header), sizeof(ms3d_header_t));
 	// Vertex Count
-	f.write(reinterpret_cast<char *>(&numVerts), sizeof(numVerts));
+	f.Write(reinterpret_cast<char *>(&numVerts), sizeof(numVerts));
 	
 	// Write Vertex data?
 	for (unsigned int i=0; i<numVerts; i++) {
 		ms3d_vertex_t vert;
-		vert.boneId = char(-1);
-		vert.flags = SELECTED;
+		vert.boneId = verts[i].boneid;
+		vert.flags = 0; //SELECTED;
 		vert.referenceCount = 0; // what the?
 		vert.vertex[0] = verts[i].vertex.x;
 		vert.vertex[1] = verts[i].vertex.y;
 		vert.vertex[2] = verts[i].vertex.z;
-		f.write(reinterpret_cast<char *>(&vert), sizeof(ms3d_vertex_t));
+		f.Write(reinterpret_cast<char *>(&vert), sizeof(ms3d_vertex_t));
 	}
 	// ---------------------------
 
 	// Triangle Count
-	f.write(reinterpret_cast<char *>(&numFaces), 2);
+	f.Write(reinterpret_cast<char *>(&numFaces), sizeof(numFaces));
 
 	// Write Triangle Data?
 	for (unsigned int i=0; i<numVerts; i+=3) {
 		ms3d_triangle_t tri;
-		tri.flags = SELECTED;
+		tri.flags = 0; //SELECTED;
 		tri.groupIndex = (unsigned char)verts[i].groupIndex;
-		tri.smoothingGroup = 1;
+		tri.smoothingGroup = 1; // 1 - 32
 
 		for (int j=0; j<3; j++) {
 			tri.vertexIndices[j] = i+j;
@@ -494,39 +496,39 @@ void ExportM2toMS3D(Attachment *att, const char *fn)
 			tri.vertexNormals[j][2] = verts[i+j].normal.z;
 		}
 
-		f.write(reinterpret_cast<char *>(&tri), sizeof(ms3d_triangle_t));
+		f.Write(reinterpret_cast<char *>(&tri), sizeof(ms3d_triangle_t));
 	}
 	// ---------------------------
 
 	// Number of groups
-	f.write(reinterpret_cast<char *>(&numGroups), 2);
+	f.Write(reinterpret_cast<char *>(&numGroups), sizeof(numGroups));
 
 	unsigned short indiceCount = 0;
 	for (unsigned short i=0; i<numGroups; i++) {
 		wxString groupName(wxString::Format("Geoset_%i", i));
 
-		const char flags = SELECTED;
-		f.write(&flags, 1);
+		const char flags = 0; // SELECTED
+		f.Write(&flags, sizeof(flags));
 
 		char name[32];
 		strncpy(name, groupName.c_str(), sizeof(name));
-		f.write(name, 32);
+		f.Write(name, sizeof(name));
 
 		unsigned short faceCount = groups[i].p.indexCount / 3;
-		f.write(reinterpret_cast<char *>(&faceCount), 2);
+		f.Write(reinterpret_cast<char *>(&faceCount), sizeof(faceCount));
 		
 		for (int k=0; k<faceCount; k++) {
 			//triIndices[k] = indiceCount;
-			f.write(reinterpret_cast<char *>(&indiceCount), 2);
+			f.Write(reinterpret_cast<char *>(&indiceCount), sizeof(indiceCount));
 			indiceCount++;
 		}
 
 		unsigned char gIndex = (char)i;
-		f.write(reinterpret_cast<char *>(&gIndex), 1);
+		f.Write(reinterpret_cast<char *>(&gIndex), sizeof(gIndex));
 	}
 
 	// Number of materials (pretty much identical to groups, each group has its own material)
-	f.write(reinterpret_cast<char *>(&numGroups), 2);
+	f.Write(reinterpret_cast<char *>(&numGroups), sizeof(numGroups));
 	
 	for (unsigned short i=0; i<numGroups; i++) {
 		wxString matName(wxString::Format("Material_%i", i));
@@ -534,8 +536,9 @@ void ExportM2toMS3D(Attachment *att, const char *fn)
 		ModelRenderPass p = groups[i].p;
 		if (p.init(groups[i].m)) {
 			ms3d_material_t mat;
-			memset(mat.alphamap, '\0', 128);
-			//mat.alphamap = (char)0;
+			memset(mat.alphamap, '\0', sizeof(mat.alphamap));
+
+			strncpy(mat.name, matName.c_str(), sizeof(mat.name));
 			mat.ambient[0] = 0.7f;
 			mat.ambient[1] = 0.7f;
 			mat.ambient[2] = 0.7f;
@@ -544,12 +547,15 @@ void ExportM2toMS3D(Attachment *att, const char *fn)
 			mat.diffuse[1] = p.ocol.y;
 			mat.diffuse[2] = p.ocol.z;
 			mat.diffuse[3] = p.ocol.w;
+			mat.specular[0] = 0.0f;
+			mat.specular[1] = 0.0f;
+			mat.specular[2] = 0.0f;
+			mat.specular[3] = 1.0f;
 			mat.emissive[0] = p.ecol.x;
 			mat.emissive[1] = p.ecol.y;
 			mat.emissive[2] = p.ecol.z;
 			mat.emissive[3] = p.ecol.w;
-
-			strncpy(mat.name, matName.c_str(), sizeof(mat.name));
+			mat.transparency = p.ocol.w;
 
 			if (p.useEnvMap) {
 				mat.shininess = 30.0f;
@@ -558,11 +564,6 @@ void ExportM2toMS3D(Attachment *att, const char *fn)
 				mat.shininess = 0.0f;
 				mat.mode = 0;
 			}
-			
-			mat.specular[0] = 0.0f;
-			mat.specular[1] = 0.0f;
-			mat.specular[2] = 0.0f;
-			mat.specular[3] = 1.0f;
 
 			unsigned int bindtex = 0;
 			if (groups[i].m->specialTextures[p.tex]==-1) 
@@ -572,11 +573,10 @@ void ExportM2toMS3D(Attachment *att, const char *fn)
 
 			wxString texName(fn);
 			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << "_" << bindtex << ".png";
+			texName << "_" << bindtex << ".tga";
 			strncpy(mat.texture, texName.c_str(), sizeof(mat.texture));
-			mat.transparency = p.ocol.w;
 
-			f.write(reinterpret_cast<char *>(&mat), sizeof(ms3d_material_t));
+			f.Write(reinterpret_cast<char *>(&mat), sizeof(ms3d_material_t));
 
 			wxString texFilename(fn);
 			texFilename = texFilename.BeforeLast('\\');
@@ -586,71 +586,106 @@ void ExportM2toMS3D(Attachment *att, const char *fn)
 		}
 	}
 
+#if 0
 	// save some keyframe data
-	float fps = 1.0f; //m->anims[m->anim].playSpeed;
+	float fps = 1.0f;
 	float fCurTime = 0.0f;
 	int totalFrames = 0;
 
-	f.write(reinterpret_cast<char *>(&fps), 4);
-	f.write(reinterpret_cast<char *>(&fCurTime), 4);
-	f.write(reinterpret_cast<char *>(&totalFrames), 4);
+	f.Write(reinterpret_cast<char *>(&fps), sizeof(fps));
+	f.Write(reinterpret_cast<char *>(&fCurTime), sizeof(fCurTime));
+	f.Write(reinterpret_cast<char *>(&totalFrames), sizeof(totalFrames));
 	
 	
 	// number of joints
 	unsigned short numJoints = 0; //(unsigned short)m->header.nBones;
 
-	f.write(reinterpret_cast<char *>(&numJoints), 2);
+	f.Write(reinterpret_cast<char *>(&numJoints), sizeof(numJoints));
+#else
+	// TODO
+	// save some keyframe data
+	float fps = 1.0f; //m->anims[m->anim].playSpeed;
+	float fCurTime = 0.0f;
+	int totalFrames = 0; // (m->anims[m->anim].timeEnd - m->anims[m->anim].timeStart);
 
-	/*
+	f.Write(reinterpret_cast<char *>(&fps), sizeof(fps));
+	f.Write(reinterpret_cast<char *>(&fCurTime), sizeof(fCurTime));
+	f.Write(reinterpret_cast<char *>(&totalFrames), sizeof(totalFrames));
+	
+	// number of joints
+
+	unsigned short numJoints = (unsigned short)m->header.nBones;
+
+	f.Write(reinterpret_cast<char *>(&numJoints), sizeof(numJoints));
+
 	for (int i=0; i<numJoints; i++) {
 		ms3d_joint_t joint;
 
-		joint.flags = SELECTED;
-		memset(joint.name, '\0', 32);
-		memset(joint.parentName, '\0', 32);
-		
-		joint.rotation[0] = m->bones[i].pivot.x;
-		joint.rotation[1] = m->bones[i].pivot.y;
-		joint.rotation[2] = m->bones[i].pivot.z;
+		joint.flags = 0; // SELECTED
+		memset(joint.name, '\0', sizeof(joint.name));
+		snprintf(joint.name, sizeof(joint.name), "Bone_%i_%i", m->anim, i);
+		memset(joint.parentName, '\0', sizeof(joint.parentName));
+
+		joint.rotation[0] = 0; // m->bones[i].pivot.x;
+		joint.rotation[1] = 0; // m->bones[i].pivot.y;
+		joint.rotation[2] = 0; // m->bones[i].pivot.z;
 
 		joint.position[0] = m->bones[i].transPivot.x;
 		joint.position[1] = m->bones[i].transPivot.y;
 		joint.position[2] = m->bones[i].transPivot.z;
 
-		joint.numKeyFramesRot = (unsigned short)m->bones[i].boneDef.rotation.nKeys;
-		joint.numKeyFramesTrans = (unsigned short)m->bones[i].boneDef.translation.nKeys;
+		int parent = m->bones[i].parent;
+		if (parent > -1) {
+			snprintf(joint.parentName, sizeof(joint.parentName), "Bone_%i_%i", m->anim, parent);
 
-		f.write(reinterpret_cast<char *>(&joint), sizeof(ms3d_joint_t));
+			joint.position[0] -= m->bones[parent].transPivot.x;
+			joint.position[1] -= m->bones[parent].transPivot.y;
+			joint.position[2] -= m->bones[parent].transPivot.z;
+		}
+
+		joint.numKeyFramesRot = 0; //(unsigned short)m->bones[i].rot.data[m->anim].size();
+		joint.numKeyFramesTrans = 0; //(unsigned short)m->bones[i].trans.data[m->anim].size();
+
+		f.Write(reinterpret_cast<char *>(&joint), sizeof(ms3d_joint_t));
 
 		if (joint.numKeyFramesRot > 0) {
 			ms3d_keyframe_rot_t *keyFramesRot = new ms3d_keyframe_rot_t[joint.numKeyFramesRot];
 			for (int j=0; j<joint.numKeyFramesRot; j++) {
-				keyFramesRot[j].time = 0;
-				keyFramesRot[j].rotation[0] = m->bones[i].rot.getValue(0,0).x;
-				keyFramesRot[j].rotation[1] = m->bones[i].rot.getValue(0,0).y;
-				keyFramesRot[j].rotation[2] = m->bones[i].rot.getValue(0,0).z;
+				keyFramesRot[j].time = m->bones[i].rot.times[m->anim][j]; // Error, time in seconds;
+				keyFramesRot[j].rotation[0] = m->bones[i].rot.data[m->anim][j].x;
+				keyFramesRot[j].rotation[1] = m->bones[i].rot.data[m->anim][j].y;
+				keyFramesRot[j].rotation[2] = m->bones[i].rot.data[m->anim][j].z;
 			}
 
-			f.write(reinterpret_cast<char *>(keyFramesRot), sizeof(ms3d_keyframe_rot_t) * joint.numKeyFramesRot);
+			f.Write(reinterpret_cast<char *>(keyFramesRot), sizeof(ms3d_keyframe_rot_t) * joint.numKeyFramesRot);
 			wxDELETEA(keyFramesRot);
 		}
 
 		if (joint.numKeyFramesTrans > 0) {
 			ms3d_keyframe_pos_t *keyFramesTrans = new ms3d_keyframe_pos_t[joint.numKeyFramesTrans];
 			for (int j=0; j<joint.numKeyFramesTrans; j++) {
-				keyFramesTrans[j].time = 0;
-				keyFramesTrans[j].position[0] = m->bones[i].trans.getValue(0,0).x;
-				keyFramesTrans[j].position[1] = m->bones[i].trans.getValue(0,0).y;
-				keyFramesTrans[j].position[2] = m->bones[i].trans.getValue(0,0).z;
+				keyFramesTrans[j].time = m->bones[i].trans.times[m->anim][j]; // Error,time in seconds;;
+				keyFramesTrans[j].position[0] = m->bones[i].trans.data[m->anim][j].x;
+				keyFramesTrans[j].position[1] = m->bones[i].trans.data[m->anim][j].y;
+				keyFramesTrans[j].position[2] = m->bones[i].trans.data[m->anim][j].z;
+				if (parent > -1) {
+					keyFramesTrans[j].position[0] -= m->bones[parent].transPivot.x;
+					keyFramesTrans[j].position[1] -= m->bones[parent].transPivot.y;
+					keyFramesTrans[j].position[2] -= m->bones[parent].transPivot.z;
+					if (m->bones[parent].trans.data[m->anim].size() > j) {
+						keyFramesTrans[j].position[0] -= m->bones[parent].trans.data[m->anim][j].x;
+						keyFramesTrans[j].position[1] -= m->bones[parent].trans.data[m->anim][j].y;
+						keyFramesTrans[j].position[2] -= m->bones[parent].trans.data[m->anim][j].z;
+					}
+				}
 			}
 
-			f.write(reinterpret_cast<char *>(keyFramesTrans), sizeof(ms3d_keyframe_pos_t) * joint.numKeyFramesTrans);
+			f.Write(reinterpret_cast<char *>(keyFramesTrans), sizeof(ms3d_keyframe_pos_t) * joint.numKeyFramesTrans);
 			wxDELETEA(keyFramesTrans);
 		}
 	}
-	*/
-
-	f.close();
+#endif
+	f.Close();
 
 	if (verts)
 		wxDELETEA(verts);
@@ -667,10 +702,9 @@ void ExportM2toLWO2(Attachment *att, const char *fn)
 	uint16 u16;
 	unsigned char ub;
 	*/
+	wxFFileOutputStream f(fn, "w+b");
 
-	ofstream f(fn, ios::out | ios::binary | ios::trunc);
-
-	if (!f.is_open()) {
+	if (!f.IsOk()) {
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
@@ -679,14 +713,14 @@ void ExportM2toLWO2(Attachment *att, const char *fn)
 
 	unsigned int fileLen = 0;
 
-	f.write("FORM", 4);
-	f.write(reinterpret_cast<char *>(&fileLen), 4);
+	f.Write("FORM", 4);
+	f.Write(reinterpret_cast<char *>(&fileLen), 4);
 
-	f.write("LWO2", 4);
+	f.Write("LWO2", 4);
 	fileLen += 4;
 
 
-	f.close();
+	f.Close();
 }
 
 
@@ -698,28 +732,29 @@ void ExportM2toLWO(Model *m, const char *fn)
 	uint16 u16;
 	unsigned char ub;
 
-	ofstream f(fn, ios::out | ios::binary | ios::trunc);
 
-	if (!f.is_open()) {
+	wxFFileOutputStream f(fn, "w+b");
+
+	if (!f.IsOk()) {
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
 
 	unsigned int fileLen = 0;
 
-	f.write("FORM", 4);
-	f.write(reinterpret_cast<char *>(&fileLen), 4);
+	f.Write("FORM", 4);
+	f.Write(reinterpret_cast<char *>(&fileLen), 4);
 
-	f.write("LWOB", 4);
+	f.Write("LWOB", 4);
 	fileLen += 4;
 
 
 	// --
 	// POINTS CHUNK, this is the vertice data
 	uint32 pointsSize = 0;
-	f.write("PNTS", 4);
+	f.Write("PNTS", 4);
 	u32 = reverse_endian<uint32>(pointsSize);
-	f.write(reinterpret_cast<char *>(&u32), 4);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
 	fileLen += 8;
 
 	// output all the vertice data
@@ -733,9 +768,9 @@ void ExportM2toLWO(Model *m, const char *fn)
 				vert.x = reverse_endian<float>(m->vertices[a].x);
 				vert.y = reverse_endian<float>(m->vertices[a].y);
 				vert.z = reverse_endian<float>(m->vertices[a].z);
-				f.write(reinterpret_cast<char *>(&vert.x), 4);
-				f.write(reinterpret_cast<char *>(&vert.y), 4);
-				f.write(reinterpret_cast<char *>(&vert.z), 4);
+				f.Write(reinterpret_cast<char *>(&vert.x), 4);
+				f.Write(reinterpret_cast<char *>(&vert.y), 4);
+				f.Write(reinterpret_cast<char *>(&vert.z), 4);
 				fileLen += 12;
 				pointsSize += 12;
 
@@ -750,8 +785,8 @@ void ExportM2toLWO(Model *m, const char *fn)
 	// --
 	// SURFACE CHUNK,
 	uint32 surfaceSize = 0;
-	f.write("SRFS", 4);
-	f.write(reinterpret_cast<char *>(&surfaceSize), 4);
+	f.Write("SRFS", 4);
+	f.Write(reinterpret_cast<char *>(&surfaceSize), 4);
 	fileLen += 8;
 
 	wxString surfName;
@@ -769,26 +804,26 @@ void ExportM2toLWO(Model *m, const char *fn)
 			if (fmod((float)surfName.length(), 2.0f) > 0)
 				surfName.Append('\0');
 
-			f.write(surfName.c_str(), (int)surfName.length());
+			f.Write(surfName.c_str(), (int)surfName.length());
 			
 			fileLen += (uint32)surfName.length();
 			surfaceSize += (uint32)surfName.length();
 		}
 	}
 	
-	f.seekp(-4 - surfaceSize, ios::cur);
+	f.SeekO(-4 - surfaceSize, wxFromCurrent);
 	u32 = reverse_endian<uint32>(surfaceSize);
-	f.write(reinterpret_cast<char *>(&u32), 4);
-	f.seekp(0, ios::end);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
 	// =================
 
 	// --
 	// POLYGON CHUNK
 	int32 polySize = (numVerts / 3) * sizeof(POLYCHUNK);
 
-	f.write("POLS", 4);
+	f.Write("POLS", 4);
 	i32 = reverse_endian<int32>(polySize);
-	f.write(reinterpret_cast<char *>(&i32), 4);
+	f.Write(reinterpret_cast<char *>(&i32), 4);
 	fileLen += 8; // an extra 4 bytes for chunk size
 
 	uint16 counter=0;
@@ -811,7 +846,7 @@ void ExportM2toLWO(Model *m, const char *fn)
 				}
 				tri.surfIndex = ByteSwap16(surfCounter);
 
-				f.write(reinterpret_cast<char *>(&tri), sizeof(POLYCHUNK));
+				f.Write(reinterpret_cast<char *>(&tri), sizeof(POLYCHUNK));
 
 				fileLen += 10;
 			}
@@ -836,8 +871,8 @@ void ExportM2toLWO(Model *m, const char *fn)
 
 		if (p.init(m)) {
 			uint32 surfaceDefSize = 0;
-			f.write("SURF", 4);
-			f.write(reinterpret_cast<char *>(&surfaceDefSize), 4);
+			f.Write("SURF", 4);
+			f.Write(reinterpret_cast<char *>(&surfaceDefSize), 4);
 			fileLen += 8;
 
 			// Surface name
@@ -849,37 +884,37 @@ void ExportM2toLWO(Model *m, const char *fn)
 			if (fmod((float)surfName.length(), 2.0f) > 0)
 				surfName.Append('\0');
 
-			f.write(surfName.data(), (int)surfName.length());
+			f.Write(surfName.data(), (int)surfName.length());
 			
 			fileLen += (uint32)surfName.length();
 			surfaceDefSize += (uint32)surfName.length();
 
 			// Surface Attributes
 			// COLOUR, size 4, bytes 2
-			f.write("COLR", 4);
+			f.Write("COLR", 4);
 			u16 = 4;
 			u16 = ByteSwap16(u16);
-			f.write(reinterpret_cast<char *>(&u16), 2);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
 			
 			// value
 			ub = (unsigned char)(p.ocol.x * 255);
-			f.write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
 			ub = (unsigned char)(p.ocol.y * 255);
-			f.write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
 			ub = (unsigned char)(p.ocol.z * 255);
-			f.write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
 			ub = '\0';
-			f.write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
 
 			fileLen += 10;
 			surfaceDefSize += 10;
 			
 			// FLAGS
-			f.write("FLAG", 4);
+			f.Write("FLAG", 4);
 			// size
 			u16 = 2;
 			u16 = ByteSwap16(u16);
-			f.write(reinterpret_cast<char *>(&u16), 2);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
 
 			// value
 			u16 = 0;
@@ -891,17 +926,17 @@ void ExportM2toLWO(Model *m, const char *fn)
 				u16 &= SUF_EDGETRANSPARENT;
 			
 			u16 = ByteSwap16(u16);
-			f.write(reinterpret_cast<char *>(&u16), 2);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
 
 			fileLen += 8;
 			surfaceDefSize += 8;
 
 			// GLOSSINESS
-			f.write("GLOS", 4);
+			f.Write("GLOS", 4);
 			// size
 			u16 = 2;
 			u16 = ByteSwap16(u16);
-			f.write(reinterpret_cast<char *>(&u16), 2);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
 
 			// Value
 			// try 50% gloss for 'relfection surfaces
@@ -910,38 +945,38 @@ void ExportM2toLWO(Model *m, const char *fn)
 			else
 				u16 = 0;
 			u16 = ByteSwap16(u16);
-			f.write(reinterpret_cast<char *>(&u16), 2);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
 
 			fileLen += 8;
 			surfaceDefSize += 8;
 			
 			if (p.useEnvMap) {
 				// REFLECTION
-				f.write("FRFL", 4);
+				f.Write("FRFL", 4);
 				// size
 				u16 = 4;
 				u16 = ByteSwap16(u16);
-				f.write(reinterpret_cast<char *>(&u16), 2);
+				f.Write(reinterpret_cast<char *>(&u16), 2);
 
 				// value
 				f32 = 0.2f;
 				f32 = reverse_endian<float>(f32);
-				f.write(reinterpret_cast<char *>(&f32), 4);
+				f.Write(reinterpret_cast<char *>(&f32), 4);
 
 				fileLen += 10;
 				surfaceDefSize += 10;
 				
 				// REFLECTION
-				f.write("RFLT", 4);
+				f.Write("RFLT", 4);
 				// size
 				u16 = 2;
 				u16 = ByteSwap16(u16);
-				f.write(reinterpret_cast<char *>(&u16), 2);
+				f.Write(reinterpret_cast<char *>(&u16), 2);
 
 				// value
 				u16 = 1;
 				u16 = ByteSwap16(u16);
-				f.write(reinterpret_cast<char *>(&u16), 2);
+				f.Write(reinterpret_cast<char *>(&u16), 2);
 
 				fileLen += 8;
 				surfaceDefSize += 8;
@@ -949,32 +984,32 @@ void ExportM2toLWO(Model *m, const char *fn)
 			
 
 			// TRANSPARENCY
-			f.write("FTRN", 4);
+			f.Write("FTRN", 4);
 			u16 = 4; // size
 			u16 = ByteSwap16(u16);
-			f.write(reinterpret_cast<char *>(&u16), 2);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
 
 			// value
 			f32 = p.ocol.w;
 			f32 = reverse_endian<float>(f32);
-			f.write(reinterpret_cast<char *>(&f32), 4);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
 
 			fileLen += 10;
 			surfaceDefSize += 10;
 
 			// TEXTURE FLAGS
-			f.write("TFLG", 4);
+			f.Write("TFLG", 4);
 			// size
 			u16 = 2;
 			u16 = ByteSwap16(u16);
-			f.write(reinterpret_cast<char *>(&u16), 2);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
 
 			// value
 			u16 = 0; // don't know the flag info yet
 			if (p.trans)
 				u16 &= TXF_PIXBLEND;
 			u16 = ByteSwap16(u16);
-			f.write(reinterpret_cast<char *>(&u16), 2);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
 
 			fileLen += 8;
 			surfaceDefSize += 8;
@@ -986,20 +1021,20 @@ void ExportM2toLWO(Model *m, const char *fn)
 				texName.Append('\0');
 
 			// TEXTURE filename
-			f.write("TIMG", 4);
+			f.Write("TIMG", 4);
 			u16 = (unsigned short)texName.length();
 			u16 = ByteSwap16(u16);
-			f.write(reinterpret_cast<char *>(&u16), 2);
-			f.write(texName.data(), (int)texName.length());
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f.Write(texName.data(), (int)texName.length());
 
 			fileLen += (unsigned int)texName.length() + 6;
 			surfaceDefSize += (unsigned int)texName.length() + 6;
 
 			// update the chunks length
-			f.seekp(-4 - surfaceDefSize, ios::cur);
+			f.SeekO(-4 - surfaceDefSize, wxFromCurrent);
 			u32 = reverse_endian<uint32>(surfaceDefSize);
-			f.write(reinterpret_cast<char *>(&u32), 4);
-			f.seekp(0, ios::end);
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			f.SeekO(0, wxFromEnd);
 
 			wxString texFilename(fn);
 			texFilename = texFilename.BeforeLast('\\');
@@ -1009,23 +1044,25 @@ void ExportM2toLWO(Model *m, const char *fn)
 		}
 	}
 	
-	f.seekp(4,ios::beg);
+	f.SeekO(4, wxFromStart);
 	u32 = reverse_endian<uint32>(fileLen);
-	f.write(reinterpret_cast<char *>(&u32), 4);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
 	
-	f.seekp(16, ios::beg);
+	f.SeekO(16, wxFromStart);
 	u32 = reverse_endian<uint32>(pointsSize);
-	f.write(reinterpret_cast<char *>(&u32), 4);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
 	// ===========================
 
 
-	f.close();
+	f.Close();
 }
 
 void ExportM2toOBJ(Model *m, const char *fn)
 {
 	// Open file
+	//locale::global(locale(""));
 	ofstream f(fn, ios_base::out | ios_base::trunc);
+	//locale::global(locale("C"));
 
 	if (!f.is_open()) {
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
@@ -1036,7 +1073,9 @@ void ExportM2toOBJ(Model *m, const char *fn)
 	matName = matName.BeforeLast('.');
 	matName << ".mtl";
 
+	//locale::global(locale(""));
 	ofstream fm(matName.c_str(), ios_base::out | ios_base::trunc);
+	//locale::global(locale("C"));
 	
 	// output all the vertice data
 	for (size_t i=0; i<m->passes.size(); i++) {
@@ -1047,7 +1086,11 @@ void ExportM2toOBJ(Model *m, const char *fn)
 
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 				uint16 a = m->indices[b];
-				f << "v " << m->vertices[a].x << " " << m->vertices[a].y << " " << m->vertices[a].z << " " << "1.0" << endl;
+				if (m->vertices == NULL) {
+					f << "v " << m->origVertices[a].pos.x << " " << m->origVertices[a].pos.y << " " << m->origVertices[a].pos.z << " " << "1.0" << endl;
+				} else {
+					f << "v " << m->vertices[a].x << " " << m->vertices[a].y << " " << m->vertices[a].z << " " << "1.0" << endl;
+				}
 			}
 
 			wxString texName(fn);
@@ -1079,7 +1122,7 @@ void ExportM2toOBJ(Model *m, const char *fn)
 		if (p.init(m)) {
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 				uint16 a = m->indices[b];
-				f << "vt " << m->origVertices[a].texcoords.x << " " << m->origVertices[a].texcoords.y << endl;
+				f << "vt " << m->origVertices[a].texcoords.x << " " << (1 - m->origVertices[a].texcoords.y) << endl;
 			}
 		}
 	}
@@ -1105,8 +1148,13 @@ void ExportM2toOBJ(Model *m, const char *fn)
 			f << "s 1" << endl;
 			f << "usemtl Material_" << p.geoset << endl;
 			for (unsigned int k=0; k<p.indexCount; k+=3) {
-				f << "f " << counter << " " << counter+1 << " " << counter+2 << endl;
-				counter+=3;
+				f << "f ";
+				f << counter << "/" << counter << "/" << counter << " ";
+				counter ++;
+				f << counter << "/" << counter << "/" << counter << " ";
+				counter ++;
+				f << counter << "/" << counter << "/" << counter << endl;
+				counter ++;
 			}
 		}
 	}
