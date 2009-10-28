@@ -10,6 +10,8 @@
 #include "vec3d.h"
 #include "quaternion.h"
 
+
+
 // interpolation functions
 template<class T>
 inline T interpolate(const float r, const T &v1, const T &v2)
@@ -103,10 +105,10 @@ template <class T, class D=T, class Conv=Identity<T> >
 class Animated {
 public:
 
-	bool used;
 	int type, seq;
-	int *globals;
+	uint32 *globals;
 #ifndef WotLK
+	bool used;
 	std::vector<AnimRange> ranges;
 	std::vector<unsigned int> times;
 	std::vector<T> data;
@@ -117,55 +119,55 @@ public:
 	std::vector<T> data[MAX_ANIMATED];
 	// for nonlinear interpolations:
 	std::vector<T> in[MAX_ANIMATED], out[MAX_ANIMATED];
-	size_t size; // for fix function
+	size_t sizes; // for fix function
 #endif
+	bool uses(unsigned int anim)
+	{
+		if (seq>-1)
+			anim = 0;
+		return (data[anim].size() > 0);
+	}
 
 	T getValue(unsigned int anim, unsigned int time)
 	{
-#ifdef WotLK // by Flow
-		if( !data[anim].size() ) { // HACK
-			return T();
-		}
-#endif
-
 #ifdef WotLK
-		if (type != INTERPOLATION_NONE || data[anim].size()>1) {
-			// obtain a time value and a data range
-			if (seq>-1) {
-				if (globals[seq]==0) 
-					time = 0;
-				else 
-					time = globalTime % globals[seq];
+		// obtain a time value and a data range
+		if (seq>-1) {
+			// TODO
+			if (globals[seq]==0) 
+				time = 0;
+			else 
+				time = globalTime % globals[seq];
+			anim = 0;
+		}
+		if (data[anim].size()>1 && times[anim].size()>1) {
+			size_t t1, t2;
+			size_t pos=0;
+			int max_time = times[anim][times[anim].size()-1];
+			if (max_time > 0)
+				time %= max_time; // I think this might not be necessary?
+			for (size_t i=0; i<times[anim].size()-1; i++) {
+				if (time >= times[anim][i] && time < times[anim][i+1]) {
+					pos = i;
+					break;
+				}
 			}
+			t1 = times[anim][pos];
+			t2 = times[anim][pos+1];
+			float r = (time-t1)/(float)(t2-t1);
 
- 			if (times[anim].size() > 1) {
-				size_t t1, t2;
-				size_t pos=0;
-				for (size_t i=0; i<times[anim].size()-1; i++) {
-					if (time >= times[anim][i] && time < times[anim][i+1]) {
-						pos = i;
-						break;
-					}
-				}
-				t1 = times[anim][pos];
-				t2 = times[anim][pos+1];
-				float r = (time-t1)/(float)(t2-t1);
-
-				if (type == INTERPOLATION_LINEAR) 
-					return interpolate<T>(r,data[anim][pos],data[anim][pos+1]);
-				else if (type == INTERPOLATION_NONE) 
-					return data[anim][pos];
-				else {
-					// INTERPOLATION_HERMITE is only used in cameras afaik?
-					return interpolateHermite<T>(r,data[anim][pos],data[anim][pos+1],in[anim][pos],out[anim][pos]);
-				}
-			} else {
-				return data[anim][0];
+			if (type == INTERPOLATION_LINEAR) 
+				return interpolate<T>(r,data[anim][pos],data[anim][pos+1]);
+			else if (type == INTERPOLATION_NONE) 
+				return data[anim][pos];
+			else {
+				// INTERPOLATION_HERMITE is only used in cameras afaik?
+				return interpolateHermite<T>(r,data[anim][pos],data[anim][pos+1],in[anim][pos],out[anim][pos]);
 			}
 		} else {
 			// default value
 			if (data[anim].size() == 0)
-				return 0;
+				return T();
 			else
 				return data[anim][0];
 		}
@@ -222,7 +224,7 @@ public:
 
 	}
 
-	void init(AnimationBlock &b, MPQFile &f, int *gs)
+	void init(AnimationBlock &b, MPQFile &f, uint32 *gs)
 	{
 		globals = gs;
 		type = b.type;
@@ -231,10 +233,12 @@ public:
 			assert(gs);
 		}
 
+#ifndef	WotLK
 		// Old method
 		//used = (type != INTERPOLATION_NONE) || (seq != -1);
 		// New method suggested by Cryect
 		used = (b.nKeys > 0);
+#endif
 
 		// ranges
 		#ifndef WotLK
@@ -257,14 +261,14 @@ public:
 		// times
 		assert(b.nTimes == b.nKeys);
 #ifdef WotLK // by Flow
-		size = b.nTimes;
+		sizes = b.nTimes;
 		if( b.nTimes == 0 )
 			return;
 
 		for(size_t j=0; j < b.nTimes; j++) {
 			AnimationBlockHeader* pHeadTimes = (AnimationBlockHeader*)(f.getBuffer() + b.ofsTimes + j*sizeof(AnimationBlockHeader));
 		
-			uint32 *ptimes = (uint32*)(f.getBuffer() + pHeadTimes->ofsEntrys);
+			unsigned int *ptimes = (unsigned int*)(f.getBuffer() + pHeadTimes->ofsEntrys);
 			for (size_t i=0; i < pHeadTimes->nEntrys; i++)
 				times[j].push_back(ptimes[i]);
 		}
@@ -318,7 +322,7 @@ public:
 	}
 
 #ifdef WotLK
-	void init(AnimationBlock &b, MPQFile &f, int *gs, MPQFile *animfiles)
+	void init(AnimationBlock &b, MPQFile &f, uint32 *gs, MPQFile *animfiles)
 	{
 		globals = gs;
 		type = b.type;
@@ -327,14 +331,16 @@ public:
 			assert(gs);
 		}
 
+#ifndef	WotLK
 		// Old method
 		//used = (type != INTERPOLATION_NONE) || (seq != -1);
 		// New method suggested by Cryect
 		used = (b.nKeys > 0);
+#endif
 
 		// times
 		assert(b.nTimes == b.nKeys);
-		size = b.nTimes;
+		sizes = b.nTimes;
 		if( b.nTimes == 0 )
 			return;
 
@@ -347,7 +353,6 @@ public:
 				ptimes = (uint32*)(f.getBuffer() + pHeadTimes->ofsEntrys);
 			for (size_t i=0; i < pHeadTimes->nEntrys; i++)
 				times[j].push_back(ptimes[i]);
-
 		}
 
 		// keyframes
@@ -383,7 +388,7 @@ public:
 			case INTERPOLATION_NONE:
 			case INTERPOLATION_LINEAR:
 #ifdef WotLK
-				for (size_t i=0; i<size; i++) {
+				for (size_t i=0; i<sizes; i++) {
 					for (size_t j=0; j<data[i].size(); j++) {
 						data[i][j] = fixfunc(data[i][j]);
 					}
@@ -396,7 +401,7 @@ public:
 				break;
 			case INTERPOLATION_HERMITE:
 #ifdef WotLK
-				for (size_t i=0; i<size; i++) {
+				for (size_t i=0; i<sizes; i++) {
 					for (size_t j=0; j<data[i].size(); j++) {
 						data[i][j] = fixfunc(data[i][j]);
 						in[i][j] = fixfunc(in[i][j]);
@@ -413,7 +418,27 @@ public:
 				break;
 		}
 	}
-
+	friend std::ostream& operator<<(std::ostream& out, Animated& v)
+	{
+		if (v.sizes == 0)
+			return out;
+		out << "      <type>"<< v.type << "</type>" << endl;
+		out << "      <seq>"<< v.seq << "</seq>" << endl;
+		out << "      <anims>"<< endl;
+		for(size_t j=0; j<v.sizes; j++) {
+			if (v.uses(j)) {
+				out << "    <anim id=\"" << j << "\">" << endl;
+				for(size_t k=0; k<v.data[j].size(); k++) {
+					out << "      <data time=\"" << v.times[j][k]  << "\">" << v.data[j][k] << "</data>" << endl;
+				}
+				out << "    </anim>" << endl;
+			}
+			if (v.seq > -1 && j > 0)
+				break;
+		}
+		out << "      </anims>"<< endl;
+		return out;
+	}
 };
 
 typedef Animated<float,short,ShortToFloat> AnimatedShort;

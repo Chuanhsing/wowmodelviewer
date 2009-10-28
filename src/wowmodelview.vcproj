@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="wowmodelview"
 	ProjectGUID="{DCA0C667-2A7A-4FCE-AD02-466F7A380E0C}"
 	RootNamespace="wowmodelview"
@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;WotLK&quot;&#x0D;&#x0A;"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;.\wx\include&quot;;&quot;.\wx\include\msvc&quot;;.\zlib\;.\glew\include;.\bzip2\;.\;"
+				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.10\include&quot;;&quot;C:\wxWidgets-2.8.10\include\msvc&quot;;.\zlib\;.\glew\include;.\bzip2\;.\;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WXDEBUG__"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -66,16 +66,17 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories=".\wx\include"
+				AdditionalIncludeDirectories="C:\wxWidgets-2.8.10\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="glew32d.lib"
 				OutputFile="$(OutDir)/wowmodelview.exe"
 				LinkIncremental="0"
-				AdditionalLibraryDirectories=".\wx\lib\vc_lib;.\CxImage;.\glew\lib;.\zlib\$(OutDir);.\bzip2\$(OutDir)"
+				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.10\lib&quot;;&quot;C:\wxWidgets-2.8.10\lib\vc_lib&quot;;.\CxImage\;.\glew\lib;.\zlib\$(OutDir);.\bzip2\$(OutDir)"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="LIBCMT.lib"
 				GenerateDebugInformation="true"
@@ -144,7 +145,7 @@
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="&quot;.\wx\include&quot;;&quot;.\wx\include\msvc&quot;;.\zlib\;.\glew\include;.\bzip2\;.\;"
+				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.10\include&quot;;&quot;C:\wxWidgets-2.8.10\include\msvc&quot;;.\zlib\;.\glew\include;.\bzip2\;.\;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_WIN32"
 				GeneratePreprocessedFile="0"
 				KeepComments="false"
@@ -166,7 +167,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories=".\wx\include"
+				AdditionalIncludeDirectories="C:\wxWidgets-2.8.10\include\"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -178,7 +179,7 @@
 				Version="0.5.01"
 				LinkIncremental="0"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories=".\wx\lib\vc_lib;.\CxImage;.\glew\lib;.\zlib\$(OutDir);.\bzip2\$(OutDir)"
+				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.10\lib&quot;;&quot;C:\wxWidgets-2.8.10\lib\vc_lib&quot;;.\CxImage\;.\glew\lib;.\zlib\$(OutDir);.\bzip2\$(OutDir)"
 				IgnoreDefaultLibraryNames="LIBCMT.lib"
 				GenerateDebugInformation="false"
 				AssemblyDebug="2"
@@ -269,6 +270,10 @@
 			</File>
 			<File
 				RelativePath=".\effects.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\filecontrol.cpp"
 				>
 			</File>
 			<File
@@ -418,6 +423,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\filecontrol.h"
+				>
+			</File>
+			<File
 				RelativePath=".\globalvars.h"
 				>
 			</File>
@@ -546,6 +555,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\wowmodelview.rc"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="CxImage"
@@ -655,10 +668,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath="..\doc\changelog.txt"
-			>
-		</File>
 		<File
 			RelativePath=".\Makefile"
 			>

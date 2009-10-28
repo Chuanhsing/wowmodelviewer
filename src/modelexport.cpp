@@ -51,7 +51,7 @@ T reverse_endian(T n) // for 32bits
 
 unsigned short ByteSwap16 (unsigned short nValue) // 16bit
 {
-   return (((nValue>> 8)) | (nValue << 8));
+   return ((((nValue & 0xFF00)>> 8)) | ((nValue & 0xFF) << 8));
 }
 
 
@@ -693,15 +693,17 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn)
 		wxDELETEA(groups);
 }
 
-void ExportM2toLWO2(Attachment *att, const char *fn)
+/*
+http://gpwiki.org/index.php/LWO
+*/
+void ExportM2toLWO2(Attachment *att, Model *m, const char *fn)
 {
-	/*
 	int i32;
 	uint32 u32;
 	float f32;
 	uint16 u16;
 	unsigned char ub;
-	*/
+	
 	wxFFileOutputStream f(fn, "w+b");
 
 	if (!f.IsOk()) {
@@ -711,14 +713,186 @@ void ExportM2toLWO2(Attachment *att, const char *fn)
 
 	InitCommon(att);
 
+	// LightWave object files use the IFF syntax described in the EA-IFF85 document. Data is stored in a collection of chunks. 
+	// Each chunk begins with a 4-byte chunk ID and the size of the chunk in bytes, and this is followed by the chunk contents.
+
 	unsigned int fileLen = 0;
 
+	// --
+	// Formally, a LightWave object file is a single IFF FORM chunk of type LWO2. The first 4 bytes are the characters 'F', 'O', 'R', 'M', 
+	// and this is followed by a 4-byte integer containing the chunk size (the size of the file minus 8) and the FORM type (the 
+	// characters 'L', 'W', 'O', '2'). As with all numbers in LWO2 files, the chunk size is always written in big-endian (Motorola, 
+	// network) byte order.
 	f.Write("FORM", 4);
 	f.Write(reinterpret_cast<char *>(&fileLen), 4);
-
 	f.Write("LWO2", 4);
 	fileLen += 4;
+	// ================
 
+
+	// --
+	// The TAGS chunk contains an array of strings. Whenever something is identified by name in the file, the ID is often a 
+	// 0-based index into the TAGS array. The only named element in this file is its single surface, named "Default".
+	f.Write("TAGS", 4);
+	u32 = reverse_endian<uint32>(8);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.Write("Default", 7);
+	ub = 0;
+	f.Write(reinterpret_cast<char *>(&ub), 1);
+	fileLen += 4+4+8;
+	// ================
+
+
+	// --
+	// The layer header signals the start of a new layer. All geometry elements that appear in the file after this and before 
+	// the next LAYR chunk belong to this layer. The layer header contains an index, a flags word, the pivot point of the layer, 
+	// the layer's name, and the index of the parent layer. This is the first (and only) layer, so its index is 0 and the optional 
+	// parent index is omitted. The bits in the flags word are also 0, and the layer hasn't been given a name.
+	// The pivot point is the origin for rotations in this layer and is expressed in world coordinates. Pivots typically differ from 
+	// (0, 0, 0) when layers and layer parenting are used to create an object hierarchy.
+	f.Write("LAYR", 4);
+	u32 = reverse_endian<uint32>(0);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	// ================
+
+
+	// --
+	// POINTS CHUNK, this is the vertice data
+	// The PNTS chunk contains triples of floating-point numbers, the coordinates of a list of points. The numbers are written 
+	// as IEEE 32-bit floats in network byte order. The IEEE float format is the standard bit pattern used by almost all CPUs 
+	// and corresponds to the internal representation of the C language float type. In other words, this isn't some bizarre 
+	// proprietary encoding. You can process these using simple fread and fwrite calls (but don't forget to correct the byte 
+	// order if necessary).
+	uint32 pointsSize = 0;
+	f.Write("PNTS", 4);
+	u32 = reverse_endian<uint32>(pointsSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+
+	// output all the vertice data
+	for (size_t i=0; i<m->passes.size(); i++) {
+		ModelRenderPass &p = m->passes[i];
+
+		if (p.init(m)) {
+			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
+				uint16 a = m->indices[b];
+				Vec3D vert;
+				vert.x = reverse_endian<float>(m->vertices[a].x);
+				vert.y = reverse_endian<float>(m->vertices[a].y);
+				vert.z = reverse_endian<float>(m->vertices[a].z);
+				f.Write(reinterpret_cast<char *>(&vert.x), 4);
+				f.Write(reinterpret_cast<char *>(&vert.y), 4);
+				f.Write(reinterpret_cast<char *>(&vert.z), 4);
+				fileLen += 12;
+				pointsSize += 12;
+
+				numVerts++;
+			}
+			numGroups++;
+		}
+	}
+	// ================
+
+
+	// --
+	// The bounding box for the layer, just so that readers don't have to scan the PNTS chunk to find the extents.
+	f.Write("BBOX", 4);
+	u32 = reverse_endian<uint32>(24);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	Vec3D vert;
+	vert.x = reverse_endian<float>(m->header.ps.BoundingBox[0].x);
+	vert.y = reverse_endian<float>(m->header.ps.BoundingBox[0].y);
+	vert.z = reverse_endian<float>(m->header.ps.BoundingBox[0].z);
+	f.Write(reinterpret_cast<char *>(&vert.x), 4);
+	f.Write(reinterpret_cast<char *>(&vert.y), 4);
+	f.Write(reinterpret_cast<char *>(&vert.z), 4);
+	vert.x = reverse_endian<float>(m->header.ps.BoundingBox[1].x);
+	vert.y = reverse_endian<float>(m->header.ps.BoundingBox[1].y);
+	vert.z = reverse_endian<float>(m->header.ps.BoundingBox[1].z);
+	f.Write(reinterpret_cast<char *>(&vert.x), 4);
+	f.Write(reinterpret_cast<char *>(&vert.y), 4);
+	f.Write(reinterpret_cast<char *>(&vert.z), 4);
+	// ================
+
+
+	// --
+	// POLYGON CHUNK
+	// The POLS chunk contains a list of polygons. A "polygon" in this context is anything that can be described using an 
+	// ordered list of vertices. A POLS of type FACE contains ordinary polygons, but the POLS type can also be CURV, 
+	// PTCH, MBAL or BONE, for example.
+	//
+	// The high 6 bits of the vertex count for each polygon are reserved for flags, which in effect limits the number of 
+	// vertices per polygon to 1023. Don't forget to mask the high bits when reading the vertex count. The flags are 
+	// currently only defined for CURVs.
+	// 
+	// The point indexes following the vertex count refer to the points defined in the most recent PNTS chunk. Each index 
+	// can be a 2-byte or a 4-byte integer. If the high order (first) byte of the index is not 0xFF, the index is 2 bytes long. 
+	// This allows values up to 65279 to be stored in 2 bytes. If the high order byte is 0xFF, the index is 4 bytes long and 
+	// its value is in the low three bytes (index & 0x00FFFFFF). The maximum value for 4-byte indexes is 16,777,215 (224 - 1). 
+	// Objects with more than 224 vertices can be stored using multiple pairs of PNTS and POLS chunks.
+	// 
+	// The cube has 6 square faces each defined by 4 vertices. LightWave polygons are single-sided by default 
+	// (double-sidedness is a possible surface property). The vertices are listed in clockwise order as viewed from the 
+	// visible side, starting with a convex vertex. (The normal is defined as the cross product of the first and last edges.)
+	int32 polySize = (numVerts / 3) * sizeof(POLYCHUNK);
+
+	f.Write("POLS", 4);
+	i32 = reverse_endian<int32>(polySize);
+	f.Write(reinterpret_cast<char *>(&i32), 4);
+	fileLen += 8; // an extra 4 bytes for chunk size
+	f.Write("FACE", 4);
+	fileLen += 4;
+
+	uint16 counter=0;
+	int16 surfCounter=0;
+	POLYCHUNK tri;
+	
+	for (size_t i=0; i<m->passes.size(); i++) {
+		ModelRenderPass &p = m->passes[i];
+
+		if (p.init(m)) {
+
+			surfCounter++;
+
+			for (unsigned int k=0; k<p.indexCount; k+=3) {
+				u16 = 3;
+				tri.numVerts = ByteSwap16(u16);
+				for (uint16 b=0; b<3; b++) {
+					tri.indice[b] = ByteSwap16(counter);
+					counter++;
+				}
+				tri.surfIndex = ByteSwap16(surfCounter);
+
+				f.Write(reinterpret_cast<char *>(&tri), sizeof(POLYCHUNK));
+
+				fileLen += 10;
+			}
+		}
+	}
+	
+	// Now lets go back and correct our data lengths
+	//f.seekp(-4 - polySize, ios::cur);
+	//i32 = reverse_endian<int32>(polySize);
+	//f.Write(reinterpret_cast<char *>(&i32), 4);
+	// ========
+
+	// --
+	// The PTAG chunk associates tags with polygons. In this case, it identifies which surface is assigned to each polygon. 
+	// The first number in each pair is a 0-based index into the most recent POLS chunk, and the second is a 0-based 
+	// index into the TAGS chunk.
+	f.Write("PTAG", 4);
+	u32 = reverse_endian<uint32>(0);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	// ================
+
+
+	// --
+	f.Write("SURF", 4);
+	u32 = reverse_endian<uint32>(0);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	// ================
+
+//	f.Write("", 4);
 
 	f.Close();
 }
@@ -1057,6 +1231,77 @@ void ExportM2toLWO(Model *m, const char *fn)
 	f.Close();
 }
 
+void ExportWMOtoOBJ(WMO *m, const char *fn)
+{
+	// Open file
+	ofstream f(fn, ios_base::out | ios_base::trunc);
+
+	if (!f.is_open()) {
+		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
+		return;
+	}
+
+	int counter = 1;
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			f << "# Chunk Indice Count: " << batch->indexCount << endl;
+			for(int ii=0;ii<batch->indexCount;ii++)
+			{
+				int a = m->groups[i].indices[batch->indexStart + ii];
+				f << "v " << m->groups[i].vertices[a].x << " " << m->groups[i].vertices[a].z << " " << -m->groups[i].vertices[a].y << " " << "1.0" << endl;
+				f << "vn " << m->groups[i].normals[a].x << " " << m->groups[i].normals[a].z << " " << -m->groups[i].normals[a].y << endl;
+				f << "vt " << m->groups[i].texcoords[a].x << " " << (1 - m->groups[i].texcoords[a].y) << endl;
+			}
+			
+			f << "g Geoset_" << i << "_" << j << "_tex_" << int(batch->texture) << endl;
+			f << "s 1" << endl;
+			f << "usemtl Material_" << counter << endl;
+			for (unsigned int k=0; k<batch->indexCount; k+=3) {
+				f << "f ";
+				f << counter << "/" << counter << "/" << counter << " ";
+				f << (counter+1) << "/" << (counter+1) << "/" << (counter+1) << " ";
+				f << (counter+2) << "/" << (counter+2) << "/" << (counter+2) << endl;
+				counter += 3;
+			}
+		}
+	}
+	for(int i=0;i<m->nTextures;i++)
+	{
+		glBindTexture(GL_TEXTURE_2D, m->mat[i].tex);
+
+		wxString texName(fn);
+		texName = texName.AfterLast('\\').BeforeLast('.');
+		texName << "_" << i << ".tga";
+
+		wxString texFilename(fn);
+		texFilename = texFilename.BeforeLast('\\');
+		texFilename += '\\';
+		texFilename += texName;
+		SaveTexture(texFilename);
+	}
+
+	// Close file
+	f.close();
+}
+
+void ExportWMOto3DS(WMO *m, const char *fn)
+{
+	wxLogMessage(_T("Error: WMO to 3DS export not implemented."));
+}
+
+void ExportWMOtoMS3D(WMO *m, const char *fn)
+{
+	wxLogMessage(_T("Error: WMO to MS3D export not implemented."));
+}
+
+void ExportWMOtoLWO(WMO *m, const char *fn)
+{
+	wxLogMessage(_T("Error: WMO to LWO export not implemented."));
+}
+
+
 void ExportM2toOBJ(Model *m, const char *fn)
 {
 	// Open file
@@ -1169,3 +1414,4 @@ void ExportM2toRAW(Model *m)
 {
 	
 }
+

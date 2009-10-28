@@ -1,3 +1,5 @@
+
+#include "modelviewer.h"
 #include "model.h"
 
 #include <cassert>
@@ -5,7 +7,7 @@
 #include "util.h"
 
 int globalTime = 0;
-extern Model *g_selModel;
+extern ModelViewer *g_modelViewer;
 
 AnimManager::AnimManager(ModelAnimation *anim) {
 	AnimIDSecondary = -1;
@@ -116,8 +118,7 @@ void AnimManager::Next() {
 	
 	Frame = anims[animList[PlayIndex].AnimID].timeStart;
 #ifdef WotLK
-	TotalFrames = anims[animList[PlayIndex].AnimID].timeEnd - anims[animList[PlayIndex].AnimID].timeStart;
-	g_selModel->currentAnim = animList[PlayIndex].AnimID;
+	TotalFrames = GetFrameCount();
 #endif
 }
 
@@ -137,8 +138,7 @@ void AnimManager::Prev() {
 
 	Frame = anims[animList[PlayIndex].AnimID].timeEnd;
 #ifdef WotLK
-	TotalFrames = anims[animList[PlayIndex].AnimID].timeEnd - anims[animList[PlayIndex].AnimID].timeStart;
-	g_selModel->currentAnim = animList[PlayIndex].AnimID;
+	TotalFrames = GetFrameCount();
 #endif
 }
 
@@ -249,17 +249,17 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 	pos = Vec3D(0.0f, 0.0f, 0.0f);
 	rot = Vec3D(0.0f, 0.0f, 0.0f);
 
-	for (int i=0; i<32; i++) {
+	for (int i=0; i<TEXTURE_MAX; i++) {
 		specialTextures[i] = -1;
 		replaceTextures[i] = 0;
 		useReplaceTextures[i] = false;
 	}
 
-	for (int i=0; i<40; i++) 
+	for (int i=0; i<ATT_MAX; i++) 
 		attLookup[i] = -1;
 
-	for (int i=0; i<27; i++) 
-		boneLookup[i] = -1;
+	for (int i=0; i<BONE_MAX; i++) 
+		keyBoneLookup[i] = -1;
 
 
 	dlist = 0;
@@ -292,6 +292,7 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 	animtime = 0;
 	anim = 0;
 	anims = 0;
+	animLookups = 0;
 	animManager = NULL;
 	bones = 0;
 	bounds = 0;
@@ -305,9 +306,11 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 	texAnims = 0;
 	textures = 0;
 	transparency = 0;
+	modelType = MT_NORMAL;
 	// --
 
 	MPQFile f(tempname);
+	g_modelViewer->modelOpened->Add(tempname);
 	ok = false;
 	if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
 		wxLogMessage("Error: Unable to load model: [%s]", tempname);
@@ -330,83 +333,8 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 		return;
 	}
 
-#if 0
-	if (header.nameOfs == 304 || header.nameOfs == 320) {
-		fullname = name;
-		ModelHeader2 header2;
-		//memset(&header, 0, sizeof(ModelHeader));
-		memcpy(&header2, f.getBuffer(), sizeof(ModelHeader2));
-
-		header.nBones = header2.nBones;
-		header.ofsBones = header2.ofsBones;
-		header.nBoneLookup = header2.nBoneLookup;
-		header.ofsBoneLookup = header2.ofsBoneLookup;
-		header.nVertices = header2.nVertices;
-		header.ofsVertices = header2.ofsVertices;
-		header.nViews = header2.nViews;
-		header.nColors = header2.nColors;
-		header.ofsColors = header2.ofsColors;
-		header.nTextures = header2.nTextures;
-		header.ofsTextures = header2.ofsTextures;
-		header.nTransparency = header2.nTransparency;
-		header.ofsTransparency = header2.ofsTransparency;
-		header.nTexAnims = header2.nTexAnims;
-		header.ofsTexAnims = header2.ofsTexAnims;
-		header.nTexReplace = header2.nTexReplace;
-		header.ofsTexReplace = header2.ofsTexReplace;
-		header.nTexFlags = header2.nTexFlags;
-		header.ofsTexFlags = header2.ofsTexFlags;
-		header.nY = header2.nY;
-		header.ofsY = header2.ofsY;
-		header.nTexLookup = header2.nTexLookup;
-		header.ofsTexLookup = header2.ofsTexLookup;
-		header.nTexUnitLookup = header2.nTexUnitLookup;
-		header.ofsTexUnitLookup = header2.ofsTexUnitLookup;
-		header.nTransparencyLookup = header2.nTransparencyLookup;
-		header.ofsTransparencyLookup = header2.ofsTransparencyLookup;
-		header.nTexAnimLookup = header2.nTexAnimLookup;
-		header.ofsTexAnimLookup = header2.ofsTexAnimLookup;
-		header.floats[0] = header2.floats[0];
-		header.floats[1] = header2.floats[1];
-		header.floats[2] = header2.floats[2];
-		header.floats[3] = header2.floats[3];
-		header.floats[4] = header2.floats[4];
-		header.floats[5] = header2.floats[5];
-		header.floats[6] = header2.floats[6];
-		header.floats[7] = header2.floats[7];
-		header.floats[8] = header2.floats[8];
-		header.floats[9] = header2.floats[9];
-		header.floats[10] = header2.floats[10];
-		header.floats[11] = header2.floats[11];
-		header.floats[12] = header2.floats[12];
-		header.floats[13] = header2.floats[13];
-		header.nBoundingTriangles = header2.nBoundingTriangles;
-		header.ofsBoundingTriangles = header2.ofsBoundingTriangles;
-		header.nBoundingVertices = header2.nBoundingVertices;
-		header.ofsBoundingVertices = header2.ofsBoundingVertices;
-		header.nBoundingNormals = header2.nBoundingNormals;
-		header.ofsBoundingNormals = header2.ofsBoundingNormals;
-		header.nAttachments = header2.nAttachments;
-		header.ofsAttachments = header2.ofsAttachments;
-		header.nAttachLookup = header2.nAttachLookup;
-		header.ofsAttachLookup = header2.ofsAttachLookup;
-		header.nAttachments_2 = header2.nAttachments_2;
-		header.ofsAttachments_2 = header2.ofsAttachments_2;
-		header.nLights = header2.nLights;
-		header.ofsLights = header2.ofsLights;
-		header.nCameras = header2.nCameras;
-		header.ofsCameras = header2.ofsCameras;
-		header.nCameraLookup = header2.nCameraLookup;
-		header.ofsCameraLookup = header2.ofsCameraLookup;
-		header.nRibbonEmitters = header2.nRibbonEmitters;
-		header.ofsRibbonEmitters = header2.ofsRibbonEmitters;
-		header.nParticleEmitters = header2.nParticleEmitters;
-		header.ofsParticleEmitters = header2.ofsParticleEmitters;
-	}
-#endif
-
 #ifdef WotLK
-	fullname = name;
+	modelname = tempname;
 
 	if (header.nameOfs != 304 && header.nameOfs != 320) {
 		wxLogMessage(_T("Error:\t\tInvalid model nameOfs=%d/%d!  May be corrupted."), header.nameOfs, sizeof(ModelHeader));
@@ -424,6 +352,7 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 #endif
 
 	// Error check
+	// 8 1 0 0 = WoW 3.0 models
 	// 4 1 0 0 = WoW 2.0 models
 	// 0 1 0 0 = WoW 1.0 models
 	if (header.version[0] != 4 && header.version[1] != 1 && header.version[2] != 0 && header.version[3] != 0) {
@@ -442,8 +371,8 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 	}
 	
 	if (header.nGlobalSequences) {
-		globalSequences = new int[header.nGlobalSequences];
-		memcpy(globalSequences, (f.getBuffer() + header.ofsGlobalSequences), header.nGlobalSequences * 4);
+		globalSequences = new uint32[header.nGlobalSequences];
+		memcpy(globalSequences, (f.getBuffer() + header.ofsGlobalSequences), header.nGlobalSequences * sizeof(uint32));
 	}
 
 	if (forceAnim) 
@@ -484,7 +413,7 @@ Model::~Model()
 					texturemanager.del(textures[i]);
 			}
 
-			for (size_t i=0; i<32; i++) {
+			for (size_t i=0; i<TEXTURE_MAX; i++) {
 				if (replaceTextures[i] > 0)
 					texturemanager.del(replaceTextures[i]);
 			}
@@ -520,6 +449,7 @@ Model::~Model()
 
 			wxDELETEA(indices);
 			wxDELETEA(anims);
+			wxDELETEA(animLookups);
 			wxDELETEA(origVertices);
 
 			wxDELETEA(bones);
@@ -533,6 +463,8 @@ Model::~Model()
 		} else {
 			glDeleteLists(dlist, 1);
 		}
+		if (g_modelViewer)
+			g_modelViewer->modelOpened->Clear();
 	}
 }
 
@@ -551,8 +483,8 @@ bool Model::isAnimated(MPQFile &f)
 		for (size_t b=0; b<4; b++) {
 			if (verts[i].weights[b]>0) {
 				ModelBoneDef &bb = bo[verts[i].bones[b]];
-				if (bb.translation.type || bb.rotation.type || bb.scaling.type || (bb.flags&8)) {
-					if (bb.flags&8) {
+				if (bb.translation.type || bb.rotation.type || bb.scaling.type || (bb.flags&MODELBONE_BILLBOARD)) {
+					if (bb.flags&MODELBONE_BILLBOARD) {
 						// if we have billboarding, the model will need per-instance animation
 						ind = true;
 					}
@@ -672,32 +604,56 @@ void Model::initCommon(MPQFile &f)
 	// textures
 	ModelTextureDef *texdef = (ModelTextureDef*)(f.getBuffer() + header.ofsTextures);
 	if (header.nTextures) {
-		
-		// Error check
-		if (header.nTextures <= 32) {
-			textures = new TextureID[header.nTextures];
-			for (size_t i=0; i<header.nTextures; i++) {
-				char texname[256];
-				if (texdef[i].type == 0) {
-					strncpy(texname, (const char*)f.getBuffer() + texdef[i].nameOfs, texdef[i].nameLen);
-					texname[texdef[i].nameLen] = 0;
-					std::string path(texname);
-					//fixname(path);
-					textures[i] = texturemanager.add(texname);
-				} else {
-					// special texture - only on characters and such...
-					textures[i] = 0;
-					//while (texdef[i].type < 16 && specialTextures[texdef[i].type]!=-1) texdef[i].type++;
-					//if (texdef[i].type < 16)specialTextures[texdef[i].type] = (int)i;
-					specialTextures[i] = texdef[i].type;
+		textures = new TextureID[header.nTextures];
+		char texname[256];
+		for (size_t i=0; i<header.nTextures; i++) {
+			// Error check
+			if (i > TEXTURE_MAX-1) {
+				wxLogMessage(_T("Critical Error: Model Texture %d over %d"), header.nTextures, TEXTURE_MAX);
+				break;
+			}
+			/*
+			Texture Types
+			Texture type is 0 for regular textures, nonzero for skinned textures (filename not referenced in the M2 file!) 
+			For instance, in the NightElfFemale model, her eye glow is a type 0 texture and has a file name, 
+			the other 3 textures have types of 1, 2 and 6. The texture filenames for these come from client database files:
 
-					if (texdef[i].type <= 32)
-						useReplaceTextures[texdef[i].type] = true;
+			DBFilesClient\CharSections.dbc
+			DBFilesClient\CreatureDisplayInfo.dbc
+			DBFilesClient\ItemDisplayInfo.dbc
+			(possibly more)
+				
+			0	 Texture given in filename
+			1	 Body + clothes
+			2	Cape
+			6	Hair, beard
+			8	Tauren fur
+			11	Skin for creatures #1
+			12	Skin for creatures #2
+			13	Skin for creatures #3
 
-					if (texdef[i].type == 3) {
-						// a fix for weapons with type-3 textures.
-						replaceTextures[3] = texturemanager.add(_T("Item\\ObjectComponents\\Weapon\\ArmorReflect4.BLP"));
-					}
+			Texture Flags
+			Value	 Meaning
+			1	Texture wrap X
+			2	Texture wrap Y
+			*/
+			if (texdef[i].type == TEXTURE_FILENAME) {
+				strncpy(texname, (const char*)f.getBuffer() + texdef[i].nameOfs, texdef[i].nameLen);
+				texname[texdef[i].nameLen] = 0;
+				textures[i] = texturemanager.add(texname);
+			} else {
+				// special texture - only on characters and such...
+				textures[i] = 0;
+				//while (texdef[i].type < TEXTURE_MAX && specialTextures[texdef[i].type]!=-1) texdef[i].type++;
+				//if (texdef[i].type < TEXTURE_MAX)specialTextures[texdef[i].type] = (int)i;
+				specialTextures[i] = texdef[i].type;
+
+				if (texdef[i].type < TEXTURE_MAX)
+					useReplaceTextures[texdef[i].type] = true;
+
+				if (texdef[i].type == TEXTURE_ARMORREFLECT) {
+					// a fix for weapons with type-3 textures.
+					replaceTextures[texdef[i].type] = texturemanager.add(_T("Item\\ObjectComponents\\Weapon\\ArmorReflect4.BLP"));
 				}
 			}
 		}
@@ -726,7 +682,11 @@ void Model::initCommon(MPQFile &f)
 
 	if (header.nAttachLookup) {
 		int16 *p = (int16*)(f.getBuffer() + header.ofsAttachLookup);
+		if (header.nAttachLookup > ATT_MAX)
+			wxLogMessage(_T("Critical Error: Model AttachLookup %d over %d"), header.nAttachLookup, ATT_MAX);
 		for (size_t i=0; i<header.nAttachLookup; i++) {
+			if (i>ATT_MAX-1)
+				break;
 			attLookup[i] = p[i];
 		}
 	}
@@ -749,175 +709,187 @@ void Model::initCommon(MPQFile &f)
 			transparency[i].init(f, trDefs[i], globalSequences);
 	}
 
-	// just use the first LOD/view
-	// First LOD/View being the worst?
-	// TODO: Add support for selecting the LOD.
-	// indices - allocate space, too
-	// header.nViews;
-	// int viewLOD = 0; // sets LOD to worst
-	// int viewLOD = header.nViews - 1; // sets LOD to best
-	//setLOD(f, header.nViews - 1); // Set the default Level of Detail to the best possible. 
+	if (header.nViews) {
+		// just use the first LOD/view
+		// First LOD/View being the worst?
+		// TODO: Add support for selecting the LOD.
+		// indices - allocate space, too
+		// header.nViews;
+		// int viewLOD = 0; // sets LOD to worst
+		// int viewLOD = header.nViews - 1; // sets LOD to best
+		//setLOD(f, header.nViews - 1); // Set the default Level of Detail to the best possible. 
 
-	// Old method - use this to try to determine a bug.
-	// just use the first LOD/view
+		// Old method - use this to try to determine a bug.
+		// just use the first LOD/view
 
-	// indices - allocate space, too
+		// indices - allocate space, too
 #ifdef WotLK
-	// replace .MDX with .M2
-	char tempname[256];
-	strncpy(tempname, fullname.c_str(), sizeof(tempname));
+		// remove suffix .M2
+		lodname = modelname.substr(0, modelname.length()-3);
+		fullname = lodname;
+		lodname.append("00.skin"); // Lods: 00, 01, 02, 03
+		MPQFile g(lodname.c_str());
+		g_modelViewer->modelOpened->Add(lodname);
+		if (g.isEof()) {
+			wxLogMessage("Error: Unable to load Lods: [%s]", lodname.c_str());
+			g.close();
+			return;
+		}
 		
-	if (tempname[fullname.length()-1] != '2') {
-		tempname[fullname.length()-2] = '2';
-		tempname[fullname.length()-1] = 0;
-	}
-	int length = strlen(tempname);
-	tempname[length-3] = 0;
-	fullname = tempname;
-	strcat(tempname, "00.skin");
-	MPQFile g(tempname);
-	if (g.isEof()) {
-		wxLogMessage("Error: Unable to load model: [%s]", tempname);
-		g.close();
-		return;
-	}
-	
-	ModelView *view = (ModelView*)(g.getBuffer());
+		ModelView *view = (ModelView*)(g.getBuffer());
 
-	// Indices,  Triangles
-	uint16 *indexLookup = (uint16*)(g.getBuffer() + view->ofsIndex);
-	uint16 *triangles = (uint16*)(g.getBuffer() + view->ofsTris);
-	nIndices = view->nTris;
-	indices = new uint16[nIndices];
-	for (size_t i = 0; i<nIndices; i++) {
-        indices[i] = indexLookup[triangles[i]];
-	}
-
-	// render ops
-	ModelGeoset *ops = (ModelGeoset*)(g.getBuffer() + view->ofsSub);
-	ModelTexUnit *tex = (ModelTexUnit*)(g.getBuffer() + view->ofsTex);
-#else // not WotLK
-	ModelView *view = (ModelView*)(f.getBuffer() + header.ofsViews);
-
-	// Indices,  Triangles
-	uint16 *indexLookup = (uint16*)(f.getBuffer() + view->ofsIndex);
-	uint16 *triangles = (uint16*)(f.getBuffer() + view->ofsTris);
-	nIndices = view->nTris;
-	indices = new uint16[nIndices];
-	for (size_t i = 0; i<nIndices; i++) {
-        indices[i] = indexLookup[triangles[i]];
-	}
-
-	// render ops
-	ModelGeoset *ops = (ModelGeoset*)(f.getBuffer() + view->ofsSub);
-	ModelTexUnit *tex = (ModelTexUnit*)(f.getBuffer() + view->ofsTex);
-#endif // WotLK
-
-	ModelRenderFlags *renderFlags = (ModelRenderFlags*)(f.getBuffer() + header.ofsTexFlags);
-	uint16 *texlookup = (uint16*)(f.getBuffer() + header.ofsTexLookup);
-	uint16 *texanimlookup = (uint16*)(f.getBuffer() + header.ofsTexAnimLookup);
-	int16 *texunitlookup = (int16*)(f.getBuffer() + header.ofsTexUnitLookup);
-
-	
-	showGeosets = new bool[view->nSub];
-	for (size_t i=0; i<view->nSub; i++) {
-		geosets.push_back(ops[i]);
-		showGeosets[i] = true;
-	}
-
-	for (size_t j = 0; j<view->nTex; j++) {
-		ModelRenderPass pass;
-
-		pass.useTex2 = false;
-		pass.useEnvMap = false;
-		pass.cull = false;
-		pass.trans = false;
-		pass.unlit = false;
-		pass.noZWrite = false;
-		pass.billboard = false;
-
-		//pass.texture2 = 0;
-		size_t geoset = tex[j].op;
-		
-		pass.geoset = (int)geoset;
-
-		pass.indexStart = ops[geoset].istart;
-		pass.indexCount = ops[geoset].icount;
-		pass.vertexStart = ops[geoset].vstart;
-		pass.vertexEnd = pass.vertexStart + ops[geoset].vcount;
-		
-		pass.order = tex[j].order; //pass.order = 0;
-		
-		//TextureID texid = textures[texlookup[tex[j].textureid]];
-		//pass.texture = texid;
-		pass.tex = texlookup[tex[j].textureid];
-		
-		/*
-		// Render Flags
-		0x01 = Unlit
-		0x02 = ? glow effects ? no zwrite?
-		0x04 = ?
-		0x08 = ?
-		0x10 = Billboard
-		0x20 = ?
-		*/
-		// TODO: figure out these flags properly -_-
-		ModelRenderFlags &rf = renderFlags[tex[j].flagsIndex];
-		
-		pass.blendmode = rf.blend;
-		//if (rf.blend == 0) // Test to disable/hide different blend types
-		//	continue;
-
-		pass.color = tex[j].colorIndex;
-		pass.opacity = transLookup[tex[j].transid];
-
-		pass.useEnvMap = (texunitlookup[tex[j].texunit] == -1) && ((rf.flags & 0x10) !=0) && rf.blend>2; //&& rf.blend<5; // Use environmental reflection effects?
-
-		// Disable environmental mapping if its been unchecked.
-		//if (pass.useEnvMap && !video.useEnvMapping)
-		//	pass.useEnvMap = false;
-
-		// This is wrong but meh.. best I could get it so far.
-		//pass.cull = (rf.flags & 0x04)==0 && pass.blendmode!=1 && pass.blendmode!=4 && (rf.flags & 17)!=17;
-		//pass.cull = false; // quick test
-		pass.cull = (rf.flags & 0x04)==0 && pass.blendmode==0;
-
-		pass.unlit = (rf.flags & 0x01)!= 0;
-
-		pass.billboard = (rf.flags & 0x10) != 0;
-
-		//pass.noZWrite = (texdef[pass.tex].flags & 3)!=0;
-		if (name == "Creature\\Turkey\\turkey.m2") // manual fix as I just bloody give up.
-			pass.noZWrite = false;
-		else
-			pass.noZWrite = (pass.blendmode>1);
-			//pass.noZWrite = (pass.blendmode>1) && !(rf.blend==4 && rf.flags==17);
-
-		// ToDo: Work out the correct way to get the true/false of transparency
-		pass.trans = (pass.blendmode>0) && (pass.opacity>0);	// Transparency - not the correct way to get transparency
-
-		pass.p = ops[geoset].v.z;
-
-		// Texture flags
-		pass.swrap = (texdef[pass.tex].flags & 1) != 0;
-		pass.twrap = (texdef[pass.tex].flags & 2) != 0;
-		
-		if (animTextures) {
-			//if (tex[j].flags & 16) {
-			if (tex[j].flags & 15) {
-				pass.texanim = -1; // no texture animation
-			} else {
-				pass.texanim = texanimlookup[tex[j].texanimid];
-			}
-		} else {
-			pass.texanim = -1; // no texture animation
+		// Indices,  Triangles
+		uint16 *indexLookup = (uint16*)(g.getBuffer() + view->ofsIndex);
+		uint16 *triangles = (uint16*)(g.getBuffer() + view->ofsTris);
+		nIndices = view->nTris;
+		indices = new uint16[nIndices];
+		for (size_t i = 0; i<nIndices; i++) {
+	        indices[i] = indexLookup[triangles[i]];
 		}
 
-        passes.push_back(pass);
-	}
+		// render ops
+		ModelGeoset *ops = (ModelGeoset*)(g.getBuffer() + view->ofsSub);
+		ModelTexUnit *tex = (ModelTexUnit*)(g.getBuffer() + view->ofsTex);
+#else // not WotLK
+		ModelView *view = (ModelView*)(f.getBuffer() + header.ofsViews);
 
-	// transparent parts come later
-	std::sort(passes.begin(), passes.end());
+		// Indices,  Triangles
+		uint16 *indexLookup = (uint16*)(f.getBuffer() + view->ofsIndex);
+		uint16 *triangles = (uint16*)(f.getBuffer() + view->ofsTris);
+		nIndices = view->nTris;
+		indices = new uint16[nIndices];
+		for (size_t i = 0; i<nIndices; i++) {
+	        indices[i] = indexLookup[triangles[i]];
+		}
+
+		// render ops
+		ModelGeoset *ops = (ModelGeoset*)(f.getBuffer() + view->ofsSub);
+		ModelTexUnit *tex = (ModelTexUnit*)(f.getBuffer() + view->ofsTex);
+#endif // WotLK
+
+		ModelRenderFlags *renderFlags = (ModelRenderFlags*)(f.getBuffer() + header.ofsTexFlags);
+		uint16 *texlookup = (uint16*)(f.getBuffer() + header.ofsTexLookup);
+		uint16 *texanimlookup = (uint16*)(f.getBuffer() + header.ofsTexAnimLookup);
+		int16 *texunitlookup = (int16*)(f.getBuffer() + header.ofsTexUnitLookup);
+
+		
+		showGeosets = new bool[view->nSub];
+		for (size_t i=0; i<view->nSub; i++) {
+			geosets.push_back(ops[i]);
+			showGeosets[i] = true;
+		}
+
+		for (size_t j = 0; j<view->nTex; j++) {
+			ModelRenderPass pass;
+
+			pass.useTex2 = false;
+			pass.useEnvMap = false;
+			pass.cull = false;
+			pass.trans = false;
+			pass.unlit = false;
+			pass.noZWrite = false;
+			pass.billboard = false;
+
+			//pass.texture2 = 0;
+			size_t geoset = tex[j].op;
+			
+			pass.geoset = (int)geoset;
+
+			pass.indexStart = ops[geoset].istart;
+			pass.indexCount = ops[geoset].icount;
+			pass.vertexStart = ops[geoset].vstart;
+			pass.vertexEnd = pass.vertexStart + ops[geoset].vcount;
+			
+			pass.order = tex[j].shading; //pass.order = 0;
+			
+			//TextureID texid = textures[texlookup[tex[j].textureid]];
+			//pass.texture = texid;
+			pass.tex = texlookup[tex[j].textureid];
+			
+			/*
+			// Render Flags
+			flags:
+			0x01 = Unlit
+			0x02 = ? glow effects ? no zwrite?
+			0x04 = Two-sided (no backface culling if set)
+			0x08 = (probably billboarded)
+			0x10 = Disable z-buffer?
+
+			blend:
+			Value	 Mapped to	 Meaning
+			0	 	0	 		Combiners_Opaque
+			1	 	1	 		Combiners_Mod
+			2	 	1	 		Combiners_Decal
+			3	 	1	 		Combiners_Add
+			4	 	1	 		Combiners_Mod2x
+			5	 	4	 		Combiners_Fade
+			6	 	4	 		Used in the Deeprun Tram subway glass, supposedly (src=dest_color, dest=src_color) (?)
+			*/
+			// TODO: figure out these flags properly -_-
+			ModelRenderFlags &rf = renderFlags[tex[j].flagsIndex];
+			
+			pass.blendmode = rf.blend;
+			//if (rf.blend == 0) // Test to disable/hide different blend types
+			//	continue;
+
+			pass.color = tex[j].colorIndex;
+			pass.opacity = transLookup[tex[j].transid];
+
+			pass.unlit = (rf.flags & RENDERFLAGS_UNLIT)!= 0;
+
+			// This is wrong but meh.. best I could get it so far.
+			//pass.cull = (rf.flags & 0x04)==0 && pass.blendmode!=1 && pass.blendmode!=4 && (rf.flags & 17)!=17;
+			//pass.cull = false; // quick test
+			pass.cull = (rf.flags & RENDERFLAGS_TWOSIDED)==0 && rf.blend==0;
+
+			pass.billboard = (rf.flags & RENDERFLAGS_BILLBOARD) != 0;
+
+			pass.useEnvMap = (texunitlookup[tex[j].texunit] == -1) && pass.billboard && rf.blend>2; //&& rf.blend<5; // Use environmental reflection effects?
+
+			// Disable environmental mapping if its been unchecked.
+			//if (pass.useEnvMap && !video.useEnvMapping)
+			//	pass.useEnvMap = false;
+
+
+			//pass.noZWrite = (texdef[pass.tex].flags & 3)!=0;
+			/*
+			if (name == "Creature\\Turkey\\turkey.m2") // manual fix as I just bloody give up.
+				pass.noZWrite = false;
+			else
+				pass.noZWrite = (pass.blendmode>1);
+			*/
+				//pass.noZWrite = (pass.blendmode>1) && !(rf.blend==4 && rf.flags==17);
+			pass.noZWrite = (rf.flags & RENDERFLAGS_ZBUFFERED) != 0;
+
+			// ToDo: Work out the correct way to get the true/false of transparency
+			pass.trans = (pass.blendmode>0) && (pass.opacity>0);	// Transparency - not the correct way to get transparency
+
+			pass.p = ops[geoset].BoundingBox[0].z;
+
+			// Texture flags
+			pass.swrap = (texdef[pass.tex].flags & TEXTURE_WRAPX) != 0; // Texture wrap X
+			pass.twrap = (texdef[pass.tex].flags & TEXTURE_WRAPY) != 0; // Texture wrap Y
+			
+			if (animTextures) {
+				// tex[j].flags: Usually 16 for static textures, and 0 for animated textures.	
+				if (tex[j].flags & TEXTUREUNIT_STATIC) {
+					pass.texanim = -1; // no texture animation
+				} else {
+					pass.texanim = texanimlookup[tex[j].texanimid];
+				}
+			} else {
+				pass.texanim = -1; // no texture animation
+			}
+
+			passes.push_back(pass);
+		}
+
+#ifdef WotLK
+		g.close();
+#endif
+		// transparent parts come later
+		std::sort(passes.begin(), passes.end());
+	}
 
 	// zomg done
 }
@@ -981,8 +953,10 @@ void Model::initAnimated(MPQFile &f)
 			anims[i].Index = animsWotLK.Index;
 
 			sprintf(tempname, "%s%04d-%02d.anim", fullname.c_str(), anims[i].animID, animsWotLK.subAnimID);
-			if (MPQFile::getSize(tempname) > 0)
+			if (MPQFile::getSize(tempname) > 0) {
 				animfiles[i].openFile(tempname);
+				g_modelViewer->modelOpened->Add(tempname);
+			}
 		}
 		#endif
 
@@ -996,17 +970,19 @@ void Model::initAnimated(MPQFile &f)
 		for (size_t i=0; i<header.nBones; i++) {
 			//if (i==0) mb[i].rotation.ofsRanges = 1.0f;
 #ifdef WotLK
+			bones[i].model = this;
 			bones[i].init(f, mb[i], globalSequences, animfiles);
 #else
 			bones[i].init(f, mb[i], globalSequences);
 #endif
 		}
 
-		// Block BoneLookup is a lookup table for Key Skeletal Bones, hands, arms, legs, etc.
-		//header.nBoneLookup
-		int16 *p = (int16*)(f.getBuffer() + header.ofsBoneLookup);
-		for (size_t i=0; i<header.nBoneLookup; i++) {
-			boneLookup[i] = p[i];
+		// Block keyBoneLookup is a lookup table for Key Skeletal Bones, hands, arms, legs, etc.
+		if (header.nKeyBoneLookup < BONE_MAX) {
+			memcpy(keyBoneLookup, f.getBuffer() + header.ofsKeyBoneLookup, sizeof(int16)*header.nKeyBoneLookup);
+		} else {
+			memcpy(keyBoneLookup, f.getBuffer() + header.ofsKeyBoneLookup, sizeof(int16)*BONE_MAX);
+			wxLogMessage("Error: keyBone number [%d] over [%d]", header.nKeyBoneLookup, BONE_MAX);
 		}
 	}
 
@@ -1020,6 +996,12 @@ void Model::initAnimated(MPQFile &f)
 		delete [] animfiles;
 	}
 #endif
+
+	// Index at ofsAnimations which represents the animation in AnimationData.dbc. -1 if none.
+	if (header.nAnimationLookup > 0) {
+		animLookups = new int16[header.nAnimationLookup];
+		memcpy(animLookups, f.getBuffer() + header.ofsAnimationLookup, sizeof(int16)*header.nAnimationLookup);
+	}
 	
 	const size_t size = (header.nVertices * sizeof(float));
 	vbufsize = (3 * size); // we multiple by 3 for the x, y, z positions of the vertex
@@ -1228,20 +1210,25 @@ void Model::calcBones(int anim, int time)
 	if (charModelDetails.isChar) {	
 
 		// Animate the "core" rotations and transformations for the rest of the model to adopt into their transformations
-		if (boneLookup[BONE_ROOT] > -1)	{
-			for (int i=0; i<=boneLookup[BONE_ROOT]; i++) {
+		if (keyBoneLookup[BONE_ROOT] > -1)	{
+			for (int i=0; i<=keyBoneLookup[BONE_ROOT]; i++) {
 				bones[i].calcMatrix(bones, anim, time);
 			}
 		}
 
 		// Find the close hands animation id
 		int closeFistID = 0;
+		/*
 		for (unsigned int i=0; i<header.nAnimations; i++) {
 			if (anims[i].animID==15) {  // closed fist
 				closeFistID = i;
 				break;
 			}
 		}
+		*/
+		// Alfred 2009.07.23 use animLookups to speedup
+		if (header.nAnimationLookup >= ANIMATION_HANDSCLOSED && animLookups[ANIMATION_HANDSCLOSED] > 0) // closed fist
+			closeFistID = animLookups[ANIMATION_HANDSCLOSED];
 
 		// Animate key skeletal bones except the fingers which we do later.
 		// -----
@@ -1257,28 +1244,28 @@ void Model::calcBones(int anim, int time)
 		}
 
 		for (size_t i=0; i<5; i++) { // only goto 5, otherwise it affects the hip/waist rotation for the lower-body.
-			if (boneLookup[i] > -1)
-				bones[boneLookup[i]].calcMatrix(bones, a, t);
+			if (keyBoneLookup[i] > -1)
+				bones[keyBoneLookup[i]].calcMatrix(bones, a, t);
 		}
 
 		if (animManager->GetMouthID() > -1) {
 			// Animate the head and jaw
-			if (boneLookup[BONE_HEAD] > -1)
-					bones[boneLookup[BONE_HEAD]].calcMatrix(bones, animManager->GetMouthID(), animManager->GetMouthFrame());
-			if (boneLookup[BONE_JAW] > -1)
-					bones[boneLookup[BONE_JAW]].calcMatrix(bones, animManager->GetMouthID(), animManager->GetMouthFrame());
+			if (keyBoneLookup[BONE_HEAD] > -1)
+					bones[keyBoneLookup[BONE_HEAD]].calcMatrix(bones, animManager->GetMouthID(), animManager->GetMouthFrame());
+			if (keyBoneLookup[BONE_JAW] > -1)
+					bones[keyBoneLookup[BONE_JAW]].calcMatrix(bones, animManager->GetMouthID(), animManager->GetMouthFrame());
 		} else {
 			// Animate the head and jaw
-			if (boneLookup[BONE_HEAD] > -1)
-					bones[boneLookup[BONE_HEAD]].calcMatrix(bones, a, t);
-			if (boneLookup[BONE_JAW] > -1)
-					bones[boneLookup[BONE_JAW]].calcMatrix(bones, a, t);
+			if (keyBoneLookup[BONE_HEAD] > -1)
+					bones[keyBoneLookup[BONE_HEAD]].calcMatrix(bones, a, t);
+			if (keyBoneLookup[BONE_JAW] > -1)
+					bones[keyBoneLookup[BONE_JAW]].calcMatrix(bones, a, t);
 		}
 
 		// still not sure what 18-26 bone lookups are but I think its more for things like wrist, etc which are not as visually obvious.
-		for (size_t i=18; i<27; i++) {
-			if (boneLookup[i] > -1)
-				bones[boneLookup[i]].calcMatrix(bones, a, t);
+		for (size_t i=18; i<BONE_MAX; i++) {
+			if (keyBoneLookup[i] > -1)
+				bones[keyBoneLookup[i]].calcMatrix(bones, a, t);
 		}
 		// =====
 
@@ -1293,8 +1280,8 @@ void Model::calcBones(int anim, int time)
 		}
 
 		for (unsigned int i=0; i<5; i++) {
-			if (boneLookup[BONE_RFINGER1 + i] > -1) 
-				bones[boneLookup[BONE_RFINGER1 + i]].calcMatrix(bones, a, t);
+			if (keyBoneLookup[BONE_RFINGER1 + i] > -1) 
+				bones[keyBoneLookup[BONE_RFINGER1 + i]].calcMatrix(bones, a, t);
 		}
 
 		if (charModelDetails.closeLHand) {
@@ -1306,11 +1293,11 @@ void Model::calcBones(int anim, int time)
 		}
 
 		for (unsigned int i=0; i<5; i++) {
-			if (boneLookup[BONE_LFINGER1 + i] > -1)
-				bones[boneLookup[BONE_LFINGER1 + i]].calcMatrix(bones, a, t);
+			if (keyBoneLookup[BONE_LFINGER1 + i] > -1)
+				bones[keyBoneLookup[BONE_LFINGER1 + i]].calcMatrix(bones, a, t);
 		}
 	} else {
-		for (int i=0; i<boneLookup[BONE_ROOT]; i++) {
+		for (int i=0; i<keyBoneLookup[BONE_ROOT]; i++) {
 			bones[i].calcMatrix(bones, anim, time);
 		}
 
@@ -1426,10 +1413,18 @@ bool ModelRenderPass::init(Model *m)
 		//	return false;
 
 		// emissive colors
-		if (color!=-1) {
+		if (color!=-1 && m->colors[color].color.uses(0)) {
+#ifdef WotLK /* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
+			Vec3D c = m->colors[color].color.getValue(0,m->animtime);
+			if (m->colors[color].opacity.uses(m->anim)) {
+				float o = m->colors[color].opacity.getValue(m->anim,m->animtime);
+				ocol.w = o;
+			}
+#else
 			Vec3D c = m->colors[color].color.getValue(m->anim,m->animtime);
 			float o = m->colors[color].opacity.getValue(m->anim,m->animtime);
 			ocol.w = o;
+#endif
 
 			if (unlit) {
 				ocol.x = c.x; ocol.y = c.y; ocol.z = c.z;
@@ -1441,12 +1436,15 @@ bool ModelRenderPass::init(Model *m)
 			glMaterialfv(GL_FRONT, GL_EMISSION, ecol);
 		}
 
-#ifndef WotLK /* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
 		// opacity
 		if (opacity!=-1) {
-			ocol.w *= m->transparency[opacity].trans.getValue(m->anim,m->animtime);
-		}
+#ifdef WotLK /* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
+			if (m->transparency[opacity].trans.uses(0))
+				ocol.w *= m->transparency[opacity].trans.getValue(0, m->animtime);
+#else
+			ocol.w *= m->transparency[opacity].trans.getValue(m->anim, m->animtime);
 #endif
+		}
 
 		// exit and return false before affecting the opengl render state
 		if (!((ocol.w > 0) && (color==-1 || ecol.w > 0)))
@@ -1545,6 +1543,7 @@ bool ModelRenderPass::init(Model *m)
 			
 			break;
 		default:
+			wxLogMessage(_T("[Error] Unknown blendmode: %d\n"), blendmode);
  			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		}
@@ -1583,7 +1582,7 @@ bool ModelRenderPass::init(Model *m)
 			glMatrixMode(GL_TEXTURE);
 			glPushMatrix();
 
-			m->texAnims[texanim].setup();
+			m->texAnims[texanim].setup(texanim);
 		}
 
 		// color
@@ -1794,32 +1793,32 @@ inline void Model::drawModel()
 
 void TextureAnim::calc(int anim, int time)
 {
-	if (trans.used) {
+	if (trans.uses(anim)) {
 		tval = trans.getValue(anim, time);
 	}
-	if (rot.used) {
+	if (rot.uses(anim)) {
         rval = rot.getValue(anim, time);
 	}
-	if (scale.used) {
-        sval = scale.getValue(anim, time);
+	if (scale.uses(anim)) {
+       	sval = scale.getValue(anim, time);
 	}
 }
 
-void TextureAnim::setup()
+void TextureAnim::setup(int anim)
 {
 	glLoadIdentity();
-	if (trans.used) {
+	if (trans.uses(anim)) {
 		glTranslatef(tval.x, tval.y, tval.z);
 	}
-	if (rot.used) {
+	if (rot.uses(anim)) {
 		glRotatef(rval.x, 0, 0, 1); // this is wrong, I have no idea what I'm doing here ;)
 	}
-	if (scale.used) {
+	if (scale.uses(anim)) {
 		glScalef(sval.x, sval.y, sval.z);
 	}
 }
 
-void ModelCamera::init(MPQFile &f, ModelCameraDef &mcd, int *global)
+void ModelCamera::init(MPQFile &f, ModelCameraDef &mcd, uint32 *global)
 {
 	ok = true;
     nearclip = mcd.nearclip;
@@ -1840,7 +1839,7 @@ void ModelCamera::setup(int time)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(fov * 34.5f, (GLfloat)video.xRes/(GLfloat)video.yRes, nearclip, farclip);
+	gluPerspective(fov * 34.5f, (GLfloat)video.xRes/(GLfloat)video.yRes, nearclip, farclip*5);
 
 	Vec3D p = pos + tPos.getValue(0, time);
 	Vec3D t = target + tTarget.getValue(0, time);
@@ -1854,27 +1853,27 @@ void ModelCamera::setup(int time)
 	//glRotatef(roll, 0, 0, 1);
 }
 
-void ModelColor::init(MPQFile &f, ModelColorDef &mcd, int *global)
+void ModelColor::init(MPQFile &f, ModelColorDef &mcd, uint32 *global)
 {
 	color.init(mcd.color, f, global);
 	opacity.init(mcd.opacity, f, global);
 }
 
-void ModelTransparency::init(MPQFile &f, ModelTransDef &mcd, int *global)
+void ModelTransparency::init(MPQFile &f, ModelTransDef &mcd, uint32 *global)
 {
 	trans.init(mcd.trans, f, global);
 }
 
-void ModelLight::init(MPQFile &f, ModelLightDef &mld, int *global)
+void ModelLight::init(MPQFile &f, ModelLightDef &mld, uint32 *global)
 {
 	tpos = pos = fixCoordSystem(mld.pos);
 	tdir = dir = Vec3D(0,1,0); // no idea
 	type = mld.type;
 	parent = mld.bone;
-	ambColor.init(mld.ambColor, f, global);
-	ambIntensity.init(mld.ambIntensity, f, global);
-	diffColor.init(mld.color, f, global);
-	diffIntensity.init(mld.intensity, f, global);
+	ambColor.init(mld.ambientColor, f, global);
+	ambIntensity.init(mld.ambientIntensity, f, global);
+	diffColor.init(mld.diffuseColor, f, global);
+	diffIntensity.init(mld.diffuseIntensity, f, global);
 }
 
 void ModelLight::setup(int time, GLuint l)
@@ -1882,12 +1881,15 @@ void ModelLight::setup(int time, GLuint l)
 	Vec4D ambcol(ambColor.getValue(0, time) * ambIntensity.getValue(0, time), 1.0f);
 	Vec4D diffcol(diffColor.getValue(0, time) * diffIntensity.getValue(0, time), 1.0f);
 	Vec4D p;
-	if (type==0) {
+	if (type==MODELLIGHT_DIRECTIONAL) {
 		// directional
 		p = Vec4D(tdir, 0.0f);
-	} else {
+	} else if (type==MODELLIGHT_POINT) {
 		// point
 		p = Vec4D(tpos, 1.0f);
+	} else {
+		p = Vec4D(tpos, 1.0f);
+		wxLogMessage(_T("Error: Light type %d is unknown."), type);
 	}
 	//gLog("Light %d (%f,%f,%f) (%f,%f,%f) [%f,%f,%f]\n", l-GL_LIGHT4, ambcol.x, ambcol.y, ambcol.z, diffcol.x, diffcol.y, diffcol.z, p.x, p.y, p.z);
 	glLightfv(l, GL_POSITION, p);
@@ -1896,7 +1898,7 @@ void ModelLight::setup(int time, GLuint l)
 	glEnable(l);
 }
 
-void TextureAnim::init(MPQFile &f, ModelTexAnimDef &mta, int *global)
+void TextureAnim::init(MPQFile &f, ModelTexAnimDef &mta, uint32 *global)
 {
 	trans.init(mta.trans, f, global);
 	rot.init(mta.rot, f, global);
@@ -1904,13 +1906,13 @@ void TextureAnim::init(MPQFile &f, ModelTexAnimDef &mta, int *global)
 }
 
 #ifdef WotLK
-void Bone::init(MPQFile &f, ModelBoneDef &b, int *global, MPQFile *animfiles)
+void Bone::init(MPQFile &f, ModelBoneDef &b, uint32 *global, MPQFile *animfiles)
 {
 	calc = false;
 
 	parent = b.parent;
 	pivot = fixCoordSystem(b.pivot);
-	billboard = (b.flags & 8) != 0;
+	billboard = (b.flags & MODELBONE_BILLBOARD) != 0;
 	//billboard = false;
 
 	boneDef = b;
@@ -1923,13 +1925,13 @@ void Bone::init(MPQFile &f, ModelBoneDef &b, int *global, MPQFile *animfiles)
 	scale.fix(fixCoordSystem2);
 }
 #else
-void Bone::init(MPQFile &f, ModelBoneDef &b, int *global)
+void Bone::init(MPQFile &f, ModelBoneDef &b, uint32 *global)
 {
 	calc = false;
 
 	parent = b.parent;
 	pivot = fixCoordSystem(b.pivot);
-	billboard = (b.flags & 8) != 0;
+	billboard = (b.flags & MODELBONE_BILLBOARD) != 0;
 	//billboard = false;
 
 	boneDef = b;
@@ -1943,7 +1945,7 @@ void Bone::init(MPQFile &f, ModelBoneDef &b, int *global)
 }
 #endif
 
-void ModelAttachment::init(MPQFile &f, ModelAttachmentDef &mad, int *global)
+void ModelAttachment::init(MPQFile &f, ModelAttachmentDef &mad, uint32 *global)
 {
 	pos = fixCoordSystem(mad.pos);
 	bone = mad.bone;
@@ -1974,21 +1976,21 @@ void Bone::calcMatrix(Bone *allbones, int anim, int time, bool rotate)
 	Matrix m;
 	Quaternion q;
 
-	bool tr = rot.used || scale.used || trans.used || billboard;
+	bool tr = rot.uses(anim) || scale.uses(anim) || trans.uses(anim) || billboard;
 	if (tr) {
 		m.translation(pivot);
 		
-		if (trans.used) {
+		if (trans.uses(anim)) {
 			Vec3D tr = trans.getValue(anim, time);
 			m *= Matrix::newTranslation(tr);
 		}
 
-		if (rot.used && rotate) {
+		if (rot.uses(anim) && rotate) {
 			q = rot.getValue(anim, time);
 			m *= Matrix::newQuatRotate(q);
 		}
 
-		if (scale.used) {
+		if (scale.uses(anim)) {
 			Vec3D sc = scale.getValue(anim, time);
 			m *= Matrix::newScale(sc);
 		}
@@ -2019,7 +2021,7 @@ void Bone::calcMatrix(Bone *allbones, int anim, int time, bool rotate)
 	} else mat = m;
 
 	// transform matrix for normal vectors ... ??
-	if (rot.used && rotate) {
+	if (rot.uses(anim) && rotate) {
 		if (parent>=0)
 			mrot = allbones[parent].mrot * Matrix::newQuatRotate(q);
 		else
@@ -2136,12 +2138,14 @@ void Model::drawParticles()
 {
 	// draw particle systems
 	for (size_t i=0; i<header.nParticleEmitters; i++) {
-		particleSystems[i].draw();
+		if (particleSystems != NULL)
+			particleSystems[i].draw();
 	}
 
 	// draw ribbons
 	for (size_t i=0; i<header.nRibbonEmitters; i++) {
-		ribbons[i].draw();
+		if (ribbons != NULL)
+			ribbons[i].draw();
 	}
 }
 

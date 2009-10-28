@@ -41,15 +41,15 @@ AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 
 	const wxString strLoops[10] = {_T("0"), _T("1"), _T("2"), _T("3"), _T("4"), _T("5"), _T("6"), _T("7"), _T("8"), _T("9")};
 	
-	animList = new wxComboBox(this, ID_ANIM, _("Animation"), wxPoint(10,10), wxSize(144,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Animation")); //|wxCB_SORT); //wxPoint(66,10)
-	animList2 = new wxComboBox(this, ID_ANIM_SECONDARY, _("Secondary"), wxPoint(154,10), wxSize(144,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Secondary")); //|wxCB_SORT); //wxPoint(66,10)
-	animList2->Enable(false);
-	animList2->Show(false);
+	animCList = new wxComboBox(this, ID_ANIM, _("Animation"), wxPoint(10,10), wxSize(150,16), 0, NULL, wxCB_READONLY, wxDefaultValidator, _("Animation")); //|wxCB_SORT); //wxPoint(66,10)
+	animCList2 = new wxComboBox(this, ID_ANIM_SECONDARY, _("Secondary"), wxPoint(170,10), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Secondary")); //|wxCB_SORT); //wxPoint(66,10)
+	animCList2->Enable(false);
+	animCList2->Show(false);
 
 	// Our hidden head/mouth related controls
-	animList3 = new wxComboBox(this, ID_ANIM_MOUTH, _("Mouth"), wxPoint(10,100), wxSize(144,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Secondary")); //|wxCB_SORT); //wxPoint(66,10)
-	animList3->Enable(false);
-	animList3->Show(false);
+	animCList3 = new wxComboBox(this, ID_ANIM_MOUTH, _("Mouth"), wxPoint(10,100), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Secondary")); //|wxCB_SORT); //wxPoint(66,10)
+	animCList3->Enable(false);
+	animCList3->Show(false);
 
 	//btnPauseMouth = new wxButton(this, ID_PAUSE_MOUTH, _("Pause"), wxPoint(160,100), wxSize(45,20));
 	//btnPauseMouth->Show(false);
@@ -62,10 +62,10 @@ AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 	speedMouthLabel->Show(false);
 	// ---
 
-	loopList = new wxComboBox(this, ID_LOOPS, wxString("0"), wxPoint(298, 10), wxSize(40,16), 10, strLoops, wxCB_READONLY, wxDefaultValidator, wxString("Loops")); //|wxCB_SORT); //wxPoint(66,10)
-	btnAdd = new wxButton(this, ID_ADDANIM, _("Add"), wxPoint(338, 10), wxSize(36,20));
+	loopList = new wxComboBox(this, ID_LOOPS, wxString("0"), wxPoint(330, 10), wxSize(40,16), 10, strLoops, wxCB_READONLY, wxDefaultValidator, wxString("Loops")); //|wxCB_SORT); //wxPoint(66,10)
+	btnAdd = new wxButton(this, ID_ADDANIM, _("Add"), wxPoint(380, 10), wxSize(45,20));
 
-	skinList = new wxComboBox(this, ID_SKIN, _("Skin"), wxPoint(154,10), wxSize(144,16), 0, NULL, wxCB_READONLY);
+	skinList = new wxComboBox(this, ID_SKIN, _("Skin"), wxPoint(170,10), wxSize(144,16), 0, NULL, wxCB_READONLY);
 	skinList->Show(FALSE);
 	randomSkins = true;
 	defaultDoodads = true;
@@ -75,26 +75,26 @@ AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 	wmoLabel = new wxStaticText(this, -1, _T(""), wxPoint(10,15), wxSize(192,16));
 	wmoLabel->Show(FALSE);
 
-	speedSlider = new wxSlider(this, ID_SPEED, 10, 1, 40, wxPoint(420,56), wxSize(100,38), wxSL_AUTOTICKS);
+	speedSlider = new wxSlider(this, ID_SPEED, 10, 1, 40, wxPoint(490,56), wxSize(100,38), wxSL_AUTOTICKS);
 	speedSlider->SetTickFreq(10, 1);
-	speedLabel = new wxStaticText(this, -1, _("Speed: 1.0x"), wxPoint(420,40), wxDefaultSize);
+	speedLabel = new wxStaticText(this, -1, _("Speed: 1.0x"), wxPoint(490,40), wxDefaultSize);
 
-	frameLabel = new wxStaticText(this, -1, _("Frame: 0"), wxPoint(250,40), wxDefaultSize);
-	frameSlider = new wxSlider(this, ID_FRAME, 1, 1, 10, wxPoint(250,56), wxSize(160,38), wxSL_AUTOTICKS);
+	frameLabel = new wxStaticText(this, -1, _("Frame: 0"), wxPoint(330,40), wxDefaultSize);
+	frameSlider = new wxSlider(this, ID_FRAME, 1, 1, 10, wxPoint(330,56), wxSize(160,38), wxSL_AUTOTICKS);
 	frameSlider->SetTickFreq(2, 1);
 
 	btnPlay = new wxButton(this, ID_PLAY, _("Play"), wxPoint(10,40), wxSize(45,20));
-	btnPause = new wxButton(this, ID_PAUSE, _("Pause"), wxPoint(53,40), wxSize(45,20));
-	btnStop = new wxButton(this, ID_STOP, _("Stop"), wxPoint(96,40), wxSize(45,20));
+	btnPause = new wxButton(this, ID_PAUSE, _("Pause"), wxPoint(62,40), wxSize(45,20));
+	btnStop = new wxButton(this, ID_STOP, _("Stop"), wxPoint(115,40), wxSize(45,20));
 	
 	btnClear = new wxButton(this, ID_CLEARANIM, _("Clear"), wxPoint(10,64), wxSize(45,20));
-	btnPrev = new wxButton(this, ID_PREVANIM, _T("<<"), wxPoint(53,64), wxSize(45,20));
-	btnNext = new wxButton(this, ID_NEXTANIM, _T(">>"), wxPoint(96,64), wxSize(45,20));
+	btnPrev = new wxButton(this, ID_PREVANIM, _T("<<"), wxPoint(62,64), wxSize(45,20));
+	btnNext = new wxButton(this, ID_NEXTANIM, _T(">>"), wxPoint(115,64), wxSize(45,20));
 	
-	lockAnims = new wxCheckBox(this, ID_ANIM_LOCK, _("Lock Animations"), wxPoint(150,40), wxDefaultSize, 0);
+	lockAnims = new wxCheckBox(this, ID_ANIM_LOCK, _("Lock Animations"), wxPoint(170,40), wxDefaultSize, 0);
 	lockAnims->SetValue(true);
 	bLockAnims = true;
-	oldStyle = new wxCheckBox(this, ID_OLDSTYLE, _("Auto Animate"), wxPoint(150,60), wxDefaultSize, 0);
+	oldStyle = new wxCheckBox(this, ID_OLDSTYLE, _("Auto Animate"), wxPoint(170,64), wxDefaultSize, 0);
 	bOldStyle = true;
 	oldStyle->SetValue(true);
 }
@@ -107,14 +107,14 @@ AnimControl::~AnimControl()
 		wxDELETE(grp);
 	}
 
-	animList->Clear();
-	animList2->Clear();
-	animList3->Clear();
+	animCList->Clear();
+	animCList2->Clear();
+	animCList3->Clear();
 	skinList->Clear();
 	
-	animList->Destroy();
-	animList2->Destroy();
-	animList3->Destroy();
+	animCList->Destroy();
+	animCList2->Destroy();
+	animCList3->Destroy();
 	skinList->Destroy();
 }
 
@@ -138,9 +138,9 @@ void AnimControl::UpdateModel(Model *m)
 	selectedAnim2 = -1;
 	selectedAnim3 = -1;
 
-	animList->Clear();
-	animList2->Clear();
-	animList3->Clear();
+	animCList->Clear();
+	animCList2->Clear();
+	animCList3->Clear();
 
 	skinList->Clear();
 
@@ -163,17 +163,20 @@ void AnimControl::UpdateModel(Model *m)
 
 	// A small attempt at keeping the 'previous' animation that was selected when changing
 	// the selected model via the model control.
+/*
+	// Alfred 2009.07.19 keep currentAnim may crash others if it doesn't have, we should save the animID, not currentAnim
 	if (g_selModel->currentAnim > 0)
 		useanim = g_selModel->currentAnim;
+*/
 
 	if (g_selModel->charModelDetails.isChar) { // only display the "secondary" animation list if its a character
-		animList2->Select(useanim);
-		animList2->Show(true);
+		animCList2->Select(useanim);
+		animCList2->Show(true);
 		lockAnims->Show(true);
 		loopList->Show(true);
 		btnAdd->Show(true);
 	} else {
-		animList2->Show(false);
+		animCList2->Show(false);
 		lockAnims->Show(false);
 		loopList->Show(false);
 		btnAdd->Show(false);
@@ -196,10 +199,10 @@ void AnimControl::UpdateModel(Model *m)
 
 			strName += wxString::Format(" [%i]", i);
 
-			animList->Append( strName);
+			animCList->Append( strName);
 			if (g_selModel->charModelDetails.isChar) {
-				animList2->Append(strName);
-				animList3->Append(strName);
+				animCList2->Append(strName);
+				animCList3->Append(strName);
 			}
 		}
 
@@ -208,8 +211,8 @@ void AnimControl::UpdateModel(Model *m)
 			//return;
 
 		g_selModel->currentAnim = useanim;
-		animList->Select(useanim);
-		animList->Show(true);
+		animCList->Select(useanim);
+		animCList->Show(true);
 
 		frameSlider->SetRange(g_selModel->anims[useanim].timeStart, g_selModel->anims[useanim].timeEnd);
 		frameSlider->SetTickFreq(g_selModel->anims[useanim].playSpeed, 1);
@@ -252,7 +255,7 @@ void AnimControl::UpdateWMO(WMO *w, int group)
 	frameSlider->SetRange(0, 10);
 	frameSlider->SetTickFreq(2, 1);
 	
-	animList->Show(false);
+	animCList->Show(false);
 	skinList->Show(false);
 	loopList->Show(false);
 	btnAdd->Show(false);
@@ -611,7 +614,7 @@ bool AnimControl::UpdateItemModel(Model *m)
 	
 	TextureSet skins;
 
-	for (ItemDisplayDB::Iterator it=itemdb.begin(); it!=itemdb.end(); ++it) {
+	for (ItemDisplayDB::Iterator it=itemdisplaydb.begin(); it!=itemdisplaydb.end(); ++it) {
 		if (fn.IsSameAs(it->getString(ItemDisplayDB::Model), false)) {
             TextureGroup grp;
 			grp.base = 2;
@@ -650,7 +653,7 @@ bool AnimControl::FillSkinSelector(TextureSet &skins)
 		}
 
 		bool existingTexture = false;
-		for (int i = 0; i<32; i++) {
+		for (int i = 0; i<TEXTURE_MAX; i++) {
 			if (g_selModel->replaceTextures[i] > 0) {
 				existingTexture = true;
 				break;
@@ -703,19 +706,19 @@ void AnimControl::OnCheck(wxCommandEvent &event)
 		bOldStyle = event.IsChecked();
 	else if (event.GetId() == ID_ANIM_LOCK) {
 		bLockAnims = event.IsChecked();
-		animList2->Enable(bLockAnims==false);
+		animCList2->Enable(bLockAnims==false);
 		if (bLockAnims)
 			g_selModel->animManager->ClearSecondary();
 
 		if (wxGetKeyState(WXK_SHIFT) && event.IsChecked()==false) {
-			animList3->Enable(true);
-			animList3->Show(true);
+			animCList3->Enable(true);
+			animCList3->Show(true);
 			speedMouthSlider->Show(true);
 			speedMouthLabel->Show(true);
 			//btnPauseMouth->Show(true);
 		} else {
-			animList3->Enable(false);
-			animList3->Show(false);
+			animCList3->Enable(false);
+			animCList3->Show(false);
 			speedMouthSlider->Show(false);
 			speedMouthLabel->Show(false);
 			//btnPauseMouth->Show(false);
@@ -727,14 +730,14 @@ void AnimControl::OnAnim(wxCommandEvent &event)
 {
 	if (event.GetId() == ID_ANIM) {
 		if (g_selModel) {
-			wxString val = animList->GetValue();
+			wxString val = animCList->GetValue();
 			int first = val.Find('[')+1;
 			int last = val.Find(']');
 			selectedAnim = atoi(val.Mid(first, last-first).c_str());
 			
 			if (bLockAnims) {
 				//selectedAnim2 = -1;
-				animList2->SetSelection(event.GetSelection());
+				animCList2->SetSelection(event.GetSelection());
 			}
 
 			if (bOldStyle == true) {
@@ -760,14 +763,14 @@ void AnimControl::OnAnim(wxCommandEvent &event)
 
 		//canvas->resetTime();
 	} else if (event.GetId() == ID_ANIM_SECONDARY) {
-		wxString val = animList2->GetValue();
+		wxString val = animCList2->GetValue();
 		int first = val.Find('[')+1;
 		int last = val.Find(']');
 		selectedAnim2 = atoi(val.Mid(first, last-first).c_str());
 
 		g_selModel->animManager->SetSecondary(selectedAnim2);
 	} else if (event.GetId() == ID_ANIM_MOUTH) {
-		wxString val = animList3->GetValue();
+		wxString val = animCList3->GetValue();
 		int first = val.Find('[')+1;
 		int last = val.Find(']');
 		selectedAnim3 = atoi(val.Mid(first, last-first).c_str());

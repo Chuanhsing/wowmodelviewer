@@ -39,6 +39,7 @@
 #include "modelexport.h"
 #include "settings.h"
 #include "modelbankcontrol.h"
+#include "filecontrol.h"
 
 #include "enums.h"
 
@@ -46,7 +47,7 @@
 
 // defines
 #define APP_TITLE _T("World of Warcraft Model Viewer")
-#define APP_VERSION _T("v0.5.08 (Fans Update v0.23)")
+#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r561)")
 
 
 class ModelViewer: public wxFrame
@@ -54,7 +55,6 @@ class ModelViewer: public wxFrame
     DECLARE_CLASS(ModelViewer)
     DECLARE_EVENT_TABLE()
 
-	std::set<FileTreeItem> filelist;
 	std::vector<MPQArchive*> archives;
 
 public:
@@ -74,10 +74,11 @@ public:
 	//SoundControl *soundControl;
 	SettingsControl *settingsControl;
 	ModelBankControl *modelbankControl;
+	ModelOpened *modelOpened;
 
 	CAnimationExporter *animExporter;
 
-	wxTreeCtrl *fileTree;
+	FileControl *fileControl;
 
 	//wxWidget objects
 	wxMenuBar *menuBar;
@@ -120,7 +121,7 @@ public:
 	void OnClose(wxCloseEvent &event);
 	void OnSize(wxSizeEvent &event);
     void OnExit(wxCommandEvent &event);
-	void OnTreeSelect(wxTreeEvent &event);
+
 
     // menu commands
 	void OnToggleDock(wxCommandEvent &event);
@@ -147,6 +148,7 @@ public:
 	void UpdateControls();
    
 	void ImportArmoury(wxString strURL);
+	void ModelViewer::ModelInfo();
 
 	Vec3D DoSetColor(const Vec3D &defColor);
 };

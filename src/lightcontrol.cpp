@@ -4,9 +4,9 @@
 extern const int MAX_LIGHTS;
 
 // default colour values
-const Vec4D def_ambience = Vec4D(0.3f, 0.3f, 0.3f, 1.0f);
-const Vec4D def_diffuse = Vec4D(1.0f, 1.0f, 1.0f, 1.0f);
-const Vec4D def_specular = Vec4D(1.0f, 1.0f, 1.0f, 1.0f);
+const static Vec4D def_ambience = Vec4D(1.0f, 1.0f, 1.0f, 1.0f);
+const static Vec4D def_diffuse = Vec4D(1.0f, 1.0f, 1.0f, 1.0f);
+const static Vec4D def_specular = Vec4D(1.0f, 1.0f, 1.0f, 1.0f);
 
 // Inhereit class event table from wxWindow
 IMPLEMENT_CLASS(LightControl, wxWindow)

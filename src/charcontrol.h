@@ -119,7 +119,8 @@ struct CharDetails
 	bool showUnderwear, showEars, showHair, showFacialHair, showFeet;
 
 	int equipment[NUM_CHAR_SLOTS];
-	int geosets[16];
+	static const size_t NUM_GEOSETS = 16;
+	int geosets[NUM_GEOSETS];
 
 	// save + load equipment
 	void save(wxString fn, TabardDetails *td);
@@ -194,7 +195,7 @@ public:
 	void selectSet();
 	void selectStart();
 	void selectMount();
-	void selectNPC();
+	void selectNPC(int type);
 
 	const std::string selectCharModel();
 };

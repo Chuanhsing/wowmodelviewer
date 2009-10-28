@@ -14,7 +14,7 @@ struct Particle {
 	Vec3D	corners[4];
 	//Vec3D tpos;
 	float size, life, maxlife;
-	int tile;
+	unsigned int tile;
 	Vec4D color;
 };
 
@@ -94,7 +94,7 @@ public:
 	}
 	~ParticleSystem() { delete emitter; }
 
-	void init(MPQFile &f, ModelParticleEmitterDef &mta, int *globals);
+	void init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *globals);
 	void update(float dt);
 
 	void setup(int anim, int time);
@@ -102,6 +102,34 @@ public:
 
 	friend class PlaneParticleEmitter;
 	friend class SphereParticleEmitter;
+
+	friend std::ostream& operator<<(std::ostream& out, ParticleSystem& v)
+	{
+		out << "        <colors>" << v.colors[0] << "</colors>" << endl;
+		out << "        <colors>" << v.colors[1] << "</colors>" << endl;
+		out << "        <colors>" << v.colors[2] << "</colors>" << endl;
+		out << "        <sizes>" << v.sizes[0] << "</sizes>" << endl;
+		out << "        <sizes>" << v.sizes[1] << "</sizes>" << endl;
+		out << "        <sizes>" << v.sizes[2] << "</sizes>" << endl;
+		out << "        <mid>" << v.mid << "</mid>" << endl;
+		out << "        <slowdown>" << v.slowdown << "</slowdown>" << endl;
+		out << "        <rotation>" << v.rotation << "</rotation>" << endl;
+		out << "        <pos>" << v.pos << "</pos>" << endl;
+		out << "        <texture>" << v.texture << "</texture>" << endl;
+		out << "        <blend>" << v.blend << "</blend>" << endl;
+		out << "        <order>" << v.order << "</order>" << endl;
+		out << "        <type>" << v.type << "</type>" << endl;
+		out << "        <manim>" << v.manim << "</manim>" << endl;
+		out << "        <mtime>" << v.mtime << "</mtime>" << endl;
+		out << "        <rows>" << v.rows << "</rows>" << endl;
+		out << "        <cols>" << v.cols << "</cols>" << endl;
+		out << "        <billboard>" << v.billboard << "</billboard>" << endl;
+		out << "        <rem>" << v.rem << "</rem>" << endl;
+		out << "        <flags>" << v.flags << "</flags>" << endl;
+		out << "        <pTypes>" << v.pType << "</pTypes>" << endl;
+		out << "        <tofs>" << v.tofs << "</tofs>" << endl;
+		return out;
+	}
 };
 
 
@@ -135,7 +163,7 @@ class RibbonEmitter {
 public:
 	Model *model;
 
-	void init(MPQFile &f, ModelRibbonEmitterDef &mta, int *globals);
+	void init(MPQFile &f, ModelRibbonEmitterDef &mta, uint32 *globals);
 	void setup(int anim, int time);
 	void draw();
 };

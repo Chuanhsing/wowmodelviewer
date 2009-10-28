@@ -16,9 +16,17 @@ enum ObjectID {
 	ID_FILE_TEXIMPORT,
 	ID_FILE_TEXEXPORT,
 	ID_FILE_MODELEXPORT,
+	ID_FILE_MODEL_INFO,
+	ID_FILE_DISCOVERY_ITEM,
+	ID_FILE_DISCOVERY_NPC,
 	ID_FILE_RESETLAYOUT,
 	ID_FILE_EXIT,
+
+	// File List
+	ID_FILELIST_FRAME,
 	ID_FILELIST,
+	ID_FILELIST_SEARCH,
+	ID_FILELIST_CONTENT,
 
 	ID_SHOW_FILE_LIST,
 	ID_SHOW_ANIM,
@@ -27,6 +35,7 @@ enum ObjectID {
 	ID_SHOW_LIGHT,
 	ID_SHOW_MODEL,
 	ID_SHOW_MODELBANK,
+	ID_SHOW_MODELOPENED,
 
 	ID_SHOW_MASK,
 
@@ -76,7 +85,9 @@ enum ObjectID {
 	ID_SHADER_DEATH,
 	ID_TEST,
 
+#ifndef	WotLK
 	ID_USE_NPCSKINS,
+#endif
 	ID_DEFAULT_DOODADS,
 	ID_USE_ANTIALIAS,
 	ID_USE_ENVMAP,
@@ -114,6 +125,8 @@ enum ObjectID {
 	ID_SETTINGS_CLEAR,
 	ID_SETTINGS_RANDOMCHAR,
 	ID_SETTINGS_RANDOMSKIN,
+	ID_SETTINGS_HIDEHELMET,
+	ID_SETTINGS_KNIGHTEYEGLOW,
 	ID_SETTINGS_INITSTARTUP,
 	ID_SETTINGS_SAVELAYOUT,
 	ID_SETTINGS_APPLY,
@@ -207,6 +220,18 @@ enum ObjectID {
 	ID_MODELBANK_DISPLAY,
 
 	// ----------------------------------------
+	// Model Opened Control Frame
+	ID_MODELOPENED_FRAME,
+	ID_MODELOPENED_COMBOBOX,
+	ID_MODELOPENED_EXPORT,
+	ID_MODELOPENED_EXPORTALL,
+	ID_MODELOPENED_VIEW,
+	ID_MODELOPENED_EXPORTALLPNG,
+	ID_MODELOPENED_COMBO,
+	ID_MODELOPENED_EXPORTALLTGA,
+	ID_MODELOPENED_PATHPRESERVED,
+
+	// ----------------------------------------
 	// Arrow Frame
 	ID_ARROW_FRAME,
 	ID_ARROW_ATTACH,
@@ -273,6 +298,7 @@ enum ObjectID {
 
 	ID_LOAD_SET,
 	ID_LOAD_START,
+	ID_LOAD_NPC_START,
 
 	ID_MOUNT,
 
@@ -322,7 +348,8 @@ enum {
 	UPDATE_START,
 	UPDATE_MOUNT,
 	UPDATE_CREATURE_ITEM,
-	UPDATE_NPC
+	UPDATE_NPC,
+	UPDATE_NPC_START
 };
 
 enum CharSlots {
@@ -371,9 +398,11 @@ enum ItemTypes {
 	IT_LEFTHANDED, // IT_1HANDED
 	IT_RIGHTHANDED, // IT_CLAW
 	IT_OFFHAND,
-	IT_UNUSED, // unused?
+	IT_AMMO, // unused?
 	IT_THROWN,
 	IT_GUN,
+	IT_UNUSED,
+	IT_RELIC,
 
 	NUM_ITEM_TYPES
 };
@@ -381,9 +410,11 @@ enum ItemTypes {
 enum {
 	CHECK_RANDOMCHAR,
 	CHECK_RANDOMSKIN,
+	CHECK_HIDEHELMET,
 	CHECK_LOCALFILES,
 	CHECK_INITSTARTUP,
-	CHECK_SAVELAYOUT
+	CHECK_SAVELAYOUT,
+	CHECK_KNIGHTEYEGLOW
 };
 
 enum {
@@ -445,36 +476,45 @@ enum BlendModes {
 	BM_MODULATEX2
 };
 
-enum BoneTable {
-	//Block F - Bone lookup table.
+enum KeyBoneTable {
+	//Block F - Key Bone lookup table.
 	//---------------------------------
-	BONE_LARM = 0,		// 0, Left upper arm
-	BONE_RARM,			// 1, Right upper arm
-	BONE_LSHOULDER,		// 2, Left Shoulder / deltoid area
-	BONE_RSHOULDER,		// 3, Right Shoulder / deltoid area
-	BONE_STOMACH,		// 4, (upper?) abdomen
-	BONE_WAIST,			// 5, (lower abdomen?) waist
-	BONE_HEAD,			// 6, head
-	BONE_JAW,			// 7, jaw/mouth
-	BONE_RFINGER1,		// 8, (Trolls have 3 "fingers", this points to the 2nd one.
-	BONE_RFINGER2,		// 9, center finger - only used by dwarfs.. don't know why
-	BONE_RFINGER3,		// 10, (Trolls have 3 "fingers", this points to the 3rd one.
-	BONE_RFINGERS,		// 11, Right fingers -- this is -1 for trolls, they have no fingers, only the 3 thumb like thingys
-	BONE_RTHUMB,		// 12, Right Thumb
-	BONE_LFINGER1,		// 13, (Trolls have 3 "fingers", this points to the 2nd one.
-	BONE_LFINGER2,		// 14, Center finger - only used by dwarfs.
-	BONE_LFINGER3,		// 15, (Trolls have 3 "fingers", this points to the 3rd one.
-	BONE_LFINGERS,		// 16, Left fingers
-	BONE_LTHUMB,		// 17, Left Thumb
-	UnK19,	// ?
-	UnK20,	// ?
-	UnK21,	// ?
-	UnK22,	// ?
-	UnK23,	// ?
-	UnK24,	// ?
-	UnK25,	// ?
-	UnK26,	// ?
-	BONE_ROOT			// 26, The "Root" bone,  this controls rotations, transformations, etc of the whole model and all subsequent bones.
+	BONE_LARM = 0,		// 0, ArmL: Left upper arm
+	BONE_RARM,			// 1, ArmR: Right upper arm
+	BONE_LSHOULDER,		// 2, ShoulderL: Left Shoulder / deltoid area
+	BONE_RSHOULDER,		// 3, ShoulderR: Right Shoulder / deltoid area
+	BONE_STOMACH,		// 4, SpineLow: (upper?) abdomen
+	BONE_WAIST,			// 5, Waist: (lower abdomen?) waist
+	BONE_HEAD,			// 6, Head
+	BONE_JAW,			// 7, Jaw: jaw/mouth
+	BONE_RFINGER1,		// 8, IndexFingerR: (Trolls have 3 "fingers", this points to the 2nd one.
+	BONE_RFINGER2,		// 9, MiddleFingerR: center finger - only used by dwarfs.. don't know why
+	BONE_RFINGER3,		// 10, PinkyFingerR: (Trolls have 3 "fingers", this points to the 3rd one.
+	BONE_RFINGERS,		// 11, RingFingerR: Right fingers -- this is -1 for trolls, they have no fingers, only the 3 thumb like thingys
+	BONE_RTHUMB,		// 12, ThumbR: Right Thumb
+	BONE_LFINGER1,		// 13, IndexFingerL: (Trolls have 3 "fingers", this points to the 2nd one.
+	BONE_LFINGER2,		// 14, MiddleFingerL: Center finger - only used by dwarfs.
+	BONE_LFINGER3,		// 15, PinkyFingerL: (Trolls have 3 "fingers", this points to the 3rd one.
+	BONE_LFINGERS,		// 16, RingFingerL: Left fingers
+	BONE_LTHUMB,		// 17, ThubbL: Left Thumb
+	BONE_BTH,			// 18, $BTH: In front of head
+	BONE_CSR,			// 19, $CSR: Left hand
+	BONE_CSL,			// 20, $CSL: Left hand
+	BONE_BREATH,		// 21, _Breath
+	BONE_NAME,			// 22, _Name
+	BONE_NAMEMOUNT,		// 23, _NameMount
+	BONE_CHD,			// 24, $CHD: Head
+	BONE_CCH,			// 25, $CCH: Bust
+	BONE_ROOT,			// 26, Root: The "Root" bone,  this controls rotations, transformations, etc of the whole model and all subsequent bones.
+	BONE_WHEEL1,		// 27, Wheel1
+	BONE_WHEEL2,		// 28, Wheel2
+	BONE_WHEEL3,		// 29, Wheel3
+	BONE_WHEEL4,		// 30, Wheel4
+	BONE_WHEEL5,		// 31, Wheel5
+	BONE_WHEEL6,		// 32, Wheel6
+	BONE_WHEEL7,		// 33, Wheel7
+	BONE_WHEEL8,		// 34, Wheel8
+	BONE_MAX
 };
 
 enum GRAPHIC_EFFECTS {
@@ -495,6 +535,77 @@ enum GRAPHIC_EFFECTS {
 	WGLPIXELFORMAT,
 
 	NUM_EFFECTS
+};
+
+enum POSITION_SLOTS {
+	PS_LEFT_WRIST = 0, // Mountpoint
+	PS_RIGHT_PALM,
+	PS_LEFT_PALM,
+	PS_RIGHT_ELBOW,
+	PS_LEFT_ELBOW,
+	PS_RIGHT_SHOULDER,
+	PS_LEFT_SHOULDER,
+	PS_RIGHT_KNEE,
+	PS_LEFT_KNEE,
+	PS_HELMET=11,
+	PS_BACK,
+	PS_BUST=15,
+	PS_BUST2=16,
+	PS_FACE,
+	PS_ABOVE_CHARACTER,
+	PS_GROUND,
+	PS_TOP_OF_HEAD,
+	PS_LEFT_PALM2,
+	PS_RIGHT_PALM2,
+	PS_RIGHT_BACK_SHEATH=26,
+	PS_LEFT_BACK_SHEATH,
+	PS_MIDDLE_BACK_SHEATH,
+	PS_BELLY,
+	PS_LEFT_BACK,
+	PS_RIGHT_BACK,
+	PS_LEFT_HIP_SHEATH,
+	PS_RIGHT_HIP_SHEATH,
+	PS_BUST3,
+	PS_PALM3,
+	PS_DEMOLISHERVEHICLE=37,
+	PS_DEMOLISHERVEHICLE2,
+	PS_VEHICLE_SEAT1,
+	PS_VEHICLE_SEAT2,
+	PS_VEHICLE_SEAT3,
+	PS_VEHICLE_SEAT4
+};
+
+/*
+Texture Types
+Texture type is 0 for regular textures, nonzero for skinned textures (filename not referenced in the M2 file!) For instance, in the NightElfFemale model, her eye glow is a type 0 texture and has a file name, the other 3 textures have types of 1, 2 and 6. The texture filenames for these come from client database files:
+DBFilesClient\CharSections.dbc
+DBFilesClient\CreatureDisplayInfo.dbc
+DBFilesClient\ItemDisplayInfo.dbc
+(possibly more)
+*/
+enum TextureTypes {
+	TEXTURE_FILENAME=0,			// Texture given in filename
+	TEXTURE_BODY,				// Body + clothes
+	TEXTURE_CAPE,				// Item, Capes ("Item\ObjectComponents\Cape\*.blp")
+	TEXTURE_ARMORREFLECT,		// 
+	TEXTURE_HAIR=6,				// Hair, bear
+	TEXTURE_FUR=8,				// Tauren fur
+	TEXTURE_INVENTORY_ART1,		// Used on inventory art M2s (1): inventoryartgeometry.m2 and inventoryartgeometryold.m2
+	TEXTURE_QUILL,				// Only used in quillboarpinata.m2. I can't even find something referencing that file. Oo Is it used?
+	TEXTURE_GAMEOBJECT1,		// Skin for creatures or gameobjects #1
+	TEXTURE_GAMEOBJECT2,		// Skin for creatures or gameobjects #2
+	TEXTURE_GAMEOBJECT3,		// Skin for creatures or gameobjects #3
+	TEXTURE_INVENTORY_ART2		// Used on inventory art M2s (2): ui-buffon.m2 and forcedbackpackitem.m2 (LUA::Model:ReplaceIconTexture("texture"))
+};
+
+enum TextureFlags {
+	TEXTURE_WRAPX=1,
+	TEXTURE_WRAPY
+};
+
+enum ModelLightTypes {
+	MODELLIGHT_DIRECTIONAL=0,
+	MODELLIGHT_POINT
 };
 
 #endif

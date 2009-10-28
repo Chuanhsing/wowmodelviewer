@@ -17,18 +17,19 @@
 // stl
 #include <vector>
 
+wxColour ItemQualityColour(int quality);
+
 class CharControl;
 
 class ChoiceDialog : public wxSingleChoiceDialog {
 	CharControl *cc;
 	int type;
 
-	wxListView *m_listctrl;
-
     DECLARE_EVENT_TABLE()
 
 public:
-    ChoiceDialog(CharControl *dest, int type,
+	wxListView *m_listctrl;
+	ChoiceDialog(CharControl *dest, int type,
 	                       wxWindow *parent,
                            const wxString& message,
                            const wxString& caption,

@@ -45,7 +45,7 @@ bool CHECK_FRAMEBUFFER_STATUS()
 			wxLogMessage(_T("OGL Error: STATUS_ERROR"));
 			break; */
 		default: 
-			wxLogMessage(_T("OGL Error: Unknown."));
+			wxLogMessage(_T("OGL Error: Unknown %d."), status);
 			/* programming error; will fail on all hardware \*/ 
 			//assert(0); 
 			//continue;

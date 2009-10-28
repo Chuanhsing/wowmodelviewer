@@ -38,7 +38,13 @@ bool WowModelViewApp::OnInit()
 	#endif
 #endif
 
-	LogFile = fopen("log.txt", "w+");
+	wxFileName fname(argv[0]);
+	wxString userPath = fname.GetPath(wxPATH_GET_VOLUME)+"\\userSettings";
+	wxFileName::Mkdir(userPath, 0777, wxPATH_MKDIR_FULL);
+
+	// set the log file path.
+	wxString logPath = userPath+"\\log.txt";
+	LogFile = fopen(logPath.c_str(), "w+");
 	if (LogFile) {
 		wxLog *logger = new wxLogStderr(LogFile);
 		delete wxLog::SetActiveTarget(logger);
@@ -53,8 +59,7 @@ bool WowModelViewApp::OnInit()
 	wxLogMessage(wxString(_T("Starting:\n") APP_TITLE _T(" ") APP_VERSION _T("\n\n")));
 	
 	// set the config file path.
-	wxFileName fname(argv[0]);
-	cfgPath = fname.GetPath(wxPATH_GET_VOLUME)+"\\Config.ini";
+	cfgPath = userPath+"\\Config.ini";
 
 	LoadSettings();
 
@@ -293,7 +298,7 @@ void WowModelViewApp::LoadSettings()
 		for (size_t i=0; i<WXSIZEOF(defaultArchives); i++) {
 			wxString mpqFile = gamePath;
 			mpqFile.Append(defaultArchives[i]);
-#ifdef WotLK
+#if 0 // WotLK
 			if (defaultArchives[i] == _T("Patch-2.MPQ"))
 				continue;
 #endif

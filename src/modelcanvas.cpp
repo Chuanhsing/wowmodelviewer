@@ -83,7 +83,7 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 	lightType = LIGHT_DYNAMIC;
 
 	// Setup our default colour values.
-	vecBGColor = Vec3D(0.1f, 0.2f, 0.4f);
+	vecBGColor = Vec3D(71.0/255,95.0/255,121.0/255); 
 
 	drawLightDir = false;
 	drawBackground = false;
@@ -162,7 +162,9 @@ void ModelCanvas::InitView()
 	// set GL viewport
 	int w=0, h=0;
 	GetClientSize(&w, &h);
-	video.SetCurrent();
+#ifndef WotLK
+	//video.SetCurrent(); // 2009.07.02 Alfred cause crash
+#endif
 	
 	// update projection
 	//SetupProjection();
@@ -351,7 +353,7 @@ void ModelCanvas::clearAttachments()
 
 void ModelCanvas::OnMouse(wxMouseEvent& event)
 {
-	if (!model)// && !wmo)
+	if (!model && !wmo)
 		return;
 
 	if (event.Button(wxMOUSE_BTN_ANY) == true)
@@ -378,40 +380,32 @@ void ModelCanvas::OnMouse(wxMouseEvent& event)
 		if (event.ButtonDown()) {
 			mx = px;
 			my = py;
-			vRot0 = model->rot;
-			vPos0 = model->pos;
 
 		} else if (event.Dragging()) {
 			int dx = mx - px;
 			int dy = my - py;
+			mx = px;
+			my = py;
 
-			if (event.LeftIsDown()) {
-
-				// rotation check
-				if (mul > 1.0)
-					mul = 1.0;
-
-				model->rot.x = (vRot0.x - (dy / 2.0f)) * mul;
-				model->rot.y = (vRot0.y - (dx / 2.0f)) * mul;
-
+			if (event.LeftIsDown() && event.RightIsDown()) {
+				wmo->viewpos.y -= dy*mul;
+			} else if (event.LeftIsDown()) {
+				wmo->viewrot.x -= dx*mul/5;
+				wmo->viewrot.y -= dy*mul/5;
 			} else if (event.RightIsDown()) {
-				mul /= 100.0f;
-
-				model->pos.x = vPos0.x - dx*mul;
-				model->pos.y = vPos0.y + dy*mul;
-
+				wmo->viewrot.x -= dx*mul/5;
+				float f = cos(wmo->viewrot.y * piover180);
+				float sf = sin(wmo->viewrot.x * piover180);
+				float cf = cos(wmo->viewrot.x * piover180);
+				wmo->viewpos.x -= sf * mul * dy * f;
+				wmo->viewpos.z += cf * mul * dy * f;
+				wmo->viewpos.y += sin(wmo->viewrot.y * piover180) * mul * dy;
 			} else if (event.MiddleIsDown()) {
-				mul = (mul / 20.0f) * dy;
-
-				Zoom(mul, false);
-				my = py;
+				//?
 			}
 
 		} else if (event.GetEventType() == wxEVT_MOUSEWHEEL) {
-			if (pz != 0) {
-				mul = (mul / 120.0f) * pz;
-				Zoom(mul, false);
-			}
+			//?
 		}
 
 	} else if (model) {
@@ -1078,7 +1072,7 @@ inline void ModelCanvas::RenderToTexture()
 	glLoadIdentity();									// Reset The Projection Matrix
 
 	// Calculate The Aspect Ratio Of The Window
-	gluPerspective(video.fov, (float)rtt[0]->nWidth/(float)rtt[0]->nHeight, 0.1f, 128.0f);
+	gluPerspective(video.fov, (float)rtt[0]->nWidth/(float)rtt[0]->nHeight, 0.1f, 128.0f*5);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glPushMatrix();
@@ -1305,7 +1299,7 @@ inline void ModelCanvas::RenderWMOToBuffer()
 	if (video.supportFBO && video.supportPBO) {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		gluPerspective( 45.0f, rt->nWidth / rt->nHeight, 3.0f, 1500.0f );
+		gluPerspective( 45.0f, rt->nWidth / rt->nHeight, 3.0f, 1500.0f*5 );
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
@@ -1828,6 +1822,8 @@ void ModelCanvas::LoadBackground(wxString filename)
 
 void ModelCanvas::Zoom(float f, bool rel)
 {
+	if (!model)
+		return;
 	if (rel) {
 		float cosx = cos(model->rot.x * piover180);
 		model->pos.x += cos(model->rot.y * piover180) * cosx * f;

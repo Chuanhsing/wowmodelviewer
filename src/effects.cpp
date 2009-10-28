@@ -212,6 +212,7 @@ void EnchantsDialog::InitObjects()
 void EnchantsDialog::InitEnchants()
 {
 	EnchantsRec temp;
+/*
 	ifstream fin("enchants.csv");
 	char line[512];
 	while (fin.getline(line,512)) {
@@ -233,8 +234,36 @@ void EnchantsDialog::InitEnchants()
 		enchants.push_back(temp);
 	}
 	fin.close();
-
+*/
 	//std::sort(enchants.begin(), enchants.end());
+
+	// Alfred 2009.07.17 rewrite, use system database
+	temp.id = 0;
+	temp.index[0] = 0;
+	temp.index[1] = 0;
+	temp.index[2] = 0;
+	temp.index[3] = 0;
+	temp.index[4] = 0;
+	temp.name = "None";
+	enchants.push_back(temp);
+
+	for (SpellItemEnchantmentDB::Iterator it=spellitemenchantmentdb.begin();  it!=spellitemenchantmentdb.end(); ++it) {
+		int visualid;
+		visualid = it->getInt(SpellItemEnchantmentDB::VisualID);
+		if (visualid < 1)
+			continue;
+		for (ItemVisualsDB::Iterator it2=itemvisualsdb.begin();  it2!=itemvisualsdb.end(); ++it2) {
+			if (it2->getInt(ItemVisualsDB::VisualID) == visualid) {
+				temp.id = visualid;
+				for(size_t i=0; i<5; i++)
+					temp.index[i] = it2->getInt(ItemVisualsDB::VisualID+1+i);
+				temp.name = CSConv(it->getString(SpellItemEnchantmentDB::Name + langID));
+				enchants.push_back(temp);
+				break;
+			}
+		}
+	}
+
 	choices.Clear();
 	for (std::vector<EnchantsRec>::iterator it=enchants.begin();  it!=enchants.end();  ++it)
 		choices.Add(wxString(it->name.c_str(), *wxConvCurrent));

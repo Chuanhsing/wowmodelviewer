@@ -12,6 +12,33 @@ BEGIN_EVENT_TABLE(ChoiceDialog, wxSingleChoiceDialog)
 	EVT_LIST_ITEM_SELECTED(wxID_LISTCTRL, ChoiceDialog::OnSelect)
 END_EVENT_TABLE()
 
+wxColour ItemQualityColour(int quality)
+{
+	wxColour c = *wxBLACK;
+	switch(quality) {
+		case 0:
+			c = wxColour(0x9d, 0x9d, 0x9d);
+			break;
+		case 2:
+			c = wxColour(0x1e, 0xff, 0x00);
+			break;
+		case 3:
+			c = wxColour(0x00, 0x70, 0xdd);
+			break;
+		case 4:
+			c = wxColour(0xa3, 0x35, 0xee);
+			break;
+		case 5:
+			c = wxColour(0xff, 0x80, 0x00);
+			break;
+		case 6:
+		case 7:
+			c = wxColour(0xe5, 0xcc, 0x80);
+			break;
+	}
+	return c;
+}
+
 ChoiceDialog::ChoiceDialog(CharControl *dest, int type,
 	                       wxWindow *parent,
                            const wxString& message,
@@ -24,28 +51,63 @@ ChoiceDialog::ChoiceDialog(CharControl *dest, int type,
 
 	m_listctrl = NULL;
 
-	/*
+#ifdef WotLK
 	// New Item Selection stuff
 	// Objective is to change over from a wxListBox to a wxListCtrl
 	// which supports different text colours
 	wxCArrayString chs(choices);
 	m_listctrl = new wxListView(this, wxID_LISTCTRL, wxDefaultPosition, wxSize(200,200), wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_NO_HEADER); 
 	
-	m_listctrl->InsertColumn(0, _T("Item"), wxLIST_FORMAT_LEFT, 180);
+	m_listctrl->InsertColumn(0, _T("Item"), wxLIST_FORMAT_LEFT, 195);
 	//m_listctrl->SetColumnWidth(0, wxLIST_AUTOSIZE);
 
+	wxListItem item;
 	for (unsigned int i = 0; i < chs.GetCount(); i++) {
-		m_listctrl->InsertItem(i, choices[i]);
+		item.SetText(choices[i]);
+		item.SetId(i);
+/*
+		if (item.GetText() == "Death Knight")
+			item.SetTextColour(wxColour(196, 30, 59));
+		else if (item.GetText() == "Druid")
+			item.SetTextColour(wxColour(255, 125, 10));
+		else if (item.GetText() == "Hunter")
+			item.SetTextColour(wxColour(171, 212, 115));
+		else if (item.GetText() == "Mage")
+			item.SetTextColour(wxColour(105, 204, 240));
+		else if (item.GetText() == "Paladin")
+			item.SetTextColour(wxColour(245, 140, 186));
+		else if (item.GetText() == "Priest")
+			item.SetTextColour(wxColour(255, 255, 255));
+		else if (item.GetText() == "Rogue")
+			item.SetTextColour(wxColour(255, 245, 105));
+		else if (item.GetText() == "Shaman")
+			item.SetTextColour(wxColour(36, 89, 255));
+		else if (item.GetText() == "Warlock")
+			item.SetTextColour(wxColour(148, 130, 201));
+		else if (item.GetText() == "Warrior")
+			item.SetTextColour(wxColour(199, 156, 110));
+		else
+			item.SetTextColour(*wxBLACK);
+*/
+		if ((i%2)==0)
+			item.SetBackgroundColour(*wxWHITE);
+		else
+			item.SetBackgroundColour(wxColour(237,243,254));
+
+		m_listctrl->InsertItem(item);
+		//m_listctrl->InsertItem(i, choices[i]);
 	}
 
 	wxBoxSizer *frameSizer = (wxBoxSizer*)this->GetSizer();
 	if (frameSizer) {
 		frameSizer->Detach(m_listbox);
 		frameSizer->Insert(1, m_listctrl, wxEXPAND|wxADJUST_MINSIZE|wxLEFT|wxRIGHT);
+		frameSizer->SetSizeHints( m_listctrl );
+		frameSizer->Fit( m_listctrl );
 
 		m_listbox->Show(false);
 	}
-	*/
+#endif	
 }
 
 void ChoiceDialog::OnClick(wxCommandEvent &event)
@@ -67,7 +129,7 @@ void ChoiceDialog::OnSelect(wxListEvent &event)
 	if (m_selection == -1) // If nothing was selected, exit function.
 		return;
 
-    m_stringSelection = m_listbox->GetStringSelection();
+    m_stringSelection = m_listctrl->GetItemText(m_selection);
 	if (cc)	
 		cc->OnUpdateItem(type, GetSelection());
 }
@@ -110,25 +172,31 @@ FilteredChoiceDialog::FilteredChoiceDialog(CharControl *dest, int type, wxWindow
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
     
-	/*
-	m_listbox->Clear();
+#ifdef WotLK
+	m_listctrl->DeleteAllItems();
 
+	wxListItem item; 
 	for(unsigned int i=0; i<choices.Count(); i++) {
-		wxListItem item; 
 		//item.m_mask=wxLIST_MASK_TEXT; 
-		//item.m_itemId=tmp; 
+		item.SetId(i); 
 		//item.m_col=col; 
-		item.m_text=choices[i]; 
-		if (quality[i] < 3)
-			item.SetTextColour(*wxRED); 
+		item.SetText(choices[i]); 
+		/*
+		if (quality) {
+			item.SetTextColour(ItemQualityColour(quality->at(i)));
+		}
+		*/
+		if ((i%2)==0)
+			item.SetBackgroundColour(*wxWHITE);
 		else
-			item.SetTextColour(*wxBLUE); 
+			item.SetBackgroundColour(wxColour(237,243,254));
 
-		m_listbox->InsertItem(item);
+		// m_listbox doesn't support wxListItem, try wxListCtrl
+		m_listctrl->InsertItem(item);
 	}
-	*/
-
+#else
     m_listbox->SetFocus();
+#endif
 }
 
 void FilteredChoiceDialog::OnFilter(wxCommandEvent& event){
@@ -143,6 +211,24 @@ void FilteredChoiceDialog::DoFilter()
 
 	m_indices.clear();
 
+#ifdef WotLK
+	m_listctrl->DeleteAllItems();
+
+	wxListItem item; 
+	for(int i=0; i<(int)m_choices->GetCount(); ++i){
+		if (FilterFunc(i)) {
+			item.SetId(i); 
+			item.SetText(m_choices->Item(i));
+			m_indices.push_back((int)i);
+			if ((i%2)==0)
+				item.SetBackgroundColour(*wxWHITE);
+			else
+				item.SetBackgroundColour(wxColour(237,243,254));
+
+			m_listctrl->InsertItem(item);
+		}
+	}
+#else
     wxArrayString filtered;
     for(int i=0; i<(int)m_choices->GetCount(); ++i){
 		if (FilterFunc(i)) {
@@ -151,8 +237,9 @@ void FilteredChoiceDialog::DoFilter()
             filtered.Add(m_choices->Item(i));
         }
     }
-    
+
     m_listbox->Set(filtered);
+#endif
 }
 
 void FilteredChoiceDialog::InitFilter()

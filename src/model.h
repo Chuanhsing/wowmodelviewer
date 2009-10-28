@@ -125,11 +125,6 @@ public:
 };
 
 class Bone {
-	/*
-	Animated<Vec3D> trans;
-	Animated<Quaternion> rot;
-	Animated<Vec3D> scale;
-	*/
 public:
 	Animated<Vec3D> trans;
 	//Animated<Quaternion> rot;
@@ -137,7 +132,7 @@ public:
 	Animated<Vec3D> scale;
 
 	Vec3D pivot, transPivot;
-	int parent;
+	int16 parent;
 
 	bool billboard;
 	Matrix mat;
@@ -146,36 +141,37 @@ public:
 	ModelBoneDef boneDef;
 
 	bool calc;
+	Model *model;
 	void calcMatrix(Bone* allbones, int anim, int time, bool rotate=true);
 #ifdef WotLK
-	void init(MPQFile &f, ModelBoneDef &b, int *global, MPQFile *animfiles);
+	void init(MPQFile &f, ModelBoneDef &b, uint32 *global, MPQFile *animfiles);
 #else
-	void init(MPQFile &f, ModelBoneDef &b, int *global);
+	void init(MPQFile &f, ModelBoneDef &b, uint32 *global);
 #endif
 };
 
 class TextureAnim {
+public:
 	Animated<Vec3D> trans, rot, scale;
 
-public:
 	Vec3D tval, rval, sval;
 
 	void calc(int anim, int time);
-	void init(MPQFile &f, ModelTexAnimDef &mta, int *global);
-	void setup();
+	void init(MPQFile &f, ModelTexAnimDef &mta, uint32 *global);
+	void setup(int anim);
 };
 
 struct ModelColor {
 	Animated<Vec3D> color;
 	AnimatedShort opacity;
 
-	void init(MPQFile &f, ModelColorDef &mcd, int *global);
+	void init(MPQFile &f, ModelColorDef &mcd, uint32 *global);
 };
 
 struct ModelTransparency {
 	AnimatedShort trans;
 
-	void init(MPQFile &f, ModelTransDef &mtd, int *global);
+	void init(MPQFile &f, ModelTransDef &mtd, uint32 *global);
 };
 
 struct ModelRenderPass {
@@ -221,7 +217,7 @@ struct ModelCamera {
 	Animated<Vec3D> tPos, tTarget;
 	Animated<float> rot;
 
-	void init(MPQFile &f, ModelCameraDef &mcd, int *global);
+	void init(MPQFile &f, ModelCameraDef &mcd, uint32 *global);
 	void setup(int time=0);
 
 	ModelCamera():ok(false) {}
@@ -233,7 +229,7 @@ struct ModelLight {
 	Animated<Vec3D> diffColor, ambColor;
 	Animated<float> diffIntensity, ambIntensity;
 
-	void init(MPQFile &f, ModelLightDef &mld, int *global);
+	void init(MPQFile &f, ModelLightDef &mld, uint32 *global);
 	void setup(int time, GLuint l);
 };
 
@@ -244,7 +240,7 @@ struct ModelAttachment {
 	int bone;
 	Model *model;
 
-	void init(MPQFile &f, ModelAttachmentDef &mad, int *global);
+	void init(MPQFile &f, ModelAttachmentDef &mad, uint32 *global);
 	void setup();
 	void setupParticle();
 };
@@ -262,15 +258,6 @@ class Model: public ManagedItem, public Displayable
 	bool forceAnim;
 
 	void init(MPQFile &f);
-
-	TextureAnim		*texAnims;
-	int				*globalSequences;
-	ModelColor		*colors;
-	ModelTransparency *transparency;
-	ModelLight		*lights;
-	ParticleSystem	*particleSystems;
-	RibbonEmitter	*ribbons;
-
 	inline void drawModel();
 	void initCommon(MPQFile &f);
 	bool isAnimated(MPQFile &f);
@@ -285,6 +272,15 @@ class Model: public ManagedItem, public Displayable
 
 	Vec3D *bounds;
 	uint16 *boundTris;
+
+public:
+	TextureAnim		*texAnims;
+	uint32			*globalSequences;
+	ModelColor		*colors;
+	ModelTransparency *transparency;
+	ModelLight		*lights;
+	ParticleSystem	*particleSystems;
+	RibbonEmitter	*ribbons;
 
 public:
 	// Raw Data
@@ -304,6 +300,8 @@ public:
 	ModelCamera cam;
 #ifdef WotLK
 	string fullname;
+	string modelname;
+	string lodname;
 #endif
 	
 	std::vector<ModelRenderPass> passes;
@@ -338,11 +336,11 @@ public:
 	float trans;
 	// -------------------------------
 
-
 	// ===============================
 	// Bone & Animation data
 	// ===============================
 	ModelAnimation *anims;
+	int16 *animLookups;
 	AnimManager *animManager;
 	Bone *bones;
 	MPQFile *animfiles;
@@ -368,9 +366,9 @@ public:
 	// Texture data
 	// ===============================
 	TextureID *textures;
-	int specialTextures[32];
-	GLuint replaceTextures[32];
-	bool useReplaceTextures[32];
+	int specialTextures[TEXTURE_MAX];
+	GLuint replaceTextures[TEXTURE_MAX];
+	bool useReplaceTextures[TEXTURE_MAX];
 	// -------------------------------
 
 	// ===============================
@@ -392,8 +390,9 @@ public:
 	void setupAtt2(int id);
 
 	std::vector<ModelAttachment> atts;
-	int attLookup[40];
-	int boneLookup[27];
+	static const size_t ATT_MAX = 50;
+	int16 attLookup[ATT_MAX];
+	int16 keyBoneLookup[BONE_MAX];
 
 	ModelType modelType;
 	CharModelDetails charModelDetails;

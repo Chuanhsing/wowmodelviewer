@@ -80,7 +80,7 @@ void ArrowControl::OnButton(wxCommandEvent &event)
 		
 		GLuint tex = texturemanager.add(mp);
 		Model *m = static_cast<Model*>(curAtt->model);
-		m->replaceTextures[2] = tex;
+		m->replaceTextures[TEXTURE_CAPE] = tex;
 
 		curAtt->scale = 0.5f;
 		curAtt->rot = 180.0f;

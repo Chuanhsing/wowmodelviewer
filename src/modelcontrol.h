@@ -66,6 +66,39 @@ public:
 
 };
 
+class ScrWindow : public wxFrame
+{
+	wxScrolledWindow *sw;
+	wxStaticBitmap *sb;
+public:
+	ScrWindow(const wxString& title);
+	~ScrWindow();
+};
+
+class ModelOpened: public wxWindow
+{
+	DECLARE_CLASS(ModelOpened)
+	DECLARE_EVENT_TABLE()
+
+	wxComboBox *openedList;
+	wxButton *btnExport, *btnExportAll, *btnView, *btnExportAllPNG, *btnExportAllTGA;
+	wxArrayString opened_files;
+	wxCheckBox *chkPathPreserved;
+	bool bPathPreserved;
+
+public:
+
+	ModelOpened(wxWindow* parent, wxWindowID id);
+	~ModelOpened();	
+
+	void OnButton(wxCommandEvent &event);
+	void OnCombo(wxCommandEvent &event);
+	void OnCheck(wxCommandEvent &event);
+	void Add(wxString str);
+	void Clear();
+	void Export(wxString val);
+	void ExportPNG(wxString val, wxString suffix);
+};
 
 #endif
 

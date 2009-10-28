@@ -12,6 +12,9 @@ wxArrayString mpqArchives;
 
 bool useLocalFiles = false;
 bool useRandomLooks = true;
+bool bHideHelmet = false;
+bool bKnightEyeGlow = true;
+bool bPTR = false;
 
 long langID = -1;
 int ssCounter = 100; // ScreenShot Counter
@@ -90,11 +93,14 @@ void getGamePath()
 	// if it failed, look for World of Warcraft install
 	const wxString regpaths[] = { 
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft"),
+/* for beta
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\1"),
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\2"),
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\3"),
+*/
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\PTR")
 		 };
+	int sTypes[2];
 
 	for (size_t i=0; i<WXSIZEOF(regpaths); i++) {
 		l = RegOpenKeyEx((HKEY)HKEY_LOCAL_MACHINE, regpaths[i], 0, KEY_QUERY_VALUE, &key);
@@ -103,7 +109,12 @@ void getGamePath()
 			s = sizeof(path);
 			l = RegQueryValueEx(key, _T("InstallPath"), 0, &t,(LPBYTE)path, &s);
 			if (l == ERROR_SUCCESS && wxDir::Exists(path)) {
-				sNames[nNames++] = path;
+				sNames[nNames] = path;
+				if (i==1)
+					sTypes[nNames] = 1;
+				else
+					sTypes[nNames] = 0;
+				nNames++;
 			}
 			RegCloseKey(key);
 		}
@@ -116,6 +127,9 @@ void getGamePath()
 			sName = 0;
 	} else
 		sName = -1;
+
+	if (sTypes[sName] == 1)
+		bPTR = true;
 
 	// If we found an install then set the game path, otherwise just set to C:\ for now
 	if (sName >= 0) {

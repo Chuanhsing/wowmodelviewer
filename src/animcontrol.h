@@ -40,6 +40,7 @@ struct TextureGroup {
 	{
 		for (int i=0; i<num; i++) {
 			if (tex[i]<grp.tex[i]) return true;
+			if (tex[i]>grp.tex[i]) return false;
 		}
 		return false;
 	}
@@ -52,7 +53,7 @@ class AnimControl: public wxWindow
 	DECLARE_CLASS(AnimControl)
     DECLARE_EVENT_TABLE()
 
-	wxComboBox *animList, *animList2, *animList3, *wmoList, *loopList;
+	wxComboBox *animCList, *animCList2, *animCList3, *wmoList, *loopList;
 	wxStaticText *wmoLabel,*speedLabel, *speedMouthLabel, *frameLabel;
 	wxSlider *speedSlider, *speedMouthSlider, *frameSlider;
 	wxButton *btnAdd;

@@ -1,4 +1,4 @@
-
+#include "modelviewer.h"
 #include "video.h"
 
 #include <wx/display.h>
@@ -17,6 +17,7 @@
 	}
 #endif
 
+extern ModelViewer *g_modelViewer;
 
 // Create an OpenGL pixel format descriptor
 PIXELFORMATDESCRIPTOR pfd =						// pfd Tells Windows How We Want Things To Be
@@ -663,7 +664,7 @@ void VideoSettings::ResizeGLScene(int width, int height)		// Resize And Initiali
 	glLoadIdentity();									// Reset The Projection Matrix
 
 	// Calculate The Aspect Ratio Of The Window
-	gluPerspective(fov, (float)width/(float)height, 0.1f, 128.0f);
+	gluPerspective(fov, (float)width/(float)height, 0.1f, 128.0f*5);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
@@ -714,6 +715,7 @@ GLuint TextureManager::add(std::string name)
 
 	return 0;
 }
+//#define SAVE_BLP
 
 void TextureManager::LoadBLP(GLuint id, Texture *tex)
 {
@@ -722,13 +724,57 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 	GLint format = 0;
 	char attr[4];
 
+	if (useLocalFiles) {
+		wxFileName fn = tex->name;
+		wxString suffix = "png";
+		wxString filename = "Import\\"+fn.GetName()+"."+suffix;
+		BYTE *buffer = NULL;
+		CxImage *image = NULL;
+
+		if (wxFile::Exists(filename)) {
+			image = new CxImage(filename.c_str(), CXIMAGE_FORMAT_PNG);
+		} else {
+			suffix = "tga";
+			filename = "Import\\"+fn.GetName()+"."+suffix;
+			if (wxFile::Exists(filename)) {
+				image = new CxImage(filename.c_str(), CXIMAGE_FORMAT_TGA);
+			}
+		}
+
+		if (image != NULL) {
+			long size = image->GetWidth() * image->GetHeight() * 4;
+			if (image->Encode2RGBA(buffer, size, true)) {
+				tex->w = image->GetWidth();
+				tex->h = image->GetHeight();
+				tex->compressed = true;
+
+				GLuint texFormat = GL_TEXTURE_2D;
+				glBindTexture(texFormat, id);
+
+				glTexImage2D(texFormat, 0, GL_RGBA8, image->GetWidth(), image->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+
+				glTexParameteri(texFormat, GL_TEXTURE_MIN_FILTER, GL_LINEAR);	// Linear Filtering
+				glTexParameteri(texFormat, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	// Linear Filtering
+
+				wxDELETE(image);
+				wxDELETE(buffer);
+				return;
+			}
+		}
+
+	}
+
 	// bind the texture
 	glBindTexture(GL_TEXTURE_2D, id);
 	
 	MPQFile f(tex->name.c_str());
+	if (g_modelViewer) {
+		g_modelViewer->modelOpened->Add(tex->name.c_str());
+	}
 	if (f.isEof()) {
 		tex->id = 0;
 		wxLogMessage(_T("Error: Could not load the texture '%s'"), tex->name.c_str());
+		f.close();
 		return;
 	} else {
 		//tex->id = id; // I don't see the id being set anywhere,  should I set it now?
@@ -746,10 +792,14 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 	tex->w = w;
 	tex->h = h;
 
-	bool hasmipmaps = attr[4]>0;
+	bool hasmipmaps = (attr[3]>0);
 	int mipmax = hasmipmaps ? 16 : 1;
 
+	//wxLogMessage(_T("[BLP]: type: %d, encoding: %d, alphadepth: %d, alphaencoding: %d, mipmap: %d, %d*%d"), type, attr[0], attr[1], attr[2], attr[3], w, h);
+	if (type != 1)
+		wxLogMessage(_T("Error: %s:%s#%d type=%d"), __FILE__, __FUNCTION__, __LINE__, type);
 /*
+reference: http://en.wikipedia.org/wiki/.BLP
 Some changes in the BLP2 format in WoW 2.0.1...  QQ
 attr[0] = encoding
 attr[1] = alpha
@@ -774,10 +824,13 @@ The image data is formatted using DXT1 compression with a one-bit alpha channel.
 
 Type 1 Encoding 2 AlphaDepth 8 (DXT3)
 The image data is formatted using DXT3 compression.
+
+Type 1 Encoding 2 AlphaDepth 8 AlphaEncoding 7 (DXT5)
+The image data are formatted using DXT5 compression.
 */
 
 	if (attr[0] == 2) {
-		// compressed
+		// encoding 2, directx compressed
 		unsigned char *ucbuf = NULL;
 		if (!video.supportCompression) 
 			ucbuf = new unsigned char[w*h*4];
@@ -829,9 +882,9 @@ The image data is formatted using DXT3 compression.
 			wxDELETEA(ucbuf);
 
 	} else if (attr[0]==1) {
-		// uncompressed
+		// encoding 1, uncompressed
 		unsigned int pal[256];
-		f.read(pal,1024);
+		f.read(pal, 1024);
 
 		unsigned char *buf = new unsigned char[sizes[0]];
 		unsigned int *buf2 = new unsigned int[w*h];
@@ -839,7 +892,7 @@ The image data is formatted using DXT3 compression.
 		unsigned char *c = NULL, *a = NULL;
 
 		int alphabits = attr[1];
-		bool hasalpha = alphabits!=0;
+		bool hasalpha = (alphabits!=0);
 
 		tex->compressed = false;
 
@@ -865,6 +918,12 @@ The image data is formatted using DXT3 compression.
 						if (hasalpha) {
 							if (alphabits == 8) {
 								alpha = (*a++);
+							} else if (alphabits == 4) {
+								alpha = (*a & (0xf << cnt++)) * 0x11;
+								if (cnt == 2) {
+									cnt = 0;
+									a++;
+								}
 							} else if (alphabits == 1) {
 								//alpha = (*a & (128 >> cnt++)) ? 0xff : 0;
 								alpha = (*a & (1 << cnt++)) ? 0xff : 0;
@@ -914,10 +973,10 @@ void TextureManager::doDelete(GLuint id)
 }
 
 
-void Texture::getPixels(unsigned char* buf)
+void Texture::getPixels(unsigned char* buf, unsigned int format)
 {
 	glBindTexture(GL_TEXTURE_2D, id);
-	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
+	glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, buf);
 }
 
 struct Color {

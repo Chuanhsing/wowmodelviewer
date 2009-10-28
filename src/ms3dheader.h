@@ -4,7 +4,7 @@
 //
 //
 //
-//                MilkShape 3D 1.7.3 File Format Specification
+//                MilkShape 3D 1.8.2 File Format Specification
 //
 //
 //                  This specifcation is written in C style.
@@ -15,7 +15,7 @@
 //
 //
 //
-//
+// http://chumbalum.swissquake.ch/ms3d/ms3dspec.txt
 
 //
 // max values
@@ -25,7 +25,6 @@
 #define MAX_GROUPS      255
 #define MAX_MATERIALS   128
 #define MAX_JOINTS      128
-#define MAX_KEYFRAMES   216     // increase when needed
 
 
 
@@ -55,7 +54,7 @@ typedef unsigned short word;
 #include <pshpack1.h>
 
 //
-// First comes the header.
+// First comes the header (sizeof(ms3d_header_t) == 14)
 //
 struct ms3d_header_t
 {
@@ -66,10 +65,10 @@ struct ms3d_header_t
 //
 // Then comes the number of vertices
 //
-word nNumVertices;
+word nNumVertices; // 2 bytes
 
 //
-// Then comes nNumVertices * sizeof (ms3d_vertex_t)
+// Then come nNumVertices times ms3d_vertex_t structs (sizeof(ms3d_vertex_t) == 15)
 //
 typedef struct
 {
@@ -80,12 +79,12 @@ typedef struct
 } ms3d_vertex_t;
 
 //
-// number of triangles
+// Then comes the number of triangles
 //
-word nNumTriangles;
+word nNumTriangles; // 2 bytes
 
 //
-// nNumTriangles * sizeof (ms3d_triangle_t)
+// Then come nNumTriangles times ms3d_triangle_t structs (sizeof(ms3d_triangle_t) == 70)
 //
 typedef struct
 {
@@ -99,12 +98,12 @@ typedef struct
 } ms3d_triangle_t;
 
 //
-// number of groups
+// Then comes the number of groups
 //
-word nNumGroups;
+word nNumGroups; // 2 bytes
 
 //
-// nNumGroups * sizeof (ms3d_group_t)
+// Then come nNumGroups times groups (the sizeof a group is dynamic, because of triangleIndices is numtriangles long)
 //
 typedef struct
 {
@@ -118,10 +117,10 @@ typedef struct
 //
 // number of materials
 //
-word nNumMaterials;
+word nNumMaterials; // 2 bytes
 
 //
-// nNumMaterials * sizeof (ms3d_material_t)
+// Then come nNumMaterials times ms3d_material_t structs (sizeof(ms3d_material_t) == 361)
 //
 typedef struct
 {
@@ -140,26 +139,25 @@ typedef struct
 //
 // save some keyframer data
 //
-float fAnimationFPS;
-float fCurrentTime;
-int iTotalFrames;
+float fAnimationFPS; // 4 bytes
+float fCurrentTime; // 4 bytes
+int iTotalFrames; // 4 bytes
 
 //
 // number of joints
 //
-word nNumJoints;
+word nNumJoints; // 2 bytes
 
 //
-// nNumJoints * sizeof (ms3d_joint_t)
+// Then come nNumJoints joints (the size of joints are dynamic, because each joint has a differnt count of keys
 //
-//
-typedef struct
+typedef struct // 16 bytes
 {
     float           time;                               // time in seconds
     float           rotation[3];                        // x, y, z angles
 } ms3d_keyframe_rot_t;
 
-typedef struct
+typedef struct // 16 bytes
 {
     float           time;                               // time in seconds
     float           position[3];                        // local position
@@ -181,14 +179,15 @@ typedef struct
 } ms3d_joint_t;
 
 //
-// subversion, stuff attached to file
+// Then comes the subVersion of the comments part, which is not available in older files
 //
-int subVersion;											// must be 1
+int subVersion; // subVersion is = 1, 4 bytes
 
-int nNumGroupComments;
+// Then comes the numer of group comments
+unsigned int nNumGroupComments; // 4 bytes
 
 //
-// nNumGroupComments * ms3d_comment_t
+// Then come nNumGroupComments times group comments, which are dynamic, because the comment can be any length
 //
 typedef struct
 {
@@ -197,37 +196,77 @@ typedef struct
 	char *comment;										// [commentLength] comment
 } ms3d_comment_t;
 
-int nNumMaterialComments;
+// Then comes the number of material comments
+int nNumMaterialComments; // 4 bytes
 
 //
-// nNumMaterialComments * ms3d_comment_t
+// Then come nNumMaterialComments times material comments, which are dynamic, because the comment can be any length
 //
 
-int nNumJointComments;
+// Then comes the number of joint comments
+int nNumJointComments; // 4 bytes
 
 //
-// nNumJointComments * ms3d_comment_t
+// Then come nNumJointComments times joint comments, which are dynamic, because the comment can be any length
 //
 
-int nHasModelComment;
+// Then comes the number of model comments, which is always 0 or 1
+int nHasModelComment; // 4 bytes
 
 //
-// nHasModelComment * ms3d_comment_t
+// Then come nHasModelComment times model comments, which are dynamic, because the comment can be any length
 //
 
+
+// Then comes the subversion of the vertex extra information like bone weights, extra etc.
+//int subVersion;		// subVersion is = 2, 4 bytes
+
+// ms3d_vertex_ex_t for subVersion == 1
 typedef struct
 {
-	char boneIds[3];									// index of joint or -1, if -1, then that weight is ignored
-	byte weights[3];									// vertex weight ranging from 0 - 255, last weight is computed by 1.0 - sum(all weights)
+	char boneIds[3];									// index of joint or -1, if -1, then that weight is ignored, since subVersion 1
+	byte weights[3];									// vertex weight ranging from 0 - 255, last weight is computed by 1.0 - sum(all weights), since subVersion 1
 	// weight[0] is the weight for boneId in ms3d_vertex_t
 	// weight[1] is the weight for boneIds[0]
 	// weight[2] is the weight for boneIds[1]
 	// 1.0f - weight[0] - weight[1] - weight[2] is the weight for boneIds[2]
 } ms3d_vertex_ex_t;
-//
-// nNumVertices * sizeof (ms3d_vertex_ex_t)
-//
 
+// ms3d_vertex_ex_t for subVersion == 2
+typedef struct
+{
+	char boneIds[3];									// index of joint or -1, if -1, then that weight is ignored, since subVersion 1
+	byte weights[3];									// vertex weight ranging from 0 - 100, last weight is computed by 1.0 - sum(all weights), since subVersion 1
+	// weight[0] is the weight for boneId in ms3d_vertex_t
+	// weight[1] is the weight for boneIds[0]
+	// weight[2] is the weight for boneIds[1]
+	// 1.0f - weight[0] - weight[1] - weight[2] is the weight for boneIds[2]
+	unsigned int extra;									// vertex extra, which can be used as color or anything else, since subVersion 2
+} ms3d_vertex_ex_t2;
+
+// Then comes nNumVertices times ms3d_vertex_ex_t structs (sizeof(ms3d_vertex_ex_t) == 10)
+
+// Then comes the subversion of the joint extra information like color etc.
+//int subVersion;		// subVersion is = 2, 4 bytes
+
+// ms3d_joint_ex_t for subVersion == 1
+typedef struct
+{
+	float color[3];	// joint color, since subVersion == 1
+} ms3d_joint_ex_t;
+
+// Then comes nNumJoints times ms3d_joint_ex_t structs (sizeof(ms3d_joint_ex_t) == 12)
+
+// Then comes the subversion of the model extra information
+//int subVersion;		// subVersion is = 1, 4 bytes
+
+// ms3d_model_ex_t for subVersion == 1
+typedef struct
+{
+	float jointSize;	// joint size, since subVersion == 1
+	int transparencyMode; // 0 = simple, 1 = depth buffered with alpha ref, 2 = depth sorted triangles, since subVersion == 1
+	float alphaRef; // alpha reference value for transparencyMode = 1, since subVersion == 1
+} ms3d_model_ex_t;
 #include <poppack.h>
 
 

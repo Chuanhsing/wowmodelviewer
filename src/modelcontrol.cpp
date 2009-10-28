@@ -207,8 +207,16 @@ void ModelControl::Update()
 	// Loop through all the geosets.
 	wxArrayString geosetItems;
 	//geosets->Clear();
+	wxString meshes[19] = {_T("Hairstyles"), _T("Facial1"), _T("Facial2"), _T("Facial3"), _T("Braces"),
+		_T("Boots"), _T(""), _T("Ears"), _T("Wristbands"),  _T("Kneepads"),
+		 _T("Pants"), _T("Pants"), _T("Tarbard"), _T("Trousers"), _T(""),
+		  _T("Cape"), _T(""), _T("Eyeglows"), _T("Belt") };
 	for (unsigned int i=0; i<model->geosets.size(); i++) {
-		geosetItems.Add(wxString::Format("%i", i), 1);
+		int mesh = model->geosets[i].id / 100;
+		if (mesh < 19 && meshes[mesh] != "")
+			geosetItems.Add(wxString::Format("%i [%s]", i, meshes[mesh].c_str()), 1);
+		else
+			geosetItems.Add(wxString::Format("%i [%i]", i, mesh), 1);
 	}
 	//geosets->InsertItems(items, 0);
 	geosets->Set(geosetItems, 0);
@@ -287,12 +295,15 @@ void ModelControl::OnCombo(wxCommandEvent &event)
 		f.close();
 	} else if (id == ID_MODEL_NAME) {
 		// Error check
-		if (modelname->GetSelection() < (int)attachments.size()) {
-			UpdateModel(attachments[modelname->GetSelection()]);
-			att = attachments[modelname->GetSelection()];
-			model = static_cast<Model*>(attachments[modelname->GetSelection()]->model);
+		/* Alfred 2009/07/16 fix crash, remember CurrentSelection before UpdateModel() */
+		int CurrentSelection = modelname->GetCurrentSelection();
+		if (CurrentSelection < (int)attachments.size()) {
+			UpdateModel(attachments[CurrentSelection]);
+			att = attachments[CurrentSelection];
+			model = static_cast<Model*>(attachments[CurrentSelection]->model);
 			
 			animControl->UpdateModel(model);
+			modelname->SetSelection(CurrentSelection);
 		}
 	}
 }
@@ -320,5 +331,223 @@ void ModelControl::OnSlider(wxScrollEvent &event)
 	}
 }
 
+ScrWindow::ScrWindow(const wxString& title)
+       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(512, 512))
+{
+	wxImage::AddHandler(new wxPNGHandler);
+	sw = new wxScrolledWindow(this);
+  
+	wxBitmap bmp(title, wxBITMAP_TYPE_PNG);
+	sb = new wxStaticBitmap(sw, -1, bmp);
+
+	int width = bmp.GetWidth();
+	int height = bmp.GetHeight();
+
+	CreateStatusBar();
+	wxString sbarText;
+	sbarText.Printf("%ix%i", width, height);
+	SetStatusText(sbarText);
+
+	sw->SetScrollbars(10, 10, width/10, height/10);
+//	sw->Scroll(50,10);
+
+	Center();
+}
+
+ScrWindow::~ScrWindow()
+{
+	sb->Destroy();
+	sw->Destroy();
+}
 
 //manager->GetPane(this).Show(false);
+/**************************************************************************
+  * Model Opened
+  *************************************************************************/
+IMPLEMENT_CLASS(ModelOpened, wxWindow)
+
+BEGIN_EVENT_TABLE(ModelOpened, wxWindow)
+	EVT_COMBOBOX(ID_MODELOPENED_COMBOBOX, ModelOpened::OnCombo)
+
+	EVT_BUTTON(ID_MODELOPENED_EXPORT, ModelOpened::OnButton)
+	EVT_BUTTON(ID_MODELOPENED_EXPORTALL, ModelOpened::OnButton)
+	EVT_BUTTON(ID_MODELOPENED_VIEW, ModelOpened::OnButton)
+	EVT_BUTTON(ID_MODELOPENED_EXPORTALLPNG, ModelOpened::OnButton)
+	EVT_BUTTON(ID_MODELOPENED_EXPORTALLTGA, ModelOpened::OnButton)
+	EVT_CHECKBOX(ID_MODELOPENED_PATHPRESERVED, ModelOpened::OnCheck)
+END_EVENT_TABLE()
+
+ModelOpened::ModelOpened(wxWindow* parent, wxWindowID id)
+{
+	wxLogMessage(_T("Creating Model Opened..."));
+	if (Create(parent, id, wxDefaultPosition, wxSize(700, 90), 0, _T("ModelOpenedControlFrame")) == false) {
+		wxLogMessage(_T("GUI Error: Failed to create a window for our ModelOpenedControl."));
+		return;
+	}
+
+	openedList = new wxComboBox(this, ID_MODELOPENED_COMBOBOX, _("Opened"), wxPoint(10,10), wxSize(500,16), 0, NULL, wxCB_READONLY, wxDefaultValidator, _("Opened")); //|wxCB_SORT); //wxPoint(66,10)
+	btnExport = new wxButton(this, ID_MODELOPENED_EXPORT, _("Export"), wxPoint(10, 40), wxSize(46,20));
+	btnExportAll = new wxButton(this, ID_MODELOPENED_EXPORTALL, _("Export All"), wxPoint(10+46+10, 40), wxSize(66,20));
+	btnView = new wxButton(this, ID_MODELOPENED_VIEW, _("View In PNG"), wxPoint(10+46+10+66+10, 40), wxSize(86,20));
+	btnView->Enable(false);
+	btnExportAllPNG = new wxButton(this, ID_MODELOPENED_EXPORTALLPNG, _("Export All To PNG"), wxPoint(10+46+10+66+10+86+10, 40), wxSize(106,20));
+	btnExportAllTGA = new wxButton(this, ID_MODELOPENED_EXPORTALLTGA, _("Export All To TGA"), wxPoint(10+46+10+66+10+86+10+106+10, 40), wxSize(106,20));
+	chkPathPreserved = new wxCheckBox(this, ID_MODELOPENED_PATHPRESERVED, _("Path Preserved"), wxPoint(10+46+10+66+10+86+10+106+10+106+10, 40), wxDefaultSize, 0);
+	chkPathPreserved->SetValue(false);
+	bPathPreserved = false;
+}
+
+ModelOpened::~ModelOpened()
+{
+	openedList->Clear();
+	openedList->Destroy();
+
+	btnExport->Destroy();
+	btnExportAll->Destroy();
+	btnView->Destroy();
+	btnExportAllPNG->Destroy();
+	btnExportAllTGA->Destroy();
+}
+
+void ModelOpened::Export(wxString val)
+{
+	if (val == "")
+		return;
+	MPQFile f(val.c_str());
+	if (f.isEof()) {
+		wxLogMessage(_T("Error: Could not extract %s\n"), val.c_str());
+		f.close();
+		return;
+	}
+	wxFileName fn(val);
+	FILE *hFile = NULL;
+	if (bPathPreserved) {
+		wxFileName::Mkdir(wxGetCwd()+"\\Export\\"+fn.GetPath(), 0777, wxPATH_MKDIR_FULL);
+		hFile = fopen(wxGetCwd()+"\\Export\\"+val, "wb");
+	} else {
+		hFile = fopen(wxGetCwd()+"\\Export\\"+fn.GetFullName(), "wb");
+	}
+	if (hFile) {
+		fwrite(f.getBuffer(), 1, f.getSize(), hFile);
+		fclose(hFile);
+	}
+	f.close();
+}
+
+void ModelOpened::ExportPNG(wxString val, wxString suffix)
+{
+	if (val == "")
+		return;
+	wxFileName fn(val);
+	if (fn.GetExt().Lower() != "blp")
+		return;
+	TextureID temptex = texturemanager.add((std::string)val);
+	Texture &tex = *((Texture*)texturemanager.items[temptex]);
+	if (tex.w == 0 || tex.h == 0)
+		return;
+
+	wxString temp;
+
+	unsigned char *tempbuf = (unsigned char*)malloc(tex.w*tex.h*4);
+	tex.getPixels(tempbuf, GL_BGRA_EXT);
+
+	CxImage *newImage = new CxImage(0);
+	newImage->AlphaCreate();	// Create the alpha layer
+	newImage->IncreaseBpp(32);	// set image to 32bit 
+	newImage->CreateFromArray(tempbuf, tex.w, tex.h, 32, (tex.w*4), true);
+	if (bPathPreserved) {
+		wxFileName::Mkdir(wxGetCwd()+"\\Export\\"+fn.GetPath(), 0777, wxPATH_MKDIR_FULL);
+		temp = wxGetCwd()+"\\Export\\"+fn.GetPath()+"\\"+fn.GetName()+"."+suffix;
+	} else {
+		temp = wxGetCwd()+"\\Export\\"+fn.GetName()+"."+suffix;
+	}
+	//wxLogMessage(_T("Info: Exporting texture to %s..."), temp.c_str());
+	if (suffix == "tga")
+		newImage->Save(temp.c_str(), CXIMAGE_FORMAT_TGA);
+	else
+		newImage->Save(temp.c_str(), CXIMAGE_FORMAT_PNG);
+	free(tempbuf);
+	newImage->Destroy();
+	wxDELETE(newImage);
+}
+
+
+void ModelOpened::OnButton(wxCommandEvent &event)
+{
+	bool dialOK = true;
+	int id = event.GetId();
+	wxFileName::Mkdir(wxGetCwd()+"\\Export", 0777, wxPATH_MKDIR_FULL);
+	if (id == ID_MODELOPENED_EXPORT) {
+		wxString val = openedList->GetValue();
+		Export(val);
+	} else if (id == ID_MODELOPENED_EXPORTALL) {
+		for (unsigned int i = 0; i < opened_files.GetCount(); i++) {
+			Export(opened_files[i]);
+		}
+	} else if (id == ID_MODELOPENED_VIEW) {
+		wxString val = openedList->GetValue();
+		ExportPNG(val, "png");
+		wxFileName fn(val);
+		wxString temp;
+		if (bPathPreserved)
+			temp =  wxGetCwd()+"\\Export\\"+fn.GetPath()+"\\"+fn.GetName()+".png";
+		else
+			temp =  wxGetCwd()+"\\Export\\"+fn.GetName()+".png";
+	    ScrWindow *sw = new ScrWindow(temp);
+	    sw->Show(true);
+		dialOK = false;
+	} else if (id == ID_MODELOPENED_EXPORTALLPNG) {
+		for (unsigned int i = 0; i < opened_files.GetCount(); i++) {
+			ExportPNG(opened_files[i], "png");
+		}
+	} else if (id == ID_MODELOPENED_EXPORTALLTGA) {
+		for (unsigned int i = 0; i < opened_files.GetCount(); i++) {
+			ExportPNG(opened_files[i], "tga");
+		}
+	}
+
+	if (dialOK) {
+		wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("Export completed"), wxT("Info"), wxOK);
+		dial->ShowModal();
+	}
+}
+void ModelOpened::OnCombo(wxCommandEvent &event)
+{
+	int id = event.GetId();
+	if (id == ID_MODELOPENED_COMBOBOX) {
+		wxString val = openedList->GetValue();
+		wxFileName fn(val);
+		if (fn.GetExt().Lower() == "blp")
+			btnView->Enable(true);
+		else
+			btnView->Enable(false);
+	}
+}
+void ModelOpened::OnCheck(wxCommandEvent &event)
+{
+	int id = event.GetId();
+	if (id == ID_MODELOPENED_PATHPRESERVED) {
+		bPathPreserved= event.IsChecked();
+	}
+}
+
+
+void ModelOpened::Add(wxString str)
+{
+	MPQFile f(str.c_str());
+	if (f.isEof() == true)
+		return;
+	f.close();
+	if (opened_files.Index(str, false) == wxNOT_FOUND) {
+		opened_files.Add(str);
+		openedList->Append(str);
+	}
+}
+
+void ModelOpened::Clear()
+{
+	opened_files.Clear();
+	openedList->Clear();
+}
+
+

@@ -4,6 +4,7 @@
 
 #define MAX_PARTICLES 10000
 
+#ifndef WotLK
 Vec4D fromARGB(uint32 color)
 {
 	const float a = ((color & 0xFF000000) >> 24) / 255.0f;
@@ -12,6 +13,7 @@ Vec4D fromARGB(uint32 color)
 	const float b = ((color & 0x000000FF)      ) / 255.0f;
     return Vec4D(r,g,b,a);
 }
+#endif
 
 template<class T>
 T lifeRamp(float life, float mid, const T &a, const T &b, const T &c)
@@ -20,40 +22,38 @@ T lifeRamp(float life, float mid, const T &a, const T &b, const T &c)
 	else return interpolate<T>((life-mid) / (1.0f-mid),b,c);
 }
 
-
-void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, int *globals)
+void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *globals)
 {
-	speed.init	 (mta.params[0], f, globals);
-	variation.init(mta.params[1], f, globals);
-	spread.init	 (mta.params[2], f, globals);
-	lat.init	 (mta.params[3], f, globals);
-	gravity.init (mta.params[4], f, globals);
-	lifespan.init(mta.params[5], f, globals);
-#ifndef WotLK
-	rate.init	 (mta.params[6], f, globals);
-	areal.init	 (mta.params[7], f, globals);
-	areaw.init	 (mta.params[8], f, globals);
-	deacceleration.init	 (mta.params[9], f, globals);
-#else
-	rate.init	 (mta.rate, f, globals);
-	areal.init	 (mta.params2[0], f, globals);
-	areaw.init	 (mta.params2[1], f, globals);
-	deacceleration.init  (mta.params2[2], f, globals);
-#endif
-	enabled.init (mta.en,        f, globals);
+	speed.init	 (mta.EmissionSpeed, f, globals);
+	variation.init (mta.SpeedVariation, f, globals);
+	spread.init (mta.VerticalRange, f, globals);
+	lat.init (mta.HorizontalRange, f, globals);
+	gravity.init (mta.Gravity, f, globals);
+	lifespan.init (mta.Lifespan, f, globals);
+	rate.init (mta.EmissionRate, f, globals);
+	areal.init (mta.EmissionAreaLength, f, globals);
+	areaw.init (mta.EmissionAreaWidth, f, globals);
+	deacceleration.init (mta.Gravity2, f, globals);
+	enabled.init (mta.en, f, globals);
 
+#ifdef WotLK
+	Vec3D colors2[3];
+	memcpy(colors2, f.getBuffer()+mta.p.colors.ofsKeys, sizeof(Vec3D)*3);
+#endif
 	for (size_t i=0; i<3; i++) {
 #ifndef WotLK
 		colors[i] = fromARGB(mta.p.colors[i]);
 		sizes[i] = mta.p.sizes[i] * mta.p.scales[i];
 #else
-		sizes[i] = mta.p.scales[i];
+		float opacity = *(short*)(f.getBuffer()+mta.p.opacity.ofsKeys+i*2);
+		colors[i] = Vec4D(colors2[i].x/255.0f, colors2[i].y/255.0f, colors2[i].z/255.0f, opacity/32767.0f);
+		sizes[i] = (*(float*)(f.getBuffer()+mta.p.sizes.ofsKeys+i*4))*mta.p.scales[i];
 #endif
 	}
 #ifndef WotLK
 	mid = mta.p.mid;
 #else
-	mid = 0.5;
+	mid = 0.5; // TODO, Alfred
 #endif
 	slowdown = mta.p.slowdown;
 	rotation = mta.p.rotation;
@@ -62,17 +62,21 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, int *globals
 	blend = mta.blend;
 	rows = mta.rows;
 	cols = mta.cols;
-	type = mta.s1;
+	type = mta.ParticleType;
 	//order = mta.s2;
-	order = mta.s1>0 ? -1 : 0;
+	order = mta.ParticleType>0 ? -1 : 0;
 	parent = model->bones + mta.bone;
     
-	switch (mta.type) {
+	switch (mta.EmitterType) {
 	case 1:
 		emitter = new PlaneParticleEmitter(this);
 		break;
 	case 2:
 		emitter = new SphereParticleEmitter(this);
+		break;
+	case 3: // Spline? (can't be bothered to find one)
+	default:
+		wxLogMessage(_T("[Error] Unknown Emitter: %d\n"), mta.EmitterType);
 		break;
 	}
 
@@ -88,11 +92,11 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, int *globals
 	// 57 = Faith halo, ring?
 	// 9 = water elemental
 
-	billboard = !(mta.flags & 0x1000);
+	billboard = !(mta.flags & MODELPARTICLE_DONOTBILLBOARD);
 
 	// diagnosis test info
-	pType = mta.type;
-	flags = mta.flags;
+	pType = mta.EmitterType;
+	flags = mta.flags; // 0x10	Do not Trail
 
 	manim = mtime = 0;
 	rem = 0;
@@ -140,7 +144,7 @@ void ParticleSystem::update(float dt)
 	if (emitter) {
 		float frate = rate.getValue(manim, mtime);
 		float flife = 1.0f;
-		//flife = lifespan.getValue(manim, mtime);
+		flife = lifespan.getValue(manim, mtime);
 
 		float ftospawn = (dt * frate / flife) + rem;
 		if (ftospawn < 1.0f) {
@@ -162,7 +166,9 @@ void ParticleSystem::update(float dt)
 			float var = variation.getValue(manim, mtime);
 			float spr = spread.getValue(manim, mtime);
 			float spr2 = lat.getValue(manim, mtime);
-			bool en = enabled.getValue(manim, mtime)!=0;
+			bool en = true;
+			if (enabled.uses(manim))
+				en = enabled.getValue(manim, mtime)!=0;
 
 			//rem = 0;
 			if (en) {
@@ -265,6 +271,8 @@ void ParticleSystem::draw()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		glDisable(GL_ALPHA_TEST);
 		break;
+	default:
+		wxLogMessage(_T("[Error] %s:%s#%d blend unknown: %d"), blend);
 	}
 	
 	//glDisable(GL_LIGHTING);
@@ -341,7 +349,12 @@ void ParticleSystem::draw()
 			vUp = Vec3D(modelview[1], modelview[5], modelview[9]); // Spherical billboarding
 			//vUp = Vec3D(0,1,0); // Cylindrical billboarding
 		}
-
+		/*
+		 * type:
+		 * 0	 "normal" particle
+		 * 1	large quad from the particle's origin to its position (used in Moonwell water effects)
+		 * 2	seems to be the same as 0 (found some in the Deeprun Tram blinky-lights-sign thing)
+ 		 */
 		if (type==0 || type==2 ) {
 			// TODO: figure out type 2 (deeprun tram subway sign)
 			// - doesn't seem to be any different from 0 -_-
@@ -351,6 +364,8 @@ void ParticleSystem::draw()
 				glBegin(GL_QUADS);
 				// TODO: per-particle rotation in a non-expensive way?? :|
 				for (ParticleList::iterator it = particles.begin(); it != particles.end(); ++it) {
+					if (tiles.size() - 1 < it->tile) // Alfred, 2009.08.07, error prevent
+						break;
 					const float size = it->size;// / 2;
 					glColor4fv(it->color);
 
@@ -371,6 +386,8 @@ void ParticleSystem::draw()
 			} else {
 				glBegin(GL_QUADS);
 				for (ParticleList::iterator it = particles.begin(); it != particles.end(); ++it) {
+					if (tiles.size() - 1 < it->tile) // Alfred, 2009.08.07, error prevent
+						break;
 					glColor4fv(it->color);
 
 					glTexCoord2fv(tiles[it->tile].tc[0]);
@@ -400,6 +417,8 @@ void ParticleSystem::draw()
 
 			glBegin(GL_QUADS);
 			for (ParticleList::iterator it = particles.begin(); it != particles.end(); ++it) {
+				if (tiles.size() - 1 < it->tile) // Alfred, 2009.08.07, error prevent
+					break;
 				glColor4fv(it->color);
 
 				glTexCoord2fv(tiles[it->tile].tc[0]);
@@ -685,7 +704,7 @@ Particle SphereParticleEmitter::newParticle(int anim, int time, float w, float l
 
 
 
-void RibbonEmitter::init(MPQFile &f, ModelRibbonEmitterDef &mta, int *globals)
+void RibbonEmitter::init(MPQFile &f, ModelRibbonEmitterDef &mta, uint32 *globals)
 {
 	color.init(mta.color, f, globals);
 	opacity.init(mta.opacity, f, globals);

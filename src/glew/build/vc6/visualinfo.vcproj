@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="big5"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="visualinfo"
 	ProjectGUID="{54921A53-F59F-431D-9D70-19801DAD760F}"
 	TargetFrameworkVersion="131072"

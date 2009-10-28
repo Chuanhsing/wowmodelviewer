@@ -53,13 +53,17 @@ class NPCDatabase;
 class NPCDB;
 class StartOutfitDB;
 class CreatureTypeDB;
+class LightSkyBoxDB;
+class SpellItemEnchantmentDB;
+class ItemVisualsDB;
+class ItemDB;
 
 // dbs
 extern ItemDatabase	items;
 extern AnimDB animdb;
 extern HelmGeosetDB	helmetdb;
 extern ItemVisualEffectDB effectdb;
-extern ItemDisplayDB itemdb;
+extern ItemDisplayDB itemdisplaydb;
 extern CreatureModelDB modeldb;
 extern NPCDatabase npcs;
 extern ItemSetDB setsdb;
@@ -74,7 +78,65 @@ extern CharFacialHairDB	facialhairdb;
 extern CharRacesDB racedb;
 extern NPCDB npcdb;
 extern CreatureTypeDB npctypedb;
+extern LightSkyBoxDB skyboxdb;
+extern SpellItemEnchantmentDB spellitemenchantmentdb;
+extern ItemVisualsDB itemvisualsdb;
+extern ItemDB itemdb;
 
+class ItemDB: public DBCFile
+{
+public:
+	ItemDB(): DBCFile("DBFilesClient\\Item.dbc") {}
+	~ItemDB() {}
+
+	static const size_t MaxItem = 100000;
+
+	// Fields
+	static const size_t ID = 0;	// unit
+	static const size_t Itemclass = 1;	// unit
+	static const size_t Subclass = 2;	// unit
+	// static const size_t materialid = 4;	// uint
+	static const size_t ItemDisplayInfo = 5;	// unit
+	static const size_t InventorySlot = 6;	// unit
+	static const size_t Sheath = 7;	// unit
+
+	Record getById(unsigned int id);
+	Record getByDisplayId(unsigned int id);
+};
+
+class SpellItemEnchantmentDB: public DBCFile
+{
+public:
+	SpellItemEnchantmentDB(): DBCFile("DBFilesClient\\SpellItemEnchantment.dbc") {}
+	~SpellItemEnchantmentDB() {}
+
+	// Fields
+	static const size_t Name = 14;		// string, localization
+	static const size_t VisualID = 31;	// unit
+
+};
+
+class ItemVisualsDB: public DBCFile
+{
+public:
+	ItemVisualsDB(): DBCFile("DBFilesClient\\ItemVisuals.dbc") {}
+	~ItemVisualsDB() {}
+
+	// Fields
+	static const size_t VisualID = 0;	// unit
+};
+
+class LightSkyBoxDB: public DBCFile
+{
+public:
+	LightSkyBoxDB(): DBCFile("DBFilesClient\\LightSkybox.dbc") {}
+	~LightSkyBoxDB() {}
+
+	// Fields
+	// static const size_t ID;
+	static const size_t Name = 1;		// string
+	// static const size_t Flags;
+};
 
 class AnimDB: public DBCFile
 {
@@ -85,6 +147,12 @@ public:
 	/// Fields
 	static const size_t AnimID = 0;		// uint
 	static const size_t Name = 1;		// string
+	// static const size_t WeaponState = 2;	// int, 32 = pull weapons out during animation. 16 and 4 weapons are put back.
+	// static const size_t Flags = 3;
+	// static const size_t Unkonwn = 4;
+	// static const size_t Preceeding; // The animation, preceeding this one.
+	// static const size_t RealId; // Same as ID for normal animations. (WotLK)
+	// static const size_t Group; // 0 for normal, 3 for fly. (WotLK)
 
 	Record getByAnimID(unsigned int id);
 };
@@ -97,13 +165,13 @@ public:
 	CharHairGeosetsDB(): DBCFile("DBFilesClient\\CharHairGeosets.dbc") {}
 	~CharHairGeosetsDB() {}
 
-	/// Fields, WotLK ready
+	/// Fields
 	static const size_t CharHairGeosetID = 0;	// uint
 	static const size_t Race = 1;				// uint
 	static const size_t Gender = 2;				// uint
-	static const size_t Section = 3;			// uint
-	static const size_t Geoset = 4;				// uint
-	static const size_t Flags = 5;				// uint
+	static const size_t Section = 3;			// uint, ID unique between race, and gender.
+	static const size_t Geoset = 4;				// uint, Defines hairstyle, each number should be unique for that race / gender combo.
+	//static const size_t Bald = 5;				// uint, If this hairstyle bald or not .
 
 	Record getByParams(unsigned int race, unsigned int gender, unsigned int section);
 	int getGeosetsFor(unsigned int race, unsigned int gender);
@@ -131,7 +199,7 @@ public:
 	static const size_t Tex1 = 4;		// string
 	static const size_t Tex2 = 5;		// string
 	static const size_t Tex3 = 6;		// string
-//	static const size_t IsNPC = 7;		// uint | 1 for npc
+	//static const size_t IsNPC = 7;		// uint | 1 for npc
 	static const size_t Section = 8;	// uint
 	static const size_t Color = 9;		// uint
 	#endif
@@ -161,12 +229,22 @@ public:
 	// Burning Crusade
 	/// Fields
 	static const size_t RaceID = 0;		// uint
+	//static const size_t maleModeID = 4;	// unit
+	//static const size_t femaleModeID = 5;	// unit
 	static const size_t ShortName = 6;	// string
-	static const size_t Name = 12;		// string
-	static const size_t FullName = 14;	// string
+	static const size_t Name = 11;		// string, model name, 10048 to 11
+#undef PTR
+#ifdef PTR
+	//static const size_t FullName = 14;	// string, i18n name
 	static const size_t GeoType1 = 65;	// string
-	static const size_t GeoType2 = 66;	// string
-	static const size_t GeoType3 = 67;	// string
+	//static const size_t GeoType2 = 66;	// string
+	//static const size_t GeoType3 = 67;	// string
+#else
+	//static const size_t FullName = 13;	// string, i18n name
+	static const size_t GeoType1 = 65;	// string
+	//static const size_t GeoType2 = 65;	// string
+	//static const size_t GeoType3 = 66;	// string
+#endif
 
 	Record getByName(wxString name);
 	Record getById(unsigned int id);
@@ -192,6 +270,8 @@ public:
 	static const size_t Geoset300 = 4;			// uint
 	static const size_t Geoset200 = 5;			// uint
 	#endif
+	// uint
+	// uint
 	
 	Record getByParams(unsigned int race, unsigned int gender, unsigned int style);
 	int getStylesFor(unsigned int race, unsigned int gender);
@@ -210,7 +290,7 @@ public:
 	/// Fields
 	static const size_t ClassID = 0;	// uint
 	static const size_t Name = 4;		// string - english name
-	static const size_t RawName = 14;	// string
+	//static const size_t RawName = 14;	// string
 
 	Record getById(unsigned int id);
 };
@@ -224,11 +304,13 @@ public:
 
 	/// Fields
 	static const size_t TypeID = 0;		// uint
-	static const size_t Field1 = 1;		// uint
-	static const size_t Field2 = 2;		// uint
-	static const size_t Field3 = 3;		// uint
-	static const size_t Field4 = 4;		// uint
-	static const size_t Field5 = 5;		// uint
+	static const size_t Hair = 1;		// int Hair, 0 = show, anything else = don't show? eg: a value of 1020 won't hide night elf ears, but 999999 or -1 will.
+	static const size_t Facial1Flags = 2;		// int Beard or Tusks
+	static const size_t Facial2Flags = 3;		// int Earring
+	static const size_t Facial3Flags = 4;		// int, See ChrRaces, column 24 to 26 for information on what is what.
+	static const size_t EarsFlags = 5;		// int Ears
+	//static const size_t Field6 = 6;		// int
+	//static const size_t Field7 = 7;		// int
 
 	Record getById(unsigned int id);
 };
@@ -257,10 +339,10 @@ public:
 	static const size_t Skin2 = 4;			// string
 	static const size_t Icon = 5;			// string
 	static const size_t Texture = 6;			// string
-	static const size_t GeosetA = 7;		// uint
-	static const size_t GeosetB = 8;		// uint
-	static const size_t GeosetC = 9;		// uint
-	static const size_t GeosetD = 10;		// uint
+	static const size_t GloveGeosetFlags = 7;		// uint
+	static const size_t BracerGeosetFlags = 8;		// uint
+	static const size_t RobeGeosetFlags = 9;		// uint
+	static const size_t BootsGeosetFlags = 10;		// uint
 	static const size_t Unknown = 11;		// uint
 	static const size_t ItemGroupSounds = 12;			// uint
 	static const size_t GeosetVisID1 = 13;	// uint
@@ -274,6 +356,7 @@ public:
 	static const size_t TexLegLower = 21;	// string
 	static const size_t TexFeet = 22;		// string
 	static const size_t Visuals = 23;		// uint
+	// uint
 
 	Record getById(unsigned int id);
 	bool hasId(unsigned int id);
@@ -292,10 +375,10 @@ public:
 	/// Fields
 	static const size_t VisualID = 0;	// uint
 	static const size_t Effect1 = 1;	// uint
-	static const size_t Effect2 = 2;	// uint
-	static const size_t Effect3 = 3;	// uint
-	static const size_t Effect4 = 4;	// uint
-	static const size_t Effect5 = 5;	// uint
+	//static const size_t Effect2 = 2;	// uint
+	//static const size_t Effect3 = 3;	// uint
+	//static const size_t Effect4 = 4;	// uint
+	//static const size_t Effect5 = 5;	// uint
 
 	Record getById(unsigned int id);
 };
@@ -326,11 +409,11 @@ public:
 
 	/// Fields
 	static const size_t SetID = 0;	// uint
-	static const size_t Name = 1;	// string
+	static const size_t Name = 1;	// string, Localization
 	static const size_t ItemIDBase = 18; // 10 * uint
 
 	Record getById(unsigned int id);
-	void cleanup(ItemDatabase &itemdb);
+	void cleanup(ItemDatabase &l_itemdb);
 	bool available(unsigned int id);
 };
 
@@ -340,16 +423,16 @@ public:
 	StartOutfitDB(): DBCFile("DBFilesClient\\CharStartOutfit.dbc") {}
 	~StartOutfitDB() {}
 
-	static const size_t NumItems = 12;
+	static const size_t NumItems = 24;
 
 	/// Fields
 	static const size_t StartOutfitID = 0;	// uint
 	static const size_t Race = 4;	// byte offset
 	static const size_t Class = 5;	// byte offset
 	static const size_t Gender = 6;	// byte offset
-	static const size_t ItemIDBase = 2; // 12 * uint
-//	static const size_t ItemDisplayIDBase = 14; // 12 * uint
-//	static const size_t ItemTypeBase = 26; // 12 * uint
+	static const size_t ItemIDBase = 2; // 24 * uint
+//	static const size_t ItemDisplayIDBase = 26; // 24 * uint
+//	static const size_t ItemTypeBase = 50; // 24 * uint
 
 	Record getById(unsigned int id);
 };
@@ -357,12 +440,19 @@ public:
 struct ItemRecord {
 	wxString name;
 	int id, itemclass, subclass, type, model, sheath, quality;
+	bool discovery;
 
 	ItemRecord(const char* line);
-	ItemRecord(wxString name, int type): id(0), name(name), type(type), itemclass(-1), subclass(-1), model(0), sheath(0), quality(0)
+	ItemRecord():id(0), type(0), itemclass(-1), subclass(-1), model(0), sheath(0), quality(0), discovery(false)
 	{}
+	ItemRecord(wxString name, int type): id(0), name(name), type(type), itemclass(-1), subclass(-1), model(0), sheath(0), quality(0), discovery(false)
+	{}
+	/*
 	ItemRecord(const ItemRecord &r): id(r.id), name(r.name), itemclass(r.itemclass), subclass(r.subclass), type(r.type), model(r.model), sheath(r.sheath), quality(r.quality)
 	{}
+	*/
+
+	void getLine(const char* line);
 
 	const bool operator< (const ItemRecord &r) const
 	{
@@ -381,11 +471,16 @@ public:
 	std::vector<ItemRecord> items;
 	std::map<int, int> itemLookup;
 
-	void cleanup(ItemDisplayDB &itemdb);
+	void cleanup(ItemDisplayDB &l_itemdb);	
 	void open(const char* filename);
 
 	const ItemRecord& get(int id);
-	int getItemNum(int id);
+	int getItemIDByModel(int id);
+	int avaiable(int id);
+	int getItemNum(int displayid);
+	wxString addDiscoveryId(int id, wxString name);
+	wxString addDiscoveryDisplayId(int id, wxString name, int type);
+	void cleanupDiscovery();
 };
 
 /*
@@ -412,7 +507,7 @@ public:
 	/// Fields
 	static const size_t ClassID = 0;	// int
 	static const size_t SubClassID = 1;	// int
-	static const size_t Flags = 4;		// uint
+	//static const size_t Flags = 4;		// uint
 	// ...
 	static const size_t Hands = 9;		// int
 	static const size_t Name = 10;		// string
@@ -430,9 +525,10 @@ public:
 struct NPCRecord {
 	wxString name;
 	int id, model, type;
+	bool discovery;
 
 	NPCRecord(const char* line);
-	//NPCRecord(const char* name): id(0), name(name), model(0) {}
+	NPCRecord(): id(0), model(0) {}
 	NPCRecord(const NPCRecord &r): id(r.id), name(r.name), model(r.model), type(r.type) {}
 
 	const bool operator< (const NPCRecord &r) const
@@ -453,6 +549,8 @@ public:
 
 	const NPCRecord& get(int id);
 	const NPCRecord& getByID(int id);
+	int avaiable(int id);
+	wxString addDiscoveryId(int id, wxString name);
 };
 
 // =========================================
@@ -468,7 +566,7 @@ public:
 	static const size_t EffectName = 1;		// string
 	static const size_t ModelName = 2;		// string
 	static const size_t SpellType = 3;		// uint
-	static const size_t UnknownValue2 = 4;	// uint
+	//static const size_t UnknownValue2 = 4;	// uint
 
 	Record getById(unsigned int id);
 	Record getByName(wxString name);
@@ -504,12 +602,20 @@ public:
 	/// Fields
 	static const size_t SkinID = 0;			// uint
 	static const size_t ModelID = 1;		// uint
-	static const size_t NPCID = 3;			// uint
-	static const size_t Scale = 4;			// float
-	static const size_t Opacity = 5;			// uint, 0-255, 255 is solid
+											// uint SoundID
+	static const size_t NPCID = 3;			// uint CreatureDisplayInfoExtraID
+	//static const size_t Scale = 4;			// float
+	//static const size_t Opacity = 5;			// uint, 0-255, 255 is solid
 	static const size_t Skin = 6;			// string
-	static const size_t Skin2 = 7;			// string
-	static const size_t Skin3 = 8;			// string
+	//static const size_t Skin2 = 7;			// string
+	//static const size_t Skin3 = 8;			// string
+	// uint IconID
+	// unit sizeClass
+	// unit bloodID
+	// unit NPCSoundID
+	// unit particleColorID
+	// unit creatureGeosetData
+	// unit objectEffectPackageID
 
 	Record getByModelID(unsigned int id);
 	Record getBySkinID(unsigned int id);
@@ -539,24 +645,23 @@ public:
 	static const size_t RaceID = 1;			// uint
 	static const size_t Gender = 2;			// bool
 	static const size_t SkinColor = 3;		// uint
-	static const size_t Face = 4;		// uint
+	static const size_t Face = 4;			// uint
 	static const size_t HairStyle = 5;		// uint
 	static const size_t HairColor = 6;		// uint
 	static const size_t FacialHair = 7;		// uint
-	static const size_t HelmID = 8;			// uint
-	static const size_t ShoulderID = 9;		// uint
-	static const size_t ShirtID = 10;		// uint
-	static const size_t ChestID = 11;		// uint
-	static const size_t BeltID = 12;		// uint
-	static const size_t PantsID = 13;		// uint
-	static const size_t BootsID = 14;		// uint
-	static const size_t BracersID = 15;		// uint
-	static const size_t GlovesID = 16;		// uint
-	static const size_t TabardID = 17;		// uint
-	static const size_t CapeID = 18;		// uint
-
-	// Changed in WoW 2.0.1, the 20th column is now an index offset to the filename.
-	static const size_t Filename = 20;		// string.
+	static const size_t HelmID = 8;			// uint, Slot1
+	static const size_t ShoulderID = 9;		// uint, Slot3
+	static const size_t ShirtID = 10;		// uint, Slot4
+	static const size_t ChestID = 11;		// uint, Slot5
+	static const size_t BeltID = 12;		// uint, Slot6
+	static const size_t PantsID = 13;		// uint, Slot7
+	static const size_t BootsID = 14;		// uint, Slot8
+	static const size_t BracersID = 15;		// uint, Slot9
+	static const size_t GlovesID = 16;		// uint, Slot10
+	static const size_t TabardID = 17;		// uint, Slot19
+	static const size_t CapeID = 18;		// uint, Slot16
+	//static const size_t CanEquip = 19;		// bool
+	static const size_t Filename = 20;		// string. an index offset to the filename.
 
 	Record getByFilename(std::string fn);
 	Record getByNPCID(unsigned int id);

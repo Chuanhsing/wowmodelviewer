@@ -8,11 +8,12 @@ NPCDatabase			npcs;
 // --
 HelmGeosetDB		helmetdb;
 ItemVisualEffectDB	effectdb;
-ItemDisplayDB		itemdb;
+ItemDisplayDB		itemdisplaydb;
 StartOutfitDB		startdb;
 ItemSubClassDB		subclassdb;
 ItemVisualDB		visualdb;
 ItemSetDB			setsdb;
+ItemDB				itemdb;
 // --
 AnimDB				animdb;
 CharHairGeosetsDB	hairdb;
@@ -25,6 +26,9 @@ CreatureModelDB		modeldb;
 CreatureSkinDB		skindb;
 CreatureTypeDB		npctypedb;
 NPCDB				npcdb;
+LightSkyBoxDB			skyboxdb;
+SpellItemEnchantmentDB	spellitemenchantmentdb;
+ItemVisualsDB			itemvisualsdb;
 
 // ANIMDB.H
 AnimDB::Record AnimDB::getByAnimID(unsigned int id)
@@ -35,6 +39,7 @@ AnimDB::Record AnimDB::getByAnimID(unsigned int id)
 		if(i->getUInt(AnimID) == id)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 // --
@@ -51,6 +56,7 @@ CharHairGeosetsDB::Record CharHairGeosetsDB::getByParams(unsigned int race, unsi
 		if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Section)==section)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -117,6 +123,7 @@ CharSectionsDB::Record CharSectionsDB::getByParams(unsigned int race, unsigned i
 			return (*i);
 		#endif
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d race:%d, gender:%d, type:%d, section:%d, color:%d"), __FILE__, __FUNCTION__, __LINE__, race, gender, type, section, color);
 	throw NotFound();
 }
 
@@ -127,6 +134,7 @@ CharRacesDB::Record CharRacesDB::getByName(wxString name)
 		if (name.IsSameAs(i->getString(Name),false) == true) 
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -136,6 +144,7 @@ CharRacesDB::Record CharRacesDB::getById(unsigned int id)
 	{
 		if (i->getUInt(RaceID)==id) return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -149,6 +158,7 @@ CharFacialHairDB::Record CharFacialHairDB::getByParams(unsigned int race, unsign
 		if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Style)==style)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -161,7 +171,7 @@ int CharFacialHairDB::getStylesFor(unsigned int race, unsigned int gender)
 			n++;
 		}
 	}
-    return n;
+	return n;
 }
 
 
@@ -173,6 +183,7 @@ CharClassesDB::Record CharClassesDB::getById(unsigned int id)
 	{
 		if (i->getUInt(ClassID)==id) return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -185,6 +196,7 @@ HelmGeosetDB::Record HelmGeosetDB::getById(unsigned int id)
 		if (i->getUInt(TypeID)==id)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 // --
@@ -202,6 +214,7 @@ CreatureModelDB::Record CreatureModelDB::getByFilename(std::string fn)
 		if(str.IsSameAs(fn.c_str(), false) == true)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -212,6 +225,7 @@ CreatureModelDB::Record CreatureModelDB::getByID(unsigned int id)
 		if (i->getUInt(ModelID)==id)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -223,6 +237,7 @@ CreatureSkinDB::Record CreatureSkinDB::getByModelID(unsigned int id)
 		if(i->getUInt(ModelID) == id)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -234,6 +249,7 @@ CreatureSkinDB::Record CreatureSkinDB::getBySkinID(unsigned int id)
 		if(i->getUInt(SkinID) == id)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -245,6 +261,7 @@ CreatureTypeDB::Record CreatureTypeDB::getByID(unsigned int id)
 		if(i->getUInt(ID) == id)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -258,6 +275,7 @@ NPCDB::Record NPCDB::getByFilename(std::string fn)
 			return (*i);
 		}
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -269,6 +287,7 @@ NPCDB::Record NPCDB::getByNPCID(unsigned int id)
 		if(i->getUInt(NPCID) == id)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 // --
@@ -304,11 +323,13 @@ char* ItemTypeNames[NUM_ITEM_TYPES] = {
 	"Tabards",
 	"Robes",
 	"One-handed weapons",
-	"Claws",
-	"Offhand",
-	"?", // unused?
+	"Offhand weapons",
+	"Holdable",
+	"Ammo",
 	"Thrown",
-	"Guns and wands"
+	"Guns and wands",
+	"Unknown",
+	"Relic"
 };
 
 // ItemDisplayInfo
@@ -320,6 +341,7 @@ ItemDisplayDB::Record ItemDisplayDB::getById(unsigned int id)
 		if (i->getUInt(ItemDisplayID)==id)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -331,6 +353,7 @@ ItemVisualDB::Record ItemVisualDB::getById(unsigned int id)
 		if (i->getUInt(VisualID)==id)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -341,6 +364,7 @@ ItemVisualEffectDB::Record ItemVisualEffectDB::getById(unsigned int id)
 		if (i->getUInt(EffectID)==id)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -351,16 +375,17 @@ ItemSetDB::Record ItemSetDB::getById(unsigned int id)
 		if (i->getUInt(SetID)==id)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
-void ItemSetDB::cleanup(ItemDatabase &itemdb)
+void ItemSetDB::cleanup(ItemDatabase &p_itemdb)
 {
 	for(Iterator i=begin(); i!=end(); ++i) {
 		for (int j=0; j<NumItems; j++) {
 			int id = i->getUInt(ItemIDBase+j);
 			if (id > 0) {
-				const ItemRecord &r = itemdb.get(id);
+				const ItemRecord &r = p_itemdb.get(id);
 				if (r.type > 0) {
 					avail.insert(i->getUInt(SetID));
 					break;
@@ -383,6 +408,7 @@ StartOutfitDB::Record StartOutfitDB::getById(unsigned int id)
 		if (i->getUInt(StartOutfitID)==id)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -390,7 +416,29 @@ StartOutfitDB::Record StartOutfitDB::getById(unsigned int id)
 
 ////////////////////
 
-ItemRecord::ItemRecord(const char* line)
+ItemDB::Record ItemDB::getById(unsigned int id)
+{
+	for(Iterator i=begin(); i!=end(); ++i)
+	{
+		if (i->getUInt(ID)==id)
+			return (*i);
+	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d id:%d"), __FILE__, __FUNCTION__, __LINE__, id);
+	throw NotFound();
+}
+
+ItemDB::Record ItemDB::getByDisplayId(unsigned int id)
+{
+	for(Iterator i=begin(); i!=end(); ++i)
+	{
+		if (i->getUInt(ItemDisplayInfo)==id)
+			return (*i);
+	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d id:%d"), __FILE__, __FUNCTION__, __LINE__, id);
+	throw NotFound();
+}
+
+void ItemRecord::getLine(const char *line)
 {
 	sscanf(line, "%u,%u,%u,%u,%u,%u,%u", &id, &model, &itemclass, &subclass, &type, &sheath, &quality);
 	for (size_t i=strlen(line)-2; i>1; i--) {
@@ -399,6 +447,35 @@ ItemRecord::ItemRecord(const char* line)
 			break;
 		}
 	}
+	discovery = true;
+}
+
+ItemRecord::ItemRecord(const char* line)
+{
+	sscanf(line, "%u,%u", &id, &quality);
+	try {
+		ItemDB::Record r = itemdb.getById(id);
+		model = r.getInt(ItemDB::ItemDisplayInfo);
+		itemclass = r.getInt(ItemDB::Itemclass);
+		subclass = r.getInt(ItemDB::Subclass);
+		type = r.getInt(ItemDB::InventorySlot);
+		switch(r.getInt(ItemDB::Sheath)) {
+			case 1: sheath = PS_RIGHT_BACK_SHEATH; break;
+			case 2: sheath = PS_LEFT_BACK; break;
+			case 3: sheath = PS_LEFT_HIP_SHEATH; break;
+			case 4: sheath = PS_MIDDLE_BACK_SHEATH; break;
+			default: sheath = 0;
+		}
+		discovery = false;
+		for (size_t i=strlen(line)-2; i>1; i--) {
+			if (line[i]==',') {
+				//name = (line + i + 1);
+				name.Printf("%s [%d] [%d]", (line+i+1), id, model);
+				break;
+			}
+		}
+	} catch (ItemDB::NotFound) {}
+
 }
 
 // Alfred. prevent null items bug.
@@ -429,20 +506,35 @@ void ItemDatabase::open(const char* filename)
 {
 	std::ifstream fin(filename);
 	char line[512];
-	while (fin.getline(line,512)) {
-		ItemRecord rec(line);
-		if (rec.type > 0) {
-			items.push_back(rec);
+	if (fin.is_open()) {
+		while (fin.getline(line,512)) {
+			ItemRecord rec(line);
+			if (rec.type > 0) {
+				items.push_back(rec);
+			}
 		}
+		fin.close();
 	}
-	fin.close();
+
+	std::ifstream fin2("discoveryitems.csv");
+	if (fin2.is_open()) {
+		while (fin2.getline(line,512)) {
+			ItemRecord rec;
+			rec.getLine(line);
+			if (rec.type > 0) {
+				items.push_back(rec);
+			}
+		}
+		fin2.close();
+	}
+
 	sort(items.begin(), items.end());
 }
 
-void ItemDatabase::cleanup(ItemDisplayDB &itemdb)
+void ItemDatabase::cleanup(ItemDisplayDB &l_itemdisplaydb)
 {
 	std::set<unsigned int> itemset;
-	for (ItemDisplayDB::Iterator it = itemdb.begin(); it != itemdb.end(); ++it) {
+	for (ItemDisplayDB::Iterator it = l_itemdisplaydb.begin(); it != l_itemdisplaydb.end(); ++it) {
 		itemset.insert(it->getUInt(ItemDisplayDB::ItemDisplayID));
 	}
 	for (unsigned int i=0; i<items.size(); ) {
@@ -455,6 +547,27 @@ void ItemDatabase::cleanup(ItemDisplayDB &itemdb)
 	}
 }
 
+void ItemDatabase::cleanupDiscovery()
+{
+	for (unsigned int i=0; i<items.size(); ) {
+		if (items[i].discovery)
+			items.erase(items.begin() + i);
+		else
+			i++;
+	}
+}
+
+int ItemDatabase::getItemIDByModel(int id)
+{
+	if (id == 0)
+		return 0;
+	for (std::vector<ItemRecord>::iterator it = items.begin(); it != items.end(); ++it)
+		if(it->model == id) return it->id;
+    
+	return 0;
+}
+
+
 const ItemRecord& ItemDatabase::get(int id)
 {
     if (itemLookup.find(id)!=itemLookup.end()) 
@@ -463,12 +576,73 @@ const ItemRecord& ItemDatabase::get(int id)
 		return items[0];
 }
 
-int ItemDatabase::getItemNum(int id)
+int ItemDatabase::avaiable(int id)
 {
 	for (std::vector<ItemRecord>::iterator it = items.begin(); it != items.end(); ++it)
-		if(it->model == id) return it->id;
+		if(it->id == id) return it->id;
     
 	return 0;
+}
+
+int ItemDatabase::getItemNum(int displayid)
+{
+	for (std::vector<ItemRecord>::iterator it = items.begin(); it != items.end(); ++it)
+		if(it->model == displayid) return it->id;
+    
+	return 0;
+}
+
+wxString ItemDatabase::addDiscoveryId(int id, wxString name)
+{
+	wxString ret = "";
+
+	try {
+		ItemDB::Record r = itemdb.getById(id);
+		ItemRecord rec;
+		rec.id = id;
+		rec.model = r.getInt(ItemDB::ItemDisplayInfo);
+		rec.itemclass = r.getInt(ItemDB::Itemclass);
+		rec.subclass = r.getInt(ItemDB::Subclass);
+		rec.type = r.getInt(ItemDB::InventorySlot);
+		switch(r.getInt(ItemDB::Sheath)) {
+			case 1: rec.sheath = PS_RIGHT_BACK_SHEATH; break;
+			case 2: rec.sheath = PS_LEFT_BACK; break;
+			case 3: rec.sheath = PS_LEFT_HIP_SHEATH; break;
+			case 4: rec.sheath = PS_MIDDLE_BACK_SHEATH; break;
+			default: rec.sheath = 0;
+		}
+		rec.discovery = true;
+		rec.name.Printf("%s [%d] [%d]", name.c_str(), rec.id, rec.model);
+		if (rec.type > 0) {
+			items.push_back(rec);
+			//wxLogMessage(_T("Info: Not exist ItemID: %d, %s..."), id, rec.name.c_str());
+			ret.Printf("%d,%d,%d,%d,%d,%d,%d,%s", rec.id, rec.model, rec.itemclass, rec.subclass,
+				rec.type, rec.sheath, rec.quality, rec.name.c_str());
+		}
+	} catch (ItemDB::NotFound) {}
+	return ret;
+}
+
+wxString ItemDatabase::addDiscoveryDisplayId(int id, wxString name, int type)
+{
+	wxString ret = "";
+
+	ItemRecord rec;
+	rec.id = id+ItemDB::MaxItem;
+	rec.model = id;
+	rec.itemclass = 4;
+	rec.subclass = 0;
+	rec.type = type;
+	rec.sheath = 0;
+	rec.discovery = true;
+	rec.name.Printf("%s [%d]", name.c_str(), id);
+	if (rec.type > 0) {
+		items.push_back(rec);
+		//wxLogMessage(_T("Info: Not exist ItemID: %d, %s..."), id, rec.name.c_str());
+		ret.Printf("%d,%d,%d,%d,%d,%d,%d,%s", rec.id, rec.model, rec.itemclass, rec.subclass,
+			rec.type, rec.sheath, rec.quality, rec.name.c_str());
+	}
+	return ret;
 }
 
 ///////////////////
@@ -480,18 +654,46 @@ ItemSubClassDB::Record ItemSubClassDB::getById(int id, int subid)
 		if (i->getInt(ClassID)==id && i->getInt(SubClassID)==subid)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 // ============================================================
 // =============================================================
 
+int NPCDatabase::avaiable(int id)
+{
+	for (std::vector<NPCRecord>::iterator it = npcs.begin(); it != npcs.end(); ++it)
+		if(it->id == id) return it->id;
+    
+	return 0;
+}
+
+wxString NPCDatabase::addDiscoveryId(int id, wxString name)
+{
+	wxString ret = "";
+
+	NPCRecord rec;
+	rec.id = id+100000;
+	rec.model = id;
+	rec.type = 7;
+	rec.discovery = true;
+	rec.name.Printf("%s [%d]", name.c_str(), rec.id);
+	if (rec.type > 0) {
+		npcs.push_back(rec);
+		ret.Printf("%d,%d,%d,%s", rec.id, rec.model, rec.type, rec.name);
+	}
+	return ret;
+}
+
 
 NPCRecord::NPCRecord(const char* line)
 {
 	sscanf(line, "%u,%u,%u,", &id, &model, &type);
+	discovery = false;
 	for (size_t i=strlen(line)-2; i>1; i--) {
 		if (line[i]==',') {
-			name = (line + i + 1);
+			//name = (line + i + 1);
+			name.Printf("%s [%d] [%d]", (line+i+1), id, model);
 			break;
 		}
 	}
@@ -518,14 +720,16 @@ void NPCDatabase::open(const char* filename)
 {
 	std::ifstream fin(filename);
 	char line[512];
-	while (fin.getline(line,512)) {
-		NPCRecord rec(line);
-		if (rec.model > 0) {
-			npcs.push_back(rec);
+	if (fin.is_open()) {
+		while (fin.getline(line,512)) {
+			NPCRecord rec(line);
+			if (rec.model > 0) {
+				npcs.push_back(rec);
+			}
 		}
+		fin.close();
+		sort(npcs.begin(), npcs.end());
 	}
-	fin.close();
-	sort(npcs.begin(), npcs.end());
 }
 
 
@@ -577,6 +781,7 @@ SpellEffectsDB::Record SpellEffectsDB::getByName(const wxString name)
 		if (name.IsSameAs(i->getString(EffectName),false) == true) 
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -587,6 +792,7 @@ SpellEffectsDB::Record SpellEffectsDB::getById(unsigned int id)
 		if (i->getUInt(ID)==id)
 			return (*i);
 	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 // --

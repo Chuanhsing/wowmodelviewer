@@ -127,6 +127,12 @@ public:
 		return in;
 	}
 
+	friend std::ostream& operator<<(std::ostream& out, Vec3D& v)
+	{
+		out << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+		return out;
+	}
+
 	operator float*()
 	{
 		return (float*)this;
@@ -226,6 +232,12 @@ public:
 	{
         in >> v.x >> v.y;
 		return in;
+	}
+
+	friend std::ostream& operator<<(std::ostream& out, Vec2D& v)
+	{
+		out << "(" << v.x << ", " << v.y << ")";
+		return out;
 	}
 
 	operator float*()

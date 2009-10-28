@@ -24,7 +24,7 @@ public:
 	bool compressed;
 
 	Texture(std::string name):ManagedItem(name), w(0), h(0), id(0), compressed(false) {}
-	void getPixels(unsigned char *buf);
+	void getPixels(unsigned char *buff, unsigned int format=GL_RGBA);
 
 };
 

@@ -86,19 +86,6 @@ CharControl::CharControl(wxWindow* parent, wxWindowID id)
 {
 	wxLogMessage(_T("Creating Char Control..."));
 
-	// If they are using the Test Patch and a test item list exist,  use it instead.
-	char filename[20];
-	if (langID == 5)
-		strncpy(filename, "zhTW/items.csv", sizeof(filename));
-	else if (langID == 4)
-		strncpy(filename, "zhCN/items.csv", sizeof(filename));
-	else
-		strncpy(filename, "enUS/items.csv", sizeof(filename));
-	if (wxFile::Exists(filename))
-		items.open(filename);
-	else
-		wxLogMessage(_T("Error: Could not find items.csv to load an item list from."));
-
 	if(Create(parent, id, wxDefaultPosition, wxSize(100,700), 0, _T("CharControl")) == false) {
 		wxLogMessage("GUI Error: Failed to create a window frame for the Character Control!");
 		return;
@@ -214,6 +201,8 @@ bool CharControl::Init()
 	cd.showHair = true;
 	cd.showFacialHair = true;
 	cd.showUnderwear = true;
+	
+	cd.facialColor = 0; // 2009.07.30 Alfred
 
 	// set max values for custom tabard
 	td.maxBackground = 50;
@@ -245,8 +234,7 @@ void CharControl::UpdateModel(Attachment *a)
 
 	// hide most geosets
 	for (size_t i=0; i<model->geosets.size(); i++) {
-		int id = model->geosets[i].id;
-		model->showGeosets[i] = (id==0);
+		model->showGeosets[i] = (model->geosets[i].id==0);
 	}
 
 	size_t p1 = model->name.find_first_of('\\', 0);
@@ -330,11 +318,13 @@ void CharControl::UpdateModel(Attachment *a)
 	cd.maxFacialHair = facialhairdb.getStylesFor(race, gender);
 	cd.maxFacialColor = cd.maxHairColor;
 
+#ifndef	WotLK
 	// Re-set the menu
 	if (cd.useNPC)
 		g_modelViewer->optMenu->Check(ID_USE_NPCSKINS, 1);
 	else
 		g_modelViewer->optMenu->Check(ID_USE_NPCSKINS, 0);
+#endif
 
 	g_modelViewer->charMenu->Check(ID_SHOW_FEET, 0);
 	// ----
@@ -392,11 +382,13 @@ void CharControl::UpdateModel(Attachment *a)
 	for (int i=0; i<NUM_TABARD_BTNS; i++) 
 		tabardSpins[i]->Refresh(false);
 	for (int i=0; i<NUM_SPIN_BTNS; i++)
-		spinLabels[i]->SetLabel(wxString::Format("%i", spins[i]->GetValue()));
+		spinLabels[i]->SetLabel(wxString::Format("%i / %i", spins[i]->GetValue(), spins[i]->GetMax()));
 
 	for (int i=0; i<NUM_CHAR_SLOTS; i++) {
-		if (labels[i]) 
+		if (labels[i]) {
 			labels[i]->SetLabel(_T("---- None ----"));
+			labels[i]->SetForegroundColour(*wxBLACK);
+		}
 	}
 
 	if (useRandomLooks)
@@ -433,8 +425,7 @@ void CharControl::UpdateNPCModel(Attachment *a, unsigned int id)
 
 	// hide most geosets
 	for (size_t i=0; i<model->geosets.size(); i++) {
-		int id = model->geosets[i].id;
-		model->showGeosets[i] = (id==0);
+		model->showGeosets[i] = (model->geosets[i].id==0);
 	}
 
 	size_t p1 = model->name.find_first_of('\\', 0);
@@ -565,7 +556,7 @@ void CharControl::OnSpin(wxSpinEvent &event)
 		cd.facialColor = event.GetPosition();
 
 	for (int i=0; i<6; i++)
-		spinLabels[i]->SetLabel(wxString::Format("%i", spins[i]->GetValue()));
+		spinLabels[i]->SetLabel(wxString::Format("%i / %i", spins[i]->GetValue(), spins[i]->GetMax()));
 
 	RefreshModel();
 }
@@ -584,6 +575,7 @@ void CharControl::OnCheck(wxCommandEvent &event)
 		bSheathe = event.IsChecked();
 	else if (event.GetId()==ID_SHOW_FEET) 
 		cd.showFeet = event.IsChecked();
+#ifndef	WotLK
 	else if (event.GetId()==ID_USE_NPCSKINS) {		
 		// All this extra checking is to modify the the 'bounds' of the max skins on the spin button.
 		size_t p1 = model->name.find_first_of('\\', 0);
@@ -625,6 +617,7 @@ void CharControl::OnCheck(wxCommandEvent &event)
 			spins[0]->SetRange(0, cd.maxSkinColor-1);
 		}
 	}
+#endif
 
 	//  Update controls associated
 	RefreshEquipment();
@@ -662,8 +655,10 @@ void CharControl::RefreshEquipment()
 			RefreshItem(i);
 
 		if (g_canvas->model->modelType != MT_NPC) {
-			if (labels[i])
+			if (labels[i]) {
 				labels[i]->SetLabel(CSConv(items.get(cd.equipment[i]).name));
+				labels[i]->SetForegroundColour(ItemQualityColour(items.get(cd.equipment[i]).quality));
+			}
 		}
 	}
 }
@@ -720,6 +715,9 @@ void CharControl::OnButton(wxCommandEvent &event)
 	} else if (event.GetId()==ID_LOAD_START) {
 		selectStart();
 
+	} else if (event.GetId()==ID_LOAD_NPC_START) {
+		// TODO: a "Load NPC Outfit..." option to the character menu. It's now possible to equip a character with the exact NPC's gear (without weapons).		
+		selectNPC(UPDATE_NPC_START);
 	} else if (event.GetId()==ID_MOUNT) {
 		selectMount();
 
@@ -762,7 +760,7 @@ void CharControl::RefreshModel()
 	capeTex = 0;
 
 	// Reset geosets
-	for (int i=0; i<16; i++) 
+	for (int i=0; i<cd.NUM_GEOSETS; i++) 
 		cd.geosets[i] = 1;
 	cd.geosets[1] = cd.geosets[2] = cd.geosets[3] = 0;
 
@@ -773,10 +771,6 @@ void CharControl::RefreshModel()
 	CharTexture tex;
 
 	CharSectionsDB::Record rec = chardb.getRecord(0);
-
-	// HACK: for Vrykul, Alfred 2008/10/11, TODO
-	if (cd.race==16)
-		cd.skinColor = 5;
 
 	// base character layer/texture
 	try {
@@ -834,7 +828,7 @@ void CharControl::RefreshModel()
 			wxLogMessage(_T("DBC facial feature geosets Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 		}
 
-		// facial feature, gone ?
+		// facial feature
 		try {
 			rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::FacialHairType, cd.facialHair, cd.facialColor, 0);
 			tex.addLayer(rec.getString(CharSectionsDB::Tex1), CR_FACE_LOWER, 2);
@@ -903,7 +897,9 @@ void CharControl::RefreshModel()
 		try {
 			CharRacesDB::Record race = racedb.getById(cd.race);
 			wxString tmp = race.getString(CharRacesDB::GeoType1);
-			if (tmp == "NORMAL") {
+			if (bPTR)
+				tmp = race.getString(CharRacesDB::GeoType1+1);
+			if (tmp.Lower() == "normal") {
 				cd.geosets[1] = 1;
 				cd.geosets[2] = 1;
 				cd.geosets[3] = 1;
@@ -911,66 +907,67 @@ void CharControl::RefreshModel()
 		} catch (CharRacesDB::NotFound) {
 			wxLogMessage(_T("Assertion FacialHair Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 		}
-    }
+      }
 
 	/*
-	// Temporary work-around - need to do more research.
+	// TODO, Temporary work-around - need to do more research.
 	// Check to see if we are wearing a helmet - if so, we need to hide our hair
 	if (cd.equipment[CS_HEAD] != 0) {
 		try {
 			const ItemRecord &item = items.get(cd.equipment[CS_HEAD]);
 			int type = item.type;
 			if (type==IT_HEAD) {
-				ItemDisplayDB::Record r = itemdb.getById(item.model);
+				ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
 				
 				int geoID;
 				if(cd.gender == 0)
-					geoID = r.getUInt(ItemDisplayDB::GeosetF);
+					geoID = r.getUInt(ItemDisplayDB::GeosetVisID1);
 				else
-					geoID = r.getUInt(ItemDisplayDB::GeosetG);
+					geoID = r.getUInt(ItemDisplayDB::GeosetVisID2);
 
+				if (geoID) {
 				HelmGeosetDB::Record rec = helmetdb.getById(geoID);
-				char c1 = rec.getByte(HelmGeosetDB::Field1);
-				char c2 = rec.getByte(HelmGeosetDB::Field2);
-				char c3 = rec.getByte(HelmGeosetDB::Field3);
-				unsigned char c4 = rec.getByte(HelmGeosetDB::Field4);
-				unsigned char c5 = rec.getByte(HelmGeosetDB::Field5);
+				int Hair = rec.getInt(HelmGeosetDB::Hair);
+				//char c2 = rec.getByte(HelmGeosetDB::Facial1Flags);
+				//char c3 = rec.getByte(HelmGeosetDB::Facial2Flags);
+				//unsigned char c4 = rec.getByte(HelmGeosetDB::Facial3Flags);
+				//unsigned char c5 = rec.getByte(HelmGeosetDB::EarsFlags);
 				
 				// TODO: Work out what exactly these geosets mean and act accordingly.
 				// These values point to records in HelmetGeosetVisData.dbc
 				// Still not sure if the 2 columns are for male / female or
 				// for facial hair / normal hair
-				std::cout << "----------\n" << r.getUInt(ItemDisplayDB::GeosetF) << "\t" << r.getUInt(ItemDisplayDB::GeosetG) << "\n";
+				//std::cout << "----------\n" << r.getUInt(ItemDisplayDB::GeosetVisID1) << "\t" << r.getUInt(ItemDisplayDB::GeosetVisID2) << "\n";
 				
-				std::cout << (unsigned int)rec.getByte(HelmGeosetDB::Field1) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field2) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field3) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field4) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field5) << "\n";
-				rec = helmetdb.getById(r.getUInt(ItemDisplayDB::GeosetG));
-				std::cout << (unsigned int)rec.getByte(HelmGeosetDB::Field1) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field2) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field3) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field4) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field5) << "\n";
+				//std::cout << (unsigned int)rec.getByte(HelmGeosetDB::Field1) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field2) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field3) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field4) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field5) << "\n";
+				//rec = helmetdb.getById(r.getUInt(ItemDisplayDB::GeosetVisID2));
+				//std::cout << (unsigned int)rec.getByte(HelmGeosetDB::Field1) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field2) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field3) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field4) << "\t" << (unsigned int)rec.getByte(HelmGeosetDB::Field5) << "\n";
 				
 				
 				//std::cout << (int)c1 << " " << (int)c2 << " " << (int)c3 << " " << (unsigned int)c4 << " " << (unsigned int)c5 << "\n";
 
-				if(c1 == 1)
+				if(Hair != 0)
 					showHair = false;
 					
-				if(c5 == 1)
-					showFacialHair = false;
+				//if(c5 == 1)
+				//	showFacialHair = false;
 
 				//if(r.getUInt(ItemDisplayDB::GeosetG) > 265)
 				//	showFacialHair = false;
+				}
 			}
 		} catch (...) {}
 	}
 	*/
-	
 
 	// check if we have a robe on
 	bool hadRobe = false;
 	if (cd.equipment[CS_CHEST] != 0) {
 		try {
 			const ItemRecord &item = items.get(cd.equipment[CS_CHEST]);
-			if (item.type==IT_ROBE) {
-				ItemDisplayDB::Record r = itemdb.getById(item.model);
-				if (r.getUInt(ItemDisplayDB::GeosetC)==1) 
+			if (item.type==IT_ROBE || item.type==IT_CHEST) {
+				ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
+				if (r.getUInt(ItemDisplayDB::RobeGeosetFlags)==1) 
 					hadRobe = true;
 			}
 		} catch (ItemDisplayDB::NotFound) {
@@ -982,10 +979,9 @@ void CharControl::RefreshModel()
 	if (cd.equipment[CS_PANTS] != 0) {
 		try {
 			const ItemRecord &item = items.get(cd.equipment[CS_PANTS]);
-			int type = item.type;
-			if (type==IT_PANTS) {
-				ItemDisplayDB::Record r = itemdb.getById(item.model);
-				if (r.getUInt(ItemDisplayDB::GeosetC)==1) 
+			if (item.type==IT_PANTS) {
+				ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
+				if (r.getUInt(ItemDisplayDB::RobeGeosetFlags)==1) 
 					hadRobe = true;
 			}
 		} catch (ItemDisplayDB::NotFound) {
@@ -1002,11 +998,11 @@ void CharControl::RefreshModel()
 		try {
 			//const ItemRecord &item = items.get(cd.equipment[CS_CHEST]);
 			//if (item.type==IT_ROBE) {
-			//	ItemDisplayDB::Record r = itemdb.getById(item.model);
+			//	ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
 				//if (r.getUInt(ItemDisplayDB::GeosetA)>0) {
 					const ItemRecord &item2 = items.get(cd.equipment[CS_GLOVES]);
-					ItemDisplayDB::Record r2 = itemdb.getById(item2.model);
-					if (r2.getUInt(ItemDisplayDB::GeosetA)==0) {
+					ItemDisplayDB::Record r2 = itemdisplaydb.getById(item2.model);
+					if (r2.getUInt(ItemDisplayDB::GloveGeosetFlags)==0) {
 						slotOrderWithRobe[7] = CS_GLOVES;
 						slotOrderWithRobe[8] = CS_CHEST;
 					}
@@ -1032,7 +1028,7 @@ void CharControl::RefreshModel()
 		if (id == 1)
 			model->showGeosets[j] = bald;
 
-		for (int i=1; i<16; i++) {
+		for (int i=1; i<19; i++) {
 			int a = i*100, b = (i+1) * 100;
 			if (id>a && id<b) 
 				model->showGeosets[j] = (id == (a + cd.geosets[i]));
@@ -1043,11 +1039,11 @@ void CharControl::RefreshModel()
 	tex.compose(charTex);
 	
 	// set replacable textures
-	model->replaceTextures[1] = charTex;
-	model->replaceTextures[2] = capeTex;
-	model->replaceTextures[6] = hairTex;
-	model->replaceTextures[8] = furTex;
-	model->replaceTextures[11] = gobTex;
+	model->replaceTextures[TEXTURE_BODY] = charTex;
+	model->replaceTextures[TEXTURE_CAPE] = capeTex;
+	model->replaceTextures[TEXTURE_HAIR] = hairTex;
+	model->replaceTextures[TEXTURE_FUR] = furTex;
+	model->replaceTextures[TEXTURE_GAMEOBJECT1] = gobTex;
 
 	/*
 	for (int i=0; i<40; i++) {
@@ -1055,9 +1051,9 @@ void CharControl::RefreshModel()
 	}
 	*/
 
+	// Alfred 2009.07.18 show max value
 	for (int i=0; i<NUM_SPIN_BTNS; i++)
-		spinLabels[i]->SetLabel(wxString::Format("%i", spins[i]->GetValue()));
-
+		spinLabels[i]->SetLabel(wxString::Format("%i / %i", spins[i]->GetValue(), spins[i]->GetMax()));
 
 	spins[SPIN_SKIN_COLOR]->SetValue(cd.skinColor);
 	spins[SPIN_FACE_TYPE]->SetValue(cd.faceType);
@@ -1065,6 +1061,14 @@ void CharControl::RefreshModel()
 	spins[SPIN_HAIR_STYLE]->SetValue(cd.hairStyle);
 	spins[SPIN_FACIAL_HAIR]->SetValue(cd.facialHair);
 	spins[SPIN_FACIAL_COLOR]->SetValue(cd.facialColor);
+
+	// eyeglow for Scourge
+	if (cd.race == 5 && bKnightEyeGlow) {
+		if (cd.gender == 0 && model->passes.size() > 52 && model->showGeosets[51] == false && model->showGeosets[52] == false)
+			model->showGeosets[51] = true;
+		else if (cd.gender == 1 && model->passes.size() > 47 && model->showGeosets[45] == false && model->showGeosets[47] == false)
+			model->showGeosets[45] = true;
+	}
 }
 
 void CharControl::RefreshNPCModel()
@@ -1075,7 +1079,7 @@ void CharControl::RefreshNPCModel()
 	capeTex = 0;
 
 	// Reset geosets
-	for (int i=0; i<16; i++) 
+	for (int i=0; i<cd.NUM_GEOSETS; i++) 
 		cd.geosets[i] = 1;
 	cd.geosets[1] = cd.geosets[2] = cd.geosets[3] = 0;
 
@@ -1171,6 +1175,8 @@ void CharControl::RefreshNPCModel()
 		if (showFacialHair == false) {		
 			CharRacesDB::Record race = racedb.getById(cd.race);
 			std::string tmp = race.getString(CharRacesDB::GeoType1);
+			if (bPTR)
+				tmp = race.getString(CharRacesDB::GeoType1+1);
 			if (tmp == "NORMAL") {
 				cd.geosets[1] = 1;
 				cd.geosets[2] = 1;
@@ -1205,10 +1211,9 @@ void CharControl::RefreshNPCModel()
 	if (cd.equipment[CS_CHEST] != 0) {
 		try {
 			const ItemRecord &item = items.get(cd.equipment[CS_CHEST]);
-			int type = item.type;
-			if (type==IT_ROBE) {
-				ItemDisplayDB::Record r = itemdb.getById(item.model);
-				if (r.getUInt(ItemDisplayDB::GeosetC)==1) 
+			if (item.type==IT_ROBE || item.type==IT_CHEST) {
+				ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
+				if (r.getUInt(ItemDisplayDB::RobeGeosetFlags)==1) 
 					hadRobe = true;
 			}
 		} catch (...) {
@@ -1223,8 +1228,8 @@ void CharControl::RefreshNPCModel()
 			const ItemRecord &item = items.get(cd.equipment[CS_PANTS]);
 			int type = item.type;
 			if (type==IT_PANTS) {
-				ItemDisplayDB::Record r = itemdb.getById(item.model);
-				if (r.getUInt(ItemDisplayDB::GeosetC)==1) 
+				ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
+				if (r.getUInt(ItemDisplayDB::RobeGeosetFlags)==1) 
 					hadRobe = true;
 			}
 		} catch (...) {
@@ -1241,10 +1246,10 @@ void CharControl::RefreshNPCModel()
 		try {
 			//const ItemRecord &item = items.get(cd.equipment[CS_CHEST]);
 			//if (item.type==IT_ROBE) {
-			//	ItemDisplayDB::Record r = itemdb.getById(item.model);
+			//	ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
 				//if (r.getUInt(ItemDisplayDB::GeosetA)>0) {
-					ItemDisplayDB::Record r = itemdb.getById(cd.equipment[CS_GLOVES]);
-					if (r.getUInt(ItemDisplayDB::GeosetA)==0) {
+					ItemDisplayDB::Record r = itemdisplaydb.getById(cd.equipment[CS_GLOVES]);
+					if (r.getUInt(ItemDisplayDB::GloveGeosetFlags)==0) {
 						slotOrderWithRobe[7] = CS_GLOVES;
 						slotOrderWithRobe[8] = CS_CHEST;
 					}
@@ -1271,7 +1276,7 @@ void CharControl::RefreshNPCModel()
 		if (id == 1) 
 			model->showGeosets[j] = bald;
 
-		for (int i=1; i<16; i++) {
+		for (int i=1; i<19; i++) {
 			int a = i*100, b = (i+1) * 100;
 			if (id>a && id<b) 
 				model->showGeosets[j] = (id == (a + cd.geosets[i]));
@@ -1282,12 +1287,11 @@ void CharControl::RefreshNPCModel()
 	tex.compose(charTex);
 	
 	// set replacable textures
-	model->replaceTextures[1] = charTex;
-	model->replaceTextures[2] = capeTex;
-	model->replaceTextures[6] = hairTex;
-	model->replaceTextures[8] = furTex;
-	
-	model->replaceTextures[11] = gobTex;
+	model->replaceTextures[TEXTURE_BODY] = charTex;
+	model->replaceTextures[TEXTURE_CAPE] = capeTex;
+	model->replaceTextures[TEXTURE_HAIR] = hairTex;
+	model->replaceTextures[TEXTURE_FUR] = furTex;
+	model->replaceTextures[TEXTURE_GAMEOBJECT1] = gobTex;
 }
 
 void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &tex, bool lookup)
@@ -1305,11 +1309,11 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 		else
 			itemID = itemnum;
 
-		ItemDisplayDB::Record r = itemdb.getById(itemID);
+		ItemDisplayDB::Record r = itemdisplaydb.getById(itemID);
 		
 		// Just a rough check to make sure textures are only being added to where they're suppose to.
 		if (slot == CS_CHEST || slot == CS_SHIRT) {
-			cd.geosets[8] = 1 + r.getUInt(ItemDisplayDB::GeosetA);
+			cd.geosets[8] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
 
 			tex.addLayer(makeItemTexture(CR_ARM_UPPER, r.getString(ItemDisplayDB::TexArmUpper)), CR_ARM_UPPER, layer);
 			tex.addLayer(makeItemTexture(CR_ARM_LOWER, r.getString(ItemDisplayDB::TexArmLower)), CR_ARM_LOWER, layer);
@@ -1317,28 +1321,30 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 			tex.addLayer(makeItemTexture(CR_TORSO_UPPER, r.getString(ItemDisplayDB::TexChestUpper)), CR_TORSO_UPPER, layer);
 			tex.addLayer(makeItemTexture(CR_TORSO_LOWER, r.getString(ItemDisplayDB::TexChestLower)), CR_TORSO_LOWER, layer);
 
-			if (type == IT_ROBE) {
+			if (type == IT_ROBE || r.getUInt(ItemDisplayDB::RobeGeosetFlags)==1) {
 				tex.addLayer(makeItemTexture(CR_LEG_UPPER, r.getString(ItemDisplayDB::TexLegUpper)), CR_LEG_UPPER, layer);
 				tex.addLayer(makeItemTexture(CR_LEG_LOWER, r.getString(ItemDisplayDB::TexLegLower)), CR_LEG_LOWER, layer);
 			}
 		} /*else if (slot == CS_SHOULDER)
 			tex.addLayer(makeItemTexture(CR_ARM_UPPER, r.getString(ItemDisplayDB::TexArmUpper)), CR_ARM_UPPER, layer);
-		*/else if (slot == CS_BELT)
+		*/else if (slot == CS_BELT) {
+			// Alfred 2009.08.15 add torso_lower for Titan-Forged Waistguard of Triumph
+			tex.addLayer(makeItemTexture(CR_TORSO_LOWER, r.getString(ItemDisplayDB::TexChestLower)), CR_TORSO_LOWER, layer);
 			tex.addLayer(makeItemTexture(CR_LEG_UPPER, r.getString(ItemDisplayDB::TexLegUpper)), CR_LEG_UPPER, layer);
-		else if (slot == CS_BRACERS)
+		} else if (slot == CS_BRACERS)
 			tex.addLayer(makeItemTexture(CR_ARM_LOWER, r.getString(ItemDisplayDB::TexArmLower)), CR_ARM_LOWER, layer);
 		else if (slot == CS_PANTS) {
-			cd.geosets[9] = 1 + r.getUInt(ItemDisplayDB::GeosetB);
+			cd.geosets[9] = 1 + r.getUInt(ItemDisplayDB::BracerGeosetFlags);
 
 			tex.addLayer(makeItemTexture(CR_LEG_UPPER, r.getString(ItemDisplayDB::TexLegUpper)), CR_LEG_UPPER, layer);
 			tex.addLayer(makeItemTexture(CR_LEG_LOWER, r.getString(ItemDisplayDB::TexLegLower)), CR_LEG_LOWER, layer);
 		} else if (slot == CS_GLOVES) {
-			cd.geosets[4] = 1 + r.getUInt(ItemDisplayDB::GeosetA);
+			cd.geosets[4] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
 
 			tex.addLayer(makeItemTexture(CR_HAND, r.getString(ItemDisplayDB::TexHands)), CR_HAND, layer);
 			tex.addLayer(makeItemTexture(CR_ARM_LOWER, r.getString(ItemDisplayDB::TexArmLower)), CR_ARM_LOWER, layer);
 		} else if (slot == CS_BOOTS) { // && cd.showFeet==false) {
-			cd.geosets[5] = 1 + r.getUInt(ItemDisplayDB::GeosetA);
+			cd.geosets[5] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
 
 			tex.addLayer(makeItemTexture(CR_LEG_LOWER, r.getString(ItemDisplayDB::TexLegLower)), CR_LEG_LOWER, layer);
 			if (!cd.showFeet)
@@ -1358,7 +1364,7 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 			tex.addLayer(makeItemTexture(CR_TORSO_LOWER, r.getString(ItemDisplayDB::TexChestLower)), CR_TORSO_LOWER, layer);
 		
 		} else if (slot==CS_CAPE) { // capes
-			cd.geosets[15] = 1 + r.getUInt(ItemDisplayDB::GeosetA);
+			cd.geosets[15] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
 
 			// load the cape texture
 			const char *tex = r.getString(ItemDisplayDB::Skin);
@@ -1368,7 +1374,7 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 
 		// robe
 		if (cd.geosets[13]==1) 
-			cd.geosets[13] = 1 + r.getUInt(ItemDisplayDB::GeosetC);
+			cd.geosets[13] = 1 + r.getUInt(ItemDisplayDB::RobeGeosetFlags);
 		if (cd.geosets[13]==2) {
 			cd.geosets[5] = 0;		// hide the boots
 			//cd.geosets[9] = 0;		// hide the pants
@@ -1387,6 +1393,9 @@ void CharControl::RefreshItem(int slot)
 	if (!charAtt)
 		return;
 
+	if (slot==CS_HEAD && bHideHelmet == true)
+		return;
+
 	// delete all attachments in that slot
 	charAtt->delSlot(slot);
 
@@ -1398,20 +1407,20 @@ void CharControl::RefreshItem(int slot)
 		//float sc = 1.0f;
 
 		if (slot==CS_HEAD) {
-			id1 = 11;
+			id1 = PS_HELMET;
 			path = "Item\\ObjectComponents\\Head\\";
 		} else if (slot==CS_SHOULDER) {
-			id1 = 6;
-			id2 = 5;
+			id1 = PS_LEFT_SHOULDER;
+			id2 = PS_RIGHT_SHOULDER;
 			path = "Item\\ObjectComponents\\Shoulder\\";
 		} else if (slot == CS_HAND_LEFT) {
-			id1 = 2;
+			id1 = PS_LEFT_PALM;
 			model->charModelDetails.closeLHand = true;
 		} else if (slot == CS_HAND_RIGHT) {
-			id1 = 1;
+			id1 = PS_RIGHT_PALM;
 			model->charModelDetails.closeRHand = true;
 		} else if (slot == CS_QUIVER) {
-			id1 = 26;
+			id1 = PS_RIGHT_BACK_SHEATH;
 			path = "Item\\ObjectComponents\\Quiver\\";
 		} else 
 			return;
@@ -1419,7 +1428,7 @@ void CharControl::RefreshItem(int slot)
 		if (slot==CS_HAND_LEFT || slot==CS_HAND_RIGHT) {
 			if (items.get(itemnum).type == IT_SHIELD) {
 				path = "Item\\ObjectComponents\\Shield\\";
-				id1 = 0;
+				id1 = PS_LEFT_WRIST;
 			} else {
 				path = "Item\\ObjectComponents\\Weapon\\";
 			}
@@ -1428,23 +1437,34 @@ void CharControl::RefreshItem(int slot)
 			// their correct positions
 			if (bSheathe && items.get(itemnum).sheath>0) {	
 				id1 = items.get(itemnum).sheath;
-				if (id1==32 && slot==CS_HAND_LEFT)
-					id1 = 33;
-				
-				if (id1==26 && items.get(itemnum).subclass==7 && slot==CS_HAND_LEFT)
-					id1 = 27;
+				if (id1==PS_LEFT_HIP_SHEATH && slot==CS_HAND_LEFT)
+					id1 = PS_RIGHT_HIP_SHEATH;
+
+				// One-handed Sword 2:7 && items.get(itemnum).subclass==7
+				if (id1==PS_RIGHT_BACK_SHEATH && slot==CS_HAND_LEFT)
+					id1 = PS_LEFT_BACK_SHEATH;
 
 				if (slot==CS_HAND_LEFT)
 					model->charModelDetails.closeLHand = false;
 				if (slot==CS_HAND_RIGHT)
 					model->charModelDetails.closeRHand = false;
 
+				/* in itemcache.wdb & item.dbc
+				0	 None	 Used on Armor, non-weapon items.
+				1	 Angled Back	 Used on two-handed swords/axes, and some one-handers such as Thunderfury.
+				2	 Upper Back	 Used on staffs and polearms, positioned higher and straighter.
+				3	 Side	 Used on one-handed maces,swords,axes,daggers.
+				4	 Back	 Used for shields
+				5	 ?	
+				6	 	
+				7	 Invisible	 Used for fist weapons and offhands.
+				*/
 				/*
-				26 = upper right back
-				27 = upper left back
-				28 = center back
-				30 = upside down, upper left back -- staves, spears
-				32 = left hip
+				26 = upper right back, two-handed sword(2:8) sheath1
+				27 = upper left back, 
+				28 = center back, shield(4:6), sheath4
+				30 = upside down, upper left back -- staff(2:10) sheath2, spears
+				32 = left hip, mace(2:4) sheath3, sword(2:7) sheath3
 				33 = right hip
 				*/
 			}
@@ -1461,7 +1481,7 @@ void CharControl::RefreshItem(int slot)
 				ItemID = item.model;
 			}
 			
-			ItemDisplayDB::Record r = itemdb.getById(ItemID);
+			ItemDisplayDB::Record r = itemdisplaydb.getById(ItemID);
 
 			GLuint tex;
 			std::string mp;
@@ -1494,7 +1514,7 @@ void CharControl::RefreshItem(int slot)
 							mp = path + r.getString(ItemDisplayDB::Skin);
 							mp.append(".blp");
 							tex = texturemanager.add(mp);
-							m->replaceTextures[2] = tex;
+							m->replaceTextures[TEXTURE_CAPE] = tex;
 							
 							succ = true;
 						}
@@ -1511,7 +1531,7 @@ void CharControl::RefreshItem(int slot)
 							mp = path + r.getString(ItemDisplayDB::Skin2);
 							mp.append(".blp");
 							tex = texturemanager.add(mp);
-							m->replaceTextures[2] = tex;
+							m->replaceTextures[TEXTURE_CAPE] = tex;
 
 							succ = true;
 						}
@@ -1578,16 +1598,16 @@ void CharControl::RefreshCreatureItem(int slot)
 		//float sc = 1.0f;
 
 		if (slot == CS_HAND_LEFT) 
-			id1 = 2;
+			id1 = PS_LEFT_PALM;
 		else if (slot == CS_HAND_RIGHT) 
-			id1 = 1;
+			id1 = PS_RIGHT_PALM;
 		else 
 			return;
 
 		if (slot==CS_HAND_LEFT || slot==CS_HAND_RIGHT) {
 			if (items.get(itemnum).type == IT_SHIELD) {
 				path = "Item\\ObjectComponents\\Shield\\";
-				id1 = 0;
+				id1 = PS_LEFT_WRIST;
 			} else {
 				path = "Item\\ObjectComponents\\Weapon\\";
 			}
@@ -1595,7 +1615,7 @@ void CharControl::RefreshCreatureItem(int slot)
 
 		try {
 			const ItemRecord &item = items.get(itemnum);
-			ItemDisplayDB::Record r = itemdb.getById(item.model);
+			ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
 
 			GLuint tex;
 			std::string mp;
@@ -1705,6 +1725,8 @@ wxString CharControl::makeItemTexture(int region, const wxString name)
 	return fn;
 }
 
+// 2007.07.03 Alfred, enlarge buf size and make it static to prevent stack overflow
+//static unsigned char destbuf[512*512*4], tempbuf[512*512*4];
 void CharTexture::compose(TextureID texID)
 {
 	// if we only have one texture then don't bother with compositing
@@ -1715,7 +1737,9 @@ void CharTexture::compose(TextureID texID)
 	}
 
 	std::sort(components.begin(), components.end());
-	unsigned char destbuf[256*256*4], tempbuf[256*256*4];
+
+	unsigned char *destbuf, *tempbuf;
+	destbuf = (unsigned char*)malloc(256*256*4);
 	memset(destbuf, 0, 256*256*4);
 
 	for (std::vector<CharTextureComponent>::iterator it = components.begin(); it != components.end(); ++it) {
@@ -1724,14 +1748,20 @@ void CharTexture::compose(TextureID texID)
 		TextureID temptex = texturemanager.add((std::string)comp.name);
 		Texture &tex = *((Texture*)texturemanager.items[temptex]);
 
+		// Alfred 2009.07.03, tex width or height can't be zero
+		if (tex.w == 0 || tex.h == 0) {
+			texturemanager.del(temptex);
+			continue;
+		}
+		tempbuf = (unsigned char*)malloc(tex.w*tex.h*4);
 		tex.getPixels(tempbuf);
 
 		// blit the texture region over the original
 
 		//assert(tex.w==coords.xsize && tex.h==coords.ysize);
 		if (tex.w==coords.xsize && tex.h==coords.ysize) {
-			for (int y=0, dy=coords.ypos; y<tex.h; y++,dy++) {
-				for (int x=0, dx=coords.xpos; x<tex.w; x++,dx++) {
+			for (int y=0, dy=coords.ypos; y<coords.ysize; y++,dy++) {
+				for (int x=0, dx=coords.xpos; x<coords.xsize; x++,dx++) {
 					unsigned char *src = tempbuf + y*tex.w*4 + x*4;
 					unsigned char *dest = destbuf + dy*256*4 + dx*4;
 
@@ -1746,7 +1776,28 @@ void CharTexture::compose(TextureID texID)
 				}
 			}
 		}
+		// Alfred 2009.07.03, BLP may double the size
+		else if (tex.w==(coords.xsize*2) && tex.h==(coords.ysize*2)) {
+			for (int y=0, dy=coords.ypos; y<coords.ysize; y++,dy++) {
+				for (int x=0, dx=coords.xpos; x<coords.xsize; x++,dx++) {
+					unsigned char *src = tempbuf + (y*tex.w*4 + x*4)*2;
+					unsigned char *dest = destbuf + dy*256*4 + dx*4;
 
+					// this is slow and ugly but I don't care
+					float r = src[3] / 255.0f;
+					float ir = 1.0f - r;
+					// zomg RGBA?
+					dest[0] = (unsigned char)(dest[0]*ir + src[0]*r);
+					dest[1] = (unsigned char)(dest[1]*ir + src[1]*r);
+					dest[2] = (unsigned char)(dest[2]*ir + src[2]*r);
+					dest[3] = 255;
+				}
+			}
+		}
+		else
+			wxLogMessage(_T("%s:%s#%d need %d*%d, but got %d*%d"), __FILE__, __FUNCTION__, __LINE__, coords.xsize, coords.ysize, tex.w, tex.h);
+
+		free(tempbuf);
 		texturemanager.del(temptex);
 	}
 
@@ -1755,6 +1806,7 @@ void CharTexture::compose(TextureID texID)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 256, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, destbuf);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	free(destbuf);
 }
 
 void CharDetails::reset()
@@ -2028,35 +2080,28 @@ void CharControl::selectMount()
 	if (!filelistInitialized) {
 		std::set<FileTreeItem> filelist;
 
-		//#ifdef _WIN32
-		stdext::hash_set<std::string> knownRidable;
-		//#else
-		//	__gnu_cxx::hash_set<std::string> knownRidable;
-		//#endif
+		wxArrayString knownRidable;
 
 		getFileLists(filelist, filterCreatures);
 
-		FILE *f = fopen("ridable.csv","r");
-		if (f) {
+		wxTextFile file;
+		file.Open("ridable.csv");
+		if (file.IsOpened()) {
 			wxString tmp;
-			while (!feof(f)) {
-				char buf[1024];
-				fgets(buf, 1024, f);
-				size_t l = strlen(buf);
-				if (buf[l-1]=='\n') 
-					buf[l-1]=0;
-				tmp = buf;
+			for ( tmp = file.GetFirstLine(); !file.Eof(); tmp = file.GetNextLine() ) {
 				tmp.LowerCase();
-				knownRidable.insert(tmp.c_str());
-				//creaturemodels.push_back(string(buf));
+				if (knownRidable.Index(tmp, false)==wxNOT_FOUND)
+					knownRidable.Add(tmp);
 			}
+		} else {
+			wxLogMessage(_T("Can't Initiate ridable.csv ..."));
 		}
 		
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
 			wxString str((*it).fn);
 			str.MakeLower();
 			creaturemodels.push_back(str);
-			ridablelist.push_back(knownRidable.find((std::string)str)!=knownRidable.end());
+			ridablelist.push_back(knownRidable.Index(str, false)!=wxNOT_FOUND);
 		}
 		filelistInitialized = true;
 	}
@@ -2084,7 +2129,7 @@ void CharControl::selectMount()
 #endif
 }
 
-void CharControl::selectNPC()
+void CharControl::selectNPC(int type)
 {
 	ClearItemDialog();
 
@@ -2102,6 +2147,17 @@ void CharControl::selectNPC()
 	int sel=0, ord=0;
 
 	for (std::vector<NPCRecord>::iterator it=npcs.npcs.begin();  it!=npcs.npcs.end(); ++it) {
+/*
+		if (type == UPDATE_NPC_START) {
+			try {
+				CreatureSkinDB::Record modelRec = skindb.getBySkinID(it->id);
+				int displayID = modelRec.getUInt(CreatureSkinDB::NPCID);
+				if (displayID == 0)
+					continue;
+			} catch (...) {}
+
+		}
+*/
 		if (it->model > 0) {
 			choices.Add(CSConv(it->name));
 			numbers.push_back(it->id);
@@ -2150,9 +2206,9 @@ void CharControl::selectNPC()
 			cats.push_back(typeLookup[r.type]);
 		}
 
-		itemDialog = new CategoryChoiceDialog(this, UPDATE_NPC, g_modelViewer, _T("Select an NPC"), _T("NPC Models"), choices, cats, catnames, &quality, false, true);
+		itemDialog = new CategoryChoiceDialog(this, type, g_modelViewer, _T("Select an NPC"), _T("NPC Models"), choices, cats, catnames, &quality, false, true);
 	} else {
-		itemDialog = new FilteredChoiceDialog(this, UPDATE_NPC, g_modelViewer, _T("Select an NPC"), _T("NPC Models"), choices, &quality, false);
+		itemDialog = new FilteredChoiceDialog(this, type, g_modelViewer, _T("Select an NPC"), _T("NPC Models"), choices, &quality, false);
 	}
 	
 	itemDialog->SetSelection(sel);
@@ -2181,6 +2237,7 @@ void CharControl::OnUpdateItem(int type, int id)
 		if (slotHasModel(choosingSlot))
 			RefreshItem(choosingSlot);
 		labels[choosingSlot]->SetLabel(CSConv(items.get(cd.equipment[choosingSlot]).name));
+		labels[choosingSlot]->SetForegroundColour(ItemQualityColour(items.get(cd.equipment[choosingSlot]).quality));
 
 		// Check if its a 'guild tabard'
 		if (choosingSlot == CS_TABARD) 
@@ -2240,13 +2297,21 @@ void CharControl::OnUpdateItem(int type, int id)
 			g_animControl->UpdateModel(m);
 			
 			// find the "mount" animation
+			/*
 			for (size_t i=0; i<model->header.nAnimations; i++) {
-				if (model->anims[i].animID == 91) {
+				if (model->anims[i].animID == ANIMATION_MOUNT) {
 					model->animManager->Stop();
 					model->currentAnim = (int)i;
 					model->animManager->Set(0,(short)i,0);
 					break;
 				}
+			}
+			*/
+			// Alfred 2009.7.23 use animLookups to speednup
+			if (model->header.nAnimationLookup >= ANIMATION_MOUNT && model->animLookups[ANIMATION_MOUNT] >= 0) {
+					model->animManager->Stop();
+					model->currentAnim = model->animLookups[ANIMATION_MOUNT];
+					model->animManager->Set(0,(short)model->currentAnim,0);
 			}
 			
 			g_canvas->curAtt = g_canvas->root;
@@ -2294,6 +2359,100 @@ void CharControl::OnUpdateItem(int type, int id)
 
 	case UPDATE_NPC:
 		g_modelViewer->LoadNPC(npcs.get(id).model);
+
+		break;
+	case UPDATE_NPC_START:
+		// Open the first record, just so we can declare the var.
+		NPCDB::Record npcrec = npcdb.getRecord(0);
+		int displayID = 0;
+
+		try {
+			// 68,3167,7,Stormwind City Guard, helmet 14964
+			NPCRecord r = npcs.get(id);
+			//wxLogMessage(_T("id: %d, %d, %d, %s"), id, r.id, r.model, r.name.c_str());
+			CreatureSkinDB::Record modelRec = skindb.getBySkinID(r.model);
+			displayID = modelRec.getUInt(CreatureSkinDB::NPCID);
+			//wxLogMessage(_T("displayID: %d\n"), displayID);
+		} catch (...) {
+			wxLogMessage(_T("Can't get extra info from: %d,%d,%d"), npcs.get(id).id, 
+				npcs.get(id).model, npcs.get(id).name.c_str());
+		}
+		if (displayID) {
+			try {
+				npcrec = npcdb.getByNPCID(displayID);
+
+				int itemid;
+
+				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::HelmID));
+				cd.equipment[CS_HEAD] = itemid;
+				if (slotHasModel(CS_HEAD)) RefreshItem(CS_HEAD);
+				if (itemid) labels[CS_HEAD]->SetLabel(CSConv(items.get(cd.equipment[CS_HEAD]).name));
+				else labels[CS_HEAD]->SetLabel("---- None ----");
+
+				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::ShoulderID));
+				cd.equipment[CS_SHOULDER] = itemid;
+				if (slotHasModel(CS_SHOULDER)) RefreshItem(CS_SHOULDER);
+				if (itemid) labels[CS_SHOULDER]->SetLabel(CSConv(items.get(cd.equipment[CS_SHOULDER]).name));
+				else labels[CS_SHOULDER]->SetLabel("---- None ----");
+
+				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::ShirtID));
+				cd.equipment[CS_SHIRT] = itemid;
+				//if (slotHasModel(CS_SHIRT)) RefreshItem(CS_SHIRT);
+				if (itemid) labels[CS_SHIRT]->SetLabel(CSConv(items.get(cd.equipment[CS_SHIRT]).name));
+				else labels[CS_SHIRT]->SetLabel("---- None ----");
+
+				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::ChestID));
+				cd.equipment[CS_CHEST] = itemid;
+				//if (slotHasModel(CS_CHEST)) RefreshItem(CS_CHEST);
+				if (itemid) labels[CS_CHEST]->SetLabel(CSConv(items.get(cd.equipment[CS_CHEST]).name));
+				else labels[CS_CHEST]->SetLabel("---- None ----");
+
+				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::BeltID));
+				cd.equipment[CS_BELT] = itemid;
+				//if (slotHasModel(CS_BELT)) RefreshItem(CS_BELT);
+				if (itemid) labels[CS_BELT]->SetLabel(CSConv(items.get(cd.equipment[CS_BELT]).name));
+				else labels[CS_BELT]->SetLabel("---- None ----");
+
+				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::PantsID));
+				cd.equipment[CS_PANTS] = itemid;
+				//if (slotHasModel(CS_PANTS)) RefreshItem(CS_PANTS);
+				if (itemid) labels[CS_PANTS]->SetLabel(CSConv(items.get(cd.equipment[CS_PANTS]).name));
+				else labels[CS_PANTS]->SetLabel("---- None ----");
+
+				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::BootsID));
+				cd.equipment[CS_BOOTS] = itemid;
+				//if (slotHasModel(CS_BOOTS)) RefreshItem(CS_BOOTS);
+				if (itemid) labels[CS_BOOTS]->SetLabel(CSConv(items.get(cd.equipment[CS_BOOTS]).name));
+				else labels[CS_BOOTS]->SetLabel("---- None ----");
+
+				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::BracersID));
+				cd.equipment[CS_BRACERS] = itemid;
+				//if (slotHasModel(CS_BRACERS)) RefreshItem(CS_BRACERS);
+				if (itemid) labels[CS_BRACERS]->SetLabel(CSConv(items.get(cd.equipment[CS_BRACERS]).name));
+				else labels[CS_BRACERS]->SetLabel("---- None ----");
+
+				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::GlovesID));
+				cd.equipment[CS_GLOVES] = itemid;
+				//if (slotHasModel(CS_GLOVES)) RefreshItem(CS_GLOVES);
+				if (itemid) labels[CS_GLOVES]->SetLabel(CSConv(items.get(cd.equipment[CS_GLOVES]).name));
+				else labels[CS_GLOVES]->SetLabel("---- None ----");
+
+				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::TabardID));
+				cd.equipment[CS_TABARD] = itemid;
+				//if (slotHasModel(CS_TABARD)) RefreshItem(CS_TABARD);
+				if (itemid) labels[CS_TABARD]->SetLabel(CSConv(items.get(cd.equipment[CS_TABARD]).name));
+				else labels[CS_TABARD]->SetLabel("---- None ----");
+
+				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::CapeID));
+				cd.equipment[CS_CAPE] = itemid;
+				if (slotHasModel(CS_CAPE)) RefreshItem(CS_CAPE);
+				if (itemid) labels[CS_CAPE]->SetLabel(CSConv(items.get(cd.equipment[CS_CAPE]).name));
+				else labels[CS_CAPE]->SetLabel("---- None ----");
+				//wxLogMessage(_T("npcdb.getByNPCID good: %d"), npcrec.getUInt(NPCDB::HelmID));
+			} catch (...) {
+				wxLogMessage(_T("npcdb.getByNPCID error"));
+			}
+		}
 
 		break;
 	}
@@ -2418,8 +2577,9 @@ void CharDetails::save(wxString fn, TabardDetails *td)
 {
 	// TODO: save/load as xml?
 	// wx/xml/xml.h says the api will change, do not use etc etc.
-
+	//locale::global(locale(""));
 	ofstream f(fn.fn_str(), ios_base::out|ios_base::trunc);
+	//locale::global(locale("C"));
 	f << race << " " << gender << endl;
 	f << skinColor << " " << faceType << " " << hairColor << " " << hairStyle << " " << facialHair << " " << facialColor << endl;
 	for (int i=0; i<NUM_CHAR_SLOTS; i++) {
@@ -2518,13 +2678,14 @@ void CharDetails::loadStart(StartOutfitDB &start, ItemDatabase &items, int setid
 
 const std::string CharControl::selectCharModel()
 {
+/* // Alfred 2009.07.21 called by OnMount, but not complete
 	wxArrayString arr;
 	std::vector<int> ids;
 	for (CharRacesDB::Iterator it = racedb.begin(); it != racedb.end(); ++it) {
 		char buf[64];
-		sprintf(buf,"%s Male", it->getString(CharRacesDB::FullName));
+		sprintf(buf,"%s Male", it->getString(CharRacesDB::FullName+langID));
 		arr.Add(buf);
-		sprintf(buf,"%s Female", it->getString(CharRacesDB::FullName));
+		sprintf(buf,"%s Female", it->getString(CharRacesDB::FullName+langID));
 		arr.Add(buf);
 		ids.push_back(it->getInt(CharRacesDB::RaceID));
 	}
@@ -2546,6 +2707,8 @@ const std::string CharControl::selectCharModel()
 			return ""; // wtf
 		}
 	}
+	
+*/
 	return "";
 }
 

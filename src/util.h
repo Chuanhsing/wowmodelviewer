@@ -39,6 +39,10 @@ extern wxString bgImagePath;
 
 extern bool useLocalFiles;
 extern bool useRandomLooks;
+extern bool bHideHelmet;
+extern bool bKnightEyeGlow;
+extern bool bPTR;
+
 //extern bool hasBeta;
 
 extern wxArrayString mpqArchives;

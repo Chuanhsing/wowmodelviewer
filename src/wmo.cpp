@@ -12,6 +12,7 @@ WMO::WMO(std::string name): ManagedItem(name)
 	ok = !f.isEof();
 	if (!ok) {
 		wxLogMessage(_T("Error: Couldn't load WMO %s."), name.c_str());
+		f.close();
 		return;
 	}
 
@@ -306,6 +307,11 @@ void WMO::draw()
 {
 	if (!ok) return;
 
+	glRotatef(viewrot.y, 1, 0, 0);
+	glRotatef(viewrot.x, 0, 1, 0);
+	glTranslatef(0,0,-100);
+	glTranslatef(viewpos.x, viewpos.y, viewpos.z);
+
 	for (int i=0; i<nGroups; i++) {
 		groups[i].draw();
 	}
@@ -535,14 +541,6 @@ void WMOGroup::init(WMO *wmo, MPQFile &f, int num, char *names)
 	visible = false;
 }
 
-
-struct WMOBatch {
-	signed char bytes[12];
-	unsigned int indexStart;
-	unsigned short indexCount, vertexStart, vertexEnd;
-	unsigned char flags, texture;
-};
-
 void setGLColor(unsigned int col)
 {
 	//glColor4ubv((GLubyte*)(&col));
@@ -565,12 +563,13 @@ struct WMOGroupHeader {
 
 void WMOGroup::initDisplayList()
 {
-	Vec3D *vertices = NULL, *normals = NULL;
-	Vec2D *texcoords = NULL;
-	unsigned short *indices = NULL;
-	unsigned short *materials = NULL;
-	WMOBatch *batches = 0;
-	int nBatches = 0;
+	vertices = NULL;
+	normals = NULL;
+	texcoords = NULL;
+	indices = NULL;
+	materials = NULL;
+	batches = 0;
+	nBatches = 0;
 
 	WMOGroupHeader gh;
 
@@ -623,16 +622,19 @@ void WMOGroup::initDisplayList()
 		if (!strcmp(fourcc,"MOPY")) {
 			// materials per triangle
 			nTriangles = (int)size / 2;
-			materials = (unsigned short*)gf.getPointer();
+			materials = new (unsigned short[nTriangles]);
+			memcpy(materials, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOVI")) {
 			// indices
-			indices =  (unsigned short*)gf.getPointer();
+			indices = new (unsigned short[size/2]);
+			memcpy(indices, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOVT")) {
 			nVertices = (int)size / 12;
 			// let's hope it's padded to 12 bytes, not 16...
-			vertices =  (Vec3D*)gf.getPointer();
+			vertices = new Vec3D[size/12];
+			memcpy(vertices, gf.getPointer(), size);
 			vmin = Vec3D( 9999999.0f, 9999999.0f, 9999999.0f);
 			vmax = Vec3D(-9999999.0f,-9999999.0f,-9999999.0f);
 			rad = 0;
@@ -649,10 +651,12 @@ void WMOGroup::initDisplayList()
 			rad = (vmax-center).length();
 		}
 		else if (!strcmp(fourcc,"MONR")) {
-			normals =  (Vec3D*)gf.getPointer();
+			normals = new Vec3D[size/12];
+			memcpy(normals, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOTV")) {
-			texcoords =  (Vec2D*)gf.getPointer();
+			texcoords = new Vec2D[size/8];
+			memcpy(texcoords, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOLR")) {
 			nLR = (int)size / 2;
@@ -666,7 +670,8 @@ void WMOGroup::initDisplayList()
 		}
 		else if (!strcmp(fourcc,"MOBA")) {
 			nBatches = (int)size / 24;
-			batches = (WMOBatch*)gf.getPointer();
+			batches = new WMOBatch[nBatches];
+			memcpy(batches, gf.getPointer(), size);
 
 			/*
 			// batch logging
@@ -970,6 +975,13 @@ void WMOGroup::cleanup()
 	dl_light = 0;
 	//if (lq) delete lq; lq = 0;
 	ok = false;
+
+	delete vertices;
+	delete normals;
+	delete texcoords;
+	delete indices;
+	delete materials;
+	delete batches;
 }
 
 void WMOFog::init(MPQFile &f)

@@ -20,11 +20,16 @@ class WMOInstance;
 class WMOManager;
 //class Liquid;
 
+struct WMOBatch {
+	signed char bytes[12];
+	unsigned int indexStart;
+	unsigned short indexCount, vertexStart, vertexEnd;
+	unsigned char flags, texture;
+};
 
 class WMOGroup {
 	WMO *wmo;
 	int flags;
-	int nTriangles, nVertices;
 	GLuint dl,dl_light;
 	Vec3D center;
 	float rad;
@@ -34,6 +39,14 @@ class WMOGroup {
 	short *ddr;
 	//Liquid *lq;
 public:
+	Vec3D *vertices, *normals;
+	Vec2D *texcoords;
+	unsigned short *indices;
+	int nTriangles, nVertices;
+	unsigned short *materials;
+	WMOBatch *batches;
+	int nBatches;
+
 	Vec3D v1,v2;
 	Vec3D b1,b2;
 	Vec3D vmin, vmax;
@@ -44,7 +57,7 @@ public:
 	bool outdoorLights;
 	std::string name, desc;
 
-	WMOGroup() : dl(0), ddr(0) {}
+	WMOGroup() : dl(0), ddr(0), vertices(NULL), normals(NULL), texcoords(NULL), indices(NULL), materials(NULL), batches(NULL) {}
 	~WMOGroup();
 	void init(WMO *wmo, MPQFile &f, int num, char *names);
 	void initDisplayList();
@@ -161,6 +174,9 @@ public:
 	std::vector<std::string> models;
 	std::vector<WMOModelInstance> modelis;
 	ModelManager loadedModels;
+
+	Vec3D viewpos;
+	Vec3D viewrot;
 
 	std::vector<WMOLight> lights;
 	std::vector<WMOPV> pvs;

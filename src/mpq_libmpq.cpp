@@ -72,6 +72,7 @@ MPQFile::openFile(const wxChar* filename)
 					// if successfully read data
 					if (file.Read(buffer, size) > 0) {
 						eof = false;
+						file.Close();
 						return;
 					} else {
 						wxDELETEA(buffer);
@@ -79,6 +80,7 @@ MPQFile::openFile(const wxChar* filename)
 						size = 0;
 					}
 				}
+				file.Close();
 			}
 		}
 	}

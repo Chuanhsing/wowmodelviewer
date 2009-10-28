@@ -159,7 +159,7 @@ int libmpq_archive_close(mpq_archive *mpq_a) {
 	}
 
 	/* Check if file descriptor is valid. */
-	if ((close(mpq_a->fd)) == LIBMPQ_EFILE) {
+	if (mpq_a->fd>0 && (close(mpq_a->fd)) == LIBMPQ_EFILE) {
 		return LIBMPQ_EFILE;
 	}
 
