@@ -34,19 +34,22 @@ struct CharRegionCoords {
 	int xpos, ypos, xsize, ysize;
 };
 
+#define	REGION_FAC	2
+#define	REGION_PX	(256*REGION_FAC)
+
 const CharRegionCoords regions[NUM_REGIONS] =
 {
-	{0, 0, 256, 256},	// base
-	{0, 0, 128, 64},	// arm upper
-	{0, 64, 128, 64},	// arm lower
-	{0, 128, 128, 32},	// hand
-	{0, 160, 128, 32},	// face upper
-	{0, 192, 128, 64},	// face lower
-	{128, 0, 128, 64},	// torso upper
-	{128, 64, 128, 32},	// torso lower
-	{128, 96, 128, 64}, // pelvis upper
-	{128, 160, 128, 64},// pelvis lower
-	{128, 224, 128, 32}	// foot
+	{0, 0, 256*REGION_FAC, 256*REGION_FAC},	// base
+	{0, 0, 128*REGION_FAC, 64*REGION_FAC},	// arm upper
+	{0, 64*REGION_FAC, 128*REGION_FAC, 64*REGION_FAC},	// arm lower
+	{0, 128*REGION_FAC, 128*REGION_FAC, 32*REGION_FAC},	// hand
+	{0, 160*REGION_FAC, 128*REGION_FAC, 32*REGION_FAC},	// face upper
+	{0, 192*REGION_FAC, 128*REGION_FAC, 64*REGION_FAC},	// face lower
+	{128*REGION_FAC, 0, 128*REGION_FAC, 64*REGION_FAC},	// torso upper
+	{128*REGION_FAC, 64*REGION_FAC, 128*REGION_FAC, 32*REGION_FAC},	// torso lower
+	{128*REGION_FAC, 96*REGION_FAC, 128*REGION_FAC, 64*REGION_FAC}, // pelvis upper
+	{128*REGION_FAC, 160*REGION_FAC, 128*REGION_FAC, 64*REGION_FAC},// pelvis lower
+	{128*REGION_FAC, 224*REGION_FAC, 128*REGION_FAC, 32*REGION_FAC}	// foot
 };
 
 struct CharTextureComponent

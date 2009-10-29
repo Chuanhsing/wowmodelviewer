@@ -1739,8 +1739,8 @@ void CharTexture::compose(TextureID texID)
 	std::sort(components.begin(), components.end());
 
 	unsigned char *destbuf, *tempbuf;
-	destbuf = (unsigned char*)malloc(256*256*4);
-	memset(destbuf, 0, 256*256*4);
+	destbuf = (unsigned char*)malloc(REGION_PX*REGION_PX*4);
+	memset(destbuf, 0, REGION_PX*REGION_PX*4);
 
 	for (std::vector<CharTextureComponent>::iterator it = components.begin(); it != components.end(); ++it) {
 		CharTextureComponent &comp = *it;
@@ -1763,7 +1763,7 @@ void CharTexture::compose(TextureID texID)
 			for (int y=0, dy=coords.ypos; y<coords.ysize; y++,dy++) {
 				for (int x=0, dx=coords.xpos; x<coords.xsize; x++,dx++) {
 					unsigned char *src = tempbuf + y*tex.w*4 + x*4;
-					unsigned char *dest = destbuf + dy*256*4 + dx*4;
+					unsigned char *dest = destbuf + dy*REGION_PX*4 + dx*4;
 
 					// this is slow and ugly but I don't care
 					float r = src[3] / 255.0f;
@@ -1781,7 +1781,7 @@ void CharTexture::compose(TextureID texID)
 			for (int y=0, dy=coords.ypos; y<coords.ysize; y++,dy++) {
 				for (int x=0, dx=coords.xpos; x<coords.xsize; x++,dx++) {
 					unsigned char *src = tempbuf + (y*tex.w*4 + x*4)*2;
-					unsigned char *dest = destbuf + dy*256*4 + dx*4;
+					unsigned char *dest = destbuf + dy*REGION_PX*4 + dx*4;
 
 					// this is slow and ugly but I don't care
 					float r = src[3] / 255.0f;
@@ -1794,6 +1794,38 @@ void CharTexture::compose(TextureID texID)
 				}
 			}
 		}
+		// Alfred 2009.07.03, BLP may smaller the size
+		else if ((tex.w*2)==coords.xsize && (tex.h*2)==coords.ysize) {
+			for (int y=0, dy=coords.ypos/2; y<tex.h; y++,dy++) {
+				for (int x=0, dx=coords.xpos/2; x<tex.w; x++,dx++) {
+					unsigned char *src = tempbuf + y*tex.w*4 + x*4;
+					unsigned char *dest = destbuf + (dy*REGION_PX*4 + dx*4)*2;
+
+					// this is slow and ugly but I don't care
+					float r = src[3] / 255.0f;
+					float ir = 1.0f - r;
+					// zomg RGBA?
+					dest[0] = (unsigned char)(dest[0]*ir + src[0]*r);
+					dest[1] = (unsigned char)(dest[1]*ir + src[1]*r);
+					dest[2] = (unsigned char)(dest[2]*ir + src[2]*r);
+					dest[3] = 255;
+					dest[4] = (unsigned char)(dest[0]*ir + src[0]*r);
+					dest[5] = (unsigned char)(dest[1]*ir + src[1]*r);
+					dest[6] = (unsigned char)(dest[2]*ir + src[2]*r);
+					dest[7] = 255;
+
+					dest = destbuf + (dy*2+1)*REGION_PX*4 + dx*4*2;
+					dest[0] = (unsigned char)(dest[0]*ir + src[0]*r);
+					dest[1] = (unsigned char)(dest[1]*ir + src[1]*r);
+					dest[2] = (unsigned char)(dest[2]*ir + src[2]*r);
+					dest[3] = 255;
+					dest[4] = (unsigned char)(dest[0]*ir + src[0]*r);
+					dest[5] = (unsigned char)(dest[1]*ir + src[1]*r);
+					dest[6] = (unsigned char)(dest[2]*ir + src[2]*r);
+					dest[7] = 255;
+				}
+			}
+		}
 		else
 			wxLogMessage(_T("%s:%s#%d need %d*%d, but got %d*%d"), __FILE__, __FUNCTION__, __LINE__, coords.xsize, coords.ysize, tex.w, tex.h);
 
@@ -1803,7 +1835,7 @@ void CharTexture::compose(TextureID texID)
 
 	// good, upload this to video
 	glBindTexture(GL_TEXTURE_2D, texID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 256, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, destbuf);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, REGION_PX, REGION_PX, 0, GL_RGBA, GL_UNSIGNED_BYTE, destbuf);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 	free(destbuf);
