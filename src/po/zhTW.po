@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-11 14:22+0800\n"
+"POT-Creation-Date: 2009-12-15 22:57+0800\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Kurax Kuang <gmmgmm@gmail.com>\n"
+"Last-Translator: Chuanhsing <chuanhsing@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-Basepath: D:\\others\\coding\\wowmodelview\\src\\\n"
+"X-Poedit-Basepath: E:\\桌面\\wowmodelview\\src\\\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: animcontrol.cpp:44
@@ -71,7 +71,7 @@ msgstr "鎖定動畫"
 msgid "Auto Animate"
 msgstr "自動播放"
 
-#: animcontrol.cpp:300
+#: animcontrol.cpp:308
 msgid "This group has been removed from the WMO"
 msgstr "該組已從WMO中移除"
 
@@ -112,6 +112,22 @@ msgid "Equipment"
 msgstr "裝備"
 
 #: charcontrol.cpp:127
+#: charcontrol.cpp:391
+#: charcontrol.cpp:512
+#: charcontrol.cpp:2040
+#: charcontrol.cpp:2170
+#: charcontrol.cpp:2457
+#: charcontrol.cpp:2463
+#: charcontrol.cpp:2469
+#: charcontrol.cpp:2475
+#: charcontrol.cpp:2481
+#: charcontrol.cpp:2487
+#: charcontrol.cpp:2493
+#: charcontrol.cpp:2499
+#: charcontrol.cpp:2505
+#: charcontrol.cpp:2511
+#: charcontrol.cpp:2517
+#: database.cpp:529
 msgid "---- None ----"
 msgstr "---- 無 ----"
 
@@ -199,21 +215,41 @@ msgstr "徽章細節"
 msgid "Choose mount"
 msgstr "選擇坐騎"
 
-#: charcontrol.cpp:678
+#: charcontrol.cpp:680
 msgid "Save equipment"
 msgstr "保存裝備"
 
-#: charcontrol.cpp:688
+#: charcontrol.cpp:690
 msgid "Load equipment"
 msgstr "載入裝備"
 
-#: charcontrol.cpp:2075
+#: charcontrol.cpp:2077
 msgid "Choose an item set"
 msgstr "選擇套裝"
 
-#: charcontrol.cpp:2075
+#: charcontrol.cpp:2077
 msgid "Item sets"
 msgstr "套裝"
+
+#: charcontrol.cpp:2136
+msgid "Known ridable models"
+msgstr ""
+
+#: charcontrol.cpp:2137
+msgid "Other models"
+msgstr ""
+
+#: charcontrol.cpp:2179
+#: charcontrol.cpp:2180
+#, fuzzy
+msgid "Choose a mount"
+msgstr "選擇坐騎"
+
+#: charcontrol.cpp:2179
+#: charcontrol.cpp:2180
+#, fuzzy
+msgid "Creatures"
+msgstr "貼圖"
 
 #: effects.cpp:89
 #: effects.cpp:91
@@ -238,7 +274,7 @@ msgid "Save"
 msgstr "保存"
 
 #: imagecontrol.cpp:75
-#: modelviewer.cpp:1717
+#: modelviewer.cpp:1721
 msgid "Save screenshot"
 msgstr "保存截圖"
 
@@ -309,6 +345,14 @@ msgstr "重置"
 #: modelbankcontrol.cpp:38
 msgid "Name:"
 msgstr "名稱："
+
+#: modelbankcontrol.cpp:42
+msgid "Remove"
+msgstr ""
+
+#: modelbankcontrol.cpp:43
+msgid "Display"
+msgstr ""
 
 #: modelcontrol.cpp:52
 msgid "View"
@@ -386,358 +430,401 @@ msgstr "DBC錯誤"
 msgid "View NPC"
 msgstr "查看NPC"
 
-#: modelviewer.cpp:234
-msgid "Save Screenshot\tF12"
-msgstr "保存截圖\tF12"
-
-#: modelviewer.cpp:235
-msgid "Save Sized Screenshot\tCTRL+S"
-msgstr "保存裁剪的截圖\tCTRL+S"
-
-#: modelviewer.cpp:236
-msgid "Animated Gif"
-msgstr "動畫Gif"
-
-#: modelviewer.cpp:237
-msgid "Export AVI"
-msgstr "導出AVI"
-
-#: modelviewer.cpp:245
-msgid "Export Texture"
-msgstr "導出貼圖"
-
-#: modelviewer.cpp:246
-#: modelviewer.cpp:2571
-msgid "Export Model"
-msgstr "導出模型"
-
-#: modelviewer.cpp:248
-msgid "Discovery Item"
-msgstr "物品探索"
-
-#: modelviewer.cpp:249
-msgid "Discovery NPC"
-msgstr "NPC探索"
-
-#: modelviewer.cpp:251
-msgid "Export ModelInfo.xml"
-msgstr "導出ModelInfo.xml"
-
-#: modelviewer.cpp:254
-msgid "Reset Layout"
-msgstr "重置佈局"
-
-#: modelviewer.cpp:256
-msgid "E&xit\tCTRL+X"
-msgstr "退出(&X)\tCTRL+X"
-
-#: modelviewer.cpp:259
-msgid "Show file list"
-msgstr "顯示檔列表"
-
-#: modelviewer.cpp:260
-msgid "Show animaton control"
-msgstr "顯示動畫控制"
-
-#: modelviewer.cpp:261
-msgid "Show character control"
-msgstr "顯示人物控制"
-
-#: modelviewer.cpp:262
-msgid "Show light control"
-msgstr "顯示光源控制"
-
-#: modelviewer.cpp:263
-msgid "Show model control"
-msgstr "顯示模型控制"
-
-#: modelviewer.cpp:264
-msgid "Show model bank"
-msgstr "顯示模型組"
-
-#: modelviewer.cpp:267
-msgid "Background Color..."
-msgstr "背景顏色..."
-
-#: modelviewer.cpp:268
-msgid "Load Background\tCTRL+L"
-msgstr "載入背景\tCTRL+L"
-
-#: modelviewer.cpp:270
-msgid "Skybox"
-msgstr "天空盒"
-
-#: modelviewer.cpp:272
-msgid "Show Grid"
-msgstr "顯示網格"
-
-#: modelviewer.cpp:275
-msgid "Show Mask"
-msgstr "顯示遮罩"
-
-#: modelviewer.cpp:287
-msgid "Use model camera"
-msgstr "使用模型攝影機"
-
-#: modelviewer.cpp:289
-msgid "Front"
-msgstr "前面"
-
-#: modelviewer.cpp:290
-msgid "Back"
-msgstr "後面"
-
-#: modelviewer.cpp:291
-msgid "Side"
-msgstr "側面"
-
-#: modelviewer.cpp:292
-msgid "Perspective"
-msgstr "透視圖"
-
-#: modelviewer.cpp:294
-msgid "Camera"
-msgstr "攝像機"
-
-#: modelviewer.cpp:307
-msgid "Set Canvas Size"
-msgstr "設置畫布大小"
-
-#: modelviewer.cpp:312
-#: modelviewer.cpp:1420
-msgid "Save Lighting"
-msgstr "保存光源"
-
-#: modelviewer.cpp:313
-#: modelviewer.cpp:1438
-msgid "Load Lighting"
-msgstr "載入光源"
-
-#: modelviewer.cpp:315
-msgid "Render Light Objects"
-msgstr "渲染光源物件"
-
-#: modelviewer.cpp:317
-msgid "Use true lighting"
-msgstr "使用真實光源"
-
-#: modelviewer.cpp:319
-msgid "Use dynamic light"
-msgstr "使用動態光源"
-
-#: modelviewer.cpp:321
-msgid "Use ambient light"
-msgstr "使用環境光源"
-
-#: modelviewer.cpp:322
-msgid "Model lights only"
-msgstr "只使用模型光"
-
-#: modelviewer.cpp:325
-msgid "Show Underwear"
-msgstr "顯示內衣"
-
-#: modelviewer.cpp:327
-msgid "Show Ears\tCTRL+E"
-msgstr "顯示耳朵\tCTRL+E"
-
-#: modelviewer.cpp:329
-msgid "Show Hair\tCTRL+H"
-msgstr "顯示頭髮\tCTRL+H"
-
-#: modelviewer.cpp:331
-msgid "Show Facial Hair\tCTRL+F"
-msgstr "顯示鬍子\tCTRL+F"
-
-#: modelviewer.cpp:333
-msgid "Show Feet"
-msgstr "顯示雙足"
-
-#: modelviewer.cpp:335
-msgid "Sheathe Weapons\tCTRL+Z"
-msgstr "武器入鞘\tCTRL+Z"
-
-#: modelviewer.cpp:338
-msgid "Save Equipment\tF5"
-msgstr "保存裝備\tF5"
-
-#: modelviewer.cpp:339
-msgid "Load Equipment\tF6"
-msgstr "載入裝備\tF6"
-
-#: modelviewer.cpp:340
-msgid "Clear Equipment\tF9"
-msgstr "清除裝備\tF9"
-
-#: modelviewer.cpp:342
-msgid "Load Item Set"
-msgstr "載入套裝"
-
-#: modelviewer.cpp:343
-msgid "Load Start Outfit"
-msgstr "載入新手裝"
-
-#: modelviewer.cpp:344
-msgid "Load NPC Outfit"
-msgstr "載入NPC服裝"
-
-#: modelviewer.cpp:347
+#: modelviewer.cpp:233
+#: modelviewer.cpp:348
 msgid "Mount a character..."
 msgstr "把角色當坐騎..."
 
-#: modelviewer.cpp:348
+#: modelviewer.cpp:235
+msgid "Save Screenshot\tF12"
+msgstr "保存截圖\tF12"
+
+#: modelviewer.cpp:236
+msgid "Save Sized Screenshot\tCTRL+S"
+msgstr "保存裁剪的截圖\tCTRL+S"
+
+#: modelviewer.cpp:237
+msgid "Animated Gif"
+msgstr "動畫Gif"
+
+#: modelviewer.cpp:238
+msgid "Export AVI"
+msgstr "導出AVI"
+
+#: modelviewer.cpp:246
+msgid "Export Texture"
+msgstr "導出貼圖"
+
+#: modelviewer.cpp:247
+#: modelviewer.cpp:2582
+msgid "Export Model"
+msgstr "導出模型"
+
+#: modelviewer.cpp:249
+msgid "Discovery Item"
+msgstr "物品探索"
+
+#: modelviewer.cpp:250
+msgid "Discovery NPC"
+msgstr "NPC探索"
+
+#: modelviewer.cpp:252
+msgid "Export ModelInfo.xml"
+msgstr "導出ModelInfo.xml"
+
+#: modelviewer.cpp:255
+msgid "Reset Layout"
+msgstr "重置佈局"
+
+#: modelviewer.cpp:257
+msgid "E&xit\tCTRL+X"
+msgstr "退出(&X)\tCTRL+X"
+
+#: modelviewer.cpp:260
+msgid "Show file list"
+msgstr "顯示檔列表"
+
+#: modelviewer.cpp:261
+msgid "Show animaton control"
+msgstr "顯示動畫控制"
+
+#: modelviewer.cpp:262
+msgid "Show character control"
+msgstr "顯示人物控制"
+
+#: modelviewer.cpp:263
+msgid "Show light control"
+msgstr "顯示光源控制"
+
+#: modelviewer.cpp:264
+msgid "Show model control"
+msgstr "顯示模型控制"
+
+#: modelviewer.cpp:265
+msgid "Show model bank"
+msgstr "顯示模型組"
+
+#: modelviewer.cpp:268
+msgid "Background Color..."
+msgstr "背景顏色..."
+
+#: modelviewer.cpp:269
+msgid "Load Background\tCTRL+L"
+msgstr "載入背景\tCTRL+L"
+
+#: modelviewer.cpp:271
+msgid "Skybox"
+msgstr "天空盒"
+
+#: modelviewer.cpp:273
+msgid "Show Grid"
+msgstr "顯示網格"
+
+#: modelviewer.cpp:276
+msgid "Show Mask"
+msgstr "顯示遮罩"
+
+#: modelviewer.cpp:288
+msgid "Use model camera"
+msgstr "使用模型攝影機"
+
+#: modelviewer.cpp:290
+msgid "Front"
+msgstr "前面"
+
+#: modelviewer.cpp:291
+msgid "Back"
+msgstr "後面"
+
+#: modelviewer.cpp:292
+msgid "Side"
+msgstr "側面"
+
+#: modelviewer.cpp:293
+msgid "Perspective"
+msgstr "透視圖"
+
+#: modelviewer.cpp:295
+msgid "Camera"
+msgstr "攝像機"
+
+#: modelviewer.cpp:308
+msgid "Set Canvas Size"
+msgstr "設置畫布大小"
+
+#: modelviewer.cpp:313
+#: modelviewer.cpp:1424
+msgid "Save Lighting"
+msgstr "保存光源"
+
+#: modelviewer.cpp:314
+#: modelviewer.cpp:1442
+msgid "Load Lighting"
+msgstr "載入光源"
+
+#: modelviewer.cpp:316
+msgid "Render Light Objects"
+msgstr "渲染光源物件"
+
+#: modelviewer.cpp:318
+msgid "Use true lighting"
+msgstr "使用真實光源"
+
+#: modelviewer.cpp:320
+msgid "Use dynamic light"
+msgstr "使用動態光源"
+
+#: modelviewer.cpp:322
+msgid "Use ambient light"
+msgstr "使用環境光源"
+
+#: modelviewer.cpp:323
+msgid "Model lights only"
+msgstr "只使用模型光"
+
+#: modelviewer.cpp:326
+msgid "Show Underwear"
+msgstr "顯示內衣"
+
+#: modelviewer.cpp:328
+msgid "Show Ears\tCTRL+E"
+msgstr "顯示耳朵\tCTRL+E"
+
+#: modelviewer.cpp:330
+msgid "Show Hair\tCTRL+H"
+msgstr "顯示頭髮\tCTRL+H"
+
+#: modelviewer.cpp:332
+msgid "Show Facial Hair\tCTRL+F"
+msgstr "顯示鬍子\tCTRL+F"
+
+#: modelviewer.cpp:334
+msgid "Show Feet"
+msgstr "顯示雙足"
+
+#: modelviewer.cpp:336
+msgid "Sheathe Weapons\tCTRL+Z"
+msgstr "武器入鞘\tCTRL+Z"
+
+#: modelviewer.cpp:339
+msgid "Save Equipment\tF5"
+msgstr "保存裝備\tF5"
+
+#: modelviewer.cpp:340
+msgid "Load Equipment\tF6"
+msgstr "載入裝備\tF6"
+
+#: modelviewer.cpp:341
+msgid "Clear Equipment\tF9"
+msgstr "清除裝備\tF9"
+
+#: modelviewer.cpp:343
+msgid "Load Item Set"
+msgstr "載入套裝"
+
+#: modelviewer.cpp:344
+msgid "Load Start Outfit"
+msgstr "載入新手裝"
+
+#: modelviewer.cpp:345
+msgid "Load NPC Outfit"
+msgstr "載入NPC服裝"
+
+#: modelviewer.cpp:349
 msgid "Randomise Character\tF10"
 msgstr "隨機化角色"
 
-#: modelviewer.cpp:351
+#: modelviewer.cpp:352
 msgid "Apply Enchants"
 msgstr "附加附魔效果"
 
-#: modelviewer.cpp:352
+#: modelviewer.cpp:353
 msgid "Creature Right-Hand"
 msgstr "生物右手"
 
-#: modelviewer.cpp:353
+#: modelviewer.cpp:354
 msgid "Creature Left-Hand"
 msgstr "生物左手"
 
-#: modelviewer.cpp:355
+#: modelviewer.cpp:356
 msgid "Spell Effects"
 msgstr "法術效果"
 
-#: modelviewer.cpp:357
+#: modelviewer.cpp:358
 msgid "Death Effect"
 msgstr "死亡效果"
 
-#: modelviewer.cpp:364
+#: modelviewer.cpp:365
 msgid "Save Character\tF7"
 msgstr "保存角色\tF7"
 
-#: modelviewer.cpp:365
+#: modelviewer.cpp:366
 msgid "Load Character\tF8"
 msgstr "載入角色\tF8"
 
-#: modelviewer.cpp:366
+#: modelviewer.cpp:367
 msgid "Import Armory Character"
 msgstr "導入英雄榜角色"
 
-#: modelviewer.cpp:369
+#: modelviewer.cpp:370
 msgid "Use npc character skins"
 msgstr "使用NPC人物皮膚"
 
-#: modelviewer.cpp:375
-#: modelviewer.cpp:644
-#: modelviewer.cpp:693
+#: modelviewer.cpp:373
+msgid "Always show default doodads in WMOs"
+msgstr ""
+
+#: modelviewer.cpp:376
+#: modelviewer.cpp:645
+#: modelviewer.cpp:694
 msgid "Settings"
 msgstr "設置"
 
-#: modelviewer.cpp:379
+#: modelviewer.cpp:380
 msgid "Help"
 msgstr "説明"
 
-#: modelviewer.cpp:381
+#: modelviewer.cpp:382
 msgid "About"
 msgstr "關於"
 
-#: modelviewer.cpp:383
+#: modelviewer.cpp:384
 msgid "Check for Update"
 msgstr "檢查更新"
 
-#: modelviewer.cpp:387
+#: modelviewer.cpp:388
 msgid "&File"
 msgstr "文件(&F)"
 
-#: modelviewer.cpp:388
+#: modelviewer.cpp:389
 msgid "&View"
 msgstr "視圖(&V)"
 
-#: modelviewer.cpp:389
+#: modelviewer.cpp:390
 msgid "&Character"
 msgstr "角色(&C)"
 
-#: modelviewer.cpp:390
+#: modelviewer.cpp:391
 msgid "&Lighting"
 msgstr "光源(&L)"
 
-#: modelviewer.cpp:391
+#: modelviewer.cpp:392
 msgid "&Options"
 msgstr "選項(&O)"
 
-#: modelviewer.cpp:392
+#: modelviewer.cpp:393
 msgid "&Effects"
 msgstr "特效(&E)"
 
-#: modelviewer.cpp:393
+#: modelviewer.cpp:394
 msgid "&About"
 msgstr "關於(&A)"
 
-#: modelviewer.cpp:600
-#: modelviewer.cpp:664
+#: modelviewer.cpp:601
+#: modelviewer.cpp:665
 msgid "OpenGL Canvas"
 msgstr "OpenGL畫布"
 
-#: modelviewer.cpp:605
-#: modelviewer.cpp:669
+#: modelviewer.cpp:606
+#: modelviewer.cpp:670
 msgid "File List"
 msgstr "文件列表"
 
-#: modelviewer.cpp:615
-#: modelviewer.cpp:679
+#: modelviewer.cpp:616
+#: modelviewer.cpp:680
 msgid "Character"
 msgstr "角色"
 
-#: modelviewer.cpp:620
-#: modelviewer.cpp:683
+#: modelviewer.cpp:621
+#: modelviewer.cpp:684
 msgid "Lighting"
 msgstr "光源"
 
-#: modelviewer.cpp:626
-#: modelviewer.cpp:688
+#: modelviewer.cpp:627
+#: modelviewer.cpp:689
 msgid "Models"
 msgstr "模型"
 
-#: modelviewer.cpp:632
+#: modelviewer.cpp:633
 msgid "ModelBank"
 msgstr "ModelBank"
 
-#: modelviewer.cpp:638
+#: modelviewer.cpp:639
 msgid "ModelOpened"
 msgstr "ModelOpened"
 
-#: modelviewer.cpp:1352
+#: modelviewer.cpp:1356
 msgid "Save character"
 msgstr "保存角色"
 
-#: modelviewer.cpp:1360
+#: modelviewer.cpp:1364
 msgid "Load character"
 msgstr "載入角色"
 
-#: modelviewer.cpp:1774
+#: modelviewer.cpp:1778
 msgid "Screenshot"
 msgstr "截圖"
 
-#: modelviewer.cpp:1791
+#: modelviewer.cpp:1795
 msgid "Load Background"
 msgstr "載入背景"
 
-#: modelviewer.cpp:1791
+#: modelviewer.cpp:1795
 msgid "Bitmap Images (*.bmp)|*.bmp|TGA Images (*.tga)|*.tga|Jpeg Images (*.jpg)|*.jpg|PNG Images (*.png)|*.png|AVI Video file(*.avi)|*.avi"
 msgstr "點陣圖圖片 (*.bmp)|*.bmp|TGA 圖片 (*.tga)|*.tga|Jpeg 圖片 (*.jpg)|*.jpg|PNG 圖片 (*.png)|*.png|AVI 視頻檔 (*.avi)|*.avi"
 
-#: modelviewer.cpp:2050
+#: modelviewer.cpp:2054
 msgid "You have the most upto date version."
 msgstr "你的版本是最新的。"
 
-#: modelviewer.cpp:2050
-#: modelviewer.cpp:2055
+#: modelviewer.cpp:2054
+#: modelviewer.cpp:2059
 msgid "Update Check"
 msgstr "檢查更新"
 
-#: modelviewer.cpp:2626
+#: modelviewer.cpp:2637
 msgid "Arrows"
 msgstr "箭矢"
 
-#: settings.cpp:182
+#: settings.cpp:38
+#, fuzzy
+msgid "Settings_Page1"
+msgstr "設置"
+
+#: settings.cpp:43
+#, fuzzy
+msgid "Show Particle"
+msgstr "粒子"
+
+#: settings.cpp:44
+msgid "Use Local Files"
+msgstr ""
+
+#: settings.cpp:45
+msgid "Random Skins"
+msgstr ""
+
+#: settings.cpp:46
+msgid "Hide Helmet"
+msgstr ""
+
+#: settings.cpp:47
+msgid "Eye Glow"
+msgstr ""
+
+#: settings.cpp:53
+msgid "MPQ Archives order and files to load"
+msgstr ""
+
+#: settings.cpp:55
+msgid "Move Up"
+msgstr ""
+
+#: settings.cpp:56
+msgid "Move Down"
+msgstr ""
+
+#: settings.cpp:186
 msgid "Apply Settings"
 msgstr "應用設置"
 
