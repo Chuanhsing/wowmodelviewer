@@ -239,11 +239,11 @@ msgstr "套装"
 
 #: charcontrol.cpp:2136
 msgid "Known ridable models"
-msgstr ""
+msgstr "已知可骑模型"
 
 #: charcontrol.cpp:2137
 msgid "Other models"
-msgstr ""
+msgstr "其他模型"
 
 #: charcontrol.cpp:2179
 #: charcontrol.cpp:2180
@@ -354,11 +354,11 @@ msgstr "名称："
 
 #: modelbankcontrol.cpp:42
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 #: modelbankcontrol.cpp:43
 msgid "Display"
-msgstr ""
+msgstr "显示"
 
 #: modelcontrol.cpp:52
 msgid "View"
@@ -678,7 +678,7 @@ msgstr "使用NPC人物皮肤"
 
 #: modelviewer.cpp:373
 msgid "Always show default doodads in WMOs"
-msgstr ""
+msgstr "一直在WMO里显示默认物件"
 
 #: modelviewer.cpp:376
 #: modelviewer.cpp:645
@@ -704,7 +704,7 @@ msgstr "文件(&F)"
 
 #: modelviewer.cpp:389
 msgid "&View"
-msgstr "视图(&V)"
+msgstr "查看(&V)"
 
 #: modelviewer.cpp:390
 msgid "&Character"
@@ -804,31 +804,31 @@ msgstr "粒子"
 
 #: settings.cpp:44
 msgid "Use Local Files"
-msgstr ""
+msgstr "使用本地文件"
 
 #: settings.cpp:45
 msgid "Random Skins"
-msgstr ""
+msgstr "随机皮肤"
 
 #: settings.cpp:46
 msgid "Hide Helmet"
-msgstr ""
+msgstr "隐藏头盔"
 
 #: settings.cpp:47
 msgid "Eye Glow"
-msgstr ""
+msgstr "眼睛发光"
 
 #: settings.cpp:53
 msgid "MPQ Archives order and files to load"
-msgstr ""
+msgstr "MPQ归档顺序及要载入的文件"
 
 #: settings.cpp:55
 msgid "Move Up"
-msgstr ""
+msgstr "上移"
 
 #: settings.cpp:56
 msgid "Move Down"
-msgstr ""
+msgstr "下移"
 
 #: settings.cpp:186
 msgid "Apply Settings"

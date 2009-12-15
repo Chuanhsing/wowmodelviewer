@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-15 23:25+0800\n"
+"POT-Creation-Date: 2009-12-15 23:24+0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Chuanhsing <chuanhsing@gmail.com>\n"
 "Language-Team: \n"
@@ -239,11 +239,11 @@ msgstr "套裝"
 
 #: charcontrol.cpp:2136
 msgid "Known ridable models"
-msgstr ""
+msgstr "已知可騎模型"
 
 #: charcontrol.cpp:2137
 msgid "Other models"
-msgstr ""
+msgstr "其他模型"
 
 #: charcontrol.cpp:2179
 #: charcontrol.cpp:2180
@@ -354,11 +354,11 @@ msgstr "名稱："
 
 #: modelbankcontrol.cpp:42
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 #: modelbankcontrol.cpp:43
 msgid "Display"
-msgstr ""
+msgstr "顯示"
 
 #: modelcontrol.cpp:52
 msgid "View"
@@ -678,7 +678,7 @@ msgstr "使用NPC人物皮膚"
 
 #: modelviewer.cpp:373
 msgid "Always show default doodads in WMOs"
-msgstr ""
+msgstr "一直在WMO裏顯示默認物件"
 
 #: modelviewer.cpp:376
 #: modelviewer.cpp:645
@@ -704,7 +704,7 @@ msgstr "文件(&F)"
 
 #: modelviewer.cpp:389
 msgid "&View"
-msgstr "視圖(&V)"
+msgstr "查看(&V)"
 
 #: modelviewer.cpp:390
 msgid "&Character"
@@ -804,31 +804,31 @@ msgstr "粒子"
 
 #: settings.cpp:44
 msgid "Use Local Files"
-msgstr ""
+msgstr "使用本地檔"
 
 #: settings.cpp:45
 msgid "Random Skins"
-msgstr ""
+msgstr "隨機皮膚"
 
 #: settings.cpp:46
 msgid "Hide Helmet"
-msgstr ""
+msgstr "隱藏頭盔"
 
 #: settings.cpp:47
 msgid "Eye Glow"
-msgstr ""
+msgstr "眼睛發光"
 
 #: settings.cpp:53
 msgid "MPQ Archives order and files to load"
-msgstr ""
+msgstr "MPQ歸檔順序及要載入的檔"
 
 #: settings.cpp:55
 msgid "Move Up"
-msgstr ""
+msgstr "上移"
 
 #: settings.cpp:56
 msgid "Move Down"
-msgstr ""
+msgstr "下移"
 
 #: settings.cpp:186
 msgid "Apply Settings"
