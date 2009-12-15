@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-15 23:00+0800\n"
+"POT-Creation-Date: 2009-12-15 23:24+0800\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Chuanhsing <chuanhsing@gmail.com>\n"
 "Language-Team: \n"
@@ -222,6 +222,12 @@ msgstr "保存装备"
 #: charcontrol.cpp:690
 msgid "Load equipment"
 msgstr "载入装备"
+
+#: charcontrol.cpp:2003
+#: charcontrol.cpp:2005
+#, fuzzy
+msgid "Choose an item"
+msgstr "选择套装"
 
 #: charcontrol.cpp:2077
 msgid "Choose an item set"
