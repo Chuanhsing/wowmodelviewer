@@ -66,11 +66,11 @@ void ImageControl::OnShow(wxAuiManager *m)
 
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxSize); 
 
-	maxsize->SetLabel(wxString::Format("Max Size: %i", maxSize));
+	maxsize->SetLabel(wxString::Format(_T("Max Size: %i"), maxSize));
 
 	aspect = ((float)screenSize[2] / (float)screenSize[3]);
 
-	wxString tmp = "screenshot_";
+	wxString tmp = _T("screenshot_");
 	tmp << ssCounter;
 	wxFileDialog dialog(this, _("Save screenshot"), wxEmptyString, tmp, _T("Bitmap Images (*.bmp)|*.bmp|TGA Images (*.tga)|*.tga|JPEG Images (*.jpg)|*.jpg|PNG Images (*.png)|*.png"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 	dialog.SetFilterIndex(imgFormat);
@@ -81,10 +81,10 @@ void ImageControl::OnShow(wxAuiManager *m)
 		filename->SetValue(tmp);
 	}
 
-	tmp = "";
+	tmp = _T("");
 	tmp << screenSize[2];
 	canvasWidth->SetValue(tmp);
-	tmp = "";
+	tmp = _T("");
 	tmp << screenSize[3];
 	canvasHeight->SetValue(tmp);
 }
@@ -133,7 +133,7 @@ void ImageControl::OnText(wxCommandEvent &event)
 		x = value;
 		value = int(value / aspect);
 		y = value;
-		canvasHeight->SetValue(wxString::Format("%i", value));
+		canvasHeight->SetValue(wxString::Format(_T("%i"), value));
 	} else if (event.GetId() == ID_IMAGE_CANVASHEIGHT) {
 		tmp = canvasHeight->GetValue();
 		tmp.ToLong(&value);
@@ -141,15 +141,15 @@ void ImageControl::OnText(wxCommandEvent &event)
 		y = value;
 		value = int(value * aspect);
 		x = value;
-		canvasWidth->SetValue(wxString::Format("%i", value));
+		canvasWidth->SetValue(wxString::Format(_T("%i"), value));
 	}
 
 	if (x > maxSize) {
 		x = maxSize;
-		canvasWidth->SetValue(wxString::Format("%i", x));
+		canvasWidth->SetValue(wxString::Format(_T("%i"), x));
 	}
 	if (y > maxSize) {
 		y = maxSize;
-		canvasHeight->SetValue(wxString::Format("%i", x));
+		canvasHeight->SetValue(wxString::Format(_T("%i"), x));
 	}
 }

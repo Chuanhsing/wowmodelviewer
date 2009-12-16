@@ -42,9 +42,6 @@ ArrowControl::ArrowControl(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
 	// Item\\Objectcomponents\\ammo\\ 
 	const wxString models[] = {_T("arrowacidflight_01.m2"), _T("arrowfireflight_01.m2"), _T("arrowflight_01.m2"), _T("arrowiceflight_01.m2"), _T("arrowmagicflight_01.m2")};
 
-	//Item\ObjectComponents\Ammo\Arrow_A_01Brown.blp
-	//const wxString textures[] = {_T(""), 
-
 	//wxComboBox(wxWindow* parent, wxWindowID id, const wxString& value = "", const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, int n, const wxString choices[], long style = 0, const wxValidator& validator = wxDefaultValidator, const wxString& name = "comboBox")
 	joint = new wxComboBox(this, ID_ARROW_JOINT,_T(""), wxPoint(5,5), wxSize(130,20), 36, loc, wxCB_READONLY);
 	model = new wxComboBox(this, ID_ARROW_MODEL,_T(""), wxPoint(5,30), wxSize(130,20), 5, models, wxCB_READONLY);
@@ -75,7 +72,7 @@ void ArrowControl::OnButton(wxCommandEvent &event)
 	if(id == ID_ARROW_ATTACH) {
 		std::string mp = "Item\\ObjectComponents\\Ammo\\Arrow_A_01Brown.blp";
 		
-		curAtt = charAtt->addChild("Item\\Objectcomponents\\ammo\\" + model->GetStringSelection(), joint->GetSelection(), -1);
+		curAtt = charAtt->addChild((_T("Item\\Objectcomponents\\ammo\\") + model->GetStringSelection()).mb_str(), joint->GetSelection(), -1);
 		atts.push_back(curAtt);
 		
 		GLuint tex = texturemanager.add(mp);

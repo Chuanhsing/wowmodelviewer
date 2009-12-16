@@ -245,6 +245,25 @@ struct ModelAttachment {
 	void setupParticle();
 };
 
+class ModelEvent {
+	ModelEventDef def;
+public:
+	void init(MPQFile &f, ModelEventDef &mad, uint32 *global);
+
+	friend std::ostream& operator<<(std::ostream& out, ModelEvent& v)
+	{
+		out << "		<id>" << v.def.id[0] << v.def.id[1] << v.def.id[2] << v.def.id[3] << "</id>" << endl;
+		out << "		<dbid>" << v.def.dbid << "</dbid>" << endl;
+		out << "		<bone>" << v.def.bone << "</bone>" << endl;
+		out << "		<pos>" << v.def.pos << "</pos>" << endl;
+		out << "		<type>" << v.def.type << "</type>" << endl;
+		out << "		<seq>" << v.def.seq << "</seq>" << endl;
+		out << "		<nTimes>" << v.def.nTimes << "</nTimes>" << endl;
+		out << "		<ofsTimes>" << v.def.ofsTimes << "</ofsTimes>" << endl;
+		return out;
+	}
+};
+
 class Model: public ManagedItem, public Displayable
 {
 	// VBO Data
@@ -281,6 +300,7 @@ public:
 	ModelLight		*lights;
 	ParticleSystem	*particleSystems;
 	RibbonEmitter	*ribbons;
+	ModelEvent		*events;
 
 public:
 	// Raw Data
@@ -413,5 +433,6 @@ public:
 	void clear();
 
 };
+
 
 #endif

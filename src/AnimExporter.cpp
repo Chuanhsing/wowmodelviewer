@@ -28,11 +28,11 @@ CAnimationExporter::CAnimationExporter(wxWindow* parent, wxWindowID id, const wx
 		return;
 	}
 	
-	lblFile = new wxStaticText(this, wxID_ANY, "", wxPoint(10,5), wxSize(320,20));
+	lblFile = new wxStaticText(this, wxID_ANY, _T(""), wxPoint(10,5), wxSize(320,20));
 	lblCurFrame = new wxStaticText(this, wxID_ANY, _T("Current Frame: 0"), wxPoint(10,25), wxSize(100,20));
 	
 	wxStaticText *lblTotalFrame = new wxStaticText(this, wxID_ANY, _T("Total Frames:"), wxPoint(10,45), wxDefaultSize);
-	txtFrames = new wxTextCtrl(this, ID_GIFTOTALFRAME, "", wxPoint(90,45), wxSize(30,18));
+	txtFrames = new wxTextCtrl(this, ID_GIFTOTALFRAME, _T(""), wxPoint(90,45), wxSize(30,18));
 	
 	cbTrans = new wxCheckBox(this, ID_GIFTRANSPARENT, _T("Transparency"), wxPoint(10,65), wxDefaultSize, 0);
 	cbGrey = new wxCheckBox(this, ID_GIFGREYSCALE, _T("Greyscale"), wxPoint(130,65), wxDefaultSize, 0);
@@ -74,7 +74,7 @@ void CAnimationExporter::Init(const wxString fn)
 	lblFile->SetLabel(fn);
 
 	int i = (m_iTotalAnimFrames / 50);
-	txtFrames->SetLabel("");
+	txtFrames->SetLabel(_T(""));
 	*txtFrames << i;
 
 	btnStart->Enable(true);
@@ -88,8 +88,8 @@ void CAnimationExporter::Init(const wxString fn)
 	txtSizeY->Enable(true);
 	txtDelay->Enable(true);
 
-	txtSizeX->SetValue("0");
-	txtSizeY->SetValue("0");
+	txtSizeX->SetValue(_T("0"));
+	txtSizeY->SetValue(_T("0"));
 	cbShrink->SetValue(false);
 }
 
@@ -160,6 +160,7 @@ void CAnimationExporter::CreateGif()
 		}
 	}
 
+#ifdef _WIN32
 	// CREATE OUR RENDERTOTEXTURE OBJECT
 	// -------------------------------------------
 	// if either are supported use our 'RenderTexture' object.
@@ -177,7 +178,9 @@ void CAnimationExporter::CreateGif()
 		m_iWidth = g_canvas->rt->nWidth;
 		m_iHeight = g_canvas->rt->nHeight;
 		g_canvas->rt->BeginRender();
-	} else {
+	} else 
+#endif
+	{
 		glReadBuffer(GL_BACK);
 		int screenSize[4];
 		glGetIntegerv(GL_VIEWPORT, screenSize);				// get the width/height of the canvas
@@ -252,6 +255,7 @@ void CAnimationExporter::CreateGif()
 
 	wxDELETEA(buffer);
 
+#ifdef _WIN32
 	if (video.supportPBO || video.supportVBO) {
 		g_canvas->rt->EndRender();
 
@@ -259,6 +263,7 @@ void CAnimationExporter::CreateGif()
 		g_canvas->rt->Shutdown();
 		wxDELETE(g_canvas->rt);
 	}
+#endif
 
 	// CREATE THE ACTUAL MULTI-IMAGE GIF ANIMATION
 	// ------------------------------------------------------
@@ -347,6 +352,7 @@ void CAnimationExporter::OnCheck(wxCommandEvent &event)
 
 void CAnimationExporter::CreateAvi(wxString fn)
 {
+#ifdef _WIN32
 	if (!g_canvas || !g_canvas->model || !g_canvas->model->animManager) {
 		wxMessageBox(_T("Unable to create AVI animation!"), _T("Error"));
 		wxLogMessage(_T("Error: Unable to created AVI animation.  A required object pointer was null!"));
@@ -464,6 +470,7 @@ void CAnimationExporter::CreateAvi(wxString fn)
 	g_canvas->model->animManager->Play();
 	video.render = true;
 	g_canvas->InitView();
+#endif
 }
 
 // --

@@ -23,11 +23,13 @@
 #include "util.h"
 //#include "viewcontrol.h"
 #include "lightcontrol.h"
-#include "rendertexture.h"
+#include "RenderTexture.h"
 //#include "CShader.h"
 #include "camera.h"
 #include "AnimExporter.h"
+#ifdef _WIN32
 #include "AVIGenerator.h"
+#endif
 
 #include "enums.h"
 
@@ -126,8 +128,10 @@ public:
 
 	CCamera camera;
 
+#ifdef _WIN32
 	RenderTexture *rt;
 	RenderTexture *rtt[2];
+#endif
 	//GLuint texShadowMap;
 
 	// Event Handlers
@@ -178,9 +182,13 @@ public:
 	void Zoom(float f, bool rel = false); // f = amount to zoom, rel = relative to model or not
 	void CheckMovement();	// move the character
 	
+#if 0
 	Attachment* LoadModel(const char* fn);
+#endif
 	Attachment* LoadCharModel(const char* fn);
+#if 0
 	Attachment* AddModel(const char *fn);
+#endif
 	void LoadWMO(std::string fn);
 	//void TogglePause();
 	
@@ -216,7 +224,9 @@ public:
 	// Backgroun image stuff
 	GLuint uiBGTexture;
 	void LoadBackground(wxString filename);
+#ifdef _WIN32
 	CAVIGenerator cAvi;
+#endif
 };
 
 

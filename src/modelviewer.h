@@ -47,7 +47,7 @@
 
 // defines
 #define APP_TITLE _T("World of Warcraft Model Viewer")
-#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r561)")
+#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r605)")
 
 
 class ModelViewer: public wxFrame
@@ -148,7 +148,7 @@ public:
 	void UpdateControls();
    
 	void ImportArmoury(wxString strURL);
-	void ModelViewer::ModelInfo();
+	void ModelInfo();
 
 	Vec3D DoSetColor(const Vec3D &defColor);
 };

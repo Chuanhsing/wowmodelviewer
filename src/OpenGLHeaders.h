@@ -1,11 +1,11 @@
 #ifndef OPENGLHEADERS_H
 #define OPENGLHEADERS_H
 
-#include ".\glew\include\GL\glew.h"
-
 #ifdef _WIN32
+	#include ".\glew\include\GL\glew.h"
 	#include ".\glew\include\GL\wglew.h"
 #else
+	#include <GL/glew.h>
 	#include <GL/glxew.h>
 #endif
 

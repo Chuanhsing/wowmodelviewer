@@ -23,7 +23,7 @@ class Settings_Page1: public wxWindow
 	DECLARE_CLASS(Settings_Page1)
     DECLARE_EVENT_TABLE()
 
-	wxCheckBox *chkbox[5];
+	wxCheckBox *chkbox[8];
 	wxListBox *mpqList;
 	wxTextCtrl *txtPath;
 

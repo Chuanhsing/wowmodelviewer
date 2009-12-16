@@ -17,6 +17,7 @@ BEGIN_EVENT_TABLE(Settings_Page1, wxWindow)
 	EVT_BUTTON(ID_SETTINGS_CLEAR, Settings_Page1::OnButton)
 	EVT_CHECKBOX(ID_SETTINGS_RANDOMSKIN, Settings_Page1::OnCheck)
 	EVT_CHECKBOX(ID_SETTINGS_HIDEHELMET, Settings_Page1::OnCheck)
+	EVT_CHECKBOX(ID_SETTINGS_SHOWPARTICLE, Settings_Page1::OnCheck)
 	EVT_CHECKBOX(ID_SETTINGS_LOCALFILES, Settings_Page1::OnCheck)
 	EVT_CHECKBOX(ID_SETTINGS_KNIGHTEYEGLOW, Settings_Page1::OnCheck)
 END_EVENT_TABLE()
@@ -34,28 +35,28 @@ END_EVENT_TABLE()
 
 Settings_Page1::Settings_Page1(wxWindow* parent, wxWindowID id)
 {
-	if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, _T("Settings_Page1")) == false) {
+	if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, _("Settings_Page1")) == false) {
 		wxLogMessage(_T("GUI Error: Settings_Page1"));
 		return;
 	}
 
-	//chkbox[CHECK_RANDOMCHAR] = new wxCheckBox(this, ID_SETTINGS_RANDOMCHAR, _T("Random Characters"), wxPoint(5,50), wxDefaultSize, 0);
-	chkbox[CHECK_LOCALFILES] = new wxCheckBox(this, ID_SETTINGS_LOCALFILES, _T("Use Local Files"), wxPoint(5,75), wxDefaultSize, 0);
-	//chkbox[CHECK_INITSTARTUP] = new wxCheckBox(this, ID_SETTINGS_INITSTARTUP, _T("Init on Startup"), wxPoint(5,100), wxDefaultSize, 0);
-
-	chkbox[CHECK_RANDOMSKIN] = new wxCheckBox(this, ID_SETTINGS_RANDOMSKIN, _T("Random Skins"), wxPoint(150,50), wxDefaultSize, 0);
-	chkbox[CHECK_HIDEHELMET] = new wxCheckBox(this, ID_SETTINGS_HIDEHELMET, _T("Hide Helmet"), wxPoint(150,75), wxDefaultSize, 0);
-	//chkbox[CHECK_SAVELAYOUT] = new wxCheckBox(this, ID_SETTINGS_SAVELAYOUT, _T("Save Layout on Exit"), wxPoint(150,100), wxDefaultSize, 0);
-	chkbox[CHECK_KNIGHTEYEGLOW] = new wxCheckBox(this, ID_SETTINGS_KNIGHTEYEGLOW, _T("Eye Glow"), wxPoint(150,100), wxDefaultSize, 0);
+	chkbox[CHECK_SHOWPARTICLE] = new wxCheckBox(this, ID_SETTINGS_SHOWPARTICLE, _("Show Particle"), wxPoint(5,50), wxDefaultSize, 0);
+	chkbox[CHECK_LOCALFILES] = new wxCheckBox(this, ID_SETTINGS_LOCALFILES, _("Use Local Files"), wxPoint(5,75), wxDefaultSize, 0);
+	chkbox[CHECK_RANDOMSKIN] = new wxCheckBox(this, ID_SETTINGS_RANDOMSKIN, _("Random Skins"), wxPoint(150,50), wxDefaultSize, 0);
+	chkbox[CHECK_HIDEHELMET] = new wxCheckBox(this, ID_SETTINGS_HIDEHELMET, _("Hide Helmet"), wxPoint(150,75), wxDefaultSize, 0);
+	chkbox[CHECK_KNIGHTEYEGLOW] = new wxCheckBox(this, ID_SETTINGS_KNIGHTEYEGLOW, _("Eye Glow"), wxPoint(150,100), wxDefaultSize, 0);
+	//chkbox[CHECK_RANDOMCHAR] = new wxCheckBox(this, ID_SETTINGS_RANDOMCHAR, _("Random Characters"), wxPoint(5,50), wxDefaultSize, 0);
+	//chkbox[CHECK_SAVELAYOUT] = new wxCheckBox(this, ID_SETTINGS_SAVELAYOUT, _("Save Layout on Exit"), wxPoint(150,100), wxDefaultSize, 0);
+	//chkbox[CHECK_INITSTARTUP] = new wxCheckBox(this, ID_SETTINGS_INITSTARTUP, _("Init on Startup"), wxPoint(5,100), wxDefaultSize, 0);
 
 	
-	wxStaticText *lbl2 = new wxStaticText(this, wxID_ANY, _T("MPQ Archives order and files to load"), wxPoint(0,140), wxDefaultSize, 0);
+	wxStaticText *lbl2 = new wxStaticText(this, wxID_ANY, _("MPQ Archives order and files to load"), wxPoint(0,140), wxDefaultSize, 0);
 	mpqList = new wxListBox(this, wxID_ANY, wxPoint(0,160), wxSize(380, 190), mpqArchives, wxLB_SINGLE|wxLB_HSCROLL, wxDefaultValidator);
-	wxButton *btn1 = new wxButton(this, ID_SETTINGS_UP, _T("Move Up"), wxPoint(5,355), wxSize(70,25), 0);
-	wxButton *btn2 = new wxButton(this, ID_SETTINGS_DOWN, _T("Move Down"), wxPoint(80,355), wxSize(70,25), 0);
-	wxButton *btn3 = new wxButton(this, ID_SETTINGS_ADD, _T("Add"), wxPoint(155,355), wxSize(70,25), 0);
-	wxButton *btn4 = new wxButton(this, ID_SETTINGS_REMOVE, _T("Remove"), wxPoint(230,355), wxSize(70,25), 0);
-	wxButton *btn5 = new wxButton(this, ID_SETTINGS_CLEAR, _T("Clear"), wxPoint(305,355), wxSize(70,25), 0);
+	wxButton *btn1 = new wxButton(this, ID_SETTINGS_UP, _("Move Up"), wxPoint(5,355), wxSize(70,25), 0);
+	wxButton *btn2 = new wxButton(this, ID_SETTINGS_DOWN, _("Move Down"), wxPoint(80,355), wxSize(70,25), 0);
+	wxButton *btn3 = new wxButton(this, ID_SETTINGS_ADD, _("Add"), wxPoint(155,355), wxSize(70,25), 0);
+	wxButton *btn4 = new wxButton(this, ID_SETTINGS_REMOVE, _("Remove"), wxPoint(230,355), wxSize(70,25), 0);
+	wxButton *btn5 = new wxButton(this, ID_SETTINGS_CLEAR, _("Clear"), wxPoint(305,355), wxSize(70,25), 0);
 }
 
 
@@ -85,7 +86,7 @@ void Settings_Page1::OnButton(wxCommandEvent &event)
 		}
 		
 	} else if (id==ID_SETTINGS_ADD) {
-		wxFileDialog file(this, _T("Choose a MPQ file to add"), _T(""), _T(""), "MPQ Archives (*.mpq)|*.mpq", wxFD_OPEN|wxFD_FILE_MUST_EXIST, wxDefaultPosition);
+		wxFileDialog file(this, _T("Choose a MPQ file to add"), _T(""), _T(""), _T("MPQ Archives (*.mpq)|*.mpq"), wxFD_OPEN|wxFD_FILE_MUST_EXIST, wxDefaultPosition);
 
 		if (file.ShowModal()==wxID_OK) {
 			if (wxFile::Exists(file.GetPath())) {
@@ -129,6 +130,8 @@ void Settings_Page1::OnCheck(wxCommandEvent &event)
 
 	} else if (id==ID_SETTINGS_HIDEHELMET) {
 		bHideHelmet = event.IsChecked();
+	} else if (id==ID_SETTINGS_SHOWPARTICLE) {
+		bShowParticle = event.IsChecked();
 	} else if (id==ID_SETTINGS_KNIGHTEYEGLOW) {
 		bKnightEyeGlow = event.IsChecked();
 	}
@@ -140,6 +143,7 @@ void Settings_Page1::Update()
 	chkbox[CHECK_HIDEHELMET]->SetValue(bHideHelmet);
 	chkbox[CHECK_LOCALFILES]->SetValue(useLocalFiles);
 	chkbox[CHECK_KNIGHTEYEGLOW]->SetValue(bKnightEyeGlow);
+	chkbox[CHECK_SHOWPARTICLE]->SetValue(bShowParticle);
 }
 
 Settings_Page2::Settings_Page2(wxWindow* parent, wxWindowID id)
@@ -202,12 +206,14 @@ void Settings_Page2::Update()
 		if (video.capsList[i].doubleBuffer)
 			mode.Append(_T("DoubleBuffer "));
 
+#ifdef _WIN32
 		if (video.capsList[i].hwAcc == WGL_FULL_ACCELERATION_ARB)
 			mode.Append(_T("Hardware mode"));
 		else if (video.capsList[i].hwAcc == WGL_GENERIC_ACCELERATION_ARB)
 			mode.Append(_T("Emulation mode"));
 		else //WGL_NO_ACCELERATION_ARB
 			mode.Append(_T("Software mode"));
+#endif
 
 		oglMode->Append(mode);
 	}
@@ -279,8 +285,8 @@ void Settings_Page2::OnButton(wxCommandEvent &event)
 	
 	if (id == ID_SETTINGS_APPLY) {
 		if ((oglMode->GetSelection() != video.capIndex) && video.GetCompatibleWinMode(video.capsList[oglMode->GetSelection()])) {
-			wxLogMessage("Info: Graphics display mode changed.  Requires restart to take effect.");
-			wxMessageBox("Graphics display settings changed.\nWoW Model Viewer requires restarting to take effect.", "Settings Changed", wxICON_INFORMATION);
+			wxLogMessage(_T("Info: Graphics display mode changed.  Requires restart to take effect."));
+			wxMessageBox(_T("Graphics display settings changed.\nWoW Model Viewer requires restarting to take effect."), _T("Settings Changed"), wxICON_INFORMATION);
 		}
 		
 		double fov;

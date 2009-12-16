@@ -60,6 +60,7 @@ public:
 	void seek(int offset);
 	void seekRelative(int offset);
 	void close();
+	void save(const char* filename);
 
 	static bool exists(const char* filename);
 	static int getSize(const char* filename); // Used to do a quick check to see if a file is corrupted

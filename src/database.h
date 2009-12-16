@@ -85,8 +85,10 @@ extern ItemDB itemdb;
 
 class ItemDB: public DBCFile
 {
+	std::map<int, int> itemLookup, itemDisplayLookup;
+	bool inited;
 public:
-	ItemDB(): DBCFile("DBFilesClient\\Item.dbc") {}
+	ItemDB(): DBCFile("DBFilesClient\\Item.dbc"), inited(false) {}
 	~ItemDB() {}
 
 	static const size_t MaxItem = 100000;
@@ -233,18 +235,12 @@ public:
 	//static const size_t femaleModeID = 5;	// unit
 	static const size_t ShortName = 6;	// string
 	static const size_t Name = 11;		// string, model name, 10048 to 11
-#undef PTR
-#ifdef PTR
 	//static const size_t FullName = 14;	// string, i18n name
 	static const size_t GeoType1 = 65;	// string
 	//static const size_t GeoType2 = 66;	// string
 	//static const size_t GeoType3 = 67;	// string
-#else
-	//static const size_t FullName = 13;	// string, i18n name
-	static const size_t GeoType1 = 65;	// string
-	//static const size_t GeoType2 = 65;	// string
-	//static const size_t GeoType3 = 66;	// string
-#endif
+
+	static const size_t NameV310 = 12;		// string, model name, 10048 to 11
 
 	Record getByName(wxString name);
 	Record getById(unsigned int id);
@@ -323,7 +319,7 @@ public:
 
 class ItemDatabase;
 
-extern char* ItemTypeNames[NUM_ITEM_TYPES];
+extern const char* ItemTypeNames[NUM_ITEM_TYPES];
 
 class ItemDisplayDB: public DBCFile
 {
@@ -476,7 +472,7 @@ public:
 
 	const ItemRecord& get(int id);
 	int getItemIDByModel(int id);
-	int avaiable(int id);
+	bool avaiable(int id);
 	int getItemNum(int displayid);
 	wxString addDiscoveryId(int id, wxString name);
 	wxString addDiscoveryDisplayId(int id, wxString name, int type);
@@ -522,7 +518,8 @@ public:
 // ------------------------------
 // NPC Stuff
 // -------------------------------
-struct NPCRecord {
+struct NPCRecord 
+{
 	wxString name;
 	int id, model, type;
 	bool discovery;
@@ -537,7 +534,8 @@ struct NPCRecord {
 	}
 };
 
-class NPCDatabase {
+class NPCDatabase 
+{
 public:
 	NPCDatabase(const char* filename);
 	NPCDatabase() { }
@@ -549,7 +547,7 @@ public:
 
 	const NPCRecord& get(int id);
 	const NPCRecord& getByID(int id);
-	int avaiable(int id);
+	bool avaiable(int id);
 	wxString addDiscoveryId(int id, wxString name);
 };
 

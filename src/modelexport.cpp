@@ -37,8 +37,9 @@ GroupData *groups = NULL;
 // or use our "drawing" routine to export only whats being drawn.
 
 template <typename T>
-T reverse_endian(T n) // for 32bits
+inline T reverse_endian(T n) // for 32bits
 {
+#ifdef _MSC_VER
 	_asm
 	{
 		mov EAX, n;
@@ -47,9 +48,15 @@ T reverse_endian(T n) // for 32bits
 	}
 
 	return n;
+#else
+	uint32 m = *reinterpret_cast<uint32 *>(&n);
+	T temp = ((m & 0xFF000000) >> 24) | ((m & 0x00FF0000) >> 8) |
+			 ((m & 0x0000FF00) << 8)  | ((m & 0x000000FF) << 24);
+	return *reinterpret_cast<T *>(&temp);
+#endif
 }
 
-unsigned short ByteSwap16 (unsigned short nValue) // 16bit
+inline unsigned short ByteSwap16 (unsigned short nValue) // 16bit
 {
    return ((((nValue & 0xFF00)>> 8)) | ((nValue & 0xFF) << 8));
 }
@@ -72,9 +79,9 @@ void SaveTexture(wxString fn)
 
 
 	if (fn.Last() == 'g')
-		newImage->Save(fn, CXIMAGE_FORMAT_PNG);
+		newImage->Save(fn.mb_str(), CXIMAGE_FORMAT_PNG);
 	else
-		newImage->Save(fn, CXIMAGE_FORMAT_TGA);
+		newImage->Save(fn.mb_str(), CXIMAGE_FORMAT_TGA);
 
 	newImage->Destroy();
 	wxDELETE(newImage);
@@ -237,7 +244,7 @@ void ExportM2to3DS(Model *m, const char *fn)
 		return;
 
 	//ofstream f(fn, ios::out | ios::binary | ios::trunc);
-	wxFFileOutputStream f(fn, "w+b");
+	wxFFileOutputStream f(wxString(fn, wxConvUTF8), wxT("w+b"));
 
 	if (!f.IsOk()) {
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
@@ -339,7 +346,7 @@ void ExportM2to3DS(Model *m, const char *fn)
 
 	// Material name
 	wxString matName(_T("Material1\0"));
-	const char *materialName = matName.c_str();
+	const char *materialName = matName.mb_str();
 	chunk2_2_1.size += int(matName.size() + 1);
 
 	//COL_RGB  
@@ -356,7 +363,7 @@ void ExportM2to3DS(Model *m, const char *fn)
 
 	// Model name
 	wxString modName(_T("Model1\0"));
-	const char *modelName = modName.c_str();
+	const char *modelName = modName.mb_str();
 	chunk2_4.size += int(modName.size() + 1);
 
 	// OBJ_MESH chunk
@@ -364,8 +371,8 @@ void ExportM2to3DS(Model *m, const char *fn)
 	chunk3.id = OBJ_MESH;
 
 	// Object name
-	wxString objName(m->name);
-	const char *objectName = objName.c_str();
+	wxString objName(m->name.c_str(), wxConvUTF8);
+	const char *objectName = objName.mb_str();
 
 	//MESH_VERTICES	0x4110 // The objects vertices
 	MAX3DS_CHUNK chunk4_1;
@@ -444,7 +451,7 @@ void ExportM2to3DS(Model *m, const char *fn)
 
 void ExportM2toMS3D(Attachment *att, Model *m, const char *fn)
 {
-	wxFFileOutputStream f(fn, "w+b");
+	wxFFileOutputStream f(wxString(fn, wxConvUTF8), wxT("w+b"));
 
 	if (!f.IsOk()) {
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
@@ -505,13 +512,13 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn)
 
 	unsigned short indiceCount = 0;
 	for (unsigned short i=0; i<numGroups; i++) {
-		wxString groupName(wxString::Format("Geoset_%i", i));
+		wxString groupName(wxString::Format(_T("Geoset_%i"), i));
 
 		const char flags = 0; // SELECTED
 		f.Write(&flags, sizeof(flags));
 
 		char name[32];
-		strncpy(name, groupName.c_str(), sizeof(name));
+		strncpy(name, groupName.mb_str(), sizeof(name));
 		f.Write(name, sizeof(name));
 
 		unsigned short faceCount = groups[i].p.indexCount / 3;
@@ -531,14 +538,14 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn)
 	f.Write(reinterpret_cast<char *>(&numGroups), sizeof(numGroups));
 	
 	for (unsigned short i=0; i<numGroups; i++) {
-		wxString matName(wxString::Format("Material_%i", i));
+		wxString matName(wxString::Format(_T("Material_%i"), i));
 
 		ModelRenderPass p = groups[i].p;
 		if (p.init(groups[i].m)) {
 			ms3d_material_t mat;
 			memset(mat.alphamap, '\0', sizeof(mat.alphamap));
 
-			strncpy(mat.name, matName.c_str(), sizeof(mat.name));
+			strncpy(mat.name, matName.mb_str(), sizeof(mat.name));
 			mat.ambient[0] = 0.7f;
 			mat.ambient[1] = 0.7f;
 			mat.ambient[2] = 0.7f;
@@ -571,14 +578,14 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn)
 			else 
 				bindtex = groups[i].m->replaceTextures[groups[i].m->specialTextures[p.tex]];
 
-			wxString texName(fn);
+			wxString texName(fn, wxConvUTF8);
 			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << "_" << bindtex << ".tga";
-			strncpy(mat.texture, texName.c_str(), sizeof(mat.texture));
+			texName << wxT("_") << bindtex << wxT(".tga");
+			strncpy(mat.texture, texName.mb_str(), sizeof(mat.texture));
 
 			f.Write(reinterpret_cast<char *>(&mat), sizeof(ms3d_material_t));
 
-			wxString texFilename(fn);
+			wxString texFilename(fn, wxConvUTF8);
 			texFilename = texFilename.BeforeLast('\\');
 			texFilename += '\\';
 			texFilename += texName;
@@ -704,7 +711,7 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn)
 	uint16 u16;
 	unsigned char ub;
 	
-	wxFFileOutputStream f(fn, "w+b");
+	wxFFileOutputStream f(wxString(fn, wxConvUTF8), wxT("w+b"));
 
 	if (!f.IsOk()) {
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
@@ -906,8 +913,7 @@ void ExportM2toLWO(Model *m, const char *fn)
 	uint16 u16;
 	unsigned char ub;
 
-
-	wxFFileOutputStream f(fn, "w+b");
+	wxFFileOutputStream f(wxString(fn, wxConvUTF8), wxT("w+b"));
 
 	if (!f.IsOk()) {
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
@@ -970,13 +976,13 @@ void ExportM2toLWO(Model *m, const char *fn)
 		ModelRenderPass &p = m->passes[i];
 
 		if (p.init(m)) {
-			surfName = "geoset_";
+			surfName = _T("geoset_");
 			surfName << surfaceCounter;
 			surfaceCounter++;
 			
-			surfName.Append('\0');
+			surfName.Append(_T('\0'));
 			if (fmod((float)surfName.length(), 2.0f) > 0)
-				surfName.Append('\0');
+				surfName.Append(_T('\0'));
 
 			f.Write(surfName.c_str(), (int)surfName.length());
 			
@@ -1050,13 +1056,13 @@ void ExportM2toLWO(Model *m, const char *fn)
 			fileLen += 8;
 
 			// Surface name
-			surfName = "geoset_";
+			surfName = _T("geoset_");
 			surfName << surfaceCounter;
 			surfaceCounter++;
 			
-			surfName.Append('\0');
+			surfName.Append(_T('\0'));
 			if (fmod((float)surfName.length(), 2.0f) > 0)
-				surfName.Append('\0');
+				surfName.Append(_T('\0'));
 
 			f.Write(surfName.data(), (int)surfName.length());
 			
@@ -1188,11 +1194,11 @@ void ExportM2toLWO(Model *m, const char *fn)
 			fileLen += 8;
 			surfaceDefSize += 8;
 
-			wxString texName(fn);
+			wxString texName(fn, wxConvUTF8);
 			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << "_" << p.tex << ".tga" << '\0';
+			texName << _T("_") << p.tex << _T(".tga") << '\0';
 			if (fmod((float)texName.length(), 2.0f) > 0)
-				texName.Append('\0');
+				texName.Append(_T('\0'));
 
 			// TEXTURE filename
 			f.Write("TIMG", 4);
@@ -1210,7 +1216,7 @@ void ExportM2toLWO(Model *m, const char *fn)
 			f.Write(reinterpret_cast<char *>(&u32), 4);
 			f.SeekO(0, wxFromEnd);
 
-			wxString texFilename(fn);
+			wxString texFilename(fn, wxConvUTF8);
 			texFilename = texFilename.BeforeLast('\\');
 			texFilename += '\\';
 			texFilename += texName;
@@ -1271,11 +1277,11 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 	{
 		glBindTexture(GL_TEXTURE_2D, m->mat[i].tex);
 
-		wxString texName(fn);
+		wxString texName(fn, wxConvUTF8);
 		texName = texName.AfterLast('\\').BeforeLast('.');
-		texName << "_" << i << ".tga";
+		texName << _T("_") << i << _T(".tga");
 
-		wxString texFilename(fn);
+		wxString texFilename(fn, wxConvUTF8);
 		texFilename = texFilename.BeforeLast('\\');
 		texFilename += '\\';
 		texFilename += texName;
@@ -1314,12 +1320,12 @@ void ExportM2toOBJ(Model *m, const char *fn)
 		return;
 	}
 
-	wxString matName(fn);
+	wxString matName(fn, wxConvUTF8);
 	matName = matName.BeforeLast('.');
-	matName << ".mtl";
+	matName << _T(".mtl");
 
 	//locale::global(locale(""));
-	ofstream fm(matName.c_str(), ios_base::out | ios_base::trunc);
+	ofstream fm(matName.mb_str(), ios_base::out | ios_base::trunc);
 	//locale::global(locale("C"));
 	
 	// output all the vertice data
@@ -1338,9 +1344,9 @@ void ExportM2toOBJ(Model *m, const char *fn)
 				}
 			}
 
-			wxString texName(fn);
+			wxString texName(fn, wxConvUTF8);
 			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << "_" << p.tex << ".tga";
+			texName << _T("_") << p.tex << _T(".tga");
 			fm << "newmtl " << "Material_" << p.geoset << endl;
 			fm << "Ka " << 0.7f << " " << 0.7f << " " << 0.7f << endl;
 			fm << "Kd " << p.ocol.x << " " << p.ocol.y << " " << p.ocol.z << endl;

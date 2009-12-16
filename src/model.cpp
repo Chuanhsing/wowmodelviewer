@@ -306,14 +306,15 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 	texAnims = 0;
 	textures = 0;
 	transparency = 0;
+	events = 0;
 	modelType = MT_NORMAL;
 	// --
 
 	MPQFile f(tempname);
-	g_modelViewer->modelOpened->Add(tempname);
+	g_modelViewer->modelOpened->Add(wxString(tempname, wxConvUTF8));
 	ok = false;
 	if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
-		wxLogMessage("Error: Unable to load model: [%s]", tempname);
+		wxLogMessage(_T("Error: Unable to load model: [%s]"), tempname);
 		// delete this; //?
 		f.close();
 		return;
@@ -457,6 +458,7 @@ Model::~Model()
 			wxDELETEA(colors);
 			wxDELETEA(transparency);
 			wxDELETEA(lights);
+			wxDELETEA(events);
 			wxDELETEA(particleSystems);
 			wxDELETEA(ribbons);
 
@@ -653,7 +655,7 @@ void Model::initCommon(MPQFile &f)
 
 				if (texdef[i].type == TEXTURE_ARMORREFLECT) {
 					// a fix for weapons with type-3 textures.
-					replaceTextures[texdef[i].type] = texturemanager.add(_T("Item\\ObjectComponents\\Weapon\\ArmorReflect4.BLP"));
+					replaceTextures[texdef[i].type] = texturemanager.add("Item\\ObjectComponents\\Weapon\\ArmorReflect4.BLP");
 				}
 			}
 		}
@@ -731,7 +733,7 @@ void Model::initCommon(MPQFile &f)
 		MPQFile g(lodname.c_str());
 		g_modelViewer->modelOpened->Add(lodname);
 		if (g.isEof()) {
-			wxLogMessage("Error: Unable to load Lods: [%s]", lodname.c_str());
+			wxLogMessage(_T("Error: Unable to load Lods: [%s]"), lodname.c_str());
 			g.close();
 			return;
 		}
@@ -943,8 +945,8 @@ void Model::initAnimated(MPQFile &f)
 			anims[i].timeStart = 0;
 			anims[i].timeEnd = animsWotLK.length;
 			anims[i].moveSpeed = animsWotLK.moveSpeed;
-			anims[i].loopType = animsWotLK.loopType;
 			anims[i].flags = animsWotLK.flags;
+			anims[i].probability = animsWotLK.probability;
 			anims[i].d1 = animsWotLK.d1;
 			anims[i].d2 = animsWotLK.d2;
 			anims[i].playSpeed = animsWotLK.playSpeed;
@@ -955,7 +957,7 @@ void Model::initAnimated(MPQFile &f)
 			sprintf(tempname, "%s%04d-%02d.anim", fullname.c_str(), anims[i].animID, animsWotLK.subAnimID);
 			if (MPQFile::getSize(tempname) > 0) {
 				animfiles[i].openFile(tempname);
-				g_modelViewer->modelOpened->Add(tempname);
+				g_modelViewer->modelOpened->Add(wxString(tempname, wxConvUTF8));
 			}
 		}
 		#endif
@@ -982,7 +984,7 @@ void Model::initAnimated(MPQFile &f)
 			memcpy(keyBoneLookup, f.getBuffer() + header.ofsKeyBoneLookup, sizeof(int16)*header.nKeyBoneLookup);
 		} else {
 			memcpy(keyBoneLookup, f.getBuffer() + header.ofsKeyBoneLookup, sizeof(int16)*BONE_MAX);
-			wxLogMessage("Error: keyBone number [%d] over [%d]", header.nKeyBoneLookup, BONE_MAX);
+			wxLogMessage(_T("Error: keyBone number [%d] over [%d]"), header.nKeyBoneLookup, BONE_MAX);
 		}
 	}
 
@@ -1035,6 +1037,14 @@ void Model::initAnimated(MPQFile &f)
 		ModelTexAnimDef *ta = (ModelTexAnimDef*)(f.getBuffer() + header.ofsTexAnims);
 		for (size_t i=0; i<header.nTexAnims; i++)
 			texAnims[i].init(f, ta[i], globalSequences);
+	}
+
+	if (header.nEvents) {
+		ModelEventDef *edefs = (ModelEventDef *)(f.getBuffer()+header.ofsEvents);
+		events = new ModelEvent[header.nEvents];
+		for (size_t i=0; i<header.nEvents; i++) {
+			events[i].init(f, edefs[i], globalSequences);
+		}
 	}
 
 	// particle systems
@@ -2076,7 +2086,7 @@ void Model::lightsOff(GLuint lbase)
 // Updates our particles within models.
 void Model::updateEmitters(float dt)
 {
-	if (!ok || !showParticles) 
+	if (!ok || !showParticles || !bShowParticle) 
 		return;
 
 	for (size_t i=0; i<header.nParticleEmitters; i++) {
@@ -2190,3 +2200,9 @@ void ModelManager::clear()
 	items.clear();
 	names.clear();
 }
+
+void ModelEvent::init(MPQFile &f, ModelEventDef &me, uint32 *globals)
+{
+	def = me;
+}
+

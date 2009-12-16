@@ -1,14 +1,14 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#ifdef _WIN32
-	#include <hash_set>
-#else
-	#include <ext/hash_set>
+// STL headers
+#ifdef min
+#undef min
 #endif
 
-
-// STL headers
+#ifdef max
+#undef max
+#endif
 #include <algorithm>
 //#include <cstdlib>
 #include <fstream>
@@ -41,7 +41,8 @@ extern bool useLocalFiles;
 extern bool useRandomLooks;
 extern bool bHideHelmet;
 extern bool bKnightEyeGlow;
-extern bool bPTR;
+extern bool bV310;
+extern bool bShowParticle;
 
 //extern bool hasBeta;
 
@@ -67,6 +68,7 @@ wxString CSConv(wxString str);
 void fixname(std::string &name);
 void fixnamen(char *name, size_t len);
 wxString Vec3DToString(Vec3D vec);
+int wxStringToInt(const wxString& str);
 
 void getGamePath();
 

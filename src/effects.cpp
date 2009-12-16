@@ -9,8 +9,8 @@ SpellEffectsDB spelleffectsdb;
 
 void GetSpellEffects(){
 	for (SpellEffectsDB::Iterator it=spelleffectsdb.begin(); it!=spelleffectsdb.end(); ++it) {
-		wxString temp = it->getString(SpellEffectsDB::EffectName);
-		if (temp.Mid(0, 5) != "zzOLD")
+		wxString temp(it->getString(SpellEffectsDB::EffectName), wxConvUTF8);
+		if (temp.Mid(0, 5) != _T("zzOLD"))
 			spelleffects.Insert(temp, 0);
 	}
 
@@ -68,7 +68,7 @@ void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent
 
 			int hands = it->getInt(ItemSubClassDB::Hands);
 			if (hands > 0) {
-				str << " (" << hands << "-handed)";
+				str << wxT(" (") << hands << wxT("-handed)");
 
 				//char buf[16];
 				//sprintf(buf, " (%d-handed)", hands);
@@ -86,9 +86,9 @@ void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent
 			cc->cats.push_back(subclasslookup[pair<int,int>(r.itemclass, r.subclass)]);
 		}
 
-		cc->itemDialog = new CategoryChoiceDialog(cc, UPDATE_CREATURE_ITEM, parent, _T("Choose an item"), _("Select a Weapon"), cc->choices, cc->cats, cc->catnames, 0);
+		cc->itemDialog = new CategoryChoiceDialog(cc, UPDATE_CREATURE_ITEM, parent, _("Choose an item"), _("Select a Weapon"), cc->choices, cc->cats, cc->catnames, 0);
 	} else {
-		cc->itemDialog = new FilteredChoiceDialog(cc, UPDATE_CREATURE_ITEM, parent, _T("Choose an item"), _("Select a Weapon"), cc->choices, 0);
+		cc->itemDialog = new FilteredChoiceDialog(cc, UPDATE_CREATURE_ITEM, parent, _("Choose an item"), _("Select a Weapon"), cc->choices, 0);
 	}
 
 	cc->itemDialog->SetSelection(sel);
@@ -133,12 +133,12 @@ void EnchantsDialog::OnClick(wxCommandEvent &event)
 	if (event.GetId() == ID_ENCHANTSOK) {
 		wxString sel(effectsListbox->GetStringSelection());
 
-		if (sel == "") {
+		if (sel == _T("")) {
 			Show(false);
 			return;
 		}
 
-		if (sel=="NONE" || sel=="None") {
+		if (sel==_T("NONE") || sel==_T("None")) {
 			if (slot->GetSelection() == 0)
 				RHandEnchant = -1;
 			else
@@ -148,7 +148,7 @@ void EnchantsDialog::OnClick(wxCommandEvent &event)
 		}
 		
 		for (std::vector<EnchantsRec>::iterator it=enchants.begin();  it!=enchants.end();  ++it) {
-			if (it->name.c_str() == sel) {
+			if (wxString(it->name.c_str(), wxConvUTF8) == sel) {
 				int s = slot->GetSelection();
 				s += 10;
 
@@ -197,9 +197,8 @@ void EnchantsDialog::InitObjects()
 {
 	wxString slots[2] = {_T("Right Hand"), _T("Left Hand")};
 
-	slot = new wxRadioBox(this, -1, _T("Apply effects to:"), wxPoint(10,10), wxSize(180, 80), 2, slots, 4, wxRA_SPECIFY_ROWS, wxDefaultValidator, "radioBox");
+	slot = new wxRadioBox(this, -1, _T("Apply effects to:"), wxPoint(10,10), wxSize(180, 80), 2, slots, 4, wxRA_SPECIFY_ROWS, wxDefaultValidator, _T("radioBox"));
 
-	
 	text1 = new wxStaticText(this, -1, _T("Enchantments:"), wxPoint(10, 110), wxDefaultSize);
 	effectsListbox = new wxListBox(this, -1, wxPoint(10,130), wxSize(180,160), choices, wxLB_SINGLE);
 	
@@ -257,7 +256,7 @@ void EnchantsDialog::InitEnchants()
 				temp.id = visualid;
 				for(size_t i=0; i<5; i++)
 					temp.index[i] = it2->getInt(ItemVisualsDB::VisualID+1+i);
-				temp.name = CSConv(it->getString(SpellItemEnchantmentDB::Name + langID));
+				temp.name = CSConv(wxString(it->getString(SpellItemEnchantmentDB::Name + langID), wxConvUTF8)).mb_str();
 				enchants.push_back(temp);
 				break;
 			}

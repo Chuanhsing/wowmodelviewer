@@ -370,7 +370,7 @@ static void DDSDecodeAlphaExplicit( unsigned int *pixel, ddsAlphaBlockExplicit_t
 		{
 			/* zero the alpha bits of image pixel */
 			*pixel &= alphaZero;
-			color.a = unsigned char(word & 0x000F);
+			color.a = (unsigned char)(word & 0x000F);
 			color.a = color.a | (color.a << 4);
 			*pixel |= *((unsigned int*) &color);
 			word >>= 4;		/* move next bits to lowest 4 */

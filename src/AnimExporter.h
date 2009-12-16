@@ -15,7 +15,9 @@
 #include "CxImage/ximabmp.h"
 
 #include "modelcanvas.h"
+#ifdef _WIN32
 #include "AVIGenerator.h"
+#endif
 
 // File Source Change log:
 // Version | Date     | Comments

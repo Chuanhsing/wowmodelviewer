@@ -65,7 +65,7 @@ public:
 // I don't really understand why as its only a very minor saving in model sizes and adds extra overhead in
 // processing the models.  Need this structure to read the data into.
 struct PACK_QUATERNION {  
-	__int16 x,y,z,w;  
+	int16 x,y,z,w;  
 }; 
 
 class Quat16ToQuat32 {

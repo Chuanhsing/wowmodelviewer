@@ -117,7 +117,11 @@ typedef void*          HRGN;
 
 #ifndef TCHAR
 #define TCHAR char
+#ifndef _T
 #define _T
+#endif
+#define LPCTSTR const char *
+#define _tfopen fopen
 #endif
 
 typedef struct tagRECT

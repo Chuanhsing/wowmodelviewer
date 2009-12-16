@@ -41,7 +41,7 @@ AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 
 	const wxString strLoops[10] = {_T("0"), _T("1"), _T("2"), _T("3"), _T("4"), _T("5"), _T("6"), _T("7"), _T("8"), _T("9")};
 	
-	animCList = new wxComboBox(this, ID_ANIM, _("Animation"), wxPoint(10,10), wxSize(150,16), 0, NULL, wxCB_READONLY, wxDefaultValidator, _("Animation")); //|wxCB_SORT); //wxPoint(66,10)
+	animCList = new wxComboBox(this, ID_ANIM, _("Animation"), wxPoint(10,10), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Animation")); //|wxCB_SORT); //wxPoint(66,10)
 	animCList2 = new wxComboBox(this, ID_ANIM_SECONDARY, _("Secondary"), wxPoint(170,10), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Secondary")); //|wxCB_SORT); //wxPoint(66,10)
 	animCList2->Enable(false);
 	animCList2->Show(false);
@@ -62,7 +62,7 @@ AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 	speedMouthLabel->Show(false);
 	// ---
 
-	loopList = new wxComboBox(this, ID_LOOPS, wxString("0"), wxPoint(330, 10), wxSize(40,16), 10, strLoops, wxCB_READONLY, wxDefaultValidator, wxString("Loops")); //|wxCB_SORT); //wxPoint(66,10)
+	loopList = new wxComboBox(this, ID_LOOPS, wxT("0"), wxPoint(330, 10), wxSize(40,16), 10, strLoops, wxCB_READONLY, wxDefaultValidator, wxT("Loops")); //|wxCB_SORT); //wxPoint(66,10)
 	btnAdd = new wxButton(this, ID_ADDANIM, _("Add"), wxPoint(380, 10), wxSize(45,20));
 
 	skinList = new wxComboBox(this, ID_SKIN, _("Skin"), wxPoint(170,10), wxSize(144,16), 0, NULL, wxCB_READONLY);
@@ -149,13 +149,13 @@ void AnimControl::UpdateModel(Model *m)
 	// Find any textures that exist for the model
 	bool res = false;
 
-	wxString fn(m->name);
+	wxString fn(m->name.c_str(), wxConvUTF8);
 	fn = fn.Lower();
-	if (fn.substr(0,4) != "char") {
+	if (fn.substr(0,4) != _T("char")) {
 
-		if (fn.substr(0,8) == "creature")
+		if (fn.substr(0,8) == _T("creature"))
 			res = UpdateCreatureModel(m);
-		else if (fn.substr(0,4) == "item")
+		else if (fn.substr(0,4) == _T("item"))
 			res = UpdateItemModel(m);
 	}
 
@@ -185,24 +185,41 @@ void AnimControl::UpdateModel(Model *m)
 	// Animation stuff
 	if (g_selModel->animated && g_selModel->anims) {
 		wxString strName;
+		wxString strStand;
+		int selectAnim = 0;
 		for (unsigned int i=0; i<g_selModel->header.nAnimations; i++) {			
 			try {
 				AnimDB::Record rec = animdb.getByAnimID(g_selModel->anims[i].animID);
-				strName = rec.getString(AnimDB::Name);
+				strName = wxString(rec.getString(AnimDB::Name), wxConvUTF8);
 			} catch (AnimDB::NotFound) {
-				strName = "???";
+				strName = _T("???");
 			}
 			
 			//strName = name;
-			if ((useanim==-1) && (strName=="Stand")) 
+			//if ((useanim==-1) && (strName=="Stand"))
+			//	useanim = i;
+
+			strName += wxString::Format(_T(" [%i]"), i);
+
+			if (g_selModel->anims[i].animID == ANIM_STAND && useanim == -1) {
+				strStand = strName;
 				useanim = i;
+			}
 
-			strName += wxString::Format(" [%i]", i);
-
-			animCList->Append( strName);
+			animCList->Append(strName);
 			if (g_selModel->charModelDetails.isChar) {
 				animCList2->Append(strName);
 				animCList3->Append(strName);
+			}
+		}
+
+		if (useanim != -1) {
+			for(int i=0; i<animCList->GetCount(); i++) {
+				strName = animCList->GetString(i);
+				if (strName == strStand) {
+					selectAnim = i;
+					break;
+				}
 			}
 		}
 
@@ -210,8 +227,8 @@ void AnimControl::UpdateModel(Model *m)
 			useanim = 0;
 			//return;
 
-		g_selModel->currentAnim = useanim;
-		animCList->Select(useanim);
+		g_selModel->currentAnim = useanim; // anim position in anims
+		animCList->Select(selectAnim); // anim position in selection
 		animCList->Show(true);
 
 		frameSlider->SetRange(g_selModel->anims[useanim].timeStart, g_selModel->anims[useanim].timeEnd);
@@ -296,19 +313,19 @@ void AnimControl::UpdateWMO(WMO *w, int group)
 
 bool AnimControl::UpdateCreatureModel(Model *m)
 {
-	wxString fn(m->name);
+	wxString fn(m->name.c_str(), wxConvUTF8);
 
 	// replace M2 with MDX
 	if (fn.Last() == '2') {
 		fn[fn.Length()-1] = 'd';
-		fn.Append("x");
+		fn.Append(_T("x"));
 	}
 
 	TextureSet skins;
 
 	// see if this model has skins
 	try {
-		CreatureModelDB::Record rec = modeldb.getByFilename((std::string)fn);
+		CreatureModelDB::Record rec = modeldb.getByFilename((std::string)fn.mb_str());
 		// for character models, don't use skins
 		if (rec.getUInt(CreatureModelDB::Type) != 4) {
 			//TextureSet skins;
@@ -330,14 +347,14 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			}
 			
 			// Hard coded skin additions - missing from DBC ?
-			if (fn == "Creature\\Furbolg\\furbolg.mdx") {
+			if (fn == _T("Creature\\Furbolg\\furbolg.mdx")) {
 				TextureGroup grp;
 				grp.tex[0] = "FurbolgSkinPanda";
 				grp.tex[1] = "FurbolgStuffWhite";
 				grp.base = 11;
 				grp.count = 2;
 				skins.insert(grp);
-			} else if (fn == "Creature\\Murloc\\babymurloc.mdx") {
+			} else if (fn == _T("Creature\\Murloc\\babymurloc.mdx")) {
 				TextureGroup grp;
 				grp.tex[0] = "MurlocBabyBlue";
 				grp.tex[1] = "TopHat";
@@ -355,13 +372,13 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 				skins.insert(grp);
 				grp.tex[0] = "MurlocBabyWhite";
 				skins.insert(grp);
-			} else if (fn == "Creature\\Felbeast\\felbeast.mdx") {
+			} else if (fn == _T("Creature\\Felbeast\\felbeast.mdx")) {
 				TextureGroup grp;
 				grp.tex[0] = "FelBeastSkinGreenBlack";
 				grp.base = 11;
 				grp.count = 1;
 				skins.insert(grp);
-			} else if (fn == "Creature\\Gryphon\\gryphon.mdx") {
+			} else if (fn == _T("Creature\\Gryphon\\gryphon.mdx")) {
 				TextureGroup grp;
 				grp.tex[0] = "Gryphon_Skin01Black";
 				grp.tex[1] = "Gryphon_Skin02Black";
@@ -371,7 +388,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 				grp.tex[0] = "Gryphon_Skin01White";
 				grp.tex[1] = "Gryphon_Skin02White";
 				skins.insert(grp);
-			} else if (fn == "Creature\\Lasher\\lasher.mdx") {
+			} else if (fn == _T("Creature\\Lasher\\lasher.mdx")) {
 				TextureGroup grp;
 				grp.tex[0] = "LasherSkinBlue";
 				grp.base = 11;
@@ -381,19 +398,19 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 				skins.insert(grp);
 				grp.tex[0] = "LasherSkinPurple";
 				skins.insert(grp);
-			} else if (fn == "Creature\\Minespider\\minespider.mdx") {
+			} else if (fn == _T("Creature\\Minespider\\minespider.mdx")) {
 				TextureGroup grp;
 				grp.tex[0] = "MineSpiderSkinViolet";
 				grp.base = 11;
 				grp.count = 1;
 				skins.insert(grp);
-			} else if (fn == "Creature\\Owl\\owl.mdx") {
+			} else if (fn == _T("Creature\\Owl\\owl.mdx")) {
 				TextureGroup grp;
 				grp.tex[0] = "OwlSpirit";
 				grp.base = 11;
 				grp.count = 1;
 				skins.insert(grp);
-			} else if (fn == "Creature\\Parrot\\parrot.mdx") {
+			} else if (fn == _T("Creature\\Parrot\\parrot.mdx")) {
 				TextureGroup grp;
 				grp.tex[0] = "ParrotSkinBrown";
 				grp.base = 11;
@@ -403,20 +420,20 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 				skins.insert(grp);
 				grp.tex[0] = "ParrotSkinlavender";
 				skins.insert(grp);
-			} else if (fn == "Creature\\Pterrordax\\pterrordax.mdx") {
+			} else if (fn == _T("Creature\\Pterrordax\\pterrordax.mdx")) {
 				TextureGroup grp;
 				grp.tex[0] = "PterrordaxSkinBrown";
 				grp.tex[1] = "PterrordaxWingSkinBrown";
 				grp.base = 11;
 				grp.count = 2;
 				skins.insert(grp);
-			} else if (fn == "Creature\\Silithidscarab\\silithidscarab.mdx") {
+			} else if (fn == _T("Creature\\Silithidscarab\\silithidscarab.mdx")) {
 				TextureGroup grp;
 				grp.tex[0] = "SilithidScarabSkinGreen";
 				grp.base = 11;
 				grp.count = 1;
 				skins.insert(grp);
-			} else if (fn == "Creature\\Silithidflyer\\silithidflyer.mdx") {
+			} else if (fn == _T("Creature\\Silithidflyer\\silithidflyer.mdx")) {
 				TextureGroup grp;
 				grp.tex[0] = "SilithidFlyerSkinBlack";
 				grp.base = 11;
@@ -428,7 +445,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			
 			// hard-coded fixes.
 			if (skins.empty() == true) {
-				if (fn == "Creature\\Dwarfmalewarriorlight\\dwarfmalewarriorlight.mdx") {
+				if (fn == _T("Creature\\Dwarfmalewarriorlight\\dwarfmalewarriorlight.mdx")) {
 					TextureGroup grp;
 					grp.tex[0] = "DwarfMaleWarriorLightSkin";
 					grp.base = 11;
@@ -438,14 +455,14 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 					grp.base = 11;
 					grp.count = 1;
 					skins.insert(grp);
-				} else if (fn == "Creature\\Faeriedragon\\faeriedragon_ghost.mdx") {
+				} else if (fn == _T("Creature\\Faeriedragon\\faeriedragon_ghost.mdx")) {
 					TextureGroup grp;
 					grp.tex[0] = "FaerieDragon_Ghost";
 					grp.tex[1] = "faeriewing_Ghost";
 					grp.base = 11;
 					grp.count = 2;
 					skins.insert(grp);
-				} else if (fn == "Creature\\Felbat\\felbat.mdx") {
+				} else if (fn == _T("Creature\\Felbat\\felbat.mdx")) {
 					TextureGroup grp;
 					grp.tex[0] = "BatSkin01";
 					grp.tex[1] = "BatSkin02";
@@ -467,39 +484,39 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 					grp.base = 11;
 					grp.count = 2;
 					skins.insert(grp);
-				} else if (fn == "Creature\\Highelf\\highelfmale_priest.mdx") {
+				} else if (fn == _T("Creature\\Highelf\\highelfmale_priest.mdx")) {
 					TextureGroup grp;
 					grp.tex[0] = "HighElfMalePriest";
 					grp.base = 11;
 					grp.count = 1;
 					skins.insert(grp);
-				} else if (fn == "Creature\\Orcmalewarriorheavy\\orcmalewarriorheavy.mdx") {
+				} else if (fn == _T("Creature\\Orcmalewarriorheavy\\orcmalewarriorheavy.mdx")) {
 					TextureGroup grp;
 					grp.tex[1] = "OrcMaleSamuHairSkin";
 					grp.tex[0] = "OrcNPCSkin";
 					grp.base = 11;
 					grp.count = 2;
 					skins.insert(grp);
-				} else if (fn == "Creature\\Seagiant\\seagiant.mdx") {
+				} else if (fn == _T("Creature\\Seagiant\\seagiant.mdx")) {
 					TextureGroup grp;
 					grp.tex[0] = "SeaGiantSkin01";
 					grp.tex[1] = "SeaGiantSkin02";
 					grp.base = 11;
 					grp.count = 2;
 					skins.insert(grp);
-				} else if (fn == "Creature\\Sealion\\sealion.mdx") {
+				} else if (fn == _T("Creature\\Sealion\\sealion.mdx")) {
 					TextureGroup grp;
 					grp.tex[0] = "SeaLionSkin";
 					grp.base = 11;
 					grp.count = 1;
 					skins.insert(grp);
-				} else if (fn == "Creature\\Stormcrow\\stormcrow.mdx") {
+				} else if (fn == _T("Creature\\Stormcrow\\stormcrow.mdx")) {
 					TextureGroup grp;
 					grp.tex[0] = "StormCrowSkin";
 					grp.base = 11;
 					grp.count = 1;
 					skins.insert(grp);
-				} else if(fn == "Creature\\Humanmalewizard\\humanmalewizard.mdx") {
+				} else if(fn == _T("Creature\\Humanmalewizard\\humanmalewizard.mdx")) {
 					TextureGroup grp;
 					grp.tex[0] = "HumanMaleMerchant01Skin";
 					grp.base = 11;
@@ -520,14 +537,14 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 
 	} catch (CreatureModelDB::NotFound) {
 		// Try hardcoding some fixes for missing model info from the DBC
-		if(fn == "Creature\\Dwarfmalewarriorlight\\dwarfmalewarriorlight_ghost.mdx") {
+		if(fn == _T("Creature\\Dwarfmalewarriorlight\\dwarfmalewarriorlight_ghost.mdx")) {
 			TextureGroup grp;
 			grp.tex[0] = "DwarfMaleWarriorLightSkin_Ghost";
 			grp.base = 11;
 			grp.count = 1;
 			skins.insert(grp);
 			return FillSkinSelector(skins);
-		} else if(fn == "Creature\\Mounteddemonknight\\mounteddemonknight.mdx") {
+		} else if(fn == _T("Creature\\Mounteddemonknight\\mounteddemonknight.mdx")) {
 			TextureGroup grp;
 			grp.tex[0] = "MountedDemonKnightBlack_01";
 			grp.tex[1] = "MountedDemonKnightBlack_02";
@@ -536,7 +553,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			grp.count = 3;
 			skins.insert(grp);
 			return FillSkinSelector(skins);
-		} else if(fn == "Creature\\Orcfemalewarriorlight\\orcfemale.mdx") {
+		} else if(fn == _T("Creature\\Orcfemalewarriorlight\\orcfemale.mdx")) {
 			TextureGroup grp;
 			grp.tex[0] = "OrcFemaleSkin";
 			//grp.tex[1] = "OrcFemaleSkin";
@@ -544,7 +561,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			grp.count = 1;
 			skins.insert(grp);
 			return FillSkinSelector(skins);
-		} else if(fn == "Creature\\Tigon\\tigon.mdx") {
+		} else if(fn == _T("Creature\\Tigon\\tigon.mdx")) {
 			TextureGroup grp;
 			grp.tex[0] = "TIGONSKIN_ORANGE";
 			grp.tex[1] = "TIGONEYEGLOW";
@@ -562,14 +579,14 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			grp.count = 2;
 			skins.insert(grp);
 			return FillSkinSelector(skins);
-		} else if(fn == "Creature\\Humanmalepiratecaptain\\humanmalepiratecaptain_ghost.mdx") {
+		} else if(fn == _T("Creature\\Humanmalepiratecaptain\\humanmalepiratecaptain_ghost.mdx")) {
 			TextureGroup grp;
 			grp.tex[0] = "PirateCaptain02_Ghost";
 			grp.base = 11;
 			grp.count = 1;
 			skins.insert(grp);
 			return FillSkinSelector(skins);
-		} else if(fn == "Creature\\Humanmalepiratecrewman\\humanmalepiratecrewman_ghost.mdx") {
+		} else if(fn == _T("Creature\\Humanmalepiratecrewman\\humanmalepiratecrewman_ghost.mdx")) {
 			TextureGroup grp;
 			grp.tex[0] = "PirateCrewman01_Ghost";
 			grp.base = 11;
@@ -594,19 +611,19 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 bool AnimControl::UpdateItemModel(Model *m)
 {
 	//std::string fn = m->name;
-	wxString fn = m->name;
+	wxString fn(m->name.c_str(), wxConvUTF8);
 
 	// change M2 to mdx
 	if (fn[fn.Length()-1]=='2') {
 		fn[fn.Length()-1] = 'd';
-		fn.Append("x");
+		fn.Append(_T("x"));
 	}
 
 	// Check to see if its a helmet model, if so cut off the race
 	// and gender specific part of the filename off
-	if (fn.Find("\\head\\") > wxNOT_FOUND) {
+	if (fn.Find(_T("\\head\\")) > wxNOT_FOUND) {
 		fn = fn.BeforeLast('_');
-		fn.Append(".mdx");
+		fn.Append(_T(".mdx"));
 	}
 
 	// just get the file name, exclude the path.
@@ -615,7 +632,7 @@ bool AnimControl::UpdateItemModel(Model *m)
 	TextureSet skins;
 
 	for (ItemDisplayDB::Iterator it=itemdisplaydb.begin(); it!=itemdisplaydb.end(); ++it) {
-		if (fn.IsSameAs(it->getString(ItemDisplayDB::Model), false)) {
+		if (fn.IsSameAs(wxString(it->getString(ItemDisplayDB::Model), wxConvUTF8), false)) {
             TextureGroup grp;
 			grp.base = 2;
 			grp.count = 1;
@@ -626,7 +643,7 @@ bool AnimControl::UpdateItemModel(Model *m)
 		}
 		
 		//if (!strcmp(it->getString(ItemDisplayDB::Model2), fn.c_str())) {
-		if (fn.IsSameAs(it->getString(ItemDisplayDB::Model2), false)) {
+		if (fn.IsSameAs(wxString(it->getString(ItemDisplayDB::Model2), wxConvUTF8), false)) {
             TextureGroup grp;
 			grp.base = 2;
 			grp.count = 1;
@@ -733,7 +750,7 @@ void AnimControl::OnAnim(wxCommandEvent &event)
 			wxString val = animCList->GetValue();
 			int first = val.Find('[')+1;
 			int last = val.Find(']');
-			selectedAnim = atoi(val.Mid(first, last-first).c_str());
+			selectedAnim = wxStringToInt(val.Mid(first, last-first));
 			
 			if (bLockAnims) {
 				//selectedAnim2 = -1;
@@ -766,14 +783,14 @@ void AnimControl::OnAnim(wxCommandEvent &event)
 		wxString val = animCList2->GetValue();
 		int first = val.Find('[')+1;
 		int last = val.Find(']');
-		selectedAnim2 = atoi(val.Mid(first, last-first).c_str());
+		selectedAnim2 = wxStringToInt(val.Mid(first, last-first));
 
 		g_selModel->animManager->SetSecondary(selectedAnim2);
 	} else if (event.GetId() == ID_ANIM_MOUTH) {
 		wxString val = animCList3->GetValue();
 		int first = val.Find('[')+1;
 		int last = val.Find(']');
-		selectedAnim3 = atoi(val.Mid(first, last-first).c_str());
+		selectedAnim3 = wxStringToInt(val.Mid(first, last-first));
 
 		//canvas->g_selModel->animManager->SetSecondary(selectedAnim2);
 		g_selModel->animManager->SetMouth(event.GetSelection());
@@ -840,7 +857,7 @@ void AnimControl::SetSkin(int num)
 	for (int i=0; i<grp->count; i++) {
 		if (g_selModel->useReplaceTextures[grp->base+i]) {
 			texturemanager.del(g_selModel->replaceTextures[grp->base+i]);
-			g_selModel->replaceTextures[grp->base+i] = texturemanager.add((std::string)makeSkinTexture(g_selModel->name.c_str(), grp->tex[i].c_str()));
+			g_selModel->replaceTextures[grp->base+i] = texturemanager.add(std::string(makeSkinTexture(g_selModel->name.c_str(), grp->tex[i].c_str()).mb_str()));
 		}
 	}
 
@@ -849,10 +866,10 @@ void AnimControl::SetSkin(int num)
 
 wxString AnimControl::makeSkinTexture(const char *texfn, const char *skin)
 {
-	wxString res = texfn;
+	wxString res(texfn, wxConvUTF8);
 	size_t i = res.find_last_of('\\');
 	res = res.substr(0,i+1);
-	res.append(skin);
+	res.append(wxString(skin, wxConvUTF8));
 	res.append(_T(".blp"));
 	return res;
 }

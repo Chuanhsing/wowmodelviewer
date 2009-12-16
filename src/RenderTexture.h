@@ -2,10 +2,11 @@
 #define RENDERTEXTURE_H
 
 // Video & graphics stuff
-#include ".\glew\include\GL\glew.h"
 #ifdef _WIN32
+	#include ".\glew\include\GL\glew.h"
 	#include ".\glew\include\GL\wglew.h"
 #else
+	#include <GL/glew.h>
 	#include <GL/glxew.h>
 #endif
 #include "OpenGLHeaders.h"
@@ -20,6 +21,7 @@
     #include "wx/wx.h"
 #endif
 
+#ifdef _WIN32
 class RenderTexture {
 protected:
 	HPBUFFERARB m_hPBuffer;
@@ -75,6 +77,7 @@ public:
 	void InitGL();
 
 };
+#endif
 
 #endif //RENDERTEXTURE_H
 

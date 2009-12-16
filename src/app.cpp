@@ -39,12 +39,12 @@ bool WowModelViewApp::OnInit()
 #endif
 
 	wxFileName fname(argv[0]);
-	wxString userPath = fname.GetPath(wxPATH_GET_VOLUME)+"\\userSettings";
+	wxString userPath = fname.GetPath(wxPATH_GET_VOLUME)+wxT("/userSettings");
 	wxFileName::Mkdir(userPath, 0777, wxPATH_MKDIR_FULL);
 
 	// set the log file path.
-	wxString logPath = userPath+"\\log.txt";
-	LogFile = fopen(logPath.c_str(), "w+");
+	wxString logPath = userPath+wxT("/log.txt");
+	LogFile = fopen(logPath.mb_str(), "w+");
 	if (LogFile) {
 		wxLog *logger = new wxLogStderr(LogFile);
 		delete wxLog::SetActiveTarget(logger);
@@ -59,7 +59,7 @@ bool WowModelViewApp::OnInit()
 	wxLogMessage(wxString(_T("Starting:\n") APP_TITLE _T(" ") APP_VERSION _T("\n\n")));
 	
 	// set the config file path.
-	cfgPath = userPath+"\\Config.ini";
+	cfgPath = userPath+wxT("/Config.ini");
 
 	LoadSettings();
 
@@ -135,7 +135,7 @@ bool WowModelViewApp::OnInit()
 	for (int i=0; i<argc; i++) {
 		cmd = argv[i];
 
-		if (cmd == "-m") {
+		if (cmd == _T("-m")) {
 			if (i+1 < argc) {
 				i++;
 				wxString fn(argv[i]);
@@ -147,7 +147,7 @@ bool WowModelViewApp::OnInit()
 				// Load the model
 				frame->LoadModel(fn);
 			}
-		} else if (cmd == "-mo") {
+		} else if (cmd == _T("-mo")) {
 			if (i+1 < argc) {
 				i++;
 				wxString fn(argv[i]);
@@ -162,13 +162,13 @@ bool WowModelViewApp::OnInit()
 				// Output the screenshot
 				fn = fn.AfterLast('\\');
 				fn = fn.BeforeLast('.');
-				fn.Prepend("ss_");
-				fn.Append(".png");
+				fn.Prepend(_T("ss_"));
+				fn.Append(_T(".png"));
 				frame->canvas->Screenshot(fn);
 			}
 		} else {
 			wxString tmp = cmd.AfterLast('.');
-			if (!tmp.IsNull() && !tmp.IsEmpty() && tmp.IsSameAs("chr", false))
+			if (!tmp.IsNull() && !tmp.IsEmpty() && tmp.IsSameAs(wxT("chr"), false))
 				frame->LoadChar(cmd.fn_str());
 		}
 	}
@@ -249,7 +249,7 @@ void WowModelViewApp::OnUnhandledException()
 void WowModelViewApp::LoadSettings()
 {
 	// Application Config Settings
-	wxFileConfig *pConfig = new wxFileConfig("Global", wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
+	wxFileConfig *pConfig = new wxFileConfig(_T("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
 	
 	// Graphic / Video display settings
 	pConfig->SetPath(_T("/Graphics"));
@@ -258,7 +258,9 @@ void WowModelViewApp::LoadSettings()
 	pConfig->Read(_T("AlphaBits"), &video.curCap.alpha, 0);
 	pConfig->Read(_T("ColourBits"), &video.curCap.colour, 24);
 	pConfig->Read(_T("DoubleBuffer"), (bool*)&video.curCap.doubleBuffer, 1);	// True
+#ifdef _WIN32
 	pConfig->Read(_T("HWAcceleration"), &video.curCap.hwAcc, WGL_FULL_ACCELERATION_ARB);
+#endif
 	pConfig->Read(_T("SampleBuffer"), (bool*)&video.curCap.sampleBuffer, 0);	// False
 	pConfig->Read(_T("StencilBuffer"), &video.curCap.stencil, 0);
 	pConfig->Read(_T("ZBuffer"), &video.curCap.zBuffer, 16);
@@ -269,7 +271,7 @@ void WowModelViewApp::LoadSettings()
 
 	// Application settings
 	pConfig->SetPath(_T("/Settings"));
-	pConfig->Read(_T("Path"), &gamePath, "");
+	pConfig->Read(_T("Path"), &gamePath, _T(""));
 
 	pConfig->Read(_T("UseLocalFiles"), &useLocalFiles, false);
 	pConfig->Read(_T("SSCounter"), &ssCounter, 100);
@@ -287,15 +289,17 @@ void WowModelViewApp::LoadSettings()
 		mpqArchives.Add(strToken.GetNextToken());
 	}
 
-	if (gamePath.IsEmpty())
+	if (gamePath.IsEmpty() || !wxDirExists(gamePath)) {
 		getGamePath();
+		mpqArchives.Clear();
+	}
 
 #ifdef _WIN32
 	if (gamePath.Last() != '\\')
-		gamePath.Append("\\", 1);
+		gamePath.Append(_T("\\"), 1);
 #else // Linux
 	if (gamePath.Last() != '/')
-		gamePath.Append("/", 1);
+		gamePath.Append(_T("/"), 1);
 #endif
 	
 	if (mpqArchives.GetCount()==0) {
@@ -326,22 +330,22 @@ void WowModelViewApp::LoadSettings()
 			wxString localePath = gamePath;
 			
 			localePath.Append(locales[i]);
-			localePath.Append("\\");
+			localePath.Append(_T("\\"));
 			if (wxDir::Exists(localePath)) {
 				if (1) {
 					wxString mpqFile = localePath;
-					mpqFile.Append("Patch-");
+					mpqFile.Append(_T("Patch-"));
 					mpqFile.Append(locales[i]);
-					mpqFile.Append("-2.MPQ");
+					mpqFile.Append(_T("-2.MPQ"));
 					if (wxFile::Exists(mpqFile.c_str()))
 						mpqArchives.Add(mpqFile);
 				}
 				for (size_t j=0; j<WXSIZEOF(localeArchives); j++) {
 					wxString mpqFile = localePath;
 					mpqFile.Append(localeArchives[j]);
-					mpqFile.Append("-");
+					mpqFile.Append(_T("-"));
 					mpqFile.Append(locales[i]);
-					mpqFile.Append(".MPQ");
+					mpqFile.Append(_T(".MPQ"));
 					if (wxFile::Exists(mpqFile.c_str()))
 						mpqArchives.Add(mpqFile);
 				}
@@ -352,22 +356,22 @@ void WowModelViewApp::LoadSettings()
 			wxString localePath = gamePath;
 			
 			localePath.Append(locales2[i]);
-			localePath.Append("\\");
+			localePath.Append(_T("\\"));
 			if (wxDir::Exists(localePath)) {
 				if (1) {
 					wxString mpqFile = localePath;
-					mpqFile.Append("Patch-");
+					mpqFile.Append(_T("Patch-"));
 					mpqFile.Append(locales2[i]);
-					mpqFile.Append("-2.MPQ");
+					mpqFile.Append(_T("-2.MPQ"));
 					if (wxFile::Exists(mpqFile.c_str()))
 						mpqArchives.Add(mpqFile);
 				}
 				for (size_t j=0; j<WXSIZEOF(localeArchives); j++) {
 					wxString mpqFile = localePath;
 					mpqFile.Append(localeArchives[j]);
-					mpqFile.Append("-");
+					mpqFile.Append(_T("-"));
 					mpqFile.Append(locales2[i]);
-					mpqFile.Append(".MPQ");
+					mpqFile.Append(_T(".MPQ"));
 					if (wxFile::Exists(mpqFile.c_str()))
 						mpqArchives.Add(mpqFile);
 				}
@@ -394,7 +398,7 @@ void WowModelViewApp::LoadSettings()
 void WowModelViewApp::SaveSettings()
 {
 	// Application Config Settings
-	wxFileConfig *pConfig = new wxFileConfig("Global", wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
+	wxFileConfig *pConfig = new wxFileConfig(_T("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
 	
 	pConfig->SetPath(_T("/Locale"));
 	pConfig->Write(_T("LanguageID"), langID);

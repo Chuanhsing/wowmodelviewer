@@ -63,10 +63,14 @@ public:
 
 	bool GetCompatibleWinMode(VideoCaps caps);
 	bool GetAvailableMode();
+#ifdef _WIN32
 	HWND GetHandle() {return hWnd;}
+#endif
 
 	void ResizeGLScene(int width, int height);
+#ifdef _WIN32
 	void SetHandle(HWND hwnd, int bpp);
+#endif
 	void SetMode();
 	void SetCurrent();
 	void SwapBuffers();
@@ -77,9 +81,11 @@ public:
 	bool refresh;
 
 	// Resources
+#ifdef _WIN32
 	HDC hDC;
 	HWND hWnd;
 	HGLRC hRC;
+#endif
 
 	// OpenGL Settings
 	int xRes, yRes;

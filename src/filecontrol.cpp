@@ -55,9 +55,9 @@ bool filterSearch(std::string s)
 	if (len < 4) 
 		return false;
 
-	wxString temp = s;
+	wxString temp(s.c_str(), wxConvUTF8);
 	temp = temp.MakeLower();
-	if (!temp.Mid(temp.Length()-2).IsSameAs("m2") && !temp.Mid(temp.Length()-3).IsSameAs("wmo"))
+	if (!temp.Mid(temp.Length()-2).IsSameAs(wxT("m2")) && !temp.Mid(temp.Length()-3).IsSameAs(wxT("wmo")))
 		return false;
 	if (temp.Find(content) != wxNOT_FOUND)
 		return true;
@@ -75,7 +75,7 @@ void FileControl::Init(ModelViewer* mv)
 	content = txtContent->GetValue();
 	content = content.MakeLower();
 	content = content.Trim();
-	if (content == "")
+	if (content == _T(""))
 		getFileLists(filelist, filterModels);
 	else
 		getFileLists(filelist, filterSearch);
@@ -100,8 +100,8 @@ void FileControl::Init(ModelViewer* mv)
 		size_t i;
 
 		// Alfred 2009.7.28 skip cameras
-		wxString tmp = str;
-		if (tmp.Mid(0, 7).IsSameAs("cameras", false))
+		wxString tmp(str.c_str(), wxConvUTF8);
+		if (tmp.Mid(0, 7).IsSameAs(_T("cameras"), false))
 			continue;
 
 		// find the matching place in the stack
@@ -174,7 +174,7 @@ void FileControl::Init(ModelViewer* mv)
 
 	}
 
-	if (content != "")
+	if (content != _T(""))
 		fileTree->ExpandAll();
 
 	// bg recolor
@@ -211,6 +211,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 	if (modelviewer->isWMO) {
 		//canvas->clearAttachments();
 		wxDELETE(modelviewer->canvas->wmo);
+		modelviewer->canvas->wmo = NULL;
 	} else {
 		modelviewer->canvas->clearAttachments();
 
@@ -219,9 +220,15 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		//canvas->model = NULL;
 		
 		if (!modelviewer->isChar) { 
-			wxDELETE(modelviewer->canvas->model);
+			//wxDELETE(modelviewer->canvas->model); // may memory leak
+			modelviewer->canvas->model = NULL;
 		} else{
 			modelviewer->charControl->charAtt = NULL;
+
+			wxString rootfn(data->fn.c_str(), wxConvUTF8);
+			if (rootfn.Last() != '2' && modelviewer->canvas->model) {
+				modelviewer->canvas->model = NULL;
+			}
 		}
 	}			
 
@@ -246,9 +253,10 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 	// Check to make sure the selected item is a model (an *.m2 file).
 	modelviewer->isModel = (rootfn.Last() == '2');
 	modelviewer->isChar = false;
-	modelviewer->isWMO = false;
 
 	if (modelviewer->isModel) {		
+		modelviewer->isWMO = false;
+
 		// not functional yet.
 		//if (wxGetKeyState(WXK_SHIFT)) 
 		//	canvas->AddModel(rootfn);
@@ -256,8 +264,6 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 			modelviewer->LoadModel(rootfn);	// Load the model.
 	
 	} else { // else, it isn't a m2 file, so load the file as a WMO.
-		modelviewer->isModel = false;
-		modelviewer->isChar = false;
 		modelviewer->isWMO = true;
 
 		// is WMO?
@@ -273,7 +279,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 			rootfn.append(_T(".wmo"));
 		}
 
-		modelviewer->canvas->LoadWMO(rootfn.c_str());
+		modelviewer->canvas->LoadWMO(std::string(rootfn.mb_str()));
 		
 		int id = -1;
 		if (!isroot) {
@@ -316,7 +322,7 @@ void FileControl::OnButton(wxCommandEvent &event)
 	if (id == ID_FILELIST_CONTENT)
 		Init();
 	else if (id == ID_FILELIST_SEARCH) {
-		txtContent->SetValue("");
+		txtContent->SetValue(_T(""));
 		Init();
 	}
 }

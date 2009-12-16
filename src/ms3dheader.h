@@ -51,7 +51,7 @@ typedef unsigned short word;
 
 
 // force one byte alignment
-#include <pshpack1.h>
+#pragma pack(push, 1)
 
 //
 // First comes the header (sizeof(ms3d_header_t) == 14)
@@ -267,7 +267,7 @@ typedef struct
 	int transparencyMode; // 0 = simple, 1 = depth buffered with alpha ref, 2 = depth sorted triangles, since subVersion == 1
 	float alphaRef; // alpha reference value for transparencyMode = 1, since subVersion == 1
 } ms3d_model_ex_t;
-#include <poppack.h>
+#pragma pack(pop)
 
 
 //

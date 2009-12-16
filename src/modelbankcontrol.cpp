@@ -38,9 +38,9 @@ ModelBankControl::ModelBankControl(wxWindow* parent, wxWindowID id)
 	lblName = new wxStaticText(this, wxID_ANY, _("Name:"), wxPoint(5,15), wxDefaultSize, 0);
 	txtName = new wxTextCtrl(this, ID_MODELBANK_NAME, wxEmptyString, wxPoint(40,10), wxDefaultSize, 0, wxDefaultValidator);
 
-	btnAdd = new wxButton(this, ID_MODELBANK_ADD, _T("Add"), wxPoint(200,10), wxDefaultSize);
-	btnRemove = new wxButton(this, ID_MODELBANK_REMOVE, _T("Remove"), wxPoint(200,40), wxDefaultSize);
-	btnDisplay = new wxButton(this, ID_MODELBANK_DISPLAY, _T("Display"), wxPoint(200,70), wxDefaultSize);
+	btnAdd = new wxButton(this, ID_MODELBANK_ADD, _("Add"), wxPoint(200,10), wxDefaultSize);
+	btnRemove = new wxButton(this, ID_MODELBANK_REMOVE, _("Remove"), wxPoint(200,40), wxDefaultSize);
+	btnDisplay = new wxButton(this, ID_MODELBANK_DISPLAY, _("Display"), wxPoint(200,70), wxDefaultSize);
 	
 	lstBank = new wxListBox(this, wxID_ANY, wxPoint(5,40), wxSize(190,250), 0, NULL, wxLB_SINGLE|wxLB_ALWAYS_SB);
 
@@ -111,7 +111,7 @@ void ModelBankControl::LoadModel()
 		grp.count = (int)cd.textures.Count();
 		grp.base = 11;
 		for (int i=0; i<grp.count; i++) 
-			grp.tex[i] = cd.textures[i].c_str();
+			grp.tex[i] = std::string(cd.textures[i].mb_str());
 
 		int val = g_animControl->AddSkin(grp);
 		g_animControl->SetSkin(val);
@@ -128,7 +128,7 @@ void ModelBankControl::AddModel()
 
 	ModelBank cd;
 
-	cd.fileName = g_canvas->model->name;
+	cd.fileName = wxString(g_canvas->model->name.c_str(), wxConvUTF8);
 	cd.name = txtName->GetValue();
 
 	cd.pos = g_canvas->model->pos;
@@ -142,7 +142,7 @@ void ModelBankControl::AddModel()
 
 		for (int i=0; i<grp->count; i++) {
 			if (g_canvas->model->useReplaceTextures[grp->base+i]) {
-				cd.textures.Add(grp->tex[i].c_str());
+				cd.textures.Add(wxString(grp->tex[i].c_str(), wxConvUTF8));
 			}
 		}
 
@@ -214,7 +214,7 @@ void ModelBankControl::SaveList()
 	if (bankList.size() == 0)
 		return;
 
-	wxFFileOutputStream file(_T("modelbank.dat"), "w+b");
+	wxFFileOutputStream file(_T("modelbank.dat"), _T("w+b"));
 
 	if (!file.IsOk()) {
 		wxLogMessage(_T("Error: Was unable to save the ModelBank data to the HDD."));
@@ -300,10 +300,10 @@ void ModelBankControl::SaveList()
 
 void ModelBankControl::LoadList()
 {
-	if (!wxFile::Exists("modelbank.dat"))
+	if (!wxFile::Exists(_T("modelbank.dat")))
 		return;
 
-	wxFFileInputStream file(_T("modelbank.dat"), "rb");
+	wxFFileInputStream file(_T("modelbank.dat"), _T("rb"));
 
 	if (!file.IsOk())
 		return;
@@ -321,13 +321,13 @@ void ModelBankControl::LoadList()
 
 	file.Read(&tag, 4);
 
-	wxString marker = wxString(tag).SubString(0,1);
+	wxString marker = wxString(tag, wxConvUTF8).SubString(0,1);
 
-	if (marker != "MB")
+	if (marker != _T("MB"))
 		return;
 
 	long fileID = 0;
-	wxString(tag).SubString(2,4).ToLong(&fileID);
+	wxString(tag, wxConvUTF8).SubString(2,4).ToLong(&fileID);
 
 	while (!file.Eof()) {
 		ModelBank cd;
@@ -335,12 +335,12 @@ void ModelBankControl::LoadList()
 		// name
 		file.Read(&val, sizeof(size_t));
 		file.Read(name, val);
-		cd.name = wxString(name).SubString(0, val-1);
+		cd.name = wxString(name, wxConvUTF8).SubString(0, val-1);
 
 		// filename
 		file.Read(&val, sizeof(size_t));
 		file.Read(filename, val);
-		cd.fileName = wxString(filename).SubString(0, val-1);
+		cd.fileName = wxString(filename, wxConvUTF8).SubString(0, val-1);
 		
 		// Position and rotation only started being saved in "MB02" model banks.
 		// This is for compatability.
@@ -365,7 +365,7 @@ void ModelBankControl::LoadList()
 				// filename
 				file.Read(&val, sizeof(size_t));
 				file.Read(textures, val);
-				cd.textures.Add(wxString(textures).SubString(0, val-1));
+				cd.textures.Add(wxString(textures, wxConvUTF8).SubString(0, val-1));
 			}
 
 		} else if (cd.modelType == MT_CHAR) {

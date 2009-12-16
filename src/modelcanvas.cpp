@@ -67,7 +67,9 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 	wmo = 0;			// world map object model
 	animControl = 0;
 	gifExporter = 0;
+#ifdef _WIN32
 	rt = 0;				// RenderToTexture class
+#endif
 	curAtt = 0;			// Current Attachment
 	root = 0;
 	sky = 0;
@@ -112,7 +114,9 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 
 		// Initiate our default OpenGL settings
 		wxLogMessage(_T("Initiating OpenGL..."));
+#ifdef _WIN32
 		video.SetHandle((HWND)this->GetHandle(), bpp);
+#endif
 	}
 	
 	root = new Attachment(NULL, NULL, -1, -1);
@@ -122,7 +126,9 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 ModelCanvas::~ModelCanvas()
 {
 	// Release our avi engine
+#ifdef _WIN32
 	cAvi.ReleaseEngine();
+#endif
 
 	// Clear remaining textures.
 	texturemanager.clear();
@@ -138,10 +144,12 @@ ModelCanvas::~ModelCanvas()
 	//wxDELETE(wmo);
 	//wxDELETE(model);
 
+#ifdef _WIN32
 	if (rt) {
 		rt->Shutdown();
 		wxDELETE(rt);
 	}
+#endif
 }
 
 void ModelCanvas::OnEraseBackground(wxEraseEvent& event)
@@ -275,6 +283,22 @@ void ModelCanvas::UninitShaders()
 	*/
 }
 
+#if 0
+Attachment* ModelCanvas::AddModel(const char *fn)
+{
+	Attachment *att = root->addChild(fn, (int)root->children.size(), -1);
+	
+	//curAtt->pos = vPos;
+	//curAtt->rot = vRot;
+
+	curAtt = att;
+
+	ResetView();
+
+	return att;
+}
+
+
 Attachment* ModelCanvas::LoadModel(const char *fn)
 {
 	clearAttachments();
@@ -296,20 +320,8 @@ Attachment* ModelCanvas::LoadModel(const char *fn)
 
 	return root;
 }
+#endif
 
-Attachment* ModelCanvas::AddModel(const char *fn)
-{
-	Attachment *att = root->addChild(fn, (int)root->children.size(), -1);
-	
-	//curAtt->pos = vPos;
-	//curAtt->rot = vRot;
-
-	curAtt = att;
-
-	ResetView();
-
-	return att;
-}
 
 Attachment* ModelCanvas::LoadCharModel(const char *fn)
 {
@@ -554,13 +566,13 @@ inline void ModelCanvas::CreateTexture(wxString filename, GLuint texture)
 	tmp.LowerCase();
 
 	if (tmp == "bmp")
-		image = new CxImage(filename.c_str(), CXIMAGE_FORMAT_BMP);
+		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_BMP);
 	else if (tmp == "tga")
-		image = new CxImage(filename.c_str(), CXIMAGE_FORMAT_TGA);
+		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_TGA);
 	else if (tmp == "jpg")
-		image = new CxImage(filename.c_str(), CXIMAGE_FORMAT_JPG);
+		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_JPG);
 	else if (tmp == "png")
-		image = new CxImage(filename.c_str(), CXIMAGE_FORMAT_PNG);
+		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_PNG);
 	else 
 		return;
 
@@ -889,9 +901,11 @@ inline void ModelCanvas::RenderBackground()
 	
 	glBindTexture(GL_TEXTURE_2D, uiBGTexture);
 
+#ifdef _WIN32
 	// If its an AVI background, increment the frame
 	if (drawAVIBackground)
 		cAvi.GetFrame();
+#endif
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBegin(GL_QUADS);
@@ -1232,6 +1246,7 @@ inline void ModelCanvas::RenderToTexture()
 	*/
 }
 
+#ifdef _WIN32
 inline void ModelCanvas::RenderWMO()
 {
 	if (!init)
@@ -1336,6 +1351,7 @@ inline void ModelCanvas::RenderWMOToBuffer()
 	root->draw(this);
 	//root->drawParticles(true);
 }
+#endif
 
 void ModelCanvas::RenderToBuffer()
 {
@@ -1382,13 +1398,13 @@ void ModelCanvas::RenderToBuffer()
 	glDisable(GL_ALPHA_TEST);
 	// --==--
 	
-
+#ifdef _WIN32
 	if (rt) {
 		glPushAttrib(GL_VIEWPORT_BIT);
 		glViewport(0, 0, rt->nWidth, rt->nHeight);
 		video.ResizeGLScene(rt->nWidth, rt->nHeight);
 	}
-	
+#endif	
 
 	// Sets the "clear" colour.  Without this you get the "ghosting" effecting 
 	// as the buffer doesn't get set/cleared.
@@ -1496,8 +1512,10 @@ void ModelCanvas::RenderToBuffer()
 	if (model)
 		RenderObjects();
 
+#ifdef _WIN32
 	if (rt)
 		glPopAttrib();
+#endif
 }
 
 inline void Attachment::draw(ModelCanvas *c)
@@ -1768,7 +1786,7 @@ void ModelCanvas::LoadBackground(wxString filename)
 	//GLuint texFormat = GL_TEXTURE_RECTANGLE_ARB;
 	GLuint texFormat = GL_TEXTURE_2D;
 
-	if (tmp == "avi") {
+	if (tmp == _T("avi")) {
 		
 		cAvi.SetFileName(filename.c_str());
 		cAvi.InitEngineForRead();
@@ -1788,13 +1806,13 @@ void ModelCanvas::LoadBackground(wxString filename)
 	} else {
 
 		if (tmp == "bmp")
-			image = new CxImage(filename.c_str(), CXIMAGE_FORMAT_BMP);
+			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_BMP);
 		else if (tmp == "tga")
-			image = new CxImage(filename.c_str(), CXIMAGE_FORMAT_TGA);
+			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_TGA);
 		else if (tmp == "jpg")
-			image = new CxImage(filename.c_str(), CXIMAGE_FORMAT_JPG);
+			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_JPG);
 		else if (tmp == "png")
-			image = new CxImage(filename.c_str(), CXIMAGE_FORMAT_PNG);
+			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_PNG);
 		else 
 			return;
 
@@ -1951,7 +1969,9 @@ void ModelCanvas::CheckMovement()
 void ModelCanvas::Screenshot(const wxString fn, int x, int y)
 {
 	CxImage *newImage = NULL;
+#ifdef _WIN32
 	wxDELETE(rt);
+#endif
 
 	if (!init)
 		InitGL();
@@ -1963,6 +1983,7 @@ void ModelCanvas::Screenshot(const wxString fn, int x, int y)
 	unsigned char *pixels = NULL;
 	int screenSize[4];
 
+#ifdef _WIN32
 	// Setup out buffers for offscreen rendering
 	if (video.supportPBO || video.supportFBO) {
 		rt = new RenderTexture();
@@ -1992,7 +2013,8 @@ void ModelCanvas::Screenshot(const wxString fn, int x, int y)
 		else
 			RenderToBuffer();
 	}
-	
+#endif
+
 	// (width*height*bytesPerPixel) - 32bit, 4 bytes
 	pixels = new unsigned char[screenSize[2]*screenSize[3]*4];
 
@@ -2001,12 +2023,14 @@ void ModelCanvas::Screenshot(const wxString fn, int x, int y)
 	// read in the texture data
 	//glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, pixels);
 	
+#ifdef _WIN32
 	if (rt) {
 		rt->ReleaseTexture();
 		rt->EndRender();
 		rt->Shutdown();
 		wxDELETE(rt);
 	}
+#endif
 
 	newImage = new CxImage(0);
 	newImage->AlphaCreate();	// Create the alpha layer

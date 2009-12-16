@@ -503,7 +503,9 @@ public:
 
 #if CXIMAGE_SUPPORT_BASICTRANSFORMATIONS
 /** \addtogroup BasicTransformations */ //@{
+#ifdef _WIN32
 	bool GrayScale();
+#endif
 	bool Flip(bool bFlipSelection = false, bool bFlipAlpha = true);
 	bool Mirror(bool bMirrorSelection = false, bool bMirrorAlpha = true);
 	bool Negative();
@@ -626,7 +628,7 @@ public:
 
 #if CXIMAGE_SUPPORT_SELECTION
 /** \addtogroup Selection */ //@{
-	bool SelectionClear(BYTE level = 0);
+//	bool SelectionClear(BYTE level = 0);
 	bool SelectionCreate();
 	bool SelectionDelete();
 	bool SelectionInvert();
@@ -703,8 +705,10 @@ public:
 	CxImage* GetLayer(long position);
 	CxImage* GetParent() const;
 	long GetNumLayers() const;
+#if CXIMAGE_SUPPORT_WINDOWS
 	long LayerDrawAll(HDC hdc, long x=0, long y=0, long cx = -1, long cy = -1, RECT* pClipRect = 0, bool bSmooth = false);
 	long LayerDrawAll(HDC hdc, const RECT& rect, RECT* pClipRect=NULL, bool bSmooth = false);
+#endif
 //@}
 #endif //CXIMAGE_SUPPORT_LAYERS
 

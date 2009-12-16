@@ -53,14 +53,14 @@ LightControl::LightControl(wxWindow* parent, wxWindowID id)
 	lights = new Light[MAX_LIGHTS];
 	
 	if(Create(parent, id, wxDefaultPosition, wxSize(160,430), 0, _T("LightControlFrame")) == false) {
-		wxLogMessage("GUI Error: Failed to create a window frame for the LightControl!");
+		wxLogMessage(_T("GUI Error: Failed to create a window frame for the LightControl!"));
 		return;
 	}
 
 	wxArrayString choices;
 	for (int i=1; i<=MAX_LIGHTS; i++) {
-		wxString s = "Light ";
-		s += wxString::Format("%i", i);
+		wxString s = _T("Light ");
+		s += wxString::Format(_T("%i"), i);
 
 		choices.Add(s);
 	}
@@ -85,13 +85,13 @@ LightControl::LightControl(wxWindow* parent, wxWindowID id)
 	//colour = new wxButton(this, ID_LIGHTCOLOUR, "", wxPoint(60, 60), wxSize(60,20));
 
 	lblAmb = new wxStaticText(this, wxID_ANY, _("Ambience"), wxPoint(5,82), wxDefaultSize);
-	ambience = new wxButton(this, ID_LIGHTAMBIENCE, "", wxPoint(60, 82), wxSize(60,20));
+	ambience = new wxButton(this, ID_LIGHTAMBIENCE, _T(""), wxPoint(60, 82), wxSize(60,20));
 
 	lblDiff = new wxStaticText(this, wxID_ANY, _("Diffuse"), wxPoint(5,104), wxDefaultSize);
-	diffuse = new wxButton(this, ID_LIGHTDIFFUSE, "", wxPoint(60, 104), wxSize(60,20));
+	diffuse = new wxButton(this, ID_LIGHTDIFFUSE, _T(""), wxPoint(60, 104), wxSize(60,20));
 
 	lblSpec = new wxStaticText(this, wxID_ANY, _("Specular"), wxPoint(5,126), wxDefaultSize);
-	specular = new wxButton(this, ID_LIGHTSPECULAR, "", wxPoint(60, 126), wxSize(60,20));
+	specular = new wxButton(this, ID_LIGHTSPECULAR, _T(""), wxPoint(60, 126), wxSize(60,20));
 
 	//position
 	lblPos = new wxStaticText(this, wxID_ANY, _("Position XYZ"), wxPoint(5,155), wxDefaultSize);
@@ -162,7 +162,7 @@ void LightControl::Init()
 {
 	//glGetLightiv(GL_LIGHT0, GL_MAX_LIGHTS, maxlights);
 	//wxLogMessage("Max Lights Supported: %i", maxlights);
-	wxLogMessage("Max Lights used: %i", MAX_LIGHTS);
+	wxLogMessage(_T("Max Lights used: %i"), MAX_LIGHTS);
 
 	if (!lights)
 		return;
@@ -296,17 +296,17 @@ void LightControl::OnText(wxCommandEvent &event)
 	Vec4D t = lights[activeLight].target;
 
 	if (id==ID_LIGHTPOSX)
-		from_string<float>(p.x, string(txtPosX->GetValue()), dec);
+		from_string<float>(p.x, std::string(txtPosX->GetValue().mb_str()), dec);
 	else if (id==ID_LIGHTPOSY)
-		from_string<float>(p.y, string(txtPosY->GetValue()), dec);
+		from_string<float>(p.y, std::string(txtPosY->GetValue().mb_str()), dec);
 	else if (id==ID_LIGHTPOSZ)
-		from_string<float>(p.z, string(txtPosZ->GetValue()), dec);
+		from_string<float>(p.z, std::string(txtPosZ->GetValue().mb_str()), dec);
 	else if (id==ID_LIGHTTARX)
-		from_string<float>(t.x, string(txtTarX->GetValue()), dec);
+		from_string<float>(t.x, std::string(txtTarX->GetValue().mb_str()), dec);
 	else if (id==ID_LIGHTTARY)
-		from_string<float>(t.y, string(txtTarY->GetValue()), dec);
+		from_string<float>(t.y, std::string(txtTarY->GetValue().mb_str()), dec);
 	else if (id==ID_LIGHTTARZ)
-		from_string<float>(t.z, string(txtTarZ->GetValue()), dec);
+		from_string<float>(t.z, std::string(txtTarZ->GetValue().mb_str()), dec);
 
 	SetPos(p);
 	SetTarget(t);
@@ -485,25 +485,25 @@ void LightControl::Update()
 
 	pos << lights[activeLight].pos.x;
 	txtPosX->SetValue(pos);
-	pos = "";
+	pos = _T("");
 
 	pos << lights[activeLight].pos.y;
 	txtPosY->SetValue(pos);
-	pos = "";
+	pos = _T("");
 
 	pos << lights[activeLight].pos.z;
 	txtPosZ->SetValue(pos);
-	pos = "";
+	pos = _T("");
 	// -- -- --
 
 	// target
 	pos << lights[activeLight].target.x;
 	txtTarX->SetValue(pos);
-	pos = "";
+	pos = _T("");
 
 	pos << lights[activeLight].target.y;
 	txtTarY->SetValue(pos);
-	pos = "";
+	pos = _T("");
 
 	pos << lights[activeLight].target.z;
 	txtTarZ->SetValue(pos);

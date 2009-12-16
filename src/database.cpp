@@ -131,7 +131,12 @@ CharSectionsDB::Record CharSectionsDB::getByParams(unsigned int race, unsigned i
 CharRacesDB::Record CharRacesDB::getByName(wxString name)
 {
 	for(Iterator i=begin(); i!=end(); ++i) {
-		if (name.IsSameAs(i->getString(Name),false) == true) 
+		wxString r;
+		if (bV310)
+			r = i->getString(NameV310);
+		else
+			r = i->getString(Name);
+		if (name.IsSameAs(wxString(i->getString(Name), wxConvUTF8),false) == true)
 			return (*i);
 	}
 	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
@@ -210,8 +215,8 @@ CreatureModelDB::Record CreatureModelDB::getByFilename(std::string fn)
 	/// Brute force search for now
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
-		wxString str(i->getString(Filename));
-		if(str.IsSameAs(fn.c_str(), false) == true)
+		wxString str(i->getString(Filename), wxConvUTF8);
+		if(str.IsSameAs(wxString(fn.c_str(), wxConvUTF8), false) == true)
 			return (*i);
 	}
 	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
@@ -300,7 +305,7 @@ NPCDB::Record NPCDB::getByNPCID(unsigned int id)
 // --------------------------------
 // Item Database Stuff
 // --------------------------------
-char* ItemTypeNames[NUM_ITEM_TYPES] = {
+const char* ItemTypeNames[NUM_ITEM_TYPES] = {
 	"All",
 	"Helmets",
 	"Neck",
@@ -418,6 +423,25 @@ StartOutfitDB::Record StartOutfitDB::getById(unsigned int id)
 
 ItemDB::Record ItemDB::getById(unsigned int id)
 {
+	if (!inited) {
+		int j=0;
+		for(Iterator i=begin(); i!=end(); ++i)
+		{
+			itemLookup[i->getUInt(ID)] = j;
+			itemDisplayLookup[i->getUInt(ItemDisplayInfo)] = j;
+			j++;
+		}
+		inited = true;
+	}
+
+    if (itemLookup.find(id)!=itemLookup.end()) {
+		int i = itemLookup[id];
+		ItemDB::Record rec = itemdb.getRecord(i);
+		return rec;
+    }
+	throw NotFound();
+
+/*
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
 		if (i->getUInt(ID)==id)
@@ -425,16 +449,37 @@ ItemDB::Record ItemDB::getById(unsigned int id)
 	}
 	//wxLogMessage(_T("NotFound: %s:%s#%d id:%d"), __FILE__, __FUNCTION__, __LINE__, id);
 	throw NotFound();
+*/
 }
 
 ItemDB::Record ItemDB::getByDisplayId(unsigned int id)
 {
+	if (!inited) {
+		int j=0;
+		for(Iterator i=begin(); i!=end(); ++i)
+		{
+			itemLookup[i->getUInt(ID)] = j;
+			itemDisplayLookup[i->getUInt(ItemDisplayInfo)] = j;
+			j++;
+		}
+		inited = true;
+	}
+
+    if (itemDisplayLookup.find(id)!=itemDisplayLookup.end()) {
+		int i = itemDisplayLookup[id];
+		ItemDB::Record rec = itemdb.getRecord(i);
+		return rec;
+    }
+	throw NotFound();
+
+/*
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
 		if (i->getUInt(ItemDisplayInfo)==id)
 			return (*i);
 	}
 	//wxLogMessage(_T("NotFound: %s:%s#%d id:%d"), __FILE__, __FUNCTION__, __LINE__, id);
+*/
 	throw NotFound();
 }
 
@@ -470,7 +515,7 @@ ItemRecord::ItemRecord(const char* line)
 		for (size_t i=strlen(line)-2; i>1; i--) {
 			if (line[i]==',') {
 				//name = (line + i + 1);
-				name.Printf("%s [%d] [%d]", (line+i+1), id, model);
+				name.Printf(_T("%s [%d] [%d]"), (line+i+1), id, model);
 				break;
 			}
 		}
@@ -481,14 +526,14 @@ ItemRecord::ItemRecord(const char* line)
 // Alfred. prevent null items bug.
 ItemDatabase::ItemDatabase()
 {
-	ItemRecord all("---- None ----", IT_ALL);
+	ItemRecord all(_("---- None ----"), IT_ALL);
 	items.push_back(all);
 }
 
 /*
 ItemDatabase::ItemDatabase(const char* filename)
 {
-	ItemRecord all("---- None ----", IT_ALL);
+	ItemRecord all(_("---- None ----"), IT_ALL);
 	items.push_back(all);
 	std::ifstream fin(filename);
 	char line[512];
@@ -576,12 +621,15 @@ const ItemRecord& ItemDatabase::get(int id)
 		return items[0];
 }
 
-int ItemDatabase::avaiable(int id)
+bool ItemDatabase::avaiable(int id)
 {
+	return (itemLookup.find(id)!=itemLookup.end());
+/*
 	for (std::vector<ItemRecord>::iterator it = items.begin(); it != items.end(); ++it)
-		if(it->id == id) return it->id;
-    
+		if(it->id == id) return id;
+
 	return 0;
+*/
 }
 
 int ItemDatabase::getItemNum(int displayid)
@@ -594,7 +642,7 @@ int ItemDatabase::getItemNum(int displayid)
 
 wxString ItemDatabase::addDiscoveryId(int id, wxString name)
 {
-	wxString ret = "";
+	wxString ret = _T("");
 
 	try {
 		ItemDB::Record r = itemdb.getById(id);
@@ -612,11 +660,12 @@ wxString ItemDatabase::addDiscoveryId(int id, wxString name)
 			default: rec.sheath = 0;
 		}
 		rec.discovery = true;
-		rec.name.Printf("%s [%d] [%d]", name.c_str(), rec.id, rec.model);
+		rec.name.Printf(_T("%s [%d] [%d]"), name.c_str(), rec.id, rec.model);
 		if (rec.type > 0) {
 			items.push_back(rec);
+			itemLookup[rec.id] = items.size()-1;
 			//wxLogMessage(_T("Info: Not exist ItemID: %d, %s..."), id, rec.name.c_str());
-			ret.Printf("%d,%d,%d,%d,%d,%d,%d,%s", rec.id, rec.model, rec.itemclass, rec.subclass,
+			ret.Printf(_T("%d,%d,%d,%d,%d,%d,%d,%s"), rec.id, rec.model, rec.itemclass, rec.subclass,
 				rec.type, rec.sheath, rec.quality, rec.name.c_str());
 		}
 	} catch (ItemDB::NotFound) {}
@@ -625,7 +674,7 @@ wxString ItemDatabase::addDiscoveryId(int id, wxString name)
 
 wxString ItemDatabase::addDiscoveryDisplayId(int id, wxString name, int type)
 {
-	wxString ret = "";
+	wxString ret = _T("");
 
 	ItemRecord rec;
 	rec.id = id+ItemDB::MaxItem;
@@ -635,11 +684,12 @@ wxString ItemDatabase::addDiscoveryDisplayId(int id, wxString name, int type)
 	rec.type = type;
 	rec.sheath = 0;
 	rec.discovery = true;
-	rec.name.Printf("%s [%d]", name.c_str(), id);
+	rec.name.Printf(_T("%s [%d]"), name.c_str(), id);
 	if (rec.type > 0) {
 		items.push_back(rec);
+		itemLookup[rec.id] = items.size()-1;
 		//wxLogMessage(_T("Info: Not exist ItemID: %d, %s..."), id, rec.name.c_str());
-		ret.Printf("%d,%d,%d,%d,%d,%d,%d,%s", rec.id, rec.model, rec.itemclass, rec.subclass,
+		ret.Printf(_T("%d,%d,%d,%d,%d,%d,%d,%s"), rec.id, rec.model, rec.itemclass, rec.subclass,
 			rec.type, rec.sheath, rec.quality, rec.name.c_str());
 	}
 	return ret;
@@ -660,27 +710,30 @@ ItemSubClassDB::Record ItemSubClassDB::getById(int id, int subid)
 // ============================================================
 // =============================================================
 
-int NPCDatabase::avaiable(int id)
+bool NPCDatabase::avaiable(int id)
 {
+	return (npcLookup.find(id)!=npcLookup.end());
+/*
 	for (std::vector<NPCRecord>::iterator it = npcs.begin(); it != npcs.end(); ++it)
 		if(it->id == id) return it->id;
     
 	return 0;
+*/
 }
 
 wxString NPCDatabase::addDiscoveryId(int id, wxString name)
 {
-	wxString ret = "";
+	wxString ret = _T("");
 
 	NPCRecord rec;
 	rec.id = id+100000;
 	rec.model = id;
 	rec.type = 7;
 	rec.discovery = true;
-	rec.name.Printf("%s [%d]", name.c_str(), rec.id);
+	rec.name.Printf(_T("%s [%d]"), name.c_str(), rec.id);
 	if (rec.type > 0) {
 		npcs.push_back(rec);
-		ret.Printf("%d,%d,%d,%s", rec.id, rec.model, rec.type, rec.name);
+		ret.Printf(_T("%d,%d,%d,%s"), rec.id, rec.model, rec.type, rec.name);
 	}
 	return ret;
 }
@@ -693,7 +746,7 @@ NPCRecord::NPCRecord(const char* line)
 	for (size_t i=strlen(line)-2; i>1; i--) {
 		if (line[i]==',') {
 			//name = (line + i + 1);
-			name.Printf("%s [%d] [%d]", (line+i+1), id, model);
+			name.Printf(_T("%s [%d] [%d]"), (line+i+1), id, model);
 			break;
 		}
 	}
@@ -701,9 +754,9 @@ NPCRecord::NPCRecord(const char* line)
 
 NPCDatabase::NPCDatabase(const char* filename)
 {
-	//ItemRecord all("---- None ----", IT_ALL);
+	//ItemRecord all(_("---- None ----"), IT_ALL);
 	//items.push_back(all);
-	
+
 	std::ifstream fin(filename);
 	char line[512];
 	while (fin.getline(line,512)) {
@@ -714,6 +767,13 @@ NPCDatabase::NPCDatabase(const char* filename)
 	}
 	fin.close();
 	sort(npcs.begin(), npcs.end());
+
+	int j=0;
+	for (std::vector<NPCRecord>::iterator it=npcs.begin();	it!=npcs.end(); ++it)
+	{
+		npcLookup[it->id] = j;
+		j++;
+	}
 }
 
 void NPCDatabase::open(const char* filename)
@@ -740,6 +800,12 @@ const NPCRecord& NPCDatabase::get(int id)
 
 const NPCRecord& NPCDatabase::getByID(int id)
 {
+    if (npcLookup.find(id)!=npcLookup.end()) {
+		return npcs[npcLookup[id]];
+    }
+	
+	return npcs[0];
+/*
 	for (std::vector<NPCRecord>::iterator it=npcs.begin();  it!=npcs.end(); ++it) {
 		if (it->id == id) {
 			return (*it);
@@ -747,6 +813,7 @@ const NPCRecord& NPCDatabase::getByID(int id)
 	}
 
 	return npcs[0];
+*/
 }
 
 // --
@@ -778,7 +845,7 @@ SpellEffectsDB::Record SpellEffectsDB::getByName(const wxString name)
 {
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
-		if (name.IsSameAs(i->getString(EffectName),false) == true) 
+		if (name.IsSameAs(wxString(i->getString(EffectName), wxConvUTF8), false) == true)
 			return (*i);
 	}
 	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);

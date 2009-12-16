@@ -254,7 +254,7 @@ void FilteredChoiceDialog::InitFilter()
 	}
 	f.append(".*$");
 
-	filter.Compile(wxString(f.c_str()), wxRE_ICASE);
+	filter.Compile(wxString(f.c_str(), wxConvUTF8), wxRE_ICASE);
 }
 
 bool FilteredChoiceDialog::FilterFunc(int index)

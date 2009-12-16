@@ -104,21 +104,34 @@
 #define DISABLED      0x0010
 #define BOGUS         0x0011
 
-__declspec(align(2)) struct MAX3DS_CHUNK {
+#ifdef _MSC_VER
+#define ALIGN_2_S __declspec(align(2))
+#define ALIGN_2_E
+#else
+#define ALIGN_2_S
+#define ALIGN_2_E __attribute__((aligned(2)))
+#endif
+ALIGN_2_S
+struct MAX3DS_CHUNK {
 	unsigned short id;
 	unsigned int size;
 
 	MAX3DS_CHUNK() : size(6) {};
-};
+}
+ALIGN_2_E;
+
 
 // Index / Indice into the vertex list
-__declspec(align(2)) struct MAX3DS_FACE {
+ALIGN_2_S
+struct MAX3DS_FACE {
 	unsigned short x;
 	unsigned short y;
 	unsigned short z;
-};
+}
+ALIGN_2_E;
 
-__declspec(align(2)) struct MAX3DS_HEADER {
+ALIGN_2_S
+struct MAX3DS_HEADER {
 	MAX3DS_CHUNK primary;
 	MAX3DS_CHUNK version;
 	unsigned int nVersion;
@@ -133,13 +146,16 @@ __declspec(align(2)) struct MAX3DS_HEADER {
 		primary.size += version.size;
 	};
 
-};
+}
+ALIGN_2_E;
 
-__declspec(align(2)) struct Vertex3f {
+ALIGN_2_S
+struct Vertex3f {
 	float x;
 	float y;
 	float z;
-};
+}
+ALIGN_2_E;
 
 #pragma pack(pop)
 

@@ -4,7 +4,7 @@
 #include <cassert>
 #include <string>
 
-#include <wx\wx.h>
+#include <wx/wx.h>
 
 class DBCFile
 {
@@ -73,6 +73,8 @@ public:
 		{
 			assert(field < file.fieldCount);
 			size_t stringOffset = getUInt(field);
+			if (stringOffset >= file.stringSize)
+				stringOffset = 0;
 			assert(stringOffset < file.stringSize);
 			//char * tmp = (char*)file.stringTable + stringOffset;
 			//unsigned char * tmp2 = file.stringTable + stringOffset;

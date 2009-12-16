@@ -16,6 +16,9 @@
 
 extern float animSpeed;
 
+// AnimationData.dbc
+#define	ANIM_STAND	0
+
 struct TextureGroup {
 	static const int num = 3;
 	int base, count;

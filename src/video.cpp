@@ -19,6 +19,7 @@
 
 extern ModelViewer *g_modelViewer;
 
+#ifdef _WIN32
 // Create an OpenGL pixel format descriptor
 PIXELFORMATDESCRIPTOR pfd =						// pfd Tells Windows How We Want Things To Be
 {
@@ -41,16 +42,18 @@ PIXELFORMATDESCRIPTOR pfd =						// pfd Tells Windows How We Want Things To Be
 		0,										// Reserved
 		0, 0, 0									// Layer Masks Ignored
 };
-
+#endif
 
 VideoSettings video;
 TextureManager texturemanager;
 
 VideoSettings::VideoSettings()
 {
+#ifdef _WIN32
 	hWnd = NULL;
 	hRC = NULL;
 	hDC = NULL;
+#endif
 
 	pixelFormat = 0;
 	xRes = 0;
@@ -67,11 +70,16 @@ VideoSettings::VideoSettings()
 	useCompression = false;
 	useVBO = false;
 	usePBO = false;
+#ifdef _WIN32
 	useFBO = true;
+#else
+	useFBO = false;
+#endif
 }
 
 VideoSettings::~VideoSettings()
 {
+#ifdef _WIN32
 	// Clear the rendering context
 	wglMakeCurrent(NULL, NULL); 
 
@@ -84,6 +92,7 @@ VideoSettings::~VideoSettings()
 		ReleaseDC(hWnd,hDC);
 		hDC = NULL;
 	}
+#endif
 }
 
 bool VideoSettings::Init()
@@ -130,10 +139,12 @@ bool VideoSettings::Init()
 	supportPointSprites = glewIsSupported("GL_ARB_point_sprite GL_ARB_point_parameters") == GL_TRUE ? true : false;
 	//supportShaders = glewIsSupported("GL_ARB_fragment_program") == GL_TRUE ? true : false;
 	//supportShaders = (suuportFragProg && supportVertexProg && supportGLSL);
+#ifdef _WIN32
 	supportPBO = wglewIsSupported("WGL_ARB_pbuffer WGL_ARB_render_texture") == GL_TRUE ? true : false;
-	supportFBO = glewIsSupported("GL_EXT_framebuffer_object") == GL_TRUE ? true : false;
 	supportAntiAlias = wglewIsSupported("WGL_ARB_multisample") == GL_TRUE ? true : false;
 	supportWGLPixelFormat = wglewIsSupported("WGL_ARB_pixel_format") == GL_TRUE ? true : false;
+#endif
+	supportFBO = glewIsSupported("GL_EXT_framebuffer_object") == GL_TRUE ? true : false;
 	supportTexRects = glewIsSupported("GL_ARB_texture_rectangle") == GL_TRUE ? true : false;
 
 	// Now output and log the info
@@ -142,8 +153,8 @@ bool VideoSettings::Init()
 	wxLogMessage(_T("Driver Version: %s"), version);
 
 	
-	if (wxString(renderer).IsSameAs("GDI Generic", false)) {
-		wxLogMessage("\tWarning: Running in software mode, this is not enough. Please try updating your video drivers.");
+	if (wxString(renderer, wxConvUTF8).IsSameAs("GDI Generic", false)) {
+		wxLogMessage(_T("\tWarning: Running in software mode, this is not enough. Please try updating your video drivers."));
 		// bloody oath - wtb a graphics card
 		hasHardware = false;
 	} else {
@@ -166,21 +177,21 @@ bool VideoSettings::Init()
 	}
 	*/
 
-	wxLogMessage(_T("Support wglPixelFormat: %s"), supportWGLPixelFormat ? "true" : "false");
-	wxLogMessage(_T("Support Texture Compression: %s"), supportCompression ? "true" : "false");
-	wxLogMessage(_T("Support Multi-Textures: %s"), supportMultiTex ? "true" : "false");
-	wxLogMessage(_T("Support Draw Range Elements: %s"), supportDrawRangeElements ? "true" : "false");
-	wxLogMessage(_T("Support Vertex Buffer Objects: %s"), supportVBO ? "true" : "false");
-	wxLogMessage(_T("Support Point Sprites: %s"), supportPointSprites ? "true" : "false");
-	wxLogMessage(_T("Support Pixel Shaders: %s"), supportFragProg ? "true" : "false");
-	wxLogMessage(_T("Support Vertex Shaders: %s"), supportVertexProg ? "true" : "false");
-	wxLogMessage(_T("Support GLSL: %s"), supportGLSL ? "true" : "false");
-	wxLogMessage(_T("Support Anti-Aliasing: %s"), supportAntiAlias ? "true" : "false");
-	wxLogMessage(_T("Support Pixel Buffer Objects: %s"), supportPBO ? "true" : "false");
-	wxLogMessage(_T("Support Frame Buffer Objects: %s"), supportFBO ? "true" : "false");
-	wxLogMessage(_T("Support Non-Power-of-Two: %s"), supportNPOT ? "true" : "false");
-	wxLogMessage(_T("Support Rectangle Textures: %s"), supportTexRects ? "true" : "false");
-	wxLogMessage(_T("Support OpenGL 2.0: %s"), supportOGL20 ? "true" : "false");
+	wxLogMessage(_T("Support wglPixelFormat: %s"), supportWGLPixelFormat ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support Texture Compression: %s"), supportCompression ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support Multi-Textures: %s"), supportMultiTex ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support Draw Range Elements: %s"), supportDrawRangeElements ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support Vertex Buffer Objects: %s"), supportVBO ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support Point Sprites: %s"), supportPointSprites ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support Pixel Shaders: %s"), supportFragProg ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support Vertex Shaders: %s"), supportVertexProg ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support GLSL: %s"), supportGLSL ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support Anti-Aliasing: %s"), supportAntiAlias ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support Pixel Buffer Objects: %s"), supportPBO ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support Frame Buffer Objects: %s"), supportFBO ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support Non-Power-of-Two: %s"), supportNPOT ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support Rectangle Textures: %s"), supportTexRects ? _T("true") : _T("false"));
+	wxLogMessage(_T("Support OpenGL 2.0: %s"), supportOGL20 ? _T("true") : _T("false"));
 
 	// Max texture sizes
 	GLint texSize; 
@@ -293,12 +304,13 @@ void VideoSettings::InitGL()
 
 void VideoSettings::EnumDisplayModes()
 {
+#ifdef _WIN32
 	if (!hasHardware)
 		return;
 
 	// Error check
 	if (!hDC) {
-		wxLogMessage("Error: Unable to enumerate display modes.  Invalid HDC.");
+		wxLogMessage(_T("Error: Unable to enumerate display modes.  Invalid HDC."));
 		return;
 	}
 
@@ -375,11 +387,13 @@ void VideoSettings::EnumDisplayModes()
 			capsList.push_back(caps);	// insert into the map
 		}
 	}
+#endif
 }
 
 // This function basically just uses any available display mode
 bool VideoSettings::GetAvailableMode()
 {
+#ifdef _WIN32
 	render = false;
 
 	if (!hWnd)
@@ -402,7 +416,7 @@ bool VideoSettings::GetAvailableMode()
 	if (hDC == 0) {							// Did We Get A Device Context?
 		// Failed
 		//throw std::runtime_error("Failed To Get Device Context");
-		wxLogMessage("Error: Failed To Get Device Context.");
+		wxLogMessage(_T("Error: Failed To Get Device Context."));
 		return false;
 	}
 
@@ -410,14 +424,14 @@ bool VideoSettings::GetAvailableMode()
 	if (pixelFormat == 0) {									// Did We Find A Compatible Format?
 		// Failed
 		//throw std::runtime_error("Failed To Acuire PixelFormat");
-		wxLogMessage("Error: Failed To Accquire PixelFormat.");
+		wxLogMessage(_T("Error: Failed To Accquire PixelFormat."));
 		return false;
 	}
 
 	if (SetPixelFormat(hDC, pixelFormat, &pfd) == false) {		// Try To Set The Pixel Format
 		// Failed
 		//throw std::runtime_error("Failed To SetPixelFormat");
-		wxLogMessage("Error: Failed To SetPixelFormat.");
+		wxLogMessage(_T("Error: Failed To SetPixelFormat."));
 		return false;
 	}
 
@@ -425,24 +439,25 @@ bool VideoSettings::GetAvailableMode()
 	if (hRC == 0) {								// Did We Get A Rendering Context?
 		// Failed
 		//throw std::runtime_error("Failed To Get OpenGL Context");
-		wxLogMessage("Error: Failed To Get OpenGL Context.");
+		wxLogMessage(_T("Error: Failed To Get OpenGL Context."));
 		return false;
 	}
 
 	SetCurrent();
 	render = true;
-
+#endif
 	return true;
 }
 
 bool VideoSettings::GetCompatibleWinMode(VideoCaps caps)
 {
+#ifdef _WIN32
 	if (!hasHardware)
 		return false;
 
 	// Ask the WGL for the clostest match to this pixel format
 	if (!hDC) {
-		wxLogMessage("Error: Attempted to Get a Compatible Window Mode Without a Valid Window");
+		wxLogMessage(_T("Error: Attempted to Get a Compatible Window Mode Without a Valid Window"));
 		//throw std::runtime_error("VideoSettings::GetCompatibleWinMode() : Attempted to Get a Compatible Window Mode Without a Valid Window");
 		return false;
 	}
@@ -524,11 +539,11 @@ bool VideoSettings::GetCompatibleWinMode(VideoCaps caps)
 
 		return true;
 	}
-
+#endif
 	return false;
 }
 
-
+#ifdef _WIN32
 void VideoSettings::SetHandle(HWND hwnd, int bpp=16)
 {
 	hWnd = hwnd;
@@ -550,9 +565,11 @@ void VideoSettings::SetHandle(HWND hwnd, int bpp=16)
 	if (hasHardware && supportWGLPixelFormat)
 		SetMode();
 }
+#endif
 
 void VideoSettings::Release()
 {
+#ifdef _WIN32
 	// Clear the rendering context
 	wglMakeCurrent(NULL, NULL); 
 
@@ -565,10 +582,12 @@ void VideoSettings::Release()
 		ReleaseDC(hWnd,hDC);
 		hDC = NULL;
 	}
+#endif
 }
 
 void VideoSettings::SetMode()
 {
+#ifdef _WIN32
 	if (!hWnd)
 		return;
 
@@ -587,7 +606,7 @@ void VideoSettings::SetMode()
 
 	hDC = GetDC(hWnd);
 	if (!hDC) {						// Did We Get A Device Context?
-		wxLogMessage("Error: Can't Create A GL Device Context.");
+		wxLogMessage(_T("Error: Can't Create A GL Device Context."));
 		return;
 	}
 	
@@ -632,14 +651,14 @@ void VideoSettings::SetMode()
 	status = wglChoosePixelFormatARB(hDC, &AttributeList[0], fAttributes, 1, &pixelFormat, &numFormats);
 	if (status == GL_TRUE && numFormats) {
 		if (SetPixelFormat(hDC, pixelFormat, &pfd) == FALSE) {
-			//wxLogMessage("Error: Failed To Set Requested Pixel Format.");
+			//wxLogMessage(_T("Error: Failed To Set Requested Pixel Format."));
 			secondPass = true;
 			return;
 		}
 
 		hRC = wglCreateContext(hDC);
 		if (!hRC) {
-			wxLogMessage("Error: Failed To Create OpenGL Context.");
+			wxLogMessage(_T("Error: Failed To Create OpenGL Context."));
 			return;
 		}
 		
@@ -650,6 +669,7 @@ void VideoSettings::SetMode()
 		// Something went wrong,  fall back to the basic opengl setup
 		GetAvailableMode();
 	}
+#endif
 }
 
 void VideoSettings::ResizeGLScene(int width, int height)		// Resize And Initialize The GL Window
@@ -673,17 +693,21 @@ void VideoSettings::ResizeGLScene(int width, int height)		// Resize And Initiali
 
 void VideoSettings::SwapBuffers()
 {
+#ifdef _WIN32
 	::SwapBuffers(hDC);
+#endif
 }
 
 inline void VideoSettings::SetCurrent()
 {
+#ifdef _WIN32
 	if(!wglMakeCurrent(hDC, hRC)) {					// Try To Activate The Rendering Context
 		//wxMessageBox("Can't Activate The GL Rendering Context.","ERROR");
 		//render = false;
 	} else {
 		render = true;
 	}
+#endif
 }
 
 GLuint TextureManager::add(std::string name)
@@ -725,19 +749,19 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 	char attr[4];
 
 	if (useLocalFiles) {
-		wxFileName fn = tex->name;
+		wxFileName fn = wxString(tex->name.c_str(), wxConvUTF8);
 		wxString suffix = "png";
-		wxString filename = "Import\\"+fn.GetName()+"."+suffix;
+		wxString filename = _T("Import\\")+fn.GetName()+_T(".")+suffix;
 		BYTE *buffer = NULL;
 		CxImage *image = NULL;
 
 		if (wxFile::Exists(filename)) {
-			image = new CxImage(filename.c_str(), CXIMAGE_FORMAT_PNG);
+			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_PNG);
 		} else {
-			suffix = "tga";
-			filename = "Import\\"+fn.GetName()+"."+suffix;
+			suffix = _T("tga");
+			filename = _T("Import\\")+fn.GetName()+_T(".")+suffix;
 			if (wxFile::Exists(filename)) {
-				image = new CxImage(filename.c_str(), CXIMAGE_FORMAT_TGA);
+				image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_TGA);
 			}
 		}
 
@@ -769,16 +793,16 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 	
 	MPQFile f(tex->name.c_str());
 	if (g_modelViewer) {
-		g_modelViewer->modelOpened->Add(tex->name.c_str());
+		g_modelViewer->modelOpened->Add(wxString(tex->name.c_str(), wxConvUTF8));
 	}
 	if (f.isEof()) {
 		tex->id = 0;
-		wxLogMessage(_T("Error: Could not load the texture '%s'"), tex->name.c_str());
+		wxLogMessage(_T("Error: Could not load the texture '%s'"), wxString(tex->name.c_str(), wxConvUTF8).c_str());
 		f.close();
 		return;
 	} else {
 		//tex->id = id; // I don't see the id being set anywhere,  should I set it now?
-		wxLogMessage(_T("Loading texture: %s"), tex->name.c_str());
+		wxLogMessage(_T("Loading texture: %s"), wxString(tex->name.c_str(), wxConvUTF8).c_str());
 	}
 
 	f.seek(4);

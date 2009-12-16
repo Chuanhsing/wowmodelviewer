@@ -6561,7 +6561,7 @@
 18308,2,Clever Hat
 18309,3,Gloves of Restoration
 18310,3,Fiendish Machete
-18311,3,Quel'dorai Channeling Rod
+18311,3,Quel'dorei Channeling Rod
 18312,3,Energized Chestplate
 18313,3,Helm of Awareness
 18318,3,Merciful Greaves
@@ -6880,7 +6880,7 @@
 19114,2,Highland Bow
 19115,2,Flask of Forest Mojo
 19116,2,Greenleaf Handwraps
-19117,2,Laquered Wooden Plate Legplates
+19117,2,Laquered Wooden Plate Legguards
 19118,2,Nature's Breath
 19119,2,Owlbeast Hide Gloves
 19121,3,Deep Woodlands Cloak
@@ -6991,9 +6991,9 @@
 19439,4,Interlaced Shadow Jerkin
 19505,1,Warsong Battle Tabard
 19506,1,Silverwing Battle Tabard
-19507,2,Inquisitor's Shawl
-19508,2,Branded Leather Bracers
-19509,2,Dusty Mail Boots
+19507,3,Inquisitor's Shawl
+19508,3,Branded Leather Bracers
+19509,3,Dusty Mail Boots
 19526,3,Battle Healer's Cloak
 19527,3,Battle Healer's Cloak
 19528,3,Battle Healer's Cloak
@@ -7356,8 +7356,8 @@
 20556,3,Wildstaff
 20561,1,Flimsy Male Dwarf Mask
 20562,1,Flimsy Female Dwarf Mask
-20563,1,Flimsy Female Nightelf Mask
-20564,1,Flimsy Male Nightelf Mask
+20563,1,Flimsy Female Night Elf Mask
+20564,1,Flimsy Male Night Elf Mask
 20565,1,Flimsy Female Human Mask
 20566,1,Flimsy Male Human Mask
 20567,1,Flimsy Female Troll Mask
@@ -7425,7 +7425,7 @@
 20668,3,Abyssal Mail Legguards
 20669,3,Darkstone Claymore
 20670,2,Abyssal Mail Clutch
-20671,3,Abyssal Plate Legplates
+20671,3,Abyssal Plate Legguards
 20672,3,Sparkling Crystal Wand
 20673,2,Abyssal Plate Girdle
 20674,3,Abyssal Cloth Pants
@@ -8008,7 +8008,7 @@
 22429,4,Redemption Spaulders
 22430,4,Redemption Boots
 22431,4,Redemption Girdle
-22436,4,Cryptstalker Tunic
+22436,4,地穴追獵者外套
 22437,4,Cryptstalker Legguards
 22438,4,Cryptstalker Headpiece
 22439,4,Cryptstalker Spaulders
@@ -8739,13 +8739,13 @@
 24635,2,Feralfen Amice
 24636,2,Feralfen Cuffs
 24637,2,Mistyreed Belt
-24638,2,Mistyreed Boot
+24638,2,Mistyreed Boots
 24639,2,Mistyreed Tunic
 24640,2,Mistyreed Gloves
 24641,2,Mistyreed Hood
 24642,2,Mistyreed Pants
 24643,2,Mistyreed Shoulderpads
-24644,2,Mistyreed Bracer
+24644,2,Mistyreed Bracers
 24645,2,Astralaan Belt
 24646,2,Astralaan Boots
 24647,2,Astralaan Robe
@@ -12673,6 +12673,7 @@
 33333,4,Kharmaa's Shroud of Hope
 33334,4,Fetish of the Primal Gods
 33338,5,Peep the Phoenix
+33350,0,Frostmourne Art Demo
 33354,4,Wub's Cursed Hexblade
 33356,4,Helm of Natural Regeneration
 33357,4,Footpads of Madness
@@ -12766,6 +12767,7 @@
 33471,4,Two-toed Sandals
 33473,4,Chestguard of the Warlord
 33474,4,Ancient Amani Longbow
+33475,6,Frostmourne
 33476,4,Cleaver of the Unforgiving
 33478,4,Jin'rohk The Great Apocalypse
 33479,4,Grimgrin Faceguard
@@ -17615,6 +17617,7 @@
 43469,4,Revenant's Treads
 43481,4,Trollwoven Spaulders
 43484,4,Trollwoven Girdle
+43486,1,Mohawk Mask
 43495,4,Earthgiving Legguards
 43499,1,Iron Boot Flask
 43500,4,Bolstered Legplates
@@ -18053,6 +18056,8 @@
 44746,3,Knife of the Tarnished Soul
 44747,3,Hammer of Wrenching Change
 44748,3,Stave of Youthful Sorrow
+44785,1,Pilgrim's Dress
+44788,1,Pilgrim's Boots
 44800,1,Spring Robes
 44802,1,Egg Basket
 44803,1,Spring Circlet
@@ -18264,6 +18269,7 @@
 45347,4,Valorous Nightsong Leggings
 45348,4,Valorous Nightsong Robe
 45349,4,Valorous Nightsong Spaulders
+45350,0,Nightsong Cover
 45351,4,Valorous Nightsong Gloves
 45352,4,Valorous Nightsong Mantle
 45353,4,Valorous Nightsong Trousers
@@ -18670,6 +18676,7 @@
 46080,4,Titan-Forged Cord of Salvation
 46095,4,Soul-Devouring Cinch
 46097,4,Caress of Insanity
+46103,0,Shirt of Titanic Scaling
 46104,4,Shirt of the Yogg-Slayer
 46106,1,Argent Lance
 46111,4,Conqueror's Darkruned Battleplate
@@ -18769,8 +18776,101 @@
 46210,4,Conqueror's Worldbreaker Kilt
 46211,4,Conqueror's Worldbreaker Shoulderpads
 46212,4,Conqueror's Worldbreaker Faceguard
+46213,0,Aegis Battleplate
+46214,0,Aegis Breastplate
+46215,0,Aegis Faceguard
+46216,0,Aegis Gauntlets
+46217,0,Aegis Gloves
+46218,0,Aegis Greaves
+46219,0,Aegis Handguards
+46220,0,Aegis Headpiece
+46221,0,Aegis Helm
+46222,0,Aegis Legguards
+46223,0,Aegis Legguards
+46224,0,Aegis Legplates
+46225,0,Aegis Shoulderguards
+46226,0,Aegis Shoulderplates
+46227,0,Aegis Spaulders
+46228,0,Aegis Tunic
+46230,0,Circlet of Sanctification
 46231,4,Cowl of Sanctification
+46232,0,Darkruned Battleplate
+46233,0,Darkruned Chestguard
+46234,0,Darkruned Faceguard
+46235,0,Darkruned Gauntlets
+46236,0,Darkruned Handguards
+46237,0,Darkruned Helmet
+46238,0,Darkruned Legguards
+46239,0,Darkruned Legplates
+46240,0,Darkruned Pauldrons
+46241,0,Darkruned Shoulderplates
+46242,0,Deathbringer Gloves
+46243,0,Deathbringer Hood
+46244,0,Deathbringer Leggings
+46245,0,Deathbringer Robe
+46246,0,Deathbringer Shoulderpads
+46247,0,Gloves of Sanctification
+46248,0,Handwraps of Sanctification
+46249,0,Kirin Tor Gauntlets
 46250,4,Kirin Tor Hood
+46251,0,Kirin Tor Leggings
+46252,0,Kirin Tor Shoulderpads
+46253,0,Kirin Tor Tunic
+46254,0,Leggings of Sanctification
+46255,0,Mantle of Sanctification
+46256,0,Pants of Sanctification
+46257,0,Raiments of Sanctification
+46258,0,Robe of Sanctification
+46259,0,Shoulderpads of Sanctification
+46260,0,Nightsong Handgrips
+46261,0,Nightsong Handguards
+46262,0,Nightsong Headguard
+46263,0,Nightsong Headpiece
+46264,0,Nightsong Leggings
+46265,0,Nightsong Legguards
+46266,0,Nightsong Mantle
+46267,0,Nightsong Raiments
+46268,0,Nightsong Robe
+46269,0,Nightsong Shoulderpads
+46270,0,Nightsong Spaulders
+46271,0,Nightsong Trousers
+46272,0,Nightsong Vestments
+46273,0,Scourgestalker Handguards
+46274,0,Scourgestalker Headpiece
+46275,0,Scourgestalker Legguards
+46276,0,Scourgestalker Spaulders
+46277,0,Scourgestalker Tunic
+46278,0,Siegebreaker Battleplate
+46279,0,Siegebreaker Breastplate
+46280,0,Siegebreaker Gauntlets
+46281,0,Siegebreaker Greathelm
+46282,0,Siegebreaker Helmet
+46283,0,Siegebreaker Handguards
+46284,0,Siegebreaker Legguards
+46285,0,Siegebreaker Legplates
+46286,0,Siegebreaker Pauldrons
+46287,0,Siegebreaker Shoulderplates
+46288,0,Terrorblade Breastplate
+46289,0,Terrorblade Gauntlets
+46290,0,Terrorblade Helmet
+46291,0,Terrorblade Legplates
+46292,0,Terrorblade Pauldrons
+46293,0,Worldbreaker Chestguard
+46294,0,Worldbreaker Faceguard
+46295,0,Worldbreaker Gloves
+46296,0,Worldbreaker Grips
+46297,0,Worldbreaker Handguards
+46298,0,Worldbreaker Hauberk
+46299,0,Worldbreaker Headpiece
+46300,0,Worldbreaker Helm
+46301,0,Worldbreaker Kilt
+46302,0,Worldbreaker Legguards
+46303,0,Worldbreaker Shoulderguards
+46304,0,Worldbreaker Shoulderpads
+46305,0,Worldbreaker Spaulders
+46306,0,Worldbreaker Tunic
+46307,0,Worldbreaker War-Kilt
+46309,0,Nightsong Gloves
 46313,4,Valorous Nightsong Cover
 46320,4,Drape of the Skyherald
 46321,4,Sunglimmer Drape
@@ -18785,9 +18885,14 @@
 46349,3,Chef's Hat
 46350,4,Pillar of Fortitude
 46351,4,Bloodcrush Cudgel
+46723,1,Pilgrim's Hat
 46735,1,Synthebrew Goggles
+46800,1,Pilgrim's Attire
 46817,1,Silver Covenant Tabard
 46818,1,Sunreaver Tabard
+46824,1,Pilgrim's Robe
+46860,1,Whimsical Skull Mask
+46861,1,Bouquet of Orange Marigolds
 46874,3,Argent Crusader's Tabard
 46958,4,Steel Bladebreaker
 46960,4,Breastplate of Cruel Intent
@@ -19172,8 +19277,8 @@
 47598,4,Ensorcelled Nerubian Breastplate
 47599,4,Knightbane Carapace
 47600,4,Knightbane Carapace
-47601,4,Lunar Eclipse Chestguard
-47602,4,Lunar Eclipse Chestguard
+47601,4,Lunar Eclipse Robes
+47602,4,Lunar Eclipse Robes
 47603,4,Merlin's Robe
 47604,4,Merlin's Robe
 47605,4,Royal Moonshroud Robe
@@ -20067,6 +20172,11 @@
 48716,7,Venerable Mass of McGowan
 48718,7,Repurposed Lava Dredger
 48783,4,Runetotem's Mantle 
+48799,4,Malfurion's Handgrips 
+48800,4,Malfurion's Headguard 
+48801,4,Malfurion's Legguards 
+48802,4,Malfurion's Raiments 
+48803,4,Malfurion's Shoulderpads 
 48933,3,Wormhole Generator: Northrend
 48974,4,Titan-Forged Armwraps of Dominance
 48975,4,Titan-Forged Armwraps of Salvation
@@ -20109,6 +20219,7 @@
 49236,4,Sabatons of Tortured Space
 49237,4,Sabatons of Tortured Space
 49238,4,Boots of Tortured Space
+49278,1,Goblin Rocket Pack
 49296,4,Singed Vis'kag the Bloodletter
 49297,4,Empowered Deathbringer
 49298,4,Glinting Azuresong Mageblade
@@ -20171,8 +20282,75 @@
 49499,4,Polished Azuresong Mageblade
 49500,4,Raging Deathbringer
 49501,4,Tempered Vis'kag the Bloodletter
+49623,5,Shadowmourne
 49682,4,Black Knight's Rondel
 49778,1,Worn Greatsword
+49783,4,Lucky Old Sun
+49784,4,Minister's Number One Legplates
+49785,4,Bewildering Shoulderpads
+49786,4,Robes of the Cheating Heart
+49787,4,Seven Stormy Mornings
+49788,4,Cold Sweat Grips
+49789,4,Heartshiver
+49790,4,Blood Boil Lancet
+49791,4,Lost Reliquary Chestguard
+49792,4,Accursed Crawling Cape
+49793,4,Tower of the Mouldering Corpse
+49794,4,Legplates of Frozen Granite
+49795,4,Sollerets of Suffering
+49796,4,Essence of Anger
+49797,4,Brace Guards of the Starless Night
+49798,4,Soul Screaming Boots
+49801,4,Unspeakable Secret
+49802,4,Garfrost's Two-Ton Hammer
+49804,4,Polished Mirror Helm
+49805,4,Ice-Steeped Sandals
+49806,4,Flayer's Black Belt
+49807,4,Krick's Beetle Stabber
+49808,4,Bent Gold Belt
+49809,4,Wristguards of Subterranean Moss
+49810,4,Scabrous Zombie Leather Belt
+49811,4,Black Dragonskin Breeches
+49813,4,Rimebane Rifle
+49816,4,Scourgelord's Frigid Chestplate
+49817,4,Shaggy Wyrmleather Leggings
+49819,4,Skeleton Lord's Cranium
+49820,4,Gondria's Spectral Bracer
+49821,4,Protector of Frigid Souls
+49822,4,Rimewoven Silks
+49823,4,Cloak of the Fallen Cardinal
+49824,4,Horns of the Spurned Val'kyr
+49825,4,Palebone Robes
+49826,4,Shroud of Rime
+49827,4,Ghoulslicer
+49828,4,Marwyn's Macabre Fingertips
+49829,4,Valonforth's Tarnished Pauldrons
+49830,4,Fallen Sentry's Hood
+49831,4,Muddied Boots of Brill
+49832,4,Eerie Runeblade Polisher
+49833,4,Splintered Icecrown Parapet
+49834,4,Frayed Abomination Stitching Shoulders
+49835,4,Splintered Door of the Citadel
+49836,4,Frostsworn Bone Leggings
+49837,4,Mitts of Burning Hail
+49838,4,Carpal Tunnelers
+49839,4,Mourning Malice
+49840,4,Hate-Forged Cleaver
+49841,4,Blackened Geist Ribs
+49842,4,Tapestry of the Frozen Throne
+49843,4,Crystalline Citadel Gauntlets
+49844,4,Crypt Fiend Slayer
+49845,4,Bone Golem Scapula
+49846,4,Chilled Heart of the Glacier
+49847,4,Legguards of Untimely Demise
+49848,4,Grim Lasher Shoulderguards
+49849,4,Tattered Glacial-Woven Hood
+49851,4,Greathelm of the Silver Hand
+49852,4,Coffin Nail
+49853,4,Titanium Links of Lore
+49854,4,Mantle of Tattered Feathers
+49855,4,Plated Grips of Korth'azz
+49888,4,Shadow's Edge
 49890,4,Deathfrost Boots
 49891,4,Leggings of Woven Death
 49892,4,Lightweave Leggings
@@ -20192,5 +20370,848 @@
 49906,4,Hellfrozen Bonegrinders
 49907,4,Boots of Kingly Upheaval
 49916,1,Lovely Charm Bracelet
+49919,4,Cryptmaker
+49950,4,Frostbitten Fur Boots
+49951,4,Gendarme's Cuirass
+49952,4,Snowserpent Mail Helm
+49960,4,Bracers of Dark Reckoning
+49964,4,Legguards of Lost Hope
+49968,4,Frozen Bonespike
+49976,4,Bulwark of Smouldering Steel
+49978,4,Crushing Coldwraith Belt
+49979,4,Handguards of Winter's Respite
+49980,4,Rusted Bonespike Pauldrons
+49982,4,Heartpierce
+49983,4,Blood-Soaked Saronite Stompers
+49986,4,Broken Ram Skull Helm
+49987,4,Cultist's Bloodsoaked Spaulders
+49988,4,Leggings of Northern Lights
+49991,4,Shoulders of Mercy Killing
+49992,4,Nibelung
+49993,4,Necrophotic Greaves
+49994,4,The Lady's Brittle Bracers
+49995,4,Fallen Lord's Handguards
+49996,4,Deathwhisper Chestpiece
+49998,4,Shadowvault Slayer's Cloak
+50000,4,Scourge Hunter's Vambraces
+50001,4,Ikfirus's Sack of Wonder
+50002,4,Polar Bear Claw Bracers
+50003,4,Boneguard Commander's Pauldrons
+50006,4,Corp'rethar Ceremonial Crown
+50009,4,Boots of Unnatural Growth
+50010,4,Waistband of Righteous Fury
+50011,4,Gunship Captain's Mittens
+50014,4,Greatcloak of the Turned Champion
+50015,4,Belt of the Blood Nova
+50016,4,Rib Spreader
+50019,4,Winding Sheet
+50020,4,Raging Behemoth's Shoulderplates
+50021,4,Aldriana's Gloves of Secrecy
+50022,4,Dual-Bladed Pauldrons
+50024,4,Blightborne Warplate
+50026,4,Helm of the Elder Moon
+50027,4,Rot-Resistant Breastplate
+50028,4,Trauma
+50030,4,Bloodsunder's Bracers
+50032,4,Death Surgeon's Sleeves
+50033,4,Corpse-Impaling Spike
+50034,4,Zod's Repeating Longbow
+50035,4,Black Bruise
+50036,4,Belt of Broken Bones
+50037,4,Fleshrending Gauntlets
+50038,4,Carapace of Forgotten Kings
+50040,4,Distant Land
+50041,4,Leather of Stitched Scourge Parts
+50042,4,Gangrenous Leggings
+50046,4,Quel'Delar Cunning of the Shadows
+50047,4,Quel'Delar Lens of the Mind
+50048,4,Quel'Delar Might of the Faithful
+50049,4,Quel'Delar Ferocity of the Scorned
+50050,4,Cudgel of Furious Justice
+50051,4,Hammer of Purified Flame
+50052,4,Lightborn Spire
 50055,1,Worn Dirk
+50056,4,Plaguebringer's Stained Pants
 50057,1,Sharp Dirk
+50059,4,Horrific Flesh Epaulets
+50060,4,Faceplate of the Forgotten
+50062,4,Plague Scientist's Boots
+50063,4,Lingering Illness
+50064,4,Unclean Surgical Gloves
+50065,4,Icecrown Glacial Wall
+50067,4,Astrylian's Sutured Cinch
+50068,4,Rigormortis
+50069,4,Professor's Bloodied Smock
+50071,4,Treads of the Wasteland
+50072,4,Landsoul's Horned Greathelm
+50073,4,Geistlord's Punishment Sack
+50074,4,Royal Crimson Cloak
+50075,4,Taldaram's Plated Fists
+50078,4,Ymirjar Lord's Battleplate
+50079,4,Ymirjar Lord's Gauntlets
+50080,4,Ymirjar Lord's Helmet
+50081,4,Ymirjar Lord's Legplates
+50082,4,Ymirjar Lord's Shoulderplates
+50087,4,Shadowblade Breastplate
+50088,4,Shadowblade Gauntlets
+50089,4,Shadowblade Helmet
+50090,4,Shadowblade Legplates
+50094,4,Scourgelord Battleplate
+50095,4,Scourgelord Gauntlets
+50096,4,Scourgelord Helmet
+50097,4,Scourgelord Legplates
+50098,4,Scourgelord Shoulderplates
+50105,4,Shadowblade Pauldrons
+50106,4,Lasherweave Robes
+50107,4,Lasherweave Gauntlets
+50108,4,Lasherweave Helmet
+50109,4,Lasherweave Legplates
+50113,4,Lasherweave Pauldrons
+50114,4,Ahn'Kahar Blood Hunter's Handguards
+50115,4,Ahn'Kahar Blood Hunter's Headpiece
+50116,4,Ahn'Kahar Blood Hunter's Legguards
+50117,4,Ahn'Kahar Blood Hunter's Spaulders
+50118,4,Ahn'Kahar Blood Hunter's Tunic
+50169,4,Papa's Brand New Knife
+50171,4,Shoulders of Frost-Tipped Thorns
+50172,4,Sanguine Silk Robes
+50173,4,Shadow Silk Spindle
+50175,4,Crypt Keeper's Bracers
+50176,4,San'layn Ritualist Gloves
+50177,4,Mail of Crimson Coins
+50178,4,Bloodfall
+50179,4,Last Word
+50181,4,Dying Light
+50183,4,Lungbreaker
+50184,4,Keleseth's Seducer
+50187,4,Coldwraith Links
+50188,4,Anub'ar Stalker's Gloves
+50190,4,Grinning Skull Greatboots
+50191,4,Nighttime
+50192,4,Scourge Reaver's Legplates
+50193,4,Very Fashionable Shoulders
+50194,4,Weeping Gauntlets
+50197,4,Eyes of Bewilderment
+50199,4,Leggings of Dying Candles
+50202,4,Snowstorm Helm
+50203,4,Blood Weeper
+50205,4,Frostbinder's Shredded Cape
+50206,4,Frayed Scoundrel's Cap
+50207,4,Black Spire Sabatons
+50208,4,Pauldrons of the Devourer
+50209,4,Essence of Suffering
+50210,4,Seethe
+50212,4,Essence of Desire
+50213,4,Mord'rethar Robes
+50214,4,Helm of the Spirit Shock
+50215,4,Recovered Reliquary Boots
+50227,4,Surgeon's Needle
+50229,4,Legguards of the Frosty Depths
+50230,4,Malykriss Vambraces
+50233,4,Spurned Val'kyr Shoulderguards
+50234,4,Shoulderplates of Frozen Blood
+50240,4,Dark Coven Gloves
+50241,4,Dark Coven Hood
+50242,4,Dark Coven Leggings
+50243,4,Dark Coven Robe
+50244,4,Dark Coven Shoulderpads
+50262,4,Felglacier Bolter
+50263,4,Braid of Salt and Fire
+50264,4,Chewed Leather Wristguards
+50265,4,Blackened Ghoul Skin Leggings
+50266,4,Ancient Polar Bear Hide
+50267,4,Tyrannical Beheader
+50268,4,Rimefang's Claw
+50269,4,Fleshwerk Leggings
+50270,4,Belt of Rotted Fingernails
+50272,4,Frost Wyrm Ribcage
+50273,4,Engraved Gargoyle Femur
+50275,4,Bloodmage Gloves
+50276,4,Bloodmage Hood
+50277,4,Bloodmage Leggings
+50278,4,Bloodmage Robe
+50279,4,Bloodmage Shoulderpads
+50283,4,Mudslide Boots
+50284,4,Rusty Frozen Fingerguards
+50285,4,Icebound Bronze Cuirass
+50286,4,Prelate's Snowshoes
+50287,3,Boots of the Bay
+50290,4,Falric's Wrist-Chopper
+50291,4,Soulsplinter
+50292,4,Bracer of Worn Molars
+50293,4,Spaulders of Black Betrayal
+50294,4,Chestpiece of High Treason
+50295,4,Spiked Toestompers
+50296,4,Orca-Hunter's Harpoon
+50297,4,Frostsworn Bone Chestpiece
+50298,4,Sightless Crown of Ulmaas
+50299,4,Suspiciously Soft Gloves
+50300,4,Choking Hauberk
+50302,4,Liar's Tongue
+50303,4,Black Icicle
+50304,4,Hoarfrost Gauntlets
+50305,4,Grinning Skull Boots
+50308,4,Blighted Leather Footpads
+50309,4,Shriveled Heart
+50311,4,Second Helm of the Executioner
+50312,4,Chestguard of Broken Branches
+50314,4,Strip of Remorse
+50315,4,Seven-Fingered Claws
+50318,4,Ghostly Wristwraps
+50319,4,Unsharpened Ice Razor
+50324,4,Lightsworn Shoulderplates
+50325,4,Lightsworn Legplates
+50326,4,Lightsworn Helmet
+50327,4,Lightsworn Gauntlets
+50328,4,Lightsworn Battleplate
+50333,4,Toskk's Maximized Wristguards
+50391,4,Crimson Acolyte Handwraps
+50392,4,Crimson Acolyte Cowl
+50393,4,Crimson Acolyte Pants
+50394,4,Crimson Acolyte Raiments
+50396,4,Crimson Acolyte Mantle
+50411,4,Scourgeborne Waraxe
+50412,4,Bloodvenom Blade
+50413,4,Nerub'ar Stalker's Cord
+50415,4,Bryntroll the Bone Arbiter
+50416,4,Boots of the Funeral March
+50417,4,Bracers of Eternal Dreaming
+50418,4,Robe of the Waking Nightmare
+50423,4,Sundial of Eternal Dusk
+50444,4,Rowan's Rifle of Silver Bullets
+50449,4,Stiffened Corpse Shoulderpads
+50450,4,Leggings of Dubious Charms
+50451,4,Belt of the Lonely Noble
+50454,4,Idol of the Black Willow
+50455,4,Libram of Three Truths
+50456,4,Idol of the Crying Moon
+50457,4,Idol of the Lunar Eclipse
+50458,4,Bizuri's Totem of Shattered Ice
+50459,4,Sigil of the Hanged Man
+50460,4,Libram of Blinding Light
+50461,4,Libram of the Eternal Tower
+50462,4,Sigil of the Bone Gryphon
+50463,4,Totem of the Avalanche
+50464,4,Totem of the Surging Sea
+50466,4,Sentinel's Winter Cloak
+50467,4,Might of the Ocean Serpent
+50468,4,Drape of the Violet Tower
+50469,4,Volde's Cloak of the Night Sky
+50470,4,Recovered Scarlet Onslaught Cape
+50472,4,Nightmare Ender
+50474,4,Shrapnel Star
+50603,4,Cryptmaker
+50605,4,Snowserpent Mail Helm
+50606,4,Gendarme's Cuirass
+50607,4,Frostbitten Fur Boots
+50608,4,Frozen Bonespike
+50611,4,Bracers of Dark Reckoning
+50612,4,Legguards of Lost Hope
+50613,4,Crushing Coldwraith Belt
+50615,4,Handguards of Winter's Respite
+50616,4,Bulwark of Smouldering Steel
+50617,4,Rusted Bonespike Pauldrons
+50619,4,Anub'ar Stalker's Gloves
+50620,4,Coldwraith Links
+50621,4,Lungbreaker
+50623,4,Leggings of Dying Candles
+50624,4,Scourge Reaver's Legplates
+50625,4,Grinning Skull Greatboots
+50626,4,Snowstorm Helm
+50628,4,Frostbinder's Shredded Cape
+50629,4,Robe of the Waking Nightmare
+50630,4,Bracers of Eternal Dreaming
+50631,4,Nightmare Ender
+50632,4,Boots of the Funeral March
+50635,4,Sundial of Eternal Dusk
+50638,4,Zod's Repeating Longbow
+50639,4,Blood-Soaked Saronite Stompers
+50640,4,Broken Ram Skull Helm
+50641,4,Heartpierce
+50643,4,Shoulders of Mercy Killing
+50645,4,Leggings of Northern Lights
+50646,4,Cultist's Bloodsoaked Spaulders
+50648,4,Nibelung
+50649,4,Deathwhisper Chestpiece
+50650,4,Fallen Lord's Handguards
+50651,4,The Lady's Brittle Bracers
+50652,4,Necrophotic Greaves
+50653,4,Shadowvault Slayer's Cloak
+50654,4,Scourgeborne Waraxe
+50655,4,Scourge Hunter's Vambraces
+50656,4,Ikfirus's Sack of Wonder
+50659,4,Polar Bear Claw Bracers
+50660,4,Boneguard Commander's Pauldrons
+50661,4,Corp'rethar Ceremonial Crown
+50663,4,Gunship Captain's Mittens
+50665,4,Boots of Unnatural Growth
+50667,4,Waistband of Righteous Fury
+50668,4,Greatcloak of the Turned Champion
+50670,4,Toskk's Maximized Wristguards
+50671,4,Belt of the Blood Nova
+50672,4,Bloodvenom Blade
+50673,4,Dual-Bladed Pauldrons
+50674,4,Raging Behemoth's Shoulderplates
+50675,4,Aldriana's Gloves of Secrecy
+50676,4,Rib Spreader
+50677,4,Winding Sheet
+50679,4,Helm of the Elder Moon
+50680,4,Rot-Resistant Breastplate
+50681,4,Blightborne Warplate
+50684,4,Corpse-Impaling Spike
+50685,4,Trauma
+50686,4,Death Surgeon's Sleeves
+50687,4,Bloodsunder's Bracers
+50688,4,Nerub'ar Stalker's Cord
+50689,4,Carapace of Forgotten Kings
+50690,4,Fleshrending Gauntlets
+50691,4,Belt of Broken Bones
+50692,4,Black Bruise
+50694,4,Plaguebringer's Stained Pants
+50695,4,Distant Land
+50696,4,Leather of Stitched Scourge Parts
+50697,4,Gangrenous Leggings
+50698,4,Horrific Flesh Epaulets
+50699,4,Plague Scientist's Boots
+50701,4,Faceplate of the Forgotten
+50702,4,Lingering Illness
+50703,4,Unclean Surgical Gloves
+50704,4,Rigormortis
+50705,4,Professor's Bloodied Smock
+50707,4,Astrylian's Sutured Cinch
+50708,4,Last Word
+50709,4,Bryntroll the Bone Arbiter
+50710,4,Keleseth's Seducer
+50711,4,Treads of the Wasteland
+50712,4,Landsoul's Horned Greathelm
+50713,4,Geistlord's Punishment Sack
+50715,4,Shoulders of Frost-Tipped Thorns
+50716,4,Taldaram's Plated Fists
+50717,4,Sanguine Silk Robes
+50718,4,Royal Crimson Cloak
+50719,4,Shadow Silk Spindle
+50721,4,Crypt Keeper's Bracers
+50722,4,San'layn Ritualist Gloves
+50723,4,Mail of Crimson Coins
+50725,4,Dying Light
+50727,4,Bloodfall
+50729,4,Icecrown Glacial Wall
+50759,4,Bone Warden's Splitter
+50760,4,Bonebreaker Scepter
+50761,4,Citadel Enforcer's Claymore
+50762,4,Linked Scourge Vertebrae
+50764,4,Shawl of Nerubian Silk
+50765,4,Crimson Acolyte Hood
+50766,4,Crimson Acolyte Gloves
+50767,4,Crimson Acolyte Shoulderpads
+50768,4,Crimson Acolyte Robe
+50769,4,Crimson Acolyte Leggings
+50771,4,Frost Needle
+50772,4,Ancient Skeletal Boots
+50773,4,Cord of the Patronizing Practitioner
+50774,4,Coldwraith Bracers
+50775,4,Corrupted Silverplate Leggings
+50776,4,Njordnar Bone Bow
+50777,4,Handgrips of Frost and Sleet
+50778,4,Soulthief's Braided Belt
+50779,4,Deathspeaker Zealot's Helm
+50780,4,Chestguard of the Frigid Noose
+50781,4,Scourgelord's Baton
+50782,4,Sister's Handshrouds
+50783,4,Boots of the Frozen Seed
+50784,4,Deathspeaker Disciple's Belt
+50785,4,Bracers of Dark Blessings
+50786,4,Ghoul Commander's Cuirass
+50787,4,Frost Giant's Cleaver
+50788,4,Bone Drake's Enameled Boots
+50789,4,Icecrown Rampart Bracers
+50791,4,Saronite Gargoyle Cloak
+50792,4,Pauldrons of Lost Hope
+50793,4,Midnight Sun
+50794,4,Neverending Winter
+50795,4,Cord of Dark Suffering
+50796,4,Bracers of Pale Illumination
+50797,4,Ice-Reinforced Vrykul Helm
+50798,4,Ramaladni's Blade of Culling
+50799,4,Scourge Stranglers
+50800,4,Hauberk of a Thousand Cuts
+50801,4,Blade-Scored Carapace
+50802,4,Gargoyle Spit Bracers
+50804,4,Icecrown Spire Sandals
+50805,4,Mag'hari Chieftain's Staff
+50806,4,Leggings of Unrelenting Blood
+50807,4,Thaumaturge's Crackling Cowl
+50808,4,Deathforged Legplates
+50810,4,Gutbuster
+50811,4,Festering Fingerguards
+50812,4,Taldron's Long Neglected Boots
+50819,4,Lasherweave Mantle
+50820,4,Lasherweave Trousers
+50821,4,Lasherweave Cover
+50822,4,Lasherweave Gloves
+50823,4,Lasherweave Vestment
+50824,4,Lasherweave Shoulderpads
+50825,4,Lasherweave Legguards
+50826,4,Lasherweave Headguard
+50827,4,Lasherweave Handgrips
+50828,4,Lasherweave Raiment
+50830,4,Frost Witch's Chestguard
+50831,4,Frost Witch's Grips
+50832,4,Frost Witch's Faceguard
+50833,4,Frost Witch's War-Kilt
+50834,4,Frost Witch's Shoulderguards
+50835,4,Frost Witch's Tunic
+50836,4,Frost Witch's Handguards
+50837,4,Frost Witch's Headpiece
+50838,4,Frost Witch's Legguards
+50839,4,Frost Witch's Spaulders
+50841,4,Frost Witch's Hauberk
+50842,4,Frost Witch's Gloves
+50843,4,Frost Witch's Helm
+50844,4,Frost Witch's Kilt
+50845,4,Frost Witch's Shoulderpads
+50846,4,Ymirjar Lord's Pauldrons
+50847,4,Ymirjar Lord's Legguards
+50848,4,Ymirjar Lord's Greathelm
+50849,4,Ymirjar Lord's Handguards
+50850,4,Ymirjar Lord's Breastplate
+50853,4,Scourgelord Pauldrons
+50854,4,Scourgelord Legguards
+50855,4,Scourgelord Faceguard
+50856,4,Scourgelord Handguards
+50857,4,Scourgelord Chestguard
+50858,4,Plague-Soaked Leather Leggings
+50859,4,Cloak of Many Skins
+50860,4,Lightsworn Shoulderguards
+50861,4,Lightsworn Legguards
+50862,4,Lightsworn Faceguard
+50863,4,Lightsworn Handguards
+50864,4,Lightsworn Chestguard
+50865,4,Lightsworn Spaulders
+50866,4,Lightsworn Greaves
+50867,4,Lightsworn Headpiece
+50868,4,Lightsworn Gloves
+50869,4,Lightsworn Tunic
+50965,4,Castle Breaker's Battleplate
+50966,4,Abracadaver
+50967,4,Festergut's Gaseous Gloves
+50968,4,Cataclysmic Chestguard
+50969,4,Chestplate of Unspoken Truths
+50970,4,Longstrider's Vest
+50971,4,Mail of the Geyser
+50972,4,Shadow Seeker's Tunic
+50973,4,Vestments of Spruce and Fir
+50974,4,Meteor Chaser's Raiment
+50975,4,Ermine Coronation Robes
+50976,4,Gauntlets of Overexposure
+50977,4,Gatecrasher's Gauntlets
+50978,4,Gauntlets of the Kraken
+50979,4,Logsplitters
+50980,4,Blizzard Keeper's Mitts
+50981,4,Gloves of the Great Horned Owl
+50982,4,Cat Burglar's Grips
+50983,4,Gloves of False Gestures
+50984,4,Gloves of Ambivalence
+50985,4,Wrists of Septic Shock
+50987,4,Malevolent Girdle
+50988,4,Bloodstained Surgeon's Shoulderguards
+50989,4,Lich Killer's Lanyard
+50990,4,Kilt of Untreated Wounds
+50991,4,Verdigris Chain Belt
+50992,4,Waistband of Despair
+50993,4,Band of the Night Raven
+50994,4,Belt of Petrified Ivy
+50995,4,Vengeful Noose
+50996,4,Belt of Omission
+50997,4,Circle of Ossus
+50998,4,Shaft of Glacial Ice
+50999,4,Gluth's Fetching Knife
+51000,4,Flesh-Shaper's Gurney Strap
+51002,4,Taldron's Short-Sighted Helm
+51003,4,Abomination Knuckles
+51004,4,Lockjaw
+51005,4,Gloves of Broken Fingers
+51006,4,Shuffling Shoes
+51007,4,Ether-Soaked Bracers
+51009,4,Chestguard of the Failed Experiment
+51010,4,The Facelifter
+51011,4,Flesh-Carving Scalpel
+51013,4,Discarded Bag of Entrails
+51014,4,Scalpel-Sharpening Shoulderguards
+51015,4,Shoulderpads of the Morbid Ritual
+51017,4,Cauterized Cord
+51018,4,Chestplate of Septic Stitches
+51019,4,Rippling Flesh Kilt
+51020,4,Shoulders of Ruinous Senility
+51021,4,Soulbreaker
+51022,4,Hersir's Greatspear
+51023,4,Taldaram's Soft Slippers
+51025,4,Battle-Maiden's Legguards
+51125,4,Sanctified Scourgelord Shoulderplates
+51126,4,Sanctified Scourgelord Legplates
+51127,4,Sanctified Scourgelord Helmet
+51128,4,Sanctified Scourgelord Gauntlets
+51129,4,Sanctified Scourgelord Battleplate
+51130,4,Sanctified Scourgelord Pauldrons
+51131,4,Sanctified Scourgelord Legguards
+51132,4,Sanctified Scourgelord Handguards
+51133,4,Sanctified Scourgelord Faceguard
+51134,4,Sanctified Scourgelord Chestguard
+51135,4,Sanctified Lasherweave Pauldrons
+51136,4,Sanctified Lasherweave Legplates
+51137,4,Sanctified Lasherweave Helmet
+51138,4,Sanctified Lasherweave Gauntlets
+51139,4,Sanctified Lasherweave Robes
+51140,4,Sanctified Lasherweave Shoulderpads
+51141,4,Sanctified Lasherweave Raiment
+51142,4,Sanctified Lasherweave Legguards
+51143,4,Sanctified Lasherweave Headguard
+51144,4,Sanctified Lasherweave Handgrips
+51145,4,Sanctified Lasherweave Vestment
+51146,4,Sanctified Lasherweave Trousers
+51147,4,Sanctified Lasherweave Mantle
+51148,4,Sanctified Lasherweave Gloves
+51149,4,Sanctified Lasherweave Cover
+51150,4,Sanctified Ahn'Kahar Blood Hunter's Tunic
+51151,4,Sanctified Ahn'Kahar Blood Hunter's Spaulders
+51152,4,Sanctified Ahn'Kahar Blood Hunter's Legguards
+51153,4,Sanctified Ahn'Kahar Blood Hunter's Headpiece
+51154,4,Sanctified Ahn'Kahar Blood Hunter's Handguards
+51155,4,Sanctified Bloodmage Shoulderpads
+51156,4,Sanctified Bloodmage Robe
+51157,4,Sanctified Bloodmage Leggings
+51158,4,Sanctified Bloodmage Hood
+51159,4,Sanctified Bloodmage Gloves
+51160,4,Sanctified Lightsworn Shoulderplates
+51161,4,Sanctified Lightsworn Legplates
+51162,4,Sanctified Lightsworn Helmet
+51163,4,Sanctified Lightsworn Gauntlets
+51164,4,Sanctified Lightsworn Battleplate
+51165,4,Sanctified Lightsworn Tunic
+51166,4,Sanctified Lightsworn Spaulders
+51167,4,Sanctified Lightsworn Headpiece
+51168,4,Sanctified Lightsworn Greaves
+51169,4,Sanctified Lightsworn Gloves
+51170,4,Sanctified Lightsworn Shoulderguards
+51171,4,Sanctified Lightsworn Legguards
+51172,4,Sanctified Lightsworn Handguards
+51173,4,Sanctified Lightsworn Faceguard
+51174,4,Sanctified Lightsworn Chestguard
+51175,4,Sanctified Crimson Acolyte Shoulderpads
+51176,4,Sanctified Crimson Acolyte Robe
+51177,4,Sanctified Crimson Acolyte Leggings
+51178,4,Sanctified Crimson Acolyte Hood
+51179,4,Sanctified Crimson Acolyte Gloves
+51180,4,Sanctified Crimson Acolyte Raiments
+51181,4,Sanctified Crimson Acolyte Pants
+51182,4,Sanctified Crimson Acolyte Mantle
+51183,4,Sanctified Crimson Acolyte Handwraps
+51184,4,Sanctified Crimson Acolyte Cowl
+51185,4,Sanctified Shadowblade Pauldrons
+51186,4,Sanctified Shadowblade Legplates
+51187,4,Sanctified Shadowblade Helmet
+51188,4,Sanctified Shadowblade Gauntlets
+51189,4,Sanctified Shadowblade Breastplate
+51190,4,Sanctified Frost Witch's Tunic
+51191,4,Sanctified Frost Witch's Handguards
+51192,4,Sanctified Frost Witch's Headpiece
+51193,4,Sanctified Frost Witch's Legguards
+51194,4,Sanctified Frost Witch's Spaulders
+51195,4,Sanctified Frost Witch's Chestguard
+51196,4,Sanctified Frost Witch's Grips
+51197,4,Sanctified Frost Witch's Faceguard
+51198,4,Sanctified Frost Witch's War-Kilt
+51199,4,Sanctified Frost Witch's Shoulderguards
+51200,4,Sanctified Frost Witch's Hauberk
+51201,4,Sanctified Frost Witch's Gloves
+51202,4,Sanctified Frost Witch's Helm
+51203,4,Sanctified Frost Witch's Kilt
+51204,4,Sanctified Frost Witch's Shoulderpads
+51205,4,Sanctified Dark Coven Shoulderpads
+51206,4,Sanctified Dark Coven Robe
+51207,4,Sanctified Dark Coven Leggings
+51208,4,Sanctified Dark Coven Hood
+51209,4,Sanctified Dark Coven Gloves
+51210,4,Sanctified Ymirjar Lord's Shoulderplates
+51211,4,Sanctified Ymirjar Lord's Legplates
+51212,4,Sanctified Ymirjar Lord's Helmet
+51213,4,Sanctified Ymirjar Lord's Gauntlets
+51214,4,Sanctified Ymirjar Lord's Battleplate
+51215,4,Sanctified Ymirjar Lord's Pauldrons
+51216,4,Sanctified Ymirjar Lord's Legguards
+51217,4,Sanctified Ymirjar Lord's Handguards
+51218,4,Sanctified Ymirjar Lord's Greathelm
+51219,4,Sanctified Ymirjar Lord's Breastplate
+51220,4,Sanctified Ymirjar Lord's Breastplate
+51221,4,Sanctified Ymirjar Lord's Greathelm
+51222,4,Sanctified Ymirjar Lord's Handguards
+51223,4,Sanctified Ymirjar Lord's Legguards
+51224,4,Sanctified Ymirjar Lord's Pauldrons
+51225,4,Sanctified Ymirjar Lord's Battleplate
+51226,4,Sanctified Ymirjar Lord's Gauntlets
+51227,4,Sanctified Ymirjar Lord's Helmet
+51228,4,Sanctified Ymirjar Lord's Legplates
+51229,4,Sanctified Ymirjar Lord's Shoulderplates
+51230,4,Sanctified Dark Coven Gloves
+51231,4,Sanctified Dark Coven Hood
+51232,4,Sanctified Dark Coven Leggings
+51233,4,Sanctified Dark Coven Robe
+51234,4,Sanctified Dark Coven Shoulderpads
+51235,4,Sanctified Frost Witch's Shoulderpads
+51236,4,Sanctified Frost Witch's Kilt
+51237,4,Sanctified Frost Witch's Helm
+51238,4,Sanctified Frost Witch's Gloves
+51239,4,Sanctified Frost Witch's Hauberk
+51240,4,Sanctified Frost Witch's Shoulderguards
+51241,4,Sanctified Frost Witch's War-Kilt
+51242,4,Sanctified Frost Witch's Faceguard
+51243,4,Sanctified Frost Witch's Grips
+51244,4,Sanctified Frost Witch's Chestguard
+51245,4,Sanctified Frost Witch's Spaulders
+51246,4,Sanctified Frost Witch's Legguards
+51247,4,Sanctified Frost Witch's Headpiece
+51248,4,Sanctified Frost Witch's Handguards
+51249,4,Sanctified Frost Witch's Tunic
+51250,4,Sanctified Shadowblade Breastplate
+51251,4,Sanctified Shadowblade Gauntlets
+51252,4,Sanctified Shadowblade Helmet
+51253,4,Sanctified Shadowblade Legplates
+51254,4,Sanctified Shadowblade Pauldrons
+51255,4,Sanctified Crimson Acolyte Cowl
+51256,4,Sanctified Crimson Acolyte Handwraps
+51257,4,Sanctified Crimson Acolyte Mantle
+51258,4,Sanctified Crimson Acolyte Pants
+51259,4,Sanctified Crimson Acolyte Raiments
+51260,4,Sanctified Crimson Acolyte Gloves
+51261,4,Sanctified Crimson Acolyte Hood
+51262,4,Sanctified Crimson Acolyte Leggings
+51263,4,Sanctified Crimson Acolyte Robe
+51264,4,Sanctified Crimson Acolyte Shoulderpads
+51265,4,Sanctified Lightsworn Chestguard
+51266,4,Sanctified Lightsworn Faceguard
+51267,4,Sanctified Lightsworn Handguards
+51268,4,Sanctified Lightsworn Legguards
+51269,4,Sanctified Lightsworn Shoulderguards
+51270,4,Sanctified Lightsworn Gloves
+51271,4,Sanctified Lightsworn Greaves
+51272,4,Sanctified Lightsworn Headpiece
+51273,4,Sanctified Lightsworn Spaulders
+51274,4,Sanctified Lightsworn Tunic
+51275,4,Sanctified Lightsworn Battleplate
+51276,4,Sanctified Lightsworn Gauntlets
+51277,4,Sanctified Lightsworn Helmet
+51278,4,Sanctified Lightsworn Legplates
+51279,4,Sanctified Lightsworn Shoulderplates
+51280,4,Sanctified Bloodmage Gloves
+51281,4,Sanctified Bloodmage Hood
+51282,4,Sanctified Bloodmage Leggings
+51283,4,Sanctified Bloodmage Robe
+51284,4,Sanctified Bloodmage Shoulderpads
+51285,4,Sanctified Ahn'Kahar Blood Hunter's Handguards
+51286,4,Sanctified Ahn'Kahar Blood Hunter's Headpiece
+51287,4,Sanctified Ahn'Kahar Blood Hunter's Legguards
+51288,4,Sanctified Ahn'Kahar Blood Hunter's Spaulders
+51289,4,Sanctified Ahn'Kahar Blood Hunter's Tunic
+51290,4,Sanctified Lasherweave Cover
+51291,4,Sanctified Lasherweave Gloves
+51292,4,Sanctified Lasherweave Mantle
+51293,4,Sanctified Lasherweave Trousers
+51294,4,Sanctified Lasherweave Vestment
+51295,4,Sanctified Lasherweave Handgrips
+51296,4,Sanctified Lasherweave Headguard
+51297,4,Sanctified Lasherweave Legguards
+51298,4,Sanctified Lasherweave Raiment
+51299,4,Sanctified Lasherweave Shoulderpads
+51300,4,Sanctified Lasherweave Robes
+51301,4,Sanctified Lasherweave Gauntlets
+51302,4,Sanctified Lasherweave Helmet
+51303,4,Sanctified Lasherweave Legplates
+51304,4,Sanctified Lasherweave Pauldrons
+51305,4,Sanctified Scourgelord Chestguard
+51306,4,Sanctified Scourgelord Faceguard
+51307,4,Sanctified Scourgelord Handguards
+51308,4,Sanctified Scourgelord Legguards
+51309,4,Sanctified Scourgelord Pauldrons
+51310,4,Sanctified Scourgelord Battleplate
+51311,4,Sanctified Scourgelord Gauntlets
+51312,4,Sanctified Scourgelord Helmet
+51313,4,Sanctified Scourgelord Legplates
+51314,4,Sanctified Scourgelord Shoulderplates
+51325,4,Blood-Drinker's Girdle
+51326,4,Wand of Ruby Claret
+51379,4,Bloodsoul Raiment
+51380,4,Pale Corpse Boots
+51382,4,Heartsick Mender's Cape
+51383,4,Spaulders of the Blood Princes
+51384,4,Bloodsipper
+51385,4,Stakethrower
+51386,4,Throatrender Handguards
+51550,4,Ivory-Inlaid Leggings
+51551,4,Chestguard of Siphoned Elements
+51552,4,Shoulderpads of the Searing Kiss
+51553,4,Lana'thel's Bloody Nail
+51554,4,Cowl of Malefic Repose
+51555,4,Tightening Waistband
+51556,4,Veincrusher Gauntlets
+51561,4,Dreamhunter's Carbine
+51562,4,Oxheart
+51563,4,Taiga Bindings
+51564,4,Ironrope Belt of Ymirjar
+51565,4,Skinned Whelp Shoulders
+51566,4,Legguards of the Twisted Dream
+51582,4,Sister Svalna's Aether Staff
+51583,4,Stormbringer Gloves
+51584,4,Lich Wrappings
+51585,4,Sister Svalna's Spangenhelm
+51586,4,Emerald Saint's Spaulders
+51777,4,Leggings of the Refracted Mind
+51782,4,Etched Dragonbone Girdle
+51783,4,Vambraces of the Frost Wyrm Queen
+51784,4,Splintershard
+51785,4,Wyrmwing Treads
+51786,4,Legplates of Aetheric Strife
+51787,4,Scourge Fanged Stompers
+51788,4,Bleak Coldarra Carver
+51789,4,Icicle Shapers
+51790,4,Robes of Azure Downfall
+51791,4,Lost Pavise of the Blue Flight
+51792,4,Shoulderguards of Crystalline Bone
+51811,4,Shoulderguards of Crystalline Bone
+51812,4,Lost Pavise of the Blue Flight
+51813,4,Robes of Azure Downfall
+51814,4,Icicle Shapers
+51815,4,Bleak Coldarra Carver
+51816,4,Scourge Fanged Stompers
+51817,4,Legplates of Aetheric Strife
+51818,4,Wyrmwing Treads
+51819,4,Splintershard
+51820,4,Vambraces of the Frost Wyrm Queen
+51821,4,Etched Dragonbone Girdle
+51823,4,Leggings of the Refracted Mind
+51824,4,Emerald Saint's Spaulders
+51825,4,Sister Svalna's Spangenhelm
+51826,4,Lich Wrappings
+51827,4,Stormbringer Gloves
+51828,4,Sister Svalna's Aether Staff
+51829,4,Legguards of the Twisted Dream
+51830,4,Skinned Whelp Shoulders
+51831,4,Ironrope Belt of Ymirjar
+51832,4,Taiga Bindings
+51833,4,Oxheart
+51834,4,Dreamhunter's Carbine
+51835,4,Veincrusher Gauntlets
+51836,4,Tightening Waistband
+51837,4,Cowl of Malefic Repose
+51838,4,Lana'thel's Bloody Nail
+51839,4,Shoulderpads of the Searing Kiss
+51840,4,Chestguard of Siphoned Elements
+51841,4,Ivory-Inlaid Leggings
+51844,4,Throatrender Handguards
+51845,4,Stakethrower
+51846,4,Bloodsipper
+51847,4,Spaulders of the Blood Princes
+51848,4,Heartsick Mender's Cape
+51850,4,Pale Corpse Boots
+51851,4,Bloodsoul Raiment
+51852,4,Wand of Ruby Claret
+51853,4,Blood-Drinker's Girdle
+51854,4,Battle-Maiden's Legguards
+51856,4,Taldaram's Soft Slippers
+51857,4,Hersir's Greatspear
+51858,4,Soulbreaker
+51859,4,Shoulders of Ruinous Senility
+51860,4,Rippling Flesh Kilt
+51861,4,Chestplate of Septic Stitches
+51862,4,Cauterized Cord
+51864,4,Shoulderpads of the Morbid Ritual
+51865,4,Scalpel-Sharpening Shoulderguards
+51866,4,Discarded Bag of Entrails
+51868,4,Flesh-Carving Scalpel
+51869,4,The Facelifter
+51870,4,Chestguard of the Failed Experiment
+51872,4,Ether-Soaked Bracers
+51873,4,Shuffling Shoes
+51874,4,Gloves of Broken Fingers
+51875,4,Lockjaw
+51876,4,Abomination Knuckles
+51877,4,Taldron's Short-Sighted Helm
+51879,4,Flesh-Shaper's Gurney Strap
+51880,4,Gluth's Fetching Knife
+51881,4,Shaft of Glacial Ice
+51882,4,Kilt of Untreated Wounds
+51883,4,Bloodstained Surgeon's Shoulderguards
+51885,4,Wrists of Septic Shock
+51886,4,Festergut's Gaseous Gloves
+51887,4,Abracadaver
+51888,4,Cloak of Many Skins
+51889,4,Plague-Soaked Leather Leggings
+51891,4,Taldron's Long Neglected Boots
+51892,4,Festering Fingerguards
+51893,4,Gutbuster
+51895,4,Deathforged Legplates
+51896,4,Thaumaturge's Crackling Cowl
+51897,4,Leggings of Unrelenting Blood
+51898,4,Mag'hari Chieftain's Staff
+51899,4,Icecrown Spire Sandals
+51901,4,Gargoyle Spit Bracers
+51902,4,Blade-Scored Carapace
+51903,4,Hauberk of a Thousand Cuts
+51904,4,Scourge Stranglers
+51905,4,Ramaladni's Blade of Culling
+51906,4,Ice-Reinforced Vrykul Helm
+51907,4,Bracers of Pale Illumination
+51908,4,Cord of Dark Suffering
+51909,4,Neverending Winter
+51910,4,Midnight Sun
+51911,4,Pauldrons of Lost Hope
+51912,4,Saronite Gargoyle Cloak
+51914,4,Icecrown Rampart Bracers
+51915,4,Bone Drake's Enameled Boots
+51916,4,Frost Giant's Cleaver
+51917,4,Ghoul Commander's Cuirass
+51918,4,Bracers of Dark Blessings
+51919,4,Deathspeaker Disciple's Belt
+51920,4,Boots of the Frozen Seed
+51921,4,Sister's Handshrouds
+51922,4,Scourgelord's Baton
+51923,4,Chestguard of the Frigid Noose
+51924,4,Deathspeaker Zealot's Helm
+51925,4,Soulthief's Braided Belt
+51926,4,Handgrips of Frost and Sleet
+51927,4,Njordnar Bone Bow
+51928,4,Corrupted Silverplate Leggings
+51929,4,Coldwraith Bracers
+51930,4,Cord of the Patronizing Practitioner
+51931,4,Ancient Skeletal Boots
+51932,4,Frost Needle
+51933,4,Shawl of Nerubian Silk
+51935,4,Linked Scourge Vertebrae
+51936,4,Citadel Enforcer's Claymore
+51937,4,Bonebreaker Scepter
+51938,4,Bone Warden's Splitter
+51947,4,Troggbane Axe of the Frostborne King
+51958,3,Pristine Glowbear Pelt
+51960,3,Vigorous Gloves
+51962,3,Vigorous Bracers
+51963,3,Vigorous Stompers
+51964,3,Vigorous Belt
+51965,3,Vigorous Handguards
+51966,3,Vigorous Spaulders
+51967,3,Enumerated Sandals
+51968,3,Enumerated Wrap
+51970,3,Enumerated Gloves
+51972,3,Enumerated Bracers
+51973,3,Enumerated Handwraps
+51974,0,Enumerated Shoulderpads
+51976,3,Earthbound Shoulderguards
+51978,3,Earthbound Girdle
+51979,3,Earthbound Grips
+51980,3,Earthbound Handgrips
+51981,3,Earthbound Wristguards
+51982,3,Earthbound Boots
+51984,3,Stalwart Shoulderpads
+51987,3,Stalwart Grips
+51989,3,Stalwart Bands
+51990,3,Stalwart Treads
+51993,3,Turbulent Cloak
+51994,3,Tumultuous Cloak

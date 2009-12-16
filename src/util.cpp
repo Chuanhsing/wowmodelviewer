@@ -1,6 +1,8 @@
 #include "util.h"
 #include "CxImage/ximage.h"
+#ifdef _WIN32
 #include <wx/msw/winundef.h>
+#endif
 #include <wx/choicdlg.h>
 #include <wx/dir.h>
 
@@ -14,12 +16,14 @@ bool useLocalFiles = false;
 bool useRandomLooks = true;
 bool bHideHelmet = false;
 bool bKnightEyeGlow = true;
-bool bPTR = false;
+bool bV310 = false;
+bool bShowParticle = true;
 
 long langID = -1;
 int ssCounter = 100; // ScreenShot Counter
 int imgFormat = 0;
 
+/*
 wxString langCSConv[] =
 {
 	_T("iso-8859-1"),
@@ -32,13 +36,15 @@ wxString langCSConv[] =
 	_T(""),
 };
 wxString CSConvStr;
+*/
 
 wxString CSConv(wxString str)
 {
-	if (langID <= 0 || langCSConv[langID] == _T(""))
+	if (langID <= 0) // || langCSConv[langID] == _T(""))
 		return str;
-	CSConvStr = wxCSConv(langCSConv[langID]).cWC2WX(wxConvUTF8.cMB2WC(str));
-	return CSConvStr;
+	return wxConvLocal.cWC2WX(wxConvUTF8.cMB2WC(str.mb_str())); // from private.h
+	//CSConvStr = wxCSConv(langCSConv[langID]).cWC2WX(wxConvUTF8.cMB2WC(str));
+	//return CSConvStr;
 }
 
 float frand()
@@ -75,6 +81,13 @@ void fixnamen(char *name, size_t len)
 			name[i] &= ~0x20;
 		}
 	}
+}
+
+int wxStringToInt(const wxString& str)
+{
+	long number = 0;
+	str.ToLong(&number);
+	return number;
 }
 
 void getGamePath()
@@ -128,8 +141,8 @@ void getGamePath()
 	} else
 		sName = -1;
 
-	if (sTypes[sName] == 1)
-		bPTR = true;
+//	if (sTypes[sName] == 1)
+//		bPTR = true;
 
 	// If we found an install then set the game path, otherwise just set to C:\ for now
 	if (sName >= 0) {

@@ -1,14 +1,20 @@
 #ifndef MODELHEADERS_H
 #define MODELHEADERS_H
 
+#ifdef _WIN32
 typedef unsigned char uint8;
 typedef char int8;
 typedef unsigned __int16 uint16;
 typedef __int16 int16;
 typedef unsigned __int32 uint32;
 typedef __int32 int32;
-
-
+#else
+#include <stdint.h>
+typedef uint16_t uint16;
+typedef int16_t int16;
+typedef uint32_t uint32;
+typedef int32_t int32;
+#endif
 
 #pragma pack(push,1)
 
@@ -210,6 +216,7 @@ struct ModelHeader {
 
 #define	ANIMATION_HANDSCLOSED	15
 #define	ANIMATION_MOUNT			91
+#define	ANIMATION_LOOPED		0x20 // flags
 // block B - animations, size 68 bytes, WotLK 64 bytes
 struct ModelAnimation {
 	uint32 animID; // AnimationDataDB.ID
@@ -218,8 +225,9 @@ struct ModelAnimation {
 
 	float moveSpeed;
 
-	uint32 loopType;
 	uint32 flags;
+	uint16 probability;
+	uint16 unused;
 	uint32 d1;
 	uint32 d2;
 	uint32 playSpeed;  // note: this can't be play speed because it's 0 for some models
@@ -238,8 +246,9 @@ struct ModelAnimationWotLK {
 
 	float moveSpeed;
 
-	uint32 loopType;
 	uint32 flags;
+	uint16 probability; // This is used to determine how often the animation is played. For all animations of the same type, this adds up to 0x7FFF (32767).
+	uint16 unused;
 	uint32 d1;
 	uint32 d2;
 	uint32 playSpeed;  // note: this can't be play speed because it's 0 for some models

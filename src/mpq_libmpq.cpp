@@ -51,21 +51,21 @@ void MPQArchive::close()
 }
 
 void
-MPQFile::openFile(const wxChar* filename)
+MPQFile::openFile(const char* filename)
 {
 	eof = false;
 	buffer = 0;
 	pointer = 0;
 	size = 0;
 	if( useLocalFiles ) {
-		wxString fn = gamePath.fn_str();
-		fn.Append(filename);
+		wxString fn = gamePath;
+		fn.Append(wxString(filename, wxConvUTF8));
 
-		if (wxFile::Exists(fn.fn_str())) {
+		if (wxFile::Exists(fn)) {
 			// success
 			wxFile file;
 			// if successfully opened
-			if (file.Open(fn.fn_str(), wxFile::read)) {
+			if (file.Open(fn, wxFile::read)) {
 				size = file.Length();
 				if (size > 0) {
 					buffer = new unsigned char[size];
@@ -111,7 +111,7 @@ MPQFile::openFile(const wxChar* filename)
 	buffer = 0;
 }
 
-MPQFile::MPQFile(const wxChar* filename):
+MPQFile::MPQFile(const char* filename):
 	eof(false),
 	buffer(0),
 	pointer(0),
@@ -129,8 +129,8 @@ bool MPQFile::exists(const char* filename)
 {
 	if( useLocalFiles ) {
 		wxString fn = gamePath;
-		fn.Append(filename);
-		if (wxFile::Exists(fn.fn_str()))
+		fn.Append(wxString(filename, wxConvUTF8));
+		if (wxFile::Exists(fn))
 			return true;
 	}
 
@@ -143,6 +143,14 @@ bool MPQFile::exists(const char* filename)
 	}
 
 	return false;
+}
+
+void MPQFile::save(const char* filename)
+{
+	wxFile f;
+	f.Open(filename, wxFile::write);
+	f.Write(buffer, size);
+	f.Close();
 }
 
 size_t MPQFile::read(void* dest, size_t bytes)
@@ -195,8 +203,8 @@ int MPQFile::getSize(const char* filename)
 {
 	if( useLocalFiles ) {
 		wxString fn = gamePath;
-		fn.Append(filename);
-		if (wxFile::Exists(fn.fn_str())) {
+		fn.Append(wxString(filename, wxConvUTF8));
+		if (wxFile::Exists(fn)) {
 			wxFile file(fn);
 			return file.Length();
 		}
@@ -244,7 +252,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 			int retVal = libmpq_file_info(&mpq_a, LIBMPQ_FILE_COMPRESSION_TYPE, fileno);
 			// If retVal is 512, its compressed, if its 0 then its uncompressed
 
-			wxString temp = mpq_a.filename;
+			wxString temp(mpq_a.filename, wxConvUTF8);
 			temp = temp.MakeLower();
 			int col = 0; // wxBLACK
 
@@ -270,14 +278,14 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 							break;
 					} while (q++<=end);
 
-					wxString line(p,q-p);
+					wxString line(reinterpret_cast<char *>(p), wxConvUTF8, q-p);
 					if (line.Length()==0) 
 						break;
 					//p += line.length();
 					p = q + 2;
 					//line.erase(line.length()-2, 2); // delete \r\n
 
-					if (filterfunc(line.c_str())) {
+					if (filterfunc(line.mb_str())) {
 						
 						// This is just to help cleanup Duplicates
 						// Ideally I should tokenise the string and clean it up automatically
@@ -288,7 +296,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 							line[ret+1] = char(line.GetChar(ret+1) - 32);
 
 						FileTreeItem tmp;
-						tmp.fn = line;
+						tmp.fn = line.mb_str();
 						tmp.col = col;
 						dest.insert(tmp);
 					}
