@@ -2040,17 +2040,17 @@ void ModelCanvas::Screenshot(const wxString fn, int x, int y)
 	bool succ = true;
 
 	// Save
-	if (temp.GetExt() == "tga") {
+	if (temp.GetExt() == _T("tga")) {
 		newImage->Save(fn.fn_str(), CXIMAGE_FORMAT_TGA);
-	} else if (temp.GetExt() == "png") {
+	} else if (temp.GetExt() == _T("png")) {
 		newImage->Save(fn.fn_str(), CXIMAGE_FORMAT_PNG);
 	//} else if (temp.GetExt() == "jp2") {
 	//	newImage->Save(fn.fn_str(), CXIMAGE_FORMAT_JP2);
-	} else if (temp.GetExt() == "jpg") {
+	} else if (temp.GetExt() == _T("jpg")) {
 		newImage->SetJpegQuality(100);
 		newImage->SetJpegScale(100);
 		newImage->Save(fn.fn_str(), CXIMAGE_FORMAT_JPG);
-	} else if (temp.GetExt() == "bmp") // Save Bitmap format
+	} else if (temp.GetExt() == _T("bmp")) // Save Bitmap format
 		newImage->Save(fn.fn_str(), CXIMAGE_FORMAT_BMP);
 	else
 		succ = false;
