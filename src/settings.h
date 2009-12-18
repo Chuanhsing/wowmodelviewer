@@ -23,7 +23,7 @@ class Settings_Page1: public wxWindow
 	DECLARE_CLASS(Settings_Page1)
     DECLARE_EVENT_TABLE()
 
-	wxCheckBox *chkbox[8];
+	wxCheckBox *chkbox[NUM_SETTINGS1_CHECK];
 	wxListBox *mpqList;
 	wxTextCtrl *txtPath;
 
@@ -44,7 +44,7 @@ class Settings_Page2: public wxWindow
     DECLARE_EVENT_TABLE()
 
 	wxComboBox *oglMode;
-	wxCheckBox *chkBox[12];
+	wxCheckBox *chkBox[NUM_SETTINGS2_CHECK];
 	wxTextCtrl *txtFov;
 
 public:

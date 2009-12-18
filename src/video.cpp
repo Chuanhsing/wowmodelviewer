@@ -64,7 +64,7 @@ VideoSettings::VideoSettings()
 	init = false;
 	render = false;
 
-	useAntiAlias = true;
+	//useAntiAlias = true;
 	useEnvMapping = true;
 	useShaders = true;
 	useCompression = false;
@@ -153,7 +153,7 @@ bool VideoSettings::Init()
 	wxLogMessage(_T("Driver Version: %s"), version);
 
 	
-	if (wxString(renderer, wxConvUTF8).IsSameAs("GDI Generic", false)) {
+	if (wxString(renderer, wxConvUTF8).IsSameAs(_T("GDI Generic"), false)) {
 		wxLogMessage(_T("\tWarning: Running in software mode, this is not enough. Please try updating your video drivers."));
 		// bloody oath - wtb a graphics card
 		hasHardware = false;
@@ -750,7 +750,7 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 
 	if (useLocalFiles) {
 		wxFileName fn = wxString(tex->name.c_str(), wxConvUTF8);
-		wxString suffix = "png";
+		wxString suffix = _T("png");
 		wxString filename = _T("Import\\")+fn.GetName()+_T(".")+suffix;
 		BYTE *buffer = NULL;
 		CxImage *image = NULL;

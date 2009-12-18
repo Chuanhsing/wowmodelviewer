@@ -27,6 +27,7 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	//EVT_MENU(ID_FILE_TEXIMPORT, ModelViewer::OnTex)
 	EVT_MENU(ID_FILE_TEXEXPORT, ModelViewer::OnExport)
 	EVT_MENU(ID_FILE_MODELEXPORT, ModelViewer::OnExport)
+	EVT_MENU(ID_FILE_MODELEXPORT_INIT, ModelViewer::OnExport)
 	EVT_MENU(ID_FILE_MODEL_INFO, ModelViewer::OnExport)
 	EVT_MENU(ID_FILE_DISCOVERY_ITEM, ModelViewer::OnExport)
 	EVT_MENU(ID_FILE_DISCOVERY_NPC, ModelViewer::OnExport)
@@ -245,6 +246,7 @@ void ModelViewer::InitMenu()
 */
 	fileMenu->Append(ID_SHOW_MODELOPENED, _("Export Texture"));
 	fileMenu->Append(ID_FILE_MODELEXPORT, _("Export Model"));
+	fileMenu->Append(ID_FILE_MODELEXPORT_INIT, _("Export Init Model"));
 	fileMenu->AppendSeparator();
 	fileMenu->Append(ID_FILE_DISCOVERY_ITEM, _("Discovery Item"));
 	fileMenu->Append(ID_FILE_DISCOVERY_NPC, _("Discovery NPC"));
@@ -1177,24 +1179,24 @@ void ModelViewer::InitMPQArchives()
 	}
 	f.close();
 
-	char *component = "component.wow-data.txt";
+	const char *component = "component.wow-data.txt";
 	MPQFile f2(component);
 	if (!f2.isEof()) {
 		f2.save(component);
 		f2.close();
 		
 		wxXmlDocument xmlDoc;
-		if (xmlDoc.Load(component, _T("UTF-8"))) {
+		if (xmlDoc.Load(wxString(component, wxConvUTF8), _T("UTF-8"))) {
 			wxXmlNode *child = xmlDoc.GetRoot()->GetChildren(); // componentinfo->component.version
-			if (child && child->GetName() == "component") {
-				wxString version = child->GetPropVal("version", "0");
-				if (version != "0") {
+			if (child && child->GetName() == _T("component")) {
+				wxString version = child->GetPropVal(_T("version"), _T("0"));
+				if (version != _T("0")) {
 					wxLogMessage(_T("Loaded Content Version: %s"), version.c_str());
 				}
 			}
 		}
 		
-		wxRemoveFile(component);
+		wxRemoveFile(wxString(component, wxConvUTF8));
 	}
 }
 
@@ -1316,9 +1318,6 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 		useAntiAlias = event.IsChecked();
 		break;
 
-	case ID_USE_ENVMAP:
-		useEnvMapping = event.IsChecked();
-		break;
 
 	case ID_USE_HWACC:
 		if (event.IsChecked() == true)
@@ -1327,6 +1326,11 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 			disableHWAcc = true;
 		break;
 	*/
+
+	case ID_USE_ENVMAP:
+		video.useEnvMapping = event.IsChecked();
+		break;
+
 	case ID_SHOW_MASK:
 		video.useMasking = !video.useMasking;
 
@@ -1875,7 +1879,7 @@ void ModelViewer::OnBackground(wxCommandEvent &event)
 
 			wxSingleChoiceDialog skyDialog(this, _T("Choose"), _T("Select a Sky Box"), skyboxes);
 			if (skyDialog.ShowModal() == wxID_OK && skyDialog.GetStringSelection() != _T("")) {
-				canvas->skyModel = new Model(skyDialog.GetStringSelection().mb_str(), false);
+				canvas->skyModel = new Model(std::string(skyDialog.GetStringSelection().mb_str()), false);
 				canvas->sky->model = canvas->skyModel;
 			}
 		}
@@ -2594,7 +2598,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				//ExportM2toLWO2(canvas->root, canvas->model, dialog.GetPath().fn_str());
 			} else if (dialog.GetFilterIndex() == 2) {
 				if (canvas->model)
-					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str());
+					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), false);
 				else if (canvas->wmo)
 					ExportWMOtoMS3D(canvas->wmo, dialog.GetPath().fn_str());
 			} else if (dialog.GetFilterIndex() == 3) {
@@ -2602,6 +2606,15 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 					ExportM2to3DS(canvas->model, dialog.GetPath().fn_str());
 				else if (canvas->wmo)
 					ExportWMOto3DS(canvas->wmo, dialog.GetPath().fn_str());
+			}
+		}
+	} else if (id == ID_FILE_MODELEXPORT_INIT) {
+		wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Milkshape 3D (*.ms3d)|*.ms3d"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+		if (dialog.ShowModal()==wxID_OK) {
+			wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+			if (dialog.GetFilterIndex() == 0) {
+				if (canvas->model)
+					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), true);
 			}
 		}
 	} else if (id == ID_FILE_MODEL_INFO) {
@@ -2676,7 +2689,7 @@ void ModelViewer::ImportArmoury(wxString strURL)
 			return;
 
 		// Make sure there was no error retrieving the page
-		if(http.GetError() == wxURL_NOERR) {
+		if(http.GetError() == wxPROTO_NOERR) {
 			wxFileOutputStream output(_T("temp.xml"));
             stream->Read(output); 
 			output.Close();

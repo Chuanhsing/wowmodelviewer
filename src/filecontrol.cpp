@@ -248,7 +248,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		wxLogMessage(_T("OpenGL Error: [0x%x] An error occured."), (unsigned int)err);
 #endif
 	
-	wxString rootfn(data->fn);
+	wxString rootfn(data->fn.c_str(), wxConvUTF8);
 
 	// Check to make sure the selected item is a model (an *.m2 file).
 	modelviewer->isModel = (rootfn.Last() == '2');

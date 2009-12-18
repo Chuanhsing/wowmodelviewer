@@ -503,9 +503,7 @@ public:
 
 #if CXIMAGE_SUPPORT_BASICTRANSFORMATIONS
 /** \addtogroup BasicTransformations */ //@{
-#ifdef _WIN32
 	bool GrayScale();
-#endif
 	bool Flip(bool bFlipSelection = false, bool bFlipAlpha = true);
 	bool Mirror(bool bMirrorSelection = false, bool bMirrorAlpha = true);
 	bool Negative();
@@ -628,7 +626,7 @@ public:
 
 #if CXIMAGE_SUPPORT_SELECTION
 /** \addtogroup Selection */ //@{
-//	bool SelectionClear(BYTE level = 0);
+	bool SelectionClear(BYTE level = 0);
 	bool SelectionCreate();
 	bool SelectionDelete();
 	bool SelectionInvert();

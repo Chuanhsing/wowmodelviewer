@@ -610,7 +610,6 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 
 bool AnimControl::UpdateItemModel(Model *m)
 {
-	//std::string fn = m->name;
 	wxString fn(m->name.c_str(), wxConvUTF8);
 
 	// change M2 to mdx

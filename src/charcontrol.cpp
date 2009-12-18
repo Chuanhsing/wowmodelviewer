@@ -1690,14 +1690,14 @@ wxString CharControl::makeItemTexture(int region, const wxString name)
 	wxChar leggings = name[name.Length() - 2];
 	
 	// try prefered version first
-	wxString fn = regionPaths[region];
+	wxString fn(regionPaths[region], wxConvUTF8);
 	fn += name;
 	fn += _T("_");
 
 	if (leggings == 'l' || leggings == 'L')
 		fn += _T("U");
 	else
-		fn += cd.gender ? "F" : "M";
+		fn += cd.gender ? _T("F") : _T("M");
 		
 	fn += _T(".blp");
 	if (MPQFile::getSize(fn.fn_str()) > 0)  //MPQFile::exists(fn.c_str()) && 
@@ -2039,7 +2039,7 @@ void CharControl::selectSet()
 	// Adds "none" to select
 	NumStringPair n; 
 	n.id = -1; 
-	n.name = _("---- None ----");
+	n.name = wxString(_("---- None ----")).mb_str();
 	items.push_back(n);
 
 	for (ItemSetDB::Iterator it = setsdb.begin(); it != setsdb.end(); ++it) {

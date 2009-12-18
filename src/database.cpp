@@ -133,9 +133,9 @@ CharRacesDB::Record CharRacesDB::getByName(wxString name)
 	for(Iterator i=begin(); i!=end(); ++i) {
 		wxString r;
 		if (bV310)
-			r = i->getString(NameV310);
+			r = wxString(i->getString(NameV310), wxConvUTF8);
 		else
-			r = i->getString(Name);
+			r = wxString(i->getString(Name), wxConvUTF8);
 		if (name.IsSameAs(wxString(i->getString(Name), wxConvUTF8),false) == true)
 			return (*i);
 	}
@@ -488,7 +488,7 @@ void ItemRecord::getLine(const char *line)
 	sscanf(line, "%u,%u,%u,%u,%u,%u,%u", &id, &model, &itemclass, &subclass, &type, &sheath, &quality);
 	for (size_t i=strlen(line)-2; i>1; i--) {
 		if (line[i]==',') {
-			name = (line + i + 1);
+			name = wxString(line + i + 1, wxConvUTF8);
 			break;
 		}
 	}
@@ -733,7 +733,7 @@ wxString NPCDatabase::addDiscoveryId(int id, wxString name)
 	rec.name.Printf(_T("%s [%d]"), name.c_str(), rec.id);
 	if (rec.type > 0) {
 		npcs.push_back(rec);
-		ret.Printf(_T("%d,%d,%d,%s"), rec.id, rec.model, rec.type, rec.name);
+		ret.Printf(_T("%d,%d,%d,%s"), rec.id, rec.model, rec.type, rec.name.c_str());
 	}
 	return ret;
 }

@@ -40,10 +40,9 @@ ArrowControl::ArrowControl(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
 		_T("L-Back"), _T("R-Back"), _T("L-Hip"), _T("R-Hip"), _T("Bust"), _T("Right palm")};
 
 	// Item\\Objectcomponents\\ammo\\ 
-	const wxString models[] = {_T("arrowacidflight_01.m2"), _T("arrowfireflight_01.m2"), _T("arrowflight_01.m2"), _T("arrowiceflight_01.m2"), _T("arrowmagicflight_01.m2")};
 
-	//wxComboBox(wxWindow* parent, wxWindowID id, const wxString& value = "", const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, int n, const wxString choices[], long style = 0, const wxValidator& validator = wxDefaultValidator, const wxString& name = "comboBox")
 	joint = new wxComboBox(this, ID_ARROW_JOINT,_T(""), wxPoint(5,5), wxSize(130,20), 36, loc, wxCB_READONLY);
+	const wxString models[] = {_T("arrowacidflight_01.m2"), _T("arrowfireflight_01.m2"), _T("arrowflight_01.m2"), _T("arrowiceflight_01.m2"), _T("arrowmagicflight_01.m2")};
 	model = new wxComboBox(this, ID_ARROW_MODEL,_T(""), wxPoint(5,30), wxSize(130,20), 5, models, wxCB_READONLY);
 	//tex = new wxComboBox(this, ID_ARROW_TEXTURE,_T(""), wxPoint(55,5), wxSize(100,20), 0, NULL, wxCB_READONLY);
 	

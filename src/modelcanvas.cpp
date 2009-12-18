@@ -170,9 +170,7 @@ void ModelCanvas::InitView()
 	// set GL viewport
 	int w=0, h=0;
 	GetClientSize(&w, &h);
-#ifndef WotLK
-	//video.SetCurrent(); // 2009.07.02 Alfred cause crash
-#endif
+	video.SetCurrent(); // 2009.07.02 Alfred cause crash
 	
 	// update projection
 	//SetupProjection();
@@ -513,7 +511,9 @@ void ModelCanvas::OnMouse(wxMouseEvent& event)
 void ModelCanvas::InitGL()
 {
 	// Initiate our default OpenGL settings
+#ifdef _WIN32
 	video.SetCurrent();
+#endif
 	video.InitGL();
 
 	GLenum err = 0;
@@ -544,10 +544,14 @@ void ModelCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 		InitGL();
 
 	if (video.render) {
+#ifdef _WIN32
 		if (wmo)
 			RenderWMO();
 		else 
 			Render();
+#else
+		Render();
+#endif
 	}
 }
 
@@ -565,13 +569,13 @@ inline void ModelCanvas::CreateTexture(wxString filename, GLuint texture)
 	wxString tmp = filename.Mid(filename.Length() - 3, 3);
 	tmp.LowerCase();
 
-	if (tmp == "bmp")
+	if (tmp == _T("bmp"))
 		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_BMP);
-	else if (tmp == "tga")
+	else if (tmp == _T("tga"))
 		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_TGA);
-	else if (tmp == "jpg")
+	else if (tmp == _T("jpg"))
 		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_JPG);
-	else if (tmp == "png")
+	else if (tmp == _T("png"))
 		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_PNG);
 	else 
 		return;
@@ -1787,7 +1791,7 @@ void ModelCanvas::LoadBackground(wxString filename)
 	GLuint texFormat = GL_TEXTURE_2D;
 
 	if (tmp == _T("avi")) {
-		
+#ifdef _WIN32
 		cAvi.SetFileName(filename.c_str());
 		cAvi.InitEngineForRead();
 
@@ -1802,16 +1806,16 @@ void ModelCanvas::LoadBackground(wxString filename)
 
 		drawBackground = true;
 		drawAVIBackground = true;
-
+#endif
 	} else {
 
-		if (tmp == "bmp")
+		if (tmp == _T("bmp"))
 			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_BMP);
-		else if (tmp == "tga")
+		else if (tmp == _T("tga"))
 			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_TGA);
-		else if (tmp == "jpg")
+		else if (tmp == _T("jpg"))
 			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_JPG);
-		else if (tmp == "png")
+		else if (tmp == _T("png"))
 			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_PNG);
 		else 
 			return;

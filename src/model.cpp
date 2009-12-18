@@ -731,7 +731,7 @@ void Model::initCommon(MPQFile &f)
 		fullname = lodname;
 		lodname.append("00.skin"); // Lods: 00, 01, 02, 03
 		MPQFile g(lodname.c_str());
-		g_modelViewer->modelOpened->Add(lodname);
+		g_modelViewer->modelOpened->Add(wxString(lodname.c_str(), wxConvUTF8));
 		if (g.isEof()) {
 			wxLogMessage(_T("Error: Unable to load Lods: [%s]"), lodname.c_str());
 			g.close();

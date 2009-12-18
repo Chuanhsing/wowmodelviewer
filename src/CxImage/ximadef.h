@@ -11,6 +11,11 @@
  #define DLL_EXP
 #endif
 
+#ifdef X_PROTOCOL
+  // X11's X.h pollutes the namespace and interferes - cleaning up
+  #undef GrayScale
+  #undef SelectionClear
+#endif
 
 #if CXIMAGE_SUPPORT_EXCEPTION_HANDLING
   #define cx_try try
@@ -120,8 +125,6 @@ typedef void*          HRGN;
 #ifndef _T
 #define _T
 #endif
-#define LPCTSTR const char *
-#define _tfopen fopen
 #endif
 
 typedef struct tagRECT

@@ -7,9 +7,9 @@
 
 void ExportM2to3DS(Model *m, const char *fn);
 
-void ExportM2toMS3D(Attachment *att, Model *m, const char *fn);
+void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init);
 
-void ExportM2toLWO2(Attachment *att, Model *m, const char *fn);
+void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init);
 
 void ExportM2toLWO(Model *m, const char *fn);
 

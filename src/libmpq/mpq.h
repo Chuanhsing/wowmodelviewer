@@ -135,6 +135,11 @@ extern "C" {
 #define min(a, b) ((a < b) ? a : b)
 #endif
 
+#ifndef _WIN32
+#include <stdint.h>
+#define _lseeki64 lseek64
+typedef int32_t __int32;
+#endif
 
 typedef unsigned int	mpq_buffer[LIBMPQ_TOOLS_BUFSIZE];
 typedef int		(*DECOMPRESS)(char *, int *, char *, int);

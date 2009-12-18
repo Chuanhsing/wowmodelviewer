@@ -103,7 +103,7 @@ void AddCount(Model *m)
 	}
 }
 
-void AddVertices(Model *m, Attachment *att)
+void AddVertices(Model *m, Attachment *att, bool init)
 {
 	int boneID = -1;
 	Model *mParent = NULL;
@@ -136,7 +136,7 @@ void AddVertices(Model *m, Attachment *att)
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 				uint16 a = m->indices[b];
 				
-				if (m->vertices) {
+				if (m->vertices && init == false) {
 					verts[vertIndex].vertex.x = ((m->vertices[a].x * scale.x) + pos.x);
 					verts[vertIndex].vertex.y = ((m->vertices[a].y * scale.y) + pos.y);
 					verts[vertIndex].vertex.z = ((m->vertices[a].z * scale.z) + pos.z);
@@ -175,7 +175,7 @@ void AddVertices(Model *m, Attachment *att)
 	}
 }
 
-void InitCommon(Attachment *att)
+void InitCommon(Attachment *att, bool init)
 {
 	if (verts)
 		wxDELETEA(verts);
@@ -221,19 +221,19 @@ void InitCommon(Attachment *att)
 	groups = new GroupData[numGroups];
 
 	if (m)
-		AddVertices(m, att);
+		AddVertices(m, att, init);
 
 	// children:
 	for (size_t i=0; i<att->children.size(); i++) {
 		Model *mAtt = static_cast<Model*>(att->children[i]->model);
 		if (mAtt)
-			AddVertices(mAtt, att->children[i]);
+			AddVertices(mAtt, att->children[i], init);
 
 		Attachment *att2 = att->children[i];
 		for (size_t j=0; j<att2->children.size(); j++) {
 			Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
 			if (mAttChild)
-				AddVertices(mAttChild, att2->children[j]);
+				AddVertices(mAttChild, att2->children[j], init);
 		}
 	}
 }
@@ -449,7 +449,7 @@ void ExportM2to3DS(Model *m, const char *fn)
 	wxDELETEA(verts);
 }
 
-void ExportM2toMS3D(Attachment *att, Model *m, const char *fn)
+void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 {
 	wxFFileOutputStream f(wxString(fn, wxConvUTF8), wxT("w+b"));
 
@@ -458,7 +458,7 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn)
 		return;
 	}
 
-	InitCommon(att);
+	InitCommon(att, init);
 
 	// Write the header
 	ms3d_header_t header;
@@ -703,7 +703,7 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn)
 /*
 http://gpwiki.org/index.php/LWO
 */
-void ExportM2toLWO2(Attachment *att, Model *m, const char *fn)
+void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init)
 {
 	int i32;
 	uint32 u32;
@@ -718,7 +718,7 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn)
 		return;
 	}
 
-	InitCommon(att);
+	InitCommon(att, init);
 
 	// LightWave object files use the IFF syntax described in the EA-IFF85 document. Data is stored in a collection of chunks. 
 	// Each chunk begins with a 4-byte chunk ID and the size of the chunk in bytes, and this is followed by the chunk contents.
@@ -1354,7 +1354,7 @@ void ExportM2toOBJ(Model *m, const char *fn)
 			fm << "Ns " << p.ocol.w << endl;
 			fm << "map_Kd " << texName.c_str() << endl << endl;
 
-			wxString texFilename(fn);
+			wxString texFilename(fn, wxConvUTF8);
 			texFilename = texFilename.BeforeLast('\\');
 			texFilename += '\\';
 			texFilename += texName;

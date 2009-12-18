@@ -24,6 +24,7 @@
 #endif
 
 // Link to our libs.
+#ifdef _WIN32
 #pragma message("     Adding library: opengl32.lib" ) 
 #pragma comment( lib, "opengl32.lib" )	// OpenGL API
 #pragma message("     Adding library: glu32.lib" ) 
@@ -42,6 +43,7 @@
 #pragma comment( lib, "comctl32.lib" ) // Common Controls 32bit
 #pragma message("     Adding library: rpcrt4.lib" ) 
 #pragma comment( lib, "rpcrt4.lib" )
+#endif
 
 #ifdef _DEBUG
 	#ifdef _WIN32
@@ -86,7 +88,6 @@
 		#pragma comment( lib, "wxmsw28_adv.lib" )
 		#pragma comment( lib, "wxmsw28_qa.lib" )
 		#pragma comment( lib, "wxmsw28_aui.lib" )
-	#endif
 	
 	#pragma comment( lib, "ws2_32.lib ") // This lib is required by wxbase28_net lib
 
@@ -97,9 +98,9 @@
 	#pragma comment( lib, "wxexpat.lib" )		// Added 0.5.08
 	#pragma comment( lib, "wxbase28_xml.lib" )	// Added 0.5.08
 	
-
 	#pragma message("     Adding library: cximagecrt.lib" ) 
 	#pragma comment( lib, "cximagecrt.lib" )
+	#endif
 #endif // _DEBUG
 
 #include "mondrian.xpm"

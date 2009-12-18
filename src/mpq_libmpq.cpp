@@ -148,7 +148,7 @@ bool MPQFile::exists(const char* filename)
 void MPQFile::save(const char* filename)
 {
 	wxFile f;
-	f.Open(filename, wxFile::write);
+	f.Open(wxString(filename, wxConvUTF8), wxFile::write);
 	f.Write(buffer, size);
 	f.Close();
 }
@@ -285,7 +285,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 					p = q + 2;
 					//line.erase(line.length()-2, 2); // delete \r\n
 
-					if (filterfunc(line.mb_str())) {
+					if (filterfunc(std::string(line.mb_str()))) {
 						
 						// This is just to help cleanup Duplicates
 						// Ideally I should tokenise the string and clean it up automatically
