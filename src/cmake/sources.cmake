@@ -1,0 +1,75 @@
+set(WOWMV_SOURCES
+    animcontrol.cpp
+    AnimExporter.cpp
+    app.cpp
+    arrows.cpp
+    camera.cpp
+    charcontrol.cpp
+    database.cpp
+    dbcfile.cpp
+    ddslib.cpp
+    effects.cpp
+    filecontrol.cpp
+    globalvars.cpp
+    imagecontrol.cpp
+    itemselection.cpp
+    lightcontrol.cpp
+    modelbankcontrol.cpp
+    modelcanvas.cpp
+    modelcontrol.cpp
+    model.cpp
+    modelexport.cpp
+    modelviewer.cpp
+    mpq_libmpq.cpp
+    particle.cpp
+#   particle_test.cpp
+    Quantize.cpp
+#   RenderTexture.cpp
+    settings.cpp
+    util.cpp
+    video.cpp
+    wmo.cpp
+)
+
+set(MPQ_SOURCES
+    libmpq/common.cpp
+    libmpq/explode.cpp
+    libmpq/extract.cpp
+    libmpq/huffman.cpp
+    libmpq/mpq.cpp
+    libmpq/wave.cpp
+)
+
+set(CXIMAGE_SOURCES
+    CxImage/tif_xfile.cpp
+    CxImage/ximabmp.cpp
+    CxImage/ximadsp.cpp
+    CxImage/ximaenc.cpp
+    CxImage/ximaexif.cpp
+    CxImage/ximage.cpp
+    CxImage/ximagif.cpp
+    CxImage/ximahist.cpp
+    CxImage/ximaico.cpp
+    CxImage/ximainfo.cpp
+    CxImage/ximaint.cpp
+    CxImage/ximajas.cpp
+    CxImage/ximajbg.cpp
+    CxImage/ximajpg.cpp
+    CxImage/ximalpha.cpp
+    CxImage/ximalyr.cpp
+    CxImage/ximamng.cpp
+    CxImage/ximapal.cpp
+    CxImage/ximapcx.cpp
+    CxImage/ximapng.cpp
+    CxImage/ximaraw.cpp
+    CxImage/ximasel.cpp
+    CxImage/ximaska.cpp
+    CxImage/ximatga.cpp
+    CxImage/ximath.cpp
+    CxImage/ximatif.cpp
+    CxImage/ximatran.cpp
+    CxImage/ximawbmp.cpp
+    CxImage/ximawmf.cpp
+    CxImage/ximawnd.cpp
+    CxImage/xmemfile.cpp
+)
