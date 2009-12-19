@@ -48,8 +48,16 @@ END_EVENT_TABLE()
 	}
 #endif
 
+#ifndef _WIN32
+namespace {
+	int attrib[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
+}
+#endif
+
 ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
-//: wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxCLIP_CHILDREN|wxFULL_REPAINT_ON_RESIZE, _T("ModelCanvas"), 0, wxNullPalette)
+#ifndef _WIN32
+: wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxCLIP_CHILDREN|wxFULL_REPAINT_ON_RESIZE, _T("ModelCanvas"), attrib, wxNullPalette)
+#endif
 {
 	wxLogMessage(_T("Creating OpenGL Canvas..."));
 
@@ -97,11 +105,14 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 	
 	
 	//wxNO_BORDER|wxCLIP_CHILDREN|wxFULL_REPAINT_ON_RESIZE
+#ifdef _WIN32
 	if(!Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxCLIP_CHILDREN|wxFULL_REPAINT_ON_RESIZE, _T("ModelCanvas"))) {
 		wxLogMessage(_T("Critcal Error: Unable to create a window to handle our OpenGL rendering.\n\tWon't be able to continue."));
 		parent->Close();
 		return;
-	} else {
+	} else 
+#endif
+	{
 		SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 		Show(true);
 
@@ -170,7 +181,7 @@ void ModelCanvas::InitView()
 	// set GL viewport
 	int w=0, h=0;
 	GetClientSize(&w, &h);
-	video.SetCurrent(); // 2009.07.02 Alfred cause crash
+	SetCurrent(); // 2009.07.02 Alfred cause crash
 	
 	// update projection
 	//SetupProjection();
@@ -511,9 +522,7 @@ void ModelCanvas::OnMouse(wxMouseEvent& event)
 void ModelCanvas::InitGL()
 {
 	// Initiate our default OpenGL settings
-#ifdef _WIN32
-	video.SetCurrent();
-#endif
+	SetCurrent();
 	video.InitGL();
 
 	GLenum err = 0;
@@ -544,14 +553,10 @@ void ModelCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 		InitGL();
 
 	if (video.render) {
-#ifdef _WIN32
 		if (wmo)
 			RenderWMO();
 		else 
 			Render();
-#else
-		Render();
-#endif
 	}
 }
 
@@ -1067,7 +1072,7 @@ inline void ModelCanvas::Render()
 	// Finished rendering, swap it into our front buffer (to the screen)
 	//glFlush();
 	//glFinish();
-	video.SwapBuffers();
+	SwapBuffers();
 }
 
 inline void ModelCanvas::RenderToTexture()
@@ -1250,7 +1255,6 @@ inline void ModelCanvas::RenderToTexture()
 	*/
 }
 
-#ifdef _WIN32
 inline void ModelCanvas::RenderWMO()
 {
 	if (!init)
@@ -1300,10 +1304,10 @@ inline void ModelCanvas::RenderWMO()
 
 	//glFlush();
 	//glFinish();
-	//SwapBuffers();
-	video.SwapBuffers();
+	SwapBuffers();
 }
 
+#ifdef _WIN32
 inline void ModelCanvas::RenderWMOToBuffer()
 {
 	if (!rt)
@@ -2102,6 +2106,25 @@ void ModelCanvas::LoadSceneState(int id)
 		glGetIntegerv(GL_VIEWPORT, screenSize);				// get the width/height of the canvas
 		video.ResizeGLScene(screenSize[2], screenSize[3]);
 	}
+}
+
+void ModelCanvas::SetCurrent()
+{
+#ifdef _WIN32
+	video.SetCurrent();
+#else
+	wxGLCanvas::SetCurrent();
+	video.render = true;
+#endif
+}
+
+void ModelCanvas::SwapBuffers()
+{
+#ifdef _WIN32
+	video.SwapBuffers();
+#else
+	wxGLCanvas::SwapBuffers();
+#endif
 }
 
 void Attachment::setup()

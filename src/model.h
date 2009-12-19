@@ -400,7 +400,7 @@ public:
 	void drawBones();
 	void drawBoundingVolume();
 	void drawParticles();
-	inline void draw();
+	void draw();
 	// -------------------------------
 	
 	void updateEmitters(float dt);

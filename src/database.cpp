@@ -515,7 +515,7 @@ ItemRecord::ItemRecord(const char* line)
 		for (size_t i=strlen(line)-2; i>1; i--) {
 			if (line[i]==',') {
 				//name = (line + i + 1);
-				name.Printf(_T("%s [%d] [%d]"), (line+i+1), id, model);
+				name.Printf(_T("%s [%d] [%d]"), wxString(line+i+1, wxConvUTF8).c_str(), id, model);
 				break;
 			}
 		}
@@ -746,7 +746,7 @@ NPCRecord::NPCRecord(const char* line)
 	for (size_t i=strlen(line)-2; i>1; i--) {
 		if (line[i]==',') {
 			//name = (line + i + 1);
-			name.Printf(_T("%s [%d] [%d]"), (line+i+1), id, model);
+			name.Printf(_T("%s [%d] [%d]"), wxString(line+i+1, wxConvUTF8).c_str(), id, model);
 			break;
 		}
 	}

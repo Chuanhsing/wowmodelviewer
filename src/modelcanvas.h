@@ -10,7 +10,7 @@
 #endif
 
 // wx
-//#include "wx/glcanvas.h"
+
 #include "wx/window.h"
 #include "wx/treectrl.h"
 
@@ -32,6 +32,15 @@
 #endif
 
 #include "enums.h"
+
+#ifdef _WIN32
+    #include "./GL/glew.h"
+    #include "./GL/wglew.h"
+#else // Linux / OSX
+    #include <GL/glew.h>
+    #include <GL/glxew.h>
+#endif
+#include "wx/glcanvas.h"
 
 // custom objects
 class AnimControl;
@@ -89,7 +98,12 @@ struct Attachment {
 	void tick(float dt);
 };
 
-class ModelCanvas: public wxWindow
+class ModelCanvas:
+#ifdef _WIN32
+		public wxWindow
+#else
+		public wxGLCanvas
+#endif
 //class ModelCanvas: public wxGLCanvas
 {
 	DECLARE_CLASS(ModelCanvas)
@@ -173,6 +187,8 @@ public:
 	void SaveSceneState(int id);
 	void LoadSceneState(int id);
 
+	void SetCurrent();
+	void SwapBuffers();
 
 	// view:
 	Vec3D vRot0;
