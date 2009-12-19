@@ -181,7 +181,9 @@ void ModelCanvas::InitView()
 	// set GL viewport
 	int w=0, h=0;
 	GetClientSize(&w, &h);
+#if 0
 	SetCurrent(); // 2009.07.02 Alfred cause crash
+#endif
 	
 	// update projection
 	//SetupProjection();
