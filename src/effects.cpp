@@ -9,7 +9,7 @@ SpellEffectsDB spelleffectsdb;
 
 void GetSpellEffects(){
 	for (SpellEffectsDB::Iterator it=spelleffectsdb.begin(); it!=spelleffectsdb.end(); ++it) {
-		wxString temp(it->getString(SpellEffectsDB::EffectName), wxConvUTF8);
+		wxString temp(it->getString(SpellEffectsDB::EffectName));
 		if (temp.Mid(0, 5) != _T("zzOLD"))
 			spelleffects.Insert(temp, 0);
 	}
@@ -53,18 +53,7 @@ void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent
 
 		// only add the subclass if it was found in the itemlist
 		if (cl>0 && subclassesFound.find(pair<int,int>(cl, scl)) != subclassesFound.end()) {
-			
-			// Used to go through the 'string fields' looking for the one with data.
-			wxString str;
-			for (int i = ItemSubClassDB::Name; i<18; i++)
-			{
-				str = wxString(it->getString(i), *wxConvCurrent);
-				if (!str.IsEmpty()) {
-					//p.name = str.fn_str();
-					break;
-				}
-			}
-			//string str = it->getString(ItemSubClassDB::Name);
+			wxString str = CSConv(it->getString(ItemSubClassDB::Name + langID));
 
 			int hands = it->getInt(ItemSubClassDB::Hands);
 			if (hands > 0) {
@@ -177,7 +166,7 @@ void EnchantsDialog::OnClick(wxCommandEvent &event)
 						for (int k=0; k<5; k++) {
 							if ((it->index[k] > 0) && (m->attLookup[k]>=0)) {
 								ItemVisualEffectDB::Record rec = effectdb.getById(it->index[k]);
-								att->addChild(rec.getString(ItemVisualEffectDB::Model), k, -1);
+								att->addChild(rec.getString(ItemVisualEffectDB::Model).c_str(), k, -1);
 							}
 						}
 						break;
@@ -256,7 +245,7 @@ void EnchantsDialog::InitEnchants()
 				temp.id = visualid;
 				for(size_t i=0; i<5; i++)
 					temp.index[i] = it2->getInt(ItemVisualsDB::VisualID+1+i);
-				temp.name = CSConv(wxString(it->getString(SpellItemEnchantmentDB::Name + langID), wxConvUTF8)).mb_str();
+				temp.name = CSConv(it->getString(SpellItemEnchantmentDB::Name + langID)).mb_str();
 				enchants.push_back(temp);
 				break;
 			}

@@ -190,7 +190,7 @@ void AnimControl::UpdateModel(Model *m)
 		for (unsigned int i=0; i<g_selModel->header.nAnimations; i++) {			
 			try {
 				AnimDB::Record rec = animdb.getByAnimID(g_selModel->anims[i].animID);
-				strName = wxString(rec.getString(AnimDB::Name), wxConvUTF8);
+				strName = rec.getString(AnimDB::Name);
 			} catch (AnimDB::NotFound) {
 				strName = _T("???");
 			}
@@ -335,9 +335,9 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 				if (it->getUInt(CreatureSkinDB::ModelID) == modelid) {
 					TextureGroup grp;
 					for (int i=0; i<TextureGroup::num; i++) {
-						std::string skin(it->getString(CreatureSkinDB::Skin + i));
+						wxString skin(it->getString(CreatureSkinDB::Skin + i));
 						
-						grp.tex[i] = skin;
+						grp.tex[i] = skin.mb_str();
 					}
 					grp.base = 11;
 					grp.count = 3;
@@ -631,23 +631,23 @@ bool AnimControl::UpdateItemModel(Model *m)
 	TextureSet skins;
 
 	for (ItemDisplayDB::Iterator it=itemdisplaydb.begin(); it!=itemdisplaydb.end(); ++it) {
-		if (fn.IsSameAs(wxString(it->getString(ItemDisplayDB::Model), wxConvUTF8), false)) {
+		if (fn.IsSameAs(it->getString(ItemDisplayDB::Model), false)) {
             TextureGroup grp;
 			grp.base = 2;
 			grp.count = 1;
-			const char *skin = it->getString(ItemDisplayDB::Skin);
-			grp.tex[0] = skin;
+			wxString skin = it->getString(ItemDisplayDB::Skin);
+			grp.tex[0] = skin.mb_str();
 			if (grp.tex[0].length() > 0) 
 				skins.insert(grp);
 		}
 		
 		//if (!strcmp(it->getString(ItemDisplayDB::Model2), fn.c_str())) {
-		if (fn.IsSameAs(wxString(it->getString(ItemDisplayDB::Model2), wxConvUTF8), false)) {
+		if (fn.IsSameAs(it->getString(ItemDisplayDB::Model2), false)) {
             TextureGroup grp;
 			grp.base = 2;
 			grp.count = 1;
-			const char *skin = it->getString(ItemDisplayDB::Skin2);
-			grp.tex[0] = skin;
+			wxString skin = it->getString(ItemDisplayDB::Skin2);
+			grp.tex[0] = skin.mb_str();
 			if (grp.tex[0].length() > 0) 
 				skins.insert(grp);
 		}

@@ -141,9 +141,9 @@ class CharControl: public wxWindow
 	DECLARE_CLASS(CharControl)
     DECLARE_EVENT_TABLE()
 
-	wxSpinButton *spins[6];
-	wxStaticText *spinLabels[6];
-	wxSpinButton *tabardSpins[5];
+	wxSpinButton *spins[NUM_SPIN_BTNS];
+	wxStaticText *spinLabels[NUM_SPIN_BTNS];
+	wxSpinButton *tabardSpins[NUM_TABARD_BTNS];
 	wxButton *buttons[NUM_CHAR_SLOTS];
 	wxStaticText *labels[NUM_CHAR_SLOTS];
 	

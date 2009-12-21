@@ -133,10 +133,10 @@ CharRacesDB::Record CharRacesDB::getByName(wxString name)
 	for(Iterator i=begin(); i!=end(); ++i) {
 		wxString r;
 		if (bV310)
-			r = wxString(i->getString(NameV310), wxConvUTF8);
+			r = i->getString(NameV310);
 		else
-			r = wxString(i->getString(Name), wxConvUTF8);
-		if (name.IsSameAs(wxString(i->getString(Name), wxConvUTF8),false) == true)
+			r = i->getString(Name);
+		if (name.IsSameAs(i->getString(Name), false) == true)
 			return (*i);
 	}
 	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
@@ -215,7 +215,7 @@ CreatureModelDB::Record CreatureModelDB::getByFilename(std::string fn)
 	/// Brute force search for now
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
-		wxString str(i->getString(Filename), wxConvUTF8);
+		wxString str(i->getString(Filename));
 		if(str.IsSameAs(wxString(fn.c_str(), wxConvUTF8), false) == true)
 			return (*i);
 	}
@@ -276,7 +276,7 @@ NPCDB::Record NPCDB::getByFilename(std::string fn)
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
 		if(i->getString(Filename) == fn) {
-			std::cout << i->getString(Filename) << "\n";
+			std::cout << i->getString(Filename).c_str() << "\n";
 			return (*i);
 		}
 	}
@@ -845,7 +845,7 @@ SpellEffectsDB::Record SpellEffectsDB::getByName(const wxString name)
 {
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
-		if (name.IsSameAs(wxString(i->getString(EffectName), wxConvUTF8), false) == true)
+		if (name.IsSameAs(i->getString(EffectName), false) == true)
 			return (*i);
 	}
 	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);

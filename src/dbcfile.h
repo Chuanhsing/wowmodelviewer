@@ -69,7 +69,7 @@ public:
 			assert(ofs < file.recordSize);
 			return *reinterpret_cast<unsigned char*>(offset+ofs);
 		}
-		const char *getString(size_t field) const
+		wxString getString(size_t field) const
 		{
 			assert(field < file.fieldCount);
 			size_t stringOffset = getUInt(field);
@@ -78,7 +78,7 @@ public:
 			assert(stringOffset < file.stringSize);
 			//char * tmp = (char*)file.stringTable + stringOffset;
 			//unsigned char * tmp2 = file.stringTable + stringOffset;
-			return reinterpret_cast<char*>(file.stringTable + stringOffset);
+			return wxString(reinterpret_cast<char*>(file.stringTable + stringOffset), wxConvUTF8);
 		}
 	private:
 		Record(DBCFile &file, unsigned char *offset): file(file), offset(offset) {}

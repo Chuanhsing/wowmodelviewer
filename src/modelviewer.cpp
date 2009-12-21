@@ -249,6 +249,8 @@ void ModelViewer::InitMenu()
 	fileMenu->Append(ID_FILE_MODELEXPORT_INIT, _("Export Init Model"));
 	fileMenu->AppendSeparator();
 	fileMenu->Append(ID_FILE_DISCOVERY_ITEM, _("Discovery Item"));
+	if (wxFileExists(_T("discoveryitems.csv")))
+		fileMenu->Enable(ID_FILE_DISCOVERY_ITEM, false);
 	fileMenu->Append(ID_FILE_DISCOVERY_NPC, _("Discovery NPC"));
 	fileMenu->AppendSeparator();
 	fileMenu->Append(ID_FILE_MODEL_INFO, _("Export ModelInfo.xml"));
@@ -945,7 +947,7 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 			unsigned int modelID = modelRec.getUInt(CreatureSkinDB::ModelID);
 			CreatureModelDB::Record creatureModelRec = modeldb.getByID(modelID);
 			
-			wxString name(creatureModelRec.getString(CreatureModelDB::Filename), wxConvUTF8);
+			wxString name(creatureModelRec.getString(CreatureModelDB::Filename));
 			name = name.BeforeLast('.');
 			name.Append(_T(".m2"));
 
@@ -955,10 +957,9 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 			TextureGroup grp;
 			int count = 0;
 			for (int i=0; i<TextureGroup::num; i++) {
-				//const char *skin = it->getString(CreatureSkinDB::Skin + i);
-				std::string skin(modelRec.getString(CreatureSkinDB::Skin + i));
+				wxString skin(modelRec.getString(CreatureSkinDB::Skin + i));
 				
-				grp.tex[i] = skin;
+				grp.tex[i] = skin.mb_str();
 				if (skin.length() > 0)
 					count++;
 			}
@@ -972,34 +973,32 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 			NPCDB::Record rec = npcdb.getByNPCID(displayID);
 			CharRacesDB::Record rec2 = racedb.getById(rec.getUInt(NPCDB::RaceID));
 			
-			string retval = rec.getString(NPCDB::Gender);
-			string strModel = "Character\\";
-
-
+			wxString retval = rec.getString(NPCDB::Gender);
+			wxString strModel = _T("Character\\");
 
 			if (bV310) {
-				if (retval != "") {
+				if (retval != _T("")) {
 					strModel.append(rec2.getString(CharRacesDB::NameV310));
-					strModel.append("\\Female\\");
+					strModel.append(_T("\\Female\\"));
 					strModel.append(rec2.getString(CharRacesDB::NameV310));
-					strModel.append("Female.m2");
+					strModel.append(_T("Female.m2"));
 				} else {
 					strModel.append(rec2.getString(CharRacesDB::NameV310));
-					strModel.append("\\Male\\");
+					strModel.append(_T("\\Male\\"));
 					strModel.append(rec2.getString(CharRacesDB::NameV310));
-					strModel.append("Male.m2");
+					strModel.append(_T("Male.m2"));
 				}
 			} else {
-				if (retval != "") {
+				if (retval != _T("")) {
 					strModel.append(rec2.getString(CharRacesDB::Name));
-					strModel.append("\\Female\\");
+					strModel.append(_T("\\Female\\"));
 					strModel.append(rec2.getString(CharRacesDB::Name));
-					strModel.append("Female.m2");
+					strModel.append(_T("Female.m2"));
 				} else {
 					strModel.append(rec2.getString(CharRacesDB::Name));
-					strModel.append("\\Male\\");
+					strModel.append(_T("\\Male\\"));
 					strModel.append(rec2.getString(CharRacesDB::Name));
-					strModel.append("Male.m2");
+					strModel.append(_T("Male.m2"));
 				}
 			}
 			
@@ -1010,7 +1009,7 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 			canvas->model->modelType = MT_NPC;
 
 			wxString fn(_T("Textures\\Bakednpctextures\\"));
-			fn.Append(wxString(rec.getString(NPCDB::Filename), wxConvUTF8));
+			fn.Append(rec.getString(NPCDB::Filename));
 			charControl->UpdateNPCModel(modelAtt, displayID);
 			charControl->customSkin = fn;
 
@@ -1866,9 +1865,9 @@ void ModelViewer::OnBackground(wxCommandEvent &event)
 			wxArrayString skyboxes;
 
 			for (LightSkyBoxDB::Iterator it=skyboxdb.begin();  it!=skyboxdb.end(); ++it) {
-				wxString str(it->getString(LightSkyBoxDB::Name + langID), wxConvUTF8);
-				str.Remove(str.length()-2);
-				str.Append(_T("2"));
+				wxString str(it->getString(LightSkyBoxDB::Name + langID));
+				str = str.BeforeLast('.');
+				str.Append(_T(".m2"));
 
 				if (skyboxes.Index(str, false) == wxNOT_FOUND)
 					skyboxes.Add(str);
@@ -1877,7 +1876,7 @@ void ModelViewer::OnBackground(wxCommandEvent &event)
 			skyboxes.Sort();
 
 
-			wxSingleChoiceDialog skyDialog(this, _T("Choose"), _T("Select a Sky Box"), skyboxes);
+			wxSingleChoiceDialog skyDialog(this, _("Choose"), _("Select a Sky Box"), skyboxes);
 			if (skyDialog.ShowModal() == wxID_OK && skyDialog.GetStringSelection() != _T("")) {
 				canvas->skyModel = new Model(std::string(skyDialog.GetStringSelection().mb_str()), false);
 				canvas->sky->model = canvas->skyModel;
@@ -2530,7 +2529,7 @@ void DiscoveryItem()
 				continue;
 			if (!items.avaiable(id)) {
 				if (langID == 0)
-					name.Printf(_T("%s"), it->getString(ItemSetDB::Name));
+					name = it->getString(ItemSetDB::Name);
 				else
 					name.Printf(_T("Set%d"), it->getUInt(ItemSetDB::SetID));
 				ret = items.addDiscoveryId(id, name);
@@ -2621,8 +2620,10 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 		ModelInfo();
 	} else if (id == ID_FILE_DISCOVERY_ITEM) {
 		DiscoveryItem();
+		fileMenu->Enable(ID_FILE_DISCOVERY_ITEM, false);
 	} else if (id == ID_FILE_DISCOVERY_NPC) {
 		DiscoveryNPC();
+		fileMenu->Enable(ID_FILE_DISCOVERY_NPC, false);
 	}
 }
 
@@ -2735,9 +2736,9 @@ void ModelViewer::ImportArmoury(wxString strURL)
 					CharRacesDB::Record racer = racedb.getById(raceId);
 					wxString race;
 					if (bV310)
-						race = wxString(racer.getString(CharRacesDB::NameV310), wxConvUTF8);
+						race = racer.getString(CharRacesDB::NameV310);
 					else
-						race = wxString(racer.getString(CharRacesDB::Name), wxConvUTF8);
+						race = racer.getString(CharRacesDB::Name);
 					//race = race.MakeLower();
 					wxString gender = child->GetPropVal(_T("gender"), _T("Male"));
 					//gender = gender.MakeLower();
