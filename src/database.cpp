@@ -136,7 +136,7 @@ CharRacesDB::Record CharRacesDB::getByName(wxString name)
 			r = i->getString(NameV310);
 		else
 			r = i->getString(Name);
-		if (name.IsSameAs(i->getString(Name), false) == true)
+		if (name.IsSameAs(r, false) == true)
 			return (*i);
 	}
 	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
