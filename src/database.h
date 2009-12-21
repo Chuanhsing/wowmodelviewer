@@ -585,7 +585,7 @@ public:
 	static const size_t Filename = 2;		// string
 
 	// filenames need to end in mdx though ;(
-	Record getByFilename(std::string fn);
+	Record getByFilename(wxString fn);
 	Record getByID(unsigned int id);
 private:
 
@@ -661,7 +661,7 @@ public:
 	//static const size_t CanEquip = 19;		// bool
 	static const size_t Filename = 20;		// string. an index offset to the filename.
 
-	Record getByFilename(std::string fn);
+	Record getByFilename(wxString fn);
 	Record getByNPCID(unsigned int id);
 
 };

@@ -315,17 +315,17 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 {
 	wxString fn(m->name.c_str(), wxConvUTF8);
 
-	// replace M2 with MDX
+	// replace .M2 with .MDX
 	if (fn.Last() == '2') {
-		fn[fn.Length()-1] = 'd';
-		fn.Append(_T("x"));
+		fn = fn.BeforeLast('.');
+		fn.Append(_T(".mdx"));
 	}
 
 	TextureSet skins;
 
 	// see if this model has skins
 	try {
-		CreatureModelDB::Record rec = modeldb.getByFilename((std::string)fn.mb_str());
+		CreatureModelDB::Record rec = modeldb.getByFilename(fn);
 		// for character models, don't use skins
 		if (rec.getUInt(CreatureModelDB::Type) != 4) {
 			//TextureSet skins;

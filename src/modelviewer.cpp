@@ -2015,8 +2015,9 @@ Windows 98\\ME\\2000\\XP on 17th December 2006\n\n\
 	info.AddDeveloper(_T("Ufo_Z"));
 	info.AddDeveloper(_T("Darjk"));
 	info.AddDeveloper(_T("Chuanhsing"));
-	info.AddTranslator(_T("Culhag (French)"));
-	info.AddTranslator(_T("Die_Backe (Deutsch)"));
+	info.AddTranslator(_T("MadSquirrel (French)"));
+	info.AddTranslator(_T("Tigurius (Deutsch)"));
+	info.AddTranslator(_T("Kurax (Chinese)"));
 
 	info.SetWebSite(_T("http://www.wowmodelviewer.org/"));
     info.SetCopyright(

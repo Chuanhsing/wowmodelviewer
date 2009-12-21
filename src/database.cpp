@@ -210,13 +210,13 @@ HelmGeosetDB::Record HelmGeosetDB::getById(unsigned int id)
 // --
 // CREATUREDB.H
 //
-CreatureModelDB::Record CreatureModelDB::getByFilename(std::string fn)
+CreatureModelDB::Record CreatureModelDB::getByFilename(wxString fn)
 {
 	/// Brute force search for now
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
 		wxString str(i->getString(Filename));
-		if(str.IsSameAs(wxString(fn.c_str(), wxConvUTF8), false) == true)
+		if(str.IsSameAs(fn, false) == true)
 			return (*i);
 	}
 	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
@@ -270,13 +270,13 @@ CreatureTypeDB::Record CreatureTypeDB::getByID(unsigned int id)
 	throw NotFound();
 }
 
-NPCDB::Record NPCDB::getByFilename(std::string fn)
+NPCDB::Record NPCDB::getByFilename(wxString fn)
 {
 	/// Brute force search for now
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
 		if(i->getString(Filename) == fn) {
-			std::cout << i->getString(Filename).c_str() << "\n";
+			//std::cout << i->getString(Filename).c_str() << "\n";
 			return (*i);
 		}
 	}
