@@ -2608,9 +2608,7 @@ void CharDetails::save(wxString fn, TabardDetails *td)
 {
 	// TODO: save/load as xml?
 	// wx/xml/xml.h says the api will change, do not use etc etc.
-	//locale::global(locale(""));
 	ofstream f(fn.fn_str(), ios_base::out|ios_base::trunc);
-	//locale::global(locale("C"));
 	f << race << " " << gender << endl;
 	f << skinColor << " " << faceType << " " << hairColor << " " << hairStyle << " " << facialHair << " " << facialColor << endl;
 	for (int i=0; i<NUM_CHAR_SLOTS; i++) {

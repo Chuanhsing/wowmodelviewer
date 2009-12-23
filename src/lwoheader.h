@@ -18,6 +18,11 @@ struct POLYCHUNK {
 	int16 surfIndex;
 };
 
+struct POLYCHUNK2 {
+	uint16 numVerts;
+	uint16 indice[3];
+};
+
 typedef struct st_LWPoint
 {
 	float x;

@@ -1429,9 +1429,7 @@ void ModelViewer::OnLightMenu(wxCommandEvent &event)
 			if (dialog.ShowModal()==wxID_OK) {
 				wxString fn = dialog.GetFilename();
 
-				//locale::global(locale(""));
 				ofstream f(fn.fn_str(), ios_base::out|ios_base::trunc);
-				//locale::global(locale("C"));
 				f << lightMenu->IsChecked(ID_LT_DIRECTION) << " " << lightMenu->IsChecked(ID_LT_TRUE) << " " << lightMenu->IsChecked(ID_LT_DIRECTIONAL) << " " << lightMenu->IsChecked(ID_LT_AMBIENT) << " " << lightMenu->IsChecked(ID_LT_MODEL) << endl;
 				for (int i=0; i<MAX_LIGHTS; i++) {
 					f << lightControl->lights[i].ambience.x << " " << lightControl->lights[i].ambience.y << " " << lightControl->lights[i].ambience.z << " " << lightControl->lights[i].arc << " " << lightControl->lights[i].constant_int << " " << lightControl->lights[i].diffuse.x << " " << lightControl->lights[i].diffuse.y << " " << lightControl->lights[i].diffuse.z << " " << lightControl->lights[i].enabled << " " << lightControl->lights[i].linear_int << " " << lightControl->lights[i].pos.x << " " << lightControl->lights[i].pos.y << " " << lightControl->lights[i].pos.z << " " << lightControl->lights[i].quadradic_int << " " << lightControl->lights[i].relative << " " << lightControl->lights[i].specular.x << " " << lightControl->lights[i].specular.y << " " << lightControl->lights[i].specular.z << " " << lightControl->lights[i].target.x << " " << lightControl->lights[i].target.y << " " << lightControl->lights[i].target.z << " " << lightControl->lights[i].type << endl;
@@ -1889,9 +1887,7 @@ void ModelViewer::OnBackground(wxCommandEvent &event)
 
 void ModelViewer::SaveChar(const char *fn)
 {
-	//locale::global(locale(""));
 	ofstream f(fn, ios_base::out|ios_base::trunc);
-	//locale::global(locale("C"));
 	f << canvas->model->name << endl;
 	f << charControl->cd.race << " " << charControl->cd.gender << endl;
 	f << charControl->cd.skinColor << " " << charControl->cd.faceType << " " << charControl->cd.hairColor << " " << charControl->cd.hairStyle << " " << charControl->cd.facialHair << " " << charControl->cd.facialColor << endl;
@@ -2125,10 +2121,8 @@ void ModelViewer::ModelInfo()
 	if (!canvas->model)
 		return;
 	Model *m = canvas->model;
-	//locale::global(locale(""));
 	const char *fn="ModelInfo.xml";
 	ofstream xml(fn, ios_base::out | ios_base::trunc);
-	//locale::global(locale("C"));
 
 	if (!xml.is_open()) {
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
@@ -2202,7 +2196,7 @@ void ModelViewer::ModelInfo()
 	xml << "    <ofsTransparencyLookup>" << m->header.ofsTransparencyLookup << "</ofsTransparencyLookup>" << endl;
 	xml << "    <nTexAnimLookup>" << m->header.nTexAnimLookup << "</nTexAnimLookup>" << endl;
 	xml << "    <ofsTexAnimLookup>" << m->header.ofsTexAnimLookup << "</ofsTexAnimLookup>" << endl;
-       xml << "    <PhysicsSettings>" << endl;
+    xml << "    <PhysicsSettings>" << endl;
 	xml << "      <VertexBox0>" << m->header.ps.VertexBox[0] << "</VertexBox0>" <<  endl;
 	xml << "      <VertexBox1>" << m->header.ps.VertexBox[1] << "</VertexBox1>" <<  endl;
 	xml << "      <VertexRadius>" << m->header.ps.VertexRadius << "</VertexRadius>" << endl;
@@ -2306,12 +2300,15 @@ void ModelViewer::ModelInfo()
 
 	xml << "  <GeometryAndRendering>" << endl;
 
-	xml << "  <Vertices></Vertices>" << endl;
+	xml << "  <Vertices>" << m->header.nVertices << "</Vertices>" << endl;
 	xml << "  <Views>" << endl;
 
-	xml << "  <Indices></Indices>" << endl;
-	xml << "  <Triangles></Triangles>" << endl;
-	xml << "  <Properties></Properties>" << endl;
+	xml << "  <Indices>" << view->nIndex << "</Indices>" << endl;
+	xml << "  <Triangles>" << view->nTris << "</Triangles>" << endl;
+	xml << "  <Properties>" << view->nProps << "</Properties>" << endl;
+	xml << "  <Subs>" << view->nSub << "</Subs>" << endl;
+	xml << "  <Texs>" << view->nTex << "</Texs>" << endl;
+
 	
 	xml << "	<RenderPasses>" << endl;
 	for (size_t i=0; i<m->passes.size(); i++) {
@@ -2581,21 +2578,20 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 {
 	int id = event.GetId();
 	if (id == ID_FILE_MODELEXPORT) {
-		wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+		wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds|Lightwave2 (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 		if (dialog.ShowModal()==wxID_OK) {
 			wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 			if (dialog.GetFilterIndex() == 0) {
 				if (canvas->model)
-					ExportM2toOBJ(canvas->model, dialog.GetPath().fn_str());
+					ExportM2toOBJ(canvas->model, dialog.GetPath().fn_str(), false);
 				else if (canvas->wmo)
 					ExportWMOtoOBJ(canvas->wmo, dialog.GetPath().fn_str());
 			} else if (dialog.GetFilterIndex() == 1) {
 				if (canvas->model)
-					ExportM2toLWO(canvas->model, dialog.GetPath().fn_str());
+					ExportM2toLWO(canvas->model, dialog.GetPath().fn_str(), false);
 				else if (canvas->wmo)
-					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());
-				//ExportM2toLWO2(canvas->root, canvas->model, dialog.GetPath().fn_str());
+					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
 			} else if (dialog.GetFilterIndex() == 2) {
 				if (canvas->model)
 					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), false);
@@ -2603,18 +2599,45 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 					ExportWMOtoMS3D(canvas->wmo, dialog.GetPath().fn_str());
 			} else if (dialog.GetFilterIndex() == 3) {
 				if (canvas->model)
-					ExportM2to3DS(canvas->model, dialog.GetPath().fn_str());
+					ExportM2to3DS(canvas->model, dialog.GetPath().fn_str(), false);
 				else if (canvas->wmo)
 					ExportWMOto3DS(canvas->wmo, dialog.GetPath().fn_str());
+			} else if (dialog.GetFilterIndex() == 4) {
+				if (canvas->model)
+					ExportM2toLWO2(canvas->root, canvas->model, dialog.GetPath().fn_str(), false);
+				else if (canvas->wmo)
+					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
 			}
 		}
 	} else if (id == ID_FILE_MODELEXPORT_INIT) {
-		wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Milkshape 3D (*.ms3d)|*.ms3d"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+		wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds|Lightwave2 (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 		if (dialog.ShowModal()==wxID_OK) {
 			wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 			if (dialog.GetFilterIndex() == 0) {
 				if (canvas->model)
+					ExportM2toOBJ(canvas->model, dialog.GetPath().fn_str(), true);
+				else if (canvas->wmo)
+					ExportWMOtoOBJ(canvas->wmo, dialog.GetPath().fn_str());
+			} else if (dialog.GetFilterIndex() == 1) {
+				if (canvas->model)
+					ExportM2toLWO(canvas->model, dialog.GetPath().fn_str(), true);
+				else if (canvas->wmo)
+					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
+			} else if (dialog.GetFilterIndex() == 2) {
+				if (canvas->model)
 					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), true);
+				else if (canvas->wmo)
+					ExportWMOtoMS3D(canvas->wmo, dialog.GetPath().fn_str());
+			} else if (dialog.GetFilterIndex() == 3) {
+				if (canvas->model)
+					ExportM2to3DS(canvas->model, dialog.GetPath().fn_str(), true);
+				else if (canvas->wmo)
+					ExportWMOto3DS(canvas->wmo, dialog.GetPath().fn_str());
+			} else if (dialog.GetFilterIndex() == 4) {
+				if (canvas->model)
+					ExportM2toLWO2(canvas->root, canvas->model, dialog.GetPath().fn_str(), true);
+				else if (canvas->wmo)
+					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
 			}
 		}
 	} else if (id == ID_FILE_MODEL_INFO) {
