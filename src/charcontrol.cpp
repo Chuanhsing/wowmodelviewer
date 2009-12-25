@@ -2385,7 +2385,8 @@ void CharControl::OnUpdateItem(int type, int id)
 
 	case UPDATE_CREATURE_ITEM:
 		cd.equipment[choosingSlot] = numbers[id];
-		RefreshCreatureItem(choosingSlot);
+		//RefreshCreatureItem(choosingSlot);
+		RefreshItem(choosingSlot);
 		return;
 
 	case UPDATE_NPC:

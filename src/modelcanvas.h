@@ -198,9 +198,7 @@ public:
 	void Zoom(float f, bool rel = false); // f = amount to zoom, rel = relative to model or not
 	void CheckMovement();	// move the character
 	
-#if 0
 	Attachment* LoadModel(const char* fn);
-#endif
 	Attachment* LoadCharModel(const char* fn);
 #if 0
 	Attachment* AddModel(const char *fn);

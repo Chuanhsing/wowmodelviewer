@@ -347,10 +347,12 @@ public:
 		for(size_t j=0; j < b.nTimes; j++) {
 			AnimationBlockHeader* pHeadTimes = (AnimationBlockHeader*)(f.getBuffer() + b.ofsTimes + j*sizeof(AnimationBlockHeader));
 			uint32 *ptimes;
-			if (animfiles[j].getSize() > 0)
+			if (animfiles[j].getSize() > pHeadTimes->ofsEntrys)
 				ptimes = (uint32*)(animfiles[j].getBuffer() + pHeadTimes->ofsEntrys);
-			else
+			else if (f.getSize() > pHeadTimes->ofsEntrys)
 				ptimes = (uint32*)(f.getBuffer() + pHeadTimes->ofsEntrys);
+			else
+				continue;
 			for (size_t i=0; i < pHeadTimes->nEntrys; i++)
 				times[j].push_back(ptimes[i]);
 		}
@@ -360,10 +362,12 @@ public:
 			AnimationBlockHeader* pHeadKeys = (AnimationBlockHeader*)(f.getBuffer() + b.ofsKeys + j*sizeof(AnimationBlockHeader));
 			assert((D*)(f.getBuffer() + pHeadKeys->ofsEntrys));
 			D *keys;
-			if (animfiles[j].getSize() > 0)
+			if (animfiles[j].getSize() > pHeadKeys->ofsEntrys)
 				keys = (D*)(animfiles[j].getBuffer() + pHeadKeys->ofsEntrys);
-			else 
+			else if (f.getSize() > pHeadKeys->ofsEntrys)
 				keys = (D*)(f.getBuffer() + pHeadKeys->ofsEntrys);
+			else
+				continue;
 			switch (type) {
 				case INTERPOLATION_NONE:
 				case INTERPOLATION_LINEAR:

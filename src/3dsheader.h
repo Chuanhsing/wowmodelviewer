@@ -47,12 +47,27 @@
 #define MATAMBIENT		0xA010 // Ambient color of the object/material
 #define MATDIFFUSE		0xA020 // This holds the color of the object/material
 #define MATSPECULAR		0xA030 // SPecular color of the object/material
-#define MATSHINESS		0xA040 // ??
+#define MATSHINESS		0xA040 // Material - Shininess
+#define MATSHINSTRENGTH	0xA041 // Material - Shine Strength
+#define MATTRANSPARENCY	0xA050 // Material - Transparency
+#define	MATFALLOFF		0xA052
+#define	MATBLUR			0xA053
+#define	MATTYPE			0xA100 // Material - Type (Flat,Gourad, Phong, Metal)
 #define MATMAP			0xA200 // This is a header for a new material
 #define MATMAPFILE		0xA300 // This holds the file name of the texture
+#define	MATFLAGS		0xA351 // Material - Texture Options
+#define	MATSCALEX		0xA354 // Material - Texture U Scale
+#define	MATSCALEY		0xA356 // Material - Texture V Scale
+#define	MATOFFSETX		0xA35A // Material - Texture V Offset
+#define	MATOFFSETY		0xA35C // Material - Texture V Offset
 
 //------ sub defines of EDIT_OBJECT
 #define OBJ_MESH		0x4100 // This lets us know that we are reading a new object
+#define	OBJ_VERTEX		0x4110 // Vertex List
+#define	OBJ_VERTEX_OPT	0x4111 // Vertex Options
+#define	OBJ_FACE		0x4120 // Face List
+#define	OBJ_MAT_DESC	0x4130 // Material Desc
+#define	OBJ_UV_MAP		0x4140 // UV MAP List
 #define OBJ_LIGHT		0x4600 // This lets un know we are reading a light object
 #define OBJ_CAMERA		0x4700 // This lets un know we are reading a camera object
 
@@ -149,13 +164,17 @@ struct MAX3DS_HEADER {
 }
 ALIGN_2_E;
 
-ALIGN_2_S
 struct Vertex3f {
 	float x;
 	float y;
 	float z;
-}
-ALIGN_2_E;
+};
+
+struct ColorRGBs {
+	char r;
+	char g;
+	char b;
+};
 
 #pragma pack(pop)
 

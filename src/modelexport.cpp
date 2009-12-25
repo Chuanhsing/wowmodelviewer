@@ -239,6 +239,10 @@ void InitCommon(Attachment *att, bool init)
 }
 
 // 3D Studio Max
+// http://gpwiki.org/index.php/Loading_3ds_files
+// http://www.martinreddy.net/gfx/3d/3DS.spec
+// http://www.martinreddy.net/gfx/3d/MLI.spec
+// http://gpwiki.org/index.php/C:Load3DS
 void ExportM2to3DS(Model *m, const char *fn, bool init)
 {
 	if (!m)
@@ -252,208 +256,404 @@ void ExportM2to3DS(Model *m, const char *fn, bool init)
 		return;
 	}
 
-	unsigned short numVerts = 0;
-
-	/*
-	for (size_t i=0; i<m->passes.size(); i++) {
-		ModelRenderPass &p = m->passes[i];
-
-		if (p.init(m)) {
-			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
-				numVerts++;
-			}
-		}
-	}
-	*/
-	numVerts = m->header.nVertices;
-
-	Vertex3f *verts = new Vertex3f[numVerts];
-	for (int i=0; i<numVerts; i++) {
-		if (init == false) {
-			verts[i].x = m->vertices[i].x;
-			verts[i].y = m->vertices[i].y;
-			verts[i].z = m->vertices[i].z;
-		} else {
-			verts[i].x = m->origVertices[i].pos.x;
-			verts[i].y = m->origVertices[i].pos.y;
-			verts[i].z = m->origVertices[i].pos.z;
-		}
-	}
-
-	unsigned int numIndices = 0;
-
-	// Indice count
-	for (size_t i=0; i<m->passes.size(); i++) {
-		if (m->passes[i].init(m)) {
-			numIndices += m->passes[i].indexCount;
-		}
-	}
-
-	numFaces = numIndices / 3;
-	MAX3DS_FACE *tris = new MAX3DS_FACE[numFaces];
-
-	int count=0;
-	int triCount = 0;
-
-	for (size_t i=0; i<m->passes.size(); i++) {
-		ModelRenderPass &p = m->passes[i];
-
-		if (p.init(m)) {
-			//int tri=0;
-			for (size_t k=0, b=p.indexStart; k<p.indexCount; k+=3,b+=3) {
-				tris[triCount].x = m->indices[b];
-				tris[triCount].y = m->indices[b+1];
-				tris[triCount].z = m->indices[b+2];
-
-				triCount++;
-
-				/*
-				uint16 a = m->indices[b];
-
-				verts[count].x = m->vertices[a].x;
-				verts[count].y = m->vertices[a].y;
-				verts[count].z = m->vertices[a].z;
-				count++;
-				tri++;
-
-				if (tri == 3) {
-					tri = 0;
-					tris[tricount].x = count-2;
-					tris[tricount].y = count-1;
-					tris[tricount].z = count;
-					tricount++;
-				}
-				*/
-			}
-		}
-	}
-
+	// ------------------------------------
 
 	// Primary chunk
 	MAX3DS_HEADER header;
 
 	// EDIT3DS chunk
 	MAX3DS_CHUNK chunk1;
-	chunk1.id = EDIT3DS;
+	chunk1.id = EDIT3DS; // 0x3D3D
+
+	// Now write the data to file
+	f.Write(&header, sizeof(MAX3DS_HEADER));
+	f.Write(&chunk1, sizeof(MAX3DS_CHUNK)); // EDIT3DS
+	chunk1.size = sizeof(MAX3DS_CHUNK);
 
 	// EDIT_CONFIG2 chunk
 	MAX3DS_CHUNK chunk2_1;
-	chunk2_1.id = MESH_VERSION;
+	chunk2_1.id = MESH_VERSION; // 0x3D3E
 	
 	int meshVersion = 3;
 	chunk2_1.size += sizeof(int);
 
-	// EDIT_MATERIAL (0xAFFF)
-	MAX3DS_CHUNK chunk2_2;
-	chunk2_2.id = EDIT_MATERIAL;
+	f.Write(&chunk2_1, sizeof(MAX3DS_CHUNK)); // MESH_VERSION
+	f.Write(&meshVersion, sizeof(int));
+	chunk1.size += chunk2_1.size;
 
-	// MATNAME (0xA000) (See mli Doc) 
-	MAX3DS_CHUNK chunk2_2_1;
-	chunk2_2_1.id = MATNAME;
+	for (unsigned short i=0; i<m->passes.size(); i++) {
+		ModelRenderPass &p = m->passes[i];
 
-	// Material name
-	wxString matName(_T("Material1\0"));
-	const char *materialName = matName.mb_str();
-	chunk2_2_1.size += int(matName.size() + 1);
+		if (p.init(m)) {
+			// EDIT_MATERIAL (0xAFFF)
+			MAX3DS_CHUNK chunk2_2;
+			chunk2_2.id = EDIT_MATERIAL; // 0xAFFF
+			f.Write(&chunk2_2, sizeof(MAX3DS_CHUNK)); // EDIT_MATERIAL
+			
+			// MATNAME (0xA000) (See mli Doc) 
+			// http://www.martinreddy.net/gfx/3d/MLI.spec
+			MAX3DS_CHUNK chunk2_2_1;
+			chunk2_2_1.id = MATNAME; // 0xA000
+			wxString matName = wxString::Format(_T("Material_%i"), i);
+			matName.Append('\0');
+			chunk2_2_1.size = sizeof(MAX3DS_CHUNK) + matName.length();
+			chunk2_2.size = sizeof(MAX3DS_CHUNK) + chunk2_2_1.size;
+			f.Write(&chunk2_2_1, sizeof(MAX3DS_CHUNK)); // MATNAME
+			f.Write(matName.data(), matName.length());
 
-	//COL_RGB  
+			//COL_RGB  
+			//chunk2_2_2.size += 18;
+			MAX3DS_CHUNK chunk2_2_2;
+			chunk2_2_2.id = MATAMBIENT; // 0xA010
+			MAX3DS_CHUNK chunk2_2_2_1;
+			chunk2_2_2_1.id = RGB1;
+			ColorRGBs rgb2_2_2_1;
+			rgb2_2_2_1.r = 178;
+			rgb2_2_2_1.g = 178;
+			rgb2_2_2_1.b = 178;
+			chunk2_2_2_1.size += sizeof(ColorRGBs);
+			MAX3DS_CHUNK chunk2_2_2_2;
+			chunk2_2_2_2.id = RGB2;
+			ColorRGBs rgb2_2_2_2;
+			rgb2_2_2_2.r = 178;
+			rgb2_2_2_2.g = 178;
+			rgb2_2_2_2.b = 178;
+			chunk2_2_2_2.size += sizeof(ColorRGBs);
+			chunk2_2_2.size += chunk2_2_2_1.size;
+			chunk2_2_2.size += chunk2_2_2_2.size;
+			chunk2_2.size += chunk2_2_2.size;
+			f.Write(&chunk2_2_2, sizeof(MAX3DS_CHUNK)); // MATAMBIENT
+			f.Write(&chunk2_2_2_1, sizeof(MAX3DS_CHUNK)); // RGB1
+			f.Write(&rgb2_2_2_1, sizeof(ColorRGBs));
+			f.Write(&chunk2_2_2_2, sizeof(MAX3DS_CHUNK)); // RGB2
+			f.Write(&rgb2_2_2_2, sizeof(ColorRGBs));
 
-	//EDIT_CONFIG1  (0x0100) chunk
+			//chunk2_2_3.size += 18;
+			MAX3DS_CHUNK chunk2_2_3;
+			chunk2_2_3.id = MATDIFFUSE; // 0xA020
+			MAX3DS_CHUNK chunk2_2_3_1;
+			chunk2_2_3_1.id = RGB1; // 0x0011
+			ColorRGBs rgb2_2_3_1;
+			rgb2_2_3_1.r = 255;
+			rgb2_2_3_1.g = 255;
+			rgb2_2_3_1.b = 255;
+			chunk2_2_3_1.size += sizeof(ColorRGBs);
+			MAX3DS_CHUNK chunk2_2_3_2;
+			chunk2_2_3_2.id = RGB2; // 0x0012
+			ColorRGBs rgb2_2_3_2;
+			rgb2_2_3_2.r = 255;
+			rgb2_2_3_2.g = 255;
+			rgb2_2_3_2.b = 255;
+			chunk2_2_3_2.size += sizeof(ColorRGBs);
+			chunk2_2_3.size += chunk2_2_3_1.size;
+			chunk2_2_3.size += chunk2_2_3_2.size;
+			chunk2_2.size += chunk2_2_3.size;
+			f.Write(&chunk2_2_3, sizeof(MAX3DS_CHUNK)); // MATDIFFUSE
+			f.Write(&chunk2_2_3_1, sizeof(MAX3DS_CHUNK)); // RGB1
+			f.Write(&rgb2_2_3_1, sizeof(ColorRGBs));
+			f.Write(&chunk2_2_3_2, sizeof(MAX3DS_CHUNK)); // RGB2
+			f.Write(&rgb2_2_3_2, sizeof(ColorRGBs));
+
+			//chunk2_2_4.size += 18;
+			MAX3DS_CHUNK chunk2_2_4;
+			chunk2_2_4.id = MATSPECULAR; // 0xA030
+			MAX3DS_CHUNK chunk2_2_4_1;
+			chunk2_2_4_1.id = RGB1; // 0x0011
+			ColorRGBs rgb2_2_4_1;
+			rgb2_2_4_1.r = 0;
+			rgb2_2_4_1.g = 0;
+			rgb2_2_4_1.b = 0;
+			chunk2_2_4_1.size += sizeof(ColorRGBs);
+			MAX3DS_CHUNK chunk2_2_4_2;
+			chunk2_2_4_2.id = RGB2; // 0x0012
+			ColorRGBs rgb2_2_4_2;
+			rgb2_2_4_2.r = 0;
+			rgb2_2_4_2.g = 0;
+			rgb2_2_4_2.b = 0;
+			chunk2_2_4_2.size += sizeof(ColorRGBs);
+			chunk2_2_4.size += chunk2_2_4_1.size;
+			chunk2_2_4.size += chunk2_2_4_2.size;
+			chunk2_2.size += chunk2_2_4.size;
+			f.Write(&chunk2_2_4, sizeof(MAX3DS_CHUNK)); // MATDIFFUSE
+			f.Write(&chunk2_2_4_1, sizeof(MAX3DS_CHUNK)); // RGB1
+			f.Write(&rgb2_2_4_1, sizeof(ColorRGBs));
+			f.Write(&chunk2_2_4_2, sizeof(MAX3DS_CHUNK)); // RGB2
+			f.Write(&rgb2_2_4_2, sizeof(ColorRGBs));
+
+			{
+			chunk2_2.size += 0x0e;
+			char aa[] = {0x40, 0xa0, 0x0e, 0, 0, 0, 0x30, 0, 0x08, 0, 0, 0, 0, 0};
+			f.Write(aa, sizeof(aa));
+			}
+
+			{
+			chunk2_2.size += 0x0e;
+			char aa[] = {0x41, 0xa0, 0x0e, 0, 0, 0, 0x30, 0, 0x08, 0, 0, 0, 0, 0};
+			f.Write(aa, sizeof(aa));
+			}
+
+			{
+			chunk2_2.size += 0x0e;
+			char aa[] = {0x50, 0xa0, 0x0e, 0, 0, 0, 0x30, 0, 0x08, 0, 0, 0, 0, 0};
+			f.Write(aa, sizeof(aa));
+			}
+
+			{
+			chunk2_2.size += 0x0e;
+			char aa[] = {0x52, 0xa0, 0x0e, 0, 0, 0, 0x30, 0, 0x08, 0, 0, 0, 0, 0};
+			f.Write(aa, sizeof(aa));
+			}
+
+			{
+			chunk2_2.size += 0x0e;
+			char aa[] = {0x53, 0xa0, 0x0e, 0, 0, 0, 0x30, 0, 0x08, 0, 0, 0, 0, 0};
+			f.Write(aa, sizeof(aa));
+			}
+
+			{
+			chunk2_2.size += 0x08;
+			char aa[] = {0x00, 0xa1, 0x08, 0, 0, 0, 0x3, 0};
+			f.Write(aa, sizeof(aa));
+			}
+
+			{
+			chunk2_2.size += 0x0e;
+			char aa[] = {0x84, 0xa0, 0x0e, 0, 0, 0, 0x30, 0, 0x08, 0, 0, 0, 0, 0};
+			f.Write(aa, sizeof(aa));
+			}
+
+			{
+			chunk2_2.size += 0x0a;
+			char aa[] = {0x87, 0xa0, 0x0a, 0, 0, 0, 0, 0, 0x80, 0x3f};
+			f.Write(aa, sizeof(aa));
+			}
+
+			{
+			chunk2_2.size += 0x06;
+			char aa[] = {0x8c, 0xa0, 0x06, 0, 0, 0};
+			f.Write(aa, sizeof(aa));
+			}
+
+			MAX3DS_CHUNK chunk2_2_6;
+			chunk2_2_6.id = MATMAPFILE; // 0xA300
+			wxString mapName(fn, wxConvUTF8);
+			mapName = mapName.AfterLast('\\').BeforeLast('.');
+			mapName << wxT("_") << p.tex << wxT(".tga");
+			mapName.Append('\0');
+			chunk2_2_6.size = sizeof(MAX3DS_CHUNK) + mapName.length();
+
+			// save texture to file
+			wxString texFilename(fn, wxConvUTF8);
+			texFilename = texFilename.BeforeLast('\\');
+			texFilename += '\\';
+			texFilename += mapName;
+			SaveTexture(texFilename);
+
+			{
+			// conatins 0xa300, 0xa351
+			chunk2_2.size += (0x0e+chunk2_2_6.size+0x08);
+			char aa[] = {0x00, 0xa2, 0x0e+chunk2_2_6.size+0x08, 0, 0, 0, 0x30, 0, 8, 0, 0, 0, 0x64, 0};
+			f.Write(aa, sizeof(aa));
+			}
+
+			f.Write(&chunk2_2_6, sizeof(MAX3DS_CHUNK)); // MATMAPNAME
+			f.Write(mapName.data(), mapName.length());
+
+			{
+			char aa[] = {0x51, 0xa3, 0x08, 0, 0, 0, 0, 0};
+			f.Write(aa, sizeof(aa));
+			}
+
+			int off_t = 0-chunk2_2.size;
+			f.SeekO(off_t, wxFromCurrent);
+			f.Write(&chunk2_2, sizeof(MAX3DS_CHUNK)); // EDIT_MATERIAL
+			f.SeekO(0, wxFromEnd);
+			chunk1.size += chunk2_2.size;
+		}
+	}
+
+	//EDIT_CONFIG1 chunk
 	MAX3DS_CHUNK chunk2_3;
-	chunk2_3.id = EDIT_CONFIG1;
+	chunk2_3.id = EDIT_CONFIG1; // 0x0100
 	float config1 = 1.0f;
 	chunk2_3.size += sizeof(float);
 
-	// EDIT OBJECT chunk
-	MAX3DS_CHUNK chunk2_4;
-	chunk2_4.id = EDIT_OBJECT;
-
-	// Model name
-	wxString modName(_T("Model1\0"));
-	const char *modelName = modName.mb_str();
-	chunk2_4.size += int(modName.size() + 1);
-
-	// OBJ_MESH chunk
-	MAX3DS_CHUNK chunk3;
-	chunk3.id = OBJ_MESH;
-
-	// Object name
-	wxString objName(m->name.c_str(), wxConvUTF8);
-	const char *objectName = objName.mb_str();
-
-	//MESH_VERTICES	0x4110 // The objects vertices
-	MAX3DS_CHUNK chunk4_1;
-	chunk4_1.id = MESH_VERTICES;
-
-	// Vertice count
-	// ^ numVerts
-	chunk4_1.size += 2;
-	// Vertices
-	chunk4_1.size += (numVerts * sizeof(Vertex3f));
-
-	//MESH_FACEL1		0x4120 // The objects faces
-	MAX3DS_CHUNK chunk4_2;
-	chunk4_2.id = MESH_FACEL1;
-
-	// number of triangle faces
-	// ^numIndices
-	chunk4_2.size += 4;
-	// Indices
-	chunk4_2.size += (numFaces * sizeof(MAX3DS_FACE));
-	// ------------------------------------
-
-
-	// ------------------------------------
-	// Correct the chunk sizes
-	chunk3.size += chunk4_2.size;
-	chunk3.size += chunk4_1.size;
-	chunk2_2.size += chunk2_2_1.size;
-	chunk2_4.size += chunk3.size;
-	chunk1.size += chunk2_1.size;
-	chunk1.size += chunk2_2.size;
+	f.Write(&chunk2_3, sizeof(MAX3DS_CHUNK)); // EDIT_CONFIG1
+	f.Write(&config1, sizeof(float));
 	chunk1.size += chunk2_3.size;
-	chunk1.size += chunk2_4.size;
+
+	{
+	chunk1.size += 0x0a;
+	char aa[] = {0x0, 0x14, 0x0a, 0, 0, 0, 0, 0, 0x80, 0x3f};
+	f.Write(aa, sizeof(aa));
+	}
+
+	{
+	chunk1.size += 0x08;
+	char aa[] = {0x20, 0x14, 0x08, 0, 0, 0, 0, 2};
+	f.Write(aa, sizeof(aa));
+	}
+
+	{
+	chunk1.size += 0x0a;
+	char aa[] = {0x50, 0x14, 0x0a, 0, 0, 0, 0, 0, 0x40, 0x40};
+	f.Write(aa, sizeof(aa));
+	}
+
+	{
+	chunk1.size += 0xa;
+	char aa[] = {0x60, 0x14, 0x0a, 0, 0, 0, 0, 0, 0x80, 0x3f};
+	f.Write(aa, sizeof(aa));
+	}
+
+	{
+	chunk1.size += 0x12;
+	char aa[] = {0x0, 0x15, 0x12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	f.Write(aa, sizeof(aa));
+	}
+
+	{
+	chunk1.size += 0x2a;
+	char aa[] = {0x0, 0x21, 0x2a, 0, 0, 0, 0x10, 0, 0x12, 0, 0, 0, 0x9a, 0x99, 0x99, 0x3e,
+		0x9a, 0x99, 0x99, 0x3e, 0x9a, 0x99, 0x99, 0x3e, 0x13, 0, 0x12, 0, 0, 0, 0x9a, 0x99,
+		0x99, 0x3e, 0x9a, 0x99, 0x99, 0x3e, 0x9a, 0x99, 0x99, 0x3e};
+	f.Write(aa, sizeof(aa));
+	}
+
+
+	for (unsigned short i=0; i<m->passes.size(); i++) {
+		ModelRenderPass &p = m->passes[i];
+
+		if (p.init(m)) {
+			
+			// EDIT OBJECT chunk
+			MAX3DS_CHUNK chunk2_4;
+			chunk2_4.id = EDIT_OBJECT; // 0x4000
+			
+			// Model name
+			wxString modName = wxString::Format(_T("Geoset_%i"), i);
+			modName.Append('\0');
+			chunk2_4.size += modName.length();
+			
+			// OBJ_MESH chunk
+			MAX3DS_CHUNK chunk3;
+			chunk3.id = OBJ_MESH; // 0x4100
+			
+			// The objects vertices
+			MAX3DS_CHUNK chunk4_1;
+			chunk4_1.id = MESH_VERTICES; // 0x4110
+			chunk4_1.size += (sizeof(unsigned short) + p.indexCount*3*4);
+			
+			// The UV Map
+			MAX3DS_CHUNK chunk4_2;
+			chunk4_2.id = MESH_UV; // 0x4140
+			chunk4_2.size += (sizeof(unsigned short) + p.indexCount*2*4);
+
+			// The objects faces
+			MAX3DS_CHUNK chunk4_3;
+			chunk4_3.id = MESH_FACEL1; // 0x4120
+			numFaces = p.indexCount / 3;
+			chunk4_3.size += (sizeof(unsigned short) + numFaces*4*2);
+
+			// Material
+			wxString matName = wxString::Format(_T("Material_%i"), i);
+			matName.Append('\0');
+			MAX3DS_CHUNK chunk4_3_1;
+			chunk4_3_1.id = MESH_MATERIAL; // 0x4130
+			chunk4_3_1.size += matName.length();
+			chunk4_3_1.size += (sizeof(unsigned short) + numFaces*2);
+			chunk4_3.size += chunk4_3_1.size;
+
+			// Smooth
+			MAX3DS_CHUNK chunk4_3_2;
+			chunk4_3_2.id = MESH_SMOOTH; // 0x4150
+			chunk4_3_2.size += (numFaces*4);
+			chunk4_3.size += chunk4_3_2.size;
+
+			chunk3.size += chunk4_1.size;
+			chunk3.size += chunk4_2.size;
+			chunk3.size += chunk4_3.size;
+			chunk2_4.size += chunk3.size;
+			chunk1.size += chunk2_4.size;
+
+			f.Write(&chunk2_4, sizeof(MAX3DS_CHUNK));
+			f.Write(modName.data(), modName.length());
+			f.Write(&chunk3, sizeof(MAX3DS_CHUNK));
+
+			// Mesh chunk Vertice count, and vertices 0x4110
+			f.Write(&chunk4_1, sizeof(MAX3DS_CHUNK));
+			f.Write(&p.indexCount, sizeof(unsigned short));
+			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
+				uint16 a = m->indices[b];
+				Vec3D vert;
+				if (init == false) {
+					vert.x = (m->vertices[a].x);
+					vert.y = (m->vertices[a].y);
+					vert.z = (m->vertices[a].z);
+				} else {
+					vert.x = (m->origVertices[a].pos.x);
+					vert.y = (m->origVertices[a].pos.y);
+					vert.z = (m->origVertices[a].pos.z);
+				}
+				f.Write(reinterpret_cast<char *>(&vert.x), 4);
+				f.Write(reinterpret_cast<char *>(&vert.y), 4);
+				f.Write(reinterpret_cast<char *>(&vert.z), 4);
+			}
+
+			// The UV Map 0x4140
+			f.Write(&chunk4_2, sizeof(MAX3DS_CHUNK));
+			f.Write(&p.indexCount, sizeof(unsigned short));
+			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
+				uint16 a = m->indices[b];
+				float x = m->origVertices[a].texcoords.x;
+				float y = (1 - m->origVertices[a].texcoords.y);
+				f.Write(reinterpret_cast<char *>(&x), 4);
+				f.Write(reinterpret_cast<char *>(&y), 4);
+			}		
+
+			// 0x4160
+			// 0x4165
+
+			// Face List 0x4120
+			f.Write(&chunk4_3, sizeof(MAX3DS_CHUNK));
+			int count = 0, unkid = 0;
+			f.Write(&numFaces, sizeof(unsigned short));
+			for (uint16 k=0; k<p.indexCount; k+=3) {
+				f.Write(&count, 2);
+				count++;
+				f.Write(&count, 2);
+				count++;
+				f.Write(&count, 2);
+				count++;
+				f.Write(&unkid, 2);
+			}
+
+			// Face List - Material 0x4130
+			f.Write(&chunk4_3_1, sizeof(MAX3DS_CHUNK));
+			f.Write(matName.data(), matName.length());
+			f.Write(&numFaces, sizeof(unsigned short));
+			count = 0;
+			for (uint16 k=0; k<p.indexCount; k+=3) {
+				f.Write(&count, 2);
+				count++;
+			}
+
+			// Face List - Smooth 0x4150
+			f.Write(&chunk4_3_2, sizeof(MAX3DS_CHUNK));
+			count = 1;
+			for (uint16 k=0; k<p.indexCount; k+=3) {
+				f.Write(&count, 4);
+			}
+		}
+	}
 	header.primary.size += chunk1.size;
 
-	// Now write the data to file
+	f.SeekO(0, wxFromStart);
 	f.Write(&header, sizeof(MAX3DS_HEADER));
-	f.Write(&chunk1, sizeof(MAX3DS_CHUNK));
-
-	f.Write(&chunk2_1, sizeof(MAX3DS_CHUNK));
-	f.Write(&meshVersion, sizeof(int));
-
-	f.Write(&chunk2_2, sizeof(MAX3DS_CHUNK));
-
-	f.Write(&chunk2_2_1, sizeof(MAX3DS_CHUNK));
-	f.Write(materialName, (matName.size() + 1));
-
-	//COL_RGB  
-
-	f.Write(&chunk2_3, sizeof(MAX3DS_CHUNK));
-	f.Write(&config1, sizeof(float));
-
-	f.Write(&chunk2_4, sizeof(MAX3DS_CHUNK));
-	f.Write(modelName, (modName.size() + 1));
-
-	f.Write(&chunk3, sizeof(MAX3DS_CHUNK));
-	//f.Write(objectName, (objName.size() + 1));
-
-	// Mesh chunk Vertice count, and vertices
-	f.Write(&chunk4_1, sizeof(MAX3DS_CHUNK));
-	f.Write(&numVerts, sizeof(unsigned short));
-	for (int i=0; i<numVerts; i++)
-		f.Write(&verts[i], sizeof(Vertex3f));
-	
-	// Index chunk - Indice count, and indices
-	f.Write(&chunk4_2, sizeof(MAX3DS_CHUNK));
-	f.Write(&numFaces, sizeof(unsigned int));
-	for (int i=0; i<numFaces; i++)
-		f.Write(&tris[i], sizeof(MAX3DS_FACE));
+	f.Write(&chunk1, sizeof(MAX3DS_CHUNK)); // EDIT3DS
+	f.SeekO(0, wxFromEnd);
 
 	f.Close();
-
-	wxDELETEA(tris);
-	wxDELETEA(verts);
 }
 
 // MilkShape 3D
@@ -579,16 +779,16 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 				mat.shininess = 0.0f;
 				mat.mode = 0;
 			}
-
+/*
 			unsigned int bindtex = 0;
 			if (groups[i].m->specialTextures[p.tex]==-1) 
 				bindtex = groups[i].m->textures[p.tex];
 			else 
 				bindtex = groups[i].m->replaceTextures[groups[i].m->specialTextures[p.tex]];
-
+*/
 			wxString texName(fn, wxConvUTF8);
 			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << wxT("_") << bindtex << wxT(".tga");
+			texName << wxT("_") << p.tex << wxT(".tga");
 			strncpy(mat.texture, texName.mb_str(), sizeof(mat.texture));
 
 			f.Write(reinterpret_cast<char *>(&mat), sizeof(ms3d_material_t));
@@ -1044,6 +1244,7 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init)
 
 
 	// --
+	uint32 surfaceCounter = 0;
 	for (size_t i=0; i<m->passes.size(); i++) {
 		ModelRenderPass &p = m->passes[i];
 
@@ -1054,14 +1255,14 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init)
 			f.Write(reinterpret_cast<char *>(&u32), 4);
 			fileLen += 8;
 
-			u32 = reverse_endian<uint32>(i+1);
+			u32 = reverse_endian<uint32>(++surfaceCounter);
 			f.Write(reinterpret_cast<char *>(&u32), 4);
 			f.Write("STIL", 4);
 			clipSize += 8;
 
 			wxString texName(fn, wxConvUTF8);
 			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << _T("_") << p.tex+1 << _T(".tga") << '\0';
+			texName << _T("_") << p.tex << _T(".tga") << '\0';
 			if (fmod((float)texName.length(), 2.0f) > 0)
 				texName.Append(_T('\0'));
 
@@ -1092,7 +1293,7 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init)
 
 	// --
 	wxString surfName;
-	uint32 surfaceCounter = 0;
+	surfaceCounter = 0;
 	for (size_t i=0; i<m->passes.size(); i++) {
 		ModelRenderPass &p = m->passes[i];
 
@@ -1207,88 +1408,6 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init)
 			f.Write(reinterpret_cast<char *>(&ub), 1);
 
 			surfaceDefSize += 12;
-
-/*
-			// FLAGS
-			f.Write("FLAG", 4);
-			u16 = 2; // size
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-			
-			// value
-			u16 = 0;
-			if (!p.cull)
-				u16 &= SUF_DOUBLESIDED;
-			if (p.blendmode>2)
-				u16 &= SUF_ADDITIVE;
-			if (p.blendmode==1)
-				u16 &= SUF_EDGETRANSPARENT;
-			
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-			
-			surfaceDefSize += 8;
-
-			if (p.useEnvMap) {
-				// REFLECTION
-				f.Write("FRFL", 4);
-				// size
-				u16 = 4;
-				u16 = ByteSwap16(u16);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
-			
-				// value
-				f32 = 0.2f;
-				f32 = reverse_endian<float>(f32);
-				f.Write(reinterpret_cast<char *>(&f32), 4);
-			
-				surfaceDefSize += 10;
-				
-				// REFLECTION
-				f.Write("RFLT", 4);
-				// size
-				u16 = 2;
-				u16 = ByteSwap16(u16);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
-			
-				// value
-				u16 = 1;
-				u16 = ByteSwap16(u16);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
-			
-				surfaceDefSize += 8;
-			}
-
-			// TRANSPARENCY
-			f.Write("FTRN", 4);
-			u16 = 4; // size
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-			
-			// value
-			f32 = p.ocol.w;
-			f32 = reverse_endian<float>(f32);
-			f.Write(reinterpret_cast<char *>(&f32), 4);
-			
-			surfaceDefSize += 10;
-			
-			// TEXTURE FLAGS
-			f.Write("TFLG", 4);
-			// size
-			u16 = 2;
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-			
-			// value
-			u16 = 0; // don't know the flag info yet
-			if (p.trans)
-				u16 &= TXF_PIXBLEND;
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-			
-			surfaceDefSize += 8;
-
-			*/
 
 			// GLOSSINESS
 			f.Write("GLOS", 4);
@@ -1518,7 +1637,7 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init)
 			u16 = 2; // size
 			u16 = ByteSwap16(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
-			u16 = i+1;
+			u16 = surfaceCounter;
 			u16 = ByteSwap16(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 			blokSize += 8;
@@ -1924,7 +2043,7 @@ void ExportM2toLWO(Model *m, const char *fn, bool init)
 
 			wxString texName(fn, wxConvUTF8);
 			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << _T("_") << p.tex+1 << _T(".tga") << '\0';
+			texName << _T("_") << p.tex << _T(".tga") << '\0';
 			if (fmod((float)texName.length(), 2.0f) > 0)
 				texName.Append(_T('\0'));
 
@@ -1994,12 +2113,9 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];
 
-			// setup texture
-			glBindTexture(GL_TEXTURE_2D, mat->tex);
-
 			wxString texName(fn, wxConvUTF8);
 			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << _T("_") << mat->tex+1 << _T(".tga");
+			texName << _T("_") << mat->tex << _T(".tga");
 			fm << "newmtl " << "Material_" << mat->tex+1 << endl;
 			fm << "Kd 1.000000 1.000000 1.000000" << endl;
 			fm << "Ka 0.700000 0.700000 0.700000" << endl;
@@ -2015,6 +2131,8 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 			texFilename = texFilename.BeforeLast('\\');
 			texFilename += '\\';
 			texFilename += texName;
+			// setup texture
+			glBindTexture(GL_TEXTURE_2D, mat->tex);
 			SaveTexture(texFilename);
 		}
 	}
@@ -2027,44 +2145,40 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 		for (int j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
-			WMOMaterial *mat = &m->mat[batch->texture];
 			for(int ii=0;ii<batch->indexCount;ii++)
 			{
 				int a = m->groups[i].indices[batch->indexStart + ii];
 				f << "v " << m->groups[i].vertices[a].x << " " << m->groups[i].vertices[a].z << " " << -m->groups[i].vertices[a].y << endl;
 			}
-			f << endl;
 		}
 	}
+	f << endl;
 
 	for (int i=0; i<m->nGroups; i++) {
 		for (int j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
-			WMOMaterial *mat = &m->mat[batch->texture];
 			for(int ii=0;ii<batch->indexCount;ii++)
 			{
 				int a = m->groups[i].indices[batch->indexStart + ii];
 				f << "vt " << m->groups[i].texcoords[a].x << " " << (1 - m->groups[i].texcoords[a].y) << endl;
 			}
-			f << endl;
 		}
 	}
+	f << endl;
 
 	for (int i=0; i<m->nGroups; i++) {
 		for (int j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
-			WMOMaterial *mat = &m->mat[batch->texture];
 			for(int ii=0;ii<batch->indexCount;ii++)
 			{
 				int a = m->groups[i].indices[batch->indexStart + ii];
 				f << "vn " << m->groups[i].normals[a].x << " " << m->groups[i].normals[a].z << " " << -m->groups[i].normals[a].y << endl;
 			}
-			f << endl;
 		}
 	}
-
+	f << endl;
 
 	int counter = 1;
 	for (int i=0; i<m->nGroups; i++) {
@@ -2086,26 +2200,9 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 			f << endl;
 		}
 	}
-/*
-	for(int i=0;i<m->nTextures;i++)
-	{
-		glBindTexture(GL_TEXTURE_2D, m->mat[i].tex);
 
-		wxString texName(fn, wxConvUTF8);
-		texName = texName.AfterLast('\\').BeforeLast('.');
-		texName << _T("_") << i << _T(".tga");
-
-		wxString texFilename(fn, wxConvUTF8);
-		texFilename = texFilename.BeforeLast('\\');
-		texFilename += '\\';
-		texFilename += texName;
-		SaveTexture(texFilename);
-	}
-*/
 	// Close file
 	f.close();
-
-
 }
 
 void ExportWMOto3DS(WMO *m, const char *fn)
@@ -2120,8 +2217,844 @@ void ExportWMOtoMS3D(WMO *m, const char *fn)
 
 void ExportWMOtoLWO(WMO *m, const char *fn)
 {
-	wxLogMessage(_T("Error: WMO to LWO export not implemented."));
+	int i32;
+	uint32 u32;
+	float f32;
+	uint16 u16;
+	unsigned char ub;
+	int off_t;
+	
+	wxFFileOutputStream f(wxString(fn, wxConvUTF8), wxT("w+b"));
+
+	if (!f.IsOk()) {
+		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
+		return;
+	}
+
+	numVerts = 0;
+	numGroups = 0;
+
+	// LightWave object files use the IFF syntax described in the EA-IFF85 document. Data is stored in a collection of chunks. 
+	// Each chunk begins with a 4-byte chunk ID and the size of the chunk in bytes, and this is followed by the chunk contents.
+
+	unsigned int fileLen = 0;
+
+	// --
+	// Formally, a LightWave object file is a single IFF FORM chunk of type LWO2. The first 4 bytes are the characters 'F', 'O', 'R', 'M', 
+	// and this is followed by a 4-byte integer containing the chunk size (the size of the file minus 8) and the FORM type (the 
+	// characters 'L', 'W', 'O', '2'). As with all numbers in LWO2 files, the chunk size is always written in big-endian (Motorola, 
+	// network) byte order.
+	f.Write("FORM", 4);
+	f.Write(reinterpret_cast<char *>(&fileLen), 4);
+	f.Write("LWO2", 4);
+	fileLen += 4;
+	// ================
+
+
+	// --
+	// The TAGS chunk contains an array of strings. Whenever something is identified by name in the file, the ID is often a 
+	// 0-based index into the TAGS array. The only named element in this file is its single surface, named "Default".
+	f.Write("TAGS", 4);
+
+	uint16 counter=0;
+	int16 surfCounter=0;
+
+	uint32 tagsSize = 0;
+	wxString TAGS;
+	u32 = 0;
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOMaterial *mat = &m->mat[batch->texture];
+
+			wxString matName(wxString::Format(_T("Material_%i"), mat->tex));
+			matName.Append(_T('\0'));
+			f.Write(matName.data(), matName.length());
+			tagsSize += matName.length();
+			if (fmod((float)matName.length(), 2.0f) > 0) {
+				ub = 0;
+				f.Write(reinterpret_cast<char *>(&ub), 1);
+				tagsSize += 1;
+			}
+		}
+	}
+	off_t = -4-tagsSize;
+	f.SeekO(off_t, wxFromCurrent);
+	u32 = reverse_endian<uint32>(tagsSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+	fileLen += tagsSize;
+	// ================
+
+
+	// --
+	// The layer header signals the start of a new layer. All geometry elements that appear in the file after this and before 
+	// the next LAYR chunk belong to this layer. The layer header contains an index, a flags word, the pivot point of the layer, 
+	// the layer's name, and the index of the parent layer. This is the first (and only) layer, so its index is 0 and the optional 
+	// parent index is omitted. The bits in the flags word are also 0, and the layer hasn't been given a name.
+	// The pivot point is the origin for rotations in this layer and is expressed in world coordinates. Pivots typically differ from 
+	// (0, 0, 0) when layers and layer parenting are used to create an object hierarchy.
+	f.Write("LAYR", 4);
+	u32 = reverse_endian<uint32>(18);
+	fileLen += 8;
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	ub = 0;
+	for(int i=0; i<18; i++) {
+		f.Write(reinterpret_cast<char *>(&ub), 1);
+	}
+	fileLen += 18;
+	// ================
+
+
+	// --
+	// POINTS CHUNK, this is the vertice data
+	// The PNTS chunk contains triples of floating-point numbers, the coordinates of a list of points. The numbers are written 
+	// as IEEE 32-bit floats in network byte order. The IEEE float format is the standard bit pattern used by almost all CPUs 
+	// and corresponds to the internal representation of the C language float type. In other words, this isn't some bizarre 
+	// proprietary encoding. You can process these using simple fread and fwrite calls (but don't forget to correct the byte 
+	// order if necessary).
+	uint32 pointsSize = 0;
+	f.Write("PNTS", 4);
+	u32 = reverse_endian<uint32>(pointsSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+
+	// output all the vertice data
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			for(int ii=0;ii<batch->indexCount;ii++)
+			{
+				int a = m->groups[i].indices[batch->indexStart + ii];
+				Vec3D vert;
+				vert.x = reverse_endian<float>(m->groups[i].vertices[a].x);
+				vert.y = reverse_endian<float>(m->groups[i].vertices[a].z);
+				vert.z = reverse_endian<float>(0-m->groups[i].vertices[a].y);
+				f.Write(reinterpret_cast<char *>(&vert.x), 4);
+				f.Write(reinterpret_cast<char *>(&vert.y), 4);
+				f.Write(reinterpret_cast<char *>(&vert.z), 4);
+				pointsSize += 12;
+
+				numVerts++;
+			}
+			numGroups++;
+		}
+	}
+	fileLen += pointsSize;
+	off_t = -4-pointsSize;
+	f.SeekO(off_t, wxFromCurrent);
+	u32 = reverse_endian<uint32>(pointsSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+	// ================
+
+
+/*
+	// --
+	// The bounding box for the layer, just so that readers don't have to scan the PNTS chunk to find the extents.
+	f.Write("BBOX", 4);
+	u32 = reverse_endian<uint32>(24);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	Vec3D vert;
+	vert.x = reverse_endian<float>(m->header.ps.BoundingBox[0].x);
+	vert.y = reverse_endian<float>(m->header.ps.BoundingBox[0].y);
+	vert.z = reverse_endian<float>(m->header.ps.BoundingBox[0].z);
+	f.Write(reinterpret_cast<char *>(&vert.x), 4);
+	f.Write(reinterpret_cast<char *>(&vert.y), 4);
+	f.Write(reinterpret_cast<char *>(&vert.z), 4);
+	vert.x = reverse_endian<float>(m->header.ps.BoundingBox[1].x);
+	vert.y = reverse_endian<float>(m->header.ps.BoundingBox[1].y);
+	vert.z = reverse_endian<float>(m->header.ps.BoundingBox[1].z);
+	f.Write(reinterpret_cast<char *>(&vert.x), 4);
+	f.Write(reinterpret_cast<char *>(&vert.y), 4);
+	f.Write(reinterpret_cast<char *>(&vert.z), 4);
+	// ================
+*/
+
+	// --
+	uint32 vmapSize = 0;
+
+	f.Write("VMAP", 4);
+	u32 = reverse_endian<uint32>(vmapSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+	f.Write("TXUV", 4);
+	uint16 dimension = 2;
+	dimension = ByteSwap16(dimension);
+	f.Write(reinterpret_cast<char *>(&dimension), 2);
+	f.Write("Texture", 7);
+	ub = 0;
+	f.Write(reinterpret_cast<char *>(&ub), 1);
+	vmapSize += 14;
+
+	// u16, f32, f32
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			for(int ii=0;ii<batch->indexCount;ii++)
+			{
+				int a = m->groups[i].indices[batch->indexStart + ii];
+				u16 = ByteSwap16(counter);
+				f.Write(reinterpret_cast<char *>(&u16), 2);
+				f32 = reverse_endian<float>(m->groups[i].texcoords[a].x);
+				f.Write(reinterpret_cast<char *>(&f32), 4);
+				f32 = reverse_endian<float>(1 - m->groups[i].texcoords[a].y);
+				f.Write(reinterpret_cast<char *>(&f32), 4);
+				counter++;
+				if (counter == 256)
+					counter = 0;
+				vmapSize += 10;
+			}
+		}
+	}
+	fileLen += vmapSize;
+
+	off_t = -4-vmapSize;
+	f.SeekO(off_t, wxFromCurrent);
+	u32 = reverse_endian<uint32>(vmapSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+	// ================
+
+
+	// --
+	// POLYGON CHUNK
+	// The POLS chunk contains a list of polygons. A "polygon" in this context is anything that can be described using an 
+	// ordered list of vertices. A POLS of type FACE contains ordinary polygons, but the POLS type can also be CURV, 
+	// PTCH, MBAL or BONE, for example.
+	//
+	// The high 6 bits of the vertex count for each polygon are reserved for flags, which in effect limits the number of 
+	// vertices per polygon to 1023. Don't forget to mask the high bits when reading the vertex count. The flags are 
+	// currently only defined for CURVs.
+	// 
+	// The point indexes following the vertex count refer to the points defined in the most recent PNTS chunk. Each index 
+	// can be a 2-byte or a 4-byte integer. If the high order (first) byte of the index is not 0xFF, the index is 2 bytes long. 
+	// This allows values up to 65279 to be stored in 2 bytes. If the high order byte is 0xFF, the index is 4 bytes long and 
+	// its value is in the low three bytes (index & 0x00FFFFFF). The maximum value for 4-byte indexes is 16,777,215 (224 - 1). 
+	// Objects with more than 224 vertices can be stored using multiple pairs of PNTS and POLS chunks.
+	// 
+	// The cube has 6 square faces each defined by 4 vertices. LightWave polygons are single-sided by default 
+	// (double-sidedness is a possible surface property). The vertices are listed in clockwise order as viewed from the 
+	// visible side, starting with a convex vertex. (The normal is defined as the cross product of the first and last edges.)
+	int32 polySize = 4 + (numVerts / 3) * sizeof(POLYCHUNK2);
+
+	f.Write("POLS", 4);
+	i32 = reverse_endian<int32>(polySize);
+	f.Write(reinterpret_cast<char *>(&i32), 4);
+	fileLen += 8; // an extra 4 bytes for chunk size
+	f.Write("FACE", 4);
+
+	counter = 0;
+	POLYCHUNK2 tri;
+	
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+
+			for (unsigned int k=0; k<batch->indexCount; k+=3) {
+				u16 = 3;
+				tri.numVerts = ByteSwap16(u16);
+				tri.indice[0] = ByteSwap16(counter);
+				counter++;
+				tri.indice[2] = ByteSwap16(counter);
+				counter++;
+				tri.indice[1] = ByteSwap16(counter);
+				counter++;
+				f.Write(reinterpret_cast<char *>(&tri), sizeof(POLYCHUNK2));
+			}
+		}
+	}
+	fileLen += polySize;
+	// ========
+
+
+	// --
+	// The PTAG chunk associates tags with polygons. In this case, it identifies which surface is assigned to each polygon. 
+	// The first number in each pair is a 0-based index into the most recent POLS chunk, and the second is a 0-based 
+	// index into the TAGS chunk.
+	surfCounter = 0;
+	counter=0;
+
+	int32 ptagSize = 4 + (numVerts / 3) * 4;
+	f.Write("PTAG", 4);
+	u32 = reverse_endian<uint32>(ptagSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+	f.Write("SURF", 4);
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+
+			for (unsigned int k=0; k<batch->indexCount; k+=3) {
+				u16 = ByteSwap16(counter);
+				f.Write(reinterpret_cast<char *>(&u16), 2);
+				u16 = ByteSwap16(surfCounter);
+				f.Write(reinterpret_cast<char *>(&u16), 2);
+				counter++;
+			}
+			surfCounter++;
+		}
+	}
+	fileLen += ptagSize;
+	// ================
+
+
+	// --
+	int32 vmadSize = 0;
+	f.Write("VMAD", 4);
+	u32 = reverse_endian<uint32>(vmadSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+	f.Write("TXUV", 4);
+	dimension = 2;
+	dimension = ByteSwap16(dimension);
+	f.Write(reinterpret_cast<char *>(&dimension), 2);
+	f.Write("Texture", 7);
+	ub = 0;
+	f.Write(reinterpret_cast<char *>(&ub), 1);
+	vmadSize += 14;
+
+	counter = 0;
+	// u16, u16, f32, f32
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+
+			for (size_t k=0, b=0; k<batch->indexCount; k++,b++) {
+				int a = m->groups[i].indices[batch->indexStart + k];
+				u16 = ByteSwap16(counter);
+				f.Write(reinterpret_cast<char *>(&u16), 2);
+				u16 = ByteSwap16((uint16)(counter/3));
+				f.Write(reinterpret_cast<char *>(&u16), 2);
+				f32 = reverse_endian<float>(m->groups[i].texcoords[a].x);
+				f.Write(reinterpret_cast<char *>(&f32), 4);
+				f32 = reverse_endian<float>(1 - m->groups[i].texcoords[a].y);
+				f.Write(reinterpret_cast<char *>(&f32), 4);
+				counter++;
+				vmadSize += 12;
+			}
+		}
+	}
+	fileLen += vmadSize;
+	off_t = -4-vmadSize;
+	f.SeekO(off_t, wxFromCurrent);
+	u32 = reverse_endian<uint32>(vmadSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+	// ================
+
+
+	// --
+	uint32 surfaceCounter = 0;
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOMaterial *mat = &m->mat[batch->texture];
+
+			int clipSize = 0;
+			f.Write("CLIP", 4);
+			u32 = reverse_endian<uint32>(0);
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			fileLen += 8;
+
+			u32 = reverse_endian<uint32>(++surfaceCounter);
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			f.Write("STIL", 4);
+			clipSize += 8;
+
+			wxString texName(fn, wxConvUTF8);
+			texName = texName.AfterLast('\\').BeforeLast('.');
+			texName << _T("_") << mat->tex << _T(".tga") << '\0';
+			if (fmod((float)texName.length(), 2.0f) > 0)
+				texName.Append(_T('\0'));
+
+			u16 = ByteSwap16(texName.length());
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f.Write(texName.data(), texName.length());
+			clipSize += (2+texName.length());
+
+			// update the chunks length
+			off_t = -4-clipSize;
+			f.SeekO(off_t, wxFromCurrent);
+			u32 = reverse_endian<uint32>(clipSize);
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			f.SeekO(0, wxFromEnd);
+
+			// save texture to file
+			wxString texFilename(fn, wxConvUTF8);
+			texFilename = texFilename.BeforeLast('\\');
+			texFilename += '\\';
+			texFilename += texName;
+			// setup texture
+			glBindTexture(GL_TEXTURE_2D, mat->tex);
+			SaveTexture(texFilename);
+
+			fileLen += clipSize;
+		}
+	}
+	// ================
+
+
+	// --
+	wxString surfName;
+	surfaceCounter = 0;
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOMaterial *mat = &m->mat[batch->texture];
+
+			uint32 surfaceDefSize = 0;
+			f.Write("SURF", 4);
+			u32 = reverse_endian<uint32>(surfaceDefSize);
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			fileLen += 8;
+
+			// Surface name
+			surfName = _T("Material_");
+			surfName << mat->tex;
+			surfaceCounter++;
+			
+			surfName.Append(_T('\0'));
+			if (fmod((float)surfName.length(), 2.0f) > 0)
+				surfName.Append(_T('\0'));
+
+			surfName.Append(_T('\0')); // ""
+			surfName.Append(_T('\0'));
+			f.Write(surfName.data(), (int)surfName.length());
+			
+			surfaceDefSize += (uint32)surfName.length();
+
+			// Surface Attributes
+			// COLOUR, size 4, bytes 2
+			f.Write("COLR", 4);
+			u16 = 14; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			
+			// value
+			f32 = reverse_endian<float>(1.0);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			f32 = reverse_endian<float>(1.0);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			f32 = reverse_endian<float>(1.0);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			
+			surfaceDefSize += 20;
+
+			// LUMI
+			f.Write("LUMI", 4);
+			u16 = 6; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f32 = 0;
+			f32 = reverse_endian<float>(f32);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+
+
+			surfaceDefSize += 12;
+
+			// DIFF
+			f.Write("DIFF", 4);
+			u16 = 6; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f32 = 1;
+			f32 = reverse_endian<float>(f32);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+
+			surfaceDefSize += 12;
+
+
+			// SPEC
+			f.Write("SPEC", 4);
+			u16 = 6; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f32 = 0;
+			f32 = reverse_endian<float>(f32);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+
+			surfaceDefSize += 12;
+
+			// REFL
+			f.Write("REFL", 4);
+			u16 = 6; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			ub = '\0';
+			f.Write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
+
+			surfaceDefSize += 12;
+
+			// TRAN
+			f.Write("TRAN", 4);
+			u16 = 6; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			ub = '\0';
+			f.Write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
+			f.Write(reinterpret_cast<char *>(&ub), 1);
+
+			surfaceDefSize += 12;
+
+			// GLOSSINESS
+			f.Write("GLOS", 4);
+			u16 = 6; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			
+			// Value
+			// try 50% gloss for 'relfection surfaces
+			f32 = 0.0;
+			f32 = reverse_endian<float>(f32);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			
+			surfaceDefSize += 12;
+
+			// RFOP
+			f.Write("RFOP", 4);
+			u16 = 2; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 1;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+
+			surfaceDefSize += 8;
+
+			// TROP
+			f.Write("TROP", 4);
+			u16 = 2; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 1;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+
+			surfaceDefSize += 8;
+
+			// SIDE
+			f.Write("SIDE", 4);
+			u16 = 2; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 1;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+
+			surfaceDefSize += 8;
+
+			
+			// --
+			// BLOK
+			uint16 blokSize = 0;
+			f.Write("BLOK", 4);
+			f.Write(reinterpret_cast<char *>(&blokSize), 2);
+			surfaceDefSize += 6;
+
+			// IMAP
+			f.Write("IMAP", 4);
+			u16 = 50-8; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 0x80;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 8;
+
+			// CHAN
+			f.Write("CHAN", 4);
+			u16 = 4; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f.Write("COLR", 4);
+			blokSize += 10;
+
+			// OPAC
+			f.Write("OPAC", 4);
+			u16 = 8; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f32 = 1.0;
+			f32 = reverse_endian<float>(f32);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 14;
+
+			// ENAB
+			f.Write("ENAB", 4);
+			u16 = 2; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 1;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 8;
+
+			// NEGA
+			f.Write("NEGA", 4);
+			u16 = 2; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 0;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 8;
+/*
+			// AXIS
+			f.Write("AXIS", 4);
+			u16 = 2; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 1;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 8;
+*/
+			// TMAP
+			f.Write("TMAP", 4);
+			u16 = 98; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 6;
+
+			// CNTR
+			f.Write("CNTR", 4);
+			u16 = 14; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f32 = 0.0;
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 20;
+
+			// SIZE
+			f.Write("SIZE", 4);
+			u16 = 14; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f32 = 1.0;
+			f32 = reverse_endian<float>(f32);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 20;
+
+			// ROTA
+			f.Write("ROTA", 4);
+			u16 = 14; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f32 = 0.0;
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 20;
+
+			// FALL
+			f.Write("FALL", 4);
+			u16 = 16; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f32 = 0.0;
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 22;
+
+			// OREF
+			f.Write("OREF", 4);
+			u16 = 2; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 8;
+
+			// CSYS
+			f.Write("CSYS", 4);
+			u16 = 2; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 0;
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 8;
+
+			// end TMAP
+
+			// PROJ
+			f.Write("PROJ", 4);
+			u16 = 2; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 5;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 8;
+
+			// AXIS
+			f.Write("AXIS", 4);
+			u16 = 2; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 2;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 8;
+
+			// IMAG
+			f.Write("IMAG", 4);
+			u16 = 2; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = surfaceCounter;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 8;
+
+			// WRAP
+			f.Write("WRAP", 4);
+			u16 = 4; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 1;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 1;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 10;
+
+			// WRPW
+			f.Write("WRPW", 4);
+			u16 = 6; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f32 = 1;
+			f32 = reverse_endian<float>(f32);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			u16 = 0;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 12;
+
+			// WRPH
+			f.Write("WRPH", 4);
+			u16 = 6; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f32 = 1;
+			f32 = reverse_endian<float>(f32);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			u16 = 0;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 12;
+
+			// VMAP
+			f.Write("VMAP", 4);
+			u16 = 8; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			wxString t = _T("Texture");
+			t.Append(_T('\0'));
+			f.Write(t.data(), t.length());
+			blokSize += 14;
+
+			// AAST
+			f.Write("AAST", 4);
+			u16 = 6; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 1;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f32 = 1;
+			f32 = reverse_endian<float>(f32);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			blokSize += 12;
+
+			// PIXB
+			f.Write("PIXB", 4);
+			u16 = 2; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = 1;
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			blokSize += 8;
+
+			// 
+			surfaceDefSize += blokSize;
+			off_t = -2-blokSize;
+			f.SeekO(off_t, wxFromCurrent);
+			u16 = ByteSwap16(blokSize);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f.SeekO(0, wxFromEnd);
+			// ================
+			
+
+			fileLen += surfaceDefSize;
+			off_t = -4-surfaceDefSize;
+			f.SeekO(off_t, wxFromCurrent);
+			u32 = reverse_endian<uint32>(surfaceDefSize);
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			f.SeekO(0, wxFromEnd);
+		}
+	}
+	// ================
+
+
+	f.SeekO(4, wxFromStart);
+	u32 = reverse_endian<uint32>(fileLen);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+
+	f.Close();
 }
+
 
 
 void ExportM2toOBJ(Model *m, const char *fn, bool init)
@@ -2155,7 +3088,7 @@ void ExportM2toOBJ(Model *m, const char *fn, bool init)
 		if (p.init(m)) {
 			wxString texName(fn, wxConvUTF8);
 			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << _T("_") << p.tex+1 << _T(".tga");
+			texName << _T("_") << p.tex << _T(".tga");
 			fm << "newmtl " << "Material_" << i << endl;
 			fm << "illum 2" << endl;
 			out = wxString::Format(_T("Kd %.06f %.06f %.06f"), p.ocol.x, p.ocol.y, p.ocol.z);

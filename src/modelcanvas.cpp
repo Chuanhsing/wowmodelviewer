@@ -308,7 +308,7 @@ Attachment* ModelCanvas::AddModel(const char *fn)
 
 	return att;
 }
-
+#endif
 
 Attachment* ModelCanvas::LoadModel(const char *fn)
 {
@@ -331,8 +331,6 @@ Attachment* ModelCanvas::LoadModel(const char *fn)
 
 	return root;
 }
-#endif
-
 
 Attachment* ModelCanvas::LoadCharModel(const char *fn)
 {

@@ -909,8 +909,10 @@ void ModelViewer::LoadModel(const wxString fn)
 		charMenu->Check(ID_SHOW_FACIALHAIR, true);
 
 		charControl->UpdateModel(modelAtt);
-	} else
+	} else {
+		charControl->charAtt = modelAtt;
 		charControl->model = (Model*)modelAtt->model;
+	}
 
 	// (Dis/en)able Character menu
 	menuBar->EnableTop(2, isChar);
@@ -1597,13 +1599,15 @@ void ModelViewer::OnEffects(wxCommandEvent &event)
 
 	} else if (id == ID_EQCREATURE_R) { // R for righthand
 		Model *m = static_cast<Model*>(canvas->root->model);
+		if (!m)
+			m = static_cast<Model*>(canvas->model);
 
 		// make sure m is a valid pointer to a model
 		if (m) {
 			// This is an error check to make sure the creature can be equipped.
 			for(int k=0; k<m->ATT_MAX; k++){
-				if (m->attLookup[k] == 10) {
-					SelectCreatureItem(10, 0, charControl, canvas);
+				if (m->attLookup[k] == PS_RIGHT_PALM) {
+					SelectCreatureItem(CS_HAND_RIGHT, 0, charControl, canvas);
 					break;
 				}
 			}
@@ -1611,13 +1615,15 @@ void ModelViewer::OnEffects(wxCommandEvent &event)
 
 	} else if (id == ID_EQCREATURE_L) { // L for lefthand
 		Model *m = static_cast<Model*>(canvas->root->model);
+		if (!m)
+			m = static_cast<Model*>(canvas->model);
 
 		// make sure m is a valid pointer to a model
 		if (m) {
 			// This is an error check to make sure the creature can be equipped.
 			for(int k=0; k<m->ATT_MAX; k++){
-				if (m->attLookup[k] == 11) {
-					SelectCreatureItem(11, 0, charControl, canvas);
+				if (m->attLookup[k] == PS_LEFT_PALM) {
+					SelectCreatureItem(CS_HAND_LEFT, 0, charControl, canvas);
 					break;
 				}
 			}
@@ -2578,68 +2584,80 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 {
 	int id = event.GetId();
 	if (id == ID_FILE_MODELEXPORT) {
-		wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds|Lightwave2 (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-		if (dialog.ShowModal()==wxID_OK) {
-			wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+		if (canvas->model) {
+			bool init = false;
+			wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds|Lightwave2 (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			if (dialog.ShowModal()==wxID_OK) {
+				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-			if (dialog.GetFilterIndex() == 0) {
-				if (canvas->model)
-					ExportM2toOBJ(canvas->model, dialog.GetPath().fn_str(), false);
-				else if (canvas->wmo)
+				if (dialog.GetFilterIndex() == 0) {
+					ExportM2toOBJ(canvas->model, dialog.GetPath().fn_str(), init);
+				} else if (dialog.GetFilterIndex() == 1) {
+					ExportM2toLWO(canvas->model, dialog.GetPath().fn_str(), init);
+				} else if (dialog.GetFilterIndex() == 2) {
+					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+				} else if (dialog.GetFilterIndex() == 3) {
+					ExportM2to3DS(canvas->model, dialog.GetPath().fn_str(), init);
+				} else if (dialog.GetFilterIndex() == 4) {
+					ExportM2toLWO2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+				}
+			}
+		} else if (canvas->wmo) {
+			wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			if (dialog.ShowModal()==wxID_OK) {
+				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+
+				if (dialog.GetFilterIndex() == 0) {
 					ExportWMOtoOBJ(canvas->wmo, dialog.GetPath().fn_str());
-			} else if (dialog.GetFilterIndex() == 1) {
-				if (canvas->model)
-					ExportM2toLWO(canvas->model, dialog.GetPath().fn_str(), false);
-				else if (canvas->wmo)
+				} else if (dialog.GetFilterIndex() == 1) {
 					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
-			} else if (dialog.GetFilterIndex() == 2) {
-				if (canvas->model)
-					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), false);
-				else if (canvas->wmo)
+				} else if (dialog.GetFilterIndex() == 2) {
 					ExportWMOtoMS3D(canvas->wmo, dialog.GetPath().fn_str());
-			} else if (dialog.GetFilterIndex() == 3) {
-				if (canvas->model)
-					ExportM2to3DS(canvas->model, dialog.GetPath().fn_str(), false);
-				else if (canvas->wmo)
+				} else if (dialog.GetFilterIndex() == 3) {
 					ExportWMOto3DS(canvas->wmo, dialog.GetPath().fn_str());
-			} else if (dialog.GetFilterIndex() == 4) {
-				if (canvas->model)
-					ExportM2toLWO2(canvas->root, canvas->model, dialog.GetPath().fn_str(), false);
-				else if (canvas->wmo)
+				} else if (dialog.GetFilterIndex() == 4) {
 					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
+				}
 			}
 		}
 	} else if (id == ID_FILE_MODELEXPORT_INIT) {
-		wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds|Lightwave2 (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-		if (dialog.ShowModal()==wxID_OK) {
-			wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
-			if (dialog.GetFilterIndex() == 0) {
-				if (canvas->model)
-					ExportM2toOBJ(canvas->model, dialog.GetPath().fn_str(), true);
-				else if (canvas->wmo)
+		if (canvas->model) {
+			bool init = true;
+			wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds|Lightwave2 (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			if (dialog.ShowModal()==wxID_OK) {
+				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+
+				if (dialog.GetFilterIndex() == 0) {
+					ExportM2toOBJ(canvas->model, dialog.GetPath().fn_str(), init);
+				} else if (dialog.GetFilterIndex() == 1) {
+					ExportM2toLWO(canvas->model, dialog.GetPath().fn_str(), init);
+				} else if (dialog.GetFilterIndex() == 2) {
+					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+				} else if (dialog.GetFilterIndex() == 3) {
+					ExportM2to3DS(canvas->model, dialog.GetPath().fn_str(), init);
+				} else if (dialog.GetFilterIndex() == 4) {
+					ExportM2toLWO2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+				}
+			}
+		} else if (canvas->wmo) {
+			wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			if (dialog.ShowModal()==wxID_OK) {
+				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+
+				if (dialog.GetFilterIndex() == 0) {
 					ExportWMOtoOBJ(canvas->wmo, dialog.GetPath().fn_str());
-			} else if (dialog.GetFilterIndex() == 1) {
-				if (canvas->model)
-					ExportM2toLWO(canvas->model, dialog.GetPath().fn_str(), true);
-				else if (canvas->wmo)
+				} else if (dialog.GetFilterIndex() == 1) {
 					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
-			} else if (dialog.GetFilterIndex() == 2) {
-				if (canvas->model)
-					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), true);
-				else if (canvas->wmo)
+				} else if (dialog.GetFilterIndex() == 2) {
 					ExportWMOtoMS3D(canvas->wmo, dialog.GetPath().fn_str());
-			} else if (dialog.GetFilterIndex() == 3) {
-				if (canvas->model)
-					ExportM2to3DS(canvas->model, dialog.GetPath().fn_str(), true);
-				else if (canvas->wmo)
+				} else if (dialog.GetFilterIndex() == 3) {
 					ExportWMOto3DS(canvas->wmo, dialog.GetPath().fn_str());
-			} else if (dialog.GetFilterIndex() == 4) {
-				if (canvas->model)
-					ExportM2toLWO2(canvas->root, canvas->model, dialog.GetPath().fn_str(), true);
-				else if (canvas->wmo)
+				} else if (dialog.GetFilterIndex() == 4) {
 					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
+				}
 			}
 		}
+
 	} else if (id == ID_FILE_MODEL_INFO) {
 		ModelInfo();
 	} else if (id == ID_FILE_DISCOVERY_ITEM) {
