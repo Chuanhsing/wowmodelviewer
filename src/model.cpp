@@ -339,16 +339,16 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 
 	if (header.nameOfs != 304 && header.nameOfs != 320) {
 		wxLogMessage(_T("Error:\t\tInvalid model nameOfs=%d/%d!  May be corrupted."), header.nameOfs, sizeof(ModelHeader));
-		ok = false;
-		f.close();
-		return;
+		//ok = false;
+		//f.close();
+		//return;
 	}
 #else
 	if (header.nameOfs != 336) {
 		wxLogMessage(_T("Error:\t\tInvalid model nameOfs=%d/%d!  May be corrupted."), header.nameOfs, sizeof(ModelHeader));
-		ok = false;
-		f.close();
-		return;
+		//ok = false;
+		//f.close();
+		//return;
 	}
 #endif
 

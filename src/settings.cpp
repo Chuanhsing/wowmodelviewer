@@ -183,7 +183,7 @@ Settings_Page2::Settings_Page2(wxWindow* parent, wxWindowID id)
 
 	top->Add(gs,wxSizerFlags().Proportion(1).Expand().Border(wxALL, 10));
 
-	top->Add(new wxButton(this, ID_SETTINGS_APPLY, _("Apply Settings"), wxDefaultPosition, wxDefaultSize, 0), wxSizerFlags()/*.Expand()*/.Border(wxALL, 10).Align(wxALIGN_RIGHT|wxALIGN_BOTTOM));
+	top->Add(new wxButton(this, ID_SETTINGS_APPLY, _("Apply Settings"), wxDefaultPosition, wxDefaultSize, 0), wxSizerFlags()/*.Expand()*/.Border(wxALL, 10).Align(wxALIGN_LEFT|wxALIGN_BOTTOM));
 	
 	top->SetMinSize(350, 350);
 	//top->SetMaxSize(400, 400);

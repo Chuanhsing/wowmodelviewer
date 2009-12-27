@@ -1869,7 +1869,7 @@ void ModelViewer::OnBackground(wxCommandEvent &event)
 			wxArrayString skyboxes;
 
 			for (LightSkyBoxDB::Iterator it=skyboxdb.begin();  it!=skyboxdb.end(); ++it) {
-				wxString str(it->getString(LightSkyBoxDB::Name + langID));
+				wxString str(it->getString(LightSkyBoxDB::Name));
 				str = str.BeforeLast('.');
 				str.Append(_T(".m2"));
 
