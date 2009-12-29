@@ -146,20 +146,23 @@ void ParticleSystem::update(float dt)
 		float flife = 1.0f;
 		flife = lifespan.getValue(manim, mtime);
 
-		float ftospawn = (dt * frate / flife) + rem;
+		float ftospawn;
+		if (flife)
+			ftospawn = (dt * frate / flife) + rem;
+		else
+			ftospawn = rem;
 		if (ftospawn < 1.0f) {
 			rem = ftospawn;
-			if (rem<0) 
+			if (rem < 0) 
 				rem = 0;
 		} else {
-			int tospawn = (int)ftospawn;
+			unsigned int tospawn = (int)ftospawn;
 
 			if ((tospawn + particles.size()) > MAX_PARTICLES) // Error check to prevent the program from trying to load insane amounts of particles.
-				tospawn = (int)particles.size() - MAX_PARTICLES;
+				tospawn = (unsigned int)particles.size() - MAX_PARTICLES;
 
 			rem = ftospawn - (float)tospawn;
 
-			
 			float w = areal.getValue(manim, mtime) * 0.5f;
 			float l = areaw.getValue(manim, mtime) * 0.5f;
 			float spd = speed.getValue(manim, mtime);
