@@ -1743,7 +1743,9 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init)
 	f.Close();
 }
 
-
+/*
+http://gpwiki.org/index.php/OBJ
+*/
 void ExportM2toLWO(Model *m, const char *fn, bool init)
 {
 	int i32;
@@ -2141,6 +2143,8 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 	f << "# Wavefront OBJ exported by WoW Model Viewer v0.5.0.8" << endl << endl;
 	f << "mtllib " << matName.mb_str() << endl << endl;
 
+	// geometric vertices (v)
+	// v x y z weight
 	for (int i=0; i<m->nGroups; i++) {
 		for (int j=0; j<m->groups[i].nBatches; j++)
 		{
@@ -2154,6 +2158,8 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 	}
 	f << endl;
 
+	// texture vertices (vt)
+	// vt horizontal vertical depth
 	for (int i=0; i<m->nGroups; i++) {
 		for (int j=0; j<m->groups[i].nBatches; j++)
 		{
@@ -2167,6 +2173,8 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 	}
 	f << endl;
 
+	// vertex normals (vn)
+	// vn x y z
 	for (int i=0; i<m->nGroups; i++) {
 		for (int j=0; j<m->groups[i].nBatches; j++)
 		{
@@ -2180,13 +2188,16 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 	}
 	f << endl;
 
+	// Referencing groups of vertices
+	// f v/vt/vn v/vt/vn v/vt/vn v/vt/vn
 	int counter = 1;
 	for (int i=0; i<m->nGroups; i++) {
 		for (int j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];
-			
+
+			// batch->texture or mat->tex ?
 			f << "g Geoset_" << i << "_" << j << "_tex_" << int(batch->texture) << endl;
 			f << "s 1" << endl;
 			f << "usemtl Material_" << mat->tex+1 << endl;

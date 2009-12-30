@@ -3,7 +3,7 @@
 #include "globalvars.h"
 
 // default colour values
-const static float def_ambience[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+const static float def_ambience[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 const static float def_diffuse[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 const static float def_emission[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 const static float def_specular[4] = {1.0f, 1.0f, 1.0f, 1.0f};

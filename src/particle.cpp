@@ -53,7 +53,7 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 #ifndef WotLK
 	mid = mta.p.mid;
 #else
-	mid = 0.5; // TODO, Alfred
+	mid = 0.5; // mid can't be 0 or 1, TODO, Alfred
 #endif
 	slowdown = mta.p.slowdown;
 	rotation = mta.p.rotation;
@@ -61,7 +61,11 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 	texture = model->textures[mta.texture];
 	blend = mta.blend;
 	rows = mta.rows;
+	if (rows == 0)
+		rows = 1;
 	cols = mta.cols;
+	if (cols == 0)
+		cols = 1;
 	type = mta.ParticleType;
 	//order = mta.s2;
 	order = mta.ParticleType>0 ? -1 : 0;
@@ -592,6 +596,8 @@ Particle PlaneParticleEmitter::newParticle(int anim, int time, float w, float l,
 
 	p.life = 0;
 	p.maxlife = sys->lifespan.getValue(anim, time);
+	if (p.maxlife == 0)
+		p.maxlife = 1;
 
 	p.origin = p.pos;
 
@@ -697,6 +703,8 @@ Particle SphereParticleEmitter::newParticle(int anim, int time, float w, float l
 
 	p.life = 0;
 	p.maxlife = sys->lifespan.getValue(anim, time);
+	if (p.maxlife == 0)
+		p.maxlife = 1;
 
 	p.origin = p.pos;
 

@@ -32,6 +32,23 @@ inline T interpolateHermite(const float r, const T &v1, const T &v2, const T &in
 	return static_cast<T>(v1*h1 + v2*h2 + in*h3 + out*h4);
 }
 
+
+template<class T>
+inline T interpolateBezier(const float r, const T &v1, const T &v2, const T &in, const T &out)
+{
+	float InverseFactor = (1.0f - r);
+	float FactorTimesTwo = r*r;
+	float InverseFactorTimesTwo = InverseFactor*InverseFactor;
+	// basis functions
+	float h1 = InverseFactorTimesTwo * InverseFactor;
+	float h2 = 3.0f * r * InverseFactorTimesTwo;
+	float h3 = 3.0f * FactorTimesTwo * InverseFactor;
+	float h4 = FactorTimesTwo * r;
+
+	// interpolation
+	return static_cast<T>(v1*h1 + v2*h2 + in*h3 + out*h4);
+}
+
 // "linear" interpolation for quaternions should be slerp by default
 template<>
 inline Quaternion interpolate<Quaternion>(const float r, const Quaternion &v1, const Quaternion &v2)
@@ -49,7 +66,8 @@ extern int globalFrame;
 enum Interpolations {
 	INTERPOLATION_NONE,
 	INTERPOLATION_LINEAR,
-	INTERPOLATION_HERMITE
+	INTERPOLATION_HERMITE,
+	INTERPOLATION_BEZIER
 };
 
 template <class T>
@@ -156,14 +174,21 @@ public:
 			t2 = times[anim][pos+1];
 			float r = (time-t1)/(float)(t2-t1);
 
-			if (type == INTERPOLATION_LINEAR) 
-				return interpolate<T>(r,data[anim][pos],data[anim][pos+1]);
-			else if (type == INTERPOLATION_NONE) 
+			if (type == INTERPOLATION_NONE) 
 				return data[anim][pos];
-			else {
+			else if (type == INTERPOLATION_LINEAR) 
+				return interpolate<T>(r,data[anim][pos],data[anim][pos+1]);
+			else if (type==INTERPOLATION_HERMITE){
 				// INTERPOLATION_HERMITE is only used in cameras afaik?
 				return interpolateHermite<T>(r,data[anim][pos],data[anim][pos+1],in[anim][pos],out[anim][pos]);
 			}
+			else if (type==INTERPOLATION_BEZIER){
+				//Is this used ingame or only by custom models?
+				return interpolateBezier<T>(r,data[anim][pos],data[anim][pos+1],in[anim][pos],out[anim][pos]);
+			}
+			else //this shouldn't appear!
+				return data[anim][pos];
+			
 		} else {
 			// default value
 			if (data[anim].size() == 0)
@@ -291,6 +316,14 @@ public:
 						out[j].push_back(Conv::conv(keys[i*3+2]));
 					}
 					break;
+				//let's use same values like hermite?!?
+				case INTERPOLATION_BEZIER:
+					for (size_t i = 0; i < pHeadKeys->nEntrys; i++) {
+						data[j].push_back(Conv::conv(keys[i*3]));
+						in[j].push_back(Conv::conv(keys[i*3+1]));
+						out[j].push_back(Conv::conv(keys[i*3+2]));
+					}
+					break;
 			}
 		}
 #else
@@ -381,6 +414,13 @@ public:
 						out[j].push_back(Conv::conv(keys[i*3+2]));
 					}
 					break;
+				case INTERPOLATION_BEZIER:
+					for (size_t i = 0; i < pHeadKeys->nEntrys; i++) {
+						data[j].push_back(Conv::conv(keys[i*3]));
+						in[j].push_back(Conv::conv(keys[i*3+1]));
+						out[j].push_back(Conv::conv(keys[i*3+2]));
+					}
+					break;
 			}
 		}
 	}
@@ -417,6 +457,17 @@ public:
 					data[i] = fixfunc(data[i]);
 					in[i] = fixfunc(in[i]);
 					out[i] = fixfunc(out[i]);
+				}
+#endif
+				break;
+			case INTERPOLATION_BEZIER:
+#ifdef WotLK
+				for (size_t i=0; i<sizes; i++) {
+					for (size_t j=0; j<data[i].size(); j++) {
+						data[i][j] = fixfunc(data[i][j]);
+						in[i][j] = fixfunc(in[i][j]);
+						out[i][j] = fixfunc(out[i][j]);
+					}
 				}
 #endif
 				break;
