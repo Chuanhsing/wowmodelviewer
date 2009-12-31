@@ -2097,15 +2097,15 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 		return;
 	}
 
-	wxString matName(fn, wxConvUTF8);
-	matName = matName.BeforeLast('.');
-	matName << _T(".mtl");
+	wxString mtlName(fn, wxConvUTF8);
+	mtlName = mtlName.BeforeLast('.');
+	mtlName << _T(".mtl");
 
-	ofstream fm(matName.mb_str(), ios_base::out | ios_base::trunc);
-	matName = matName.AfterLast('\\');
+	ofstream fm(mtlName.mb_str(), ios_base::out | ios_base::trunc);
+	mtlName = mtlName.AfterLast('\\');
 
 	fm << "#" << endl;
-	fm << "# " << matName.mb_str() << endl;
+	fm << "# " << mtlName.mb_str() << endl;
 	fm << "#" << endl;
 	fm <<  endl;
 
@@ -2115,10 +2115,20 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];
 
-			wxString texName(fn, wxConvUTF8);
-			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << _T("_") << mat->tex << _T(".tga");
-			fm << "newmtl " << "Material_" << mat->tex+1 << endl;
+			wxString matName;
+			// Find a Match for mat->tex and place it into the Texture Name Array.
+			for (int t=0;t<=m->nTextures; t++) {
+				if (t == mat->tex) {
+					matName = wxString(m->textures[t-1].c_str(), wxConvUTF8);
+					matName = matName.BeforeLast('.');
+					break;
+				}
+			}
+			wxString texName = matName;
+			texName = texName.AfterLast('\\');
+			texName.Append(_T(".tga"));
+
+			fm << "newmtl " << matName.c_str() << endl;
 			fm << "Kd 1.000000 1.000000 1.000000" << endl;
 			fm << "Ka 0.700000 0.700000 0.700000" << endl;
 			fm << "Ks 0.000000 0.000000 0.000000" << endl;
@@ -2141,7 +2151,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 	fm.close();
 
 	f << "# Wavefront OBJ exported by WoW Model Viewer v0.5.0.8" << endl << endl;
-	f << "mtllib " << matName.mb_str() << endl << endl;
+	f << "mtllib " << mtlName.mb_str() << endl << endl;
 
 	// geometric vertices (v)
 	// v x y z weight
@@ -2200,7 +2210,17 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 			// batch->texture or mat->tex ?
 			f << "g Geoset_" << i << "_" << j << "_tex_" << int(batch->texture) << endl;
 			f << "s 1" << endl;
-			f << "usemtl Material_" << mat->tex+1 << endl;
+			//f << "usemtl Material_" << mat->tex+1 << endl;
+			// Find a Match for mat->tex and place it into the Texture Name Array.
+			wxString matName;
+			for (int t=0;t<=m->nTextures; t++) {
+				if (t == mat->tex) {
+					matName = wxString(m->textures[t-1].c_str(), wxConvUTF8);
+					matName = matName.BeforeLast('.');
+					break;
+				}
+			}
+			f << "usemtl " << matName.c_str() << endl;
 			for (unsigned int k=0; k<batch->indexCount; k+=3) {
 				f << "f ";
 				f << counter << "/" << counter << "/" << counter << " ";
@@ -2281,7 +2301,17 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];
 
-			wxString matName(wxString::Format(_T("Material_%i"), mat->tex));
+			//wxString matName(wxString::Format(_T("Material_%03i"), mat->tex));
+			wxString matName;
+			// Find a Match for mat->tex and place it into the Texture Name Array.
+			for (int t=0;t<=m->nTextures; t++) {
+				if (t == mat->tex) {
+					matName = wxString(m->textures[t-1].c_str(), wxConvUTF8);
+					matName = matName.BeforeLast('.');
+					break;
+				}
+			}
+
 			matName.Append(_T('\0'));
 			f.Write(matName.data(), matName.length());
 			tagsSize += matName.length();
@@ -2344,7 +2374,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 				Vec3D vert;
 				vert.x = reverse_endian<float>(m->groups[i].vertices[a].x);
 				vert.y = reverse_endian<float>(m->groups[i].vertices[a].z);
-				vert.z = reverse_endian<float>(0-m->groups[i].vertices[a].y);
+				vert.z = reverse_endian<float>(m->groups[i].vertices[a].y);
 				f.Write(reinterpret_cast<char *>(&vert.x), 4);
 				f.Write(reinterpret_cast<char *>(&vert.y), 4);
 				f.Write(reinterpret_cast<char *>(&vert.z), 4);
@@ -2582,9 +2612,24 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			f.Write("STIL", 4);
 			clipSize += 8;
 
-			wxString texName(fn, wxConvUTF8);
-			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << _T("_") << mat->tex << _T(".tga") << '\0';
+			//wxString texName(fn, wxConvUTF8);
+			wxString texName;
+			// Find a Match for mat->tex and place it into the Texture Name Array.
+			for (int t=0;t<=m->nTextures; t++) {
+				if (t == mat->tex) {
+					texName = wxString(m->textures[t-1].c_str(), wxConvUTF8);
+					texName = texName.BeforeLast('.');
+					break;
+				}
+			}
+
+			// Remove all paths from our name.
+			// Hopefully we can be able to export paths in the future...
+			texName = texName.AfterLast('\\');
+
+			//texName << _T("_") << wxString::Format(_T("%03i"),mat->tex) << _T(".tga") << '\0';
+			texName << _T(".tga") << '\0';
+
 			if (fmod((float)texName.length(), 2.0f) > 0)
 				texName.Append(_T('\0'));
 
@@ -2605,6 +2650,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			texFilename = texFilename.BeforeLast('\\');
 			texFilename += '\\';
 			texFilename += texName;
+
 			// setup texture
 			glBindTexture(GL_TEXTURE_2D, mat->tex);
 			SaveTexture(texFilename);
@@ -2616,7 +2662,6 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 
 
 	// --
-	wxString surfName;
 	surfaceCounter = 0;
 	for (int i=0; i<m->nGroups; i++) {
 		for (int j=0; j<m->groups[i].nBatches; j++)
@@ -2631,19 +2676,28 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			fileLen += 8;
 
 			// Surface name
-			surfName = _T("Material_");
-			surfName << mat->tex;
+			//wxString matName = wxString::Format(_T("Material_%03i"),mat->tex);
+			// Find a Match for mat->tex and place it into the Texture Name Array.
+			wxString matName;
+			for (int t=0;t<=m->nTextures; t++) {
+				if (t == mat->tex) {
+					matName = wxString(m->textures[t-1].c_str(), wxConvUTF8);
+					matName = matName.BeforeLast('.');
+					break;
+				}
+			}
+
 			surfaceCounter++;
 			
-			surfName.Append(_T('\0'));
-			if (fmod((float)surfName.length(), 2.0f) > 0)
-				surfName.Append(_T('\0'));
+			matName.Append(_T('\0'));
+			if (fmod((float)matName.length(), 2.0f) > 0)
+				matName.Append(_T('\0'));
 
-			surfName.Append(_T('\0')); // ""
-			surfName.Append(_T('\0'));
-			f.Write(surfName.data(), (int)surfName.length());
+			matName.Append(_T('\0')); // ""
+			matName.Append(_T('\0'));
+			f.Write(matName.data(), (int)matName.length());
 			
-			surfaceDefSize += (uint32)surfName.length();
+			surfaceDefSize += (uint32)matName.length();
 
 			// Surface Attributes
 			// COLOUR, size 4, bytes 2
