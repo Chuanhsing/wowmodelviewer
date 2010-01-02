@@ -761,7 +761,7 @@ void WMOGroup::initDisplayList()
 			glAlphaFunc(GL_GREATER, aval);
 		}
 
-		if (mat->flags & 0x04) 
+		if (mat->flags & WMO_MATERIAL_CULL) 
 			glDisable(GL_CULL_FACE);
 		else 
 			glEnable(GL_CULL_FACE);

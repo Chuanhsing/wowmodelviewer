@@ -1796,7 +1796,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 			u16 = 1;
 			// If double-sided...
-			if (mat->flags & 0x04){
+			if (mat->flags & WMO_MATERIAL_CULL){
 				u16 = 3;
 			}
 			u16 = ByteSwap16(u16);

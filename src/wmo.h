@@ -71,6 +71,7 @@ public:
 	void updateModels(bool load);
 };
 
+#define	WMO_MATERIAL_CULL	0x04
 struct WMOMaterial {
 	int flags;
 	int d1;
