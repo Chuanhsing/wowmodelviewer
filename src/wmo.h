@@ -88,10 +88,11 @@ struct WMOMaterial {
 };
 
 struct WMOLight {
-	unsigned int flags, color;
+	unsigned int type, useatten, color;
 	Vec3D pos;
 	float intensity;
-	float unk[5];
+	float attenStart, attenEnd;
+	float unk[3];
 	float r;
 
 	Vec4D fcolor;

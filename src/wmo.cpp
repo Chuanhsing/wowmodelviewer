@@ -448,12 +448,17 @@ void WMO::drawPortals()
 
 void WMOLight::init(MPQFile &f)
 {
-	char type[4];
-	f.read(&type,4);
+	char pad[2];
+	f.read(&pad[0],1);
+	f.read(&type,1);
+	f.read(&useatten,1);
+	f.read(&pad[1],1);
 	f.read(&color,4);
 	f.read(pos, 12);
 	f.read(&intensity, 4);
-	f.read(unk, 4*5);
+	f.read(&attenStart, 4);
+	f.read(&attenEnd, 4);
+	f.read(unk, 4*3);	// Seems to be -1, -0.5, X, where X changes from model to model. Guard Tower: 2.3611112, GoldshireInn: 5.8888888, Duskwood_TownHall: 5
 	f.read(&r,4);
 
 	pos = Vec3D(pos.x, pos.z, -pos.y);

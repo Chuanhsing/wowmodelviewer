@@ -2611,12 +2611,6 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 					ExportWMOtoOBJ(canvas->wmo, dialog.GetPath().fn_str());
 				} else if (dialog.GetFilterIndex() == 1) {
 					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
-				} else if (dialog.GetFilterIndex() == 2) {
-					ExportWMOtoMS3D(canvas->wmo, dialog.GetPath().fn_str());
-				} else if (dialog.GetFilterIndex() == 3) {
-					ExportWMOto3DS(canvas->wmo, dialog.GetPath().fn_str());
-				} else if (dialog.GetFilterIndex() == 4) {
-					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
 				}
 			}
 		}
@@ -2647,12 +2641,6 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				if (dialog.GetFilterIndex() == 0) {
 					ExportWMOtoOBJ(canvas->wmo, dialog.GetPath().fn_str());
 				} else if (dialog.GetFilterIndex() == 1) {
-					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
-				} else if (dialog.GetFilterIndex() == 2) {
-					ExportWMOtoMS3D(canvas->wmo, dialog.GetPath().fn_str());
-				} else if (dialog.GetFilterIndex() == 3) {
-					ExportWMOto3DS(canvas->wmo, dialog.GetPath().fn_str());
-				} else if (dialog.GetFilterIndex() == 4) {
 					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
 				}
 			}

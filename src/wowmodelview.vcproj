@@ -313,6 +313,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\modelexport-lwo.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\modelviewer.cpp"
 				>
 			</File>

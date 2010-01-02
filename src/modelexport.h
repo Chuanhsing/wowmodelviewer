@@ -15,13 +15,12 @@ void ExportM2toLWO(Model *m, const char *fn, bool init);
 
 void ExportM2toOBJ(Model *m, const char *fn, bool init);
 
-void ExportWMOto3DS(WMO *m, const char *fn);
- 
-void ExportWMOtoMS3D(WMO *m, const char *fn);
-
 void ExportWMOtoLWO(WMO *m, const char *fn);
+
+void ExportWMOObjectstoLWO(WMO *m, const char *fn);
 
 void ExportWMOtoOBJ(WMO *m, const char *fn);
 
+void SaveTexture(wxString fn);
 
 #endif
