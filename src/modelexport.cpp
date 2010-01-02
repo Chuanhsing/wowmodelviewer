@@ -881,161 +881,6 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 		wxDELETEA(groups);
 }
 
-void ExportWMOtoOBJ(WMO *m, const char *fn)
-{
-	// Open file
-	ofstream f(fn, ios_base::out | ios_base::trunc);
-
-	if (!f.is_open()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
-		return;
-	}
-
-	wxString matName(fn, wxConvUTF8);
-	matName = matName.BeforeLast('.');
-	matName << _T(".mtl");
-
-	ofstream fm(matName.mb_str(), ios_base::out | ios_base::trunc);
-	matName = matName.AfterLast('\\');
-
-	fm << "#" << endl;
-	fm << "# " << matName.mb_str() << endl;
-	fm << "#" << endl;
-	fm <<  endl;
-
-	wxString texarray[200][200];
-
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
-		{
-			WMOBatch *batch = &m->groups[i].batches[j];
-			WMOMaterial *mat = &m->mat[batch->texture];
-
-			wxString outname(fn, wxConvUTF8);
-
-			// Find a Match for mat->tex and place it into the Texture Name Array.
-			bool nomatch = true;
-			for (int t=0;t<=m->nTextures; t++) {
-				if (t == mat->tex) {
-					texarray[i][j] << m->textures[t-1];
-					texarray[i][j] = texarray[i][j].BeforeLast('.');
-					nomatch = false;
-					break;
-				}
-			}
-			if (nomatch == true){
-				texarray[i][j] = outname << wxString::Format(_T("_Material_%03i"), mat->tex);
-			}
-
-			//wxString matName(wxString::Format(_T("Material_%03i"), mat->tex));
-			wxString matName = texarray[i][j];
-
-			//wxString texName(fn, wxConvUTF8);
-			wxString texName = texarray[i][j];
-			texName = texName.AfterLast('\\');
-			//texName << _T("_") << mat->tex << _T(".tga");
-			texName << _T(".tga");
-
-			//fm << "newmtl " << "Material_" << mat->tex+1 << endl;
-			fm << "newmtl " << texarray[i][j] << endl;
-			fm << "Kd 0.750000 0.750000 0.750000" << endl;
-			fm << "Ka 0.250000 0.250000 0.250000" << endl;
-			fm << "Ks 0.000000 0.000000 0.000000" << endl;
-			fm << "Ke 0.000000 0.000000 0.000000" << endl;
-			fm << "Ns 0.000000" << endl;
-			//fm << "Kd " << p.ocol.x << " " << p.ocol.y << " " << p.ocol.z << endl;
-			//fm << "Ks " << p.ecol.x << " " << p.ecol.y << " " << p.ecol.z << endl;
-			//fm << "Ns " << p.ocol.w << endl;
-			fm << "map_Kd " << texName.c_str() << endl << endl;
-
-			wxString texFilename(fn, wxConvUTF8);
-			texFilename = texFilename.BeforeLast('\\');
-			texFilename += '\\';
-			texFilename += texName;
-			// setup texture
-			glBindTexture(GL_TEXTURE_2D, mat->tex);
-			SaveTexture(texFilename);
-		}
-	}
-	fm.close();
-
-	f << "# Wavefront OBJ exported by WoW Model Viewer v0.5.0.8" << endl << endl;
-	f << "mtllib " << matName.mb_str() << endl << endl;
-
-	// geometric vertices (v)
-	// v x y z weight
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
-		{
-			WMOBatch *batch = &m->groups[i].batches[j];
-			for(int ii=0;ii<batch->indexCount;ii++)
-			{
-				int a = m->groups[i].indices[batch->indexStart + ii];
-				f << "v " << m->groups[i].vertices[a].x << " " << m->groups[i].vertices[a].z << " " << -m->groups[i].vertices[a].y << endl;
-			}
-		}
-	}
-	f << endl;
-
-	// texture vertices (vt)
-	// vt horizontal vertical depth
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
-		{
-			WMOBatch *batch = &m->groups[i].batches[j];
-			for(int ii=0;ii<batch->indexCount;ii++)
-			{
-				int a = m->groups[i].indices[batch->indexStart + ii];
-				f << "vt " << m->groups[i].texcoords[a].x << " " << (1 - m->groups[i].texcoords[a].y) << endl;
-			}
-		}
-	}
-	f << endl;
-
-	// vertex normals (vn)
-	// vn x y z
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
-		{
-			WMOBatch *batch = &m->groups[i].batches[j];
-			for(int ii=0;ii<batch->indexCount;ii++)
-			{
-				int a = m->groups[i].indices[batch->indexStart + ii];
-				f << "vn " << m->groups[i].normals[a].x << " " << m->groups[i].normals[a].z << " " << -m->groups[i].normals[a].y << endl;
-			}
-		}
-	}
-	f << endl;
-
-	// Referencing groups of vertices
-	// f v/vt/vn v/vt/vn v/vt/vn v/vt/vn
-	int counter = 1;
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
-		{
-			WMOBatch *batch = &m->groups[i].batches[j];
-			WMOMaterial *mat = &m->mat[batch->texture];
-
-			// batch->texture or mat->tex ?
-			f << "g Geoset_" << i << "_" << j << "_tex_" << int(batch->texture) << endl;
-			f << "s 1" << endl;
-			//f << "usemtl Material_" << mat->tex+1 << endl;
-			f << "usemtl " << texarray[i][j] << endl;
-			for (unsigned int k=0; k<batch->indexCount; k+=3) {
-				f << "f ";
-				f << counter << "/" << counter << "/" << counter << " ";
-				f << (counter+1) << "/" << (counter+1) << "/" << (counter+1) << " ";
-				f << (counter+2) << "/" << (counter+2) << "/" << (counter+2) << endl;
-				counter += 3;
-			}
-			f << endl;
-		}
-	}
-
-	// Close file
-	f.close();
-}
-
 void ExportM2toOBJ(Model *m, const char *fn, bool init)
 {
 	// Open file
@@ -1189,4 +1034,166 @@ void ExportM2toOBJ(Model *m, const char *fn, bool init)
 	f.close();
 }
 
+void ExportWMOtoOBJ(WMO *m, const char *fn)
+{
+	// Open file
+	ofstream f(fn, ios_base::out | ios_base::trunc);
+
+	if (!f.is_open()) {
+		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
+		return;
+	}
+
+	wxString mtlName(fn, wxConvUTF8);
+	mtlName = mtlName.BeforeLast('.');
+	mtlName << _T(".mtl");
+
+	ofstream fm(mtlName.mb_str(), ios_base::out | ios_base::trunc);
+	mtlName = mtlName.AfterLast('\\');
+
+	fm << "#" << endl;
+	fm << "# " << mtlName.mb_str() << endl;
+	fm << "#" << endl;
+	fm <<  endl;
+
+	wxString texarray[200];
+
+	// Find a Match for mat->tex and place it into the Texture Name Array.
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOMaterial *mat = &m->mat[batch->texture];
+
+			wxString outname(fn, wxConvUTF8);
+
+			bool nomatch = true;
+			for (int t=0;t<=m->nTextures; t++) {
+				if (t == mat->tex) {
+					texarray[mat->tex] = m->textures[t-1];
+					texarray[mat->tex] = texarray[mat->tex].AfterLast('\\');
+					texarray[mat->tex] = texarray[mat->tex].BeforeLast('.');
+					nomatch = false;
+					break;
+				}
+			}
+			if (nomatch == true){
+				outname = outname.AfterLast('\\');
+				texarray[mat->tex] = outname << wxString::Format(_T("_Material_%03i"), mat->tex);
+			}
+		}
+	}
+
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOMaterial *mat = &m->mat[batch->texture];
+
+			//wxString matName(wxString::Format(_T("Material_%03i"), mat->tex));
+			wxString matName = texarray[mat->tex];
+
+			//wxString texName(fn, wxConvUTF8);
+			wxString texName = texarray[mat->tex];
+			texName = texName.AfterLast('\\');
+			//texName << _T("_") << mat->tex << _T(".tga");
+			texName << _T(".tga");
+
+			//fm << "newmtl " << "Material_" << mat->tex+1 << endl;
+			fm << "newmtl " << texarray[mat->tex] << endl;
+			fm << "Kd 0.750000 0.750000 0.750000" << endl; // diffuse
+			fm << "Ka 0.250000 0.250000 0.250000" << endl; // ambient
+			fm << "Ks 0.000000 0.000000 0.000000" << endl; // specular
+			//fm << "Ke 0.000000 0.000000 0.000000" << endl;
+			fm << "Ns 0.000000" << endl;
+			fm << "map_Kd " << texName.c_str() << endl << endl;
+
+			wxString texFilename(fn, wxConvUTF8);
+			texFilename = texFilename.BeforeLast('\\');
+			texFilename += '\\';
+			texFilename += texName;
+			
+			// setup texture
+			glBindTexture(GL_TEXTURE_2D, mat->tex);
+			SaveTexture(texFilename);
+		}
+	}
+	fm.close();
+
+	f << "# Wavefront OBJ exported by WoW Model Viewer v0.5.0.8" << endl << endl;
+	f << "mtllib " << mtlName.mb_str() << endl << endl;
+
+	// geometric vertices (v)
+	// v x y z weight
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			for(int ii=0;ii<batch->indexCount;ii++)
+			{
+				int a = m->groups[i].indices[batch->indexStart + ii];
+				f << "v " << m->groups[i].vertices[a].x << " " << m->groups[i].vertices[a].z << " " << -m->groups[i].vertices[a].y << endl;
+			}
+		}
+	}
+	f << endl;
+
+	// texture vertices (vt)
+	// vt horizontal vertical depth
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			for(int ii=0;ii<batch->indexCount;ii++)
+			{
+				int a = m->groups[i].indices[batch->indexStart + ii];
+				f << "vt " << m->groups[i].texcoords[a].x << " " << (1 - m->groups[i].texcoords[a].y) << endl;
+			}
+		}
+	}
+	f << endl;
+
+	// vertex normals (vn)
+	// vn x y z
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			for(int ii=0;ii<batch->indexCount;ii++)
+			{
+				int a = m->groups[i].indices[batch->indexStart + ii];
+				f << "vn " << m->groups[i].normals[a].x << " " << m->groups[i].normals[a].z << " " << -m->groups[i].normals[a].y << endl;
+			}
+		}
+	}
+	f << endl;
+
+	// Referencing groups of vertices
+	// f v/vt/vn v/vt/vn v/vt/vn v/vt/vn
+	int counter = 1;
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOMaterial *mat = &m->mat[batch->texture];
+
+			// batch->texture or mat->tex ?
+			f << "g Geoset_" << i << "_" << j << "_tex_" << int(batch->texture) << endl;
+			f << "s 1" << endl;
+			//f << "usemtl Material_" << mat->tex+1 << endl;
+			f << "usemtl " << texarray[mat->tex] << endl;
+			for (unsigned int k=0; k<batch->indexCount; k+=3) {
+				f << "f ";
+				f << counter << "/" << counter << "/" << counter << " ";
+				f << (counter+1) << "/" << (counter+1) << "/" << (counter+1) << " ";
+				f << (counter+2) << "/" << (counter+2) << "/" << (counter+2) << endl;
+				counter += 3;
+			}
+			f << endl;
+		}
+	}
+
+	// Close file
+	f.close();
+}
 

@@ -76,355 +76,6 @@ void WriteLWSceneEnvArray(ofstream &fs, unsigned int count, unsigned int Chan, f
 
 // --==M2==--
 
-/* LWOB
-For Lightwave 5.x and below.
-I'm not sure why this is even still in here...
-
-*/
-void ExportM2toLWO(Model *m, const char *fn, bool init)
-{
-	int i32;
-	uint32 u32;
-	float f32;
-	uint16 u16;
-	unsigned char ub;
-	int off_t;
-	unsigned short numVerts = 0;
-	unsigned short numGroups = 0;
-
-	wxFFileOutputStream f(wxString(fn, wxConvUTF8), wxT("w+b"));
-
-	if (!f.IsOk()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
-		return;
-	}
-
-	unsigned int fileLen = 0;
-
-	f.Write("FORM", 4);
-	f.Write(reinterpret_cast<char *>(&fileLen), 4);
-
-	f.Write("LWOB", 4);
-	fileLen += 4;
-
-
-	// --
-	// POINTS CHUNK, this is the vertice data
-	uint32 pointsSize = 0;
-	f.Write("PNTS", 4);
-	u32 = reverse_endian<uint32>(pointsSize);
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	fileLen += 8;
-
-
-	// output all the vertice data
-	for (size_t i=0; i<m->passes.size(); i++) {
-		ModelRenderPass &p = m->passes[i];
-
-		if (p.init(m)) {
-			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
-				uint16 a = m->indices[b];
-				Vec3D vert;
-				if (init == false) {
-					vert.x = reverse_endian<float>(m->vertices[a].x);
-					vert.y = reverse_endian<float>(m->vertices[a].y);
-					vert.z = reverse_endian<float>(m->vertices[a].z);
-				} else {
-					vert.x = reverse_endian<float>(m->origVertices[a].pos.x);
-					vert.y = reverse_endian<float>(m->origVertices[a].pos.y);
-					vert.z = reverse_endian<float>(m->origVertices[a].pos.z);
-				}
-				f.Write(reinterpret_cast<char *>(&vert.x), 4);
-				f.Write(reinterpret_cast<char *>(&vert.y), 4);
-				f.Write(reinterpret_cast<char *>(&vert.z), 4);
-				fileLen += 12;
-				pointsSize += 12;
-
-				numVerts++;
-			}
-			numGroups++;
-		}
-	}
-	// ================
-
-
-	// --
-	// SURFACE CHUNK,
-	uint32 surfaceSize = 0;
-	f.Write("SRFS", 4);
-	f.Write(reinterpret_cast<char *>(&surfaceSize), 4);
-	fileLen += 8;
-
-	wxString surfName;
-	int surfaceCounter = 0;
-
-	for (size_t i=0; i<m->passes.size(); i++) {
-		ModelRenderPass &p = m->passes[i];
-
-		if (p.init(m)) {
-			surfName = _T("Geoset_");
-			surfName << surfaceCounter;
-			surfaceCounter++;
-			
-			surfName.Append(_T('\0'));
-			if (fmod((float)surfName.length(), 2.0f) > 0)
-				surfName.Append(_T('\0'));
-
-			f.Write(surfName.c_str(), (int)surfName.length());
-			
-			fileLen += (uint32)surfName.length();
-			surfaceSize += (uint32)surfName.length();
-		}
-	}
-
-	off_t = -4-surfaceSize;
-	f.SeekO(off_t, wxFromCurrent);
-	u32 = reverse_endian<uint32>(surfaceSize);
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	f.SeekO(0, wxFromEnd);
-	// =================
-
-	// --
-	// POLYGON CHUNK
-	int32 polySize = (numVerts / 3) * sizeof(POLYCHUNK);
-
-	f.Write("POLS", 4);
-	i32 = reverse_endian<int32>(polySize);
-	f.Write(reinterpret_cast<char *>(&i32), 4);
-	fileLen += 8; // an extra 4 bytes for chunk size
-
-	uint16 counter=0;
-	int16 surfCounter=0;
-	POLYCHUNK tri;
-	
-	for (size_t i=0; i<m->passes.size(); i++) {
-		ModelRenderPass &p = m->passes[i];
-
-		if (p.init(m)) {
-
-			surfCounter++;
-
-			for (unsigned int k=0; k<p.indexCount; k+=3) {
-				u16 = 3;
-				tri.numVerts = ByteSwap16(u16);
-				for (uint16 b=0; b<3; b++) {
-					tri.indice[b] = ByteSwap16(counter);
-					counter++;
-				}
-				tri.surfIndex = ByteSwap16(surfCounter);
-
-				f.Write(reinterpret_cast<char *>(&tri), sizeof(POLYCHUNK));
-
-				fileLen += 10;
-			}
-		}
-	}
-	
-	// Now lets go back and correct our data lengths
-	//f.seekp(-4 - polySize, ios::cur);
-	//i32 = reverse_endian<int32>(polySize);
-	//f.write(reinterpret_cast<char *>(&i32), 4);
-	// ========
-
-
-	// Now we need to write our surface definitions (ie. RenderPass data)
-	// --------------------------
-	//f.seekp(0, ios::end);
-
-	surfaceCounter = 0;
-
-	for (size_t i=0; i<m->passes.size(); i++) {
-		ModelRenderPass &p = m->passes[i];
-
-		if (p.init(m)) {
-			uint32 surfaceDefSize = 0;
-			f.Write("SURF", 4);
-			f.Write(reinterpret_cast<char *>(&surfaceDefSize), 4);
-			fileLen += 8;
-
-			// Surface name
-			surfName = _T("Geoset_");
-			surfName << surfaceCounter;
-			surfaceCounter++;
-			
-			surfName.Append(_T('\0'));
-			if (fmod((float)surfName.length(), 2.0f) > 0)
-				surfName.Append(_T('\0'));
-
-			f.Write(surfName.data(), (int)surfName.length());
-			
-			fileLen += (uint32)surfName.length();
-			surfaceDefSize += (uint32)surfName.length();
-
-			// Surface Attributes
-			// COLOUR, size 4, bytes 2
-			f.Write("COLR", 4);
-			u16 = 4;
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-			
-			// value
-			ub = (unsigned char)(p.ocol.x * 255);
-			f.Write(reinterpret_cast<char *>(&ub), 1);
-			ub = (unsigned char)(p.ocol.y * 255);
-			f.Write(reinterpret_cast<char *>(&ub), 1);
-			ub = (unsigned char)(p.ocol.z * 255);
-			f.Write(reinterpret_cast<char *>(&ub), 1);
-			ub = '\0';
-			f.Write(reinterpret_cast<char *>(&ub), 1);
-
-			fileLen += 10;
-			surfaceDefSize += 10;
-			
-			// FLAGS
-			f.Write("FLAG", 4);
-			// size
-			u16 = 2;
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-
-			// value
-			u16 = 0;
-			if (!p.cull)
-				u16 &= SUF_DOUBLESIDED;
-			if (p.blendmode>2)
-				u16 &= SUF_ADDITIVE;
-			if (p.blendmode==1)
-				u16 &= SUF_EDGETRANSPARENT;
-			
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-
-			fileLen += 8;
-			surfaceDefSize += 8;
-
-			// GLOSSINESS
-			f.Write("GLOS", 4);
-			// size
-			u16 = 2;
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-
-			// Value
-			// try 50% gloss for 'relfection surfaces
-			if (p.useEnvMap)
-				u16 = 128;
-			else
-				u16 = 0;
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-
-			fileLen += 8;
-			surfaceDefSize += 8;
-			
-			if (p.useEnvMap) {
-				// REFLECTION
-				f.Write("FRFL", 4);
-				// size
-				u16 = 4;
-				u16 = ByteSwap16(u16);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
-
-				// value
-				f32 = 0.2f;
-				f32 = reverse_endian<float>(f32);
-				f.Write(reinterpret_cast<char *>(&f32), 4);
-
-				fileLen += 10;
-				surfaceDefSize += 10;
-				
-				// REFLECTION
-				f.Write("RFLT", 4);
-				// size
-				u16 = 2;
-				u16 = ByteSwap16(u16);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
-
-				// value
-				u16 = 1;
-				u16 = ByteSwap16(u16);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
-
-				fileLen += 8;
-				surfaceDefSize += 8;
-			}
-			
-
-			// TRANSPARENCY
-			f.Write("FTRN", 4);
-			u16 = 4; // size
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-
-			// value
-			f32 = p.ocol.w;
-			f32 = reverse_endian<float>(f32);
-			f.Write(reinterpret_cast<char *>(&f32), 4);
-
-			fileLen += 10;
-			surfaceDefSize += 10;
-
-			// TEXTURE FLAGS
-			f.Write("TFLG", 4);
-			// size
-			u16 = 2;
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-
-			// value
-			u16 = 0; // don't know the flag info yet
-			if (p.trans)
-				u16 &= TXF_PIXBLEND;
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-
-			fileLen += 8;
-			surfaceDefSize += 8;
-
-			wxString texName(fn, wxConvUTF8);
-			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << _T("_") << p.tex << _T(".tga") << '\0';
-			if (fmod((float)texName.length(), 2.0f) > 0)
-				texName.Append(_T('\0'));
-
-			// TEXTURE filename
-			f.Write("TIMG", 4);
-			u16 = (unsigned short)texName.length();
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-			f.Write(texName.data(), (int)texName.length());
-
-			fileLen += (unsigned int)texName.length() + 6;
-			surfaceDefSize += (unsigned int)texName.length() + 6;
-
-			// update the chunks length
-			off_t = -4 - surfaceDefSize;
-			f.SeekO(off_t, wxFromCurrent);
-			u32 = reverse_endian<uint32>(surfaceDefSize);
-			f.Write(reinterpret_cast<char *>(&u32), 4);
-			f.SeekO(0, wxFromEnd);
-
-			wxString texFilename(fn, wxConvUTF8);
-			texFilename = texFilename.BeforeLast('\\');
-			texFilename += '\\';
-			texFilename += texName;
-			SaveTexture(texFilename);
-		}
-	}
-	
-	f.SeekO(4, wxFromStart);
-	u32 = reverse_endian<uint32>(fileLen);
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	
-	f.SeekO(16, wxFromStart);
-	u32 = reverse_endian<uint32>(pointsSize);
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	// ===========================
-
-
-	f.Close();
-}
-
 /* LWO2
 
 Links to helpful documents:
@@ -437,7 +88,7 @@ I've done some research into the LWO2 format. I have a HUGE commented section ab
 I'll update this function once I re-tune the WMO function.
 		-Kjasi
 */
-void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init)
+void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 {
 	int i32;
 	uint32 u32;
@@ -1557,7 +1208,29 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 
 	// Declare the Texture Name Array
 	// Made it fairly large, just for the really big models.
-	wxString texarray[200][200];
+	// Find a Match for mat->tex and place it into the Texture Name Array.
+	wxString texarray[200];
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOMaterial *mat = &m->mat[batch->texture];
+			wxString outname(fn, wxConvUTF8);
+
+			bool nomatch = true;
+			for (int t=0;t<=m->nTextures; t++) {
+				if (t == mat->tex) {
+					texarray[mat->tex] = m->textures[t-1];
+					texarray[mat->tex] = texarray[mat->tex].BeforeLast('.');
+					nomatch = false;
+					break;
+				}
+			}
+			if (nomatch == true){
+				texarray[mat->tex] = outname << wxString::Format(_T("_Material_%03i"), mat->tex);
+			}
+		}
+	}
 
 	uint32 tagsSize = 0;
 	u32 = 0;
@@ -1569,23 +1242,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];
 
-			wxString outname(fn, wxConvUTF8);
-
-			// Find a Match for mat->tex and place it into the Texture Name Array.
-			bool nomatch = true;
-			for (int t=0;t<=m->nTextures; t++) {
-				if (t == mat->tex) {
-					texarray[i][j] << m->textures[t-1];
-					texarray[i][j] = texarray[i][j].BeforeLast('.');
-					nomatch = false;
-					break;
-				}
-			}
-			if (nomatch == true){
-				texarray[i][j] = outname << wxString::Format(_T("_Material_%03i"), mat->tex);
-			}
-
-			wxString matName = texarray[i][j];
+			wxString matName = texarray[mat->tex];
 			matName.Append(_T('\0'));
 			if (fmod((float)matName.length(), 2.0f) > 0)
 				matName.Append(_T('\0'));
@@ -1934,7 +1591,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			clipSize += 8;
 
 			//wxString texName(fn, wxConvUTF8);
-			wxString texName = texarray[i][j];
+			wxString texName = texarray[mat->tex];
 
 			// Remove all paths from our name.
 			// Hopefully we can be able to export paths in the future...
@@ -1991,7 +1648,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 
 			// Surface name
 			//surfName = wxString::Format(_T("Material_%03i"),mat->tex);
-			surfName = texarray[i][j];
+			surfName = texarray[mat->tex];
 			surfaceCounter++;
 			
 			surfName.Append(_T('\0'));
@@ -2413,7 +2070,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 
 			// CMNT
 			f.Write("CMNT", 4);
-			wxString cmnt = texarray[i][j];
+			wxString cmnt = texarray[mat->tex];
 			cmnt.Append(_T('\0'));
 			if (fmod((float)cmnt.length(), 2.0f) > 0)
 				cmnt.Append(_T('\0'));

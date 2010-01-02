@@ -1,4 +1,7 @@
-World of Warcraft Model Viewer v0.5.08 (Chuanhsing Update r661)
+World of Warcraft Model Viewer v0.5.08 (Chuanhsing Update)
+
+r666
+- Fixed WMO Export functions
 
 r663
 -Lightwave Scenes should read falloff data from WMO's lights and set up the light accordingly. (Don't know of a WMO with Light falloff settings, so I haven't tested it...);

@@ -16,7 +16,7 @@ WMO::WMO(std::string name): ManagedItem(name)
 		return;
 	}
 
-	wxLogMessage(_T("Loading WMO %s\n"), name.c_str());
+	wxLogMessage(_T("Loading WMO %s"), name.c_str());
 
 	char fourcc[5];
 	size_t size;

@@ -2586,20 +2586,18 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 	if (id == ID_FILE_MODELEXPORT) {
 		if (canvas->model) {
 			bool init = false;
-			wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds|Lightwave2 (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				if (dialog.GetFilterIndex() == 0) {
 					ExportM2toOBJ(canvas->model, dialog.GetPath().fn_str(), init);
 				} else if (dialog.GetFilterIndex() == 1) {
-					ExportM2toLWO(canvas->model, dialog.GetPath().fn_str(), init);
+					ExportM2toLWO(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 				} else if (dialog.GetFilterIndex() == 2) {
 					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 				} else if (dialog.GetFilterIndex() == 3) {
 					ExportM2to3DS(canvas->model, dialog.GetPath().fn_str(), init);
-				} else if (dialog.GetFilterIndex() == 4) {
-					ExportM2toLWO2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 				}
 			}
 		} else if (canvas->wmo) {
@@ -2617,20 +2615,18 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 	} else if (id == ID_FILE_MODELEXPORT_INIT) {
 		if (canvas->model) {
 			bool init = true;
-			wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds|Lightwave2 (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, _("Export Model"), wxEmptyString, wxEmptyString, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				if (dialog.GetFilterIndex() == 0) {
 					ExportM2toOBJ(canvas->model, dialog.GetPath().fn_str(), init);
 				} else if (dialog.GetFilterIndex() == 1) {
-					ExportM2toLWO(canvas->model, dialog.GetPath().fn_str(), init);
+					ExportM2toLWO(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 				} else if (dialog.GetFilterIndex() == 2) {
 					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 				} else if (dialog.GetFilterIndex() == 3) {
 					ExportM2to3DS(canvas->model, dialog.GetPath().fn_str(), init);
-				} else if (dialog.GetFilterIndex() == 4) {
-					ExportM2toLWO2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 				}
 			}
 		} else if (canvas->wmo) {
