@@ -33,32 +33,36 @@ inline unsigned short ByteSwap16 (unsigned short nValue) // 16bit
    return ((((nValue & 0xFF00)>> 8)) | ((nValue & 0xFF) << 8));
 }
 
+//---------------------------------------------
+// Scene Writing Functions
+//---------------------------------------------
+
 // Writes a single Key for an envelope.
-void WriteLWSceneEnvKey(ofstream &fs, unsigned int Chan, float value, float time, unsigned int spline)
+void WriteLWSceneEnvKey(ofstream &fs, unsigned int Chan, float value, float time, unsigned int spline = 0)
 {
 	fs << "  Key ";				// Announces the start of a Key
 	fs << value;				// The Key's Value;
 	fs << " " << time;			// Time, in seconds, a float. This can be negative, zero or positive. Keys are listed in the envelope in increasing time order.
 	fs << " " << spline;		// The curve type, an integer: 0 - TCB, 1 - Hermite, 2 - 1D Bezier (obsolete, equivalent to Hermite), 3 - Linear, 4 - Stepped, 5 - 2D Bezier
-	fs << " 0 0 0 0 0 0 \n";	// Curve Data 1-6
+	fs << " 0 0 0 0 0 0 \n";	// Curve Data 1-6, all 0s for now.
 }
 
-// Writes am entire channel with only 1 key.
+// Writes an entire channel with only 1 key.
 // Use WriteLWSceneEnvArray for writing animations.
-void WriteLWSceneEnvChannel(ofstream &fs, unsigned int Chan, float value, float time, unsigned int spline = 0)
+void WriteLWSceneEnvChannel(ofstream &fs, unsigned int ChanNum, float value, float time, unsigned int spline = 0)
 {
-	fs << "Channel " << Chan << "\n";	// Channel Number
+	fs << "Channel " << ChanNum << "\n";	// Channel Number
 	fs << "{ Envelope\n";
 	fs << "  1\n";						// Number of Keys in this envelope.
-	WriteLWSceneEnvKey(fs,Chan,value,time,spline);
+	WriteLWSceneEnvKey(fs,ChanNum,value,time,spline);
 	fs << "  Behaviors 1 1\n";			// Pre/Post Behaviors. Defaults to 1 - Constant.
 	fs << "}\n";
 }
 
 // Used for writing the keyframes of an animation.
-void WriteLWSceneEnvArray(ofstream &fs, unsigned int count, unsigned int Chan, float value[], float time[], unsigned int spline[])
+void WriteLWSceneEnvArray(ofstream &fs, unsigned int count, unsigned int ChanNum, float value[], float time[], unsigned int spline[])
 {
-	fs << "Channel " << Chan << "\n";
+	fs << "Channel " << ChanNum << "\n";
 	fs << "{ Envelope\n";
 	fs << "  1\n";
 	for (int n=0;n<count;n++){
@@ -66,15 +70,199 @@ void WriteLWSceneEnvArray(ofstream &fs, unsigned int count, unsigned int Chan, f
 		if (spline[n]) {
 			thisspline = spline[n];
 		}
-		WriteLWSceneEnvKey(fs,Chan,value[n],time[n],thisspline);
+		WriteLWSceneEnvKey(fs,ChanNum,value[n],time[n],thisspline);
 	}
 
 	fs << "  Behaviors 1 1\n";
 	fs << "}\n";
 }
 
+// Writes the "Plugin" information for a scene object, light, camera &/or bone.
+void WriteLWScenePlugin(ofstream &fs, wxString type, int PluginCount, wxString PluginName, wxString Data = "")
+{
+	fs << "Plugin " << type << " " <<PluginCount << " " << PluginName << "\n" <<Data<< "EndPlugin\n";
+}
 
+// Write a scene light, if it's a Model Light
+void WriteLWSceneModelLight(ofstream &fs, Model *m, ModelLight *light, int &lcount, Vec3D LPos, int ParentNum = NULL)
+{
+	bool isParented = false;
+	if (ParentNum!=NULL)
+		isParented = true;
+
+	fs << "AddLight 2" << wxString::Format("%07x",lcount) << "\n";
+	wxString modelname = wxString(m->modelname).AfterLast('\\').BeforeLast('.').MakeLower();
+	modelname[0] = toupper(modelname[0]);
+	fs << "LightName " << modelname << " Light " << lcount+1 << "\n";
+	fs << "ShowLight 1 -1 0.941176 0.376471 0.941176\n";	// Last 3 Numbers are Layout Color for the Light.
+	fs << "LightMotion\n";
+	fs << "NumChannels 9\n";
+	// Position
+	WriteLWSceneEnvChannel(fs,0,LPos.x,0);
+	WriteLWSceneEnvChannel(fs,1,LPos.y,0);
+	WriteLWSceneEnvChannel(fs,2,-LPos.z,0);
+	// Rotation
+	WriteLWSceneEnvChannel(fs,3,0,0);
+	WriteLWSceneEnvChannel(fs,4,0,0);
+	WriteLWSceneEnvChannel(fs,5,0,0);
+	// Scale
+	WriteLWSceneEnvChannel(fs,6,1,0);
+	WriteLWSceneEnvChannel(fs,7,1,0);
+	WriteLWSceneEnvChannel(fs,8,1,0);
+
+	if (isParented)
+		fs << "ParentItem 1" <<wxString::Format("%07x",ParentNum);
+
+	// Light Color Reducer
+	// Some lights have a color channel greater than 255. This reduces all the colors, but increases the intensity, which should keep it looking the way Blizzard intended.
+
+	// Model lights have 2 light types: Ambient & Diffused. We'll use Diffused for our Lights.
+	Vec3D diffC = light->diffColor.getValue(0,0);
+
+	float Lcolor[] = {diffC.x , diffC.y, diffC.z};
+	float Lintensity = light->diffIntensity.getValue(0,0);
+
+	while ((Lcolor[0] > 1)||(Lcolor[1] > 1)||(Lcolor[2] > 1)) {
+		Lcolor[0] = Lcolor[0] * 0.99;
+		Lcolor[1] = Lcolor[1] * 0.99;
+		Lcolor[2] = Lcolor[2] * 0.99;
+		Lintensity = Lintensity / 0.99;
+	}
+
+	fs << "LightColor " << Lcolor[0] << " " << Lcolor[1] << " " << Lcolor[2] << "\n";
+	fs << "LightIntensity " << Lintensity << "\n";
+
+	unsigned int ltype = light->type;
+	// Process Light type & output!
+	switch (ltype) {
+		// Omni Lights
+		case 1:
+		default:
+			// Default to an Omni (Point) light.
+			fs << "LightType 1\n";
+
+			if (light->UseAttenuation.getValue(0,0) == 1) {
+				// Use Inverse Distance for the default Light Falloff Type. Should better simulate WoW Lights, until I can write a WoW light plugin for Lightwave...
+				float attenend = (light->AttenEnd.getValue(0,0)) * 10;
+				fs << "LightFalloffType 2\nLightRange " << attenend << "\n";
+			}else{
+				// Default to these settings, which look pretty close...
+				fs << "LightFalloffType 2\nLightRange 25\n";
+			}
+			fs << "ShadowType 1\nShadowColor 0 0 0\n";
+			WriteLWScenePlugin(fs,"LightHandler",1,"PointLight");
+	}
+	fs << "\n";
+	lcount++;
+}
+
+// Write a scene light, if it's a WMO Light
+void WriteLWSceneWMOLight(ofstream &fs, WMO *m, WMOLight *light, int &lcount, Vec3D LPos)
+{
+	fs << "AddLight 2" << wxString::Format("%07x",lcount) << "\n";
+	wxString modelname = wxString(m->name).AfterLast('\\').BeforeLast('.').MakeLower();
+	modelname[0] = toupper(modelname[0]);
+	fs << "LightName " << modelname << " Light " << lcount+1 << "\n";
+	fs << "ShowLight 1 -1 0.941176 0.376471 0.941176\n";	// Last 3 Numbers are Layout Color for the Light.
+	fs << "LightMotion\n";
+	fs << "NumChannels 9\n";
+	// Position
+	WriteLWSceneEnvChannel(fs,0,LPos.x,0);
+	WriteLWSceneEnvChannel(fs,1,LPos.y,0);
+	WriteLWSceneEnvChannel(fs,2,-LPos.z,0);
+	// Rotation
+	WriteLWSceneEnvChannel(fs,3,0,0);
+	WriteLWSceneEnvChannel(fs,4,0,0);
+	WriteLWSceneEnvChannel(fs,5,0,0);
+	// Scale
+	WriteLWSceneEnvChannel(fs,6,1,0);
+	WriteLWSceneEnvChannel(fs,7,1,0);
+	WriteLWSceneEnvChannel(fs,8,1,0);
+
+	// Light Color Reducer
+	// Some lights have a color channel greater than 255. This reduces all the colors, but increases the intensity, which should keep it looking the way Blizzard intended.
+	float Lcolor[] = {light->fcolor.x, light->fcolor.y, light->fcolor.z};
+	float Lintensity = light->intensity;
+
+	while ((Lcolor[0] > 1)||(Lcolor[1] > 1)||(Lcolor[2] > 1)) {
+		Lcolor[0] = Lcolor[0] * 0.99;
+		Lcolor[1] = Lcolor[1] * 0.99;
+		Lcolor[2] = Lcolor[2] * 0.99;
+		Lintensity = Lintensity / 0.99;
+	}
+
+	fs << "LightColor " << Lcolor[0] << " " << Lcolor[1] << " " << Lcolor[2] << "\n";
+	fs << "LightIntensity " << Lintensity << "\n";
+
+	unsigned int ltype = light->type;
+	// Process Light type & output!
+	switch (ltype) {
+		// Omni Lights
+		case 1:
+		default:
+			// Default to an Omni (Point) light.
+			fs << "LightType 1\n";
+			// If the light uses falloff...
+			if (light->useatten == 1) {
+				// Use Inverse Distance for the default Light Falloff Type. Should better simulate WoW Lights, until I can write a WoW light plugin for Lightwave...
+				float attenend = light->attenEnd * 10;
+				fs << "LightFalloffType 2\nLightRange " << attenend << "\n";
+			}else{
+				// Default to these settings, which look pretty close...
+				fs << "LightFalloffType 1\nLightRange 12.5\n";
+			}
+			fs << "ShadowType 1\nShadowColor 0 0 0\n";
+			WriteLWScenePlugin(fs,"LightHandler",1,"PointLight");
+	}
+	fs << "\n";
+	lcount++;
+}
+
+// Writes a Null Object to the scene file.
+void WriteLWSceneNull(ofstream &fs, wxString Name, Vec3D Pos, Vec3D Rot, float Scale, int &ItemNumber, int ParentNum = -1, wxString Label="")
+{
+	bool isLabeled = false;
+	bool isParented = false;
+	if (Label!="")
+		isLabeled = true;
+	if (ParentNum > -1)
+		isParented = true;
+
+	fs << "AddNullObject 1" << wxString::Format("%07x",ItemNumber) << " " << Name << "\nChangeObject 0\n";
+	if (isLabeled)
+		fs << "// " << Label << "\n";
+	fs << "ShowObject 7 -1 0.376471 0.878431 0.941176 \nGroup 0\nObjectMotion\nNumChannels 9\n";
+	// Position
+	WriteLWSceneEnvChannel(fs,0,Pos.x,0);
+	WriteLWSceneEnvChannel(fs,1,Pos.y,0);
+	WriteLWSceneEnvChannel(fs,2,-Pos.z,0);
+	// Rotation
+	WriteLWSceneEnvChannel(fs,3,Rot.x,0);
+	WriteLWSceneEnvChannel(fs,4,Rot.y,0);
+	WriteLWSceneEnvChannel(fs,5,Rot.z,0);
+	// Scale
+	WriteLWSceneEnvChannel(fs,6,Scale,0);
+	WriteLWSceneEnvChannel(fs,7,Scale,0);
+	WriteLWSceneEnvChannel(fs,8,Scale,0);
+
+	fs << "PathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n";
+	if (isParented)
+		fs << "ParentItem 1" <<wxString::Format("%07x",ParentNum);
+	fs << "IKInitialState 0\nSubPatchLevel 3 3\nShadowOptions 7\n";
+
+	fs << "\n";
+	ItemNumber++;
+}
+
+// Writes an Object file to a scene
+
+
+
+
+
+//---------------------------------------------
 // --==M2==--
+//---------------------------------------------
 
 /* LWO2
 
@@ -190,7 +378,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 				uint16 a = m->indices[b];
 				Vec3D vert;
-				if (init == false) {
+				if ((init == false)&&(m->vertices)) {
 					vert.x = reverse_endian<float>(m->vertices[a].x);
 					vert.y = reverse_endian<float>(m->vertices[a].y);
 					vert.z = reverse_endian<float>(0-m->vertices[a].z);
@@ -917,14 +1105,16 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 }
 
 
+//---------------------------------------------
 // --==WMOs==--
+//---------------------------------------------
 
 /*
-	This will export Lights & (eventually) Doodads into a Lightwave Scene file.
+	This will export Lights & Doodads (as nulls) into a Lightwave Scene file.
 */
 void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 {
-	if (m->nLights == 0) {
+	if ((m->nLights == 0)&&(m->nDoodads == 0)) {
 		return;
 	}
 
@@ -961,80 +1151,77 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 	fs << "PreviewFrameStep 1\n";
 	fs << "CurrentFrame 0\n";
 	fs << "FramesPerSecond 30\n";
-	fs << "ChangeScene 0\n";
+	fs << "ChangeScene 0\n\n";
 
-	// Objects go here
+	int mcount = 0;	// Model Count
+	int lcount = 0; // Light Count
 
-	// Lighting Basics
-	fs << "AmbientColor 1 1 1\n";
-	fs << "AmbientIntensity 0.25\n";
-	fs << "DoubleSidedAreaLights 1\n\n";
+	int DoodadLightArrayID[1000];
+	int DoodadLightArrayDDID[1000];
+	int DDLArrCount = 0;
+
+	Vec3D ZeroPos(0,0,0);
+	Vec3D ZeroRot(0,0,0);
+
+	// Objects/Doodads go here
+	// TODO: Add the Exported Object First...
+	for (int ds=0;ds<m->nDoodadSets;ds++){
+		WMODoodadSet *DDSet = &m->doodadsets[ds];
+		wxString DDSetName;
+		DDSetName << wxString(m->name).AfterLast('\\').BeforeLast('.') << " DoodadSet " << wxString(DDSet->name);
+		int DDSID = mcount;
+
+		WriteLWSceneNull(fs,DDSetName,ZeroPos,ZeroRot,1,mcount);
+
+		for (int dd=DDSet->start;dd<(DDSet->start+DDSet->size);dd++){
+			WMOModelInstance *doodad = &m->modelis[dd];
+			wxString name = wxString(doodad->filename).AfterLast('\\').BeforeLast('.');
+			// Heading, Pitch & Bank.
+			// Pitch & Bank are 0s so the item is sitting flat on the ground. Not sure how to convert WoW to Lightwave's rotations yet...
+			Vec3D rot(doodad->dir.z,0,0);
+
+			int DDID = mcount;
+			WriteLWSceneNull(fs,name,doodad->pos,rot,doodad->sc,mcount,DDSID,doodad->filename);
+
+			// Doodad Lights
+			// Apparently, Doodad Lights must be parented to the Doodad for proper placement.
+			if ((doodad->model) && (doodad->model->header.nLights > 0)){
+				DoodadLightArrayDDID[DDLArrCount] = DDID;
+				DoodadLightArrayID[DDLArrCount] = dd;
+				DDLArrCount++;
+			}
+		}
+	}
 
 	// Lights
+	// Lighting Basics
+	fs << "AmbientColor 1 1 1\nAmbientIntensity 0.25\nDoubleSidedAreaLights 1\n\n";
+
+	// Doodad Lights
+	for (int i=0;i<DDLArrCount;i++){
+		
+		WMOModelInstance *doodad = &m->modelis[DoodadLightArrayID[i]];
+		ModelLight *light = &doodad->model->lights[i];
+
+		WriteLWSceneModelLight(fs,doodad->model,light,lcount,light->pos,DoodadLightArrayDDID[i]);
+	}
+
+	// WMO Lights
 	for (int i=0;i<m->nLights;i++){
 		WMOLight *light = &m->lights[i];
-
-		fs << "AddLight 2" << wxString::Format("%07x",i) << "\n";
-		wxString modelname = wxString(m->name).AfterLast('\\').BeforeLast('.').MakeLower();
-		modelname[0] = toupper(modelname[0]);
-		fs << "LightName " << modelname << " Light " << i+1 << "\n";
-		fs << "ShowLight 1 -1 0.941176 0.376471 0.941176\n";	// Last 3 Numbers are Layout Color for the Light.
-		fs << "LightMotion\n";
-		fs << "NumChannels 9\n";
-		// Position
-		WriteLWSceneEnvChannel(fs,0,light->pos.x,0);
-		WriteLWSceneEnvChannel(fs,1,light->pos.y,0);
-		WriteLWSceneEnvChannel(fs,2,-light->pos.z,0);
-		// Rotation
-		WriteLWSceneEnvChannel(fs,3,0,0);
-		WriteLWSceneEnvChannel(fs,4,0,0);
-		WriteLWSceneEnvChannel(fs,5,0,0);
-		// Scale
-		WriteLWSceneEnvChannel(fs,6,1,0);
-		WriteLWSceneEnvChannel(fs,7,1,0);
-		WriteLWSceneEnvChannel(fs,8,1,0);
-
-		// Light Color Reducer
-		// Some lights have a color channel greater than 255. This reduces all the colors, but increases the intensity, which should keep it looking the way Blizzard intended.
-		float Lcolor[] = {light->fcolor.x, light->fcolor.y, light->fcolor.z};
-		float Lintensity = light->intensity;
-
-		while ((Lcolor[0] > 1)||(Lcolor[1] > 1)||(Lcolor[2] > 1)) {
-			Lcolor[0] = Lcolor[0] * 0.99;
-			Lcolor[1] = Lcolor[1] * 0.99;
-			Lcolor[2] = Lcolor[2] * 0.99;
-			Lintensity = Lintensity / 0.99;
-		}
-
-		fs << "LightColor " << Lcolor[0] << " " << Lcolor[1] << " " << Lcolor[2] << "\n";
-		fs << "LightIntensity " << Lintensity << "\n";
-
-		unsigned int ltype = light->type;
-		// Process Light type & output!
-		switch (ltype) {
-			// Omni Lights
-			case 1:
-			default:
-				// Default to an Omni (Point) light.
-				fs << "LightType 1\n";
-				// If the light uses falloff...
-				if (light->useatten == 1) {
-					// Use Inverse Distance for the default Light Falloff Type. Should better simulate WoW Lights, until I can write a WoW light plugin for Lightwave...
-					fs << "LightFalloffType 2\nLightRange " << light->attenStart << "\n";
-				}else{
-					// Default to these settings, which look pretty close...
-					fs << "LightFalloffType 1\nLightRange 12.5\n";
-				}
-				fs << "ShadowType 1\nShadowColor 0 0 0\nPlugin LightHandler 1 PointLight\nEndPlugin\n";
-		}
-		
-
-		fs << "\n";
+		WriteLWSceneWMOLight(fs,m,light,lcount,light->pos);
 	}
 
 	// Camera data (if we want it) goes here.
 	// Yes, we can export flying cameras to Lightwave!
 	// Just gotta add them back into the listing...
+
+	// Backdrop Settings
+	// Add this if viewing a skybox, or using one as a background?
+
+	// Rendering Options
+	// Raytrace Shadows enabled.
+	fs << "RenderMode 2\nRayTraceEffects 1\nDepthBufferAA 0\nRenderLines 1\nRayRecursionLimit 16\nRayPrecision 6\nRayCutoff 0.01\nDataOverlayLabel  \nSaveRGB 0\nSaveAlpha 0\n";
 
 	fs.close();
 }
@@ -1124,6 +1311,9 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 		SIDE	// Is it Double-Sided?
 		NVSK	// Exclude from VStack
 
+		CMNT // Surface Comment, but I don't seem to be able to get it to show up in LW... 2bytes: Size. Simple Text line for this surface. Make sure it doesn't end on an odd byte!
+		VERS // Version Compatibility mode, including what it's compatible with. 2bytes (int16, value 4), 4bytes (int32, value is 850 or 931, depending on if you're compatible with LW8.5 or LW9.3.1)
+
 		BLOK	// First Blok. Bloks hold Surface texture information!
 			IMAP	// Declares that this surface texture is an image map.
 				CHAN COLR	// Declares that the image map will be applied to the color channel. (Color has a Texture!)
@@ -1148,9 +1338,6 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 						VMAP	// Name of the UV Map to use, should PROJ be set to 5!
 						AAST	// Antialiasing Strength
 						PIXB	// Pixel Blending
-
-		CMNT // Surface Comment, but I don't seem to be able to get it to show up in LW... 2bytes: Size. Simple Text line for this surface. Make sure it doesn't end on an odd byte!
-		VERS // Version Compatibility mode, including what it's compatible with. 2bytes (int16, value 4), 4bytes (int32, value is 850 or 931, depending on if you're compatible with LW8.5 or LW9.3.1)
 
 			// Node Information
 			// We can probably skip this for now. Later, it would be cool to mess with it, but for now, it'll be automatically generated once the file is opened in LW.

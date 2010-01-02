@@ -1,5 +1,11 @@
 World of Warcraft Model Viewer v0.5.08 (Chuanhsing Update)
 
+r667
+-Exported Lightwave Scene files now contain Doodad Placement nulls, parented to DoodadSet nulls.
+-Lights attached to Doodads will now export to the Lightwave Scene file
+-Fixed a bug when exporting old M2/MDX models via LWO
+-(Dev Work) Defined Model Light Attenuation
+
 r666
 - Fixed WMO Export functions
 

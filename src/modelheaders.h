@@ -457,7 +457,7 @@ struct ModelLightDef {
 	AnimationBlock diffuseIntensity; // A float for the intensity again.
 	AnimationBlock attenuationStart; // This defines, where the light starts to be.
 	AnimationBlock attenuationEnd; // And where it stops.
-	AnimationBlock unk1; // Its an integer and usually 1.
+	AnimationBlock useAttenuation; // Its an integer and usually 1.
 };
 
 struct ModelCameraDef {

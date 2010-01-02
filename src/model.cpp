@@ -1884,6 +1884,9 @@ void ModelLight::init(MPQFile &f, ModelLightDef &mld, uint32 *global)
 	ambIntensity.init(mld.ambientIntensity, f, global);
 	diffColor.init(mld.diffuseColor, f, global);
 	diffIntensity.init(mld.diffuseIntensity, f, global);
+	AttenStart.init(mld.attenuationStart, f, global);
+	AttenEnd.init(mld.attenuationEnd, f, global);
+	UseAttenuation.init(mld.useAttenuation, f, global);
 }
 
 void ModelLight::setup(int time, GLuint l)

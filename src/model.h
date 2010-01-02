@@ -227,7 +227,8 @@ struct ModelLight {
 	int type, parent;
 	Vec3D pos, tpos, dir, tdir;
 	Animated<Vec3D> diffColor, ambColor;
-	Animated<float> diffIntensity, ambIntensity;
+	Animated<float> diffIntensity, ambIntensity, AttenStart, AttenEnd;
+	Animated<int> UseAttenuation;
 
 	void init(MPQFile &f, ModelLightDef &mld, uint32 *global);
 	void setup(int time, GLuint l);
