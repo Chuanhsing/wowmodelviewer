@@ -1098,6 +1098,8 @@ void ModelViewer::LoadItem(unsigned int displayID)
 		wxString name = modelRec.getString(ItemDisplayDB::Model);
 		name = name.BeforeLast('.');
 		name.Append(_T(".M2"));
+		//wxLogMessage(_T("LoadItem %d %s"), displayID, name.c_str());
+
 		wxString fns[] = { _T("Item\\ObjectComponents\\Head\\"),
 			_T("Item\\ObjectComponents\\Shoulder\\"),
 			_T("Item\\ObjectComponents\\Quiver\\"),

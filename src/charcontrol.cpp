@@ -1952,12 +1952,15 @@ void CharControl::selectItem(int type, int slot, int current, const wxChar *capt
 	int sel=0, ord=0;
 	for (std::vector<ItemRecord>::iterator it = items.items.begin(); it != items.items.end(); ++it) {
 		if (type == UPDATE_SINGLE_ITEM) {
-			choices.Add(CSConv(it->name));
-			numbers.push_back(it->id);
-			quality.push_back(it->quality);
+			if (/*it->type == IT_HEAD ||*/ it->type == IT_SHOULDER || it->type == IT_SHIELD || 
+				it->type == IT_BOW || it->type == IT_2HANDED || it->type == IT_LEFTHANDED || 
+				it->type == IT_RIGHTHANDED || it->type == IT_OFFHAND || it->type == IT_GUN) {
+				choices.Add(CSConv(it->name));
+				numbers.push_back(it->id);
+				quality.push_back(it->quality);
 
-			if (it->itemclass > 0) 
 				subclassesFound.insert(std::pair<int,int>(it->itemclass,it->subclass));
+			}
 		}
 		else if (correctType(it->type, slot)) {
 			choices.Add(CSConv(it->name));
@@ -2403,7 +2406,8 @@ void CharControl::OnUpdateItem(int type, int id)
 		break;
 
 	case UPDATE_SINGLE_ITEM:
-		g_modelViewer->LoadItem(items.getByPos(id).model);
+		id = numbers[id];
+		g_modelViewer->LoadItem(items.getById(id).model);
 		break;
 
 	case UPDATE_NPC_START:
