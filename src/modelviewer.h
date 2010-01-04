@@ -82,7 +82,7 @@ public:
 
 	//wxWidget objects
 	wxMenuBar *menuBar;
-	wxMenu *fileMenu, *camMenu, *charMenu, *viewMenu, *optMenu, *lightMenu;
+	wxMenu *fileMenu, *exportMenu, *camMenu, *charMenu, *viewMenu, *optMenu, *lightMenu;
 	
 	// wxAUI - new docking lib (now part of wxWidgets 2.8.0)
 	wxAuiManager interfaceManager;
@@ -144,6 +144,7 @@ public:
 	void OnCanvasSize(wxCommandEvent &event);
 	void OnTest(wxCommandEvent &event);
 	void OnExport(wxCommandEvent &event);
+	void OnExportOther(wxCommandEvent &event);
 	
 	void UpdateControls();
    

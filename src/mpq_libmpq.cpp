@@ -264,6 +264,9 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 			if (temp.Find(_T("expansion")) > -1)
 				col = 3; // Green
 
+			if (temp.Find(_T("lichking")) > -1)
+				col = 4; // Frozen Blue
+
 			// TODO: Add handling for uncompressed files.
 			// err.. it seems uncompressed files no longer cause crashes?
 			if (size > 0 /*&& retVal != 0*/) {

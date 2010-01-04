@@ -6,33 +6,6 @@
 
 #include "CxImage/ximage.h"
 
-//--==Common Functions/Declarations==--
-
-template <typename T>
-inline T reverse_endian(T n) // for 32bits
-{
-#ifdef _MSC_VER
-	_asm
-	{
-		mov EAX, n;
-		bswap EAX;
-		mov n, EAX;
-	}
-
-	return n;
-#else
-	uint32 m = *reinterpret_cast<uint32 *>(&n);
-	T temp = ((m & 0xFF000000) >> 24) | ((m & 0x00FF0000) >> 8) |
-			 ((m & 0x0000FF00) << 8)  | ((m & 0x000000FF) << 24);
-	return *reinterpret_cast<T *>(&temp);
-#endif
-}
-
-inline unsigned short ByteSwap16 (unsigned short nValue) // 16bit
-{
-   return ((((nValue & 0xFF00)>> 8)) | ((nValue & 0xFF) << 8));
-}
-
 //---------------------------------------------
 // Scene Writing Functions
 //---------------------------------------------
@@ -1396,7 +1369,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	// Declare the Texture Name Array
 	// Made it fairly large, just for the really big models.
 	// Find a Match for mat->tex and place it into the Texture Name Array.
-	wxString texarray[200];
+	wxString texarray[500];
 	for (int i=0; i<m->nGroups; i++) {
 		for (int j=0; j<m->groups[i].nBatches; j++)
 		{
@@ -2296,4 +2269,213 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	f.Close();
 
 	ExportWMOObjectstoLWO(m,fn);
+}
+
+
+
+// -----------------------------------------
+// New Lightwave Stuff
+//
+// Under construction, only visible/usable while in Debug Mode.
+// -----------------------------------------
+
+
+// Seperated out the Writing function, so we don't have to write it all out every time we want to export something.
+// Should probably do something similar with the other exporting functions as well...
+bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Points[], unsigned long PointCount){
+
+   	// -----------------------------------------
+	// Initial Variables
+	// -----------------------------------------
+
+	// File Length
+	unsigned int fileLen = 0;
+	int off_t;
+
+	// Open Model File
+	wxFFileOutputStream f(filename, wxT("w+b"));
+	if (!f.IsOk()) {
+		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), filename);
+		return false;
+	}
+
+	// -----------------------------------------
+	// Declare the file as a Lightwave Object
+	// -----------------------------------------
+	f.Write("FORM",4);
+	// The entire file's length, minus FORM and itself. (filesize - 8)
+	f.Write(reinterpret_cast<char *>(&fileLen), 4);
+	f.Write("LWO2", 4);	// Declare this is a LWO2 format!
+	fileLen += 4;
+
+	// -----------------------------------------
+	// TAGS Sector
+	// Most of our strings go here.
+	// -----------------------------------------
+	f.Write("TAGS", 4);
+	// Temp Tag Length
+	u32 = 0;
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+	uint32 tagsSize = 0;
+
+	// For each Tag...
+	for (int i=0; i<TagCount; i++){
+		wxString tagName = Tags[i];
+
+		tagName.Append(_T('\0'));
+		if (fmod((float)tagName.length(), 2.0f) > 0)
+			tagName.Append(_T('\0'));
+		f.Write(tagName.data(), tagName.length());
+		tagsSize += tagName.length();
+	}
+	// Correct TAGS Length
+	off_t = -4-tagsSize;
+	f.SeekO(off_t, wxFromCurrent);
+	u32 = reverse_endian<uint32>(tagsSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+
+	fileLen += tagsSize;
+
+
+	// -----------------------------------------
+	// Declare a New Layer!
+	// -----------------------------------------
+	// Only ever going to support 1 Layer for now.
+	f.Write("LAYR", 4);
+	u32 = reverse_endian<uint32>(18);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+	ub = 0;
+	// All our Layer data is going to be 0.
+	// If we ever go beyond 1 Layer, we need to change this.
+	for(int i=0; i<18; i++) {
+		f.Write(reinterpret_cast<char *>(&ub), 1);
+	}
+	fileLen += 18;
+
+
+	// -----------------------------------------
+	// Points Chunk
+	//
+	// There will be new Point Chunk for every
+	// Layer, so if we go beyond 1 Layer, this
+	// should be nested.
+	// -----------------------------------------
+
+	uint32 pointsSize = 0;
+	f.Write("PNTS", 4);
+	u32 = reverse_endian<uint32>(pointsSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+
+	// Writes the point data
+	for (int i=0; i<PointCount; i++) {
+		Vec3D vert;
+		vert.x = reverse_endian<float>(Points[i].x);
+		vert.y = reverse_endian<float>(Points[i].z);
+		vert.z = reverse_endian<float>(Points[i].y);
+		f.Write(reinterpret_cast<char *>(&vert.x), 4);
+		f.Write(reinterpret_cast<char *>(&vert.y), 4);
+		f.Write(reinterpret_cast<char *>(&vert.z), 4);
+		pointsSize += 12;
+	}
+	// Corrects the filesize...
+	fileLen += pointsSize;
+	off_t = -4-pointsSize;
+	f.SeekO(off_t, wxFromCurrent);
+	u32 = reverse_endian<uint32>(pointsSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+
+
+
+
+
+	// If we've gotten this far, then the file is good!
+	return true;
+}
+
+// No longer writes data to a LWO file. Instead, it collects the data, and send it to a seperate function that writes the actual file.
+void ExportWMOtoLWO2(WMO *m, const char *fn)
+{
+	// FileOutName
+	wxString FileOutName(fn, wxConvUTF8);
+
+	// Texture Name Array
+	// Find a Match for mat->tex and place it into the Texture Name Array.
+	wxString TexArray[500];
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOMaterial *mat = &m->mat[batch->texture];
+			wxString outname(fn, wxConvUTF8);
+
+			bool nomatch = true;
+			for (int t=0;t<=m->nTextures; t++) {
+				if (t == mat->tex) {
+					TexArray[mat->tex] = m->textures[t-1];
+					TexArray[mat->tex] = TexArray[mat->tex].BeforeLast('.');
+					nomatch = false;
+					break;
+				}
+			}
+			if (nomatch == true){
+				TexArray[mat->tex] = outname << wxString::Format(_T("_Material_%03i"), mat->tex);
+			}
+		}
+	}
+
+	wxString TagNames[1000];	// Unlikely it'll ever need to be higher than this, but you never know...
+	int TagCount = 0;
+
+	// TAGS: Part Names
+	for (int i=0; i<m->nGroups; i++){
+		TagNames[TagCount] = m->groups[i].name;
+		TagCount++;
+	}
+
+	// TAGS: Surface Names
+	for (int i=0;i<m->nGroups; i++){
+		for (int j=0;j<m->groups[i].nBatches; j++) {
+			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOMaterial *mat = &m->mat[batch->texture];
+
+			TagNames[TagCount]= TexArray[mat->tex];
+			TagCount++;
+		}
+	}
+
+	//Stack overflow error above 85,094...
+	Vec3D Points[85094];	// 85,094 point limit. Expand to multi-dimentional array if we need more. (Dalaran or Stormwind...)
+	unsigned long PointCount = 0;
+
+	// Points
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)	{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			for(int ii=0;ii<batch->indexCount;ii++)
+			{
+				int a = m->groups[i].indices[batch->indexStart + ii];
+				Vec3D vert;
+				vert.x = m->groups[i].vertices[a].x;
+				vert.y = m->groups[i].vertices[a].z;
+				vert.z = m->groups[i].vertices[a].y;
+
+				Points[PointCount] = vert;
+				PointCount++;
+			}
+		}
+	}
+
+
+
+	// Call the Writing function
+	if (!WriteLWObject(FileOutName,TagNames,TagCount,Points,PointCount)) {
+		wxLogMessage(_T("Error Writing LWO: %s"), FileOutName);
+	}else{
+		wxLogMessage(_T("Info: Successfully exported %s!"), FileOutName);
+	}
 }

@@ -1056,7 +1056,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 	fm << "#" << endl;
 	fm <<  endl;
 
-	wxString texarray[200];
+	wxString texarray[500];
 
 	// Find a Match for mat->tex and place it into the Texture Name Array.
 	for (int i=0; i<m->nGroups; i++) {
@@ -1197,3 +1197,8 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 	f.close();
 }
 
+// Now for the incomplete functions
+void ExportM2toCOLLADA(Attachment *att, Model *m, const char *fn, bool init){}
+void ExportWMOtoCOLLADA(WMO *m, const char *fn){}
+void ExportWMOtoMS3D(WMO *m, const char *fn){}
+void ExportWMOto3DS(WMO *m, const char *fn){}

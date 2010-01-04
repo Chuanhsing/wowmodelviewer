@@ -130,4 +130,45 @@ typedef struct st_ObjectHelp {
 } ObjectHelp;
 */
 
+
+// -----------------------------------------
+// New LW Header Stuff
+//
+// One I finish my work, this will replace the above file.
+// -----------------------------------------
+
+int i32;
+uint32 u32;
+float f32;
+uint16 u16;
+unsigned char ub;
+
+template <typename T>
+inline T reverse_endian(T n) // for 32bits
+{
+#ifdef _MSC_VER
+	_asm
+	{
+		mov EAX, n;
+		bswap EAX;
+		mov n, EAX;
+	}
+
+	return n;
+#else
+	uint32 m = *reinterpret_cast<uint32 *>(&n);
+	T temp = ((m & 0xFF000000) >> 24) | ((m & 0x00FF0000) >> 8) |
+			 ((m & 0x0000FF00) << 8)  | ((m & 0x000000FF) << 24);
+	return *reinterpret_cast<T *>(&temp);
+#endif
+}
+
+inline unsigned short ByteSwap16 (unsigned short nValue) // 16bit
+{
+   return ((((nValue & 0xFF00)>> 8)) | ((nValue & 0xFF) << 8));
+}
+
+
+
+
 #endif // LWOHEADER_H

@@ -149,6 +149,8 @@ void FileControl::Init(ModelViewer* mv)
 						fileTree->SetItemTextColour(newItem.first, *wxRED);
 					else if ((*it).col == 3)
 						fileTree->SetItemTextColour(newItem.first, wxColour(160,0,160));
+					else if ((*it).col == 4)
+						fileTree->SetItemTextColour(newItem.first, wxColour(35,130,179));
 				//} else {
 				//	colour = true;
 				//}
@@ -169,6 +171,8 @@ void FileControl::Init(ModelViewer* mv)
 			fileTree->SetItemTextColour(item, *wxRED);
 		else if ((*it).col == 3)
 			fileTree->SetItemTextColour(item, wxColour(160,0,160));
+		else if ((*it).col == 4)
+			fileTree->SetItemTextColour(item, wxColour(35,130,179));
 
 		index++;
 
@@ -295,6 +299,19 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		
 		// wxAUI
 		modelviewer->interfaceManager.GetPane(modelviewer->charControl).Show(false);
+	}
+
+	// Disable whatever formats can't export WMOs yet!
+	if (modelviewer->isWMO == true){
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode when viewing WMOs...
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, false);
+	}else{
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);	// Currently totally disabled. No support at all...
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, true);
 	}
 
 	// Update the layout
