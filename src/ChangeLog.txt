@@ -1,7 +1,11 @@
 World of Warcraft Model Viewer v0.5.08 (Chuanhsing Update)
 
+r675
+- Added interface language chooser by Chuanhsing
+
 r672
-- Added new function: "View Item" in main menu
+- New Exporter Menu by Kjasi
+- Added new function: "View Item" in main menu by Chuanhsing
 
 r667
 -Exported Lightwave Scene files now contain Doodad Placement nulls, parented to DoodadSet nulls.

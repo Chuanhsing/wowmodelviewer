@@ -112,6 +112,7 @@ enum ObjectID {
 	//ID_RESET,
 	
 	ID_CHECKFORUPDATE,
+	ID_LANGUAGE,
 	ID_HELP,
 	ID_ABOUT,
 

@@ -63,25 +63,24 @@ bool WowModelViewApp::OnInit()
 
 	LoadSettings();
 
-
 #ifdef _WIN32
 	// This chunk of code is all related to locale translation (if a translation is available).
 	// Only use locale for non-english?
-	if ((langID == 1 && wxFileExists(_T("mo\\koKR.mo"))) || 
-		(langID == 2 && wxFileExists(_T("mo\\frFR.mo"))) || 
-		(langID == 3 && wxFileExists(_T("mo\\deDE.mo"))) || 
-		(langID == 4 && wxFileExists(_T("mo\\zhCN.mo"))) || 
-		(langID == 5 && wxFileExists(_T("mo\\zhTW.mo"))) ||
-		(langID == 6 && wxFileExists(_T("mo\\esES.mo"))) ||
-		(langID == 7 && wxFileExists(_T("mo\\ruRU.mo")))
+	if ((interfaceID == 1 && wxFileExists(_T("mo\\koKR.mo"))) || 
+		(interfaceID == 2 && wxFileExists(_T("mo\\frFR.mo"))) || 
+		(interfaceID == 3 && wxFileExists(_T("mo\\deDE.mo"))) || 
+		(interfaceID == 4 && wxFileExists(_T("mo\\zhCN.mo"))) || 
+		(interfaceID == 5 && wxFileExists(_T("mo\\zhTW.mo"))) ||
+		(interfaceID == 6 && wxFileExists(_T("mo\\esES.mo"))) ||
+		(interfaceID == 7 && wxFileExists(_T("mo\\ruRU.mo")))
 	) {
-		locale.Init(langIds[langID], wxLOCALE_CONV_ENCODING);
+		locale.Init(langIds[interfaceID], wxLOCALE_CONV_ENCODING);
 		
 		wxLocale::AddCatalogLookupPathPrefix(_T("mo"));
 		//wxLocale::AddCatalogLookupPathPrefix(_T(".."));
 
 		//locale.AddCatalog(_T("wowmodelview")); // Initialize the catalogs we'll be using
-		switch(langID) {
+		switch(interfaceID) {
 			case 1: locale.AddCatalog(_T("koKR")); break;
 			case 2: locale.AddCatalog(_T("frFR")); break;
 			case 3: locale.AddCatalog(_T("deDE")); break;
@@ -92,7 +91,6 @@ bool WowModelViewApp::OnInit()
 		}
 	}
 #endif
-
 
 	// Now create our main frame.
     frame = new ModelViewer();
@@ -302,6 +300,7 @@ void WowModelViewApp::LoadSettings()
 	// Application locale info
 	pConfig->SetPath(_T("/Locale"));
 	pConfig->Read(_T("LanguageID"), &langID, -1);
+	pConfig->Read(_T("InterfaceID"), &interfaceID, -1);
 
 	// Application settings
 	pConfig->SetPath(_T("/Settings"));
@@ -384,6 +383,8 @@ void WowModelViewApp::LoadSettings()
 
 		SaveSettings();
 	}
+	if (interfaceID == -1)
+		interfaceID = langID;
 }
 
 void WowModelViewApp::SaveSettings()
@@ -393,6 +394,7 @@ void WowModelViewApp::SaveSettings()
 	
 	pConfig->SetPath(_T("/Locale"));
 	pConfig->Write(_T("LanguageID"), langID);
+	pConfig->Write(_T("InterfaceID"), interfaceID);
 
 	pConfig->SetPath(_T("/Settings"));
 	pConfig->Write(_T("Path"), gamePath);

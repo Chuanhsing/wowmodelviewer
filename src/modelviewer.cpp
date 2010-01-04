@@ -144,6 +144,7 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 
 	// About menu
 	EVT_MENU(ID_CHECKFORUPDATE, ModelViewer::OnCheckForUpdate)
+	EVT_MENU(ID_LANGUAGE, ModelViewer::OnLanguage)
 	EVT_MENU(ID_HELP, ModelViewer::OnAbout)
 	EVT_MENU(ID_ABOUT, ModelViewer::OnAbout)
 
@@ -428,6 +429,7 @@ void ModelViewer::InitMenu()
 
 
 		wxMenu *aboutMenu = new wxMenu;
+		aboutMenu->Append(ID_LANGUAGE, _("Language"));
 		aboutMenu->Append(ID_HELP, _("Help"));
 		aboutMenu->Enable(ID_HELP, false);
 		aboutMenu->Append(ID_ABOUT, _("About"));
@@ -2042,8 +2044,8 @@ void ModelViewer::LoadChar(const char *fn)
 
 void ModelViewer::OnLanguage(wxCommandEvent &event)
 {
-	/*
-	if (event.GetId() == ID_LOCALE) {
+	if (event.GetId() == ID_LANGUAGE) {
+		/*
 		static const wxLanguage langIds[] =
 		{
 			wxLANGUAGE_ENGLISH,
@@ -2054,8 +2056,9 @@ void ModelViewer::OnLanguage(wxCommandEvent &event)
 			wxLANGUAGE_CHINESE_TRADITIONAL,
 			wxLANGUAGE_SPANISH,
 		};
+		*/
 		
-		const wxString langNames[] =
+		wxString langNames[] =
 		{
 			_T("English"),
 			_T("Korean"),
@@ -2067,17 +2070,15 @@ void ModelViewer::OnLanguage(wxCommandEvent &event)
 		};
 
 		// the arrays should be in sync
-		wxCOMPILE_TIME_ASSERT(WXSIZEOF(langNames) == WXSIZEOF(langIds), LangArraysMismatch);
+		//wxCOMPILE_TIME_ASSERT(WXSIZEOF(langNames) == WXSIZEOF(langIds), LangArraysMismatch);
 
-		long lng = wxGetSingleChoiceIndex(_T("Please select a language:"), _T("Language"), WXSIZEOF(langNames), langNames);
-		
+		long lng = wxGetSingleChoiceIndex(_("Please select a language:"), _("Language"), WXSIZEOF(langNames), langNames);
+
 		if (lng != -1) {
-			langID = lng;
+			interfaceID = lng;
 			wxMessageBox(_T("You will need to reload WoW Model Viewer for changes to take effect."), _T("Language Changed"), wxOK | wxICON_INFORMATION);
 		}
-
 	}
-	*/
 }
 
 void ModelViewer::OnAbout(wxCommandEvent &event)

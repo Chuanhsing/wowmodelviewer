@@ -49,6 +49,7 @@ extern bool bShowParticle;
 extern wxArrayString mpqArchives;
 
 extern long langID;
+extern long interfaceID;
 extern int ssCounter;
 extern int imgFormat;
 extern long versionID;

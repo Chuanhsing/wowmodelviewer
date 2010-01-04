@@ -20,6 +20,7 @@ bool bV310 = false;
 bool bShowParticle = true;
 
 long langID = -1;
+long interfaceID = -1;
 int ssCounter = 100; // ScreenShot Counter
 int imgFormat = 0;
 
