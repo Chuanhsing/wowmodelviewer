@@ -658,8 +658,8 @@ void CharControl::RefreshEquipment()
 
 		if (g_canvas->model->modelType != MT_NPC) {
 			if (labels[i]) {
-				labels[i]->SetLabel(CSConv(items.get(cd.equipment[i]).name));
-				labels[i]->SetForegroundColour(ItemQualityColour(items.get(cd.equipment[i]).quality));
+				labels[i]->SetLabel(CSConv(items.getById(cd.equipment[i]).name));
+				labels[i]->SetForegroundColour(ItemQualityColour(items.getById(cd.equipment[i]).quality));
 			}
 		}
 	}
@@ -726,7 +726,7 @@ void CharControl::OnButton(wxCommandEvent &event)
 	} else {
 		for (int i=0; i<NUM_CHAR_SLOTS; i++) {
 			if (buttons[i] && (wxButton*)event.GetEventObject()==buttons[i]) {
-				selectItem(i, cd.equipment[i], buttons[i]->GetLabel().GetData());
+				selectItem(UPDATE_ITEM, i, cd.equipment[i], buttons[i]->GetLabel().GetData());
 				break;
 			}
 		}
@@ -914,7 +914,7 @@ void CharControl::RefreshModel()
 	// Check to see if we are wearing a helmet - if so, we need to hide our hair
 	if (cd.equipment[CS_HEAD] != 0) {
 		try {
-			const ItemRecord &item = items.get(cd.equipment[CS_HEAD]);
+			const ItemRecord &item = items.getById(cd.equipment[CS_HEAD]);
 			int type = item.type;
 			if (type==IT_HEAD) {
 				ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
@@ -964,7 +964,7 @@ void CharControl::RefreshModel()
 	bool hadRobe = false;
 	if (cd.equipment[CS_CHEST] != 0) {
 		try {
-			const ItemRecord &item = items.get(cd.equipment[CS_CHEST]);
+			const ItemRecord &item = items.getById(cd.equipment[CS_CHEST]);
 			if (item.type==IT_ROBE || item.type==IT_CHEST) {
 				ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
 				if (r.getUInt(ItemDisplayDB::RobeGeosetFlags)==1) 
@@ -978,7 +978,7 @@ void CharControl::RefreshModel()
 	// check if we have a kilt on, just like our robes
 	if (cd.equipment[CS_PANTS] != 0) {
 		try {
-			const ItemRecord &item = items.get(cd.equipment[CS_PANTS]);
+			const ItemRecord &item = items.getById(cd.equipment[CS_PANTS]);
 			if (item.type==IT_PANTS) {
 				ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
 				if (r.getUInt(ItemDisplayDB::RobeGeosetFlags)==1) 
@@ -996,11 +996,11 @@ void CharControl::RefreshModel()
 	// check the order of robe/gloves
 	if (cd.equipment[CS_CHEST] && cd.equipment[CS_GLOVES]) {
 		try {
-			//const ItemRecord &item = items.get(cd.equipment[CS_CHEST]);
+			//const ItemRecord &item = items.getById(cd.equipment[CS_CHEST]);
 			//if (item.type==IT_ROBE) {
 			//	ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
 				//if (r.getUInt(ItemDisplayDB::GeosetA)>0) {
-					const ItemRecord &item2 = items.get(cd.equipment[CS_GLOVES]);
+					const ItemRecord &item2 = items.getById(cd.equipment[CS_GLOVES]);
 					ItemDisplayDB::Record r2 = itemdisplaydb.getById(item2.model);
 					if (r2.getUInt(ItemDisplayDB::GloveGeosetFlags)==0) {
 						slotOrderWithRobe[7] = CS_GLOVES;
@@ -1208,7 +1208,7 @@ void CharControl::RefreshNPCModel()
 	bool hadRobe = false;
 	if (cd.equipment[CS_CHEST] != 0) {
 		try {
-			const ItemRecord &item = items.get(cd.equipment[CS_CHEST]);
+			const ItemRecord &item = items.getById(cd.equipment[CS_CHEST]);
 			if (item.type==IT_ROBE || item.type==IT_CHEST) {
 				ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
 				if (r.getUInt(ItemDisplayDB::RobeGeosetFlags)==1) 
@@ -1223,7 +1223,7 @@ void CharControl::RefreshNPCModel()
 	// check if we have a kilt on, just like our robes
 	if (cd.equipment[CS_PANTS] != 0) {
 		try {
-			const ItemRecord &item = items.get(cd.equipment[CS_PANTS]);
+			const ItemRecord &item = items.getById(cd.equipment[CS_PANTS]);
 			int type = item.type;
 			if (type==IT_PANTS) {
 				ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
@@ -1242,7 +1242,7 @@ void CharControl::RefreshNPCModel()
 	// check the order of robe/gloves
 	if (cd.equipment[CS_CHEST] && cd.equipment[CS_GLOVES]) {
 		try {
-			//const ItemRecord &item = items.get(cd.equipment[CS_CHEST]);
+			//const ItemRecord &item = items.getById(cd.equipment[CS_CHEST]);
 			//if (item.type==IT_ROBE) {
 			//	ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
 				//if (r.getUInt(ItemDisplayDB::GeosetA)>0) {
@@ -1298,7 +1298,7 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 		return; // if we are wearing a robe, no pants for us! ^_^
 
 	try {
-		const ItemRecord &item = items.get(itemnum);
+		const ItemRecord &item = items.getById(itemnum);
 		int type = item.type;
 		int itemID = 0;
 
@@ -1424,7 +1424,7 @@ void CharControl::RefreshItem(int slot)
 			return;
 
 		if (slot==CS_HAND_LEFT || slot==CS_HAND_RIGHT) {
-			if (items.get(itemnum).type == IT_SHIELD) {
+			if (items.getById(itemnum).type == IT_SHIELD) {
 				path = _T("Item\\ObjectComponents\\Shield\\");
 				id1 = PS_LEFT_WRIST;
 			} else {
@@ -1433,12 +1433,12 @@ void CharControl::RefreshItem(int slot)
 
 			// If we're sheathing our weapons, relocate the items to
 			// their correct positions
-			if (bSheathe && items.get(itemnum).sheath>0) {	
-				id1 = items.get(itemnum).sheath;
+			if (bSheathe && items.getById(itemnum).sheath>0) {	
+				id1 = items.getById(itemnum).sheath;
 				if (id1==PS_LEFT_HIP_SHEATH && slot==CS_HAND_LEFT)
 					id1 = PS_RIGHT_HIP_SHEATH;
 
-				// One-handed Sword 2:7 && items.get(itemnum).subclass==7
+				// One-handed Sword 2:7 && items.getById(itemnum).subclass==7
 				if (id1==PS_RIGHT_BACK_SHEATH && slot==CS_HAND_LEFT)
 					id1 = PS_LEFT_BACK_SHEATH;
 
@@ -1475,7 +1475,7 @@ void CharControl::RefreshItem(int slot)
 			if (g_canvas->model->modelType == MT_NPC)
 				ItemID = itemnum;
 			else {
-				const ItemRecord &item = items.get(itemnum);
+				const ItemRecord &item = items.getById(itemnum);
 				ItemID = item.model;
 			}
 			
@@ -1603,7 +1603,7 @@ void CharControl::RefreshCreatureItem(int slot)
 			return;
 
 		if (slot==CS_HAND_LEFT || slot==CS_HAND_RIGHT) {
-			if (items.get(itemnum).type == IT_SHIELD) {
+			if (items.getById(itemnum).type == IT_SHIELD) {
 				path = _T("Item\\ObjectComponents\\Shield\\");
 				id1 = PS_LEFT_WRIST;
 			} else {
@@ -1612,7 +1612,7 @@ void CharControl::RefreshCreatureItem(int slot)
 		}
 
 		try {
-			const ItemRecord &item = items.get(itemnum);
+			const ItemRecord &item = items.getById(itemnum);
 			ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
 
 			GLuint tex;
@@ -1937,7 +1937,7 @@ void CharControl::ClearItemDialog()
 	}
 }
 
-void CharControl::selectItem(int slot, int current, const wxChar *caption)
+void CharControl::selectItem(int type, int slot, int current, const wxChar *caption)
 {
 	ClearItemDialog();
 
@@ -1951,7 +1951,15 @@ void CharControl::selectItem(int slot, int current, const wxChar *caption)
 	
 	int sel=0, ord=0;
 	for (std::vector<ItemRecord>::iterator it = items.items.begin(); it != items.items.end(); ++it) {
-		if (correctType(it->type, slot)) {
+		if (type == UPDATE_SINGLE_ITEM) {
+			choices.Add(CSConv(it->name));
+			numbers.push_back(it->id);
+			quality.push_back(it->quality);
+
+			if (it->itemclass > 0) 
+				subclassesFound.insert(std::pair<int,int>(it->itemclass,it->subclass));
+		}
+		else if (correctType(it->type, slot)) {
 			choices.Add(CSConv(it->name));
 			numbers.push_back(it->id);
 			quality.push_back(it->quality);
@@ -1993,13 +2001,13 @@ void CharControl::selectItem(int slot, int current, const wxChar *caption)
 	if (subclassesFound.size() > 1) {
 		// build category list
 		for (size_t i=0; i<numbers.size(); i++) {
-			ItemRecord r = items.get(numbers[i]);
+			ItemRecord r = items.getById(numbers[i]);
 			cats.push_back(subclasslookup[std::pair<int,int>(r.itemclass, r.subclass)]);
 		}
 
-		itemDialog = new CategoryChoiceDialog(this, UPDATE_ITEM, g_modelViewer, _("Choose an item"), caption, choices, cats, catnames, &quality);
+		itemDialog = new CategoryChoiceDialog(this, type, g_modelViewer, _("Choose an item"), caption, choices, cats, catnames, &quality);
 	} else {
-		itemDialog = new FilteredChoiceDialog(this, UPDATE_ITEM, g_modelViewer, _("Choose an item"), caption, choices, &quality);
+		itemDialog = new FilteredChoiceDialog(this, type, g_modelViewer, _("Choose an item"), caption, choices, &quality);
 	}
 
 	itemDialog->SetSelection(sel);
@@ -2261,8 +2269,8 @@ void CharControl::OnUpdateItem(int type, int id)
 		cd.equipment[choosingSlot] = numbers[id];
 		if (slotHasModel(choosingSlot))
 			RefreshItem(choosingSlot);
-		labels[choosingSlot]->SetLabel(CSConv(items.get(cd.equipment[choosingSlot]).name));
-		labels[choosingSlot]->SetForegroundColour(ItemQualityColour(items.get(cd.equipment[choosingSlot]).quality));
+		labels[choosingSlot]->SetLabel(CSConv(items.getById(cd.equipment[choosingSlot]).name));
+		labels[choosingSlot]->SetForegroundColour(ItemQualityColour(items.getById(cd.equipment[choosingSlot]).quality));
 
 		// Check if its a 'guild tabard'
 		if (choosingSlot == CS_TABARD) 
@@ -2393,6 +2401,11 @@ void CharControl::OnUpdateItem(int type, int id)
 		g_modelViewer->LoadNPC(npcs.get(id).model);
 
 		break;
+
+	case UPDATE_SINGLE_ITEM:
+		g_modelViewer->LoadItem(items.getByPos(id).model);
+		break;
+
 	case UPDATE_NPC_START:
 		// Open the first record, just so we can declare the var.
 		NPCDB::Record npcrec = npcdb.getRecord(0);
@@ -2418,67 +2431,67 @@ void CharControl::OnUpdateItem(int type, int id)
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::HelmID));
 				cd.equipment[CS_HEAD] = itemid;
 				if (slotHasModel(CS_HEAD)) RefreshItem(CS_HEAD);
-				if (itemid) labels[CS_HEAD]->SetLabel(CSConv(items.get(cd.equipment[CS_HEAD]).name));
+				if (itemid) labels[CS_HEAD]->SetLabel(CSConv(items.getById(cd.equipment[CS_HEAD]).name));
 				else labels[CS_HEAD]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::ShoulderID));
 				cd.equipment[CS_SHOULDER] = itemid;
 				if (slotHasModel(CS_SHOULDER)) RefreshItem(CS_SHOULDER);
-				if (itemid) labels[CS_SHOULDER]->SetLabel(CSConv(items.get(cd.equipment[CS_SHOULDER]).name));
+				if (itemid) labels[CS_SHOULDER]->SetLabel(CSConv(items.getById(cd.equipment[CS_SHOULDER]).name));
 				else labels[CS_SHOULDER]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::ShirtID));
 				cd.equipment[CS_SHIRT] = itemid;
 				//if (slotHasModel(CS_SHIRT)) RefreshItem(CS_SHIRT);
-				if (itemid) labels[CS_SHIRT]->SetLabel(CSConv(items.get(cd.equipment[CS_SHIRT]).name));
+				if (itemid) labels[CS_SHIRT]->SetLabel(CSConv(items.getById(cd.equipment[CS_SHIRT]).name));
 				else labels[CS_SHIRT]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::ChestID));
 				cd.equipment[CS_CHEST] = itemid;
 				//if (slotHasModel(CS_CHEST)) RefreshItem(CS_CHEST);
-				if (itemid) labels[CS_CHEST]->SetLabel(CSConv(items.get(cd.equipment[CS_CHEST]).name));
+				if (itemid) labels[CS_CHEST]->SetLabel(CSConv(items.getById(cd.equipment[CS_CHEST]).name));
 				else labels[CS_CHEST]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::BeltID));
 				cd.equipment[CS_BELT] = itemid;
 				//if (slotHasModel(CS_BELT)) RefreshItem(CS_BELT);
-				if (itemid) labels[CS_BELT]->SetLabel(CSConv(items.get(cd.equipment[CS_BELT]).name));
+				if (itemid) labels[CS_BELT]->SetLabel(CSConv(items.getById(cd.equipment[CS_BELT]).name));
 				else labels[CS_BELT]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::PantsID));
 				cd.equipment[CS_PANTS] = itemid;
 				//if (slotHasModel(CS_PANTS)) RefreshItem(CS_PANTS);
-				if (itemid) labels[CS_PANTS]->SetLabel(CSConv(items.get(cd.equipment[CS_PANTS]).name));
+				if (itemid) labels[CS_PANTS]->SetLabel(CSConv(items.getById(cd.equipment[CS_PANTS]).name));
 				else labels[CS_PANTS]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::BootsID));
 				cd.equipment[CS_BOOTS] = itemid;
 				//if (slotHasModel(CS_BOOTS)) RefreshItem(CS_BOOTS);
-				if (itemid) labels[CS_BOOTS]->SetLabel(CSConv(items.get(cd.equipment[CS_BOOTS]).name));
+				if (itemid) labels[CS_BOOTS]->SetLabel(CSConv(items.getById(cd.equipment[CS_BOOTS]).name));
 				else labels[CS_BOOTS]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::BracersID));
 				cd.equipment[CS_BRACERS] = itemid;
 				//if (slotHasModel(CS_BRACERS)) RefreshItem(CS_BRACERS);
-				if (itemid) labels[CS_BRACERS]->SetLabel(CSConv(items.get(cd.equipment[CS_BRACERS]).name));
+				if (itemid) labels[CS_BRACERS]->SetLabel(CSConv(items.getById(cd.equipment[CS_BRACERS]).name));
 				else labels[CS_BRACERS]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::GlovesID));
 				cd.equipment[CS_GLOVES] = itemid;
 				//if (slotHasModel(CS_GLOVES)) RefreshItem(CS_GLOVES);
-				if (itemid) labels[CS_GLOVES]->SetLabel(CSConv(items.get(cd.equipment[CS_GLOVES]).name));
+				if (itemid) labels[CS_GLOVES]->SetLabel(CSConv(items.getById(cd.equipment[CS_GLOVES]).name));
 				else labels[CS_GLOVES]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::TabardID));
 				cd.equipment[CS_TABARD] = itemid;
 				//if (slotHasModel(CS_TABARD)) RefreshItem(CS_TABARD);
-				if (itemid) labels[CS_TABARD]->SetLabel(CSConv(items.get(cd.equipment[CS_TABARD]).name));
+				if (itemid) labels[CS_TABARD]->SetLabel(CSConv(items.getById(cd.equipment[CS_TABARD]).name));
 				else labels[CS_TABARD]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::CapeID));
 				cd.equipment[CS_CAPE] = itemid;
 				if (slotHasModel(CS_CAPE)) RefreshItem(CS_CAPE);
-				if (itemid) labels[CS_CAPE]->SetLabel(CSConv(items.get(cd.equipment[CS_CAPE]).name));
+				if (itemid) labels[CS_CAPE]->SetLabel(CSConv(items.getById(cd.equipment[CS_CAPE]).name));
 				else labels[CS_CAPE]->SetLabel(_("---- None ----"));
 				//wxLogMessage(_T("npcdb.getByNPCID good: %d"), npcrec.getUInt(NPCDB::HelmID));
 			} catch (...) {
@@ -2487,6 +2500,7 @@ void CharControl::OnUpdateItem(int type, int id)
 		}
 
 		break;
+
 	}
 
 	//  Update controls associated
@@ -2671,7 +2685,7 @@ void CharDetails::loadSet(ItemSetDB &sets, ItemDatabase &items, int setid)
 			//if (id==0)
 			//	continue;
 
-			const ItemRecord &r = items.get(id);
+			const ItemRecord &r = items.getById(id);
 			if (r.type > 0) {
 				// find a slot for it
 				for (int s=0; s<NUM_CHAR_SLOTS; s++) {
@@ -2692,7 +2706,7 @@ void CharDetails::loadStart(StartOutfitDB &start, ItemDatabase &items, int setid
 		for (size_t i=0; i<StartOutfitDB::NumItems; i++) {
 			int id = rec.getInt(StartOutfitDB::ItemIDBase + i);
 			if (id==0) continue;
-			const ItemRecord &r = items.get(id);
+			const ItemRecord &r = items.getById(id);
 			if (r.type > 0) {
 				// find a slot for it
 				for (int s=0; s<NUM_CHAR_SLOTS; s++) {

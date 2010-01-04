@@ -390,7 +390,7 @@ void ItemSetDB::cleanup(ItemDatabase &p_itemdb)
 		for (int j=0; j<NumItems; j++) {
 			int id = i->getUInt(ItemIDBase+j);
 			if (id > 0) {
-				const ItemRecord &r = p_itemdb.get(id);
+				const ItemRecord &r = p_itemdb.getById(id);
 				if (r.type > 0) {
 					avail.insert(i->getUInt(SetID));
 					break;
@@ -612,13 +612,17 @@ int ItemDatabase::getItemIDByModel(int id)
 	return 0;
 }
 
-
-const ItemRecord& ItemDatabase::get(int id)
+const ItemRecord& ItemDatabase::getById(int id)
 {
     if (itemLookup.find(id)!=itemLookup.end()) 
 		return items[itemLookup[id]];
 	else 
 		return items[0];
+}
+
+const ItemRecord& ItemDatabase::getByPos(int id)
+{
+	return items[id];
 }
 
 bool ItemDatabase::avaiable(int id)

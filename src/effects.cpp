@@ -71,7 +71,7 @@ void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent
 	if (subclassesFound.size() > 1) {
 		// build category list
 		for (size_t i=0; i<cc->numbers.size(); i++) {
-			ItemRecord r = items.get(cc->numbers[i]);
+			ItemRecord r = items.getById(cc->numbers[i]);
 			cc->cats.push_back(subclasslookup[pair<int,int>(r.itemclass, r.subclass)]);
 		}
 

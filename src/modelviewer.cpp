@@ -19,6 +19,7 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 
 	// File menu
 	EVT_MENU(ID_FILE_NPC, ModelViewer::OnCharToggle)
+	EVT_MENU(ID_FILE_ITEM, ModelViewer::OnCharToggle)
 	EVT_MENU(ID_FILE_SCREENSHOT, ModelViewer::OnSave)
 	EVT_MENU(ID_FILE_SCREENSHOTCONFIG, ModelViewer::OnSave)
 	EVT_MENU(ID_FILE_EXPORTGIF, ModelViewer::OnSave)
@@ -245,6 +246,7 @@ void ModelViewer::InitMenu()
 	// MENU
 	fileMenu = new wxMenu;
 	fileMenu->Append(ID_FILE_NPC, _("View NPC"));
+	fileMenu->Append(ID_FILE_ITEM, _("View Item"));
 	fileMenu->Append(ID_MOUNT_CHARACTER, _("Mount a character..."));
 	fileMenu->AppendSeparator();
 	fileMenu->Append(ID_FILE_SCREENSHOT, _("Save Screenshot\tF12"));
@@ -1082,7 +1084,38 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 
 void ModelViewer::LoadItem(unsigned int displayID)
 {
+	canvas->clearAttachments();
+	//if (!isChar) // may memory leak
+	//	wxDELETE(canvas->model);
+	canvas->model = NULL;
 	
+	isModel = true;
+	isChar = false;
+	isWMO = false;
+
+	try {
+		ItemDisplayDB::Record modelRec = itemdisplaydb.getById(displayID);
+		wxString name = modelRec.getString(ItemDisplayDB::Model);
+		name = name.BeforeLast('.');
+		name.Append(_T(".M2"));
+		wxString fns[] = { _T("Item\\ObjectComponents\\Head\\"),
+			_T("Item\\ObjectComponents\\Shoulder\\"),
+			_T("Item\\ObjectComponents\\Quiver\\"),
+			_T("Item\\ObjectComponents\\Shield\\"),
+			_T("Item\\ObjectComponents\\Weapon\\") };
+		wxString fn;
+		for(int i=0; i<5; i++) {
+			fn = fns[i]+name;
+			if (MPQFile::getSize(fn.fn_str()) > 0) {
+				LoadModel(fn);
+				break;
+			}
+		}
+	} catch (...) {}
+
+	// wxAUI
+	interfaceManager.GetPane(charControl).Show(isChar);
+	interfaceManager.Update();
 }
 
 // This is called when the user goes to File->Exit
@@ -1707,6 +1740,8 @@ void ModelViewer::OnCharToggle(wxCommandEvent &event)
 {
 	if (event.GetId() == ID_FILE_NPC)
 		charControl->selectNPC(UPDATE_NPC);
+	if (event.GetId() == ID_FILE_ITEM)
+		charControl->selectItem(UPDATE_SINGLE_ITEM, -1, -1);
 	else if (isChar) 
 		charControl->OnCheck(event);
 	

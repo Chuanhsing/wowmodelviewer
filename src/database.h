@@ -470,7 +470,8 @@ public:
 	void cleanup(ItemDisplayDB &l_itemdb);	
 	void open(const char* filename);
 
-	const ItemRecord& get(int id);
+	const ItemRecord& getById(int id);
+	const ItemRecord& getByPos(int id);
 	int getItemIDByModel(int id);
 	bool avaiable(int id);
 	int getItemNum(int displayid);
