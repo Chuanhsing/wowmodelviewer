@@ -74,22 +74,29 @@ public:
 #define	WMO_MATERIAL_CULL	0x04
 struct WMOMaterial {
 	int flags;
-	int d1;
-	int transparent;
-	int nameStart;
-	unsigned int col1;
-	int d3;
-	int nameEnd;
-	unsigned int col2;
-	int d4;
+	int SpecularMode;
+	int transparent; // Blending: 0 for opaque, 1 for transparent
+	int nameStart; // Start position for the first texture filename in the MOTX data block
+	unsigned int color1;
+	unsigned int flag1;
+	int nameEnd; // Start position for the second texture filename in the MOTX data block
+	unsigned int color2;
+	unsigned int flag2;
 	float f1,f2;
 	int dx[5];
 	// read up to here -_-
 	TextureID tex;
 };
 
+enum LightType 
+{
+	OMNI_LGT,
+	SPOT_LGT,
+	DIRECT_LGT,
+	AMBIENT_LGT
+};
 struct WMOLight {
-	unsigned int type, useatten, color;
+	unsigned int lighttype, type, useatten, color;
 	Vec3D pos;
 	float intensity;
 	float attenStart, attenEnd;
@@ -109,14 +116,22 @@ struct WMOPV {
 };
 
 struct WMOPR {
-	short portal, group, dir, reserved;
+	short portal; // Portal index
+	short group; // WMO group index
+	short dir; // 1 or -1
+	short reserved; // always 0
+};
+
+struct WMOVB {
+	unsigned short firstVertex;
+	unsigned short count;
 };
 
 struct WMODoodadSet {
-	char name[0x14];
-	int start;
-	int size;
-	int unused;
+	char name[0x14]; // set name
+	int start; // index of first doodad instance in this set
+	int size; // number of doodad instances in this set
+	int unused; // unused? (always 0)
 };
 
 struct WMOLiquidHeader {
@@ -128,10 +143,13 @@ struct WMOLiquidHeader {
 struct WMOFog {
 	unsigned int flags;
 	Vec3D pos;
-	float r1, r2, fogend, fogstart;
-	unsigned int color1;
-	float f2;
-	float f3;
+	float r1; // Smaller radius
+	float r2; // Larger radius
+	float fogend; // This is the distance at which all visibility ceases, and you see no objects or terrain except for the fog color.
+	float fogstart; // This is where the fog starts. Obtained by multiplying the fog end value by the fog start multiplier. multiplier (0..1)
+	unsigned int color1; // The back buffer is also cleared to this colour 
+	float f2; // Unknown (almost always 222.222)
+	float f3; // Unknown (-1 or -0.5)
 	unsigned int color2;
 	// read to here (0x30 bytes)
 	Vec4D color;
@@ -141,16 +159,18 @@ struct WMOFog {
 
 class WMOModelInstance {
 public:
+	// header
+	Vec3D pos;
+	float w;
+	Vec3D dir;
+	float sc;
+	unsigned int d1;
+	
 	Model *model;
 	std::string filename;
-
 	int id;
-
-	Vec3D pos, dir;
-	unsigned int d1, scale;
-
-	float frot,w,sc;
-
+	unsigned int scale;
+	float frot;
 	int light;
 	Vec3D ldir;
 	Vec3D lcol;
@@ -163,13 +183,39 @@ public:
 	void unloadModel(ModelManager &mm);
 };
 
+struct WMOHeader {
+	int nTextures; // number of materials
+	int nGroups; // number of WMO groups
+	int nP; // number of portals
+	int nLights; // number of lights
+	int nModels; // number of M2 models imported
+	int nDoodads; // number of dedicated files
+	int nDoodadSets; // number of doodad sets
+	unsigned int col; // ambient color? RGB
+	int nX; // WMO ID (column 2 in WMOAreaTable.dbc)
+	Vec3D v1; // Bounding box corner 1
+	Vec3D v2; // Bounding box corner 2
+	int LiquidType;
+};
 
 class WMO: public ManagedItem, public Displayable {
 public:
+	//WMOHeader header;
+	int nTextures; // number of materials
+	int nGroups; // number of WMO groups
+	int nP; // number of portals
+	int nLights; // number of lights
+	int nModels; // number of M2 models imported
+	int nDoodads; // number of dedicated files
+	int nDoodadSets; // number of doodad sets
+	unsigned int col; // ambient color? RGB
+	int nX; // WMO ID (column 2 in WMOAreaTable.dbc)
+	Vec3D v1; // Bounding box corner 1
+	Vec3D v2; // Bounding box corner 2
+	int LiquidType;
+
 	WMOGroup *groups;
-	int nTextures, nGroups, nP, nLights, nModels, nDoodads, nDoodadSets, nX;
 	WMOMaterial *mat;
-	Vec3D v1,v2;
 	bool ok;
 	char *groupnames;
 	std::vector<std::string> textures;

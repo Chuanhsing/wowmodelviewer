@@ -42,32 +42,34 @@ WMO::WMO(std::string name): ManagedItem(name)
 		size_t nextpos = f.getPos() + size;
 
 		if (!strcmp(fourcc,"MOHD")) {
-			unsigned int col;
-			// header
-			f.read(&nTextures, 4);
-			f.read(&nGroups, 4);
-			f.read(&nP, 4);
-			f.read(&nLights, 4);
-			f.read(&nModels, 4);
-			f.read(&nDoodads, 4);
-			f.read(&nDoodadSets, 4);
-			f.read(&col, 4);
-			f.read(&nX, 4);
-			f.read(ff,12);
+			// Header for the map object. 64 bytes.
+			f.read(&nTextures, 4); // number of materials
+			f.read(&nGroups, 4); // number of WMO groups
+			f.read(&nP, 4); // number of portals
+			f.read(&nLights, 4); // number of lights
+			f.read(&nModels, 4); // number of M2 models imported
+			f.read(&nDoodads, 4); // number of dedicated files
+			f.read(&nDoodadSets, 4); // number of doodad sets
+			f.read(&col, 4); // ambient color? RGB
+			f.read(&nX, 4); // WMO ID (column 2 in WMOAreaTable.dbc)
+			f.read(ff,12); // Bounding box corner 1
 			v1 = Vec3D(ff[0],ff[1],ff[2]);
-			f.read(ff,12);
+			f.read(ff,12); // Bounding box corner 2
 			v2 = Vec3D(ff[0],ff[1],ff[2]);
+			f.read(&LiquidType, 4);
 
 			groups = new WMOGroup[nGroups];
 			mat = new WMOMaterial[nTextures];
-
 		} else if (!strcmp(fourcc,"MOTX")) {
 			// textures
+			// The beginning of a string is always aligned to a 4Byte Adress. (0, 4, 8, C). 
+			// The end of the string is Zero terminated and filled with zeros until the next aligment. 
+			// Sometimes there also empty aligtments for no (it seems like no) real reason.
 			texbuf = new char[size];
 			f.read(texbuf, size);
 		} else if (!strcmp(fourcc,"MOMT")) {
 			// materials
-			//WMOMaterialBlock bl;
+			// Materials used in this map object, 64 bytes per texture (BLP file), nMaterials entries.
 
 			for (int i=0; i<nTextures; i++) {
 				WMOMaterial *m = &mat[i];
@@ -93,18 +95,24 @@ WMO::WMO(std::string name): ManagedItem(name)
 
 			}
 		} else if (!strcmp(fourcc,"MOGN")) {
+			// List of group names for the groups in this map object. There are nGroups entries in this chunk.
+			// A contiguous block of zero-terminated strings. The names are purely informational, 
+			// they aren't used elsewhere (to my knowledge)
+			// i think that his realy is zero terminated and just a name list .. but so far im not sure 
+			// _what_ else it could be - tharo
 			groupnames = new char[size];
 			memcpy(groupnames,f.getPointer(),size);
 			
 			//groupnames = (char*)f.getPointer();
 		} else if (!strcmp(fourcc,"MOGI")) {
 			// group info - important information! ^_^
+			// Group information for WMO groups, 32 bytes per group, nGroups entries.
 			for (int i=0; i<nGroups; i++) {
 				groups[i].init(this, f, i, groupnames);
 
 			}
 		} else if (!strcmp(fourcc,"MOLT")) {
-			// Lights?
+			// Lighting information. 48 bytes per light, nLights entries
 			for (int i=0; i<nLights; i++) {
 				WMOLight l;
 				l.init(f);
@@ -113,6 +121,8 @@ WMO::WMO(std::string name): ManagedItem(name)
 		} else if (!strcmp(fourcc,"MODN")) {
 			// models ...
 			// MMID would be relative offsets for MMDX filenames
+			// List of filenames for M2 (mdx) models that appear in this WMO.
+			// A block of zero-padded, zero-terminated strings. There are nModels file names in this list. They have to be .MDX!
 			if (size) {
 
 				ddnames = (char*)f.getPointer();
@@ -131,16 +141,32 @@ WMO::WMO(std::string name): ManagedItem(name)
 				f.seekRelative((int)size);
 			}
 		} else if (!strcmp(fourcc,"MODS")) {
+			// This chunk defines doodad sets.
+			// Doodads in WoW are M2 model files. There are 32 bytes per doodad set, and nSets 
+			// entries. Doodad sets specify several versions of "interior decoration" for a WMO. Like, 
+			// a small house might have tables and a bed laid out neatly in one set called 
+			// "Set_$DefaultGlobal", and have a horrible mess of abandoned broken things in another 
+			// set called "Set_Abandoned01". The names are only informative.
+			// The doodad set number for every WMO instance is specified in the ADT files.
 			for (int i=0; i<nDoodadSets; i++) {
 				WMODoodadSet dds;
 				f.read(&dds, 32);
 				doodadsets.push_back(dds);
 			}
 		} else if (!strcmp(fourcc,"MODD")) {
-			nModels = (int)size / 0x28;
+			// Information for doodad instances. 40 bytes per doodad instance, nDoodads entries.
+			// While WMOs and models (M2s) in a map tile are rotated along the axes, doodads within 
+			// a WMO are oriented using quaternions! Hooray for consistency!
+			// I had to do some tinkering and mirroring to orient the doodads correctly using the 
+			// quaternion, see model.cpp in the WoWmapview source code for the exact transform 
+			// matrix. It's probably because I'm using another coordinate system, as a lot of other 
+			// coordinates in WMOs and models also have to be read as (X,Z,-Y) to work in my system. 
+			// But then again, the ADT files have the "correct" order of coordinates. Weird.
+			
+			//nModels = (int)size / 0x28;
 			for (int i=0; i<nModels; i++) {
 				int ofs;
-				f.read(&ofs,4);
+				f.read(&ofs,4); // Offset to the start of the model's filename in the MODN chunk. 
 				//Model *m = (Model*)gWorld->modelmanager.items[gWorld->modelmanager.get(ddnames + ofs)];
 				WMOModelInstance mi;
 				mi.init(ddnames+ofs, f);
@@ -149,6 +175,8 @@ WMO::WMO(std::string name): ManagedItem(name)
 
 		}
 		else if (!strcmp(fourcc,"MOSB")) {
+			// Skybox. Always 00 00 00 00. Skyboxes are now defined in DBCs (Light.dbc etc.). 
+			// Contained a M2 filename that was used as skybox.
 			if (size>4) {
 				string path = (char*)f.getPointer();
 				fixname(path);
@@ -163,11 +191,22 @@ WMO::WMO(std::string name): ManagedItem(name)
 						skybox = 0;
 					}
 					*/
-
 				}
 			}
 		}
 		else if (!strcmp(fourcc,"MOPV")) {
+			// Portal vertices, 4 * 3 * float per portal, nPortals entries.
+			// Portals are (always?) rectangles that specify where doors or entrances are in a WMO. 
+			// They could be used for visibility, but I currently have no idea what relations they have 
+			// to each other or how they work.
+			// Since when "playing" WoW, you're confined to the ground, checking for passing through 
+			// these portals would be enough to toggle visibility for indoors or outdoors areas, however, 
+			// when randomly flying around, this is not necessarily the case.
+			// So.... What happens when you're flying around on a gryphon, and you fly into that 
+			// arch-shaped portal into Ironforge? How is that portal calculated? It's all cool as long as 
+			// you're inside "legal" areas, I suppose.
+			// It's fun, you can actually map out the topology of the WMO using this and the MOPR chunk. 
+			// This could be used to speed up the rendering once/if I figure out how.
 			WMOPV p;
 			for (int i=0; i<nP; i++) {
 				f.read(ff,12);
@@ -182,19 +221,33 @@ WMO::WMO(std::string name): ManagedItem(name)
 			}
 		}
 		else if (!strcmp(fourcc,"MOPR")) {
+			// Portal <> group relationship? 2*nPortals entries of 8 bytes.
+			// I think this might specify the two WMO groups that a portal connects.
 			int nn = (int)size / 8;
 			WMOPR *pr = (WMOPR*)f.getPointer();
 			for (int i=0; i<nn; i++) {
 				prs.push_back(*pr++);
 			}
 		}
+		else if (!strcmp(fourcc,"MOVV")) {
+			// Visible block vertices
+			// Just a list of vertices that corresponds to the visible block list.
+		}
+		else if (!strcmp(fourcc,"MOVB")) {
+			// Visible block list
+ 			// WMOVB p;
+		}
 		else if (!strcmp(fourcc,"MFOG")) {
+			// Fog information. Made up of blocks of 48 bytes.
 			int nfogs = (int)size / 0x30;
 			for (int i=0; i<nfogs; i++) {
 				WMOFog fog;
 				fog.init(f);
 				fogs.push_back(fog);
 			}
+		}
+		else if (!strcmp(fourcc,"MFOG")) {
+			// optional, Convex Volume Planes. Contains blocks of floating-point numbers.
 		}
 
 		f.seek((int)nextpos);
@@ -448,11 +501,22 @@ void WMO::drawPortals()
 
 void WMOLight::init(MPQFile &f)
 {
-	char pad[2];
-	f.read(&pad[0],1);
+/*
+	I haven't quite figured out how WoW actually does lighting, as it seems much smoother than 
+	the regular vertex lighting in my screenshots. The light paramters might be range or attenuation 
+	information, or something else entirely. Some WMO groups reference a lot of lights at once.
+	The WoW client (at least on my system) uses only one light, which is always directional. 
+	Attenuation is always (0, 0.7, 0.03). So I suppose for models/doodads (both are M2 files anyway) 
+	it selects an appropriate light to turn on. Global light is handled similarly. Some WMO textures 
+	(BLP files) have specular maps in the alpha channel, the pixel shader renderpath uses these. 
+	Still don't know how to determine direction/color for either the outdoor light or WMO local lights... :)
+*/
+
+	char pad;
+	f.read(&lighttype,1); // LightType
 	f.read(&type,1);
 	f.read(&useatten,1);
-	f.read(&pad[1],1);
+	f.read(&pad,1);
 	f.read(&color,4);
 	f.read(pos, 12);
 	f.read(&intensity, 4);
@@ -517,18 +581,31 @@ void WMOLight::setupOnce(GLint light, Vec3D dir, Vec3D lcol)
 
 void WMOGroup::init(WMO *wmo, MPQFile &f, int num, char *names)
 {
+	/*
+		Groups don't have placement or orientation information, because the coordinates for the 
+		vertices in the additional .WMO files are already correctly transformed relative to (0,0,0) 
+		which is the entire WMO's base position in model space.
+		The name offsets seem to be incorrect (or something else entirely?). The correct name 
+		offsets are in the WMO group file headers. (along with more descriptive names for some groups)
+		It is just the index. You have to find the offsets by yourself. --Schlumpf 10:17, 31 July 2007 (CEST)
+		The flags for the groups seem to specify whether it is indoors/outdoors, probably to 
+		choose what kind of lighting to use. Not fully understood. "Indoors" and "Outdoors" are flags 
+		used to tell the client whether certain spells can be cast and abilities used. (Example: Entangling 
+		Roots cannot be used indoors).
+	*/
+
 	this->wmo = wmo;
 	this->num = num;
 
 	// extract group info from f
 	f.read(&flags,4);
 	float ff[3];
-	f.read(ff,12);
+	f.read(ff,12); // Bounding box corner 1
 	v1 = Vec3D(ff[0],ff[1],ff[2]);
-	f.read(ff,12);
+	f.read(ff,12); // Bounding box corner 2
 	v2 = Vec3D(ff[0],ff[1],ff[2]);
 	int nameOfs;
-	f.read(&nameOfs,4);
+	f.read(&nameOfs,4); // name in MOGN chunk (or -1 for no name?)
 
 	// TODO: get proper name from group header and/or dbc?
 	/*
@@ -1094,16 +1171,16 @@ void WMOModelInstance::init(char *fname, MPQFile &f)
 	model = 0;
 
 	float ff[3],temp;
-	f.read(ff,12);
+	f.read(ff,12); // Position (X,Z,-Y)
 	pos = Vec3D(ff[0],ff[1],ff[2]);
 	temp = pos.z;
 	pos.z = -pos.y;
 	pos.y = temp;
-	f.read(&w,4);
-	f.read(ff,12);
+	f.read(&w,4); // W component of the orientation quaternion
+	f.read(ff,12); // X, Y, Z components of the orientaton quaternion
 	dir = Vec3D(ff[0],ff[1],ff[2]);
-	f.read(&sc,4);
-	f.read(&d1,4);
+	f.read(&sc,4); // Scale factor
+	f.read(&d1,4); // (B,G,R,A) Lightning-color. 
 	lcol = Vec3D(((d1&0xff0000)>>16) / 255.0f, ((d1&0x00ff00)>>8) / 255.0f, (d1&0x0000ff) / 255.0f);
 }
 
