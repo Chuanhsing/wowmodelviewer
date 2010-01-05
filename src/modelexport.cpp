@@ -1,5 +1,6 @@
 
 #include <wx/wfstream.h>
+#include <math.h>
 
 #include "modelexport.h"
 #include "ms3dheader.h"
@@ -59,6 +60,69 @@ void SaveTexture(wxString fn)
 	newImage->Destroy();
 	wxDELETE(newImage);
 	wxDELETEA(pixels);
+}
+// Limit a value by a min & a max. The Inc controls by how much to reduce for every run.
+double Clamp(double value, float min, float max, float inc = PI){
+	if (value > 0){
+		while (value >= max){
+			value -= inc;
+		}
+	}else if (value < 0){
+		while (value <= min){
+			value += inc;
+		}
+	}
+	
+	return value;
+}
+
+// Converts WoW's Radians into a 3D friendly Heading, Pitch, Bank system.
+Vec3D QuaternionToXYZ(Vec3D Dir, float W){
+	//-dir.z,dir.x,dir.y	WoW Direction...
+	Vec3D vdir(Dir.x,Dir.z,-Dir.y);
+	float c,angle_x,angle_y,angle_z,tempx,tempy;
+
+	Vec3D XYZ;
+	Matrix m;
+	Quaternion q(vdir, W);
+	m.quaternionRotate(q);
+
+	angle_y = asin(m.m[0][2]);
+	c = cos(angle_y);
+	if (fabs(c) > 0.005){		// If not Gimble-locked
+		tempx = m.m[2][2];
+		tempy = -m.m[1][2];
+
+		angle_x = atan2(tempy,tempx);
+
+		tempx = m.m[0][0] / c;
+		tempy = -m.m[0][1] / c;
+
+		angle_z = atan2(tempy,tempx);
+	}else{						// If Gimble-lock occured...
+		wxString ays, cs;
+		ays << angle_y;
+		cs << c;
+		wxLogMessage("Gimbal Lock happened! angle_y=%s, c=%s", ays, cs);
+
+		angle_x  = 0;
+		tempx = m.m[1][1];
+		tempy = m.m[1][0];
+
+		angle_z  = atan2(tempy, tempx);
+	}
+
+	if (angle_y < 0)
+		angle_y = -angle_y;
+
+	// 1.0 = 1 Radian, or 57.295779513082320876798154814114 degrees (180/PI)
+	float d180 = PI;	// 180 degrees
+	int accuracy = 6;	// to the 6th decimal point...
+	XYZ.x = Clamp(round(angle_x+d180,accuracy),-PI*2,PI*2);			// Heading
+	XYZ.y = Clamp(round(-angle_y,accuracy),-PI*2,PI*2);				// Pitch
+	XYZ.z = -Clamp(round(angle_z+d180,accuracy),-PI*2,PI*2);		// Bank
+
+	return XYZ;
 }
 
 void AddCount(Model *m)

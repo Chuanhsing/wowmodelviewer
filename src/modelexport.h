@@ -5,6 +5,8 @@
 #include "model.h"
 #include "modelcanvas.h"
 
+#define RADIAN 57.295779513082320876798154814114
+
 //3D Studio Max
 void ExportM2to3DS(Model *m, const char *fn, bool init);
 void ExportWMOto3DS(WMO *m, const char *fn);
@@ -31,5 +33,6 @@ void ExportWMOtoCOLLADA(WMO *m, const char *fn);
 
 // Common functions
 void SaveTexture(wxString fn);
+Vec3D QuaternionToXYZ(Vec3D Dir, float W);
 
 #endif

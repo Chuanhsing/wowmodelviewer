@@ -891,6 +891,11 @@ void WMOGroup::initDisplayList()
 			0x14	uint16		End vertex
 			0x16	uint8		0?
 			0x17	uint8		Texture
+
+			Flags
+			0x1		Unknown
+			0x4		Unknown
+
 			*/
 			nBatches = (int)size / 24;
 			batches = new WMOBatch[nBatches];

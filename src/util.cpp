@@ -18,6 +18,7 @@ bool bHideHelmet = false;
 bool bKnightEyeGlow = true;
 bool bV310 = false;
 bool bShowParticle = true;
+bool modelExportInitOnly = true;
 
 long langID = -1;
 long interfaceID = -1;
@@ -89,6 +90,17 @@ int wxStringToInt(const wxString& str)
 	long number = 0;
 	str.ToLong(&number);
 	return number;
+}
+
+float round(float input, int limit = 2){
+	if (limit > 0){
+		input *= (10^limit);
+	}
+	input = int(input+0.5);
+	if (limit > 0){
+		input /= (10^limit);
+	}
+	return input;
 }
 
 void getGamePath()

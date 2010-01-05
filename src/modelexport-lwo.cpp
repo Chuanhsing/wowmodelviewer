@@ -56,6 +56,47 @@ void WriteLWScenePlugin(ofstream &fs, wxString type, int PluginCount, wxString P
 	fs << "Plugin " << type << " " <<PluginCount << " " << PluginName << "\n" <<Data<< "EndPlugin\n";
 }
 
+// Writes an Object or Null Object to the scene file.
+void WriteLWSceneObject(ofstream &fs, wxString Filename, Vec3D Pos, Vec3D Rot, float Scale, int &ItemNumber, bool isNull = false, int ParentNum = -1, wxString Label="")
+{
+	bool isLabeled = false;
+	bool isParented = false;
+	if (Label!="")
+		isLabeled = true;
+	if (ParentNum > -1)
+		isParented = true;
+
+	if (isNull == true){
+		fs << "AddNullObject";
+	}else{
+		fs << "LoadObjectLayer 1";
+	}
+	fs << " 1" << wxString::Format("%07x",ItemNumber) << " " << Filename << "\nChangeObject 0\n";
+	if (isLabeled)
+		fs << "// " << Label << "\n";
+	fs << "ShowObject 7 -1 0.376471 0.878431 0.941176 \nGroup 0\nObjectMotion\nNumChannels 9\n";
+	// Position
+	WriteLWSceneEnvChannel(fs,0,Pos.x,0);
+	WriteLWSceneEnvChannel(fs,1,Pos.y,0);
+	WriteLWSceneEnvChannel(fs,2,-Pos.z,0);
+	// Rotation
+	WriteLWSceneEnvChannel(fs,3,Rot.x,0);
+	WriteLWSceneEnvChannel(fs,4,Rot.y,0);
+	WriteLWSceneEnvChannel(fs,5,Rot.z,0);
+	// Scale
+	WriteLWSceneEnvChannel(fs,6,Scale,0);
+	WriteLWSceneEnvChannel(fs,7,Scale,0);
+	WriteLWSceneEnvChannel(fs,8,Scale,0);
+
+	fs << "PathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n";
+	if (isParented)
+		fs << "ParentItem 1" << wxString::Format("%07x",ParentNum) << "\n";
+	fs << "IKInitialState 0\nSubPatchLevel 3 3\nShadowOptions 7\n";
+
+	fs << "\n";
+	ItemNumber++;
+}
+
 // Write a scene light, if it's a Model Light
 void WriteLWSceneModelLight(ofstream &fs, Model *m, ModelLight *light, int &lcount, Vec3D LPos, int ParentNum = NULL)
 {
@@ -189,42 +230,6 @@ void WriteLWSceneWMOLight(ofstream &fs, WMO *m, WMOLight *light, int &lcount, Ve
 	}
 	fs << "\n";
 	lcount++;
-}
-
-// Writes a Null Object to the scene file.
-void WriteLWSceneNull(ofstream &fs, wxString Name, Vec3D Pos, Vec3D Rot, float Scale, int &ItemNumber, int ParentNum = -1, wxString Label="")
-{
-	bool isLabeled = false;
-	bool isParented = false;
-	if (Label!="")
-		isLabeled = true;
-	if (ParentNum > -1)
-		isParented = true;
-
-	fs << "AddNullObject 1" << wxString::Format("%07x",ItemNumber) << " " << Name << "\nChangeObject 0\n";
-	if (isLabeled)
-		fs << "// " << Label << "\n";
-	fs << "ShowObject 7 -1 0.376471 0.878431 0.941176 \nGroup 0\nObjectMotion\nNumChannels 9\n";
-	// Position
-	WriteLWSceneEnvChannel(fs,0,Pos.x,0);
-	WriteLWSceneEnvChannel(fs,1,Pos.y,0);
-	WriteLWSceneEnvChannel(fs,2,-Pos.z,0);
-	// Rotation
-	WriteLWSceneEnvChannel(fs,3,Rot.x,0);
-	WriteLWSceneEnvChannel(fs,4,Rot.y,0);
-	WriteLWSceneEnvChannel(fs,5,Rot.z,0);
-	// Scale
-	WriteLWSceneEnvChannel(fs,6,Scale,0);
-	WriteLWSceneEnvChannel(fs,7,Scale,0);
-	WriteLWSceneEnvChannel(fs,8,Scale,0);
-
-	fs << "PathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n";
-	if (isParented)
-		fs << "ParentItem 1" <<wxString::Format("%07x",ParentNum);
-	fs << "IKInitialState 0\nSubPatchLevel 3 3\nShadowOptions 7\n";
-
-	fs << "\n";
-	ItemNumber++;
 }
 
 // Writes an Object file to a scene
@@ -1137,24 +1142,31 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 	Vec3D ZeroRot(0,0,0);
 
 	// Objects/Doodads go here
-	// TODO: Add the Exported Object First...
+
+	// Exported Object
+	int ModelID = mcount;
+	WriteLWSceneObject(fs,wxString(fn).AfterLast('\\'),ZeroPos,ZeroRot,1,mcount);
+
+	// Doodads
 	for (int ds=0;ds<m->nDoodadSets;ds++){
 		WMODoodadSet *DDSet = &m->doodadsets[ds];
 		wxString DDSetName;
 		DDSetName << wxString(m->name).AfterLast('\\').BeforeLast('.') << " DoodadSet " << wxString(DDSet->name);
 		int DDSID = mcount;
 
-		WriteLWSceneNull(fs,DDSetName,ZeroPos,ZeroRot,1,mcount);
+		WriteLWSceneObject(fs,DDSetName,ZeroPos,ZeroRot,1,mcount,true,ModelID);
 
 		for (int dd=DDSet->start;dd<(DDSet->start+DDSet->size);dd++){
 			WMOModelInstance *doodad = &m->modelis[dd];
 			wxString name = wxString(doodad->filename).AfterLast('\\').BeforeLast('.');
 			// Heading, Pitch & Bank.
 			// Pitch & Bank are 0s so the item is sitting flat on the ground. Not sure how to convert WoW to Lightwave's rotations yet...
-			Vec3D rot(doodad->dir.z,0,0);
+			Vec3D rot = QuaternionToXYZ(doodad->dir,doodad->w);
+			//rot = (doodad->dir.z,0,0);
 
 			int DDID = mcount;
-			WriteLWSceneNull(fs,name,doodad->pos,rot,doodad->sc,mcount,DDSID,doodad->filename);
+			bool isNull = true;
+			WriteLWSceneObject(fs,name,doodad->pos,rot,doodad->sc,mcount,isNull,DDSID,doodad->filename);
 
 			// Doodad Lights
 			// Apparently, Doodad Lights must be parented to the Doodad for proper placement.
@@ -1188,6 +1200,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 	// Camera data (if we want it) goes here.
 	// Yes, we can export flying cameras to Lightwave!
 	// Just gotta add them back into the listing...
+	fs << "AddCamera 30000000\nCameraName Camera\nShowCamera 1 -1 0.125490 0.878431 0.125490\nZoomFactor 2.316845\nZoomType 2\n\n";
 
 	// Backdrop Settings
 	// Add this if viewing a skybox, or using one as a background?
@@ -1970,7 +1983,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			u16 = ByteSwap16(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 			// Smoothing is done in radiens. PI = 180 degree smoothing.
-			f32 = 3.141592653589793238462643383279502884197169399375105820974944592307816;
+			f32 = PI;
 			f32 = reverse_endian<float>(f32);
 			f.Write(reinterpret_cast<char *>(&f32), 4);
 
@@ -2282,7 +2295,15 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 
 // Seperated out the Writing function, so we don't have to write it all out every time we want to export something.
 // Should probably do something similar with the other exporting functions as well...
-bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Points[], unsigned long PointCount){
+bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Points[], unsigned long PointCount, POLYCHUNK2 Polys[], unsigned long PolyCount){
+
+	// Check to see if we have the proper data to generate this file.
+	// At the very least, we need some point data...
+	if (PointCount == 0){
+		// wxLogMessage(_T("Error: No Point Data."), 0);
+		return false;
+	}
+
 
    	// -----------------------------------------
 	// Initial Variables
@@ -2376,9 +2397,11 @@ bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Point
 		vert.x = reverse_endian<float>(Points[i].x);
 		vert.y = reverse_endian<float>(Points[i].z);
 		vert.z = reverse_endian<float>(Points[i].y);
+
 		f.Write(reinterpret_cast<char *>(&vert.x), 4);
 		f.Write(reinterpret_cast<char *>(&vert.y), 4);
 		f.Write(reinterpret_cast<char *>(&vert.z), 4);
+
 		pointsSize += 12;
 	}
 	// Corrects the filesize...
@@ -2390,8 +2413,70 @@ bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Point
 	f.SeekO(0, wxFromEnd);
 
 
+	// -----------------------------------------
+	// UV Maps
+	// We'll come back to them later.
+	// -----------------------------------------
 
 
+
+	// -----------------------------------------
+	// Polygon Chunk
+	// -----------------------------------------
+	if (PolyCount > 0){
+		int32 polySize = 4 + (PointCount / 3) * sizeof(POLYCHUNK2);
+
+		f.Write("POLS", 4);
+		i32 = reverse_endian<int32>(polySize);
+		f.Write(reinterpret_cast<char *>(&i32), 4);
+		fileLen += 8; // an extra 4 bytes for chunk size
+		f.Write("FACE", 4);
+
+	/*
+	counter = 0;
+	POLYCHUNK2 tri;
+	
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+
+			for (unsigned int k=0; k<batch->indexCount; k+=3) {
+				u16 = 3;
+				tri.numVerts = ByteSwap16(u16);
+				tri.indice[0] = ByteSwap16(counter);
+				counter++;
+				tri.indice[2] = ByteSwap16(counter);
+				counter++;
+				tri.indice[1] = ByteSwap16(counter);
+				counter++;
+				f.Write(reinterpret_cast<char *>(&tri), sizeof(POLYCHUNK2));
+			}
+		}
+	}
+	*/
+
+		POLYCHUNK2 swapped;
+		for (int p=0;p<PolyCount;p++){
+			swapped.numVerts = ByteSwap16(Polys[p].numVerts);
+			swapped.indice[0] =  ByteSwap16(Polys[p].indice[0]);
+			swapped.indice[2] =  ByteSwap16(Polys[p].indice[1]);
+			swapped.indice[1] =  ByteSwap16(Polys[p].indice[2]);
+
+			f.Write(reinterpret_cast<char *>(&swapped), sizeof(POLYCHUNK2));
+		}
+		fileLen += polySize;
+	}
+
+
+
+	// Correct File Length
+	f.SeekO(4, wxFromStart);
+	u32 = reverse_endian<uint32>(fileLen);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+
+	f.Close();
 
 	// If we've gotten this far, then the file is good!
 	return true;
@@ -2403,9 +2488,33 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 	// FileOutName
 	wxString FileOutName(fn, wxConvUTF8);
 
+	// Array Counts
+	unsigned int TexNum = 0;
+	unsigned int TagNum = 0;
+	unsigned int IndiceNum = 0;
+	unsigned int VertNum = 0;
+
+	// Populate array sizes
+	for (int i=0; i<m->nGroups; i++) {
+		int gtexNum = 0;
+		for (int j=0; j<m->groups[i].nBatches; j++){
+			WMOBatch *batch = &m->groups[i].batches[j];
+
+			// Indicies
+			IndiceNum += batch->indexCount;
+		}
+		// Verts
+		TexNum += m->nTextures;
+		TagNum += m->nTextures;
+		VertNum += m->groups[i].nVertices;
+
+		TagNum++;
+	}
+
 	// Texture Name Array
 	// Find a Match for mat->tex and place it into the Texture Name Array.
-	wxString TexArray[500];
+	
+	wxString *TexArray = new wxString[TexNum+1];
 	for (int i=0; i<m->nGroups; i++) {
 		for (int j=0; j<m->groups[i].nBatches; j++)
 		{
@@ -2428,7 +2537,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 		}
 	}
 
-	wxString TagNames[1000];	// Unlikely it'll ever need to be higher than this, but you never know...
+	wxString *TagNames = new wxString[TagNum];
 	int TagCount = 0;
 
 	// TAGS: Part Names
@@ -2448,34 +2557,125 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 		}
 	}
 
-	//Stack overflow error above 85,094...
-	Vec3D Points[85094];	// 85,094 point limit. Expand to multi-dimentional array if we need more. (Dalaran or Stormwind...)
+	// 50,000 point limit. Expand to multi-dimentional array if we need more than 75,000. (Dalaran or Stormwind...)
+	// Don't forget to change the writing function to handle the multi-dimentional arrays!	
+	Vec3D *Points = new Vec3D[VertNum];			//Stack overflow error above 85,094...
 	unsigned long PointCount = 0;
 
 	// Points
+
+	/* Old System
+	// output all the vertice data
 	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)	{
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			for(int ii=0;ii<batch->indexCount;ii++)
 			{
 				int a = m->groups[i].indices[batch->indexStart + ii];
 				Vec3D vert;
-				vert.x = m->groups[i].vertices[a].x;
-				vert.y = m->groups[i].vertices[a].z;
-				vert.z = m->groups[i].vertices[a].y;
+				vert.x = reverse_endian<float>(m->groups[i].vertices[a].x);
+				vert.y = reverse_endian<float>(m->groups[i].vertices[a].z);
+				vert.z = reverse_endian<float>(m->groups[i].vertices[a].y);
+				f.Write(reinterpret_cast<char *>(&vert.x), 4);
+				f.Write(reinterpret_cast<char *>(&vert.y), 4);
+				f.Write(reinterpret_cast<char *>(&vert.z), 4);
+				pointsSize += 12;
 
-				Points[PointCount] = vert;
-				PointCount++;
+				numVerts++;
 			}
+			numGroups++;
+		}
+	}
+	*/
+
+	// New System
+
+	/*
+		Verticies are the points, the indices just contain the order of the points!
+		Gotta find a way to grab the verts in the indices' order, but not grab the indices themselves...
+	*/
+	Vec3D *PointMerge = new Vec3D[VertNum];
+	unsigned int PointMergeNum = 0;
+	uint16 *indiceConvert = new uint16[IndiceNum];
+
+	for (int i=0; i<m->nGroups; i++) {
+		WMOGroup *group = &m->groups[i];
+		if (group->visible == true){
+			for (int b=0;b<group->nBatches;b++){
+				WMOBatch *batch = &m->groups[i].batches[b];
+
+				for (int in=0;in<(batch->indexCount);in++){
+					int a = group->indices[batch->indexStart+in];
+					Vec3D b = group->vertices[a];
+					bool vertfound = false;
+
+					for (int pm=0;pm<PointMergeNum;pm++){
+						if (PointMerge[pm] == b){
+							vertfound = true;
+							indiceConvert[a] = pm;
+							break;
+						}
+					}
+
+					if (vertfound == false){
+						Points[PointCount] = b;
+						PointCount++;
+						PointMerge[PointMergeNum] = b;
+						PointMergeNum++;
+					}
+				}
+			}
+		}
+	}
+
+	POLYCHUNK2 *PolyArray = new POLYCHUNK2[PointCount/3];
+	unsigned long PolyCount = 0;
+	uint16 VertCount = 0;
+
+	// Polys
+	for (int i=0; i<m->nGroups; i++) {
+		for(int ii=0;ii<(PointCount/3);ii++)
+		{
+			POLYCHUNK2 Poly;
+			Poly.numVerts = 3;
+
+			for (int x=0;x<3;x++){
+				uint16 thisvert = VertCount;
+				if (indiceConvert[VertCount]){
+					thisvert = indiceConvert[VertCount];
+				}
+				Poly.indice[x] = thisvert;
+				VertCount++;
+			}
+
+			PolyArray[PolyCount] = Poly;
+			PolyCount++;
 		}
 	}
 
 
 
+
+
+
+
+
+
 	// Call the Writing function
-	if (!WriteLWObject(FileOutName,TagNames,TagCount,Points,PointCount)) {
+	if (!WriteLWObject(FileOutName,TagNames,TagCount,Points,PointCount,PolyArray,PolyCount)) {
 		wxLogMessage(_T("Error Writing LWO: %s"), FileOutName);
 	}else{
 		wxLogMessage(_T("Info: Successfully exported %s!"), FileOutName);
 	}
+
+	// Cleanup, remove data
+	/*
+	delete [] TexArray;
+	delete [] TagNames;
+	delete [] Points;
+	delete [] PointMerge;
+	delete [] indiceConvert;
+	delete [] PolyArray;
+	*/
 }

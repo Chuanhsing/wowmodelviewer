@@ -36,6 +36,7 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	//--
 	// Export Menu
 	//EVT_MENU(ID_MODELEXPORT_OPTIONS, ModelViewer::OnExportOptions)
+	EVT_MENU(ID_MODELEXPORT_INIT, ModelViewer::OnToggleCommand)
 	EVT_MENU(ID_MODELEXPORT_LWO, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_LWO2, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_OBJ, ModelViewer::OnExport)
@@ -273,7 +274,7 @@ void ModelViewer::InitMenu()
 */
 	exportMenu = new wxMenu;
 	exportMenu->AppendCheckItem(ID_MODELEXPORT_INIT, _("Initial Pose Only"));
-	exportMenu->Check(ID_MODELEXPORT_INIT, true);
+	exportMenu->Check(ID_MODELEXPORT_INIT, modelExportInitOnly);
 	exportMenu->AppendSeparator();
 	exportMenu->Append(ID_MODELEXPORT_OPTIONS, _("Export Options..."));
 #ifndef _DEBUG
@@ -1498,6 +1499,9 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 	case ID_LOAD_TEMP4:
 		canvas->LoadSceneState(4);
 		break;
+	case ID_MODELEXPORT_INIT:
+		modelExportInitOnly = exportMenu->IsChecked(ID_MODELEXPORT_INIT);
+		break;
 	}
 }
 
@@ -2675,9 +2679,8 @@ void DiscoveryItem()
 void ModelViewer::OnExport(wxCommandEvent &event)
 {
 	// If nothing's on the canvas, stop.
-	if ((!canvas->model) && (!canvas->wmo)){
+	if ((!canvas->model) && (!canvas->wmo))
 		return;
-	}
 
 	int id = event.GetId();
 
@@ -2692,7 +2695,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 	wxString newfilename;
 	if (canvas->wmo) {
 		newfilename << wxString(canvas->wmo->name).AfterLast('\\').BeforeLast('.');
-	}else{
+	}else if (canvas->model) {
 		newfilename << wxString(canvas->model->name).AfterLast('\\').BeforeLast('.');
 	}
 
@@ -2779,16 +2782,16 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 			}
 		}
 	} else if (id == ID_MODELEXPORT_COLLADA) {
-		newfilename << ".collada";
+		newfilename << ".dae";
 		if (canvas->model) {
-			wxFileDialog dialog(this, _("Export Model..."), wxEmptyString, newfilename, _T("Collada (*.collada)|*.collada"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, _("Export Model..."), wxEmptyString, newfilename, _T("Collada (*.dae)|*.dae"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportM2toCOLLADA(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		} else if (canvas->wmo) {
-			wxFileDialog dialog(this, _("Export World Model Object..."), wxEmptyString, newfilename, _T("Collada (*.collada)|*.collada"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, _("Export World Model Object..."), wxEmptyString, newfilename, _T("Collada (*.dae)|*.dae"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 

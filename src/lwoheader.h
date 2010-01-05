@@ -10,17 +10,12 @@
 //#define OBJECT_ACCESS_NAME  "LWObjectAccess"
 //#define OBJECT_HELP_NAME  "LWObjectHelp"
 
-#define MAX_POINTS_PER_POLYGON 4000
+#define MAX_POINTS_PER_POLYGON 1023
 
 struct POLYCHUNK {
 	uint16 numVerts;
 	uint16 indice[3];
 	int16 surfIndex;
-};
-
-struct POLYCHUNK2 {
-	uint16 numVerts;
-	uint16 indice[3];
 };
 
 typedef struct st_LWPoint
@@ -168,6 +163,11 @@ inline unsigned short ByteSwap16 (unsigned short nValue) // 16bit
    return ((((nValue & 0xFF00)>> 8)) | ((nValue & 0xFF) << 8));
 }
 
+
+struct POLYCHUNK2 {
+	uint16 numVerts;
+	uint16 indice[3];
+};
 
 
 
