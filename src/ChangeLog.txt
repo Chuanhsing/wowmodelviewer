@@ -1,5 +1,16 @@
 World of Warcraft Model Viewer v0.5.08 (Chuanhsing Update)
 
+r676 by Kjasi
+-Export Menu's Init Only option will now save between sessions.
+-Export Options Menu now available.
+-Preserve Directories now available when exporting WMO files.
+-Lightwave Content directories can now be generated for exported WMO files.
+-LWO WMO Doodad Nulls will now be rotated correctly!
+-LWO WMO exported scenes will now have the model loaded with the scene!
+-(Dev Work) Wrote a function for converting Quaternions into Heading, Pitch and Bank values.
+-(Dev Work) Wrote a rounding function.
+-(Dev Work) Wrote a function that will create whatever sort of directory structure you give it.
+
 r675
 - Added interface language chooser by Chuanhsing
 
