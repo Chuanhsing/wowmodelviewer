@@ -1134,7 +1134,17 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 	fm << "#" << endl;
 	fm <<  endl;
 
-	wxString texarray[500];
+	int max_mat_tex = 0;
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOMaterial *mat = &m->mat[batch->texture];
+			if (mat->tex > max_mat_tex)
+				max_mat_tex = mat->tex;
+		}
+	}
+	wxString *texarray = new wxString[max_mat_tex+1];
 
 	// Find a Match for mat->tex and place it into the Texture Name Array.
 	for (int i=0; i<m->nGroups; i++) {
@@ -1178,7 +1188,11 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 			texName << _T(".tga");
 
 			//fm << "newmtl " << "Material_" << mat->tex+1 << endl;
-			fm << "newmtl " << texarray[mat->tex] << endl;
+			// MilkShape3D cann't read long texname
+			if (modelExport_PreserveDir == true)
+				fm << "newmtl " << texarray[mat->tex] << endl;
+			else
+				fm << "newmtl " << texarray[mat->tex].AfterLast('\\') << endl;
 			fm << "Kd 0.750000 0.750000 0.750000" << endl; // diffuse
 			fm << "Ka 0.250000 0.250000 0.250000" << endl; // ambient
 			fm << "Ks 0.000000 0.000000 0.000000" << endl; // specular
@@ -1271,7 +1285,11 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 			f << "g Geoset_" << i << "_" << j << "_tex_" << int(batch->texture) << endl;
 			f << "s 1" << endl;
 			//f << "usemtl Material_" << mat->tex+1 << endl;
-			f << "usemtl " << texarray[mat->tex] << endl;
+			// MilkShape3D cann't read long texname
+			if (modelExport_PreserveDir == true)
+				f << "usemtl " << texarray[mat->tex] << endl;
+			else
+				f << "usemtl " << texarray[mat->tex].AfterLast('\\') << endl;
 			for (unsigned int k=0; k<batch->indexCount; k+=3) {
 				f << "f ";
 				f << counter << "/" << counter << "/" << counter << " ";
@@ -1285,6 +1303,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 
 	// Close file
 	f.close();
+	wxDELETEA(texarray);
 }
 
 // Now for the incomplete functions
