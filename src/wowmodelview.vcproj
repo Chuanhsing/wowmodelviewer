@@ -317,6 +317,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\modelexportoptions.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\modelviewer.cpp"
 				>
 			</File>
@@ -476,6 +480,14 @@
 			</File>
 			<File
 				RelativePath=".\modelexport.h"
+				>
+			</File>
+			<File
+				RelativePath=".\modelexport-lwo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\modelexportoptions.h"
 				>
 			</File>
 			<File
