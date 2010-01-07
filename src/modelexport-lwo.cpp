@@ -1169,7 +1169,19 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 
 	// Exported Object
 	int ModelID = mcount;
-	WriteLWSceneObject(fs,wxString(fn).AfterLast('\\'),ZeroPos,ZeroRot,1,mcount);
+	wxString Obj = wxString(fn, wxConvUTF8).AfterLast('\\');
+	wxString objFilename = "";
+	if (modelExport_PreserveLWDir == true){
+		objFilename += "Objects/";
+	}
+	if (modelExport_PreserveDir == true){
+		objFilename += wxString(m->name).BeforeLast('\\');
+		objFilename << "\\";
+		objFilename.Replace("\\","/");
+	}
+	objFilename += Obj;
+
+	WriteLWSceneObject(fs,objFilename,ZeroPos,ZeroRot,1,mcount);
 
 	// Doodads
 	for (int ds=0;ds<m->nDoodadSets;ds++){
@@ -1806,16 +1818,27 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			wxString texPath = texName.BeforeLast('\\');
 			texName = texName.AfterLast('\\');
 
+			wxString sTexName = "";
+			if (modelExport_PreserveLWDir == true){
+				sTexName += "Images/";
+			}
+			if (modelExport_PreserveDir == true){
+				sTexName += texarray[mat->tex].BeforeLast('\\');
+				sTexName << "\\";
+				sTexName.Replace("\\","/");
+			}
+			sTexName += texName;
+
 			//texName << _T("_") << wxString::Format(_T("%03i"),mat->tex) << _T(".tga") << '\0';
-			texName << _T(".tga") << '\0';
+			sTexName << _T(".tga") << '\0';
 
-			if (fmod((float)texName.length(), 2.0f) > 0)
-				texName.Append(_T('\0'));
+			if (fmod((float)sTexName.length(), 2.0f) > 0)
+				sTexName.Append(_T('\0'));
 
-			u16 = ByteSwap16(texName.length());
+			u16 = ByteSwap16(sTexName.length());
 			f.Write(reinterpret_cast<char *>(&u16), 2);
-			f.Write(texName.data(), texName.length());
-			clipSize += (2+texName.length());
+			f.Write(sTexName.data(), sTexName.length());
+			clipSize += (2+sTexName.length());
 
 			// update the chunks length
 			off_t = -4-clipSize;
@@ -1853,7 +1876,8 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 				texFilename.Empty();
 				texFilename << Path1 << '\\' << Path2 << '\\' << Name;
 			}
-			wxLogMessage("Saving Image: %s",texFilename);
+			texFilename << (".tga");
+			//wxLogMessage("Saving Image: %s",texFilename);
 
 			// setup texture
 			glBindTexture(GL_TEXTURE_2D, mat->tex);
