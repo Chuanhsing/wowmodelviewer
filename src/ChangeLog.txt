@@ -1,5 +1,8 @@
 World of Warcraft Model Viewer v0.5.08 (Chuanhsing Update)
 
+r677
+- Fixed error .skin format that makes WMV crash
+
 r676 by Kjasi
 -Export Menu's Init Only option will now save between sessions.
 -Export Options Menu now available.
