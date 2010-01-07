@@ -740,6 +740,12 @@ void Model::initCommon(MPQFile &f)
 		
 		ModelView *view = (ModelView*)(g.getBuffer());
 
+		if (view->id[0] != 'S' || view->id[1] != 'K' || view->id[2] != 'I' || view->id[3] != 'N') {
+			wxLogMessage(_T("Error: Unable to load Lods: [%s]"), lodname.c_str());
+			g.close();
+			return;
+		}
+
 		// Indices,  Triangles
 		uint16 *indexLookup = (uint16*)(g.getBuffer() + view->ofsIndex);
 		uint16 *triangles = (uint16*)(g.getBuffer() + view->ofsTris);
