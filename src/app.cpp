@@ -312,6 +312,8 @@ void WowModelViewApp::LoadSettings()
 	//pConfig->Read(_T("DisableHWAcc"), &disableHWAcc, false);
 	pConfig->Read(_T("DefaultFormat"), &imgFormat, 0);
 	pConfig->Read(_T("ModelExportInitOnly"), &modelExportInitOnly, true);
+	pConfig->Read(_T("ModelExportPreserveDirs"), &modelExport_PreserveDir, true);
+	pConfig->Read(_T("ModelExportPreserveLWDirs"), &modelExport_PreserveLWDir, true);
 
 
 	// Data path and mpq archive stuff
@@ -405,6 +407,8 @@ void WowModelViewApp::SaveSettings()
 	//pConfig->Write(_T("DisableHWAcc"), disableHWAcc);
 	pConfig->Write(_T("DefaultFormat"), imgFormat);
 	pConfig->Write(_T("ModelExportInitOnly"), modelExportInitOnly);
+	pConfig->Write(_T("ModelExportPreserveDirs"), modelExport_PreserveDir);
+	pConfig->Write(_T("ModelExportPreserveLWDirs"), modelExport_PreserveLWDir);
 
 	wxString archives;
 

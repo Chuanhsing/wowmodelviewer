@@ -40,6 +40,7 @@
 #include "settings.h"
 #include "modelbankcontrol.h"
 #include "filecontrol.h"
+#include "modelexportoptions.h"
 
 #include "enums.h"
 
@@ -75,6 +76,7 @@ public:
 	SettingsControl *settingsControl;
 	ModelBankControl *modelbankControl;
 	ModelOpened *modelOpened;
+	ModelExportOptions_Control *exportOptionsControl;
 
 	CAnimationExporter *animExporter;
 

@@ -1101,14 +1101,28 @@ void ExportM2toOBJ(Model *m, const char *fn, bool init)
 void ExportWMOtoOBJ(WMO *m, const char *fn)
 {
 	// Open file
-	ofstream f(fn, ios_base::out | ios_base::trunc);
+	wxString file = wxString(fn, wxConvUTF8);
+
+	if (modelExport_PreserveDir == true){
+		wxString Path1, Path2, Name;
+		Path1 << file.BeforeLast('\\');
+		Name << file.AfterLast('\\');
+		Path2 << wxString(m->name).BeforeLast('\\');
+
+		MakeDirs(Path1,Path2);
+
+		file.Empty();
+		file << Path1 << '\\' << Path2 << '\\' << Name;
+	}
+
+	ofstream f(file.c_str(), ios_base::out | ios_base::trunc);
 
 	if (!f.is_open()) {
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
 
-	wxString mtlName(fn, wxConvUTF8);
+	wxString mtlName = file;
 	mtlName = mtlName.BeforeLast('.');
 	mtlName << _T(".mtl");
 
@@ -1135,7 +1149,6 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 			for (int t=0;t<=m->nTextures; t++) {
 				if (t == mat->tex) {
 					texarray[mat->tex] = m->textures[t-1];
-					texarray[mat->tex] = texarray[mat->tex].AfterLast('\\');
 					texarray[mat->tex] = texarray[mat->tex].BeforeLast('.');
 					nomatch = false;
 					break;
@@ -1159,6 +1172,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 
 			//wxString texName(fn, wxConvUTF8);
 			wxString texName = texarray[mat->tex];
+			wxString texPath = texName.BeforeLast('\\');
 			texName = texName.AfterLast('\\');
 			//texName << _T("_") << mat->tex << _T(".tga");
 			texName << _T(".tga");
@@ -1177,6 +1191,18 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 			texFilename += '\\';
 			texFilename += texName;
 			
+			if (modelExport_PreserveDir == true){
+				wxString Path1, Path2, Name;
+				Path1 << wxString(texFilename, wxConvUTF8).BeforeLast('\\');
+				Name << texName.AfterLast('\\');
+				Path2 << texPath;
+
+				MakeDirs(Path1,Path2);
+
+				texFilename.Empty();
+				texFilename << Path1 << '\\' << Path2 << '\\' << Name;
+			}
+
 			// setup texture
 			glBindTexture(GL_TEXTURE_2D, mat->tex);
 			SaveTexture(texFilename);

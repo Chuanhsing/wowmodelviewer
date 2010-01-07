@@ -1099,6 +1099,30 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 	// Open file
 	wxString SceneName = wxString(fn, wxConvUTF8).BeforeLast('.');
 	SceneName << ".lws";
+
+	if (modelExport_PreserveLWDir == true){
+		wxString Path, Name;
+
+		Path << SceneName.BeforeLast('\\');
+		Name << SceneName.AfterLast('\\');
+
+		MakeDirs(Path,"Scenes");
+
+		SceneName.Empty();
+		SceneName << Path << "\\Scenes\\" << Name;
+	}
+	if (modelExport_PreserveDir == true){
+		wxString Path1, Path2, Name;
+		Path1 << SceneName.BeforeLast('\\');
+		Name << SceneName.AfterLast('\\');
+		Path2 << wxString(m->name).BeforeLast('\\');
+
+		MakeDirs(Path1,Path2);
+
+		SceneName.Empty();
+		SceneName << Path1 << '\\' << Path2 << '\\' << Name;
+	}
+
 	ofstream fs(SceneName.mb_str(), ios_base::out | ios_base::trunc);
 
 	if (!fs.is_open()) {
@@ -1215,21 +1239,47 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 
 void ExportWMOtoLWO(WMO *m, const char *fn)
 {
-	int i32;
-	uint32 u32;
-	float f32;
-	uint16 u16;
-	unsigned char ub;
-	int off_t;
-	unsigned short numVerts = 0;
-	unsigned short numGroups = 0;
-	
-	wxFFileOutputStream f(wxString(fn, wxConvUTF8), wxT("w+b"));
+	wxString file = wxString(fn, wxConvUTF8);
+
+	if (modelExport_PreserveLWDir == true){
+		wxString Path, Name;
+
+		Path << file.BeforeLast('\\');
+		Name << file.AfterLast('\\');
+
+		MakeDirs(Path,"Objects");
+
+		file.Empty();
+		file << Path << "\\Objects\\" << Name;
+	}
+	if (modelExport_PreserveDir == true){
+		wxString Path1, Path2, Name;
+		Path1 << file.BeforeLast('\\');
+		Name << file.AfterLast('\\');
+		Path2 << wxString(m->name).BeforeLast('\\');
+
+		MakeDirs(Path1,Path2);
+
+		file.Empty();
+		file << Path1 << '\\' << Path2 << '\\' << Name;
+	}
+
+	wxFFileOutputStream f(file, wxT("w+b"));
 
 	if (!f.IsOk()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
+		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file);
 		return;
 	}
+
+	int off_t;
+	uint16 dimension;
+
+	unsigned short numVerts = 0;
+	unsigned short numGroups = 0;
+
+	// LightWave object files use the IFF syntax described in the EA-IFF85 document. Data is stored in a collection of chunks. 
+	// Each chunk begins with a 4-byte chunk ID and the size of the chunk in bytes, and this is followed by the chunk contents.
+
 
 	/* LWO Model Format, as layed out in offical LWO2 files.( I Hex Edited to find most of this information from files I made/saved in Lightwave. -Kjasi)
 	FORM	// Format Declaration
@@ -1242,7 +1292,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	LAYR		// Specifies the start of a new layer. Probably best to only be on one...
 		PNTS		// Points listing & Block Section
 			BBOX		// Bounding Box. It's optional, but will probably help.
-			VMPA		// Vertex Map Parameters, Always Preceeds a VMAP. 4bytes: Size (2 * 4 bytes).
+			VMPA		// Vertex Map Parameters, Always Preceeds a VMAP & VMAD. 4bytes: Size (2 * 4 bytes).
 						// UV Sub Type: 0-Linear, 1-Subpatched, 2-Linear Corners, 3-Linear Edges, 4-Across Discontinuous Edges.
 						// Sketch Color: 0-12; 6-Default Gray
 				VMAP		// Vector Map Section. Always Preceeds the following:
@@ -1352,41 +1402,57 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	*/
 
 
-	// LightWave object files use the IFF syntax described in the EA-IFF85 document. Data is stored in a collection of chunks. 
-	// Each chunk begins with a 4-byte chunk ID and the size of the chunk in bytes, and this is followed by the chunk contents.
+
 
 	unsigned int fileLen = 0;
 
-	// --
-	// Formally, a LightWave object file is a single IFF FORM chunk of type LWO2. The first 4 bytes are the characters 'F', 'O', 'R', 'M', 
-	// and this is followed by a 4-byte integer containing the chunk size (the size of the file minus 8) and the FORM type (the 
-	// characters 'L', 'W', 'O', '2'). As with all numbers in LWO2 files, the chunk size is always written in big-endian (Motorola, 
-	// network) byte order.
+
+	// ===================================================
+	// FORM		// Format Declaration
+	//
+	// Always exempt from the length of the file!
+	// ===================================================
 	f.Write("FORM", 4);
 	f.Write(reinterpret_cast<char *>(&fileLen), 4);
+
+
+	// ===================================================
+	// LWO2
+	//
+	// Declares this is the Lightwave Object 2 file format.
+	// LWOB is the first format. It doesn't have a lot of the cool stuff LWO2 has...
+	// ===================================================
 	f.Write("LWO2", 4);
 	fileLen += 4;
-	// ================
 
 
-	// --
-	// The TAGS chunk contains an array of strings. Whenever something is identified by name in the file, the ID is often a 
-	// 0-based index into the TAGS array. The only named element in this file is its single surface, named "Default".
+	// ===================================================
+	// TAGS
+	//
+	// Used for various Strings. Known string types, in order:
+	//		Sketch Color Names
+	//		Part Names
+	//		Surface Names
+	// ===================================================
 	f.Write("TAGS", 4);
+	uint32 tagsSize = 0;
+	u32 = 0;
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
 
 	uint16 counter=0;
-	int16 TagCounter=0;
-	int16 PartCounter=0;
-	int16 SurfCounter=0;
+	uint16 TagCounter=0;
+	uint16 PartCounter=0;
+	uint16 SurfCounter=0;
 
 	// Declare the Texture Name Array
 	// Made it fairly large, just for the really big models.
 	// Find a Match for mat->tex and place it into the Texture Name Array.
 	wxString texarray[500];
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	for (int g=0;g<m->nGroups;g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++)
 		{
-			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOBatch *batch = &m->groups[g].batches[b];
 			WMOMaterial *mat = &m->mat[batch->texture];
 			wxString outname(fn, wxConvUTF8);
 
@@ -1405,14 +1471,22 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 		}
 	}
 
-	uint32 tagsSize = 0;
-	u32 = 0;
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	fileLen += 8;
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	// Part Names
+	for (int g=0;g<m->nGroups;g++) {
+		wxString partName = m->groups[g].name;
+
+		partName.Append(_T('\0'));
+		if (fmod((float)partName.length(), 2.0f) > 0)
+			partName.Append(_T('\0'));
+		f.Write(partName.data(), partName.length());
+		tagsSize += partName.length();
+	}
+
+	// Surface Names
+	for (int g=0;g<m->nGroups;g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++)
 		{
-			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOBatch *batch = &m->groups[g].batches[b];
 			WMOMaterial *mat = &m->mat[batch->texture];
 
 			wxString matName = texarray[mat->tex];
@@ -1424,33 +1498,22 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 		}
 	}
 
-	// Part Names
-	for (int i=0; i<m->nGroups; i++) {
-		wxString partName = m->groups[i].name;
-
-		partName.Append(_T('\0'));
-		if (fmod((float)partName.length(), 2.0f) > 0)
-			partName.Append(_T('\0'));
-		f.Write(partName.data(), partName.length());
-		tagsSize += partName.length();
-	}
-
 	off_t = -4-tagsSize;
 	f.SeekO(off_t, wxFromCurrent);
 	u32 = reverse_endian<uint32>(tagsSize);
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	f.SeekO(0, wxFromEnd);
 	fileLen += tagsSize;
-	// ================
 
 
-	// --
-	// The layer header signals the start of a new layer. All geometry elements that appear in the file after this and before 
-	// the next LAYR chunk belong to this layer. The layer header contains an index, a flags word, the pivot point of the layer, 
-	// the layer's name, and the index of the parent layer. This is the first (and only) layer, so its index is 0 and the optional 
-	// parent index is omitted. The bits in the flags word are also 0, and the layer hasn't been given a name.
-	// The pivot point is the origin for rotations in this layer and is expressed in world coordinates. Pivots typically differ from 
-	// (0, 0, 0) when layers and layer parenting are used to create an object hierarchy.
+
+	// ===================================================
+	// LAYR
+	//
+	// Specifies the start of a new layer. Each layer has it's own Point & Poly
+	// chunk, which tells it what data is on what layer. It's probably best
+	// to only have 1 layer for now.
+	// ===================================================
 	f.Write("LAYR", 4);
 	u32 = reverse_endian<uint32>(18);
 	fileLen += 8;
@@ -1463,13 +1526,14 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	// ================
 
 
-	// --
+	// ===================================================
 	// POINTS CHUNK, this is the vertice data
 	// The PNTS chunk contains triples of floating-point numbers, the coordinates of a list of points. The numbers are written 
 	// as IEEE 32-bit floats in network byte order. The IEEE float format is the standard bit pattern used by almost all CPUs 
 	// and corresponds to the internal representation of the C language float type. In other words, this isn't some bizarre 
 	// proprietary encoding. You can process these using simple fread and fwrite calls (but don't forget to correct the byte 
 	// order if necessary).
+	// ===================================================
 	uint32 pointsSize = 0;
 	f.Write("PNTS", 4);
 	u32 = reverse_endian<uint32>(pointsSize);
@@ -1477,17 +1541,16 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	fileLen += 8;
 
 	// output all the vertice data
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
-		{
-			WMOBatch *batch = &m->groups[i].batches[j];
+	for (int g=0; g<m->nGroups; g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++)	{
+			WMOBatch *batch = &m->groups[g].batches[b];
 			for(int ii=0;ii<batch->indexCount;ii++)
 			{
-				int a = m->groups[i].indices[batch->indexStart + ii];
+				int a = m->groups[g].indices[batch->indexStart + ii];
 				Vec3D vert;
-				vert.x = reverse_endian<float>(m->groups[i].vertices[a].x);
-				vert.y = reverse_endian<float>(m->groups[i].vertices[a].z);
-				vert.z = reverse_endian<float>(m->groups[i].vertices[a].y);
+				vert.x = reverse_endian<float>(m->groups[g].vertices[a].x);
+				vert.y = reverse_endian<float>(m->groups[g].vertices[a].z);
+				vert.z = reverse_endian<float>(m->groups[g].vertices[a].y);
 				f.Write(reinterpret_cast<char *>(&vert.x), 4);
 				f.Write(reinterpret_cast<char *>(&vert.y), 4);
 				f.Write(reinterpret_cast<char *>(&vert.z), 4);
@@ -1498,6 +1561,8 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			numGroups++;
 		}
 	}
+
+
 	fileLen += pointsSize;
 	off_t = -4-pointsSize;
 	f.SeekO(off_t, wxFromCurrent);
@@ -1526,56 +1591,13 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	f.Write(reinterpret_cast<char *>(&vert.x), 4);
 	f.Write(reinterpret_cast<char *>(&vert.y), 4);
 	f.Write(reinterpret_cast<char *>(&vert.z), 4);
-	// ================
+
 */
 
-	// --
-	uint32 vmapSize = 0;
 
-	//Vertex Mapping
-	f.Write("VMAP", 4);
-	u32 = reverse_endian<uint32>(vmapSize);
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	fileLen += 8;
-	// UV Data
-	f.Write("TXUV", 4);
-	uint16 dimension = 2;
-	dimension = ByteSwap16(dimension);
-	f.Write(reinterpret_cast<char *>(&dimension), 2);
-	f.Write("Texture", 7);
-	ub = 0;
-	f.Write(reinterpret_cast<char *>(&ub), 1);
-	vmapSize += 14;
+	// Removed Point Vertex Mapping for WMOs.
+	// UV Map now generated by Discontinuous Vertex Mapping, down in the Poly section.
 
-	// u16, f32, f32
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
-		{
-			WMOBatch *batch = &m->groups[i].batches[j];
-			for(int ii=0;ii<batch->indexCount;ii++)
-			{
-				int a = m->groups[i].indices[batch->indexStart + ii];
-				u16 = ByteSwap16(counter);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
-				f32 = reverse_endian<float>(m->groups[i].texcoords[a].x);
-				f.Write(reinterpret_cast<char *>(&f32), 4);
-				f32 = reverse_endian<float>(1 - m->groups[i].texcoords[a].y);
-				f.Write(reinterpret_cast<char *>(&f32), 4);
-				counter++;
-				if (counter == 256)
-					counter = 0;
-				vmapSize += 10;
-			}
-		}
-	}
-	fileLen += vmapSize;
-
-	off_t = -4-vmapSize;
-	f.SeekO(off_t, wxFromCurrent);
-	u32 = reverse_endian<uint32>(vmapSize);
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	f.SeekO(0, wxFromEnd);
-	// ================
 
 
 	// --
@@ -1608,10 +1630,10 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	counter = 0;
 	POLYCHUNK2 tri;
 	
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	for (int g=0;g<m->nGroups;g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++)
 		{
-			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOBatch *batch = &m->groups[g].batches[b];
 
 			for (unsigned int k=0; k<batch->indexCount; k+=3) {
 				u16 = 3;
@@ -1641,31 +1663,6 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	counter=0;
 	int32 ptagSize;
 
-	// Surface PolyTag
-	f.Write("PTAG", 4);
-	ptagSize = 4 + (numVerts / 3) * 4;		// PTAG Title (always 4) + (Number of Points / PolySides (always 3)) * Number of Bytes
-	u32 = reverse_endian<uint32>(ptagSize);
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	fileLen += 8;
-	f.Write("SURF", 4);
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
-		{
-			WMOBatch *batch = &m->groups[i].batches[j];
-
-			for (unsigned int k=0; k<batch->indexCount; k+=3) {
-				u16 = ByteSwap16(counter);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
-				u16 = ByteSwap16(TagCounter);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
-				counter++;
-			}
-			TagCounter++;
-			SurfCounter++;
-		}
-	}
-	fileLen += ptagSize;
-
 	// Parts PolyTag
 	f.Write("PTAG", 4);
 	ptagSize = 4 + (numVerts / 3) * 4;		// PTAG Title (always 4) + (Number of Points / PolySides (always 3)) * Number of Bytes
@@ -1674,10 +1671,9 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	fileLen += 8;
 	f.Write("PART", 4);
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
-		{
-			WMOBatch *batch = &m->groups[i].batches[j];
+	for (int g=0;g<m->nGroups;g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++) {
+			WMOBatch *batch = &m->groups[g].batches[b];
 
 			for (unsigned int k=0; k<batch->indexCount; k+=3) {
 				u16 = ByteSwap16(counter);
@@ -1692,12 +1688,52 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	}
 	fileLen += ptagSize;
 
+	// Surface PolyTag
+	counter = 0;
+	SurfCounter = 0;
+	f.Write("PTAG", 4);
+	ptagSize = 4 + (numVerts / 3) * 4;		// PTAG Title (always 4) + (Number of Points / PolySides (always 3)) * Number of Bytes
+	u32 = reverse_endian<uint32>(ptagSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+	f.Write("SURF", 4);
+	for (int g=0;g<m->nGroups;g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++) {
+			WMOBatch *batch = &m->groups[g].batches[b];
 
-	// ================
+			for (unsigned int k=0; k<batch->indexCount; k+=3) {
+				u16 = ByteSwap16(counter);
+				f.Write(reinterpret_cast<char *>(&u16), 2);
+				u16 = ByteSwap16(TagCounter);
+				f.Write(reinterpret_cast<char *>(&u16), 2);
+				counter++;
+			}
+			TagCounter++;
+			SurfCounter++;
+		}
+	}
+	fileLen += ptagSize;
 
 
-	// --
+	// ===================================================
+	//VMPA		// Vertex Map Parameters, Always Preceeds a VMAP & VMAD. 4bytes: Size, then Num Vars (2) * 4 bytes.
+				// UV Sub Type: 0-Linear, 1-Subpatched, 2-Linear Corners, 3-Linear Edges, 4-Across Discontinuous Edges.
+				// Sketch Color: 0-12; 6-Default Gray
+	// ===================================================
+	f.Write("VMPA", 4);
+	u32 = reverse_endian<uint32>(8);	// We got 2 Paramaters, * 4 Bytes.
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	u32 = 0;							// Linear UV Sub Type
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	u32 = reverse_endian<uint32>(6);	// Default Gray
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 16;
+
+
+	// ===================================================
 	// Discontinuous Vertex Mapping
+	// ===================================================
+
 	int32 vmadSize = 0;
 	f.Write("VMAD", 4);
 	u32 = reverse_endian<uint32>(vmadSize);
@@ -1715,20 +1751,20 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 
 	counter = 0;
 	// u16, u16, f32, f32
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	for (int g=0;g<m->nGroups;g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++)
 		{
-			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOBatch *batch = &m->groups[g].batches[b];
 
 			for (size_t k=0, b=0; k<batch->indexCount; k++,b++) {
-				int a = m->groups[i].indices[batch->indexStart + k];
+				int a = m->groups[g].indices[batch->indexStart + k];
 				u16 = ByteSwap16(counter);
 				f.Write(reinterpret_cast<char *>(&u16), 2);
 				u16 = ByteSwap16((uint16)(counter/3));
 				f.Write(reinterpret_cast<char *>(&u16), 2);
-				f32 = reverse_endian<float>(m->groups[i].texcoords[a].x);
+				f32 = reverse_endian<float>(m->groups[g].texcoords[a].x);
 				f.Write(reinterpret_cast<char *>(&f32), 4);
-				f32 = reverse_endian<float>(1 - m->groups[i].texcoords[a].y);
+				f32 = reverse_endian<float>(1 - m->groups[g].texcoords[a].y);
 				f.Write(reinterpret_cast<char *>(&f32), 4);
 				counter++;
 				vmadSize += 12;
@@ -1741,15 +1777,17 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	u32 = reverse_endian<uint32>(vmadSize);
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	f.SeekO(0, wxFromEnd);
-	// ================
 
 
-	// --
+
+	// ===================================================
+	// Texture File List
+	// ===================================================
 	uint32 surfaceCounter = PartCounter;
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	for (int g=0;g<m->nGroups;g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++)
 		{
-			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOBatch *batch = &m->groups[g].batches[b];
 			WMOMaterial *mat = &m->mat[batch->texture];
 
 			int clipSize = 0;
@@ -1765,9 +1803,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 
 			//wxString texName(fn, wxConvUTF8);
 			wxString texName = texarray[mat->tex];
-
-			// Remove all paths from our name.
-			// Hopefully we can be able to export paths in the future...
+			wxString texPath = texName.BeforeLast('\\');
 			texName = texName.AfterLast('\\');
 
 			//texName << _T("_") << wxString::Format(_T("%03i"),mat->tex) << _T(".tga") << '\0';
@@ -1794,6 +1830,31 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			texFilename += '\\';
 			texFilename += texName;
 
+			if (modelExport_PreserveLWDir == true){
+				wxString Path, Name;
+
+				Path << wxString(fn, wxConvUTF8).BeforeLast('\\');
+				Name << texFilename.AfterLast('\\');
+
+				MakeDirs(Path,"Images");
+
+				texFilename.Empty();
+				texFilename << Path << "\\Images\\" << Name;
+			}
+
+			if (modelExport_PreserveDir == true){
+				wxString Path1, Path2, Name;
+				Path1 << wxString(texFilename, wxConvUTF8).BeforeLast('\\');
+				Name << texName.AfterLast('\\');
+				Path2 << texPath;
+
+				MakeDirs(Path1,Path2);
+
+				texFilename.Empty();
+				texFilename << Path1 << '\\' << Path2 << '\\' << Name;
+			}
+			wxLogMessage("Saving Image: %s",texFilename);
+
 			// setup texture
 			glBindTexture(GL_TEXTURE_2D, mat->tex);
 			SaveTexture(texFilename);
@@ -1807,10 +1868,10 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	// --
 	wxString surfName;
 	surfaceCounter = PartCounter;
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	for (int g=0;g<m->nGroups;g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++)
 		{
-			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOBatch *batch = &m->groups[g].batches[b];
 			WMOMaterial *mat = &m->mat[batch->texture];
 
 			uint32 surfaceDefSize = 0;
@@ -2295,7 +2356,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 
 // Seperated out the Writing function, so we don't have to write it all out every time we want to export something.
 // Should probably do something similar with the other exporting functions as well...
-bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Points[], unsigned long PointCount, POLYCHUNK2 Polys[], unsigned long PolyCount){
+bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Points[], unsigned long PointCount, Vec2D UVData[],POLYCHUNK2 Polys[], unsigned long PolyCount){
 
 	// Check to see if we have the proper data to generate this file.
 	// At the very least, we need some point data...
@@ -2311,7 +2372,10 @@ bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Point
 
 	// File Length
 	unsigned int fileLen = 0;
+
+	// Other Declares
 	int off_t;
+	uint16 dimension;
 
 	// Open Model File
 	wxFFileOutputStream f(filename, wxT("w+b"));
@@ -2403,6 +2467,7 @@ bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Point
 		f.Write(reinterpret_cast<char *>(&vert.z), 4);
 
 		pointsSize += 12;
+		free (vert);
 	}
 	// Corrects the filesize...
 	fileLen += pointsSize;
@@ -2414,11 +2479,58 @@ bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Point
 
 
 	// -----------------------------------------
-	// UV Maps
-	// We'll come back to them later.
+	// Point Vertex Maps
+	// UV, Weights, Vertex Color Maps, etc.
 	// -----------------------------------------
+	f.Write("VMAP", 4);
+	uint32 vmapSize = 0;
+	u32 = reverse_endian<uint32>(vmapSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
 
 
+	// UV Data
+	f.Write("TXUV", 4);
+	dimension = 2;
+	dimension = ByteSwap16(dimension);
+	f.Write(reinterpret_cast<char *>(&dimension), 2);
+	vmapSize += 6;
+
+	wxString UVMapName;
+	UVMapName << filename << '\0';
+	if (fmod((float)UVMapName.length(), 2.0f) > 0)
+		UVMapName.Append(_T('\0'));
+	f.Write(UVMapName.data(), UVMapName.length());
+	vmapSize += UVMapName.length();
+	/*
+	for (int g=0; g<m->nGroups; g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++)
+		{
+			WMOBatch *batch = &m->groups[g].batches[b];
+			for(int ii=0;ii<batch->indexCount;ii++)
+			{
+				int a = m->groups[g].indices[batch->indexStart + ii];
+				u16 = ByteSwap16(counter);
+				f.Write(reinterpret_cast<char *>(&u16), 2);
+				f32 = reverse_endian<float>(m->groups[g].texcoords[a].x);
+				f.Write(reinterpret_cast<char *>(&f32), 4);
+				f32 = reverse_endian<float>(1 - m->groups[g].texcoords[a].y);
+				f.Write(reinterpret_cast<char *>(&f32), 4);
+				counter++;
+				if (counter == 256)
+					counter = 0;
+				vmapSize += 10;
+			}
+		}
+	}
+	*/
+	fileLen += vmapSize;
+
+	off_t = -4-vmapSize;
+	f.SeekO(off_t, wxFromCurrent);
+	u32 = reverse_endian<uint32>(vmapSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
 
 	// -----------------------------------------
 	// Polygon Chunk
@@ -2432,38 +2544,15 @@ bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Point
 		fileLen += 8; // an extra 4 bytes for chunk size
 		f.Write("FACE", 4);
 
-	/*
-	counter = 0;
-	POLYCHUNK2 tri;
-	
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
-		{
-			WMOBatch *batch = &m->groups[i].batches[j];
-
-			for (unsigned int k=0; k<batch->indexCount; k+=3) {
-				u16 = 3;
-				tri.numVerts = ByteSwap16(u16);
-				tri.indice[0] = ByteSwap16(counter);
-				counter++;
-				tri.indice[2] = ByteSwap16(counter);
-				counter++;
-				tri.indice[1] = ByteSwap16(counter);
-				counter++;
-				f.Write(reinterpret_cast<char *>(&tri), sizeof(POLYCHUNK2));
-			}
-		}
-	}
-	*/
-
 		POLYCHUNK2 swapped;
 		for (int p=0;p<PolyCount;p++){
 			swapped.numVerts = ByteSwap16(Polys[p].numVerts);
 			swapped.indice[0] =  ByteSwap16(Polys[p].indice[0]);
-			swapped.indice[2] =  ByteSwap16(Polys[p].indice[1]);
-			swapped.indice[1] =  ByteSwap16(Polys[p].indice[2]);
+			swapped.indice[1] =  ByteSwap16(Polys[p].indice[1]);
+			swapped.indice[2] =  ByteSwap16(Polys[p].indice[2]);
 
 			f.Write(reinterpret_cast<char *>(&swapped), sizeof(POLYCHUNK2));
+			wxLogMessage(_T("Writing polygon %i..."), p);
 		}
 		fileLen += polySize;
 	}
@@ -2482,6 +2571,8 @@ bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Point
 	return true;
 }
 
+
+
 // No longer writes data to a LWO file. Instead, it collects the data, and send it to a seperate function that writes the actual file.
 void ExportWMOtoLWO2(WMO *m, const char *fn)
 {
@@ -2493,12 +2584,13 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 	unsigned int TagNum = 0;
 	unsigned int IndiceNum = 0;
 	unsigned int VertNum = 0;
+	unsigned int PolyNum = 0;
 
 	// Populate array sizes
-	for (int i=0; i<m->nGroups; i++) {
+	for (int g=0;g<m->nGroups;g++) {
 		int gtexNum = 0;
-		for (int j=0; j<m->groups[i].nBatches; j++){
-			WMOBatch *batch = &m->groups[i].batches[j];
+		for (int b=0; b<m->groups[g].nBatches; b++){
+			WMOBatch *batch = &m->groups[g].batches[b];
 
 			// Indicies
 			IndiceNum += batch->indexCount;
@@ -2506,19 +2598,20 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 		// Verts
 		TexNum += m->nTextures;
 		TagNum += m->nTextures;
-		VertNum += m->groups[i].nVertices;
+		VertNum += m->groups[g].nVertices;
 
 		TagNum++;
 	}
+	PolyNum = IndiceNum / 3;
 
 	// Texture Name Array
 	// Find a Match for mat->tex and place it into the Texture Name Array.
 	
 	wxString *TexArray = new wxString[TexNum+1];
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	for (int g=0;g<m->nGroups;g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++)
 		{
-			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOBatch *batch = &m->groups[g].batches[b];
 			WMOMaterial *mat = &m->mat[batch->texture];
 			wxString outname(fn, wxConvUTF8);
 
@@ -2541,15 +2634,15 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 	int TagCount = 0;
 
 	// TAGS: Part Names
-	for (int i=0; i<m->nGroups; i++){
-		TagNames[TagCount] = m->groups[i].name;
+	for (int g=0; g<m->nGroups; g++){
+		TagNames[TagCount] = m->groups[g].name;
 		TagCount++;
 	}
 
 	// TAGS: Surface Names
-	for (int i=0;i<m->nGroups; i++){
-		for (int j=0;j<m->groups[i].nBatches; j++) {
-			WMOBatch *batch = &m->groups[i].batches[j];
+	for (int g=0; g<m->nGroups; g++){
+		for (int b=0;b<m->groups[g].nBatches;b++) {
+			WMOBatch *batch = &m->groups[g].batches[b];
 			WMOMaterial *mat = &m->mat[batch->texture];
 
 			TagNames[TagCount]= TexArray[mat->tex];
@@ -2559,24 +2652,24 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 
 	// 50,000 point limit. Expand to multi-dimentional array if we need more than 75,000. (Dalaran or Stormwind...)
 	// Don't forget to change the writing function to handle the multi-dimentional arrays!	
-	Vec3D *Points = new Vec3D[VertNum];			//Stack overflow error above 85,094...
+	Vec3D *Points = new Vec3D[IndiceNum];			//Stack overflow error above 85,094...
 	unsigned long PointCount = 0;
 
 	// Points
 
 	/* Old System
 	// output all the vertice data
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	for (int g=0;g<m->nGroups;g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++)
 		{
-			WMOBatch *batch = &m->groups[i].batches[j];
+			WMOBatch *batch = &m->groups[g].batches[b];
 			for(int ii=0;ii<batch->indexCount;ii++)
 			{
-				int a = m->groups[i].indices[batch->indexStart + ii];
+				int a = m->groups[g].indices[batch->indexStart + ii];
 				Vec3D vert;
-				vert.x = reverse_endian<float>(m->groups[i].vertices[a].x);
-				vert.y = reverse_endian<float>(m->groups[i].vertices[a].z);
-				vert.z = reverse_endian<float>(m->groups[i].vertices[a].y);
+				vert.x = reverse_endian<float>(m->groups[g].vertices[a].x);
+				vert.y = reverse_endian<float>(m->groups[g].vertices[a].z);
+				vert.z = reverse_endian<float>(m->groups[g].vertices[a].y);
 				f.Write(reinterpret_cast<char *>(&vert.x), 4);
 				f.Write(reinterpret_cast<char *>(&vert.y), 4);
 				f.Write(reinterpret_cast<char *>(&vert.z), 4);
@@ -2592,90 +2685,220 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 	// New System
 
 	/*
+
+	For each indice, assigned a vertex number if they share a Vec3D! Later, when an indice is called, reference back to the assosicated vert.
+	This will let us build an item using the verts, in order of the indices... (Merged points!)
+
+	*/
+
+	// Convert Indicies to Verticies
+/*
+	for (int g=0; g<m->nGroups; g++) {
+		WMOGroup *group = &m->groups[g];
+		if (group->visible == true){
+
+		} // End If Visible
+	} // End For Group
+*/
+	/*
 		Verticies are the points, the indices just contain the order of the points!
 		Gotta find a way to grab the verts in the indices' order, but not grab the indices themselves...
 	*/
-	Vec3D *PointMerge = new Vec3D[VertNum];
-	unsigned int PointMergeNum = 0;
-	uint16 *indiceConvert = new uint16[IndiceNum];
 
-	for (int i=0; i<m->nGroups; i++) {
-		WMOGroup *group = &m->groups[i];
+	// Points
+	for (int g=0;g<m->nGroups;g++) {
+		WMOGroup *group = &m->groups[g];
 		if (group->visible == true){
 			for (int b=0;b<group->nBatches;b++){
-				WMOBatch *batch = &m->groups[i].batches[b];
+				WMOBatch *batch = &m->groups[g].batches[b];
 
-				for (int in=0;in<(batch->indexCount);in++){
-					int a = group->indices[batch->indexStart+in];
-					Vec3D b = group->vertices[a];
-					bool vertfound = false;
+				for (int i=batch->indexStart;i<batch->indexCount;i++){
+					int a = m->groups[g].indices[i];
 
-					for (int pm=0;pm<PointMergeNum;pm++){
-						if (PointMerge[pm] == b){
-							vertfound = true;
-							indiceConvert[a] = pm;
+					Points[PointCount] = group->vertices[a];
+					PointCount++;
+				}
+			}
+		}
+	}
+
+	// UV data
+	Vec2D UVData[1];
+	UVData[0].x = 0;
+	UVData[0].y = 1;
+	/*
+	for (int g=0; g<m->nGroups; g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++)
+		{
+			WMOBatch *batch = &m->groups[g].batches[b];
+			for(int ii=0;ii<batch->indexCount;ii++)
+			{
+				int a = m->groups[g].indices[batch->indexStart + ii];
+				u16 = ByteSwap16(counter);
+				f.Write(reinterpret_cast<char *>(&u16), 2);
+				f32 = reverse_endian<float>(m->groups[g].texcoords[a].x);
+				f.Write(reinterpret_cast<char *>(&f32), 4);
+				f32 = reverse_endian<float>(1 - m->groups[g].texcoords[a].y);
+				f.Write(reinterpret_cast<char *>(&f32), 4);
+				counter++;
+				if (counter == 256)
+					counter = 0;
+				vmapSize += 10;
+			}
+		}
+	}
+	*/
+
+
+	// Poly Data
+	POLYCHUNK2 *PolyArray = (POLYCHUNK2*) calloc (PolyNum,sizeof(POLYCHUNK2));
+	unsigned int PolyCount = 0;
+	uint16 counter = 0;
+
+	for (int g=0; g<m->nGroups; g++) {
+		WMOGroup *group = &m->groups[g];
+		if (group->visible == true){
+			for (int b=0;b<group->nBatches;b++){
+				WMOBatch *batch = &group->batches[b];
+
+				for (unsigned int k=0; k<batch->indexCount; k+=3) {
+					POLYCHUNK2 Poly;
+
+					Poly.numVerts = 3;
+
+					Poly.indice[0] = counter;
+					counter++;
+					Poly.indice[0] = counter;
+					counter++;
+					Poly.indice[0] = counter;
+					counter++;
+					//numVerts++;
+				}
+
+
+
+
+				/*
+
+				uint16 *IndiceArray = new uint16[batch->indexCount];
+
+				// Build Indice Array
+				for (int i=0;i<batch->indexCount;i++){
+					uint16 a = m->groups[g].indices[batch->indexStart + i];
+					Vec3D Indice3D = group->vertices[a];
+
+					for (int v=batch->vertexStart;v<batch->vertexEnd;v++){
+						Vec3D Vert3D = Points[v];
+						if ((Indice3D.x == Vert3D.x)&&(Indice3D.y == Vert3D.y)&&(Indice3D.z == Vert3D.z)){
+							IndiceArray[a] = v;
 							break;
 						}
-					}
+					} // End For Verts
+				} // End For Indices
 
-					if (vertfound == false){
-						Points[PointCount] = b;
-						PointCount++;
-						PointMerge[PointMergeNum] = b;
-						PointMergeNum++;
+				// Apply to Polys!
+
+				for (unsigned int i=0; i<batch->indexCount; i+=3){
+						POLYCHUNK2 Poly;
+						Poly.numVerts = 3;
+
+						for (int x=0;x<3;x++){
+							uint16 a = group->indices[batch->indexStart+(i+x)];
+							Poly.indice[x] = IndiceArray[a];
+							wxString s1, s2;
+							s1 << a;
+							s2 << IndiceArray[a];
+							//wxLogMessage("Converting Indice \"%s\" to Vertex \"%s\"", s1, s2);
+						}
+						PolyArray[PolyCount] = Poly;
+						PolyCount++;
+				}
+			
+			for (int b=0;b<group->nBatches;b++){
+				WMOBatch *batch = &group->batches[b];
+
+				POLYCHUNK2 Poly;
+				Poly.numVerts = 3;
+				for (int i=0,x=0;i<(batch->indexCount);i++,x++){
+					//uint16 a = group->indices[batch->indexStart+(i+x)];
+					uint16 b = IndiceArray[IndiceCount];
+
+					Poly.indice[x] = b;
+
+					if (x == 2){
+						PolyArray[PolyCount] = Poly;
+						PolyCount++;
+						x = -1;
 					}
+					IndiceCount++;
 				}
 			}
+			*/
+			
+			}
+			//numGroups++;
 		}
 	}
+	
+/*
 
-	POLYCHUNK2 *PolyArray = new POLYCHUNK2[PointCount/3];
-	unsigned long PolyCount = 0;
-	uint16 VertCount = 0;
-
-	// Polys
-	for (int i=0; i<m->nGroups; i++) {
-		for(int ii=0;ii<(PointCount/3);ii++)
+	for (int g=0;g<m->nGroups;g++) {
+		for (int b=0; b<m->groups[g].nBatches; b++)
 		{
-			POLYCHUNK2 Poly;
-			Poly.numVerts = 3;
+			WMOBatch *batch = &m->groups[g].batches[b];
+			for(int ii=0;ii<batch->indexCount;ii++) {
+				int a = m->groups[g].indices[batch->indexStart + ii];
+				Vec3D vert;
+				vert.x = reverse_endian<float>(m->groups[g].vertices[a].x);
+				vert.y = reverse_endian<float>(m->groups[g].vertices[a].z);
+				vert.z = reverse_endian<float>(m->groups[g].vertices[a].y);
+				f.Write(reinterpret_cast<char *>(&vert.x), 4);
+				f.Write(reinterpret_cast<char *>(&vert.y), 4);
+				f.Write(reinterpret_cast<char *>(&vert.z), 4);
+				pointsSize += 12;
 
-			for (int x=0;x<3;x++){
-				uint16 thisvert = VertCount;
-				if (indiceConvert[VertCount]){
-					thisvert = indiceConvert[VertCount];
-				}
-				Poly.indice[x] = thisvert;
-				VertCount++;
+				numVerts++;
 			}
-
-			PolyArray[PolyCount] = Poly;
-			PolyCount++;
+			for (unsigned int k=0; k<batch->indexCount; k+=3) {
+				u16 = 3;
+				tri.numVerts = ByteSwap16(u16);
+				tri.indice[0] = ByteSwap16(counter);
+				counter++;
+				tri.indice[2] = ByteSwap16(counter);
+				counter++;
+				tri.indice[1] = ByteSwap16(counter);
+				counter++;
+				f.Write(reinterpret_cast<char *>(&tri), sizeof(POLYCHUNK2));
+			}
+			numGroups++;
 		}
 	}
 
 
 
 
+*/
 
 
+	// Post-Surfaces
+	//free (TexArray);
 
+/*	wxString pnts, pols;
+	pnts << PointCount;
+	pols << PolyCount;
 
-
+	wxLogMessage(_T("Point Count: %s"), pnts);
+	wxLogMessage(_T("Poly Count: %s"), pols);
+*/
 	// Call the Writing function
-	if (!WriteLWObject(FileOutName,TagNames,TagCount,Points,PointCount,PolyArray,PolyCount)) {
+	if (!WriteLWObject(FileOutName,TagNames,TagCount,Points,PointCount,UVData,PolyArray,PolyCount)) {
 		wxLogMessage(_T("Error Writing LWO: %s"), FileOutName);
 	}else{
 		wxLogMessage(_T("Info: Successfully exported %s!"), FileOutName);
 	}
 
 	// Cleanup, remove data
-	/*
-	delete [] TexArray;
-	delete [] TagNames;
-	delete [] Points;
-	delete [] PointMerge;
-	delete [] indiceConvert;
-	delete [] PolyArray;
-	*/
+	//free (PolyArray);
+	//free (TagNames);
+	//free (Points);
 }

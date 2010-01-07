@@ -18,7 +18,13 @@ bool bHideHelmet = false;
 bool bKnightEyeGlow = true;
 bool bV310 = false;
 bool bShowParticle = true;
+
+// Model Export Options
+// General Options
 bool modelExportInitOnly = true;
+bool modelExport_PreserveDir = true;
+// Lightwave Options
+bool modelExport_PreserveLWDir = true;
 
 long langID = -1;
 long interfaceID = -1;
@@ -101,6 +107,28 @@ float round(float input, int limit = 2){
 		input /= (10^limit);
 	}
 	return input;
+}
+
+void MakeDirs(wxString base, wxString paths){
+	wxString NewBase = base;
+	wxLogMessage("MKDIR Paths\nBasePath: %s\nOthers Paths: %s", base, paths);
+	wxString Paths[30];
+	unsigned int PathNum = 0;
+	while (paths.Find('\\')>0){
+		Paths[PathNum] = paths.BeforeFirst('\\');
+		wxString rep = Paths[PathNum];
+		paths.Replace(rep.Append('\\'),"");
+		wxLogMessage("\nBuilding Paths: %s\npaths:%s",Paths[PathNum],paths);
+		PathNum++;
+	}
+	Paths[PathNum] = paths;
+	PathNum++;
+
+	for (unsigned int x=0;x<PathNum;x++){
+		NewBase = wxString(NewBase << '\\' << Paths[x]);
+		wxLogMessage("Attempting to create the following directory: %s",NewBase);
+		mkdir(NewBase.c_str());
+	}
 }
 
 void getGamePath()

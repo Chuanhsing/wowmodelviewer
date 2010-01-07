@@ -35,7 +35,7 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	EVT_MENU(ID_FILE_DISCOVERY_NPC, ModelViewer::OnExportOther)
 	//--
 	// Export Menu
-	//EVT_MENU(ID_MODELEXPORT_OPTIONS, ModelViewer::OnExportOptions)
+	EVT_MENU(ID_MODELEXPORT_OPTIONS, ModelViewer::OnToggleDock)
 	EVT_MENU(ID_MODELEXPORT_INIT, ModelViewer::OnToggleCommand)
 	EVT_MENU(ID_MODELEXPORT_LWO, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_LWO2, ModelViewer::OnExport)
@@ -181,7 +181,7 @@ ModelViewer::ModelViewer()
 	modelOpened = NULL;
 	animExporter = NULL;
 	fileControl = NULL;
-	//exportOptions = NULL;
+	exportOptionsControl = NULL;
 
 	//wxWidget objects
 	menuBar = NULL;
@@ -270,16 +270,12 @@ void ModelViewer::InitMenu()
 
 /*
 	New Model Export Menu!
-	Gonna get this working soon...
 */
 	exportMenu = new wxMenu;
 	exportMenu->AppendCheckItem(ID_MODELEXPORT_INIT, _("Initial Pose Only"));
 	exportMenu->Check(ID_MODELEXPORT_INIT, modelExportInitOnly);
 	exportMenu->AppendSeparator();
 	exportMenu->Append(ID_MODELEXPORT_OPTIONS, _("Export Options..."));
-#ifndef _DEBUG
-	exportMenu->Enable(ID_MODELEXPORT_OPTIONS, false);
-#endif
 	exportMenu->AppendSeparator();
 #ifdef _DEBUG
 	exportMenu->Append(ID_MODELEXPORT_LWO2, _("Experimental Lightwave..."));
@@ -503,6 +499,8 @@ void ModelViewer::InitObjects()
 	settingsControl->Show(false);
 	modelbankControl = new ModelBankControl(this, ID_MODELBANK_FRAME);
 	modelOpened = new ModelOpened(this, ID_MODELOPENED_FRAME);
+	exportOptionsControl = new ModelExportOptions_Control(this, ID_EXPORTOPTIONS_FRAME);
+	exportOptionsControl->Show(false);
 
 	canvas = new ModelCanvas(this);
 
@@ -699,7 +697,12 @@ void ModelViewer::InitDocking()
 		Name(wxT("Settings")).Caption(_("Settings")).
 		FloatingSize(wxSize(400,440)).Float().TopDockable(false).LeftDockable(false).
 		RightDockable(false).BottomDockable(false).Fixed().Show(false));
-                              
+
+	interfaceManager.AddPane(exportOptionsControl, wxAuiPaneInfo().
+		Name(wxT("ExportOptions")).Caption(_("Model Export Options")).
+		FloatingSize(wxSize(400,440)).Float().TopDockable(false).LeftDockable(false).
+		RightDockable(false).BottomDockable(false).Fixed().Show(false));
+
     // tell the manager to "commit" all the changes just made
     //interfaceManager.Update();
 }
@@ -712,6 +715,7 @@ void ModelViewer::ResetLayout()
 	interfaceManager.DetachPane(lightControl);
 	interfaceManager.DetachPane(modelControl);
 	interfaceManager.DetachPane(settingsControl);
+	interfaceManager.DetachPane(exportOptionsControl);
 	interfaceManager.DetachPane(canvas);
 	
 	// OpenGL Canvas
@@ -746,6 +750,11 @@ void ModelViewer::ResetLayout()
 
 	interfaceManager.AddPane(settingsControl, wxAuiPaneInfo().
 		Name(wxT("Settings")).Caption(_("Settings")).
+		FloatingSize(wxSize(400,440)).Float().TopDockable(false).LeftDockable(false).
+		RightDockable(false).BottomDockable(false).Show(false));
+
+	interfaceManager.AddPane(exportOptionsControl, wxAuiPaneInfo().
+		Name(wxT("ExportOptions")).Caption(_("Model Export Options")).
 		FloatingSize(wxSize(400,440)).Float().TopDockable(false).LeftDockable(false).
 		RightDockable(false).BottomDockable(false).Show(false));
 
@@ -871,6 +880,7 @@ void ModelViewer::LoadLayout()
 			interfaceManager.GetPane(modelControl).Show(false);
 			interfaceManager.GetPane(modelOpened).Show(false);
 			interfaceManager.GetPane(settingsControl).Show(false);
+			interfaceManager.GetPane(exportOptionsControl).Show(false);
 
 			// If character panel is showing,  hide it
 			interfaceManager.GetPane(charControl).Show(isChar);
@@ -1217,6 +1227,11 @@ ModelViewer::~ModelViewer()
 		settingsControl = NULL;
 	}
 
+	if (exportOptionsControl) {
+		exportOptionsControl->Destroy();
+		exportOptionsControl = NULL;
+	}
+	
 	if (modelControl) {
 		modelControl->Destroy();
 		modelControl = NULL;
@@ -1382,6 +1397,9 @@ void ModelViewer::OnToggleDock(wxCommandEvent &event)
 		interfaceManager.GetPane(modelbankControl).Show(true);
 	} else if (id==ID_SHOW_MODELOPENED) {
 		interfaceManager.GetPane(modelOpened).Show(true);
+	}else if(id==ID_MODELEXPORT_OPTIONS){
+		interfaceManager.GetPane(exportOptionsControl).Show(true);
+		exportOptionsControl->Open();
 	}
 	interfaceManager.Update();
 }
@@ -2104,6 +2122,7 @@ Windows 98\\ME\\2000\\XP on 17th December 2006\n\n\
 	info.AddDeveloper(_T("Ufo_Z"));
 	info.AddDeveloper(_T("Darjk"));
 	info.AddDeveloper(_T("Chuanhsing"));
+	info.AddDeveloper(_T("Kjasi"));
 	info.AddTranslator(_T("MadSquirrel (French)"));
 	info.AddTranslator(_T("Tigurius (Deutsch)"));
 	info.AddTranslator(_T("Kurax (Chinese)"));

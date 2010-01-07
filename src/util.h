@@ -44,6 +44,8 @@ extern bool bKnightEyeGlow;
 extern bool bV310;
 extern bool bShowParticle;
 extern bool modelExportInitOnly;
+extern bool modelExport_PreserveDir;
+extern bool modelExport_PreserveLWDir;
 
 //extern bool hasBeta;
 
@@ -72,6 +74,7 @@ void fixnamen(char *name, size_t len);
 wxString Vec3DToString(Vec3D vec);
 int wxStringToInt(const wxString& str);
 float round(float input, int limit);
+void MakeDirs(wxString base, wxString paths);
 
 void getGamePath();
 
