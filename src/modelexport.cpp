@@ -1134,17 +1134,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 	fm << "#" << endl;
 	fm <<  endl;
 
-	int max_mat_tex = 0;
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
-		{
-			WMOBatch *batch = &m->groups[i].batches[j];
-			WMOMaterial *mat = &m->mat[batch->texture];
-			if (mat->tex > max_mat_tex)
-				max_mat_tex = mat->tex;
-		}
-	}
-	wxString *texarray = new wxString[max_mat_tex+1];
+	wxString *texarray = new wxString[m->nTextures+1];
 
 	// Find a Match for mat->tex and place it into the Texture Name Array.
 	for (int i=0; i<m->nGroups; i++) {

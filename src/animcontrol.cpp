@@ -663,7 +663,10 @@ bool AnimControl::FillSkinSelector(TextureSet &skins)
 		int num = 0;
 		// fill our skin selector
 		for (TextureSet::iterator it = skins.begin(); it != skins.end(); ++it) {
-			skinList->Append(wxString(it->tex[0].c_str(), *wxConvCurrent));
+			wxString texname = wxString(it->tex[0].c_str(), *wxConvCurrent);
+			skinList->Append(texname);
+			texname = wxString(g_selModel->name).BeforeLast('\\') << "\\" << texname << ".blp";
+			g_selModel->TextureList.push_back(texname.c_str());
 			TextureGroup *grp = new TextureGroup(*it);
 			skinList->SetClientData(num++, grp);
 		}

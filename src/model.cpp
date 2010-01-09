@@ -643,6 +643,8 @@ void Model::initCommon(MPQFile &f)
 				strncpy(texname, (const char*)f.getBuffer() + texdef[i].nameOfs, texdef[i].nameLen);
 				texname[texdef[i].nameLen] = 0;
 				textures[i] = texturemanager.add(texname);
+				TextureList.push_back(texname);
+				wxLogMessage("Info: Added %s to the TextureList.", texname);
 			} else {
 				// special texture - only on characters and such...
 				textures[i] = 0;

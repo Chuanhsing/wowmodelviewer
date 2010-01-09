@@ -46,6 +46,9 @@ extern bool bShowParticle;
 extern bool modelExportInitOnly;
 extern bool modelExport_PreserveDir;
 extern bool modelExport_PreserveLWDir;
+extern bool modelExport_LW_ExportLights;
+extern bool modelExport_LW_ExportDoodads;
+extern int modelExport_LW_DoodadsAs;
 
 //extern bool hasBeta;
 

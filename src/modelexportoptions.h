@@ -43,8 +43,7 @@ class ModelExportOptions_Lightwave: public wxWindow
     DECLARE_EVENT_TABLE()
 
 	wxCheckBox *chkbox[NUM_MEO2_CHECK];
-
-	//wxComboBox *oglMode;
+	wxComboBox *ddextype;
 	//wxTextCtrl *txtFov;
 
 public:
@@ -56,6 +55,7 @@ public:
 
 	void OnButton(wxCommandEvent &event);
 	void OnCheck(wxCommandEvent &event);
+	void OnComboBox(wxCommandEvent &event);
 };
 
 

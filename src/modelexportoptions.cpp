@@ -2,9 +2,11 @@
 
 #include "modelexportoptions.h"
 #include "enums.h"
-//#include "util.h"
 
 //#include "globalvars.h"
+
+
+// All IDs & Vars should follow the naming structure similar to "ExportOptions_(3D Format)_(Option name)"
 
 IMPLEMENT_CLASS(ModelExportOptions_General, wxWindow)
 IMPLEMENT_CLASS(ModelExportOptions_Lightwave, wxWindow)
@@ -29,6 +31,9 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(ModelExportOptions_Lightwave, wxWindow)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_PRESERVE_LWDIR, ModelExportOptions_Lightwave::OnCheck)
+	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_EXPORTLIGHTS, ModelExportOptions_Lightwave::OnCheck)
+	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_EXPORTDOODADS, ModelExportOptions_Lightwave::OnCheck)
+	EVT_COMBOBOX(ID_EXPORTOPTIONS_LW_DOODADSAS,ModelExportOptions_Lightwave::OnComboBox)
 	
 	// EVT_BUTTON(ID_SETTINGS_APPLY, ModelExportOptions_Lightwave::OnButton)
 END_EVENT_TABLE()
@@ -75,13 +80,32 @@ ModelExportOptions_Lightwave::ModelExportOptions_Lightwave(wxWindow* parent, wxW
 		wxLogMessage(_T("GUI Error: ModelExportOptions_Lightwave"));
 		return;
 	}
+	wxFlexGridSizer *top = new wxFlexGridSizer(1);
 
 	chkbox[MEO_CHECK_PRESERVE_LWDIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_PRESERVE_LWDIR, _("Build Content Directories"), wxPoint(5,5), wxDefaultSize, 0);
+
+	chkbox[MEO_CHECK_LW_EXPORTLIGHTS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTLIGHTS, _("Export Lights"), wxPoint(5,35), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_LW_EXPORTDOODADS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTDOODADS, _("Export Doodads"), wxPoint(160,35), wxDefaultSize, 0);
+	top->Add(ddextype = new wxComboBox(this, ID_EXPORTOPTIONS_LW_DOODADSAS, _T("Doodads As"), wxPoint(160,50), wxSize(180, 25), 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
 }
 
 void ModelExportOptions_Lightwave::Update()
 {
 	chkbox[MEO_CHECK_PRESERVE_LWDIR]->SetValue(modelExport_PreserveLWDir);
+	chkbox[MEO_CHECK_LW_EXPORTLIGHTS]->SetValue(modelExport_LW_ExportLights);
+	chkbox[MEO_CHECK_LW_EXPORTDOODADS]->SetValue(modelExport_LW_ExportDoodads);
+
+	ddextype->Clear();
+
+	ddextype->Append(wxString("as Nulls"));
+	// Uncomment as we're able to do it!
+	//ddextype->Append(wxString("as Objects"));
+	//ddextype->Append(wxString("as a Single Object"));
+	//ddextype->Append(wxString("as a Single Object, Per Group"));
+	ddextype->SetSelection(modelExport_LW_DoodadsAs);
+
+	ddextype->Enable(modelExport_LW_ExportDoodads);
+
 }
 
 void ModelExportOptions_Lightwave::OnButton(wxCommandEvent &event)
@@ -96,6 +120,20 @@ void ModelExportOptions_Lightwave::OnCheck(wxCommandEvent &event)
 
 	if (id==ID_EXPORTOPTIONS_PRESERVE_LWDIR){
 		modelExport_PreserveLWDir = event.IsChecked();
+	}else if (id==ID_EXPORTOPTIONS_LW_EXPORTLIGHTS){
+		modelExport_LW_ExportLights = event.IsChecked();
+	}else if (id==ID_EXPORTOPTIONS_LW_EXPORTDOODADS){
+		modelExport_LW_ExportDoodads = event.IsChecked();
+		ddextype->Enable(event.IsChecked());
+	}
+}
+
+void ModelExportOptions_Lightwave::OnComboBox(wxCommandEvent &event)
+{
+	int id = event.GetId();
+
+	if (id==ID_EXPORTOPTIONS_LW_DOODADSAS){
+		modelExport_LW_DoodadsAs = ddextype->GetCurrentSelection();
 	}
 }
 

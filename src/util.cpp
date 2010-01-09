@@ -25,6 +25,9 @@ bool modelExportInitOnly = true;
 bool modelExport_PreserveDir = true;
 // Lightwave Options
 bool modelExport_PreserveLWDir = true;
+bool modelExport_LW_ExportLights = true;
+bool modelExport_LW_ExportDoodads = true;
+int modelExport_LW_DoodadsAs = 0;
 
 long langID = -1;
 long interfaceID = -1;
@@ -111,14 +114,14 @@ float round(float input, int limit = 2){
 
 void MakeDirs(wxString base, wxString paths){
 	wxString NewBase = base;
-	wxLogMessage("MKDIR Paths\nBasePath: %s\nOthers Paths: %s", base, paths);
+	//wxLogMessage("MKDIR Paths\nBasePath: %s\nOthers Paths: %s", base, paths);
 	wxString Paths[30];
 	unsigned int PathNum = 0;
 	while (paths.Find('\\')>0){
 		Paths[PathNum] = paths.BeforeFirst('\\');
 		wxString rep = Paths[PathNum];
 		paths.Replace(rep.Append('\\'),"");
-		wxLogMessage("\nBuilding Paths: %s\npaths:%s",Paths[PathNum],paths);
+		//wxLogMessage("\nBuilding Paths: %s\npaths:%s",Paths[PathNum],paths);
 		PathNum++;
 	}
 	Paths[PathNum] = paths;
@@ -126,7 +129,7 @@ void MakeDirs(wxString base, wxString paths){
 
 	for (unsigned int x=0;x<PathNum;x++){
 		NewBase = wxString(NewBase << '\\' << Paths[x]);
-		wxLogMessage("Attempting to create the following directory: %s",NewBase);
+		//wxLogMessage("Attempting to create the following directory: %s",NewBase);
 		mkdir(NewBase.c_str());
 	}
 }

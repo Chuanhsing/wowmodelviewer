@@ -311,6 +311,7 @@ public:
 	Vec2D *texCoords;
 	uint16 *indices;
 	size_t nIndices;
+	std::vector<std::string> TextureList;
 	// --
 
 public:

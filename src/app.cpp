@@ -315,6 +315,10 @@ void WowModelViewApp::LoadSettings()
 	pConfig->Read(_T("ModelExportPreserveDirs"), &modelExport_PreserveDir, true);
 	pConfig->Read(_T("ModelExportPreserveLWDirs"), &modelExport_PreserveLWDir, true);
 
+	pConfig->Read(_T("ModelExportLWExportLights"), &modelExport_LW_ExportLights, true);
+	pConfig->Read(_T("ModelExportLWExportDoodads"), &modelExport_LW_ExportDoodads, true);
+	pConfig->Read(_T("ModelExportLWDoodadsAs"), &modelExport_LW_DoodadsAs, 0);
+
 
 	// Data path and mpq archive stuff
 	wxString archives;
@@ -409,6 +413,10 @@ void WowModelViewApp::SaveSettings()
 	pConfig->Write(_T("ModelExportInitOnly"), modelExportInitOnly);
 	pConfig->Write(_T("ModelExportPreserveDirs"), modelExport_PreserveDir);
 	pConfig->Write(_T("ModelExportPreserveLWDirs"), modelExport_PreserveLWDir);
+
+	pConfig->Write(_T("ModelExportLWExportLights"), modelExport_LW_ExportLights);
+	pConfig->Write(_T("ModelExportLWExportDoodads"), modelExport_LW_ExportDoodads);
+	pConfig->Write(_T("ModelExportLWDoodadsAs"), modelExport_LW_DoodadsAs);
 
 	wxString archives;
 

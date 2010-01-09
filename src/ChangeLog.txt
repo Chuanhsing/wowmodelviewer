@@ -1,5 +1,11 @@
 World of Warcraft Model Viewer v0.5.08 (Chuanhsing Update)
 
+r678
+- You can now turn off Doodad & Light exporting for Lightwave exports.
+- LWO M2 files will now be double-sided and have the smoothing option set to 180 degrees.
+- LWO M2 exporting now obeys the directory Export Options. *NOTE 1* Character models don't obey the "Preserve Content Directories" export option. *NOTE 2* Textures that don't load in WMV (appear white) will export with 0 bytes, making it invalid. *NOTE 3* Items & Creatures with multiple skin images won't have those images exported.
+- (Dev Work) Model objects now have a TextureList item, with strings of all the texture names of that model. Also includes alternate skins for creatures/items. Does not work with Character models.
+
 r677
 - Fixed error .skin format that makes WMV crash
 

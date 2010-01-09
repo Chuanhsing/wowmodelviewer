@@ -50,7 +50,7 @@ void WriteLWSceneEnvArray(ofstream &fs, unsigned int count, unsigned int ChanNum
 	fs << "}\n";
 }
 
-// Writes the "Plugin" information for a scene object, light, camera &/or bone.
+// Writes the "Plugin" information for a scene object, light, camera &/or bones.
 void WriteLWScenePlugin(ofstream &fs, wxString type, int PluginCount, wxString PluginName, wxString Data = "")
 {
 	fs << "Plugin " << type << " " <<PluginCount << " " << PluginName << "\n" <<Data<< "EndPlugin\n";
@@ -265,7 +265,34 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	unsigned short numVerts = 0;
 	unsigned short numGroups = 0;
 	
-	wxFFileOutputStream f(wxString(fn, wxConvUTF8), wxT("w+b"));
+	wxString file = wxString(fn, wxConvUTF8);
+
+	if (modelExport_PreserveLWDir == true){
+		wxString Path, Name;
+
+		Path << file.BeforeLast('\\');
+		Name << file.AfterLast('\\');
+
+		MakeDirs(Path,"Objects");
+
+		file.Empty();
+		file << Path << "\\Objects\\" << Name;
+	}
+	if (m->modelType != MT_CHAR){
+		if (modelExport_PreserveDir == true){
+			wxString Path1, Path2, Name;
+			Path1 << file.BeforeLast('\\');
+			Name << file.AfterLast('\\');
+			Path2 << wxString(m->name).BeforeLast('\\');
+
+			MakeDirs(Path1,Path2);
+
+			file.Empty();
+			file << Path1 << '\\' << Path2 << '\\' << Name;
+		}
+	}
+
+	wxFFileOutputStream f(file, wxT("w+b"));
 
 	if (!f.IsOk()) {
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
@@ -293,20 +320,68 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	// The TAGS chunk contains an array of strings. Whenever something is identified by name in the file, the ID is often a 
 	// 0-based index into the TAGS array. The only named element in this file is its single surface, named "Default".
 	f.Write("TAGS", 4);
-
 	uint32 tagsSize = 0;
 	wxString TAGS;
 	u32 = 0;
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	fileLen += 8;
+
+#ifdef _DEBUG
+	// Debug Texture List
+	if (m->modelType != MT_CHAR){
+		wxLogMessage("M2 Texture List for %s:",wxString(m->fullname));
+		for (unsigned short i=0; i<m->TextureList.size(); i++) {
+			wxLogMessage("Texture List[%i] = %s",i,wxString(m->TextureList[i]));
+		}
+		wxLogMessage("M2 Texture List Complete for %s",wxString(m->fullname));
+	}
+#endif
+
+
+	// Texture Array
+	wxString *texarray = new wxString[m->header.nTextures+3];
+	if (m->modelType != MT_CHAR){
+		for (unsigned short i=0; i<m->passes.size(); i++) {
+			ModelRenderPass &p = m->passes[i];
+
+			bool nomatch = true;
+			for (int t=0;t<m->TextureList.size();t++){
+				if ((t == p.tex)&&(texarray[p.tex] != "(null)")){
+					int n = t-1;
+					if (m->modelType != MT_NPC){
+						n++;
+					}
+					texarray[p.tex] = wxString(m->TextureList[n]);
+					texarray[p.tex] = texarray[p.tex].BeforeLast('.');
+					//wxLogMessage("Texture %i is %s",t,texarray[p.tex]);
+					nomatch = false;
+					break;
+				}
+			}
+			if (nomatch == true){
+				texarray[p.tex-1] = wxString(m->name).BeforeLast('.') << wxString::Format(_T("_Material_%03i"), p.tex);
+			}
+		}
+	}
+#ifdef _DEBUG
+	wxLogMessage("M2 Texture Array Built for %s",wxString(m->fullname));
+#endif
+
+	// Surface Name
 	for (unsigned short i=0; i<m->passes.size(); i++) {
-		wxString matName(wxString::Format(_T("Material_%i"), i));
+		wxString matName;
+		if (m->modelType != MT_CHAR){
+			matName = texarray[m->passes[i].tex];
+		}else{
+			matName = wxString::Format(_T("Material_%03i"), i);
+		}
 		matName.Append(_T('\0'));
 		if (fmod((float)matName.length(), 2.0f) > 0)
 			matName.Append(_T('\0'));
 		f.Write(matName.data(), matName.length());
 		tagsSize += matName.length();
 	}
+
 	off_t = -4-tagsSize;
 	f.SeekO(off_t, wxFromCurrent);
 	u32 = reverse_endian<uint32>(tagsSize);
@@ -314,7 +389,9 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.SeekO(0, wxFromEnd);
 	fileLen += tagsSize;
 	// ================
-
+#ifdef _DEBUG
+	wxLogMessage("M2 Surface Names Written for %s",wxString(m->fullname));
+#endif
 
 	// --
 	// The layer header signals the start of a new layer. All geometry elements that appear in the file after this and before 
@@ -333,7 +410,9 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	}
 	fileLen += 18;
 	// ================
-
+#ifdef _DEBUG
+	wxLogMessage("M2 Layer Defined for %s",wxString(m->fullname));
+#endif
 
 	// --
 	// POINTS CHUNK, this is the vertice data
@@ -382,7 +461,9 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	f.SeekO(0, wxFromEnd);
 	// ================
-
+#ifdef _DEBUG
+	wxLogMessage("M2 Point Data Written for %s",wxString(m->fullname));
+#endif
 
 /*
 	// --
@@ -453,7 +534,9 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	f.SeekO(0, wxFromEnd);
 	// ================
-
+#ifdef _DEBUG
+	wxLogMessage("M2 VMAP data Written for %s",wxString(m->fullname));
+#endif
 
 	// --
 	// POLYGON CHUNK
@@ -504,7 +587,9 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	}
 	fileLen += polySize;
 	// ========
-
+#ifdef _DEBUG
+	wxLogMessage("M2 Polygons Written for %s",wxString(m->fullname));
+#endif
 
 	// --
 	// The PTAG chunk associates tags with polygons. In this case, it identifies which surface is assigned to each polygon. 
@@ -535,7 +620,9 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	}
 	fileLen += ptagSize;
 	// ================
-
+#ifdef _DEBUG
+	wxLogMessage("M2 PTag Surface data Written for %s",wxString(m->fullname));
+#endif
 
 	// --
 	int32 vmadSize = 0;
@@ -580,7 +667,9 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	f.SeekO(0, wxFromEnd);
 	// ================
-
+#ifdef _DEBUG
+	wxLogMessage("M2 VMAD data Written for %s",wxString(m->fullname));
+#endif
 
 	// --
 	uint32 surfaceCounter = 0;
@@ -599,16 +688,54 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			f.Write("STIL", 4);
 			clipSize += 8;
 
-			wxString texName(fn, wxConvUTF8);
-			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << _T("_") << p.tex << _T(".tga") << '\0';
-			if (fmod((float)texName.length(), 2.0f) > 0)
-				texName.Append(_T('\0'));
+#ifdef _DEBUG
+			if (p.useTex2 != false){
+				wxLogMessage("Pass %i uses Texture 2!",i);
+			}
+#endif
 
-			u16 = ByteSwap16(texName.length());
+			wxString texName;
+			if (m->modelType != MT_CHAR){
+				texName = texarray[p.tex];
+			}else{
+				texName = wxString(fn, wxConvUTF8).BeforeLast('.');
+			}
+			wxString texPath = texName.BeforeLast('\\');
+			texName = texName.AfterLast('\\');
+
+			if (texName.Length() == 0)
+				texName << wxString(m->modelname).AfterLast('\\').BeforeLast('.') << wxString::Format("_Image_%03i",i);
+
+#ifdef _DEBUG
+			wxLogMessage("Image Export: Final texName result: %s", texName);
+#endif
+
+			wxString sTexName = "";
+			if (modelExport_PreserveLWDir == true){
+				sTexName += "Images/";
+			}
+			if (m->modelType != MT_CHAR){
+				if (modelExport_PreserveDir == true){
+					sTexName += texPath;
+					sTexName << "\\";
+					sTexName.Replace("\\","/");
+				}
+			}
+			sTexName += texName;
+
+			sTexName << _T(".tga") << '\0';
+
+#ifdef _DEBUG
+			wxLogMessage("Image Export: Final sTexName result: %s", sTexName);
+#endif
+
+			if (fmod((float)sTexName.length(), 2.0f) > 0)
+				sTexName.Append(_T('\0'));
+
+			u16 = ByteSwap16(sTexName.length());
 			f.Write(reinterpret_cast<char *>(&u16), 2);
-			f.Write(texName.data(), texName.length());
-			clipSize += (2+texName.length());
+			f.Write(sTexName.data(), sTexName.length());
+			clipSize += (2+sTexName.length());
 
 			// update the chunks length
 			off_t = -4-clipSize;
@@ -622,13 +749,51 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			texFilename = texFilename.BeforeLast('\\');
 			texFilename += '\\';
 			texFilename += texName;
+
+#ifdef _DEBUG
+			wxLogMessage("Image Export: Starting texFilename result: %s", texFilename);
+#endif
+
+			if (modelExport_PreserveLWDir == true){
+				wxString Path, Name;
+
+				Path << wxString(fn, wxConvUTF8).BeforeLast('\\');
+				Name << texFilename.AfterLast('\\');
+
+				MakeDirs(Path,"Images");
+
+				texFilename.Empty();
+				texFilename << Path << "\\Images\\" << Name;
+			}
+			if (m->modelType != MT_CHAR){
+				if (modelExport_PreserveDir == true){
+					wxString Path1, Path2, Name;
+					Path1 << texFilename.BeforeLast('\\');
+					Name << texName.AfterLast('\\');
+					Path2 << texPath;
+
+					MakeDirs(Path1,Path2);
+
+					texFilename.Empty();
+					texFilename << Path1 << '\\' << Path2 << '\\' << Name;
+				}
+			}
+			if (texFilename.Length() == 0){
+				texFilename << wxString(m->modelname).AfterLast('\\').BeforeLast('.') << wxString::Format("_Image_%03i",i);
+			}
+			texFilename << (".tga");
+#ifdef _DEBUG
+			wxLogMessage("Image Export: Final texFilename result: %s", texFilename);
+#endif
 			SaveTexture(texFilename);
 
 			fileLen += clipSize;
 		}
 	}
 	// ================
-
+#ifdef _DEBUG
+	wxLogMessage("M2 Images & Image Data Written for %s",wxString(m->fullname));
+#endif
 
 	// --
 	wxString surfName;
@@ -644,8 +809,11 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			fileLen += 8;
 
 			// Surface name
-			surfName = _T("Material_");
-			surfName << surfaceCounter;
+			if (m->modelType != MT_CHAR){
+				surfName = texarray[p.tex];
+			}else{
+				surfName = wxString::Format(_T("Material_%03i"),p.tex);
+			}
 			surfaceCounter++;
 			
 			surfName.Append(_T('\0'));
@@ -795,10 +963,26 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			u16 = ByteSwap16(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 			u16 = 1;
+			// If double-sided...
+			if (p.cull == false){
+				u16 = 3;
+			}
 			u16 = ByteSwap16(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 
 			surfaceDefSize += 8;
+
+			// SMAN (Smoothing)
+			f.Write("SMAN", 4);
+			u16 = 4; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			// Smoothing is done in radiens. PI = 180 degree smoothing.
+			f32 = PI;
+			f32 = reverse_endian<float>(f32);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+
+			surfaceDefSize += 10;
 
 			
 			// --
@@ -1072,7 +1256,9 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 		}
 	}
 	// ================
-
+#ifdef _DEBUG
+	wxLogMessage("M2 Surface Data Written for %s",wxString(m->fullname));
+#endif
 
 	f.SeekO(4, wxFromStart);
 	u32 = reverse_endian<uint32>(fileLen);
@@ -1080,6 +1266,9 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.SeekO(0, wxFromEnd);
 
 	f.Close();
+#ifdef _DEBUG
+	wxLogMessage("M2 %s Successfully written!",wxString(m->fullname));
+#endif
 }
 
 
@@ -1092,9 +1281,14 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 */
 void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 {
-	if ((m->nLights == 0)&&(m->nDoodads == 0)) {
-		return;
+	// Should we generate a scene file?
+	// Wll only generate if there are doodads or lights.
+	bool doreturn = false;
+	if (((modelExport_LW_ExportLights == false) || (m->nLights == 0)) && ((modelExport_LW_ExportDoodads == false) || (m->nDoodads == 0))){
+		doreturn = true;
 	}
+	if (doreturn == true)
+		return;
 
 	// Open file
 	wxString SceneName = wxString(fn, wxConvUTF8).BeforeLast('.');
@@ -1183,54 +1377,108 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 
 	WriteLWSceneObject(fs,objFilename,ZeroPos,ZeroRot,1,mcount);
 
-	// Doodads
-	for (int ds=0;ds<m->nDoodadSets;ds++){
-		WMODoodadSet *DDSet = &m->doodadsets[ds];
-		wxString DDSetName;
-		DDSetName << wxString(m->name).AfterLast('\\').BeforeLast('.') << " DoodadSet " << wxString(DDSet->name);
-		int DDSID = mcount;
+	if (modelExport_LW_ExportDoodads ==  true){
+		// Doodads
+		for (int ds=0;ds<m->nDoodadSets;ds++){
+			WMODoodadSet *DDSet = &m->doodadsets[ds];
+			wxString DDSetName;
+			DDSetName << wxString(m->name).AfterLast('\\').BeforeLast('.') << " DoodadSet " << wxString(DDSet->name);
+			int DDSID = mcount;
+			wxString *savedDoodad = new wxString[DDSet->size];
 
-		WriteLWSceneObject(fs,DDSetName,ZeroPos,ZeroRot,1,mcount,true,ModelID);
+			WriteLWSceneObject(fs,DDSetName,ZeroPos,ZeroRot,1,mcount,true,ModelID);
 
-		for (int dd=DDSet->start;dd<(DDSet->start+DDSet->size);dd++){
-			WMOModelInstance *doodad = &m->modelis[dd];
-			wxString name = wxString(doodad->filename).AfterLast('\\').BeforeLast('.');
-			// Heading, Pitch & Bank.
-			// Pitch & Bank are 0s so the item is sitting flat on the ground. Not sure how to convert WoW to Lightwave's rotations yet...
-			Vec3D rot = QuaternionToXYZ(doodad->dir,doodad->w);
-			//rot = (doodad->dir.z,0,0);
+			for (int dd=DDSet->start;dd<(DDSet->start+DDSet->size);dd++){
+				WMOModelInstance *doodad = &m->modelis[dd];
+				wxString name = wxString(doodad->filename).AfterLast('\\').BeforeLast('.');
+				// Heading, Pitch & Bank.
+				Vec3D rot = QuaternionToXYZ(doodad->dir,doodad->w);
 
-			int DDID = mcount;
-			bool isNull = true;
-			WriteLWSceneObject(fs,name,doodad->pos,rot,doodad->sc,mcount,isNull,DDSID,doodad->filename);
+				int DDID = mcount;
+				bool isNull = true;
+				if (modelExport_LW_DoodadsAs > 0)
+					isNull = false;
 
-			// Doodad Lights
-			// Apparently, Doodad Lights must be parented to the Doodad for proper placement.
-			if ((doodad->model) && (doodad->model->header.nLights > 0)){
-				DoodadLightArrayDDID[DDLArrCount] = DDID;
-				DoodadLightArrayID[DDLArrCount] = dd;
-				DDLArrCount++;
+				if (isNull == false){
+					bool isSavedDoodad = false;
+					for (int sd=0;sd<DDSet->size;sd++){
+						if ((savedDoodad[sd]) && (savedDoodad[sd] == doodad->filename)){
+							isSavedDoodad = true;
+#ifdef _DEBUG
+							wxLogMessage("Info: The doodad \"%s\" has already been saved.", wxString(doodad->filename));
+#endif
+						}
+					}
+
+					bool weTurnedOn = false;
+					if (!doodad->model){
+						doodad->loadModel(m->loadedModels);
+						doodad->draw();
+						m->updateModels();
+						weTurnedOn = true;
+					}
+					if (!doodad->model){
+						isNull = true;
+					}else if (isSavedDoodad == false){
+						wxLogMessage("Export: Attempting to export doodad model: %s",wxString(doodad->filename));
+						// Export Individual Doodad Models
+						// Add array to check if we've already export it!
+						wxString dfile = wxString(fn).BeforeLast('\\') << '\\' << wxString(doodad->filename).AfterLast('\\');
+						dfile = dfile.BeforeLast('.') << ".lwo";
+
+						ExportM2toLWO(NULL, doodad->model, dfile.fn_str(), true);
+
+						savedDoodad[dd] = doodad->filename;
+						wxLogMessage("Export: Finished exporting doodad model: %s",wxString(doodad->filename));
+
+						wxString pathdir = "";
+						if (modelExport_PreserveLWDir == true){
+							pathdir += "Objects/";
+						}
+						name = pathdir << wxString(doodad->filename).BeforeLast('.') << ".lwo";
+						name.Replace("\\","/");
+					}
+					if ((doodad->model)&&(weTurnedOn == true)){
+						doodad->unloadModel(m->loadedModels);
+						m->updateModels();
+					}
+				}
+
+				WriteLWSceneObject(fs,name,doodad->pos,rot,doodad->sc,mcount,isNull,DDSID,doodad->filename);
+				wxLogMessage("Export: Finished writing the Doodad to the Scene File.");
+
+				// Doodad Lights
+				// Apparently, Doodad Lights must be parented to the Doodad for proper placement.
+				if ((doodad->model) && (doodad->model->header.nLights > 0)){
+					wxLogMessage("Export: Doodad Lights found for %s, Number of lights: %i",wxString(doodad->filename),doodad->model->header.nLights);
+					DoodadLightArrayDDID[DDLArrCount] = DDID;
+					DoodadLightArrayID[DDLArrCount] = dd;
+					DDLArrCount++;
+				}
 			}
+			wxDELETEA(savedDoodad);
 		}
 	}
 
-	// Lights
 	// Lighting Basics
 	fs << "AmbientColor 1 1 1\nAmbientIntensity 0.25\nDoubleSidedAreaLights 1\n\n";
 
-	// Doodad Lights
-	for (int i=0;i<DDLArrCount;i++){
-		
-		WMOModelInstance *doodad = &m->modelis[DoodadLightArrayID[i]];
-		ModelLight *light = &doodad->model->lights[i];
+	// Lights
+	if (modelExport_LW_ExportLights == true){
+		// Doodad Lights
+		for (int i=0;i<DDLArrCount;i++){
+			
+			WMOModelInstance *doodad = &m->modelis[DoodadLightArrayID[i]];
+			ModelLight *light = &doodad->model->lights[i];
 
-		WriteLWSceneModelLight(fs,doodad->model,light,lcount,light->pos,DoodadLightArrayDDID[i]);
-	}
+			WriteLWSceneModelLight(fs,doodad->model,light,lcount,light->pos,DoodadLightArrayDDID[i]);
+		}
 
-	// WMO Lights
-	for (int i=0;i<m->nLights;i++){
-		WMOLight *light = &m->lights[i];
-		WriteLWSceneWMOLight(fs,m,light,lcount,light->pos);
+		// WMO Lights
+		for (int i=0;i<m->nLights;i++){
+			WMOLight *light = &m->lights[i];
+			WriteLWSceneWMOLight(fs,m,light,lcount,light->pos);
+		}
 	}
 
 	// Camera data (if we want it) goes here.
@@ -1460,7 +1708,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	// Declare the Texture Name Array
 	// Made it fairly large, just for the really big models.
 	// Find a Match for mat->tex and place it into the Texture Name Array.
-	wxString texarray[500];
+	wxString *texarray = new wxString[m->nTextures+1];
 	for (int g=0;g<m->nGroups;g++) {
 		for (int b=0; b<m->groups[g].nBatches; b++)
 		{
@@ -1556,8 +1804,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	for (int g=0; g<m->nGroups; g++) {
 		for (int b=0; b<m->groups[g].nBatches; b++)	{
 			WMOBatch *batch = &m->groups[g].batches[b];
-			for(int ii=0;ii<batch->indexCount;ii++)
-			{
+			for(int ii=0;ii<batch->indexCount;ii++){
 				int a = m->groups[g].indices[batch->indexStart + ii];
 				Vec3D vert;
 				vert.x = reverse_endian<float>(m->groups[g].vertices[a].x);
@@ -1823,7 +2070,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 				sTexName += "Images/";
 			}
 			if (modelExport_PreserveDir == true){
-				sTexName += texarray[mat->tex].BeforeLast('\\');
+				sTexName += texPath;
 				sTexName << "\\";
 				sTexName.Replace("\\","/");
 			}
@@ -2366,7 +2613,13 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 
 	f.Close();
 
-	ExportWMOObjectstoLWO(m,fn);
+	// Cleanup, Isle 3!
+	wxDELETEA(texarray);
+
+	// Export Lights & Doodads
+	if ((modelExport_LW_ExportDoodads == true)||(modelExport_LW_ExportLights == true)){
+		ExportWMOObjectstoLWO(m,fn);
+	}
 }
 
 
@@ -2620,12 +2873,12 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 			IndiceNum += batch->indexCount;
 		}
 		// Verts
-		TexNum += m->nTextures;
-		TagNum += m->nTextures;
 		VertNum += m->groups[g].nVertices;
 
 		TagNum++;
 	}
+	TexNum += m->nTextures;
+	TagNum += m->nTextures;
 	PolyNum = IndiceNum / 3;
 
 	// Texture Name Array
@@ -2905,7 +3158,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 
 
 	// Post-Surfaces
-	//free (TexArray);
+	wxDELETEA(TexArray);
 
 /*	wxString pnts, pols;
 	pnts << PointCount;
@@ -2922,7 +3175,8 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 	}
 
 	// Cleanup, remove data
-	//free (PolyArray);
-	//free (TagNames);
-	//free (Points);
+	wxDELETEA(TagNames);
+	wxDELETEA(Points);
+	*UVData = NULL;
+	wxDELETEA(PolyArray);
 }
