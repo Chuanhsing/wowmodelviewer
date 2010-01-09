@@ -1431,7 +1431,7 @@ bool ModelRenderPass::init(Model *m)
 		//	return false;
 
 		// emissive colors
-		if (color!=-1 && m->colors[color].color.uses(0)) {
+		if (color!=-1 && m->colors && m->colors[color].color.uses(0)) {
 #ifdef WotLK /* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
 			Vec3D c = m->colors[color].color.getValue(0,m->animtime);
 			if (m->colors[color].opacity.uses(m->anim)) {
@@ -1457,7 +1457,7 @@ bool ModelRenderPass::init(Model *m)
 		// opacity
 		if (opacity!=-1) {
 #ifdef WotLK /* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
-			if (m->transparency[opacity].trans.uses(0))
+			if (m->transparency && m->transparency[opacity].trans.uses(0))
 				ocol.w *= m->transparency[opacity].trans.getValue(0, m->animtime);
 #else
 			ocol.w *= m->transparency[opacity].trans.getValue(m->anim, m->animtime);

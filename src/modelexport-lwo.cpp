@@ -2907,7 +2907,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 		}
 	}
 
-	wxString *TagNames = new wxString[TagNum];
+	wxString *TagNames = new wxString[TagNum+1];
 	int TagCount = 0;
 
 	// TAGS: Part Names
