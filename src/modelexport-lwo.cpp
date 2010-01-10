@@ -1410,6 +1410,10 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 						}
 					}
 
+					Model *dm = new Model(doodad->model->modelname);
+					dm->update(0);
+					dm->draw();
+/*
 					bool weTurnedOn = false;
 					if (!doodad->model){
 						doodad->loadModel(m->loadedModels);
@@ -1420,14 +1424,15 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 					if (!doodad->model){
 						isNull = true;
 					}else if (isSavedDoodad == false){
+						*/
 						wxLogMessage("Export: Attempting to export doodad model: %s",wxString(doodad->filename));
 						// Export Individual Doodad Models
 						// Add array to check if we've already export it!
 						wxString dfile = wxString(fn).BeforeLast('\\') << '\\' << wxString(doodad->filename).AfterLast('\\');
 						dfile = dfile.BeforeLast('.') << ".lwo";
 
-						ExportM2toLWO(NULL, doodad->model, dfile.fn_str(), true);
-
+						ExportM2toLWO(NULL, dm, dfile.fn_str(), true);
+						dm->~Model();
 						savedDoodad[dd] = doodad->filename;
 						wxLogMessage("Export: Finished exporting doodad model: %s",wxString(doodad->filename));
 
@@ -1437,11 +1442,13 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 						}
 						name = pathdir << wxString(doodad->filename).BeforeLast('.') << ".lwo";
 						name.Replace("\\","/");
+						/*
 					}
 					if ((doodad->model)&&(weTurnedOn == true)){
 						doodad->unloadModel(m->loadedModels);
 						m->updateModels();
 					}
+					*/
 				}
 
 				WriteLWSceneObject(fs,name,doodad->pos,rot,doodad->sc,mcount,isNull,DDSID,doodad->filename);
@@ -1534,9 +1541,6 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	int off_t;
 	uint16 dimension;
 
-	unsigned short numVerts = 0;
-	unsigned short numGroups = 0;
-
 	// LightWave object files use the IFF syntax described in the EA-IFF85 document. Data is stored in a collection of chunks. 
 	// Each chunk begins with a 4-byte chunk ID and the size of the chunk in bytes, and this is followed by the chunk contents.
 
@@ -1570,7 +1574,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 					COLR	// The Sketch Color Name
 					PART	// The Part Name
 					SURF	// The Surface Name
-				VMPA		// Discontinuous Vertex Map Parameters
+				VMPA		// Discontinuous Vertex Map Parameters (See the one in the Points section for details)
 					VMAD		// Discontinuous Vector Map Section. Best if used only for UV Maps. Difference between VMAP & VMAD: VMAPs are connected to points, while VMADs are connected to Polys.
 						APSL	// Adaptive Pixel Subdivision Level. Only needed for sub-patched models, so just ignore it for our outputs.
 						TXUV	// Defines UV Vector Map
@@ -1700,13 +1704,14 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	fileLen += 8;
 
-	uint16 counter=0;
-	uint16 TagCounter=0;
+	uint32 counter=0;
+	uint32 TagCounter=0;
 	uint16 PartCounter=0;
 	uint16 SurfCounter=0;
+	unsigned int numVerts = 0;
+	unsigned int numGroups = 0;
 
-	// Declare the Texture Name Array
-	// Made it fairly large, just for the really big models.
+	// Texture Name Array
 	// Find a Match for mat->tex and place it into the Texture Name Array.
 	wxString *texarray = new wxString[m->nTextures+1];
 	for (int g=0;g<m->nGroups;g++) {
@@ -1800,10 +1805,16 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	fileLen += 8;
 
+	unsigned int bindice = 0;
+	unsigned int gverts = 0;
+
 	// output all the vertice data
 	for (int g=0; g<m->nGroups; g++) {
+		gverts += m->groups[g].nVertices;
 		for (int b=0; b<m->groups[g].nBatches; b++)	{
 			WMOBatch *batch = &m->groups[g].batches[b];
+
+			bindice += batch->indexCount;
 			for(int ii=0;ii<batch->indexCount;ii++){
 				int a = m->groups[g].indices[batch->indexStart + ii];
 				Vec3D vert;
@@ -1820,6 +1831,9 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			numGroups++;
 		}
 	}
+#ifdef _DEBUG
+	wxLogMessage("WMO Point Count: %i, Stored Indices: %i, Stored Verticies: %i",numVerts, bindice, gverts);
+#endif
 
 
 	fileLen += pointsSize;
@@ -1831,27 +1845,26 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	// ================
 
 
-/*
 	// --
 	// The bounding box for the layer, just so that readers don't have to scan the PNTS chunk to find the extents.
 	f.Write("BBOX", 4);
 	u32 = reverse_endian<uint32>(24);
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	Vec3D vert;
-	vert.x = reverse_endian<float>(m->header.ps.BoundingBox[0].x);
-	vert.y = reverse_endian<float>(m->header.ps.BoundingBox[0].y);
-	vert.z = reverse_endian<float>(m->header.ps.BoundingBox[0].z);
+	vert.x = reverse_endian<float>(m->v1.x);
+	vert.z = reverse_endian<float>(m->v1.y);
+	vert.y = reverse_endian<float>(m->v1.z);
 	f.Write(reinterpret_cast<char *>(&vert.x), 4);
 	f.Write(reinterpret_cast<char *>(&vert.y), 4);
 	f.Write(reinterpret_cast<char *>(&vert.z), 4);
-	vert.x = reverse_endian<float>(m->header.ps.BoundingBox[1].x);
-	vert.y = reverse_endian<float>(m->header.ps.BoundingBox[1].y);
-	vert.z = reverse_endian<float>(m->header.ps.BoundingBox[1].z);
+	vert.x = reverse_endian<float>(m->v2.x);
+	vert.z = reverse_endian<float>(m->v2.y);
+	vert.y = reverse_endian<float>(m->v2.z);
 	f.Write(reinterpret_cast<char *>(&vert.x), 4);
 	f.Write(reinterpret_cast<char *>(&vert.y), 4);
 	f.Write(reinterpret_cast<char *>(&vert.z), 4);
+	fileLen += 32;
 
-*/
 
 
 	// Removed Point Vertex Mapping for WMOs.
@@ -1878,35 +1891,74 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	// The cube has 6 square faces each defined by 4 vertices. LightWave polygons are single-sided by default 
 	// (double-sidedness is a possible surface property). The vertices are listed in clockwise order as viewed from the 
 	// visible side, starting with a convex vertex. (The normal is defined as the cross product of the first and last edges.)
-	int32 polySize = 4 + (numVerts / 3) * sizeof(POLYCHUNK2);
 
 	f.Write("POLS", 4);
-	i32 = reverse_endian<int32>(polySize);
-	f.Write(reinterpret_cast<char *>(&i32), 4);
-	fileLen += 8; // an extra 4 bytes for chunk size
+	uint32 polySize = 4;
+	u32 = reverse_endian<uint32>(polySize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8; // FACE is handled in the PolySize
 	f.Write("FACE", 4);
 
 	counter = 0;
-	POLYCHUNK2 tri;
+	unsigned long polycount = 0;
+	uint32 gpolys = 0;
+	unsigned int tnBatches = 0;
 	
 	for (int g=0;g<m->nGroups;g++) {
-		for (int b=0; b<m->groups[g].nBatches; b++)
-		{
+		gpolys += m->groups[g].nTriangles;
+		for (int b=0; b<m->groups[g].nBatches; b++){
 			WMOBatch *batch = &m->groups[g].batches[b];
-
 			for (unsigned int k=0; k<batch->indexCount; k+=3) {
-				u16 = 3;
-				tri.numVerts = ByteSwap16(u16);
-				tri.indice[0] = ByteSwap16(counter);
-				counter++;
-				tri.indice[2] = ByteSwap16(counter);
-				counter++;
-				tri.indice[1] = ByteSwap16(counter);
-				counter++;
-				f.Write(reinterpret_cast<char *>(&tri), sizeof(POLYCHUNK2));
+				uint16 nverts;
+
+				// Write the number of Verts
+				nverts = ByteSwap16(3);
+				f.Write(reinterpret_cast<char *>(&nverts),2);
+				polySize += 2;
+
+				for (int x=0;x<3;x++,counter++){
+					//wxLogMessage("Batch %i, index %i, x=%i",b,k,x);
+					uint16 indice16;
+					uint32 indice32;
+
+					int mod = 0;
+					if (x==1){
+						mod = 1;
+					}else if (x==2){
+						mod = -1;
+					}
+
+					uint16 counter16 = ((counter+mod) & 0x0000FFFF);
+					uint32 counter32 = (counter+mod) + 0xFF000000;
+
+					if ((counter+mod) < 0xFF00){
+						indice16 = ByteSwap16(counter16);
+						f.Write(reinterpret_cast<char *>(&indice16),2);
+						polySize += 2;
+					}else{
+						//wxLogMessage("Counter above limit: %i", counter);
+						indice32 = reverse_endian<uint32>(counter32);
+						f.Write(reinterpret_cast<char *>(&indice32), 4);
+						polySize += 4;
+					}
+				}
+				polycount++;
 			}
+			tnBatches++;
 		}
 	}
+
+	off_t = -4-polySize;
+	f.SeekO(off_t, wxFromCurrent);
+	u32 = reverse_endian<uint32>(polySize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+
+#ifdef _DEBUG
+	wxLogMessage("WMO Poly Count: %i, Stored Polys: %i, Polysize: %i, Stored Polysize: %i",polycount, gpolys, polySize,gpolys * sizeof(PolyChunk16) );
+	wxLogMessage("WMO nGroups: %i, nBatchs: %i",m->nGroups, tnBatches);
+#endif
+
 	fileLen += polySize;
 	// ========
 
@@ -1924,7 +1976,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 
 	// Parts PolyTag
 	f.Write("PTAG", 4);
-	ptagSize = 4 + (numVerts / 3) * 4;		// PTAG Title (always 4) + (Number of Points / PolySides (always 3)) * Number of Bytes
+	ptagSize = 4;		// PTAG Title (always 4) + (Number of Points / PolySides (always 3)) * Number of Bytes
 	counter=0;
 	u32 = reverse_endian<uint32>(ptagSize);
 	f.Write(reinterpret_cast<char *>(&u32), 4);
@@ -1935,10 +1987,24 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			WMOBatch *batch = &m->groups[g].batches[b];
 
 			for (unsigned int k=0; k<batch->indexCount; k+=3) {
-				u16 = ByteSwap16(counter);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
+				uint16 indice16;
+				uint32 indice32;
+
+				uint16 counter16 = (counter & 0x0000FFFF);
+				uint32 counter32 = counter + 0xFF000000;
+
+				if (counter < 0xFF00){
+					indice16 = ByteSwap16(counter16);
+					f.Write(reinterpret_cast<char *>(&indice16),2);
+					ptagSize += 2;
+				}else{
+					indice32 = reverse_endian<uint32>(counter32);
+					f.Write(reinterpret_cast<char *>(&indice32), 4);
+					ptagSize += 4;
+				}
 				u16 = ByteSwap16(TagCounter);
 				f.Write(reinterpret_cast<char *>(&u16), 2);
+				ptagSize += 2;
 				counter++;
 			}
 		}
@@ -1947,11 +2013,18 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	}
 	fileLen += ptagSize;
 
+	off_t = -4-ptagSize;
+	f.SeekO(off_t, wxFromCurrent);
+	u32 = reverse_endian<uint32>(ptagSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+
+
 	// Surface PolyTag
 	counter = 0;
 	SurfCounter = 0;
 	f.Write("PTAG", 4);
-	ptagSize = 4 + (numVerts / 3) * 4;		// PTAG Title (always 4) + (Number of Points / PolySides (always 3)) * Number of Bytes
+	ptagSize = 4;		// PTAG Title (always 4) + (Number of Points / PolySides (always 3)) * Number of Bytes
 	u32 = reverse_endian<uint32>(ptagSize);
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	fileLen += 8;
@@ -1961,10 +2034,24 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			WMOBatch *batch = &m->groups[g].batches[b];
 
 			for (unsigned int k=0; k<batch->indexCount; k+=3) {
-				u16 = ByteSwap16(counter);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
+				uint16 indice16;
+				uint32 indice32;
+
+				uint16 counter16 = (counter & 0x0000FFFF);
+				uint32 counter32 = counter + 0xFF000000;
+
+				if (counter < 0xFF00){
+					indice16 = ByteSwap16(counter16);
+					f.Write(reinterpret_cast<char *>(&indice16),2);
+					ptagSize += 2;
+				}else{
+					indice32 = reverse_endian<uint32>(counter32);
+					f.Write(reinterpret_cast<char *>(&indice32), 4);
+					ptagSize += 4;
+				}
 				u16 = ByteSwap16(TagCounter);
 				f.Write(reinterpret_cast<char *>(&u16), 2);
+				ptagSize += 2;
 				counter++;
 			}
 			TagCounter++;
@@ -1972,6 +2059,12 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 		}
 	}
 	fileLen += ptagSize;
+
+	off_t = -4-ptagSize;
+	f.SeekO(off_t, wxFromCurrent);
+	u32 = reverse_endian<uint32>(ptagSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
 
 
 	// ===================================================
@@ -2017,16 +2110,39 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 
 			for (size_t k=0, b=0; k<batch->indexCount; k++,b++) {
 				int a = m->groups[g].indices[batch->indexStart + k];
-				u16 = ByteSwap16(counter);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
-				u16 = ByteSwap16((uint16)(counter/3));
-				f.Write(reinterpret_cast<char *>(&u16), 2);
+				uint16 indice16;
+				uint32 indice32;
+
+				uint16 counter16 = (counter & 0x0000FFFF);
+				uint32 counter32 = counter + 0xFF000000;
+
+				if (counter < 0xFF00){
+					indice16 = ByteSwap16(counter16);
+					f.Write(reinterpret_cast<char *>(&indice16),2);
+					vmadSize += 2;
+				}else{
+					indice32 = reverse_endian<uint32>(counter32);
+					f.Write(reinterpret_cast<char *>(&indice32), 4);
+					vmadSize += 4;
+				}
+
+				if (((counter/3) & 0x0000FFFF) < 0xFF00){
+					indice16 = ByteSwap16(((counter/3) & 0x0000FFFF));
+					f.Write(reinterpret_cast<char *>(&indice16),2);
+					vmadSize += 2;
+				}else{
+					indice32 = reverse_endian<uint32>((counter/3) + 0xFF000000);
+					f.Write(reinterpret_cast<char *>(&indice32), 4);
+					vmadSize += 4;
+				}
+			//	u16 = ByteSwap16((uint16)(counter/3));
+			//	f.Write(reinterpret_cast<char *>(&u16), 2);
 				f32 = reverse_endian<float>(m->groups[g].texcoords[a].x);
 				f.Write(reinterpret_cast<char *>(&f32), 4);
 				f32 = reverse_endian<float>(1 - m->groups[g].texcoords[a].y);
 				f.Write(reinterpret_cast<char *>(&f32), 4);
 				counter++;
-				vmadSize += 12;
+				vmadSize += 8;
 			}
 		}
 	}
@@ -2086,6 +2202,15 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 			f.Write(sTexName.data(), sTexName.length());
 			clipSize += (2+sTexName.length());
+
+			f.Write("FLAG", 4);
+			u16 = ByteSwap16(4);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = ByteSwap16(2048);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			u16 = ByteSwap16(128);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			clipSize += 10;
 
 			// update the chunks length
 			off_t = -4-clipSize;
@@ -2164,7 +2289,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			surfName.Append(_T('\0'));
 			f.Write(surfName.data(), (int)surfName.length());
 			
-			surfaceDefSize += (uint32)surfName.length();
+			surfaceDefSize += surfName.length();//(uint32)surfName.length();
 
 			// Surface Attributes
 			// COLOUR, size 4, bytes 2
@@ -2272,6 +2397,18 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			
 			surfaceDefSize += 12;
 
+			// SMAN (Smoothing)
+			f.Write("SMAN", 4);
+			u16 = 4; // size
+			u16 = ByteSwap16(u16);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			// Smoothing is done in radiens. PI = 180 degree smoothing.
+			f32 = PI;
+			f32 = reverse_endian<float>(f32);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			surfaceDefSize += 10;
+
+
 			// RFOP
 			f.Write("RFOP", 4);
 			u16 = 2; // size
@@ -2308,18 +2445,6 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 
 			surfaceDefSize += 8;
-
-			// SMAN (Smoothing)
-			f.Write("SMAN", 4);
-			u16 = 4; // size
-			u16 = ByteSwap16(u16);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-			// Smoothing is done in radiens. PI = 180 degree smoothing.
-			f32 = PI;
-			f32 = reverse_endian<float>(f32);
-			f.Write(reinterpret_cast<char *>(&f32), 4);
-
-			surfaceDefSize += 10;
 
 			// --
 			// BLOK
@@ -2633,7 +2758,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 
 // Seperated out the Writing function, so we don't have to write it all out every time we want to export something.
 // Should probably do something similar with the other exporting functions as well...
-bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Points[], unsigned long PointCount, Vec2D UVData[],POLYCHUNK2 Polys[], unsigned long PolyCount){
+bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Points[], unsigned long PointCount, Vec2D UVData[],PolyChunk16 Polys[], unsigned long PolyCount){
 
 	// Check to see if we have the proper data to generate this file.
 	// At the very least, we need some point data...
@@ -2813,7 +2938,7 @@ bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Point
 	// Polygon Chunk
 	// -----------------------------------------
 	if (PolyCount > 0){
-		int32 polySize = 4 + (PointCount / 3) * sizeof(POLYCHUNK2);
+		int32 polySize = 4 + (PointCount / 3) * sizeof(PolyChunk16);
 
 		f.Write("POLS", 4);
 		i32 = reverse_endian<int32>(polySize);
@@ -2821,14 +2946,14 @@ bool WriteLWObject(wxString filename, wxString Tags[], int TagCount, Vec3D Point
 		fileLen += 8; // an extra 4 bytes for chunk size
 		f.Write("FACE", 4);
 
-		POLYCHUNK2 swapped;
+		PolyChunk16 swapped;
 		for (int p=0;p<PolyCount;p++){
 			swapped.numVerts = ByteSwap16(Polys[p].numVerts);
 			swapped.indice[0] =  ByteSwap16(Polys[p].indice[0]);
 			swapped.indice[1] =  ByteSwap16(Polys[p].indice[1]);
 			swapped.indice[2] =  ByteSwap16(Polys[p].indice[2]);
 
-			f.Write(reinterpret_cast<char *>(&swapped), sizeof(POLYCHUNK2));
+			f.Write(reinterpret_cast<char *>(&swapped), sizeof(PolyChunk16));
 			wxLogMessage(_T("Writing polygon %i..."), p);
 		}
 		fileLen += polySize;
@@ -3028,7 +3153,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 
 
 	// Poly Data
-	POLYCHUNK2 *PolyArray = (POLYCHUNK2*) calloc (PolyNum,sizeof(POLYCHUNK2));
+	PolyChunk16 *PolyArray = (PolyChunk16*) calloc (PolyNum,sizeof(PolyChunk16));
 	unsigned int PolyCount = 0;
 	uint16 counter = 0;
 
@@ -3039,7 +3164,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 				WMOBatch *batch = &group->batches[b];
 
 				for (unsigned int k=0; k<batch->indexCount; k+=3) {
-					POLYCHUNK2 Poly;
+					PolyChunk16 Poly;
 
 					Poly.numVerts = 3;
 
@@ -3076,7 +3201,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 				// Apply to Polys!
 
 				for (unsigned int i=0; i<batch->indexCount; i+=3){
-						POLYCHUNK2 Poly;
+						PolyChunk16 Poly;
 						Poly.numVerts = 3;
 
 						for (int x=0;x<3;x++){
@@ -3094,7 +3219,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 			for (int b=0;b<group->nBatches;b++){
 				WMOBatch *batch = &group->batches[b];
 
-				POLYCHUNK2 Poly;
+				PolyChunk16 Poly;
 				Poly.numVerts = 3;
 				for (int i=0,x=0;i<(batch->indexCount);i++,x++){
 					//uint16 a = group->indices[batch->indexStart+(i+x)];
@@ -3145,7 +3270,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 				counter++;
 				tri.indice[1] = ByteSwap16(counter);
 				counter++;
-				f.Write(reinterpret_cast<char *>(&tri), sizeof(POLYCHUNK2));
+				f.Write(reinterpret_cast<char *>(&tri), sizeof(PolyChunk16));
 			}
 			numGroups++;
 		}
