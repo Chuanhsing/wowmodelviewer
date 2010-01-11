@@ -1,5 +1,8 @@
 World of Warcraft Model Viewer v0.5.08 (Chuanhsing Update)
 
+r679
+- Add ICC new npcs
+
 r678
 - You can now turn off Doodad & Light exporting for Lightwave exports.
 - LWO M2 files will now be double-sided and have the smoothing option set to 180 degrees.
