@@ -1,5 +1,10 @@
 World of Warcraft Model Viewer v0.5.08 (Chuanhsing Update)
 
+r680
+ - Fixed Armory URL problems for characters with accents in their character name. (IE: Daïmhôndrùs)
+ - Fixed an error where exporting WMO files with more than 65,280 points to Lightwave would cause the resulting object file to crash Lightwave.
+ - Fixed a bug where lights in certain models would crash WMV when exporting.
+
 r679
 - Add ICC new npcs
 
