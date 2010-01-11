@@ -164,11 +164,10 @@ inline unsigned short ByteSwap16 (unsigned short nValue) // 16bit
 }
 
 
-struct POLYCHUNK2 {
+struct PolyChunk16 {
 	uint16 numVerts;
 	uint16 indice[3];
 };
-
 
 
 #endif // LWOHEADER_H
