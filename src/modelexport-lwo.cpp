@@ -53,7 +53,7 @@ void WriteLWSceneEnvArray(ofstream &fs, unsigned int count, unsigned int ChanNum
 // Writes the "Plugin" information for a scene object, light, camera &/or bones.
 void WriteLWScenePlugin(ofstream &fs, wxString type, int PluginCount, wxString PluginName, wxString Data = "")
 {
-	fs << "Plugin " << type << " " <<PluginCount << " " << PluginName << "\n" <<Data<< "EndPlugin\n";
+	fs << "Plugin " << type << " " << PluginCount << " " << PluginName << "\n" <<Data<< "EndPlugin\n";
 }
 
 // Writes an Object or Null Object to the scene file.
@@ -105,8 +105,8 @@ void WriteLWSceneModelLight(ofstream &fs, Model *m, ModelLight *light, int &lcou
 		isParented = true;
 
 	fs << "AddLight 2" << wxString::Format("%07x",lcount) << "\n";
-	wxString modelname = wxString(m->modelname).AfterLast('\\').BeforeLast('.').MakeLower();
-	modelname[0] = toupper(modelname[0]);
+	wxString modelname = wxString(m->modelname).AfterLast('\\').BeforeLast('.');//.MakeLower();
+	//modelname[0] = toupper(modelname[0]);
 	fs << "LightName " << modelname << " Light " << lcount+1 << "\n";
 	fs << "ShowLight 1 -1 0.941176 0.376471 0.941176\n";	// Last 3 Numbers are Layout Color for the Light.
 	fs << "LightMotion\n";
@@ -125,12 +125,12 @@ void WriteLWSceneModelLight(ofstream &fs, Model *m, ModelLight *light, int &lcou
 	WriteLWSceneEnvChannel(fs,8,1,0);
 
 	if (isParented)
-		fs << "ParentItem 1" <<wxString::Format("%07x",ParentNum);
+		fs << "ParentItem 1" << wxString::Format("%07x",ParentNum) << "\n";
 
 	// Light Color Reducer
 	// Some lights have a color channel greater than 255. This reduces all the colors, but increases the intensity, which should keep it looking the way Blizzard intended.
 
-	// Model lights have 2 light types: Ambient & Diffused. We'll use Diffused for our Lights.
+	// Model lights have 2 light types: Ambient & Diffused. We'll use Diffused for our Lights. (Have not found an example of a light using Ambient...)
 	Vec3D diffC = light->diffColor.getValue(0,0);
 
 	float Lcolor[] = {diffC.x , diffC.y, diffC.z};
@@ -157,7 +157,7 @@ void WriteLWSceneModelLight(ofstream &fs, Model *m, ModelLight *light, int &lcou
 
 			if (light->UseAttenuation.getValue(0,0) == 1) {
 				// Use Inverse Distance for the default Light Falloff Type. Should better simulate WoW Lights, until I can write a WoW light plugin for Lightwave...
-				float attenend = (light->AttenEnd.getValue(0,0)) * 10;
+				float attenend = (light->AttenEnd.getValue(0,0)) * 2;
 				fs << "LightFalloffType 2\nLightRange " << attenend << "\n";
 			}else{
 				// Default to these settings, which look pretty close...
@@ -223,7 +223,7 @@ void WriteLWSceneWMOLight(ofstream &fs, WMO *m, WMOLight *light, int &lcount, Ve
 				fs << "LightFalloffType 2\nLightRange " << attenend << "\n";
 			}else{
 				// Default to these settings, which look pretty close...
-				fs << "LightFalloffType 1\nLightRange 12.5\n";
+				fs << "LightFalloffType 2\nLightRange 12.5\n";
 			}
 			fs << "ShadowType 1\nShadowColor 0 0 0\n";
 			WriteLWScenePlugin(fs,"LightHandler",1,"PointLight");
@@ -557,7 +557,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	// The cube has 6 square faces each defined by 4 vertices. LightWave polygons are single-sided by default 
 	// (double-sidedness is a possible surface property). The vertices are listed in clockwise order as viewed from the 
 	// visible side, starting with a convex vertex. (The normal is defined as the cross product of the first and last edges.)
-	int32 polySize = 4 + (numVerts / 3) * sizeof(POLYCHUNK2);
+	int32 polySize = 4 + (numVerts / 3) * sizeof(PolyChunk16);
 
 	f.Write("POLS", 4);
 	i32 = reverse_endian<int32>(polySize);
@@ -566,7 +566,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.Write("FACE", 4);
 
 	counter = 0;
-	POLYCHUNK2 tri;
+	PolyChunk16 tri;
 	
 	for (size_t i=0; i<m->passes.size(); i++) {
 		ModelRenderPass &p = m->passes[i];
@@ -581,7 +581,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 				counter++;
 				tri.indice[1] = ByteSwap16(counter);
 				counter++;
-				f.Write(reinterpret_cast<char *>(&tri), sizeof(POLYCHUNK2));
+				f.Write(reinterpret_cast<char *>(&tri), sizeof(PolyChunk16));
 			}
 		}
 	}
@@ -1279,8 +1279,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 /*
 	This will export Lights & Doodads (as nulls) into a Lightwave Scene file.
 */
-void ExportWMOObjectstoLWO(WMO *m, const char *fn)
-{
+void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 	// Should we generate a scene file?
 	// Wll only generate if there are doodads or lights.
 	bool doreturn = false;
@@ -1352,8 +1351,8 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 	int mcount = 0;	// Model Count
 	int lcount = 0; // Light Count
 
-	int DoodadLightArrayID[1000];
-	int DoodadLightArrayDDID[1000];
+	int DoodadLightArrayID[3000];
+	int DoodadLightArrayDDID[3000];
 	int DDLArrCount = 0;
 
 	Vec3D ZeroPos(0,0,0);
@@ -1391,8 +1390,10 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 			for (int dd=DDSet->start;dd<(DDSet->start+DDSet->size);dd++){
 				WMOModelInstance *doodad = &m->modelis[dd];
 				wxString name = wxString(doodad->filename).AfterLast('\\').BeforeLast('.');
+				// Position
+				Vec3D Pos = doodad->pos;
 				// Heading, Pitch & Bank.
-				Vec3D rot = QuaternionToXYZ(doodad->dir,doodad->w);
+				Vec3D Rot = QuaternionToXYZ(doodad->dir,doodad->w);
 
 				int DDID = mcount;
 				bool isNull = true;
@@ -1410,10 +1411,6 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 						}
 					}
 
-					Model *dm = new Model(doodad->model->modelname);
-					dm->update(0);
-					dm->draw();
-/*
 					bool weTurnedOn = false;
 					if (!doodad->model){
 						doodad->loadModel(m->loadedModels);
@@ -1424,15 +1421,13 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 					if (!doodad->model){
 						isNull = true;
 					}else if (isSavedDoodad == false){
-						*/
 						wxLogMessage("Export: Attempting to export doodad model: %s",wxString(doodad->filename));
 						// Export Individual Doodad Models
 						// Add array to check if we've already export it!
 						wxString dfile = wxString(fn).BeforeLast('\\') << '\\' << wxString(doodad->filename).AfterLast('\\');
 						dfile = dfile.BeforeLast('.') << ".lwo";
 
-						ExportM2toLWO(NULL, dm, dfile.fn_str(), true);
-						dm->~Model();
+						ExportM2toLWO(NULL, doodad->model, dfile.fn_str(), true);
 						savedDoodad[dd] = doodad->filename;
 						wxLogMessage("Export: Finished exporting doodad model: %s",wxString(doodad->filename));
 
@@ -1442,16 +1437,16 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 						}
 						name = pathdir << wxString(doodad->filename).BeforeLast('.') << ".lwo";
 						name.Replace("\\","/");
-						/*
+
 					}
 					if ((doodad->model)&&(weTurnedOn == true)){
 						doodad->unloadModel(m->loadedModels);
 						m->updateModels();
 					}
-					*/
+
 				}
 
-				WriteLWSceneObject(fs,name,doodad->pos,rot,doodad->sc,mcount,isNull,DDSID,doodad->filename);
+				WriteLWSceneObject(fs,name,Pos,Rot,doodad->sc,mcount,isNull,DDSID,doodad->filename);
 				wxLogMessage("Export: Finished writing the Doodad to the Scene File.");
 
 				// Doodad Lights
@@ -1478,7 +1473,9 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 			WMOModelInstance *doodad = &m->modelis[DoodadLightArrayID[i]];
 			ModelLight *light = &doodad->model->lights[i];
 
-			WriteLWSceneModelLight(fs,doodad->model,light,lcount,light->pos,DoodadLightArrayDDID[i]);
+			if ((light->type == 0) || (light->type == 1)){
+				WriteLWSceneModelLight(fs,doodad->model,light,lcount,light->pos,DoodadLightArrayDDID[i]);
+			}
 		}
 
 		// WMO Lights
@@ -1492,6 +1489,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 	// Yes, we can export flying cameras to Lightwave!
 	// Just gotta add them back into the listing...
 	fs << "AddCamera 30000000\nCameraName Camera\nShowCamera 1 -1 0.125490 0.878431 0.125490\nZoomFactor 2.316845\nZoomType 2\n\n";
+	WriteLWScenePlugin(fs,"CameraHandler",1,"Perspective");	// Make the camera a Perspective camera
 
 	// Backdrop Settings
 	// Add this if viewing a skybox, or using one as a background?
@@ -1504,8 +1502,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn)
 }
 
 
-void ExportWMOtoLWO(WMO *m, const char *fn)
-{
+void ExportWMOtoLWO(WMO *m, const char *fn){
 	wxString file = wxString(fn, wxConvUTF8);
 
 	if (modelExport_PreserveLWDir == true){
@@ -1607,12 +1604,12 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 		SMAN	// Smoothing Amount
 
 		RFOP	// Reflection Options: 0-Backdrop Only (default), 1-Raytracing + Backdrop, 2 - Spherical Map, 3 - Raytracing + Spherical Map
-		TROP	// Same as FROP, but for Refraction.
+		TROP	// Same as RFOP, but for Refraction.
 		SIDE	// Is it Double-Sided?
 		NVSK	// Exclude from VStack
 
-		CMNT // Surface Comment, but I don't seem to be able to get it to show up in LW... 2bytes: Size. Simple Text line for this surface. Make sure it doesn't end on an odd byte!
-		VERS // Version Compatibility mode, including what it's compatible with. 2bytes (int16, value 4), 4bytes (int32, value is 850 or 931, depending on if you're compatible with LW8.5 or LW9.3.1)
+		CMNT // Surface Comment, but I don't seem to be able to get it to show up in LW... 2bytes: Size. Simple Text line for this surface. Make sure it doesn't end on an odd byte! VERS must be 931 or 950!
+		VERS // Version Compatibility mode, including what it's compatible with. 2 bytes (int16, value 4), 4 bytes (int32, value is 850 for LW8.5 Compatability, 931 for LW9.3.1, and 950 for Default)
 
 		BLOK	// First Blok. Bloks hold Surface texture information!
 			IMAP	// Declares that this surface texture is an image map.
@@ -1639,29 +1636,29 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 						AAST	// Antialiasing Strength
 						PIXB	// Pixel Blending
 
-			// Node Information
-			// We can probably skip this for now. Later, it would be cool to mess with it, but for now, it'll be automatically generated once the file is opened in LW.
+		// Node Information
+		// We can probably skip this for now. Later, it would be cool to mess with it, but for now, it'll be automatically generated once the file is opened in LW.
 
-			NODS	// Node Block & Size
-				NROT
-				NLOC
-				NZOM
-				NSTA	// Activate Nodes
-				NVER
-				NNDS
-				NSRV
-					Surface
-				NTAG
-				NRNM
-					Surface
-				NNME
-					Surface
-				NCRD
-				NMOD
-				NDTA
-				NPRW
-				NCOM
-				NCON
+		NODS	// Node Block & Size
+			NROT
+			NLOC
+			NZOM
+			NSTA	// Activate Nodes
+			NVER
+			NNDS
+			NSRV
+				Surface
+			NTAG
+			NRNM
+				Surface
+			NNME
+				Surface
+			NCRD
+			NMOD
+			NDTA
+			NPRW
+			NCOM
+			NCON
 
 	*/
 
@@ -1748,6 +1745,19 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	}
 
 	// Surface Names
+	wxString *surfarray = new wxString[m->nTextures+1];
+	for (unsigned int t=0;t<m->nTextures;t++){
+		wxString matName = wxString(m->textures[t]).BeforeLast('.');
+
+		matName.Append(_T('\0'));
+		if (fmod((float)matName.length(), 2.0f) > 0)
+			matName.Append(_T('\0'));
+		f.Write(matName.data(), matName.length());
+		tagsSize += matName.length();
+		surfarray[t] = wxString(m->textures[t]).BeforeLast('.');
+	}
+
+/*
 	for (int g=0;g<m->nGroups;g++) {
 		for (int b=0; b<m->groups[g].nBatches; b++)
 		{
@@ -1762,7 +1772,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			tagsSize += matName.length();
 		}
 	}
-
+*/
 	off_t = -4-tagsSize;
 	f.SeekO(off_t, wxFromCurrent);
 	u32 = reverse_endian<uint32>(tagsSize);
@@ -1870,6 +1880,66 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	// Removed Point Vertex Mapping for WMOs.
 	// UV Map now generated by Discontinuous Vertex Mapping, down in the Poly section.
 
+	uint32 vmapSize = 0;
+
+	//Vertex Mapping
+	f.Write("VMAP", 4);
+	u32 = reverse_endian<uint32>(vmapSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+	// UV Data
+	f.Write("TXUV", 4);
+	dimension = ByteSwap16(2);
+	f.Write(reinterpret_cast<char *>(&dimension), 2);
+	f.Write("Texture", 7);
+	ub = 0;
+	f.Write(reinterpret_cast<char *>(&ub), 1);
+	vmapSize += 14;
+
+	// u16, f32, f32
+	for (int i=0; i<m->nGroups; i++) {
+		for (int j=0; j<m->groups[i].nBatches; j++)
+		{
+			WMOBatch *batch = &m->groups[i].batches[j];
+			for(int ii=0;ii<batch->indexCount;ii++)
+			{
+				int a = m->groups[i].indices[batch->indexStart + ii];
+
+
+				uint16 indice16;
+				uint32 indice32;
+
+				uint16 counter16 = (counter & 0x0000FFFF);
+				uint32 counter32 = counter + 0xFF000000;
+
+				if (counter < 0xFF00){
+					indice16 = ByteSwap16(counter16);
+					f.Write(reinterpret_cast<char *>(&indice16),2);
+					vmapSize += 2;
+				}else{
+					indice32 = reverse_endian<uint32>(counter32);
+					f.Write(reinterpret_cast<char *>(&indice32), 4);
+					vmapSize += 4;
+				}
+
+				f32 = reverse_endian<float>(m->groups[i].texcoords[a].x);
+				f.Write(reinterpret_cast<char *>(&f32), 4);
+				f32 = reverse_endian<float>(1 - m->groups[i].texcoords[a].y);
+				f.Write(reinterpret_cast<char *>(&f32), 4);
+				vmapSize += 8;
+				counter++;
+			}
+		}
+	}
+	fileLen += vmapSize;
+
+	off_t = -4-vmapSize;
+	f.SeekO(off_t, wxFromCurrent);
+	u32 = reverse_endian<uint32>(vmapSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+
+
 
 
 	// --
@@ -1971,12 +2041,13 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	// NOTE: Every PTAG type needs a seperate PTAG call!
 
 	TagCounter = 0;
+	PartCounter = 0;
 	counter=0;
 	int32 ptagSize;
 
 	// Parts PolyTag
 	f.Write("PTAG", 4);
-	ptagSize = 4;		// PTAG Title (always 4) + (Number of Points / PolySides (always 3)) * Number of Bytes
+	ptagSize = 4;
 	counter=0;
 	u32 = reverse_endian<uint32>(ptagSize);
 	f.Write(reinterpret_cast<char *>(&u32), 4);
@@ -2002,6 +2073,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 					f.Write(reinterpret_cast<char *>(&indice32), 4);
 					ptagSize += 4;
 				}
+
 				u16 = ByteSwap16(TagCounter);
 				f.Write(reinterpret_cast<char *>(&u16), 2);
 				ptagSize += 2;
@@ -2024,7 +2096,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	counter = 0;
 	SurfCounter = 0;
 	f.Write("PTAG", 4);
-	ptagSize = 4;		// PTAG Title (always 4) + (Number of Points / PolySides (always 3)) * Number of Bytes
+	ptagSize = 4;
 	u32 = reverse_endian<uint32>(ptagSize);
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	fileLen += 8;
@@ -2049,12 +2121,21 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 					f.Write(reinterpret_cast<char *>(&indice32), 4);
 					ptagSize += 4;
 				}
-				u16 = ByteSwap16(TagCounter);
+
+				int surfID = TagCounter + 0;
+				for (int x=0;x<m->nTextures;x++){
+					wxString target = texarray[m->mat[batch->texture].tex];
+					if (surfarray[x] == target){
+						surfID = TagCounter + x;
+						break;
+					}
+				}
+
+				u16 = ByteSwap16(surfID);
 				f.Write(reinterpret_cast<char *>(&u16), 2);
 				ptagSize += 2;
 				counter++;
 			}
-			TagCounter++;
 			SurfCounter++;
 		}
 	}
@@ -2159,6 +2240,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 	// Texture File List
 	// ===================================================
 	uint32 surfaceCounter = PartCounter;
+	uint32 ClipCount = 0;
 	for (int g=0;g<m->nGroups;g++) {
 		for (int b=0; b<m->groups[g].nBatches; b++)
 		{
@@ -2176,7 +2258,9 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			f.Write("STIL", 4);
 			clipSize += 8;
 
-			//wxString texName(fn, wxConvUTF8);
+			glBindTexture(GL_TEXTURE_2D, mat->tex);
+			//wxLogMessage("Opening %s so we can save it...",texarray[mat->tex]);
+			wxString FilePath = wxString(fn, wxConvUTF8).BeforeLast('\\');
 			wxString texName = texarray[mat->tex];
 			wxString texPath = texName.BeforeLast('\\');
 			texName = texName.AfterLast('\\');
@@ -2192,7 +2276,6 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			}
 			sTexName += texName;
 
-			//texName << _T("_") << wxString::Format(_T("%03i"),mat->tex) << _T(".tga") << '\0';
 			sTexName << _T(".tga") << '\0';
 
 			if (fmod((float)sTexName.length(), 2.0f) > 0)
@@ -2203,15 +2286,6 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			f.Write(sTexName.data(), sTexName.length());
 			clipSize += (2+sTexName.length());
 
-			f.Write("FLAG", 4);
-			u16 = ByteSwap16(4);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-			u16 = ByteSwap16(2048);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-			u16 = ByteSwap16(128);
-			f.Write(reinterpret_cast<char *>(&u16), 2);
-			clipSize += 10;
-
 			// update the chunks length
 			off_t = -4-clipSize;
 			f.SeekO(off_t, wxFromCurrent);
@@ -2220,39 +2294,31 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			f.SeekO(0, wxFromEnd);
 
 			// save texture to file
-			wxString texFilename(fn, wxConvUTF8);
-			texFilename = texFilename.BeforeLast('\\');
+			wxString texFilename;
+			texFilename = FilePath;
 			texFilename += '\\';
 			texFilename += texName;
 
 			if (modelExport_PreserveLWDir == true){
-				wxString Path, Name;
-
-				Path << wxString(fn, wxConvUTF8).BeforeLast('\\');
-				Name << texFilename.AfterLast('\\');
-
-				MakeDirs(Path,"Images");
+				MakeDirs(FilePath,"Images");
 
 				texFilename.Empty();
-				texFilename << Path << "\\Images\\" << Name;
+				texFilename = FilePath << "\\" << "Images" << "\\" << texName;
 			}
 
 			if (modelExport_PreserveDir == true){
-				wxString Path1, Path2, Name;
-				Path1 << wxString(texFilename, wxConvUTF8).BeforeLast('\\');
-				Name << texName.AfterLast('\\');
-				Path2 << texPath;
+				wxString Path;
+				Path << texFilename.BeforeLast('\\');
 
-				MakeDirs(Path1,Path2);
+				MakeDirs(Path,texPath);
 
 				texFilename.Empty();
-				texFilename << Path1 << '\\' << Path2 << '\\' << Name;
+				texFilename = Path << '\\' << texPath << '\\' << texName;
 			}
 			texFilename << (".tga");
-			//wxLogMessage("Saving Image: %s",texFilename);
+			wxLogMessage("Saving Image: %s",texFilename);
 
 			// setup texture
-			glBindTexture(GL_TEXTURE_2D, mat->tex);
 			SaveTexture(texFilename);
 
 			fileLen += clipSize;
@@ -2278,32 +2344,32 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 
 			// Surface name
 			//surfName = wxString::Format(_T("Material_%03i"),mat->tex);
-			surfName = texarray[mat->tex];
-			surfaceCounter++;
-			
+			++surfaceCounter;
+
+			surfName = texarray[mat->tex];			
 			surfName.Append(_T('\0'));
 			if (fmod((float)surfName.length(), 2.0f) > 0)
 				surfName.Append(_T('\0'));
 
-			surfName.Append(_T('\0')); // ""
-			surfName.Append(_T('\0'));
+			surfName.Append(_T('\0')); // Source: ""
+			surfName.Append(_T('\0')); // Even out the source
 			f.Write(surfName.data(), (int)surfName.length());
 			
-			surfaceDefSize += surfName.length();//(uint32)surfName.length();
+			surfaceDefSize += surfName.length();
 
 			// Surface Attributes
-			// COLOUR, size 4, bytes 2
+			// COLOR, size 4, bytes 2
 			f.Write("COLR", 4);
 			u16 = 14; // size
 			u16 = ByteSwap16(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 			
 			// value
-			f32 = reverse_endian<float>(1.0);
+			f32 = reverse_endian<float>(0.5);
 			f.Write(reinterpret_cast<char *>(&f32), 4);
-			f32 = reverse_endian<float>(1.0);
+			f32 = reverse_endian<float>(0.5);
 			f.Write(reinterpret_cast<char *>(&f32), 4);
-			f32 = reverse_endian<float>(1.0);
+			f32 = reverse_endian<float>(0.5);
 			f.Write(reinterpret_cast<char *>(&f32), 4);
 			u16 = 0;
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -2698,6 +2764,15 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 			blokSize += 8;
 
+			// Fix Blok Size
+			surfaceDefSize += blokSize;
+			off_t = -2-blokSize;
+			f.SeekO(off_t, wxFromCurrent);
+			u16 = ByteSwap16(blokSize);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f.SeekO(0, wxFromEnd);
+			// ================
+
 			// CMNT
 			f.Write("CMNT", 4);
 			wxString cmnt = texarray[mat->tex];
@@ -2708,18 +2783,18 @@ void ExportWMOtoLWO(WMO *m, const char *fn)
 			u16 = ByteSwap16(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 			f.Write(cmnt.data(), cmnt.length());
-			blokSize += 6 + cmnt.length();
+			surfaceDefSize += 6 + cmnt.length();
 
-			// 
-			surfaceDefSize += blokSize;
-			off_t = -2-blokSize;
-			f.SeekO(off_t, wxFromCurrent);
-			u16 = ByteSwap16(blokSize);
+			f.Write("VERS", 4);
+			u16 = 4;
+			u16 = ByteSwap16(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
-			f.SeekO(0, wxFromEnd);
-			// ================
+			f32 = 950;
+			f32 = reverse_endian<float>(f32);
+			f.Write(reinterpret_cast<char *>(&f32), 4);
+			surfaceDefSize += 10;
 			
-
+			// Fix Surface Size
 			fileLen += surfaceDefSize;
 			off_t = -4-surfaceDefSize;
 			f.SeekO(off_t, wxFromCurrent);
