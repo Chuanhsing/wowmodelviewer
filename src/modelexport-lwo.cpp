@@ -97,17 +97,18 @@ void WriteLWSceneObject(ofstream &fs, wxString Filename, Vec3D Pos, Vec3D Rot, f
 	ItemNumber++;
 }
 
-// Write a scene light, if it's a Model Light
-void WriteLWSceneModelLight(ofstream &fs, Model *m, ModelLight *light, int &lcount, Vec3D LPos, int ParentNum = NULL)
+// Write a Light to the Scene File
+void WriteLWSceneLight(ofstream &fs, int &lcount, Vec3D LPos, unsigned int Ltype, Vec3D Lcolor, float Lintensity, bool useAtten, float AttenEnd, float defRange = 12.5, wxString prefix = "", int ParentNum = NULL)
 {
 	bool isParented = false;
 	if (ParentNum!=NULL)
 		isParented = true;
+	if (prefix != "")
+		prefix = " "+prefix;
 
 	fs << "AddLight 2" << wxString::Format("%07x",lcount) << "\n";
-	wxString modelname = wxString(m->modelname).AfterLast('\\').BeforeLast('.');//.MakeLower();
 	//modelname[0] = toupper(modelname[0]);
-	fs << "LightName " << modelname << " Light " << lcount+1 << "\n";
+	fs << "LightName " << prefix << "Light " << lcount+1 << "\n";
 	fs << "ShowLight 1 -1 0.941176 0.376471 0.941176\n";	// Last 3 Numbers are Layout Color for the Light.
 	fs << "LightMotion\n";
 	fs << "NumChannels 9\n";
@@ -129,39 +130,30 @@ void WriteLWSceneModelLight(ofstream &fs, Model *m, ModelLight *light, int &lcou
 
 	// Light Color Reducer
 	// Some lights have a color channel greater than 255. This reduces all the colors, but increases the intensity, which should keep it looking the way Blizzard intended.
-
-	// Model lights have 2 light types: Ambient & Diffused. We'll use Diffused for our Lights. (Have not found an example of a light using Ambient...)
-	Vec3D diffC = light->diffColor.getValue(0,0);
-
-	float Lcolor[] = {diffC.x , diffC.y, diffC.z};
-	float Lintensity = light->diffIntensity.getValue(0,0);
-
-	while ((Lcolor[0] > 1)||(Lcolor[1] > 1)||(Lcolor[2] > 1)) {
-		Lcolor[0] = Lcolor[0] * 0.99;
-		Lcolor[1] = Lcolor[1] * 0.99;
-		Lcolor[2] = Lcolor[2] * 0.99;
+	while ((Lcolor.x > 1)||(Lcolor.y > 1)||(Lcolor.z > 1)) {
+		Lcolor.x = Lcolor.x * 0.99;
+		Lcolor.y = Lcolor.y * 0.99;
+		Lcolor.z = Lcolor.z * 0.99;
 		Lintensity = Lintensity / 0.99;
 	}
 
-	fs << "LightColor " << Lcolor[0] << " " << Lcolor[1] << " " << Lcolor[2] << "\n";
+	fs << "LightColor " << Lcolor.x << " " << Lcolor.y << " " << Lcolor.z << "\n";
 	fs << "LightIntensity " << Lintensity << "\n";
 
-	unsigned int ltype = light->type;
 	// Process Light type & output!
-	switch (ltype) {
+	switch (Ltype) {
 		// Omni Lights
 		case 1:
 		default:
 			// Default to an Omni (Point) light.
 			fs << "LightType 1\n";
 
-			if (light->UseAttenuation.getValue(0,0) == 1) {
+			if (useAtten == true) {
 				// Use Inverse Distance for the default Light Falloff Type. Should better simulate WoW Lights, until I can write a WoW light plugin for Lightwave...
-				float attenend = (light->AttenEnd.getValue(0,0)) * 2;
-				fs << "LightFalloffType 2\nLightRange " << attenend << "\n";
+				fs << "LightFalloffType 2\nLightRange " << AttenEnd << "\n";
 			}else{
 				// Default to these settings, which look pretty close...
-				fs << "LightFalloffType 2\nLightRange 25\n";
+				fs << "LightFalloffType 2\nLightRange " << defRange << "\n";
 			}
 			fs << "ShadowType 1\nShadowColor 0 0 0\n";
 			WriteLWScenePlugin(fs,"LightHandler",1,"PointLight");
@@ -169,73 +161,6 @@ void WriteLWSceneModelLight(ofstream &fs, Model *m, ModelLight *light, int &lcou
 	fs << "\n";
 	lcount++;
 }
-
-// Write a scene light, if it's a WMO Light
-void WriteLWSceneWMOLight(ofstream &fs, WMO *m, WMOLight *light, int &lcount, Vec3D LPos)
-{
-	fs << "AddLight 2" << wxString::Format("%07x",lcount) << "\n";
-	wxString modelname = wxString(m->name).AfterLast('\\').BeforeLast('.').MakeLower();
-	modelname[0] = toupper(modelname[0]);
-	fs << "LightName " << modelname << " Light " << lcount+1 << "\n";
-	fs << "ShowLight 1 -1 0.941176 0.376471 0.941176\n";	// Last 3 Numbers are Layout Color for the Light.
-	fs << "LightMotion\n";
-	fs << "NumChannels 9\n";
-	// Position
-	WriteLWSceneEnvChannel(fs,0,LPos.x,0);
-	WriteLWSceneEnvChannel(fs,1,LPos.y,0);
-	WriteLWSceneEnvChannel(fs,2,-LPos.z,0);
-	// Rotation
-	WriteLWSceneEnvChannel(fs,3,0,0);
-	WriteLWSceneEnvChannel(fs,4,0,0);
-	WriteLWSceneEnvChannel(fs,5,0,0);
-	// Scale
-	WriteLWSceneEnvChannel(fs,6,1,0);
-	WriteLWSceneEnvChannel(fs,7,1,0);
-	WriteLWSceneEnvChannel(fs,8,1,0);
-
-	// Light Color Reducer
-	// Some lights have a color channel greater than 255. This reduces all the colors, but increases the intensity, which should keep it looking the way Blizzard intended.
-	float Lcolor[] = {light->fcolor.x, light->fcolor.y, light->fcolor.z};
-	float Lintensity = light->intensity;
-
-	while ((Lcolor[0] > 1)||(Lcolor[1] > 1)||(Lcolor[2] > 1)) {
-		Lcolor[0] = Lcolor[0] * 0.99;
-		Lcolor[1] = Lcolor[1] * 0.99;
-		Lcolor[2] = Lcolor[2] * 0.99;
-		Lintensity = Lintensity / 0.99;
-	}
-
-	fs << "LightColor " << Lcolor[0] << " " << Lcolor[1] << " " << Lcolor[2] << "\n";
-	fs << "LightIntensity " << Lintensity << "\n";
-
-	unsigned int ltype = light->type;
-	// Process Light type & output!
-	switch (ltype) {
-		// Omni Lights
-		case 1:
-		default:
-			// Default to an Omni (Point) light.
-			fs << "LightType 1\n";
-			// If the light uses falloff...
-			if (light->useatten == 1) {
-				// Use Inverse Distance for the default Light Falloff Type. Should better simulate WoW Lights, until I can write a WoW light plugin for Lightwave...
-				float attenend = light->attenEnd * 10;
-				fs << "LightFalloffType 2\nLightRange " << attenend << "\n";
-			}else{
-				// Default to these settings, which look pretty close...
-				fs << "LightFalloffType 2\nLightRange 12.5\n";
-			}
-			fs << "ShadowType 1\nShadowColor 0 0 0\n";
-			WriteLWScenePlugin(fs,"LightHandler",1,"PointLight");
-	}
-	fs << "\n";
-	lcount++;
-}
-
-// Writes an Object file to a scene
-
-
-
 
 
 //---------------------------------------------
@@ -1467,21 +1392,46 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 
 	// Lights
 	if (modelExport_LW_ExportLights == true){
+		// WMO Lights
+		for (int i=0;i<m->nLights;i++){
+			WMOLight *light = &m->lights[i];
+
+			Vec3D color;
+			color.x=light->fcolor.x;
+			color.y=light->fcolor.y;
+			color.z=light->fcolor.z;
+			float intense = light->intensity;
+			bool useAtten = false;
+			float AttenEnd = light->attenEnd;
+
+			if (light->useatten > 0){
+				useAtten = true;
+			}
+
+			WriteLWSceneLight(fs,lcount,light->pos,light->type,color,intense,useAtten,AttenEnd,12.5);
+		}
+
 		// Doodad Lights
 		for (int i=0;i<DDLArrCount;i++){
 			
 			WMOModelInstance *doodad = &m->modelis[DoodadLightArrayID[i]];
 			ModelLight *light = &doodad->model->lights[i];
 
-			if ((light->type == 0) || (light->type == 1)){
-				WriteLWSceneModelLight(fs,doodad->model,light,lcount,light->pos,DoodadLightArrayDDID[i]);
+			if (light->type < 0){
+				continue;
 			}
-		}
+			
+			Vec3D color = light->diffColor.getValue(0,0);
+			float intense = light->diffIntensity.getValue(0,0);
+			bool useAtten = false;
+			float AttenEnd = light->AttenEnd.getValue(0,0);
+			wxString name = wxString(doodad->filename).AfterLast('\\');
 
-		// WMO Lights
-		for (int i=0;i<m->nLights;i++){
-			WMOLight *light = &m->lights[i];
-			WriteLWSceneWMOLight(fs,m,light,lcount,light->pos);
+			if (light->UseAttenuation.getValue(0,0) > 0){
+				useAtten = true;
+			}
+			
+			WriteLWSceneLight(fs,lcount,light->pos,light->type,color,intense,useAtten,AttenEnd,25,name,DoodadLightArrayDDID[i]);
 		}
 	}
 
