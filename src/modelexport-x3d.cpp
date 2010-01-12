@@ -309,13 +309,12 @@ void ExportM2toXHTML(Model *m, const char *fn, bool init)
         f << "<html xmlns=\"http://www.w3.org/1999/xhtml\">" << std::endl;
         f << "<head>" << std::endl;
         f << "    <meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />" << std::endl;
-        f << "    <title>X3DOM example</title>" << std::endl;
+        f << "    <title>WoWModelViewer X3D export</title>" << std::endl;
         f << "    <link rel=\"stylesheet\" type=\"text/css\" href=\"http://www.x3dom.org/x3dom/src/x3dom.css\" />" << std::endl;
         f << "</head>" << std::endl;
         f << "<body>" << std::endl;
-        f << "    <h1>X3DOM example</h1>" << std::endl;
         f << "    <p> " << std::endl;
-        f << "    <X3D xmlns=\"http://www.web3d.org/specifications/x3d-namespace\" id=\"someUniqueId\" showStat=\"false\" showLog=\"false\" x=\"0px\" y=\"0px\" width=\"400px\" height=\"400px\">" << std::endl;
+        f << "    <X3D xmlns=\"http://www.web3d.org/specifications/x3d-namespace\" id=\"someUniqueId\" showStat=\"false\" showLog=\"false\" x=\"0px\" y=\"0px\" width=\"600px\" height=\"600px\">" << std::endl;
 
         M2toX3D(f, m, init, fn, false, true);
 
