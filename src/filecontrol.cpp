@@ -301,17 +301,26 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		modelviewer->interfaceManager.GetPane(modelviewer->charControl).Show(false);
 	}
 
-	// Disable whatever formats can't export WMOs yet!
+	// Disable whatever formats can't be export yet!
+
+	// You MUST put true in one if the other is false! Otherwise, if they open the other model type and go back,
+	// your function will still be disabled!!
 	if (modelviewer->isWMO == true){
+		// If the object is a WMO file...
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode when viewing WMOs...
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, false);
 	}else{
+		// If it's an M2 file...
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);	// Currently totally disabled. No support at all...
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, true);
 	}
 
 	// Update the layout

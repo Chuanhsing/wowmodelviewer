@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;WotLK&quot;&#x0D;&#x0A;"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.10\include&quot;;&quot;C:\wxWidgets-2.8.10\include\msvc&quot;;.\zlib\;.\glew\include;.\bzip2\;.\;"
+				AdditionalIncludeDirectories="&quot;D:\Programming Tools\wxWidgets-2.8.10\include&quot;;&quot;D:\Programming Tools\wxWidgets-2.8.10\include\msvc&quot;;.\zlib\;.\glew\include;.\bzip2\;.\"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WXDEBUG__"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -73,10 +73,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glew32d.lib"
+				AdditionalDependencies="glew32d.lib wxpng.lib"
 				OutputFile="$(OutDir)/wowmodelview.exe"
 				LinkIncremental="0"
-				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.10\lib&quot;;&quot;C:\wxWidgets-2.8.10\lib\vc_lib&quot;;.\CxImage\;.\glew\lib;.\zlib\$(OutDir);.\bzip2\$(OutDir)"
+				AdditionalLibraryDirectories="&quot;D:\Programming Tools\wxWidgets-2.8.10\lib&quot;;&quot;D:\Programming Tools\wxWidgets-2.8.10\lib\vc_lib&quot;;.\CxImage\;.\glew\lib;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="LIBCMT.lib"
 				GenerateDebugInformation="true"
@@ -480,10 +480,6 @@
 			</File>
 			<File
 				RelativePath=".\modelcontrol.h"
-				>
-			</File>
-			<File
-				RelativePath=".\modelexport-lwo.h"
 				>
 			</File>
 			<File

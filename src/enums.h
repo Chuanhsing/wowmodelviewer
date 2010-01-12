@@ -26,6 +26,7 @@ enum ObjectID {
 	ID_FILE_EXIT,
 
 	// Model Export Menu items
+	// Pleae add your IDs to the bottom of this list.
 	ID_MODELEXPORT_INIT,
 	ID_MODELEXPORT_OPTIONS,
 	ID_MODELEXPORT_LWO,
@@ -34,6 +35,8 @@ enum ObjectID {
 	ID_MODELEXPORT_OBJ,
 	ID_MODELEXPORT_MS3D,
 	ID_MODELEXPORT_3DS,
+	ID_MODELEXPORT_X3D,
+	ID_MODELEXPORT_XHTML,
 
 	// Model Export Options
 	ID_EXPORTOPTIONS_FRAME,

@@ -35,6 +35,8 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	EVT_MENU(ID_FILE_DISCOVERY_NPC, ModelViewer::OnExportOther)
 	//--
 	// Export Menu
+	// To add your new exporter, simply copy the bottom line, and add your unique ID (specified in enums.h) as seen below.
+	// Make sure to use this ID for your export command in the ModelViewer::OnExport function!
 	EVT_MENU(ID_MODELEXPORT_OPTIONS, ModelViewer::OnToggleDock)
 	EVT_MENU(ID_MODELEXPORT_INIT, ModelViewer::OnToggleCommand)
 	EVT_MENU(ID_MODELEXPORT_LWO, ModelViewer::OnExport)
@@ -43,6 +45,8 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	EVT_MENU(ID_MODELEXPORT_COLLADA, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_MS3D, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_3DS, ModelViewer::OnExport)
+	EVT_MENU(ID_MODELEXPORT_X3D, ModelViewer::OnExport)
+	EVT_MENU(ID_MODELEXPORT_XHTML, ModelViewer::OnExport)
 	// --
 	EVT_MENU(ID_FILE_RESETLAYOUT, ModelViewer::OnToggleCommand)
 	// --
@@ -270,6 +274,10 @@ void ModelViewer::InitMenu()
 
 /*
 	New Model Export Menu!
+
+	To add your exporter, simply copu the botton line below, and change the nessicary information.
+	If you don't support WMOs or M2 files yet, you can disable export for that in filecontrol.cpp,
+	at the bottom of the FileControl::OnTreeSelect function.
 */
 	exportMenu = new wxMenu;
 	exportMenu->AppendCheckItem(ID_MODELEXPORT_INIT, _("Initial Pose Only"));
@@ -285,6 +293,9 @@ void ModelViewer::InitMenu()
 	exportMenu->Append(ID_MODELEXPORT_COLLADA, _("Collada..."));
 	exportMenu->Append(ID_MODELEXPORT_MS3D, _("Milkshape..."));
 	exportMenu->Append(ID_MODELEXPORT_3DS, _("3DS..."));
+	exportMenu->Append(ID_MODELEXPORT_X3D, _("X3D..."));
+	exportMenu->Append(ID_MODELEXPORT_XHTML, _("X3D in XHTML..."));
+
 	exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
 
 	fileMenu->Append(ID_FILE_MODELEXPORT_MENU, _("Export Model"), exportMenu);
@@ -2718,6 +2729,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 		newfilename << wxString(canvas->model->name).AfterLast('\\').BeforeLast('.');
 	}
 
+	// While good to support this style, we will be removing this export option in a near-version. Please use the individual options below.
 	if ((id == ID_FILE_MODELEXPORT)||(id == ID_FILE_MODELEXPORT_INIT)) {
 		if (canvas->model) {
 			wxFileDialog dialog(this, _("Export Model..."), wxEmptyString, newfilename, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds|X3D (*.x3d)|*.x3d|Embedded X3D in XHTML (*.xhtml)|*.xhtml"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
@@ -2750,23 +2762,33 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				}
 			}
 		}
+	// Individual Export Options for the Export Options Menu!
+
+	// Identifies the ID for this export option, and does the nessicary functions.
 	} else if (id == ID_MODELEXPORT_LWO) {
+		// Adds the proper extention to our default filename.
 		newfilename << ".lwo";
+		// For M2 Models
 		if (canvas->model) {
 			wxFileDialog dialog(this, _("Export Model..."), wxEmptyString, newfilename, _T("Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
+				// Your M2 export function goes here.
 				ExportM2toLWO(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}
+		// For WMO Models. This should be included, even if it isn't supported yet!
 		} else if (canvas->wmo) {
 			wxFileDialog dialog(this, _("Export World Model Object..."), wxEmptyString, newfilename, _T("Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
+				// Your WMO export function goes here.
 				ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
 			}
 		}
+	// That's all folks!
+
 #ifdef _DEBUG
 	// Experimental new LWO Exporter!!
 	} else if (id == ID_MODELEXPORT_LWO2) {
@@ -2855,8 +2877,44 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				ExportWMOto3DS(canvas->wmo, dialog.GetPath().fn_str());	
 			}
 		}
+	} else if (id == ID_MODELEXPORT_X3D) {
+		newfilename << ".x3d";
+		if (canvas->model) {
+			wxFileDialog dialog(this, _("Export Model..."), wxEmptyString, newfilename, _T("X3D (*.x3d)|*.x3d"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			if (dialog.ShowModal()==wxID_OK) {
+				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+
+				ExportM2toX3D(canvas->model, dialog.GetPath().fn_str(), init);
+			}
+		} else if (canvas->wmo) {
+			wxFileDialog dialog(this, _("Export World Model Object..."), wxEmptyString, newfilename, _T("X3D (*.x3d)|*.x3d"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			if (dialog.ShowModal()==wxID_OK) {
+				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+
+				ExportWMOtoX3D(canvas->wmo, dialog.GetPath().fn_str());	
+			}
+		}
+	} else if (id == ID_MODELEXPORT_XHTML) {
+		newfilename << ".xhtml";
+		if (canvas->model) {
+			wxFileDialog dialog(this, _("Export Model..."), wxEmptyString, newfilename, _T("Embedded X3D in XHTML (*.xhtml)|*.xhtml"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			if (dialog.ShowModal()==wxID_OK) {
+				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+
+				ExportM2toXHTML(canvas->model, dialog.GetPath().fn_str(), init);
+			}
+		} else if (canvas->wmo) {
+			wxFileDialog dialog(this, _("Export World Model Object..."), wxEmptyString, newfilename, _T("Embedded X3D in XHTML (*.xhtml)|*.xhtml"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			if (dialog.ShowModal()==wxID_OK) {
+				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+
+				ExportWMOtoXHTML(canvas->wmo, dialog.GetPath().fn_str());
+			}
+		}
 	}
 }
+
+
 
 // Other things to export...
 void ModelViewer::OnExportOther(wxCommandEvent &event)

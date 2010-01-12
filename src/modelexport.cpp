@@ -36,6 +36,24 @@ GroupData *groups = NULL;
 // 2 methods to go,  just export the entire m2 model.
 // or use our "drawing" routine to export only whats being drawn.
 
+void SaveTexture2(wxString infn, wxString outfn)
+{
+	CxImage *newImage = new CxImage(0);
+	MPQFile texf(infn);
+    texf.seek(0x00);
+
+	// read header
+	BLPHeader texHeader;
+	texf.read(&texHeader, sizeof(BLPHeader));
+
+	if (texHeader.Type != "BLP2")
+		return;
+	
+
+	// newImage->CreateFromArray(pixels, texHeader.sizeX, texHeader.sizeY, 32, (width*4), true);
+
+}
+
 void SaveTexture(wxString fn)
 {
 	unsigned char *pixels = NULL;
@@ -1296,8 +1314,11 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 	wxDELETEA(texarray);
 }
 
-// Now for the incomplete functions
+// Now for the non-working functions. These are most-likely disabled, but are here so
+// someone can eventually work on them.
 void ExportM2toCOLLADA(Attachment *att, Model *m, const char *fn, bool init){}
 void ExportWMOtoCOLLADA(WMO *m, const char *fn){}
 void ExportWMOtoMS3D(WMO *m, const char *fn){}
 void ExportWMOto3DS(WMO *m, const char *fn){}
+void ExportWMOtoX3D(WMO *m, const char *fn){}
+void ExportWMOtoXHTML(WMO *m, const char *fn){}
