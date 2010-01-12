@@ -19,6 +19,10 @@ void ExportWMOtoMS3D(WMO *m, const char *fn);
 void ExportM2toOBJ(Model *m, const char *fn, bool init);
 void ExportWMOtoOBJ(WMO *m, const char *fn);
 
+// X3D/XHTML
+void ExportM2toX3D(Model *m, const char *fn, bool init, bool animated = false);
+void ExportM2toXHTML(Model *m, const char *fn, bool init);
+
 // Lightwave
 void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init);
 void ExportWMOtoLWO(WMO *m, const char *fn);

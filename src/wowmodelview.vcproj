@@ -309,11 +309,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\modelexport.cpp"
+				RelativePath=".\modelexport-lwo.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\modelexport-lwo.cpp"
+				RelativePath=".\modelexport-x3d.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\modelexport.cpp"
 				>
 			</File>
 			<File
@@ -479,11 +483,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\modelexport.h"
+				RelativePath=".\modelexport-lwo.h"
 				>
 			</File>
 			<File
-				RelativePath=".\modelexport-lwo.h"
+				RelativePath=".\modelexport.h"
 				>
 			</File>
 			<File

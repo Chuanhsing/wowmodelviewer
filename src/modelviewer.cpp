@@ -2720,7 +2720,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 
 	if ((id == ID_FILE_MODELEXPORT)||(id == ID_FILE_MODELEXPORT_INIT)) {
 		if (canvas->model) {
-			wxFileDialog dialog(this, _("Export Model..."), wxEmptyString, newfilename, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, _("Export Model..."), wxEmptyString, newfilename, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds|X3D (*.x3d)|*.x3d|Embedded X3D in XHTML (*.xhtml)|*.xhtml"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
@@ -2732,7 +2732,11 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 				} else if (dialog.GetFilterIndex() == 3) {
 					ExportM2to3DS(canvas->model, dialog.GetPath().fn_str(), init);
-				}
+				} else if (dialog.GetFilterIndex() == 4) {
+                    ExportM2toX3D(canvas->model, dialog.GetPath().fn_str(), init);
+                } else if (dialog.GetFilterIndex() == 5) {
+                    ExportM2toXHTML(canvas->model, dialog.GetPath().fn_str(), init);
+                }
 			}
 		} else if (canvas->wmo) {
 			wxFileDialog dialog(this, _("Export World Model Object..."), wxEmptyString, newfilename, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
