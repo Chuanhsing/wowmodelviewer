@@ -28,6 +28,9 @@ bool modelExport_PreserveLWDir = true;
 bool modelExport_LW_ExportLights = true;
 bool modelExport_LW_ExportDoodads = true;
 int modelExport_LW_DoodadsAs = 0;
+// X3D Options
+bool modelExport_X3D_ExportAnimation = false;
+bool modelExport_X3D_CenterModel = true;
 
 long langID = -1;
 long interfaceID = -1;

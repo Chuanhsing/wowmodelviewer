@@ -58,6 +58,22 @@ public:
 	void OnComboBox(wxCommandEvent &event);
 };
 
+class ModelExportOptions_X3D: public wxWindow
+{
+    DECLARE_CLASS(ModelExportOptions_X3D)
+    DECLARE_EVENT_TABLE()
+
+    wxCheckBox *chkbox[NUM_MEO3_CHECK];
+
+public:
+
+    ModelExportOptions_X3D(wxWindow* parent, wxWindowID id);
+    ~ModelExportOptions_X3D() {};
+
+    void Update();
+
+    void OnCheck(wxCommandEvent &event);
+};
 
 class ModelExportOptions_Control: public wxWindow
 {
@@ -67,6 +83,7 @@ class ModelExportOptions_Control: public wxWindow
 	wxNotebook *notebook;
 	ModelExportOptions_General *page1;
 	ModelExportOptions_Lightwave *page2;
+    ModelExportOptions_X3D *page3;
 public:
 
 	ModelExportOptions_Control(wxWindow* parent, wxWindowID id);

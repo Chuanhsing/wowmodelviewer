@@ -11,6 +11,7 @@
 IMPLEMENT_CLASS(ModelExportOptions_General, wxWindow)
 IMPLEMENT_CLASS(ModelExportOptions_Lightwave, wxWindow)
 IMPLEMENT_CLASS(ModelExportOptions_Control, wxWindow)
+IMPLEMENT_CLASS(ModelExportOptions_X3D, wxWindow)
 
 BEGIN_EVENT_TABLE(ModelExportOptions_General, wxWindow)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_PRESERVE_DIR, ModelExportOptions_General::OnCheck)
@@ -43,6 +44,13 @@ BEGIN_EVENT_TABLE(ModelExportOptions_Control, wxWindow)
 	
 END_EVENT_TABLE()
 
+BEGIN_EVENT_TABLE(ModelExportOptions_X3D, wxWindow)
+    EVT_CHECKBOX(ID_EXPORTOPTIONS_EXPORT_ANIMATION, ModelExportOptions_X3D::OnCheck)
+    EVT_CHECKBOX(ID_EXPORTOPTIONS_CENTER_MODEL, ModelExportOptions_X3D::OnCheck)
+END_EVENT_TABLE()
+
+
+//**** General Options ****
 
 ModelExportOptions_General::ModelExportOptions_General(wxWindow* parent, wxWindowID id)
 {
@@ -73,6 +81,10 @@ void ModelExportOptions_General::Update()
 {
 	chkbox[MEO_CHECK_PRESERVE_DIR]->SetValue(modelExport_PreserveDir);
 }
+
+
+
+//**** Lightwave Options ****
 
 ModelExportOptions_Lightwave::ModelExportOptions_Lightwave(wxWindow* parent, wxWindowID id)
 {
@@ -137,6 +149,10 @@ void ModelExportOptions_Lightwave::OnComboBox(wxCommandEvent &event)
 	}
 }
 
+
+
+//**** Control Options ****
+
 ModelExportOptions_Control::ModelExportOptions_Control(wxWindow* parent, wxWindowID id)
 {
 	wxLogMessage(_T("Creating Model Export Options Control..."));
@@ -150,9 +166,11 @@ ModelExportOptions_Control::ModelExportOptions_Control(wxWindow* parent, wxWindo
 	
 	page1 = new ModelExportOptions_General(notebook, ID_EXPORTOPTIONS_PAGE_GENERAL);
 	page2 = new ModelExportOptions_Lightwave(notebook, ID_EXPORTOPTIONS_PAGE_LIGHTWAVE);
+    page3 = new ModelExportOptions_X3D(notebook, ID_EXPORTOPTIONS_PAGE_X3D);
 
 	notebook->AddPage(page1, _T("General"), false, -1);
 	notebook->AddPage(page2, _T("Lightwave"), false);
+    notebook->AddPage(page3, _T("X3D and XHTML", false));
 }
 
 
@@ -160,6 +178,7 @@ ModelExportOptions_Control::~ModelExportOptions_Control()
 {
 	page1->Destroy();
 	page2->Destroy();
+    page3->Destroy();
 	notebook->Destroy();
 }
 
@@ -170,11 +189,48 @@ void ModelExportOptions_Control::Open()
 
 	page1->Update();
 	page2->Update();
+    page3->Update();
 }
 
 void ModelExportOptions_Control::Close()
 {
 	
+}
+
+
+
+//**** X3D Options ****
+
+ModelExportOptions_X3D::ModelExportOptions_X3D(wxWindow* parent, wxWindowID id)
+{
+    if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, _T("ModelExportOptions_X3D")) == false) {
+        wxLogMessage(_T("GUI Error: ModelExportOptions_X3D"));
+        return;
+    }
+    wxFlexGridSizer *top = new wxFlexGridSizer(1);
+
+    chkbox[MEO_CHECK_EXPORT_ANIMATION] = new wxCheckBox(this, ID_EXPORTOPTIONS_EXPORT_ANIMATION, _("Export keyframe animation"), wxPoint(5,5), wxDefaultSize, 0);
+    chkbox[MEO_CHECK_CENTER_MODEL] = new wxCheckBox(this, ID_EXPORTOPTIONS_CENTER_MODEL, _("Add Transform to center model"), wxPoint(160,5), wxDefaultSize, 0);
+    
+    // disabled for now
+    chkbox[MEO_CHECK_EXPORT_ANIMATION]->Enable(false);
+}
+
+void ModelExportOptions_X3D::Update()
+{
+    chkbox[MEO_CHECK_EXPORT_ANIMATION]->SetValue(modelExport_X3D_ExportAnimation);
+    chkbox[MEO_CHECK_CENTER_MODEL]->SetValue(modelExport_X3D_CenterModel);
+}
+
+void ModelExportOptions_X3D::OnCheck(wxCommandEvent &event)
+{
+    int id = event.GetId();
+
+    if (id==ID_EXPORTOPTIONS_EXPORT_ANIMATION){
+        modelExport_X3D_ExportAnimation = event.IsChecked();
+    }else if (id==ID_EXPORTOPTIONS_CENTER_MODEL){
+        modelExport_X3D_CenterModel = event.IsChecked();
+    }
 }
 
 // --

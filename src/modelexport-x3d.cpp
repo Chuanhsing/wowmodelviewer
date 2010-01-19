@@ -13,6 +13,8 @@
 
 #include "CxImage/ximage.h"
 
+//#define NONSTANDARDBLENDMODE
+
 class tabbed_ostream
 {
 private:
@@ -31,7 +33,8 @@ private:
 public:
     tabbed_ostream(std::ostream& stream) : tabc_(0), tab_(""), stream_(stream), on_(true) 
     { 
-        stream_.precision(5); 
+        stream_.setf(std::ios::fixed);
+        stream_.precision(6);
     }
 
     void toggle() { on_ = !on_; }
@@ -48,13 +51,138 @@ public:
     }
 };
 
-void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool exportAnimations, bool xhtml)
+void writeBlendMode(tabbed_ostream& s, int16 blendmode)
+{
+    if (blendmode == BM_OPAQUE)
+        return;
+    
+    s   << "<BlendMode ";
+
+    s.toggle();
+    switch(blendmode)
+    {
+        case BM_TRANSPARENT:
+            s << "alphaFunc='equal' alphaFuncValue='0.7'";
+            break;
+        case BM_ALPHA_BLEND:
+            s << "srcFactor='src_alpha' destFactor='one_minus_src_alpha'";
+            break;
+        case BM_ADDITIVE:
+            break;
+        case BM_ADDITIVE_ALPHA:
+            break;
+        case BM_MODULATE:
+            break;
+        case BM_MODULATEX2:
+            break;
+        default:
+            break;
+    }
+    
+    s << " />" << std::endl;
+    s.toggle();    
+}
+
+Vec3D calcCenteringTransform(Model* m)
+{
+    Vec3D boundMax, boundMin;
+
+    float* bmaxf = boundMax;
+    float* bminf = boundMin;
+
+    if (m->header.nVertices > 0)
+        boundMax = boundMin = m->vertices[0];
+
+    for (size_t x = 0; x < m->header.nVertices; ++x)
+    {
+        float* bf = static_cast<float*>(m->vertices[x]);
+        for (size_t i = 0; i < 3; ++i)
+        {
+            if (bf[i] > bmaxf[i])
+                bmaxf[i] = bf[i];
+
+            if (bf[i] < bminf[i])
+                bminf[i] = bf[i];
+        }
+    }
+
+    return (boundMin+((boundMax-boundMin)*0.5f))*-1.f;
+}
+
+void M2toX3DAnim(tabbed_ostream s, Model* m)
+{
+    size_t animation = m->animManager->GetAnim();
+    ModelAnimation* ma = &m->anims[animation];
+
+    size_t animSpeed = ma->playSpeed;
+
+    if (animSpeed == 0) // error
+        return;
+
+    size_t numFrames = (ma->timeEnd - ma->timeStart)/animSpeed;
+
+    //m_iTotalAnimFrames = m->animManager->GetFrameCount();
+    //m_iTotalFrames = (m_iTotalAnimFrames / 25);
+    //m_iTimeStep = int(m_iTotalAnimFrames / m_iTotalFrames);
+
+
+    s   << "<TimeSensor DEF='ts' "
+        << "cycleInterval='" << (1.0f+(numFrames/25))*3 << "' "
+        << "loop='TRUE' />" << std::endl;
+
+    for (size_t i=0; i<m->passes.size(); i++) 
+    {
+        ModelRenderPass &p = m->passes[i];         
+
+        if (p.init(m)) 
+        {
+            s << "<CoordinateInterpolator DEF='ci_" << i << "' ";
+            s.toggle();
+            s << "key='";
+
+            for (size_t frame = 0; frame < numFrames; ++frame)
+                s << static_cast<float>(frame)/static_cast<float>(numFrames) << " ";
+            s << " 1.0' keyValue='";
+
+            for (size_t frame = 0; frame <= numFrames; ++frame)
+            {
+                if (frame != numFrames)
+                    m->animManager->SetFrame(animSpeed*frame);
+                else
+                    m->animManager->SetFrame(0);
+
+                // calculate frame
+                m->draw();
+
+                //s << "<!-- frame " << frame << " -->" << std::endl;
+
+                for (size_t k = 0, b=p.indexStart; k<p.indexCount; k++,b++)
+                {
+                    uint16 a = m->indices[b];
+                    Vec3D v;
+
+                    v = m->vertices[a];
+
+                    s << v.x << " " << v.y << " " << v.z << " " << std::endl;
+                }
+
+            }
+            s << "' />" << std::endl;
+            s.toggle();
+
+            s << "<ROUTE fromNode='ts' fromField='fraction_changed' toNode='ci_" << i << "' toField='set_fraction' />" << std::endl;
+            s << "<ROUTE fromNode='ci_" << i << "' fromField='value_changed' toNode='pl_" << i << "' toField='set_point' />" << std::endl;
+        }
+    }
+}
+
+void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
 {
     s << "<!-- Exported with WoWModelViewer -->" << std::endl;
 
     s.tab();
     s << "<Scene>" << std::endl;
-
+    
     s.tab();
 
     // define background
@@ -97,6 +225,29 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool exportA
         }
     }
 
+    size_t num_rot = 0;
+    if (modelExport_X3D_CenterModel)
+    {
+        // move viewpoint back
+        s << "<Viewpoint position='0 0 " << m->pos.z << "'/>" << std::endl;
+
+        // create rotation transforms only if there is an actual rotation
+        float rot[3] = { m->rot.x, m->rot.y, m->rot.z };
+        for (size_t n=0; n < 3; ++n)
+            if (rot[n] != 0.f)
+            {   
+                s << "<Transform rotation='" << (n == 0) << " " << (n == 1) << " " << (n == 2) << " " 
+                  << PIOVER180*rot[n] << "'>" << std::endl;
+                num_rot++;
+                s.tab();
+            }
+
+        // translate object to center
+        Vec3D p = calcCenteringTransform(m);
+        s << "<Transform translation='" << p.x << " " << p.y << " " << p.z << "'>" << std::endl;
+        s.tab();
+    }
+
     for (size_t i=0; i<m->passes.size(); i++) 
     {
         ModelRenderPass &p = m->passes[i];
@@ -112,6 +263,15 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool exportA
             s << "<Appearance>" << std::endl;
 
             s.tab();
+
+#ifdef NONSTANDARDBLENDMODE
+            if (!xhtml)
+            {
+                writeBlendMode(s, p.blendmode);
+                if (p.noZWrite)
+                    s << "<DepthMode readOnly='TRUE' />" << std::endl;
+            }
+#endif
             
             s   << "<Material diffuseColor='"
                 << p.ocol.x << " " 
@@ -119,20 +279,24 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool exportA
                 << p.ocol.z << "' ";
 
             s.toggle();
+
+            if (p.useEnvMap)
+                s << "shininess='18.0' ";
+
+#ifndef NONSTANDARDBLENDMODE
             if (!xhtml) 
             {
-                    
-                   s    << "emissiveColor='" 
-                        << p.ecol.x << " " 
-                        << p.ecol.y << " " 
-                        << p.ecol.z << "' "
+                s   << "emissiveColor='" 
+                    << p.ecol.x << " " 
+                    << p.ecol.y << " " 
+                    << p.ecol.z << "' "
 
-                        << "transparency='" << p.ocol.w << "' ";
-                    
+                    << "transparency='" << p.ocol.w << "' ";
             }
-            
+#endif
             s << "/>" << std::endl;
             s.toggle();
+
             
             s << "<ImageTexture USE='" << textures[p.tex] << "'/>" << std::endl;
 
@@ -209,80 +373,30 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool exportA
         }
     }
 
-#ifdef EXPORTANIMATED
-    if (m->animated && exportAnimations)
+    if (m->animated && modelExport_X3D_ExportAnimation)
+        M2toX3DAnim(s, m);
+
+    if (modelExport_X3D_CenterModel)
     {
-        size_t animation = m->animManager->GetAnim();
-        ModelAnimation* ma = &m->anims[animation];
+        // close translation
+        s.rtab();
+        s << "</Transform>" << std::endl;
 
-        size_t animSpeed = ma->playSpeed;
-
-        if (animSpeed == 0) // error
-            return;
-
-        size_t numFrames = (ma->timeEnd - ma->timeStart)/animSpeed;
-
-        s   << "<TimeSensor DEF='ts' "
-            << "cycleInterval='" << 1.0f+(numFrames/25) << "' "
-            << "loop='TRUE' />" << std::endl;
-        
-        for (size_t i=0; i<m->passes.size(); i++) 
+        // close all rotations
+        for (size_t n = 0; n < num_rot; ++n)
         {
-            ModelRenderPass &p = m->passes[i];         
-
-            if (p.init(m)) 
-            {
-
-                s << "<CoordinateInterpolator DEF='ci_" << i << "' ";
-                s.toggle();
-                s << "key='";
-
-                for (size_t frame = 0; frame < numFrames; ++frame)
-                    s << static_cast<float>(frame)/static_cast<float>(numFrames) << " ";
-                s << " 1.0' keyValue='" << std::endl;
-                s.toggle();
-
-                for (size_t frame = 0; frame <= numFrames; ++frame)
-                {
-                    // set time
-                    //m->animManager->Tick(animSpeed*frame);
-
-                    if (frame != numFrames)
-                        m->animManager->SetFrame(animSpeed*frame);
-                    else
-                        m->animManager->SetFrame(0);
-
-                    // calculate frame
-                    m->animate(animation);
-
-                    //s << "<!-- frame " << frame << " -->" << std::endl;
-
-                    for (size_t k = 0, b=p.indexStart; k<p.indexCount; k++,b++)
-                    {
-                        uint16 a = m->indices[b];
-                        Vec3D v;
-
-                        v = m->vertices[a];
-
-                        s << v.x << " " << v.y << " " << v.z << " " << std::endl;
-                    }
-
-                }
-                s << "' />" << std::endl;
-                
-
-                s << "<ROUTE fromNode='ts' fromField='fraction_changed' toNode='ci_" << i << "' toField='set_fraction' />" << std::endl;
-                s << "<ROUTE fromNode='ci_" << i << "' fromField='value_changed' toNode='pl_" << i << "' toField='set_point' />" << std::endl;
-            }
+            s.rtab();
+            s << "</Transform>" << std::endl;
         }
     }
-#endif
 
+    s.rtab();
     s << "</Scene>" << std::endl;
+
     s.rtab();
 }
 
-void ExportM2toX3D(Model *m, const char *fn, bool init, bool animated)
+void ExportM2toX3D(Model *m, const char *fn, bool init)
 {
     ofstream f(fn, ios_base::out | ios_base::trunc);
 
@@ -291,7 +405,7 @@ void ExportM2toX3D(Model *m, const char *fn, bool init, bool animated)
         f << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << std::endl;
         f << "<!DOCTYPE X3D PUBLIC \"ISO//Web3D//DTD X3D 3.0//EN\" \"http://www.web3d.org/specifications/x3d-3.0.dtd\">" << std::endl;
         f << "<X3D xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' profile='Full' version='3.0' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.0.xsd'>" << std::endl;
-        M2toX3D(f, m, init, fn, animated, false);
+        M2toX3D(f, m, init, fn, false);
         f << "</X3D>" << std::endl;
     }
 
@@ -316,7 +430,7 @@ void ExportM2toXHTML(Model *m, const char *fn, bool init)
         f << "    <p> " << std::endl;
         f << "    <X3D xmlns=\"http://www.web3d.org/specifications/x3d-namespace\" id=\"someUniqueId\" showStat=\"false\" showLog=\"false\" x=\"0px\" y=\"0px\" width=\"600px\" height=\"600px\">" << std::endl;
 
-        M2toX3D(f, m, init, fn, false, true);
+        M2toX3D(f, m, init, fn, true);
 
         f << "\n" << std::endl;
         f << "      </X3D>" << std::endl;
