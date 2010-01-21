@@ -109,30 +109,95 @@ Vec3D calcCenteringTransform(Model* m)
     return (boundMin+((boundMax-boundMin)*0.5f))*-1.f;
 }
 
+// find the biggest "times" keyframe array to determine the maximum number of keyframes that can be saved
+size_t getMaxKeyFrames(Model* m)
+{
+    unsigned int anim = m->animManager->GetAnim();
+    size_t numKeyFrames = 0;
+
+    // figure out a reasonable number of keyframes
+    for (size_t b = 0; b < m->header.nBones; ++b)
+    {
+        size_t nTrans = m->bones[b].trans.times[anim].size();
+        size_t nScale = m->bones[b].scale.times[anim].size();
+        size_t nRotat = m->bones[b].rot.times[anim].size();
+
+
+        if (nTrans) numKeyFrames = max(nTrans, numKeyFrames);
+        if (nScale) numKeyFrames = max(nScale, numKeyFrames);
+        if (nRotat) numKeyFrames = max(nRotat, numKeyFrames);
+    }
+
+    return numKeyFrames;
+}
+
+// ask user for number of keyframes per second to save
+size_t getKFPSExportOptions(Model* m)
+{
+    // default value
+    size_t maxKeyFrames = getMaxKeyFrames(m);
+    wxString strNumFrames("5");
+    wxString title = wxString::Format("Number of key frames per second to be used (max. %i):", maxKeyFrames);
+
+    wxTextEntryDialog d(NULL, title, _T("Export X3D animation"), strNumFrames);
+
+    double n;
+    bool success;
+    size_t numFrames;
+
+    do
+    {
+        do
+        {
+            if (d.ShowModal() == wxID_OK)
+                strNumFrames = d.GetValue();
+            else
+                return maxKeyFrames;
+        }
+        while (!strNumFrames.IsNumber());
+
+        success = strNumFrames.ToDouble(&n);
+        numFrames = static_cast<size_t>(n);
+    } 
+    while (!success || numFrames > maxKeyFrames || n < 1);
+
+    return numFrames;
+}
+
 void M2toX3DAnim(tabbed_ostream s, Model* m)
 {
-    size_t animation = m->animManager->GetAnim();
-    ModelAnimation* ma = &m->anims[animation];
-
-    size_t animSpeed = ma->playSpeed;
-
-    if (animSpeed == 0) // error
+    if (m->header.nBones == 0)
         return;
 
-    size_t numFrames = (ma->timeEnd - ma->timeStart)/animSpeed;
+    // get total frame count of model
+    size_t numTotalFrames = m->animManager->GetFrameCount();
 
-    //m_iTotalAnimFrames = m->animManager->GetFrameCount();
-    //m_iTotalFrames = (m_iTotalAnimFrames / 25);
-    //m_iTimeStep = int(m_iTotalAnimFrames / m_iTotalFrames);
+    // determine number of keyframes per second to be used
+    size_t numKFPS = getKFPSExportOptions(m);
 
+    // animManager->getFrameCount total frames equal milliseconds, because
+    // Tick() progresses the Frame counter by time*speed, time being time passed in milliseconds
+    float totalTime = static_cast<float>(numTotalFrames)/1000.f;
 
     s   << "<TimeSensor DEF='ts' "
-        << "cycleInterval='" << (1.0f+(numFrames/25))*3 << "' "
-        << "loop='TRUE' />" << std::endl;
+        << " cycleInterval='" << totalTime <<  "' "
+        << " loop='TRUE' />" << std::endl;
+
+    // length of animation * key frames per second = numKeyFrames
+    size_t numKeyFrames = static_cast<size_t>(totalTime * numKFPS);
+    assert(numKeyFrames < numTotalFrames);
+
+    // length of step per time unit
+    size_t stepSize = numTotalFrames/numKeyFrames;
+    
+    // save state
+    bool showModel = m->showModel;
+    m->showModel = false;
+    unsigned int currentFrame = m->animManager->GetFrame();
 
     for (size_t i=0; i<m->passes.size(); i++) 
     {
-        ModelRenderPass &p = m->passes[i];         
+        ModelRenderPass &p = m->passes[i];
 
         if (p.init(m)) 
         {
@@ -140,16 +205,13 @@ void M2toX3DAnim(tabbed_ostream s, Model* m)
             s.toggle();
             s << "key='";
 
-            for (size_t frame = 0; frame < numFrames; ++frame)
-                s << static_cast<float>(frame)/static_cast<float>(numFrames) << " ";
+            for (size_t frame = 0; frame < numKeyFrames; ++frame)
+                s << static_cast<float>(frame)/static_cast<float>(numKeyFrames) << " ";
             s << " 1.0' keyValue='";
 
-            for (size_t frame = 0; frame <= numFrames; ++frame)
+            for (size_t frame = 0; frame <= numKeyFrames; ++frame)
             {
-                if (frame != numFrames)
-                    m->animManager->SetFrame(animSpeed*frame);
-                else
-                    m->animManager->SetFrame(0);
+                m->animManager->SetFrame((stepSize*frame) % numTotalFrames);
 
                 // calculate frame
                 m->draw();
@@ -165,7 +227,6 @@ void M2toX3DAnim(tabbed_ostream s, Model* m)
 
                     s << v.x << " " << v.y << " " << v.z << " " << std::endl;
                 }
-
             }
             s << "' />" << std::endl;
             s.toggle();
@@ -174,6 +235,10 @@ void M2toX3DAnim(tabbed_ostream s, Model* m)
             s << "<ROUTE fromNode='ci_" << i << "' fromField='value_changed' toNode='pl_" << i << "' toField='set_point' />" << std::endl;
         }
     }
+
+    // reset state
+    m->showModel = showModel;
+    m->animManager->SetFrame(currentFrame);
 }
 
 void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
