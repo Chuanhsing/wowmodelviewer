@@ -112,6 +112,7 @@ bool WowModelViewApp::OnInit()
 	g_canvas = frame->canvas;
 	g_animControl = frame->animControl;
 	g_charControl = frame->charControl;
+	g_fileControl = frame->fileControl;
 
 	frame->interfaceManager.Update();
 
@@ -313,8 +314,8 @@ void WowModelViewApp::LoadSettings()
 	pConfig->Read(_T("DefaultFormat"), &imgFormat, 0);
 	pConfig->Read(_T("ModelExportInitOnly"), &modelExportInitOnly, true);
 	pConfig->Read(_T("ModelExportPreserveDirs"), &modelExport_PreserveDir, true);
-	pConfig->Read(_T("ModelExportPreserveLWDirs"), &modelExport_PreserveLWDir, true);
 
+	pConfig->Read(_T("ModelExportLWPreserveDirs"), &modelExport_LW_PreserveDir, true);
 	pConfig->Read(_T("ModelExportLWExportLights"), &modelExport_LW_ExportLights, true);
 	pConfig->Read(_T("ModelExportLWExportDoodads"), &modelExport_LW_ExportDoodads, true);
 	pConfig->Read(_T("ModelExportLWDoodadsAs"), &modelExport_LW_DoodadsAs, 0);
@@ -412,8 +413,8 @@ void WowModelViewApp::SaveSettings()
 	pConfig->Write(_T("DefaultFormat"), imgFormat);
 	pConfig->Write(_T("ModelExportInitOnly"), modelExportInitOnly);
 	pConfig->Write(_T("ModelExportPreserveDirs"), modelExport_PreserveDir);
-	pConfig->Write(_T("ModelExportPreserveLWDirs"), modelExport_PreserveLWDir);
 
+	pConfig->Write(_T("ModelExportLWPreserveDirs"), modelExport_LW_PreserveDir);
 	pConfig->Write(_T("ModelExportLWExportLights"), modelExport_LW_ExportLights);
 	pConfig->Write(_T("ModelExportLWExportDoodads"), modelExport_LW_ExportDoodads);
 	pConfig->Write(_T("ModelExportLWDoodadsAs"), modelExport_LW_DoodadsAs);

@@ -7,12 +7,12 @@
 
 #define RADIAN 57.295779513082320876798154814114
 
-// If your exported doesn't do WMO or m2 files, include a faux function anyways. Then add a non-working
+// If your exporter doesn't do WMO or m2 files, include a faux function anyways. Then add a non-working
 // function at the bottom of modelexport.cpp so it has something to look for. The non-working exporter
 // can be disabled in filecontrol.cpp, so it won't ever run.
 
 //3D Studio Max
-void ExportM2to3DS(Model *m, const char *fn, bool init);
+void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init);
 void ExportWMOto3DS(WMO *m, const char *fn);
 
 // Milkshape
@@ -20,7 +20,7 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init);
 void ExportWMOtoMS3D(WMO *m, const char *fn);
 
 // Wavefront Object
-void ExportM2toOBJ(Model *m, const char *fn, bool init);
+void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init);
 void ExportWMOtoOBJ(WMO *m, const char *fn);
 
 // X3D/XHTML
@@ -45,6 +45,7 @@ void ExportWMOtoCOLLADA(WMO *m, const char *fn);
 void SaveTexture(wxString fn);
 void SaveTexture2(wxString infn, wxString outfn);
 Vec3D QuaternionToXYZ(Vec3D Dir, float W);
+void InitCommon(Attachment *att, bool init);
 
 
 

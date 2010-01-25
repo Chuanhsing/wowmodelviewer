@@ -24,7 +24,7 @@ bool bShowParticle = true;
 bool modelExportInitOnly = true;
 bool modelExport_PreserveDir = true;
 // Lightwave Options
-bool modelExport_PreserveLWDir = true;
+bool modelExport_LW_PreserveDir = true;
 bool modelExport_LW_ExportLights = true;
 bool modelExport_LW_ExportDoodads = true;
 int modelExport_LW_DoodadsAs = 0;
@@ -104,6 +104,7 @@ int wxStringToInt(const wxString& str)
 	return number;
 }
 
+// Round a float, down to the specified decimal
 float round(float input, int limit = 2){
 	if (limit > 0){
 		input *= (10^limit);

@@ -191,7 +191,7 @@ void AddVertices(Model *m, Attachment *att, bool init)
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 				uint16 a = m->indices[b];
 				
-				if (m->vertices && init == false) {
+				if ((m->vertices) && (init == false)) {
 					verts[vertIndex].vertex.x = ((m->vertices[a].x * scale.x) + pos.x);
 					verts[vertIndex].vertex.y = ((m->vertices[a].y * scale.y) + pos.y);
 					verts[vertIndex].vertex.z = ((m->vertices[a].z * scale.z) + pos.z);
@@ -298,7 +298,7 @@ void InitCommon(Attachment *att, bool init)
 // http://www.martinreddy.net/gfx/3d/3DS.spec
 // http://www.martinreddy.net/gfx/3d/MLI.spec
 // http://gpwiki.org/index.php/C:Load3DS
-void ExportM2to3DS(Model *m, const char *fn, bool init)
+void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 {
 	if (!m)
 		return;
@@ -312,6 +312,8 @@ void ExportM2to3DS(Model *m, const char *fn, bool init)
 	}
 
 	// ------------------------------------
+
+	InitCommon(att, init);
 
 	// Primary chunk
 	MAX3DS_HEADER header;
@@ -963,7 +965,7 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 		wxDELETEA(groups);
 }
 
-void ExportM2toOBJ(Model *m, const char *fn, bool init)
+void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init)
 {
 	// Open file
 	ofstream f(fn, ios_base::out | ios_base::trunc);
@@ -973,6 +975,7 @@ void ExportM2toOBJ(Model *m, const char *fn, bool init)
 		return;
 	}
 
+	InitCommon(att, init);
 	wxString out;
 
 	// http://people.sc.fsu.edu/~burkardt/data/mtl/mtl.html

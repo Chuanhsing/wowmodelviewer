@@ -1355,8 +1355,9 @@ bool filterModels(std::string s)
 
 	//return ((s[len-2]=='m' && s[len-1]=='2') || (s[len-3]=='w' && s[len-2]=='m'));
 	return ( 
-			((s[len-2]|0x20)=='m' && s[len-1]=='2') ||
-			((s[len-3]|0x20)=='w' && (s[len-2]|0x20)=='m' && (s[len-1]|0x20)=='o' ) 
+			((s[len-2]|0x20)=='m' && s[len-1]=='2')
+			|| ((s[len-3]|0x20)=='w' && (s[len-2]|0x20)=='m' && (s[len-1]|0x20)=='o' )
+			//||((s[len-3]|0x20)=='a' && (s[len-2]|0x20)=='d' && (s[len-1]|0x20)=='t' ) 
 			);
 }
 
@@ -2737,13 +2738,13 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				if (dialog.GetFilterIndex() == 0) {
-					ExportM2toOBJ(canvas->model, dialog.GetPath().fn_str(), init);
+					ExportM2toOBJ(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 				} else if (dialog.GetFilterIndex() == 1) {
 					ExportM2toLWO(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 				} else if (dialog.GetFilterIndex() == 2) {
 					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 				} else if (dialog.GetFilterIndex() == 3) {
-					ExportM2to3DS(canvas->model, dialog.GetPath().fn_str(), init);
+					ExportM2to3DS(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 				} else if (dialog.GetFilterIndex() == 4) {
                     ExportM2toX3D(canvas->model, dialog.GetPath().fn_str(), init);
                 } else if (dialog.GetFilterIndex() == 5) {
@@ -2816,7 +2817,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportM2toOBJ(canvas->model, dialog.GetPath().fn_str(), init);
+				ExportM2toOBJ(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		} else if (canvas->wmo) {
 			wxFileDialog dialog(this, _("Export World Model Object..."), wxEmptyString, newfilename, _T("Wavefront (*.obj)|*.obj"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
@@ -2867,7 +2868,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportM2to3DS(canvas->model, dialog.GetPath().fn_str(), init);
+				ExportM2to3DS(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		} else if (canvas->wmo) {
 			wxFileDialog dialog(this, _("Export World Model Object..."), wxEmptyString, newfilename, _T("3D Studio Max (*.3ds)|*.3ds"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);

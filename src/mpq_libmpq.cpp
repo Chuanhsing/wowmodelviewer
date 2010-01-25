@@ -262,7 +262,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 				col = 2; // wxRed
 			
 			if (temp.Find(_T("expansion")) > -1)
-				col = 3; // Green
+				col = 3; // Purple
 
 			if (temp.Find(_T("lichking")) > -1)
 				col = 4; // Frozen Blue

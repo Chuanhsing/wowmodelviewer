@@ -57,7 +57,10 @@ bool filterSearch(std::string s)
 
 	wxString temp(s.c_str(), wxConvUTF8);
 	temp = temp.MakeLower();
-	if (!temp.Mid(temp.Length()-2).IsSameAs(wxT("m2")) && !temp.Mid(temp.Length()-3).IsSameAs(wxT("wmo")))
+	if (!temp.Mid(temp.Length()-2).IsSameAs(wxT("m2"))
+		&& !temp.Mid(temp.Length()-3).IsSameAs(wxT("wmo"))
+		//&& !temp.Mid(temp.Length()-3).IsSameAs(wxT("adt"))
+		)
 		return false;
 	if (temp.Find(content) != wxNOT_FOUND)
 		return true;

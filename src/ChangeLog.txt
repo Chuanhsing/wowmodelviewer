@@ -1,5 +1,13 @@
 World of Warcraft Model Viewer v0.5.08 (Chuanhsing Update)
 
+r681
+ - Lightwave WMO Exports can now export Doodads as models! *NOTE* Some WMOs won't look right in WMV after exporting. This is a visual bug and will have no impact on other exports.
+ - Added X3D & X3D in XHTML Exporting.
+ - Renamed the Preserve Lightwave Content Directory option in the save file. Previous setting will be lost.
+ - Fixed a bug when exporting Lights to Lightwave. They will no longer have an attenuation of 0.
+ - (Dev Work) Added a lot of comments to help people add their items to the Export Menu
+ - (Dev Work) FileControl is now globally available.
+
 r680
  - Fixed Armory URL problems for characters with accents in their character name. (IE: Daïmhôndrùs)
  - Fixed an error where exporting WMO files with more than 65,280 points to Lightwave would cause the resulting object file to crash Lightwave.
