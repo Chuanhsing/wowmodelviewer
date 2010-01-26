@@ -83,19 +83,27 @@ void writeBlendMode(tabbed_ostream& s, int16 blendmode)
     s.toggle();    
 }
 
-Vec3D calcCenteringTransform(Model* m)
+Vec3D calcCenteringTransform(Model* m, bool init)
 {
     Vec3D boundMax, boundMin;
 
     float* bmaxf = boundMax;
     float* bminf = boundMin;
 
-    if (m->header.nVertices > 0)
+    if (m->vertices == NULL || init == true) 
+        boundMax = boundMin = m->origVertices[0].pos;
+    else
         boundMax = boundMin = m->vertices[0];
 
     for (size_t x = 0; x < m->header.nVertices; ++x)
     {
-        float* bf = static_cast<float*>(m->vertices[x]);
+        float* bf;
+        
+        if (m->vertices == NULL || init == true)
+            bf = static_cast<float*>(m->origVertices[x].pos);
+        else
+            bf = static_cast<float*>(m->vertices[x]);
+        
         for (size_t i = 0; i < 3; ++i)
         {
             if (bf[i] > bmaxf[i])
@@ -308,7 +316,7 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
             }
 
         // translate object to center
-        Vec3D p = calcCenteringTransform(m);
+        Vec3D p = calcCenteringTransform(m, init);
         s << "<Transform translation='" << p.x << " " << p.y << " " << p.z << "'>" << std::endl;
         s.tab();
     }
@@ -356,7 +364,7 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
                     << p.ecol.y << " " 
                     << p.ecol.z << "' "
 
-                    << "transparency='" << p.ocol.w << "' ";
+                    << "transparency='" << 1.f - p.ocol.w << "' ";
             }
 #endif
             s << "/>" << std::endl;
