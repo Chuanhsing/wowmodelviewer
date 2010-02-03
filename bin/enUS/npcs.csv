@@ -15,7 +15,7 @@
 61,3341,7,Thuros Lightfingers
 66,1298,7,Tharynn Bouden
 68,3167,7,Stormwind City Guard
-69,604,1,Timber Wolf
+69,31048,1,Diseased Timber Wolf
 74,1289,7,Kurran Steele
 78,3275,7,Janos Hammerknuckle
 79,774,7,Narg the Taskmaster
@@ -117,7 +117,7 @@
 294,1689,7,Marshal Haggard
 295,1291,7,Innkeeper Farley
 297,1756,7,Caretaker Folsom
-299,447,1,Diseased Young Wolf
+299,31049,1,Diseased Young Wolf
 300,655,7,Zzarc' Vul
 302,915,6,Blind Mary
 304,2346,3,Felsteed
@@ -950,7 +950,7 @@
 1420,901,8,Toad
 1421,4437,7,Private Merle
 1422,4395,7,Corporal Sethman
-1423,3258,7,Stormwind City Guard
+1423,3258,7,Stormwind Guard
 1424,774,7,Master Digger
 1425,774,7,Grizlak
 1426,374,7,Riverpaw Miner
@@ -3746,7 +3746,7 @@
 4965,2966,7,Pained
 4966,2967,7,Private Hendel
 4967,2969,7,Archmage Tervosh
-4968,2970,7,Lady Jaina Proudmoore
+4968,30863,7,Lady Jaina Proudmoore
 4969,4470,7,Old Town Thug
 4971,3509,7,Slim's Friend
 4972,2971,7,Kagoro
@@ -5021,6 +5021,7 @@
 7392,304,12,Prairie Chicken
 7393,304,0,White Plymouth Rock
 7394,5369,12,Ancona Chicken
+7395,2177,12,Cockroach
 7396,6010,7,Earthen Stonebreaker
 7397,6009,7,Earthen Stonecarver
 7398,4588,11,Stoneclaw Totem V
@@ -7273,7 +7274,7 @@
 12997,5485,7,Monty
 12998,12932,7,Dwarven Farmer
 12999,17519,10,World Invisible Trigger
-13000,12940,7,Gnomish Engineer
+13000,12940,10,Gnome Engineer
 13016,1141,8,Deeprun Rat
 13017,1141,8,Enthralled Deeprun Rat
 13018,12965,7,Nipsy
@@ -7407,7 +7408,7 @@
 13441,13415,7,Frostwolf Wolf Rider Commander
 13442,13403,7,Arch Druid Renferal
 13443,13409,7,Druid of the Grove
-13444,13369,7,Great-father Winter
+13444,13369,7,Greatfather Winter
 13445,13370,7,Great-father Winter
 13446,13662,7,Field Marshal Teravaine
 13447,13383,7,Corporal Noreg Stormpike
@@ -8494,7 +8495,7 @@
 15694,15766,7,Stormwind Reveler
 15695,11686,10,Vek Twins Trigger
 15696,15650,7,War Effort Recruit
-15698,15660,12,Father Winter's Helper (BIG) gm
+15698,15660,12,Father Winter's Helper
 15699,10269,12,Tranquil Mechanical Yeti
 15700,15661,7,Warlord Gorchuk
 15701,15662,7,Field Marshal Snowfall
@@ -8538,7 +8539,8 @@
 15742,15695,10,Colossus of Ashi
 15743,15696,10,Colossal Anubisath Warbringer
 15744,15697,10,Imperial Qiraji Destroyer
-15745,15698,7,Great-father Winter's Helper
+15745,15698,7,Greatfather Winter's Helper
+15746,15698,7,Great-father Winter's Helper
 15747,15699,10,Qiraji Captain
 15748,15700,10,Lesser Anubisath Warbringer
 15749,11096,10,Lesser Silithid Flayer
@@ -21525,7 +21527,7 @@
 35070,29682,7,Firehawk Mariner
 35071,12202,1,North Sea Mako
 35072,25632,7,Angry Kvaldir
-35073,29573,0,Farseer Eannu
+35073,29573,7,Farseer Eannu
 35079,29688,7,Firehawk Mariner Female (Dead)
 35080,25773,7,Kvaldir Berserker (dead)
 35083,29682,7,Firehawk Mariner Male (Dead)
@@ -21635,7 +21637,7 @@
 35474,25452,6,Vengeful Val'kyr
 35475,29881,7,Visiting Warlock
 35476,30571,7,Wilfred Fizzlebang
-35477,344,0,Little Adeline
+35477,344,7,Little Adeline
 35482,24892,1,Hungry Jormungar
 35483,29844,7,Huntsman Hakan
 35491,29842,6,Black Knight's Skeletal Gryphon
@@ -22074,7 +22076,6 @@
 38181,30982,7,Haragg the Unseen
 38182,30983,7,Niby the Almighty
 38194,30859,7,Torgo the Elder
-38200,30310,7,Silver Covenant Agent (Ambusher)
 38222,10771,6,Vengeful Shade
 38229,7511,8,Frozen Insect
 38231,30995,8,Blood Parasite

@@ -20381,6 +20381,7 @@
 49978,4,Crushing Coldwraith Belt
 49979,4,Handguards of Winter's Respite
 49980,4,Rusted Bonespike Pauldrons
+49981,4,Fal'inrush Defender of Quel'thalas
 49982,4,Heartpierce
 49983,4,Blood-Soaked Saronite Stompers
 49986,4,Broken Ram Skull Helm
@@ -20392,6 +20393,7 @@
 49994,4,The Lady's Brittle Bracers
 49995,4,Fallen Lord's Handguards
 49996,4,Deathwhisper Chestpiece
+49997,4,Mithrios Bronzebeard's Legacy
 49998,4,Shadowvault Slayer's Cloak
 50000,4,Scourge Hunter's Vambraces
 50001,4,Ikfirus's Sack of Wonder
@@ -20401,6 +20403,7 @@
 50009,4,Boots of Unnatural Growth
 50010,4,Waistband of Righteous Fury
 50011,4,Gunship Captain's Mittens
+50012,4,Havoc's Call Blade of Lordaeron Kings
 50014,4,Greatcloak of the Turned Champion
 50015,4,Belt of the Blood Nova
 50016,4,Rib Spreader
@@ -20442,6 +20445,7 @@
 50067,4,Astrylian's Sutured Cinch
 50068,4,Rigormortis
 50069,4,Professor's Bloodied Smock
+50070,4,Glorenzelg High-Blade of the Silver Hand
 50071,4,Treads of the Wasteland
 50072,4,Landsoul's Horned Greathelm
 50073,4,Geistlord's Punishment Sack
@@ -20578,6 +20582,11 @@
 50417,4,Bracers of Eternal Dreaming
 50418,4,Robe of the Waking Nightmare
 50423,4,Sundial of Eternal Dusk
+50425,4,Oathbinder Charge of the Ranger-General
+50426,4,Heaven's Fall Kryss of a Thousand Lies
+50427,4,Bloodsurge Kel'Thuzad's Blade of Agony
+50428,4,Royal Scepter of Terenas II
+50429,4,Archus Greatstaff of Antonidas
 50444,4,Rowan's Rifle of Silver Bullets
 50449,4,Stiffened Corpse Shoulderpads
 50450,4,Leggings of Dubious Charms
@@ -20696,6 +20705,15 @@
 50725,4,Dying Light
 50727,4,Bloodfall
 50729,4,Icecrown Glacial Wall
+50730,4,Glorenzelg High-Blade of the Silver Hand
+50731,4,Archus Greatstaff of Antonidas
+50732,4,Bloodsurge Kel'Thuzad's Blade of Agony
+50733,4,Fal'inrush Defender of Quel'thalas
+50734,4,Royal Scepter of Terenas II
+50735,4,Oathbinder Charge of the Ranger-General
+50736,4,Heaven's Fall Kryss of a Thousand Lies
+50737,4,Havoc's Call Blade of Lordaeron Kings
+50738,4,Mithrios Bronzebeard's Legacy
 50759,4,Bone Warden's Splitter
 50760,4,Bonebreaker Scepter
 50761,4,Citadel Enforcer's Claymore
@@ -21064,6 +21082,7 @@
 51584,4,Lich Wrappings
 51585,4,Sister Svalna's Spangenhelm
 51586,4,Emerald Saint's Spaulders
+51755,0,Frost Witch's War-Kilt
 51777,4,Leggings of the Refracted Mind
 51782,4,Etched Dragonbone Girdle
 51783,4,Vambraces of the Frost Wyrm Queen
@@ -21076,6 +21095,15 @@
 51790,4,Robes of Azure Downfall
 51791,4,Lost Pavise of the Blue Flight
 51792,4,Shoulderguards of Crystalline Bone
+51795,4,Troggbane Axe of the Frostborne King
+51796,4,Warmace of Menethil
+51797,4,Tainted Twig of Nordrassil
+51798,4,Valius Gavel of the Lightbringer
+51799,4,Halion Staff of Forgotten Love
+51800,4,Stormfury Black Blade of the Betrayer
+51801,4,Pugius Fist of Defiance
+51802,4,Windrunner's Heartseeker
+51803,4,Tel'thas Dagger of the Blood King
 51811,4,Shoulderguards of Crystalline Bone
 51812,4,Lost Pavise of the Blue Flight
 51813,4,Robes of Azure Downfall
@@ -21189,8 +21217,17 @@
 51936,4,Citadel Enforcer's Claymore
 51937,4,Bonebreaker Scepter
 51938,4,Bone Warden's Splitter
+51939,4,Tel'thas Dagger of the Blood King
+51940,4,Windrunner's Heartseeker
+51941,4,Pugius Fist of Defiance
+51942,4,Stormfury Black Blade of the Betrayer
+51943,4,Halion Staff of Forgotten Love
+51944,4,Valius Gavel of the Lightbringer
+51945,4,Tainted Twig of Nordrassil
+51946,4,Warmace of Menethil
 51947,4,Troggbane Axe of the Frostborne King
 51958,3,Pristine Glowbear Pelt
+51959,3,Vigorous Belt
 51960,3,Vigorous Gloves
 51962,3,Vigorous Bracers
 51963,3,Vigorous Stompers
@@ -21204,12 +21241,14 @@
 51973,3,Enumerated Handwraps
 51974,0,Enumerated Shoulderpads
 51976,3,Earthbound Shoulderguards
+51977,3,Earthbound Girdle
 51978,3,Earthbound Girdle
 51979,3,Earthbound Grips
 51980,3,Earthbound Handgrips
 51981,3,Earthbound Wristguards
 51982,3,Earthbound Boots
 51984,3,Stalwart Shoulderpads
+51985,3,Stalwart Belt
 51987,3,Stalwart Grips
 51989,3,Stalwart Bands
 51990,3,Stalwart Treads
