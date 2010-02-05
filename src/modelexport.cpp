@@ -36,24 +36,8 @@ GroupData *groups = NULL;
 // 2 methods to go,  just export the entire m2 model.
 // or use our "drawing" routine to export only whats being drawn.
 
-void SaveTexture2(wxString infn, wxString outfn)
-{
-	CxImage *newImage = new CxImage(0);
-	MPQFile texf(infn);
-    texf.seek(0x00);
-
-	// read header
-	BLPHeader texHeader;
-	texf.read(&texHeader, sizeof(BLPHeader));
-
-	if (texHeader.Type != "BLP2")
-		return;
-	
-
-	// newImage->CreateFromArray(pixels, texHeader.sizeX, texHeader.sizeY, 32, (width*4), true);
-
-}
-
+// SaveTexture
+// Used to save composite textures, such as a character's face & body.
 void SaveTexture(wxString fn)
 {
 	unsigned char *pixels = NULL;
@@ -79,6 +63,79 @@ void SaveTexture(wxString fn)
 	wxDELETE(newImage);
 	wxDELETEA(pixels);
 }
+
+// SaveTexture2 Function
+// Used to export images that are filenames. For composited images, such as a character's face & body texture, use SaveTexture.
+// ExportID identifies the exporting function. This is used in the path-generating section.
+// Suffixes currently supported: "tga" & "png". Defaults to tga if omitted by exporter.
+void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString suffix = "tga")
+{
+	// Check to see if we have all our data...
+	if (file == _T(""))
+		return;
+	if (outdir == _T(""))
+		return;
+
+	wxFileName fn(file);
+	if (fn.GetExt().Lower() != _T("blp"))
+		return;
+	TextureID temptex = texturemanager.add(std::string(file.mb_str()));
+	Texture &tex = *((Texture*)texturemanager.items[temptex]);
+	if (tex.w == 0 || tex.h == 0)
+		return;
+
+	wxString temp;
+
+	unsigned char *tempbuf = (unsigned char*)malloc(tex.w*tex.h*4);
+	tex.getPixels(tempbuf, GL_BGRA_EXT);
+
+	CxImage *newImage = new CxImage(0);
+	newImage->AlphaCreate();	// Create the alpha layer
+	newImage->IncreaseBpp(32);	// set image to 32bit 
+	newImage->CreateFromArray(tempbuf, tex.w, tex.h, 32, (tex.w*4), true);
+
+	wxString fileName = file.AfterLast('\\').BeforeLast('.');
+	wxString filePath = file.BeforeLast('\\');
+
+	// -= Pre-Path Directories =-
+	// Add any directories inbetween the target directory and the preserved directory go here.
+
+	// Lightwave
+	if (ExportID == "LWO"){
+		if (modelExport_LW_PreserveDir == true){
+			MakeDirs(outdir,"Images");
+			outdir += "/Images/";
+		}
+	// Wavefront OBJ
+	}else if (ExportID == "OBJ"){
+	}
+
+	// Restore WoW's content directories for this image.
+	if (modelExport_PreserveDir == true){
+		MakeDirs(outdir,filePath);
+		outdir += filePath;
+		outdir << "\\";
+		outdir.Replace("\\","/");
+	}
+
+	// Final Filename
+	temp = outdir+fileName+wxT(".")+suffix;
+
+	//wxLogMessage(_T("Info: Exporting texture to %s..."), temp.c_str());
+
+	// Save image!
+	if (suffix == _T("tga"))
+		newImage->Save(temp.mb_str(), CXIMAGE_FORMAT_TGA);
+	else
+		newImage->Save(temp.mb_str(), CXIMAGE_FORMAT_PNG);
+
+	// Clear data we don't need anymore
+	free(tempbuf);
+	newImage->Destroy();
+	wxDELETE(newImage);
+	
+}
+
 // Limit a value by a min & a max. The Inc controls by how much to reduce for every run.
 double Clamp(double value, float min, float max, float inc = PI){
 	if (value > 0){
@@ -95,6 +152,7 @@ double Clamp(double value, float min, float max, float inc = PI){
 }
 
 // Converts WoW's Radians into a 3D friendly Heading, Pitch, Bank system.
+// Tested only with Lightwave. Might have to make minor direction changes here to make it more univsersal.
 Vec3D QuaternionToXYZ(Vec3D Dir, float W){
 	//-dir.z,dir.x,dir.y	WoW Direction...
 	Vec3D vdir(Dir.x,Dir.z,-Dir.y);
@@ -172,16 +230,33 @@ void AddVertices(Model *m, Attachment *att, bool init)
 	Vec3D pos(0,0,0);
 	Vec3D scale(1,1,1);
 	if (boneID>-1) {
+		// Note: We still need to rotate the items!!
 		pos = mParent->atts[boneID].pos;
-		Matrix mat = mParent->bones[mParent->atts[boneID].bone].mat;
-		/*
-		pos.x += mat.m[0][4];
-		pos.y += mat.m[1][4];
-		pos.z += mat.m[2][4];
-		*/
-		scale.x = mat.m[0][0];
-		scale.y = mat.m[1][1];
-		scale.z = mat.m[2][2];
+		Bone cbone = mParent->bones[mParent->atts[boneID].bone];
+		Matrix mat = cbone.mat;
+		if (init == true){
+			// InitPose is a reference to the HandsClosed animation (#15), which is the closest to the Initial pose.
+			// By using this animation, we'll get the proper scale for the items when in Init mode.
+			int InitPose = 15;
+			scale = cbone.scale.getValue(InitPose,0);
+			if (scale.x == 0 && scale.y == 0 && scale.z == 0){
+				scale.x = 1;
+				scale.y = 1;
+				scale.z = 1;
+			}
+		}else{
+			// Scale takes into consideration only the final size of an object. This means that if a staff it rotated 90 degrees,
+			// the final scale will be as if the staff is REALLY short. This should solve itself after we get rotations working.
+			scale.x = mat.m[0][0];
+			scale.y = mat.m[1][1];
+			scale.z = mat.m[2][2];
+
+			// Moves the item to the proper position.
+			mat.translation(cbone.transPivot);
+			pos.x = mat.m[0][3];
+			pos.y = mat.m[1][3];
+			pos.z = mat.m[2][3];
+		}
 	}
 
 	for (size_t i=0; i<m->passes.size(); i++) {

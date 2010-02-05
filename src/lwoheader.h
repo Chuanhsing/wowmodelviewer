@@ -5,8 +5,6 @@
 
 // -----------------------------------------
 // New LW Header Stuff
-//
-// One I finish my work, this will replace the above file.
 // -----------------------------------------
 
 int i32;
@@ -77,30 +75,29 @@ struct PolyChunk32 {
 	uint32 indice[3];
 };
 
-/*
-// Return a Vertex
-inline char get_VX(unsigned int Value)
-{
-	unsigned short indice16;
-	unsigned int indice32;
-	unsigned short byte = 0;
-	bool is16 = false;
-	char rthis[256];
 
-	uint16 counter16 = (Value & 0x0000FFFF);
-	uint32 counter32 = Value + 0xFF000000;
+// -=Usable Structures=-
+// Weight Data
+struct LWWeight{
+	Vec3D Point;
+	float Value;
+};
 
-	if (Value < 0xFF00){
-		rthis = MSB2(counter16);
-		byte = 2;
-	}else{
-		rthis = MSB4(counter32);
-		byte = 4;
-	}
+// Layer Data
+struct LWLayer {
+	// Layer Data
+	wxString Name;
 
-	return reinterpret_cast<char *>rthis, byte;
-}
-*/
-
+	// Points Block
+	unsigned long PointCount;
+	Vec3D Points[1];
+	Vec3D BoundingBox1;
+	Vec3D BoundingBox2;
+	Vec2D UVData[1];
+	
+	// Poly Block
+	unsigned long PolyCount;
+	PolyChunk32 Polys[1];
+};
 
 #endif // LWOHEADER_H

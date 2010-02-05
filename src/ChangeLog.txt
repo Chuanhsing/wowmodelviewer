@@ -1,5 +1,22 @@
 World of Warcraft Model Viewer v0.5.08 (Chuanhsing Update)
 
+r682
+ - Added new 3.2.2 items!
+ - Removed old exporting menu.
+ - Exporters that can export Attached items will no longer have oddly stretched items when exporting Init-Only Models.
+ - Lightwave Exporter Updates:
+   - WMO Surface names no longer contain the image's path. The image's path is still available in the surface's comment.
+   - M2 Geosets will now export as Parts for Lightwave.
+   - M2 Model surfaces are now smoothed by default.
+   - Character Models will now save variable textures (body, hair & cape) using the exported model's name.
+   - Updated/fixed M2 export format.
+   - Added support for attached character items, such as helmets & weapons. (Known Bug: Attached item textures are imported but are not linked the item's surface.)
+ - X3D Exporter Updates: (tob.franke)
+   - Fixed inverse transparency bug.
+   - Fixed calcCenteringTransform access to vertex array for initial pose.
+ - (Dev Work) M2 TextureList now has spots for a Character's Body, Hair, Fur, Cape, Reflections, and item/Monster replaceable textures.
+ - (Dev Work) Wrote SaveTexture2 so exporters can simply process a list of textures and they will be saved.
+
 r681
  - Lightwave WMO Exports can now export Doodads as models! *NOTE* Some WMOs won't look right in WMV after exporting. This is a visual bug and will have no impact on other exports.
  - Added X3D & X3D in XHTML Exporting.

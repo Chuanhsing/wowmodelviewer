@@ -27,8 +27,6 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	// --
 	//EVT_MENU(ID_FILE_TEXIMPORT, ModelViewer::OnTex)
 	EVT_MENU(ID_FILE_TEXEXPORT, ModelViewer::OnExport)
-	EVT_MENU(ID_FILE_MODELEXPORT, ModelViewer::OnExport)
-	EVT_MENU(ID_FILE_MODELEXPORT_INIT, ModelViewer::OnExport)
 	EVT_MENU(ID_FILE_MODELEXPORT_MENU, ModelViewer::OnExport)
 	EVT_MENU(ID_FILE_MODEL_INFO, ModelViewer::OnExportOther)
 	EVT_MENU(ID_FILE_DISCOVERY_ITEM, ModelViewer::OnExportOther)
@@ -266,19 +264,11 @@ void ModelViewer::InitMenu()
 	fileMenu->Append(ID_FILE_TEXEXPORT, _("Export Texture"));
 	fileMenu->Enable(ID_FILE_TEXEXPORT, false);
 */
-	fileMenu->Append(ID_SHOW_MODELOPENED, _("Export Texture..."));
+	fileMenu->Append(ID_SHOW_MODELOPENED, _("Export Textures..."));
 
-	// Keeping these two for a bit so people can get used to the new format...
-	fileMenu->Append(ID_FILE_MODELEXPORT, _("Export Model..."));
-	fileMenu->Append(ID_FILE_MODELEXPORT_INIT, _("Export Init Model..."));
+	// --== New Model Export Menu! ==--
+	//To add your exporter, simply copy the bottom line below, and change the nessicary information.
 
-/*
-	New Model Export Menu!
-
-	To add your exporter, simply copu the botton line below, and change the nessicary information.
-	If you don't support WMOs or M2 files yet, you can disable export for that in filecontrol.cpp,
-	at the bottom of the FileControl::OnTreeSelect function.
-*/
 	exportMenu = new wxMenu;
 	exportMenu->AppendCheckItem(ID_MODELEXPORT_INIT, _("Initial Pose Only"));
 	exportMenu->Check(ID_MODELEXPORT_INIT, modelExportInitOnly);
@@ -296,10 +286,15 @@ void ModelViewer::InitMenu()
 	exportMenu->Append(ID_MODELEXPORT_X3D, _("X3D..."));
 	exportMenu->Append(ID_MODELEXPORT_XHTML, _("X3D in XHTML..."));
 
+	// -= Enable/Disable Model Exporters =-
+	// If you don't support WMOs or M2 files yet, you can disable export for that in filecontrol.cpp,
+	// at the bottom of the FileControl::OnTreeSelect function.
 	exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
 
+	// -= Create Model Export Menu =-
 	fileMenu->Append(ID_FILE_MODELEXPORT_MENU, _("Export Model"), exportMenu);
 
+	// --== Continue regular menu ==--
 	fileMenu->AppendSeparator();
 	fileMenu->Append(ID_FILE_DISCOVERY_ITEM, _("Discovery Item"));
 	if (wxFileExists(_T("discoveryitems.csv")))
@@ -2718,7 +2713,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 	// Determine if this model should be in the initial pose or not.
 	// Currently supports both the new and old method for making an item Init or not...
 	bool init = false;
-	if ((id == ID_FILE_MODELEXPORT_INIT) || ((id != ID_FILE_MODELEXPORT) && (exportMenu->IsChecked(ID_MODELEXPORT_INIT) == true))){
+	if (exportMenu->IsChecked(ID_MODELEXPORT_INIT) == true){
 		init = true;
 	}
 
@@ -2730,43 +2725,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 		newfilename << wxString(canvas->model->name).AfterLast('\\').BeforeLast('.');
 	}
 
-	// While good to support this style, we will be removing this export option in a near-version. Please use the individual options below.
-	if ((id == ID_FILE_MODELEXPORT)||(id == ID_FILE_MODELEXPORT_INIT)) {
-		if (canvas->model) {
-			wxFileDialog dialog(this, _("Export Model..."), wxEmptyString, newfilename, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo|Milkshape 3D (*.ms3d)|*.ms3d|3D Studio Max (*.3ds)|*.3ds|X3D (*.x3d)|*.x3d|Embedded X3D in XHTML (*.xhtml)|*.xhtml"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
-
-				if (dialog.GetFilterIndex() == 0) {
-					ExportM2toOBJ(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
-				} else if (dialog.GetFilterIndex() == 1) {
-					ExportM2toLWO(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
-				} else if (dialog.GetFilterIndex() == 2) {
-					ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
-				} else if (dialog.GetFilterIndex() == 3) {
-					ExportM2to3DS(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
-				} else if (dialog.GetFilterIndex() == 4) {
-                    ExportM2toX3D(canvas->model, dialog.GetPath().fn_str(), init);
-                } else if (dialog.GetFilterIndex() == 5) {
-                    ExportM2toXHTML(canvas->model, dialog.GetPath().fn_str(), init);
-                }
-			}
-		} else if (canvas->wmo) {
-			wxFileDialog dialog(this, _("Export World Model Object..."), wxEmptyString, newfilename, _T("Wavefront (*.obj)|*.obj|Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
-
-				if (dialog.GetFilterIndex() == 0) {
-					ExportWMOtoOBJ(canvas->wmo, dialog.GetPath().fn_str());
-				} else if (dialog.GetFilterIndex() == 1) {
-					ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
-				}
-			}
-		}
-	// Individual Export Options for the Export Options Menu!
-
 	// Identifies the ID for this export option, and does the nessicary functions.
-	} else if (id == ID_MODELEXPORT_LWO) {
+	if (id == ID_MODELEXPORT_LWO) {
 		// Adds the proper extention to our default filename.
 		newfilename << ".lwo";
 		// For M2 Models
@@ -2776,7 +2736,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				// Your M2 export function goes here.
-				ExportM2toLWO(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+				ExportM2toLWO(canvas->root,canvas->model,dialog.GetPath().fn_str(),init);
 			}
 		// For WMO Models. This should be included, even if it isn't supported yet!
 		} else if (canvas->wmo) {
