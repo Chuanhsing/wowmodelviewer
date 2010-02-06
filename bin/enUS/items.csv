@@ -21057,6 +21057,46 @@
 51314,4,Sanctified Scourgelord Shoulderplates
 51325,4,Blood-Drinker's Girdle
 51326,4,Wand of Ruby Claret
+51327,4,Wrathful Gladiator's Cord of Dominance
+51328,4,Wrathful Gladiator's Treads of Dominance
+51329,4,Wrathful Gladiator's Cuffs of Dominance
+51330,4,Wrathful Gladiator's Cloak of Dominance
+51332,4,Wrathful Gladiator's Cloak of Subjugation
+51334,4,Wrathful Gladiator's Cloak of Ascendancy
+51337,4,Wrathful Gladiator's Cord of Alacrity
+51338,4,Wrathful Gladiator's Treads of Alacrity
+51339,4,Wrathful Gladiator's Cuffs of Alacrity
+51340,4,Wrathful Gladiator's Belt of Salvation
+51341,4,Wrathful Gladiator's Boots of Salvation
+51342,4,Wrathful Gladiator's Armwraps of Salvation
+51343,4,Wrathful Gladiator's Belt of Dominance
+51344,4,Wrathful Gladiator's Boots of Dominance
+51345,4,Wrathful Gladiator's Armwraps of Dominance
+51346,4,Wrathful Gladiator's Cloak of Salvation
+51348,4,Wrathful Gladiator's Cloak of Deliverance
+51350,4,Wrathful Gladiator's Waistguard of Triumph
+51351,4,Wrathful Gladiator's Sabatons of Triumph
+51352,4,Wrathful Gladiator's Wristguards of Triumph
+51354,4,Wrathful Gladiator's Cloak of Triumph
+51356,4,Wrathful Gladiator's Cloak of Victory
+51359,4,Wrathful Gladiator's Girdle of Salvation
+51360,4,Wrathful Gladiator's Greaves of Salvation
+51361,4,Wrathful Gladiator's Bracers of Salvation
+51362,4,Wrathful Gladiator's Girdle of Triumph
+51363,4,Wrathful Gladiator's Greaves of Triumph
+51364,4,Wrathful Gladiator's Bracers of Triumph
+51365,4,Wrathful Gladiator's Cord of Salvation
+51366,4,Wrathful Gladiator's Treads of Salvation
+51367,4,Wrathful Gladiator's Cuffs of Salvation
+51368,4,Wrathful Gladiator's Belt of Triumph
+51369,4,Wrathful Gladiator's Boots of Triumph
+51370,4,Wrathful Gladiator's Armwraps of Triumph
+51371,4,Wrathful Gladiator's Waistguard of Salvation
+51372,4,Wrathful Gladiator's Sabatons of Salvation
+51373,4,Wrathful Gladiator's Wristguards of Salvation
+51374,4,Wrathful Gladiator's Waistguard of Dominance
+51375,4,Wrathful Gladiator's Sabatons of Dominance
+51376,4,Wrathful Gladiator's Wristguards of Dominance
 51379,4,Bloodsoul Raiment
 51380,4,Pale Corpse Boots
 51382,4,Heartsick Mender's Cape
@@ -21064,6 +21104,164 @@
 51384,4,Bloodsipper
 51385,4,Stakethrower
 51386,4,Throatrender Handguards
+51388,4,Wrathful Gladiator's Decapitator
+51389,4,Wrathful Gladiator's Sunderer
+51390,4,Wrathful Gladiator's Bonegrinder
+51391,4,Wrathful Gladiator's Crusher
+51392,4,Wrathful Gladiator's Greatsword
+51393,4,Wrathful Gladiator's Claymore
+51394,4,Wrathful Gladiator's Longbow
+51395,4,Wrathful Gladiator's Recurve
+51396,4,Wrathful Gladiator's Endgame
+51397,4,Wrathful Gladiator's Spellblade
+51398,4,Wrathful Gladiator's Blade of Celerity
+51399,4,Wrathful Gladiator's Mageblade
+51400,4,Wrathful Gladiator's War Staff
+51401,4,Wrathful Gladiator's Combat Staff
+51402,4,Wrathful Gladiator's Focus Staff
+51403,4,Wrathful Gladiator's Acute Staff
+51404,4,Wrathful Gladiator's Battle Staff
+51405,4,Wrathful Gladiator's Skirmish Staff
+51406,4,Wrathful Gladiator's Blade of Alacrity
+51407,4,Wrathful Gladiator's Compendium
+51408,4,Wrathful Gladiator's Grimoire
+51409,4,Wrathful Gladiator's Reprieve
+51410,4,Wrathful Gladiator's Touch of Defeat
+51411,4,Wrathful Gladiator's Heavy Crossbow
+51412,4,Wrathful Gladiator's Repeater
+51413,4,Wrathful Gladiator's Dreadplate Chestpiece
+51414,4,Wrathful Gladiator's Dreadplate Gauntlets
+51415,4,Wrathful Gladiator's Dreadplate Helm
+51416,4,Wrathful Gladiator's Dreadplate Legguards
+51417,4,Wrathful Gladiator's Sigil of Strife
+51418,4,Wrathful Gladiator's Dreadplate Shoulders
+51419,4,Wrathful Gladiator's Kodohide Robes
+51420,4,Wrathful Gladiator's Kodohide Gloves
+51421,4,Wrathful Gladiator's Kodohide Helm
+51422,4,Wrathful Gladiator's Kodohide Legguards
+51423,4,Wrathful Gladiator's Idol of Tenacity
+51424,4,Wrathful Gladiator's Kodohide Spaulders
+51425,4,Wrathful Gladiator's Dragonhide Robes
+51426,4,Wrathful Gladiator's Dragonhide Gloves
+51427,4,Wrathful Gladiator's Dragonhide Helm
+51428,4,Wrathful Gladiator's Dragonhide Legguards
+51429,4,Wrathful Gladiator's Idol of Resolve
+51430,4,Wrathful Gladiator's Dragonhide Spaulders
+51431,4,Wrathful Gladiator's Staff
+51432,4,Wrathful Gladiator's Greatstaff
+51433,4,Wrathful Gladiator's Wyrmhide Robes
+51434,4,Wrathful Gladiator's Wyrmhide Gloves
+51435,4,Wrathful Gladiator's Wyrmhide Helm
+51436,4,Wrathful Gladiator's Wyrmhide Legguards
+51437,4,Wrathful Gladiator's Idol of Steadfastness
+51438,4,Wrathful Gladiator's Wyrmhide Spaulders
+51439,4,Wrathful Gladiator's Hacker
+51440,4,Wrathful Gladiator's Dicer
+51441,4,Wrathful Gladiator's Shiv
+51442,4,Wrathful Gladiator's Dirk
+51443,4,Wrathful Gladiator's Left Ripper
+51444,4,Wrathful Gladiator's Left Razor
+51445,4,Wrathful Gladiator's Bonecracker
+51446,4,Wrathful Gladiator's Punisher
+51447,4,Wrathful Gladiator's Quickblade
+51448,4,Wrathful Gladiator's Swiftblade
+51449,4,Wrathful Gladiator's Rifle
+51450,4,Wrathful Gladiator's Shotgun
+51451,4,Wrathful Gladiator's Wand of Alacrity
+51452,4,Wrathful Gladiator's Barrier
+51453,4,Wrathful Gladiator's Gavel
+51454,4,Wrathful Gladiator's Salvation
+51455,4,Wrathful Gladiator's Redoubt
+51456,4,Wrathful Gladiator's Energy Staff
+51457,4,Wrathful Gladiator's Light Staff
+51458,4,Wrathful Gladiator's Chain Armor
+51459,4,Wrathful Gladiator's Chain Gauntlets
+51460,4,Wrathful Gladiator's Chain Helm
+51461,4,Wrathful Gladiator's Chain Leggings
+51462,4,Wrathful Gladiator's Chain Spaulders
+51463,4,Wrathful Gladiator's Silk Raiment
+51464,4,Wrathful Gladiator's Silk Handguards
+51465,4,Wrathful Gladiator's Silk Cowl
+51466,4,Wrathful Gladiator's Silk Trousers
+51467,4,Wrathful Gladiator's Silk Amice
+51468,4,Wrathful Gladiator's Ornamented Chestguard
+51469,4,Wrathful Gladiator's Ornamented Gloves
+51470,4,Wrathful Gladiator's Ornamented Headcover
+51471,4,Wrathful Gladiator's Ornamented Legplates
+51472,4,Wrathful Gladiator's Libram of Justice
+51473,4,Wrathful Gladiator's Ornamented Spaulders
+51474,4,Wrathful Gladiator's Scaled Chestpiece
+51475,4,Wrathful Gladiator's Scaled Gauntlets
+51476,4,Wrathful Gladiator's Scaled Helm
+51477,4,Wrathful Gladiator's Scaled Legguards
+51478,4,Wrathful Gladiator's Libram of Fortitude
+51479,4,Wrathful Gladiator's Scaled Shoulders
+51480,4,Wrathful Gladiator's Pike
+51481,4,Wrathful Gladiator's Halberd
+51482,4,Wrathful Gladiator's Mooncloth Robe
+51483,4,Wrathful Gladiator's Mooncloth Gloves
+51484,4,Wrathful Gladiator's Mooncloth Hood
+51485,4,Wrathful Gladiator's Mooncloth Leggings
+51486,4,Wrathful Gladiator's Mooncloth Mantle
+51487,4,Wrathful Gladiator's Satin Robe
+51488,4,Wrathful Gladiator's Satin Gloves
+51489,4,Wrathful Gladiator's Satin Hood
+51490,4,Wrathful Gladiator's Satin Leggings
+51491,4,Wrathful Gladiator's Satin Mantle
+51492,4,Wrathful Gladiator's Leather Tunic
+51493,4,Wrathful Gladiator's Leather Gloves
+51494,4,Wrathful Gladiator's Leather Helm
+51495,4,Wrathful Gladiator's Leather Legguards
+51496,4,Wrathful Gladiator's Leather Spaulders
+51497,4,Wrathful Gladiator's Ringmail Armor
+51498,4,Wrathful Gladiator's Ringmail Gauntlets
+51499,4,Wrathful Gladiator's Ringmail Helm
+51500,4,Wrathful Gladiator's Ringmail Leggings
+51501,4,Wrathful Gladiator's Totem of the Third Wind
+51502,4,Wrathful Gladiator's Ringmail Spaulders
+51503,4,Wrathful Gladiator's Linked Armor
+51504,4,Wrathful Gladiator's Linked Gauntlets
+51505,4,Wrathful Gladiator's Linked Helm
+51506,4,Wrathful Gladiator's Linked Leggings
+51507,4,Wrathful Gladiator's Totem of Indomitability
+51508,4,Wrathful Gladiator's Linked Spaulders
+51509,4,Wrathful Gladiator's Mail Armor
+51510,4,Wrathful Gladiator's Mail Gauntlets
+51511,4,Wrathful Gladiator's Mail Helm
+51512,4,Wrathful Gladiator's Mail Leggings
+51513,4,Wrathful Gladiator's Totem of Survival
+51514,4,Wrathful Gladiator's Mail Spaulders
+51515,4,Wrathful Gladiator's Cleaver
+51516,4,Wrathful Gladiator's Handaxe
+51517,4,Wrathful Gladiator's Shanker
+51518,4,Wrathful Gladiator's Spike
+51519,4,Wrathful Gladiator's Pummeler
+51520,4,Wrathful Gladiator's Truncheon
+51521,4,Wrathful Gladiator's Slicer
+51522,4,Wrathful Gladiator's Longblade
+51523,4,Wrathful Gladiator's Right Ripper
+51524,4,Wrathful Gladiator's Grasp
+51525,4,Wrathful Gladiator's Chopper
+51526,4,Wrathful Gladiator's Splitter
+51527,4,Wrathful Gladiator's Mutilator
+51528,4,Wrathful Gladiator's Eviscerator
+51529,4,Wrathful Gladiator's Left Claw
+51530,4,Wrathful Gladiator's Left Render
+51531,4,Wrathful Gladiator's Piercing Touch
+51532,4,Wrathful Gladiator's Baton of Light
+51533,4,Wrathful Gladiator's Shield Wall
+51534,4,Wrathful Gladiator's Tabard
+51535,4,Wrathful Gladiator's War Edge
+51536,4,Wrathful Gladiator's Felweave Raiment
+51537,4,Wrathful Gladiator's Felweave Handguards
+51538,4,Wrathful Gladiator's Felweave Cowl
+51539,4,Wrathful Gladiator's Felweave Trousers
+51540,4,Wrathful Gladiator's Felweave Amice
+51541,4,Wrathful Gladiator's Plate Chestpiece
+51542,4,Wrathful Gladiator's Plate Gauntlets
+51543,4,Wrathful Gladiator's Plate Helm
+51544,4,Wrathful Gladiator's Plate Legguards
+51545,4,Wrathful Gladiator's Plate Shoulders
 51550,4,Ivory-Inlaid Leggings
 51551,4,Chestguard of Siphoned Elements
 51552,4,Shoulderpads of the Searing Kiss
@@ -21077,6 +21275,18 @@
 51564,4,Ironrope Belt of Ymirjar
 51565,4,Skinned Whelp Shoulders
 51566,4,Legguards of the Twisted Dream
+51570,4,Titan-Forged Cloak of Ascendancy
+51571,4,Titan-Forged Cloak of Victory
+51572,4,Titan-Forged Shoulderpads of Salvation
+51573,4,Titan-Forged Shoulderpads of Domination
+51574,4,Titan-Forged Spaulders of Dominance
+51575,4,Titan-Forged Spaulders of Salvation
+51576,4,Titan-Forged Spaulders of Triumph
+51577,4,Titan-Forged Shoulders of Triumph
+51578,4,Titan-Forged Shoulders of Dominance
+51579,4,Titan-Forged Shoulders of Salvation
+51580,4,Titan-Forged Shoulderplates of Triumph
+51581,4,Titan-Forged Shoulderplates of Salvation
 51582,4,Sister Svalna's Aether Staff
 51583,4,Stormbringer Gloves
 51584,4,Lich Wrappings
