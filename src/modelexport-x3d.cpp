@@ -272,32 +272,6 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
     if (!fn)
         fn = "texture";
 
-    for (size_t i=0; i<m->passes.size(); i++) 
-    {
-        ModelRenderPass &p = m->passes[i];
-        if (p.init(m))
-        {
-            wxString texName(fn, wxConvUTF8);
-            texName = texName.AfterLast('\\').BeforeLast('.');
-            texName << _T("_") << p.tex;
-
-            if (!textures[p.tex])
-            {
-                wxString texFilename(fn, wxConvUTF8);
-                texFilename = texFilename.BeforeLast('\\');
-                texFilename += '\\';
-                texFilename += texName;
-                texFilename += ".png";
-                SaveTexture(texFilename);
-
-                s << "<ImageTexture DEF='" << texName << "' url='"
-                  << texFilename.AfterLast('\\').c_str() << "' />" << std::endl;
-            }
-
-            textures[p.tex] = texName;
-        }
-    }
-
     size_t num_rot = 0;
     if (modelExport_X3D_CenterModel)
     {
@@ -370,8 +344,29 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
             s << "/>" << std::endl;
             s.toggle();
 
-            
-            s << "<ImageTexture USE='" << textures[p.tex] << "'/>" << std::endl;
+            // has the texture been used before?
+            // no : save texture, create a map entry and define it
+            // yes: reuse the previously defined texture
+            if (!textures.count(p.tex))
+            {
+                wxString texName(fn, wxConvUTF8);
+                texName = texName.AfterLast('\\').BeforeLast('.');
+                texName << _T("_") << p.tex;
+
+                wxString texFilename(fn, wxConvUTF8);
+                texFilename = texFilename.BeforeLast('\\');
+                texFilename += '\\';
+                texFilename += texName;
+                texFilename += ".png";
+                SaveTexture(texFilename);
+
+                textures[p.tex] = texName;
+
+                s << "<ImageTexture DEF='" << textures[p.tex] << "' url='"
+                  << texFilename.AfterLast('\\').c_str() << "' />" << std::endl;
+            }
+            else
+                s << "<ImageTexture USE='" << textures[p.tex] << "'/>" << std::endl;
 
             s.rtab();
             s << "</Appearance>" << std::endl;
