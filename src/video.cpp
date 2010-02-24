@@ -7,8 +7,9 @@
 
 #ifdef _WIN32
 	#include "./GL/wglew.h"
-
-#else // Linux / OSX
+#elif __WXMAC__ // OSX
+    #include <GL/glew.h>
+#else // Linux
 	#include <GL/glxew.h>
 
 	void (*wglGetProcAddress(const char *function_name))(void)

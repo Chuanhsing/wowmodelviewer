@@ -581,13 +581,13 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			texFilename += mapName;
 			SaveTexture(texFilename);
 
-			{
-			// conatins 0xa300, 0xa351
-			chunk2_2.size += (0x0e+chunk2_2_6.size+0x08);
-			char aa[] = {0x00, 0xa2, 0x0e+chunk2_2_6.size+0x08, 0, 0, 0, 0x30, 0, 8, 0, 0, 0, 0x64, 0};
+            // conatins 0xa300, 0xa351
+            unsigned int n = 0x0e;
+            n += (chunk2_2_6.size+0x08);               
+			chunk2_2.size += n;
+			char aa[] = {0x00, 0xa2, n, 0, 0, 0, 0x30, 0, 8, 0, 0, 0, 0x64, 0};
 			f.Write(aa, sizeof(aa));
-			}
-
+            
 			f.Write(&chunk2_2_6, sizeof(MAX3DS_CHUNK)); // MATMAPNAME
 			f.Write(mapName.data(), mapName.length());
 
@@ -1203,7 +1203,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 		wxString Path1, Path2, Name;
 		Path1 << file.BeforeLast('\\');
 		Name << file.AfterLast('\\');
-		Path2 << wxString(m->name).BeforeLast('\\');
+		Path2 << wxString(m->name.c_str()).BeforeLast('\\');
 
 		MakeDirs(Path1,Path2);
 
@@ -1244,7 +1244,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 			bool nomatch = true;
 			for (int t=0;t<=m->nTextures; t++) {
 				if (t == mat->tex) {
-					texarray[mat->tex] = m->textures[t-1];
+					texarray[mat->tex] = m->textures[t-1].c_str();
 					texarray[mat->tex] = texarray[mat->tex].BeforeLast('.');
 					nomatch = false;
 					break;

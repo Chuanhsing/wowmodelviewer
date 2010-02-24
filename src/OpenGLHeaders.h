@@ -4,6 +4,8 @@
 #ifdef _WIN32
 	#include ".\glew\include\GL\glew.h"
 	#include ".\glew\include\GL\wglew.h"
+#elif __WXMAC__
+    #include <GL/glew.h>
 #else
 	#include <GL/glew.h>
 	#include <GL/glxew.h>
@@ -15,15 +17,8 @@
 
 // opengl
 #ifdef __WXMAC__ //Mac
-#	ifdef __DARWIN__
-#		include <OpenGL/gl.h>
-#		include <OpenGL/glaux.h>
-#		include <OpenGL/glu.h>
-#	else
-#		include <gl.h>
-#		include <glu.h>
-#		include <glaux.h>
-#	endif
+#   include <OpenGL/gl.h>
+#	include <OpenGL/glu.h>
 #else
 #	include <GL/gl.h>
 #	include <GL/glu.h>

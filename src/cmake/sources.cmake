@@ -1,35 +1,9 @@
-set(WOWMV_SOURCES
-    animcontrol.cpp
-    AnimExporter.cpp
-    app.cpp
-    arrows.cpp
-    camera.cpp
-    charcontrol.cpp
-    database.cpp
-    dbcfile.cpp
-    ddslib.cpp
-    effects.cpp
-    filecontrol.cpp
-    globalvars.cpp
-    imagecontrol.cpp
-    itemselection.cpp
-    lightcontrol.cpp
-    modelbankcontrol.cpp
-    modelcanvas.cpp
-    modelcontrol.cpp
-    model.cpp
-    modelexport.cpp
-    modelviewer.cpp
-    mpq_libmpq.cpp
-    particle.cpp
-#   particle_test.cpp
-    Quantize.cpp
-#   RenderTexture.cpp
-    settings.cpp
-    util.cpp
-    video.cpp
-    wmo.cpp
-)
+file(GLOB WOWMV_SOURCES RELATIVE ${CMAKE_SOURCE_DIR} *.cpp)
+list(REMOVE_ITEM WOWMV_SOURCES particle_test.cpp)
+
+if (UNIX)
+	list(REMOVE_ITEM WOWMV_SOURCES RenderTexture.cpp AVIGenerator.cpp)
+endif()
 
 set(MPQ_SOURCES
     libmpq/common.cpp

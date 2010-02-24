@@ -5,6 +5,8 @@
 #ifdef _WIN32
 	#include ".\glew\include\GL\glew.h"
 	#include ".\glew\include\GL\wglew.h"
+#elif __WXMAC__
+    #include <GL/glew.h>
 #else
 	#include <GL/glew.h>
 	#include <GL/glxew.h>

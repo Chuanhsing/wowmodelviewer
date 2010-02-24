@@ -2147,7 +2147,10 @@ is (C)2006 Blizzard Entertainment(R). All rights reserved.")));
 	//info.SetDocWriters();
 	//info.SetIcon();
 
+#ifndef __WXMAC__
+    // FIXME: Doesn't link on OSX
     wxAboutBox(info);
+#endif
 }
 
 void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
@@ -2720,9 +2723,9 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 	// Set Default filename
 	wxString newfilename;
 	if (canvas->wmo) {
-		newfilename << wxString(canvas->wmo->name).AfterLast('\\').BeforeLast('.');
+		newfilename << wxString(canvas->wmo->name.c_str()).AfterLast('\\').BeforeLast('.');
 	}else if (canvas->model) {
-		newfilename << wxString(canvas->model->name).AfterLast('\\').BeforeLast('.');
+		newfilename << wxString(canvas->model->name.c_str()).AfterLast('\\').BeforeLast('.');
 	}
 
 	// Identifies the ID for this export option, and does the nessicary functions.

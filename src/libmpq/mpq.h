@@ -31,25 +31,33 @@
 #define _MPQ_H
 
 #ifdef _WIN32
-#include <io.h>
+    #include <io.h>
 
-#define snprintf _snprintf
-//inline int open(const char* x, int y)
-//{
-//	return _open(x, y);
-//}
-//#define lseek _lseek
-#define PATH_MAX 259
+    #define snprintf _snprintf
+    //inline int open(const char* x, int y)
+    //{
+    //	return _open(x, y);
+    //}
+    //#define lseek _lseek
+    #define PATH_MAX 259
 #else
-#include <dirent.h>
-//lseek ...
-#include <unistd.h>
-//PATH_MAX
-//#include <linux/limits.h>
-// size_t
-#include <stdlib.h>
-#define O_BINARY 0
+    #define _LARGEFILE64_SOURCE
+    #include <dirent.h>
+    //lseek ...
+    #include <unistd.h>
+    //PATH_MAX
+    //#include <linux/limits.h>
+    // size_t
+    #include <stdlib.h>
+    #include <sys/types.h>
+    #include <stdint.h>
+    #define _lseeki64 lseek
+    typedef int32_t __int32;
+    #define O_BINARY 0
+    //#define lseek _lseek
+    #define PATH_MAX 259
 #endif
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -133,12 +141,6 @@ extern "C" {
 
 #ifndef min
 #define min(a, b) ((a < b) ? a : b)
-#endif
-
-#ifndef _WIN32
-#include <stdint.h>
-#define _lseeki64 lseek64
-typedef int32_t __int32;
 #endif
 
 typedef unsigned int	mpq_buffer[LIBMPQ_TOOLS_BUFSIZE];

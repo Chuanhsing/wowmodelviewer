@@ -721,6 +721,7 @@ CxImage * CxImage::GetFrame(long nFrame) const
 	return ppFrames[nFrame];
 }
 ////////////////////////////////////////////////////////////////////////////////
+#ifndef __WXMAC__
 short CxImage::ntohs(const short word)
 {
 	if (info.bLittleEndianHost) return word;
@@ -733,6 +734,7 @@ long CxImage::ntohl(const long dword)
 	return  ((dword & 0xff) << 24 ) | ((dword & 0xff00) << 8 ) |
 			((dword >> 8) & 0xff00) | ((dword >> 24) & 0xff);
 }
+#endif // __WXMAC__
 ////////////////////////////////////////////////////////////////////////////////
 void CxImage::bihtoh(BITMAPINFOHEADER* bih)
 {

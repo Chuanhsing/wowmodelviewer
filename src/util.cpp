@@ -5,6 +5,7 @@
 #endif
 #include <wx/choicdlg.h>
 #include <wx/dir.h>
+#include <wx/dirdlg.h>
 
 wxString gamePath;
 wxString cfgPath;
@@ -134,7 +135,11 @@ void MakeDirs(wxString base, wxString paths){
 	for (unsigned int x=0;x<PathNum;x++){
 		NewBase = wxString(NewBase << '\\' << Paths[x]);
 		//wxLogMessage("Attempting to create the following directory: %s",NewBase);
-		mkdir(NewBase.c_str());
+#ifndef WIN32        
+		mkdir(NewBase.mb_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+#else
+        mkdir(NewBase.mb_str());
+#endif
 	}
 }
 
@@ -199,6 +204,12 @@ void getGamePath()
 	} else {
 		gamePath = _T("C:\\");
 	}
+#elif __WXMAC__ // Mac OS X
+    gamePath = wxT("/Applications/World\\ of\\ Warcraft/Data");
+    while (!wxFileExists(gamePath + wxT("/common.MPQ")) && !gamePath.empty())
+    {
+        gamePath = wxDirSelector(wxT("Please select the data folder withing your WOW game folder:"));
+    }
 #else // linux - not sure what it should be set to for Mac osx
 	gamePath = _T("/data/");
 	
