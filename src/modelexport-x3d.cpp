@@ -13,6 +13,12 @@
 
 #include "CxImage/ximage.h"
 
+#ifdef WIN32
+    #define SLASH '\\'
+#else
+    #define SLASH '/'
+#endif
+
 //#define NONSTANDARDBLENDMODE
 
 class tabbed_ostream
@@ -350,12 +356,12 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
             if (!textures.count(p.tex))
             {
                 wxString texName(fn, wxConvUTF8);
-                texName = texName.AfterLast('\\').BeforeLast('.');
+                texName = texName.AfterLast(SLASH).BeforeLast('.');
                 texName << _T("_") << p.tex;
 
                 wxString texFilename(fn, wxConvUTF8);
-                texFilename = texFilename.BeforeLast('\\');
-                texFilename += '\\';
+                texFilename = texFilename.BeforeLast(SLASH);
+                texFilename += SLASH;
                 texFilename += texName;
                 texFilename += ".png";
                 SaveTexture(texFilename);
@@ -363,7 +369,7 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
                 textures[p.tex] = texName;
 
                 s << "<ImageTexture DEF='" << textures[p.tex] << "' url='"
-                  << texFilename.AfterLast('\\').c_str() << "' />" << std::endl;
+                  << texFilename.AfterLast(SLASH).c_str() << "' />" << std::endl;
             }
             else
                 s << "<ImageTexture USE='" << textures[p.tex] << "'/>" << std::endl;
