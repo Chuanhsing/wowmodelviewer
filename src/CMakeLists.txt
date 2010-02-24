@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.6)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" "${CMAKE_MODULE_PATH}")
 set(wxWidgets_USE_LIBS base core gl net aui xml)
-find_package(wxWidgets REQUIRED)
+find_package(wxWidgets REQUIRED )
 find_package(GLEW REQUIRED)
 find_package(BZip2 REQUIRED)
 find_package(ZLIB REQUIRED)
@@ -29,7 +29,18 @@ add_definitions(
 add_library(mpq STATIC ${MPQ_SOURCES})
 add_library(cximage STATIC ${CXIMAGE_SOURCES})
 
-add_executable(wowmodelviewer ${WOWMV_SOURCES})
+if (APPLE)
+	set(CMAKE_OSX_ARCHITECTURES i386)
+	set(MACOSX_BUNDLE_ICON_FILE mondrian-new.icns)
+	set(MACOSX_BUNDLE_INFO_STRING "World of Warcraft ModelViewer")
+	
+	set_source_files_properties("${MACOSX_BUNDLE_ICON_FILE}" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+	
+	add_executable(wowmodelviewer MACOSX_BUNDLE ${WOWMV_SOURCES} ${MACOSX_BUNDLE_ICON_FILE})
+else()
+	add_executable(wowmodelviewer ${WOWMV_SOURCES})
+endif()
+
 target_link_libraries(wowmodelviewer
     mpq
     cximage
