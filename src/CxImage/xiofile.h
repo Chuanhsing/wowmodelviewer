@@ -4,11 +4,6 @@
 #include "xfile.h"
 //#include <TCHAR.h>
 
-#ifndef _WIN32
-typedef const TCHAR *LPCTSTR;
-#define _tfopen fopen
-#endif
-
 class DLL_EXP CxIOFile : public CxFile
 	{
 public:

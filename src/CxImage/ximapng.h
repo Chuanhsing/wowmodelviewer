@@ -22,7 +22,7 @@
 #if CXIMAGE_SUPPORT_PNG
 
 extern "C" {
-#include "png.h"
+#include "../png/png.h"
 }
 
 class CxImagePNG: public CxImage

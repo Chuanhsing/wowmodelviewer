@@ -11,4 +11,3 @@ GL_NV_present_video
 	void glGetVideouivNV (GLuint video_slot, GLenum pname, GLuint* params)
 	void glPresentFrameDualFillNV (GLuint video_slot, GLuint64EXT minPresentTime, GLuint beginPresentTimeId, GLuint presentDurationId, GLenum type, GLenum target0, GLuint fill0, GLenum target1, GLuint fill1, GLenum target2, GLuint fill2, GLenum target3, GLuint fill3)
 	void glPresentFrameKeyedNV (GLuint video_slot, GLuint64EXT minPresentTime, GLuint beginPresentTimeId, GLuint presentDurationId, GLenum type, GLenum target0, GLuint fill0, GLuint key0, GLenum target1, GLuint fill1, GLuint key1)
-	void glVideoParameterivNV (GLuint video_slot, GLenum pname, const GLint* params)

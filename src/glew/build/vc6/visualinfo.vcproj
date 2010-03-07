@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="big5"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="visualinfo"
-	ProjectGUID="{54921A53-F59F-431D-9D70-19801DAD760F}"
-	TargetFrameworkVersion="131072"
+	ProjectGUID="{932245D8-DF42-47BB-A298-00E27229BD98}"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -44,7 +44,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../include"
-				PreprocessorDefinitions="WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;GLEW_STATIC"
+				PreprocessorDefinitions="WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				PrecompiledHeaderFile=".\static/debug/visualinfo.pch"
@@ -134,7 +134,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../../include"
-				PreprocessorDefinitions="WIN32;WIN32_MEAN_AND_LEAN;VC_EXTRALEAN;GLEW_STATIC"
+				PreprocessorDefinitions="WIN32;WIN32_MEAN_AND_LEAN;VC_EXTRALEAN;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -223,7 +223,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../../include"
-				PreprocessorDefinitions="WIN32;WIN32_MEAN_AND_LEAN;VC_EXTRALEAN;GLEW_MX;GLEW_STATIC"
+				PreprocessorDefinitions="WIN32;WIN32_MEAN_AND_LEAN;VC_EXTRALEAN;GLEW_MX;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -311,7 +311,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../include"
-				PreprocessorDefinitions="WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;GLEW_MX;GLEW_STATIC"
+				PreprocessorDefinitions="WIN32;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;GLEW_MX;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				PrecompiledHeaderFile=".\static/debug-mx/visualinfo.pch"

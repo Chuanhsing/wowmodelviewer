@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="big5"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="glew_shared"
-	ProjectGUID="{9D92BED5-F738-4B9B-9CE8-A4D427263277}"
-	TargetFrameworkVersion="131072"
+	ProjectGUID="{4596F98F-990A-4DED-A8E7-BB89EADFA65D}"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -78,6 +78,7 @@
 				OutputFile="../../bin/glew32.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				BaseAddress="0x62AA0000"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/glew32.lib"
@@ -171,6 +172,7 @@
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/glew32mxd.pdb"
+				BaseAddress="0x62AA0000"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/glew32mxd.lib"
@@ -264,6 +266,7 @@
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\../../lib/glew32d.pdb"
+				BaseAddress="0x62AA0000"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/glew32d.lib"
@@ -357,6 +360,7 @@
 				OutputFile="../../bin/glew32mx.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				BaseAddress="0x62AA0000"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				ImportLibrary=".\../../lib/glew32mx.lib"

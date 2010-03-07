@@ -996,7 +996,7 @@ bool CxImage::CheckFormat(CxFile * hFile, DWORD imagetype)
 ////////////////////////////////////////////////////////////////////////////////
 bool CxImage::CheckFormat(BYTE * buffer, DWORD size, DWORD imagetype)
 {
-    if (buffer==0 || size==0){
+	if (buffer==NULL || size==NULL){
 		strcpy(info.szLastError,"invalid or empty buffer");
 		return false;
 	}
