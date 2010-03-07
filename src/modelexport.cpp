@@ -40,6 +40,9 @@ GroupData *groups = NULL;
 // Used to save composite textures, such as a character's face & body.
 void SaveTexture(wxString fn)
 {
+#ifndef WIN32
+	fn.Replace('\\','/');
+#endif
 	unsigned char *pixels = NULL;
 
 	GLint width, height;
@@ -99,6 +102,10 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString su
 
 	// -= Pre-Path Directories =-
 	// Add any directories inbetween the target directory and the preserved directory go here.
+#ifndef WIN32
+	outdir.Replace('\\','/');
+	filePath.Replace('\\','/');
+#endif
 
 	// Lightwave
 	if (ExportID == "LWO"){
@@ -120,6 +127,10 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString su
 
 	// Final Filename
 	temp = outdir+fileName+wxT(".")+suffix;
+
+#ifndef WIN32
+	temp.Replace('\\','/');
+#endif
 
 	//wxLogMessage(_T("Info: Exporting texture to %s..."), temp.c_str());
 
@@ -230,7 +241,7 @@ void AddVertices(Model *m, Attachment *att, bool init)
 	Vec3D pos(0,0,0);
 	Vec3D scale(1,1,1);
 	if (boneID>-1) {
-		// Note: We still need to rotate the items!!
+		// Note: We still need to rotate the item's points!!
 		pos = mParent->atts[boneID].pos;
 		Bone cbone = mParent->bones[mParent->atts[boneID].bone];
 		Matrix mat = cbone.mat;

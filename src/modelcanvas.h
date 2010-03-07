@@ -11,8 +11,8 @@
 
 // wx
 #ifdef _WIN32
-    #include "./GL/glew.h"
-    #include "./GL/wglew.h"
+    #include <GL/glew.h>
+    #include <GL/wglew.h>
 #elif __WXMAC__ // OSX
     #include <GL/glew.h>
 #else

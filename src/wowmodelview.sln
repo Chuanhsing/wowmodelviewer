@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bzip2", "bzip2\bzip2.vcproj
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmpq", "libmpq\libmpq.vcproj", "{EE3A42DD-81C7-48DE-A0E2-393F0B7F6558}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Win32Installer", "..\Win32Installer\Win32Installer.vdproj", "{B8C730E1-7726-436B-9E7A-8C983FF5FE60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -35,6 +37,8 @@ Global
 		{EE3A42DD-81C7-48DE-A0E2-393F0B7F6558}.Debug|Win32.Build.0 = Debug|Win32
 		{EE3A42DD-81C7-48DE-A0E2-393F0B7F6558}.Release|Win32.ActiveCfg = Release|Win32
 		{EE3A42DD-81C7-48DE-A0E2-393F0B7F6558}.Release|Win32.Build.0 = Release|Win32
+		{B8C730E1-7726-436B-9E7A-8C983FF5FE60}.Debug|Win32.ActiveCfg = Debug
+		{B8C730E1-7726-436B-9E7A-8C983FF5FE60}.Release|Win32.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

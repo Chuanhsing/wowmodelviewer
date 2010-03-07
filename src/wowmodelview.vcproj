@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;WotLK&quot;&#x0D;&#x0A;"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;D:\Programming Tools\wxWidgets-2.8.10\include&quot;;&quot;D:\Programming Tools\wxWidgets-2.8.10\include\msvc&quot;;.\zlib\;.\glew\include;.\bzip2\;.\"
+				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.10\include&quot;;&quot;C:\wxWidgets-2.8.10\include\msvc&quot;;.\zlib\;.\glew\include\;.\bzip2\;&quot;.\blp2-lib\&quot;;.\"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WXDEBUG__"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -76,7 +76,7 @@
 				AdditionalDependencies="glew32d.lib wxpng.lib"
 				OutputFile="$(OutDir)/wowmodelview.exe"
 				LinkIncremental="0"
-				AdditionalLibraryDirectories="&quot;D:\Programming Tools\wxWidgets-2.8.10\lib&quot;;&quot;D:\Programming Tools\wxWidgets-2.8.10\lib\vc_lib&quot;;.\CxImage\;.\glew\lib;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
+				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.10\lib&quot;;&quot;C:\wxWidgets-2.8.10\lib\vc_lib&quot;;.\CxImage\;.\glew\lib;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;;&quot;.\blp2-lib&quot;"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="LIBCMT.lib"
 				GenerateDebugInformation="true"
@@ -114,7 +114,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="Release"
+			OutputDirectory="Release\Clean"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
@@ -176,7 +176,7 @@
 				Name="VCLinkerTool"
 				ShowProgress="2"
 				OutputFile="$(OutDir)/wowmodelview.exe"
-				Version="0.5.01"
+				Version="05.08.682"
 				LinkIncremental="0"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.10\lib&quot;;&quot;C:\wxWidgets-2.8.10\lib\vc_lib&quot;;.\CxImage\;.\glew\lib;.\zlib\$(OutDir);.\bzip2\$(OutDir)"
@@ -184,7 +184,7 @@
 				GenerateDebugInformation="false"
 				AssemblyDebug="2"
 				GenerateMapFile="true"
-				MapFileName="$(OutDir)/$(ProjectName).map"
+				MapFileName="$(IntDir)/$(ProjectName).map"
 				MapExports="true"
 				SubSystem="2"
 				LargeAddressAware="2"
@@ -216,7 +216,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy CxImage\cximagecrt.dll $(OutDir)\&#x0D;&#x0A;copy glew\bin\glew32.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\* $(OutDir)\enUS\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;"
+				CommandLine="copy CxImage\cximagecrt.dll $(OutDir)\&#x0D;&#x0A;copy glew\bin\glew32.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\*.csv $(OutDir)\enUS\&#x0D;&#x0A;mkdir $(OutDir)\zhCN&#x0D;&#x0A;copy ..\bin\zhCN\*.csv $(OutDir)\zhCN\&#x0D;&#x0A;mkdir $(OutDir)\zhTW&#x0D;&#x0A;copy ..\bin\zhTW\*.csv $(OutDir)\zhTW\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\mo&#x0D;&#x0A;copy po\*.mo $(OutDir)\mo\&#x0D;&#x0A;mkdir $(OutDir)\Export&#x0D;&#x0A;mkdir $(OutDir)\Import&#x0D;&#x0A;copy ..\bin\msvcr80.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin\msvcp80.dll $(OutDir)\&#x0D;&#x0A;copy ChangeLog.txt $(OutDir)\&#x0D;&#x0A;copy ..\bin\COPYING $(OutDir)\"
 			/>
 		</Configuration>
 	</Configurations>
@@ -684,6 +684,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\ClassDiagram1.cd"
+			>
+		</File>
 		<File
 			RelativePath=".\Makefile"
 			>

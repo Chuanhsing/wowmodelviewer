@@ -48,7 +48,11 @@
 
 // defines
 #define APP_TITLE _T("World of Warcraft Model Viewer")
-#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r682)")
+#ifdef _DEBUG
+	#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r682) Debug")
+#else
+	#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r682)")
+#endif
 
 
 class ModelViewer: public wxFrame
