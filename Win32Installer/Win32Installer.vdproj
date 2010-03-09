@@ -51,20 +51,32 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_29E492E040CD4E5689E2B1602CB65B82"
+        "OwnerKey" = "8:_6427337947FA49E2BDAABACDB4AAF782"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2C35B2D436304B41B3E01CD761765D6B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
+        "MsmKey" = "8:_6427337947FA49E2BDAABACDB4AAF782"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6E17D4CDE5D74DB94EB54E6D40A46ACD"
-        "OwnerKey" = "8:_8C8DB709A54A4E719D4338AAF4C0850D"
+        "OwnerKey" = "8:_6427337947FA49E2BDAABACDB4AAF782"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_6E77EDD2D389957EDC6145594F8B5F5D"
-        "OwnerKey" = "8:_8C8DB709A54A4E719D4338AAF4C0850D"
+        "OwnerKey" = "8:_6427337947FA49E2BDAABACDB4AAF782"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -75,8 +87,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_733BAAD2BE3849C9BFB11228094EDB7F"
-        "OwnerKey" = "8:_8C8DB709A54A4E719D4338AAF4C0850D"
+        "MsmKey" = "8:_728D2F55605F43EA8A3C5A1118CACA03"
+        "OwnerKey" = "8:_29E492E040CD4E5689E2B1602CB65B82"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -105,12 +117,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8C8DB709A54A4E719D4338AAF4C0850D"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_8D5B189DDD0C4339AE8C2345454FC3B2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -124,19 +130,13 @@
         "Entry"
         {
         "MsmKey" = "8:_AA948F29C115E6736A6E4B44207731ED"
-        "OwnerKey" = "8:_8C8DB709A54A4E719D4338AAF4C0850D"
+        "OwnerKey" = "8:_6427337947FA49E2BDAABACDB4AAF782"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_B7F6AF3D2E89479C892748B85DBA6566"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BF21A3307A704BA48041F33AE9C6C68D"
-        "OwnerKey" = "8:_733BAAD2BE3849C9BFB11228094EDB7F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -160,13 +160,13 @@
         "Entry"
         {
         "MsmKey" = "8:_CF65CA06685670990CB7DBD7BFF6386F"
-        "OwnerKey" = "8:_8C8DB709A54A4E719D4338AAF4C0850D"
+        "OwnerKey" = "8:_6427337947FA49E2BDAABACDB4AAF782"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_E318492919C0EF81DFAA058E5A8D8FFB"
-        "OwnerKey" = "8:_8C8DB709A54A4E719D4338AAF4C0850D"
+        "OwnerKey" = "8:_6427337947FA49E2BDAABACDB4AAF782"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -896,14 +896,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:World of Warcraft Model Viewer"
-        "ProductCode" = "8:{B1FB17F5-AE7C-40B2-879C-B847016E2CA8}"
-        "PackageCode" = "8:{EAFF87A3-E5F1-4AD1-B4AA-97A71A23A3A2}"
+        "ProductCode" = "8:{F9D6939C-9BE1-4CAC-BDCA-0848F9BBD464}"
+        "PackageCode" = "8:{84FD9849-145A-46C4-8BF0-226699B74FC1}"
         "UpgradeCode" = "8:{BA7105E6-2189-4CAF-9CB5-28124A1FD428}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:05.08.682"
+        "ProductVersion" = "8:05.08.683"
         "Manufacturer" = "8:WoWModelViewer.org"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -982,10 +982,10 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:101"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_8C8DB709A54A4E719D4338AAF4C0850D"
+            "Target" = "8:"
             "Folder" = "8:_C14B4DE066F540BC85E741A8F32B0884"
             "WorkingFolder" = "8:_52A2D39C5ABC4C2890526F9834A18EB8"
-            "Icon" = "8:_8C8DB709A54A4E719D4338AAF4C0850D"
+            "Icon" = "8:_6427337947FA49E2BDAABACDB4AAF782"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E6E3F104DBF74F58A925B3E9817D791F"
@@ -996,10 +996,10 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:101"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_8C8DB709A54A4E719D4338AAF4C0850D"
+            "Target" = "8:"
             "Folder" = "8:_3ACAF82D293C41949F2E9520CBE7096F"
             "WorkingFolder" = "8:_52A2D39C5ABC4C2890526F9834A18EB8"
-            "Icon" = "8:_8C8DB709A54A4E719D4338AAF4C0850D"
+            "Icon" = "8:_6427337947FA49E2BDAABACDB4AAF782"
             "Feature" = "8:"
             }
         }
@@ -1398,7 +1398,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_733BAAD2BE3849C9BFB11228094EDB7F"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_29E492E040CD4E5689E2B1602CB65B82"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1412,7 +1412,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_BF21A3307A704BA48041F33AE9C6C68D"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_728D2F55605F43EA8A3C5A1118CACA03"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1429,7 +1429,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8C8DB709A54A4E719D4338AAF4C0850D"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6427337947FA49E2BDAABACDB4AAF782"
             {
             "SourcePath" = "8:..\\src\\Release\\Clean\\wowmodelview.exe"
             "TargetName" = "8:"

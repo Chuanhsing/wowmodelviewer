@@ -1,5 +1,15 @@
 World of Warcraft Model Viewer v0.5.08 (Chuanhsing Update)
 
+r683
+ - Updated enUS Items.
+ - Updated zhTW Items & NPCs.
+ - Updated support Libraries, including OpenGL. (Might fix ATI Video Card problem)
+ - X3D Exporter Updates: (tob.franke)
+   - Fixed texture exporting for OSX in X3D exporter.
+   - Fixed texture definition: texture nodes need to be children of appearance nodes.
+   - Define on first use, reuse afterwards.
+ - Windows 32-bit Installer Released.
+
 r682
  - Added new 3.2.2 items!
  - Removed old exporting menu.

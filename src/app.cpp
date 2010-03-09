@@ -1,6 +1,5 @@
 ﻿#include "app.h"
 
-
 /*	THIS IS OUR MAIN "START UP" FILE.
 	App.cpp creates our wxApp class object.
 	the wxApp initiates our program (takes over the role of main())
@@ -103,7 +102,10 @@ bool WowModelViewApp::OnInit()
 	SetTopWindow(frame);
 
 	// Set the icon, different source location for the icon under linux
-	wxIcon icon(mondrian_xpm);
+	wxIcon icon("mainicon");
+#ifndef WIN32
+	icon.LoadFile(mondrian_new_xpm);
+#endif
 	frame->SetIcon(icon);
 	// --
 

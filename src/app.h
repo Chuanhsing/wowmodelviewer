@@ -103,7 +103,9 @@
 	#endif
 #endif // _DEBUG
 
-#include "mondrian.xpm"
+#ifndef WIN32
+	#include "mondrian-new.xpm"
+#endif
 
 // headers
 #include <wx/app.h>

@@ -2145,7 +2145,12 @@ is (C)2006 Blizzard Entertainment(R). All rights reserved.")));
 	info.SetDescription(_T("WoWmodelview is a 3D model viewer for World of Warcraft.\nIt uses the data files included with the game to display\nthe 3D models from the game: creatures, characters, spell\neffects, objects and so forth.\n\nCredits To: Linghuye,  nSzAbolcs,  Sailesh, Terran and Cryect\nfor their contributions either directly or indirectly."));
 	//info.SetArtists();
 	//info.SetDocWriters();
-	//info.SetIcon();
+
+	wxIcon icon("mainicon",wxBITMAP_TYPE_ICO_RESOURCE,48,48);
+#ifndef WIN32
+	icon.LoadFile(mondrian_new_xpm);
+#endif
+	info.SetIcon(icon);
 
 #ifndef __WXMAC__
     // FIXME: Doesn't link on OSX
@@ -2714,7 +2719,6 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 	int id = event.GetId();
 
 	// Determine if this model should be in the initial pose or not.
-	// Currently supports both the new and old method for making an item Init or not...
 	bool init = false;
 	if (exportMenu->IsChecked(ID_MODELEXPORT_INIT) == true){
 		init = true;
@@ -2948,11 +2952,11 @@ void ModelViewer::ImportArmoury(wxString strURL)
 
 	// Build Page file
 	// "/character-sheet.xml?r=%s&n=%s"
-	wxString strPage = '/' + strFile;
-	strPage.Append("=").Append(strRealm).Append("=").Append(strChar);
+	wxString strPage = _T('/') + strFile;
+	strPage.Append(_T("=")).Append(strRealm).Append(_T("=")).Append(strChar);
 	//http://armory.wow-europe.com/character-sheet.xml?r=Spinebreaker&n=Nostrum
 
-	wxLogMessage("Attemping to access WoWArmory Page: %s", strDomain + strPage);
+	wxLogMessage(_T("Attemping to access WoWArmory Page: %s"), strDomain + strPage);
 
 	// Get the page from the armoury website
 	wxHTTP http;
