@@ -1,5 +1,15 @@
 World of Warcraft Model Viewer v0.5.08 (Chuanhsing Update)
 
+r684
+ - First 64-bit Edition released!
+ - Updated Icons.
+ - Updated zlib support Library.
+ - Removed the 64-bit DLL files that were included in previous installer.
+ - Lightwave Exporter: 
+   - WMOs will no longer automatically remove duplicate names, causing some surface name/texture relationships to be wrong.
+   - Removed some redunant texturing code.
+ - (Dev Work) WMO Vertex Colors are now available to groups. (Outputting color vertex data isn't far off now!)
+
 r683
  - Updated enUS Items.
  - Updated zhTW Items & NPCs.

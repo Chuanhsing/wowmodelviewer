@@ -49,9 +49,17 @@
 // defines
 #define APP_TITLE _T("World of Warcraft Model Viewer")
 #ifdef _DEBUG
-	#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r683) Debug")
+	#ifdef _WIN64
+		#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r684) 64-bit Debug")
+	#else
+		#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r684) 32-bit Debug")
+	#endif
 #else
-	#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r683)")
+	#ifdef _WIN64
+		#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r684) 64-bit")
+	#else
+		#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r684) 32-bit")
+	#endif
 #endif
 
 

@@ -1,6 +1,6 @@
 #include "util.h"
 #include "CxImage/ximage.h"
-#ifdef _WIN32
+#ifdef _WINDOWS
 #include <wx/msw/winundef.h>
 #endif
 #include <wx/choicdlg.h>
@@ -79,7 +79,7 @@ int randint(int lower, int upper)
 
 void fixname(std::string &name)
 {
-	for (size_t i=0; i<name.length(); i++) {
+	for (uint32 i=0; i<name.length(); i++) {
 		if (i>0 && name[i]>='A' && name[i]<='Z' && isalpha(name[i-1])) {
 			name[i] |= 0x20;
 		} else if ((i==0 || !isalpha(name[i-1])) && name[i]>='a' && name[i]<='z') {
@@ -87,9 +87,9 @@ void fixname(std::string &name)
 		}
 	}
 }
-void fixnamen(char *name, size_t len)
+void fixnamen(char *name, uint32 len)
 {
-	for (size_t i=0; i<len; i++) {
+	for (uint32 i=0; i<len; i++) {
 		if (i>0 && name[i]>='A' && name[i]<='Z' && isalpha(name[i-1])) {
 			name[i] |= 0x20;
 		} else if ((i==0 || !isalpha(name[i-1])) && name[i]>='a' && name[i]<='z') {
@@ -145,10 +145,10 @@ void MakeDirs(wxString base, wxString paths){
 
 void getGamePath()
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	HKEY key;
-	DWORD t, s;
-	LONG l;
+	unsigned long t, s;
+	long l;
 	unsigned char path[1024];
 	memset(path, 0, sizeof(path));
 
@@ -164,11 +164,15 @@ void getGamePath()
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\2"),
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\3"),
 */
-		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\PTR")
+		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\PTR"),
+#ifdef _WIN64
+		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft"),
+		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\PTR")
+#endif
 		 };
 	int sTypes[2];
 
-	for (size_t i=0; i<WXSIZEOF(regpaths); i++) {
+	for (uint32 i=0; i<WXSIZEOF(regpaths); i++) {
 		l = RegOpenKeyEx((HKEY)HKEY_LOCAL_MACHINE, regpaths[i], 0, KEY_QUERY_VALUE, &key);
 
 		if (l == ERROR_SUCCESS) {

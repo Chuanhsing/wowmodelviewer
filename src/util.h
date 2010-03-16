@@ -62,6 +62,23 @@ extern int ssCounter;
 extern int imgFormat;
 extern long versionID;
 
+#ifdef _WINDOWS
+	typedef unsigned char uint8;
+	typedef char int8;
+	typedef unsigned __int16 uint16;
+	typedef __int16 int16;
+	typedef unsigned __int32 uint32;
+	typedef __int32 int32;
+#else
+	#include <stdint.h>
+	typedef uint8_t uint8;
+	typedef int8_t int8;
+	typedef uint16_t uint16;
+	typedef int16_t int16;
+	typedef uint32_t uint32;
+	typedef int32_t int32;
+#endif
+
 float frand();
 float randfloat(float lower, float upper);
 int randint(int lower, int upper);
@@ -75,7 +92,7 @@ bool from_string(T& t, const string& s, ios_base& (*f)(ios_base&))
 
 wxString CSConv(wxString str);
 void fixname(std::string &name);
-void fixnamen(char *name, size_t len);
+void fixnamen(char *name, uint32 len);
 wxString Vec3DToString(Vec3D vec);
 int wxStringToInt(const wxString& str);
 float round(float input, int limit);

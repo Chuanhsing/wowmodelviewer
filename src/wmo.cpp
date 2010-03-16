@@ -19,7 +19,7 @@ WMO::WMO(std::string name): ManagedItem(name)
 	wxLogMessage(_T("Loading WMO %s"), name.c_str());
 
 	char fourcc[5];
-	size_t size;
+	uint32 size;
 	float ff[3];
 
 	char *ddnames = NULL;
@@ -39,7 +39,7 @@ WMO::WMO(std::string name): ManagedItem(name)
 		flipcc(fourcc);
 		fourcc[4] = 0;
 
-		size_t nextpos = f.getPos() + size;
+		uint32 nextpos = f.getPos() + size;
 
 		if (!strcmp(fourcc,"MOHD")) {
 			// Header for the map object. 64 bytes.
@@ -400,7 +400,7 @@ void WMO::draw()
 	// draw fog positions..?
 	glDisable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
-	for (size_t i=0; i<fogs.size(); i++) {
+	for (uint32 i=0; i<fogs.size(); i++) {
 		WMOFog &fog = fogs[i];
 		glColor4f(1,1,1,1);
 		glBegin(GL_LINE_LOOP);
@@ -439,7 +439,7 @@ void WMO::draw()
 	}
 	// draw portal relations
 	glBegin(GL_LINES);
-	for (size_t i=0; i<prs.size(); i++) {
+	for (uint32 i=0; i<prs.size(); i++) {
 		WMOPR &pr = prs[i];
 		WMOPV &pv = pvs[pr.portal];
 		if (pr.dir>0) glColor4f(1,0,0,1);
@@ -711,9 +711,9 @@ void WMOGroup::initDisplayList()
 
 	gf.seek(0x58); // first chunk
 	char fourcc[5];
-	size_t size;
+	uint32 size;
 
-	unsigned int *cv = 0;
+	cv = 0;
 	hascv = false;
 
 	while (!gf.isEof()) {
@@ -723,7 +723,7 @@ void WMOGroup::initDisplayList()
 		flipcc(fourcc);
 		fourcc[4] = 0;
 
-		size_t nextpos = gf.getPos() + size;
+		uint32 nextpos = gf.getPos() + size;
 
 		// why copy stuff when I can just map it from memory ^_^
 

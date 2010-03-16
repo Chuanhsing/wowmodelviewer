@@ -13,29 +13,9 @@ float f32;
 uint16 u16;
 unsigned char ub;
 
-template <typename T>
-inline T reverse_endian(T n) // for 32bits
-{
-#ifdef _MSC_VER
-	_asm
-	{
-		mov EAX, n;
-		bswap EAX;
-		mov n, EAX;
-	}
-
-	return n;
-#else
-	uint32 m = *reinterpret_cast<uint32 *>(&n);
-	T temp = ((m & 0xFF000000) >> 24) | ((m & 0x00FF0000) >> 8) |
-			 ((m & 0x0000FF00) << 8)  | ((m & 0x000000FF) << 24);
-	return *reinterpret_cast<T *>(&temp);
-#endif
-}
-
 #if defined _MSWIN || defined _WINDOWS
 	#define MSB2			_SwapTwoBytes
-	#define MSB4			_SwapFourBytes 
+	#define MSB4			_SwapFourBytes
 	#define LSB2(w)			(w)
 	#define LSB4(w)			(w)
 #else
@@ -53,16 +33,20 @@ unsigned short _SwapTwoBytes (unsigned short w)
 	return tmp;
 }
 
-unsigned int _SwapFourBytes (unsigned int w)
+template <typename T>
+inline T _SwapFourBytes (T w)
 {
-	unsigned int tmp;
-	tmp =  (w & 0x000000ff);
-	tmp = ((w & 0x0000ff00) >> 0x08) | (tmp << 0x08);
-	tmp = ((w & 0x00ff0000) >> 0x10) | (tmp << 0x08);
-	tmp = ((w & 0xff000000) >> 0x18) | (tmp << 0x08);
-	return tmp;
-}
+	T a;
+	unsigned char *src = (unsigned char*)&w;
+	unsigned char *dst = (unsigned char*)&a;
 
+	dst[0] = src[3];
+	dst[1] = src[2];
+	dst[2] = src[1];
+	dst[3] = src[0];
+
+	return a;
+}
 
 struct PolyChunk16 {
 	uint16 numVerts;

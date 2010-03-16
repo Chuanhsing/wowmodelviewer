@@ -44,6 +44,7 @@ public:
 	unsigned short *indices;
 	int nTriangles, nVertices;
 	unsigned short *materials;
+	unsigned int *cv; // Vector Colors
 	WMOBatch *batches;
 	int nBatches;
 
