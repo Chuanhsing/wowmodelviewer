@@ -62,7 +62,7 @@ bool WowModelViewApp::OnInit()
 
 	LoadSettings();
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 	// This chunk of code is all related to locale translation (if a translation is available).
 	// Only use locale for non-english?
 	if ((interfaceID == 1 && wxFileExists(_T("mo\\koKR.mo"))) || 
@@ -101,10 +101,14 @@ bool WowModelViewApp::OnInit()
 	
 	SetTopWindow(frame);
 
-	// Set the icon, different source location for the icon under linux
+	// Set the icon, different source location for the icon under Linux & Mac
 	wxIcon icon("mainicon");
-#ifndef WIN32
-	icon.LoadFile(mondrian_new_xpm);
+#ifndef _WINDOWS
+	#if defined (_LINUX)
+		icon.LoadFile(../bin_support/icon/wmv_xpm);
+	#elif defined (_MAC)
+		//icon.LoadFile(../bin_support/icon/wmv.icns);
+	#endif
 #endif
 	frame->SetIcon(icon);
 	// --

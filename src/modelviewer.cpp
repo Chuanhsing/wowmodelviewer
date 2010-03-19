@@ -2129,7 +2129,8 @@ Windows 98\\ME\\2000\\XP on 17th December 2006\n\n\
 	info.AddDeveloper(_T("Ufo_Z"));
 	info.AddDeveloper(_T("Darjk"));
 	info.AddDeveloper(_T("Chuanhsing"));
-	info.AddDeveloper(_T("Kjasi"));
+	info.AddDeveloper(_T("Kjasi (Sephiroth3D)"));
+	info.AddDeveloper(_T("Tob.Franke"));
 	info.AddTranslator(_T("MadSquirrel (French)"));
 	info.AddTranslator(_T("Tigurius (Deutsch)"));
 	info.AddTranslator(_T("Kurax (Chinese)"));
@@ -2146,10 +2147,16 @@ is (C)2006 Blizzard Entertainment(R). All rights reserved.")));
 	//info.SetArtists();
 	//info.SetDocWriters();
 
-	wxIcon icon("mainicon",wxBITMAP_TYPE_ICO_RESOURCE,48,48);
-#ifndef WIN32
-	icon.LoadFile(mondrian_new_xpm);
+	wxIcon icon("mainicon",wxBITMAP_TYPE_ICO_RESOURCE,128,128);
+#ifndef _WINDOWS
+	#if defined (_LINUX)
+		icon.LoadFile(../bin_support/icon/wmv_xpm);
+	#elif defined (_MAC)
+		//icon.LoadFile(../bin_support/icon/wmv.icns);
+	#endif
 #endif
+	icon.SetHeight(128);
+	icon.SetWidth(128);
 	info.SetIcon(icon);
 
 #ifndef __WXMAC__

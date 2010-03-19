@@ -49,16 +49,36 @@
 // defines
 #define APP_TITLE _T("World of Warcraft Model Viewer")
 #ifdef _DEBUG
-	#ifdef _WIN64
-		#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r684) 64-bit Debug")
-	#else
-		#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r684) 32-bit Debug")
+	#if defined (_WINDOWS)
+		#if defined (_WIN64)
+			#define APP_VERSION _T("v0.7.00 r685 64-bit Debug")
+		#else
+			#define APP_VERSION _T("v0.7.00 r685 32-bit Debug")
+		#endif
+	#elif defined (_MAC)
+		#if defined (_INTEL)
+			#define APP_VERSION _T("v0.7.00 r685 Intel Debug")
+		#elif defined (_PPC)
+			#define APP_VERSION _T("v0.7.00 r685 PowerPC Debug")
+		#else
+			#error _T("Your Macintosh CPU type is not defined. Please specify either _INTEL or _PPC.")
+		#endif
 	#endif
 #else
-	#ifdef _WIN64
-		#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r684) 64-bit")
-	#else
-		#define APP_VERSION _T("v0.5.08 (Chuanhsing Update r684) 32-bit")
+	#if defined (_WINDOWS)
+		#ifdef _WIN64
+			#define APP_VERSION _T("v0.7.00 r685 64-bit")
+		#else
+			#define APP_VERSION _T("v0.7.00 r685 32-bit")
+		#endif
+	#elif defined (_MAC)
+		#if defined (_INTEL)
+			#define APP_VERSION _T("v0.7.00 r685 Intel")
+		#elif defined (_PPC)
+			#define APP_VERSION _T("v0.7.00 r685 PowerPC")
+		#else
+			#error _T("Your Macintosh CPU type is not defined. Please specify either _INTEL or _PPC.")
+		#endif
 	#endif
 #endif
 

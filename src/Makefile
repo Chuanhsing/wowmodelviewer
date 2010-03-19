@@ -25,7 +25,7 @@ AR = ar
 CC = gcc
 CXX = g++
 CFLAGS = $(shell wx-config --cflags)
-DEFINES = -DGTK_NO_CHECK_CASTS -D__WXGTK__ -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D_LARGEFILE_SOURCE=1 
+DEFINES = -DGTK_NO_CHECK_CASTS -D__WXGTK__ -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D_LARGEFILE_SOURCE=1 -D_UNIX
 CXXFLAGS = -Wall
 # -O2 
 LDFLAGS = -L/usr/X11R6/lib
@@ -35,26 +35,34 @@ LDFLAGS = -L/usr/X11R6/lib
 SRC_OBJS =  \
 	$(OBJ_DIR)/app.o \
 	$(OBJ_DIR)/animcontrol.o \
-	$(OBJ_DIR)/aboutframe.o \
-	$(OBJ_DIR)/animdb.o \
+	$(OBJ_DIR)/animexporter.o \
+	$(OBJ_DIR)/arrows.o \
+	$(OBJ_DIR)/camera.o \
 	$(OBJ_DIR)/charcontrol.o \
-	$(OBJ_DIR)/chardb.o \
-	$(OBJ_DIR)/creaturedb.o \
+	$(OBJ_DIR)/database.o \
 	$(OBJ_DIR)/dbcfile.o \
 	$(OBJ_DIR)/ddslib.o \
 	$(OBJ_DIR)/effects.o \
-	$(OBJ_DIR)/gifexporter.o \
-	$(OBJ_DIR)/itemdb.o \
+	$(OBJ_DIR)/filecontrol.o \
+	$(OBJ_DIR)/globalvars.o \
+	$(OBJ_DIR)/imagecontrol.o \
 	$(OBJ_DIR)/itemselection.o \
+	$(OBJ_DIR)/lightcontrol.o \
 	$(OBJ_DIR)/model.o \
+	$(OBJ_DIR)/modelbankcontrol.o \
 	$(OBJ_DIR)/modelcanvas.o \
+	$(OBJ_DIR)/modelcontrol.o \
+	$(OBJ_DIR)/modelexport.o \
+	$(OBJ_DIR)/modelexportoptions.o \
+	$(OBJ_DIR)/modelexport-lwo.o \
+	$(OBJ_DIR)/modelexport-x3d.o \
 	$(OBJ_DIR)/modelviewer.o \
 	$(OBJ_DIR)/mpqlib.o \
 	$(OBJ_DIR)/particle.o \
 	$(OBJ_DIR)/quantize.o \
+	$(OBJ_DIR)/settings.o \
 	$(OBJ_DIR)/util.o \
 	$(OBJ_DIR)/video.o \
-	$(OBJ_DIR)/viewcontrol.o \
 	$(OBJ_DIR)/wmo.o
 
 define build_target
@@ -84,22 +92,22 @@ directories:
 $(OBJ_DIR)/app.o: ./app.cpp
 	$(compile_source)
 	
-$(OBJ_DIR)/aboutframe.o: ./aboutframe.cpp
+$(OBJ_DIR)/animexporter.o: ./AnimExporter.cpp
 	$(compile_source)
 
 $(OBJ_DIR)/animcontrol.o: ./animcontrol.cpp
 	$(compile_source)
 
-$(OBJ_DIR)/animdb.o: ./animdb.cpp
+$(OBJ_DIR)/arrows.o: ./arrows.cpp
 	$(compile_source)
 	
+$(OBJ_DIR)/camera.o: ./camera.cpp
+	$(compile_source)
+
 $(OBJ_DIR)/charcontrol.o: ./charcontrol.cpp
 	$(compile_source)
 	
-$(OBJ_DIR)/chardb.o: ./chardb.cpp
-	$(compile_source)
-	
-$(OBJ_DIR)/creaturedb.o: ./creaturedb.cpp
+$(OBJ_DIR)/database.o: ./database.cpp
 	$(compile_source)
 	
 $(OBJ_DIR)/dbcfile.o: ./dbcfile.cpp
@@ -111,22 +119,43 @@ $(OBJ_DIR)/ddslib.o: ./ddslib.cpp
 $(OBJ_DIR)/effects.o: ./effects.cpp
 	$(compile_source)
 	
-$(OBJ_DIR)/gifexporter.o: ./gifexporter.cpp
+$(OBJ_DIR)/filecontrol.o: ./filecontrol.cpp
 	$(compile_source)
 	
-$(OBJ_DIR)/itemdb.o: ./itemdb.cpp
+$(OBJ_DIR)/globalvars.o: ./globalvars.cpp
+	$(compile_source)
+
+$(OBJ_DIR)/imagecontrol.o: ./imagecontrol.cpp
 	$(compile_source)
 	
 $(OBJ_DIR)/itemselection.o: ./itemselection.cpp
 	$(compile_source)
 
+$(OBJ_DIR)/lightcontrol.o: ./lightcontrol.cpp
+	$(compile_source)
+
 $(OBJ_DIR)/model.o: ./model.cpp
+	$(compile_source)
+
+$(OBJ_DIR)/modelbankcontrol.o: ./modelbankcontrol.cpp
 	$(compile_source)
 	
 $(OBJ_DIR)/modelcanvas.o: ./modelcanvas.cpp
 	$(compile_source)
-	
-$(OBJ_DIR)/modelheaders.o: ./modelheaders.cpp
+
+$(OBJ_DIR)/modelcontrol.o: ./modelcontrol.cpp
+	$(compile_source)
+
+$(OBJ_DIR)/modelexport.o: ./modelexport.cpp
+	$(compile_source)
+
+$(OBJ_DIR)/modelexportoptions.o: ./modelexportoptions.cpp
+	$(compile_source)
+
+$(OBJ_DIR)/modelexport-lwo.o: ./modelexport-lwo.cpp
+	$(compile_source)
+
+$(OBJ_DIR)/modelexport-x3d.o: ./modelexport-x3d.cpp
 	$(compile_source)
 	
 $(OBJ_DIR)/modelviewer.o: ./modelviewer.cpp
@@ -141,13 +170,16 @@ $(OBJ_DIR)/particle.o: ./particle.cpp
 $(OBJ_DIR)/quantize.o: ./Quantize.cpp
 	$(compile_source)
 
+$(OBJ_DIR)/rendertexture.o: ./RenderTexture.cpp
+	$(compile_source)
+
+$(OBJ_DIR)/settings.o: ./settings.cpp
+	$(compile_source)
+
 $(OBJ_DIR)/util.o: ./util.cpp
 	$(compile_source)
 
 $(OBJ_DIR)/video.o: ./video.cpp
-	$(compile_source)
-
-$(OBJ_DIR)/viewcontrol.o: ./viewcontrol.cpp
 	$(compile_source)
 
 $(OBJ_DIR)/wmo.o: ./wmo.cpp

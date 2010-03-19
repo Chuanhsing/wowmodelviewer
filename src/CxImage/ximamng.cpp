@@ -203,7 +203,7 @@ bool CxImageMNG::Decode(CxFile *hFile)
 	cx_try
 	{
 		// set up the mng decoder for our stream
-		hmng = mng_initialize(&mnginfo, (mng_memalloc)mymngalloc, (mng_memfree)mymngfree, MNG_NULL);
+		hmng = mng_initialize(&mnginfo, mymngalloc, mymngfree, MNG_NULL);
 		if (hmng == NULL) cx_throw("could not initialize libmng");			
 
 		// set the file we want to play
@@ -322,7 +322,7 @@ bool CxImageMNG::Encode(CxFile *hFile)
 		memcpy(mnginfo.image,info.pImage, head.biSizeImage);
 
 		// set up the mng decoder for our stream
-		hmng = mng_initialize(&mnginfo, (mng_memalloc)mymngalloc, (mng_memfree)mymngfree, MNG_NULL);
+		hmng = mng_initialize(&mnginfo, mymngalloc, mymngfree, MNG_NULL);
 		if (hmng == NULL) cx_throw("could not initialize libmng");			
 
 		mng_setcb_openstream(hmng, mymngopenstreamwrite );

@@ -622,7 +622,7 @@ bool CxImage::CreateFromHICON(HICON hico)
 		{
 			CxImage mask;
 			mask.CreateFromHBITMAP(iinfo.hbmMask);
-			mask.GrayScale();
+            mask.GrayScale();
 			mask.Negative();
 			AlphaSet(mask);
 		}

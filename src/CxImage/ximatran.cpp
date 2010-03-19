@@ -1461,7 +1461,7 @@ bool CxImage::Dither(long method)
 	if (!pDib) return false;
 	if (head.biBitCount == 1) return true;
 	
-	GrayScale();
+    GrayScale();
 
 	CxImage tmp;
 	tmp.CopyInfo(*this);
