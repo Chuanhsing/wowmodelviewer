@@ -30,7 +30,7 @@
 #ifndef _MPQ_H
 #define _MPQ_H
 
-#ifdef _WIN32
+#ifdef _WINDOWS
     #include <io.h>
 
     #define snprintf _snprintf
@@ -226,8 +226,8 @@ char *libmpq_version();
 int libmpq_archive_open(mpq_archive *mpq_a, unsigned char *mpq_filename);
 int libmpq_archive_close(mpq_archive *mpq_a);
 int libmpq_archive_info(mpq_archive *mpq_a, unsigned int infotype);
-//int libmpq_file_extract(mpq_archive *mpq_a, const int number);\
-/// *dest must have enough space
+//int libmpq_file_extract(mpq_archive *mpq_a, const int number);
+// *dest must have enough space
 int libmpq_file_getdata(mpq_archive *mpq_a, const int number, unsigned char *dest);
 int libmpq_file_info(mpq_archive *mpq_a, unsigned int infotype, const int number);
 int libmpq_file_number(mpq_archive *mpq_a, const char *name);

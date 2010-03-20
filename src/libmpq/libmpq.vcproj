@@ -42,6 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".\zlib\;..\zlib\;..\bzip2\;"
+				PreprocessorDefinitions="_WIN32;_WINDOWS;_DEBUG"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -55,61 +56,6 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile="$(SolutionDir)Debug32\libmpq.lib"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)Release32"
-			IntermediateDirectory="Release32"
-			ConfigurationType="4"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\zlib\;..\zlib\;..\bzip2\;"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(SolutionDir)Release32\libmpq.lib"
-				SuppressStartupBanner="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -152,6 +98,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".\zlib\;..\zlib\;..\bzip2\;"
+				PreprocessorDefinitions="_WIN64;_WINDOWS;_DEBUG"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -165,6 +112,62 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile="$(SolutionDir)Debug64\libmpq.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)Release32"
+			IntermediateDirectory="Release32"
+			ConfigurationType="4"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=".\zlib\;..\zlib\;..\bzip2\;"
+				PreprocessorDefinitions="_WIN32;_WINDOWS"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(SolutionDir)Release32\libmpq.lib"
+				SuppressStartupBanner="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -207,6 +210,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".\zlib\;..\zlib\;..\bzip2\;"
+				PreprocessorDefinitions="_WIN64;_WINDOWS"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

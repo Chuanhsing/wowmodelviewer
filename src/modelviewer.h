@@ -48,36 +48,37 @@
 
 // defines
 #define APP_TITLE _T("World of Warcraft Model Viewer")
+#define APP_VERSION _T("v0.7.00 r685")
 #ifdef _DEBUG
 	#if defined (_WINDOWS)
 		#if defined (_WIN64)
-			#define APP_VERSION _T("v0.7.00 r685 64-bit Debug")
+			#define APP_PLATFORM _T("64-bit Debug")
 		#else
-			#define APP_VERSION _T("v0.7.00 r685 32-bit Debug")
+			#define APP_PLATFORM _T("32-bit Debug")
 		#endif
 	#elif defined (_MAC)
-		#if defined (_INTEL)
-			#define APP_VERSION _T("v0.7.00 r685 Intel Debug")
-		#elif defined (_PPC)
-			#define APP_VERSION _T("v0.7.00 r685 PowerPC Debug")
+		#if defined (_MAC_INTEL)
+			#define APP_PLATFORM _T("Intel Debug")
+		#elif defined (_MAC_PPC)
+			#define APP_PLATFORM _T("PowerPC Debug")
 		#else
-			#error _T("Your Macintosh CPU type is not defined. Please specify either _INTEL or _PPC.")
+			#error _T("Your Macintosh CPU type is not defined. Please specify either _MAC_INTEL or _MAC_PPC.")
 		#endif
 	#endif
 #else
 	#if defined (_WINDOWS)
 		#ifdef _WIN64
-			#define APP_VERSION _T("v0.7.00 r685 64-bit")
+			#define APP_PLATFORM _T("64-bit")
 		#else
-			#define APP_VERSION _T("v0.7.00 r685 32-bit")
+			#define APP_PLATFORM _T("32-bit")
 		#endif
 	#elif defined (_MAC)
-		#if defined (_INTEL)
-			#define APP_VERSION _T("v0.7.00 r685 Intel")
-		#elif defined (_PPC)
-			#define APP_VERSION _T("v0.7.00 r685 PowerPC")
+		#if defined (_MAC_INTEL)
+			#define APP_PLATFORM _T("Intel")
+		#elif defined (_MAC_PPC)
+			#define APP_PLATFORM _T("PowerPC")
 		#else
-			#error _T("Your Macintosh CPU type is not defined. Please specify either _INTEL or _PPC.")
+			#error _T("Your Macintosh CPU type is not defined. Please specify either _MAC_INTEL or _MAC_PPC.")
 		#endif
 	#endif
 #endif

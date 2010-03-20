@@ -199,7 +199,7 @@ ModelViewer::ModelViewer()
 
 	//wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU
 	// create our main frame
-	if (Create(NULL, wxID_ANY, wxString(APP_TITLE _T(" ") APP_VERSION), wxDefaultPosition, wxSize(1024, 768), wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN, _T("ModelViewerFrame"))) {
+	if (Create(NULL, wxID_ANY, wxString(APP_TITLE _T(" ") APP_VERSION _T(" ") APP_PLATFORM), wxDefaultPosition, wxSize(1024, 768), wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN, _T("ModelViewerFrame"))) {
 		SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
 		SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
@@ -2125,7 +2125,7 @@ Windows 98\\ME\\2000\\XP on 17th December 2006\n\n\
 
 	wxAboutDialogInfo info;
     info.SetName(APP_TITLE);
-    info.SetVersion(APP_VERSION);
+    info.SetVersion(APP_VERSION _T(" ") APP_PLATFORM);
 	info.AddDeveloper(_T("Ufo_Z"));
 	info.AddDeveloper(_T("Darjk"));
 	info.AddDeveloper(_T("Chuanhsing"));
@@ -2167,8 +2167,7 @@ is (C)2006 Blizzard Entertainment(R). All rights reserved.")));
 
 void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 {
-//	wxURL url(_T("http://www.wowmodelviewer.org/latest.txt"));
-	wxURL url(_T("http://219.84.160.97/dl/latest.txt"));
+	wxURL url(_T("http://wowmodelviewer.googlecode.com/svn/trunk/latest.txt"));
 
 	if(url.GetError() == wxURL_NOERR)   {
 		wxInputStream *stream = url.GetInputStream();
@@ -2178,19 +2177,23 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 		stream->Read(&buffer, 1024);
 		
 		// Sort the data
-		wxString data(buffer, wxConvUTF8);
+		wxString data(buffer);
 		wxString version = data.BeforeFirst(10);
 		wxString downloadURL = data.AfterLast(10);
+		int Compare = version.find(wxString(APP_VERSION));
+#ifdef _DEBUG
+		wxLogMessage("Update Data:\nCurrent Version: \"%s\"\nRecorded Version \"%s\"\nURL Download: \"%s\"\nComparison Result: %i",wxString(APP_VERSION), version, downloadURL, Compare);
+#endif
 
-		if (version.IsSameAs(APP_VERSION, false)) {
-			wxMessageBox(_("You have the most upto date version."), _("Update Check"));
+		if (Compare == 0) {
+			wxMessageBox(_T("You have the most up-to-date version."), _T("Update Check"));
 		} else {
 			wxString msg = _T("The most current version is: ");
 			msg.Append(version);
 			msg.Append(_T("\nWould you like to goto the download page?"));
 			int answer = wxMessageBox(msg, _("Update Check"), wxYES_NO, this);
 			if (answer == wxYES)
-				wxLaunchDefaultBrowser(downloadURL);
+				wxLaunchDefaultBrowser(downloadURL.ToUTF8());
 		}
 
 		// Create a string from the data that was received... (?)
@@ -2198,6 +2201,8 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 		//wxMessageBox(wxString::Format("%s",buffer));
 
 		delete stream;
+	}else{
+		wxMessageBox(_T("Error retrieving update information."),_T("Update Error"));
 	}
 }
 
