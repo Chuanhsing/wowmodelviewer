@@ -97,7 +97,7 @@
 #define __GLEXT_H_
 #define __gl_ATI_h_
 
-#if defined(_WIN32)
+#if defined(_WINDOWS)
 
 /*
  * GLEW does not include <windows.h> to avoid name space pollution.
@@ -211,7 +211,7 @@ typedef _W64 int ptrdiff_t;
 #define GLAPIENTRY
 #endif
 
-#endif /* _WIN32 */
+#endif /* _WINDOWS */
 
 #ifdef __cplusplus
 extern "C" {
@@ -11161,7 +11161,7 @@ typedef void (GLAPIENTRY * PFNGLADDSWAPHINTRECTWINPROC) (GLint x, GLint y, GLsiz
 
 /* ------------------------------------------------------------------------- */
 
-#if defined(GLEW_MX) && defined(_WIN32)
+#if defined(GLEW_MX) && defined(_WINDOWS)
 #define GLEW_FUN_EXPORT
 #else
 #define GLEW_FUN_EXPORT GLEWAPI
@@ -11173,7 +11173,7 @@ typedef void (GLAPIENTRY * PFNGLADDSWAPHINTRECTWINPROC) (GLint x, GLint y, GLsiz
 #define GLEW_VAR_EXPORT GLEWAPI
 #endif /* GLEW_MX */
 
-#if defined(GLEW_MX) && defined(_WIN32)
+#if defined(GLEW_MX) && defined(_WINDOWS)
 struct GLEWContextStruct
 {
 #endif /* GLEW_MX */
@@ -12944,7 +12944,7 @@ GLEW_FUN_EXPORT PFNGLTEXCOORD4FVERTEX4FVSUNPROC __glewTexCoord4fVertex4fvSUN;
 
 GLEW_FUN_EXPORT PFNGLADDSWAPHINTRECTWINPROC __glewAddSwapHintRectWIN;
 
-#if defined(GLEW_MX) && !defined(_WIN32)
+#if defined(GLEW_MX) && !defined(_WINDOWS)
 struct GLEWContextStruct
 {
 #endif /* GLEW_MX */
@@ -13345,7 +13345,7 @@ GLEWAPI GLboolean glewContextIsSupported (GLEWContext* ctx, const char* name);
 #define glewIsExtensionSupported(x) glewIsSupported(x)
 
 #define GLEW_GET_VAR(x) (*(const GLboolean*)&(glewGetContext()->x))
-#ifdef _WIN32
+#ifdef _WINDOWS
 #  define GLEW_GET_FUN(x) glewGetContext()->x
 #else
 #  define GLEW_GET_FUN(x) x

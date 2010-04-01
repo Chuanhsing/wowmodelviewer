@@ -61,7 +61,7 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -158,7 +158,7 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -259,7 +259,7 @@
 				DefaultCharIsUnsigned="true"
 				ForceConformanceInForLoopScope="true"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -367,7 +367,7 @@
 				DefaultCharIsUnsigned="true"
 				ForceConformanceInForLoopScope="true"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -517,15 +517,27 @@
 				>
 			</File>
 			<File
-				RelativePath=".\modelexport-lwo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\modelexport-x3d.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\modelexport.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\modelexport_3ds.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\modelexport_lwo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\modelexport_ms3d.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\modelexport_obj.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\modelexport_x3d.cpp"
 				>
 			</File>
 			<File
@@ -590,10 +602,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\3dsheader.h"
-				>
-			</File>
 			<File
 				RelativePath=".\animated.h"
 				>
@@ -671,10 +679,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\lwoheader.h"
-				>
-			</File>
-			<File
 				RelativePath=".\manager.h"
 				>
 			</File>
@@ -703,6 +707,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\modelexport_3ds.h"
+				>
+			</File>
+			<File
+				RelativePath=".\modelexport_lwo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\modelexport_ms3d.h"
+				>
+			</File>
+			<File
 				RelativePath=".\modelexportoptions.h"
 				>
 			</File>
@@ -720,10 +736,6 @@
 			</File>
 			<File
 				RelativePath=".\mpq_libmpq.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ms3dheader.h"
 				>
 			</File>
 			<File

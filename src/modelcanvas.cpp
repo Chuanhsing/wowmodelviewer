@@ -27,7 +27,7 @@ BEGIN_EVENT_TABLE(ModelCanvas, wxWindow)
 END_EVENT_TABLE()
 
 
-#ifdef _WIN32 // The following time related functions COULD be 64bit incompatible.
+#ifdef _WINDOWS // The following time related functions COULD be 64bit incompatible.
 	// for timeGetTime:
 	#pragma comment(lib,"Winmm.lib")
 
@@ -48,14 +48,14 @@ END_EVENT_TABLE()
 	}
 #endif
 
-#ifndef _WIN32
+#ifndef _WINDOWS
 namespace {
 	int attrib[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
 }
 #endif
 
 ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
-#ifndef _WIN32
+#ifndef _WINDOWS
 : wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxCLIP_CHILDREN|wxFULL_REPAINT_ON_RESIZE, _T("ModelCanvas"), attrib, wxNullPalette)
 #endif
 {
@@ -75,7 +75,7 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 	wmo = 0;			// world map object model
 	animControl = 0;
 	gifExporter = 0;
-#ifdef _WIN32
+#ifdef _WINDOWS
 	rt = 0;				// RenderToTexture class
 #endif
 	curAtt = 0;			// Current Attachment
@@ -105,7 +105,7 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 	
 	
 	//wxNO_BORDER|wxCLIP_CHILDREN|wxFULL_REPAINT_ON_RESIZE
-#ifdef _WIN32
+#ifdef _WINDOWS
 	if(!Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxCLIP_CHILDREN|wxFULL_REPAINT_ON_RESIZE, _T("ModelCanvas"))) {
 		wxLogMessage(_T("Critcal Error: Unable to create a window to handle our OpenGL rendering.\n\tWon't be able to continue."));
 		parent->Close();
@@ -125,7 +125,7 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 
 		// Initiate our default OpenGL settings
 		wxLogMessage(_T("Initiating OpenGL..."));
-#ifdef _WIN32
+#ifdef _WINDOWS
 		video.SetHandle((HWND)this->GetHandle(), bpp);
 #endif
 	}
@@ -137,7 +137,7 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 ModelCanvas::~ModelCanvas()
 {
 	// Release our avi engine
-#ifdef _WIN32
+#ifdef _WINDOWS
 	cAvi.ReleaseEngine();
 #endif
 
@@ -155,7 +155,7 @@ ModelCanvas::~ModelCanvas()
 	//wxDELETE(wmo);
 	//wxDELETE(model);
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 	if (rt) {
 		rt->Shutdown();
 		wxDELETE(rt);
@@ -910,7 +910,7 @@ inline void ModelCanvas::RenderBackground()
 	
 	glBindTexture(GL_TEXTURE_2D, uiBGTexture);
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 	// If its an AVI background, increment the frame
 	if (drawAVIBackground)
 		cAvi.GetFrame();
@@ -1307,7 +1307,7 @@ inline void ModelCanvas::RenderWMO()
 	SwapBuffers();
 }
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 inline void ModelCanvas::RenderWMOToBuffer()
 {
 	if (!rt)
@@ -1406,7 +1406,7 @@ void ModelCanvas::RenderToBuffer()
 	glDisable(GL_ALPHA_TEST);
 	// --==--
 	
-#ifdef _WIN32
+#ifdef _WINDOWS
 	if (rt) {
 		glPushAttrib(GL_VIEWPORT_BIT);
 		glViewport(0, 0, rt->nWidth, rt->nHeight);
@@ -1520,7 +1520,7 @@ void ModelCanvas::RenderToBuffer()
 	if (model)
 		RenderObjects();
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 	if (rt)
 		glPopAttrib();
 #endif
@@ -1795,7 +1795,7 @@ void ModelCanvas::LoadBackground(wxString filename)
 	GLuint texFormat = GL_TEXTURE_2D;
 
 	if (tmp == _T("avi")) {
-#ifdef _WIN32
+#ifdef _WINDOWS
 		cAvi.SetFileName(filename.c_str());
 		cAvi.InitEngineForRead();
 
@@ -1977,7 +1977,7 @@ void ModelCanvas::CheckMovement()
 void ModelCanvas::Screenshot(const wxString fn, int x, int y)
 {
 	CxImage *newImage = NULL;
-#ifdef _WIN32
+#ifdef _WINDOWS
 	wxDELETE(rt);
 #endif
 
@@ -1991,7 +1991,7 @@ void ModelCanvas::Screenshot(const wxString fn, int x, int y)
 	unsigned char *pixels = NULL;
 	int screenSize[4];
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 	// Setup out buffers for offscreen rendering
 	if (video.supportPBO || video.supportFBO) {
 		rt = new RenderTexture();
@@ -2031,7 +2031,7 @@ void ModelCanvas::Screenshot(const wxString fn, int x, int y)
 	// read in the texture data
 	//glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, pixels);
 	
-#ifdef _WIN32
+#ifdef _WINDOWS
 	if (rt) {
 		rt->ReleaseTexture();
 		rt->EndRender();
@@ -2110,7 +2110,7 @@ void ModelCanvas::LoadSceneState(int id)
 
 void ModelCanvas::SetCurrent()
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	video.SetCurrent();
 #else
 	wxGLCanvas::SetCurrent();
@@ -2120,7 +2120,7 @@ void ModelCanvas::SetCurrent()
 
 void ModelCanvas::SwapBuffers()
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	video.SwapBuffers();
 #else
 	wxGLCanvas::SwapBuffers();

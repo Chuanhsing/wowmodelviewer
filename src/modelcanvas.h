@@ -10,7 +10,7 @@
 #endif
 
 // wx
-#ifdef _WIN32
+#ifdef _WINDOWS
     #include <GL/glew.h>
     #include <GL/wglew.h>
 #elif __WXMAC__ // OSX
@@ -38,7 +38,7 @@
 //#include "CShader.h"
 #include "camera.h"
 #include "AnimExporter.h"
-#ifdef _WIN32
+#ifdef _WINDOWS
 #include "AVIGenerator.h"
 #endif
 
@@ -102,7 +102,7 @@ struct Attachment {
 };
 
 class ModelCanvas:
-#ifdef _WIN32
+#ifdef _WINDOWS
 		public wxWindow
 #else
 		public wxGLCanvas
@@ -145,7 +145,7 @@ public:
 
 	CCamera camera;
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 	RenderTexture *rt;
 	RenderTexture *rtt[2];
 #endif
@@ -241,7 +241,7 @@ public:
 	// Backgroun image stuff
 	GLuint uiBGTexture;
 	void LoadBackground(wxString filename);
-#ifdef _WIN32
+#ifdef _WINDOWS
 	CAVIGenerator cAvi;
 #endif
 };

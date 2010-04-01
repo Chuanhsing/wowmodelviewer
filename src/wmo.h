@@ -27,6 +27,10 @@ struct WMOBatch {
 	unsigned char flags, texture;
 };
 
+struct WMOVertColor{
+	uint8 b, g, r, a;
+};
+
 class WMOGroup {
 	WMO *wmo;
 	int flags;
@@ -42,11 +46,13 @@ public:
 	Vec3D *vertices, *normals;
 	Vec2D *texcoords;
 	unsigned short *indices;
-	int nTriangles, nVertices;
+	int nTriangles, nVertices, nIndices;
+	unsigned int *cv;
 	unsigned short *materials;
-	unsigned int *cv; // Vector Colors
 	WMOBatch *batches;
 	int nBatches;
+	WMOVertColor *VertexColors;
+	uint32 *IndiceToVerts;
 
 	Vec3D v1,v2;
 	Vec3D b1,b2;

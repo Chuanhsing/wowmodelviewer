@@ -37,6 +37,8 @@ extern wxString gamePath;
 extern wxString cfgPath;
 extern wxString bgImagePath;
 
+extern int gameVersion;
+
 extern bool useLocalFiles;
 extern bool useRandomLooks;
 extern bool bHideHelmet;
@@ -97,8 +99,44 @@ wxString Vec3DToString(Vec3D vec);
 int wxStringToInt(const wxString& str);
 float round(float input, int limit);
 void MakeDirs(wxString base, wxString paths);
+unsigned short _SwapTwoBytes (unsigned short w);
 
 void getGamePath();
+
+// Byte Swapping
+#if defined _WINDOWS || defined _MSWIN
+	#define MSB2			_SwapTwoBytes
+	#define MSB4			_SwapFourBytes
+	#define LSB2(w)			(w)
+	#define LSB4(w)			(w)
+#else
+	#define MSB2(w)			(w)
+	#define MSB4(w)			(w)
+	#define LSB2			_SwapTwoBytes
+	#define LSB4			_SwapFourBytes 
+#endif
+
+template <typename T>
+inline T _SwapFourBytes (T w)
+{
+	T a;
+	unsigned char *src = (unsigned char*)&w;
+	unsigned char *dst = (unsigned char*)&a;
+
+	dst[0] = src[3];
+	dst[1] = src[2];
+	dst[2] = src[1];
+	dst[3] = src[0];
+
+	return a;
+}
+
+// Slashes for Pathing
+#ifdef _WINDOWS
+	#define SLASH _T('\\')
+#else
+	#define SLASH _T('/')
+#endif
 
 #endif
 

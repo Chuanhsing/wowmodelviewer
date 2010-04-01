@@ -2109,7 +2109,7 @@ std::vector<bool> ridablelist;
 // TODO: Add an equivilant working version of this function for Linux / Mac OS X
 void CharControl::selectMount()
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	ClearItemDialog();
 
 	numbers.clear();
@@ -2513,17 +2513,22 @@ void CharControl::OnUpdateItem(int type, int id)
 
 void CharControl::OnTabardSpin(wxSpinEvent &event)
 {
-	if (!g_canvas || !g_canvas->model || g_canvas->model->modelType == MT_NPC)
+	if (!g_canvas || !g_canvas->model || g_canvas->model->modelType == MT_NPC){
+		wxLogMessage("Tabard Error: Model Not Present, or can't use a tabard.");
 		return;
+	}
 
 	switch (event.GetId()) {
 	case ID_TABARD_ICON:
+		wxLogMessage("Tabard Notice: Icon Change.");
 		td.Icon = event.GetPosition();
 		break;
 	case ID_TABARD_ICONCOLOR:
+		wxLogMessage("Tabard Notice: Icon Color Change.");
 		td.IconColor = event.GetPosition();
 		break;
 	case ID_TABARD_BORDER:
+		wxLogMessage("Tabard Notice: Border Change.");
         td.Border = event.GetPosition();
 		if (td.Border > 5)
 		{
@@ -2535,9 +2540,11 @@ void CharControl::OnTabardSpin(wxSpinEvent &event)
 			tabardSpins[SPIN_TABARD_BORDERCOLOR]->SetRange(0, 16);
 		break;
 	case ID_TABARD_BORDERCOLOR:
+		wxLogMessage("Tabard Notice: Border Color Change.");
 		td.BorderColor = event.GetPosition();
 		break;
 	case ID_TABARD_BACKGROUND:
+		wxLogMessage("Tabard Notice: Background Color Change.");
 		td.Background = event.GetPosition();
 		break;
 	}

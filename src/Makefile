@@ -54,8 +54,11 @@ SRC_OBJS =  \
 	$(OBJ_DIR)/modelcontrol.o \
 	$(OBJ_DIR)/modelexport.o \
 	$(OBJ_DIR)/modelexportoptions.o \
-	$(OBJ_DIR)/modelexport-lwo.o \
-	$(OBJ_DIR)/modelexport-x3d.o \
+	$(OBJ_DIR)/modelexport_3ds.o \
+	$(OBJ_DIR)/modelexport_lwo.o \
+	$(OBJ_DIR)/modelexport_ms3d.o \
+	$(OBJ_DIR)/modelexport_obj.o \
+	$(OBJ_DIR)/modelexport_x3d.o \
 	$(OBJ_DIR)/modelviewer.o \
 	$(OBJ_DIR)/mpqlib.o \
 	$(OBJ_DIR)/particle.o \
@@ -152,10 +155,19 @@ $(OBJ_DIR)/modelexport.o: ./modelexport.cpp
 $(OBJ_DIR)/modelexportoptions.o: ./modelexportoptions.cpp
 	$(compile_source)
 
-$(OBJ_DIR)/modelexport-lwo.o: ./modelexport-lwo.cpp
+$(OBJ_DIR)/modelexport_3ds.o: ./modelexport_3ds.cpp
 	$(compile_source)
 
-$(OBJ_DIR)/modelexport-x3d.o: ./modelexport-x3d.cpp
+$(OBJ_DIR)/modelexport_lwo.o: ./modelexport_lwo.cpp
+	$(compile_source)
+
+$(OBJ_DIR)/modelexport_ms3d.o: ./modelexport_ms3d.cpp
+	$(compile_source)
+
+$(OBJ_DIR)/modelexport_obj.o: ./modelexport_obj.cpp
+	$(compile_source)
+
+$(OBJ_DIR)/modelexport_x3d.o: ./modelexport_x3d.cpp
 	$(compile_source)
 	
 $(OBJ_DIR)/modelviewer.o: ./modelviewer.cpp

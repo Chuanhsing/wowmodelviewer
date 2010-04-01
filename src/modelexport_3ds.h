@@ -1,6 +1,5 @@
-
-#ifndef MAX3DSHEADER_H
-#define MAX3DSHEADER_H
+#ifndef MODELEXPORT_3DS_H
+#define MODELEXPORT_3DS_H
 
 #pragma pack(push)
 #pragma pack(2)
@@ -164,12 +163,6 @@ struct MAX3DS_HEADER {
 }
 ALIGN_2_E;
 
-struct Vertex3f {
-	float x;
-	float y;
-	float z;
-};
-
 struct ColorRGBs {
 	char r;
 	char g;
@@ -178,4 +171,4 @@ struct ColorRGBs {
 
 #pragma pack(pop)
 
-#endif // MAX3DSHEADER_H
+#endif

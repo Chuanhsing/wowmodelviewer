@@ -69,6 +69,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4B88AC62E0744EF393FB9B8BABFD086E"
+        "OwnerKey" = "8:_A484C02DD2884F759BE84F64F0BF6E8E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4C7CA8A97230E42F41FEC552FFEF23C6"
         "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
         "MsmSig" = "8:_UNDEFINED"
@@ -141,13 +147,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_AADD6CE06FA9E284204D797C6AECA826"
+        "MsmKey" = "8:_A484C02DD2884F759BE84F64F0BF6E8E"
         "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_B3A6C80AFB604EB39170D90FC590F584"
+        "MsmKey" = "8:_AADD6CE06FA9E284204D797C6AECA826"
         "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -167,12 +173,6 @@
         {
         "MsmKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EF95793899CF49EDABA38DA436075A10"
-        "OwnerKey" = "8:_B3A6C80AFB604EB39170D90FC590F584"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -220,7 +220,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\WMV_Installer_r685_Win64.msi"
+        "OutputFilename" = "8:Release\\WMV_Installer_v0701_r128_Win64.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -896,14 +896,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:World of Warcraft Model Viewer"
-        "ProductCode" = "8:{243DF9A8-0D6D-4070-A899-F7342B3BFB53}"
-        "PackageCode" = "8:{7C2808C5-2125-45C2-BD51-6D4FEAED73CE}"
+        "ProductCode" = "8:{E52569BB-78A4-43B8-BCB8-6D07CAA0B20C}"
+        "PackageCode" = "8:{CFE4DB96-BA1D-4B4D-AF38-4E246EBCC745}"
         "UpgradeCode" = "8:{69AA293E-260B-47B1-A596-44671A8B6EDF}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:07.00.685"
+        "ProductVersion" = "8:07.01.128"
         "Manufacturer" = "8:WoWModelViewer.org"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1454,11 +1454,11 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_B3A6C80AFB604EB39170D90FC590F584"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_4B88AC62E0744EF393FB9B8BABFD086E"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86_x64.msm"
+            "SourcePath" = "8:microsoft_vc90_crt_x86_x64.msm"
                 "Properties"
                 {
                 }
@@ -1468,11 +1468,11 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_EF95793899CF49EDABA38DA436075A10"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_A484C02DD2884F759BE84F64F0BF6E8E"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:microsoft_vc90_crt_x86_x64.msm"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86_x64.msm"
                 "Properties"
                 {
                 }

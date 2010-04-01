@@ -18,8 +18,8 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	//EVT_SIZE(ModelViewer::OnSize)
 
 	// File menu
-	EVT_MENU(ID_FILE_NPC, ModelViewer::OnCharToggle)
-	EVT_MENU(ID_FILE_ITEM, ModelViewer::OnCharToggle)
+	EVT_MENU(ID_VIEW_NPC, ModelViewer::OnCharToggle)
+	EVT_MENU(ID_VIEW_ITEM, ModelViewer::OnCharToggle)
 	EVT_MENU(ID_FILE_SCREENSHOT, ModelViewer::OnSave)
 	EVT_MENU(ID_FILE_SCREENSHOTCONFIG, ModelViewer::OnSave)
 	EVT_MENU(ID_FILE_EXPORTGIF, ModelViewer::OnSave)
@@ -227,7 +227,16 @@ ModelViewer::ModelViewer()
 		Update();
 
 		// load our World of Warcraft mpq archives
-		Init();
+		bool initbool = Init();
+		if (initbool == false){
+			wxString info = _T("Fatal Error: WoW Model Viewer does not support your version of WoW.\nPlease update your World of Warcraft client!");
+			wxLogMessage(info);
+			wxMessageDialog *dial = new wxMessageDialog(NULL, info, wxT("Version Mismatch"), wxOK | wxICON_ERROR);
+			dial->ShowModal();
+			Close(true);
+			return;
+		}
+
 		InitDatabase();
 		// --
 
@@ -249,10 +258,6 @@ void ModelViewer::InitMenu()
 	
 	// MENU
 	fileMenu = new wxMenu;
-	fileMenu->Append(ID_FILE_NPC, _("View NPC"));
-	fileMenu->Append(ID_FILE_ITEM, _("View Item"));
-	fileMenu->Append(ID_MOUNT_CHARACTER, _("Mount a character..."));
-	fileMenu->AppendSeparator();
 	fileMenu->Append(ID_FILE_SCREENSHOT, _("Save Screenshot\tF12"));
 	fileMenu->Append(ID_FILE_SCREENSHOTCONFIG, _("Save Sized Screenshot\tCTRL+S"));
 	fileMenu->Append(ID_FILE_EXPORTGIF, _("Animated Gif"));
@@ -309,6 +314,9 @@ void ModelViewer::InitMenu()
 	fileMenu->Append(ID_FILE_EXIT, _("E&xit\tCTRL+X"));
 
 	viewMenu = new wxMenu;
+	viewMenu->Append(ID_VIEW_NPC, _("View NPC"));
+	viewMenu->Append(ID_VIEW_ITEM, _("View Item"));
+	viewMenu->AppendSeparator();
 	viewMenu->Append(ID_SHOW_FILE_LIST, _("Show file list"));
 	viewMenu->Append(ID_SHOW_ANIM, _("Show animaton control"));
 	viewMenu->Append(ID_SHOW_CHAR, _("Show character control"));
@@ -378,6 +386,10 @@ void ModelViewer::InitMenu()
 		lightMenu->AppendRadioItem(ID_LT_MODEL, _("Model lights only"));
 
 		charMenu = new wxMenu;
+		charMenu->Append(ID_LOAD_CHAR, _("Load Character\tF8"));
+		charMenu->Append(ID_IMPORT_CHAR, _("Import Armory Character"));
+		charMenu->Append(ID_SAVE_CHAR, _("Save Character\tF7"));
+		charMenu->AppendSeparator();
 		charMenu->AppendCheckItem(ID_SHOW_UNDERWEAR, _("Show Underwear"));
 		charMenu->Check(ID_SHOW_UNDERWEAR, true);
 		charMenu->AppendCheckItem(ID_SHOW_EARS, _("Show Ears\tCTRL+E"));
@@ -398,10 +410,26 @@ void ModelViewer::InitMenu()
 		charMenu->Append(ID_LOAD_SET, _("Load Item Set"));
 		charMenu->Append(ID_LOAD_START, _("Load Start Outfit"));
 		charMenu->Append(ID_LOAD_NPC_START, _("Load NPC Outfit"));
-		//charMenu->Enable(ID_LOAD_NPC_START, false);
 		charMenu->AppendSeparator();
 		charMenu->Append(ID_MOUNT_CHARACTER, _("Mount a character..."));
 		charMenu->Append(ID_CHAR_RANDOMISE, _("Randomise Character\tF10"));
+
+		// Start out Disabled.
+		charMenu->Enable(ID_SAVE_CHAR, false);
+		charMenu->Enable(ID_SHOW_UNDERWEAR, false);
+		charMenu->Enable(ID_SHOW_EARS, false);
+		charMenu->Enable(ID_SHOW_HAIR, false);
+		charMenu->Enable(ID_SHOW_FACIALHAIR, false);
+		charMenu->Enable(ID_SHOW_FEET, false);
+		charMenu->Enable(ID_SHEATHE, false);
+		charMenu->Enable(ID_SAVE_EQUIPMENT, false);
+		charMenu->Enable(ID_LOAD_EQUIPMENT, false);
+		charMenu->Enable(ID_CLEAR_EQUIPMENT, false);
+		charMenu->Enable(ID_LOAD_SET, false);
+		charMenu->Enable(ID_LOAD_START, false);
+		charMenu->Enable(ID_LOAD_NPC_START, false);
+		charMenu->Enable(ID_MOUNT_CHARACTER, false);
+		charMenu->Enable(ID_CHAR_RANDOMISE, false);
 
 		wxMenu *effectsMenu = new wxMenu;
 		effectsMenu->Append(ID_ENCHANTS, _("Apply Enchants"));
@@ -417,10 +445,6 @@ void ModelViewer::InitMenu()
 
 		// Options menu
 		optMenu = new wxMenu;
-		optMenu->Append(ID_SAVE_CHAR, _("Save Character\tF7"));
-		optMenu->Append(ID_LOAD_CHAR, _("Load Character\tF8"));
-		optMenu->Append(ID_IMPORT_CHAR, _("Import Armory Character"));
-		optMenu->AppendSeparator();
 #ifndef	WotLK
 		optMenu->AppendCheckItem(ID_USE_NPCSKINS, _("Use npc character skins"));
 		optMenu->Check(ID_USE_NPCSKINS, false);
@@ -428,7 +452,8 @@ void ModelViewer::InitMenu()
 		optMenu->AppendCheckItem(ID_DEFAULT_DOODADS, _("Always show default doodads in WMOs"));
 		optMenu->Check(ID_DEFAULT_DOODADS, true);
 		optMenu->AppendSeparator();
-		optMenu->Append(ID_SHOW_SETTINGS, _("Settings"));
+		optMenu->Append(ID_MODELEXPORT_OPTIONS, _("Export Options..."));
+		optMenu->Append(ID_SHOW_SETTINGS, _("Settings..."));
 
 
 		wxMenu *aboutMenu = new wxMenu;
@@ -438,7 +463,6 @@ void ModelViewer::InitMenu()
 		aboutMenu->Append(ID_ABOUT, _("About"));
 		aboutMenu->AppendSeparator();
 		aboutMenu->Append(ID_CHECKFORUPDATE, _("Check for Update"));
-		//aboutMenu->Enable(ID_CHECKFORUPDATE, false);
 
 		menuBar = new wxMenuBar();
 		menuBar->Append(fileMenu, _("&File"));
@@ -452,7 +476,7 @@ void ModelViewer::InitMenu()
 	} catch(...) {};
 
 	// Disable our "Character" menu, only accessible when a character model is being displayed
-	menuBar->EnableTop(2, false);
+	// menuBar->EnableTop(2, false);
 	
 	// Hotkeys / shortcuts
 	wxAcceleratorEntry entries[26];
@@ -974,14 +998,43 @@ void ModelViewer::LoadModel(const wxString fn)
 		charMenu->Check(ID_SHOW_HAIR, true);
 		charMenu->Check(ID_SHOW_FACIALHAIR, true);
 
+		charMenu->Enable(ID_SAVE_CHAR, true);
+		charMenu->Enable(ID_SHOW_UNDERWEAR, true);
+		charMenu->Enable(ID_SHOW_EARS, true);
+		charMenu->Enable(ID_SHOW_HAIR, true);
+		charMenu->Enable(ID_SHOW_FACIALHAIR, true);
+		charMenu->Enable(ID_SHOW_FEET, true);
+		charMenu->Enable(ID_SHEATHE, true);
+		charMenu->Enable(ID_SAVE_EQUIPMENT, true);
+		charMenu->Enable(ID_LOAD_EQUIPMENT, true);
+		charMenu->Enable(ID_CLEAR_EQUIPMENT, true);
+		charMenu->Enable(ID_LOAD_SET, true);
+		charMenu->Enable(ID_LOAD_START, true);
+		charMenu->Enable(ID_LOAD_NPC_START, true);
+		charMenu->Enable(ID_MOUNT_CHARACTER, true);
+		charMenu->Enable(ID_CHAR_RANDOMISE, true);
+
 		charControl->UpdateModel(modelAtt);
 	} else {
 		charControl->charAtt = modelAtt;
 		charControl->model = (Model*)modelAtt->model;
-	}
 
-	// (Dis/en)able Character menu
-	menuBar->EnableTop(2, isChar);
+		charMenu->Enable(ID_SAVE_CHAR, false);
+		charMenu->Enable(ID_SHOW_UNDERWEAR, false);
+		charMenu->Enable(ID_SHOW_EARS, false);
+		charMenu->Enable(ID_SHOW_HAIR, false);
+		charMenu->Enable(ID_SHOW_FACIALHAIR, false);
+		charMenu->Enable(ID_SHOW_FEET, false);
+		charMenu->Enable(ID_SHEATHE, false);
+		charMenu->Enable(ID_SAVE_EQUIPMENT, false);
+		charMenu->Enable(ID_LOAD_EQUIPMENT, false);
+		charMenu->Enable(ID_CLEAR_EQUIPMENT, false);
+		charMenu->Enable(ID_LOAD_SET, false);
+		charMenu->Enable(ID_LOAD_START, false);
+		charMenu->Enable(ID_LOAD_NPC_START, false);
+		charMenu->Enable(ID_MOUNT_CHARACTER, false);
+		charMenu->Enable(ID_CHAR_RANDOMISE, false);
+	}
 
 	// Update the model control
 	modelControl->UpdateModel(modelAtt);
@@ -1132,6 +1185,22 @@ void ModelViewer::LoadItem(unsigned int displayID)
 				break;
 			}
 		}
+		charMenu->Enable(ID_SAVE_CHAR, false);
+		charMenu->Enable(ID_SHOW_UNDERWEAR, false);
+		charMenu->Enable(ID_SHOW_EARS, false);
+		charMenu->Enable(ID_SHOW_HAIR, false);
+		charMenu->Enable(ID_SHOW_FACIALHAIR, false);
+		charMenu->Enable(ID_SHOW_FEET, false);
+		charMenu->Enable(ID_SHEATHE, false);
+		charMenu->Enable(ID_SAVE_EQUIPMENT, false);
+		charMenu->Enable(ID_LOAD_EQUIPMENT, false);
+		charMenu->Enable(ID_CLEAR_EQUIPMENT, false);
+		charMenu->Enable(ID_LOAD_SET, false);
+		charMenu->Enable(ID_LOAD_START, false);
+		charMenu->Enable(ID_LOAD_NPC_START, false);
+		charMenu->Enable(ID_MOUNT_CHARACTER, false);
+		charMenu->Enable(ID_CHAR_RANDOMISE, false);
+
 	} catch (...) {}
 
 	// wxAUI
@@ -1254,7 +1323,7 @@ ModelViewer::~ModelViewer()
 	}
 }
 
-void ModelViewer::InitMPQArchives()
+bool ModelViewer::InitMPQArchives()
 {
 	wxString path;
 
@@ -1267,22 +1336,41 @@ void ModelViewer::InitMPQArchives()
 	MPQFile f("Interface\\FrameXML\\FrameXML.TOC");
 	if (f.isEof()) {
 		f.close();
-		return;
+		wxLogMessage(_T("Unable to gather TOC data."));
+		return false;
 	}
 	f.seek(51);
 	unsigned char toc[6];
 	memset(toc,'\0', 6);
 	f.read(toc, 6);
-	wxLogMessage(_T("Loaded Content TOC: v%c.%c%c.%c%c"), toc[0], toc[1], toc[2], toc[3], toc[4]);
-	if (strncmp((char*)toc, "30200", 5) != 0) {
-		wxString info = _T("Error: This version only support 3.02.00, please update your World of Warcraft client!");
-		wxLogMessage(info);
-		wxMessageDialog *dial = new wxMessageDialog(NULL, info, wxT("Info"), wxOK);
-		//dial->ShowModal();
-		if (strncmp((char*)toc, "30100", 5) == 0)
-			bV310 = true;
-	}
 	f.close();
+	wxLogMessage(_T("Loaded Content TOC: v%c.%c%c.%c%c"), toc[0], toc[1], toc[2], toc[3], toc[4]);
+
+	wxString info = _T("Notice: WMV is designed for WoW 3.3.x, but your version is supported.\nYou may experience diminished capacity while working with WoW Model Viewer.\nYou should update your World of Warcraft client soon.");
+	// If we support more than 1 TOC version, place the others here.
+	if (strncmp((char*)toc, "30100", 5) == 0){
+		if (gameVersion != 30100){
+			wxMessageBox(info,_T("Compatible Version Found."),wxOK);
+			gameVersion = 30100;
+		}
+		bV310 = true;
+	}else if (strncmp((char*)toc, "30200", 5) == 0){
+		wxLogMessage(info);
+		if (gameVersion != 30200){
+			wxMessageBox(info,_T("Compatible Version Found."),wxOK);
+			gameVersion = 30200;
+		}
+		bV310 = false;
+	// else if not our primary supported edition...
+	}else if (strncmp((char*)toc, "30300", 5) != 0) {
+		wxString info = _T("Notice: WoW Model Viewer does not support your version of WoW.\nPlease update your World of Warcraft client!");
+		wxLogMessage(info);
+
+		return false;
+	}else{
+		gameVersion = 30300;
+		bV310 = false;
+	}
 
 	const char *component = "component.wow-data.txt";
 	MPQFile f2(component);
@@ -1303,9 +1391,10 @@ void ModelViewer::InitMPQArchives()
 		
 		wxRemoveFile(wxString(component, wxConvUTF8));
 	}
+	return true;
 }
 
-void ModelViewer::Init()
+bool ModelViewer::Init()
 {
 	/*
 	// Set our display mode	
@@ -1332,13 +1421,21 @@ void ModelViewer::Init()
 	
 	isChar = false;
 	isModel = false;
+	bool mpqarch = true;
 
 	// Load the games MPQ files into memory
-	InitMPQArchives();
+	mpqarch = InitMPQArchives();
+	wxLogMessage(_T("InitMPQArchives result: %s"),mpqarch ? _T("true") : _T("false"));
+
+	if (mpqarch == false){
+		return false;
+	}
 
 	fileControl->Init(this);
 
 	charControl->Init();
+
+	return true;
 }
 
 bool filterModels(std::string s)
@@ -1771,9 +1868,9 @@ void ModelViewer::OnSetEquipment(wxCommandEvent &event)
 
 void ModelViewer::OnCharToggle(wxCommandEvent &event)
 {
-	if (event.GetId() == ID_FILE_NPC)
+	if (event.GetId() == ID_VIEW_NPC)
 		charControl->selectNPC(UPDATE_NPC);
-	if (event.GetId() == ID_FILE_ITEM)
+	if (event.GetId() == ID_VIEW_ITEM)
 		charControl->selectItem(UPDATE_SINGLE_ITEM, -1, -1);
 	else if (isChar) 
 		charControl->OnCheck(event);
@@ -2066,6 +2163,22 @@ void ModelViewer::LoadChar(const char *fn)
 
 	charControl->RefreshModel();
 	charControl->RefreshEquipment();
+
+	charMenu->Enable(ID_SAVE_CHAR, true);
+	charMenu->Enable(ID_SHOW_UNDERWEAR, true);
+	charMenu->Enable(ID_SHOW_EARS, true);
+	charMenu->Enable(ID_SHOW_HAIR, true);
+	charMenu->Enable(ID_SHOW_FACIALHAIR, true);
+	charMenu->Enable(ID_SHOW_FEET, true);
+	charMenu->Enable(ID_SHEATHE, true);
+	charMenu->Enable(ID_SAVE_EQUIPMENT, true);
+	charMenu->Enable(ID_LOAD_EQUIPMENT, true);
+	charMenu->Enable(ID_CLEAR_EQUIPMENT, true);
+	charMenu->Enable(ID_LOAD_SET, true);
+	charMenu->Enable(ID_LOAD_START, true);
+	charMenu->Enable(ID_LOAD_NPC_START, true);
+	charMenu->Enable(ID_MOUNT_CHARACTER, true);
+	charMenu->Enable(ID_CHAR_RANDOMISE, true);
 
 	// Update interface docking components
 	interfaceManager.Update();

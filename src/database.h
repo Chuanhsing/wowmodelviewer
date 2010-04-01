@@ -201,7 +201,7 @@ public:
 	static const size_t Tex1 = 4;		// string
 	static const size_t Tex2 = 5;		// string
 	static const size_t Tex3 = 6;		// string
-	//static const size_t IsNPC = 7;		// uint | 1 for npc
+	static const size_t Flags = 7;		// uint		(As specified in http://www.madx.dk/wowdev/wiki/index.php?title=CharSections.dbc)
 	static const size_t Section = 8;	// uint
 	static const size_t Color = 9;		// uint
 	#endif
@@ -219,8 +219,6 @@ public:
 };
 
 
-// HACK: Work around to make this compatible with both Burning Crusade and older (1.12 and earlier) WoW files
-// TODO: Clean this code up at a later date when the future format is more concrete.
 class CharRacesDB: public DBCFile
 {
 public:
@@ -228,17 +226,27 @@ public:
 
 	~CharRacesDB() {}
 
-	// Burning Crusade
-	/// Fields
-	static const size_t RaceID = 0;		// uint
-	//static const size_t maleModeID = 4;	// unit
-	//static const size_t femaleModeID = 5;	// unit
-	static const size_t ShortName = 6;	// string
-	static const size_t Name = 11;		// string, model name, 10048 to 11
-	//static const size_t FullName = 14;	// string, i18n name
-	static const size_t GeoType1 = 65;	// string
-	//static const size_t GeoType2 = 66;	// string
-	//static const size_t GeoType3 = 67;	// string
+	// Correct for WotLK v3.3.x
+	static const size_t RaceID = 0;			// uint
+	static const size_t maleModeID = 4;		// unit
+	static const size_t femaleModeID = 5;	// unit
+	static const size_t ShortName = 6;		// string, Name, represented by only 2 chars
+	static const size_t Name = 11;			// string, Model name, 10048 to 11
+	static const size_t FullName = 14;		// string, Name with spaces & such.
+	static const size_t GeoType1 = 65;		// string, Facial Feature Type for Men
+	static const size_t GeoType2 = 66;		// string, Facial Feature Type for Women
+	static const size_t GeoType3 = 67;		// string, Changes Hair to this value. (IE: Hair for everyone, but Horns for Tauren)
+
+	// -= GeoType Values =-
+	// Normal: Default Geotype. Facial Hair for Men, no known value for Women.
+	// Peircings: Women Only. Earrings, noserings, eyebrow peircings, etc.
+	// Earrings: Gnome Women Only. Just Earrings.
+	// Features: Forsaken(Scourge) Only. Indicates a model change for the face.
+	// Horns: Taurens & Draenei Females Only. Horns.
+	// Tusks: Trolls Only. Tusks.
+	// Markings: Night Elf Women Only. Facial Markings.
+	// None: No Changable Geotypes. Currently only found on Goblin Women.
+
 
 	static const size_t NameV310 = 12;		// string, model name, 10048 to 11
 

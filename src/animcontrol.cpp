@@ -214,7 +214,7 @@ void AnimControl::UpdateModel(Model *m)
 		}
 
 		if (useanim != -1) {
-			for(int i=0; i<animCList->GetCount(); i++) {
+			for(unsigned int i=0; i<animCList->GetCount(); i++) {
 				strName = animCList->GetString(i);
 				if (strName == strStand) {
 					selectAnim = i;

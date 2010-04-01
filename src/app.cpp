@@ -102,13 +102,18 @@ bool WowModelViewApp::OnInit()
 	SetTopWindow(frame);
 
 	// Set the icon, different source location for the icon under Linux & Mac
-	wxIcon icon("mainicon");
-#ifndef _WINDOWS
-	#if defined (_LINUX)
-		icon.LoadFile(../bin_support/icon/wmv_xpm);
-	#elif defined (_MAC)
-		//icon.LoadFile(../bin_support/icon/wmv.icns);
-	#endif
+	wxIcon icon;
+#if defined (_WINDOWS)
+	if (icon.LoadFile("mainicon",wxBITMAP_TYPE_ICO_RESOURCE) == false)
+		wxMessageBox("Failed to load Icon","Failure");
+#elif defined (_LINUX)
+	// This probably needs to be fixed...
+	if (icon.LoadFile(../bin_support/icon/wmv_xpm) == false)
+		wxMessageBox("Failed to load Icon","Failure");
+#elif defined (_MAC)
+	// Dunno what to do about Macs...
+	//if (icon.LoadFile("../bin_support/icon/wmv.icns") == false)
+	//	wxMessageBox("Failed to load Icon","Failure");
 #endif
 	frame->SetIcon(icon);
 	// --
@@ -297,7 +302,7 @@ void WowModelViewApp::LoadSettings()
 	pConfig->Read(_T("AlphaBits"), &video.curCap.alpha, 0);
 	pConfig->Read(_T("ColourBits"), &video.curCap.colour, 24);
 	pConfig->Read(_T("DoubleBuffer"), (bool*)&video.curCap.doubleBuffer, 1);	// True
-#ifdef _WIN32
+#ifdef _WINDOWS
 	pConfig->Read(_T("HWAcceleration"), &video.curCap.hwAcc, WGL_FULL_ACCELERATION_ARB);
 #endif
 	pConfig->Read(_T("SampleBuffer"), (bool*)&video.curCap.sampleBuffer, 0);	// False
@@ -312,6 +317,7 @@ void WowModelViewApp::LoadSettings()
 	// Application settings
 	pConfig->SetPath(_T("/Settings"));
 	pConfig->Read(_T("Path"), &gamePath, _T(""));
+	pConfig->Read(_T("TOCVersion"), &gameVersion, 0);
 
 	pConfig->Read(_T("UseLocalFiles"), &useLocalFiles, false);
 	pConfig->Read(_T("SSCounter"), &ssCounter, 100);
@@ -341,7 +347,7 @@ void WowModelViewApp::LoadSettings()
 		mpqArchives.Clear();
 	}
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 	if (gamePath.Last() != '\\')
 		gamePath.Append(_T("\\"), 1);
 #else // Linux
@@ -412,6 +418,7 @@ void WowModelViewApp::SaveSettings()
 
 	pConfig->SetPath(_T("/Settings"));
 	pConfig->Write(_T("Path"), gamePath);
+	pConfig->Write(_T("TOCVersion"), gameVersion);
 	pConfig->Write(_T("UseLocalFiles"), useLocalFiles);
 	pConfig->Write(_T("SSCounter"), ssCounter);
 	//pConfig->Write(_T("AntiAlias"), useAntiAlias);

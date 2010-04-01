@@ -206,7 +206,7 @@ void Settings_Page2::Update()
 		if (video.capsList[i].doubleBuffer)
 			mode.Append(_T("DoubleBuffer "));
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 		if (video.capsList[i].hwAcc == WGL_FULL_ACCELERATION_ARB)
 			mode.Append(_T("Hardware mode"));
 		else if (video.capsList[i].hwAcc == WGL_GENERIC_ACCELERATION_ARB)

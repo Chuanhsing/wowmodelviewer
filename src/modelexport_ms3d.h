@@ -1,5 +1,5 @@
-#ifndef MS3DHEADER_H
-#define MS3DHEADER_H
+#ifndef MODELEXPORT_MS3D_H
+#define MODELEXPORT_MS3D_H
 
 //
 //

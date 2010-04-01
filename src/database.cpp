@@ -667,7 +667,7 @@ wxString ItemDatabase::addDiscoveryId(int id, wxString name)
 		rec.name.Printf(_T("%s [%d] [%d]"), name.c_str(), rec.id, rec.model);
 		if (rec.type > 0) {
 			items.push_back(rec);
-			itemLookup[rec.id] = items.size()-1;
+			itemLookup[rec.id] = (int)items.size()-1;
 			//wxLogMessage(_T("Info: Not exist ItemID: %d, %s..."), id, rec.name.c_str());
 			ret.Printf(_T("%d,%d,%d,%d,%d,%d,%d,%s"), rec.id, rec.model, rec.itemclass, rec.subclass,
 				rec.type, rec.sheath, rec.quality, rec.name.c_str());
@@ -691,15 +691,13 @@ wxString ItemDatabase::addDiscoveryDisplayId(int id, wxString name, int type)
 	rec.name.Printf(_T("%s [%d]"), name.c_str(), id);
 	if (rec.type > 0) {
 		items.push_back(rec);
-		itemLookup[rec.id] = items.size()-1;
+		itemLookup[rec.id] = (int)items.size()-1;
 		//wxLogMessage(_T("Info: Not exist ItemID: %d, %s..."), id, rec.name.c_str());
 		ret.Printf(_T("%d,%d,%d,%d,%d,%d,%d,%s"), rec.id, rec.model, rec.itemclass, rec.subclass,
 			rec.type, rec.sheath, rec.quality, rec.name.c_str());
 	}
 	return ret;
 }
-
-///////////////////
 
 ItemSubClassDB::Record ItemSubClassDB::getById(int id, int subid)
 {

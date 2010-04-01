@@ -63,12 +63,12 @@ public:
 
 	bool GetCompatibleWinMode(VideoCaps caps);
 	bool GetAvailableMode();
-#ifdef _WIN32
+#ifdef _WINDOWS
 	HWND GetHandle() {return hWnd;}
 #endif
 
 	void ResizeGLScene(int width, int height);
-#ifdef _WIN32
+#ifdef _WINDOWS
 	void SetHandle(HWND hwnd, int bpp);
 #endif
 	void SetMode();
@@ -81,7 +81,7 @@ public:
 	bool refresh;
 
 	// Resources
-#ifdef _WIN32
+#ifdef _WINDOWS
 	HDC hDC;
 	HWND hWnd;
 	HGLRC hRC;

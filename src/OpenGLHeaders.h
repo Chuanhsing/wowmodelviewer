@@ -1,7 +1,7 @@
 #ifndef OPENGLHEADERS_H
 #define OPENGLHEADERS_H
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 	#include ".\glew\include\GL\glew.h"
 	#include ".\glew\include\GL\wglew.h"
 #elif __WXMAC__
@@ -11,7 +11,7 @@
 	#include <GL/glxew.h>
 #endif
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 #include <windows.h>
 #endif
 

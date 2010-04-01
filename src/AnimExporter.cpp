@@ -160,7 +160,7 @@ void CAnimationExporter::CreateGif()
 		}
 	}
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 	// CREATE OUR RENDERTOTEXTURE OBJECT
 	// -------------------------------------------
 	// if either are supported use our 'RenderTexture' object.
@@ -224,10 +224,10 @@ void CAnimationExporter::CreateGif()
 			g_canvas->sky->tick((float)m_iTimeStep);
 		
 
-		#ifdef _WIN32
+		#ifdef _WINDOWS
 		if (m_bGreyscale)
 			newImage->GrayScale();
-		#endif //_WIN32
+		#endif
 
 		if(m_bShrink && m_iNewWidth!=m_iWidth && m_iNewHeight!=m_iHeight)
 			newImage->Resample(m_iNewWidth, m_iNewHeight, 2);
@@ -255,7 +255,7 @@ void CAnimationExporter::CreateGif()
 
 	wxDELETEA(buffer);
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 	if (video.supportPBO || video.supportVBO) {
 		g_canvas->rt->EndRender();
 
@@ -352,7 +352,7 @@ void CAnimationExporter::OnCheck(wxCommandEvent &event)
 
 void CAnimationExporter::CreateAvi(wxString fn)
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	if (!g_canvas || !g_canvas->model || !g_canvas->model->animManager) {
 		wxMessageBox(_T("Unable to create AVI animation!"), _T("Error"));
 		wxLogMessage(_T("Error: Unable to created AVI animation.  A required object pointer was null!"));

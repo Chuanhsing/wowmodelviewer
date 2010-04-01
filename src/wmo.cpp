@@ -772,8 +772,8 @@ void WMOGroup::initDisplayList()
 			/*
 			Vertex indices for triangles. Three 16-bit integers per triangle, that are indices into the vertex list. The numbers specify the 3 vertices for each triangle, their order makes it possible to do backface culling.
 			*/
-			// indices
-			indices = new (unsigned short[size/2]);
+			nIndices = (int)size/2;
+			indices = new (unsigned short[nIndices]);
 			memcpy(indices, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOVT")) {
@@ -924,6 +924,7 @@ void WMOGroup::initDisplayList()
 
 		}
 		else if (!strcmp(fourcc,"MOCV")) {
+			uint32 spos = gf.getPos();
 			/*
 			Vertex colors, 4 bytes per vertex (BGRA), for WMO groups using indoor lighting.
 			I don't know if this is supposed to work together with, or replace, the lights referenced in MOLR. But it sure is the only way for the ground around the goblin smelting pot to turn red in the Deadmines. (but some corridors are, in turn, too dark - how the hell does lighting work anyway, are there lightmaps hidden somewhere?)
@@ -933,6 +934,21 @@ void WMOGroup::initDisplayList()
 			//gLog("CV: %d\n", size);
 			hascv = true;
 			cv = (unsigned int*)gf.getPointer();
+			wxLogMessage("Original Vertex Colors Gathered.");
+
+			// Temp, until we get this fully working.
+			gf.seek(spos);
+			wxLogMessage("Gathering New Vertex Colors...");
+			VertexColors = new WMOVertColor[nVertices];
+			memcpy(VertexColors, gf.getPointer(), size);
+			/*
+			for (uint32 x=0;x<nVertices;x++){
+				WMOVertColor vc;
+				gf.read(&vc,4);
+				//wxLogMessage("Vertex Colors Gathered. R:%03i, G:%03i, B:%03i, A:%03i",vc.r,vc.g,vc.b,vc.a);
+				VertexColors.push_back(vc);
+			}
+			*/
 		}
 		else if (!strcmp(fourcc,"MLIQ")) {
 			// liquids
@@ -973,9 +989,19 @@ void WMOGroup::initDisplayList()
 
 	// assume that texturing is on, for unit 1
 
+	IndiceToVerts = new uint32[nIndices];
+
 	for (int b=0; b<nBatches; b++) {
 		WMOBatch *batch = &batches[b];
 		WMOMaterial *mat = &wmo->mat[batch->texture];
+
+		// build indice to vert array.
+		//wxLogMessage("Indice to Vert Conversion Array for Batch %i:",b);
+		for (uint32 i=0;i<batch->indexCount;i++){
+			int a = indices[batch->indexStart + i];
+			IndiceToVerts[batch->indexStart + i] = a;
+			//wxLogMessage("Indice %i = Vert %i",batch->indexStart + i,a);
+		}
 
         // setup texture
 		glBindTexture(GL_TEXTURE_2D, mat->tex);

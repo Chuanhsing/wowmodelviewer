@@ -2,7 +2,7 @@
 #define RENDERTEXTURE_H
 
 // Video & graphics stuff
-#ifdef _WIN32
+#ifdef _WINDOWS
 	#include ".\glew\include\GL\glew.h"
 	#include ".\glew\include\GL\wglew.h"
 #elif __WXMAC__
@@ -23,7 +23,7 @@
     #include "wx/wx.h"
 #endif
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 class RenderTexture {
 protected:
 	HPBUFFERARB m_hPBuffer;

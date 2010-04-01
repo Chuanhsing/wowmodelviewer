@@ -1,4 +1,3 @@
-
 #ifndef MODELEXPORT_H
 #define MODELEXPORT_H
 
@@ -7,6 +6,34 @@
 
 #define RADIAN 57.295779513082320876798154814114
 
+// Structures
+struct Vertex3f {
+	float x;
+	float y;
+	float z;
+};
+
+struct ModelData {
+	Vertex3f vertex;
+	float tu;
+	float tv;
+	Vertex3f normal;
+	unsigned short groupIndex;
+	char boneid;
+};
+
+struct GroupData {
+	ModelRenderPass p;
+	Model *m;
+};
+
+// Common functions
+void SaveTexture(wxString fn);
+void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString suffix);
+Vec3D QuaternionToXYZ(Vec3D Dir, float W);
+void InitCommon(Attachment *att, bool init, ModelData *verts, GroupData *groups, unsigned short numVerts, unsigned short numGroups, unsigned short numFaces);
+
+// --== Exporter Functions ==--
 // If your exporter doesn't do WMO or M2 files, include a faux function anyways. Then add a non-working
 // function at the bottom of modelexport.cpp so it has something to look for. The non-working exporter
 // can be disabled in filecontrol.cpp, so it won't ever run.
@@ -40,13 +67,5 @@ void ExportM2toX3D(Model *m, const char *fn, bool init);
 void ExportM2toXHTML(Model *m, const char *fn, bool init);
 void ExportWMOtoX3D(WMO *m, const char *fn);
 void ExportWMOtoXHTML(WMO *m, const char *fn);
-
-// Common functions
-void SaveTexture(wxString fn);
-void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString suffix);
-Vec3D QuaternionToXYZ(Vec3D Dir, float W);
-
-void InitCommon(Attachment *att, bool init);
-
 
 #endif

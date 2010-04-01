@@ -48,7 +48,9 @@
 
 // defines
 #define APP_TITLE _T("World of Warcraft Model Viewer")
-#define APP_VERSION _T("v0.7.00 r685")
+#define APP_VERSION _T("v0.7.0.1 r128")		// Revision number should match the revision number on GoogleCode.
+
+// This should only be touched when adding a new OS or platform.
 #ifdef _DEBUG
 	#if defined (_WINDOWS)
 		#if defined (_WIN64)
@@ -62,8 +64,10 @@
 		#elif defined (_MAC_PPC)
 			#define APP_PLATFORM _T("PowerPC Debug")
 		#else
-			#error _T("Your Macintosh CPU type is not defined. Please specify either _MAC_INTEL or _MAC_PPC.")
+			#error _T("Your Macintosh platform is not defined. Please specify either _MAC_INTEL or _MAC_PPC.")
 		#endif
+	#else
+		#error _T("You have not specified a valid Operating System to your debug configuration.")
 	#endif
 #else
 	#if defined (_WINDOWS)
@@ -78,8 +82,10 @@
 		#elif defined (_MAC_PPC)
 			#define APP_PLATFORM _T("PowerPC")
 		#else
-			#error _T("Your Macintosh CPU type is not defined. Please specify either _MAC_INTEL or _MAC_PPC.")
+			#error _T("Your Macintosh platform is not defined. Please specify either _MAC_INTEL or _MAC_PPC.")
 		#endif
+	#else
+		#error _T("You have not specified a valid Operating System to your release configuration.")
 	#endif
 #endif
 
@@ -131,10 +137,10 @@ public:
 	// Initialising related functions
 	void InitMenu();
 	void InitObjects();
-	void Init();
+	bool Init();
 	void InitDocking();
 	void InitDatabase();
-	void InitMPQArchives();
+	bool InitMPQArchives();
 
 	// Save and load various settings between sessions
 	void LoadSession();

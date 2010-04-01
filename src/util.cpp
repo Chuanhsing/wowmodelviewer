@@ -13,6 +13,8 @@ wxString bgImagePath;
 
 wxArrayString mpqArchives;
 
+int gameVersion = 0;
+
 bool useLocalFiles = false;
 bool useRandomLooks = true;
 bool bHideHelmet = false;
@@ -105,6 +107,15 @@ int wxStringToInt(const wxString& str)
 	return number;
 }
 
+// Byteswap for 2 Bytes
+unsigned short _SwapTwoBytes (unsigned short w)
+{
+	unsigned short tmp;
+	tmp =  (w & 0x00ff);
+	tmp = ((w & 0xff00) >> 0x08) | (tmp << 0x08);
+	return tmp;
+}
+
 // Round a float, down to the specified decimal
 float round(float input, int limit = 2){
 	if (limit > 0){
@@ -122,10 +133,10 @@ void MakeDirs(wxString base, wxString paths){
 	//wxLogMessage("MKDIR Paths\nBasePath: %s\nOthers Paths: %s", base, paths);
 	wxString Paths[30];
 	unsigned int PathNum = 0;
-	while (paths.Find('\\')>0){
-		Paths[PathNum] = paths.BeforeFirst('\\');
+	while (paths.Find(SLASH)>0){
+		Paths[PathNum] = paths.BeforeFirst(SLASH);
 		wxString rep = Paths[PathNum];
-		paths.Replace(rep.Append('\\'),"");
+		paths.Replace(rep.Append(SLASH),"");
 		//wxLogMessage("\nBuilding Paths: %s\npaths:%s",Paths[PathNum],paths);
 		PathNum++;
 	}
@@ -133,7 +144,7 @@ void MakeDirs(wxString base, wxString paths){
 	PathNum++;
 
 	for (unsigned int x=0;x<PathNum;x++){
-		NewBase = wxString(NewBase << '\\' << Paths[x]);
+		NewBase = wxString(NewBase << SLASH << Paths[x]);
 		//wxLogMessage("Attempting to create the following directory: %s",NewBase);
 #ifndef WIN32        
 		mkdir(NewBase.mb_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);

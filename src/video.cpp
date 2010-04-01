@@ -5,7 +5,7 @@
 
 #include "./GL/glew.h"
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 	#include "./GL/wglew.h"
 #elif __WXMAC__ // OSX
     #include <GL/glew.h>
@@ -20,7 +20,7 @@
 
 extern ModelViewer *g_modelViewer;
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 // Create an OpenGL pixel format descriptor
 PIXELFORMATDESCRIPTOR pfd =						// pfd Tells Windows How We Want Things To Be
 {
@@ -50,7 +50,7 @@ TextureManager texturemanager;
 
 VideoSettings::VideoSettings()
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	hWnd = NULL;
 	hRC = NULL;
 	hDC = NULL;
@@ -71,7 +71,7 @@ VideoSettings::VideoSettings()
 	useCompression = false;
 	useVBO = false;
 	usePBO = false;
-#ifdef _WIN32
+#ifdef _WINDOWS
 	useFBO = true;
 #else
 	useFBO = false;
@@ -80,7 +80,7 @@ VideoSettings::VideoSettings()
 
 VideoSettings::~VideoSettings()
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	// Clear the rendering context
 	wglMakeCurrent(NULL, NULL); 
 
@@ -140,7 +140,7 @@ bool VideoSettings::Init()
 	supportPointSprites = glewIsSupported("GL_ARB_point_sprite GL_ARB_point_parameters") == GL_TRUE ? true : false;
 	//supportShaders = glewIsSupported("GL_ARB_fragment_program") == GL_TRUE ? true : false;
 	//supportShaders = (suuportFragProg && supportVertexProg && supportGLSL);
-#ifdef _WIN32
+#ifdef _WINDOWS
 	supportPBO = wglewIsSupported("WGL_ARB_pbuffer WGL_ARB_render_texture") == GL_TRUE ? true : false;
 	supportAntiAlias = wglewIsSupported("WGL_ARB_multisample") == GL_TRUE ? true : false;
 	supportWGLPixelFormat = wglewIsSupported("WGL_ARB_pixel_format") == GL_TRUE ? true : false;
@@ -305,7 +305,7 @@ void VideoSettings::InitGL()
 
 void VideoSettings::EnumDisplayModes()
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	if (!hasHardware)
 		return;
 
@@ -394,7 +394,7 @@ void VideoSettings::EnumDisplayModes()
 // This function basically just uses any available display mode
 bool VideoSettings::GetAvailableMode()
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	render = false;
 
 	if (!hWnd)
@@ -452,7 +452,7 @@ bool VideoSettings::GetAvailableMode()
 
 bool VideoSettings::GetCompatibleWinMode(VideoCaps caps)
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	if (!hasHardware)
 		return false;
 
@@ -544,7 +544,7 @@ bool VideoSettings::GetCompatibleWinMode(VideoCaps caps)
 	return false;
 }
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 void VideoSettings::SetHandle(HWND hwnd, int bpp=16)
 {
 	hWnd = hwnd;
@@ -570,7 +570,7 @@ void VideoSettings::SetHandle(HWND hwnd, int bpp=16)
 
 void VideoSettings::Release()
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	// Clear the rendering context
 	wglMakeCurrent(NULL, NULL); 
 
@@ -588,7 +588,7 @@ void VideoSettings::Release()
 
 void VideoSettings::SetMode()
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	if (!hWnd)
 		return;
 
@@ -694,14 +694,14 @@ void VideoSettings::ResizeGLScene(int width, int height)		// Resize And Initiali
 
 void VideoSettings::SwapBuffers()
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	::SwapBuffers(hDC);
 #endif
 }
 
 inline void VideoSettings::SetCurrent()
 {
-#ifdef _WIN32
+#ifdef _WINDOWS
 	if(!wglMakeCurrent(hDC, hRC)) {					// Try To Activate The Rendering Context
 		//wxMessageBox("Can't Activate The GL Rendering Context.","ERROR");
 		//render = false;

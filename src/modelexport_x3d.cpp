@@ -13,12 +13,6 @@
 
 #include "CxImage/ximage.h"
 
-#ifdef WIN32
-    #define SLASH '\\'
-#else
-    #define SLASH '/'
-#endif
-
 //#define NONSTANDARDBLENDMODE
 
 class tabbed_ostream

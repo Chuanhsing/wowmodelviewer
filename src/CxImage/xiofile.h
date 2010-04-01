@@ -4,7 +4,7 @@
 #include "xfile.h"
 //#include <TCHAR.h>
 
-#ifndef _WIN32
+#ifndef _WINDOWS
 typedef const TCHAR *LPCTSTR;
 #define _tfopen fopen
 #endif

@@ -645,7 +645,7 @@ void Model::initCommon(MPQFile &f)
 				texname[texdef[i].nameLen] = 0;
 				textures[i] = texturemanager.add(texname);
 				TextureList.push_back(texname);
-				wxLogMessage("Info: Added %s to the TextureList.", texname);
+				wxLogMessage(_T("Info: Added %s to the TextureList."), texname);
 			} else {
 				// special texture - only on characters and such...
 				textures[i] = 0;
@@ -653,50 +653,64 @@ void Model::initCommon(MPQFile &f)
 				//if (texdef[i].type < TEXTURE_MAX)specialTextures[texdef[i].type] = (int)i;
 				specialTextures[i] = texdef[i].type;
 
-				if (modelType == MT_CHAR || modelType == MT_NPC){
+				if (modelType == MT_NORMAL){
+					wxString tex;
 					if (texdef[i].type == TEXTURE_HAIR){
-						strncpy(texname,(const char*)"Hair.blp",8);
-						TextureList.push_back(texname);
-						wxLogMessage("Info: Added %s to the TextureList via specialTextures.", texname);
+						tex = _T("Hair.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
 					}else if(texdef[i].type == TEXTURE_BODY){
-						strncpy(texname,(const char*)"Body.blp",8);
-						TextureList.push_back(texname);
-						wxLogMessage("Info: Added %s to the TextureList via specialTextures.", texname);
+						tex = _T("Body.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
 					}else if(texdef[i].type == TEXTURE_CAPE){
-						strncpy(texname,(const char*)"Cape.blp",8);
-						TextureList.push_back(texname);
-						wxLogMessage("Info: Added %s to the TextureList via specialTextures.", texname);
+						tex = _T("Cape.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
 					}else if(texdef[i].type == TEXTURE_FUR){
-						strncpy(texname,(const char*)"Fur.blp",7);
-						TextureList.push_back(texname);
-						wxLogMessage("Info: Added %s to the TextureList via specialTextures.", texname);
+						tex = _T("Fur.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
 					}else if(texdef[i].type == TEXTURE_ARMORREFLECT){
-						strncpy(texname,(const char*)"Reflection.blp",14);
-						TextureList.push_back(texname);
-						wxLogMessage("Info: Added %s to the TextureList via specialTextures.", texname);
+						tex = _T("Reflection.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
 					}else if(texdef[i].type == TEXTURE_GAMEOBJECT1){
-						strncpy(texname,(const char*)"ChangableTexture 1.blp",22);
-						TextureList.push_back(texname);
-						wxLogMessage("Info: Added %s to the TextureList via specialTextures.", texname);
+						tex = _T("ChangableTexture1.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
 					}else if(texdef[i].type == TEXTURE_GAMEOBJECT2){
-						strncpy(texname,(const char*)"ChangableTexture 2.blp",22);
-						TextureList.push_back(texname);
-						wxLogMessage("Info: Added %s to the TextureList via specialTextures.", texname);
+						tex = _T("ChangableTexture2.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
 					}else if(texdef[i].type == TEXTURE_GAMEOBJECT3){
-						strncpy(texname,(const char*)"ChangableTexture 3.blp",22);
-						TextureList.push_back(texname);
-						wxLogMessage("Info: Added %s to the TextureList via specialTextures.", texname);
+						tex = _T("ChangableTexture3.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
 					}
-				}else if (modelType == MT_NORMAL){
-					if (texdef[i].type == TEXTURE_CAPE){
-						// This is a replacable Texture!
-
-						//g_charControl
-
-						strncpy(texname,(const char*)"Cape.blp",8);
-						TextureList.push_back(texname);
-						wxLogMessage("Info: Added %s to the TextureList via specialTextures.", texname);
+					strncpy(texname,tex.c_str(),tex.Len());
+					TextureList.push_back(texname);
+				}else{
+					wxString tex;
+					if (texdef[i].type == TEXTURE_HAIR){
+						tex = _T("NHair.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
+					}else if(texdef[i].type == TEXTURE_BODY){
+						tex = _T("NBody.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
+					}else if(texdef[i].type == TEXTURE_CAPE){
+						tex = _T("NCape.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
+					}else if(texdef[i].type == TEXTURE_FUR){
+						tex = _T("NFur");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
+					}else if(texdef[i].type == TEXTURE_ARMORREFLECT){
+						tex = _T("NReflection.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
+					}else if(texdef[i].type == TEXTURE_GAMEOBJECT1){
+						tex = _T("NChangableTexture1.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
+					}else if(texdef[i].type == TEXTURE_GAMEOBJECT2){
+						tex = _T("NChangableTexture2.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
+					}else if(texdef[i].type == TEXTURE_GAMEOBJECT3){
+						tex = _T("NChangableTexture3.blp");
+						wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
 					}
+					strncpy(texname,tex.c_str(),tex.Len());
+					TextureList.push_back(texname);
 				}
 
 				if (texdef[i].type < TEXTURE_MAX)

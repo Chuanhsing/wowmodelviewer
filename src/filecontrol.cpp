@@ -274,7 +274,6 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		modelviewer->isWMO = true;
 
 		// is WMO?
-		modelviewer->menuBar->EnableTop(2, false);
 		//canvas->model->modelType = MT_WMO;
 
 		// if we have selected a non-root wmo, find the root filename
@@ -311,19 +310,59 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 	if (modelviewer->isWMO == true){
 		// If the object is a WMO file...
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode when viewing WMOs...
+/*#ifdef _DEBUG
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, true);
+#else*/
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
+//#endif
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, false);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, false);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, false);
+
+		modelviewer->charMenu->Enable(ID_SAVE_CHAR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_EARS, false);
+		modelviewer->charMenu->Enable(ID_SHOW_HAIR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_FACIALHAIR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_FEET, false);
+		modelviewer->charMenu->Enable(ID_SHEATHE, false);
+		modelviewer->charMenu->Enable(ID_SAVE_EQUIPMENT, false);
+		modelviewer->charMenu->Enable(ID_LOAD_EQUIPMENT, false);
+		modelviewer->charMenu->Enable(ID_CLEAR_EQUIPMENT, false);
+		modelviewer->charMenu->Enable(ID_LOAD_SET, false);
+		modelviewer->charMenu->Enable(ID_LOAD_START, false);
+		modelviewer->charMenu->Enable(ID_LOAD_NPC_START, false);
+		modelviewer->charMenu->Enable(ID_MOUNT_CHARACTER, false);
+		modelviewer->charMenu->Enable(ID_CHAR_RANDOMISE, false);
 	}else{
 		// If it's an M2 file...
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, true);
+/*#ifdef _DEBUG
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, true);
+#else*/
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);	// Currently totally disabled. No support at all...
+//#endif
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, true);
+
+		modelviewer->charMenu->Enable(ID_SAVE_CHAR, true);
+		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, true);
+		modelviewer->charMenu->Enable(ID_SHOW_EARS, true);
+		modelviewer->charMenu->Enable(ID_SHOW_HAIR, true);
+		modelviewer->charMenu->Enable(ID_SHOW_FACIALHAIR, true);
+		modelviewer->charMenu->Enable(ID_SHOW_FEET, true);
+		modelviewer->charMenu->Enable(ID_SHEATHE, true);
+		modelviewer->charMenu->Enable(ID_SAVE_EQUIPMENT, true);
+		modelviewer->charMenu->Enable(ID_LOAD_EQUIPMENT, true);
+		modelviewer->charMenu->Enable(ID_CLEAR_EQUIPMENT, true);
+		modelviewer->charMenu->Enable(ID_LOAD_SET, true);
+		modelviewer->charMenu->Enable(ID_LOAD_START, true);
+		modelviewer->charMenu->Enable(ID_LOAD_NPC_START, true);
+		modelviewer->charMenu->Enable(ID_MOUNT_CHARACTER, true);
+		modelviewer->charMenu->Enable(ID_CHAR_RANDOMISE, true);
 	}
 
 	// Update the layout
