@@ -13,6 +13,7 @@ BEGIN_EVENT_TABLE(CAnimationExporter, wxFrame)
 	EVT_CHECKBOX(ID_GIFDIFFUSE,		CAnimationExporter::OnCheck)
 	EVT_CHECKBOX(ID_GIFSHRINK,		CAnimationExporter::OnCheck)
 	EVT_CHECKBOX(ID_GIFGREYSCALE,	CAnimationExporter::OnCheck)
+	EVT_CHECKBOX(ID_PNGSEQ,	CAnimationExporter::OnCheck)
 END_EVENT_TABLE()
 
 // This creates our frame and all our objects
@@ -36,6 +37,7 @@ CAnimationExporter::CAnimationExporter(wxWindow* parent, wxWindowID id, const wx
 	
 	cbTrans = new wxCheckBox(this, ID_GIFTRANSPARENT, _T("Transparency"), wxPoint(10,65), wxDefaultSize, 0);
 	cbGrey = new wxCheckBox(this, ID_GIFGREYSCALE, _T("Greyscale"), wxPoint(130,65), wxDefaultSize, 0);
+	cbPng = new wxCheckBox(this, ID_PNGSEQ, _T("PNG Sequence"), wxPoint(250,65), wxDefaultSize, 0);
 	cbDither = new wxCheckBox(this, ID_GIFDIFFUSE, _T("Error Diffusion"), wxPoint(10,85), wxDefaultSize, 0);
 	cbShrink = new wxCheckBox(this, ID_GIFSHRINK, _T("Resize"), wxPoint(130,85), wxDefaultSize, 0);
 
@@ -64,6 +66,7 @@ void CAnimationExporter::Init(const wxString fn)
 	m_bDiffuse = false;
 	m_bShrink = false;
 	m_bGreyscale = false;
+	m_bPng = false;
 	
 	m_iNewWidth = 0;
 	m_iNewHeight = 0;
@@ -80,6 +83,7 @@ void CAnimationExporter::Init(const wxString fn)
 	btnStart->Enable(true);
 	btnCancel->Enable(true);
 	cbGrey->Enable(true);
+	cbPng->Enable(true);
 	cbTrans->Enable(true);
 	cbDither->Enable(true);
 	cbShrink->Enable(true);
@@ -116,6 +120,7 @@ void CAnimationExporter::CreateGif()
 	btnStart->Enable(false);
 	btnCancel->Enable(false);
 	cbGrey->Enable(false);
+	cbPng->Enable(false);
 	cbTrans->Enable(false);
 	cbDither->Enable(false);
 	cbShrink->Enable(false);
@@ -123,7 +128,6 @@ void CAnimationExporter::CreateGif()
 	txtSizeX->Enable(false);
 	txtSizeY->Enable(false);
 	txtDelay->Enable(false);
-
 	// Pause our rendering to screen so we can focus on making the animated image
 	video.render = false;
 	
@@ -160,7 +164,7 @@ void CAnimationExporter::CreateGif()
 		}
 	}
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 	// CREATE OUR RENDERTOTEXTURE OBJECT
 	// -------------------------------------------
 	// if either are supported use our 'RenderTexture' object.
@@ -201,7 +205,7 @@ void CAnimationExporter::CreateGif()
 	unsigned char *buffer = new unsigned char[m_iSize];
 	gifImages = new CxImage*[m_iTotalFrames];
 
-	for(unsigned int i=0; i<m_iTotalFrames; i++) {
+	for(unsigned int i=0; i<m_iTotalFrames && !m_bPng; i++) {
 		lblCurFrame->SetLabel(wxString::Format(_T("Current Frame: %i"), i));
 
 		this->Refresh();
@@ -224,10 +228,10 @@ void CAnimationExporter::CreateGif()
 			g_canvas->sky->tick((float)m_iTimeStep);
 		
 
-		#ifdef _WINDOWS
+		#ifdef _WIN32
 		if (m_bGreyscale)
 			newImage->GrayScale();
-		#endif
+		#endif //_WIN32
 
 		if(m_bShrink && m_iNewWidth!=m_iWidth && m_iNewHeight!=m_iHeight)
 			newImage->Resample(m_iNewWidth, m_iNewHeight, 2);
@@ -253,9 +257,65 @@ void CAnimationExporter::CreateGif()
 		// All the memory that we allocate for newImage gets cleared at the end
 	}
 
+	//PNG Sequence Exporter, use if Checkbox is true
+	for(unsigned int i=0; i<m_iTotalFrames && m_bPng; i++) {
+		lblCurFrame->SetLabel(wxString::Format(_T("Current Frame: %i"), i));
+
+		this->Refresh();
+		this->Update();
+
+		CxImage *newImage = new CxImage(0);
+		CxImage *newImage2 = new CxImage(0);
+		
+		g_canvas->RenderToBuffer();
+		wxString stat;
+
+		glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGRA_EXT, GL_UNSIGNED_BYTE, buffer);
+
+		newImage->CreateFromArray(buffer, m_iWidth, m_iHeight, 32, (m_iWidth*4), false);
+
+		/*
+		 *Because Alpha Channel textures are a bit messed up in the OpenGL renders,
+		 *alpha channels will have to be 1-bit to "hide" any texture errors
+		 */
+		if (m_bTransparent){
+		newImage->AlphaSplit(newImage2); //split alpha to another cximage object
+		newImage2->Threshold(1); //convert 8bit alpha to 1bit
+		newImage2->GrayScale(); //prepare conversion for application to alpha channel
+		newImage->AlphaSet(*newImage2); //apply mock 1-bit alpha channel
+		}else{
+			newImage->AlphaCreate();
+			newImage->IncreaseBpp(32);
+		}
+
+		// not needed due to the code just below, which fixes the issue with particles
+		//g_canvas->model->animManager->SetTimeDiff(m_iTimeStep);
+		//g_canvas->model->animManager->Tick(m_iTimeStep);
+		if (g_canvas->root)
+			g_canvas->root->tick((float)m_iTimeStep);
+		if (g_canvas->sky)
+			g_canvas->sky->tick((float)m_iTimeStep);
+		
+
+		#ifdef _WIN32
+		if (m_bGreyscale)
+			newImage->GrayScale();
+		#endif //_WIN32
+
+		// if (Optimise) {
+
+		// Append PNG extension, save out PNG file with frame number
+		wxString filen = m_strFilename.fn_str();
+		filen << "_" << i << ".png";
+		newImage->Save(filen, CXIMAGE_FORMAT_PNG);
+		
+		//gifImages must not be empty
+		gifImages[i] = newImage;
+		// All the memory that we allocate for newImage gets cleared at the end
+	}
 	wxDELETEA(buffer);
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 	if (video.supportPBO || video.supportVBO) {
 		g_canvas->rt->EndRender();
 
@@ -264,13 +324,18 @@ void CAnimationExporter::CreateGif()
 		wxDELETE(g_canvas->rt);
 	}
 #endif
-
+	if(!m_bPng){
 	// CREATE THE ACTUAL MULTI-IMAGE GIF ANIMATION
 	// ------------------------------------------------------
 	// Create the file and write all the data
 	// Open/Create the file that were going to save to
+
+	// Append GIF extension
+	wxString filen = m_strFilename.fn_str();
+	filen << ".gif";
+
 	FILE *hFile = NULL;
-	hFile = fopen(m_strFilename.fn_str(), "wb");
+	hFile = fopen(filen, "wb");
 
 	// Set gif options
 	CxImageGIF multiImage;
@@ -291,6 +356,7 @@ void CAnimationExporter::CreateGif()
 	// --------------------------------------------------------
 	// Close file
 	fclose(hFile);
+	}
 
 	// Free the memory used by all the images to create the GIF
 	for(unsigned int i=0; i<m_iTotalFrames; i++) {
@@ -315,6 +381,7 @@ void CAnimationExporter::CreateGif()
 	video.render = true;
 	g_canvas->InitView();
 }
+
 
 void CAnimationExporter::OnButton(wxCommandEvent &event)
 {
@@ -346,6 +413,9 @@ void CAnimationExporter::OnCheck(wxCommandEvent &event)
 		
 	} else if (event.GetId() == ID_GIFGREYSCALE) {
 		m_bGreyscale = event.IsChecked();
+	}
+	else if (event.GetId() == ID_PNGSEQ) {
+		m_bPng = event.IsChecked();
 	}
 }
 

@@ -260,7 +260,7 @@ void ModelViewer::InitMenu()
 	fileMenu = new wxMenu;
 	fileMenu->Append(ID_FILE_SCREENSHOT, _("Save Screenshot\tF12"));
 	fileMenu->Append(ID_FILE_SCREENSHOTCONFIG, _("Save Sized Screenshot\tCTRL+S"));
-	fileMenu->Append(ID_FILE_EXPORTGIF, _("Animated Gif"));
+	fileMenu->Append(ID_FILE_EXPORTGIF, _("GIF/Sequence Export"));
 	fileMenu->Append(ID_FILE_EXPORTAVI, _("Export AVI"));
 	fileMenu->AppendSeparator();
 /*
@@ -1961,7 +1961,7 @@ void ModelViewer::OnSave(wxCommandEvent &event)
 			return;
 		}
 		
-		wxFileDialog dialog(this, _T("Save Animated Gif"), dir.GetPath(wxPATH_GET_VOLUME), _T("animation.gif"), _T("Animated GIF (*.gif)|*.gif"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
+		wxFileDialog dialog(this, _T("Save Animation"), dir.GetPath(wxPATH_GET_VOLUME), _T("filename"), _T("Animation"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
 		
 		if (dialog.ShowModal()==wxID_OK) {
 			// Save the folder location for next time

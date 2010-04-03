@@ -184,6 +184,7 @@ enum ObjectID {
 	ID_GIFDIFFUSE,
 	ID_GIFSHRINK,
 	ID_GIFGREYSCALE,
+	ID_PNGSEQ,
 
 	// ------------------------------------
 	// Anim Frame

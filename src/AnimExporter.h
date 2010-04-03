@@ -39,7 +39,7 @@ private:
 	unsigned long m_iNewWidth, m_iNewHeight;// New width and height of the output image
 	unsigned long m_iDelay;					// Delay between frames
 
-	bool m_bTransparent, m_bDiffuse, m_bShrink, m_bGreyscale;	// Various options and toggles settings
+	bool m_bTransparent, m_bDiffuse, m_bShrink, m_bGreyscale, m_bPng;	// Various options and toggles settings
 
 	unsigned long m_iSize;		// Size of our data buffer to hold the pixel data
 
@@ -53,7 +53,7 @@ private:
 	wxStaticText *lblCurFrame, *lblFile;
 	wxButton *btnStart, *btnCancel;
 	wxTextCtrl *txtFrames, *txtSizeX, *txtSizeY, *txtDelay;
-	wxCheckBox *cbTrans, *cbDither, *cbShrink, *cbGrey;
+	wxCheckBox *cbTrans, *cbDither, *cbShrink, *cbGrey, *cbPng;
 
 public:
 	CAnimationExporter(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE|wxCAPTION|wxFRAME_NO_TASKBAR);
