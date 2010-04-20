@@ -111,7 +111,7 @@ void getGamePath();
 	#define LSB4(w)			(w)
 #else
 	#define MSB2(w)			(w)
-	#define MSB4(w)			(w)
+	#define MSB4			static_cast
 	#define LSB2			_SwapTwoBytes
 	#define LSB4			_SwapFourBytes 
 #endif

@@ -15,7 +15,7 @@ void SaveTexture(wxString fn)
 {
 	// Slash correction, just in case.
 	#ifndef _WINDOWS
-		fn.Replace('\\','/');
+		fn.Replace(wxT("\\"),wxT("/"));
 	#endif
 	unsigned char *pixels = NULL;
 
@@ -79,8 +79,8 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString su
 
 	// Secure paths for Non-Windows systems
 	#ifndef _WINDOWS
-		outdir.Replace('\\','/');
-		filePath.Replace('\\','/');
+		outdir.Replace(wxT("\\"),wxT("/"));
+		filePath.Replace(wxT("\\"),wxT("/"));
 	#endif
 
 	// Lightwave

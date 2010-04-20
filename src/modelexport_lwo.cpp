@@ -847,7 +847,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 		if (p.init(m)){
 	//		if (!surfArray[m->passes[i].tex]){
 				wxString matName;
-				matName = wxString(m->TextureList[p.tex]).AfterLast(SLASH).BeforeLast(_T('.'));
+				matName = wxString(m->TextureList[p.tex].c_str()).AfterLast(SLASH).BeforeLast(_T('.'));
 				
 				if (matName.Len() == 0)
 					matName = wxString::Format(_T("Material_%03i"), p.tex);
@@ -873,7 +873,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 					ModelRenderPass &p = attM->passes[i];
 
 					if (p.init(attM)) {					
-						wxString matName = wxString(attM->TextureList[p.tex]).AfterLast(SLASH).BeforeLast(_T('.'));
+						wxString matName = wxString(attM->TextureList[p.tex].c_str()).AfterLast(SLASH).BeforeLast(_T('.'));
 
 						if (matName.Len() == 0)
 							matName = wxString::Format(_T("Attach Material %03i"), p.tex);
@@ -898,7 +898,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 						ModelRenderPass &p = mAttChild->passes[i];
 
 						if (p.init(mAttChild)) {
-							wxString matName = wxString(mAttChild->TextureList[p.tex]).AfterLast(SLASH).BeforeLast(_T('.'));
+							wxString matName = wxString(mAttChild->TextureList[p.tex].c_str()).AfterLast(SLASH).BeforeLast(_T('.'));
 							int thisslot = att2->children[j]->slot;
 							if (thisslot < 15 && slots[thisslot]!=_T("")){
 								if (matName == _T("Cape")) {
@@ -1764,7 +1764,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 #endif
 
 			wxString FilePath = wxString(fn, wxConvUTF8).BeforeLast(SLASH);
-			wxString texName = wxString(m->TextureList[p.tex]).BeforeLast(_T('.'));
+			wxString texName = wxString(m->TextureList[p.tex].c_str()).BeforeLast(_T('.'));
 			wxString texPath = texName.BeforeLast(SLASH);
 			if (m->modelType == MT_CHAR){
 				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName.AfterLast(SLASH);
@@ -1876,7 +1876,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 						clipSize += 8;
 
 						wxString FilePath = wxString(fn, wxConvUTF8).BeforeLast(SLASH);
-						wxString texName = wxString(attM->TextureList[p.tex]).BeforeLast(_T('.'));
+						wxString texName = wxString(attM->TextureList[p.tex].c_str()).BeforeLast(_T('.'));
 						wxString texPath = texName.BeforeLast(SLASH);
 						if (texName.AfterLast(SLASH) == _T("Cape")){
 							texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + wxString(attM->name.c_str()).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
@@ -1992,7 +1992,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 							clipSize += 8;
 
 							wxString FilePath = wxString(fn, wxConvUTF8).BeforeLast(SLASH);
-							wxString texName = wxString(mAttChild->TextureList[p.tex]).BeforeLast(_T('.'));
+							wxString texName = wxString(mAttChild->TextureList[p.tex].c_str()).BeforeLast(_T('.'));
 							wxString texPath = texName.BeforeLast(SLASH);
 							if (texName.AfterLast(SLASH) == _T("Cape")){
 								//texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + wxString(mAttChild->name).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
@@ -2092,7 +2092,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			surfaceCounter++;
 
 			// Surface name
-			surfName = wxString(m->TextureList[p.tex]).AfterLast(SLASH).BeforeLast(_T('.'));
+			surfName = wxString(m->TextureList[p.tex].c_str()).AfterLast(SLASH).BeforeLast(_T('.'));
 			if (surfName.Len() == 0)
 				surfName = wxString::Format(_T("Material_%03i"),p.tex);
 
@@ -2105,7 +2105,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			if (m->modelType == MT_CHAR){
 				cmnt = wxString::Format(_T("Character Material %03i"),p.tex);
 			}else{
-				cmnt = wxString(m->TextureList[p.tex]).BeforeLast(_T('.')).Append(_T(".TGA"));
+				cmnt = wxString(m->TextureList[p.tex].c_str()).BeforeLast(_T('.')).Append(_T(".TGA"));
 			}
 
 			// If double-sided...
@@ -2130,7 +2130,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 						surfaceCounter++;
 
 						// Surface name
-						surfName = wxString(attM->TextureList[p.tex]).AfterLast(SLASH).BeforeLast(_T('.'));
+						surfName = wxString(attM->TextureList[p.tex].c_str()).AfterLast(SLASH).BeforeLast(_T('.'));
 						if (surfName.Len() == 0)
 							surfName = wxString::Format(_T("Material_%03i"),p.tex);
 						Vec4D color = p.ocol;
@@ -2138,7 +2138,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 						if (p.useEnvMap)
 							reflect = 0.5f;
 
-						wxString cmnt = wxString(attM->TextureList[p.tex]).BeforeLast(_T('.')).Append(_T(".TGA"));
+						wxString cmnt = wxString(attM->TextureList[p.tex].c_str()).BeforeLast(_T('.')).Append(_T(".TGA"));
 
 						// If double-sided...
 						bool cull = true;
@@ -2162,10 +2162,10 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 							surfaceCounter++;
 
 							// Comment
-							wxString cmnt = wxString(mAttChild->TextureList[p.tex]).BeforeLast(_T('.')).Append(_T(".TGA"));
+							wxString cmnt = wxString(mAttChild->TextureList[p.tex].c_str()).BeforeLast(_T('.')).Append(_T(".TGA"));
 
 							// Surface name
-							surfName = wxString(mAttChild->TextureList[p.tex]).AfterLast(SLASH).BeforeLast(_T('.'));
+							surfName = wxString(mAttChild->TextureList[p.tex].c_str()).AfterLast(SLASH).BeforeLast(_T('.'));
 							int thisslot = att2->children[j]->slot;
 							if (thisslot < 15 && slots[thisslot]!=_T("")){
 								if (surfName == _T("Cape")) {
@@ -2502,7 +2502,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 		file << Path1 << SLASH << Path2 << SLASH << Name;
 	}
 #ifndef _WINDOWS
-	file.Replace('\\','/');
+	file.Replace(wxT("\\"),wxT("/"));
 #endif
 	wxFFileOutputStream f(file, _T("w+b"));
 
@@ -2692,7 +2692,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 	std::vector<uint16> sfix2;
 	std::vector<uint16> check;
 	for (uint16 t=0;t<m->nTextures;t++){
-		wxString tex = wxString(m->textures[t]).BeforeLast(_T('.'));
+		wxString tex = wxString(m->textures[t].c_str()).BeforeLast(_T('.'));
 		surfarray.push_back(tex.c_str());
 		//sfix.push_back(tex.c_str());
 		sfix2.push_back(t);
@@ -3241,7 +3241,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 	// Once the proper textures can be assigned the proper filenames, then this will be re-installed.
 	
 	for (uint32 x=0;x<m->textures.size();x++){
-		SaveTexture2(m->textures[x], wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("LWO"),_T("tga"));
+		SaveTexture2(m->textures[x].c_str(), wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("LWO"),_T("tga"));
 	}
 
 	// Texture Data
