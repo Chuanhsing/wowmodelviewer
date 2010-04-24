@@ -1,5 +1,32 @@
 World of Warcraft Model Viewer v0.7.0.1
 
+r133
+ - Fixed the bug that wouldn't let the OBJ & Milkshape Exporters do their jobs.
+ - Files from Patch-3.MPQ are now colored Green. If you don't see any green files, clear your MPQ list & reload WMV, or manually add Patch-3.MPQ & (locale)\Patch-(locale)-3.MPQ.
+ - Added an Export option to use the position & rotation from WMV.
+ - Camera M2 files are available again, so they can be exported!
+ - GIF Exporter Updates:
+   - Renamed "GIF/Sequence Export".
+   - Now Exports PNG Sequences.
+   - When PNG is used, Transparency checkbox is actually used to convert the alpha channel to 1-bit from 8-bit. This will fix most alpha channel errors.
+ - Lightwave Exporter Updates:
+   - M2 files will now export a scene file if they have any data to export!
+   - M2 models with Camera data will now export that data!
+   - Camera Animation Data will now export!
+   - M2 Exports can now (optionally) place models in the scene file, based on their position and rotation in WoW Model Viewer!
+ - OBJ Exporter Updates:
+   - M2 models now export images using their actual texture names, or modelname_body.tga style names.
+ - Milkshape Exporter Updates:
+   - Same Texture Name update as OBJ.
+ - 3DS Exporter Updates:
+   - Same Texture Name update as OBJ & Milkshape.
+ - (Dev Work) Added a function to determine M2 Texture names.
+ - (Dev Work) Logs from Model Exports will now be more helpful.
+ - (Dev Work) Fixed some wide-char issues.
+ - (Dev Work) Added new icon to CMake file.
+ - (Dev Work) Added Intel Definitions for OSX to CMake file.
+
+
 r128
  - Changed Revision Numbers to match GoogleCode Revision Number. To avoid confusion, the version number has increased to v0.7.0.1!
  - Added an Error message if you don't have a supported version of World of Warcraft. No more DBC assertion errors!
@@ -25,6 +52,7 @@ r128
  - (Dev Work) WMO Vertex Colors are now listed in an array. (Old Vertex Color system is still in place.)
  - (Dev Work) Added IndiceToVerts conversion array for WMO Groups.
  - (Dev Work) Both Lightwave Exporters now share Point and Surface Data writing functions. Reduces code overall.
+
 
 v0.7.0.0 r685 (Last of the old Revision Numbers)
  - Officially updated version to 0.7.0.0!

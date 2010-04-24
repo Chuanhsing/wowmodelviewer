@@ -16,6 +16,7 @@ void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init)
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
+	LogExportData(_T("OBJ"),wxString(fn).BeforeLast(SLASH));
 
 	unsigned short numVerts = 0;
 	unsigned short numGroups = 0;
@@ -43,10 +44,10 @@ void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init)
 		ModelRenderPass &p = m->passes[i];
 			
 		if (p.init(m)) {
-			wxString texName(fn, wxConvUTF8);
-			texName = texName.AfterLast('\\').BeforeLast('.');
-			texName << _T("_") << p.tex << _T(".tga");
-			fm << "newmtl " << "Material_" << i << endl;
+			wxString texName = GetM2TextureName(m,fn,p,i);
+
+			fm << _T("newmtl ") << texName << endl;
+			texName << _T(".tga");
 			fm << "illum 2" << endl;
 			out = wxString::Format(_T("Kd %.06f %.06f %.06f"), p.ocol.x, p.ocol.y, p.ocol.z);
 			fm << out.c_str() << endl;
@@ -63,11 +64,14 @@ void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init)
 			//fm << "Ns " << p.ocol.w << endl;
 			fm << "map_Kd " << texName.c_str() << endl << endl;
 
+			
 			wxString texFilename(fn, wxConvUTF8);
-			texFilename = texFilename.BeforeLast('\\');
-			texFilename += '\\';
+			texFilename = texFilename.BeforeLast(SLASH);
+			texFilename += SLASH;
 			texFilename += texName;
+			wxLogMessage(_T("Exporting Image: %s"),texFilename);
 			SaveTexture(texFilename);
+			
 		}
 	}
 
@@ -142,8 +146,26 @@ void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init)
 		ModelRenderPass &p = m->passes[i];
 
 		if (p.init(m)) {
+			wxString FilePath = wxString(fn, wxConvUTF8).BeforeLast(SLASH);
+			wxString texName = wxString(m->TextureList[p.tex].c_str()).BeforeLast(_T('.'));
+			wxString texPath = texName.BeforeLast(SLASH);
+			if (m->modelType == MT_CHAR){
+				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName.AfterLast(SLASH);
+			}else if ((texName.Find(SLASH) <= 0)&&(texName == _T("Cape"))){
+				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
+				texPath = wxString(m->name.c_str()).BeforeLast(SLASH);
+			}else if (texName.Find(SLASH) <= 0){
+				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName;
+				texPath = wxString(m->name.c_str()).BeforeLast(SLASH);
+			}else{
+				texName = texName.AfterLast(SLASH);
+			}
+
+			if (texName.Length() == 0)
+				texName << wxString(m->modelname.c_str()).AfterLast(SLASH).BeforeLast(_T('.')) << wxString::Format(_T("_Image_%03i"),i);
+
 			f << "g Geoset_" << i << endl;
-			f << "usemtl Material_" << i << endl;
+			f << "usemtl " << texName << endl;
 			f << "s 1" << endl;
 			triangles = 0;
 			for (unsigned int k=0; k<p.indexCount; k+=3) {
@@ -181,7 +203,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 		MakeDirs(Path1,Path2);
 
 		file.Empty();
-		file << Path1 << '\\' << Path2 << '\\' << Name;
+		file << Path1 << SLASH << Path2 << SLASH << Name;
 	}
 
 	ofstream f(file.c_str(), ios_base::out | ios_base::trunc);
@@ -190,13 +212,14 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
+	LogExportData(_T("OBJ"),wxString(fn).BeforeLast(SLASH));
 
 	wxString mtlName = file;
 	mtlName = mtlName.BeforeLast('.');
 	mtlName << _T(".mtl");
 
 	ofstream fm(mtlName.mb_str(), ios_base::out | ios_base::trunc);
-	mtlName = mtlName.AfterLast('\\');
+	mtlName = mtlName.AfterLast(SLASH);
 
 	fm << "#" << endl;
 	fm << "# " << mtlName.mb_str() << endl;
@@ -278,6 +301,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 
 			// setup texture
 			glBindTexture(GL_TEXTURE_2D, mat->tex);
+			wxLogMessage(_T("Exporting Image: %s"),texFilename);
 			SaveTexture(texFilename);
 		}
 	}

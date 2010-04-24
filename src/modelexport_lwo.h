@@ -29,6 +29,24 @@ struct PolyChunk32 {
 	uint32 indice[3];
 };
 
+// Animation Data
+struct AnimationData {
+	std::vector<Vec3D> Position;
+	std::vector<Vec3D> Rotation;
+	std::vector<Vec3D> Scale;
+	std::vector<uint32> Time;
+
+	void Push(Vec3D position, Vec3D rotation, Vec3D scale, uint32 time){
+		Position.push_back(position);
+		Rotation.push_back(rotation);
+		Scale.push_back(scale);
+		Time.push_back(time);
+	}
+	uint32 Size(){
+		return (uint32)Time.size();
+	}
+};
+
 // Weight Data
 struct LWWeight{
 	uint16 WeightID;

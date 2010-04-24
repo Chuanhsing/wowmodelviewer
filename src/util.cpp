@@ -26,6 +26,8 @@ bool bShowParticle = true;
 // General Options
 bool modelExportInitOnly = true;
 bool modelExport_PreserveDir = true;
+bool modelExport_UseWMVPosRot = false;
+
 // Lightwave Options
 bool modelExport_LW_PreserveDir = true;
 bool modelExport_LW_ExportLights = true;

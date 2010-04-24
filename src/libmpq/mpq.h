@@ -55,7 +55,9 @@
     typedef int32_t __int32;
     #define O_BINARY 0
     //#define lseek _lseek
-    #define PATH_MAX 259
+	#ifndef PATH_MAX
+		#define PATH_MAX 259
+	#endif
 #endif
 
 

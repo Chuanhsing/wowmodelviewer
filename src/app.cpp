@@ -326,6 +326,7 @@ void WowModelViewApp::LoadSettings()
 	pConfig->Read(_T("DefaultFormat"), &imgFormat, 0);
 	pConfig->Read(_T("ModelExportInitOnly"), &modelExportInitOnly, true);
 	pConfig->Read(_T("ModelExportPreserveDirs"), &modelExport_PreserveDir, true);
+	pConfig->Read(_T("ModelExportUseWMVPosRot"), &modelExport_UseWMVPosRot, false);
 
 	pConfig->Read(_T("ModelExportLWPreserveDirs"), &modelExport_LW_PreserveDir, true);
 	pConfig->Read(_T("ModelExportLWExportLights"), &modelExport_LW_ExportLights, true);
@@ -426,6 +427,7 @@ void WowModelViewApp::SaveSettings()
 	pConfig->Write(_T("DefaultFormat"), imgFormat);
 	pConfig->Write(_T("ModelExportInitOnly"), modelExportInitOnly);
 	pConfig->Write(_T("ModelExportPreserveDirs"), modelExport_PreserveDir);
+	pConfig->Write(_T("ModelExportUseWMVPosRot"), modelExport_UseWMVPosRot);
 
 	pConfig->Write(_T("ModelExportLWPreserveDirs"), modelExport_LW_PreserveDir);
 	pConfig->Write(_T("ModelExportLWExportLights"), modelExport_LW_ExportLights);

@@ -28,10 +28,12 @@ struct GroupData {
 };
 
 // Common functions
+void LogExportData(wxString FileExtension, wxString Directory);
 void SaveTexture(wxString fn);
 void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString suffix);
 Vec3D QuaternionToXYZ(Vec3D Dir, float W);
-void InitCommon(Attachment *att, bool init, ModelData *verts, GroupData *groups, unsigned short numVerts, unsigned short numGroups, unsigned short numFaces);
+void InitCommon(Attachment *att, bool init, ModelData *&verts, GroupData *&groups, unsigned short &numVerts, unsigned short &numGroups, unsigned short &numFaces);
+wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassNumber);
 
 // --== Exporter Functions ==--
 // If your exporter doesn't do WMO or M2 files, include a faux function anyways. Then add a non-working

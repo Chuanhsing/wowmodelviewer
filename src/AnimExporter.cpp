@@ -164,7 +164,7 @@ void CAnimationExporter::CreateGif()
 		}
 	}
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 	// CREATE OUR RENDERTOTEXTURE OBJECT
 	// -------------------------------------------
 	// if either are supported use our 'RenderTexture' object.
@@ -228,10 +228,10 @@ void CAnimationExporter::CreateGif()
 			g_canvas->sky->tick((float)m_iTimeStep);
 		
 
-		#ifdef _WIN32
+		#ifdef _WINDOWS
 		if (m_bGreyscale)
 			newImage->GrayScale();
-		#endif //_WIN32
+		#endif //_WINDOWS
 
 		if(m_bShrink && m_iNewWidth!=m_iWidth && m_iNewHeight!=m_iHeight)
 			newImage->Resample(m_iNewWidth, m_iNewHeight, 2);
@@ -297,10 +297,10 @@ void CAnimationExporter::CreateGif()
 			g_canvas->sky->tick((float)m_iTimeStep);
 		
 
-		#ifdef _WIN32
+		#ifdef _WINDOWS
 		if (m_bGreyscale)
 			newImage->GrayScale();
-		#endif //_WIN32
+		#endif //_WINDOWS
 
 		// if (Optimise) {
 
@@ -315,7 +315,7 @@ void CAnimationExporter::CreateGif()
 	}
 	wxDELETEA(buffer);
 
-#ifdef _WIN32
+#ifdef _WINDOWS
 	if (video.supportPBO || video.supportVBO) {
 		g_canvas->rt->EndRender();
 

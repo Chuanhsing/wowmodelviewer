@@ -102,6 +102,7 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString su
 
 	// Final Filename
 	temp = outdir+fileName+wxT(".")+suffix;
+	wxLogMessage(_T("Exporting Image: %s"),temp);
 
 	//wxLogMessage(_T("Info: Exporting texture to %s..."), temp.c_str());
 
@@ -184,7 +185,7 @@ Vec3D QuaternionToXYZ(Vec3D Dir, float W){
 	return XYZ;
 }
 
-void AddCount(Model *m, unsigned short *numGroups, unsigned short *numVerts)
+void AddCount(Model *m, unsigned short &numGroups, unsigned short &numVerts)
 {
 	for (size_t i=0; i<m->passes.size(); i++) {
 		ModelRenderPass &p = m->passes[i];
@@ -201,6 +202,7 @@ void AddCount(Model *m, unsigned short *numGroups, unsigned short *numVerts)
 
 void AddVertices(Model *m, Attachment *att, bool init, ModelData *verts, unsigned short &vertIndex, GroupData *groups, unsigned short &grpIndex)
 {
+	wxLogMessage(_T("Adding Verticies from %s..."),wxString(m->name));
 	int boneID = -1;
 	Model *mParent = NULL;
 
@@ -245,11 +247,12 @@ void AddVertices(Model *m, Attachment *att, bool init, ModelData *verts, unsigne
 	for (size_t i=0; i<m->passes.size(); i++) {
 		ModelRenderPass &p = m->passes[i];
 
-		if (p.init(m)) {			
+		if (p.init(m)) {
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
+				//wxLogMessage(_T("Processing vertIndex %i, grpIndex %i"),vertIndex,grpIndex);
 				uint16 a = m->indices[b];
 				
-				if ((m->vertices) && (init == false)) {
+				if ((init == false)&&(m->vertices)) {
 					verts[vertIndex].vertex.x = ((m->vertices[a].x * scale.x) + pos.x);
 					verts[vertIndex].vertex.y = ((m->vertices[a].y * scale.y) + pos.y);
 					verts[vertIndex].vertex.z = ((m->vertices[a].z * scale.z) + pos.z);
@@ -288,20 +291,15 @@ void AddVertices(Model *m, Attachment *att, bool init, ModelData *verts, unsigne
 	}
 }
 
-void InitCommon(Attachment *att, bool init, ModelData *verts, GroupData *groups, unsigned short numVerts, unsigned short numGroups, unsigned short numFaces)
+void InitCommon(Attachment *att, bool init, ModelData *&verts, GroupData *&groups, unsigned short &numVerts, unsigned short &numGroups, unsigned short &numFaces)
 {
-	/*
-	if (verts)
-		wxDELETEA(verts);
-	if (groups)
-		wxDELETEA(groups);
-	*/
-
 	unsigned short vertIndex = 0;
 	unsigned short grpIndex = 0;
 
 	if (!att)
 		return;
+
+	wxLogMessage(_T("Counting Verticies via InitCommon..."));
 
 	Model *m = NULL;
 	if (att->model) {
@@ -309,28 +307,31 @@ void InitCommon(Attachment *att, bool init, ModelData *verts, GroupData *groups,
 		if (!m)
 			return;
 
-		AddCount(m, &numGroups, &numVerts);
+		AddCount(m, numGroups, numVerts);
 	}
 
 	// children:
 	for (size_t i=0; i<att->children.size(); i++) {
 		Model *mAtt = static_cast<Model*>(att->children[i]->model);
 		if (mAtt)
-			AddCount(mAtt, &numGroups, &numVerts);
+			AddCount(mAtt, numGroups, numVerts);
 
 		Attachment *att2 = att->children[i];
 		for (size_t j=0; j<att2->children.size(); j++) {
 			Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
 			if (mAttChild)
-				AddCount(mAttChild, &numGroups, &numVerts);
+				AddCount(mAttChild, numGroups, numVerts);
 		}
 	}
 
-	numFaces = numVerts / 3;
+	numFaces = (numVerts / 3);
 
 	verts = new ModelData[numVerts];
 	//indices = new float[numVerts];
 	groups = new GroupData[numGroups];
+
+	wxLogMessage(_T("Num Verts: %i, Num Faces: %i, Num Groups: %i"), numVerts, numFaces, numGroups);
+	wxLogMessage(_T("Adding Verticies via InitCommon..."));
 
 	if (m)
 		AddVertices(m, att, init, verts, vertIndex, groups, grpIndex);
@@ -347,6 +348,70 @@ void InitCommon(Attachment *att, bool init, ModelData *verts, GroupData *groups,
 			if (mAttChild)
 				AddVertices(mAttChild, att2->children[j], init, verts, vertIndex, groups, grpIndex);
 		}
+	}
+	#ifdef _DEBUG
+		wxLogMessage(_T("Vert[0] BoneID: %i"),verts[0].boneid);
+	#endif
+
+	wxLogMessage(_T("Finished InitCommon Function."));
+}
+
+// Get Proper Texture Names for an M2 File
+wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassNumber){
+	wxString texName = wxString(m->TextureList[p.tex].c_str()).BeforeLast(_T('.'));
+	wxString texPath = texName.BeforeLast(SLASH);
+	if (m->modelType == MT_CHAR){
+		texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName.AfterLast(SLASH);
+	}else if ((texName.Find(SLASH) <= 0)&&(texName == _T("Cape"))){
+		texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
+		texPath = wxString(m->name.c_str()).BeforeLast(SLASH);
+	}else if (texName.Find(SLASH) <= 0){
+		texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName;
+		texPath = wxString(m->name.c_str()).BeforeLast(SLASH);
+	}else{
+		texName = texName.AfterLast(SLASH);
+	}
+
+	if (texName.Length() == 0)
+		texName << wxString(m->modelname.c_str()).AfterLast(SLASH).BeforeLast(_T('.')) << wxString::Format(_T("_Image_%03i"),PassNumber);
+
+	return texName;
+}
+
+// Write out some debug info
+void LogExportData(wxString FileExtension, wxString Directory){
+	wxLogMessage(_T("\n\n========================================================================\n   Exporting Model...\n========================================================================\n"));
+	wxLogMessage(_T("Exporting to Directory: %s"),Directory);
+	wxLogMessage(_T("Exporting File Type: %s"),FileExtension);
+	wxLogMessage(_T("Export Init Mode: %s"),(modelExportInitOnly==true?"True":"False"));
+	wxLogMessage(_T("Preserve Directories: %s"),(modelExport_PreserveDir==true?"True":"False"));
+	wxLogMessage(_T("Use WMV Position & Rotation: %s"),(modelExport_UseWMVPosRot==true?"True":"False"));
+
+	// Lightwave Options
+	if (FileExtension == _T("LWO")){
+		wxLogMessage(_T("Preserve Lightwave Directories: %s"),(modelExport_LW_PreserveDir==true?"True":"False"));
+		wxLogMessage(_T("Export Lights: %s"),(modelExport_LW_ExportLights==true?"True":"False"));
+		wxLogMessage(_T("Export Doodads: %s"),(modelExport_LW_ExportDoodads==true?"True":"False"));
+		wxString XDDas;
+		switch (modelExport_LW_DoodadsAs) {
+			case 0:
+				XDDas = _T("Nulls");
+				break;
+			case 1:
+				XDDas = _T("Objects");
+				break;
+			case 2:
+				XDDas = _T("A Single Object");
+				break;
+			case 3:
+				XDDas = _T("A Single Object, Per Group");
+				break;
+		}
+		wxLogMessage(_T("Export Doodads as: %s"),XDDas);
+	// X3D Options
+	}else if (FileExtension == _T("X3D")){
+		wxLogMessage(_T("Export Animation: %s"),(modelExport_X3D_ExportAnimation==true?"True":"False"));
+		wxLogMessage(_T("Center Model: %s"),(modelExport_X3D_CenterModel==true?"True":"False"));
 	}
 }
 

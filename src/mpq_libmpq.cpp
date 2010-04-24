@@ -254,18 +254,23 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 
 			wxString temp(mpq_a.filename, wxConvUTF8);
 			temp = temp.MakeLower();
-			int col = 0; // wxBLACK
+			int col = 0; // Black
 
 			if (temp.Find(_T("patch.mpq")) > -1)
-				col = 1; // wxBLUE
+				col = 1; // Blue
 			else if (temp.Find(_T("patch-2.mpq")) > -1)
-				col = 2; // wxRed
+				col = 2; // Red
+			else if (temp.Find(_T("patch-3.mpq")) > -1)
+				col = 6; // Green
 			
 			if (temp.Find(_T("expansion")) > -1)
-				col = 3; // Purple
+				col = 3; // Outlands Purple
 
 			if (temp.Find(_T("lichking")) > -1)
 				col = 4; // Frozen Blue
+
+			if (temp.Find(_T("cataclysm")) > -1) // For the future...
+				col = 5; // Destruction Orange
 
 			// TODO: Add handling for uncompressed files.
 			// err.. it seems uncompressed files no longer cause crashes?

@@ -15,6 +15,7 @@ IMPLEMENT_CLASS(ModelExportOptions_X3D, wxWindow)
 
 BEGIN_EVENT_TABLE(ModelExportOptions_General, wxWindow)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_PRESERVE_DIR, ModelExportOptions_General::OnCheck)
+	EVT_CHECKBOX(ID_EXPORTOPTIONS_USE_WMV_POSROT, ModelExportOptions_General::OnCheck)
 	/*
 	EVT_BUTTON(ID_SETTINGS_UP, ModelExportOptions_General::OnButton)
 	EVT_BUTTON(ID_SETTINGS_DOWN, ModelExportOptions_General::OnButton)
@@ -54,12 +55,14 @@ END_EVENT_TABLE()
 
 ModelExportOptions_General::ModelExportOptions_General(wxWindow* parent, wxWindowID id)
 {
-	if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, _("ModelExportOptions_General")) == false) {
+	if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, _T("ModelExportOptions_General")) == false) {
 		wxLogMessage(_T("GUI Error: ModelExportOptions_General"));
 		return;
 	}
 
-	chkbox[MEO_CHECK_PRESERVE_DIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_PRESERVE_DIR, _("Preserve Directory Structure"), wxPoint(5,5), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_PRESERVE_DIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_PRESERVE_DIR, _T("Preserve Directory Structure"), wxPoint(5,5), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_USE_WMV_POSROT] = new wxCheckBox(this, ID_EXPORTOPTIONS_USE_WMV_POSROT, _T("Use Position and Rotation from WMV"), wxPoint(5,22), wxDefaultSize, 0);
+	
 }
 
 
@@ -74,12 +77,15 @@ void ModelExportOptions_General::OnCheck(wxCommandEvent &event)
 
 	if (id==ID_EXPORTOPTIONS_PRESERVE_DIR){
 		modelExport_PreserveDir = event.IsChecked();
+	}else if (id==ID_EXPORTOPTIONS_USE_WMV_POSROT){
+		modelExport_UseWMVPosRot = event.IsChecked();
 	}
 }
 
 void ModelExportOptions_General::Update()
 {
 	chkbox[MEO_CHECK_PRESERVE_DIR]->SetValue(modelExport_PreserveDir);
+	chkbox[MEO_CHECK_USE_WMV_POSROT]->SetValue(modelExport_UseWMVPosRot);
 }
 
 ModelExportOptions_Control::ModelExportOptions_Control(wxWindow* parent, wxWindowID id)

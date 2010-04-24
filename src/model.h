@@ -310,7 +310,7 @@ public:
 	Vec3D *vertices, *normals;
 	Vec2D *texCoords;
 	uint16 *indices;
-	size_t nIndices;
+	uint32 nIndices;
 	std::vector<std::string> TextureList;
 	// --
 
