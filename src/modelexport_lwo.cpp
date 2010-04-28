@@ -2463,7 +2463,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	}
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 Surface Data Written for %s"),wxString(m->fullname));
+	wxLogMessage(_T("M2 Surface Data Written for %s"),wxString(m->fullname.c_str()));
 #endif
 
 	f.SeekO(4, wxFromStart);
@@ -2472,7 +2472,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.SeekO(0, wxFromEnd);
 
 	f.Close();
-	wxLogMessage(_T("M2 %s Successfully written!"),wxString(m->fullname));
+	wxLogMessage(_T("M2 %s Successfully written!"),wxString(m->fullname.c_str()));
 
 	ExportM2toScene(m,fn,init);
 }

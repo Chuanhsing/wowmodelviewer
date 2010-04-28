@@ -202,7 +202,7 @@ void AddCount(Model *m, unsigned short &numGroups, unsigned short &numVerts)
 
 void AddVertices(Model *m, Attachment *att, bool init, ModelData *verts, unsigned short &vertIndex, GroupData *groups, unsigned short &grpIndex)
 {
-	wxLogMessage(_T("Adding Verticies from %s..."),wxString(m->name));
+	wxLogMessage(_T("Adding Verticies from %s..."),wxString(m->name.c_str()));
 	int boneID = -1;
 	Model *mParent = NULL;
 
