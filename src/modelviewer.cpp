@@ -1339,7 +1339,7 @@ bool ModelViewer::InitMPQArchives()
 		wxLogMessage(_T("Unable to gather TOC data."));
 		return false;
 	}
-	f.seek(51);
+	f.seek(51); // offset to "## Interface: "
 	unsigned char toc[6];
 	memset(toc,'\0', 6);
 	f.read(toc, 5);
@@ -1367,12 +1367,9 @@ bool ModelViewer::InitMPQArchives()
 	// else if not our primary supported edition...
 	}else if (strncmp((char*)toc, "30300", 5) != 0) {
 		wxString info = _T("Notice: WoW Model Viewer does not support your version of WoW.\nPlease update your World of Warcraft client!");
-		info += toc;
 		wxLogMessage(info);
 
-		gameVersion = 30300;
-		bV310 = false;
-		//return false;
+		return false;
 	}else{
 		gameVersion = 30300;
 		bV310 = false;
