@@ -362,8 +362,8 @@ void WowModelViewApp::LoadSettings()
 		const wxString locales2[] = {_T("enGB")};
 
 #ifdef WotLK
-		const wxString defaultArchives[] = {_T("patch-3.mpq"),_T("patch-2.mpq"),_T("patch.mpq"),_T("lichking.mpq"),_T("expansion.mpq"),_T("common-2.mpq"), _T("common.mpq")};
-		const wxString localeArchives[] = {_T("patch-%s-3.mpq"), _T("patch-%s-2.mpq"), _T("patch-%s.mpq"), _T("lichking-locale-%s.mpq"), _T("expansion-locale-%s.mpq"), _T("locale-%s.mpq"), _T("base-%s.mpq")};
+		const wxString defaultArchives[] = {_T("patch-3.mpq"),_T("patch-2.mpq"),_T("patch.mpq"),_T("expansion3.mpq"),_T("expansion2.mpq"),_T("lichking.mpq"),_T("expansion.mpq"),_T("common-3.mpq"),_T("common-2.mpq"), _T("common.mpq")};
+		const wxString localeArchives[] = {_T("patch-%s-3.mpq"), _T("patch-%s-2.mpq"), _T("patch-%s.mpq"), _T("expansion3-locale-%s.mpq"), _T("expansion2-locale-%s.mpq"), _T("lichking-locale-%s.mpq"), _T("expansion-locale-%s.mpq"), _T("locale-%s.mpq"), _T("base-%s.mpq")};
 #else
 		const wxString defaultArchives[] = {_T("patch-3.mpq"),_T("patch-2.mpq"),_T("patch.mpq"), _T("expansion.mpq"), _T("common.mpq")};
 		const wxString localeArchives[] = {_T("patch-%s-3.mpq"), _T("patch-%s-2.mpq"), _T("patch-%s.mpq"), _T("expansion-locale-%s.mpq"), _T("locale-%s.mpq"), _T("base-%s.mpq")};
