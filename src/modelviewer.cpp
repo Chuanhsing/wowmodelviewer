@@ -1342,7 +1342,7 @@ bool ModelViewer::InitMPQArchives()
 	f.seek(51);
 	unsigned char toc[6];
 	memset(toc,'\0', 6);
-	f.read(toc, 6);
+	f.read(toc, 5);
 	f.close();
 	wxLogMessage(_T("Loaded Content TOC: v%c.%c%c.%c%c"), toc[0], toc[1], toc[2], toc[3], toc[4]);
 
@@ -1361,12 +1361,18 @@ bool ModelViewer::InitMPQArchives()
 			gameVersion = 30200;
 		}
 		bV310 = false;
+	}else if (strncmp((char*)toc, "40000", 5) == 0){
+		gameVersion = 30300;
+		bV310 = false;
 	// else if not our primary supported edition...
 	}else if (strncmp((char*)toc, "30300", 5) != 0) {
 		wxString info = _T("Notice: WoW Model Viewer does not support your version of WoW.\nPlease update your World of Warcraft client!");
+		info += toc;
 		wxLogMessage(info);
 
-		return false;
+		gameVersion = 30300;
+		bV310 = false;
+		//return false;
 	}else{
 		gameVersion = 30300;
 		bV310 = false;

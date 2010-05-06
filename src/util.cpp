@@ -172,18 +172,15 @@ void getGamePath()
 	// if it failed, look for World of Warcraft install
 	const wxString regpaths[] = { 
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft"),
-/* for beta
-		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\1"),
-		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\2"),
-		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\3"),
-*/
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\PTR"),
+		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\Beta")
 #ifdef _WIN64
-		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft"),
-		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\PTR")
+		,_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft"),
+		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\PTR"),
+		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\Beta")
 #endif
 		 };
-	int sTypes[2];
+	int sTypes[3];
 
 	for (uint32 i=0; i<WXSIZEOF(regpaths); i++) {
 		l = RegOpenKeyEx((HKEY)HKEY_LOCAL_MACHINE, regpaths[i], 0, KEY_QUERY_VALUE, &key);
