@@ -6548,6 +6548,7 @@
 18203,4,Eskhandar's Right Claw
 18204,4,Eskhandar's Pelt
 18208,4,Drape of Benediction
+18231,0,Sleeveless T-Shirt
 18238,3,Shadowskin Gloves
 18263,4,Flarecore Wraps
 18282,4,Core Marksman Rifle
@@ -6890,6 +6891,7 @@
 19126,2,Slagplate Gauntlets
 19127,2,Charred Leather Tunic
 19128,2,Seared Mail Vest
+19129,2,Everglowing Robe
 19130,4,Cold Snap
 19131,4,Snowblind Shoes
 19132,4,Crystal Adorned Crown
@@ -20284,6 +20286,7 @@
 49501,4,Tempered Vis'kag the Bloodletter
 49623,5,Shadowmourne
 49682,4,Black Knight's Rondel
+49715,3,Forever-Lovely Rose
 49778,1,Worn Greatsword
 49783,4,Lucky Old Sun
 49784,4,Minister's Number One Legplates
@@ -20392,7 +20395,7 @@
 49993,4,Necrophotic Greaves
 49994,4,The Lady's Brittle Bracers
 49995,4,Fallen Lord's Handguards
-49996,4,Deathwhisper Chestpiece
+49996,4,Deathwhisper Raiment
 49997,4,Mithrios Bronzebeard's Legacy
 49998,4,Shadowvault Slayer's Cloak
 50000,4,Scourge Hunter's Vambraces
@@ -20502,7 +20505,7 @@
 50205,4,Frostbinder's Shredded Cape
 50206,4,Frayed Scoundrel's Cap
 50207,4,Black Spire Sabatons
-50208,4,Pauldrons of the Devourer
+50208,4,Pauldrons of the Souleater
 50209,4,Essence of Suffering
 50210,4,Seethe
 50212,4,Essence of Desire
@@ -20641,7 +20644,7 @@
 50645,4,Leggings of Northern Lights
 50646,4,Cultist's Bloodsoaked Spaulders
 50648,4,Nibelung
-50649,4,Deathwhisper Chestpiece
+50649,4,Deathwhisper Raiment
 50650,4,Fallen Lord's Handguards
 50651,4,The Lady's Brittle Bracers
 50652,4,Necrophotic Greaves
@@ -20714,6 +20717,7 @@
 50736,4,Heaven's Fall Kryss of a Thousand Lies
 50737,4,Havoc's Call Blade of Lordaeron Kings
 50738,4,Mithrios Bronzebeard's Legacy
+50741,3,Vile Fumigator's Mask
 50759,4,Bone Warden's Splitter
 50760,4,Bonebreaker Scepter
 50761,4,Citadel Enforcer's Claymore
@@ -20729,7 +20733,7 @@
 50773,4,Cord of the Patronizing Practitioner
 50774,4,Coldwraith Bracers
 50775,4,Corrupted Silverplate Leggings
-50776,4,Njordnar Bone Bow
+50776,4,Njorndar Bone Bow
 50777,4,Handgrips of Frost and Sleet
 50778,4,Soulthief's Braided Belt
 50779,4,Deathspeaker Zealot's Helm
@@ -21416,7 +21420,7 @@
 51924,4,Deathspeaker Zealot's Helm
 51925,4,Soulthief's Braided Belt
 51926,4,Handgrips of Frost and Sleet
-51927,4,Njordnar Bone Bow
+51927,4,Njorndar Bone Bow
 51928,4,Corrupted Silverplate Leggings
 51929,4,Coldwraith Bracers
 51930,4,Cord of the Patronizing Practitioner
@@ -21439,6 +21443,7 @@
 51958,3,Pristine Glowbear Pelt
 51959,3,Vigorous Belt
 51960,3,Vigorous Gloves
+51961,3,Vigorous Shoulderguards
 51962,3,Vigorous Bracers
 51963,3,Vigorous Stompers
 51964,3,Vigorous Belt
@@ -21446,10 +21451,13 @@
 51966,3,Vigorous Spaulders
 51967,3,Enumerated Sandals
 51968,3,Enumerated Wrap
+51969,3,Enumerated Shoulders
 51970,3,Enumerated Gloves
+51971,3,Enumerated Belt
 51972,3,Enumerated Bracers
 51973,3,Enumerated Handwraps
-51974,0,Enumerated Shoulderpads
+51974,3,Enumerated Shoulderpads
+51975,3,Earthbound Shoulders
 51976,3,Earthbound Shoulderguards
 51977,3,Earthbound Girdle
 51978,3,Earthbound Girdle
@@ -21457,6 +21465,7 @@
 51980,3,Earthbound Handgrips
 51981,3,Earthbound Wristguards
 51982,3,Earthbound Boots
+51983,3,Stalwart Shoulderguards
 51984,3,Stalwart Shoulderpads
 51985,3,Stalwart Belt
 51987,3,Stalwart Grips
@@ -21464,3 +21473,5 @@
 51990,3,Stalwart Treads
 51993,3,Turbulent Cloak
 51994,3,Tumultuous Cloak
+52019,2,Precious's Ribbon
+54804,4,Shroud of Winter's Chill
