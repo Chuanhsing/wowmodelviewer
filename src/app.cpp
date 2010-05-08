@@ -262,6 +262,8 @@ namespace {
 		long langID = -1;
 
 		for (size_t i = 0; i < localeCount; i++) {
+			if (locales[i] == _T(""))
+				continue;
 			wxArrayString localeMpqs;
 			wxString localePath = gamePath;
 
@@ -359,7 +361,7 @@ void WowModelViewApp::LoadSettings()
 	if (mpqArchives.GetCount()==0) {
 		//enUS(enGB), koKR, frFR, deDE, zhCN, zhTW, esES, ruRU
 		const wxString locales[] = {_T("enUS"), _T("koKR"), _T("frFR"), _T("deDE"), _T("zhCN"),  _T("zhTW"),  _T("esES"),  _T("ruRU")};
-		const wxString locales2[] = {_T("enGB")};
+		const wxString locales2[] = {_T("enGB"), _T(""), _T(""), _T(""), _T("enCN"), _T("enTW"), _T("esMX"), _T("")};
 
 #ifdef WotLK
 		const wxString defaultArchives[] = {_T("patch-3.mpq"),_T("patch-2.mpq"),_T("patch.mpq"),_T("expansion3.mpq"),_T("expansion2.mpq"),_T("lichking.mpq"),_T("expansion.mpq"),_T("common-3.mpq"),_T("common-2.mpq"), _T("common.mpq")};
