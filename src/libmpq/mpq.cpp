@@ -433,7 +433,45 @@ int libmpq_file_extract(mpq_archive *mpq_a, const int number) {
 	return LIBMPQ_TOOLS_SUCCESS;
 }
 #endif
-int libmpq_file_getdata(mpq_archive *mpq_a, const int number, unsigned char *dest) {
+
+int32_t libmpq__file_blocks(mpq_archive *mpq_a, const int file_number, uint32_t *blocks) {
+	int blockindex = -1;
+	unsigned int i=0;
+	mpq_block *mpq_b = NULL;
+	
+	if (file_number < 1 || (unsigned int)file_number > mpq_a->header->blocktablesize) {
+		return LIBMPQ_EINV_RANGE;
+	}
+
+	/* search for correct hashtable */
+	for (i=0; i<mpq_a->header->hashtablesize; i++) {
+		if ((file_number - 1) == (mpq_a->hashtable[i]).blockindex) {
+			blockindex = (mpq_a->hashtable[i]).blockindex;
+			mpq_h = &(mpq_a->hashtable[i]);
+			break;
+		}
+	}
+
+	/* check if file was found */
+	if (blockindex == -1 || (unsigned int)blockindex > mpq_a->header->blocktablesize) {
+		return LIBMPQ_EFILE_NOT_FOUND;
+	}
+
+	/* check if sizes are correct */
+	mpq_b = mpq_a->blocktable + blockindex;
+	if (mpq_b->filepos > (mpq_a->header->archivesize + mpq_a->mpqpos) || mpq_b->csize > mpq_a->header->archivesize) {
+		return LIBMPQ_EFILE_CORRUPT;
+	}
+
+	if ((mpq_b->flags & LIBMPQ_FLAG_SINGLE_UNIT) != 0)
+		*blocks = 1;
+	else
+		*blocks = (mpq_f->mpq_b->fsize + mpq_a->blocksize - 1) / mpq_a->blocksize;
+
+	return LIBMPQ_TOOLS_SUCCESS;
+}
+
+int libmpq_file_getdata(mpq_archive *mpq_a, const int file_number, unsigned char *dest) {
 	int blockindex = -1;
 	unsigned int i=0;
 	mpq_file *mpq_f = NULL;
@@ -441,13 +479,13 @@ int libmpq_file_getdata(mpq_archive *mpq_a, const int number, unsigned char *des
 	mpq_hash *mpq_h = NULL;
     int success = 0;
 
-	if (number < 1 || (unsigned int)number > mpq_a->header->blocktablesize) {
+	if (file_number < 1 || (unsigned int)file_number > mpq_a->header->blocktablesize) {
 		return LIBMPQ_EINV_RANGE;
 	}
 
 	/* search for correct hashtable */
 	for (i=0; i<mpq_a->header->hashtablesize; i++) {
-		if ((number - 1) == (mpq_a->hashtable[i]).blockindex) {
+		if ((file_number - 1) == (mpq_a->hashtable[i]).blockindex) {
 			blockindex = (mpq_a->hashtable[i]).blockindex;
 			mpq_h = &(mpq_a->hashtable[i]);
 			break;
