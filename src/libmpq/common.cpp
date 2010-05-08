@@ -395,6 +395,11 @@ int libmpq_file_read_block(mpq_archive *mpq_a, mpq_file *mpq_f, unsigned int blo
 	}
 	readpos += mpq_f->mpq_b->filepos;
 
+	if (mpq_f->mpq_b->flags & LIBMPQ_FILE_SINGLE_UNIT) {
+		readpos = mpq_f->mpq_b->filepos;
+		toread = mpq_f->mpq_b->csize;
+	}
+
 	/* Get work buffer for store read data */
 	// Why is the tempbuf only getting allocated for compressed files?
 	//if (mpq_f->mpq_b->flags & LIBMPQ_FILE_COMPRESSED) {
@@ -432,7 +437,10 @@ int libmpq_file_read_block(mpq_archive *mpq_a, mpq_file *mpq_f, unsigned int blo
 
 		/* Get current block length */
 		if (mpq_f->mpq_b->flags & LIBMPQ_FILE_COMPRESSED) {
-			blocksize = mpq_f->blockpos[index + 1] - mpq_f->blockpos[index];
+			if (mpq_f->mpq_b->flags & LIBMPQ_FILE_SINGLE_UNIT)
+				blocksize = mpq_f->mpq_b->csize;
+			else
+				blocksize = mpq_f->blockpos[index + 1] - mpq_f->blockpos[index];
 		}
 
 		/* If block is encrypted, we have to decrypt it. */
