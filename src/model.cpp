@@ -672,7 +672,7 @@ void Model::initCommon(MPQFile &f)
 					}else if(texdef[i].type == TEXTURE_GAMEOBJECT3){
 						tex = _T("ChangableTexture3.blp");
 					}
-					strncpy(texname,tex.c_str(),tex.Len());
+					strncpy(texname,(const char*)(tex.c_str()),tex.Len());
 					wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
 					TextureList.push_back(texname);
 				}else{
@@ -694,7 +694,7 @@ void Model::initCommon(MPQFile &f)
 					}else if(texdef[i].type == TEXTURE_GAMEOBJECT3){
 						tex = _T("NChangableTexture3.blp");
 					}
-					strncpy(texname,tex.c_str(),tex.Len());
+					strncpy(texname,(const char*)(tex.c_str()),tex.Len());
 					wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
 					TextureList.push_back(texname);
 				}

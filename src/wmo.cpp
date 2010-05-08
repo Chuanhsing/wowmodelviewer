@@ -39,7 +39,7 @@ WMO::WMO(std::string name): ManagedItem(name)
 		flipcc(fourcc);
 		fourcc[4] = 0;
 
-		uint32 nextpos = f.getPos() + size;
+		uint32 nextpos = (uint32)f.getPos() + size;
 
 		if (!strcmp(fourcc,"MOHD")) {
 			// Header for the map object. 64 bytes.
@@ -723,7 +723,7 @@ void WMOGroup::initDisplayList()
 		flipcc(fourcc);
 		fourcc[4] = 0;
 
-		uint32 nextpos = gf.getPos() + size;
+		uint32 nextpos = (uint32)gf.getPos() + size;
 
 		// why copy stuff when I can just map it from memory ^_^
 
@@ -924,7 +924,7 @@ void WMOGroup::initDisplayList()
 
 		}
 		else if (!strcmp(fourcc,"MOCV")) {
-			uint32 spos = gf.getPos();
+			uint32 spos = (uint32)gf.getPos();
 			/*
 			Vertex colors, 4 bytes per vertex (BGRA), for WMO groups using indoor lighting.
 			I don't know if this is supposed to work together with, or replace, the lights referenced in MOLR. But it sure is the only way for the ground around the goblin smelting pot to turn red in the Deadmines. (but some corridors are, in turn, too dark - how the hell does lighting work anyway, are there lightmaps hidden somewhere?)
@@ -934,11 +934,11 @@ void WMOGroup::initDisplayList()
 			//gLog("CV: %d\n", size);
 			hascv = true;
 			cv = (unsigned int*)gf.getPointer();
-			wxLogMessage("Original Vertex Colors Gathered.");
+			wxLogMessage(_T("Original Vertex Colors Gathered."));
 
 			// Temp, until we get this fully working.
 			gf.seek(spos);
-			wxLogMessage("Gathering New Vertex Colors...");
+			wxLogMessage(_T("Gathering New Vertex Colors..."));
 			VertexColors = new WMOVertColor[nVertices];
 			memcpy(VertexColors, gf.getPointer(), size);
 			/*

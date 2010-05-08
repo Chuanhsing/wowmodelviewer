@@ -75,7 +75,7 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			MAX3DS_CHUNK chunk2_2_1;
 			chunk2_2_1.id = MATNAME; // 0xA000
 			wxString matName = wxString::Format(_T("Material_%i"), i);
-			matName.Append('\0');
+			matName.Append(_T('\0'));
 			chunk2_2_1.size = sizeof(MAX3DS_CHUNK) + matName.length();
 			chunk2_2.size = sizeof(MAX3DS_CHUNK) + chunk2_2_1.size;
 			f.Write(&chunk2_2_1, sizeof(MAX3DS_CHUNK)); // MATNAME
@@ -217,8 +217,9 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			MAX3DS_CHUNK chunk2_2_6;
 			chunk2_2_6.id = MATMAPFILE; // 0xA300
 			wxString mapName = GetM2TextureName(m,fn,p,i);
+			mapName = mapName.AfterLast('\\').BeforeLast('.');
 			mapName << wxT(".tga");
-			mapName.Append('\0');
+			mapName.Append(_T('\0'));
 			chunk2_2_6.size = sizeof(MAX3DS_CHUNK) + mapName.length();
 
 			// save texture to file
@@ -312,7 +313,7 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			
 			// Model name
 			wxString modName = wxString::Format(_T("Geoset_%i"), i);
-			modName.Append('\0');
+			modName.Append(_T('\0'));
 			chunk2_4.size += modName.length();
 			
 			// OBJ_MESH chunk
@@ -337,7 +338,7 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 
 			// Material
 			wxString matName = wxString::Format(_T("Material_%i"), i);
-			matName.Append('\0');
+			matName.Append(_T('\0'));
 			MAX3DS_CHUNK chunk4_3_1;
 			chunk4_3_1.id = MESH_MATERIAL; // 0x4130
 			chunk4_3_1.size += matName.length();

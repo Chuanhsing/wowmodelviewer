@@ -5,7 +5,7 @@
 
 #include "ximage.h"
 #include "ximath.h"
-
+#define CXIMAGE_SUPPORT_BASICTRANSFORMATIONS 1
 #if CXIMAGE_SUPPORT_BASICTRANSFORMATIONS
 ////////////////////////////////////////////////////////////////////////////////
 bool CxImage::GrayScale()

@@ -45,7 +45,7 @@ void SaveTexture(wxString fn)
 // Used to export images that are filenames. For composited images, such as a character's face & body texture, use SaveTexture.
 // ExportID identifies the exporting function. This is used in the path-generating section.
 // Suffixes currently supported: "tga" & "png". Defaults to tga if omitted by exporter.
-void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString suffix = "tga")
+void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString suffix = wxString(wxT("tga")))
 {
 	// Check to see if we have all our data...
 	if (file == _T(""))
@@ -84,13 +84,13 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString su
 	#endif
 
 	// Lightwave
-	if (ExportID == "LWO"){
+	if (ExportID.IsSameAs(wxT("LWO"))){
 		if (modelExport_LW_PreserveDir == true){
-			MakeDirs(outdir,"Images");
-			outdir += SLASH+"Images"+SLASH;
+			MakeDirs(outdir,wxT("Images"));
+			outdir += SLASH+wxT("Images")+SLASH;
 		}
 	// Wavefront OBJ
-	}else if (ExportID == "OBJ"){
+	}else if (ExportID.IsSameAs(wxT("OBJ"))){
 	}
 
 	// Restore WoW's content directories for this image.

@@ -1,6 +1,7 @@
 #include "animcontrol.h"
 #include "util.h"
 #include "globalvars.h"
+#include "wx/wx.h"
 
 IMPLEMENT_CLASS(AnimControl, wxWindow)
 
@@ -665,8 +666,11 @@ bool AnimControl::FillSkinSelector(TextureSet &skins)
 		for (TextureSet::iterator it = skins.begin(); it != skins.end(); ++it) {
 			wxString texname = wxString(it->tex[0].c_str(), *wxConvCurrent);
 			skinList->Append(texname);
-			texname = wxString(g_selModel->name.c_str()).BeforeLast('\\') << "\\" << texname << ".blp";
-			g_selModel->TextureList.push_back(texname.c_str());
+			const  char * sName = g_selModel->name.c_str();
+			texname = wxString(sName, wxConvUTF8).BeforeLast('\\') << wxString(wxT("\\")) << texname << wxString(wxT(".blp"));
+			std::string sTexname = std::string(wxString(texname.c_str()).mb_str());
+			g_selModel->TextureList.push_back(sTexname);
+			//g_selModel->TextureList.push_back( wxString(texname.c_str()).mb_str() );
 			TextureGroup *grp = new TextureGroup(*it);
 			skinList->SetClientData(num++, grp);
 		}

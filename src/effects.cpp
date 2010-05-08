@@ -166,7 +166,7 @@ void EnchantsDialog::OnClick(wxCommandEvent &event)
 						for (int k=0; k<5; k++) {
 							if ((it->index[k] > 0) && (m->attLookup[k]>=0)) {
 								ItemVisualEffectDB::Record rec = effectdb.getById(it->index[k]);
-								att->addChild(rec.getString(ItemVisualEffectDB::Model).c_str(), k, -1);
+								att->addChild(rec.getString(ItemVisualEffectDB::Model).mb_str(), k, -1);
 							}
 						}
 						break;

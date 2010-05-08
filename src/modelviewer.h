@@ -48,23 +48,29 @@
 
 // defines
 #define APP_TITLE _T("World of Warcraft Model Viewer")
-#define APP_VERSION _T("v0.7.0.1 r133")		// Revision number should match the revision number on GoogleCode.
+#define APP_VERSION _T("v0.7.0.1 r142")		// Revision number should match the revision number on GoogleCode.
 
 // This should only be touched when adding a new OS or platform.
 #ifdef _DEBUG
 	#if defined (_WINDOWS)
 		#if defined (_WIN64)
-			#define APP_PLATFORM _T("64-bit Debug")
+			#define APP_PLATFORM _T("Windows 64-bit Debug")
 		#else
-			#define APP_PLATFORM _T("32-bit Debug")
+			#define APP_PLATFORM _T("Windows 32-bit Debug")
 		#endif
 	#elif defined (_MAC)
 		#if defined (_MAC_INTEL)
-			#define APP_PLATFORM _T("Intel Debug")
+			#define APP_PLATFORM _T("Macintosh Intel Debug")
 		#elif defined (_MAC_PPC)
-			#define APP_PLATFORM _T("PowerPC Debug")
+			#define APP_PLATFORM _T("Macintosh PowerPC Debug")
 		#else
 			#error _T("Your Macintosh platform is not defined. Please specify either _MAC_INTEL or _MAC_PPC.")
+		#endif
+	#elif defined (_LINUX)
+		#ifdef _LINUX64
+			#define APP_PLATFORM _T("Linux 64-bit Debug")
+		#else
+			#define APP_PLATFORM _T("Linux 32-bit Debug")
 		#endif
 	#else
 		#error _T("You have not specified a valid Operating System to your debug configuration.")
@@ -72,17 +78,23 @@
 #else
 	#if defined (_WINDOWS)
 		#ifdef _WIN64
-			#define APP_PLATFORM _T("64-bit")
+			#define APP_PLATFORM _T("Windows 64-bit")
 		#else
-			#define APP_PLATFORM _T("32-bit")
+			#define APP_PLATFORM _T("Windows 32-bit")
 		#endif
 	#elif defined (_MAC)
 		#if defined (_MAC_INTEL)
-			#define APP_PLATFORM _T("Intel")
+			#define APP_PLATFORM _T("Macintosh Intel")
 		#elif defined (_MAC_PPC)
-			#define APP_PLATFORM _T("PowerPC")
+			#define APP_PLATFORM _T("Macintosh PowerPC")
 		#else
 			#error _T("Your Macintosh platform is not defined. Please specify either _MAC_INTEL or _MAC_PPC.")
+		#endif
+	#elif defined (_LINUX)
+		#ifdef _LINUX64
+			#define APP_PLATFORM _T("Linux 64-bit")
+		#else
+			#define APP_PLATFORM _T("Linux 32-bit")
 		#endif
 	#else
 		#error _T("You have not specified a valid Operating System to your release configuration.")

@@ -198,7 +198,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 		wxString Path1, Path2, Name;
 		Path1 << file.BeforeLast('\\');
 		Name << file.AfterLast('\\');
-		Path2 << wxString(m->name.c_str()).BeforeLast('\\');
+		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast('\\');
 
 		MakeDirs(Path1,Path2);
 
@@ -206,7 +206,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 		file << Path1 << SLASH << Path2 << SLASH << Name;
 	}
 
-	ofstream f(file.c_str(), ios_base::out | ios_base::trunc);
+	ofstream f(file.mb_str(), ios_base::out | ios_base::trunc);
 
 	if (!f.is_open()) {
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
@@ -240,7 +240,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 			bool nomatch = true;
 			for (int t=0;t<=m->nTextures; t++) {
 				if (t == mat->tex) {
-					texarray[mat->tex] = m->textures[t-1].c_str();
+					texarray[mat->tex] = wxString(m->textures[t-1].c_str(), wxConvUTF8);
 					texarray[mat->tex] = texarray[mat->tex].BeforeLast('.');
 					nomatch = false;
 					break;

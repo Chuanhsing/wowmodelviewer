@@ -2,6 +2,7 @@
 #include "AnimExporter.h"
 #include "Quantize.h"
 #include "globalvars.h"
+#include "CxImage/ximage.h"
 
 IMPLEMENT_CLASS(CAnimationExporter, wxFrame)
 
@@ -279,10 +280,10 @@ void CAnimationExporter::CreateGif()
 		 *alpha channels will have to be 1-bit to "hide" any texture errors
 		 */
 		if (m_bTransparent){
-		newImage->AlphaSplit(newImage2); //split alpha to another cximage object
-		newImage2->Threshold(1); //convert 8bit alpha to 1bit
-		newImage2->GrayScale(); //prepare conversion for application to alpha channel
-		newImage->AlphaSet(*newImage2); //apply mock 1-bit alpha channel
+			newImage->AlphaSplit(newImage2); //split alpha to another cximage object
+			newImage2->Threshold(1); //convert 8bit alpha to 1bit
+			//newImage2->GrayScale(); //prepare conversion for application to alpha channel
+			newImage->AlphaSet(*newImage2); //apply mock 1-bit alpha channel
 		}else{
 			newImage->AlphaCreate();
 			newImage->IncreaseBpp(32);
@@ -305,9 +306,9 @@ void CAnimationExporter::CreateGif()
 		// if (Optimise) {
 
 		// Append PNG extension, save out PNG file with frame number
-		wxString filen = m_strFilename.fn_str();
-		filen << "_" << i << ".png";
-		newImage->Save(filen, CXIMAGE_FORMAT_PNG);
+		wxString filen = wxString(m_strFilename.fn_str(), wxConvUTF8);
+		filen << _T("_") << i << _T(".png");
+		newImage->Save(filen.mb_str(), CXIMAGE_FORMAT_PNG);
 		
 		//gifImages must not be empty
 		gifImages[i] = newImage;
@@ -331,11 +332,11 @@ void CAnimationExporter::CreateGif()
 	// Open/Create the file that were going to save to
 
 	// Append GIF extension
-	wxString filen = m_strFilename.fn_str();
-	filen << ".gif";
+	wxString filen = wxString(m_strFilename.fn_str(), wxConvUTF8);;
+	filen << _T(".gif");
 
 	FILE *hFile = NULL;
-	hFile = fopen(filen, "wb");
+	hFile = fopen(filen.mb_str(), "wb");
 
 	// Set gif options
 	CxImageGIF multiImage;

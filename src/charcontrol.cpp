@@ -782,7 +782,7 @@ void CharControl::RefreshModel()
 		// Tauren fur
 		wxString furTexName = rec.getString(CharSectionsDB::Tex2);
 		if (!furTexName.IsEmpty())
-			furTex = texturemanager.add(furTexName.mb_str());
+			furTex = texturemanager.add(std::string(furTexName.mb_str()));
 
 	} catch (CharSectionsDB::NotFound) {
 		wxLogMessage(_T("Assertion base character Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
@@ -864,7 +864,7 @@ void CharControl::RefreshModel()
 		rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, cd.hairStyle, cd.hairColor, 0);
 		wxString hairTexfn = rec.getString(CharSectionsDB::Tex1);
 		if (!hairTexfn.IsEmpty()) 
-			hairTex = texturemanager.add(hairTexfn.mb_str());
+			hairTex = texturemanager.add(std::string(hairTexfn.mb_str()));
 		else {
 			// oops, looks like we're missing a hair texture. Let's try with hair style #0.
 			// (only a problem for orcs with no hair but some beard
@@ -872,7 +872,7 @@ void CharControl::RefreshModel()
 				rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, 0, cd.hairColor, 0);
 				hairTexfn = rec.getString(CharSectionsDB::Tex1);
 				if (!hairTexfn.IsEmpty()) 
-					hairTex = texturemanager.add(hairTexfn.mb_str());
+					hairTex = texturemanager.add(std::string(hairTexfn.mb_str()));
 				else 
 					hairTex = 0;
 			} catch (CharSectionsDB::NotFound) {
@@ -1131,7 +1131,7 @@ void CharControl::RefreshNPCModel()
 		// Tauren fur
 		wxString furTexName = rec.getString(CharSectionsDB::Tex2);
 		if (!furTexName.IsEmpty())
-			furTex = texturemanager.add(furTexName.mb_str());
+			furTex = texturemanager.add(std::string(furTexName.mb_str()));
 
 	} catch (...) {
 		wxLogMessage(_T("Exception base layer Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
@@ -1142,12 +1142,12 @@ void CharControl::RefreshNPCModel()
 		CharSectionsDB::Record rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, cd.hairStyle, cd.hairColor, cd.useNPC);
 		wxString hairTexfn = rec.getString(CharSectionsDB::Tex1);
 		if (!hairTexfn.IsEmpty()) {
-			hairTex = texturemanager.add(hairTexfn.mb_str());
+			hairTex = texturemanager.add(std::string(hairTexfn.mb_str()));
 		} else {
 			rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, 1, cd.hairColor, cd.useNPC);
 			hairTexfn = rec.getString(CharSectionsDB::Tex1);
 			if (!hairTexfn.IsEmpty()) 
-				hairTex = texturemanager.add(hairTexfn.mb_str());
+				hairTex = texturemanager.add(std::string(hairTexfn.mb_str()));
 			else 
 				hairTex = 0;
 		}
@@ -1367,7 +1367,7 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 			// load the cape texture
 			wxString tex = r.getString(ItemDisplayDB::Skin);
 			if (!tex.IsEmpty()) 
-				capeTex = texturemanager.add(std::string(AnimControl::makeSkinTexture("Item\\ObjectComponents\\Cape\\",tex.c_str()).mb_str()));
+				capeTex = texturemanager.add(std::string(AnimControl::makeSkinTexture("Item\\ObjectComponents\\Cape\\",tex.mb_str()).mb_str()));
 		}
 
 		// robe
@@ -1568,7 +1568,7 @@ void CharControl::RefreshItem(int slot)
 								ItemVisualEffectDB::Record eff = effectdb.getById(effectid);
 								wxString filename = eff.getString(ItemVisualEffectDB::Model);
 
-								att->addChild(filename.c_str(), i, -1);
+								att->addChild(filename.mb_str(), i, -1);
 
 							} catch (ItemVisualEffectDB::NotFound) {}
 						}
@@ -1666,7 +1666,7 @@ void CharControl::RefreshCreatureItem(int slot)
 								ItemVisualEffectDB::Record eff = effectdb.getById(effectid);
 								wxString filename = eff.getString(ItemVisualEffectDB::Model);
 
-								att->addChild(filename.c_str(), i, -1);
+								att->addChild(filename.mb_str(), i, -1);
 
 							} catch (ItemVisualEffectDB::NotFound) {}
 						}
@@ -2514,21 +2514,21 @@ void CharControl::OnUpdateItem(int type, int id)
 void CharControl::OnTabardSpin(wxSpinEvent &event)
 {
 	if (!g_canvas || !g_canvas->model || g_canvas->model->modelType == MT_NPC){
-		wxLogMessage("Tabard Error: Model Not Present, or can't use a tabard.");
+		wxLogMessage(_T("Tabard Error: Model Not Present, or can't use a tabard."));
 		return;
 	}
 
 	switch (event.GetId()) {
 	case ID_TABARD_ICON:
-		wxLogMessage("Tabard Notice: Icon Change.");
+		wxLogMessage(_T("Tabard Notice: Icon Change."));
 		td.Icon = event.GetPosition();
 		break;
 	case ID_TABARD_ICONCOLOR:
-		wxLogMessage("Tabard Notice: Icon Color Change.");
+		wxLogMessage(_T("Tabard Notice: Icon Color Change."));
 		td.IconColor = event.GetPosition();
 		break;
 	case ID_TABARD_BORDER:
-		wxLogMessage("Tabard Notice: Border Change.");
+		wxLogMessage(_T("Tabard Notice: Border Change."));
         td.Border = event.GetPosition();
 		if (td.Border > 5)
 		{
@@ -2540,11 +2540,11 @@ void CharControl::OnTabardSpin(wxSpinEvent &event)
 			tabardSpins[SPIN_TABARD_BORDERCOLOR]->SetRange(0, 16);
 		break;
 	case ID_TABARD_BORDERCOLOR:
-		wxLogMessage("Tabard Notice: Border Color Change.");
+		wxLogMessage(_T("Tabard Notice: Border Color Change."));
 		td.BorderColor = event.GetPosition();
 		break;
 	case ID_TABARD_BACKGROUND:
-		wxLogMessage("Tabard Notice: Background Color Change.");
+		wxLogMessage(_T("Tabard Notice: Background Color Change."));
 		td.Background = event.GetPosition();
 		break;
 	}

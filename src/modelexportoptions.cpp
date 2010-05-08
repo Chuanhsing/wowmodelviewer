@@ -160,9 +160,9 @@ void ModelExportOptions_Lightwave::Update()
 
 	ddextype->Clear();
 
-	ddextype->Append(wxString("as Nulls"));
+	ddextype->Append(wxString(wxT("as Nulls")));
 	// Uncomment as we're able to do it!
-	ddextype->Append(wxString("as Objects"));
+	ddextype->Append(wxString(wxT("as Objects")));
 	//ddextype->Append(wxString("as a Single Object"));
 	//ddextype->Append(wxString("as a Single Object, Per Group"));
 	ddextype->SetSelection(modelExport_LW_DoodadsAs);

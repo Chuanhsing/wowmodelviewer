@@ -138,7 +138,7 @@ void MakeDirs(wxString base, wxString paths){
 	while (paths.Find(SLASH)>0){
 		Paths[PathNum] = paths.BeforeFirst(SLASH);
 		wxString rep = Paths[PathNum];
-		paths.Replace(rep.Append(SLASH),"");
+		paths.Replace(rep.Append(SLASH),wxT(""),true);
 		//wxLogMessage("\nBuilding Paths: %s\npaths:%s",Paths[PathNum],paths);
 		PathNum++;
 	}
@@ -224,8 +224,12 @@ void getGamePath()
     {
         gamePath = wxDirSelector(wxT("Please select the data folder withing your WOW game folder:"));
     }
-#else // linux - not sure what it should be set to for Mac osx
-	gamePath = _T("/data/");
+#else // Linux
+	gamePath = _T("./data");
+	while (!wxFileExists(gamePath + wxT("/common.mpq")) && !gamePath.empty())
+	{
+		gamePath = wxDirSelector(wxT("Please select the data folder withing your WOW game folder:"));
+	}
 	
 #endif
 }

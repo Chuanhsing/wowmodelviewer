@@ -27,7 +27,7 @@ IMPLEMENT_APP(WowModelViewApp)
 bool WowModelViewApp::OnInit()
 {
 	frame = NULL;
-	LogFile = NULL;
+	FILE *LogFile = NULL;
 
 
 	// Error & Logging settings
@@ -43,6 +43,7 @@ bool WowModelViewApp::OnInit()
 
 	// set the log file path.
 	wxString logPath = userPath+wxT("/log.txt");
+
 	LogFile = fopen(logPath.mb_str(), "w+");
 	if (LogFile) {
 		wxLog *logger = new wxLogStderr(LogFile);
@@ -363,13 +364,8 @@ void WowModelViewApp::LoadSettings()
 		const wxString locales[] = {_T("enUS"), _T("koKR"), _T("frFR"), _T("deDE"), _T("zhCN"),  _T("zhTW"),  _T("esES"),  _T("ruRU")};
 		const wxString locales2[] = {_T("enGB"), _T(""), _T(""), _T(""), _T("enCN"), _T("enTW"), _T("esMX"), _T("")};
 
-#ifdef WotLK
 		const wxString defaultArchives[] = {_T("patch-3.mpq"),_T("patch-2.mpq"),_T("patch.mpq"),_T("expansion3.mpq"),_T("expansion2.mpq"),_T("lichking.mpq"),_T("expansion.mpq"),_T("common-3.mpq"),_T("common-2.mpq"), _T("common.mpq")};
 		const wxString localeArchives[] = {_T("patch-%s-3.mpq"), _T("patch-%s-2.mpq"), _T("patch-%s.mpq"), _T("expansion3-locale-%s.mpq"), _T("expansion2-locale-%s.mpq"), _T("lichking-locale-%s.mpq"), _T("expansion-locale-%s.mpq"), _T("locale-%s.mpq"), _T("base-%s.mpq")};
-#else
-		const wxString defaultArchives[] = {_T("patch-3.mpq"),_T("patch-2.mpq"),_T("patch.mpq"), _T("expansion.mpq"), _T("common.mpq")};
-		const wxString localeArchives[] = {_T("patch-%s-3.mpq"), _T("patch-%s-2.mpq"), _T("patch-%s.mpq"), _T("expansion-locale-%s.mpq"), _T("locale-%s.mpq"), _T("base-%s.mpq")};
-#endif
 
 		wxArrayString baseMpqs;
 		wxDir::GetAllFiles(gamePath, &baseMpqs, wxEmptyString, wxDIR_FILES);

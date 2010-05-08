@@ -152,13 +152,13 @@ void FileControl::Init(ModelViewer* mv)
 					else if ((*it).col == 2)
 						fileTree->SetItemTextColour(newItem.first, *wxRED);
 					else if ((*it).col == 3)
-						fileTree->SetItemTextColour(newItem.first, wxColour(160,0,160));	// Outland Purple
+						fileTree->SetItemTextColour(newItem.first, wxColour(0,170,0));		// Green
 					else if ((*it).col == 4)
-						fileTree->SetItemTextColour(newItem.first, wxColour(35,130,179));	// Frozen Blue
+						fileTree->SetItemTextColour(newItem.first, wxColour(160,0,160));	// Outland Purple
 					else if ((*it).col == 5)
-						fileTree->SetItemTextColour(newItem.first, wxColour(233,109,17));	// Destruction Orange
+						fileTree->SetItemTextColour(newItem.first, wxColour(35,130,179));	// Frozen Blue
 					else if ((*it).col == 6)
-						fileTree->SetItemTextColour(newItem.first, wxColour(0,170,0)); // Green
+						fileTree->SetItemTextColour(newItem.first, wxColour(233,109,17));	// Destruction Orange
 					else
 						fileTree->SetItemTextColour(newItem.first, *wxLIGHT_GREY);
 
@@ -181,13 +181,13 @@ void FileControl::Init(ModelViewer* mv)
 		else if ((*it).col == 2)
 			fileTree->SetItemTextColour(item, *wxRED);
 		else if ((*it).col == 3)
-			fileTree->SetItemTextColour(item, wxColour(160,0,160));		// Outland Purple
+			fileTree->SetItemTextColour(item, wxColour(0,170,0));		// Green
 		else if ((*it).col == 4)
-			fileTree->SetItemTextColour(item, wxColour(35,130,179));	// Frozen Blue
+			fileTree->SetItemTextColour(item, wxColour(160,0,160));		// Outland Purple
 		else if ((*it).col == 5)
-			fileTree->SetItemTextColour(item, wxColour(233,109,17));	// Destruction Orange
+			fileTree->SetItemTextColour(item, wxColour(35,130,179));	// Frozen Blue
 		else if ((*it).col == 6)
-			fileTree->SetItemTextColour(item, wxColour(0,170,0)); // Green
+			fileTree->SetItemTextColour(item, wxColour(233,109,17));	// Destruction Orange
 		else
 			fileTree->SetItemTextColour(item, *wxLIGHT_GREY);
 

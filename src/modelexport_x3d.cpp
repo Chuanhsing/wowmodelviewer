@@ -144,8 +144,8 @@ size_t getKFPSExportOptions(Model* m)
 {
     // default value
     size_t maxKeyFrames = getMaxKeyFrames(m);
-    wxString strNumFrames("5");
-    wxString title = wxString::Format("Number of key frames per second to be used (max. %i):", maxKeyFrames);
+    wxString strNumFrames(_T("5"));
+    wxString title = wxString::Format(_T("Number of key frames per second to be used (max. %i):"), maxKeyFrames);
 
     wxTextEntryDialog d(NULL, title, _T("Export X3D animation"), strNumFrames);
 
@@ -358,7 +358,7 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
                 texFilename = texFilename.BeforeLast(SLASH);
                 texFilename += SLASH;
                 texFilename += texName;
-                texFilename += ".png";
+                texFilename += wxString(_T(".png"));
                 SaveTexture(texFilename);
 
                 textures[p.tex] = texName;

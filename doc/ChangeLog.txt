@@ -1,5 +1,17 @@
 World of Warcraft Model Viewer v0.7.0.1
 
+r142
+ - Expanded Cataclysm support.
+ - Attempt to fix Win 7/Vista file creation issues.
+ - Replaced msvcp80.dll & msvcr80.dll with msvcp90.dll & msvcr90.dll.
+ - (Dev Work) Linux/Ubuntu patch intergrated. (Thanks Joel!)
+ - (Dev Work) Switched from LibMPQ to StormLib.
+ - (Dev Work) Removed Zlib & Bzip2 support libraries. (No longer needed.)
+
+r141
+ - Preliminary Cataclysm Support.
+ - esMX locale supported.
+
 r133
  - Fixed the bug that wouldn't let the OBJ & Milkshape Exporters do their jobs.
  - Files from Patch-3.MPQ are now colored Green. If you don't see any green files, clear your MPQ list & reload WMV, or manually add Patch-3.MPQ & (locale)\Patch-(locale)-3.MPQ.

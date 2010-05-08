@@ -9,6 +9,7 @@
 #ifdef max
 #undef max
 #endif
+
 #include <algorithm>
 //#include <cstdlib>
 #include <fstream>
@@ -32,6 +33,10 @@
 #include "vec3d.h"
 
 using namespace std;
+
+#ifdef _WINDOWS
+	#define snprintf sprintf_s
+#endif 
 
 extern wxString gamePath;
 extern wxString cfgPath;
