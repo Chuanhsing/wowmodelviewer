@@ -1360,7 +1360,7 @@ bool ModelViewer::InitMPQArchives()
 	}else if (strncmp((char*)toc, "40000", 5) == 0) {
 		wxLogMessage(info);
 		if (gameVersion != 40000){
-			wxString info = _T("Notice: Cataclysm is still under development.\nMissing Textures and models may not be a WMV issue.");
+			wxString info = _T("Notice: Cataclysm is still under development.\nMissing or incorrect data may not be a WMV issue.");
 			wxMessageBox(info,_T("Cataclysm Detected!"),wxOK);
 			gameVersion = 40000;
 		}

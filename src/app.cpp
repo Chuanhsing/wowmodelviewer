@@ -38,11 +38,11 @@ bool WowModelViewApp::OnInit()
 #endif
 
 	wxFileName fname(argv[0]);
-	wxString userPath = fname.GetPath(wxPATH_GET_VOLUME)+wxT("/userSettings");
+	wxString userPath = fname.GetPath(wxPATH_GET_VOLUME)+SLASH+wxT("userSettings");
 	wxFileName::Mkdir(userPath, 0777, wxPATH_MKDIR_FULL);
 
 	// set the log file path.
-	wxString logPath = userPath+wxT("/log.txt");
+	wxString logPath = userPath+SLASH+wxT("log.txt");
 
 	LogFile = fopen(logPath.mb_str(), "w+");
 	if (LogFile) {
@@ -59,9 +59,12 @@ bool WowModelViewApp::OnInit()
 	wxLogMessage(wxString(_T("Starting:\n") APP_TITLE _T(" ") APP_VERSION _T(" ") APP_PLATFORM _T("\n\n")));
 	
 	// set the config file path.
-	cfgPath = userPath+wxT("/Config.ini");
+	cfgPath = userPath+SLASH+wxT("Config.ini");
 
-	LoadSettings();
+	bool loadfail = LoadSettings();
+	if (loadfail == true){
+		return false;
+	}
 
 #ifdef _WINDOWS
 	// This chunk of code is all related to locale translation (if a translation is available).
@@ -293,7 +296,7 @@ namespace {
 	}
 }
 
-void WowModelViewApp::LoadSettings()
+bool WowModelViewApp::LoadSettings()
 {
 	// Application Config Settings
 	wxFileConfig *pConfig = new wxFileConfig(_T("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
@@ -351,13 +354,16 @@ void WowModelViewApp::LoadSettings()
 		mpqArchives.Clear();
 	}
 
-#ifdef _WINDOWS
-	if (gamePath.Last() != '\\')
-		gamePath.Append(_T("\\"), 1);
-#else // Linux
-	if (gamePath.Last() != '/')
-		gamePath.Append(_T("/"), 1);
-#endif
+	if (gamePath.Last() != SLASH)
+		gamePath.Append(SLASH, 1);
+
+	if (!wxFileExists(gamePath + wxT("common.MPQ"))){
+		wxLogMessage(_T("World of Warcraft Data Directory Not Found. Returned GamePath: %s"),gamePath);
+		wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("Fatal Error: Could not find your World of Warcraft Data folder."), wxT("World of Warcraft Not Found"), wxOK | wxICON_ERROR);
+		dial->ShowModal();
+		return true;
+	}
+
 	
 	if (mpqArchives.GetCount()==0) {
 		//enUS(enGB), koKR, frFR, deDE, zhCN, zhTW, esES, ruRU
@@ -410,6 +416,7 @@ void WowModelViewApp::LoadSettings()
 		else
 			langOffset = langID;
 	}
+	return false;
 }
 
 void WowModelViewApp::SaveSettings()
