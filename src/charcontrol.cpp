@@ -2706,7 +2706,7 @@ void CharDetails::loadSet(ItemSetDB &sets, ItemDatabase &items, int setid)
 			if (gameVersion == 40000)
 				id = rec.getInt(ItemSetDB::ItemIDBaseV400 + i);
 			else
-				if = rec.getInt(ItemSetDB::ItemIDBase + i);
+				id = rec.getInt(ItemSetDB::ItemIDBase + i);
 			//if (id==0)
 			//	continue;
 
