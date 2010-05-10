@@ -285,8 +285,12 @@ public:
 	Record getByParams(unsigned int race, unsigned int gender, unsigned int style);
 	int getStylesFor(unsigned int race, unsigned int gender);
 
-private:
-
+	static const size_t RaceV400 = 1;				// uint
+	static const size_t GenderV400 = 2;				// uint
+	static const size_t StyleV400 = 3;				// uint
+	static const size_t Geoset100V400 = 4;			// uint
+	static const size_t Geoset300V400 = 5;			// uint
+	static const size_t Geoset200V400 = 6;			// uint
 };
 
 
@@ -526,8 +530,10 @@ public:
 	static const size_t Hands = 9;		// int
 	static const size_t Name = 10;		// string
 
-
 	Record getById(int id, int subid);
+
+	static const size_t HandsV400 = 10;		// int
+	static const size_t NameV400 = 11;		// string
 };
 
 // ============/////////////////=================/////////////////

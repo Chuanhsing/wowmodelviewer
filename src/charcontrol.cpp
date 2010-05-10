@@ -823,9 +823,15 @@ void CharControl::RefreshModel()
 		// facial feature geosets
 		try {
 			CharFacialHairDB::Record frec = facialhairdb.getByParams(cd.race, cd.gender, cd.facialHair);
-			cd.geosets[1] = frec.getUInt(CharFacialHairDB::Geoset100);
-			cd.geosets[2] = frec.getUInt(CharFacialHairDB::Geoset200);
-			cd.geosets[3] = frec.getUInt(CharFacialHairDB::Geoset300);
+			if (gameVersion == 40000) {
+				cd.geosets[1] = frec.getUInt(CharFacialHairDB::Geoset100V400);
+				cd.geosets[2] = frec.getUInt(CharFacialHairDB::Geoset200V400);
+				cd.geosets[3] = frec.getUInt(CharFacialHairDB::Geoset300V400);
+			} else {
+				cd.geosets[1] = frec.getUInt(CharFacialHairDB::Geoset100);
+				cd.geosets[2] = frec.getUInt(CharFacialHairDB::Geoset200);
+				cd.geosets[3] = frec.getUInt(CharFacialHairDB::Geoset300);
+			}
 		} catch (CharFacialHairDB::NotFound) {
 			wxLogMessage(_T("DBC facial feature geosets Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 		}
@@ -1171,9 +1177,15 @@ void CharControl::RefreshNPCModel()
 	// facial hair geosets
 	try {
 		CharFacialHairDB::Record frec = facialhairdb.getByParams(cd.race, cd.gender, cd.facialHair);
-		cd.geosets[1] = frec.getUInt(CharFacialHairDB::Geoset100);
-		cd.geosets[2] = frec.getUInt(CharFacialHairDB::Geoset200);
-		cd.geosets[3] = frec.getUInt(CharFacialHairDB::Geoset300);
+		if (gameVersion == 40000) {
+			cd.geosets[1] = frec.getUInt(CharFacialHairDB::Geoset100);
+			cd.geosets[2] = frec.getUInt(CharFacialHairDB::Geoset200);
+			cd.geosets[3] = frec.getUInt(CharFacialHairDB::Geoset300);
+		} else {
+			cd.geosets[1] = frec.getUInt(CharFacialHairDB::Geoset100V400);
+			cd.geosets[2] = frec.getUInt(CharFacialHairDB::Geoset200V400);
+			cd.geosets[3] = frec.getUInt(CharFacialHairDB::Geoset300V400);
+		}
 
 		// Hide facial fair if it isn't toggled and they don't have tusks, horns, etc.
 		if (showFacialHair == false) {		
@@ -1998,9 +2010,16 @@ void CharControl::selectItem(int type, int slot, int current, const wxChar *capt
 			
 			// Used to go through the 'string fields' looking for the one with data.
 			wxString str;
-			str = CSConv(it->getString(ItemSubClassDB::Name + langID));
+			if (gameVersion == 40000)
+				str = CSConv(it->getString(ItemSubClassDB::NameV400 + langID));
+			else
+				str = CSConv(it->getString(ItemSubClassDB::Name + langID));
 
-			int hands = it->getInt(ItemSubClassDB::Hands);
+			int hands;
+			if (gameVersion == 40000)
+				hands = it->getInt(ItemSubClassDB::HandsV400);
+			else
+				hands = it->getInt(ItemSubClassDB::Hands);
 			if (hands > 0) {
 				str.append(wxString::Format(_T(" (%d-handed)"), hands));
 			}

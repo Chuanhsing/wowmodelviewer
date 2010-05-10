@@ -158,10 +158,18 @@ CharRacesDB::Record CharRacesDB::getById(unsigned int id)
 
 CharFacialHairDB::Record CharFacialHairDB::getByParams(unsigned int race, unsigned int gender, unsigned int style)
 {
-	for(Iterator i=begin(); i!=end(); ++i)
-	{
-		if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Style)==style)
-			return (*i);
+	if (gameVersion == 40000) {
+		for(Iterator i=begin(); i!=end(); ++i)
+		{
+			if (i->getUInt(RaceV400)==race && i->getUInt(GenderV400)==gender && i->getUInt(StyleV400)==style)
+				return (*i);
+		}
+	} else {
+		for(Iterator i=begin(); i!=end(); ++i)
+		{
+			if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Style)==style)
+				return (*i);
+		}
 	}
 	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
@@ -170,10 +178,19 @@ CharFacialHairDB::Record CharFacialHairDB::getByParams(unsigned int race, unsign
 int CharFacialHairDB::getStylesFor(unsigned int race, unsigned int gender)
 {
 	int n = 0;
-	for(Iterator i=begin(); i!=end(); ++i)
-	{
-		if (i->getUInt(Race)==race && i->getUInt(Gender)==gender) {
-			n++;
+	if (gameVersion == 40000) {
+		for(Iterator i=begin(); i!=end(); ++i)
+		{
+			if (i->getUInt(RaceV400)==race && i->getUInt(GenderV400)==gender) {
+				n++;
+			}
+		}
+	} else {
+		for(Iterator i=begin(); i!=end(); ++i)
+		{
+			if (i->getUInt(Race)==race && i->getUInt(Gender)==gender) {
+				n++;
+			}
 		}
 	}
 	return n;

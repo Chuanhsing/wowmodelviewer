@@ -53,9 +53,17 @@ void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent
 
 		// only add the subclass if it was found in the itemlist
 		if (cl>0 && subclassesFound.find(pair<int,int>(cl, scl)) != subclassesFound.end()) {
-			wxString str = CSConv(it->getString(ItemSubClassDB::Name + langID));
+			wxString str;
+			if (gameVersion == 40000)
+				str = CSConv(it->getString(ItemSubClassDB::NameV400 + langID));
+			else
+				str = CSConv(it->getString(ItemSubClassDB::Name + langID));
 
-			int hands = it->getInt(ItemSubClassDB::Hands);
+			int hands;
+			if (gameVersion == 40000)
+				hands = it->getInt(ItemSubClassDB::HandsV400);
+			else
+				hands = it->getInt(ItemSubClassDB::Hands);
 			if (hands > 0) {
 				str << wxT(" (") << hands << wxT("-handed)");
 
