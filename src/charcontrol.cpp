@@ -898,9 +898,11 @@ void CharControl::RefreshModel()
 	if (!showFacialHair) {		
 		try {
 			CharRacesDB::Record race = racedb.getById(cd.race);
-			wxString tmp = race.getString(CharRacesDB::GeoType1);
+			wxString tmp;
 			if (gameVersion == 40000)
 				tmp = race.getString(CharRacesDB::GeoType1V400);
+			else
+				tmp = race.getString(CharRacesDB::GeoType1);
 			if (tmp.Lower() == _T("normal")) {
 				cd.geosets[1] = 1;
 				cd.geosets[2] = 1;
@@ -1176,9 +1178,11 @@ void CharControl::RefreshNPCModel()
 		// Hide facial fair if it isn't toggled and they don't have tusks, horns, etc.
 		if (showFacialHair == false) {		
 			CharRacesDB::Record race = racedb.getById(cd.race);
-			wxString tmp = race.getString(CharRacesDB::GeoType1);
+			wxString tmp;
 			if (gameVersion == 40000)
 				tmp = race.getString(CharRacesDB::GeoType1V400);
+			else
+				tmp = race.getString(CharRacesDB::GeoType1);
 			if (tmp.Lower() == _T("normal")) {
 				cd.geosets[1] = 1;
 				cd.geosets[2] = 1;
@@ -2698,9 +2702,11 @@ void CharDetails::loadSet(ItemSetDB &sets, ItemDatabase &items, int setid)
 	try {
 		ItemSetDB::Record rec = sets.getById(setid);
 		for (size_t i=0; i<ItemSetDB::NumItems; i++) {
-			int id = rec.getInt(ItemSetDB::ItemIDBase + i);
+			int id;
 			if (gameVersion == 40000)
 				id = rec.getInt(ItemSetDB::ItemIDBaseV400 + i);
+			else
+				if = rec.getInt(ItemSetDB::ItemIDBase + i);
 			//if (id==0)
 			//	continue;
 

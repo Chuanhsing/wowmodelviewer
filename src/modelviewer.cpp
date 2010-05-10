@@ -2785,9 +2785,11 @@ void DiscoveryItem()
 	// 1. from itemsets.dbc
 	for (ItemSetDB::Iterator it = setsdb.begin(); it != setsdb.end(); ++it) {
 		for(size_t i=0; i<ItemSetDB::NumItems; i++) {
-			int id = it->getUInt(ItemSetDB::ItemIDBase+i);
+			int id;
 			if (gameVersion == 40000)
 				id = it->getUInt(ItemSetDB::ItemIDBaseV400+i);
+			else
+				id = it->getUInt(ItemSetDB::ItemIDBase+i);
 			if (id == 0)
 				continue;
 			if (!items.avaiable(id)) {
