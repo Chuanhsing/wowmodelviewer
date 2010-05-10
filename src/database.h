@@ -116,6 +116,7 @@ public:
 	static const size_t Name = 14;		// string, localization
 	static const size_t VisualID = 31;	// unit
 
+	static const size_t VisualIDV400 = 15;
 };
 
 class ItemVisualsDB: public DBCFile
@@ -232,10 +233,10 @@ public:
 	static const size_t femaleModeID = 5;	// unit
 	static const size_t ShortName = 6;		// string, Name, represented by only 2 chars
 	static const size_t Name = 11;			// string, Model name, 10048 to 11
-	static const size_t FullName = 14;		// string, Name with spaces & such.
+	static const size_t FullName = 14;		// string, localization, Name with spaces & such.
 	static const size_t GeoType1 = 65;		// string, Facial Feature Type for Men
-	static const size_t GeoType2 = 66;		// string, Facial Feature Type for Women
-	static const size_t GeoType3 = 67;		// string, Changes Hair to this value. (IE: Hair for everyone, but Horns for Tauren)
+	//static const size_t GeoType2 = 66;		// string, Facial Feature Type for Women
+	//static const size_t GeoType3 = 67;		// string, Changes Hair to this value. (IE: Hair for everyone, but Horns for Tauren)
 
 	// -= GeoType Values =-
 	// Normal: Default Geotype. Facial Hair for Men, no known value for Women.
@@ -249,6 +250,10 @@ public:
 
 
 	static const size_t NameV310 = 12;		// string, model name, 10048 to 11
+	
+	static const size_t GeoType1V400 = 17;
+	//static const size_t GeoType2V400 = 18;
+	//static const size_t GeoType3V400 = 19;
 
 	Record getByName(wxString name);
 	Record getById(unsigned int id);
@@ -293,10 +298,12 @@ public:
 
 	/// Fields
 	static const size_t ClassID = 0;	// uint
-	static const size_t Name = 4;		// string - english name
+	static const size_t Name = 4;		// string, localization - english name
 	//static const size_t RawName = 14;	// string
 
 	Record getById(unsigned int id);
+	
+	static const size_t NameV400 = 3;	// string, localization - english name
 };
 
 
@@ -419,6 +426,8 @@ public:
 	Record getById(unsigned int id);
 	void cleanup(ItemDatabase &l_itemdb);
 	bool available(unsigned int id);
+	
+	static const size_t ItemIDBaseV400 = 2; // 10 * uint
 };
 
 class StartOutfitDB: public DBCFile

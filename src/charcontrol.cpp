@@ -899,6 +899,8 @@ void CharControl::RefreshModel()
 		try {
 			CharRacesDB::Record race = racedb.getById(cd.race);
 			wxString tmp = race.getString(CharRacesDB::GeoType1);
+			if (gameVersion == 40000)
+				tmp = race.getString(CharRacesDB::GeoType1V400);
 			if (tmp.Lower() == _T("normal")) {
 				cd.geosets[1] = 1;
 				cd.geosets[2] = 1;
@@ -1175,6 +1177,8 @@ void CharControl::RefreshNPCModel()
 		if (showFacialHair == false) {		
 			CharRacesDB::Record race = racedb.getById(cd.race);
 			wxString tmp = race.getString(CharRacesDB::GeoType1);
+			if (gameVersion == 40000)
+				tmp = race.getString(CharRacesDB::GeoType1V400);
 			if (tmp.Lower() == _T("normal")) {
 				cd.geosets[1] = 1;
 				cd.geosets[2] = 1;
@@ -2085,7 +2089,10 @@ void CharControl::selectStart()
 		if ((it->getByte(StartOutfitDB::Race) == cd.race) && (it->getByte(StartOutfitDB::Gender) == cd.gender)) {
 			try {
 				CharClassesDB::Record r = classdb.getById(it->getByte(StartOutfitDB::Class));
-				choices.Add(CSConv(r.getString(CharClassesDB::Name + langID)));
+				if (gameVersion == 40000)
+					choices.Add(CSConv(r.getString(CharClassesDB::NameV400 + langID)));
+				else
+					choices.Add(CSConv(r.getString(CharClassesDB::Name + langID)));
 				numbers.push_back(it->getUInt(StartOutfitDB::StartOutfitID));
 			} catch (CharClassesDB::NotFound) {}
 		}
@@ -2692,7 +2699,6 @@ void CharDetails::loadSet(ItemSetDB &sets, ItemDatabase &items, int setid)
 		ItemSetDB::Record rec = sets.getById(setid);
 		for (size_t i=0; i<ItemSetDB::NumItems; i++) {
 			int id = rec.getInt(ItemSetDB::ItemIDBase + i);
-
 			//if (id==0)
 			//	continue;
 

@@ -2792,6 +2792,8 @@ void DiscoveryItem()
 	for (ItemSetDB::Iterator it = setsdb.begin(); it != setsdb.end(); ++it) {
 		for(size_t i=0; i<ItemSetDB::NumItems; i++) {
 			int id = it->getUInt(ItemSetDB::ItemIDBase+i);
+			if (gameVersion == 40000)
+				id = it->getUInt(ItemSetDB::ItemIDBaseV400+i);
 			if (id == 0)
 				continue;
 			if (!items.avaiable(id)) {

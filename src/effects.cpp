@@ -236,8 +236,9 @@ void EnchantsDialog::InitEnchants()
 	enchants.push_back(temp);
 
 	for (SpellItemEnchantmentDB::Iterator it=spellitemenchantmentdb.begin();  it!=spellitemenchantmentdb.end(); ++it) {
-		int visualid;
-		visualid = it->getInt(SpellItemEnchantmentDB::VisualID);
+		int visualid= it->getInt(SpellItemEnchantmentDB::VisualID);
+		if (gameVersion == 40000)
+			visualid = it->getInt(SpellItemEnchantmentDB::VisualIDV400);
 		if (visualid < 1)
 			continue;
 		for (ItemVisualsDB::Iterator it2=itemvisualsdb.begin();  it2!=itemvisualsdb.end(); ++it2) {

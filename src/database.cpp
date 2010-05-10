@@ -389,6 +389,8 @@ void ItemSetDB::cleanup(ItemDatabase &p_itemdb)
 	for(Iterator i=begin(); i!=end(); ++i) {
 		for (int j=0; j<NumItems; j++) {
 			int id = i->getUInt(ItemIDBase+j);
+			if (gameVersion == 40000)
+				id = i->getUInt(ItemIDBaseV400+j);
 			if (id > 0) {
 				const ItemRecord &r = p_itemdb.getById(id);
 				if (r.type > 0) {
