@@ -1364,6 +1364,7 @@ bool ModelViewer::InitMPQArchives()
 			wxMessageBox(info,_T("Cataclysm Detected!"),wxOK);
 			gameVersion = 40000;
 		}
+		langOffset = 0;
 	// else if not our primary supported edition...
 	}else if (strncmp((char*)toc, "30300", 5) != 0){
 		wxString info = _T("Notice: WoW Model Viewer does not support your version of WoW.\nPlease update your World of Warcraft client!");

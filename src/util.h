@@ -64,6 +64,7 @@ extern bool modelExport_X3D_CenterModel;
 extern wxArrayString mpqArchives;
 
 extern long langID;
+extern long langOffset;
 extern long interfaceID;
 extern int ssCounter;
 extern int imgFormat;

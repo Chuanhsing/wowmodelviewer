@@ -37,6 +37,7 @@ bool modelExport_X3D_ExportAnimation = false;
 bool modelExport_X3D_CenterModel = true;
 
 long langID = -1;
+long langOffset = -1;
 long interfaceID = -1;
 int ssCounter = 100; // ScreenShot Counter
 int imgFormat = 0;

@@ -55,9 +55,9 @@ void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent
 		if (cl>0 && subclassesFound.find(pair<int,int>(cl, scl)) != subclassesFound.end()) {
 			wxString str;
 			if (gameVersion == 40000)
-				str = CSConv(it->getString(ItemSubClassDB::NameV400 + langID));
+				str = CSConv(it->getString(ItemSubClassDB::NameV400 + langOffset));
 			else
-				str = CSConv(it->getString(ItemSubClassDB::Name + langID));
+				str = CSConv(it->getString(ItemSubClassDB::Name + langOffset));
 
 			int hands;
 			if (gameVersion == 40000)
@@ -256,7 +256,7 @@ void EnchantsDialog::InitEnchants()
 				temp.id = visualid;
 				for(size_t i=0; i<5; i++)
 					temp.index[i] = it2->getInt(ItemVisualsDB::VisualID+1+i);
-				temp.name = CSConv(it->getString(SpellItemEnchantmentDB::Name + langID)).mb_str();
+				temp.name = CSConv(it->getString(SpellItemEnchantmentDB::Name + langOffset)).mb_str();
 				enchants.push_back(temp);
 				break;
 			}

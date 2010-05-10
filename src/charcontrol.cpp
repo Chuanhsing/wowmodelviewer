@@ -2011,9 +2011,9 @@ void CharControl::selectItem(int type, int slot, int current, const wxChar *capt
 			// Used to go through the 'string fields' looking for the one with data.
 			wxString str;
 			if (gameVersion == 40000)
-				str = CSConv(it->getString(ItemSubClassDB::NameV400 + langID));
+				str = CSConv(it->getString(ItemSubClassDB::NameV400 + langOffset));
 			else
-				str = CSConv(it->getString(ItemSubClassDB::Name + langID));
+				str = CSConv(it->getString(ItemSubClassDB::Name + langOffset));
 
 			int hands;
 			if (gameVersion == 40000)
@@ -2082,7 +2082,7 @@ void CharControl::selectSet()
 		if (setsdb.available(id)) {
 			NumStringPair p;
 			p.id = id;
-			p.name = CSConv(it->getString(ItemSetDB::Name + langID)).mb_str();
+			p.name = CSConv(it->getString(ItemSetDB::Name + langOffset)).mb_str();
 			items.push_back(p);
 		}
 	}
@@ -2113,9 +2113,9 @@ void CharControl::selectStart()
 			try {
 				CharClassesDB::Record r = classdb.getById(it->getByte(StartOutfitDB::Class));
 				if (gameVersion == 40000)
-					choices.Add(CSConv(r.getString(CharClassesDB::NameV400 + langID)));
+					choices.Add(CSConv(r.getString(CharClassesDB::NameV400 + langOffset)));
 				else
-					choices.Add(CSConv(r.getString(CharClassesDB::Name + langID)));
+					choices.Add(CSConv(r.getString(CharClassesDB::Name + langOffset)));
 				numbers.push_back(it->getUInt(StartOutfitDB::StartOutfitID));
 			} catch (CharClassesDB::NotFound) {}
 		}
@@ -2259,7 +2259,7 @@ void CharControl::selectNPC(int type)
 		// Used to go through the 'string fields' looking for the one with data.
 		// This is a problem when the DBC files are the non-english ones.
 		wxString str;
-		str = CSConv(it->getString(CreatureTypeDB::Name + langID));
+		str = CSConv(it->getString(CreatureTypeDB::Name + langOffset));
 
 		catnames.Add(str);
 		typeLookup[type] = (int)catnames.size()-1;
@@ -2771,9 +2771,9 @@ const std::string CharControl::selectCharModel()
 	std::vector<int> ids;
 	for (CharRacesDB::Iterator it = racedb.begin(); it != racedb.end(); ++it) {
 		char buf[64];
-		sprintf(buf,"%s Male", it->getString(CharRacesDB::FullName+langID).c_str());
+		sprintf(buf,"%s Male", it->getString(CharRacesDB::FullName+langOffset).mb_str());
 		arr.Add(buf);
-		sprintf(buf,"%s Female", it->getString(CharRacesDB::FullName+langID).c_str());
+		sprintf(buf,"%s Female", it->getString(CharRacesDB::FullName+langOffset).mb_str());
 		arr.Add(buf);
 		ids.push_back(it->getInt(CharRacesDB::RaceID));
 	}

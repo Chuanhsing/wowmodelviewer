@@ -260,7 +260,7 @@ void WowModelViewApp::OnUnhandledException()
 namespace {
 	long traverseLocaleMPQs(const wxString locales[], size_t localeCount, const wxString localeArchives[], size_t archiveCount, const wxString& gamePath)
 	{
-		long langID = -1;
+		long lngID = -1;
 
 		for (size_t i = 0; i < localeCount; i++) {
 			if (locales[i] == _T(""))
@@ -285,11 +285,11 @@ namespace {
 					}
 				}
 
-				langID = (long)i;
+				lngID = (long)i;
 			}
 		}
 
-		return langID;
+		return lngID;
 	}
 }
 
@@ -404,6 +404,12 @@ void WowModelViewApp::LoadSettings()
 	}
 	if (interfaceID == -1)
 		interfaceID = langID;
+	if (langOffset == -1) {
+		if (gameVersion == 40000)
+			langOffset = 0;
+		else
+			langOffset = langID;
+	}
 }
 
 void WowModelViewApp::SaveSettings()
