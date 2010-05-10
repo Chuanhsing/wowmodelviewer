@@ -19,7 +19,6 @@ bool useLocalFiles = false;
 bool useRandomLooks = true;
 bool bHideHelmet = false;
 bool bKnightEyeGlow = true;
-bool bV310 = false;
 bool bShowParticle = true;
 
 // Model Export Options

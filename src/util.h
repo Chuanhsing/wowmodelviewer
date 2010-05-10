@@ -48,7 +48,6 @@ extern bool useLocalFiles;
 extern bool useRandomLooks;
 extern bool bHideHelmet;
 extern bool bKnightEyeGlow;
-extern bool bV310;
 extern bool bShowParticle;
 extern bool modelExportInitOnly;
 extern bool modelExport_PreserveDir;

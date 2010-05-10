@@ -132,7 +132,7 @@ CharRacesDB::Record CharRacesDB::getByName(wxString name)
 {
 	for(Iterator i=begin(); i!=end(); ++i) {
 		wxString r;
-		if (bV310)
+		if (gameVersion == 30100)
 			r = i->getString(NameV310);
 		else
 			r = i->getString(Name);

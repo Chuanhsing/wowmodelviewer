@@ -817,7 +817,6 @@ void ModelViewer::LoadSession()
 		pConfig->Read(_T("HideHelmet"), &bHideHelmet, false);
 		pConfig->Read(_T("ShowParticle"), &bShowParticle, true);
 		pConfig->Read(_T("KnightEyeGlow"), &bKnightEyeGlow, true);
-		pConfig->Read(_T("V310"), &bV310, false);
 		pConfig->Read(_T("DBackground"), &canvas->drawBackground, false);
 		pConfig->Read(_T("BackgroundImage"), &bgImagePath, _T(""));
 		if (bgImagePath != _T("")) {
@@ -871,7 +870,6 @@ void ModelViewer::SaveSession()
 		pConfig->Write(_T("HideHelmet"), bHideHelmet);
 		pConfig->Write(_T("ShowParticle"), bShowParticle);
 		pConfig->Write(_T("KnightEyeGlow"), bKnightEyeGlow);
-		pConfig->Write(_T("V310"), bV310);
 
 		pConfig->Write(_T("DBackground"), canvas->drawBackground);
 		if (canvas->drawBackground)
@@ -1097,7 +1095,7 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 			wxString retval = rec.getString(NPCDB::Gender);
 			wxString strModel = _T("Character\\");
 
-			if (bV310) {
+			if (gameVersion == 30100) {
 				if (retval != _T("")) {
 					strModel.append(rec2.getString(CharRacesDB::NameV310));
 					strModel.append(_T("\\Female\\"));
@@ -1353,14 +1351,12 @@ bool ModelViewer::InitMPQArchives()
 			wxMessageBox(info,_T("Compatible Version Found."),wxOK);
 			gameVersion = 30100;
 		}
-		bV310 = true;
 	}else if (strncmp((char*)toc, "30200", 5) == 0){
 		wxLogMessage(info);
 		if (gameVersion != 30200){
 			wxMessageBox(info,_T("Compatible Version Found."),wxOK);
 			gameVersion = 30200;
 		}
-		bV310 = false;
 	}else if (strncmp((char*)toc, "40000", 5) == 0) {
 		wxLogMessage(info);
 		if (gameVersion != 40000){
@@ -1368,7 +1364,6 @@ bool ModelViewer::InitMPQArchives()
 			wxMessageBox(info,_T("Cataclysm Detected!"),wxOK);
 			gameVersion = 40000;
 		}
-		bV310 = false;
 	// else if not our primary supported edition...
 	}else if (strncmp((char*)toc, "30300", 5) != 0){
 		wxString info = _T("Notice: WoW Model Viewer does not support your version of WoW.\nPlease update your World of Warcraft client!");
@@ -1377,7 +1372,6 @@ bool ModelViewer::InitMPQArchives()
 		return false;
 	}else{
 		gameVersion = 30300;
-		bV310 = false;
 	}
 
 	const char *component = "component.wow-data.txt";
@@ -3158,7 +3152,7 @@ void ModelViewer::ImportArmoury(wxString strURL)
 					int raceId = wxAtoi(child->GetPropVal(_T("raceId"), _T("1")));
 					CharRacesDB::Record racer = racedb.getById(raceId);
 					wxString race;
-					if (bV310)
+					if (gameVersion == 30100)
 						race = racer.getString(CharRacesDB::NameV310);
 					else
 						race = racer.getString(CharRacesDB::Name);

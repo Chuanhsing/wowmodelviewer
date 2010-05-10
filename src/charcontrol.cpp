@@ -2699,6 +2699,8 @@ void CharDetails::loadSet(ItemSetDB &sets, ItemDatabase &items, int setid)
 		ItemSetDB::Record rec = sets.getById(setid);
 		for (size_t i=0; i<ItemSetDB::NumItems; i++) {
 			int id = rec.getInt(ItemSetDB::ItemIDBase + i);
+			if (gameVersion == 40000)
+				id = rec.getInt(ItemSetDB::ItemIDBaseV400 + i);
 			//if (id==0)
 			//	continue;
 
