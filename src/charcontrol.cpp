@@ -298,7 +298,7 @@ void CharControl::UpdateModel(Attachment *a)
 	}
 
 	// Enable the use of NPC skins if its  a goblin.
-	if (race==9)
+	if (race == 9 && gameVersion < 40000)
 		cd.useNPC=1;
 	else
 		cd.useNPC=0;
@@ -454,7 +454,7 @@ void CharControl::UpdateNPCModel(Attachment *a, unsigned int id)
 	cd.gender = gender;
 
 	// Enable the use of NPC skins if its a goblin.
-	if (race==9)
+	if (race == 9 && gameVersion < 40000)
 		cd.useNPC=1;
 	else
 		cd.useNPC=0;
@@ -600,7 +600,7 @@ void CharControl::OnCheck(wxCommandEvent &event)
 		}
 
 		// If the race is a goblin, then ignore this
-		if (race == 9) {
+		if (race == 9 && gameVersion < 40000) {
 			g_modelViewer->optMenu->Check(ID_USE_NPCSKINS, true);
 			return;
 		}
@@ -789,7 +789,7 @@ void CharControl::RefreshModel()
 	}
 
 	// HACK: for goblin males, explicitly load a hair texture
-	if (cd.race==9 && cd.gender==0 && gobTex==0) {
+	if (cd.race == 9 && cd.gender == 0 && gobTex == 0 && gameVersion < 40000) {
         gobTex = texturemanager.add("Creature\\Goblin\\Goblin.blp");		
 	}
 
@@ -798,7 +798,7 @@ void CharControl::RefreshModel()
 	bool showHair = cd.showHair;
 	bool showFacialHair = cd.showFacialHair;
 
-	if (cd.race != 9) { // Goblin chars base texture already contains all this stuff.
+	if (cd.race != 9 || gameVersion >= 40000) { // Goblin chars base texture already contains all this stuff.
 
 		// Display underwear on the model?
 		if (cd.showUnderwear) {
