@@ -3074,9 +3074,10 @@ void ModelViewer::ImportArmoury(wxString strURL)
 	// Format the URL
 	wxString strDomain = strURL.BeforeLast(_T('/')); // "armory.worldofwarcraft.com"
 	strDomain = strDomain.AfterLast(_T('/'));
-	wxString strFile = strURL.AfterLast(_T('/')).BeforeFirst(_T("?r="));
-	wxString strRealm = strURL.AfterFirst(_T("?r=")).BeforeLast(_T("&n="));
-	wxString strChar = strURL.AfterLast(_T("&n="));
+	// FIXME: wxString AfterLast(char ch) const
+	wxString strFile = strURL.AfterLast(_T('/')).BeforeFirst(_T('?r='));
+	wxString strRealm = strURL.AfterFirst(_T('?r=')).BeforeLast(_T('&n='));
+	wxString strChar = strURL.AfterLast(_T('&n='));
 
 	// Char Name Corrections
 	// Done so names like Daïmhôndrùs will get the proper page...
