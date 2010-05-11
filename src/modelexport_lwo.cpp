@@ -166,7 +166,7 @@ void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, 
 void WriteLWSceneLight(ofstream &fs, uint32 &lcount, Vec3D LPos, uint32 Ltype, Vec3D Lcolor, float Lintensity, bool useAtten, float AttenEnd, float defRange = 2.5, wxString prefix = _T(""), uint32 ParentNum = NULL)
 {
 	bool isParented = false;
-	if (ParentNum!=NULL)
+	if (ParentNum!=NULL) // FIXME: NULL used in arithmetic
 		isParented = true;
 	if (prefix != _T(""))
 		prefix = _T(" "+prefix);
