@@ -358,7 +358,7 @@ bool WowModelViewApp::LoadSettings()
 		gamePath.Append(SLASH, 1);
 
 	if (!wxFileExists(gamePath + wxT("common.MPQ"))){
-		wxLogMessage(_T("World of Warcraft Data Directory Not Found. Returned GamePath: %s"),gamePath);
+		wxLogMessage(_T("World of Warcraft Data Directory Not Found. Returned GamePath: %s"),gamePath.c_str());
 		wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("Fatal Error: Could not find your World of Warcraft Data folder."), wxT("World of Warcraft Not Found"), wxOK | wxICON_ERROR);
 		dial->ShowModal();
 		return true;

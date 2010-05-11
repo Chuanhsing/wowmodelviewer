@@ -163,7 +163,7 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 			texFilename = texFilename.BeforeLast('\\');
 			texFilename += '\\';
 			texFilename += texName;
-			wxLogMessage(_T("Exporting Image: %s"),texFilename);
+			wxLogMessage(_T("Exporting Image: %s"),texFilename.c_str());
 			SaveTexture(texFilename);
 		}
 	}

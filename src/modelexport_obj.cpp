@@ -69,7 +69,7 @@ void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init)
 			texFilename = texFilename.BeforeLast(SLASH);
 			texFilename += SLASH;
 			texFilename += texName;
-			wxLogMessage(_T("Exporting Image: %s"),texFilename);
+			wxLogMessage(_T("Exporting Image: %s"),texFilename.c_str());
 			SaveTexture(texFilename);
 			
 		}
@@ -301,7 +301,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 
 			// setup texture
 			glBindTexture(GL_TEXTURE_2D, mat->tex);
-			wxLogMessage(_T("Exporting Image: %s"),texFilename);
+			wxLogMessage(_T("Exporting Image: %s"),texFilename.c_str());
 			SaveTexture(texFilename);
 		}
 	}

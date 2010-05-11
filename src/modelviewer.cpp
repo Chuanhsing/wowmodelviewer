@@ -3074,9 +3074,9 @@ void ModelViewer::ImportArmoury(wxString strURL)
 	// Format the URL
 	wxString strDomain = strURL.BeforeLast(_T('/')); // "armory.worldofwarcraft.com"
 	strDomain = strDomain.AfterLast(_T('/'));
-	wxString strFile = strURL.AfterLast(_T('/')).BeforeFirst(_T('?r='));
-	wxString strRealm = strURL.AfterFirst(_T('?r=')).BeforeLast(_T('&n='));
-	wxString strChar = strURL.AfterLast(_T('&n='));
+	wxString strFile = strURL.AfterLast(_T('/')).BeforeFirst(_T("?r="));
+	wxString strRealm = strURL.AfterFirst(_T("?r=")).BeforeLast(_T("&n="));
+	wxString strChar = strURL.AfterLast(_T("&n="));
 
 	// Char Name Corrections
 	// Done so names like Daïmhôndrùs will get the proper page...
@@ -3088,7 +3088,7 @@ void ModelViewer::ImportArmoury(wxString strURL)
 	strPage.Append(_T("=")).Append(strRealm).Append(_T("=")).Append(strChar);
 	//http://armory.wow-europe.com/character-sheet.xml?r=Spinebreaker&n=Nostrum
 
-	wxLogMessage(_T("Attemping to access WoWArmory Page: %s"), strDomain + strPage);
+	wxLogMessage(_T("Attemping to access WoWArmory Page: %s"), wxString(strDomain + strPage).c_str());
 
 	// Get the page from the armoury website
 	wxHTTP http;

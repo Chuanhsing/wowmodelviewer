@@ -102,7 +102,7 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString su
 
 	// Final Filename
 	temp = outdir+fileName+wxT(".")+suffix;
-	wxLogMessage(_T("Exporting Image: %s"),temp);
+	wxLogMessage(_T("Exporting Image: %s"),temp.c_str());
 
 	//wxLogMessage(_T("Info: Exporting texture to %s..."), temp.c_str());
 
@@ -163,7 +163,7 @@ Vec3D QuaternionToXYZ(Vec3D Dir, float W){
 		ays << angle_y;
 		cs << c;
 		wxMessageBox(_T("Gimbal Lock Occured!\nPlease send the logfile and the name of the\nobject you were outputting to the development\nteam so they can attempt to fix any errors\ncaused by this."),_T("Gimble Lock Warning"));
-		wxLogMessage(_T("Gimbal Lock happened! angle_y=%s, c=%s"), ays, cs);
+		wxLogMessage(_T("Gimbal Lock happened! angle_y=%s, c=%s"), ays.c_str(), cs.c_str());
 
 		angle_x  = 0;
 		tempx = m.m[1][1];

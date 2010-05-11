@@ -767,10 +767,10 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 
 	if (!fs.is_open()) {
 		wxMessageBox(_T("Unable to open the scene file for exporting."),_T("Scene Export Failure"));
-		wxLogMessage(_T("Error: Unable to open file \"%s\". Could not export the scene."), SceneName.mb_str());
+		wxLogMessage(_T("Error: Unable to open file \"%s\". Could not export the scene."), SceneName.c_str());
 		return;
 	}
-	wxLogMessage(_T("Opened %s for writing..."),SceneName);
+	wxLogMessage(_T("Opened %s for writing..."),SceneName.c_str());
 	SceneName = SceneName.AfterLast(SLASH);
 
 	// File Top
@@ -941,7 +941,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	wxFFileOutputStream f(file, _T("w+b"));
 
 	if (!f.IsOk()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file);
+		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file.c_str());
 		return;
 	}
 	LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH));
@@ -1045,7 +1045,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 					if (p.init(attM)) {						
 						wxString partName;
 						if (att->slot < 15 && slots[att->slot]!=_T("")){
-							partName = wxString::Format(_T("%s"),slots[att->slot]);
+							partName = wxString::Format(_T("%s"),slots[att->slot].c_str());
 						}else{
 							partName = wxString::Format(_T("Slot %02i"),att->slot);
 						}
@@ -1073,7 +1073,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 							int thisslot = att2->children[j]->slot;
 							wxString partName;
 							if (thisslot < 15 && slots[thisslot]!=_T("")){
-								partName = wxString::Format(_T("Child %02i - %s"),j,slots[thisslot]);
+								partName = wxString::Format(_T("Child %02i - %s"),j,slots[thisslot].c_str());
 							}else{
 								partName = wxString::Format(_T("Child %02i - Slot %02i"),j,att2->children[j]->slot);
 							}
@@ -1158,14 +1158,14 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 								if (matName == _T("Cape")) {
 									wxString tex = wxString(mAttChild->name.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.'));
 									if (tex.Len() > 0){
-										matName = wxString::Format(_T("%s - %s"),slots[thisslot],tex);
+										matName = wxString::Format(_T("%s - %s"),slots[thisslot].c_str(),tex.c_str());
 									}else{
-										matName = wxString::Format(_T("%s - Surface"),slots[thisslot]);
+										matName = wxString::Format(_T("%s - Surface"),slots[thisslot].c_str());
 									}
 								}else if (matName != _T("")){
-									matName = wxString::Format(_T("%s - %s"),slots[thisslot],matName);
+									matName = wxString::Format(_T("%s - %s"),slots[thisslot].c_str(),matName.c_str());
 								}else {
-									matName = wxString::Format(_T("%s - Material %02i"),slots[thisslot],p.tex);
+									matName = wxString::Format(_T("%s - Material %02i"),slots[thisslot].c_str(),p.tex);
 								}
 							}
 
@@ -1265,7 +1265,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 		Model *attM = NULL;
 		if (att->model) {
 			attM = static_cast<Model*>(att->model);
-			wxLogMessage(_T("Loaded Attached Model %s for export."),attM->modelname);
+			wxLogMessage(_T("Loaded Attached Model %s for export."),attM->modelname.c_str());
 
 			if (attM){
 				int boneID = -1;
@@ -1341,7 +1341,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			Attachment *att2 = att->children[i];
 			for (uint32 j=0; j<att2->children.size(); j++) {
 				Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
-				wxLogMessage(_T("Loaded Attached 2nd Child Model %s for export."),mAttChild->fullname);
+				wxLogMessage(_T("Loaded Attached 2nd Child Model %s for export."),mAttChild->fullname.c_str());
 
 				if (mAttChild){
 					int boneID = -1;
@@ -2101,7 +2101,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 				texFilename << wxString(m->modelname.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) << wxString::Format(_T("_Image_%03i"),i);
 			}
 			texFilename << _T(".tga");
-			wxLogMessage(_T("Exporting Image: %s"),texFilename);
+			wxLogMessage(_T("Exporting Image: %s"),texFilename.c_str());
 			SaveTexture(texFilename);
 
 			fileLen += clipSize;
@@ -2217,7 +2217,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 							texFilename << wxString(attM->modelname.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast('.') << wxString::Format(_T("_Image_%03i"),i);
 						}
 						texFilename << _T(".tga");
-						wxLogMessage(_T("Exporting Image: %s"),texFilename);
+						wxLogMessage(_T("Exporting Image: %s"),texFilename.c_str());
 						SaveTexture(texFilename);
 
 						fileLen += clipSize;
@@ -2322,7 +2322,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 								texFilename << wxString(attM->modelname.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast('.') << wxString::Format(_T("_Image_%03i"),i);
 							}
 							texFilename << _T(".tga");
-							wxLogMessage(_T("Exporting Image: %s"),texFilename);
+							wxLogMessage(_T("Exporting Image: %s"),texFilename.c_str());
 							SaveTexture(texFilename);
 
 							fileLen += clipSize;
@@ -2427,16 +2427,16 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 								if (surfName == _T("Cape")) {
 									wxString tex = wxString(mAttChild->name.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.'));
 									if (tex.Len() > 0){
-										surfName = wxString::Format(_T("%s - %s"),slots[thisslot],tex);
+										surfName = wxString::Format(_T("%s - %s"),slots[thisslot].c_str(),tex.c_str());
 										cmnt = wxString(mAttChild->name.c_str(), wxConvUTF8).BeforeLast(_T('.')).Append(_T(".tga"));
 									}else{
-										surfName = wxString::Format(_T("%s - %s"),slots[thisslot],_T("Surface"));
+										surfName = wxString::Format(_T("%s - Surface"),slots[thisslot].c_str());
 										cmnt = _T("Surface");
 									}
 								}else if (surfName != _T("")){
-									surfName = wxString::Format(_T("%s - %s"),slots[thisslot],surfName);
+									surfName = wxString::Format(_T("%s - %s"),slots[thisslot].c_str(),surfName.c_str());
 								}else{
-									surfName = wxString::Format(_T("%s - Material %02i"),slots[thisslot],p.tex);
+									surfName = wxString::Format(_T("%s - Material %02i"),slots[thisslot].c_str(),p.tex);
 									cmnt = surfName;
 								}
 							}
@@ -2524,7 +2524,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 
 	if (!fs.is_open()) {
 		wxMessageBox(_T("Unable to open the scene file for exporting."),_T("Scene Export Failure"));
-		wxLogMessage(_T("Error: Unable to open file \"%s\". Could not export the scene."), SceneName.mb_str());
+		wxLogMessage(_T("Error: Unable to open file \"%s\". Could not export the scene."), SceneName.c_str());
 		return;
 	}
 	SceneName = SceneName.AfterLast(SLASH);
@@ -2623,7 +2623,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 				// Doodad Lights
 				// Apparently, Doodad Lights must be parented to the Doodad for proper placement.
 				if ((doodad->model) && (doodad->model->header.nLights > 0)){
-					wxLogMessage(_T("Export: Doodad Lights found for %s, Number of lights: %i"),wxString(doodad->filename.c_str(),wxConvUTF8),doodad->model->header.nLights);
+					wxLogMessage(_T("Export: Doodad Lights found for %s, Number of lights: %i"), doodad->filename.c_str(), doodad->model->header.nLights);
 					DoodadLightArrayDDID[DDLArrCount] = DDID;
 					DoodadLightArrayID[DDLArrCount] = dd;
 					DDLArrCount++;
@@ -2713,7 +2713,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 				g_modelViewer->isModel = true;
 				wxString cModelName(modelarray[x].c_str(),wxConvUTF8);
 
-				wxLogMessage(_T("Export: Attempting to export doodad model: %s"),cModelName);
+				wxLogMessage(_T("Export: Attempting to export doodad model: %s"),cModelName.c_str());
 				wxString dfile = wxString(fn,wxConvUTF8).BeforeLast(SLASH) << SLASH << cModelName.AfterLast(SLASH);
 				dfile = dfile.BeforeLast(_T('.')) << _T(".lwo");
 
@@ -2771,7 +2771,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 	wxFFileOutputStream f(file, _T("w+b"));
 
 	if (!f.IsOk()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file);
+		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file.c_str());
 		wxMessageDialog(g_modelViewer,_T("Could not open file for exporting."),_T("Exporting Error..."));
 		return;
 	}
