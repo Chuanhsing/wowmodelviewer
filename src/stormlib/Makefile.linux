@@ -1,0 +1,69 @@
+#####################################################################
+###
+#
+# Makefile for compiling StormLib under linux
+#
+# Author: Marko Friedemann <marko.friedemann@bmx-chemnitz.de>
+# Created at: Mon Jan 29 18:26:01 CEST 2001
+# Computer: whiplash.flachland-chemnitz.de 
+# System: Linux 2.4.0 on i686
+#    
+# Copyright (c) 2001 BMX-Chemnitz.DE All rights reserved.
+#
+#####################################################################
+###
+
+##############################################################
+# updated on April 24, 2010 by Ivan Komissarov aka Nevermore #
+##############################################################
+
+C++ = g++
+CC = gcc
+DFLAGS = -D__SYS_ZLIB
+OFLAGS =
+LFLAGS = -lbz2 -lz
+CFLAGS = -fPIC -D_7ZIP_ST
+CFLAGS += $(OFLAGS) $(DFLAGS)
+
+
+OBJS = SCommon.o SCompression.o SFileCompactArchive.o \
+       SFileCreateArchiveEx.o SFileExtractFile.o SFileFindFile.o \
+       SListFile.o SFileOpenArchive.o SFileOpenFileEx.o \
+       SAttrFile.o SFileReadFile.o StormPortLinux.o \
+       SFileAddFile.o \
+       huffman/huff.o \
+       adpcm/adpcm.o \
+       sparse/sparse.o \
+       misc/adler32_sector.o misc/crc32_sector.o misc/md5_sector.o
+
+COBJS = pklib/crc32.o pklib/explode.o pklib/implode.o \
+       lzma/C/LzFind.o \
+       lzma/C/LzmaDec.o \
+       lzma/C/LzmaEnc.o
+
+LIB = libStorm.so
+
+all: $(OBJS) $(COBJS) $(LIB)
+
+$(LIB): $(OBJS) $(COBJS)
+	$(C++) $(ARCH) -shared -o $(LIB) $(OBJS) $(COBJS) $(LFLAGS)
+
+clean:
+	rm -f $(OBJS) $(COBJS) $(LIB)
+
+$(OBJS): %.o: %.cpp
+	$(C++) -o $@ $(CFLAGS) -c $<
+
+$(COBJS): %.o: %.c
+	$(CC) -o $@ $(CFLAGS) -c $<
+
+$(LIB): $(OBJS) $(COBJS)
+
+all: $(LIB)
+
+install: $(LIB)
+	install $(LIB) /usr/local/lib
+	mkdir -p /usr/local/include/StormLib
+	cp StormLib.h /usr/local/include/StormLib
+	cp StormPort.h /usr/local/include/StormLib
+#	ldconfig

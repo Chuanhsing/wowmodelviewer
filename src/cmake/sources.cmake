@@ -9,6 +9,38 @@ if (MAC)
         list(REMOVE_ITEM WOWMV_SOURCES mpq_stormlib.cpp)
 endif()
 
+set(STORM_SOURCES
+    stormlib/src/SCommon.cpp
+    stormlib/src/SCompression.cpp
+    stormlib/src/SFileAddFile.cpp
+    stormlib/src/SFileAttributes.cpp
+    stormlib/src/SFileCompactArchive.cpp
+    stormlib/src/SFileCreateArchiveEx.cpp
+    stormlib/src/SFileExtractFile.cpp
+    stormlib/src/SFileFindFile.cpp
+    stormlib/src/SFileListFile.cpp
+    stormlib/src/SFileOpenArchive.cpp
+    stormlib/src/SFileOpenFileEx.cpp
+    stormlib/src/SFileReadFile.cpp
+    stormlib/src/SFileVerify.cpp
+    stormlib/src/huffman/huff.cpp
+    stormlib/src/adpcm/adpcm.cpp
+    stormlib/src/pklib/crc32.c
+    stormlib/src/pklib/explode.c
+    stormlib/src/pklib/implode.c
+    stormlib/src/lzma/C/LzFind.c
+    stormlib/src/lzma/C/LzmaDec.c
+    stormlib/src/lzma/C/LzmaEnc.c
+)
+
+if (UNIX)
+	list(APPEND STORM_SOURCES stormlib/src/StormPortLinux.cpp)
+endif()
+
+if (MAC)
+	list(APPEND STORM_SOURCES stormlib/src/StormPortMac.cpp)
+endif()
+
 set(MPQ_SOURCES
     libmpq/common.cpp
     libmpq/explode.cpp

@@ -31,15 +31,12 @@
 
   // In MSVC 8.0, there are some functions declared as deprecated.
   #if _MSC_VER >= 1400
-	#ifndef _CRT_SECURE_NO_DEPRECATE
-	  #define _CRT_SECURE_NO_DEPRECATE
-	#endif
-	#ifndef _CRT_NON_CONFORMING_SWPRINTFS
-	  #define _CRT_NON_CONFORMING_SWPRINTFS
-	#endif
+  #define _CRT_SECURE_NO_DEPRECATE
+  #define _CRT_NON_CONFORMING_SWPRINTFS
   #endif
 
   #include <assert.h>      
+  #include <ctype.h>      
   #include <stdio.h>      
   #include <windows.h>      
   #define PLATFORM_LITTLE_ENDIAN  1
@@ -132,7 +129,7 @@
       DWORD dwLowDateTime; 
       DWORD dwHighDateTime; 
   }
-  FILETIME, *PFILETIME;
+  FILETIME, *PFILETIME, *LPFILETIME;
 
   typedef union _LARGE_INTEGER
   {
@@ -176,12 +173,7 @@
   #define FILE_BEGIN    SEEK_SET
   #define FILE_CURRENT  SEEK_CUR
   #define FILE_END      SEEK_END
-  
-  #define CREATE_NEW    1
-  #define CREATE_ALWAYS 2
-  #define OPEN_EXISTING 3
-  #define OPEN_ALWAYS   4
-  
+
   #define FILE_SHARE_READ 0x00000001L
   #define GENERIC_WRITE   0x40000000
   #define GENERIC_READ    0x80000000
@@ -228,6 +220,8 @@
   DWORD  SetFilePointer(HANDLE, LONG lDistanceToMove, LONG * lpDistanceToMoveHigh, DWORD dwMoveMethod);
   BOOL   SetEndOfFile(HANDLE hFile);
 
+  BOOL   GetFileTime(HANDLE hFile, LPFILETIME lpCreationTime, LPFILETIME lpLastAccessTime, LPFILETIME lpLastWriteTime);
+
   BOOL   ReadFile(HANDLE hFile, void * lpBuffer, DWORD nNumberOfBytesToRead, DWORD * lpNumberOfBytesRead, void * lpOverLapped);
   BOOL   WriteFile(HANDLE hFile, const void * lpBuffer, DWORD nNumberOfBytesToWrite, DWORD * lpNumberOfBytesWritten, void * lpOverLapped);
 
@@ -236,8 +230,6 @@
 
   BOOL   DeleteFile(const char * lpFileName);
   BOOL   MoveFile(const char * lpFromFileName, const char * lpToFileName);
-  void   GetTempPath(DWORD szTempLength, char * szTemp);
-  void   GetTempFileName(const char * lpTempFolderPath, const char * lpFileName, DWORD something, char * szLFName);
 
   #define strnicmp strncasecmp
 
