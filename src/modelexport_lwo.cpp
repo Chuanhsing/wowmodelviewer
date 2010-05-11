@@ -128,7 +128,7 @@ void WriteLWSceneObject(ofstream &fs, wxString Filename, AnimationData AnimData,
 }
 
 // Writes an Object's Bone to the scene file.
-void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, Vec3D Rot, float Length, uint32 &BoneNumber, uint32 ParentNum)
+void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, Vec3D Rot, float Length, uint32 &BoneNumber, uint16 ParentType, uint32 ParentNum)
 {
 	bool isParented = false;
 
@@ -155,7 +155,7 @@ void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, 
 	WriteLWSceneEnvChannel(fs,8,1,0);
 
 	fs << _T("PathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
-	fs << _T("ParentItem "<< ParentNum);
+	fs << _T("ParentItem " << ParentType << wxString::Format(_T("%07x"),ParentNum));
 	fs << _T("IKInitialState 0");
 
 	fs << _T("\n");
@@ -163,10 +163,10 @@ void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, 
 }
 
 // Write a Light to the Scene File
-void WriteLWSceneLight(ofstream &fs, uint32 &lcount, Vec3D LPos, uint32 Ltype, Vec3D Lcolor, float Lintensity, bool useAtten, float AttenEnd, float defRange = 2.5, wxString prefix = _T(""), uint32 ParentNum = NULL)
+void WriteLWSceneLight(ofstream &fs, uint32 &lcount, Vec3D LPos, uint32 Ltype, Vec3D Lcolor, float Lintensity, bool useAtten, float AttenEnd, float defRange = 2.5, wxString prefix = _T(""), uint32 ParentNum = -1)
 {
 	bool isParented = false;
-	if (ParentNum!=NULL) // FIXME: NULL used in arithmetic
+	if (ParentNum > -1)
 		isParented = true;
 	if (prefix != _T(""))
 		prefix = _T(" "+prefix);

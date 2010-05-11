@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="9.00"
 	Name="StormLib"
 	ProjectGUID="{78424708-1F6E-4D4B-920C-FB6D26847055}"
 	RootNamespace="StormLib"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -20,7 +21,7 @@
 	<Configurations>
 		<Configuration
 			Name="DebugAD|Win32"
-			OutputDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
+			OutputDirectory="../lib/Windows/32bit"
 			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="2"
@@ -84,7 +85,7 @@
 		</Configuration>
 		<Configuration
 			Name="DebugAD|x64"
-			OutputDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
+			OutputDirectory="../lib/Windows/64bit"
 			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="2"
@@ -149,7 +150,7 @@
 		</Configuration>
 		<Configuration
 			Name="DebugAS|Win32"
-			OutputDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
+			OutputDirectory="../lib/Windows/32bit"
 			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="2"
@@ -213,7 +214,7 @@
 		</Configuration>
 		<Configuration
 			Name="DebugAS|x64"
-			OutputDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
+			OutputDirectory="../lib/Windows/64bit"
 			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="2"
@@ -278,7 +279,7 @@
 		</Configuration>
 		<Configuration
 			Name="ReleaseAD|Win32"
-			OutputDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
+			OutputDirectory="../lib/Windows/32bit"
 			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="2"
@@ -340,7 +341,7 @@
 		</Configuration>
 		<Configuration
 			Name="ReleaseAD|x64"
-			OutputDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
+			OutputDirectory="../lib/Windows/64bit"
 			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="2"
@@ -403,7 +404,7 @@
 		</Configuration>
 		<Configuration
 			Name="ReleaseAS|Win32"
-			OutputDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
+			OutputDirectory="../lib/Windows/32bit"
 			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="2"
@@ -465,7 +466,7 @@
 		</Configuration>
 		<Configuration
 			Name="ReleaseAS|x64"
-			OutputDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
+			OutputDirectory="../lib/Windows/64bit"
 			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="2"
