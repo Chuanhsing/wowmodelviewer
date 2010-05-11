@@ -26,7 +26,7 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
-	LogExportData(_T("3DS"),wxString(fn).BeforeLast(SLASH));
+	LogExportData(_T("3DS"),wxString(fn, wxConvUTF8).BeforeLast(SLASH));
 
 	unsigned short numVerts = 0;
 	unsigned short numGroups = 0;
@@ -227,7 +227,7 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			texFilename = texFilename.BeforeLast('\\');
 			texFilename += '\\';
 			texFilename += mapName;
-			wxLogMessage(_T("Exporting Image: %s"),texFilename);
+			wxLogMessage(_T("Exporting Image: %s"),texFilename.c_str());
 			SaveTexture(texFilename);
 
             // conatins 0xa300, 0xa351

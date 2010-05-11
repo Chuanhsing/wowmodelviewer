@@ -251,7 +251,7 @@ void M2toX3DAnim(tabbed_ostream s, Model* m)
 
 void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
 {
-	LogExportData(_T("X3D"),wxString(fn).BeforeLast(SLASH));
+	LogExportData(_T("X3D"),wxString(fn, wxConvUTF8).BeforeLast(SLASH));
     s << "<!-- Exported with WoWModelViewer -->" << std::endl;
 
     s.tab();

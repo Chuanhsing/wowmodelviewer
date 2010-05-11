@@ -41,6 +41,8 @@ if (APPLE)
 	
 	add_executable(wowmodelviewer MACOSX_BUNDLE ${WOWMV_SOURCES} ../bin_support/Icons/${MACOSX_BUNDLE_ICON_FILE})
 else()
+	add_definitions(-D_LINUX)
+
 	add_executable(wowmodelviewer ${WOWMV_SOURCES})
 endif()
 

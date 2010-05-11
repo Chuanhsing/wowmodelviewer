@@ -2263,12 +2263,12 @@ is (C)2006 Blizzard Entertainment(R). All rights reserved.")));
 	//info.SetArtists();
 	//info.SetDocWriters();
 
-	wxIcon icon("mainicon",wxBITMAP_TYPE_ICO_RESOURCE,128,128);
+	wxIcon icon(_T("mainicon"),wxBITMAP_TYPE_ICO_RESOURCE,128,128);
 #ifndef _WINDOWS
 	#if defined (_LINUX)
-		icon.LoadFile(../bin_support/icon/wmv_xpm);
+		//icon.LoadFile(_T("../bin_support/icon/wmv_xpm"));
 	#elif defined (_MAC)
-		//icon.LoadFile(../bin_support/icon/wmv.icns);
+		//icon.LoadFile(_T("../bin_support/icon/wmv.icns"));
 	#endif
 #endif
 	icon.SetHeight(128);
@@ -2781,7 +2781,7 @@ void DiscoveryItem()
 {
 	wxString name, ret;
 	items.cleanupDiscovery();
-	ofstream f(_T("discoveryitems.csv"), ios_base::out | ios_base::trunc);
+	ofstream f("discoveryitems.csv", ios_base::out | ios_base::trunc);
 
 	// 1. from itemsets.dbc
 	for (ItemSetDB::Iterator it = setsdb.begin(); it != setsdb.end(); ++it) {

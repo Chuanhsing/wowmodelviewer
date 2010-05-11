@@ -108,16 +108,16 @@ bool WowModelViewApp::OnInit()
 	// Set the icon, different source location for the icon under Linux & Mac
 	wxIcon icon;
 #if defined (_WINDOWS)
-	if (icon.LoadFile("mainicon",wxBITMAP_TYPE_ICO_RESOURCE) == false)
-		wxMessageBox("Failed to load Icon","Failure");
+	if (icon.LoadFile(_T("mainicon"),wxBITMAP_TYPE_ICO_RESOURCE) == false)
+		wxMessageBox(_T("Failed to load Icon"),_T("Failure"));
 #elif defined (_LINUX)
 	// This probably needs to be fixed...
-	if (icon.LoadFile(../bin_support/icon/wmv_xpm) == false)
-		wxMessageBox("Failed to load Icon","Failure");
+	//if (icon.LoadFile(_T("../bin_support/icon/wmv_xpm")) == false)
+	//	wxMessageBox(_T("Failed to load Icon"),_T("Failure"));
 #elif defined (_MAC)
 	// Dunno what to do about Macs...
-	//if (icon.LoadFile("../bin_support/icon/wmv.icns") == false)
-	//	wxMessageBox("Failed to load Icon","Failure");
+	//if (icon.LoadFile(_T("../bin_support/icon/wmv.icns")) == false)
+	//	wxMessageBox(_T("Failed to load Icon"),_T("Failure"));
 #endif
 	frame->SetIcon(icon);
 	// --

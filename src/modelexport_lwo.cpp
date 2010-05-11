@@ -15,7 +15,7 @@
 void WriteLWSceneEnvKey(ofstream &fs, uint32 Chan, float value, float time, uint32 spline = 0)
 {
 	fs << _T("  Key ");				// Announces the start of a Key
-	fs << _T(value);				// The Key's Value;
+	fs << value;				// The Key's Value;
 	fs << _T(" " << time);			// Time, in seconds, a float. This can be negative, zero or positive. Keys are listed in the envelope in increasing time order.
 	fs << _T(" " << spline);		// The curve type, an integer: 0 - TCB, 1 - Hermite, 2 - 1D Bezier (obsolete, equivalent to Hermite), 3 - Linear, 4 - Stepped, 5 - 2D Bezier
 	fs << _T(" 0 0 0 0 0 0 \n");	// Curve Data 1-6, all 0s for now.
@@ -133,7 +133,7 @@ void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, 
 	bool isParented = false;
 
 	fs << _T("BoneFalloffType 5\nFasterBones 1\nAddBone 4");
-	fs << _T(wxString::Format("%07x",BoneNumber) << "\nBoneName " << BoneName);
+	fs << wxString::Format(_T("%07x"),BoneNumber) << "\nBoneName " << BoneName;
 	fs << _T("ShowBone 1 -1 0.376471 0.878431 0.941176\nBoneActive 1");
 	fs << _T("BoneStrength 1\nScaleBoneStrength 1");
 	fs << _T("BoneRestPosition "<<Pos.x<<" "<<Pos.y<<" "<<Pos.z);
@@ -755,7 +755,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 		wxString Path1, Path2, Name;
 		Path1 << SceneName.BeforeLast(SLASH);
 		Name << SceneName.AfterLast(SLASH);
-		Path2 << wxString(m->name.c_str()).BeforeLast(SLASH);
+		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 
 		MakeDirs(Path1,Path2);
 
@@ -797,7 +797,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 		objFilename << _T("Objects") << SLASH;
 	}
 	if (modelExport_PreserveDir == true){
-		objFilename += wxString(m->name.c_str()).BeforeLast(SLASH);
+		objFilename += wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 		objFilename << SLASH;
 		objFilename.Replace(_T("\\"),_T("/"));
 	}
@@ -883,7 +883,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 			WriteLWSceneEnvChannel(fs,5,0,0);
 		}
 
-		fs << _T("ParentItem 1" << wxString::Format("%07x",ParentID) << "\n");
+		fs << _T("ParentItem 1" << wxString::Format(_T("%07x"),ParentID) << "\n");
 		fs << _T("IKInitCustomFrame 0\nGoalStrength 1\nIKFKBlending 0\nIKSoftMin 0.25\nIKSoftMax 0.75\nCtrlPosItemBlend 1\nCtrlRotItemBlend 1\nCtrlScaleItemBlend 1\n\n");
 		fs << _T("HController 1\nPController 1\nPathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
 		fs << _T("TargetItem 1"<<wxString::Format(_T("%07x"),CameraTargetID)<<"\n");
@@ -944,7 +944,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file);
 		return;
 	}
-	LogExportData(_T("LWO"),wxString(fn).BeforeLast(SLASH));
+	LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH));
 	int off_t;
 	uint32 counter=0;
 	uint32 TagCounter=0;
@@ -2133,7 +2133,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 						wxString texName = wxString(attM->TextureList[p.tex].c_str(), wxConvUTF8).BeforeLast(_T('.'));
 						wxString texPath = texName.BeforeLast(SLASH);
 						if (texName.AfterLast(SLASH) == _T("Cape")){
-							texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + wxString(attM->name.c_str()).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
+							texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + wxString(attM->name.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
 							texPath = wxString(fn, wxConvUTF8).BeforeLast(SLASH);
 						}else{
 							texName = texName.AfterLast(SLASH);
@@ -2471,7 +2471,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.SeekO(0, wxFromEnd);
 
 	f.Close();
-	wxLogMessage(_T("M2 %s Successfully written!"),wxString(m->fullname.c_str()));
+	wxLogMessage(_T("M2 %s Successfully written!"),m->fullname.c_str());
 
 	ExportM2toScene(m,fn,init);
 }
@@ -2617,7 +2617,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 				AnimationData DoodadData;
 				DoodadData.Push(Pos,Rot,Vec3D(doodad->sc,doodad->sc,doodad->sc),0);
 
-				WriteLWSceneObject(fs,name,DoodadData,mcount,7,isNull,DDSID,doodad->filename.c_str());
+				WriteLWSceneObject(fs,name,DoodadData,mcount,7,isNull,DDSID,wxString(doodad->filename.c_str(), wxConvUTF8));
 				wxLogMessage(_T("Export: Finished writing the Doodad to the Scene File."));
 
 				// Doodad Lights
@@ -2717,10 +2717,10 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 				wxString dfile = wxString(fn,wxConvUTF8).BeforeLast(SLASH) << SLASH << cModelName.AfterLast(SLASH);
 				dfile = dfile.BeforeLast(_T('.')) << _T(".lwo");
 
-				g_modelViewer->canvas->LoadModel(cModelName.c_str());
+				g_modelViewer->canvas->LoadModel((char *)cModelName.c_str());
 				ExportM2toLWO(NULL, g_modelViewer->canvas->model, dfile.fn_str(), true);
 
-				wxLogMessage(_T("Export: Finished exporting doodad model: %s\n\n"),cModelName);
+				wxLogMessage(_T("Export: Finished exporting doodad model: %s\n\n"),cModelName.c_str());
 
 				// Delete the loaded model
 				g_modelViewer->canvas->clearAttachments();
@@ -2775,7 +2775,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 		wxMessageDialog(g_modelViewer,_T("Could not open file for exporting."),_T("Exporting Error..."));
 		return;
 	}
-	LogExportData(_T("LWO"),wxString(fn).BeforeLast(SLASH));
+	LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH));
 
 	int off_t;
 	uint16 dimension;
@@ -2958,7 +2958,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 	std::vector<uint16> check;
 	for (uint16 t=0;t<m->nTextures;t++){
 		wxString tex = wxString(m->textures[t].c_str(), wxConvUTF8).BeforeLast(_T('.'));
-		surfarray.push_back(tex.c_str());
+		surfarray.push_back((char *)tex.c_str());
 		//sfix.push_back(tex.c_str());
 		sfix2.push_back(t);
 		check.push_back(0);

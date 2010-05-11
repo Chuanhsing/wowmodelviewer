@@ -16,7 +16,7 @@ void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init)
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
-	LogExportData(_T("OBJ"),wxString(fn).BeforeLast(SLASH));
+	LogExportData(_T("OBJ"),wxString(fn, wxConvUTF8).BeforeLast(SLASH));
 
 	unsigned short numVerts = 0;
 	unsigned short numGroups = 0;
@@ -147,22 +147,22 @@ void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init)
 
 		if (p.init(m)) {
 			wxString FilePath = wxString(fn, wxConvUTF8).BeforeLast(SLASH);
-			wxString texName = wxString(m->TextureList[p.tex].c_str()).BeforeLast(_T('.'));
+			wxString texName = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8).BeforeLast(_T('.'));
 			wxString texPath = texName.BeforeLast(SLASH);
 			if (m->modelType == MT_CHAR){
 				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName.AfterLast(SLASH);
 			}else if ((texName.Find(SLASH) <= 0)&&(texName == _T("Cape"))){
 				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
-				texPath = wxString(m->name.c_str()).BeforeLast(SLASH);
+				texPath = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 			}else if (texName.Find(SLASH) <= 0){
 				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName;
-				texPath = wxString(m->name.c_str()).BeforeLast(SLASH);
+				texPath = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 			}else{
 				texName = texName.AfterLast(SLASH);
 			}
 
 			if (texName.Length() == 0)
-				texName << wxString(m->modelname.c_str()).AfterLast(SLASH).BeforeLast(_T('.')) << wxString::Format(_T("_Image_%03i"),i);
+				texName << wxString(m->modelname.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) << wxString::Format(_T("_Image_%03i"),i);
 
 			f << "g Geoset_" << i << endl;
 			f << "usemtl " << texName << endl;
@@ -212,7 +212,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
-	LogExportData(_T("OBJ"),wxString(fn).BeforeLast(SLASH));
+	LogExportData(_T("OBJ"),wxString(fn, wxConvUTF8).BeforeLast(SLASH));
 
 	wxString mtlName = file;
 	mtlName = mtlName.BeforeLast('.');

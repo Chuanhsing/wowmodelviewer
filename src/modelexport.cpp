@@ -202,7 +202,7 @@ void AddCount(Model *m, unsigned short &numGroups, unsigned short &numVerts)
 
 void AddVertices(Model *m, Attachment *att, bool init, ModelData *verts, unsigned short &vertIndex, GroupData *groups, unsigned short &grpIndex)
 {
-	wxLogMessage(_T("Adding Verticies from %s..."),wxString(m->name.c_str()));
+	wxLogMessage(_T("Adding Verticies from %s..."), m->name.c_str());
 	int boneID = -1;
 	Model *mParent = NULL;
 
@@ -358,22 +358,22 @@ void InitCommon(Attachment *att, bool init, ModelData *&verts, GroupData *&group
 
 // Get Proper Texture Names for an M2 File
 wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassNumber){
-	wxString texName = wxString(m->TextureList[p.tex].c_str()).BeforeLast(_T('.'));
+	wxString texName = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8).BeforeLast(_T('.'));
 	wxString texPath = texName.BeforeLast(SLASH);
 	if (m->modelType == MT_CHAR){
 		texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName.AfterLast(SLASH);
 	}else if ((texName.Find(SLASH) <= 0)&&(texName == _T("Cape"))){
 		texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
-		texPath = wxString(m->name.c_str()).BeforeLast(SLASH);
+		texPath = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 	}else if (texName.Find(SLASH) <= 0){
 		texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName;
-		texPath = wxString(m->name.c_str()).BeforeLast(SLASH);
+		texPath = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 	}else{
 		texName = texName.AfterLast(SLASH);
 	}
 
 	if (texName.Length() == 0)
-		texName << wxString(m->modelname.c_str()).AfterLast(SLASH).BeforeLast(_T('.')) << wxString::Format(_T("_Image_%03i"),PassNumber);
+		texName << wxString(m->modelname.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) << wxString::Format(_T("_Image_%03i"),PassNumber);
 
 	return texName;
 }
@@ -381,8 +381,8 @@ wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassN
 // Write out some debug info
 void LogExportData(wxString FileExtension, wxString Directory){
 	wxLogMessage(_T("\n\n========================================================================\n   Exporting Model...\n========================================================================\n"));
-	wxLogMessage(_T("Exporting to Directory: %s"),Directory);
-	wxLogMessage(_T("Exporting File Type: %s"),FileExtension);
+	wxLogMessage(_T("Exporting to Directory: %s"),Directory.c_str());
+	wxLogMessage(_T("Exporting File Type: %s"),FileExtension.c_str());
 	wxLogMessage(_T("Export Init Mode: %s"),(modelExportInitOnly==true?"True":"False"));
 	wxLogMessage(_T("Preserve Directories: %s"),(modelExport_PreserveDir==true?"True":"False"));
 	wxLogMessage(_T("Use WMV Position & Rotation: %s"),(modelExport_UseWMVPosRot==true?"True":"False"));
@@ -407,7 +407,7 @@ void LogExportData(wxString FileExtension, wxString Directory){
 				XDDas = _T("A Single Object, Per Group");
 				break;
 		}
-		wxLogMessage(_T("Export Doodads as: %s"),XDDas);
+		wxLogMessage(_T("Export Doodads as: %s"),XDDas.c_str());
 	// X3D Options
 	}else if (FileExtension == _T("X3D")){
 		wxLogMessage(_T("Export Animation: %s"),(modelExport_X3D_ExportAnimation==true?"True":"False"));

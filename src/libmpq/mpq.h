@@ -41,7 +41,9 @@
     //#define lseek _lseek
     #define PATH_MAX 259
 #else
+    #ifndef _LARGEFILE64_SOURCE
     #define _LARGEFILE64_SOURCE
+    #endif
     #include <dirent.h>
     //lseek ...
     #include <unistd.h>
