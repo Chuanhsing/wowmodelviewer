@@ -1,4 +1,4 @@
-﻿#include "app.h"
+#include "app.h"
 
 /*	THIS IS OUR MAIN "START UP" FILE.
 	App.cpp creates our wxApp class object.

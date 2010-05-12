@@ -1,4 +1,4 @@
-﻿#ifndef ENUMS_H
+#ifndef ENUMS_H
 #define ENUMS_H
 
 enum ObjectID {
