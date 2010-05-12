@@ -26,7 +26,7 @@ add_definitions(
     -DWotLK
 )
 
-add_library(mpq STATIC ${MPQ_SOURCES})
+add_library(storm STATIC ${MPQ_SOURCES})
 add_library(cximage STATIC ${CXIMAGE_SOURCES})
 
 if (APPLE)
@@ -49,7 +49,7 @@ else()
 endif()
 
 target_link_libraries(wowmodelviewer
-    mpq
+    storm
     cximage
     ${wxWidgets_LIBRARIES}
     ${BZIP2_LIBRARIES}
