@@ -3074,10 +3074,10 @@ void ModelViewer::ImportArmoury(wxString strURL)
 	// Format the URL
 	wxString strDomain = strURL.BeforeLast(_T('/')).AfterLast(_T('/')); // "armory.worldofwarcraft.com"
 	wxString strParam = strURL.AfterLast(_T('/'));
-	int pos = strParam.Find("?r=");
+	int pos = strParam.Find(_T("?r="));
 	wxString strFile = strParam.Mid(0, pos);
 	strParam = strParam.Mid(pos+3);
-	pos = strParam.Find("&cn=");
+	pos = strParam.Find(_T("&cn="));
 	wxString strRealm = strParam.Mid(0, pos);
 	wxString strChar = strParam.Mid(pos+4);
 
