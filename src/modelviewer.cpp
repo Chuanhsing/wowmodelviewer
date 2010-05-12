@@ -3072,12 +3072,14 @@ void ModelViewer::UpdateControls()
 void ModelViewer::ImportArmoury(wxString strURL)
 {
 	// Format the URL
-	wxString strDomain = strURL.BeforeLast(_T('/')); // "armory.worldofwarcraft.com"
-	strDomain = strDomain.AfterLast(_T('/'));
-	// FIXME: wxString AfterLast(char ch) const
-	wxString strFile = strURL.AfterLast(_T('/')).BeforeFirst(_T('?r='));
-	wxString strRealm = strURL.AfterFirst(_T('?r=')).BeforeLast(_T('&n='));
-	wxString strChar = strURL.AfterLast(_T('&n='));
+	wxString strDomain = strURL.BeforeLast(_T('/')).AfterLast(_T('/')); // "armory.worldofwarcraft.com"
+	wxString strParam = strURL.AfterLast(_T('/'));
+	int pos = strParam.Find("?r=");
+	wxString strFile = strParam.Mid(0, pos);
+	strParam = strParam.Mid(pos+3);
+	pos = strParam.Find("&cn=");
+	wxString strRealm = strParam.Mid(0, pos);
+	wxString strChar = strParam.Mid(pos+4);
 
 	// Char Name Corrections
 	// Done so names like Daïmhôndrùs will get the proper page...
@@ -3086,8 +3088,8 @@ void ModelViewer::ImportArmoury(wxString strURL)
 	// Build Page file
 	// "/character-sheet.xml?r=%s&n=%s"
 	wxString strPage = _T('/') + strFile;
-	strPage.Append(_T("=")).Append(strRealm).Append(_T("=")).Append(strChar);
-	//http://armory.wow-europe.com/character-sheet.xml?r=Spinebreaker&n=Nostrum
+	strPage.Append(_T("?r=")).Append(strRealm).Append(_T("&cn=")).Append(strChar);
+	//http://armory.wow-europe.com/character-sheet.xml?r=Spinebreaker&cn=Nostrum
 
 	wxLogMessage(_T("Attemping to access WoWArmory Page: %s"), wxString(strDomain + strPage).c_str());
 
@@ -3095,16 +3097,17 @@ void ModelViewer::ImportArmoury(wxString strURL)
 	wxHTTP http;
 
 	// set the headers
-	http.SetHeader(_T("User-Agent"), _T("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.2) Gecko/20070219 Firefox/2.0.0.2 WoWModelViewer/0.5.08")); 
+	http.SetHeader(_T("User-Agent"), _T("Mozilla/5.0 (Windows;U;Windows NT 5.1;zh-TW;rv:1.8.1.2) Gecko/20070219 Firefox/2.0.0.12")); 
 	http.SetHeader(_T("Accept"), _T("text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"));
 	http.SetHeader(_T("Accept-Language"), _T("en-us,en;q=0.5"));
 	http.SetHeader(_T("Accept-Charset"), _T("ISO-8859-1,utf-8;q=0.7,*;q=0.7"));
+	http.SetHeader(_T("Host"), strDomain);
 
 	if (http.Connect(strDomain))
 	{ 
 		// Success
 		wxInputStream *stream = http.GetInputStream(strPage); 
-		if (!stream->IsOk())
+		if (!stream || !stream->IsOk())
 			return;
 
 		// Make sure there was no error retrieving the page
