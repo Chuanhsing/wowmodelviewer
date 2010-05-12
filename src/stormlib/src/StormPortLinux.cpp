@@ -175,6 +175,12 @@ BOOL DeleteFile(const char *lpFileName)
 BOOL MoveFile(const char *lpExistingFileName, const char *lpNewFileName)
 {
     return rename(lpExistingFileName, lpNewFileName);
-}	
+}
+
+BOOL GetFileTime(HANDLE hFile, LPFILETIME lpCreationTime, LPFILETIME
+lpLastAccessTime, LPFILETIME lpLastWriteTime)
+{
+	return FALSE;
+}
 
 #endif
