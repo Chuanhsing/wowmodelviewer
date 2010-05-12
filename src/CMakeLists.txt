@@ -26,7 +26,7 @@ add_definitions(
     -DWotLK
 )
 
-add_library(storm STATIC ${MPQ_SOURCES})
+add_library(storm STATIC ${STORM_SOURCES})
 add_library(cximage STATIC ${CXIMAGE_SOURCES})
 
 if (APPLE)
