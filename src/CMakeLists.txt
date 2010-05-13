@@ -10,6 +10,12 @@ find_package(ZLIB REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(PNG REQUIRED)
 
+if (APPLE)
+    set(USE_STORM 0)
+else ()
+    set(USE_STORM 1)
+endif ()
+
 include(${wxWidgets_USE_FILE})
 include(cmake/sources.cmake)
 
@@ -26,7 +32,16 @@ add_definitions(
     -DWotLK
 )
 
-add_library(storm STATIC ${STORM_SOURCES})
+if (USE_STORM)
+    add_library(storm STATIC ${STORM_SOURCES})
+    set (EXTRA_LIBS ${EXTRA_LIBS} storm)
+    add_definitions(-D__SYS_ZLIB)
+    add_definitions(-D_7ZIP_ST)
+else ()
+    add_library(mpq STATIC ${MPQ_SOURCES})
+    set (EXTRA_LIBS ${EXTRA_LIBS} mpq)
+endif()
+
 add_library(cximage STATIC ${CXIMAGE_SOURCES})
 
 if (APPLE)
@@ -42,14 +57,12 @@ if (APPLE)
 	add_executable(wowmodelviewer MACOSX_BUNDLE ${WOWMV_SOURCES} ../bin_support/Icons/${MACOSX_BUNDLE_ICON_FILE})
 else()
 	add_definitions(-D_LINUX)
-	add_definitions(-D__SYS_ZLIB)
-	add_definitions(-D_7ZIP_ST)
 
 	add_executable(wowmodelviewer ${WOWMV_SOURCES})
 endif()
 
 target_link_libraries(wowmodelviewer
-    storm
+    ${EXTRA_LIBS}
     cximage
     ${wxWidgets_LIBRARIES}
     ${BZIP2_LIBRARIES}

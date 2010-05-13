@@ -1,9 +1,13 @@
 file(GLOB WOWMV_SOURCES RELATIVE ${CMAKE_SOURCE_DIR} *.cpp)
 list(REMOVE_ITEM WOWMV_SOURCES particle_test.cpp)
-list(REMOVE_ITEM WOWMV_SOURCES mpq_libmpq.cpp)
+if (USE_STORM)
+    list(REMOVE_ITEM WOWMV_SOURCES mpq_libmpq.cpp)
+else ()
+    list(REMOVE_ITEM WOWMV_SOURCES mpq_stormlib.cpp)
+endif ()
 
 if (UNIX)
-        list(REMOVE_ITEM WOWMV_SOURCES RenderTexture.cpp AVIGenerator.cpp)
+    list(REMOVE_ITEM WOWMV_SOURCES RenderTexture.cpp AVIGenerator.cpp)
 endif()
 
 set(STORM_SOURCES
