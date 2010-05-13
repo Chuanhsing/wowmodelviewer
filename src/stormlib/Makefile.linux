@@ -226,7 +226,6 @@ COBJS = src/libtomcrypt/src/hashes/hash_memory.o \
 	src/lzma/C/LzFind.o \
 	src/lzma/C/LzmaDec.o \
 	src/lzma/C/LzmaEnc.o \
-	src/pklib/crc32.o \
 	src/pklib/explode.o \
 	src/pklib/implode.o
 

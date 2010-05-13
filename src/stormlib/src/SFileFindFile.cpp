@@ -33,71 +33,87 @@ static BOOL IsValidSearchHandle(TMPQSearch * hs)
 
 BOOL CheckWildCard(const char * szString, const char * szWildCard)
 {
-    // Number of following chars in szString that may differ from szWildCard
-    unsigned int nDiffCharsAllowed = 0; 
+    const char * szSubString;
+    int nSubStringLength;
+    int nMatchCount = 0;
 
-    // When the string is empty, it does not match with any wildcard
-    if(*szString == 0)
-        return FALSE;
-
-    // When the mask is empty, it matches to every wildcard
+    // When the mask is empty, it never matches
     if(szWildCard == NULL || *szWildCard == 0)
         return FALSE;
+
+    // If the wildcard contains just "*", then it always matches
+    if(szWildCard[0] == '*' && szWildCard[1] == 0)
+        return TRUE;
 
     // Do normal test
     for(;;)
     {
-        // If we allow at least one char that doesn't have to match,
-        // Skip them
-        if(nDiffCharsAllowed != 0)
+        // If there is '?' in the wildcard, we skip one char
+        while(*szWildCard == '?')
         {
-            // When end of string, they match
-            if(*szString == 0)
-                return (*szWildCard == 0) ? TRUE : FALSE;
+            szWildCard++;
+            szString++;
+        }
 
-            // If we found a matching char, clear number of allowed non-matching chars
-            if(toupper(*szString) == toupper(*szWildCard))
-            {
-                nDiffCharsAllowed = 0;
+        // If there is '*', means zero or more chars. We have to 
+        // find the sequence after '*'
+        if(*szWildCard == '*')
+        {
+            // More stars is equal to one star
+            while(*szWildCard == '*' || *szWildCard == '?')
                 szWildCard++;
-                szString++;
-            }
-            else
+
+            // If we found end of the wildcard, it's a match
+            if(*szWildCard == 0)
+                return TRUE;
+
+            // Determine the length of the substring in szWildCard
+            szSubString = szWildCard;
+            while(*szSubString != 0 && *szSubString != '?' && *szSubString != '*')
+                szSubString++;
+            nSubStringLength = (int)(szSubString - szWildCard);
+            nMatchCount = 0;
+
+            // Now we have to find a substring in szString,
+            // that matches the substring in szWildCard
+            while(*szString != 0)
             {
-                // When the chars don't match, increment string,
-                // but stay at the same pos in wildcard
-                nDiffCharsAllowed--;
+                // Calculate match count
+                while(nMatchCount < nSubStringLength)
+                {
+                    if(toupper(szString[nMatchCount]) != toupper(szWildCard[nMatchCount]))
+                        break;
+                    if(szString[nMatchCount] == 0)
+                        break;
+                    nMatchCount++;
+                }
+
+                // If the match count has reached substring length, we found a match
+                if(nMatchCount == nSubStringLength)
+                {
+                    szWildCard += nMatchCount;
+                    szString += nMatchCount;
+                    break;
+                }
+
+                // No match, move to the next char in szString
+                nMatchCount = 0;
                 szString++;
             }
         }
         else
         {
-            while(*szWildCard == '*')
-            {
-                nDiffCharsAllowed |= 0x80000000;
-                szWildCard++;
-            }
+            // If we came to the end of the string, compare it to the wildcard
+            if(toupper(*szString) != toupper(*szWildCard))
+                return FALSE;
 
-            while(*szWildCard == '?')
-            {
-                nDiffCharsAllowed++;
-                szWildCard++;
-            }
+            // If we arrived to the end of the string, it's a match
+            if(*szString == 0)
+                return TRUE;
 
-            if(nDiffCharsAllowed == 0)
-            {
-                // If the current chars don't match, then the strings don't match
-                if(toupper(*szString) != toupper(*szWildCard))
-                    return FALSE;
-
-                // When end of string, they match
-                if(*szString == 0)
-                    return TRUE;
-
-                // The chars match. Move both string and wildcard
-                szWildCard++;
-                szString++;
-            }
+            // Otherwise, continue in comparing
+            szWildCard++;
+            szString++;
         }
     }
 }

@@ -29,6 +29,27 @@
 
 int globalerr;
 
+// time_t is number of seconds since 1.1.1970, UTC.
+// 1 second = 10000000 (decimal) in FILETIME
+static void ConvertTimeTToFileTime(LPFILETIME pFT, time_t crt_time)
+{
+    LARGE_INTEGER ft;
+    LARGE_INTEGER seconds;
+
+    // Set the start to 1.1.1970 00:00:00
+    ft.HighPart = 0x019DB1DE;
+    ft.LowPart = 0xD53E8000;
+
+    // Add number of seconds
+    seconds.QuadPart = 10000000;
+    seconds.QuadPart *= crt_time;
+    ft.QuadPart += seconds.QuadPart;
+
+    // Return the result FILETIME
+    pFT->dwHighDateTime = ft.HighPart;
+    pFT->dwLowDateTime = ft.LowPart;
+}
+
 void SetLastError(int err)
 {
     globalerr = err;
@@ -133,6 +154,26 @@ BOOL SetEndOfFile(HANDLE hFile)
     return (ftruncate((intptr_t)hFile, lseek((intptr_t)hFile, 0, SEEK_CUR)) == 0);
 }
 
+BOOL GetFileTime(HANDLE hFile,                 /* handle to file */
+                 LPFILETIME lpCreationTime,    /* file creation time */
+                 LPFILETIME lpLastAccessTime,  /* file accessed time */
+                 LPFILETIME lpLastWriteTime)   /* file modified time */
+{
+    struct stat file_stats;
+    int filedesc = (int)hFile;
+
+    if(fstat(filedesc, &file_stats) == -1)
+        return FALSE;
+
+    if(lpCreationTime != NULL)
+        ConvertTimeTToFileTime(lpCreationTime, file_stats.st_ctime);
+    if(lpLastAccessTime != NULL)
+        ConvertTimeTToFileTime(lpLastAccessTime, file_stats.st_atime);
+    if(lpLastWriteTime != NULL)
+        ConvertTimeTToFileTime(lpLastWriteTime, file_stats.st_mtime);
+    return TRUE;
+}
+
 BOOL ReadFile(HANDLE hFile, void *pBuffer, DWORD ulLen, DWORD *ulRead, void *pOverLapped)
 {
     ssize_t count;
@@ -175,12 +216,6 @@ BOOL DeleteFile(const char *lpFileName)
 BOOL MoveFile(const char *lpExistingFileName, const char *lpNewFileName)
 {
     return rename(lpExistingFileName, lpNewFileName);
-}
-
-BOOL GetFileTime(HANDLE hFile, LPFILETIME lpCreationTime, LPFILETIME
-lpLastAccessTime, LPFILETIME lpLastWriteTime)
-{
-	return FALSE;
-}
+}	
 
 #endif

@@ -638,6 +638,10 @@ DWORD WINAPI SFileVerifyArchive(HANDLE hMpq)
     MPQ_SIGNATURE_INFO si;
     TMPQArchive * ha = (TMPQArchive *)hMpq;
 
+    // Verify input parameters
+    if(!IsValidMpqHandle(ha))
+        return ERROR_VERIFY_FAILED;
+
     // Get the MPQ signature and signature type
     memset(&si, 0, sizeof(MPQ_SIGNATURE_INFO));
     if(!QueryMpqSignatureInfo(ha, &si))
