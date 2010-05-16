@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-15 23:24+0800\n"
+"POT-Creation-Date: 2010-05-16 13:14+0800\n"
 "PO-Revision-Date: \n"
-"Last-Translator: MadSquirrel <madsquirrel.choplegob@gmail.com>\n"
+"Last-Translator: Chuanhsing <chuanhsing@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -78,11 +78,11 @@ msgid "This group has been removed from the WMO"
 msgstr "Ce groupe a été supprimé du WMO"
 
 #  Voir à l'usage. Peut etre mieux traduit par "lier", ou "joindre". A voir.
-#: arrows.cpp:53
+#: arrows.cpp:49
 msgid "Attach"
 msgstr "Attacher"
 
-#: arrows.cpp:54
+#: arrows.cpp:50
 msgid "Clear All"
 msgstr "Effacer tout"
 
@@ -119,8 +119,11 @@ msgstr "Equipment"
 #: charcontrol.cpp:127
 #: charcontrol.cpp:391
 #: charcontrol.cpp:512
-#: charcontrol.cpp:2040
-#: charcontrol.cpp:2170
+#: charcontrol.cpp:2050
+#: charcontrol.cpp:2153
+#: charcontrol.cpp:2439
+#: charcontrol.cpp:2445
+#: charcontrol.cpp:2451
 #: charcontrol.cpp:2457
 #: charcontrol.cpp:2463
 #: charcontrol.cpp:2469
@@ -129,9 +132,6 @@ msgstr "Equipment"
 #: charcontrol.cpp:2487
 #: charcontrol.cpp:2493
 #: charcontrol.cpp:2499
-#: charcontrol.cpp:2505
-#: charcontrol.cpp:2511
-#: charcontrol.cpp:2517
 #: database.cpp:529
 msgid "---- None ----"
 msgstr "---- Aucun ----"
@@ -229,47 +229,47 @@ msgstr "Enregistrer équipment"
 msgid "Load equipment"
 msgstr "Charger équipment"
 
-#: charcontrol.cpp:2003
-#: charcontrol.cpp:2005
+#: charcontrol.cpp:2011
+#: charcontrol.cpp:2013
 msgid "Choose an item"
 msgstr "Choisir un objets"
 
-#: charcontrol.cpp:2077
+#: charcontrol.cpp:2072
 msgid "Choose an item set"
 msgstr "Choisir un set d'objets"
 
-#: charcontrol.cpp:2077
+#: charcontrol.cpp:2072
 msgid "Item sets"
 msgstr "Sets d'objets"
 
-#: charcontrol.cpp:2136
+#: charcontrol.cpp:2119
 msgid "Known ridable models"
 msgstr "Montures connues"
 
-#: charcontrol.cpp:2137
+#: charcontrol.cpp:2120
 msgid "Other models"
 msgstr "Autres modèles"
 
-#: charcontrol.cpp:2179
-#: charcontrol.cpp:2180
+#: charcontrol.cpp:2162
+#: charcontrol.cpp:2163
 msgid "Choose a mount"
 msgstr "Choisir une monture"
 
-#: charcontrol.cpp:2179
-#: charcontrol.cpp:2180
+#: charcontrol.cpp:2162
+#: charcontrol.cpp:2163
 msgid "Creatures"
 msgstr "Créatures"
 
-#: effects.cpp:89
-#: effects.cpp:91
+#: effects.cpp:78
+#: effects.cpp:80
 msgid "Select a Weapon"
 msgstr "Choisir une arme"
 
-#: effects.cpp:206
+#: effects.cpp:194
 msgid "OK"
 msgstr "OK"
 
-#: effects.cpp:207
+#: effects.cpp:195
 #: imagecontrol.cpp:41
 msgid "Cancel"
 msgstr "Annuler"
@@ -283,7 +283,6 @@ msgid "Save"
 msgstr "Enregistrer"
 
 #: imagecontrol.cpp:75
-#: modelviewer.cpp:1721
 msgid "Save screenshot"
 msgstr "Capture d'écran"
 
@@ -434,374 +433,498 @@ msgstr "Tout exporter en TGA"
 msgid "Path Preserved"
 msgstr "Garder arborescence"
 
-#: modelviewer.cpp:216
+#: modelexportoptions.cpp:57
+msgid "ModelExportOptions_General"
+msgstr ""
+
+#: modelexportoptions.cpp:62
+msgid "Preserve Directory Structure"
+msgstr ""
+
+#: modelexportoptions.cpp:142
+msgid "Build Content Directories"
+msgstr ""
+
+#: modelexportoptions.cpp:144
+#, fuzzy
+msgid "Export Lights"
+msgstr "Exporter"
+
+#: modelexportoptions.cpp:145
+#, fuzzy
+msgid "Export Doodads"
+msgstr "Exporter modèle"
+
+#: modelexportoptions.cpp:209
+msgid "Export keyframe animation"
+msgstr ""
+
+#: modelexportoptions.cpp:210
+msgid "Add Transform to center model"
+msgstr ""
+
+#: modelviewer.cpp:236
 msgid "DBC Error"
 msgstr "DBC Erreur"
 
-#: modelviewer.cpp:232
+#: modelviewer.cpp:252
 msgid "View NPC"
 msgstr "Voir PNJ"
 
-#: modelviewer.cpp:233
-#: modelviewer.cpp:348
+#  "Point de vue" ?
+#: modelviewer.cpp:253
+#, fuzzy
+msgid "View Item"
+msgstr "Vue"
+
+#: modelviewer.cpp:254
+#: modelviewer.cpp:403
 msgid "Mount a character..."
 msgstr "Choix monture..."
 
-#: modelviewer.cpp:235
+#: modelviewer.cpp:256
 msgid "Save Screenshot\tF12"
 msgstr "Capture d'écran\tF12"
 
 #  "Capture d'écran retaillée" ? "redimentionnée" ? ... C'est une traduction un peu longue pour rentrer dans le menu. Essayer de trouver quelquechose d'explicite et plus court.
-#: modelviewer.cpp:236
+#: modelviewer.cpp:257
 msgid "Save Sized Screenshot\tCTRL+S"
 msgstr "Save Sized Screenshot\tCTRL+S"
 
-#: modelviewer.cpp:237
+#: modelviewer.cpp:258
 msgid "Animated Gif"
 msgstr "GIF animé"
 
-#: modelviewer.cpp:238
+#: modelviewer.cpp:259
 msgid "Export AVI"
 msgstr "Exporter AVI"
 
-#: modelviewer.cpp:246
-msgid "Export Texture"
+#: modelviewer.cpp:267
+#, fuzzy
+msgid "Export Textures..."
 msgstr "Exporter texture"
 
-#: modelviewer.cpp:247
-#: modelviewer.cpp:2582
+#: modelviewer.cpp:273
+msgid "Initial Pose Only"
+msgstr ""
+
+#: modelviewer.cpp:276
+msgid "Export Options..."
+msgstr ""
+
+#: modelviewer.cpp:279
+msgid "Experimental Lightwave..."
+msgstr ""
+
+#: modelviewer.cpp:281
+msgid "Lightwave..."
+msgstr ""
+
+#: modelviewer.cpp:282
+msgid "Wavefront OBJ..."
+msgstr ""
+
+#: modelviewer.cpp:283
+msgid "Collada..."
+msgstr ""
+
+#: modelviewer.cpp:284
+msgid "Milkshape..."
+msgstr ""
+
+#: modelviewer.cpp:285
+msgid "3DS..."
+msgstr ""
+
+#: modelviewer.cpp:286
+msgid "X3D..."
+msgstr ""
+
+#: modelviewer.cpp:287
+msgid "X3D in XHTML..."
+msgstr ""
+
+#: modelviewer.cpp:295
 msgid "Export Model"
 msgstr "Exporter modèle"
 
-#: modelviewer.cpp:249
+#: modelviewer.cpp:299
 msgid "Discovery Item"
 msgstr "Recherche d'objets"
 
-#: modelviewer.cpp:250
+#: modelviewer.cpp:302
 msgid "Discovery NPC"
 msgstr "Recherche de PNJ"
 
-#: modelviewer.cpp:252
+#: modelviewer.cpp:304
 msgid "Export ModelInfo.xml"
 msgstr "Exporter ModelInfo.xml"
 
-#: modelviewer.cpp:255
+#: modelviewer.cpp:307
 msgid "Reset Layout"
 msgstr "Restaurer mise en page"
 
-#: modelviewer.cpp:257
+#: modelviewer.cpp:309
 msgid "E&xit\tCTRL+X"
 msgstr "Quitter\tCTRL+X"
 
-#: modelviewer.cpp:260
+#: modelviewer.cpp:312
 msgid "Show file list"
 msgstr "Liste de modèles"
 
-#: modelviewer.cpp:261
+#: modelviewer.cpp:313
 msgid "Show animaton control"
 msgstr "Contrôles animation"
 
-#: modelviewer.cpp:262
+#: modelviewer.cpp:314
 msgid "Show character control"
 msgstr "Customisation personnage"
 
-#: modelviewer.cpp:263
+#: modelviewer.cpp:315
 msgid "Show light control"
 msgstr "Contrôles lumières"
 
-#: modelviewer.cpp:264
+#: modelviewer.cpp:316
 msgid "Show model control"
 msgstr "Contrôles modèle"
 
-#: modelviewer.cpp:265
+#: modelviewer.cpp:317
 msgid "Show model bank"
 msgstr "Banque de modèles"
 
-#: modelviewer.cpp:268
+#: modelviewer.cpp:320
 msgid "Background Color..."
 msgstr "Couleur de fond..."
 
-#: modelviewer.cpp:269
+#: modelviewer.cpp:321
 msgid "Load Background\tCTRL+L"
 msgstr "Charger fond d'écran\tCTRL+L"
 
 #  Voute céleste ?
-#: modelviewer.cpp:271
+#: modelviewer.cpp:323
 msgid "Skybox"
 msgstr "Texture ciel"
 
-#: modelviewer.cpp:273
+#: modelviewer.cpp:325
 msgid "Show Grid"
 msgstr "Grille"
 
-#: modelviewer.cpp:276
+#: modelviewer.cpp:328
 msgid "Show Mask"
 msgstr "Masque"
 
-#: modelviewer.cpp:288
+#: modelviewer.cpp:340
 msgid "Use model camera"
 msgstr "Caméra modèle"
 
-#: modelviewer.cpp:290
+#: modelviewer.cpp:342
 msgid "Front"
 msgstr "Face"
 
-#: modelviewer.cpp:291
+#: modelviewer.cpp:343
 msgid "Back"
 msgstr "Dos"
 
-#: modelviewer.cpp:292
+#: modelviewer.cpp:344
 msgid "Side"
 msgstr "Côté"
 
-#: modelviewer.cpp:293
+#: modelviewer.cpp:345
 msgid "Perspective"
 msgstr "Perspective"
 
-#: modelviewer.cpp:295
+#: modelviewer.cpp:347
 msgid "Camera"
 msgstr "Caméra"
 
 #  J'ai un doute ... mais il me semble que "canevas" est utilisé en Francais.
-#: modelviewer.cpp:308
+#: modelviewer.cpp:363
 msgid "Set Canvas Size"
 msgstr "Taille du canevas"
 
-#: modelviewer.cpp:313
-#: modelviewer.cpp:1424
+#: modelviewer.cpp:368
+#: modelviewer.cpp:1540
 msgid "Save Lighting"
 msgstr "Enreg. lumières"
 
-#: modelviewer.cpp:314
-#: modelviewer.cpp:1442
+#: modelviewer.cpp:369
+#: modelviewer.cpp:1556
 msgid "Load Lighting"
 msgstr "Charger lumières"
 
-#: modelviewer.cpp:316
+#: modelviewer.cpp:371
 msgid "Render Light Objects"
 msgstr "Rendu des lumières"
 
-#: modelviewer.cpp:318
+#: modelviewer.cpp:373
 msgid "Use true lighting"
 msgstr "Lumière réelle"
 
-#: modelviewer.cpp:320
+#: modelviewer.cpp:375
 msgid "Use dynamic light"
 msgstr "Lumière dynamique"
 
-#: modelviewer.cpp:322
+#: modelviewer.cpp:377
 msgid "Use ambient light"
 msgstr "Lumière ambiante"
 
 #  Un peu long pour rentrer dans le menu. Essayer de trouver autre chose.
-#: modelviewer.cpp:323
+#: modelviewer.cpp:378
 msgid "Model lights only"
 msgstr "Lumières du modèle uniquement"
 
-#: modelviewer.cpp:326
+#: modelviewer.cpp:381
 msgid "Show Underwear"
 msgstr "Sous-vêtements"
 
-#: modelviewer.cpp:328
+#: modelviewer.cpp:383
 msgid "Show Ears\tCTRL+E"
 msgstr "Oreilles\tCTRL+E"
 
-#: modelviewer.cpp:330
+#: modelviewer.cpp:385
 msgid "Show Hair\tCTRL+H"
 msgstr "Cheveux\tCTRL+H"
 
-#: modelviewer.cpp:332
+#: modelviewer.cpp:387
 msgid "Show Facial Hair\tCTRL+F"
 msgstr "Pilosité faciale\tCTRL+F"
 
-#: modelviewer.cpp:334
+#: modelviewer.cpp:389
 msgid "Show Feet"
 msgstr "Pieds"
 
-#: modelviewer.cpp:336
+#: modelviewer.cpp:391
 msgid "Sheathe Weapons\tCTRL+Z"
 msgstr "Rengainer armes\tCTRL+Z"
 
-#: modelviewer.cpp:339
+#: modelviewer.cpp:394
 msgid "Save Equipment\tF5"
 msgstr "Enregistrer équipement\tF5"
 
-#: modelviewer.cpp:340
+#: modelviewer.cpp:395
 msgid "Load Equipment\tF6"
 msgstr "Charger équipment\tF6"
 
-#: modelviewer.cpp:341
+#: modelviewer.cpp:396
 msgid "Clear Equipment\tF9"
 msgstr "Effacer équipment\tF9"
 
-#: modelviewer.cpp:343
+#: modelviewer.cpp:398
 msgid "Load Item Set"
 msgstr "Charger set d'objet"
 
-#: modelviewer.cpp:344
+#: modelviewer.cpp:399
 msgid "Load Start Outfit"
 msgstr "Charger equipement de départ"
 
-#: modelviewer.cpp:345
+#: modelviewer.cpp:400
 msgid "Load NPC Outfit"
 msgstr "Charger équipement de PNJ"
 
 #  Je trouve ca pas top comme traduction. Mais là, tout de suite, je ne trouve rien de mieux. Si quelqu'un a mieux à proposer ...
-#: modelviewer.cpp:349
+#: modelviewer.cpp:404
 msgid "Randomise Character\tF10"
 msgstr "Personnage au hasard\tF10"
 
-#: modelviewer.cpp:352
+#: modelviewer.cpp:407
 msgid "Apply Enchants"
 msgstr "Enchantements"
 
-#: modelviewer.cpp:353
+#: modelviewer.cpp:408
 msgid "Creature Right-Hand"
 msgstr "Main droite créature"
 
-#: modelviewer.cpp:354
+#: modelviewer.cpp:409
 msgid "Creature Left-Hand"
 msgstr "Main gauche créature"
 
-#: modelviewer.cpp:356
+#: modelviewer.cpp:411
 msgid "Spell Effects"
 msgstr "Effets magiques"
 
-#: modelviewer.cpp:358
+#: modelviewer.cpp:413
 msgid "Death Effect"
 msgstr "Mort"
 
-#: modelviewer.cpp:365
+#: modelviewer.cpp:420
 msgid "Save Character\tF7"
 msgstr "Enregistrer personnage\tF7"
 
-#: modelviewer.cpp:366
+#: modelviewer.cpp:421
 msgid "Load Character\tF8"
 msgstr "Charger personnage\tF8"
 
-#: modelviewer.cpp:367
+#: modelviewer.cpp:422
 msgid "Import Armory Character"
 msgstr "Importer depuis l'armurerie"
 
-#: modelviewer.cpp:370
+#: modelviewer.cpp:425
 msgid "Use npc character skins"
 msgstr "Texture de PNJ"
 
-#: modelviewer.cpp:373
+#: modelviewer.cpp:428
 msgid "Always show default doodads in WMOs"
 msgstr "Equipement par defaut dans les WMOs"
 
 #  Il y a déja un "options" plus loin. Je ne pense pas que ca dérange. Sinon, comment traduire celui-ci ? Préférences ? Réglages ?
-#: modelviewer.cpp:376
-#: modelviewer.cpp:645
-#: modelviewer.cpp:694
+#: modelviewer.cpp:431
+#: modelviewer.cpp:703
+#: modelviewer.cpp:758
 msgid "Settings"
 msgstr "Options"
 
-#: modelviewer.cpp:380
+#: modelviewer.cpp:435
+#: modelviewer.cpp:2104
+msgid "Language"
+msgstr ""
+
+#: modelviewer.cpp:436
 msgid "Help"
 msgstr "Aide"
 
-#: modelviewer.cpp:382
+#: modelviewer.cpp:438
 msgid "About"
 msgstr "A propos"
 
-#: modelviewer.cpp:384
+#: modelviewer.cpp:440
 msgid "Check for Update"
 msgstr "Mises à jour"
 
-#: modelviewer.cpp:388
+#: modelviewer.cpp:444
 msgid "&File"
 msgstr "&Fichier"
 
-#: modelviewer.cpp:389
+#: modelviewer.cpp:445
 msgid "&View"
 msgstr "&Voir"
 
-#: modelviewer.cpp:390
+#: modelviewer.cpp:446
 msgid "&Character"
 msgstr "Personnage"
 
-#: modelviewer.cpp:391
+#: modelviewer.cpp:447
 msgid "&Lighting"
 msgstr "&Lumières"
 
-#: modelviewer.cpp:392
+#: modelviewer.cpp:448
 msgid "&Options"
 msgstr "&Options"
 
-#: modelviewer.cpp:393
+#: modelviewer.cpp:449
 msgid "&Effects"
 msgstr "&Effets"
 
-#: modelviewer.cpp:394
+#: modelviewer.cpp:450
 msgid "&About"
 msgstr "&A propos"
 
-#: modelviewer.cpp:601
-#: modelviewer.cpp:665
+#: modelviewer.cpp:659
+#: modelviewer.cpp:729
 msgid "OpenGL Canvas"
 msgstr "OpenGL"
 
-#: modelviewer.cpp:606
-#: modelviewer.cpp:670
+#: modelviewer.cpp:664
+#: modelviewer.cpp:734
 msgid "File List"
 msgstr "Liste de fichiers"
 
-#: modelviewer.cpp:616
-#: modelviewer.cpp:680
+#: modelviewer.cpp:674
+#: modelviewer.cpp:744
 msgid "Character"
 msgstr "Personnage"
 
-#: modelviewer.cpp:621
-#: modelviewer.cpp:684
+#: modelviewer.cpp:679
+#: modelviewer.cpp:748
 msgid "Lighting"
 msgstr "Lumière"
 
-#: modelviewer.cpp:627
-#: modelviewer.cpp:689
+#: modelviewer.cpp:685
+#: modelviewer.cpp:753
 msgid "Models"
 msgstr "Modèles"
 
-#: modelviewer.cpp:633
+#: modelviewer.cpp:691
 msgid "ModelBank"
 msgstr "Banque de modèles"
 
-#: modelviewer.cpp:639
+#: modelviewer.cpp:697
 msgid "ModelOpened"
 msgstr "Modèle en cours"
 
-#: modelviewer.cpp:1356
+#: modelviewer.cpp:708
+#: modelviewer.cpp:763
+msgid "Model Export Options"
+msgstr ""
+
+#: modelviewer.cpp:1469
 msgid "Save character"
 msgstr "Enregistrer personnage"
 
-#: modelviewer.cpp:1364
+#: modelviewer.cpp:1477
 msgid "Load character"
 msgstr "Charger personnage"
 
-#: modelviewer.cpp:1778
+#: modelviewer.cpp:1898
 msgid "Screenshot"
 msgstr "Capture d'écran"
 
-#: modelviewer.cpp:1795
+#: modelviewer.cpp:1915
 msgid "Load Background"
 msgstr "Charger image de fond"
 
-#: modelviewer.cpp:1795
+#: modelviewer.cpp:1915
 msgid "Bitmap Images (*.bmp)|*.bmp|TGA Images (*.tga)|*.tga|Jpeg Images (*.jpg)|*.jpg|PNG Images (*.png)|*.png|AVI Video file(*.avi)|*.avi"
 msgstr "Images Bitmap  (*.bmp)|*.bmp|Images TGA (*.tga)|*.tga|Images Jpeg (*.jpg)|*.jpg|Images PNG (*.png)|*.png|Vidéo AVI(*.avi)|*.avi"
 
-#: modelviewer.cpp:2054
+#: modelviewer.cpp:1996
+#, fuzzy
+msgid "Choose"
+msgstr "Monture"
+
+#: modelviewer.cpp:1996
+#, fuzzy
+msgid "Select a Sky Box"
+msgstr "Choisir une arme"
+
+#: modelviewer.cpp:2104
+msgid "Please select a language:"
+msgstr ""
+
+#: modelviewer.cpp:2171
 msgid "You have the most upto date version."
 msgstr "Vous avez la version la plus récente"
 
-#: modelviewer.cpp:2054
-#: modelviewer.cpp:2059
+#: modelviewer.cpp:2171
+#: modelviewer.cpp:2176
 msgid "Update Check"
 msgstr "Recherche de mise à jour"
 
+#: modelviewer.cpp:2734
+#: modelviewer.cpp:2758
+#: modelviewer.cpp:2776
+#: modelviewer.cpp:2793
+#: modelviewer.cpp:2810
+#: modelviewer.cpp:2827
+#: modelviewer.cpp:2844
+#: modelviewer.cpp:2861
+#, fuzzy
+msgid "Export Model..."
+msgstr "Exporter modèle"
+
+#: modelviewer.cpp:2743
+#: modelviewer.cpp:2765
+#: modelviewer.cpp:2783
+#: modelviewer.cpp:2800
+#: modelviewer.cpp:2817
+#: modelviewer.cpp:2834
+#: modelviewer.cpp:2851
+#: modelviewer.cpp:2868
+#, fuzzy
+msgid "Export World Model Object..."
+msgstr "Exporter modèle"
+
 #  Traduction littérale. A confirmer dans le contexte.
-#: modelviewer.cpp:2637
+#: modelviewer.cpp:2914
 msgid "Arrows"
 msgstr "Flèches"
 
