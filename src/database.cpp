@@ -568,9 +568,9 @@ ItemDatabase::ItemDatabase(const char* filename)
 	sort(items.begin(), items.end());
 }*/
 
-void ItemDatabase::open(const char* filename)
+void ItemDatabase::open(wxString filename)
 {
-	std::ifstream fin(filename);
+	std::ifstream fin(filename.mb_str());
 	char line[512];
 	if (fin.is_open()) {
 		while (fin.getline(line,512)) {
@@ -799,9 +799,9 @@ NPCDatabase::NPCDatabase(const char* filename)
 	}
 }
 
-void NPCDatabase::open(const char* filename)
+void NPCDatabase::open(wxString filename)
 {
-	std::ifstream fin(filename);
+	std::ifstream fin(filename.mb_str());
 	char line[512];
 	if (fin.is_open()) {
 		while (fin.getline(line,512)) {

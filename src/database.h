@@ -489,7 +489,7 @@ public:
 	std::map<int, int> itemLookup;
 
 	void cleanup(ItemDisplayDB &l_itemdb);	
-	void open(const char* filename);
+	void open(wxString filename);
 
 	const ItemRecord& getById(int id);
 	const ItemRecord& getByPos(int id);
@@ -567,7 +567,7 @@ public:
 	std::vector<NPCRecord> npcs;
 	std::map<int, int> npcLookup;
 
-	void open(const char* filename);
+	void open(wxString filename);
 
 	const NPCRecord& get(int id);
 	const NPCRecord& getByID(int id);

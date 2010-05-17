@@ -565,7 +565,7 @@ void ModelViewer::InitDatabase()
 	if (!wxFile::Exists(filename))
 		filename = locales[0]+SLASH+_T("items.csv");
 	if (wxFile::Exists(filename)) {
-		items.open(filename.c_str());
+		items.open(filename);
 	} else
 		wxLogMessage(_T("Error: Could not find items.csv to load an item list from."));
 
@@ -642,7 +642,7 @@ void ModelViewer::InitDatabase()
 	if(!wxFile::Exists(filename))
 		filename = locales[0]+SLASH+_T("npcs.csv");
 	if(wxFile::Exists(filename))
-		npcs.open(filename.c_str());
+		npcs.open(filename);
 	else {
 		NPCRecord rec("26499,24949,7,Arthas");
 		if (rec.model > 0) {
