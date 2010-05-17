@@ -561,17 +561,11 @@ void ModelViewer::InitDatabase()
 		initDB = false;
 		wxLogMessage(_T("Error: Could not open the Item DB."));
 	}
-	char filename[20];
-	if (langID == 5)
-		strncpy(filename, "zhTW/items.csv", sizeof(filename));
-	else if (langID == 4)
-		strncpy(filename, "zhCN/items.csv", sizeof(filename));
-	else
-		strncpy(filename, "enUS/items.csv", sizeof(filename));
-	if (!wxFile::Exists(wxString(filename, wxConvUTF8)))
-		strncpy(filename, "enUS/items.csv", sizeof(filename));
-	if (wxFile::Exists(wxString(filename, wxConvUTF8))) {
-		items.open(filename);
+	wxString filename = locales[langID]+SLASH+_T("items.csv");
+	if (!wxFile::Exists(filename))
+		filename = locales[0]+SLASH+_T("items.csv");
+	if (wxFile::Exists(filename)) {
+		items.open(filename.c_str());
 	} else
 		wxLogMessage(_T("Error: Could not find items.csv to load an item list from."));
 
@@ -644,16 +638,11 @@ void ModelViewer::InitDatabase()
 		setsdb.cleanup(items);
 
 //	char filename[20];
-	if (langID == 5)
-		strncpy(filename, "zhTW/npcs.csv", sizeof(filename));
-	else if (langID == 4)
-		strncpy(filename, "zhCN/npcs.csv", sizeof(filename));
-	else
-		strncpy(filename, "enUS/npcs.csv", sizeof(filename));
-	if(!wxFile::Exists(wxString(filename, wxConvUTF8)))
-		strncpy(filename, "enUS/npcs.csv", sizeof(filename));
-	if(wxFile::Exists(wxString(filename, wxConvUTF8)))
-		npcs.open(filename);
+	filename = locales[langID]+SLASH+_T("npcs.csv");
+	if(!wxFile::Exists(filename))
+		filename = locales[0]+SLASH+_T("npcs.csv");
+	if(wxFile::Exists(filename))
+		npcs.open(filename.c_str());
 	else {
 		NPCRecord rec("26499,24949,7,Arthas");
 		if (rec.model > 0) {

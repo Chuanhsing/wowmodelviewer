@@ -71,6 +71,8 @@ extern int ssCounter;
 extern int imgFormat;
 extern long versionID;
 
+extern wxString locales[];
+
 #ifdef _WINDOWS
 	typedef unsigned char uint8;
 	typedef char int8;

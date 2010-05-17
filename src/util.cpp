@@ -43,6 +43,8 @@ long interfaceID = -1;
 int ssCounter = 100; // ScreenShot Counter
 int imgFormat = 0;
 
+wxString locales[8] = {_T("enUS"), _T("koKR"), _T("frFR"), _T("deDE"), _T("zhCN"),  _T("zhTW"),  _T("esES"),  _T("ruRU")};
+
 /*
 wxString langCSConv[] =
 {

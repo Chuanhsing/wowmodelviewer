@@ -69,29 +69,17 @@ bool WowModelViewApp::OnInit()
 #ifdef _WINDOWS
 	// This chunk of code is all related to locale translation (if a translation is available).
 	// Only use locale for non-english?
-	if ((interfaceID == 1 && wxFileExists(_T("mo\\koKR.mo"))) || 
-		(interfaceID == 2 && wxFileExists(_T("mo\\frFR.mo"))) || 
-		(interfaceID == 3 && wxFileExists(_T("mo\\deDE.mo"))) || 
-		(interfaceID == 4 && wxFileExists(_T("mo\\zhCN.mo"))) || 
-		(interfaceID == 5 && wxFileExists(_T("mo\\zhTW.mo"))) ||
-		(interfaceID == 6 && wxFileExists(_T("mo\\esES.mo"))) ||
-		(interfaceID == 7 && wxFileExists(_T("mo\\ruRU.mo")))
-	) {
+	wxString fn = _T("mo");
+	fn = fn+SLASH+locales[interfaceID]+_T(".mo");
+	if (wxFileExists(fn))
+	{
 		locale.Init(langIds[interfaceID], wxLOCALE_CONV_ENCODING);
 		
 		wxLocale::AddCatalogLookupPathPrefix(_T("mo"));
 		//wxLocale::AddCatalogLookupPathPrefix(_T(".."));
 
 		//locale.AddCatalog(_T("wowmodelview")); // Initialize the catalogs we'll be using
-		switch(interfaceID) {
-			case 1: locale.AddCatalog(_T("koKR")); break;
-			case 2: locale.AddCatalog(_T("frFR")); break;
-			case 3: locale.AddCatalog(_T("deDE")); break;
-			case 4: locale.AddCatalog(_T("zhCN")); break;
-			case 5: locale.AddCatalog(_T("zhTW")); break;
-			case 6: locale.AddCatalog(_T("esES")); break;
-			case 7: locale.AddCatalog(_T("ruRU")); break;
-		}
+		locale.AddCatalog(locales[interfaceID]);
 	}
 #endif
 
