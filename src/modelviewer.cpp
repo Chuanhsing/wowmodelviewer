@@ -816,6 +816,7 @@ void ModelViewer::LoadSession()
 		pConfig->Read(_T("RandomLooks"), &useRandomLooks, true);
 		pConfig->Read(_T("HideHelmet"), &bHideHelmet, false);
 		pConfig->Read(_T("ShowParticle"), &bShowParticle, true);
+		pConfig->Read(_T("ZeroParticle"), &bZeroParticle, true);
 		pConfig->Read(_T("KnightEyeGlow"), &bKnightEyeGlow, true);
 		pConfig->Read(_T("DBackground"), &canvas->drawBackground, false);
 		pConfig->Read(_T("BackgroundImage"), &bgImagePath, _T(""));
@@ -869,6 +870,7 @@ void ModelViewer::SaveSession()
 		pConfig->Write(_T("RandomLooks"), useRandomLooks);
 		pConfig->Write(_T("HideHelmet"), bHideHelmet);
 		pConfig->Write(_T("ShowParticle"), bShowParticle);
+		pConfig->Write(_T("ZeroParticle"), bZeroParticle);
 		pConfig->Write(_T("KnightEyeGlow"), bKnightEyeGlow);
 
 		pConfig->Write(_T("DBackground"), canvas->drawBackground);

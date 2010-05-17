@@ -25,6 +25,7 @@ BEGIN_EVENT_TABLE(ModelExportOptions_General, wxWindow)
 	EVT_CHECKBOX(ID_SETTINGS_RANDOMSKIN, ModelExportOptions_General::OnCheck)
 	EVT_CHECKBOX(ID_SETTINGS_HIDEHELMET, ModelExportOptions_General::OnCheck)
 	EVT_CHECKBOX(ID_SETTINGS_SHOWPARTICLE, ModelExportOptions_General::OnCheck)
+	EVT_CHECKBOX(ID_SETTINGS_ZEROPARTICLE, ModelExportOptions_General::OnCheck)
 	EVT_CHECKBOX(ID_SETTINGS_LOCALFILES, ModelExportOptions_General::OnCheck)
 	EVT_CHECKBOX(ID_SETTINGS_KNIGHTEYEGLOW, ModelExportOptions_General::OnCheck)
 	*/

@@ -49,6 +49,7 @@ extern bool useRandomLooks;
 extern bool bHideHelmet;
 extern bool bKnightEyeGlow;
 extern bool bShowParticle;
+extern bool bZeroParticle;
 extern bool modelExportInitOnly;
 extern bool modelExport_PreserveDir;
 extern bool modelExport_UseWMVPosRot;

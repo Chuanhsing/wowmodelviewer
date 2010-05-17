@@ -20,6 +20,7 @@ bool useRandomLooks = true;
 bool bHideHelmet = false;
 bool bKnightEyeGlow = true;
 bool bShowParticle = true;
+bool bZeroParticle = true;
 
 // Model Export Options
 // General Options

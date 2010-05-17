@@ -141,6 +141,8 @@ void ParticleSystem::initTile(Vec2D *tc, int num)
 
 void ParticleSystem::update(float dt)
 {
+	if (bZeroParticle)
+		manim = 0;
 	float grav = gravity.getValue(manim, mtime);
 	float deaccel = deacceleration.getValue(manim, mtime);
 
