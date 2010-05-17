@@ -13,7 +13,7 @@ find_package(PNG REQUIRED)
 if (APPLE)
     set(USE_STORM 0)
 else ()
-    set(USE_STORM 1)
+    set(USE_STORM 0)
 endif ()
 
 include(${wxWidgets_USE_FILE})
