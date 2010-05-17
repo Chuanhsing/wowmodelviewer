@@ -820,160 +820,199 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 	bool hasmipmaps = (attr[3]>0);
 	int mipmax = hasmipmaps ? 16 : 1;
 
+	/*
+	reference: http://en.wikipedia.org/wiki/.BLP
+	*/
 	//wxLogMessage(_T("[BLP]: type: %d, encoding: %d, alphadepth: %d, alphaencoding: %d, mipmap: %d, %d*%d"), type, attr[0], attr[1], attr[2], attr[3], w, h);
-	if (type != 1)
+	if (type == 0) { // JPEG compression
+		/*
+		 * DWORD JpegHeaderSize;
+		 * BYTE[JpegHeaderSize] JpegHeader;
+		 * struct MipMap[16]
+		 * {
+		 *     BYTE[???] JpegData;
+		 * }
+		 */
 		wxLogMessage(_T("Error: %s:%s#%d type=%d"), __FILE__, __FUNCTION__, __LINE__, type);
-/*
-reference: http://en.wikipedia.org/wiki/.BLP
-Some changes in the BLP2 format in WoW 2.0.1...  QQ
-attr[0] = encoding
-attr[1] = alpha
 
-attr[2] = unknown.  When its 0 and 1 textures display fine (0 and 1 bit alpha?)
-when its 7 (dxt3) its all screwy and interlaced type thing.
+		BYTE *buffer = NULL;
+		CxImage *image = NULL;
+		GLuint texture;
+		unsigned char *buf = new unsigned char[sizes[0]];
 
-Type 1 Encoding 0 AlphaDepth 0 (uncompressed paletted image with no alpha)
-Each by of the image data is an index into Palette which contains the actual RGB value for the pixel. Although the palette entries are 32-bits, the alpha value of each Palette entry may contain garbage and should be discarded.
+		f.seek(offsets[0]);
+		f.read(buf,sizes[0]);
+		image = new CxImage(buf, sizes[0], CXIMAGE_FORMAT_JPG);
 
-Type 1 Encoding 1 AlphaDepth 1 (uncompressed paletted image with 1-bit alpha)
-This is the same as Type 1 Encoding 1 AlphaDepth 0 except that immediately following the index array is a second image array containing 1-bit alpha values for each pixel. The first byte of the array is for pixels 0 through 7, the second byte for pixels 8 through 15 and so on. Bit 0 of each byte corresponds to the first pixel (leftmost) in the group, bit 7 to the rightmost. A set bit indicates the pixel is opaque while a zero bit indicates a transparent pixel.
+		if (image == NULL)
+			return;
 
-Type 1 Encoding 1 AlphaDepth 8(uncompressed paletted image with 8-bit alpha)
-This is the same as Type 1 Encoding 1 AlphaDepth 0 except that immediately following the index array is a second image array containing the actual 8-bit alpha values for each pixel. This second array starts at BLP2Header.Offset[0] + BLP2Header.Width * BLP2Header.Height.
+		long size = image->GetWidth() * image->GetHeight() * 4;
+		image->Encode2RGBA(buffer, size);
 
-Type 1 Encoding 2 AlphaDepth 0 (DXT1 no alpha)
-The image data is formatted using DXT1 compression with no alpha channel.
+		GLuint texFormat = 0;
+		texFormat = GL_TEXTURE_2D;
 
-Type 1 Encoding 2 AlphaDepth 1 (DXT1 one bit alpha)
-The image data is formatted using DXT1 compression with a one-bit alpha channel.
+		// Setup the OpenGL Texture stuff
+		glGenTextures(1, &texture);
+		glBindTexture(texFormat, texture);
 
-Type 1 Encoding 2 AlphaDepth 8 (DXT3)
-The image data is formatted using DXT3 compression.
-
-Type 1 Encoding 2 AlphaDepth 8 AlphaEncoding 7 (DXT5)
-The image data are formatted using DXT5 compression.
-*/
-
-	if (attr[0] == 2) {
-		// encoding 2, directx compressed
-		unsigned char *ucbuf = NULL;
-		if (!video.supportCompression) 
-			ucbuf = new unsigned char[w*h*4];
-	
-		format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
-		int blocksize = 8;
+		glTexParameteri(texFormat, GL_TEXTURE_MIN_FILTER, GL_LINEAR);	// Linear Filtering
+		glTexParameteri(texFormat, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	// Linear Filtering
 		
-		// guesswork here :(
-		// new alpha bit depth == 4 for DXT3, alfred 2008/10/11
-		if (attr[1]==8 || attr[1]==4) {
-			format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
-			blocksize = 16;
-		}
+		glTexImage2D(texFormat, 0, GL_RGBA8, image->GetWidth(), image->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
-		// Fix to the BLP2 format required in WoW 2.0 thanks to Linghuye (creator of MyWarCraftStudio)
-		if (attr[1]==8 && attr[2]==7) {
-			format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
-			blocksize = 16;
-		}
+		wxDELETE(image);
+		wxDELETE(buffer);
+		wxDELETE(buf);
+	} else if (type == 1) {
+		if (attr[0] == 2) {
+			/*
+			Type 1 Encoding 2 AlphaDepth 0 (DXT1 no alpha)
+			The image data is formatted using DXT1 compression with no alpha channel.
 
-		tex->compressed = true;
+			Type 1 Encoding 2 AlphaDepth 1 (DXT1 one bit alpha)
+			The image data is formatted using DXT1 compression with a one-bit alpha channel.
 
-		unsigned char *buf = new unsigned char[sizes[0]];
+			Type 1 Encoding 2 AlphaDepth 8 (DXT3)
+			The image data is formatted using DXT3 compression.
 
-		// do every mipmap level
-		for (int i=0; i<mipmax; i++) {
-			if (w==0) w = 1;
-			if (h==0) h = 1;
-			if (offsets[i] && sizes[i]) {
-				f.seek(offsets[i]);
-				f.read(buf,sizes[i]);
+			Type 1 Encoding 2 AlphaDepth 8 AlphaEncoding 7 (DXT5)
+			The image data are formatted using DXT5 compression.
+			*/
+			// encoding 2, directx compressed
+			unsigned char *ucbuf = NULL;
+			if (!video.supportCompression) 
+				ucbuf = new unsigned char[w*h*4];
+		
+			format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+			int blocksize = 8;
+			
+			// guesswork here :(
+			// new alpha bit depth == 4 for DXT3, alfred 2008/10/11
+			if (attr[1]==8 || attr[1]==4) {
+				format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+				blocksize = 16;
+			}
 
-				int size = ((w+3)/4) * ((h+3)/4) * blocksize;
+			// Fix to the BLP2 format required in WoW 2.0 thanks to Linghuye (creator of MyWarCraftStudio)
+			if (attr[1]==8 && attr[2]==7) {
+				format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+				blocksize = 16;
+			}
 
-				if (video.supportCompression) {
-					glCompressedTexImage2DARB(GL_TEXTURE_2D, i, format, w, h, 0, size, buf);
-				} else {
-					decompressDXTC(format, w, h, size, buf, ucbuf);					
-					glTexImage2D(GL_TEXTURE_2D, i, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, ucbuf);
-				}
-				
-			} else break;
-			w >>= 1;
-			h >>= 1;
-		}
+			tex->compressed = true;
 
-		wxDELETEA(buf);
-		if (!video.supportCompression) 
-			wxDELETEA(ucbuf);
+			unsigned char *buf = new unsigned char[sizes[0]];
 
-	} else if (attr[0]==1) {
-		// encoding 1, uncompressed
-		unsigned int pal[256];
-		f.read(pal, 1024);
+			// do every mipmap level
+			for (int i=0; i<mipmax; i++) {
+				if (w==0) w = 1;
+				if (h==0) h = 1;
+				if (offsets[i] && sizes[i]) {
+					f.seek(offsets[i]);
+					f.read(buf,sizes[i]);
 
-		unsigned char *buf = new unsigned char[sizes[0]];
-		unsigned int *buf2 = new unsigned int[w*h];
-		unsigned int *p = NULL;
-		unsigned char *c = NULL, *a = NULL;
+					int size = ((w+3)/4) * ((h+3)/4) * blocksize;
 
-		int alphabits = attr[1];
-		bool hasalpha = (alphabits!=0);
-
-		tex->compressed = false;
-
-		for (int i=0; i<mipmax; i++) {
-			if (w==0) w = 1;
-			if (h==0) h = 1;
-			if (offsets[i] && sizes[i]) {
-				f.seek(offsets[i]);
-				f.read(buf,sizes[i]);
-
-				int cnt = 0;
-				int alpha = 0;
-
-				p = buf2;
-				c = buf;
-				a = buf + w*h;
-				for (int y=0; y<h; y++) {
-					for (int x=0; x<w; x++) {
-						unsigned int k = pal[*c++];
-
-						k = ((k&0x00FF0000)>>16) | ((k&0x0000FF00)) | ((k& 0x000000FF)<<16);
-
-						if (hasalpha) {
-							if (alphabits == 8) {
-								alpha = (*a++);
-							} else if (alphabits == 4) {
-								alpha = (*a & (0xf << cnt++)) * 0x11;
-								if (cnt == 2) {
-									cnt = 0;
-									a++;
-								}
-							} else if (alphabits == 1) {
-								//alpha = (*a & (128 >> cnt++)) ? 0xff : 0;
-								alpha = (*a & (1 << cnt++)) ? 0xff : 0;
-								if (cnt == 8) {
-									cnt = 0;
-									a++;
-								}
-							}
-						} else alpha = 0xff;
-
-						k |= alpha << 24;
-						*p++ = k;
+					if (video.supportCompression) {
+						glCompressedTexImage2DARB(GL_TEXTURE_2D, i, format, w, h, 0, size, buf);
+					} else {
+						decompressDXTC(format, w, h, size, buf, ucbuf);					
+						glTexImage2D(GL_TEXTURE_2D, i, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, ucbuf);
 					}
-				}
+					
+				} else break;
+				w >>= 1;
+				h >>= 1;
+			}
 
-				glTexImage2D(GL_TEXTURE_2D, i, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf2);
-				
-			} else break;
+			wxDELETEA(buf);
+			if (!video.supportCompression) 
+				wxDELETEA(ucbuf);
 
-			w >>= 1;
-			h >>= 1;
+		} else if (attr[0]==1) {
+			/*
+			Type 1 Encoding 0 AlphaDepth 0 (uncompressed paletted image with no alpha)
+			Each by of the image data is an index into Palette which contains the actual RGB value for the pixel. Although the palette entries are 32-bits, the alpha value of each Palette entry may contain garbage and should be discarded.
+
+			Type 1 Encoding 1 AlphaDepth 1 (uncompressed paletted image with 1-bit alpha)
+			This is the same as Type 1 Encoding 1 AlphaDepth 0 except that immediately following the index array is a second image array containing 1-bit alpha values for each pixel. The first byte of the array is for pixels 0 through 7, the second byte for pixels 8 through 15 and so on. Bit 0 of each byte corresponds to the first pixel (leftmost) in the group, bit 7 to the rightmost. A set bit indicates the pixel is opaque while a zero bit indicates a transparent pixel.
+
+			Type 1 Encoding 1 AlphaDepth 8(uncompressed paletted image with 8-bit alpha)
+			This is the same as Type 1 Encoding 1 AlphaDepth 0 except that immediately following the index array is a second image array containing the actual 8-bit alpha values for each pixel. This second array starts at BLP2Header.Offset[0] + BLP2Header.Width * BLP2Header.Height.
+			*/
+
+			// encoding 1, uncompressed
+			unsigned int pal[256];
+			f.read(pal, 1024);
+
+			unsigned char *buf = new unsigned char[sizes[0]];
+			unsigned int *buf2 = new unsigned int[w*h];
+			unsigned int *p = NULL;
+			unsigned char *c = NULL, *a = NULL;
+
+			int alphabits = attr[1];
+			bool hasalpha = (alphabits!=0);
+
+			tex->compressed = false;
+
+			for (int i=0; i<mipmax; i++) {
+				if (w==0) w = 1;
+				if (h==0) h = 1;
+				if (offsets[i] && sizes[i]) {
+					f.seek(offsets[i]);
+					f.read(buf,sizes[i]);
+
+					int cnt = 0;
+					int alpha = 0;
+
+					p = buf2;
+					c = buf;
+					a = buf + w*h;
+					for (int y=0; y<h; y++) {
+						for (int x=0; x<w; x++) {
+							unsigned int k = pal[*c++];
+
+							k = ((k&0x00FF0000)>>16) | ((k&0x0000FF00)) | ((k& 0x000000FF)<<16);
+
+							if (hasalpha) {
+								if (alphabits == 8) {
+									alpha = (*a++);
+								} else if (alphabits == 4) {
+									alpha = (*a & (0xf << cnt++)) * 0x11;
+									if (cnt == 2) {
+										cnt = 0;
+										a++;
+									}
+								} else if (alphabits == 1) {
+									//alpha = (*a & (128 >> cnt++)) ? 0xff : 0;
+									alpha = (*a & (1 << cnt++)) ? 0xff : 0;
+									if (cnt == 8) {
+										cnt = 0;
+										a++;
+									}
+								}
+							} else alpha = 0xff;
+
+							k |= alpha << 24;
+							*p++ = k;
+						}
+					}
+
+					glTexImage2D(GL_TEXTURE_2D, i, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf2);
+					
+				} else break;
+
+				w >>= 1;
+				h >>= 1;
+			}
+
+			wxDELETEA(buf2);
+			wxDELETEA(buf);
+		} else {
+			wxLogMessage(_T("Error: %s:%s#%d type=%d, attr[0]=%d"), __FILE__, __FUNCTION__, __LINE__, type, attr[0]);
 		}
-
-		wxDELETEA(buf2);
-		wxDELETEA(buf);
 	}
 
 	f.close();
