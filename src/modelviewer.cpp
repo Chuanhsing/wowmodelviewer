@@ -3080,8 +3080,15 @@ void ModelViewer::ImportArmoury(wxString strURL)
 	wxString strFile = strParam.Mid(0, pos);
 	strParam = strParam.Mid(pos+3);
 	pos = strParam.Find(_T("&cn="));
-	wxString strRealm = strParam.Mid(0, pos);
-	wxString strChar = strParam.Mid(pos+4);
+	wxString strRealm, strChar;
+	if (pos >= 0) {
+		strRealm = strParam.Mid(0, pos);
+		strChar = strParam.Mid(pos+4);
+	} else {
+		pos = strParam.Find(_T("&n="));
+		strRealm = strParam.Mid(0, pos);
+		strChar = strParam.Mid(pos+3);
+	}
 
 	// Char Name Corrections
 	// Done so names like Daïmhôndrùs will get the proper page...
@@ -3149,15 +3156,6 @@ void ModelViewer::ImportArmoury(wxString strURL)
 					//wxString content = child->GetNodeContent();
 
 					// process properties of <tag1>, raceId will better?
-/*
-					wxString race = child->GetPropVal(_T("race"), _T("Human"));
-					if (race == "Undead")
-						race = "Scourge";
-					else if (race == "Blood Elf")
-						race = "BloodElf";
-					else if (race == "Night Elf")
-						race = "NightElf";
-*/
 					int raceId = wxAtoi(child->GetPropVal(_T("raceId"), _T("1")));
 					CharRacesDB::Record racer = racedb.getById(raceId);
 					wxString race;
