@@ -261,16 +261,13 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 			else if (temp.Find(_T("patch-2.mpq")) > -1)
 				col = 2; // Red
 			else if (temp.Find(_T("patch-3.mpq")) > -1)
-				col = 6; // Green
-			
-			if (temp.Find(_T("expansion")) > -1)
-				col = 3; // Outlands Purple
-
-			if (temp.Find(_T("lichking")) > -1)
-				col = 4; // Frozen Blue
-
-			if (temp.Find(_T("cataclysm")) > -1) // For the future...
-				col = 5; // Destruction Orange
+				col = 3; // Green
+			else if (temp.Find(_T("expansion.mpq")) > -1)
+				col = 4; // Outlands Purple
+			else if (temp.Find(_T("expansion2.mpq")) > -1 || temp.Find(_T("lichking.mpq")) > -1)
+				col = 5; // Frozen Blue
+			else if (temp.Find(_T("expansion3.mpq")) > -1)
+				col = 6; // Destruction Orange
 
 			// TODO: Add handling for uncompressed files.
 			// err.. it seems uncompressed files no longer cause crashes?

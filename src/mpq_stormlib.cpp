@@ -276,7 +276,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 				col = 3; // Green
 			else if (temp.Find(_T("expansion.mpq")) > -1)
 				col = 4; // Outlands Purple
-			else if (temp.Find(_T("expansion2.mpq")) > -1)
+			else if (temp.Find(_T("expansion2.mpq")) > -1 || temp.Find(_T("lichking.mpq")) > -1)
 				col = 5; // Frozen Blue
 			else if (temp.Find(_T("expansion3.mpq")) > -1)
 				col = 6; // Destruction Orange
