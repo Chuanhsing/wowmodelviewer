@@ -1,7 +1,7 @@
 #ifndef MPQ_H
 #define MPQ_H
 
-#include "stormlib/StormLib.h"
+#include "stormlib/src/StormLib.h"
 
 // C++ files
 #include <string>
