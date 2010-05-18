@@ -48,59 +48,45 @@
 
 // defines
 #define APP_TITLE _T("World of Warcraft Model Viewer")
-#define APP_VERSION _T("v0.7.0.1 r169")		// Revision number should match the revision number on GoogleCode.
-
-// This should only be touched when adding a new OS or platform.
+#define APP_VERSION _T("v0.7.0.1 r190")		// Revision number should match the revision number on GoogleCode.
 #ifdef _DEBUG
-	#if defined (_WINDOWS)
-		#if defined (_WIN64)
-			#define APP_PLATFORM _T("Windows 64-bit Debug")
-		#else
-			#define APP_PLATFORM _T("Windows 32-bit Debug")
-		#endif
-	#elif defined (_MAC)
-		#if defined (_MAC_INTEL)
-			#define APP_PLATFORM _T("Macintosh Intel Debug")
-		#elif defined (_MAC_PPC)
-			#define APP_PLATFORM _T("Macintosh PowerPC Debug")
-		#else
-			#error _T("Your Macintosh platform is not defined. Please specify either _MAC_INTEL or _MAC_PPC.")
-		#endif
-	#elif defined (_LINUX)
-		#ifdef _LINUX64
-			#define APP_PLATFORM _T("Linux 64-bit Debug")
-		#else
-			#define APP_PLATFORM _T("Linux 32-bit Debug")
-		#endif
-	#else
-		#error _T("You have not specified a valid Operating System to your debug configuration.")
-	#endif
+	#define APP_ISDEBUG _T(" Debug")
 #else
-	#if defined (_WINDOWS)
-		#ifdef _WIN64
-			#define APP_PLATFORM _T("Windows 64-bit")
-		#else
-			#define APP_PLATFORM _T("Windows 32-bit")
-		#endif
-	#elif defined (_MAC)
-		#if defined (_MAC_INTEL)
-			#define APP_PLATFORM _T("Macintosh Intel")
-		#elif defined (_MAC_PPC)
-			#define APP_PLATFORM _T("Macintosh PowerPC")
-		#else
-			#error _T("Your Macintosh platform is not defined. Please specify either _MAC_INTEL or _MAC_PPC.")
-		#endif
-	#elif defined (_LINUX)
-		#ifdef _LINUX64
-			#define APP_PLATFORM _T("Linux 64-bit")
-		#else
-			#define APP_PLATFORM _T("Linux 32-bit")
-		#endif
-	#else
-		#error _T("You have not specified a valid Operating System to your release configuration.")
-	#endif
+	#define APP_ISDEBUG _T("")
 #endif
 
+// This should only be touched when adding a new OS or platform.
+#if defined (_WINDOWS)
+	#if defined (_WIN64)
+		#define APP_PLATFORM _T("Windows 64-bit")
+	#elif defined (_WIN32)
+		#define APP_PLATFORM _T("Windows 32-bit")
+	#else
+		#error _T("Your Windows platform is not defined. Please specify either _WIN64 or _WIN32.")
+	#endif
+#elif defined (_MAC)
+	#if defined (_MAC_INTEL)
+		#define APP_PLATFORM _T("Macintosh Intel")
+	#elif defined (_MAC_PPC)
+		#define APP_PLATFORM _T("Macintosh PowerPC")
+	#else
+		#error _T("Your Macintosh platform is not defined. Please specify either _MAC_INTEL or _MAC_PPC.")
+	#endif
+#elif defined (_LINUX)
+	#if defined (_LINUX64)
+		#define APP_PLATFORM _T("Linux 64-bit")
+	#elif defined (_LINUX32)
+		#define APP_PLATFORM _T("Linux 32-bit")
+	#else
+		#error _T("Your Linux platform is not defined. Please specify either _LINUX64 or _LINUX32.")
+	#endif
+#else
+	#ifdef _DEBUG
+		#error _T("You have not specified a valid Operating System for your Debug configuration.")
+	#else
+		#error _T("You have not specified a valid Operating System for your Release configuration.")
+	#endif
+#endif
 
 class ModelViewer: public wxFrame
 {    

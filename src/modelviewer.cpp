@@ -199,7 +199,7 @@ ModelViewer::ModelViewer()
 
 	//wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU
 	// create our main frame
-	if (Create(NULL, wxID_ANY, wxString(APP_TITLE _T(" ") APP_VERSION _T(" ") APP_PLATFORM), wxDefaultPosition, wxSize(1024, 768), wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN, _T("ModelViewerFrame"))) {
+	if (Create(NULL, wxID_ANY, wxString(APP_TITLE _T(" ") APP_VERSION _T(" ") APP_PLATFORM APP_ISDEBUG), wxDefaultPosition, wxSize(1024, 768), wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN, _T("ModelViewerFrame"))) {
 		SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
 		SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
@@ -2232,7 +2232,7 @@ Windows 98\\ME\\2000\\XP on 17th December 2006\n\n\
 
 	wxAboutDialogInfo info;
     info.SetName(APP_TITLE);
-    info.SetVersion(APP_VERSION _T(" ") APP_PLATFORM);
+    info.SetVersion(APP_VERSION _T(" ") APP_PLATFORM APP_ISDEBUG);
 	info.AddDeveloper(_T("Ufo_Z"));
 	info.AddDeveloper(_T("Darjk"));
 	info.AddDeveloper(_T("Chuanhsing"));
@@ -2297,7 +2297,7 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 		} else {
 			wxString msg = _T("The most current version is: ");
 			msg.Append(version);
-			msg.Append(_T("\nWould you like to goto the download page?"));
+			msg.Append(_T("\nWould you like to go to the download page?"));
 			int answer = wxMessageBox(msg, _("Update Check"), wxYES_NO, this);
 			if (answer == wxYES)
 				wxLaunchDefaultBrowser(wxString(downloadURL.ToUTF8(), wxConvUTF8));
@@ -2309,7 +2309,7 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 
 		delete stream;
 	}else{
-		wxMessageBox(_T("Error retrieving update information."),_T("Update Error"));
+		wxMessageBox(_T("Error retrieving update information.\nPlease try again later."),_T("Update Error"));
 	}
 }
 

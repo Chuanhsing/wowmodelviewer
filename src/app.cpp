@@ -56,7 +56,7 @@ bool WowModelViewApp::OnInit()
 	SetAppName(_T("WoWModelViewer"));
 
 	// Just a little header to start off the log file.
-	wxLogMessage(wxString(_T("Starting:\n") APP_TITLE _T(" ") APP_VERSION _T(" ") APP_PLATFORM _T("\n\n")));
+	wxLogMessage(wxString(_T("Starting:\n") APP_TITLE _T(" ") APP_VERSION _T(" ") APP_PLATFORM APP_ISDEBUG _T("\n\n")));
 	
 	// set the config file path.
 	cfgPath = userPath+SLASH+wxT("Config.ini");

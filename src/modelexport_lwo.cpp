@@ -91,7 +91,7 @@ void WriteLWSceneObject(ofstream &fs, wxString Filename, AnimationData AnimData,
 	std::vector<float>ScaX;
 	std::vector<float>ScaY;
 	std::vector<float>ScaZ;
-	for (int c=0;c<AnimData.Size();c++){
+	for (unsigned int c=0;c<AnimData.Size();c++){
 		splines.push_back(0);
 		Time.push_back(AnimData.Time[c]);
 		PosX.push_back(AnimData.Position[c].x);
@@ -370,7 +370,7 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 	u16 = MSB2(u16);
 	f.Write(reinterpret_cast<char *>(&u16), 2);
 	// Smoothing is done in radiens. PI = 180 degree smoothing.
-	f32 = PI;
+	f32 = (float)PI;
 	f32 = MSB4<float>(f32);
 	f.Write(reinterpret_cast<char *>(&f32), 4);
 	surfaceDefSize += 10;
@@ -678,11 +678,11 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 	comment.Append(_T('\0'));
 	if (fmod((float)comment.length(), 2.0f) > 0)
 		comment.Append(_T('\0'));
-	u16 = comment.length(); // size
+	u16 = (uint16)comment.length(); // size
 	u16 = MSB2(u16);
 	f.Write(reinterpret_cast<char *>(&u16), 2);
 	f.Write(comment.data(), comment.length());
-	surfaceDefSize += 6 + comment.length();
+	surfaceDefSize += 6 + (uint32)comment.length();
 
 	f.Write(_T("VERS"), 4);
 	u16 = 4;
@@ -814,7 +814,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 	temp = ObjRot.y;
 	ObjRot.y = ObjRot.z;
 	ObjRot.z = temp;
-	ObjData.Push(ObjPos,(ObjRot/RADIAN),OneScale,0);
+	ObjData.Push(ObjPos,(ObjRot/(float)RADIAN),OneScale,0);
 
 	uint32 ParentID = mcount;
 	WriteLWSceneObject(fs,objFilename,ObjData,mcount);
