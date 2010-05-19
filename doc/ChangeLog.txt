@@ -1,5 +1,36 @@
 World of Warcraft Model Viewer v0.7.0.1
 
+r191
+- Fix some SLASH problem
+- Enhanced the File List filter
+- Export function File List when right click
+
+r190
+-Cleaned up OS/Platform definitions.
+-Added OS/Platform redundancies. 32-bit Linux builds now need a _LINUX32
+defined.
+-removed some compiler warnings in the LWO exporter.
+
+r189
+- File List color fix
+- (DEV WORK) Remove dup StormLib.h & StormPort.h
+- Linux Compatible
+- (DEV WORK) BLP type 0 supported
+
+r175
+- Import Armory Fixed
+
+r169
+-Fixed Null issue in LW Bone Export function. (Currently unused)
+-Updated some StormLib files and the .libs
+
+r154
+-WMV will now produce an error message if it can't find the World of Warcraft
+directory.
+-WMV now wants you to specify the WoW directory, not the WoW/Data directory.
+-In Windows, WMV will now prompt for the user to select their WoW directory if
+it can't find the registry info.
+
 r142
  - Expanded Cataclysm support.
  - Attempt to fix Win 7/Vista file creation issues.
