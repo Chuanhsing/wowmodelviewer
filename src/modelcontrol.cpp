@@ -331,6 +331,11 @@ void ModelControl::OnSlider(wxScrollEvent &event)
 	}
 }
 
+
+/**************************************************************************
+  * ScrWindow
+  *************************************************************************/
+
 ScrWindow::ScrWindow(const wxString& title)
        : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(512, 512))
 {
@@ -422,10 +427,10 @@ void ModelOpened::Export(wxString val)
 	wxFileName fn(val);
 	FILE *hFile = NULL;
 	if (bPathPreserved) {
-		wxFileName::Mkdir(wxGetCwd()+wxT("/Export/")+fn.GetPath(), 0755, wxPATH_MKDIR_FULL);
-		hFile = fopen((wxGetCwd()+wxT("/Export/")+val).mb_str(), "wb");
+		wxFileName::Mkdir(wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetPath(), 0755, wxPATH_MKDIR_FULL);
+		hFile = fopen((wxGetCwd()+SLASH+wxT("Export")+SLASH+val).mb_str(), "wb");
 	} else {
-		hFile = fopen((wxGetCwd()+wxT("/Export/")+fn.GetFullName()).mb_str(), "wb");
+		hFile = fopen((wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetFullName()).mb_str(), "wb");
 	}
 	if (hFile) {
 		fwrite(f.getBuffer(), 1, f.getSize(), hFile);
@@ -456,10 +461,10 @@ void ModelOpened::ExportPNG(wxString val, wxString suffix)
 	newImage->IncreaseBpp(32);	// set image to 32bit 
 	newImage->CreateFromArray(tempbuf, tex.w, tex.h, 32, (tex.w*4), true);
 	if (bPathPreserved) {
-		wxFileName::Mkdir(wxGetCwd()+wxT("/Export/")+fn.GetPath(), 0755, wxPATH_MKDIR_FULL);
-		temp = wxGetCwd()+wxT("/Export/")+fn.GetPath()+wxT("/")+fn.GetName()+wxT(".")+suffix;
+		wxFileName::Mkdir(wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetPath(), 0755, wxPATH_MKDIR_FULL);
+		temp = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetPath()+SLASH+fn.GetName()+wxT(".")+suffix;
 	} else {
-		temp = wxGetCwd()+wxT("/Export/")+fn.GetName()+wxT(".")+suffix;
+		temp = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".")+suffix;
 	}
 	//wxLogMessage(_T("Info: Exporting texture to %s..."), temp.c_str());
 	if (suffix == _T("tga"))
@@ -476,7 +481,7 @@ void ModelOpened::OnButton(wxCommandEvent &event)
 {
 	bool dialOK = true;
 	int id = event.GetId();
-	wxFileName::Mkdir(wxGetCwd()+wxT("/Export"), 0755, wxPATH_MKDIR_FULL);
+	wxFileName::Mkdir(wxGetCwd()+SLASH+wxT("Export"), 0755, wxPATH_MKDIR_FULL);
 	if (id == ID_MODELOPENED_EXPORT) {
 		wxString val = openedList->GetValue();
 		Export(val);
@@ -490,9 +495,9 @@ void ModelOpened::OnButton(wxCommandEvent &event)
 		wxFileName fn(val);
 		wxString temp;
 		if (bPathPreserved)
-			temp =  wxGetCwd()+wxT("/Export/")+fn.GetPath()+wxT("/")+fn.GetName()+wxT(".png");
+			temp =  wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetPath()+SLASH+fn.GetName()+wxT(".png");
 		else
-			temp =  wxGetCwd()+wxT("/Export/")+fn.GetName()+wxT(".png");
+			temp =  wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".png");
 	    ScrWindow *sw = new ScrWindow(temp);
 	    sw->Show(true);
 		dialOK = false;

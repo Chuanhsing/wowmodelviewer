@@ -16,10 +16,16 @@ public:
 	void OnTreeSelect(wxTreeEvent &event);
 	void OnTreeCollapsedOrExpanded(wxTreeEvent &event);
 	void OnButton(wxCommandEvent &event);
+	void OnChoice(wxCommandEvent &event);
+	void OnTreeMenu(wxTreeEvent &event);
+	void OnPopupClick(wxCommandEvent &evt);
+	void Export(wxString val);
 
 	wxTreeCtrl *fileTree;
 	wxButton *btnSearch;
 	wxTextCtrl *txtContent;
+	wxChoice *choFilter;
+	int filterMode;
 
 	ModelViewer* modelviewer; // point to parent
 };

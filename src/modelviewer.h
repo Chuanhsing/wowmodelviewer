@@ -193,10 +193,5 @@ public:
 	Vec3D DoSetColor(const Vec3D &defColor);
 };
 
-
-bool filterModels(std::string);
-//bool filterNpcs(std::string);
-//bool filterSounds(std::string);
-
 #endif
 

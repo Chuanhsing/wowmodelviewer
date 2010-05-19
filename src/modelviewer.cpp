@@ -1432,46 +1432,6 @@ bool ModelViewer::Init()
 	return true;
 }
 
-bool filterModels(std::string s)
-{
-	//s.LowerCase();
-	const size_t len = s.length();
-	if (len < 4) 
-		return false;
-
-	//return ((s[len-2]=='m' && s[len-1]=='2') || (s[len-3]=='w' && s[len-2]=='m'));
-	return ( 
-			((s[len-2]|0x20)=='m' && s[len-1]=='2')
-			|| ((s[len-3]|0x20)=='w' && (s[len-2]|0x20)=='m' && (s[len-1]|0x20)=='o' )
-			//||((s[len-3]|0x20)=='a' && (s[len-2]|0x20)=='d' && (s[len-1]|0x20)=='t' ) 
-			);
-}
-
-/*
-bool filterNpcs(std::string s)
-{
-	// textures\BakedNpcTextures\*.*
-	if (s.length() < 18) 
-		return false;
-	
-	return (s.substr(9, 8) == "BakedNpc");
-}
-*/
-
-bool filterSounds(std::string s)
-{
-	const size_t len = s.length();
-	if (len < 4) 
-		return false;
-
-	return (
-			((s[len-3]|0x20)=='w' && (s[len-2]|0x20)=='a' && (s[len-1]|0x20)=='v') ||
-			((s[len-3]|0x20)=='m' && (s[len-2]|0x20)=='p' && s[len-1]=='3')
-			);
-}
-
-
-
 // Menu button press events
 void ModelViewer::OnToggleDock(wxCommandEvent &event)
 {
