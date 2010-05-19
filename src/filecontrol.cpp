@@ -323,7 +323,7 @@ void FileControl::Export(wxString val)
 
 	FILE *hFile = NULL;
 	wxString filename = wxFileSelector(wxT("Please select your file to export"), 
-		wxGetCwd(), fn.GetName(), fn.GetExt(), fn.GetExt()+_T(" files (.")+fn.GetExt()+")|*."+fn.GetExt());
+		wxGetCwd(), fn.GetName(), fn.GetExt(), fn.GetExt()+_T(" files (.")+fn.GetExt()+_T(")|*.")+fn.GetExt());
 	if ( !filename.empty() )
 	{
 		hFile = fopen(filename.mb_str(), "wb");
@@ -363,6 +363,8 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 	wxMenu infoMenu;
 	infoMenu.SetClientData( data );
 	infoMenu.Append(ID_MODELOPENED_EXPORT, wxT("&Export"), wxT("Export this object"));
+	// TODO: if is music, a Play option
+	// TODO: if is graphic, a View option
 	infoMenu.Connect(wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&FileControl::OnPopupClick, NULL, this);
 	PopupMenu(&infoMenu);
 }
