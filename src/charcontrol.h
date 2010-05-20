@@ -20,7 +20,6 @@
 #include "database.h"
 #include "model.h"
 #include "modelcanvas.h"
-
 #include "enums.h"
 
 // forward class declarations

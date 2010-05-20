@@ -305,8 +305,6 @@ int libmpq_file_number(mpq_archive *mpq_a, const char *name) {
  *  it returns 0, otherwise LIBMPQ_EFILE_NOT_FOUND.
  */
 int libmpq_file_check(mpq_archive *mpq_a, void *file, int type) {
-	int found = 0;
-
 	switch (type) {
 		case LIBMPQ_FILE_TYPE_INT:
 

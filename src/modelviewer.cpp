@@ -1,6 +1,7 @@
 
 #include "modelviewer.h"
 #include "globalvars.h"
+#include "mpq.h"
 
 // default colour values
 const static float def_ambience[4] = {1.0f, 1.0f, 1.0f, 1.0f};

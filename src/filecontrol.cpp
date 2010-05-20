@@ -1,5 +1,6 @@
 #include "modelviewer.h"
 #include "globalvars.h"
+#include "mpq.h"
 
 typedef std::pair<wxTreeItemId, std::string> TreeStackItem;
 typedef std::vector<TreeStackItem> TreeStack;

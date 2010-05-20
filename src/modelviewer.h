@@ -34,7 +34,6 @@
 #include "lightcontrol.h"
 #include "modelcontrol.h"
 #include "imagecontrol.h"
-#include "mpq.h"
 #include "util.h"
 #include "AnimExporter.h"
 #include "effects.h"

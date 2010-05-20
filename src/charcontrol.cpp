@@ -3,7 +3,7 @@
 #include "charcontrol.h"
 #include "modelviewer.h"
 #include "itemselection.h"
-
+#include "mpq.h"
 #include "globalvars.h"
 
 

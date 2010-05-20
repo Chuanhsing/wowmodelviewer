@@ -6,7 +6,6 @@
 #include "util.h"
 #include "vec3d.h"
 #include "manager.h"
-#include "mpq.h"
 #include "ddslib.h"
 
 

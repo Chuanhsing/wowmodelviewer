@@ -1,5 +1,6 @@
 
 #include "modelcontrol.h"
+#include "mpq.h"
 
 IMPLEMENT_CLASS(ModelControl, wxWindow)
 

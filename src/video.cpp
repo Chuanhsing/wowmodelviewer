@@ -1,5 +1,6 @@
 #include "modelviewer.h"
 #include "video.h"
+#include "mpq.h"
 
 #include <wx/display.h>
 

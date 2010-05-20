@@ -10,7 +10,6 @@
 #endif
 
 #include "model.h"
-#include "mpq.h"
 #include "modelcanvas.h"
 #include "animcontrol.h"
 
