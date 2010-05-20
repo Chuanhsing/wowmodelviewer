@@ -14,6 +14,8 @@
 #include "AVIGenerator.h"
 #endif
 
+#include "CxImage/ximage.h" // RGBQUAD
+
 // File Source Change log:
 // Version | Date     | Comments
 // -----------------------------------------------------------------------------------------------------
