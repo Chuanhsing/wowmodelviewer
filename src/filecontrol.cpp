@@ -22,7 +22,8 @@ END_EVENT_TABLE()
 enum FilterModes {
 	FILE_FILTER_MODEL=0,
 	FILE_FILTER_MUSIC,
-	FILE_FILTER_GRAPHIC
+	FILE_FILTER_GRAPHIC,
+	FILE_FILTER_ADT
 };
 
 class FileTreeData:public wxTreeItemData
@@ -47,7 +48,7 @@ FileControl::FileControl(wxWindow* parent, wxWindowID id)
 		txtContent = new wxTextCtrl(this, ID_FILELIST_CONTENT, _T(""), wxPoint(10, 10), wxSize(110, 20), wxTE_PROCESS_ENTER, wxDefaultValidator);
 		btnSearch = new wxButton(this, ID_FILELIST_SEARCH, _("Clear"), wxPoint(120, 10), wxSize(46,20));
 		fileTree = new wxTreeCtrl(this, ID_FILELIST, wxPoint(0, 35), wxSize(250,600), wxTR_HIDE_ROOT|wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_FULL_ROW_HIGHLIGHT|wxTR_NO_LINES);
-		wxString chos[] = {_T("Model"), _T("Music"), _T("Graphic")};
+		wxString chos[] = {_T("Model"), _T("Music"), _T("Graphic"), _T("ADT")};
 		choFilter = new wxChoice(this, ID_FILELIST_FILTER, wxPoint(10, 645), wxSize(110, 10), WXSIZEOF(chos), chos);
 		choFilter->SetSelection(filterMode);
 #ifdef	PLAY_MUSIC
@@ -161,6 +162,22 @@ bool filterGraphicsSearch(std::string s)
 	return true;
 }
 
+bool filterADTsSearch(std::string s)
+{
+	const size_t len = s.length();
+	if (len < 4) 
+		return false;
+
+	wxString temp(s.c_str(), wxConvUTF8);
+	temp = temp.MakeLower();
+	if (!temp.Mid(temp.Length()-3).IsSameAs(wxT("adt")))
+		return false;
+	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
+		return false;
+
+	return true;
+}
+
 void FileControl::Init(ModelViewer* mv)
 {
 	if (modelviewer == NULL)
@@ -172,12 +189,14 @@ void FileControl::Init(ModelViewer* mv)
 	content = content.MakeLower();
 	content = content.Trim();
 
-	if (filterMode == 0)
+	if (filterMode == FILE_FILTER_MODEL)
 		getFileLists(filelist, filterModelsSearch);
-	else if (filterMode == 1)
+	else if (filterMode == FILE_FILTER_MUSIC)
 		getFileLists(filelist, filterSoundsSearch);
-	else if (filterMode == 2)
+	else if (filterMode == FILE_FILTER_GRAPHIC)
 		getFileLists(filelist, filterGraphicsSearch);
+	else if (filterMode == FILE_FILTER_ADT)
+		getFileLists(filelist, filterADTsSearch);
 
 	// Put all the viewable files into our File Tree.
 	TreeStack stack;
