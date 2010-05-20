@@ -178,7 +178,7 @@ BOOL WINAPI SFileCreateArchiveEx(const char * szMpqName, DWORD dwFlags, DWORD dw
         ha->pBlockTable     = ALLOCMEM(TMPQBlock, ha->dwBlockTableMax);
         ha->pExtBlockTable  = ALLOCMEM(TMPQBlockEx, ha->dwBlockTableMax);
         ha->pListFile       = NULL;
-        ha->dwFlags         = MPQ_FLAG_OPEN_FOR_WRITE;
+        ha->dwFlags         = 0;
 
         if(!ha->pHashTable || !ha->pBlockTable || !ha->pExtBlockTable)
             nError = ERROR_NOT_ENOUGH_MEMORY;
@@ -232,7 +232,7 @@ BOOL WINAPI SFileCreateArchiveEx(const char * szMpqName, DWORD dwFlags, DWORD dw
 
     // Create the file attributes
     if(nError == ERROR_SUCCESS && (dwFlags & MPQ_CREATE_ATTRIBUTES))
-        nError = SAttrFileCreate(ha);
+        nError = SAttrCreateAttributes(ha, MPQ_ATTRIBUTE_ALL);
 
     // Cleanup : If an error, delete all buffers and return
     if(nError != ERROR_SUCCESS)

@@ -148,8 +148,8 @@ int SFileAddFile_Finish(
 //-----------------------------------------------------------------------------
 // Attributes support
 
-int  SAttrFileCreate(TMPQArchive * ha);
-int  SAttrFileLoad(TMPQArchive * ha);
+int  SAttrCreateAttributes(TMPQArchive * ha, DWORD dwFlags);
+int  SAttrLoadAttributes(TMPQArchive * ha);
 int  SAttrFileSaveToMpq(TMPQArchive * ha);
 void FreeMPQAttributes(TMPQAttributes * pAttr);
 

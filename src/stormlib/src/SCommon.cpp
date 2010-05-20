@@ -710,6 +710,11 @@ int AllocateSectorOffsets(TMPQFile * hf, bool bLoadFromFile)
         hf->dwDataSectors++;
 
     // Calculate the number of file sectors
+    // Note: I've seen corrupted MPQs that had MPQ_FILE_SECTOR_CRC flag absent,
+    // but there was one extra sector offset, with the same value as the last one,
+    // which corresponds to files with MPQ_FILE_SECTOR_CRC set, but with sector
+    // checksums not present. StormLib doesn't handle such MPQs in any special way.
+    // Compacting archive on such MPQs fails.
     hf->dwSectorCount = (pBlock->dwFSize / hf->dwSectorSize) + 1;
     if(pBlock->dwFSize % hf->dwSectorSize)
         hf->dwSectorCount++;

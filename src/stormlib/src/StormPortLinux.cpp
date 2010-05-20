@@ -160,7 +160,7 @@ BOOL GetFileTime(HANDLE hFile,                 /* handle to file */
                  LPFILETIME lpLastWriteTime)   /* file modified time */
 {
     struct stat file_stats;
-    int filedesc = (int)hFile;
+    int filedesc = (int)(size_t)(hFile);
 
     if(fstat(filedesc, &file_stats) == -1)
         return FALSE;

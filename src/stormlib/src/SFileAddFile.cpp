@@ -658,15 +658,15 @@ BOOL WINAPI SFileAddFileEx(
         nError = ERROR_INVALID_PARAMETER;
     
     // Don't allow to add file if the MPQ is open for read only
-    if((ha->dwFlags & MPQ_FLAG_OPEN_FOR_WRITE) == 0)
+    if(ha->dwFlags & MPQ_FLAG_READ_ONLY)
         nError = ERROR_ACCESS_DENIED;
     
     // Don't allow to add any of the internal files
-    if(!_stricmp(szFileName, LISTFILE_NAME))
+    if(!_stricmp(szArchivedName, LISTFILE_NAME))
         nError = ERROR_ACCESS_DENIED;
-    if(!_stricmp(szFileName, ATTRIBUTES_NAME))
+    if(!_stricmp(szArchivedName, ATTRIBUTES_NAME))
         nError = ERROR_ACCESS_DENIED;
-    if(!_stricmp(szFileName, SIGNATURE_NAME))
+    if(!_stricmp(szArchivedName, SIGNATURE_NAME))
         nError = ERROR_ACCESS_DENIED;
 
     // Perform validity check of the MPQ flags
@@ -858,7 +858,7 @@ BOOL WINAPI SFileRemoveFile(HANDLE hMpq, const char * szFileName, DWORD dwSearch
     if(nError == ERROR_SUCCESS)
     {
         // Do not allow to remove files from MPQ open for read only
-        if((ha->dwFlags & MPQ_FLAG_OPEN_FOR_WRITE) == 0)
+        if(ha->dwFlags & MPQ_FLAG_READ_ONLY)
             nError = ERROR_ACCESS_DENIED;
 
         // Do not allow to remove internal files
@@ -960,7 +960,7 @@ BOOL WINAPI SFileRenameFile(HANDLE hMpq, const char * szFileName, const char * s
     if(nError == ERROR_SUCCESS)
     {
         // Do not allow to rename files in MPQ open for read only
-        if((ha->dwFlags & MPQ_FLAG_OPEN_FOR_WRITE) == 0)
+        if(ha->dwFlags & MPQ_FLAG_READ_ONLY)
             nError = ERROR_ACCESS_DENIED;
 
         // Do not allow to rename any of the internal files
@@ -1092,7 +1092,8 @@ BOOL WINAPI SFileSetFileLocale(HANDLE hFile, LCID lcNewLocale)
     }
 
     // Do not allow to rename files in MPQ open for read only
-    if((hf->ha->dwFlags & MPQ_FLAG_OPEN_FOR_WRITE) == 0)
+    ha = hf->ha;
+    if(ha->dwFlags & MPQ_FLAG_READ_ONLY)
     {
         SetLastError(ERROR_ACCESS_DENIED);
         return FALSE;
@@ -1103,7 +1104,6 @@ BOOL WINAPI SFileSetFileLocale(HANDLE hFile, LCID lcNewLocale)
         return TRUE;
 
     // We have to check if the file+locale is not already there
-    ha = hf->ha;
     pHashEnd = ha->pHashTable + ha->pHeader->dwHashTableSize;
     for(pHash = ha->pHashTable; pHash < pHashEnd; pHash++)
     {

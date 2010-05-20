@@ -128,8 +128,8 @@ BOOL SFileOpenArchiveEx(
         hFile = INVALID_HANDLE_VALUE;
 
         // Remember if the archive is open for write
-        if(dwAccessMode & GENERIC_WRITE)
-            ha->dwFlags |= MPQ_FLAG_OPEN_FOR_WRITE;
+        if((dwAccessMode & GENERIC_WRITE) == 0)
+            ha->dwFlags |= MPQ_FLAG_READ_ONLY;
 
         // Also remember if we shall check sector CRCs when reading file
         if(dwFlags & MPQ_OPEN_CHECK_SECTOR_CRC)
@@ -242,7 +242,7 @@ BOOL SFileOpenArchiveEx(
         {
             ha->pHeader->wFormatVersion = MPQ_FORMAT_VERSION_1;
             ha->pHeader->dwHeaderSize = MPQ_HEADER_SIZE_V1;
-            ha->dwFlags &= ~MPQ_FLAG_OPEN_FOR_WRITE;
+            ha->dwFlags |= MPQ_FLAG_READ_ONLY;
             ha->pUserData = NULL;
         }
 
@@ -253,6 +253,10 @@ BOOL SFileOpenArchiveEx(
             ha->pHeader->wBlockTablePosHigh = 0;
             ha->pHeader->wHashTablePosHigh = 0;
         }
+
+        // Both MPQ_OPEN_NO_LISTFILE or MPQ_OPEN_NO_ATTRIBUTES trigger read only mode
+        if(dwFlags & (MPQ_OPEN_NO_LISTFILE | MPQ_OPEN_NO_ATTRIBUTES))
+            ha->dwFlags |= MPQ_FLAG_READ_ONLY;
 
         ha->dwSectorSize = (0x200 << ha->pHeader->wSectorSize);
         RelocateMpqTablePositions(ha);
@@ -450,30 +454,22 @@ BOOL SFileOpenArchiveEx(
 
     // If the caller didn't specified otherwise, 
     // include the internal listfile to the TMPQArchive structure
-    if(nError == ERROR_SUCCESS)
+    if(nError == ERROR_SUCCESS && (dwFlags & MPQ_OPEN_NO_LISTFILE) == 0)
     {
-        if((dwFlags & MPQ_OPEN_NO_LISTFILE) == 0)
-        {
-            nError = SListFileCreateListFile(ha);
-
-            // Add the internal listfile
-            if(nError == ERROR_SUCCESS)
-                SFileAddListFile((HANDLE)ha, NULL);
-        }
+        // Create listfile and load it from the MPQ
+        nError = SListFileCreateListFile(ha);
+        if(nError == ERROR_SUCCESS)
+            SFileAddListFile((HANDLE)ha, NULL);
     }
 
     // If the caller didn't specified otherwise, 
     // load the "(attributes)" file
-    if(nError == ERROR_SUCCESS)
+    if(nError == ERROR_SUCCESS && (dwFlags & MPQ_OPEN_NO_ATTRIBUTES) == 0)
     {
-        if((dwFlags & MPQ_OPEN_NO_ATTRIBUTES) == 0)
-        {
-            nError = SAttrFileCreate(ha);
-            
-            // Add the attributes file, if any
-            if(nError == ERROR_SUCCESS)
-                SAttrFileLoad(ha);
-        }
+        // Create the attributes file and load it from the MPQ
+        nError = SAttrCreateAttributes(ha, 0);
+        if(nError == ERROR_SUCCESS)
+            SAttrLoadAttributes(ha);
     }
 
     // Cleanup and exit

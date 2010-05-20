@@ -560,7 +560,7 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
     DWORD dwCrc32;
 
     // Attempt to open the file
-    if(SFileOpenFileEx(hMpq, szFileName, 0, &hFile))
+    if(SFileOpenFileEx(hMpq, szFileName, SFILE_OPEN_FROM_MPQ, &hFile))
     {
         // Get the file size
         hf = (TMPQFile *)hFile;
