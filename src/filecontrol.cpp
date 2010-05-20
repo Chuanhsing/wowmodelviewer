@@ -19,6 +19,12 @@ BEGIN_EVENT_TABLE(FileControl, wxWindow)
 	EVT_TREE_ITEM_MENU(ID_FILELIST, FileControl::OnTreeMenu)
 END_EVENT_TABLE()
 
+enum FilterModes {
+	FILE_FILTER_MODEL=0,
+	FILE_FILTER_MUSIC,
+	FILE_FILTER_GRAPHIC
+};
+
 class FileTreeData:public wxTreeItemData
 {
 public:
@@ -30,7 +36,7 @@ public:
 FileControl::FileControl(wxWindow* parent, wxWindowID id)
 {
 	modelviewer = NULL;
-	filterMode = 0;
+	filterMode = FILE_FILTER_MODEL;
 
 	if (Create(parent, id, wxDefaultPosition, wxSize(170,700), 0, _T("ModelControlFrame")) == false) {
 		wxLogMessage(_T("GUI Error: Failed to create a window for our FileControl!"));
@@ -444,7 +450,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 	if (!data)
 		return; // isn't valid, exit.
 
-	if (filterMode == 0) {
+	if (filterMode == FILE_FILTER_MODEL) {
 		// Exit, if its the same model thats currently loaded
 		if (modelviewer->canvas->model && !modelviewer->canvas->model->name.empty() && modelviewer->canvas->model->name == data->fn)
 			return; // clicked on the same model thats currently loaded, no need to load it again - exit
@@ -596,6 +602,15 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		// Update the layout
 		modelviewer->interfaceManager.Update();
 	} else {
+		if (filterMode == FILE_FILTER_GRAPHIC) {
+			wxString val(data->fn.c_str(), wxConvUTF8);
+			ExportPNG(val, _T("png"));
+			wxFileName fn(val);
+			wxString temp;
+			temp = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".png");
+			modelviewer->canvas->LoadBackground(temp);
+		}
+		
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);
