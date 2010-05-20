@@ -42,6 +42,9 @@ FileControl::FileControl(wxWindow* parent, wxWindowID id)
 		wxString chos[] = {_T("Model"), _T("Music"), _T("Graphic")};
 		choFilter = new wxChoice(this, ID_FILELIST_FILTER, wxPoint(10, 645), wxSize(110, 10), WXSIZEOF(chos), chos);
 		choFilter->SetSelection(filterMode);
+#ifdef	PLAY_MUSIC
+		mcPlayer = new wxMediaCtrl(this, ID_FILELIST_PLAY, _T(""), wxPoint(0,660), wxSize(320,80));
+#endif
 	} catch(...) {};
 }
 
@@ -110,7 +113,7 @@ bool filterModelsSearch(std::string s)
 		//&& !temp.Mid(temp.Length()-3).IsSameAs(wxT("adt"))
 		)
 		return false;
-	if (content != _T("") && temp.Find(content) == wxNOT_FOUND)
+	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
 		return false;
 
 	return true;
@@ -125,10 +128,10 @@ bool filterSoundsSearch(std::string s)
 	wxString temp(s.c_str(), wxConvUTF8);
 	temp = temp.MakeLower();
 	if (!temp.Mid(temp.Length()-3).IsSameAs(wxT("wav"))
-		&& !temp.Mid(temp.Length()-3).IsSameAs(wxT("wp3"))
+		&& !temp.Mid(temp.Length()-3).IsSameAs(wxT("mp3"))
 		)
 		return false;
-	if (content != _T("") && temp.Find(content) == wxNOT_FOUND)
+	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
 		return false;
 
 	return true;
@@ -142,11 +145,9 @@ bool filterGraphicsSearch(std::string s)
 
 	wxString temp(s.c_str(), wxConvUTF8);
 	temp = temp.MakeLower();
-	if (!temp.Mid(temp.Length()-3).IsSameAs(wxT("blp"))
-		&& !temp.Mid(temp.Length()-3).IsSameAs(wxT("png"))
-		)
+	if (!temp.Mid(temp.Length()-3).IsSameAs(wxT("blp")))
 		return false;
-	if (content != _T("") && temp.Find(content) == wxNOT_FOUND)
+	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
 		return false;
 
 	return true;
@@ -186,12 +187,6 @@ void FileControl::Init(ModelViewer* mv)
 		const std::string &str = (*it).fn;
 		size_t p = 0;
 		size_t i;
-
-		// Alfred 2009.7.28 skip cameras
-		/*wxString tmp(str.c_str(), wxConvUTF8);
-		if (tmp.Mid(0, 7).IsSameAs(_T("cameras"), false))
-			continue;
-		*/
 
 		// find the matching place in the stack
 		for (i=1; i<stack.size(); i++) {
@@ -309,9 +304,9 @@ void FileControl::OnChoice(wxCommandEvent &event)
 }
 
 // copy from ModelOpened::Export
-void FileControl::Export(wxString val)
+void FileControl::Export(wxString val, int select)
 {
-	if (val == _T(""))
+	if (val.IsEmpty())
 		return;
 	MPQFile f(val.mb_str());
 	if (f.isEof()) {
@@ -322,8 +317,13 @@ void FileControl::Export(wxString val)
 	wxFileName fn(val);
 
 	FILE *hFile = NULL;
-	wxString filename = wxFileSelector(wxT("Please select your file to export"), 
-		wxGetCwd(), fn.GetName(), fn.GetExt(), fn.GetExt()+_T(" files (.")+fn.GetExt()+_T(")|*.")+fn.GetExt());
+	wxString filename;
+	if (select == 1)
+		filename = wxFileSelector(wxT("Please select your file to export"), 
+			wxGetCwd(), fn.GetName(), fn.GetExt(), fn.GetExt()+_T(" files (.")+fn.GetExt()+_T(")|*.")+fn.GetExt());
+	else {
+		filename = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetFullName();
+	}
 	if ( !filename.empty() )
 	{
 		hFile = fopen(filename.mb_str(), "wb");
@@ -335,14 +335,63 @@ void FileControl::Export(wxString val)
 	f.close();
 }
 
+void FileControl::ExportPNG(wxString val, wxString suffix)
+{
+	if (val.IsEmpty())
+		return;
+	wxFileName fn(val);
+	if (fn.GetExt().Lower() != _T("blp"))
+		return;
+	TextureID temptex = texturemanager.add(std::string(val.mb_str()));
+	Texture &tex = *((Texture*)texturemanager.items[temptex]);
+	if (tex.w == 0 || tex.h == 0)
+		return;
+
+	wxString temp;
+
+	unsigned char *tempbuf = (unsigned char*)malloc(tex.w*tex.h*4);
+	tex.getPixels(tempbuf, GL_BGRA_EXT);
+
+	CxImage *newImage = new CxImage(0);
+	newImage->AlphaCreate();	// Create the alpha layer
+	newImage->IncreaseBpp(32);	// set image to 32bit 
+	newImage->CreateFromArray(tempbuf, tex.w, tex.h, 32, (tex.w*4), true);
+	temp = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".")+suffix;
+	//wxLogMessage(_T("Info: Exporting texture to %s..."), temp.c_str());
+	if (suffix == _T("tga"))
+		newImage->Save(temp.mb_str(), CXIMAGE_FORMAT_TGA);
+	else
+		newImage->Save(temp.mb_str(), CXIMAGE_FORMAT_PNG);
+	free(tempbuf);
+	newImage->Destroy();
+	wxDELETE(newImage);
+}
+
 void FileControl::OnPopupClick(wxCommandEvent &evt)
 {
-	switch(evt.GetId()) {
-		case ID_MODELOPENED_EXPORT:
-			FileTreeData *data = (FileTreeData*)(static_cast<wxMenu *>(evt.GetEventObject())->GetClientData());
-			wxString rootfn(data->fn.c_str(), wxConvUTF8);
-			Export(rootfn);
-		break;
+	FileTreeData *data = (FileTreeData*)(static_cast<wxMenu *>(evt.GetEventObject())->GetClientData());
+	wxString val(data->fn.c_str(), wxConvUTF8);
+
+	int id = evt.GetId();
+	if (id == ID_FILELIST_EXPORT) { 
+		Export(val, 1);
+	} else if (id == ID_FILELIST_PLAY) {
+#ifdef	PLAY_MUSIC
+		Export(val, 0);
+		wxFileName fn(val);
+		wxString filename = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetFullName();
+		mcPlayer->Stop();
+		mcPlayer->Load(filename);
+		mcPlayer->Play();
+		wxLogMessage(_T("Playing: %s, Vol: %f, State: %d"), filename.c_str(), mcPlayer->GetVolume(), mcPlayer->GetState());
+#endif
+	} else if (ID_FILELIST_VIEW) {
+		ExportPNG(val, _T("png"));
+		wxFileName fn(val);
+		wxString temp;
+		temp = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".png");
+	    ScrWindow *sw = new ScrWindow(temp);
+	    sw->Show(true);
 	}
 }
 
@@ -354,6 +403,7 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 		return;
 
 	void *data = reinterpret_cast<void *>(fileTree->GetItemData(item));
+	FileTreeData *tdata = (FileTreeData*)data;
 
 	// make sure the data (file name) is valid
 	if (!data)
@@ -362,9 +412,19 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 	// Make a menu to show item Info or export it
 	wxMenu infoMenu;
 	infoMenu.SetClientData( data );
-	infoMenu.Append(ID_MODELOPENED_EXPORT, wxT("&Export"), wxT("Export this object"));
+	infoMenu.Append(ID_FILELIST_EXPORT, _T("&Export"), _T("Export this object"));
 	// TODO: if is music, a Play option
-	// TODO: if is graphic, a View option
+	wxString temp(tdata->fn.c_str(), wxConvUTF8);
+	temp = temp.MakeLower();
+#ifdef	PLAY_MUSIC
+	if (temp.Mid(temp.Length()-3).IsSameAs(_T("wav")) || temp.Mid(temp.Length()-3).IsSameAs(_T("mp3"))) {
+		infoMenu.Append(ID_FILELIST_PLAY, _T("&Play"), _T("Play this object"));
+	}
+#endif
+	// if is graphic, a View option
+	if (temp.Mid(temp.Length()-3).IsSameAs(_T("blp"))) {
+		infoMenu.Append(ID_FILELIST_VIEW, _T("&View"), _T("View this object"));
+	}
 	infoMenu.Connect(wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&FileControl::OnPopupClick, NULL, this);
 	PopupMenu(&infoMenu);
 }

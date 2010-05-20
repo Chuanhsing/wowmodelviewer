@@ -19,12 +19,16 @@ public:
 	void OnChoice(wxCommandEvent &event);
 	void OnTreeMenu(wxTreeEvent &event);
 	void OnPopupClick(wxCommandEvent &evt);
-	void Export(wxString val);
+	void Export(wxString val, int select);
+	void ExportPNG(wxString val, wxString suffix);
 
 	wxTreeCtrl *fileTree;
 	wxButton *btnSearch;
 	wxTextCtrl *txtContent;
 	wxChoice *choFilter;
+#ifdef	PLAY_MUSIC
+	wxMediaCtrl *mcPlayer;
+#endif
 	int filterMode;
 
 	ModelViewer* modelviewer; // point to parent

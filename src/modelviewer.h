@@ -20,6 +20,9 @@
 #include <wx/url.h>
 #include <wx/xml/xml.h>
 #include <wx/wfstream.h>
+#ifdef	PLAY_MUSIC
+#include <wx/mediactrl.h>
+#endif
 
 //wxAUI
 #include <wx/aui/aui.h>
