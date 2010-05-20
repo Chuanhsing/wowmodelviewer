@@ -11,7 +11,7 @@
 #include "modelexport.h"
 #include "modelcanvas.h"
 
-#include "CxImage/ximage.h"
+//#include "CxImage/ximage.h"
 
 //#define NONSTANDARDBLENDMODE
 

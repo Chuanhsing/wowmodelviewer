@@ -5,7 +5,7 @@
 #include "modelexport_lwo.h"
 #include "modelcanvas.h"
 
-#include "CxImage/ximage.h"
+//#include "CxImage/ximage.h"
 
 //---------------------------------------------
 // Scene Writing Functions
@@ -833,7 +833,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 		uint32 CameraTargetID = mcount;
 		AnimationData CamData;
 		if (cam->tTarget.data[anim].size() > 1){
-			for (int x=0;x<cam->tTarget.data[anim].size();x++){
+			for (unsigned int x=0;x<cam->tTarget.data[anim].size();x++){
 				Vec3D a = cam->target + cam->tTarget.data[anim][x];
 				uint32 ctime = cam->tTarget.times[anim][x]/30;
 				a.x = -a.x;
@@ -854,7 +854,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 			std::vector<float> time, PosX, PosY, PosZ, ZeroFloat;
 			std::vector<uint8> splines;
 			// Animations
-			for (int x=0;x<cam->tPos.data[anim].size();x++){
+			for (unsigned int x=0;x<cam->tPos.data[anim].size();x++){
 				// Position Data
 				Vec3D p_val = cam->pos + cam->tPos.data[anim][x];
 				uint32 ctime = cam->tPos.times[anim][x]/30;
@@ -1596,8 +1596,8 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 				for (int x=0;x<3;x++,counter++){
 					//wxLogMessage("Batch %i, index %i, x=%i",b,k,x);
-					uint16 indice16;
-					uint32 indice32;
+					//uint16 indice16;
+					//uint32 indice32;
 
 					int mod = 0;
 					if (x==1){
@@ -1632,8 +1632,8 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 							for (int x=0;x<3;x++,counter++){
 								//wxLogMessage("Batch %i, index %i, x=%i",b,k,x);
-								uint16 indice16;
-								uint32 indice32;
+								//uint16 indice16;
+								//uint32 indice32;
 
 								int mod = 0;
 								if (x==1){
@@ -1669,8 +1669,8 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 								for (int x=0;x<3;x++,counter++){
 									//wxLogMessage("Batch %i, index %i, x=%i",b,k,x);
-									uint16 indice16;
-									uint32 indice32;
+									//uint16 indice16;
+									//uint32 indice32;
 
 									int mod = 0;
 									if (x==1){
@@ -1721,7 +1721,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	fileLen += 8;
 	f.Write(_T("PART"), 4);
-	for (int i=0;i<m->passes.size();i++) {
+	for (unsigned int i=0;i<m->passes.size();i++) {
 		ModelRenderPass &p = m->passes[i];
 
 		if (p.init(m)){
@@ -2657,7 +2657,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 		}
 
 		// Doodad Lights
-		for (int i=0;i<DDLArrCount;i++){
+		for (unsigned int i=0;i<DDLArrCount;i++){
 			
 			WMOModelInstance *doodad = &m->modelis[DoodadLightArrayID[i]];
 			ModelLight *light = &doodad->model->lights[i];
@@ -2709,7 +2709,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 			g_modelViewer->isChar = false;
 			
 			// Export Individual Doodad Models
-			for (int x=0;x<modelarray.size();x++){
+			for (unsigned int x=0;x<modelarray.size();x++){
 				g_modelViewer->isModel = true;
 				wxString cModelName(modelarray[x].c_str(),wxConvUTF8);
 
@@ -3165,13 +3165,13 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 	f.Write(reinterpret_cast<char *>(&ub), 1);
 	vmapSize += 14;
 
-	for (uint32 g=0; g<m->nGroups; g++) {
+	for (int32 g=0; g<m->nGroups; g++) {
 		WMOGroup *group = &m->groups[g];
 
 		if (group->hascv){
 			hasVertColors = true;
 		}
-		for (uint32 b=0; b<group->nBatches; b++) {
+		for (int32 b=0; b<group->nBatches; b++) {
 			WMOBatch *batch = &group->batches[b];
 			for(uint32 ii=0;ii<batch->indexCount;ii++) {
 				int a = group->indices[batch->indexStart + ii];

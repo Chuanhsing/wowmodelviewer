@@ -1,6 +1,7 @@
 
 #include "modelcontrol.h"
 #include "mpq.h"
+#include "CxImage/ximage.h"
 
 IMPLEMENT_CLASS(ModelControl, wxWindow)
 

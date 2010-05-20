@@ -181,7 +181,7 @@ void ParticleSystem::update(float dt)
 
 			//rem = 0;
 			if (en) {
-				for (int i=0; i<tospawn; i++) {
+				for (unsigned int i=0; i<tospawn; i++) {
 					Particle p = emitter->newParticle(manim, mtime, w, l, spd, var, spr, spr2);
 					// sanity check:
 					//if (particles.size() < MAX_PARTICLES) // No need to check this every loop iteration. Already checked above.

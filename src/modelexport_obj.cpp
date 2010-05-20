@@ -5,7 +5,7 @@
 #include "modelexport.h"
 #include "modelcanvas.h"
 
-#include "CxImage/ximage.h"
+//#include "CxImage/ximage.h"
 
 void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init)
 {

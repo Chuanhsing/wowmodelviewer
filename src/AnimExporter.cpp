@@ -2,7 +2,10 @@
 #include "AnimExporter.h"
 #include "Quantize.h"
 #include "globalvars.h"
+// CxImage
 #include "CxImage/ximage.h"
+#include "CxImage/ximagif.h"
+#include "CxImage/ximabmp.h"
 
 IMPLEMENT_CLASS(CAnimationExporter, wxFrame)
 

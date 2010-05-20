@@ -5,7 +5,7 @@
 #include "modelexport_3ds.h"
 #include "modelcanvas.h"
 
-#include "CxImage/ximage.h"
+//#include "CxImage/ximage.h"
 
 
 

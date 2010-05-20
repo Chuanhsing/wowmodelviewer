@@ -5,7 +5,7 @@
 #include "modelexport_ms3d.h"
 #include "modelcanvas.h"
 
-#include "CxImage/ximage.h"
+//#include "CxImage/ximage.h"
 
 // MilkShape 3D
 void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
@@ -246,7 +246,7 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 
 		if (joint.numKeyFramesTrans > 0) {
 			ms3d_keyframe_pos_t *keyFramesTrans = new ms3d_keyframe_pos_t[joint.numKeyFramesTrans];
-			for (int j=0; j<joint.numKeyFramesTrans; j++) {
+			for (unsigned int j=0; j<joint.numKeyFramesTrans; j++) {
 				keyFramesTrans[j].time = m->bones[i].trans.times[m->anim][j]; // Error,time in seconds;;
 				keyFramesTrans[j].position[0] = m->bones[i].trans.data[m->anim][j].x;
 				keyFramesTrans[j].position[1] = m->bones[i].trans.data[m->anim][j].y;

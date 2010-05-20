@@ -1,6 +1,7 @@
 #include "util.h"
-#include "CxImage/ximage.h"
+//#include "CxImage/ximage.h"
 #ifdef _WINDOWS
+#include <windows.h>
 #include <wx/msw/winundef.h>
 #endif
 #include <wx/choicdlg.h>

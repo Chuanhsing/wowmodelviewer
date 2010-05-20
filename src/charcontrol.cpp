@@ -5,7 +5,7 @@
 #include "itemselection.h"
 #include "mpq.h"
 #include "globalvars.h"
-
+#include "CxImage/ximage.h"
 
 int slotOrder[] = {	
 	CS_SHIRT,

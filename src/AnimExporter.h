@@ -9,11 +9,6 @@
 //#include "wx/stattext.h"
 //#include "wx/button.h"
 
-// CxImage
-#include "CxImage/ximage.h"
-#include "CxImage/ximagif.h"
-#include "CxImage/ximabmp.h"
-
 #include "modelcanvas.h"
 #ifdef _WINDOWS
 #include "AVIGenerator.h"
