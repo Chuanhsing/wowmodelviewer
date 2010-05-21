@@ -311,6 +311,13 @@ void AnimControl::UpdateWMO(WMO *w, int group)
 	wmoLabel->Show(TRUE);
 }
 
+wxString sFilterDir;
+bool filterDir(std::string fn)
+{
+	wxString tmp(fn.c_str(), wxConvUTF8);
+	tmp.LowerCase();
+	return (tmp.StartsWith(sFilterDir) && tmp.EndsWith(_T("blp")));
+}
 
 bool AnimControl::UpdateCreatureModel(Model *m)
 {
@@ -528,14 +535,10 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 					grp.count = 1;
 					skins.insert(grp);
 				} 
-
-
 			}
-			return FillSkinSelector(skins);
-
-		} else 
-			return false;
-
+			if (skins.empty() != true)
+				return FillSkinSelector(skins);
+		}
 	} catch (CreatureModelDB::NotFound) {
 		// Try hardcoding some fixes for missing model info from the DBC
 		if(fn == _T("Creature\\Dwarfmalewarriorlight\\dwarfmalewarriorlight_ghost.mdx")) {
@@ -602,6 +605,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			grp.count = 1;
 			skins.insert(grp);
 			return FillSkinSelector(skins);
+			/*
 		} else if (fn == _T("Creature\\Druidbearworgen\\druidbearworgen.mdx")) {
 			TextureGroup grp;
 			grp.tex[0] = "DruidBearWorgen";
@@ -671,10 +675,28 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			grp.count = 1;
 			skins.insert(grp);
 			return FillSkinSelector(skins);
+			*/
 		}
-		return false;
 	}
 
+	// Search the same directory for BLPs
+	std::set<FileTreeItem> filelist;
+	sFilterDir = fn.BeforeLast(_T('\\'))+SLASH;
+	sFilterDir.LowerCase();
+	getFileLists(filelist, filterDir);
+	if (filelist.begin() != filelist.end()) {
+		TextureGroup grp;
+		grp.base = 11;
+		grp.count = 1;
+		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
+			wxString str((*it).fn);
+			grp.tex[0] = str.BeforeLast(_T('.')).AfterLast(SLASH).c_str();
+			skins.insert(grp);
+		}
+		return FillSkinSelector(skins);
+	}
+
+	return false;
 }
 
 bool AnimControl::UpdateItemModel(Model *m)
