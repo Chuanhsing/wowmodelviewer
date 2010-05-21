@@ -602,8 +602,76 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			grp.count = 1;
 			skins.insert(grp);
 			return FillSkinSelector(skins);
+		} else if (fn == _T("Creature\\Druidbearworgen\\druidbearworgen.mdx")) {
+			TextureGroup grp;
+			grp.tex[0] = "DruidBearWorgen";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			grp.tex[0] = "DruidBearWorgenBlack";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			grp.tex[0] = "DruidBearWorgenBrown";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			grp.tex[0] = "DruidBearWorgenTan";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			grp.tex[0] = "DruidBearWorgenWhite";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			return FillSkinSelector(skins);
+		} else if (fn == _T("Creature\\Druidcatworgen\\druidcatworgen.mdx")) {
+			TextureGroup grp;
+			grp.tex[0] = "DruidCatSkinWorgen";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			grp.tex[0] = "DruidCatSkinWorgenBlack";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			grp.tex[0] = "DruidCatSkinWorgenBrown";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			grp.tex[0] = "DruidCatSkinWorgenWhite";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			grp.tex[0] = "DruidCatSkinWorgenYellow";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			return FillSkinSelector(skins);
+		} else if (fn == _T("Creature\\Druidcattroll\\druidcattroll.mdx")) {
+			TextureGroup grp;
+			grp.tex[0] = "DruidCatTrollSkinBlack";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			grp.tex[0] = "DruidCatTrollSkinBlue";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			grp.tex[0] = "DruidCatTrollSkinGreen";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			grp.tex[0] = "DruidCatTrollSkinRed";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			grp.tex[0] = "DruidCatTrollSkinWhite";
+			grp.base = 11;
+			grp.count = 1;
+			skins.insert(grp);
+			return FillSkinSelector(skins);
 		}
-
 		return false;
 	}
 
