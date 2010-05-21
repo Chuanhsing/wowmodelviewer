@@ -10,7 +10,7 @@ SpellEffectsDB spelleffectsdb;
 void GetSpellEffects(){
 	for (SpellEffectsDB::Iterator it=spelleffectsdb.begin(); it!=spelleffectsdb.end(); ++it) {
 		wxString temp(it->getString(SpellEffectsDB::EffectName));
-		if (temp.Mid(0, 5) != _T("zzOLD"))
+		if (temp.StartsWith(_T("zzOLD")))
 			spelleffects.Insert(temp, 0);
 	}
 
@@ -130,7 +130,7 @@ void EnchantsDialog::OnClick(wxCommandEvent &event)
 	if (event.GetId() == ID_ENCHANTSOK) {
 		wxString sel(effectsListbox->GetStringSelection());
 
-		if (sel == _T("")) {
+		if (sel.IsEmpty()) {
 			Show(false);
 			return;
 		}

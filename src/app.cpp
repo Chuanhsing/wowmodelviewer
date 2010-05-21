@@ -57,7 +57,7 @@ bool WowModelViewApp::OnInit()
 
 	// Just a little header to start off the log file.
 	wxLogMessage(wxString(_T("Starting:\n") APP_TITLE _T(" ") APP_VERSION _T(" ") APP_PLATFORM APP_ISDEBUG _T("\n\n")));
-	
+
 	// set the config file path.
 	cfgPath = userPath+SLASH+wxT("Config.ini");
 
@@ -254,7 +254,7 @@ namespace {
 		long lngID = -1;
 
 		for (size_t i = 0; i < localeCount; i++) {
-			if (locales[i] == _T(""))
+			if (locales[i].IsEmpty())
 				continue;
 			wxArrayString localeMpqs;
 			wxString localePath = gamePath;
@@ -310,7 +310,7 @@ bool WowModelViewApp::LoadSettings()
 
 	// Application settings
 	pConfig->SetPath(_T("/Settings"));
-	pConfig->Read(_T("Path"), &gamePath, _T(""));
+	pConfig->Read(_T("Path"), &gamePath, wxEmptyString);
 	pConfig->Read(_T("TOCVersion"), &gameVersion, 0);
 
 	pConfig->Read(_T("UseLocalFiles"), &useLocalFiles, false);
@@ -356,7 +356,7 @@ bool WowModelViewApp::LoadSettings()
 	if (mpqArchives.GetCount()==0) {
 		//enUS(enGB), koKR, frFR, deDE, zhCN, zhTW, esES, ruRU
 		const wxString locales[] = {_T("enUS"), _T("koKR"), _T("frFR"), _T("deDE"), _T("zhCN"),  _T("zhTW"),  _T("esES"),  _T("ruRU")};
-		const wxString locales2[] = {_T("enGB"), _T(""), _T(""), _T(""), _T("enCN"), _T("enTW"), _T("esMX"), _T("")};
+		const wxString locales2[] = {_T("enGB"), wxEmptyString, wxEmptyString, wxEmptyString, _T("enCN"), _T("enTW"), _T("esMX"), wxEmptyString};
 
 		const wxString defaultArchives[] = {_T("patch-3.mpq"),_T("patch-2.mpq"),_T("patch.mpq"),_T("expansion3.mpq"),_T("expansion2.mpq"),_T("lichking.mpq"),_T("expansion.mpq"),_T("common-3.mpq"),_T("common-2.mpq"), _T("common.mpq")};
 		const wxString localeArchives[] = {_T("patch-%s-3.mpq"), _T("patch-%s-2.mpq"), _T("patch-%s.mpq"), _T("expansion3-locale-%s.mpq"), _T("expansion2-locale-%s.mpq"), _T("lichking-locale-%s.mpq"), _T("expansion-locale-%s.mpq"), _T("locale-%s.mpq"), _T("base-%s.mpq")};

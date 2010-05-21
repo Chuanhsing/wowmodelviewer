@@ -48,9 +48,9 @@ void SaveTexture(wxString fn)
 void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString suffix = wxString(wxT("tga")))
 {
 	// Check to see if we have all our data...
-	if (file == _T(""))
+	if (file == wxEmptyString)
 		return;
-	if (outdir == _T(""))
+	if (outdir == wxEmptyString)
 		return;
 
 	wxFileName fn(file);

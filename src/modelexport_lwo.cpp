@@ -52,17 +52,17 @@ void WriteLWSceneEnvArray(ofstream &fs, uint32 ChanNum, std::vector<float> value
 }
 
 // Writes the "Plugin" information for a scene object, light, camera &/or bones.
-void WriteLWScenePlugin(ofstream &fs, wxString type, uint32 PluginCount, wxString PluginName, wxString Data = _T(""))
+void WriteLWScenePlugin(ofstream &fs, wxString type, uint32 PluginCount, wxString PluginName, wxString Data = wxEmptyString)
 {
 	fs << _T("Plugin " << type << " " << PluginCount << " " << PluginName << "\n" << Data << "EndPlugin\n");
 }
 
 // Writes an Object or Null Object to the scene file.
-void WriteLWSceneObject(ofstream &fs, wxString Filename, AnimationData AnimData, uint32 &ItemNumber, int Visibility = 7, bool isNull = false, uint32 ParentNum = -1, wxString Label=_T(""))
+void WriteLWSceneObject(ofstream &fs, wxString Filename, AnimationData AnimData, uint32 &ItemNumber, int Visibility = 7, bool isNull = false, uint32 ParentNum = -1, wxString Label=wxEmptyString)
 {
 	bool isLabeled = false;
 	bool isParented = false;
-	if (Label!=_T(""))
+	if (!Label.IsEmpty())
 		isLabeled = true;
 	if (ParentNum > -1)
 		isParented = true;
@@ -163,12 +163,12 @@ void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, 
 }
 
 // Write a Light to the Scene File
-void WriteLWSceneLight(ofstream &fs, uint32 &lcount, Vec3D LPos, uint32 Ltype, Vec3D Lcolor, float Lintensity, bool useAtten, float AttenEnd, float defRange = 2.5, wxString prefix = _T(""), uint32 ParentNum = -1)
+void WriteLWSceneLight(ofstream &fs, uint32 &lcount, Vec3D LPos, uint32 Ltype, Vec3D Lcolor, float Lintensity, bool useAtten, float AttenEnd, float defRange = 2.5, wxString prefix = wxEmptyString, uint32 ParentNum = -1)
 {
 	bool isParented = false;
 	if (ParentNum > -1)
 		isParented = true;
-	if (prefix != _T(""))
+	if (!prefix.IsEmpty())
 		prefix = _T(" "+prefix);
 	if ((useAtten == true)&&(AttenEnd<=0))
 		useAtten = false;
@@ -792,7 +792,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 	// Exported Object
 	int ModelID = mcount;
 	wxString Obj = wxString(fn, wxConvUTF8).AfterLast(SLASH);
-	wxString objFilename = _T("");
+	wxString objFilename = wxEmptyString;
 	if (modelExport_LW_PreserveDir == true){
 		objFilename << _T("Objects") << SLASH;
 	}
@@ -997,19 +997,19 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 	#ifdef _DEBUG
 	// Debug Texture List
-	wxLogMessage(_T("M2 Texture List for %s:"),wxString(m->fullname));
+	wxLogMessage(_T("M2 Texture List for %s:"),wxString(m->fullname.c_str()));
 	for (unsigned short i=0; i<m->TextureList.size(); i++) {
 		wxLogMessage(_T("Texture List[%i] = %s"),i,wxString(m->TextureList[i]));
 	}
-	wxLogMessage(_T("M2 Texture List Complete for %s"),wxString(m->fullname));
+	wxLogMessage(_T("M2 Texture List Complete for %s"),wxString(m->fullname.c_str()));
 	#endif
 
 	// Mesh & Slot names
 	wxString meshes[19] = {_T("Hairstyles"), _T("Facial1"), _T("Facial2"), _T("Facial3"), _T("Braces"),
-		_T("Boots"), _T(""), _T("Ears"), _T("Wristbands"),  _T("Kneepads"), _T("Pants"), _T("Pants"),
-		_T("Tarbard"), _T("Trousers"), _T(""), _T("Cape"), _T(""), _T("Eyeglows"), _T("Belt") };
-	wxString slots[15] = {_T("Helm"), _T(""), _T("Shoulder"), _T(""), _T(""), _T(""), _T(""), _T(""),
-		_T(""), _T(""), _T("Right Hand Item"), _T("Left Hand Item"), _T(""), _T(""), _T("Quiver") };
+		_T("Boots"), wxEmptyString, _T("Ears"), _T("Wristbands"),  _T("Kneepads"), _T("Pants"), _T("Pants"),
+		_T("Tarbard"), _T("Trousers"), wxEmptyString, _T("Cape"), wxEmptyString, _T("Eyeglows"), _T("Belt") };
+	wxString slots[15] = {_T("Helm"), wxEmptyString, _T("Shoulder"), wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString,
+		wxEmptyString, wxEmptyString, _T("Right Hand Item"), _T("Left Hand Item"), wxEmptyString, wxEmptyString, _T("Quiver") };
 
 	// Part Names
 	for (unsigned short p=0; p<m->passes.size(); p++) {
@@ -1018,7 +1018,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 			wxString partName;
 			int mesh = m->geosets[g].id / 100;
-			if (m->modelType == MT_CHAR && mesh < 19 && meshes[mesh] != _T("")){
+			if (m->modelType == MT_CHAR && mesh < 19 && meshes[mesh] != wxEmptyString){
 				partName = wxString::Format(_T("Geoset %03i - %s"),g,meshes[mesh].c_str());
 			}else{
 				partName = wxString::Format(_T("Geoset %03i"),g);
@@ -1044,7 +1044,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 					if (p.init(attM)) {						
 						wxString partName;
-						if (att->slot < 15 && slots[att->slot]!=_T("")){
+						if (att->slot < 15 && slots[att->slot]!=wxEmptyString){
 							partName = wxString::Format(_T("%s"),slots[att->slot].c_str());
 						}else{
 							partName = wxString::Format(_T("Slot %02i"),att->slot);
@@ -1072,7 +1072,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 						if (p.init(mAttChild)) {
 							int thisslot = att2->children[j]->slot;
 							wxString partName;
-							if (thisslot < 15 && slots[thisslot]!=_T("")){
+							if (thisslot < 15 && slots[thisslot]!=wxEmptyString){
 								partName = wxString::Format(_T("Child %02i - %s"),j,slots[thisslot].c_str());
 							}else{
 								partName = wxString::Format(_T("Child %02i - Slot %02i"),j,att2->children[j]->slot);
@@ -1091,7 +1091,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	}
 
 	#ifdef _DEBUG
-	wxLogMessage(_T("M2 Part Names Written for %s"),wxString(m->fullname));
+	wxLogMessage(_T("M2 Part Names Written for %s"),m->fullname.c_str());
 	#endif
 
 	// Surface Name
@@ -1154,7 +1154,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 						if (p.init(mAttChild)) {
 							wxString matName = wxString(mAttChild->TextureList[p.tex].c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.'));
 							int thisslot = att2->children[j]->slot;
-							if (thisslot < 15 && slots[thisslot]!=_T("")){
+							if (thisslot < 15 && slots[thisslot]!=wxEmptyString){
 								if (matName == _T("Cape")) {
 									wxString tex = wxString(mAttChild->name.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.'));
 									if (tex.Len() > 0){
@@ -1162,7 +1162,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 									}else{
 										matName = wxString::Format(_T("%s - Surface"),slots[thisslot].c_str());
 									}
-								}else if (matName != _T("")){
+								}else if (matName != wxEmptyString){
 									matName = wxString::Format(_T("%s - %s"),slots[thisslot].c_str(),matName.c_str());
 								}else {
 									matName = wxString::Format(_T("%s - Material %02i"),slots[thisslot].c_str(),p.tex);
@@ -1192,7 +1192,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	fileLen += tagsSize;
 	// ================
 	#ifdef _DEBUG
-	wxLogMessage(_T("M2 Surface Names Written for %s"),wxString(m->fullname));
+	wxLogMessage(_T("M2 Surface Names Written for %s"),m->fullname.c_str());
 	#endif
 
 	
@@ -1215,7 +1215,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	fileLen += 18;
 	// ================
 	#ifdef _DEBUG
-	wxLogMessage(_T("M2 Layer Defined for %s"),wxString(m->fullname));
+	wxLogMessage(_T("M2 Layer Defined for %s"),m->fullname.c_str());
 	#endif
 
 	// --
@@ -1421,7 +1421,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.SeekO(0, wxFromEnd);
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 Point Data Written for %s"),wxString(m->fullname));
+	wxLogMessage(_T("M2 Point Data Written for %s"),m->fullname.c_str());
 #endif
 
 /*
@@ -1551,7 +1551,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 VMAP data Written for %s"),wxString(m->fullname));
+	wxLogMessage(_T("M2 VMAP data Written for %s"),m->fullname.c_str());
 #endif
 
 	// --
@@ -1698,7 +1698,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	fileLen += polySize;
 	// ========
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 Polygons Written for %s"),wxString(m->fullname));
+	wxLogMessage(_T("M2 Polygons Written for %s"),m->fullname.c_str());
 #endif
 
 	// The PTAG chunk associates tags with polygons. In this case, it identifies which surface is assigned to each polygon. 
@@ -1886,7 +1886,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 PTag Surface data Written for %s"),wxString(m->fullname));
+	wxLogMessage(_T("M2 PTag Surface data Written for %s"),m->fullname.c_str());
 #endif
 
 	// --
@@ -1990,7 +1990,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.SeekO(0, wxFromEnd);
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 VMAD data Written for %s"),wxString(m->fullname));
+	wxLogMessage(_T("M2 VMAD data Written for %s"),m->fullname.c_str());
 #endif
 
 	
@@ -2037,7 +2037,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			if (texName.Length() == 0)
 				texName << wxString(m->modelname.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) << wxString::Format(_T("_Image_%03i"),i);
 
-			wxString sTexName = _T("");
+			wxString sTexName = wxEmptyString;
 			if (modelExport_LW_PreserveDir == true){
 				sTexName << _T("Images") << SLASH;
 			}
@@ -2157,7 +2157,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 						if (texName.Length() == 0)
 							texName << wxString(attM->modelname).AfterLast(SLASH).BeforeLast(_T('.')) << wxString::Format(_T("_Image_%03i"),i);
 */
-						wxString sTexName = _T("");
+						wxString sTexName = wxEmptyString;
 						if (modelExport_LW_PreserveDir == true){
 							sTexName << _T("Images") << SLASH;
 						}
@@ -2262,7 +2262,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 								texPath = wxString(mAttChild->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 							}
 
-							wxString sTexName = _T("");
+							wxString sTexName = wxEmptyString;
 							if (modelExport_LW_PreserveDir == true){
 								sTexName << _T("Images") << SLASH;
 							}
@@ -2335,7 +2335,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 Images & Image Data Written for %s"),wxString(m->fullname));
+	wxLogMessage(_T("M2 Images & Image Data Written for %s"),m->fullname.c_str());
 #endif
 
 	// --
@@ -2423,7 +2423,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 							// Surface name
 							surfName = wxString(mAttChild->TextureList[p.tex].c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.'));
 							int thisslot = att2->children[j]->slot;
-							if (thisslot < 15 && slots[thisslot]!=_T("")){
+							if (thisslot < 15 && slots[thisslot]!=wxEmptyString){
 								if (surfName == _T("Cape")) {
 									wxString tex = wxString(mAttChild->name.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.'));
 									if (tex.Len() > 0){
@@ -2433,7 +2433,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 										surfName = wxString::Format(_T("%s - Surface"),slots[thisslot].c_str());
 										cmnt = _T("Surface");
 									}
-								}else if (surfName != _T("")){
+								}else if (surfName != wxEmptyString){
 									surfName = wxString::Format(_T("%s - %s"),slots[thisslot].c_str(),surfName.c_str());
 								}else{
 									surfName = wxString::Format(_T("%s - Material %02i"),slots[thisslot].c_str(),p.tex);
@@ -2462,7 +2462,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	}
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 Surface Data Written for %s"),wxString(m->fullname.c_str()));
+	wxLogMessage(_T("M2 Surface Data Written for %s"),m->fullname.c_str());
 #endif
 
 	f.SeekO(4, wxFromStart);
@@ -2559,7 +2559,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 	// Exported Object
 	int ModelID = mcount;
 	wxString Obj = wxString(fn, wxConvUTF8).AfterLast(SLASH);
-	wxString objFilename = _T("");
+	wxString objFilename = wxEmptyString;
 	if (modelExport_LW_PreserveDir == true){
 		objFilename << _T("Objects") << SLASH;
 	}
@@ -2606,7 +2606,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 				}
 
 				if (isNull == false){
-					wxString pathdir = _T("");
+					wxString pathdir = wxEmptyString;
 					if (modelExport_LW_PreserveDir == true){
 						pathdir << _T("Objects") << SLASH;
 					}
@@ -3522,7 +3522,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 		f.Write("STIL", 4);
 		clipSize += 8;
 
-		wxString sTexName = _T("");
+		wxString sTexName = wxEmptyString;
 		if (modelExport_LW_PreserveDir == true){
 			sTexName += _T("Images/");
 		}

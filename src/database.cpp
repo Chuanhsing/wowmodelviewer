@@ -667,7 +667,7 @@ int ItemDatabase::getItemNum(int displayid)
 
 wxString ItemDatabase::addDiscoveryId(int id, wxString name)
 {
-	wxString ret = _T("");
+	wxString ret = wxEmptyString;
 
 	try {
 		ItemDB::Record r = itemdb.getById(id);
@@ -699,7 +699,7 @@ wxString ItemDatabase::addDiscoveryId(int id, wxString name)
 
 wxString ItemDatabase::addDiscoveryDisplayId(int id, wxString name, int type)
 {
-	wxString ret = _T("");
+	wxString ret = wxEmptyString;
 
 	ItemRecord rec;
 	rec.id = id+ItemDB::MaxItem;
@@ -746,7 +746,7 @@ bool NPCDatabase::avaiable(int id)
 
 wxString NPCDatabase::addDiscoveryId(int id, wxString name)
 {
-	wxString ret = _T("");
+	wxString ret = wxEmptyString;
 
 	NPCRecord rec;
 	rec.id = id+100000;

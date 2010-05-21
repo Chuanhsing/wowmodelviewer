@@ -45,14 +45,14 @@ FileControl::FileControl(wxWindow* parent, wxWindowID id)
 	}
 
 	try {
-		txtContent = new wxTextCtrl(this, ID_FILELIST_CONTENT, _T(""), wxPoint(10, 10), wxSize(110, 20), wxTE_PROCESS_ENTER, wxDefaultValidator);
+		txtContent = new wxTextCtrl(this, ID_FILELIST_CONTENT, wxEmptyString, wxPoint(10, 10), wxSize(110, 20), wxTE_PROCESS_ENTER, wxDefaultValidator);
 		btnSearch = new wxButton(this, ID_FILELIST_SEARCH, _("Clear"), wxPoint(120, 10), wxSize(46,20));
 		fileTree = new wxTreeCtrl(this, ID_FILELIST, wxPoint(0, 35), wxSize(250,600), wxTR_HIDE_ROOT|wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_FULL_ROW_HIGHLIGHT|wxTR_NO_LINES);
 		wxString chos[] = {_T("Model"), _T("Music"), _T("Graphic"), _T("ADT")};
 		choFilter = new wxChoice(this, ID_FILELIST_FILTER, wxPoint(10, 645), wxSize(110, 10), WXSIZEOF(chos), chos);
 		choFilter->SetSelection(filterMode);
 #ifdef	PLAY_MUSIC
-		mcPlayer = new wxMediaCtrl(this, ID_FILELIST_PLAY, _T(""), wxPoint(0,660), wxSize(320,80));
+		mcPlayer = new wxMediaCtrl(this, ID_FILELIST_PLAY, wxEmptyString, wxPoint(0,660), wxSize(320,80));
 #endif
 	} catch(...) {};
 }
@@ -117,10 +117,7 @@ bool filterModelsSearch(std::string s)
 
 	wxString temp(s.c_str(), wxConvUTF8);
 	temp = temp.MakeLower();
-	if (!temp.Mid(temp.Length()-2).IsSameAs(wxT("m2"))
-		&& !temp.Mid(temp.Length()-3).IsSameAs(wxT("wmo"))
-		//&& !temp.Mid(temp.Length()-3).IsSameAs(wxT("adt"))
-		)
+	if (!temp.EndsWith(wxT("m2")) && !temp.EndsWith(wxT("wmo")))
 		return false;
 	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
 		return false;
@@ -136,9 +133,7 @@ bool filterSoundsSearch(std::string s)
 
 	wxString temp(s.c_str(), wxConvUTF8);
 	temp = temp.MakeLower();
-	if (!temp.Mid(temp.Length()-3).IsSameAs(wxT("wav"))
-		&& !temp.Mid(temp.Length()-3).IsSameAs(wxT("mp3"))
-		)
+	if (!temp.EndsWith(wxT("wav")) && !temp.EndsWith(wxT("mp3")))
 		return false;
 	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
 		return false;
@@ -154,7 +149,7 @@ bool filterGraphicsSearch(std::string s)
 
 	wxString temp(s.c_str(), wxConvUTF8);
 	temp = temp.MakeLower();
-	if (!temp.Mid(temp.Length()-3).IsSameAs(wxT("blp")))
+	if (!temp.EndsWith(wxT("blp")))
 		return false;
 	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
 		return false;
@@ -170,7 +165,7 @@ bool filterADTsSearch(std::string s)
 
 	wxString temp(s.c_str(), wxConvUTF8);
 	temp = temp.MakeLower();
-	if (!temp.Mid(temp.Length()-3).IsSameAs(wxT("adt")))
+	if (!temp.EndsWith(wxT("adt")))
 		return false;
 	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
 		return false;
@@ -302,7 +297,7 @@ void FileControl::Init(ModelViewer* mv)
 
 	}
 
-	if (content != _T(""))
+	if (content != wxEmptyString)
 		fileTree->ExpandAll();
 
 	// bg recolor
@@ -444,12 +439,12 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 	wxString temp(tdata->fn.c_str(), wxConvUTF8);
 	temp = temp.MakeLower();
 #ifdef	PLAY_MUSIC
-	if (temp.Mid(temp.Length()-3).IsSameAs(_T("wav")) || temp.Mid(temp.Length()-3).IsSameAs(_T("mp3"))) {
+	if (temp.EndsWith(_T("wav")) || temp.EndsWith(_T("mp3"))) {
 		infoMenu.Append(ID_FILELIST_PLAY, _T("&Play"), _T("Play this object"));
 	}
 #endif
 	// if is graphic, a View option
-	if (temp.Mid(temp.Length()-3).IsSameAs(_T("blp"))) {
+	if (temp.EndsWith(_T("blp"))) {
 		infoMenu.Append(ID_FILELIST_VIEW, _T("&View"), _T("View this object"));
 	}
 	infoMenu.Connect(wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&FileControl::OnPopupClick, NULL, this);
@@ -520,11 +515,10 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 
 		// Check to make sure the selected item is a model (an *.m2 file).
 		modelviewer->isModel = (rootfn.Last() == '2');
+		modelviewer->isWMO = !modelviewer->isModel;
 		modelviewer->isChar = false;
 
 		if (modelviewer->isModel) {
-			modelviewer->isWMO = false;
-
 			// not functional yet.
 			//if (wxGetKeyState(WXK_SHIFT)) 
 			//	canvas->AddModel(rootfn);
@@ -532,8 +526,6 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 				modelviewer->LoadModel(rootfn);	// Load the model.
 		
 		} else { // else, it isn't a m2 file, so load the file as a WMO.
-			modelviewer->isWMO = true;
-
 			// is WMO?
 			//canvas->model->modelType = MT_WMO;
 
@@ -679,7 +671,7 @@ void FileControl::OnButton(wxCommandEvent &event)
 	if (id == ID_FILELIST_CONTENT)
 		Init();
 	else if (id == ID_FILELIST_SEARCH) {
-		txtContent->SetValue(_T(""));
+		txtContent->SetValue(wxEmptyString);
 		Init();
 	}
 }

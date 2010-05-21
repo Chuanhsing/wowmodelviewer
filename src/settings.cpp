@@ -88,7 +88,7 @@ void Settings_Page1::OnButton(wxCommandEvent &event)
 		}
 		
 	} else if (id==ID_SETTINGS_ADD) {
-		wxFileDialog file(this, _T("Choose a MPQ file to add"), _T(""), _T(""), _T("MPQ Archives (*.mpq)|*.mpq"), wxFD_OPEN|wxFD_FILE_MUST_EXIST, wxDefaultPosition);
+		wxFileDialog file(this, _T("Choose a MPQ file to add"), wxEmptyString, wxEmptyString, _T("MPQ Archives (*.mpq)|*.mpq"), wxFD_OPEN|wxFD_FILE_MUST_EXIST, wxDefaultPosition);
 
 		if (file.ShowModal()==wxID_OK) {
 			if (wxFile::Exists(file.GetPath())) {

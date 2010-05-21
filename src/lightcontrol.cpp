@@ -85,13 +85,13 @@ LightControl::LightControl(wxWindow* parent, wxWindowID id)
 	//colour = new wxButton(this, ID_LIGHTCOLOUR, "", wxPoint(60, 60), wxSize(60,20));
 
 	lblAmb = new wxStaticText(this, wxID_ANY, _("Ambience"), wxPoint(5,82), wxDefaultSize);
-	ambience = new wxButton(this, ID_LIGHTAMBIENCE, _T(""), wxPoint(60, 82), wxSize(60,20));
+	ambience = new wxButton(this, ID_LIGHTAMBIENCE, wxEmptyString, wxPoint(60, 82), wxSize(60,20));
 
 	lblDiff = new wxStaticText(this, wxID_ANY, _("Diffuse"), wxPoint(5,104), wxDefaultSize);
-	diffuse = new wxButton(this, ID_LIGHTDIFFUSE, _T(""), wxPoint(60, 104), wxSize(60,20));
+	diffuse = new wxButton(this, ID_LIGHTDIFFUSE, wxEmptyString, wxPoint(60, 104), wxSize(60,20));
 
 	lblSpec = new wxStaticText(this, wxID_ANY, _("Specular"), wxPoint(5,126), wxDefaultSize);
-	specular = new wxButton(this, ID_LIGHTSPECULAR, _T(""), wxPoint(60, 126), wxSize(60,20));
+	specular = new wxButton(this, ID_LIGHTSPECULAR, wxEmptyString, wxPoint(60, 126), wxSize(60,20));
 
 	//position
 	lblPos = new wxStaticText(this, wxID_ANY, _("Position XYZ"), wxPoint(5,155), wxDefaultSize);
@@ -485,25 +485,25 @@ void LightControl::Update()
 
 	pos << lights[activeLight].pos.x;
 	txtPosX->SetValue(pos);
-	pos = _T("");
+	pos = wxEmptyString;
 
 	pos << lights[activeLight].pos.y;
 	txtPosY->SetValue(pos);
-	pos = _T("");
+	pos = wxEmptyString;
 
 	pos << lights[activeLight].pos.z;
 	txtPosZ->SetValue(pos);
-	pos = _T("");
+	pos = wxEmptyString;
 	// -- -- --
 
 	// target
 	pos << lights[activeLight].target.x;
 	txtTarX->SetValue(pos);
-	pos = _T("");
+	pos = wxEmptyString;
 
 	pos << lights[activeLight].target.y;
 	txtTarY->SetValue(pos);
-	pos = _T("");
+	pos = wxEmptyString;
 
 	pos << lights[activeLight].target.z;
 	txtTarZ->SetValue(pos);

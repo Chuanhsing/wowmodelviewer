@@ -73,7 +73,7 @@ AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 
 	wmoList = new wxComboBox(this, ID_ITEMSET, _("Item set"), wxPoint(220,10), wxSize(128,16), 0, NULL, wxCB_READONLY);
 	wmoList->Show(FALSE);
-	wmoLabel = new wxStaticText(this, -1, _T(""), wxPoint(10,15), wxSize(192,16));
+	wmoLabel = new wxStaticText(this, -1, wxEmptyString, wxPoint(10,15), wxSize(192,16));
 	wmoLabel->Show(FALSE);
 
 	speedSlider = new wxSlider(this, ID_SPEED, 10, 1, 40, wxPoint(490,56), wxSize(100,38), wxSL_AUTOTICKS);

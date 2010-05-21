@@ -321,9 +321,9 @@ public:
 	ModelHeader header;
 	ModelCamera cam;
 #ifdef WotLK
-	string fullname;
-	string modelname;
-	string lodname;
+	wxString fullname;
+	wxString modelname;
+	wxString lodname;
 #endif
 	
 	std::vector<ModelRenderPass> passes;

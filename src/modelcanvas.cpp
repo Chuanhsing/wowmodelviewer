@@ -572,7 +572,7 @@ inline void ModelCanvas::CreateTexture(wxString filename, GLuint texture)
 	bgImagePath = filename;
 
 	// Get the file extension and load the file
-	wxString tmp = filename.Mid(filename.Length() - 3, 3);
+	wxString tmp = filename.AfterLast(_T('.'));
 	tmp.LowerCase();
 
 	if (tmp == _T("bmp"))
@@ -1789,7 +1789,7 @@ void ModelCanvas::LoadBackground(wxString filename)
 	bgImagePath = filename;
 
 	// Get the file extension and load the file
-	wxString tmp = filename.Mid(filename.Length() - 3, 3);
+	wxString tmp = filename.AfterLast(_T('.'));
 	tmp.LowerCase();
 
 	//GLuint texFormat = GL_TEXTURE_RECTANGLE_ARB;

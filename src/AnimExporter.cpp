@@ -33,11 +33,11 @@ CAnimationExporter::CAnimationExporter(wxWindow* parent, wxWindowID id, const wx
 		return;
 	}
 	
-	lblFile = new wxStaticText(this, wxID_ANY, _T(""), wxPoint(10,5), wxSize(320,20));
+	lblFile = new wxStaticText(this, wxID_ANY, wxEmptyString, wxPoint(10,5), wxSize(320,20));
 	lblCurFrame = new wxStaticText(this, wxID_ANY, _T("Current Frame: 0"), wxPoint(10,25), wxSize(100,20));
 	
 	wxStaticText *lblTotalFrame = new wxStaticText(this, wxID_ANY, _T("Total Frames:"), wxPoint(10,45), wxDefaultSize);
-	txtFrames = new wxTextCtrl(this, ID_GIFTOTALFRAME, _T(""), wxPoint(90,45), wxSize(30,18));
+	txtFrames = new wxTextCtrl(this, ID_GIFTOTALFRAME, wxEmptyString, wxPoint(90,45), wxSize(30,18));
 	
 	cbTrans = new wxCheckBox(this, ID_GIFTRANSPARENT, _T("Transparency"), wxPoint(10,65), wxDefaultSize, 0);
 	cbGrey = new wxCheckBox(this, ID_GIFGREYSCALE, _T("Greyscale"), wxPoint(130,65), wxDefaultSize, 0);
@@ -81,7 +81,7 @@ void CAnimationExporter::Init(const wxString fn)
 	lblFile->SetLabel(fn);
 
 	int i = (m_iTotalAnimFrames / 50);
-	txtFrames->SetLabel(_T(""));
+	txtFrames->SetLabel(wxEmptyString);
 	*txtFrames << i;
 
 	btnStart->Enable(true);

@@ -41,10 +41,10 @@ ArrowControl::ArrowControl(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
 
 	// Item\\Objectcomponents\\ammo\\ 
 
-	joint = new wxComboBox(this, ID_ARROW_JOINT,_T(""), wxPoint(5,5), wxSize(130,20), 36, loc, wxCB_READONLY);
+	joint = new wxComboBox(this, ID_ARROW_JOINT, wxEmptyString, wxPoint(5,5), wxSize(130,20), 36, loc, wxCB_READONLY);
 	const wxString models[] = {_T("arrowacidflight_01.m2"), _T("arrowfireflight_01.m2"), _T("arrowflight_01.m2"), _T("arrowiceflight_01.m2"), _T("arrowmagicflight_01.m2")};
-	model = new wxComboBox(this, ID_ARROW_MODEL,_T(""), wxPoint(5,30), wxSize(130,20), 5, models, wxCB_READONLY);
-	//tex = new wxComboBox(this, ID_ARROW_TEXTURE,_T(""), wxPoint(55,5), wxSize(100,20), 0, NULL, wxCB_READONLY);
+	model = new wxComboBox(this, ID_ARROW_MODEL,wxEmptyString, wxPoint(5,30), wxSize(130,20), 5, models, wxCB_READONLY);
+	//tex = new wxComboBox(this, ID_ARROW_TEXTURE,wxEmptyString, wxPoint(55,5), wxSize(100,20), 0, NULL, wxCB_READONLY);
 	
 	attach = new wxButton(this, ID_ARROW_ATTACH, _("Attach"), wxPoint(10,55), wxSize(45,20));
 	clear = new wxButton(this, ID_ARROW_CLEAR, _("Clear All"), wxPoint(80,55), wxSize(45,20));

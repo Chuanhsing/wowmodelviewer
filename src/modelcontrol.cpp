@@ -49,10 +49,10 @@ ModelControl::ModelControl(wxWindow* parent, wxWindowID id)
 	}
 
 	try {
-		modelname = new wxComboBox(this, ID_MODEL_NAME, _T(""), wxPoint(5,5), wxSize(150,16), 0, NULL, wxCB_READONLY);
+		modelname = new wxComboBox(this, ID_MODEL_NAME, wxEmptyString, wxPoint(5,5), wxSize(150,16), 0, NULL, wxCB_READONLY);
 		
 		lblLod = new wxStaticText(this, wxID_ANY, _("View"), wxPoint(5,25), wxDefaultSize);
-		lod = new wxComboBox(this, ID_MODEL_LOD, _T(""), wxPoint(5,40), wxSize(120,16), 0, NULL, wxCB_READONLY, wxDefaultValidator, _T("LOD")); //|wxCB_SORT); //wxPoint(66,10)
+		lod = new wxComboBox(this, ID_MODEL_LOD, wxEmptyString, wxPoint(5,40), wxSize(120,16), 0, NULL, wxCB_READONLY, wxDefaultValidator, _T("LOD")); //|wxCB_SORT); //wxPoint(66,10)
 		lod->Enable(false);
 
 		lblAlpha = new wxStaticText(this, wxID_ANY, _("Alpha"), wxPoint(5,65), wxDefaultSize);
@@ -210,12 +210,12 @@ void ModelControl::Update()
 	wxArrayString geosetItems;
 	//geosets->Clear();
 	wxString meshes[19] = {_T("Hairstyles"), _T("Facial1"), _T("Facial2"), _T("Facial3"), _T("Braces"),
-		_T("Boots"), _T(""), _T("Ears"), _T("Wristbands"),  _T("Kneepads"),
-		 _T("Pants"), _T("Pants"), _T("Tarbard"), _T("Trousers"), _T(""),
-		  _T("Cape"), _T(""), _T("Eyeglows"), _T("Belt") };
+		_T("Boots"), wxEmptyString, _T("Ears"), _T("Wristbands"),  _T("Kneepads"),
+		 _T("Pants"), _T("Pants"), _T("Tarbard"), _T("Trousers"), wxEmptyString,
+		  _T("Cape"), wxEmptyString, _T("Eyeglows"), _T("Belt") };
 	for (unsigned int i=0; i<model->geosets.size(); i++) {
 		int mesh = model->geosets[i].id / 100;
-		if (mesh < 19 && meshes[mesh] != _T(""))
+		if (mesh < 19 && meshes[mesh] != wxEmptyString)
 			geosetItems.Add(wxString::Format(_T("%i [%s]"), i, meshes[mesh].c_str()), 1);
 		else
 			geosetItems.Add(wxString::Format(_T("%i [%i]"), i, mesh), 1);
@@ -418,7 +418,7 @@ ModelOpened::~ModelOpened()
 
 void ModelOpened::Export(wxString val)
 {
-	if (val == _T(""))
+	if (val == wxEmptyString)
 		return;
 	MPQFile f(val.mb_str());
 	if (f.isEof()) {
@@ -443,7 +443,7 @@ void ModelOpened::Export(wxString val)
 
 void ModelOpened::ExportPNG(wxString val, wxString suffix)
 {
-	if (val == _T(""))
+	if (val == wxEmptyString)
 		return;
 	wxFileName fn(val);
 	if (fn.GetExt().Lower() != _T("blp"))

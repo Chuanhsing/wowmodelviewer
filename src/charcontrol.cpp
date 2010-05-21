@@ -1705,7 +1705,7 @@ wxString CharControl::makeItemTexture(int region, const wxString name)
 {
 	// just return an empty filename
 	if (name.Length() < 3) 
-		return _T("");
+		return wxEmptyString;
 
 	wxChar leggings = name[name.Length() - 2];
 	
@@ -1724,7 +1724,7 @@ wxString CharControl::makeItemTexture(int region, const wxString name)
 		return fn;
 
 	if (fn.Length() < 5)
-		return _T("");
+		return wxEmptyString;
 
 	// if that failed try alternate texture version
 	if (leggings == 'l' || leggings == 'L')
@@ -2130,7 +2130,7 @@ bool filterCreatures(std::string fn)
 {
 	wxString tmp(fn.c_str(), wxConvUTF8);
 	tmp.LowerCase();
-	return (tmp.Mid(0,4)==_T("crea") && tmp.EndsWith(_T("m2")));
+	return (tmp.StartsWith(_T("crea")) && tmp.EndsWith(_T("m2")));
 }
 
 std::vector<wxString> creaturemodels;

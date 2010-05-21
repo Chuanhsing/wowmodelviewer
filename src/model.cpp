@@ -236,14 +236,9 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 		return;
 
 	// replace .MDX with .M2
-	char tempname[256];
-	strncpy(tempname, name.c_str(), sizeof(tempname));
-		
-	if (tempname[name.length()-1] != '2') {
-		tempname[name.length()-2] = '2';
-		tempname[name.length()-1] = 0;
-	}
-	
+	wxString tempname(name.c_str(), wxConvUTF8);
+	tempname = tempname.BeforeLast(_T('.')).Append(_T(".m2"));
+
 	// Initiate our model variables.
 	trans = 1.0f;
 	rad = 1.0f;
@@ -311,11 +306,11 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 	modelType = MT_NORMAL;
 	// --
 
-	MPQFile f(tempname);
-	g_modelViewer->modelOpened->Add(wxString(tempname, wxConvUTF8));
+	MPQFile f(tempname.c_str());
+	g_modelViewer->modelOpened->Add(tempname);
 	ok = false;
 	if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
-		wxLogMessage(_T("Error: Unable to load model: [%s]"), tempname);
+		wxLogMessage(_T("Error: Unable to load model: [%s]"), tempname.c_str());
 		// delete this; //?
 		f.close();
 		return;
@@ -325,7 +320,7 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 	memcpy(&header, f.getBuffer(), sizeof(ModelHeader));
 	animated = isAnimated(f) || forceAnim;  // isAnimated will set animGeometry and animTextures
 
-	wxLogMessage(_T("Loading model: %s\n"), tempname);
+	wxLogMessage(_T("Loading model: %s\n"), tempname.c_str());
 
 	// Error check
 	if (header.id[0] != 'M' && header.id[1] != 'D' && header.id[2] != '2' && header.id[3] != '0') {
@@ -369,7 +364,7 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 	}
 
 	if (f.getSize() < header.ofsParticleEmitters) {
-		wxLogMessage(_T("Error: Unable to load the Model \"%s\", appears to be corrupted."), tempname);
+		wxLogMessage(_T("Error: Unable to load the Model \"%s\", appears to be corrupted."), tempname.c_str());
 	}
 	
 	if (header.nGlobalSequences) {
@@ -777,11 +772,11 @@ void Model::initCommon(MPQFile &f)
 		// indices - allocate space, too
 #ifdef WotLK
 		// remove suffix .M2
-		lodname = modelname.substr(0, modelname.length()-3);
+		lodname = modelname.BeforeLast(_T('.'));
 		fullname = lodname;
-		lodname.append("00.skin"); // Lods: 00, 01, 02, 03
+		lodname.Append(_T("00.skin")); // Lods: 00, 01, 02, 03
 		MPQFile g(lodname.c_str());
-		g_modelViewer->modelOpened->Add(wxString(lodname.c_str(), wxConvUTF8));
+		g_modelViewer->modelOpened->Add(lodname);
 		if (g.isEof()) {
 			wxLogMessage(_T("Error: Unable to load Lods: [%s]"), lodname.c_str());
 			g.close();

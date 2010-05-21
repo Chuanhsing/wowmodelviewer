@@ -50,20 +50,20 @@ wxString locales[8] = {_T("enUS"), _T("koKR"), _T("frFR"), _T("deDE"), _T("zhCN"
 wxString langCSConv[] =
 {
 	_T("iso-8859-1"),
-	_T(""),
-	_T(""),
-	_T(""),
+	wxEmptyString,
+	wxEmptyString,
+	wxEmptyString,
 	_T("gb2312"),
 	_T("big5"),
-	_T(""),
-	_T(""),
+	wxEmptyString,
+	wxEmptyString,
 };
 wxString CSConvStr;
 */
 
 wxString CSConv(wxString str)
 {
-	if (langID <= 0) // || langCSConv[langID] == _T(""))
+	if (langID <= 0) // || langCSConv[langID].IsEmpty())
 		return str;
 	return wxConvLocal.cWC2WX(wxConvUTF8.cMB2WC(str.mb_str())); // from private.h
 	//CSConvStr = wxCSConv(langCSConv[langID]).cWC2WX(wxConvUTF8.cMB2WC(str));

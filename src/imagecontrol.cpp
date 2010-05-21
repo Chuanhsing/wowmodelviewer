@@ -26,12 +26,12 @@ ImageControl::ImageControl(wxWindow *parent, wxWindowID id, ModelCanvas *cc)
 	}
 
 	wxStaticText *lbl1 = new wxStaticText(this, wxID_ANY, _T("Filename:"), wxPoint(10,10), wxDefaultSize, wxALIGN_LEFT);
-	filename = new wxTextCtrl(this, ID_IMAGE_FILENAME, _T(""), wxPoint(60,5), wxSize(200,20), wxTE_READONLY);
+	filename = new wxTextCtrl(this, ID_IMAGE_FILENAME, wxEmptyString, wxPoint(60,5), wxSize(200,20), wxTE_READONLY);
 
 	wxStaticText *lbl2 = new wxStaticText(this, wxID_ANY, _T("Canvas Width:"), wxPoint(10,40), wxDefaultSize, wxALIGN_LEFT);
-	canvasWidth = new wxTextCtrl(this, ID_IMAGE_CANVASWIDTH, _T(""), wxPoint(90,40), wxSize(40,20), 0);
+	canvasWidth = new wxTextCtrl(this, ID_IMAGE_CANVASWIDTH, wxEmptyString, wxPoint(90,40), wxSize(40,20), 0);
 	wxStaticText *lbl3 = new wxStaticText(this, wxID_ANY, _T("Canvas Height:"), wxPoint(10,65), wxDefaultSize, wxALIGN_LEFT);
-	canvasHeight = new wxTextCtrl(this, ID_IMAGE_CANVASHEIGHT, _T(""), wxPoint(90,65), wxSize(40,20), 0);
+	canvasHeight = new wxTextCtrl(this, ID_IMAGE_CANVASHEIGHT, wxEmptyString, wxPoint(90,65), wxSize(40,20), 0);
 	
 	lockAspect = new wxCheckBox(this, ID_IMAGE_LOCKASPECT, _T("Lock Aspect"), wxPoint(140,45), wxDefaultSize);
 
@@ -81,10 +81,10 @@ void ImageControl::OnShow(wxAuiManager *m)
 		filename->SetValue(tmp);
 	}
 
-	tmp = _T("");
+	tmp = wxEmptyString;
 	tmp << screenSize[2];
 	canvasWidth->SetValue(tmp);
-	tmp = _T("");
+	tmp = wxEmptyString;
 	tmp << screenSize[3];
 	canvasHeight->SetValue(tmp);
 }

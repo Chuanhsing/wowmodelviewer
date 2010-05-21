@@ -809,8 +809,8 @@ void ModelViewer::LoadSession()
 		pConfig->Read(_T("ZeroParticle"), &bZeroParticle, true);
 		pConfig->Read(_T("KnightEyeGlow"), &bKnightEyeGlow, true);
 		pConfig->Read(_T("DBackground"), &canvas->drawBackground, false);
-		pConfig->Read(_T("BackgroundImage"), &bgImagePath, _T(""));
-		if (bgImagePath != _T("")) {
+		pConfig->Read(_T("BackgroundImage"), &bgImagePath, wxEmptyString);
+		if (!bgImagePath.IsEmpty()) {
 			canvas->LoadBackground(bgImagePath);
 			//viewMenu->Check(ID_BACKGROUND, canvas->drawBackground);
 		}
@@ -867,7 +867,7 @@ void ModelViewer::SaveSession()
 		if (canvas->drawBackground)
 			pConfig->Write(_T("BackgroundImage"), bgImagePath);
 		else
-			pConfig->Write(_T("BackgroundImage"), _T(""));
+			pConfig->Write(_T("BackgroundImage"), wxEmptyString);
 
 		// model file
 		if (canvas->model)
@@ -939,7 +939,7 @@ void ModelViewer::LoadModel(const wxString fn)
 	isModel = true;
 
 	// check if this is a character model
-	isChar = (fn.Mid(0,4).IsSameAs(_T("Char"), false));
+	isChar = (fn.StartsWith(_T("Char"), false));
 
 	Attachment *modelAtt = NULL;
 
@@ -1088,7 +1088,7 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 			wxString strModel = _T("Character\\");
 
 			if (gameVersion == 30100) {
-				if (retval != _T("")) {
+				if (!retval.IsEmpty()) {
 					strModel.append(rec2.getString(CharRacesDB::NameV310));
 					strModel.append(_T("\\Female\\"));
 					strModel.append(rec2.getString(CharRacesDB::NameV310));
@@ -1100,7 +1100,7 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 					strModel.append(_T("Male.m2"));
 				}
 			} else {
-				if (retval != _T("")) {
+				if (!retval.IsEmpty()) {
 					strModel.append(rec2.getString(CharRacesDB::Name));
 					strModel.append(_T("\\Female\\"));
 					strModel.append(rec2.getString(CharRacesDB::Name));
@@ -2046,7 +2046,7 @@ void ModelViewer::OnBackground(wxCommandEvent &event)
 
 
 			wxSingleChoiceDialog skyDialog(this, _("Choose"), _("Select a Sky Box"), skyboxes);
-			if (skyDialog.ShowModal() == wxID_OK && skyDialog.GetStringSelection() != _T("")) {
+			if (skyDialog.ShowModal() == wxID_OK && skyDialog.GetStringSelection() != wxEmptyString) {
 				canvas->skyModel = new Model(std::string(skyDialog.GetStringSelection().mb_str()), false);
 				canvas->sky->model = canvas->skyModel;
 			}
@@ -2367,8 +2367,8 @@ void ModelViewer::ModelInfo()
 
 	xml << "<m2>" << endl;
 	xml << "  <info>" << endl;
-	xml << "    <fullname>" <<m->fullname  << "</fullname>" << endl;
-	xml << "    <modelname>" <<m->modelname  << "</modelname>" << endl;
+	xml << "    <fullname>" <<m->fullname.c_str()  << "</fullname>" << endl;
+	xml << "    <modelname>" <<m->modelname.c_str()  << "</modelname>" << endl;
 	xml << "  </info>" << endl;
 	xml << "  <header>" << endl;
 //	xml << "    <id>" << m->header.id << "</id>" << endl;
@@ -2389,7 +2389,7 @@ void ModelViewer::ModelInfo()
 	xml << "    <nVertices>" << m->header.nVertices << "</nVertices>" << endl;
 	xml << "    <ofsVertices>" << m->header.ofsVertices << "</ofsVertices>" << endl;
 	xml << "    <nViews>" << m->header.nViews << "</nViews>" << endl;
-	xml << "    <lodname>" <<m->lodname  << "</lodname>" << endl;
+	xml << "    <lodname>" <<m->lodname.c_str()  << "</lodname>" << endl;
 	xml << "    <nColors>" << m->header.nColors << "</nColors>" << endl;
 	xml << "    <ofsColors>" << m->header.ofsColors << "</ofsColors>" << endl;
 	xml << "    <nTextures>" << m->header.nTextures << "</nTextures>" << endl;
@@ -2751,7 +2751,7 @@ void DiscoveryItem()
 				else
 					name.Printf(_T("Set%d"), it->getUInt(ItemSetDB::SetID));
 				ret = items.addDiscoveryId(id, name);
-				if (f.is_open() && ret != _T(""))
+				if (f.is_open() && !ret.IsEmpty())
 					f << ret.mb_str() << endl;
 			}
 		}
@@ -2762,7 +2762,7 @@ void DiscoveryItem()
 		if (!items.avaiable(id)) {
 			name.Printf(_T("Item%d"), id);
 			ret = items.addDiscoveryId(id, name);
-			if (f.is_open() && ret != _T(""))
+			if (f.is_open() && !ret.IsEmpty())
 				f << ret.mb_str() << endl;
 		}
 	}
@@ -2780,7 +2780,7 @@ void DiscoveryItem()
 					int type = slots[i];
 					name.Printf(_T("NPC%d"), it->getUInt(NPCDB::NPCID));
 					ret = items.addDiscoveryDisplayId(id, name, type);
-					if (f.is_open() && ret != _T(""))
+					if (f.is_open() && !ret.IsEmpty())
 						f << ret.mb_str() << endl;
 				}
 			}

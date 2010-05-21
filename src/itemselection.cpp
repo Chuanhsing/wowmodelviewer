@@ -162,7 +162,7 @@ FilteredChoiceDialog::FilteredChoiceDialog(CharControl *dest, int type, wxWindow
     wxSizer *topsizer = GetSizer();
     
     wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
-    m_pattern = new wxTextCtrl(this, ID_FILTER_TEXT, _T(""), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER); // fnmatch: "*" re: ""
+    m_pattern = new wxTextCtrl(this, ID_FILTER_TEXT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER); // fnmatch: "*" re: ""
     
     sizer->Add(new wxStaticText(this, -1, _("Filter   ")), 0, wxALIGN_CENTER_VERTICAL);
 	sizer->Add(m_pattern, 1, 0);
@@ -201,7 +201,7 @@ FilteredChoiceDialog::FilteredChoiceDialog(CharControl *dest, int type, wxWindow
 
 void FilteredChoiceDialog::OnFilter(wxCommandEvent& event){
 	if (event.GetId() == ID_FILTER_CLEAR) 
-		m_pattern->SetValue(_T(""));
+		m_pattern->SetValue(wxEmptyString);
     DoFilter();
 }
 
