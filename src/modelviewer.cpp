@@ -2345,7 +2345,7 @@ void ModelViewer::ModelInfo()
 		return;
 	}
 
-	MPQFile f(m->modelname.c_str());
+	MPQFile f((char *)m->modelname.c_str());
 	if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
 		wxLogMessage(_T("Error: Unable to load model: [%s]"), m->modelname.c_str());
 		// delete this; //?
@@ -2354,7 +2354,7 @@ void ModelViewer::ModelInfo()
 		return;
 	}
 
-	MPQFile g(m->lodname.c_str());
+	MPQFile g((char *)m->lodname.c_str());
 	if (g.isEof() || (g.getSize() < sizeof(ModelView))) {
 		wxLogMessage(_T("Error: Unable to load Lod: [%s]"), m->lodname.c_str());
 		// delete this; //?

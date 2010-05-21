@@ -689,8 +689,8 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 		grp.base = 11;
 		grp.count = 1;
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
-			wxString str((*it).fn);
-			grp.tex[0] = str.BeforeLast(_T('.')).AfterLast(SLASH).c_str();
+			wxString str((*it).fn.c_str(), wxConvUTF8);
+			grp.tex[0] = std::string((char *)str.BeforeLast(_T('.')).AfterLast(SLASH).c_str());
 			skins.insert(grp);
 		}
 		return FillSkinSelector(skins);

@@ -306,7 +306,7 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 	modelType = MT_NORMAL;
 	// --
 
-	MPQFile f(tempname.c_str());
+	MPQFile f((char *)tempname.c_str());
 	g_modelViewer->modelOpened->Add(tempname);
 	ok = false;
 	if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
@@ -358,7 +358,7 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 		f.close();
 
 		if (header.version[0] == 0)
-			wxMessageBox(wxString::Format(_T("An error occured while trying to load the model %s.\nWoW Model Viewer 0.5.x only supports loading WoW 2.0 models\nModels from WoW 1.12 or earlier are not supported"), tempname), _T("Error: Unable to load model"), wxICON_ERROR);
+			wxMessageBox(wxString::Format(_T("An error occured while trying to load the model %s.\nWoW Model Viewer 0.5.x only supports loading WoW 2.0 models\nModels from WoW 1.12 or earlier are not supported"), tempname.c_str()), _T("Error: Unable to load model"), wxICON_ERROR);
 
 		return;
 	}
@@ -775,7 +775,7 @@ void Model::initCommon(MPQFile &f)
 		lodname = modelname.BeforeLast(_T('.'));
 		fullname = lodname;
 		lodname.Append(_T("00.skin")); // Lods: 00, 01, 02, 03
-		MPQFile g(lodname.c_str());
+		MPQFile g((char *)lodname.c_str());
 		g_modelViewer->modelOpened->Add(lodname);
 		if (g.isEof()) {
 			wxLogMessage(_T("Error: Unable to load Lods: [%s]"), lodname.c_str());
@@ -1005,7 +1005,7 @@ void Model::initAnimated(MPQFile &f)
 			anims[i].NextAnimation = animsWotLK.NextAnimation;
 			anims[i].Index = animsWotLK.Index;
 
-			sprintf(tempname, "%s%04d-%02d.anim", fullname.c_str(), anims[i].animID, animsWotLK.subAnimID);
+			sprintf(tempname, "%s%04d-%02d.anim", (char *)fullname.c_str(), anims[i].animID, animsWotLK.subAnimID);
 			if (MPQFile::getSize(tempname) > 0) {
 				animfiles[i].openFile(tempname);
 				g_modelViewer->modelOpened->Add(wxString(tempname, wxConvUTF8));
