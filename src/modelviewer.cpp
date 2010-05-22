@@ -36,6 +36,7 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	// Export Menu
 	// To add your new exporter, simply copy the bottom line, and add your unique ID (specified in enums.h) as seen below.
 	// Make sure to use this ID for your export command in the ModelViewer::OnExport function!
+	EVT_MENU(ID_MODELEXPORT_BASE, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_OPTIONS, ModelViewer::OnToggleDock)
 	EVT_MENU(ID_MODELEXPORT_INIT, ModelViewer::OnToggleCommand)
 	EVT_MENU(ID_MODELEXPORT_LWO, ModelViewer::OnExport)
@@ -259,6 +260,8 @@ void ModelViewer::InitMenu()
 	
 	// MENU
 	fileMenu = new wxMenu;
+	fileMenu->Append(ID_MODELEXPORT_BASE, _("Save File..."));
+	fileMenu->Enable(ID_MODELEXPORT_BASE, false);
 	fileMenu->Append(ID_FILE_SCREENSHOT, _("Save Screenshot\tF12"));
 	fileMenu->Append(ID_FILE_SCREENSHOTCONFIG, _("Save Sized Screenshot\tCTRL+S"));
 	fileMenu->Append(ID_FILE_EXPORTGIF, _("GIF/Sequence Export"));
@@ -567,8 +570,9 @@ void ModelViewer::InitDatabase()
 		filename = locales[0]+SLASH+_T("items.csv");
 	if (wxFile::Exists(filename)) {
 		items.open(filename);
-	} else
+	} else {
 		wxLogMessage(_T("Error: Could not find items.csv to load an item list from."));
+	}
 
 	if (!skyboxdb.open()) {
 		initDB = false;
@@ -2840,6 +2844,9 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 			}
 		}
 	// That's all folks!
+
+	}else if (id == ID_MODELEXPORT_BASE){
+		SaveBaseFile();
 
 #ifdef _DEBUG
 	// Experimental new LWO Exporter!!

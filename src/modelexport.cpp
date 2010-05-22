@@ -1,6 +1,7 @@
 #include <wx/wfstream.h>
 #include <math.h>
 
+#include "globalvars.h"
 #include "modelexport.h"
 #include "modelcanvas.h"
 
@@ -423,3 +424,39 @@ void ExportWMOtoMS3D(WMO *m, const char *fn){}
 void ExportWMOto3DS(WMO *m, const char *fn){}
 void ExportWMOtoX3D(WMO *m, const char *fn){}
 void ExportWMOtoXHTML(WMO *m, const char *fn){}
+
+void SaveBaseFile(){
+	if (g_fileControl->fileTree->HasChildren(g_fileControl->CurrentItem)){
+		wxLogMessage(_T("File has children. Cancelling Save Fuction..."));
+		return;
+	}
+	FileTreeData *data = (FileTreeData*)g_fileControl->fileTree->GetItemData(g_fileControl->CurrentItem);
+	wxString modelfile(data->fn.c_str(), wxConvUTF8);
+
+	//modelfile = g_fileControl->fileTree->GetParent()+_T("\\")+g_fileControl->fileTree->GetItemText(g_fileControl->CurrentItem);
+	wxLogMessage(_T("Original Model File Name: %s"),modelfile.c_str());
+
+	if (modelfile.IsEmpty())
+		return;
+	MPQFile f(modelfile.mb_str());
+	if (f.isEof()) {
+		wxLogMessage(_T("Error: Could not extract %s\n"), modelfile.c_str());
+		f.close();
+		return;
+	}
+	wxFileName fn(modelfile);
+
+	FILE *hFile = NULL;
+	wxString filename;
+	filename = wxFileSelector(wxT("Please select your file to export"), wxGetCwd(), fn.GetName(), fn.GetExt(), fn.GetExt()+_T(" files (.")+fn.GetExt()+_T(")|*.")+fn.GetExt());
+
+	if ( !filename.empty() )
+	{
+		hFile = fopen(filename.mb_str(), "wb");
+	}
+	if (hFile) {
+		fwrite(f.getBuffer(), 1, f.getSize(), hFile);
+		fclose(hFile);
+	}
+	f.close();
+}

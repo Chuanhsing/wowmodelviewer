@@ -26,12 +26,20 @@ public:
 	wxButton *btnSearch;
 	wxTextCtrl *txtContent;
 	wxChoice *choFilter;
+	wxTreeItemId CurrentItem;
 #ifdef	PLAY_MUSIC
 	wxMediaCtrl *mcPlayer;
 #endif
 	int filterMode;
 
 	ModelViewer* modelviewer; // point to parent
+};
+
+class FileTreeData:public wxTreeItemData
+{
+public:
+	std::string fn;
+	FileTreeData(std::string fn):fn(fn) {}
 };
 
 #endif

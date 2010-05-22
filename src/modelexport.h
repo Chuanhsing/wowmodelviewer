@@ -40,6 +40,9 @@ wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassN
 // function at the bottom of modelexport.cpp so it has something to look for. The non-working exporter
 // can be disabled in filecontrol.cpp, so it won't ever run.
 
+// Raw Model File
+void SaveBaseFile();
+
 // Lightwave
 void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init);
 void ExportWMOtoLWO(WMO *m, const char *fn);

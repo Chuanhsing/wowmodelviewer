@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_1544A6F42E8E4949A9E4912D77A8FF10"
+        "OwnerKey" = "8:_B1CAE128D0724BA58BDB49161CAA3E25"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_158C7E945AA24524A778EDE7CC1847E6"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -81,6 +87,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_7C32F08E6ADD43649539083EC6D5A4CA"
+        "OwnerKey" = "8:_1544A6F42E8E4949A9E4912D77A8FF10"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7E7C11F17AD74D789255D0CEFA397A59"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -117,12 +129,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_99622594FAF5490E84ED06AAAC4EEDC6"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_AA948F29C115E6736A6E4B44207731ED"
         "OwnerKey" = "8:_B1CAE128D0724BA58BDB49161CAA3E25"
         "MsmSig" = "8:_UNDEFINED"
@@ -135,12 +141,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B22A31516DD64728ADE8C855B12AE286"
-        "OwnerKey" = "8:_CBBB5952E4E549678F0526BB981FC5B1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_B637D48CDE634D588F8E18513099D1CF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -149,12 +149,6 @@
         {
         "MsmKey" = "8:_C2D63DE81415494290CFEEF0AD2DE4E2"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CBBB5952E4E549678F0526BB981FC5B1"
-        "OwnerKey" = "8:_B1CAE128D0724BA58BDB49161CAA3E25"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -965,14 +959,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:World of Warcraft Model Viewer"
-        "ProductCode" = "8:{8371AB01-E7B0-42F4-B219-653636FE293B}"
-        "PackageCode" = "8:{437EE15D-393C-41F7-B8BD-79160D773599}"
+        "ProductCode" = "8:{B84167BE-BD2C-4932-A249-65520C5E8B21}"
+        "PackageCode" = "8:{F1037276-8FE5-42D1-B034-80E39D0AB679}"
         "UpgradeCode" = "8:{BA7105E6-2189-4CAF-9CB5-28124A1FD428}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:07.01.142"
+        "ProductVersion" = "8:07.01.206"
         "Manufacturer" = "8:WoWModelViewer.org"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1467,39 +1461,25 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_99622594FAF5490E84ED06AAAC4EEDC6"
-            {
-            "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:FALSE"
-            "SourcePath" = "8:c:\\program files (x86)\\common files\\merge modules\\microsoft_vc90_crt_x86_x64.msm"
-                "Properties"
-                {
-                }
-            "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
-            "Folder" = "8:"
-            "Feature" = "8:"
-            "IsolateTo" = "8:"
-            }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_B22A31516DD64728ADE8C855B12AE286"
-            {
-            "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:microsoft_vc90_crt_x86.msm"
-                "Properties"
-                {
-                }
-            "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
-            "Folder" = "8:"
-            "Feature" = "8:"
-            "IsolateTo" = "8:"
-            }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_CBBB5952E4E549678F0526BB981FC5B1"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_1544A6F42E8E4949A9E4912D77A8FF10"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_7C32F08E6ADD43649539083EC6D5A4CA"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:microsoft_vc90_crt_x86.msm"
                 "Properties"
                 {
                 }

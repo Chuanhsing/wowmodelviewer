@@ -25,6 +25,7 @@ enum ObjectID {
 	// Pleae add your IDs to the bottom of this list.
 	ID_MODELEXPORT_INIT,
 	ID_MODELEXPORT_OPTIONS,
+	ID_MODELEXPORT_BASE,
 	ID_MODELEXPORT_LWO,
 	ID_MODELEXPORT_LWO2,	// Temp, until I finish the new LW exporter...
 	ID_MODELEXPORT_COLLADA,

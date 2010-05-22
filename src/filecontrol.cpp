@@ -26,13 +26,6 @@ enum FilterModes {
 	FILE_FILTER_ADT
 };
 
-class FileTreeData:public wxTreeItemData
-{
-public:
-	std::string fn;
-	FileTreeData(std::string fn):fn(fn) {}
-};
-
 
 FileControl::FileControl(wxWindow* parent, wxWindowID id)
 {
@@ -48,11 +41,12 @@ FileControl::FileControl(wxWindow* parent, wxWindowID id)
 		txtContent = new wxTextCtrl(this, ID_FILELIST_CONTENT, wxEmptyString, wxPoint(10, 10), wxSize(110, 20), wxTE_PROCESS_ENTER, wxDefaultValidator);
 		btnSearch = new wxButton(this, ID_FILELIST_SEARCH, _("Clear"), wxPoint(120, 10), wxSize(46,20));
 		fileTree = new wxTreeCtrl(this, ID_FILELIST, wxPoint(0, 35), wxSize(250,600), wxTR_HIDE_ROOT|wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_FULL_ROW_HIGHLIGHT|wxTR_NO_LINES);
-		wxString chos[] = {_T("Model"), _T("Music"), _T("Graphic"), _T("ADT")};
+		wxString chos[] = {_T("Models & WMOs"), _T("Sounds"), _T("Images"), _T("ADTs")};
 		choFilter = new wxChoice(this, ID_FILELIST_FILTER, wxPoint(10, 645), wxSize(110, 10), WXSIZEOF(chos), chos);
 		choFilter->SetSelection(filterMode);
 #ifdef	PLAY_MUSIC
-		mcPlayer = new wxMediaCtrl(this, ID_FILELIST_PLAY, wxEmptyString, wxPoint(0,660), wxSize(320,80));
+		mcPlayer = new wxMediaCtrl(this, ID_FILELIST_PLAY, wxEmptyString, wxPoint(0,670), wxSize(280,50));
+		mcPlayer->SetVolume(1.0);
 #endif
 	} catch(...) {};
 }
@@ -434,7 +428,7 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 	// Make a menu to show item Info or export it
 	wxMenu infoMenu;
 	infoMenu.SetClientData( data );
-	infoMenu.Append(ID_FILELIST_EXPORT, _T("&Export"), _T("Export this object"));
+	infoMenu.Append(ID_FILELIST_EXPORT, _T("&Save..."), _T("Save this object"));
 	// TODO: if is music, a Play option
 	wxString temp(tdata->fn.c_str(), wxConvUTF8);
 	temp = temp.MakeLower();
@@ -455,14 +449,22 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 {
 	wxTreeItemId item = event.GetItem();
 
-	if (!item.IsOk() || !modelviewer->canvas) // make sure that a valid Tree Item was actually selected.
+	// make sure that a valid Tree Item was actually selected.
+	if (!item.IsOk() || !modelviewer->canvas){
+		modelviewer->fileMenu->Enable(ID_MODELEXPORT_BASE,false);
 		return;
+	}
 
 	FileTreeData *data = (FileTreeData*)fileTree->GetItemData(item);
 
 	// make sure the data (file name) is valid
-	if (!data)
+	if (!data){
+		modelviewer->fileMenu->Enable(ID_MODELEXPORT_BASE,false);
 		return; // isn't valid, exit.
+	}
+
+	CurrentItem = item;
+	modelviewer->fileMenu->Enable(ID_MODELEXPORT_BASE,true);
 
 	if (filterMode == FILE_FILTER_MODEL) {
 		// Exit, if its the same model thats currently loaded
@@ -613,6 +615,11 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		// Update the layout
 		modelviewer->interfaceManager.Update();
 	} else {
+		// Clear any models that may be loaded.
+		wxDELETE(modelviewer->canvas->model);
+		modelviewer->canvas->model = NULL;
+
+		// For Graphics
 		if (filterMode == FILE_FILTER_GRAPHIC) {
 			wxString val(data->fn.c_str(), wxConvUTF8);
 			ExportPNG(val, _T("png"));
@@ -620,6 +627,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 			wxString temp;
 			temp = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".png");
 			modelviewer->canvas->LoadBackground(temp);
+			remove(temp);
 		}
 		
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);
