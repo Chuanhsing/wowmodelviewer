@@ -69,6 +69,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_39D2F5D6A3E34393A93C4FCD09DC29D8"
+        "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4C7CA8A97230E42F41FEC552FFEF23C6"
         "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
         "MsmSig" = "8:_UNDEFINED"
@@ -82,7 +88,7 @@
         "Entry"
         {
         "MsmKey" = "8:_4F068D3280C148C0A10E489FBB607086"
-        "OwnerKey" = "8:_C85C2D3B38A9483881BD821D4ACFA14C"
+        "OwnerKey" = "8:_39D2F5D6A3E34393A93C4FCD09DC29D8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -183,13 +189,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_C85C2D3B38A9483881BD821D4ACFA14C"
-        "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
+        "MsmKey" = "8:_D7A0A67D74664D3999D9338684A414C1"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_D7A0A67D74664D3999D9338684A414C1"
+        "MsmKey" = "8:_E958787F5C7A43BAAF70906E6FC988ED"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -238,7 +244,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\WMV_Installer_v0701_r142_Win64.msi"
+        "OutputFilename" = "8:Release\\WMV_Installer_v0701_r206_Win64.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -810,6 +816,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E958787F5C7A43BAAF70906E6FC988ED"
+            {
+            "SourcePath" = "8:..\\Installer-Logo.bmp"
+            "TargetName" = "8:Installer-Logo.bmp"
+            "Tag" = "8:"
+            "Folder" = "8:_296025CC5E4C487297BD0E52D9BB7E38"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -818,7 +844,7 @@
         {
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_296025CC5E4C487297BD0E52D9BB7E38"
             {
-            "DefaultLocation" = "8:[ProgramFiles64Folder][ProductName]"
+            "DefaultLocation" = "8:[ProgramFiles64Folder]World of Warcraft Model Viewer"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
@@ -840,7 +866,7 @@
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_96416B35809E494CBE4773EFF615C55F"
                     {
                     "Name" = "8:userSettings"
-                    "AlwaysCreate" = "11:FALSE"
+                    "AlwaysCreate" = "11:TRUE"
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
                     "Property" = "8:_5B730BEF6DAB4563B42208FBD9F36A58"
@@ -964,9 +990,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:World of Warcraft Model Viewer"
+        "ProductName" = "8:World of Warcraft Model Viewer 64-bit"
         "ProductCode" = "8:{3747D749-D0E1-4D83-96CA-F108CFE7370F}"
-        "PackageCode" = "8:{B5CA0EA7-2E27-4494-ACD3-441509F7E314}"
+        "PackageCode" = "8:{9AF7C152-2DAB-4477-9C09-8A429C27322D}"
         "UpgradeCode" = "8:{69AA293E-260B-47B1-A596-44671A8B6EDF}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -983,7 +1009,7 @@
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:http://www.wowmodelviewer.org/"
         "ARPPRODUCTICON" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
-        "ARPIconIndex" = "3:101"
+        "ARPIconIndex" = "3:100"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
         "TargetPlatform" = "3:1"
@@ -997,68 +1023,12 @@
             {
                 "Keys"
                 {
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_8AF50232EC524D4682C0CC972981E41E"
-                    {
-                    "Name" = "8:Software"
-                    "Condition" = "8:"
-                    "AlwaysCreate" = "11:FALSE"
-                    "DeleteAtUninstall" = "11:FALSE"
-                    "Transitive" = "11:FALSE"
-                        "Keys"
-                        {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_7F350A6C1BBA402DA452C51AAAB4AD15"
-                            {
-                            "Name" = "8:[Manufacturer]"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                }
-                                "Values"
-                                {
-                                }
-                            }
-                        }
-                        "Values"
-                        {
-                        }
-                    }
                 }
             }
             "HKCU"
             {
                 "Keys"
                 {
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_5A31C8BE2D6E4EBDB038A30EFE956EE3"
-                    {
-                    "Name" = "8:Software"
-                    "Condition" = "8:"
-                    "AlwaysCreate" = "11:FALSE"
-                    "DeleteAtUninstall" = "11:FALSE"
-                    "Transitive" = "11:FALSE"
-                        "Keys"
-                        {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_090CBE9F51FB4CE08607F16B69E55A90"
-                            {
-                            "Name" = "8:[Manufacturer]"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                }
-                                "Values"
-                                {
-                                }
-                            }
-                        }
-                        "Values"
-                        {
-                        }
-                    }
                 }
             }
             "HKCR"
@@ -1160,7 +1130,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_E958787F5C7A43BAAF70906E6FC988ED"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -1191,7 +1162,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_E958787F5C7A43BAAF70906E6FC988ED"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -1213,7 +1185,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_E958787F5C7A43BAAF70906E6FC988ED"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "InstallAllUsersVisible"
@@ -1248,7 +1221,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_E958787F5C7A43BAAF70906E6FC988ED"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "CopyrightWarning"
@@ -1272,8 +1246,8 @@
                             "Type" = "3:3"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1203"
+                            "Setting" = "3:2"
+                            "Value" = "8:The installer will guide you through the steps required to install World of Warcraft Model Viewer on your computer."
                             "DefaultValue" = "8:#1203"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -1305,7 +1279,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_E958787F5C7A43BAAF70906E6FC988ED"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "ShowProgress"
@@ -1349,7 +1324,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_E958787F5C7A43BAAF70906E6FC988ED"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -1371,7 +1347,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_E958787F5C7A43BAAF70906E6FC988ED"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "CopyrightWarning"
@@ -1419,7 +1396,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_E958787F5C7A43BAAF70906E6FC988ED"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -1456,7 +1434,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_E958787F5C7A43BAAF70906E6FC988ED"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "UpdateText"
@@ -1500,7 +1479,8 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:2"
+                            "Value" = "8:_E958787F5C7A43BAAF70906E6FC988ED"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "ShowProgress"
@@ -1523,11 +1503,11 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_4F068D3280C148C0A10E489FBB607086"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_39D2F5D6A3E34393A93C4FCD09DC29D8"
             {
             "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:FALSE"
-            "SourcePath" = "8:c:\\program files (x86)\\common files\\merge modules\\microsoft_vc90_crt_x86_x64.msm"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86_x64.msm"
                 "Properties"
                 {
                 }
@@ -1537,11 +1517,11 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_C85C2D3B38A9483881BD821D4ACFA14C"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_4F068D3280C148C0A10E489FBB607086"
             {
             "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86_x64.msm"
+            "IsDependency" = "11:FALSE"
+            "SourcePath" = "8:c:\\program files (x86)\\common files\\merge modules\\microsoft_vc90_crt_x86_x64.msm"
                 "Properties"
                 {
                 }
