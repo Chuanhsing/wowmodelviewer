@@ -626,6 +626,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 			wxFileName fn(val);
 			wxString temp(wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".png"));
 			modelviewer->canvas->LoadBackground(temp);
+			wxRemoveFile(temp);
 		}
 		
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);
