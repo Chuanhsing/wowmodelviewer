@@ -2129,7 +2129,7 @@ void CharControl::selectStart()
 bool filterCreatures(std::string fn)
 {
 	wxString tmp(fn.c_str(), wxConvUTF8);
-	tmp.LowerCase();
+	tmp.MakeLower();
 	return (tmp.StartsWith(_T("crea")) && tmp.EndsWith(_T("m2")));
 }
 
@@ -2163,7 +2163,7 @@ void CharControl::selectMount()
 		if (file.IsOpened()) {
 			wxString tmp;
 			for ( tmp = file.GetFirstLine(); !file.Eof(); tmp = file.GetNextLine() ) {
-				tmp.LowerCase();
+				tmp.MakeLower();
 				if (knownRidable.Index(tmp, false)==wxNOT_FOUND)
 					knownRidable.Add(tmp);
 			}

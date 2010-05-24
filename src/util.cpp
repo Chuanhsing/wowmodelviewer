@@ -152,11 +152,7 @@ void MakeDirs(wxString base, wxString paths){
 	for (unsigned int x=0;x<PathNum;x++){
 		NewBase = wxString(NewBase << SLASH << Paths[x]);
 		//wxLogMessage("Attempting to create the following directory: %s",NewBase);
-#ifndef WIN32        
-		mkdir(NewBase.mb_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
-#else
-        mkdir(NewBase.mb_str());
-#endif
+		wxMkdir(NewBase);
 	}
 }
 
@@ -174,12 +170,13 @@ void getGamePath()
 	int sName = 0;
 
 	// if it failed, look for World of Warcraft install
-	const wxString regpaths[] = { 
+	const wxString regpaths[] = {
+#ifdef _WIN32
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft"),
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\PTR"),
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\Beta")
-#ifdef _WIN64
-		,_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft"),
+#else //_WIN64
+		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft"),
 		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\PTR"),
 		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\Beta")
 #endif

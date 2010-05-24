@@ -67,7 +67,7 @@ wxString content;
 /*
 bool filterModels(std::string s)
 {
-	//s.LowerCase();
+	//s.MakeLower();
 	const size_t len = s.length();
 	if (len < 4) 
 		return false;
@@ -110,7 +110,7 @@ bool filterModelsSearch(std::string s)
 		return false;
 
 	wxString temp(s.c_str(), wxConvUTF8);
-	temp = temp.MakeLower();
+	temp.MakeLower();
 	if (!temp.EndsWith(wxT("m2")) && !temp.EndsWith(wxT("wmo")))
 		return false;
 	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
@@ -126,7 +126,7 @@ bool filterSoundsSearch(std::string s)
 		return false;
 
 	wxString temp(s.c_str(), wxConvUTF8);
-	temp = temp.MakeLower();
+	temp.MakeLower();
 	if (!temp.EndsWith(wxT("wav")) && !temp.EndsWith(wxT("mp3")))
 		return false;
 	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
@@ -142,7 +142,7 @@ bool filterGraphicsSearch(std::string s)
 		return false;
 
 	wxString temp(s.c_str(), wxConvUTF8);
-	temp = temp.MakeLower();
+	temp.MakeLower();
 	if (!temp.EndsWith(wxT("blp")))
 		return false;
 	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
@@ -158,7 +158,7 @@ bool filterADTsSearch(std::string s)
 		return false;
 
 	wxString temp(s.c_str(), wxConvUTF8);
-	temp = temp.MakeLower();
+	temp.MakeLower();
 	if (!temp.EndsWith(wxT("adt")))
 		return false;
 	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
@@ -174,9 +174,7 @@ void FileControl::Init(ModelViewer* mv)
 
 	// Gets the list of files that meet the filter criteria
 	// and puts them into an array to be processed into out file tree
-	content = txtContent->GetValue();
-	content = content.MakeLower();
-	content = content.Trim();
+	content = txtContent->GetValue().MakeLower().Trim();
 
 	if (filterMode == FILE_FILTER_MODEL)
 		getFileLists(filelist, filterModelsSearch);
@@ -431,7 +429,7 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 	infoMenu.Append(ID_FILELIST_EXPORT, _T("&Save..."), _T("Save this object"));
 	// TODO: if is music, a Play option
 	wxString temp(tdata->fn.c_str(), wxConvUTF8);
-	temp = temp.MakeLower();
+	temp.MakeLower();
 #ifdef	PLAY_MUSIC
 	if (temp.EndsWith(_T("wav")) || temp.EndsWith(_T("mp3"))) {
 		infoMenu.Append(ID_FILELIST_PLAY, _T("&Play"), _T("Play this object"));

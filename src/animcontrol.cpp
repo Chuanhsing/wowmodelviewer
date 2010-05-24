@@ -151,7 +151,7 @@ void AnimControl::UpdateModel(Model *m)
 	bool res = false;
 
 	wxString fn(m->name.c_str(), wxConvUTF8);
-	fn = fn.Lower();
+	fn.MakeLower();
 	if (fn.substr(0,4) != _T("char")) {
 
 		if (fn.substr(0,8) == _T("creature"))
@@ -315,7 +315,7 @@ wxString sFilterDir;
 bool filterDir(std::string fn)
 {
 	wxString tmp(fn.c_str(), wxConvUTF8);
-	tmp.LowerCase();
+	tmp.MakeLower();
 	return (tmp.StartsWith(sFilterDir) && tmp.EndsWith(_T("blp")));
 }
 
@@ -324,10 +324,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 	wxString fn(m->name.c_str(), wxConvUTF8);
 
 	// replace .M2 with .MDX
-	if (fn.Last() == '2') {
-		fn = fn.BeforeLast('.');
-		fn.Append(_T(".mdx"));
-	}
+	fn = fn.BeforeLast(_T('.')).Append(_T(".mdx"));
 
 	TextureSet skins;
 
@@ -536,8 +533,6 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 					skins.insert(grp);
 				} 
 			}
-			if (skins.empty() != true)
-				return FillSkinSelector(skins);
 		}
 	} catch (CreatureModelDB::NotFound) {
 		// Try hardcoding some fixes for missing model info from the DBC
@@ -547,7 +542,6 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			grp.base = 11;
 			grp.count = 1;
 			skins.insert(grp);
-			return FillSkinSelector(skins);
 		} else if(fn == _T("Creature\\Mounteddemonknight\\mounteddemonknight.mdx")) {
 			TextureGroup grp;
 			grp.tex[0] = "MountedDemonKnightBlack_01";
@@ -556,7 +550,6 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			grp.base = 11;
 			grp.count = 3;
 			skins.insert(grp);
-			return FillSkinSelector(skins);
 		} else if(fn == _T("Creature\\Orcfemalewarriorlight\\orcfemale.mdx")) {
 			TextureGroup grp;
 			grp.tex[0] = "OrcFemaleSkin";
@@ -564,7 +557,6 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			grp.base = 11;
 			grp.count = 1;
 			skins.insert(grp);
-			return FillSkinSelector(skins);
 		} else if(fn == _T("Creature\\Tigon\\tigon.mdx")) {
 			TextureGroup grp;
 			grp.tex[0] = "TIGONSKIN_ORANGE";
@@ -582,14 +574,12 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			grp.base = 11;
 			grp.count = 2;
 			skins.insert(grp);
-			return FillSkinSelector(skins);
 		} else if(fn == _T("Creature\\Humanmalepiratecaptain\\humanmalepiratecaptain_ghost.mdx")) {
 			TextureGroup grp;
 			grp.tex[0] = "PirateCaptain02_Ghost";
 			grp.base = 11;
 			grp.count = 1;
 			skins.insert(grp);
-			return FillSkinSelector(skins);
 		} else if(fn == _T("Creature\\Humanmalepiratecrewman\\humanmalepiratecrewman_ghost.mdx")) {
 			TextureGroup grp;
 			grp.tex[0] = "PirateCrewman01_Ghost";
@@ -604,8 +594,8 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			grp.base = 11;
 			grp.count = 1;
 			skins.insert(grp);
-			return FillSkinSelector(skins);
-			/*
+			/* 
+			// Cataclysm Beta have some skins not in CreatureModelData.dbc
 		} else if (fn == _T("Creature\\Druidbearworgen\\druidbearworgen.mdx")) {
 			TextureGroup grp;
 			grp.tex[0] = "DruidBearWorgen";
@@ -681,8 +671,8 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 
 	// Search the same directory for BLPs
 	std::set<FileTreeItem> filelist;
-	sFilterDir = fn.BeforeLast(_T('\\'))+SLASH;
-	sFilterDir.LowerCase();
+	sFilterDir = fn.BeforeLast(SLASH)+SLASH;
+	sFilterDir.MakeLower();
 	getFileLists(filelist, filterDir);
 	if (filelist.begin() != filelist.end()) {
 		TextureGroup grp;
@@ -693,8 +683,10 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			grp.tex[0] = std::string((char *)str.BeforeLast(_T('.')).AfterLast(SLASH).c_str());
 			skins.insert(grp);
 		}
-		return FillSkinSelector(skins);
 	}
+
+	if (!skins.empty())
+		return FillSkinSelector(skins);
 
 	return false;
 }
@@ -704,10 +696,7 @@ bool AnimControl::UpdateItemModel(Model *m)
 	wxString fn(m->name.c_str(), wxConvUTF8);
 
 	// change M2 to mdx
-	if (fn[fn.Length()-1]=='2') {
-		fn[fn.Length()-1] = 'd';
-		fn.Append(_T("x"));
-	}
+	fn = fn.BeforeLast(_T('.')).Append(_T(".mdx"));
 
 	// Check to see if its a helmet model, if so cut off the race
 	// and gender specific part of the filename off
@@ -744,7 +733,26 @@ bool AnimControl::UpdateItemModel(Model *m)
 		}
 	}
 
-	return FillSkinSelector(skins);
+	// Search the same directory for BLPs
+	std::set<FileTreeItem> filelist;
+	sFilterDir = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(_T('.'));
+	sFilterDir.MakeLower();
+	getFileLists(filelist, filterDir);
+	if (filelist.begin() != filelist.end()) {
+		TextureGroup grp;
+		grp.base = 2;
+		grp.count = 1;
+		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
+			wxString str((*it).fn.c_str(), wxConvUTF8);
+			grp.tex[0] = std::string((char *)str.BeforeLast(_T('.')).AfterLast(SLASH).c_str());
+			skins.insert(grp);
+		}
+	}
+
+	if (!skins.empty())
+		return FillSkinSelector(skins);
+
+	return false;
 }
 
 
@@ -757,7 +765,7 @@ bool AnimControl::FillSkinSelector(TextureSet &skins)
 			wxString texname = wxString(it->tex[0].c_str(), *wxConvCurrent);
 			skinList->Append(texname);
 			const  char * sName = g_selModel->name.c_str();
-			texname = wxString(sName, wxConvUTF8).BeforeLast('\\') << wxString(wxT("\\")) << texname << wxString(wxT(".blp"));
+			texname = wxString(sName, wxConvUTF8).BeforeLast(SLASH) << _T("\\") << texname << _T(".blp");
 			std::string sTexname = std::string(wxString(texname.c_str()).mb_str());
 			g_selModel->TextureList.push_back(sTexname);
 			//g_selModel->TextureList.push_back( wxString(texname.c_str()).mb_str() );

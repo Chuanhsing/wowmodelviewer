@@ -573,7 +573,7 @@ inline void ModelCanvas::CreateTexture(wxString filename, GLuint texture)
 
 	// Get the file extension and load the file
 	wxString tmp = filename.AfterLast(_T('.'));
-	tmp.LowerCase();
+	tmp.MakeLower();
 
 	if (tmp == _T("bmp"))
 		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_BMP);
@@ -1790,7 +1790,7 @@ void ModelCanvas::LoadBackground(wxString filename)
 
 	// Get the file extension and load the file
 	wxString tmp = filename.AfterLast(_T('.'));
-	tmp.LowerCase();
+	tmp.MakeLower();
 
 	//GLuint texFormat = GL_TEXTURE_RECTANGLE_ARB;
 	GLuint texFormat = GL_TEXTURE_2D;

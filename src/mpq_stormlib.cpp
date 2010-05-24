@@ -265,7 +265,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 			size_t size = filesize;
 
 			wxString temp(i->first.c_str(), wxConvUTF8);
-			temp = temp.MakeLower();
+			temp.MakeLower();
 			int col = 0; // Black
 
 			if (temp.Find(_T("patch.mpq")) > -1)
@@ -304,7 +304,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 						
 						// This is just to help cleanup Duplicates
 						// Ideally I should tokenise the string and clean it up automatically
-						line.LowerCase();
+						line.MakeLower();
 						line[0] = char(line.GetChar(0) - 32);
 						int ret = line.Find('\\');
 						if (ret>-1)
