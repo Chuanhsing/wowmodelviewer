@@ -425,7 +425,7 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 
 void FileControl::ClearCanvas()
 {
-	if (!modelviewer->isModel && !modelviewer->isWMO)
+	if (!modelviewer->isModel && !modelviewer->isWMO && !modelviewer->isADT)
 		return;
 
 	// Delete any previous models that were loaded.
@@ -457,6 +457,9 @@ void FileControl::ClearCanvas()
 		}
 		//wxDELETE(modelviewer->canvas->model); // may memory leak
 		modelviewer->canvas->model = NULL;
+	} else if (modelviewer->isADT) {
+		wxDELETE(modelviewer->canvas->adt);
+		modelviewer->canvas->adt = NULL;
 	}
 
 #ifdef _DEBUG

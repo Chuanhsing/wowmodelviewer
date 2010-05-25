@@ -117,7 +117,7 @@ public:
 	bool supportMultiTex;//  = false;
 	bool supportDrawRangeElements;//  = false;
 	bool supportPointSprites;//  = false;
-	//bool supportShaders;//  = false;
+	bool supportShaders;//  = false;
 	bool supportAntiAlias;//  = false;
 	bool supportVBO;//  = false;
 	bool supportPBO;//  = false;

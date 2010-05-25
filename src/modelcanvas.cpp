@@ -1,6 +1,7 @@
 #include "modelcanvas.h"
 #include "video.h"
 #include "animcontrol.h"
+#include "shaders.h"
 
 #include "globalvars.h"
 #include "CxImage/ximage.h"
@@ -74,6 +75,7 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 	model =	0;			// Main model.
 	skyModel = 0;		// SkyBox Model
 	wmo = 0;			// world map object model
+	adt = 0;			// ADT
 	animControl = 0;
 	gifExporter = 0;
 #ifdef _WINDOWS
@@ -357,6 +359,13 @@ Attachment* ModelCanvas::LoadCharModel(const char *fn)
 
 void ModelCanvas::LoadADT(wxString fn)
 {
+#ifdef	_DEBUG
+	OldinitShaders();
+	if (!adt) {
+		adt = new MapTile(0, 0, (char *)fn.c_str(), 0);
+		root->model = adt;
+	}
+#endif
 }
 
 void ModelCanvas::LoadWMO(wxString fn)
@@ -379,7 +388,7 @@ void ModelCanvas::clearAttachments()
 
 void ModelCanvas::OnMouse(wxMouseEvent& event)
 {
-	if (!model && !wmo)
+	if (!model && !wmo && !adt)
 		return;
 
 	if (event.Button(wxMOUSE_BTN_ANY) == true)
@@ -517,6 +526,7 @@ void ModelCanvas::OnMouse(wxMouseEvent& event)
 				}
 			}
 		}
+	} else if (adt) {
 	}
 
 
@@ -560,8 +570,10 @@ void ModelCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 	if (video.render) {
 		if (wmo)
 			RenderWMO();
-		else 
+		else if (model)
 			Render();
+		else if (adt)
+			RenderADT();
 	}
 }
 
@@ -1312,6 +1324,59 @@ inline void ModelCanvas::RenderWMO()
 	SwapBuffers();
 }
 
+inline void ModelCanvas::RenderADT()
+{
+	if (!init)
+		InitGL();
+
+	glClearColor(vecBGColor.x, vecBGColor.y, vecBGColor.z, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//SetupProjection(modelsize);
+	InitView();
+
+	// Lighting
+	Vec4D la;
+	// From what I can tell, WoW OpenGL only uses 4 g_modelViewer->lightControl->lights
+	for (int i=0; i<4; i++) {
+		GLuint light = GL_LIGHT0 + i;
+		glLightf(light, GL_CONSTANT_ATTENUATION, 0.0f);
+		glLightf(light, GL_LINEAR_ATTENUATION, 0.7f);
+		glLightf(light, GL_QUADRATIC_ATTENUATION, 0.03f);
+		glDisable(light);
+	}
+	la = Vec4D(0.35f, 0.35f, 0.35f, 1.0f);
+
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, la);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	// --==--
+
+	/*
+	// TODO: Possibly move this into the Model/Attachment/Displayable::draw() routine?
+	// View
+	if (model) {
+		glTranslatef(model->pos.x, model->pos.y, -model->pos.z);
+		glRotatef(model->rot.x, 1.0f, 0.0f, 0.0f);
+		glRotatef(model->rot.y, 0.0f, 1.0f, 0.0f);
+		glRotatef(model->rot.z, 0.0f, 0.0f, 1.0f);
+		// --==--
+	}
+	*/
+	camera.Setup();
+
+
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	root->draw(this);
+	//root->drawParticles(true);
+
+	//glFlush();
+	//glFinish();
+	SwapBuffers();
+}
+
+
 #ifdef _WINDOWS
 inline void ModelCanvas::RenderWMOToBuffer()
 {
@@ -1547,7 +1612,7 @@ inline void Attachment::draw(ModelCanvas *c)
 		if (!m)
 			return;
 
-		if (!c->wmo) {
+		if (c->model) {
 			// no need to scale if its already 100%
 			if (scale != 1.0f)
 				glScalef(scale, scale, scale);
@@ -1585,7 +1650,7 @@ inline void Attachment::draw(ModelCanvas *c)
 		// and we do the 'showmodel' check inside the function
 		model->draw();
 
-		if (!c->wmo) {	
+		if (c->model) {	
 			if (m->showModel && (m->alpha!=1.0f)) {
 				float a[] = {1.0f, 1.0f, 1.0f, 1.0f};
 				glMaterialfv(GL_FRONT, GL_DIFFUSE, a);
@@ -1942,9 +2007,9 @@ void ModelCanvas::CheckMovement()
 	float speed = 1.0f;
 
 	// Time stuff
-	if (!wmo)
+	if (model)
 		speed = ((timeGetTime() - lastTime) * model->animManager->GetSpeed()) / 7.0f;
-	else 
+	else
 		speed = (timeGetTime() - lastTime);
 
 	//lastTime = timeGetTime();
@@ -2012,7 +2077,7 @@ void ModelCanvas::Screenshot(const wxString fn, int x, int y)
 
 		if (wmo)
 			RenderWMOToBuffer();
-		else
+		else if (model)
 			RenderToBuffer();
 
 		rt->BindTexture();
@@ -2023,7 +2088,7 @@ void ModelCanvas::Screenshot(const wxString fn, int x, int y)
 
 		if (wmo)
 			RenderWMOToBuffer();
-		else
+		else if (model)
 			RenderToBuffer();
 	}
 #endif

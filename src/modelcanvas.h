@@ -32,6 +32,7 @@
 #include "model.h"
 #include "wmo.h"
 #include "util.h"
+#include "maptile.h"
 //#include "viewcontrol.h"
 #include "lightcontrol.h"
 #include "RenderTexture.h"
@@ -175,6 +176,7 @@ public:
 	void Render();
 	void RenderToTexture();
 	void RenderWMO();
+	void RenderADT();
 	void RenderToBuffer();
 	void RenderWMOToBuffer();
 	void RenderLight(Light *l);
@@ -226,6 +228,7 @@ public:
 	Model *model;
 	Model *skyModel;
 	WMO *wmo;
+	MapTile *adt;
 
 	Attachment *root;
 	Attachment *sky;
