@@ -219,7 +219,7 @@ void M2toX3DAnim(tabbed_ostream s, Model* m)
 
             for (size_t frame = 0; frame <= numKeyFrames; ++frame)
             {
-                m->animManager->SetFrame((stepSize*frame) % numTotalFrames);
+                m->animManager->SetFrame((unsigned int)((stepSize*frame) % numTotalFrames));
 
                 // calculate frame
                 m->draw();

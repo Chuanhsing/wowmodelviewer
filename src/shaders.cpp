@@ -4,11 +4,15 @@
 bool supportShaders = false;
 static bool initedShaders = false;
 
+/*
+Commented out as it currently breaks the compile with the new Glew 1.5.4
+
 PFNGLPROGRAMSTRINGARBPROC glProgramStringARB = NULL;
 PFNGLBINDPROGRAMARBPROC glBindProgramARB = NULL;
 PFNGLDELETEPROGRAMSARBPROC glDeleteProgramsARB = NULL;
 PFNGLGENPROGRAMSARBPROC glGenProgramsARB = NULL;
 PFNGLPROGRAMLOCALPARAMETER4FARBPROC glProgramLocalParameter4fARB;
+*/
 
 ShaderPair *terrainShaders[4]={0,0,0,0}, *wmoShader=0, *waterShaders[1]={0};
 

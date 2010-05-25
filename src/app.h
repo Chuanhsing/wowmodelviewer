@@ -25,24 +25,25 @@
 
 // Link to our libs.
 #ifdef _WINDOWS
-#pragma message("     Adding library: opengl32.lib" ) 
-#pragma comment( lib, "opengl32.lib" )	// OpenGL API
-#pragma message("     Adding library: glu32.lib" ) 
-#pragma comment( lib, "glu32.lib" ) // OpenGL Utilities
-#ifdef _DEBUG // GLEW lib
-	#pragma message("     Adding library: glew32d.lib" ) 
-	#pragma comment( lib, "glew32d.lib" )
-#else
-	#pragma message("     Adding library: glew32.lib" ) 
-	#pragma comment( lib, "glew32.lib" )
-#endif
+	#pragma message("     Adding library: opengl32.lib" ) 
+	#pragma comment( lib, "opengl32.lib" )	// OpenGL API
+	#pragma message("     Adding library: glu32.lib" ) 
+	#pragma comment( lib, "glu32.lib" ) // OpenGL Utilities
+	#define GLEW_STATIC
+	#ifdef _DEBUG // GLEW lib
+		#pragma message("     Adding library: glew32d.lib" ) 
+		#pragma comment( lib, "glew32d.lib" )
+	#else
+		#pragma message("     Adding library: glew32.lib" ) 
+		#pragma comment( lib, "glew32.lib" )
+	#endif
 
-#pragma message("     Adding library: uxtheme.lib" ) 
-#pragma comment( lib, "uxtheme.lib" ) // WinXP Theme Engine
-#pragma message("     Adding library: comctl32.lib" ) 
-#pragma comment( lib, "comctl32.lib" ) // Common Controls 32bit
-#pragma message("     Adding library: rpcrt4.lib" ) 
-#pragma comment( lib, "rpcrt4.lib" )
+	#pragma message("     Adding library: uxtheme.lib" ) 
+	#pragma comment( lib, "uxtheme.lib" ) // WinXP Theme Engine
+	#pragma message("     Adding library: comctl32.lib" ) 
+	#pragma comment( lib, "comctl32.lib" ) // Common Controls 32bit
+	#pragma message("     Adding library: rpcrt4.lib" ) 
+	#pragma comment( lib, "rpcrt4.lib" )
 #endif
 
 #ifdef _DEBUG

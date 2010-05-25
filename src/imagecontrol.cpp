@@ -59,12 +59,12 @@ void ImageControl::OnShow(wxAuiManager *m)
 	lockAspect->SetValue(locked);
 
 	int screenSize[4];
-	glGetIntegerv(GL_VIEWPORT, screenSize);
+	glGetIntegerv(GL_VIEWPORT, (GLint*)screenSize);
 
 	x = screenSize[2];
 	y = screenSize[3];
 
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxSize); 
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*)&maxSize); 
 
 	maxsize->SetLabel(wxString::Format(_T("Max Size: %i"), maxSize));
 

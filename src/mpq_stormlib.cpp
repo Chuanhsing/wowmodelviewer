@@ -108,7 +108,7 @@ MPQFile::openFile(const char* filename)
 		}
 
 		buffer = new unsigned char[size];
-		SFileReadFile( fh, buffer, size );
+		SFileReadFile( fh, buffer, (DWORD)size );
 		SFileCloseFile( fh );
 
 		return;
@@ -283,7 +283,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 
 			if (size > 0 ) {
 				unsigned char *buffer = new unsigned char[size];
-				SFileReadFile( fh, buffer, size );
+				SFileReadFile( fh, buffer, (DWORD)size );
 				unsigned char *p = buffer, *end = buffer + size;
 
 				while (p <= end) {

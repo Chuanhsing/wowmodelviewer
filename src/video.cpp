@@ -112,11 +112,11 @@ bool VideoSettings::Init()
 	// Now get some specifics on the card
 	// First up, the details
 	if(glewIsSupported("GL_EXT_texture_filter_anisotropic"))
-		glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &AnisofilterLevel);
+		glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, (GLint*)&AnisofilterLevel);
 	else
 		AnisofilterLevel = 0;
 
-	glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &numTextureUnits);
+	glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, (GLint*)&numTextureUnits);
 	vendor = ((char *)glGetString(GL_VENDOR));
 	version = ((char *)glGetString(GL_VERSION));
 	renderer = ((char *)glGetString(GL_RENDERER));

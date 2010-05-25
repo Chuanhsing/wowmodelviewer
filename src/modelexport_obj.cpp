@@ -44,7 +44,7 @@ void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init)
 		ModelRenderPass &p = m->passes[i];
 			
 		if (p.init(m)) {
-			wxString texName = GetM2TextureName(m,fn,p,i);
+			wxString texName = GetM2TextureName(m,fn,p,(int)i);
 
 			fm << _T("newmtl ") << texName << endl;
 			texName << _T(".tga");
