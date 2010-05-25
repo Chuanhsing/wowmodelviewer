@@ -21,8 +21,9 @@ END_EVENT_TABLE()
 
 enum FilterModes {
 	FILE_FILTER_MODEL=0,
-	FILE_FILTER_MUSIC,
-	FILE_FILTER_GRAPHIC,
+	FILE_FILTER_WMO,
+	FILE_FILTER_SOUND,
+	FILE_FILTER_IMAGE,
 	FILE_FILTER_ADT
 };
 
@@ -41,7 +42,7 @@ FileControl::FileControl(wxWindow* parent, wxWindowID id)
 		txtContent = new wxTextCtrl(this, ID_FILELIST_CONTENT, wxEmptyString, wxPoint(10, 10), wxSize(110, 20), wxTE_PROCESS_ENTER, wxDefaultValidator);
 		btnSearch = new wxButton(this, ID_FILELIST_SEARCH, _("Clear"), wxPoint(120, 10), wxSize(46,20));
 		fileTree = new wxTreeCtrl(this, ID_FILELIST, wxPoint(0, 35), wxSize(250,600), wxTR_HIDE_ROOT|wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_FULL_ROW_HIGHLIGHT|wxTR_NO_LINES);
-		wxString chos[] = {_T("Models & WMOs"), _T("Sounds"), _T("Images"), _T("ADTs")};
+		wxString chos[] = {_T("Models"), _T("WMOs"), _T("Sounds"), _T("Images"), _T("ADTs")};
 		choFilter = new wxChoice(this, ID_FILELIST_FILTER, wxPoint(10, 645), wxSize(110, 10), WXSIZEOF(chos), chos);
 		choFilter->SetSelection(filterMode);
 #ifdef	PLAY_MUSIC
@@ -64,45 +65,6 @@ FileControl::~FileControl()
 
 wxString content;
 
-/*
-bool filterModels(std::string s)
-{
-	//s.MakeLower();
-	const size_t len = s.length();
-	if (len < 4) 
-		return false;
-
-	//return ((s[len-2]=='m' && s[len-1]=='2') || (s[len-3]=='w' && s[len-2]=='m'));
-	return ( 
-			((s[len-2]|0x20)=='m' && s[len-1]=='2')
-			|| ((s[len-3]|0x20)=='w' && (s[len-2]|0x20)=='m' && (s[len-1]|0x20)=='o' )
-			//||((s[len-3]|0x20)=='a' && (s[len-2]|0x20)=='d' && (s[len-1]|0x20)=='t' ) 
-			);
-}
-
-bool filterNpcs(std::string s)
-{
-	// textures\BakedNpcTextures\*.*
-	if (s.length() < 18) 
-		return false;
-	
-	return (s.substr(9, 8) == "BakedNpc");
-}
-
-
-bool filterSounds(std::string s)
-{
-	const size_t len = s.length();
-	if (len < 4) 
-		return false;
-
-	return (
-			((s[len-3]|0x20)=='w' && (s[len-2]|0x20)=='a' && (s[len-1]|0x20)=='v') ||
-			((s[len-3]|0x20)=='m' && (s[len-2]|0x20)=='p' && s[len-1]=='3')
-			);
-}
-*/
-
 bool filterModelsSearch(std::string s)
 {
 	const size_t len = s.length();
@@ -111,7 +73,23 @@ bool filterModelsSearch(std::string s)
 
 	wxString temp(s.c_str(), wxConvUTF8);
 	temp.MakeLower();
-	if (!temp.EndsWith(wxT("m2")) && !temp.EndsWith(wxT("wmo")))
+	if (!temp.EndsWith(wxT("m2")))
+		return false;
+	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
+		return false;
+
+	return true;
+}
+
+bool filterWMOsSearch(std::string s)
+{
+	const size_t len = s.length();
+	if (len < 4) 
+		return false;
+
+	wxString temp(s.c_str(), wxConvUTF8);
+	temp.MakeLower();
+	if (!temp.EndsWith(wxT("wmo")))
 		return false;
 	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
 		return false;
@@ -178,9 +156,11 @@ void FileControl::Init(ModelViewer* mv)
 
 	if (filterMode == FILE_FILTER_MODEL)
 		getFileLists(filelist, filterModelsSearch);
-	else if (filterMode == FILE_FILTER_MUSIC)
+	else if (filterMode == FILE_FILTER_WMO)
+		getFileLists(filelist, filterWMOsSearch);
+	else if (filterMode == FILE_FILTER_SOUND)
 		getFileLists(filelist, filterSoundsSearch);
-	else if (filterMode == FILE_FILTER_GRAPHIC)
+	else if (filterMode == FILE_FILTER_IMAGE)
 		getFileLists(filelist, filterGraphicsSearch);
 	else if (filterMode == FILE_FILTER_ADT)
 		getFileLists(filelist, filterADTsSearch);
@@ -443,6 +423,122 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 	PopupMenu(&infoMenu);
 }
 
+void FileControl::ClearCanvas()
+{
+	if (!modelviewer->isModel && !modelviewer->isWMO)
+		return;
+
+	// Delete any previous models that were loaded.
+	if (modelviewer->isWMO) {
+		//canvas->clearAttachments();
+		wxDELETE(modelviewer->canvas->wmo);
+		modelviewer->canvas->wmo = NULL;
+	} else if (modelviewer->isModel) {
+		modelviewer->canvas->clearAttachments();
+
+		// If it was a character model, no need to delete canvas->model, 
+		//it was just pointing to a model created as an attachment - just set back to NULL instead.
+		//canvas->model = NULL;
+/*
+		if (!modelviewer->isChar) { 
+			
+			modelviewer->canvas->model = NULL;
+		} else{
+			modelviewer->charControl->charAtt = NULL;
+
+			wxString rootfn(data->fn.c_str(), wxConvUTF8);
+			if (rootfn.Last() != '2' && modelviewer->canvas->model) {
+				modelviewer->canvas->model = NULL;
+			}
+		}
+*/
+		if (modelviewer->isChar) {
+			modelviewer->charControl->charAtt = NULL;
+		}
+		//wxDELETE(modelviewer->canvas->model); // may memory leak
+		modelviewer->canvas->model = NULL;
+	}
+
+#ifdef _DEBUG
+	GLenum err=glGetError();
+	if (err)
+		wxLogMessage(_T("OGL Error: [0x%x] An error occured."), (unsigned int)err);
+	wxLogMessage(_T("Clearing textures from previous model..."));
+#endif
+	// Texture clearing and debugging
+	texturemanager.clear();
+
+#ifdef _DEBUG
+	err = glGetError();
+	if (err)
+		wxLogMessage(_T("OpenGL Error: [0x%x] An error occured."), (unsigned int)err);
+#endif
+
+	modelviewer->isModel = false;
+	modelviewer->isWMO = false;
+	modelviewer->isChar = false;
+}
+
+void FileControl::UpdateInterface()
+{
+	// Disable whatever formats can't be export yet!
+
+	// You MUST put true in one if the other is false! Otherwise, if they open the other model type and go back,
+	// your function will still be disabled!!
+	if (modelviewer->isModel == true){
+		// If it's an M2 file...
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);	// Currently totally disabled. No support at all...
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, true);
+
+		modelviewer->charMenu->Enable(ID_SAVE_CHAR, true);
+		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, true);
+		modelviewer->charMenu->Enable(ID_SHOW_EARS, true);
+		modelviewer->charMenu->Enable(ID_SHOW_HAIR, true);
+		modelviewer->charMenu->Enable(ID_SHOW_FACIALHAIR, true);
+		modelviewer->charMenu->Enable(ID_SHOW_FEET, true);
+		modelviewer->charMenu->Enable(ID_SHEATHE, true);
+		modelviewer->charMenu->Enable(ID_SAVE_EQUIPMENT, true);
+		modelviewer->charMenu->Enable(ID_LOAD_EQUIPMENT, true);
+		modelviewer->charMenu->Enable(ID_CLEAR_EQUIPMENT, true);
+		modelviewer->charMenu->Enable(ID_LOAD_SET, true);
+		modelviewer->charMenu->Enable(ID_LOAD_START, true);
+		modelviewer->charMenu->Enable(ID_LOAD_NPC_START, true);
+		modelviewer->charMenu->Enable(ID_MOUNT_CHARACTER, true);
+		modelviewer->charMenu->Enable(ID_CHAR_RANDOMISE, true);
+	}else{
+		// If the object is a WMO file...
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode when viewing WMOs...
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, false);
+
+		modelviewer->charMenu->Enable(ID_SAVE_CHAR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_EARS, false);
+		modelviewer->charMenu->Enable(ID_SHOW_HAIR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_FACIALHAIR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_FEET, false);
+		modelviewer->charMenu->Enable(ID_SHEATHE, false);
+		modelviewer->charMenu->Enable(ID_SAVE_EQUIPMENT, false);
+		modelviewer->charMenu->Enable(ID_LOAD_EQUIPMENT, false);
+		modelviewer->charMenu->Enable(ID_CLEAR_EQUIPMENT, false);
+		modelviewer->charMenu->Enable(ID_LOAD_SET, false);
+		modelviewer->charMenu->Enable(ID_LOAD_START, false);
+		modelviewer->charMenu->Enable(ID_LOAD_NPC_START, false);
+		modelviewer->charMenu->Enable(ID_MOUNT_CHARACTER, false);
+		modelviewer->charMenu->Enable(ID_CHAR_RANDOMISE, false);
+	}
+
+	// Update the layout
+	modelviewer->interfaceManager.Update();
+}
+
 void FileControl::OnTreeSelect(wxTreeEvent &event)
 {
 	wxTreeItemId item = event.GetItem();
@@ -469,189 +565,74 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		if (modelviewer->canvas->model && !modelviewer->canvas->model->name.empty() && modelviewer->canvas->model->name == data->fn)
 			return; // clicked on the same model thats currently loaded, no need to load it again - exit
 
-		// Delete any previous models that were loaded.
-		if (modelviewer->isWMO) {
-			//canvas->clearAttachments();
-			wxDELETE(modelviewer->canvas->wmo);
-			modelviewer->canvas->wmo = NULL;
-		} else {
-			modelviewer->canvas->clearAttachments();
-
-			// If it was a character model, no need to delete canvas->model, 
-			//it was just pointing to a model created as an attachment - just set back to NULL instead.
-			//canvas->model = NULL;
-			
-			if (!modelviewer->isChar) { 
-				//wxDELETE(modelviewer->canvas->model); // may memory leak
-				modelviewer->canvas->model = NULL;
-			} else{
-				modelviewer->charControl->charAtt = NULL;
-
-				wxString rootfn(data->fn.c_str(), wxConvUTF8);
-				if (rootfn.Last() != '2' && modelviewer->canvas->model) {
-					modelviewer->canvas->model = NULL;
-				}
-			}
-		}
-
-#ifdef _DEBUG
-		GLenum err=glGetError();
-		if (err)
-			wxLogMessage(_T("OGL Error: [0x%x] An error occured."), (unsigned int)err);
-		wxLogMessage(_T("Clearing textures from previous model..."));
-#endif
-
-		// Texture clearing and debugging
-		texturemanager.clear();
-
-#ifdef _DEBUG
-		err = glGetError();
-		if (err)
-			wxLogMessage(_T("OpenGL Error: [0x%x] An error occured."), (unsigned int)err);
-#endif
-
+		ClearCanvas();
 
 		wxString rootfn(data->fn.c_str(), wxConvUTF8);
 
 		// Check to make sure the selected item is a model (an *.m2 file).
 		modelviewer->isModel = (rootfn.Last() == '2');
-		modelviewer->isWMO = !modelviewer->isModel;
-		modelviewer->isChar = false;
 
-		if (modelviewer->isModel) {
-			// not functional yet.
-			//if (wxGetKeyState(WXK_SHIFT)) 
-			//	canvas->AddModel(rootfn);
-			//else
-				modelviewer->LoadModel(rootfn);	// Load the model.
-		
-		} else { // else, it isn't a m2 file, so load the file as a WMO.
-			// is WMO?
-			//canvas->model->modelType = MT_WMO;
+		// not functional yet.
+		//if (wxGetKeyState(WXK_SHIFT)) 
+		//	canvas->AddModel(rootfn);
+		//else
+			modelviewer->LoadModel(rootfn);	// Load the model.
 
-			// if we have selected a non-root wmo, find the root filename
-			char dash = rootfn[data->fn.length() - 8];
-			char num = rootfn[data->fn.length() - 7];
-			bool isroot = !((dash=='_') && (num>='0') && (num<='9'));
-			if (!isroot) {
-				rootfn.erase(rootfn.length()-8);
-				rootfn.append(_T(".wmo"));
-			}
+		UpdateInterface();
+	} else if (filterMode == FILE_FILTER_WMO) {
+		ClearCanvas();
 
-			modelviewer->canvas->LoadWMO(std::string(rootfn.mb_str()));
+		wxString rootfn(data->fn.c_str(), wxConvUTF8);
 
-			int id = -1;
-			if (!isroot) {
-				char idnum[4];
-				strncpy(idnum, data->fn.c_str() + strlen(data->fn.c_str())-7,3);
-				//wxString(data->fn.Substr((data->fn.Length() - 7), 3)).ToLong(&id);
-				idnum[3]=0;
-				sscanf(idnum,"%d",&id);
-			}
-			modelviewer->canvas->wmo->loadGroup(id);
-			modelviewer->canvas->ResetViewWMO(id);
-			modelviewer->animControl->UpdateWMO(modelviewer->canvas->wmo, id);
+		// Check to make sure the selected item is a model (an *.m2 file).
+		modelviewer->isWMO = true;
 
-			// wxAUI
-			modelviewer->interfaceManager.GetPane(modelviewer->charControl).Show(false);
+		// it isn't a m2 file, so load the file as a WMO.
+		//canvas->model->modelType = MT_WMO;
+
+		// if we have selected a non-root wmo, find the root filename
+		char dash = rootfn[data->fn.length() - 8];
+		char num = rootfn[data->fn.length() - 7];
+		bool isroot = !((dash=='_') && (num>='0') && (num<='9'));
+		if (!isroot) {
+			rootfn.erase(rootfn.length()-8);
+			rootfn.append(_T(".wmo"));
 		}
 
-		// Disable whatever formats can't be export yet!
+		modelviewer->canvas->LoadWMO(std::string(rootfn.mb_str()));
 
-		// You MUST put true in one if the other is false! Otherwise, if they open the other model type and go back,
-		// your function will still be disabled!!
-		if (modelviewer->isWMO == true){
-			// If the object is a WMO file...
-			modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode when viewing WMOs...
-			modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
-			modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);
-			modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, false);
-			modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, false);
-			modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, false);
-
-			modelviewer->charMenu->Enable(ID_SAVE_CHAR, false);
-			modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, false);
-			modelviewer->charMenu->Enable(ID_SHOW_EARS, false);
-			modelviewer->charMenu->Enable(ID_SHOW_HAIR, false);
-			modelviewer->charMenu->Enable(ID_SHOW_FACIALHAIR, false);
-			modelviewer->charMenu->Enable(ID_SHOW_FEET, false);
-			modelviewer->charMenu->Enable(ID_SHEATHE, false);
-			modelviewer->charMenu->Enable(ID_SAVE_EQUIPMENT, false);
-			modelviewer->charMenu->Enable(ID_LOAD_EQUIPMENT, false);
-			modelviewer->charMenu->Enable(ID_CLEAR_EQUIPMENT, false);
-			modelviewer->charMenu->Enable(ID_LOAD_SET, false);
-			modelviewer->charMenu->Enable(ID_LOAD_START, false);
-			modelviewer->charMenu->Enable(ID_LOAD_NPC_START, false);
-			modelviewer->charMenu->Enable(ID_MOUNT_CHARACTER, false);
-			modelviewer->charMenu->Enable(ID_CHAR_RANDOMISE, false);
-		}else{
-			// If it's an M2 file...
-			modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, true);
-			modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);	// Currently totally disabled. No support at all...
-			modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, true);
-			modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, true);
-			modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, true);
-			modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, true);
-
-			modelviewer->charMenu->Enable(ID_SAVE_CHAR, true);
-			modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, true);
-			modelviewer->charMenu->Enable(ID_SHOW_EARS, true);
-			modelviewer->charMenu->Enable(ID_SHOW_HAIR, true);
-			modelviewer->charMenu->Enable(ID_SHOW_FACIALHAIR, true);
-			modelviewer->charMenu->Enable(ID_SHOW_FEET, true);
-			modelviewer->charMenu->Enable(ID_SHEATHE, true);
-			modelviewer->charMenu->Enable(ID_SAVE_EQUIPMENT, true);
-			modelviewer->charMenu->Enable(ID_LOAD_EQUIPMENT, true);
-			modelviewer->charMenu->Enable(ID_CLEAR_EQUIPMENT, true);
-			modelviewer->charMenu->Enable(ID_LOAD_SET, true);
-			modelviewer->charMenu->Enable(ID_LOAD_START, true);
-			modelviewer->charMenu->Enable(ID_LOAD_NPC_START, true);
-			modelviewer->charMenu->Enable(ID_MOUNT_CHARACTER, true);
-			modelviewer->charMenu->Enable(ID_CHAR_RANDOMISE, true);
+		int id = -1;
+		if (!isroot) {
+			char idnum[4];
+			strncpy(idnum, data->fn.c_str() + strlen(data->fn.c_str())-7,3);
+			//wxString(data->fn.Substr((data->fn.Length() - 7), 3)).ToLong(&id);
+			idnum[3]=0;
+			sscanf(idnum,"%d",&id);
 		}
+		modelviewer->canvas->wmo->loadGroup(id);
+		modelviewer->canvas->ResetViewWMO(id);
+		modelviewer->animControl->UpdateWMO(modelviewer->canvas->wmo, id);
 
-		// Update the layout
-		modelviewer->interfaceManager.Update();
-	} else {
-		// Clear any models that may be loaded.
-		wxDELETE(modelviewer->canvas->model);
-		modelviewer->canvas->model = NULL;
+		// wxAUI
+		modelviewer->interfaceManager.GetPane(modelviewer->charControl).Show(false);
+
+		UpdateInterface();
+	} else if (filterMode == FILE_FILTER_IMAGE) {
+		ClearCanvas();
 
 		// For Graphics
-		if (filterMode == FILE_FILTER_GRAPHIC) {
-			wxString val(data->fn.c_str(), wxConvUTF8);
-			ExportPNG(val, _T("png"));
-			wxFileName fn(val);
-			wxString temp(wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".png"));
-			modelviewer->canvas->LoadBackground(temp);
-			wxRemoveFile(temp);
-		}
-		
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, false);
+		wxString val(data->fn.c_str(), wxConvUTF8);
+		ExportPNG(val, _T("png"));
+		wxFileName fn(val);
+		wxString temp(wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".png"));
+		modelviewer->canvas->LoadBackground(temp);
+		wxRemoveFile(temp);
 
-		modelviewer->charMenu->Enable(ID_SAVE_CHAR, false);
-		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, false);
-		modelviewer->charMenu->Enable(ID_SHOW_EARS, false);
-		modelviewer->charMenu->Enable(ID_SHOW_HAIR, false);
-		modelviewer->charMenu->Enable(ID_SHOW_FACIALHAIR, false);
-		modelviewer->charMenu->Enable(ID_SHOW_FEET, false);
-		modelviewer->charMenu->Enable(ID_SHEATHE, false);
-		modelviewer->charMenu->Enable(ID_SAVE_EQUIPMENT, false);
-		modelviewer->charMenu->Enable(ID_LOAD_EQUIPMENT, false);
-		modelviewer->charMenu->Enable(ID_CLEAR_EQUIPMENT, false);
-		modelviewer->charMenu->Enable(ID_LOAD_SET, false);
-		modelviewer->charMenu->Enable(ID_LOAD_START, false);
-		modelviewer->charMenu->Enable(ID_LOAD_NPC_START, false);
-		modelviewer->charMenu->Enable(ID_MOUNT_CHARACTER, false);
-		modelviewer->charMenu->Enable(ID_CHAR_RANDOMISE, false);
+		UpdateInterface();
+	} else {
+		ClearCanvas();
 
-		// Update the layout
-		modelviewer->interfaceManager.Update();
+		UpdateInterface();
 	}
 }
 

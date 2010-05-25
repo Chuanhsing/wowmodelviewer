@@ -33,6 +33,10 @@ public:
 	int filterMode;
 
 	ModelViewer* modelviewer; // point to parent
+	
+private:
+	void ClearCanvas();
+	void UpdateInterface();
 };
 
 class FileTreeData:public wxTreeItemData
