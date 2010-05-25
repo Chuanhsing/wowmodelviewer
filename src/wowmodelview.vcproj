@@ -46,7 +46,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;WotLK&quot;&#x0D;&#x0A;/D &quot;PLAY_MUSIC&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.10\include&quot;;&quot;C:\wxWidgets-2.8.10\include\msvc&quot;;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\"
+				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.11\include&quot;;&quot;C:\wxWidgets-2.8.11\include\msvc&quot;;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\"
 				PreprocessorDefinitions="WIN32;_WIN32;_WINDOWS;__WINDOWS__;__WXMSW__;_DEBUG;__WXDEBUG__"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="C:\wxWidgets-2.8.10\include"
+				AdditionalIncludeDirectories="C:\wxWidgets-2.8.11\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -79,7 +79,7 @@
 				AdditionalDependencies="glew32d.lib wxpng.lib"
 				OutputFile="$(OutDir)/wowmodelview.exe"
 				LinkIncremental="0"
-				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.10\lib\vc_lib&quot;;.\lib\Windows\32bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
+				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.11\lib\vc_lib&quot;;.\lib\Windows\32bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="LIBCMT.lib"
 				GenerateDebugInformation="true"
@@ -143,7 +143,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;WotLK&quot;&#x0D;&#x0A;/D &quot;PLAY_MUSIC&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.10\include&quot;;&quot;C:\wxWidgets-2.8.10\include\msvc&quot;;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\"
+				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.11\include&quot;;&quot;C:\wxWidgets-2.8.11\include\msvc&quot;;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\"
 				PreprocessorDefinitions="WIN32;_WIN32;_WINDOWS;WIN64;_WIN64;_AMD64_;_M_AMD64;__WINDOWS__;__WXMSW__;_DEBUG;__WXDEBUG__"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -166,7 +166,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="C:\wxWidgets-2.8.10\include"
+				AdditionalIncludeDirectories="C:\wxWidgets-2.8.11\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -176,7 +176,7 @@
 				AdditionalDependencies="glew32d.lib wxpng.lib"
 				OutputFile="$(OutDir)/wowmodelview.exe"
 				LinkIncremental="0"
-				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.10\lib\vc_lib64&quot;;.\lib\Windows\64bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
+				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.11\lib\vc_lib64&quot;;.\lib\Windows\64bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="LIBCMT.lib"
 				GenerateDebugInformation="true"
@@ -245,7 +245,7 @@
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.10\include&quot;;&quot;C:\wxWidgets-2.8.10\include\msvc&quot;;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\"
+				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.11\include&quot;;&quot;C:\wxWidgets-2.8.11\include\msvc&quot;;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\"
 				PreprocessorDefinitions="WIN32;_WIN32;_WINDOWS;__WINDOWS__;__WXMSW__"
 				GeneratePreprocessedFile="0"
 				KeepComments="false"
@@ -279,7 +279,7 @@
 				Version="05.08.684"
 				LinkIncremental="0"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.10\lib\vc_lib&quot;;.\lib\Windows\32bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
+				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.11\lib\vc_lib&quot;;.\lib\Windows\32bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
 				IgnoreDefaultLibraryNames="LIBCMT.lib"
 				GenerateDebugInformation="false"
 				AssemblyDebug="2"
@@ -353,7 +353,7 @@
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.10\include&quot;;&quot;C:\wxWidgets-2.8.10\include\msvc&quot;;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\"
+				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.11\include&quot;;&quot;C:\wxWidgets-2.8.11\include\msvc&quot;;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\"
 				PreprocessorDefinitions="WIN32;_WIN32;_WINDOWS;WIN64;_WIN64;_AMD64_;__WINDOWS__;__WXMSW__"
 				GeneratePreprocessedFile="0"
 				KeepComments="false"
@@ -375,7 +375,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="C:\wxWidgets-2.8.10\include\"
+				AdditionalIncludeDirectories="C:\wxWidgets-2.8.11\include\"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -387,7 +387,7 @@
 				Version="05.08.682"
 				LinkIncremental="0"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.10\lib\vc_lib64&quot;;.\lib\Windows\64bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
+				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.11\lib\vc_lib64&quot;;.\lib\Windows\64bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
 				IgnoreDefaultLibraryNames="LIBCMT.lib"
 				GenerateDebugInformation="false"
 				AssemblyDebug="2"

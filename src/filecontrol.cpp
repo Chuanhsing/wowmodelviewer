@@ -475,8 +475,9 @@ void FileControl::ClearCanvas()
 #endif
 
 	modelviewer->isModel = false;
-	modelviewer->isWMO = false;
 	modelviewer->isChar = false;
+	modelviewer->isWMO = false;
+	modelviewer->isADT = false;
 }
 
 void FileControl::UpdateInterface()
@@ -582,12 +583,9 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 	} else if (filterMode == FILE_FILTER_WMO) {
 		ClearCanvas();
 
+		modelviewer->isWMO = true;
 		wxString rootfn(data->fn.c_str(), wxConvUTF8);
 
-		// Check to make sure the selected item is a model (an *.m2 file).
-		modelviewer->isWMO = true;
-
-		// it isn't a m2 file, so load the file as a WMO.
 		//canvas->model->modelType = MT_WMO;
 
 		// if we have selected a non-root wmo, find the root filename
@@ -599,7 +597,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 			rootfn.append(_T(".wmo"));
 		}
 
-		modelviewer->canvas->LoadWMO(std::string(rootfn.mb_str()));
+		modelviewer->canvas->LoadWMO(rootfn);
 
 		int id = -1;
 		if (!isroot) {
@@ -627,6 +625,14 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		wxString temp(wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".png"));
 		modelviewer->canvas->LoadBackground(temp);
 		wxRemoveFile(temp);
+
+		UpdateInterface();
+	} else if (filterMode == FILE_FILTER_ADT) {
+		ClearCanvas();
+
+		modelviewer->isADT = true;
+		wxString rootfn(data->fn.c_str(), wxConvUTF8);
+		modelviewer->canvas->LoadADT(rootfn);
 
 		UpdateInterface();
 	} else {

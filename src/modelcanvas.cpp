@@ -355,10 +355,14 @@ Attachment* ModelCanvas::LoadCharModel(const char *fn)
 	return att;
 }
 
-void ModelCanvas::LoadWMO(std::string fn)
+void ModelCanvas::LoadADT(wxString fn)
+{
+}
+
+void ModelCanvas::LoadWMO(wxString fn)
 {
 	if (!wmo) {
-		wmo = new WMO(fn);
+		wmo = new WMO(std::string(fn.mb_str()));
 		root->model = wmo;
 	}
 }

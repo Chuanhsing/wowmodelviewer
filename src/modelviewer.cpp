@@ -2091,7 +2091,7 @@ void ModelViewer::LoadChar(const char *fn)
 		//canvas->clearAttachments();
 		wxDELETE(canvas->wmo);
 		canvas->wmo = NULL;
-	} else {
+	} else if (isModel) {
 		canvas->clearAttachments();
 		//if (!isChar) // may memory leak
 		//	wxDELETE(canvas->model);

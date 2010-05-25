@@ -206,7 +206,8 @@ public:
 #if 0
 	Attachment* AddModel(const char *fn);
 #endif
-	void LoadWMO(std::string fn);
+	void LoadWMO(wxString fn);
+	void LoadADT(wxString fn);
 	//void TogglePause();
 	
 	// Various toggles
