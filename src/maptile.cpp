@@ -306,11 +306,14 @@ http://madx.dk/wowdev/wiki/index.php?title=ADT
 */
 MapTile::MapTile(int x0, int z0, char* filename, bool bigAlpha): x(x0), z(z0), topnode(0,0,16), nWMO(0), nMDX(0)
 {
+	x0 = 28;
+	z0 = 33;
+	char *fn = "World\\Maps\\gilneas\\gilneas_28_33.adt";
 	xbase = x0 * TILESIZE;
 	zbase = z0 * TILESIZE;
 	mBigAlpha=bigAlpha;
 
-	wxLogMessage(_T("Loading tile %s"),filename);
+	wxLogMessage(_T("Loading tile %s"),fn);
 	initDisplay();
 
 	 // [FLOW] DON'T REMOVE i use this file extraction method to debug the adt format
@@ -327,7 +330,7 @@ MapTile::MapTile(int x0, int z0, char* filename, bool bigAlpha): x(x0), z(z0), t
 	}
 */
 
-	MPQFile f(filename);
+	MPQFile f(fn);
 	ok = !f.isEof();
 	if (!ok) {
 		wxLogMessage(_T("Error: loading %s"),filename);
@@ -780,6 +783,36 @@ void MapTile::draw()
 {
 	if (!ok) return;
 
+	Vec3D camera; // [0] = {x=14933.333 y=-259.28278 z=17600.000 }
+	Vec3D lookat;
+
+	//glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
+	camera.x = 14937.999f+200.0f;
+	camera.y = -260.0f+100.0f;
+	camera.z = 18400.0f;
+	lookat.x = camera.x;
+	lookat.y = camera.y + 0.2f;
+	lookat.z = camera.z - 1.0f;
+	gluLookAt(camera.x,camera.y,camera.z, lookat.x,lookat.y,lookat.z, 0.0f, -1.0f, 0.0f);
+
+/*
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glPolygonMode(GL_BACK, GL_LINE);
+	glBegin(GL_TRIANGLES);
+	glVertex3f(14933.333f, -259.282f, 17600.0f);
+	glVertex3f(14937.500f, -260.560f, 17600.0f);
+	glVertex3f(14941.666f, -262.477f, 17600.0f); 
+	glEnd();
+
+	glColor3f(0.0f, 1.0f, 0.0f);
+	glBegin(GL_LINES);
+	glVertex3f(lookat.x-25.0f, lookat.y-25.0f, 17600.0f);
+	glVertex3f(lookat.x+25.0f, lookat.y+25.0f, 17600.0f);
+	glEnd();
+	//glFlush();
+*/
+
 	// Draw height map
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -787,7 +820,6 @@ void MapTile::draw()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL); // less z-fighting artifacts this way, I think
 	glEnable(GL_LIGHTING);
-
 
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -946,7 +978,7 @@ static unsigned char blendbuf[64*64*4]; // make unstable when new/delete, just m
 static unsigned char amap[64*64];
 void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 {
-	Vec3D tn[mapbufsize], tv[mapbufsize];
+	//Vec3D tn[mapbufsize], tv[mapbufsize];
 	
 	maptile = mt;
 
@@ -1741,7 +1773,22 @@ void MapChunk::draw()
 		//glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, shc.x,shc.y,shc.z,1);
 
 		glDrawElements(GL_TRIANGLE_STRIP, striplen, GL_UNSIGNED_SHORT, strip);
+
 		terrainShaders[nTextures-1]->unbind();
+
+		// Testing code
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_BLEND);
+		glDisable(GL_LIGHTING);
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glPolygonMode(GL_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT, GL_LINE);
+		glBegin(GL_TRIANGLES);
+		for(int i=0; i<striplen; i++) {
+			Vec3D t = tv[strip[i]];
+			glVertex3f(t.x, t.y, t.z);
+		}
+		glEnd();
 
 	} else {
 		// FIXED-FUNCTION

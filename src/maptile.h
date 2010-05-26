@@ -156,8 +156,6 @@ public:
 		}
 	}
 	
-	MapTile* maptile;
-
 	void init(MapTile* mt, MPQFile &f, bool bigAlpha);
 	void destroy();
 	void initStrip(int holes);
@@ -167,6 +165,8 @@ public:
 	void drawPass(int anim);
 	void drawWater();
 
+	MapTile* maptile;
+	Vec3D tn[mapbufsize], tv[mapbufsize];
 };
 
 const int stripsize2 = 16*18 + 7*2 + 8*2;
