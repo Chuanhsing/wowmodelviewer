@@ -838,7 +838,6 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 
 		BYTE *buffer = NULL;
 		CxImage *image = NULL;
-		GLuint texture;
 		unsigned char *buf = new unsigned char[sizes[0]];
 
 		f.seek(offsets[0]);
@@ -851,17 +850,7 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 		long size = image->GetWidth() * image->GetHeight() * 4;
 		image->Encode2RGBA(buffer, size);
 
-		GLuint texFormat = 0;
-		texFormat = GL_TEXTURE_2D;
-
-		// Setup the OpenGL Texture stuff
-		glGenTextures(1, &texture);
-		glBindTexture(texFormat, texture);
-
-		glTexParameteri(texFormat, GL_TEXTURE_MIN_FILTER, GL_LINEAR);	// Linear Filtering
-		glTexParameteri(texFormat, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	// Linear Filtering
-		
-		glTexImage2D(texFormat, 0, GL_RGBA8, image->GetWidth(), image->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image->GetWidth(), image->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
 		wxDELETE(image);
 		wxDELETE(buffer);
