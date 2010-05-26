@@ -224,6 +224,69 @@ struct MH2O_Information {
 	uint32 ofsHeightmap; // Another offset to data.
 };
 
+int gdetailtexcoords, galphatexcoords;
+
+void initGlobalVBOs()
+{
+	if (gdetailtexcoords==0 && galphatexcoords==0) {
+
+		GLuint detailtexcoords, alphatexcoords;
+
+		Vec2D temp[mapbufsize], *vt;
+		float tx,ty;
+		
+		// init texture coordinates for detail map:
+		vt = temp;
+		int detail_size = 1;
+		const float detail_half = 0.5f * detail_size / 8.0f;
+		for (int j=0; j<17; j++) {
+			for (int i=0; i<((j%2)?8:9); i++) {
+				tx = detail_size / 8.0f * i;
+				ty = detail_size / 8.0f * j * 0.5f;
+				if (j%2) {
+					// offset by half
+					tx += detail_half;
+				}
+				*vt++ = Vec2D(tx, ty);
+			}
+		}
+
+		glGenBuffersARB(1, &detailtexcoords);
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, detailtexcoords);
+		glBufferDataARB(GL_ARRAY_BUFFER_ARB, mapbufsize*2*sizeof(float), temp, GL_STATIC_DRAW_ARB);
+
+		// init texture coordinates for alpha map:
+		vt = temp;
+		const float alpha_half = 0.5f * 1.0f / 8.0f;
+		for (int j=0; j<17; j++) {
+			for (int i=0; i<((j%2)?8:9); i++) {
+				tx = 1.0f / 8.0f * i;
+				ty = 1.0f / 8.0f * j * 0.5f;
+				if (j%2) {
+					// offset by half
+					tx += alpha_half;
+				}
+				//*vt++ = Vec2D(tx*0.95f, ty*0.95f);
+				const int divs = 32;
+				const float inv = 1.0f / divs;
+				const float mul = (divs-1.0f);
+				*vt++ = Vec2D(tx*(mul*inv), ty*(mul*inv));
+			}
+		}
+
+		glGenBuffersARB(1, &alphatexcoords);
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, alphatexcoords);
+		glBufferDataARB(GL_ARRAY_BUFFER_ARB, mapbufsize*2*sizeof(float), temp, GL_STATIC_DRAW_ARB);
+
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+
+
+		gdetailtexcoords=detailtexcoords;
+		galphatexcoords=alphatexcoords;
+	}
+
+}
+
 void MapTile::initDisplay()
 {
 	// default strip indices
@@ -233,6 +296,8 @@ void MapTile::initDisplay()
 	//mapstrip2 = new short[stripsize2];
 	stripify2<short>(defstrip, mapstrip2);
 	delete[] defstrip;
+	
+	initGlobalVBOs();
 }
 
 /*
@@ -715,6 +780,29 @@ void MapTile::draw()
 {
 	if (!ok) return;
 
+	// Draw height map
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL); // less z-fighting artifacts this way, I think
+	glEnable(GL_LIGHTING);
+
+
+	glEnable(GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glClientActiveTextureARB(GL_TEXTURE0_ARB);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, gdetailtexcoords);
+	glTexCoordPointer(2, GL_FLOAT, 0, 0);
+
+	glClientActiveTextureARB(GL_TEXTURE1_ARB);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, galphatexcoords);
+	glTexCoordPointer(2, GL_FLOAT, 0, 0);
+
+	glClientActiveTextureARB(GL_TEXTURE0_ARB);
 
 	for (int j=0; j<CHUNKS_IN_TILE; j++) {
 		for (int i=0; i<CHUNKS_IN_TILE; i++) {
@@ -1125,7 +1213,8 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 					animated[i] = 0;
 				}
 
-				//textures[i] = video.textures.get(mt->textures[mcly[i].textureId]); // TODO
+				// textures[i] = video.textures.get(mt->textures[mcly[i].textureId]);
+				//textures[i] = video.textures.items[mt->textures[mcly[i].textureId]]; // TODO
 			}
 		}
 		else if (strncmp(fcc, "MCRF", 4) == 0) {
@@ -1409,10 +1498,12 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 
 	if (hasholes)
 		initStrip(holes);
+	/*
 	else {
 		strip = maptile->mapstrip2;
 		striplen = stripsize2;
 	}
+	*/
 
 	this->mt = mt;
 
@@ -1563,8 +1654,7 @@ void MapChunk::drawPass(int anim)
 		glTranslatef(f*fdx,f*fdy,0);
 	}
 
-	//glDrawElements(GL_TRIANGLE_STRIP, striplen, GL_UNSIGNED_SHORT, strip);
-	glDrawElements(GL_TRIANGLE_STRIP, stripsize2, GL_UNSIGNED_SHORT, maptile->mapstrip2);
+	glDrawElements(GL_TRIANGLE_STRIP, striplen, GL_UNSIGNED_SHORT, strip);
 
 	if (anim) {
 		glPopMatrix();
@@ -1765,7 +1855,7 @@ void MapChunk::drawNoDetail()
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, vertices);
 	glVertexPointer(3, GL_FLOAT, 0, 0);
 	glDisableClientState(GL_NORMAL_ARRAY);
-	glDrawElements(GL_TRIANGLE_STRIP, stripsize2, GL_UNSIGNED_SHORT, maptile->mapstrip2);
+	glDrawElements(GL_TRIANGLE_STRIP, striplen, GL_UNSIGNED_SHORT, strip);
 	glEnableClientState(GL_NORMAL_ARRAY);
 
 	glColor4f(1,1,1,1);
