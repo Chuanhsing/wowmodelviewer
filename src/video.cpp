@@ -141,6 +141,7 @@ bool VideoSettings::Init()
 	supportCompression = glewIsSupported("GL_ARB_texture_compression GL_ARB_texture_cube_map GL_EXT_texture_compression_s3tc") == GL_TRUE ? true : false;
 	supportPointSprites = glewIsSupported("GL_ARB_point_sprite GL_ARB_point_parameters") == GL_TRUE ? true : false;
 	supportShaders = glewIsSupported("GL_ARB_fragment_program") == GL_TRUE ? true : false;
+	supportShaders = false;
 	//supportShaders = (suuportFragProg && supportVertexProg && supportGLSL);
 #ifdef _WINDOWS
 	supportPBO = wglewIsSupported("WGL_ARB_pbuffer WGL_ARB_render_texture") == GL_TRUE ? true : false;

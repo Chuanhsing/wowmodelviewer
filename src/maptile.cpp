@@ -224,6 +224,17 @@ struct MH2O_Information {
 	uint32 ofsHeightmap; // Another offset to data.
 };
 
+void MapTile::initDisplay()
+{
+	// default strip indices
+	short *defstrip = new short[stripsize2];
+	for (int i=0; i<stripsize2; i++) 
+		defstrip[i] = i; // note: this is ugly and should be handled in stripify
+	//mapstrip2 = new short[stripsize2];
+	stripify2<short>(defstrip, mapstrip2);
+	delete[] defstrip;
+}
+
 /*
 MapTile is ADT
 http://madx.dk/wowdev/wiki/index.php?title=ADT
@@ -234,7 +245,8 @@ MapTile::MapTile(int x0, int z0, char* filename, bool bigAlpha): x(x0), z(z0), t
 	zbase = z0 * TILESIZE;
 	mBigAlpha=bigAlpha;
 
-	wxLogMessage(_T("Loading tile %d,%d\n"),x0,z0);
+	wxLogMessage(_T("Loading tile %s"),filename);
+	initDisplay();
 
 	 // [FLOW] DON'T REMOVE i use this file extraction method to debug the adt format
 /*
@@ -253,7 +265,7 @@ MapTile::MapTile(int x0, int z0, char* filename, bool bigAlpha): x(x0), z(z0), t
 	MPQFile f(filename);
 	ok = !f.isEof();
 	if (!ok) {
-		wxLogMessage(_T("Error: loading %s\n"),filename);
+		wxLogMessage(_T("Error: loading %s"),filename);
 		return;
 	}
 
@@ -303,7 +315,7 @@ MapTile::MapTile(int x0, int z0, char* filename, bool bigAlpha): x(x0), z(z0), t
 					f.seekRelative(8);
 				}
 			} else
-				wxLogMessage(_T("Error: wrong MCIN chunk %d.\n"), size);
+				wxLogMessage(_T("Error: wrong MCIN chunk %d."), size);
 		}
 		else if (strncmp(fourcc,"MTEX",4)==0) {
 			/*
@@ -605,7 +617,7 @@ MapTile::MapTile(int x0, int z0, char* filename, bool bigAlpha): x(x0), z(z0), t
 					}
 					else if( mh2oi->ofsHeigthAlpha != 0 )
 					{
-						wxLogMessage(_T("Unknown flag combination: %s.\n"), filename);
+						wxLogMessage(_T("Unknown flag combination: %s."), filename);
 					}
 
 					chunks[i/CHUNKS_IN_TILE][i%CHUNKS_IN_TILE].waterLayer.push_back( waterLayer );
@@ -646,7 +658,7 @@ MapTile::MapTile(int x0, int z0, char* filename, bool bigAlpha): x(x0), z(z0), t
 			*/
 		}
 		else {
-			wxLogMessage(_T("No implement tile chunk %s [%d].\n"), fourcc, size);
+			wxLogMessage(_T("No implement tile chunk %s [%d]."), fourcc, size);
 		}
 
 		f.seek((int)nextpos);
@@ -673,7 +685,7 @@ MapTile::~MapTile()
 {
 	if (!ok) return;
 
-	wxLogMessage(_T("Unloading tile %d,%d\n"), x, z);
+	wxLogMessage(_T("Unloading tile %d,%d"), x, z);
 
 	topnode.cleanup();
 
@@ -847,6 +859,8 @@ static unsigned char amap[64*64];
 void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 {
 	Vec3D tn[mapbufsize], tv[mapbufsize];
+	
+	maptile = mt;
 
 	char fcc[5];
 	uint32 size;
@@ -859,7 +873,7 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 	fcc[4] = 0;
 
 	if (strncmp(fcc, "MCNK", 4)!=0 || size == 0) {
-		wxLogMessage(_T("Error: mcnk main chunk %s [%d].\n"), fcc, size);
+		wxLogMessage(_T("Error: mcnk main chunk %s [%d]."), fcc, size);
 		return;
 	}
 
@@ -994,7 +1008,7 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 		size_t nextpos = f.getPos() + size;
 
 		if (fcc[0] != 'M' || f.getPos() > f.getSize()) {
-			wxLogMessage(_T("Error: mcnk chunk initial error, fcc: %s, size: %d, pos: %d, size: %d.\n"), fcc, size, f.getPos(), f.getSize());
+			wxLogMessage(_T("Error: mcnk chunk initial error, fcc: %s, size: %d, pos: %d, size: %d."), fcc, size, f.getPos(), f.getSize());
 			break;
 		}
 
@@ -1111,7 +1125,7 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 					animated[i] = 0;
 				}
 
-				//textures[i] = video.textures.get(mt->textures[mcly[i].textureId]); 
+				//textures[i] = video.textures.get(mt->textures[mcly[i].textureId]); // TODO
 			}
 		}
 		else if (strncmp(fcc, "MCRF", 4) == 0) {
@@ -1378,7 +1392,7 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 			//gLog("No implement mcnk subchunk %s [%d].\n", fcc, size);
 		}
 		else {
-			wxLogMessage(_T("No implement mcnk subchunk %s [%d].\n"), fcc, size);
+			wxLogMessage(_T("No implement mcnk subchunk %s [%d]."), fcc, size);
 		}
 		f.seek((int)nextpos);
 	}
@@ -1393,13 +1407,12 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, normals);
 	glBufferDataARB(GL_ARRAY_BUFFER_ARB, mapbufsize*3*sizeof(float), tn, GL_STATIC_DRAW_ARB);
 
-	if (hasholes) initStrip(holes);
-	/*
+	if (hasholes)
+		initStrip(holes);
 	else {
-	strip = gWorld->mapstrip;
-	striplen = 16*18 + 7*2 + 8*2; //stripsize;
+		strip = maptile->mapstrip2;
+		striplen = stripsize2;
 	}
-	*/
 
 	this->mt = mt;
 
@@ -1550,7 +1563,8 @@ void MapChunk::drawPass(int anim)
 		glTranslatef(f*fdx,f*fdy,0);
 	}
 
-	glDrawElements(GL_TRIANGLE_STRIP, striplen, GL_UNSIGNED_SHORT, strip);
+	//glDrawElements(GL_TRIANGLE_STRIP, striplen, GL_UNSIGNED_SHORT, strip);
+	glDrawElements(GL_TRIANGLE_STRIP, stripsize2, GL_UNSIGNED_SHORT, maptile->mapstrip2);
 
 	if (anim) {
 		glPopMatrix();
@@ -1574,7 +1588,12 @@ void MapChunk::draw()
 
 	if (nTextures==0) return;
 
+	if (!hasholes) {
+		strip = maptile->mapstrip2;
+		striplen = stripsize2;
+	}
 	/*
+	// TODO
 	if (!hasholes) {
 		bool highres = gWorld->drawhighres;
 		if (highres) {
@@ -1746,7 +1765,7 @@ void MapChunk::drawNoDetail()
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, vertices);
 	glVertexPointer(3, GL_FLOAT, 0, 0);
 	glDisableClientState(GL_NORMAL_ARRAY);
-	//glDrawElements(GL_TRIANGLE_STRIP, stripsize, GL_UNSIGNED_SHORT, gWorld->mapstrip);
+	glDrawElements(GL_TRIANGLE_STRIP, stripsize2, GL_UNSIGNED_SHORT, maptile->mapstrip2);
 	glEnableClientState(GL_NORMAL_ARRAY);
 
 	glColor4f(1,1,1,1);

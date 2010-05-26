@@ -155,6 +155,8 @@ public:
 			alphamaps[i] = 0;
 		}
 	}
+	
+	MapTile* maptile;
 
 	void init(MapTile* mt, MPQFile &f, bool bigAlpha);
 	void destroy();
@@ -166,6 +168,8 @@ public:
 	void drawWater();
 
 };
+
+const int stripsize2 = 16*18 + 7*2 + 8*2;
 
 class MapTile: public Displayable {
 public:
@@ -202,6 +206,9 @@ public:
 
 	/// Get chunk for sub offset x,z
 	MapChunk *getChunk(unsigned int x, unsigned int z);
+
+	void initDisplay();
+	short mapstrip2[stripsize2];
 };
 
 int indexMapBuf(int x, int y);
@@ -226,7 +233,7 @@ void stripify(V *in, V *out)
 }
 
 // high res version, size = 16*18 + 7*2 + 8*2
-const int stripsize2 = 16*18 + 7*2 + 8*2;
+
 template <class V>
 void stripify2(V *in, V *out)
 {
