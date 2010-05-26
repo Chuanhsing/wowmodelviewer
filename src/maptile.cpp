@@ -786,6 +786,8 @@ void MapTile::draw()
 	Vec3D camera; // [0] = {x=14933.333 y=-259.28278 z=17600.000 }
 	Vec3D lookat;
 
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+
 	//glMatrixMode(GL_MODELVIEW);
 	//glLoadIdentity();
 	camera.x = 14937.999f+200.0f;
@@ -820,6 +822,19 @@ void MapTile::draw()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL); // less z-fighting artifacts this way, I think
 	glEnable(GL_LIGHTING);
+
+ 	glEnable(GL_COLOR_MATERIAL);
+	//glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glColor4f(1,1,1,1);
+	// if we're using shaders let's give it some specular
+	if (video.supportShaders) {
+		Vec4D spec_color(1,1,1,1);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec_color);
+		glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, 20);
+
+		glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
+	}
 
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -1245,8 +1260,7 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 					animated[i] = 0;
 				}
 
-				// textures[i] = video.textures.get(mt->textures[mcly[i].textureId]);
-				//textures[i] = video.textures.items[mt->textures[mcly[i].textureId]]; // TODO
+				textures[i] = texturemanager.get(mt->textures[mcly[i].textureId]);
 			}
 		}
 		else if (strncmp(fcc, "MCRF", 4) == 0) {
@@ -1771,11 +1785,11 @@ void MapChunk::draw()
 		// setup shadow color as local parameter:
 		//Vec3D shc = gWorld->skies->colorSet[SHADOW_COLOR] * 0.3f;
 		//glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, shc.x,shc.y,shc.z,1);
-
+		glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, 0.1f, 0.1f, 0.1f, 1);
 		glDrawElements(GL_TRIANGLE_STRIP, striplen, GL_UNSIGNED_SHORT, strip);
 
 		terrainShaders[nTextures-1]->unbind();
-
+/*
 		// Testing code
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
@@ -1789,7 +1803,7 @@ void MapChunk::draw()
 			glVertex3f(t.x, t.y, t.z);
 		}
 		glEnd();
-
+*/
 	} else {
 		// FIXED-FUNCTION
 
