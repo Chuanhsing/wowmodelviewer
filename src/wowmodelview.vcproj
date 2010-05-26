@@ -80,7 +80,7 @@
 				OutputFile="$(OutDir)/wowmodelview.exe"
 				Version="07.01.214"
 				LinkIncremental="0"
-				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.11\lib\vc_lib\$(PlatformName)&quot;;.\lib\Windows\32bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
+				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.11\lib\vc_lib\$(PlatformName)&quot;;&quot;C:\wxWidgets-2.8.11\lib\vc_lib\&quot;;.\lib\Windows\32bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="LIBCMT.lib"
 				GenerateDebugInformation="true"
@@ -114,6 +114,113 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="copy ..\bin_support\Windows\32bit\cximagecrtd.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\glew32d.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\* $(OutDir)\enUS\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="Release32\Clean"
+			IntermediateDirectory="Release32"
+			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			UseOfATL="0"
+			CharacterSet="2"
+			ManagedExtensions="0"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/D &quot;WotLK&quot;"
+				Optimization="3"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
+				FavorSizeOrSpeed="1"
+				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.11\include&quot;;&quot;C:\wxWidgets-2.8.11\include\msvc&quot;;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\"
+				PreprocessorDefinitions="WIN32;_WIN32;_WINDOWS;__WINDOWS__;__WXMSW__"
+				GeneratePreprocessedFile="0"
+				KeepComments="false"
+				StringPooling="true"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="2"
+				BufferSecurityCheck="false"
+				EnableFunctionLevelLinking="false"
+				EnableEnhancedInstructionSet="0"
+				DefaultCharIsUnsigned="true"
+				ForceConformanceInForLoopScope="true"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories=""
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				ShowProgress="2"
+				OutputFile="$(OutDir)/wowmodelview.exe"
+				Version="07.01.214"
+				LinkIncremental="0"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.11\lib\vc_lib\$(PlatformName)&quot;;&quot;C:\wxWidgets-2.8.11\lib\vc_lib\&quot;;.\lib\Windows\32bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
+				IgnoreDefaultLibraryNames="LIBCMT.lib"
+				GenerateDebugInformation="false"
+				AssemblyDebug="2"
+				GenerateMapFile="true"
+				MapFileName="$(IntDir)/$(ProjectName).map"
+				MapExports="true"
+				SubSystem="2"
+				LargeAddressAware="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				OptimizeForWindows98="1"
+				SetChecksum="true"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy ..\bin_support\Windows\32bit\cximagecrt.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\glew32.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\*.csv $(OutDir)\enUS\&#x0D;&#x0A;mkdir $(OutDir)\zhCN&#x0D;&#x0A;copy ..\bin\zhCN\*.csv $(OutDir)\zhCN\&#x0D;&#x0A;mkdir $(OutDir)\zhTW&#x0D;&#x0A;copy ..\bin\zhTW\*.csv $(OutDir)\zhTW\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\mo&#x0D;&#x0A;copy po\*.mo $(OutDir)\mo\&#x0D;&#x0A;mkdir $(OutDir)\Export&#x0D;&#x0A;mkdir $(OutDir)\Import&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\msvcr90.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\msvcp90.dll $(OutDir)\&#x0D;&#x0A;copy ..\doc\ChangeLog.txt $(OutDir)\&#x0D;&#x0A;copy ..\bin\COPYING $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\userSettings&#x0D;&#x0A;copy ..\bin\userSettings\*.* $(OutDir)\userSettings&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -212,113 +319,6 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="copy ..\bin_support\Windows\64bit\cximagecrtd.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\glew32d.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\* $(OutDir)\enUS\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="Release32\Clean"
-			IntermediateDirectory="Release32"
-			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
-			UseOfATL="0"
-			CharacterSet="2"
-			ManagedExtensions="0"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalOptions="/D &quot;WotLK&quot;"
-				Optimization="3"
-				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="true"
-				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.11\include&quot;;&quot;C:\wxWidgets-2.8.11\include\msvc&quot;;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\"
-				PreprocessorDefinitions="WIN32;_WIN32;_WINDOWS;__WINDOWS__;__WXMSW__"
-				GeneratePreprocessedFile="0"
-				KeepComments="false"
-				StringPooling="true"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="0"
-				RuntimeLibrary="2"
-				BufferSecurityCheck="false"
-				EnableFunctionLevelLinking="false"
-				EnableEnhancedInstructionSet="0"
-				DefaultCharIsUnsigned="true"
-				ForceConformanceInForLoopScope="true"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories=""
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				ShowProgress="2"
-				OutputFile="$(OutDir)/wowmodelview.exe"
-				Version="07.01.214"
-				LinkIncremental="0"
-				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.11\lib\vc_lib\$(PlatformName)&quot;;.\lib\Windows\32bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
-				IgnoreDefaultLibraryNames="LIBCMT.lib"
-				GenerateDebugInformation="false"
-				AssemblyDebug="2"
-				GenerateMapFile="true"
-				MapFileName="$(IntDir)/$(ProjectName).map"
-				MapExports="true"
-				SubSystem="2"
-				LargeAddressAware="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				OptimizeForWindows98="1"
-				SetChecksum="true"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="copy ..\bin_support\Windows\32bit\cximagecrt.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\glew32.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\*.csv $(OutDir)\enUS\&#x0D;&#x0A;mkdir $(OutDir)\zhCN&#x0D;&#x0A;copy ..\bin\zhCN\*.csv $(OutDir)\zhCN\&#x0D;&#x0A;mkdir $(OutDir)\zhTW&#x0D;&#x0A;copy ..\bin\zhTW\*.csv $(OutDir)\zhTW\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\mo&#x0D;&#x0A;copy po\*.mo $(OutDir)\mo\&#x0D;&#x0A;mkdir $(OutDir)\Export&#x0D;&#x0A;mkdir $(OutDir)\Import&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\msvcr90.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\msvcp90.dll $(OutDir)\&#x0D;&#x0A;copy ..\doc\ChangeLog.txt $(OutDir)\&#x0D;&#x0A;copy ..\bin\COPYING $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\userSettings&#x0D;&#x0A;copy ..\bin\userSettings\*.* $(OutDir)\userSettings&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
