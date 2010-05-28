@@ -493,6 +493,8 @@ void FileControl::UpdateInterface()
 		// If it's an M2 file...
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);	// Currently totally disabled. No support at all...
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OBJ, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, true);
@@ -513,9 +515,36 @@ void FileControl::UpdateInterface()
 		modelviewer->charMenu->Enable(ID_LOAD_NPC_START, true);
 		modelviewer->charMenu->Enable(ID_MOUNT_CHARACTER, true);
 		modelviewer->charMenu->Enable(ID_CHAR_RANDOMISE, true);
+	}else if (modelviewer->isADT == true){
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OBJ, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, false);
+
+		modelviewer->charMenu->Enable(ID_SAVE_CHAR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_EARS, false);
+		modelviewer->charMenu->Enable(ID_SHOW_HAIR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_FACIALHAIR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_FEET, false);
+		modelviewer->charMenu->Enable(ID_SHEATHE, false);
+		modelviewer->charMenu->Enable(ID_SAVE_EQUIPMENT, false);
+		modelviewer->charMenu->Enable(ID_LOAD_EQUIPMENT, false);
+		modelviewer->charMenu->Enable(ID_CLEAR_EQUIPMENT, false);
+		modelviewer->charMenu->Enable(ID_LOAD_SET, false);
+		modelviewer->charMenu->Enable(ID_LOAD_START, false);
+		modelviewer->charMenu->Enable(ID_LOAD_NPC_START, false);
+		modelviewer->charMenu->Enable(ID_MOUNT_CHARACTER, false);
+		modelviewer->charMenu->Enable(ID_CHAR_RANDOMISE, false);
 	}else{
 		// If the object is a WMO file...
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode when viewing WMOs...
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OBJ, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, false);

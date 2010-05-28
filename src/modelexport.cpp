@@ -177,11 +177,11 @@ Vec3D QuaternionToXYZ(Vec3D Dir, float W){
 		angle_y = -angle_y;
 
 	// 1.0 = 1 Radian, or 57.295779513082320876798154814114 degrees (180/PI)
-	float d180 = PI;	// 180 degrees
+	float d180 = (float)PI;	// 180 degrees
 	int accuracy = 6;	// to the 6th decimal point...
-	XYZ.x = Clamp(round(angle_x+d180,accuracy),-PI*2,PI*2);			// Heading
-	XYZ.y = Clamp(round(-angle_y,accuracy),-PI*2,PI*2);				// Pitch
-	XYZ.z = -Clamp(round(angle_z+d180,accuracy),-PI*2,PI*2);		// Bank
+	XYZ.x = (float)(Clamp(round(angle_x+d180,accuracy),(float)-PI*2,(float)PI*2));			// Heading
+	XYZ.y = (float)(Clamp(round(-angle_y,accuracy),(float)-PI*2,(float)PI*2));				// Pitch
+	XYZ.z = (float)(-Clamp(round(angle_z+d180,accuracy),(float)-PI*2,(float)PI*2));			// Bank
 
 	return XYZ;
 }
@@ -380,10 +380,11 @@ wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassN
 }
 
 // Write out some debug info
-void LogExportData(wxString FileExtension, wxString Directory){
+void LogExportData(wxString FileExtension, wxString Directory, wxString ExportType){
 	wxLogMessage(_T("\n\n========================================================================\n   Exporting Model...\n========================================================================\n"));
 	wxLogMessage(_T("Exporting to Directory: %s"),Directory.c_str());
 	wxLogMessage(_T("Exporting File Type: %s"),FileExtension.c_str());
+	wxLogMessage(_T("Original Model File Type: %s"), ExportType.c_str());
 	wxLogMessage(_T("Export Init Mode: %s"),(modelExportInitOnly==true?"True":"False"));
 	wxLogMessage(_T("Preserve Directories: %s"),(modelExport_PreserveDir==true?"True":"False"));
 	wxLogMessage(_T("Use WMV Position & Rotation: %s"),(modelExport_UseWMVPosRot==true?"True":"False"));
@@ -416,14 +417,9 @@ void LogExportData(wxString FileExtension, wxString Directory){
 	}
 }
 
-// Now for the non-working functions. These are most-likely disabled, but are here so
-// someone can eventually work on them.
+// Disabled Collada Exporters
 void ExportM2toCOLLADA(Attachment *att, Model *m, const char *fn, bool init){}
 void ExportWMOtoCOLLADA(WMO *m, const char *fn){}
-void ExportWMOtoMS3D(WMO *m, const char *fn){}
-void ExportWMOto3DS(WMO *m, const char *fn){}
-void ExportWMOtoX3D(WMO *m, const char *fn){}
-void ExportWMOtoXHTML(WMO *m, const char *fn){}
 
 void SaveBaseFile(){
 	if (g_fileControl->fileTree->HasChildren(g_fileControl->CurrentItem)){

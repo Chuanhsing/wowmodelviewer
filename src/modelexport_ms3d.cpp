@@ -16,7 +16,7 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
-	LogExportData(_T("MS3D"),wxString(fn, wxConvUTF8).BeforeLast(SLASH));
+	LogExportData(_T("MS3D"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
 	unsigned short numVerts = 0;
 	unsigned short numFaces = 0;
 	unsigned short numGroups = 0;

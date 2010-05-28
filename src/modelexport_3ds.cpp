@@ -26,7 +26,7 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
-	LogExportData(_T("3DS"),wxString(fn, wxConvUTF8).BeforeLast(SLASH));
+	LogExportData(_T("3DS"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
 
 	unsigned short numVerts = 0;
 	unsigned short numGroups = 0;
@@ -76,7 +76,7 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			chunk2_2_1.id = MATNAME; // 0xA000
 			wxString matName = wxString::Format(_T("Material_%i"), i);
 			matName.Append(_T('\0'));
-			chunk2_2_1.size = sizeof(MAX3DS_CHUNK) + matName.length();
+			chunk2_2_1.size = sizeof(MAX3DS_CHUNK) + (unsigned int)matName.length();
 			chunk2_2.size = sizeof(MAX3DS_CHUNK) + chunk2_2_1.size;
 			f.Write(&chunk2_2_1, sizeof(MAX3DS_CHUNK)); // MATNAME
 			f.Write(matName.data(), matName.length());
@@ -220,7 +220,7 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			mapName = mapName.AfterLast('\\').BeforeLast('.');
 			mapName << wxT(".tga");
 			mapName.Append(_T('\0'));
-			chunk2_2_6.size = sizeof(MAX3DS_CHUNK) + mapName.length();
+			chunk2_2_6.size = sizeof(MAX3DS_CHUNK) + (unsigned int)mapName.length();
 
 			// save texture to file
 			wxString texFilename(fn, wxConvUTF8);
@@ -314,7 +314,7 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			// Model name
 			wxString modName = wxString::Format(_T("Geoset_%i"), i);
 			modName.Append(_T('\0'));
-			chunk2_4.size += modName.length();
+			chunk2_4.size += (unsigned int)modName.length();
 			
 			// OBJ_MESH chunk
 			MAX3DS_CHUNK chunk3;
@@ -341,7 +341,7 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			matName.Append(_T('\0'));
 			MAX3DS_CHUNK chunk4_3_1;
 			chunk4_3_1.id = MESH_MATERIAL; // 0x4130
-			chunk4_3_1.size += matName.length();
+			chunk4_3_1.size += (unsigned int)matName.length();
 			chunk4_3_1.size += (sizeof(unsigned short) + numFaces*2);
 			chunk4_3.size += chunk4_3_1.size;
 

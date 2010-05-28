@@ -686,11 +686,11 @@ void WMOGroup::initDisplayList()
 
 	// open group file
 	char temp[256];
-	strncpy(temp, wmo->name.c_str(), sizeof(temp));
+	strncpy_s(temp, wmo->name.c_str(), sizeof(temp));
     temp[wmo->name.length()-4] = 0;
 
 	char fname[256];
-	sprintf(fname,"%s_%03d.wmo",temp, num);
+	sprintf_s(fname,"%s_%03d.wmo",temp, num);
 
 	MPQFile gf(fname);
     gf.seek(0x14);

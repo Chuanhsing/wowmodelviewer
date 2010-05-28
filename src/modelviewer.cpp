@@ -2201,7 +2201,7 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 		wxString data(wxString(buffer, wxConvUTF8));
 		wxString version = data.BeforeFirst(10);
 		wxString downloadURL = data.AfterLast(10);
-		int Compare = version.find(wxString(APP_VERSION));
+		int Compare = (int)version.find(wxString(APP_VERSION));
 #ifdef _DEBUG
 		wxLogMessage("Update Data:\nCurrent Version: \"%s\"\nRecorded Version \"%s\"\nURL Download: \"%s\"\nComparison Result: %i",wxString(APP_VERSION), version, downloadURL, Compare);
 #endif
@@ -2750,7 +2750,7 @@ void DiscoveryItem()
 void ModelViewer::OnExport(wxCommandEvent &event)
 {
 	// If nothing's on the canvas, stop.
-	if ((!canvas->model) && (!canvas->wmo))
+	if ((!canvas->model) && (!canvas->wmo) && (!canvas->adt))
 		return;
 
 	int id = event.GetId();
@@ -2767,6 +2767,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 		newfilename << wxString(canvas->wmo->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
 	}else if (canvas->model) {
 		newfilename << wxString(canvas->model->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
+	}else if (canvas->adt) {
+		newfilename << wxString(canvas->adt->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
 	}
 
 	// Identifies the ID for this export option, and does the nessicary functions.
@@ -2777,19 +2779,28 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 		if (canvas->model) {
 			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(_T("Info: Exporting M2 model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				// Your M2 export function goes here.
 				ExportM2toLWO(canvas->root,canvas->model,dialog.GetPath().fn_str(),init);
 			}
-		// For WMO Models. This should be included, even if it isn't supported yet!
+		// For WMO Models. You don't need to include this if the exporter doesn't support it.
 		} else if (canvas->wmo) {
 			wxFileDialog dialog(this, _T("Export World Model Object..."), wxEmptyString, newfilename, _T("Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(_T("Info: Exporting WMO model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				// Your WMO export function goes here.
 				ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
+			}
+		// ADT support. Same as WMOs.
+		} else if (canvas->adt) {
+			wxFileDialog dialog(this, _T("Export MapTile..."), wxEmptyString, newfilename, _T("Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			if (dialog.ShowModal()==wxID_OK) {
+				wxLogMessage(_T("Info: Exporting MapTile model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+
+				// Your ADT export function goes here.
+				ExportADTtoLWO(canvas->adt, dialog.GetPath().fn_str());	
 			}
 		}
 	// That's all folks!
@@ -2860,13 +2871,6 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 
 				ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}
-		} else if (canvas->wmo) {
-			wxFileDialog dialog(this, _T("Export World Model Object..."), wxEmptyString, newfilename, _T("Milkshape 3D (*.ms3d)|*.ms3d"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
-
-				ExportWMOtoMS3D(canvas->wmo, dialog.GetPath().fn_str());	
-			}
 		}
 	} else if (id == ID_MODELEXPORT_3DS) {
 		newfilename << _T(".3ds");
@@ -2876,13 +2880,6 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportM2to3DS(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
-			}
-		} else if (canvas->wmo) {
-			wxFileDialog dialog(this, _T("Export World Model Object..."), wxEmptyString, newfilename, _T("3D Studio Max (*.3ds)|*.3ds"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
-
-				ExportWMOto3DS(canvas->wmo, dialog.GetPath().fn_str());	
 			}
 		}
 	} else if (id == ID_MODELEXPORT_X3D) {
@@ -2894,13 +2891,6 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 
 				ExportM2toX3D(canvas->model, dialog.GetPath().fn_str(), init);
 			}
-		} else if (canvas->wmo) {
-			wxFileDialog dialog(this, _T("Export World Model Object..."), wxEmptyString, newfilename, _T("X3D (*.x3d)|*.x3d"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
-
-				ExportWMOtoX3D(canvas->wmo, dialog.GetPath().fn_str());	
-			}
 		}
 	} else if (id == ID_MODELEXPORT_XHTML) {
 		newfilename << _T(".xhtml");
@@ -2910,13 +2900,6 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportM2toXHTML(canvas->model, dialog.GetPath().fn_str(), init);
-			}
-		} else if (canvas->wmo) {
-			wxFileDialog dialog(this, _T("Export World Model Object..."), wxEmptyString, newfilename, _T("Embedded X3D in XHTML (*.xhtml)|*.xhtml"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
-
-				ExportWMOtoXHTML(canvas->wmo, dialog.GetPath().fn_str());
 			}
 		}
 	}

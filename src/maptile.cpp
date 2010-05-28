@@ -330,13 +330,14 @@ MapTile::MapTile(int x0, int z0, char* filename, bool bigAlpha): x(x0), z(z0), t
 	}
 */
 
-	MPQFile f(fn);
+	MPQFile f(filename);
 	ok = !f.isEof();
 	if (!ok) {
 		wxLogMessage(_T("Error: loading %s"),filename);
 		return;
 	}
 
+	name = fn;
 	char fourcc[5];
 	uint32 size;
 

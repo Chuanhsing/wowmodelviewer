@@ -339,7 +339,7 @@ void CAnimationExporter::CreateGif()
 	filen << _T(".gif");
 
 	FILE *hFile = NULL;
-	hFile = fopen(filen.mb_str(), "wb");
+	fopen_s(&hFile,filen.mb_str(), "wb");
 
 	// Set gif options
 	CxImageGIF multiImage;

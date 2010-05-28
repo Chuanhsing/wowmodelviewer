@@ -28,7 +28,7 @@ struct GroupData {
 };
 
 // Common functions
-void LogExportData(wxString FileExtension, wxString Directory);
+void LogExportData(wxString FileExtension, wxString Directory, wxString ExportType);
 void SaveTexture(wxString fn);
 void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString suffix);
 Vec3D QuaternionToXYZ(Vec3D Dir, float W);
@@ -48,6 +48,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init);
 void ExportWMOtoLWO(WMO *m, const char *fn);
 void ExportWMOObjectstoLWO(WMO *m, const char *fn);
 #ifdef _DEBUG
+	void ExportADTtoLWO(MapTile *m, const char *fn);
 	void ExportWMOtoLWO2(WMO *m, const char *fn);
 #endif
 

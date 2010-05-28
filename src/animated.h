@@ -481,7 +481,7 @@ public:
 		out << "      <seq>"<< v.seq << "</seq>" << endl;
 		out << "      <anims>"<< endl;
 		for(size_t j=0; j<v.sizes; j++) {
-			if (v.uses(j)) {
+			if (v.uses((unsigned int)j)) {
 				out << "    <anim id=\"" << j << "\">" << endl;
 				for(size_t k=0; k<v.data[j].size(); k++) {
 					out << "      <data time=\"" << v.times[j][k]  << "\">" << v.data[j][k] << "</data>" << endl;

@@ -128,34 +128,41 @@ void WriteLWSceneObject(ofstream &fs, wxString Filename, AnimationData AnimData,
 }
 
 // Writes an Object's Bone to the scene file.
-void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, Vec3D Rot, float Length, uint32 &BoneNumber, uint16 ParentType, uint32 ParentNum)
+void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, Vec3D Rot, float Length, uint32 &BoneNumber, uint32 ParentObject, uint32 ParentNum = -1)
 {
 	bool isParented = false;
+	if (ParentNum > -1){
+		isParented = true;
+	}
 
-	fs << _T("BoneFalloffType 5\nFasterBones 1\nAddBone 4");
-	fs << wxString::Format(_T("%07x"),BoneNumber) << "\nBoneName " << BoneName;
-	fs << _T("ShowBone 1 -1 0.376471 0.878431 0.941176\nBoneActive 1");
-	fs << _T("BoneStrength 1\nScaleBoneStrength 1");
-	fs << _T("BoneRestPosition "<<Pos.x<<" "<<Pos.y<<" "<<Pos.z);
-	fs << _T("BoneRestDirection "<<Rot.x<<" "<<Rot.y<<" "<<Rot.z);
-	fs << _T("BoneRestLength "<<Length);
-	fs << _T("BoneType " << BoneType);
+	fs << _T("AddBone 4") << wxString::Format(_T("%07x"),BoneNumber) << _T("\nBoneName " << BoneName << "\n");
+	fs << _T("ShowBone 1 -1 0.376471 0.878431 0.941176\nBoneActive 1" << "\n");
+	fs << _T("BoneStrength 1\nScaleBoneStrength 1" << "\n");
+	fs << _T("BoneRestPosition "<<Pos.x<<" "<<Pos.y<<" "<<Pos.z<< "\n");
+	fs << _T("BoneRestDirection "<<Rot.x<<" "<<Rot.y<<" "<<Rot.z<< "\n");
+	fs << _T("BoneRestLength "<<Length<< "\n");
+	fs << _T("BoneType " << BoneType<< "\n");
 	fs << _T("BoneMotion\nNumChannels 9\n");
 	// Position
-	WriteLWSceneEnvChannel(fs,0,0,0);
-	WriteLWSceneEnvChannel(fs,1,0,0);
-	WriteLWSceneEnvChannel(fs,2,0,0);
+	WriteLWSceneEnvChannel(fs,0,Pos.x,0);
+	WriteLWSceneEnvChannel(fs,1,Pos.y,0);
+	WriteLWSceneEnvChannel(fs,2,Pos.z,0);
 	// Rotation
-	WriteLWSceneEnvChannel(fs,3,0,0);
-	WriteLWSceneEnvChannel(fs,4,0,0);
-	WriteLWSceneEnvChannel(fs,5,0,0);
+	WriteLWSceneEnvChannel(fs,3,Rot.x,0);
+	WriteLWSceneEnvChannel(fs,4,Rot.y,0);
+	WriteLWSceneEnvChannel(fs,5,Rot.z,0);
 	// Scale
 	WriteLWSceneEnvChannel(fs,6,1,0);
 	WriteLWSceneEnvChannel(fs,7,1,0);
 	WriteLWSceneEnvChannel(fs,8,1,0);
 
 	fs << _T("PathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
-	fs << _T("ParentItem " << ParentType << wxString::Format(_T("%07x"),ParentNum));
+	if (isParented == true){
+		fs << _T("ParentItem 4" << wxString::Format(_T("%07x"),ParentNum) << "\n");
+	}else{
+		fs << _T("ParentItem 1" << wxString::Format(_T("%07x"),ParentObject) << "\n");
+	}
+
 	fs << _T("IKInitialState 0");
 
 	fs << _T("\n");
@@ -232,7 +239,7 @@ void WriteLWSceneLight(ofstream &fs, uint32 &lcount, Vec3D LPos, uint32 Ltype, V
 
 // Data Writing Functions
 
-// VX is Lightwave Shorthand for any Point Number, because Lightwave stores points differently if they're over a certain number.
+// VX is Lightwave Shorthand for any Point Number, because Lightwave stores points differently if they're over a certain threshold.
 void LW_WriteVX(wxFFileOutputStream &f, uint32 p, uint32 &Size){
 	if (p < 0xFF00){
 		uint16 indice = MSB2(p & 0x0000FFFF);
@@ -820,6 +827,13 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 	WriteLWSceneObject(fs,objFilename,ObjData,mcount);
 
 	// Export Bones
+	if (m->header.nBones > 0){
+		fs << _T("BoneFalloffType 5\nFasterBones 1\n");
+		for (uint16 x=0;x<m->header.nBones;x++){
+			Bone *cbone = &m->bones[x];
+			WriteLWSceneBone(fs, wxString(_T("Bone_")) << x, 1, cbone->transPivot, Vec3D(0,0,0), 0, bcount, ParentID, cbone->parent);
+		}
+	}
 
 	// Lighting Basics
 	fs << _T("AmbientColor 1 1 1\nAmbientIntensity 0.25\nDoubleSidedAreaLights 1\n\n");
@@ -944,7 +958,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file.c_str());
 		return;
 	}
-	LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH));
+	LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
 	int off_t;
 	uint32 counter=0;
 	uint32 TagCounter=0;
@@ -1028,7 +1042,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			if (fmod((float)partName.length(), 2.0f) > 0)
 				partName.Append(_T('\0'));
 			f.Write(partName.data(), partName.length());
-			tagsSize += partName.length();
+			tagsSize += (uint32)partName.length();
 		}
 	}
 
@@ -1054,7 +1068,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 						if (fmod((float)partName.length(), 2.0f) > 0)
 							partName.Append(_T('\0'));
 						f.Write(partName.data(), partName.length());
-						tagsSize += partName.length();
+						tagsSize += (uint32)partName.length();
 					}
 				}
 			}
@@ -1082,7 +1096,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 							if (fmod((float)partName.length(), 2.0f) > 0)
 								partName.Append(_T('\0'));
 							f.Write(partName.data(), partName.length());
-							tagsSize += partName.length();
+							tagsSize += (uint32)partName.length();
 						}
 					}
 				}
@@ -1110,7 +1124,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 				if (fmod((float)matName.length(), 2.0f) > 0)
 					matName.Append(_T('\0'));
 				f.Write(matName.data(), matName.length());
-				tagsSize += matName.length();
+				tagsSize += (uint32)matName.length();
 	//			surfArray[m->passes[i].tex] = m->TextureList[m->passes[i].tex];
 	//		}
 		}
@@ -1136,7 +1150,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 						if (fmod((float)matName.length(), 2.0f) > 0)
 							matName.Append(_T('\0'));
 						f.Write(matName.data(), matName.length());
-						tagsSize += matName.length();
+						tagsSize += (uint32)matName.length();
 					}
 				}
 			}
@@ -1176,7 +1190,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 							if (fmod((float)matName.length(), 2.0f) > 0)
 								matName.Append(_T('\0'));
 							f.Write(matName.data(), matName.length());
-							tagsSize += matName.length();
+							tagsSize += (uint32)matName.length();
 						}
 					}
 				}
@@ -2055,10 +2069,10 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			if (fmod((float)sTexName.length(), 2.0f) > 0)
 				sTexName.Append(_T('\0'));
 
-			u16 = MSB2(sTexName.length());
+			u16 = MSB2((unsigned short)sTexName.length());
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 			f.Write(sTexName.data(), sTexName.length());
-			clipSize += (2+sTexName.length());
+			clipSize += (2+(int)sTexName.length());
 
 			// update the chunks length
 			off_t = -4-clipSize;
@@ -2172,10 +2186,10 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 						if (fmod((float)sTexName.length(), 2.0f) > 0)
 							sTexName.Append(_T('\0'));
 
-						u16 = MSB2(sTexName.length());
+						u16 = MSB2((unsigned short)sTexName.length());
 						f.Write(reinterpret_cast<char *>(&u16), 2);
 						f.Write(sTexName.data(), sTexName.length());
-						clipSize += (2+sTexName.length());
+						clipSize += (2+(int)sTexName.length());
 
 						// update the chunks length
 						off_t = -4-clipSize;
@@ -2277,10 +2291,10 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 							if (fmod((float)sTexName.length(), 2.0f) > 0)
 								sTexName.Append(_T('\0'));
 
-							u16 = MSB2(sTexName.length());
+							u16 = MSB2((unsigned short)sTexName.length());
 							f.Write(reinterpret_cast<char *>(&u16), 2);
 							f.Write(sTexName.data(), sTexName.length());
-							clipSize += (2+sTexName.length());
+							clipSize += (2+(int)sTexName.length());
 
 							// update the chunks length
 							off_t = -4-clipSize;
@@ -2775,7 +2789,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 		wxMessageDialog(g_modelViewer,_T("Could not open file for exporting."),_T("Exporting Error..."));
 		return;
 	}
-	LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH));
+	LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("WMO"));
 
 	int off_t;
 	uint16 dimension;
@@ -3010,7 +3024,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 		if (fmod((float)partName.length(), 2.0f) > 0)
 			partName.Append(_T('\0'));
 		f.Write(partName.data(), partName.length());
-		tagsSize += partName.length();
+		tagsSize += (uint32)partName.length();
 	}
 
 	// --== Surface Names ==--	
@@ -3026,7 +3040,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 		if (fmod((float)matName.length(), 2.0f) > 0)
 			matName.Append(_T('\0'));
 		f.Write(matName.data(), matName.length());
-		tagsSize += matName.length();
+		tagsSize += (uint32)matName.length();
 		//surfarray[t] = wxString(m->textures[t].c_str()).BeforeLast('.');
 	}
 
@@ -3535,10 +3549,10 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 		if (fmod((float)sTexName.length(), 2.0f) > 0)
 				sTexName.Append(_T('\0'));
 
-		u16 = MSB2(sTexName.length());
+		u16 = MSB2((unsigned short)sTexName.length());
 		f.Write(reinterpret_cast<char *>(&u16), 2);
 		f.Write(sTexName.data(), sTexName.length());
-		clipSize += (2+sTexName.length());
+		clipSize += (2+(int)sTexName.length());
 
 		// update the chunks length
 		off_t = -4-clipSize;
@@ -4695,4 +4709,46 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 	//}
 	*/
 
+}
+
+void ExportADTtoLWO(MapTile *m, const char *fn){
+	wxString file = wxString(fn, wxConvUTF8);
+
+	if (modelExport_LW_PreserveDir == true){
+		wxString Path, Name;
+
+		Path << file.BeforeLast(SLASH);
+		Name << file.AfterLast(SLASH);
+
+		MakeDirs(Path,_T("Objects"));
+
+		file.Empty();
+		file << Path << SLASH<<_T("Objects")<<SLASH << Name;
+	}
+	if (modelExport_PreserveDir == true){
+		wxString Path1, Path2, Name;
+		Path1 << file.BeforeLast(SLASH);
+		Name << file.AfterLast(SLASH);
+		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+
+		MakeDirs(Path1,Path2);
+
+		file.Empty();
+		file << Path1 << SLASH << Path2 << SLASH << Name;
+	}
+#ifndef _WINDOWS
+	file.Replace(wxT("\\"),wxT("/"));
+#endif
+	wxFFileOutputStream f(file, _T("w+b"));
+
+	if (!f.IsOk()) {
+		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file.c_str());
+		wxMessageDialog(g_modelViewer,_T("Could not open file for exporting."),_T("Exporting Error..."));
+		return;
+	}
+	LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("ADT"));
+
+	
+
+	wxLogMessage(_T("ADT Export completed."));
 }

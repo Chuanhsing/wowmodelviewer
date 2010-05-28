@@ -182,6 +182,7 @@ public:
 	int nWMO;
 	int nMDX;
 
+	wxString name;
 	int x, z;
 	bool ok;
 	bool mBigAlpha;

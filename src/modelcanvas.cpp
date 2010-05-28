@@ -96,7 +96,7 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 	lightType = LIGHT_DYNAMIC;
 
 	// Setup our default colour values.
-	vecBGColor = Vec3D(71.0/255,95.0/255,121.0/255); 
+	vecBGColor = Vec3D((float)(71.0/255),(float)(95.0/255),(float)(121.0/255)); 
 
 	drawLightDir = false;
 	drawBackground = false;
