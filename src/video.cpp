@@ -9,7 +9,7 @@
 
 #ifdef _WINDOWS
 	#include "./GL/wglew.h"
-#elif __WXMAC__ // OSX
+#elif _MAC // OSX
     #include <GL/glew.h>
 #else // Linux
 	#include <GL/glxew.h>
@@ -753,7 +753,7 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 	if (useLocalFiles) {
 		wxFileName fn = wxString(tex->name.c_str(), wxConvUTF8);
 		wxString suffix = _T("png");
-		wxString filename = _T("Import\\")+fn.GetName()+_T(".")+suffix;
+		wxString filename = _T("Import")+SLASH+fn.GetName()+_T(".")+suffix;
 		BYTE *buffer = NULL;
 		CxImage *image = NULL;
 
@@ -761,7 +761,7 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_PNG);
 		} else {
 			suffix = _T("tga");
-			filename = _T("Import\\")+fn.GetName()+_T(".")+suffix;
+			filename = _T("Import")+SLASH+fn.GetName()+_T(".")+suffix;
 			if (wxFile::Exists(filename)) {
 				image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_TGA);
 			}

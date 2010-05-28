@@ -1986,55 +1986,6 @@ void ModelViewer::OnBackground(wxCommandEvent &event)
 			
 		} else {
 			// List of skybox models, LightSkybox.dbc
-/*
-			const wxString skyboxes[] = {
-				"Environments\\Stars\\Aurora.m2",
-				"Environments\\Stars\\AuroraOrange.m2",
-				"Environments\\Stars\\AuroraYellowGreen.m2",
-				"Environments\\Stars\\AzjolNerub_SkyA.m2",
-				"Environments\\Stars\\Battlefield_Dirty_SkyBox.m2",
-				"Environments\\Stars\\BladesEdgeForestSkybox.m2",
-				"Environments\\Stars\\BladesEdgeNightelfSkybox.m2",
-				"Environments\\Stars\\BladesEdgeSkybox.m2",
-				"Environments\\Stars\\BonewasteSkybox.m2",
-				"Environments\\Stars\\COT_sky01.m2",
-				"Environments\\Stars\\CavernsOfTimeSky.m2",
-				"Environments\\Stars\\ChamberAspectsBlackSky.m2",
-				"Environments\\Stars\\ColdarraSky.m2",
-				"Environments\\Stars\\DalaranSkyBox.m2",
-				"Environments\\Stars\\DeathClouds.m2",
-				"Environments\\Stars\\DeathKnightFireSkyBox.m2",
-				"Environments\\Stars\\DeathSkybox.m2",
-				"Environments\\Stars\\DireMaulSkybox.m2",
-				"Environments\\Stars\\DragonblightScarletSkyBox.m2",
-				"Environments\\Stars\\HellfireSkybox.m2",
-				"Environments\\Stars\\IceCrownCitadelSky.m2",
-				"Environments\\Stars\\IceCrownDarkSky.m2",
-				"Environments\\Stars\\IceCrownScourgeSky.m2",
-				"Environments\\Stars\\IceCrownSky.m2",
-				"Environments\\Stars\\IceCrownSunsetSky.m2",
-				"Environments\\Stars\\NagrandSkyBox.m2",
-				"Environments\\Stars\\NetherstormSkybox.m2",
-				"Environments\\Stars\\NagrandSkybox.m2",
-				"Environments\\Stars\\NexusRaid_NebulaSky.m2",
-				"Environments\\Stars\\NexusRaid_RuneEffects_Nebula.m2",
-				"Environments\\Stars\\NexusRaid_RuneEffects_Starry.m2",
-				"Environments\\Stars\\NexusRaid_StarrySky.m2",
-				"Environments\\Stars\\NexusRaid_Wormhole.m2",
-				"Environments\\Stars\\PortalWorldLegionSky.m2",
-				"Environments\\Stars\\ShadowmoonIllidan.m2",
-				"Environments\\Stars\\ShadowmoonSkybox.m2",
-				"Environments\\Stars\\Stars.m2",
-				"Environments\\Stars\\StormPeaks_SkyA.m2",
-				"Environments\\Stars\\StormPeaks_SkyB_Storm.m2",
-				"Environments\\Stars\\StormPeaks_SkyC_Ulduar.m2",
-				"Environments\\Stars\\StratholmeSkybox.m2",
-				"Environments\\Stars\\UlduranCloudySky.m2",
-				"Environments\\Stars\\WintergraspSmokySky.m2",
-				"Environments\\Stars\\ZulDrakSkyA.m2",
-				"Environments\\Stars\\ZulDrakSkyB.m2",
-				"World\\Outland\\PassiveDoodads\\SkyBox\\OutlandSkyBox.m2"
-			};*/
 			wxArrayString skyboxes;
 
 			for (LightSkyBoxDB::Iterator it=skyboxdb.begin();  it!=skyboxdb.end(); ++it) {
@@ -2220,18 +2171,16 @@ is (C)2006 Blizzard Entertainment(R). All rights reserved.")));
 	//info.SetDocWriters();
 
 	wxIcon icon(_T("mainicon"),wxBITMAP_TYPE_ICO_RESOURCE,128,128);
-#ifndef _WINDOWS
-	#if defined (_LINUX)
-		//icon.LoadFile(_T("../bin_support/icon/wmv_xpm"));
-	#elif defined (_MAC)
-		//icon.LoadFile(_T("../bin_support/icon/wmv.icns"));
-	#endif
+#if defined (_LINUX)
+	//icon.LoadFile(_T("../bin_support/icon/wmv_xpm"));
+#elif defined (_MAC)
+	//icon.LoadFile(_T("../bin_support/icon/wmv.icns"));
 #endif
 	icon.SetHeight(128);
 	icon.SetWidth(128);
 	info.SetIcon(icon);
 
-#ifndef __WXMAC__
+#ifndef _MAC
     // FIXME: Doesn't link on OSX
     wxAboutBox(info);
 #endif
@@ -3036,7 +2985,7 @@ void ModelViewer::ImportArmoury(wxString strURL)
 	int pos = strParam.Find(_T("?r="));
 	wxString strFile = strParam.Mid(0, pos);
 	strParam = strParam.Mid(pos+3);
-	pos = strParam.Find(_T("&cn="));
+	pos = strParam.Find(_T("&cn=")); // newer version change from 'n=' to 'cn='
 	wxString strRealm, strChar;
 	if (pos >= 0) {
 		strRealm = strParam.Mid(0, pos);

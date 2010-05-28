@@ -764,7 +764,7 @@ MapTile::~MapTile()
 	}
 
 	for (vector<string>::iterator it = textures.begin(); it != textures.end(); ++it) {
-		//video.textures.delbyname(*it);
+		texturemanager.delbyname(*it);
 	}
 
 	/*
@@ -791,12 +791,12 @@ void MapTile::draw()
 	//glMatrixMode(GL_MODELVIEW);
 	//glLoadIdentity();
 	camera.x = 14937.999f+200.0f;
-	camera.y = -260.0f+100.0f;
+	camera.y = -260.0f+200.0f;
 	camera.z = 18400.0f;
 	lookat.x = camera.x;
-	lookat.y = camera.y + 0.2f;
+	lookat.y = camera.y;
 	lookat.z = camera.z - 1.0f;
-	gluLookAt(camera.x,camera.y,camera.z, lookat.x,lookat.y,lookat.z, 0.0f, -1.0f, 0.0f);
+	gluLookAt(camera.x,camera.y,camera.z, lookat.x,lookat.y,lookat.z, 0.0f, 1.0f, 0.0f);
 
 /*
 	glColor3f(1.0f, 0.0f, 0.0f);
@@ -983,8 +983,7 @@ void MapChunk::initTextures(char *basename, int first, int last)
 	char buf[256];
 	for (int i=first; i<=last; i++) {
 		sprintf(buf, "%s.%d.blp", basename, i);
-		int tex = texturemanager.add(buf);
-		wTextures.push_back(tex);
+		wTextures.push_back(texturemanager.add(buf));
 		//wTextures.push_back(video.textures.add(buf));
 	}
 }
@@ -1785,25 +1784,13 @@ void MapChunk::draw()
 		// setup shadow color as local parameter:
 		//Vec3D shc = gWorld->skies->colorSet[SHADOW_COLOR] * 0.3f;
 		//glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, shc.x,shc.y,shc.z,1);
-		glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, 0.1f, 0.1f, 0.1f, 1);
+		glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, 0.09f, 0.07f, 0.05f, 0.9f);
 		glDrawElements(GL_TRIANGLE_STRIP, striplen, GL_UNSIGNED_SHORT, strip);
 
 		terrainShaders[nTextures-1]->unbind();
-/*
-		// Testing code
-		glDisable(GL_TEXTURE_2D);
-		glDisable(GL_BLEND);
-		glDisable(GL_LIGHTING);
-		glColor3f(0.0f, 1.0f, 0.0f);
-		glPolygonMode(GL_BACK, GL_LINE);
-		glPolygonMode(GL_FRONT, GL_LINE);
-		glBegin(GL_TRIANGLES);
-		for(int i=0; i<striplen; i++) {
-			Vec3D t = tv[strip[i]];
-			glVertex3f(t.x, t.y, t.z);
-		}
-		glEnd();
-*/
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glDrawElements(GL_TRIANGLE_STRIP, striplen, GL_UNSIGNED_SHORT, strip);
 	} else {
 		// FIXED-FUNCTION
 

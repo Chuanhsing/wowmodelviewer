@@ -209,31 +209,28 @@ void getGamePath()
 	} else
 		sName = -1;
 
-//	if (sTypes[sName] == 1)
-//		bPTR = true;
-
 	// If we found an install then set the game path, otherwise just set to C:\ for now
 	if (sName >= 0) {
 		gamePath = sNames[sName];
-		gamePath.append(_T("Data\\"));
+		gamePath.append(_T("Data")+SLASH);
 	} else {
-		gamePath = _T("C:\\");
-		if (!wxFileExists(gamePath + wxT("\\data\\common.MPQ")) && !gamePath.empty()){
+		gamePath = _T("C:")+SLASH;
+		if (!wxFileExists(gamePath + SLASH + _T("data") + SLASH + _T("common.MPQ")) && !gamePath.empty()){
 			gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"),gamePath);
-			gamePath.append(_T("\\Data\\"));
+			gamePath.append(SLASH+_T("Data")+SLASH);
 		}
 	}
-#elif __WXMAC__ // Mac OS X
+#elif _MAC // Mac OS X
     gamePath = wxT("/Applications/World\\ of\\ Warcraft/");
-	if (!wxFileExists(gamePath + wxT("/data/common.MPQ")) && !gamePath.empty()){
+	if (!wxFileExists(gamePath + SLASH + _T("data") + SLASH + _T("common.MPQ")) && !gamePath.empty()){
         gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"),gamePath);
-		gamePath.append(_T("/Data/"));
+		gamePath.append(SLASH+_T("Data")+SLASH);
     }
 #else // Linux
-	gamePath = _T("./");
-	if (!wxFileExists(gamePath + wxT("/data/common.mpq")) && !gamePath.empty()){
+	gamePath = _T(".")+SLASH;
+	if (!wxFileExists(gamePath + SLASH + _T("data") + SLASH + _T("common.MPQ")) && !gamePath.empty()){
 		gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"),gamePath);
-		gamePath.append(_T("/Data/"));
+		gamePath.append(SLASH+_T("Data")+SLASH);
 	}
 #endif
 }
