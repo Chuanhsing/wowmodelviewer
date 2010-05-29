@@ -304,14 +304,14 @@ void MapTile::initDisplay()
 MapTile is ADT
 http://madx.dk/wowdev/wiki/index.php?title=ADT
 */
-MapTile::MapTile(int x0, int z0, char* filename, bool bigAlpha): x(x0), z(z0), topnode(0,0,16), nWMO(0), nMDX(0)
+MapTile::MapTile(wxString filename): topnode(0,0,16), nWMO(0), nMDX(0)
 {
-	x0 = 28;
-	z0 = 33;
-	char *fn = "World\\Maps\\gilneas\\gilneas_28_33.adt";
-	xbase = x0 * TILESIZE;
-	zbase = z0 * TILESIZE;
-	mBigAlpha=bigAlpha;
+	x = atoi(filename.Mid(filename.Len()-9, 2).c_str());
+	z = atoi(filename.Mid(filename.Len()-6, 2).c_str());
+	xbase = x * TILESIZE;
+	zbase = z * TILESIZE;
+	// TODO: get bigAlpha from world
+	// mBigAlpha=bigAlpha;
 	viewpos.x = 14937.999f+200.0f;
 	viewpos.y = -260.0f+200.0f;
 	viewpos.z = 18400.0f;
@@ -320,7 +320,7 @@ MapTile::MapTile(int x0, int z0, char* filename, bool bigAlpha): x(x0), z(z0), t
 	viewrot.z = 0;
 
 
-	wxLogMessage(_T("Loading tile %s"),fn);
+	wxLogMessage(_T("Loading tile %s"),filename.c_str());
 	initDisplay();
 
 	 // [FLOW] DON'T REMOVE i use this file extraction method to debug the adt format
@@ -337,14 +337,14 @@ MapTile::MapTile(int x0, int z0, char* filename, bool bigAlpha): x(x0), z(z0), t
 	}
 */
 
-	MPQFile f(fn);
+	MPQFile f(filename.c_str());
 	ok = !f.isEof();
 	if (!ok) {
-		wxLogMessage(_T("Error: loading %s"),filename);
+		wxLogMessage(_T("Error: loading %s"),filename.c_str());
 		return;
 	}
 
-	name = fn;
+	name = filename;
 	char fourcc[5];
 	uint32 size;
 
@@ -796,38 +796,20 @@ void MapTile::draw()
 	//glTranslatef(0,0,-100);
 	//glTranslatef(viewpos.x, viewpos.y, viewpos.z);
 
-	Vec3D camera; // [0] = {x=14933.333 y=-259.28278 z=17600.000 }
+	Vec3D camera;
 	Vec3D lookat;
 
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
 	//glMatrixMode(GL_MODELVIEW);
 	//glLoadIdentity();
-	camera.x = viewpos.x; //14937.999f+200.0f;
-	camera.y = viewpos.y; //-260.0f+200.0f;
-	camera.z = viewpos.z; //18400.0f;
-	lookat.x = camera.x;
-	lookat.y = camera.y;
-	lookat.z = camera.z - 1.0f;
+	camera.x = viewpos.x;
+	camera.y = viewpos.y;
+	camera.z = viewpos.z;
+	lookat.x = camera.x + 1.0f;
+	lookat.y = camera.y - 0.5f;
+	lookat.z = camera.z + 1.0f;
 	gluLookAt(camera.x,camera.y,camera.z, lookat.x,lookat.y,lookat.z, 0.0f, 1.0f, 0.0f);
-
-
-/*
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glPolygonMode(GL_BACK, GL_LINE);
-	glBegin(GL_TRIANGLES);
-	glVertex3f(14933.333f, -259.282f, 17600.0f);
-	glVertex3f(14937.500f, -260.560f, 17600.0f);
-	glVertex3f(14941.666f, -262.477f, 17600.0f); 
-	glEnd();
-
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glBegin(GL_LINES);
-	glVertex3f(lookat.x-25.0f, lookat.y-25.0f, 17600.0f);
-	glVertex3f(lookat.x+25.0f, lookat.y+25.0f, 17600.0f);
-	glEnd();
-	//glFlush();
-*/
 
 	// Draw height map
 	glEnableClientState(GL_VERTEX_ARRAY);

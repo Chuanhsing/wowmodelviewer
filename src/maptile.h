@@ -198,7 +198,7 @@ public:
 
 	MapNode topnode;
 
-	MapTile(int x0, int z0, char* filename, bool bigAlpha);
+	MapTile(wxString filename);
 	~MapTile();
 
 	void draw();

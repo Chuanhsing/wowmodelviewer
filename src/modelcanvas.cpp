@@ -361,9 +361,21 @@ void ModelCanvas::LoadADT(wxString fn)
 {
 #ifdef	_DEBUG
 	OldinitShaders();
+
+	root->model = NULL;
+	wxDELETE (adt);
+
 	if (!adt) {
-		adt = new MapTile(0, 0, (char *)fn.c_str(), 0);
-		root->model = adt;
+		adt = new MapTile(fn);
+		if (adt->ok) {
+			Vec3D vc = adt->topnode.vmax;
+			if (vc.y < 0) vc.y = 0;
+			adt->viewpos.y = vc.y + 50.0f;
+			adt->viewpos.x = adt->xbase;
+			adt->viewpos.z = adt->zbase;
+			root->model = adt;
+		} else
+			wxDELETE(adt);
 	}
 #endif
 }
