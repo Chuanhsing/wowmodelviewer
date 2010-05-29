@@ -312,6 +312,13 @@ MapTile::MapTile(int x0, int z0, char* filename, bool bigAlpha): x(x0), z(z0), t
 	xbase = x0 * TILESIZE;
 	zbase = z0 * TILESIZE;
 	mBigAlpha=bigAlpha;
+	viewpos.x = 14937.999f+200.0f;
+	viewpos.y = -260.0f+200.0f;
+	viewpos.z = 18400.0f;
+	viewrot.x = 0;
+	viewrot.y = 0;
+	viewrot.z = 0;
+
 
 	wxLogMessage(_T("Loading tile %s"),fn);
 	initDisplay();
@@ -330,7 +337,7 @@ MapTile::MapTile(int x0, int z0, char* filename, bool bigAlpha): x(x0), z(z0), t
 	}
 */
 
-	MPQFile f(filename);
+	MPQFile f(fn);
 	ok = !f.isEof();
 	if (!ok) {
 		wxLogMessage(_T("Error: loading %s"),filename);
@@ -784,6 +791,11 @@ void MapTile::draw()
 {
 	if (!ok) return;
 
+	glRotatef(viewrot.y, 1, 0, 0);
+	glRotatef(viewrot.x, 0, 1, 0);
+	//glTranslatef(0,0,-100);
+	//glTranslatef(viewpos.x, viewpos.y, viewpos.z);
+
 	Vec3D camera; // [0] = {x=14933.333 y=-259.28278 z=17600.000 }
 	Vec3D lookat;
 
@@ -791,13 +803,14 @@ void MapTile::draw()
 
 	//glMatrixMode(GL_MODELVIEW);
 	//glLoadIdentity();
-	camera.x = 14937.999f+200.0f;
-	camera.y = -260.0f+200.0f;
-	camera.z = 18400.0f;
+	camera.x = viewpos.x; //14937.999f+200.0f;
+	camera.y = viewpos.y; //-260.0f+200.0f;
+	camera.z = viewpos.z; //18400.0f;
 	lookat.x = camera.x;
 	lookat.y = camera.y;
 	lookat.z = camera.z - 1.0f;
 	gluLookAt(camera.x,camera.y,camera.z, lookat.x,lookat.y,lookat.z, 0.0f, 1.0f, 0.0f);
+
 
 /*
 	glColor3f(1.0f, 0.0f, 0.0f);

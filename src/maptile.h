@@ -187,6 +187,9 @@ public:
 	bool ok;
 	bool mBigAlpha;
 
+	Vec3D viewpos;
+	Vec3D viewrot;
+
 	//World *world;
 
 	float xbase, zbase;

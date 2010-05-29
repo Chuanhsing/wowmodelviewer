@@ -527,6 +527,38 @@ void ModelCanvas::OnMouse(wxMouseEvent& event)
 			}
 		}
 	} else if (adt) {
+		// Copied from WMO controls.
+
+		if (event.ButtonDown()) {
+			mx = px;
+			my = py;
+
+		} else if (event.Dragging()) {
+			int dx = mx - px;
+			int dy = my - py;
+			mx = px;
+			my = py;
+
+			if (event.LeftIsDown() && event.RightIsDown()) {
+				adt->viewpos.y -= dy*mul;
+			} else if (event.LeftIsDown()) {
+				adt->viewrot.x -= dx*mul/5;
+				adt->viewrot.y -= dy*mul/5;
+			} else if (event.RightIsDown()) {
+				adt->viewrot.x -= dx*mul/5;
+				float f = cos(adt->viewrot.y * piover180);
+				float sf = sin(adt->viewrot.x * piover180);
+				float cf = cos(adt->viewrot.x * piover180);
+				adt->viewpos.x -= sf * mul * dy * f;
+				adt->viewpos.z += cf * mul * dy * f;
+				adt->viewpos.y += sin(adt->viewrot.y * piover180) * mul * dy;
+			} else if (event.MiddleIsDown()) {
+				//?
+			}
+
+		} else if (event.GetEventType() == wxEVT_MOUSEWHEEL) {
+			//?
+		}
 	}
 
 
