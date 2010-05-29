@@ -685,20 +685,19 @@ void WMOGroup::initDisplayList()
 	int nLR = 0;
 
 	// open group file
-	char temp[256];
-	strncpy_s(temp, wmo->name.c_str(), sizeof(temp));
-    temp[wmo->name.length()-4] = 0;
+	wxString temp(wmo->name.c_str(), wxConvUTF8);
+	temp = temp.BeforeLast(_T('.'));
+	
+	wxString fname;
+	fname.Printf(_T("%s_%03d.wmo"), temp.c_str(), num);
 
-	char fname[256];
-	sprintf_s(fname,"%s_%03d.wmo",temp, num);
-
-	MPQFile gf(fname);
+	MPQFile gf(fname.c_str());
     gf.seek(0x14);
 
 	// read header
 	gf.read(&gh, sizeof(WMOGroupHeader));
 	WMOFog &wf = wmo->fogs[gh.fogs[0]];
-	if (wf.r2 <= 0) 
+	if (wf.r2 <= 0)
 		fog = -1; // default outdoor fog..?
 	else 
 		fog = gh.fogs[0];

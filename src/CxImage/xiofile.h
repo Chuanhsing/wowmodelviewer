@@ -27,7 +27,11 @@ public:
 	{
 		if (m_fp) return false;	// Can't re-open without closing first
 
+#ifdef	_WINDOWS
 		fopen_s(&m_fp, filename, mode);
+#else
+		m_fp = _tfopen(filename, mode);
+#endif
 		if (!m_fp) return false;
 
 		m_bCloseFile = true;
@@ -119,7 +123,11 @@ public:
 	virtual long	Scanf(const char *format, void* output)
 	{
 		if (!m_fp) return EOF;
+#ifdef	_WINDOWS
 		return fscanf_s(m_fp, format, output);
+#else
+		return fscanf(m_fp, format, output);
+#endif
 	}
 //////////////////////////////////////////////////////////
 protected:
