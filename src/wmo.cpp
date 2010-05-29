@@ -691,7 +691,7 @@ void WMOGroup::initDisplayList()
 	wxString fname;
 	fname.Printf(_T("%s_%03d.wmo"), temp.c_str(), num);
 
-	MPQFile gf(fname.c_str());
+	MPQFile gf((char *)fname.c_str());
     gf.seek(0x14);
 
 	// read header

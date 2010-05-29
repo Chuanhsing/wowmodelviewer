@@ -306,8 +306,8 @@ http://madx.dk/wowdev/wiki/index.php?title=ADT
 */
 MapTile::MapTile(wxString filename): topnode(0,0,16), nWMO(0), nMDX(0)
 {
-	x = atoi(filename.Mid(filename.Len()-9, 2).c_str());
-	z = atoi(filename.Mid(filename.Len()-6, 2).c_str());
+	x = atoi((char *)filename.Mid(filename.Len()-9, 2).c_str());
+	z = atoi((char *)filename.Mid(filename.Len()-6, 2).c_str());
 	xbase = x * TILESIZE;
 	zbase = z * TILESIZE;
 	// TODO: get bigAlpha from world
@@ -337,7 +337,7 @@ MapTile::MapTile(wxString filename): topnode(0,0,16), nWMO(0), nMDX(0)
 	}
 */
 
-	MPQFile f(filename.c_str());
+	MPQFile f((char *)filename.c_str());
 	ok = !f.isEof();
 	if (!ok) {
 		wxLogMessage(_T("Error: loading %s"),filename.c_str());
@@ -693,7 +693,7 @@ MapTile::MapTile(wxString filename): topnode(0,0,16), nWMO(0), nMDX(0)
 					}
 					else if( mh2oi->ofsHeigthAlpha != 0 )
 					{
-						wxLogMessage(_T("Unknown flag combination: %s."), filename);
+						wxLogMessage(_T("Unknown flag combination: %s."), filename.c_str());
 					}
 
 					chunks[i/CHUNKS_IN_TILE][i%CHUNKS_IN_TILE].waterLayer.push_back( waterLayer );
