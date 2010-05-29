@@ -58,7 +58,7 @@ void WriteLWScenePlugin(ofstream &fs, wxString type, uint32 PluginCount, wxStrin
 }
 
 // Writes an Object or Null Object to the scene file.
-void WriteLWSceneObject(ofstream &fs, wxString Filename, AnimationData AnimData, uint32 &ItemNumber, int Visibility = 7, bool isNull = false, uint32 ParentNum = -1, wxString Label=wxEmptyString)
+void WriteLWSceneObject(ofstream &fs, wxString Filename, AnimationData AnimData, uint32 &ItemNumber, int Visibility = 7, bool isNull = false, int32 ParentNum = -1, wxString Label=wxEmptyString)
 {
 	bool isLabeled = false;
 	bool isParented = false;
@@ -128,7 +128,7 @@ void WriteLWSceneObject(ofstream &fs, wxString Filename, AnimationData AnimData,
 }
 
 // Writes an Object's Bone to the scene file.
-void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, Vec3D Rot, float Length, uint32 &BoneNumber, uint32 ParentObject, uint32 ParentNum = -1)
+void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, Vec3D Rot, float Length, uint32 BoneNumber, uint32 ParentObject, int32 ParentNum = -1)
 {
 	bool isParented = false;
 	if (ParentNum > -1){
@@ -166,7 +166,6 @@ void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, 
 	fs << _T("IKInitialState 0");
 
 	fs << _T("\n");
-	BoneNumber++;
 }
 
 // Write a Light to the Scene File
@@ -823,7 +822,6 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 	ObjRot.z = temp;
 	ObjData.Push(ObjPos,(ObjRot/(float)RADIAN),OneScale,0);
 
-	uint32 ParentID = mcount;
 	WriteLWSceneObject(fs,objFilename,ObjData,mcount);
 
 	// Export Bones
@@ -831,7 +829,16 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 		fs << _T("BoneFalloffType 5\nFasterBones 1\n");
 		for (uint16 x=0;x<m->header.nBones;x++){
 			Bone *cbone = &m->bones[x];
-			WriteLWSceneBone(fs, wxString(_T("Bone_")) << x, 1, cbone->transPivot, Vec3D(0,0,0), 0, bcount, ParentID, cbone->parent);
+			Vec3D Pos = cbone->pivot;
+			if (cbone->parent > -1)
+				Pos -= m->bones[cbone->parent].pivot;
+			if (init == false){
+				Pos = cbone->transPivot;
+				if (cbone->parent > -1)
+					Pos -= m->bones[cbone->parent].transPivot;
+			}
+			Pos.z = -Pos.z;
+			WriteLWSceneBone(fs, wxString::Format(_T("Bone_%03i"),x), 1, Pos, Vec3D(0,0,0), 0.25, x, ModelID, cbone->parent);
 		}
 	}
 
@@ -860,7 +867,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 			CamData.Push(cam->target,ZeroRot,OneScale,0);
 		}
 
-		WriteLWSceneObject(fs,_T("Camera Target"),CamData,mcount,0,true,ParentID);
+		WriteLWSceneObject(fs,_T("Camera Target"),CamData,mcount,0,true,ModelID);
 
 		fs << _T("AddCamera 30000000\nCameraName Camera\nShowCamera 1 -1 0.125490 0.878431 0.125490\nCameraMotion\nNumChannels 6\n");
 
@@ -897,7 +904,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 			WriteLWSceneEnvChannel(fs,5,0,0);
 		}
 
-		fs << _T("ParentItem 1" << wxString::Format(_T("%07x"),ParentID) << "\n");
+		fs << _T("ParentItem 1" << wxString::Format(_T("%07x"),ModelID) << "\n");
 		fs << _T("IKInitCustomFrame 0\nGoalStrength 1\nIKFKBlending 0\nIKSoftMin 0.25\nIKSoftMax 0.75\nCtrlPosItemBlend 1\nCtrlRotItemBlend 1\nCtrlScaleItemBlend 1\n\n");
 		fs << _T("HController 1\nPController 1\nPathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
 		fs << _T("TargetItem 1"<<wxString::Format(_T("%07x"),CameraTargetID)<<"\n");
@@ -1565,8 +1572,113 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 VMAP data Written for %s"),m->fullname.c_str());
+	wxLogMessage(_T("M2 UV data Written for %s"),m->fullname.c_str());
 #endif
+
+	//m->header;
+	/*
+	//Vertex Mapping
+	f.Write(_T("VMAP"), 4);
+	u32 = MSB4<uint32>(vmapSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+	// UV Data
+	f.Write(_T("WGHT"), 4);
+	dimension = MSB2(1);
+	f.Write(reinterpret_cast<char *>(&dimension), 2);
+	f.Write(_T("Texture"), 7);
+	ub = 0;
+	f.Write(reinterpret_cast<char *>(&ub), 1);
+	vmapSize += 14;
+
+	counter = 0;
+
+	for (uint32 i=0; i<m->passes.size(); i++) {
+		ModelRenderPass &p = m->passes[i];
+
+		if (p.init(m)){
+			for(uint32 k=0, b=p.indexStart;k<p.indexCount;k++,b++) {
+				uint16 a = m->indices[b];
+
+				LW_WriteVX(f,counter,vmapSize);
+
+				f32 = MSB4<float>(m->origVertices[a].texcoords.x);
+				f.Write(reinterpret_cast<char *>(&f32), 4);
+				f32 = MSB4<float>(1 - m->origVertices[a].texcoords.y);
+				f.Write(reinterpret_cast<char *>(&f32), 4);
+				vmapSize += 8;
+				counter++;
+			}
+		}
+	}
+
+	if (att!=NULL){
+		Model *attM = NULL;
+		if (att->model) {
+			attM = static_cast<Model*>(att->model);
+
+			if (attM){
+				for (uint32 i=0; i<attM->passes.size(); i++) {
+					ModelRenderPass &p = attM->passes[i];
+
+					if (p.init(attM)) {
+						for(uint32 k=0, b=p.indexStart;k<p.indexCount;k++,b++) {
+							uint16 a = attM->indices[b];
+
+							LW_WriteVX(f,counter,vmapSize);
+
+							f32 = MSB4<float>(attM->origVertices[a].texcoords.x);
+							f.Write(reinterpret_cast<char *>(&f32), 4);
+							f32 = MSB4<float>(1 - attM->origVertices[a].texcoords.y);
+							f.Write(reinterpret_cast<char *>(&f32), 4);
+							vmapSize += 8;
+							counter++;
+						}
+					}
+				}
+			}
+		}
+		for (uint32 i=0; i<att->children.size(); i++) {
+			Attachment *att2 = att->children[i];
+			for (uint32 j=0; j<att2->children.size(); j++) {
+				Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
+
+				if (mAttChild){
+					for (uint32 i=0; i<mAttChild->passes.size(); i++) {
+						ModelRenderPass &p = mAttChild->passes[i];
+
+						if (p.init(mAttChild)) {
+							for(uint32 k=0, b=p.indexStart;k<p.indexCount;k++,b++) {
+								uint16 a = mAttChild->indices[b];
+
+								LW_WriteVX(f,counter,vmapSize);
+
+								f32 = MSB4<float>(mAttChild->origVertices[a].texcoords.x);
+								f.Write(reinterpret_cast<char *>(&f32), 4);
+								f32 = MSB4<float>(1 - mAttChild->origVertices[a].texcoords.y);
+								f.Write(reinterpret_cast<char *>(&f32), 4);
+								vmapSize += 8;
+								counter++;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	fileLen += vmapSize;
+
+	off_t = -4-vmapSize;
+	f.SeekO(off_t, wxFromCurrent);
+	u32 = MSB4<uint32>(vmapSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+
+#ifdef _DEBUG
+	wxLogMessage(_T("M2 Weight data Written for %s"),m->fullname.c_str());
+#endif
+*/
 
 	// --
 	// POLYGON CHUNK

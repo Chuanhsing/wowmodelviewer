@@ -11,7 +11,6 @@ extern PFNGLDELETEPROGRAMSARBPROC glDeleteProgramsARB;
 extern PFNGLGENPROGRAMSARBPROC glGenProgramsARB;
 extern PFNGLPROGRAMLOCALPARAMETER4FARBPROC glProgramLocalParameter4fARB;
 
-
 void OldinitShaders();
 void OldreloadShaders();
 
