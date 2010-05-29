@@ -63,8 +63,6 @@ int GetLastError()
 char *ErrString(int err)
 {
     switch (err) {
-    case ERROR_INVALID_FUNCTION:
-        return "function not implemented";
     case ERROR_FILE_NOT_FOUND:
         return "file not found";
     case ERROR_ACCESS_DENIED:
@@ -77,8 +75,6 @@ char *ErrString(int err)
         return "no more files";
     case ERROR_HANDLE_EOF:
         return "access beyound EOF";
-    case ERROR_HANDLE_DISK_FULL:
-        return "no space left on device";
     case ERROR_INVALID_PARAMETER:
         return "invalid parameter";
     case ERROR_INVALID_HANDLE:
@@ -113,7 +109,7 @@ HANDLE CreateFile(const char *sFileName, DWORD ulMode, DWORD ulSharing, void *pS
     }
 }
 
-BOOL CloseHandle(HANDLE hFile)
+bool CloseHandle(HANDLE hFile)
 {
     return (close((intptr_t)hFile) == 0);
 }
@@ -149,12 +145,12 @@ DWORD SetFilePointer(HANDLE hFile, LONG lOffSetLow, LONG *pOffSetHigh, DWORD ulM
     return lseek64((intptr_t)hFile, nFileOffset, ulMethod);
 }
 
-BOOL SetEndOfFile(HANDLE hFile)
+bool SetEndOfFile(HANDLE hFile)
 {
     return (ftruncate((intptr_t)hFile, lseek((intptr_t)hFile, 0, SEEK_CUR)) == 0);
 }
 
-BOOL GetFileTime(HANDLE hFile,                 /* handle to file */
+bool GetFileTime(HANDLE hFile,                 /* handle to file */
                  LPFILETIME lpCreationTime,    /* file creation time */
                  LPFILETIME lpLastAccessTime,  /* file accessed time */
                  LPFILETIME lpLastWriteTime)   /* file modified time */
@@ -163,7 +159,7 @@ BOOL GetFileTime(HANDLE hFile,                 /* handle to file */
     int filedesc = (int)(size_t)(hFile);
 
     if(fstat(filedesc, &file_stats) == -1)
-        return FALSE;
+        return false;
 
     if(lpCreationTime != NULL)
         ConvertTimeTToFileTime(lpCreationTime, file_stats.st_ctime);
@@ -171,10 +167,10 @@ BOOL GetFileTime(HANDLE hFile,                 /* handle to file */
         ConvertTimeTToFileTime(lpLastAccessTime, file_stats.st_atime);
     if(lpLastWriteTime != NULL)
         ConvertTimeTToFileTime(lpLastWriteTime, file_stats.st_mtime);
-    return TRUE;
+    return true;
 }
 
-BOOL ReadFile(HANDLE hFile, void *pBuffer, DWORD ulLen, DWORD *ulRead, void *pOverLapped)
+bool ReadFile(HANDLE hFile, void *pBuffer, DWORD ulLen, DWORD *ulRead, void *pOverLapped)
 {
     ssize_t count;
     if ((count = read((intptr_t)hFile, pBuffer, ulLen)) == -1) {
@@ -185,7 +181,7 @@ BOOL ReadFile(HANDLE hFile, void *pBuffer, DWORD ulLen, DWORD *ulRead, void *pOv
     return true;
 }
 
-BOOL WriteFile(HANDLE hFile, const void *pBuffer, DWORD ulLen, DWORD *ulWritten, void *pOverLapped)
+bool WriteFile(HANDLE hFile, const void *pBuffer, DWORD ulLen, DWORD *ulWritten, void *pOverLapped)
 {
     ssize_t count;
     if ((count = write((intptr_t)hFile, pBuffer, ulLen)) == -1) {
@@ -197,9 +193,9 @@ BOOL WriteFile(HANDLE hFile, const void *pBuffer, DWORD ulLen, DWORD *ulWritten,
 }
 
 // Check if a memory block is accessible for reading
-BOOL IsBadReadPtr(const void * ptr, int size)
+bool IsBadReadPtr(const void * ptr, int size)
 {
-    return FALSE;
+    return false;
 }
 
 // Returns attributes of a file
@@ -208,12 +204,12 @@ DWORD GetFileAttributes(const char * szFileName)
     return 0;
 }
 
-BOOL DeleteFile(const char *lpFileName)
+bool DeleteFile(const char *lpFileName)
 {
-    return (BOOL)remove(lpFileName);
+    return (bool)remove(lpFileName);
 }
 
-BOOL MoveFile(const char *lpExistingFileName, const char *lpNewFileName)
+bool MoveFile(const char *lpExistingFileName, const char *lpNewFileName)
 {
     return rename(lpExistingFileName, lpNewFileName);
 }	

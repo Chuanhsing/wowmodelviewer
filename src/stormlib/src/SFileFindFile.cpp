@@ -20,18 +20,18 @@
 //-----------------------------------------------------------------------------
 // Local functions
 
-static BOOL IsValidSearchHandle(TMPQSearch * hs)
+static bool IsValidSearchHandle(TMPQSearch * hs)
 {
     if(hs == NULL || IsBadReadPtr(hs, sizeof(TMPQSearch)))
-        return FALSE;
+        return false;
 
-    if(IsValidMpqHandle(hs->ha) == FALSE)
-        return FALSE;
+    if(!IsValidMpqHandle(hs->ha))
+        return false;
 
-    return TRUE;
+    return true;
 }
 
-BOOL CheckWildCard(const char * szString, const char * szWildCard)
+bool CheckWildCard(const char * szString, const char * szWildCard)
 {
     const char * szSubString;
     int nSubStringLength;
@@ -39,11 +39,11 @@ BOOL CheckWildCard(const char * szString, const char * szWildCard)
 
     // When the mask is empty, it never matches
     if(szWildCard == NULL || *szWildCard == 0)
-        return FALSE;
+        return false;
 
     // If the wildcard contains just "*", then it always matches
     if(szWildCard[0] == '*' && szWildCard[1] == 0)
-        return TRUE;
+        return true;
 
     // Do normal test
     for(;;)
@@ -65,7 +65,7 @@ BOOL CheckWildCard(const char * szString, const char * szWildCard)
 
             // If we found end of the wildcard, it's a match
             if(*szWildCard == 0)
-                return TRUE;
+                return true;
 
             // Determine the length of the substring in szWildCard
             szSubString = szWildCard;
@@ -105,11 +105,11 @@ BOOL CheckWildCard(const char * szString, const char * szWildCard)
         {
             // If we came to the end of the string, compare it to the wildcard
             if(toupper(*szString) != toupper(*szWildCard))
-                return FALSE;
+                return false;
 
             // If we arrived to the end of the string, it's a match
             if(*szString == 0)
-                return TRUE;
+                return true;
 
             // Otherwise, continue in comparing
             szWildCard++;
@@ -205,7 +205,7 @@ HANDLE WINAPI SFileFindFirstFile(HANDLE hMpq, const char * szMask, SFILE_FIND_DA
     int nError = ERROR_SUCCESS;
 
     // Check for the valid parameters
-    if(IsValidMpqHandle(ha) == FALSE)
+    if(!IsValidMpqHandle(ha))
         nError = ERROR_INVALID_HANDLE;
     if(szMask == NULL || lpFindFileData == NULL)
         nError = ERROR_INVALID_PARAMETER;
@@ -244,13 +244,13 @@ HANDLE WINAPI SFileFindFirstFile(HANDLE hMpq, const char * szMask, SFILE_FIND_DA
     return (HANDLE)hs;
 }
 
-BOOL WINAPI SFileFindNextFile(HANDLE hFind, SFILE_FIND_DATA * lpFindFileData)
+bool WINAPI SFileFindNextFile(HANDLE hFind, SFILE_FIND_DATA * lpFindFileData)
 {
     TMPQSearch * hs = (TMPQSearch *)hFind;
     int nError = ERROR_SUCCESS;
 
     // Check the parameters
-    if(IsValidSearchHandle(hs) == FALSE)
+    if(!IsValidSearchHandle(hs))
         nError = ERROR_INVALID_HANDLE;
     if(lpFindFileData == NULL)
         nError = ERROR_INVALID_PARAMETER;
@@ -263,17 +263,17 @@ BOOL WINAPI SFileFindNextFile(HANDLE hFind, SFILE_FIND_DATA * lpFindFileData)
     return (nError == ERROR_SUCCESS);
 }
 
-BOOL WINAPI SFileFindClose(HANDLE hFind)
+bool WINAPI SFileFindClose(HANDLE hFind)
 {
     TMPQSearch * hs = (TMPQSearch *)hFind;
 
     // Check the parameters
-    if(IsValidSearchHandle(hs) == FALSE)
+    if(!IsValidSearchHandle(hs))
     {
         SetLastError(ERROR_INVALID_HANDLE);
-        return FALSE;
+        return false;
     }
 
     FreeMPQSearch(hs);
-    return TRUE;
+    return true;
 }

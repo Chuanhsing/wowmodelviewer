@@ -60,6 +60,8 @@
 #define STORMLIB_MIN(a, b) ((a < b) ? a : b)
 #define STORMLIB_MAX(a, b) ((a > b) ? a : b)
 
+#define ID_MPQ_FILE              0x46494c45 // Used internally for checking TMPQFile ('FILE')
+
 extern LCID lcFileLocale;                   // Preferred file locale
 
 //-----------------------------------------------------------------------------
@@ -69,20 +71,20 @@ void InitializeMpqCryptography();
 
 DWORD DecryptFileKey(const char * szFileName);
 
-void  EncryptMpqBlock(VOID * pvFileBlock, DWORD dwLength, DWORD dwFileKey);
-void  DecryptMpqBlock(VOID * pvFileBlock, DWORD dwLength, DWORD dwFileKey);
+void  EncryptMpqBlock(void * pvFileBlock, DWORD dwLength, DWORD dwFileKey);
+void  DecryptMpqBlock(void * pvFileBlock, DWORD dwLength, DWORD dwFileKey);
 
-void  EncryptMpqTable(VOID * pvMpqTable, DWORD dwLength, const char * szKey);
-void  DecryptMpqTable(VOID * pvMpqTable, DWORD dwLength, const char * szKey);
+void  EncryptMpqTable(void * pvMpqTable, DWORD dwLength, const char * szKey);
+void  DecryptMpqTable(void * pvMpqTable, DWORD dwLength, const char * szKey);
 
 DWORD DetectFileKeyBySectorSize(DWORD * SectorOffsets, DWORD decrypted);
-DWORD DetectFileKeyByContent(VOID * pvFileContent, DWORD dwFileSize);
+DWORD DetectFileKeyByContent(void * pvFileContent, DWORD dwFileSize);
 
 //-----------------------------------------------------------------------------
 // Handle validation functions
 
-BOOL IsValidMpqHandle(TMPQArchive * ha);
-BOOL IsValidFileHandle(TMPQFile * hf);
+bool IsValidMpqHandle(TMPQArchive * ha);
+bool IsValidFileHandle(TMPQFile * hf);
 
 //-----------------------------------------------------------------------------
 // Hash table and block table manipulation
@@ -116,7 +118,7 @@ void FreeMPQArchive(TMPQArchive *& ha);
 //-----------------------------------------------------------------------------
 // Utility functions
 
-BOOL CheckWildCard(const char * szString, const char * szWildCard);
+bool CheckWildCard(const char * szString, const char * szWildCard);
 const char * GetPlainLocalFileName(const char * szFileName);
 const char * GetPlainMpqFileName(const char * szFileName);
 
@@ -130,19 +132,18 @@ int SFileAddFile_Init(
     DWORD dwFileSize,
     LCID lcLocale,
     DWORD dwFlags,
-    void ** ppvAddHandle
+    TMPQFile ** phf
     );
 
 int SFileAddFile_Write(
-    void * pvAddHandle,
-    void * pvData,
+    TMPQFile * hf,
+    const void * pvData,
     DWORD dwSize,
     DWORD dwCompression
     );
 
 int SFileAddFile_Finish(
-    void * pvAddHandle,
-    int nError
+    TMPQFile * hf
     );
 
 //-----------------------------------------------------------------------------

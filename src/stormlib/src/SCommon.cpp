@@ -34,7 +34,7 @@ USHORT  wPlatform = 0;                      // File platform
 #define STORM_BUFFER_SIZE   0x500
 
 static DWORD StormBuffer[STORM_BUFFER_SIZE];    // Buffer for the decryption engine
-static BOOL  bMpqCryptographyInitialized = FALSE;
+static bool  bMpqCryptographyInitialized = false;
 
 static DWORD HashString(const char * szFileName, DWORD dwHashType)
 {
@@ -63,7 +63,7 @@ void InitializeMpqCryptography()
 
     // Initialize the decryption buffer.
     // Do nothing if already done.
-    if(bMpqCryptographyInitialized == FALSE)
+    if(bMpqCryptographyInitialized == false)
     {
         for(index1 = 0; index1 < 0x100; index1++)
         {
@@ -89,7 +89,7 @@ void InitializeMpqCryptography()
         ltc_mp = ltm_desc;    
 
         // Don't do that again
-        bMpqCryptographyInitialized = TRUE;
+        bMpqCryptographyInitialized = true;
     }
 }
 
@@ -104,7 +104,7 @@ DWORD DecryptFileKey(const char * szFileName)
 //-----------------------------------------------------------------------------
 // Encrypting and decrypting MPQ file data
 
-void EncryptMpqBlock(VOID * pvFileBlock, DWORD dwLength, DWORD dwSeed1)
+void EncryptMpqBlock(void * pvFileBlock, DWORD dwLength, DWORD dwSeed1)
 {
     DWORD * block = (DWORD *)pvFileBlock;
     DWORD dwSeed2 = 0xEEEEEEEE;
@@ -124,7 +124,7 @@ void EncryptMpqBlock(VOID * pvFileBlock, DWORD dwLength, DWORD dwSeed1)
     }
 }
 
-void DecryptMpqBlock(VOID * pvFileBlock, DWORD dwLength, DWORD dwSeed1)
+void DecryptMpqBlock(void * pvFileBlock, DWORD dwLength, DWORD dwSeed1)
 {
     DWORD * block = (DWORD *)pvFileBlock;
     DWORD dwSeed2 = 0xEEEEEEEE;
@@ -144,12 +144,12 @@ void DecryptMpqBlock(VOID * pvFileBlock, DWORD dwLength, DWORD dwSeed1)
     }
 }
 
-void EncryptMpqTable(VOID * pvMpqTable, DWORD dwLength, const char * szKey)
+void EncryptMpqTable(void * pvMpqTable, DWORD dwLength, const char * szKey)
 {
     EncryptMpqBlock(pvMpqTable, dwLength, HashString(szKey, MPQ_HASH_FILE_KEY));
 }
 
-void DecryptMpqTable(VOID * pvMpqTable, DWORD dwLength, const char * szKey)
+void DecryptMpqTable(void * pvMpqTable, DWORD dwLength, const char * szKey)
 {
     DecryptMpqBlock(pvMpqTable, dwLength, HashString(szKey, MPQ_HASH_FILE_KEY));
 }
@@ -204,7 +204,7 @@ DWORD DetectFileKeyBySectorSize(DWORD * SectorOffsets, DWORD decrypted)
 }
 
 // Function tries to detect file encryption key. It expectes at least two uncompressed bytes
-DWORD DetectFileKeyByKnownContent(VOID * pvFileContent, UINT nDwords, ...)
+DWORD DetectFileKeyByKnownContent(void * pvFileContent, DWORD nDwords, ...)
 {
     DWORD * pdwContent = (DWORD *)pvFileContent;
     va_list argList;
@@ -255,7 +255,7 @@ DWORD DetectFileKeyByKnownContent(VOID * pvFileContent, UINT nDwords, ...)
     return 0;
 }
 
-DWORD DetectFileKeyByContent(VOID * pvFileContent, DWORD dwFileSize)
+DWORD DetectFileKeyByContent(void * pvFileContent, DWORD dwFileSize)
 {
     DWORD dwFileKey;
 
@@ -290,29 +290,32 @@ DWORD DetectFileKeyByContent(VOID * pvFileContent, DWORD dwFileSize)
 //-----------------------------------------------------------------------------
 // Handle validation functions
 
-BOOL IsValidMpqHandle(TMPQArchive * ha)
+bool IsValidMpqHandle(TMPQArchive * ha)
 {
     if(ha == NULL || IsBadReadPtr(ha, sizeof(TMPQArchive)))
-        return FALSE;
+        return false;
     if(ha->pHeader == NULL || IsBadReadPtr(ha->pHeader, MPQ_HEADER_SIZE_V2))
-        return FALSE;
+        return false;
     
-    return (ha->pHeader->dwID == ID_MPQ);
+    return (bool)(ha->pHeader->dwID == ID_MPQ);
 }
 
-BOOL IsValidFileHandle(TMPQFile * hf)
+bool IsValidFileHandle(TMPQFile * hf)
 {
     if(hf == NULL || IsBadReadPtr(hf, sizeof(TMPQFile)))
-        return FALSE;
+        return false;
+
+    if(hf->dwMagic != ID_MPQ_FILE)
+        return false;
 
     if(hf->hFile != INVALID_HANDLE_VALUE)
-        return TRUE;
+        return true;
 
     return IsValidMpqHandle(hf->ha);
 }
 
 //-----------------------------------------------------------------------------
-// Hash table and block table manioulation
+// Hash table and block table manipulation
 
 #define GET_NEXT_HASH_ENTRY(pStartHash, pHash, pHashEnd)  \
         if(++pHash >= pHashEnd)                           \
@@ -327,12 +330,14 @@ TMPQHash * GetFirstHashEntry(TMPQArchive * ha, const char * szFileName)
     TMPQHash * pStartHash;                  // File hash entry (start)
     TMPQHash * pHashEnd = ha->pHashTable + ha->pHeader->dwHashTableSize;
     TMPQHash * pHash;                       // File hash entry (current)
+    DWORD dwHashTableSizeMask;
     DWORD dwIndex = HashString(szFileName, MPQ_HASH_TABLE_OFFSET);
     DWORD dwName1 = HashString(szFileName, MPQ_HASH_NAME_A);
     DWORD dwName2 = HashString(szFileName, MPQ_HASH_NAME_B);
 
     // Get the first possible has entry that might be the one
-    pStartHash = pHash = ha->pHashTable + (dwIndex & (ha->pHeader->dwHashTableSize - 1));
+    dwHashTableSizeMask = ha->pHeader->dwHashTableSize ? (ha->pHeader->dwHashTableSize - 1) : 0;
+    pStartHash = pHash = ha->pHashTable + (dwIndex & dwHashTableSizeMask);
 
     // There might be deleted entries in the hash table prior to our desired entry.
     while(pHash->dwBlockIndex != HASH_ENTRY_FREE)
@@ -480,12 +485,14 @@ TMPQHash * FindFreeHashEntry(TMPQHash * pHashTable, DWORD dwHashTableSize, const
     TMPQHash * pStartHash;                  // Starting point of the search
     TMPQHash * pHashEnd = pHashTable + dwHashTableSize;
     TMPQHash * pHash;
+    DWORD dwHashTableSizeMask;
     DWORD dwIndex = HashString(szFileName, MPQ_HASH_TABLE_OFFSET);
     DWORD dwName1 = HashString(szFileName, MPQ_HASH_NAME_A);
     DWORD dwName2 = HashString(szFileName, MPQ_HASH_NAME_B);
 
     // Save the starting hash position
-    pStartHash = pHash = pHashTable + (dwIndex & (dwHashTableSize - 1));
+    dwHashTableSizeMask = dwHashTableSize ? (dwHashTableSize - 1) : 0;
+    pStartHash = pHash = pHashTable + (dwIndex & dwHashTableSizeMask);
 
     // Look for the first free or deleted hash entry.
     while(pHash->dwBlockIndex < HASH_ENTRY_DELETED)
@@ -658,6 +665,7 @@ TMPQFile * CreateMpqFile(TMPQArchive * ha, const char * szFileName)
         memset(hf, 0, nSize);
         hf->ha = ha;
         hf->hFile = INVALID_HANDLE_VALUE;
+        hf->dwMagic = ID_MPQ_FILE;
         strcpy(hf->szFileName, szFileName);
     }
 

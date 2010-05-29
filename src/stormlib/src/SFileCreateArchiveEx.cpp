@@ -17,7 +17,7 @@
 
 #define DEFAULT_SECTOR_SIZE  3       // Default size of a file sector
 
-BOOL SFileOpenArchiveEx(const char * szMpqName, DWORD dwAccessMode, DWORD dwFlags, HANDLE * phMPQ);
+bool SFileOpenArchiveEx(const char * szMpqName, DWORD dwAccessMode, DWORD dwFlags, HANDLE * phMPQ);
 
 //-----------------------------------------------------------------------------
 // Opens or creates a (new) MPQ archive.
@@ -45,7 +45,7 @@ BOOL SFileOpenArchiveEx(const char * szMpqName, DWORD dwAccessMode, DWORD dwFlag
 // phMpq - Receives handle to the archive
 //
 
-BOOL WINAPI SFileCreateArchiveEx(const char * szMpqName, DWORD dwFlags, DWORD dwHashTableSize, HANDLE * phMPQ)
+bool WINAPI SFileCreateArchiveEx(const char * szMpqName, DWORD dwFlags, DWORD dwHashTableSize, HANDLE * phMPQ)
 {
     LARGE_INTEGER MpqPos = {0};             // Position of MPQ header in the file
     TMPQArchive * ha = NULL;                // MPQ archive handle
@@ -54,14 +54,14 @@ BOOL WINAPI SFileCreateArchiveEx(const char * szMpqName, DWORD dwFlags, DWORD dw
     DWORD dwCreationDisposition;
     DWORD dwBlockTableSize = 0;             // Initial block table size
     DWORD dwPowerOfTwo;
-    BOOL bFileExists = FALSE;
+    bool bFileExists = false;
     int nError = ERROR_SUCCESS;
 
     // Check the parameters, if they are valid
     if(szMpqName == NULL || *szMpqName == 0 || phMPQ == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
-        return FALSE;
+        return false;
     }
 
     // Pre-initialize the result value
@@ -75,11 +75,11 @@ BOOL WINAPI SFileCreateArchiveEx(const char * szMpqName, DWORD dwFlags, DWORD dw
     if(dwCreationDisposition > MPQ_OPEN_ALWAYS)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
-        return FALSE;
+        return false;
     }
 
     // Check the value of dwCreationDisposition against file existence
-    bFileExists = (GetFileAttributes(szMpqName) != 0xFFFFFFFF);
+    bFileExists = (bool)(GetFileAttributes(szMpqName) != 0xFFFFFFFF);
 
     // If the file exists and open required, do it.
     if(bFileExists && (dwCreationDisposition == MPQ_OPEN_EXISTING || dwCreationDisposition == MPQ_OPEN_ALWAYS))
@@ -87,24 +87,24 @@ BOOL WINAPI SFileCreateArchiveEx(const char * szMpqName, DWORD dwFlags, DWORD dw
         // Try to open the archive normal way. If it fails, it means that
         // the file exist, but it is not a MPQ archive.
         if(SFileOpenArchiveEx(szMpqName, GENERIC_READ | GENERIC_WRITE, dwFlags, phMPQ))
-            return TRUE;
+            return true;
         
         // If the caller required to open the existing archive,
         // and the file is not MPQ archive, return error
         if(dwCreationDisposition == MPQ_OPEN_EXISTING)
-            return FALSE;
+            return false;
     }
 
     // Two error cases
     if(dwCreationDisposition == MPQ_CREATE_NEW && bFileExists)
     {
         SetLastError(ERROR_ALREADY_EXISTS);
-        return FALSE;
+        return false;
     }
-    if(dwCreationDisposition == MPQ_OPEN_EXISTING && bFileExists == FALSE)
+    if(dwCreationDisposition == MPQ_OPEN_EXISTING && !bFileExists)
     {
         SetLastError(ERROR_FILE_NOT_FOUND);
-        return FALSE;
+        return false;
     }
 
     //

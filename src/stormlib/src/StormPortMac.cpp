@@ -25,7 +25,7 @@ static OSErr FSOpenDFCompat(FSRef *ref, char permission, short *refNum)
 	OSErr theErr;
 	Boolean isFolder, wasChanged;
 	
-	theErr = FSResolveAliasFile(ref, TRUE, &isFolder, &wasChanged);
+	theErr = FSResolveAliasFile(ref, true, &isFolder, &wasChanged);
 	if (theErr != noErr)
 	{
 		return theErr;
@@ -177,8 +177,6 @@ char *ErrString(int err)
 {
 	switch (err)
 	{
-		case ERROR_INVALID_FUNCTION:
-			return "function not implemented";
 		case ERROR_FILE_NOT_FOUND:
 			return "file not found";
 		case ERROR_ACCESS_DENIED:
@@ -191,8 +189,6 @@ char *ErrString(int err)
 			return "no more files";
 		case ERROR_HANDLE_EOF:
 			return "access beyond EOF";
-		case ERROR_HANDLE_DISK_FULL:
-			return "no space left on device";
 		case ERROR_INVALID_PARAMETER:
 			return "invalid parameter";
 		case ERROR_INVALID_HANDLE:
@@ -218,7 +214,7 @@ char *ErrString(int err)
 *	 DeleteFile
 *		 lpFileName: file path
 ********************************************************************/
-BOOL DeleteFile(const char * lpFileName)
+bool DeleteFile(const char * lpFileName)
 {
 	OSErr	theErr;
 	FSRef	theFileRef;
@@ -227,7 +223,7 @@ BOOL DeleteFile(const char * lpFileName)
 	if (theErr != noErr)
 	{
 		SetLastError(theErr);
-		return FALSE;
+		return false;
 	}
 	
 	theErr = FSDeleteObject(&theFileRef);
@@ -242,7 +238,7 @@ BOOL DeleteFile(const char * lpFileName)
 *		 lpFromFileName: old file path
 *		 lpToFileName: new file path
 ********************************************************************/
-BOOL MoveFile(const char * lpFromFileName, const char * lpToFileName)
+bool MoveFile(const char * lpFromFileName, const char * lpToFileName)
 {
 	OSErr theErr;
 	FSRef fromFileRef;
@@ -254,15 +250,15 @@ BOOL MoveFile(const char * lpFromFileName, const char * lpToFileName)
 	if (theErr != noErr)
 	{
 		SetLastError(theErr);
-		return FALSE;
+		return false;
 	}
 	
 	// Get the path to the new folder for the file
 	char folderName[MAX_PATH];
 	CFStringRef folderPathCFString = CFStringCreateWithCString(NULL, lpToFileName, kCFStringEncodingUTF8);
-	CFURLRef fileURL = CFURLCreateWithFileSystemPath(NULL, folderPathCFString, kCFURLPOSIXPathStyle, FALSE);
+	CFURLRef fileURL = CFURLCreateWithFileSystemPath(NULL, folderPathCFString, kCFURLPOSIXPathStyle, false);
 	CFURLRef folderURL = CFURLCreateCopyDeletingLastPathComponent(NULL, fileURL);
-	CFURLGetFileSystemRepresentation(folderURL, TRUE, (UInt8 *)folderName, MAX_PATH);
+	CFURLGetFileSystemRepresentation(folderURL, true, (UInt8 *)folderName, MAX_PATH);
 	theErr = FSPathMakeRef((UInt8 *)folderName, &parentFolderRef, NULL);
 	CFRelease(fileURL);
 	CFRelease(folderURL);
@@ -273,12 +269,12 @@ BOOL MoveFile(const char * lpFromFileName, const char * lpToFileName)
 	if (theErr != noErr)
 	{
 		SetLastError(theErr);
-		return FALSE;
+		return false;
 	}
 	
 	// Get a CFString for the new file name
 	CFStringRef newFileNameCFString = CFStringCreateWithCString(NULL, lpToFileName, kCFStringEncodingUTF8);
-	fileURL = CFURLCreateWithFileSystemPath(NULL, newFileNameCFString, kCFURLPOSIXPathStyle, FALSE);
+	fileURL = CFURLCreateWithFileSystemPath(NULL, newFileNameCFString, kCFURLPOSIXPathStyle, false);
 	CFRelease(newFileNameCFString);
 	newFileNameCFString = CFURLCopyLastPathComponent(fileURL);
 	CFRelease(fileURL);
@@ -293,13 +289,13 @@ BOOL MoveFile(const char * lpFromFileName, const char * lpToFileName)
 	{
 		SetLastError(theErr);
 		CFRelease(newFileNameCFString);
-		return FALSE;
+		return false;
 	}
 	
 	CFRelease(newFileNameCFString);
 	
 	SetLastError(theErr);
-	return TRUE;
+	return true;
 }
 
 /********************************************************************
@@ -344,9 +340,9 @@ HANDLE CreateFile(	const char *sFileName,			/* file name */
 		memset(&theFileRef, 0, sizeof(FSRef));
 		UInt8 folderName[MAX_PATH];
 		CFStringRef folderPathCFString = CFStringCreateWithCString(NULL, sFileName, kCFStringEncodingUTF8);
-		CFURLRef fileURL = CFURLCreateWithFileSystemPath(NULL, folderPathCFString, kCFURLPOSIXPathStyle, FALSE);
+		CFURLRef fileURL = CFURLCreateWithFileSystemPath(NULL, folderPathCFString, kCFURLPOSIXPathStyle, false);
 		CFURLRef folderURL = CFURLCreateCopyDeletingLastPathComponent(NULL, fileURL);
-		CFURLGetFileSystemRepresentation(folderURL, TRUE, folderName, MAX_PATH);
+		CFURLGetFileSystemRepresentation(folderURL, true, folderName, MAX_PATH);
 		theErr = FSPathMakeRef(folderName, &theParentRef, NULL);
 		CFRelease(fileURL);
 		CFRelease(folderURL);
@@ -364,7 +360,7 @@ HANDLE CreateFile(	const char *sFileName,			/* file name */
 	{	/* We create the file */
 		UniChar unicodeFileName[256];
 		CFStringRef filePathCFString = CFStringCreateWithCString(NULL, sFileName, kCFStringEncodingUTF8);
-		CFURLRef fileURL = CFURLCreateWithFileSystemPath(NULL, filePathCFString, kCFURLPOSIXPathStyle, FALSE);
+		CFURLRef fileURL = CFURLCreateWithFileSystemPath(NULL, filePathCFString, kCFURLPOSIXPathStyle, false);
 		CFStringRef fileNameCFString = CFURLCopyLastPathComponent(fileURL);
 		CFStringGetCharacters(fileNameCFString, CFRangeMake(0, CFStringGetLength(fileNameCFString)), 
 							  unicodeFileName);
@@ -412,13 +408,13 @@ HANDLE CreateFile(	const char *sFileName,			/* file name */
 /********************************************************************
 *	 CloseHandle
 ********************************************************************/
-BOOL CloseHandle(	HANDLE hFile	)	 /* handle to object */
+bool CloseHandle(	HANDLE hFile	)	 /* handle to object */
 {
 	OSErr theErr;
 	
 	if ((hFile == NULL) || (hFile == INVALID_HANDLE_VALUE))
 	{
-		return FALSE;
+		return false;
 	}
 
 	theErr = FSCloseFork((short)(long)hFile);
@@ -574,7 +570,7 @@ DWORD SetFilePointer(	HANDLE hFile,			/* handle to file */
 /********************************************************************
 *	 SetEndOfFile
 ********************************************************************/
-BOOL SetEndOfFile(	HANDLE hFile	)	/* handle to file */
+bool SetEndOfFile(	HANDLE hFile	)	/* handle to file */
 {
 	OSErr theErr;
 	
@@ -588,7 +584,7 @@ BOOL SetEndOfFile(	HANDLE hFile	)	/* handle to file */
 /********************************************************************
  *	 GetFileTime
  ********************************************************************/
-BOOL GetFileTime(	HANDLE hFile,					/* handle to file */
+bool GetFileTime(	HANDLE hFile,					/* handle to file */
 					LPFILETIME lpCreationTime,		/* file creation time */
 					LPFILETIME lpLastAccessTime,	/* file accessed time */
 					LPFILETIME lpLastWriteTime	)	/* file modified time */
@@ -601,7 +597,7 @@ BOOL GetFileTime(	HANDLE hFile,					/* handle to file */
 	if (theErr != noErr)
 	{
 		SetLastError(theErr);
-		return FALSE;
+		return false;
 	}
 	
 	theErr = FSGetCatalogInfo(&theFileRef, kFSCatInfoCreateDate | kFSCatInfoAccessDate | kFSCatInfoContentMod, &theCatInfo, NULL, NULL, NULL);
@@ -633,7 +629,7 @@ BOOL GetFileTime(	HANDLE hFile,					/* handle to file */
 *	 ReadFile
 *		 pOverLapped: NULL
 ********************************************************************/
-BOOL ReadFile(	HANDLE hFile,			/* handle to file */
+bool ReadFile(	HANDLE hFile,			/* handle to file */
 				void *pBuffer,			/* data buffer */
 				DWORD ulLen,			/* number of bytes to read */
 				DWORD *ulRead,			/* number of bytes read */
@@ -657,7 +653,7 @@ BOOL ReadFile(	HANDLE hFile,			/* handle to file */
 *	 WriteFile
 *		 pOverLapped: NULL
 ********************************************************************/
-BOOL WriteFile( HANDLE hFile,			/* handle to file */
+bool WriteFile( HANDLE hFile,			/* handle to file */
 				const void *pBuffer,	/* data buffer */
 				DWORD ulLen,			/* number of bytes to write */
 				DWORD *ulWritten,		/* number of bytes written */
@@ -679,11 +675,11 @@ BOOL WriteFile( HANDLE hFile,			/* handle to file */
 
 // Check if a memory block is accessible for reading. I doubt it's
 // possible to check on Mac, so sorry, we'll just have to crash
-BOOL IsBadReadPtr(const void * ptr, int size)
+bool IsBadReadPtr(const void * ptr, int size)
 {
 #pragma unused (ptr, size)
 
-	return FALSE;
+	return false;
 }
 
 // Returns attributes of a file. Actually, it doesn't, it just checks if 

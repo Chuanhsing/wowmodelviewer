@@ -215,18 +215,18 @@ dword_550998    dd 200h dup(?)
 dword_551198    dd 800h dup(?)
 dword_553198    dd 100h dup(?)
 
-off_517A50      dd offset __purecall    ; DATA XREF: sub_4D0170+2o
+ICompressSetOutStream_vftable      dd offset __purecall    ; DATA XREF: NCompress_NLZMA_CEncoder_CEncoder+2o
                 dd offset __purecall
                 dd offset __purecall
                 dd offset __purecall
                 dd offset __purecall
                 dd offset dword_51B960
-off_517A68      dd offset __purecall    ; DATA XREF: sub_4D0170+9o
+ICompressSetCoderProperties_vftable   dd offset __purecall    ; DATA XREF: NCompress_NLZMA_CEncoder_CEncoder+9o
                 dd offset __purecall
                 dd offset __purecall
                 dd offset __purecall
                 dd offset dword_51B9AC
-off_517A7C      dd offset __purecall    ; DATA XREF: sub_4D0170+10o
+ICompressWriteCoderProperties_vftable      dd offset __purecall    ; DATA XREF: NCompress_NLZMA_CEncoder_CEncoder+10o
                 dd offset __purecall
                 dd offset __purecall
                 dd offset __purecall
@@ -242,23 +242,23 @@ off_517AA4      dd offset Interface1_QueryInterface ; DATA XREF: sub_4CF610+Eo
                 dd offset sub_4CCB90
                 dd offset sub_4CF590
                 dd offset dword_51BC80
-off_517ABC      dd offset sub_4CFA50    ; DATA XREF: sub_4CF810+3Do
+NCompress_NLZMA_CEncoder_vftable_ICompressWriteCoderProperties      dd offset sub_4CFA50    ; DATA XREF: sub_4CF810+3Do
                 dd offset sub_4CFA10
                 dd offset sub_4CFA70
                 dd offset sub_4CDDB0
                 dd offset dword_51BC6C
-off_517AD0      dd offset sub_4CFA30    ; DATA XREF: sub_4CF810+36o
-                dd offset sub_4CFA00
-                dd offset sub_4CFA60
-                dd offset sub_4CB070
+NCompress_NLZMA_CEncoder_vftable_ICompressSetCoderProperties      dd offset ICompressSetCoderProperties_QueryInterface    ; DATA XREF: sub_4CF810+36o
+                dd offset ICompressSetCoderProperties_AddRef
+                dd offset ICompressSetCoderProperties_Release
+                dd offset ICompressSetCoderProperties_SetCoderProperties
                 dd offset dword_51BC58
-off_517AE4      dd offset sub_4CFA20    ; DATA XREF: sub_4CF810+2Fo
+NCompress_NLZMA_CEncoder_vftable_ICompressSetOutStream      dd offset sub_4CFA20    ; DATA XREF: sub_4CF810+2Fo
                 dd offset sub_4CFA80
                 dd offset sub_4CFA40
                 dd offset sub_4CFA90
                 dd offset sub_4CDE70
                 dd offset dword_51BAF0
-off_517AFC      dd offset sub_4CF900    ; DATA XREF: sub_4CF810+29o
+NCompress_NLZMA_CEncoder_vftable      dd offset sub_4CF900    ; DATA XREF: sub_4CF810+29o
                 dd offset sub_4CF9D0
                 dd offset sub_4CF9E0
                 dd offset CEncoder_Code
@@ -483,7 +483,7 @@ sub_4CAFA0      endp
 
 ; =============== S U B R O U T I N E =======================================
 
-sub_4CAFC0      proc near               ; CODE XREF: sub_4CB070+A5p
+sub_4CAFC0      proc near               ; CODE XREF: ICompressSetCoderProperties_SetCoderProperties+A5p
                 movzx   ecx, word ptr [eax]
                 lea     edx, [ecx-61h]
                 cmp     dx, 19h
@@ -565,29 +565,29 @@ loc_4CB06C:                             ; CODE XREF: sub_4CAFC0+89j
 sub_4CAFC0      endp
 
 
-sub_4CB070      proc near               ; DATA XREF: .rdata:00517ADCo
+ICompressSetCoderProperties_SetCoderProperties      proc near               ; DATA XREF: .rdata:00517ADCo
 
 var_4           = dword ptr -4
-arg_0           = dword ptr  4
-arg_4           = dword ptr  8
-arg_8           = dword ptr  0Ch
-arg_C           = dword ptr  10h
+pThis           = dword ptr  4
+propIDs         = dword ptr  8
+properties      = dword ptr  0Ch
+numProperties   = dword ptr  10h
 
                 push    ecx
                 push    ebx
                 push    ebp
                 xor     edx, edx
-                cmp     [esp+0Ch+arg_C], edx
+                cmp     [esp+0Ch+numProperties], edx
                 push    esi
                 push    edi
                 mov     [esp+14h+var_4], edx
                 jbe     loc_4CB20D
-                mov     esi, [esp+14h+arg_8]
-                mov     ebp, [esp+14h+arg_0]
+                mov     esi, [esp+14h+properties]
+                mov     ebp, [esp+14h+pThis]
                 lea     ecx, [ecx+0]
 
 loc_4CB090:                             ; CODE XREF: sub_4CB070+197j
-                mov     eax, [esp+14h+arg_4]
+                mov     eax, [esp+14h+propIDs]
                 mov     eax, [eax+edx*4]
                 add     eax, 0FFFFFC00h
                 cmp     eax, 90h        ; switch 145 cases
@@ -755,7 +755,7 @@ loc_4CB1F9:                             ; CODE XREF: sub_4CB070+5Fj
                                         ; sub_4CB070+73j ...
                 add     edx, 1
                 add     esi, 10h
-                cmp     edx, [esp+14h+arg_C]
+                cmp     edx, [esp+14h+numProperties]
                 mov     [esp+14h+var_4], edx
                 jb      loc_4CB090
 
@@ -773,7 +773,7 @@ off_4CB218      dd offset loc_4CB149, offset loc_4CB183, offset loc_4CB1C3
                 dd offset loc_4CB0D4, offset loc_4CB0E8, offset loc_4CB127
                 dd offset loc_4CB13E, offset loc_4CB1E1, offset loc_4CB131
 
-sub_4CB070      endp
+ICompressSetCoderProperties_SetCoderProperties      endp
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -8090,10 +8090,10 @@ var_4           = dword ptr -4
                 mov     dword ptr fs:[0], eax
                 mov     esi, ecx
                 mov     [esp+1Ch+var_10], esi
-                mov     dword ptr [esi], offset off_517AFC
-                mov     dword ptr [esi+4], offset off_517AE4
-                mov     dword ptr [esi+8], offset off_517AD0
-                mov     dword ptr [esi+0Ch], offset off_517ABC
+                mov     dword ptr [esi], offset NCompress_NLZMA_CEncoder_vftable
+                mov     dword ptr [esi+4], offset NCompress_NLZMA_CEncoder_vftable_ICompressSetOutStream
+                mov     dword ptr [esi+8], offset NCompress_NLZMA_CEncoder_vftable_ICompressSetCoderProperties
+                mov     dword ptr [esi+0Ch], offset NCompress_NLZMA_CEncoder_vftable_ICompressWriteCoderProperties
                 mov     eax, [esi+0A4h]
                 push    eax             ; lpAddress
                 mov     [esp+20h+var_4], 1
@@ -8155,7 +8155,7 @@ sub_4CF810      endp
 
 ; int __stdcall sub_4CF900(int, void *Buf1, int)
 sub_4CF900      proc near               ; CODE XREF: sub_4CFA20+5j
-                                        ; sub_4CFA30+5j ...
+                                        ; ICompressSetCoderProperties_QueryInterface+5j ...
 
 arg_0           = dword ptr  4
 Buf1            = dword ptr  8
@@ -8261,7 +8261,7 @@ sub_4CF900      endp
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_4CF9D0      proc near               ; CODE XREF: sub_4CFA00+5j
+sub_4CF9D0      proc near               ; CODE XREF: ICompressSetCoderProperties_AddRef+5j
                                         ; sub_4CFA10+5j ...
 
 arg_0           = dword ptr  4
@@ -8279,7 +8279,7 @@ sub_4CF9D0      endp
 
 
 sub_4CF9E0      proc near               ; CODE XREF: sub_4CFA40+5j
-                                        ; sub_4CFA60+5j ...
+                                        ; ICompressSetCoderProperties_Release+5j ...
 
 arg_0           = dword ptr  4
 
@@ -8303,13 +8303,13 @@ sub_4CF9E0      endp
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_4CFA00      proc near               ; DATA XREF: .rdata:00517AD4o
+ICompressSetCoderProperties_AddRef      proc near               ; DATA XREF: .rdata:00517AD4o
 
 arg_0           = dword ptr  4
 
                 sub     [esp+arg_0], 8
                 jmp     sub_4CF9D0
-sub_4CFA00      endp
+ICompressSetCoderProperties_AddRef      endp
 
 ; ---------------------------------------------------------------------------
                 align 10h
@@ -8331,7 +8331,7 @@ sub_4CFA10      endp
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_4CFA20      proc near               ; DATA XREF: .rdata:off_517AE4o
+sub_4CFA20      proc near               ; DATA XREF: .rdata:NCompress_NLZMA_CEncoder_vftable_ICompressSetOutStreamo
 
 arg_0           = dword ptr  4
 
@@ -8345,13 +8345,13 @@ sub_4CFA20      endp
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_4CFA30      proc near               ; DATA XREF: .rdata:off_517AD0o
+ICompressSetCoderProperties_QueryInterface      proc near               ; DATA XREF: .rdata:NCompress_NLZMA_CEncoder_vftable_ICompressSetCoderPropertieso
 
 arg_0           = dword ptr  4
 
                 sub     [esp+arg_0], 8
                 jmp     sub_4CF900
-sub_4CFA30      endp
+ICompressSetCoderProperties_QueryInterface      endp
 
 ; ---------------------------------------------------------------------------
                 align 10h
@@ -8373,7 +8373,7 @@ sub_4CFA40      endp
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_4CFA50      proc near               ; DATA XREF: .rdata:off_517ABCo
+sub_4CFA50      proc near               ; DATA XREF: .rdata:NCompress_NLZMA_CEncoder_vftable_ICompressWriteCoderPropertieso
 
 arg_0           = dword ptr  4
 arg_4           = dword ptr  8
@@ -8389,13 +8389,13 @@ sub_4CFA50      endp
 ; =============== S U B R O U T I N E =======================================
 
 
-sub_4CFA60      proc near               ; DATA XREF: .rdata:00517AD8o
+ICompressSetCoderProperties_Release      proc near               ; DATA XREF: .rdata:00517AD8o
 
 arg_0           = dword ptr  4
 
                 sub     [esp+arg_0], 8
                 jmp     sub_4CF9E0
-sub_4CFA60      endp
+ICompressSetCoderProperties_Release      endp
 
 ; ---------------------------------------------------------------------------
                 align 10h
@@ -9274,17 +9274,17 @@ sub_4D0020      endp
 
 ; =============== S U B R O U T I N E =======================================
 
-sub_4D0170      proc near               ; CODE XREF: Compress_lzma_internal+149p
+NCompress_NLZMA_CEncoder_CEncoder      proc near               ; CODE XREF: Compress_lzma_internal+149p
                 mov     eax, ecx
-                mov     dword ptr [eax+4], offset off_517A50
-                mov     dword ptr [eax+8], offset off_517A68
-                mov     dword ptr [eax+0Ch], offset off_517A7C
+                mov     dword ptr [eax+4], offset ICompressSetOutStream_vftable
+                mov     dword ptr [eax+8], offset ICompressSetCoderProperties_vftable
+                mov     dword ptr [eax+0Ch], offset ICompressWriteCoderProperties_vftable
                 xor     ecx, ecx
                 mov     [eax+24h], ecx
-                mov     dword ptr [eax], offset off_517AFC
-                mov     dword ptr [eax+4], offset off_517AE4
-                mov     dword ptr [eax+8], offset off_517AD0
-                mov     dword ptr [eax+0Ch], offset off_517ABC
+                mov     dword ptr [eax], offset NCompress_NLZMA_CEncoder_vftable
+                mov     dword ptr [eax+4], offset NCompress_NLZMA_CEncoder_vftable_ICompressSetOutStream
+                mov     dword ptr [eax+8], offset NCompress_NLZMA_CEncoder_vftable_ICompressSetCoderProperties
+                mov     dword ptr [eax+0Ch], offset NCompress_NLZMA_CEncoder_vftable_ICompressWriteCoderProperties
                 mov     [eax+40h], ecx
                 mov     [eax+44h], ecx
                 mov     [eax+54h], ecx
@@ -9310,7 +9310,7 @@ sub_4D0170      proc near               ; CODE XREF: Compress_lzma_internal+149
                 mov     [eax+0D8h], ecx
                 mov     [eax+32EF4h], cl
                 retn
-sub_4D0170      endp
+NCompress_NLZMA_CEncoder_CEncoder      endp
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -9512,6 +9512,7 @@ loc_4D0441:                             ; CODE XREF: CEncoder_SetStreams+1Bj
                 retn    10h
 CEncoder_SetStreams endp
 
+;Compress_lzma_internal proc near        ; CODE XREF: Compress_lzma+34p
 _starcraft_compress_lzma proc near        ; CODE XREF: Compress_lzma+34p
 ; sub_4D0450
 
@@ -9666,7 +9667,7 @@ loc_4D053A:                             ; CODE XREF: Compress_lzma_internal+C9j
                 mov     [esp+6Ch+var_4], ebx
                 jz      short loc_4D05A4
                 mov     ecx, eax
-                call    sub_4D0170
+                call    NCompress_NLZMA_CEncoder_CEncoder
                 mov     [esp+6Ch+var_54], eax
                 jmp     short loc_4D05AA
 ; ---------------------------------------------------------------------------
@@ -9689,7 +9690,7 @@ loc_4D05AA:                             ; CODE XREF: Compress_lzma_internal+152
                 push    edx
                 push    eax
                 mov     eax, [ecx+0Ch]
-                call    eax
+                call    eax             ; ICompressSetCodeProperties::SetCoderProperties
                 test    eax, eax
                 jz      short loc_4D05D5
 
@@ -9712,7 +9713,7 @@ loc_4D05D5:                             ; CODE XREF: Compress_lzma_internal+17F
                 mov     [eax+18h], ebx
                 mov     [eax+1Ch], ebx
                 mov     [eax+20h], bl
-                mov     edi, eax
+                mov     edi, eax                ; EDI = pInStreamMemory
                 mov     [esp+6Ch+var_50], eax
                 jmp     short loc_4D0614
 ; ---------------------------------------------------------------------------
@@ -9739,7 +9740,7 @@ loc_4D0614:                             ; CODE XREF: Compress_lzma_internal+1BC
                 mov     [eax+18h], ebx
                 mov     [eax+1Ch], ebx
                 mov     [eax+20h], bl
-                mov     esi, eax
+                mov     esi, eax        ; ESI = pOutStreamMemory
                 jmp     short loc_4D0659
 ; ---------------------------------------------------------------------------
 
@@ -9756,8 +9757,8 @@ loc_4D0661:                             ; CODE XREF: Compress_lzma_internal+20B
                 mov     [esp+6Ch+var_58], 0FFFFFFFFh
 
 loc_4D0669:                             ; CODE XREF: Compress_lzma_internal+20Fj
-                mov     eax, [esi]
-                mov     ecx, [eax+10h]
+                mov     eax, [esi]      ; EAX = pOutStreamMemory->vftable
+                mov     ecx, [eax+10h]  ; ECX = 
                 push    ebx
                 mov     edi, 1
                 push    edi
@@ -9885,7 +9886,46 @@ loc_4D0755:                             ; CODE XREF: Compress_lzma_internal+2FD
                 add     esp, 58h
                 retn
 _starcraft_compress_lzma endp
- 
+;Compress_lzma_internal endp
+
+; =============== S U B R O U T I N E =======================================
+
+Compress_lzma   proc near               ; DATA XREF: .rdata:00509684o
+
+pbOutBuffer     = dword ptr  4
+pcbOutBuffer    = dword ptr  8
+pbInBuffer      = dword ptr  0Ch
+cbInBuffer      = dword ptr  10h
+
+                push    esi
+                push    edi
+;                call    sub_47F198
+                mov     esi, [esp+8+pcbOutBuffer] ; ESI = pcbOutBuffer
+                mov     edi, [esp+8+cbInBuffer] ; EDI = cbInBuffer
+;                push    offset GiveDataToCompress
+;                push    offset FreeMemory_47F3AB
+;                push    offset AllocateMemory_47F396
+                push    esi             ; pcbOutBuffer
+                push    0
+                mov     [eax+493E0h], eax
+                push    dword ptr [esi] ; cbOutBuffer
+                push    [esp+20h+pbOutBuffer] ; pbOutBuffer
+                push    0
+                push    edi             ; cbInBuffer
+                push    [esp+2Ch+pbInBuffer] ; pbInBuffer
+;                call    Compress_lzma_internal
+                add     esp, 28h
+                sub     eax, 0
+                jz      short loc_47F401
+                mov     [esi], edi
+                dec     eax
+
+loc_47F401:                             ; CODE XREF: Compress_lzma+3Fj
+                pop     edi
+                pop     esi
+                retn
+Compress_lzma  endp
+
 ; =============== S U B R O U T I N E =======================================
 
 sub_4D0770      proc near               ; CODE XREF: CEncoder_Flush+1Ap

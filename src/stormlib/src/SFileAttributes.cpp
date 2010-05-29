@@ -182,10 +182,10 @@ int SAttrLoadAttributes(TMPQArchive * ha)
 int SAttrFileSaveToMpq(TMPQArchive * ha)
 {
     TMPQAttributes * pAttr = ha->pAttributes;
+    TMPQFile * hf = NULL;
     DWORD dwFinalBlockTableSize;
     DWORD dwFileSize = 0;
     DWORD dwToWrite;
-    void * pvAddHandle = NULL;
     int nError = ERROR_SUCCESS;
 
     // If there are no attributes, do nothing
@@ -218,39 +218,39 @@ int SAttrFileSaveToMpq(TMPQArchive * ha)
                                    dwFileSize,
                                    LANG_NEUTRAL,
                                    MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING,
-                                  &pvAddHandle);
+                                  &hf);
     
     // Write all parts of the (attributes) file
     if(nError == ERROR_SUCCESS)
     {
         dwToWrite = sizeof(DWORD) + sizeof(DWORD);
-        nError = SFileAddFile_Write(pvAddHandle, pAttr, dwToWrite, MPQ_COMPRESSION_ZLIB);
+        nError = SFileAddFile_Write(hf, pAttr, dwToWrite, MPQ_COMPRESSION_ZLIB);
     }
 
     // Write the array of CRC32
     if(nError == ERROR_SUCCESS && (pAttr->dwFlags & MPQ_ATTRIBUTE_CRC32))
     {
         dwToWrite = dwFinalBlockTableSize * sizeof(DWORD);
-        nError = SFileAddFile_Write(pvAddHandle, pAttr->pCrc32, dwToWrite, MPQ_COMPRESSION_ZLIB);
+        nError = SFileAddFile_Write(hf, pAttr->pCrc32, dwToWrite, MPQ_COMPRESSION_ZLIB);
     }
 
     // Write the array of FILETIMEs
     if(nError == ERROR_SUCCESS && (pAttr->dwFlags & MPQ_ATTRIBUTE_FILETIME))
     {
         dwToWrite = dwFinalBlockTableSize * sizeof(TMPQFileTime);
-        nError = SFileAddFile_Write(pvAddHandle, pAttr->pFileTime, dwToWrite, MPQ_COMPRESSION_ZLIB);
+        nError = SFileAddFile_Write(hf, pAttr->pFileTime, dwToWrite, MPQ_COMPRESSION_ZLIB);
     }
 
     // Write the array of MD5s
     if(nError == ERROR_SUCCESS && (pAttr->dwFlags & MPQ_ATTRIBUTE_MD5))
     {
         dwToWrite = dwFinalBlockTableSize * sizeof(TMPQMD5);
-        nError = SFileAddFile_Write(pvAddHandle, pAttr->pMd5, dwToWrite, MPQ_COMPRESSION_ZLIB);
+        nError = SFileAddFile_Write(hf, pAttr->pMd5, dwToWrite, MPQ_COMPRESSION_ZLIB);
     }
 
     // Finalize the file in the archive
-    if(pvAddHandle != NULL)
-        SFileAddFile_Finish(pvAddHandle, nError);
+    if(hf != NULL)
+        SFileAddFile_Finish(hf);
 
     return nError;
 }
@@ -273,7 +273,7 @@ void FreeMPQAttributes(TMPQAttributes * pAttr)
 //-----------------------------------------------------------------------------
 // Public functions
 
-BOOL WINAPI SFileCreateAttributes(HANDLE hMpq, DWORD dwFlags)
+bool WINAPI SFileCreateAttributes(HANDLE hMpq, DWORD dwFlags)
 {
     TMPQArchive * ha = (TMPQArchive *)hMpq;
     int nError;
@@ -282,21 +282,21 @@ BOOL WINAPI SFileCreateAttributes(HANDLE hMpq, DWORD dwFlags)
     if(!IsValidMpqHandle(ha))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
-        return FALSE;
+        return false;
     }
 
     // If the archive already has attributes, return error
     if(ha->pAttributes != NULL)
     {
         SetLastError(ERROR_ALREADY_EXISTS);
-        return FALSE;
+        return false;
     }
 
     // Create the attributes
     nError = SAttrCreateAttributes(ha, dwFlags);
     if(nError != ERROR_SUCCESS)
         SetLastError(nError);
-    return (BOOL)(nError == ERROR_SUCCESS);
+    return (bool)(nError == ERROR_SUCCESS);
 }
 
 DWORD WINAPI SFileGetAttributes(HANDLE hMpq)
@@ -320,7 +320,7 @@ DWORD WINAPI SFileGetAttributes(HANDLE hMpq)
     return ha->pAttributes->dwFlags;
 }
 
-BOOL WINAPI SFileSetAttributes(HANDLE hMpq, DWORD dwFlags)
+bool WINAPI SFileSetAttributes(HANDLE hMpq, DWORD dwFlags)
 {
     TMPQArchive * ha = (TMPQArchive *)hMpq;
 
@@ -328,30 +328,30 @@ BOOL WINAPI SFileSetAttributes(HANDLE hMpq, DWORD dwFlags)
     if(!IsValidMpqHandle(ha))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
-        return FALSE;
+        return false;
     }
 
     // If the archive has no attributes, return error
     if(ha->pAttributes == NULL)
     {
         SetLastError(ERROR_CAN_NOT_COMPLETE);
-        return FALSE;
+        return false;
     }
 
     // Not allowed when the archive is read-only
     if(ha->dwFlags & MPQ_FLAG_READ_ONLY)
     {
         SetLastError(ERROR_ACCESS_DENIED);
-        return FALSE;
+        return false;
     }
 
     // Set the attributes
     ha->pAttributes->dwFlags = (dwFlags & MPQ_ATTRIBUTE_ALL);
     ha->dwFlags |= MPQ_FLAG_CHANGED;
-    return TRUE;
+    return true;
 }
 
-BOOL WINAPI SFileUpdateFileAttributes(HANDLE hMpq, const char * szFileName)
+bool WINAPI SFileUpdateFileAttributes(HANDLE hMpq, const char * szFileName)
 {
     hash_state md5_state;
     TMPQArchive * ha = (TMPQArchive *)hMpq;
@@ -366,26 +366,26 @@ BOOL WINAPI SFileUpdateFileAttributes(HANDLE hMpq, const char * szFileName)
     if(!IsValidMpqHandle(ha))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
-        return FALSE;
+        return false;
     }
 
     // Not allowed when the archive is read-only
     if(ha->dwFlags & MPQ_FLAG_READ_ONLY)
     {
         SetLastError(ERROR_ACCESS_DENIED);
-        return FALSE;
+        return false;
     }
 
     // If the archive has no attributes, return error
     if(ha->pAttributes == NULL)
     {
         SetLastError(ERROR_CAN_NOT_COMPLETE);
-        return FALSE;
+        return false;
     }
 
     // Attempt to open the file
     if(!SFileOpenFileEx(hMpq, szFileName, SFILE_OPEN_FROM_MPQ, &hFile))
-        return FALSE;
+        return false;
 
     // Get the file size
     hf = (TMPQFile *)hFile;
@@ -426,5 +426,5 @@ BOOL WINAPI SFileUpdateFileAttributes(HANDLE hMpq, const char * szFileName)
     // Remember that we need to save the MPQ tables
     ha->dwFlags |= MPQ_FLAG_CHANGED;
     SFileCloseFile(hFile);
-    return TRUE;
+    return true;
 }

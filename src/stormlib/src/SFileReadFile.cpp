@@ -207,7 +207,7 @@ static int ReadMpqSectors(TMPQFile * hf, BYTE * pbBuffer, DWORD dwByteOffset, DW
     return nError; 
 }
 
-static int ReadMpqFileSingleUnit(TMPQFile * hf, VOID * pvBuffer, DWORD dwToRead, DWORD * pdwBytesRead)
+static int ReadMpqFileSingleUnit(TMPQFile * hf, void * pvBuffer, DWORD dwToRead, DWORD * pdwBytesRead)
 {
     TMPQArchive * ha = hf->ha;
     TMPQBlock * pBlock = hf->pBlock;
@@ -305,7 +305,7 @@ static int ReadMpqFileSingleUnit(TMPQFile * hf, VOID * pvBuffer, DWORD dwToRead,
     return ERROR_READ_FAULT;
 }
 
-static int ReadMpqFile(TMPQFile * hf, VOID * pvBuffer, DWORD dwBytesToRead, DWORD * pdwBytesRead)
+static int ReadMpqFile(TMPQFile * hf, void * pvBuffer, DWORD dwBytesToRead, DWORD * pdwBytesRead)
 {
     TMPQArchive * ha = hf->ha;
     TMPQBlock * pBlock = hf->pBlock;
@@ -433,23 +433,23 @@ static int ReadMpqFile(TMPQFile * hf, VOID * pvBuffer, DWORD dwBytesToRead, DWOR
 //-----------------------------------------------------------------------------
 // SFileReadFile
 
-BOOL WINAPI SFileReadFile(HANDLE hFile, VOID * pvBuffer, DWORD dwToRead, DWORD * pdwRead, LPOVERLAPPED lpOverlapped)
+bool WINAPI SFileReadFile(HANDLE hFile, void * pvBuffer, DWORD dwToRead, DWORD * pdwRead, LPOVERLAPPED lpOverlapped)
 {
     TMPQFile * hf = (TMPQFile *)hFile;
     DWORD dwBytesRead = 0;                      // Number of bytes read
     int nError = ERROR_SUCCESS;
 
     // Check valid parameters
-    if(IsValidFileHandle(hf) == FALSE)
+    if(!IsValidFileHandle(hf))
     {
         SetLastError(ERROR_INVALID_HANDLE);
-        return FALSE;
+        return false;
     }
 
     if(pvBuffer == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
-        return FALSE;
+        return false;
     }
 
     // If the file is local file, redirect the read request to ReadFile
@@ -515,7 +515,7 @@ DWORD WINAPI SFileSetFilePointer(HANDLE hFile, LONG lFilePos, LONG * plFilePosHi
     TMPQFile * hf = (TMPQFile *)hFile;
 
     // If the hFile is not a valid file handle, return an error.
-    if(IsValidFileHandle(hf) == FALSE)
+    if(!IsValidFileHandle(hf))
     {
         SetLastError(ERROR_INVALID_HANDLE);
         return SFILE_INVALID_SIZE;
@@ -593,7 +593,7 @@ static TID2Ext id2ext[] =
     {0, NULL}                           // Terminator 
 };
 
-BOOL WINAPI SFileGetFileName(HANDLE hFile, char * szFileName)
+bool WINAPI SFileGetFileName(HANDLE hFile, char * szFileName)
 {
     TMPQFile * hf = (TMPQFile *)hFile;  // MPQ File handle
     char * szExt = "xxx";               // Default extension
@@ -607,7 +607,7 @@ BOOL WINAPI SFileGetFileName(HANDLE hFile, char * szFileName)
         *szFileName = 0;
 
     // Check valid parameters
-    if(IsValidFileHandle(hf) == FALSE)
+    if(!IsValidFileHandle(hf))
         nError = ERROR_INVALID_HANDLE;
     if(szFileName == NULL)
         nError = ERROR_INVALID_PARAMETER;
@@ -617,7 +617,7 @@ BOOL WINAPI SFileGetFileName(HANDLE hFile, char * szFileName)
     {
         if(szFileName != hf->szFileName)
             strcpy(szFileName, hf->szFileName);
-        return TRUE;
+        return true;
     }
 
     if(nError == ERROR_SUCCESS)
@@ -694,10 +694,10 @@ BOOL WINAPI SFileGetFileName(HANDLE hFile, char * szFileName)
     *((DWORD *)pvFileInfo) = val;
 
 
-BOOL WINAPI SFileGetFileInfo(
+bool WINAPI SFileGetFileInfo(
     HANDLE hMpqOrFile,
     DWORD dwInfoType,
-    VOID * pvFileInfo,
+    void * pvFileInfo,
     DWORD cbFileInfo,
     DWORD * pcbLengthNeeded)
 {

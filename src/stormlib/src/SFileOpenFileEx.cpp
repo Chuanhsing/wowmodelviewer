@@ -17,7 +17,7 @@
 /*****************************************************************************/
 
 // Is it a pseudo-name ("FileXXXXXXXX.ext") ?
-static BOOL IsPseudoFileName(const char * szFileName, DWORD * pdwFileIndex)
+static bool IsPseudoFileName(const char * szFileName, DWORD * pdwFileIndex)
 {
     const char * szExt = strrchr(szFileName, '.');
 
@@ -34,16 +34,16 @@ static BOOL IsPseudoFileName(const char * szFileName, DWORD * pdwFileIndex)
                 if(isdigit(szFileName[4]) && isdigit(szFileName[11]))
                 {
                     *pdwFileIndex = strtol(szFileName + 4, (char **)&szExt, 10);
-                    return TRUE;
+                    return true;
                 }
             }
         }
     }
 
-    return FALSE;
+    return false;
 }
 
-static BOOL OpenLocalFile(const char * szFileName, HANDLE * phFile)
+static bool OpenLocalFile(const char * szFileName, HANDLE * phFile)
 {
     TMPQFile * hf = NULL;
     HANDLE hFile = CreateFile(szFileName, GENERIC_READ, FILE_SHARE_READ, NULL, MPQ_OPEN_EXISTING, 0, NULL);
@@ -56,13 +56,13 @@ static BOOL OpenLocalFile(const char * szFileName, HANDLE * phFile)
         {
             hf->hFile = hFile;
             *phFile = hf;
-            return TRUE;
+            return true;
         }
         else
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
     }
     *phFile = NULL;
-    return FALSE;
+    return false;
 }
 
 /*****************************************************************************/
@@ -88,7 +88,7 @@ int WINAPI SFileEnumLocales(
     DWORD dwLocales = 0;
 
     // Test the parameters
-    if(IsValidMpqHandle(ha) == FALSE)
+    if(!IsValidMpqHandle(ha))
         return ERROR_INVALID_HANDLE;
     if(pdwMaxLocales == NULL)
         return ERROR_INVALID_PARAMETER;
@@ -151,12 +151,12 @@ int WINAPI SFileEnumLocales(
 //   hMpq          - Handle of opened MPQ archive
 //   szFileName    - Name of file to look for
 
-BOOL WINAPI SFileHasFile(HANDLE hMpq, const char * szFileName)
+bool WINAPI SFileHasFile(HANDLE hMpq, const char * szFileName)
 {
     TMPQArchive * ha = (TMPQArchive *)hMpq;
     int nError = ERROR_SUCCESS;
 
-    if(IsValidMpqHandle(ha) == FALSE)
+    if(!IsValidMpqHandle(ha))
         nError = ERROR_INVALID_HANDLE;
     if(*szFileName == 0)
         nError = ERROR_INVALID_PARAMETER;
@@ -185,7 +185,7 @@ BOOL WINAPI SFileHasFile(HANDLE hMpq, const char * szFileName)
 //   dwSearchScope - Where to search
 //   phFile        - Pointer to store opened file handle
 
-BOOL WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearchScope, HANDLE * phFile)
+bool WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearchScope, HANDLE * phFile)
 {
     TMPQArchive * ha = (TMPQArchive *)hMpq;
     TMPQFile    * hf = NULL;
@@ -208,7 +208,7 @@ BOOL WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
         {
             case SFILE_OPEN_FROM_MPQ:
                 
-                if(IsValidMpqHandle(ha) == FALSE)
+                if(!IsValidMpqHandle(ha))
                 {
                     nError = ERROR_INVALID_HANDLE;
                     break;
@@ -237,7 +237,7 @@ BOOL WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
 
             case SFILE_OPEN_BY_INDEX:
 
-                if(IsValidMpqHandle(ha) == FALSE)
+                if(!IsValidMpqHandle(ha))
                 {
                     nError = ERROR_INVALID_HANDLE;
                     break;
@@ -279,7 +279,7 @@ BOOL WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
         if(nError != ERROR_SUCCESS)
         {
             SetLastError(nError);
-            return FALSE;
+            return false;
         }
     }
 
@@ -324,6 +324,7 @@ BOOL WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
         hf->pBlockEx = pBlockEx;
         hf->pBlock   = pBlock;
         hf->pHash    = pHash;
+        hf->dwMagic  = ID_MPQ_FILE;
         
         hf->MpqFilePos.HighPart = pBlockEx->wFilePosHigh;
         hf->MpqFilePos.LowPart  = pBlock->dwFilePos;
@@ -334,7 +335,7 @@ BOOL WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
 
         // If the MPQ has sector CRC enabled, enable if for the file
         if(ha->dwFlags & MPQ_FLAG_CHECK_SECTOR_CRC)
-            hf->bCheckSectorCRCs = TRUE;
+            hf->bCheckSectorCRCs = true;
 
         // Decrypt file key. Cannot be used if the file is given by index
         if(dwSearchScope == SFILE_OPEN_FROM_MPQ)
@@ -353,7 +354,7 @@ BOOL WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
         else
         {
             // If the file is encrypted and not compressed, we cannot detect the file key
-            if(SFileGetFileName(hf, hf->szFileName) == FALSE)
+            if(!SFileGetFileName(hf, hf->szFileName))
                 nError = GetLastError();
         }
     }
@@ -381,19 +382,19 @@ BOOL WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
 }
 
 //-----------------------------------------------------------------------------
-// BOOL WINAPI SFileCloseFile(HANDLE hFile);
+// bool WINAPI SFileCloseFile(HANDLE hFile);
 
-BOOL WINAPI SFileCloseFile(HANDLE hFile)
+bool WINAPI SFileCloseFile(HANDLE hFile)
 {
     TMPQFile * hf = (TMPQFile *)hFile;
     
-    if(IsValidFileHandle(hf) == FALSE)
+    if(!IsValidFileHandle(hf))
     {
         SetLastError(ERROR_INVALID_HANDLE);
-        return FALSE;
+        return false;
     }
 
     // Free the structure
     FreeMPQFile(hf);
-    return TRUE;
+    return true;
 }

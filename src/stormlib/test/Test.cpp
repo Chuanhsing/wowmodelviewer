@@ -665,8 +665,8 @@ static int CompareLzmaCompressions(int nSectorSize)
 
             // Compress the sector by both methods
             nCmpLength1 = nCmpLength2 = nSectorSize;
-            Compress_LZMA((char *)pbCompressed1, &nCmpLength1, (char *)pbOriginalData, nSectorSize, 0, 0);
-            StarcraftCompress_LZMA((char *)pbCompressed1, &nCmpLength1, (char *)pbOriginalData, nSectorSize);
+//          Compress_LZMA((char *)pbCompressed1, &nCmpLength1, (char *)pbOriginalData, nSectorSize, 0, 0);
+            StarcraftCompress_LZMA((char *)pbCompressed1, &nCmpLength2, (char *)pbOriginalData, nSectorSize);
 
 __TryToDecompress:
 
@@ -675,7 +675,7 @@ __TryToDecompress:
             {
                 // Decompress both data
                 nDcmpLength2 = nDcmpLength1 = nSectorSize;
-                Decompress_LZMA((char *)pbDecompressed1, &nDcmpLength1, (char *)pbCompressed1, nCmpLength1);
+//              Decompress_LZMA((char *)pbDecompressed1, &nDcmpLength1, (char *)pbCompressed1, nCmpLength1);
                 StarcraftDecompress_LZMA((char *)pbDecompressed2, &nDcmpLength2, (char *)pbCompressed1, nCmpLength1);
 
                 // Compare the length of the output data
@@ -809,12 +809,11 @@ __TryAgain:
     return nError;
 }
 
-static int TestArchiveOpenAndClose()
+static int TestArchiveOpenAndClose(const char * szMpqName)
 {
     HANDLE hFile1 = NULL;
     HANDLE hFile2 = NULL;
     HANDLE hMpq = NULL;
-    const char * szMpqName = "e:\\Multimedia\\MPQs\\Warcraft III\\Patch_War3x.mpq";
     const char * szFileName = "(10)ExtremeCandyWar2004.w3x";
 //  DWORD dwMaxLocales = 0x100;
     BYTE Buffer[0x1000];
@@ -1075,6 +1074,101 @@ static int TestCreateArchiveV2(const char * szMpqName)
 //          printf("Cannot add the file\n");
     }
 
+    if(hMpq != NULL)
+        SFileCloseArchive(hMpq);
+    return nError;
+}
+
+static int TestFileReadAndWrite(
+    const char * szMpqName,
+    const char * szFileName)
+{
+    LARGE_INTEGER FileSize;
+    PVOID pvFile = NULL;
+    HANDLE hFile = NULL;
+    HANDLE hMpq = NULL;
+    DWORD dwBytesRead;
+    DWORD dwFileSize;
+    int nError = ERROR_SUCCESS;
+
+    if(!SFileCreateArchiveEx(szMpqName, MPQ_OPEN_EXISTING, 0, &hMpq))
+    {
+        nError = GetLastError();
+        printf("Failed to open the archive %s (%u).\n", szMpqName, nError);
+    }
+
+    if(nError == ERROR_SUCCESS)
+    {
+        if(!SFileOpenFileEx(hMpq, szFileName, 0, &hFile))
+        {
+            nError = GetLastError();
+            printf("Failed to open the file %s (%u).\n", szFileName, nError);
+        }
+    }
+
+    if(nError == ERROR_SUCCESS)
+    {
+        if(!SFileGetFileInfo(hFile, SFILE_INFO_FILE_SIZE, &dwFileSize, sizeof(DWORD)))
+        {
+            nError = GetLastError();
+            printf("Failed to get the file size (%u).\n", nError);
+        }
+    }
+
+    if(nError == ERROR_SUCCESS)
+    {
+        pvFile = new BYTE[dwFileSize];
+        if(pvFile == NULL)
+        {
+            nError = ERROR_NOT_ENOUGH_MEMORY;
+            printf("Failed to allocate buffer for the file (%u).\n", nError);
+        }
+    }
+
+    if(nError == ERROR_SUCCESS)
+    {
+        if(!SFileReadFile(hFile, pvFile, dwFileSize, &dwBytesRead))
+        {
+            nError = GetLastError();
+            printf("Failed to read file (%u).\n", nError);
+        }
+    }
+
+    if(hFile != NULL)
+    {
+        SFileCloseFile(hFile);
+        hFile = NULL;
+    }
+
+    if(nError == ERROR_SUCCESS)
+    {
+        if(!SFileCreateFile(hMpq, szFileName, NULL, dwFileSize, 0, MPQ_FILE_REPLACEEXISTING, &hFile))
+        {
+            nError = GetLastError();
+            printf("Failed to create %s in the archive (%u).\n", szFileName, nError);
+        }
+    }
+
+    if(nError == ERROR_SUCCESS)
+    {
+        if(!SFileWriteFile(hFile, pvFile, dwFileSize, 0))
+        {
+            nError = GetLastError();
+            printf("Failed to write the data to the MPQ (%u).\n", nError);
+        }
+    }
+
+    if(hFile != NULL)
+    {
+        if(!SFileFinishFile(hFile))
+        {
+            nError = GetLastError();
+            printf("Failed to finalize file creation (%u).\n", nError);
+        }
+    }
+
+    if(pvFile != NULL)
+        delete [] pvFile;
     if(hMpq != NULL)
         SFileCloseArchive(hMpq);
     return nError;
@@ -1364,15 +1458,6 @@ void main(void)
     // Set the lowest priority to allow running in the background
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
 
-    // Create the working directory
-//  if(nError == ERROR_SUCCESS)
-//  {
-//      if(!CreateDirectory(szWorkDir, NULL))
-//          nError = GetLastError();
-//      if(nError == ERROR_ALREADY_EXISTS)
-//          nError = ERROR_SUCCESS;
-//  }
-
     // Test structure sizes
 //  if(nError == ERROR_SUCCESS)
 //      nError = TestStructureSizes();
@@ -1391,8 +1476,8 @@ void main(void)
 //      nError = TestSectorCompress(MPQ_SECTOR_SIZE);
 
     // Test the archive open and close
-//  if(nError == ERROR_SUCCESS)
-//      nError = TestArchiveOpenAndClose();
+    if(nError == ERROR_SUCCESS)
+        nError = TestArchiveOpenAndClose("e:\\Ladik\\Incoming\\SoundCache-enUS.MPQ");
                                                                              
     // Test the archive open and close
 //  if(nError == ERROR_SUCCESS)
@@ -1405,10 +1490,13 @@ void main(void)
 //  if(nError == ERROR_SUCCESS)
 //      nError = TestCreateArchiveV2("E:\\Multimedia\\MPQs\\Test.mpq");
 
+//  if(nError == ERROR_SUCCESS)
+//      nError = TestFileReadAndWrite("e:\\Multimedia\\MPQs\\Warcraft III\\(10)DustwallowKeys.w3m", "war3map.j");
+
     // Verify the archive signature
-    if(nError == ERROR_SUCCESS)
+//  if(nError == ERROR_SUCCESS)
 //      nError = TestSignatureVerify("e:\\Hry\\World of Warcraft\\WoW-3.2.0.10192-to-3.3.0.10958-enGB-patch.exe");
-        nError = TestSignatureVerify("e:\\Multimedia\\MPQs\\Warcraft III\\(10)DustwallowKeys.w3m");
+//      nError = TestSignatureVerify("e:\\Multimedia\\MPQs\\Warcraft III\\(10)DustwallowKeys.w3m");
 //      nError = TestSignatureVerify("e:\\Multimedia\\MPQs\\Warcraft III\\War3TFT_121b_English.exe");
 //      nError = TestSignatureVerify("e:\\Multimedia\\MPQs\\World of Warcraft\\standalone.MPQ");
 

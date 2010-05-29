@@ -12,7 +12,7 @@
 #include "StormLib.h"
 #include "SCommon.h"
 
-BOOL WINAPI SFileExtractFile(HANDLE hMpq, const char * szToExtract, const char * szExtracted)
+bool WINAPI SFileExtractFile(HANDLE hMpq, const char * szToExtract, const char * szExtracted)
 {
     HANDLE hLocalFile = INVALID_HANDLE_VALUE;
     HANDLE hMpqFile = NULL;
@@ -68,5 +68,5 @@ BOOL WINAPI SFileExtractFile(HANDLE hMpq, const char * szToExtract, const char *
         CloseHandle(hLocalFile);
     if(nError != ERROR_SUCCESS)
         SetLastError(nError);
-    return (BOOL)(nError == ERROR_SUCCESS);
+    return (bool)(nError == ERROR_SUCCESS);
 }

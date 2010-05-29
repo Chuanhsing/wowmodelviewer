@@ -273,7 +273,7 @@ int SListFileSaveToMpq(TMPQArchive * ha)
     TMPQHash * pFirstHash;
     TMPQHash * pHashEnd = ha->pHashTable + ha->pHeader->dwHashTableSize;
     TMPQHash * pHash = NULL;
-    void * pvAddHandle = NULL;
+    TMPQFile * hf = NULL;
     DWORD dwFileSize = 0;
     char szNewLine[2] = {0x0D, 0x0A};
     size_t nFileNodes = 0;
@@ -315,7 +315,7 @@ int SListFileSaveToMpq(TMPQArchive * ha)
                                    dwFileSize,
                                    LANG_NEUTRAL,
                                    MPQ_FILE_ENCRYPTED | MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING,
-                                  &pvAddHandle);
+                                  &hf);
 
     // Add all file names
     if(nError == ERROR_SUCCESS)
@@ -325,11 +325,11 @@ int SListFileSaveToMpq(TMPQArchive * ha)
         {
             pNode = SortTable[i];
 
-            nError = SFileAddFile_Write(pvAddHandle, pNode->szFileName, (DWORD)pNode->nLength, MPQ_COMPRESSION_ZLIB);
+            nError = SFileAddFile_Write(hf, pNode->szFileName, (DWORD)pNode->nLength, MPQ_COMPRESSION_ZLIB);
             if(nError != ERROR_SUCCESS)
                 break;
 
-            nError = SFileAddFile_Write(pvAddHandle, szNewLine, sizeof(szNewLine), MPQ_COMPRESSION_ZLIB);
+            nError = SFileAddFile_Write(hf, szNewLine, sizeof(szNewLine), MPQ_COMPRESSION_ZLIB);
             if(nError != ERROR_SUCCESS)
                 break;
         }
@@ -337,8 +337,8 @@ int SListFileSaveToMpq(TMPQArchive * ha)
 
 
     // Finalize the file in the MPQ
-    if(pvAddHandle != NULL)
-        SFileAddFile_Finish(pvAddHandle, nError);
+    if(hf != NULL)
+        SFileAddFile_Finish(hf);
     if(SortTable != NULL)
         FREEMEM(SortTable);
     return nError;
@@ -527,11 +527,11 @@ HANDLE WINAPI SListFileFindFirstFile(HANDLE hMpq, const char * szListFile, const
     return (HANDLE)pCache;
 }
 
-BOOL WINAPI SListFileFindNextFile(HANDLE hFind, SFILE_FIND_DATA * lpFindFileData)
+bool WINAPI SListFileFindNextFile(HANDLE hFind, SFILE_FIND_DATA * lpFindFileData)
 {
     TListFileCache * pCache = (TListFileCache *)hFind;
     size_t nLength;
-    BOOL bResult = FALSE;
+    bool bResult = false;
     int nError = ERROR_SUCCESS;
 
     for(;;)
@@ -547,7 +547,7 @@ BOOL WINAPI SListFileFindNextFile(HANDLE hFind, SFILE_FIND_DATA * lpFindFileData
         // If some mask entered, check it
         if(CheckWildCard(lpFindFileData->cFileName, pCache->szMask))
         {
-            bResult = TRUE;
+            bResult = true;
             break;
         }
     }
@@ -557,7 +557,7 @@ BOOL WINAPI SListFileFindNextFile(HANDLE hFind, SFILE_FIND_DATA * lpFindFileData
     return bResult;
 }
 
-BOOL WINAPI SListFileFindClose(HANDLE hFind)
+bool WINAPI SListFileFindClose(HANDLE hFind)
 {
     TListFileCache * pCache = (TListFileCache *)hFind;
 
@@ -569,9 +569,9 @@ BOOL WINAPI SListFileFindClose(HANDLE hFind)
             FREEMEM(pCache->szMask);
 
         FREEMEM(pCache);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 

@@ -105,7 +105,6 @@ static int CheckIfAllFilesKnown(TMPQArchive * ha, const char * szListFile, DWORD
     TMPQHash * pHash;
     TMPQHash * pHashEnd = NULL;         // End of the hash table
     DWORD dwFileCount = 0;
-    BOOL bHasUnknownNames = FALSE;
     int nError = ERROR_SUCCESS;
 
     // First of all, create a copy of hash table
@@ -125,7 +124,7 @@ static int CheckIfAllFilesKnown(TMPQArchive * ha, const char * szListFile, DWORD
     {
         SFILE_FIND_DATA wf;
         HANDLE hFind = SFileFindFirstFile((HANDLE)ha, "*", &wf, szListFile);
-        BOOL bResult = TRUE;
+        bool bResult = true;
 
         // Do while something has been found
         while(hFind != NULL && bResult)
@@ -184,9 +183,6 @@ static int CheckIfAllFilesKnown(TMPQArchive * ha, const char * szListFile, DWORD
                 HANDLE hFile  = NULL;
                 DWORD dwFlags = 0;
                 DWORD dwFileKey  = 0;
-
-                // Relelber that we have at least one name that is not known
-                bHasUnknownNames = TRUE;
 
                 if(SFileOpenFileEx((HANDLE)ha, (char *)(DWORD_PTR)pHash->dwBlockIndex, SFILE_OPEN_BY_INDEX, &hFile))
                 {
@@ -456,7 +452,7 @@ static int CopyMpqFileSectors(
         else
         {
             nError = ERROR_FILE_CORRUPT;
-            assert(FALSE);
+            assert(false);
         }
     }
 
@@ -536,17 +532,17 @@ static int CopyMpqFiles(TMPQArchive * ha, DWORD * pFileKeys, HANDLE hNewFile)
 /* Public functions                                                          */
 /*****************************************************************************/
 
-BOOL WINAPI SFileSetCompactCallback(HANDLE /* hMpq */, SFILE_COMPACT_CALLBACK aCompactCB, void * pvData)
+bool WINAPI SFileSetCompactCallback(HANDLE /* hMpq */, SFILE_COMPACT_CALLBACK aCompactCB, void * pvData)
 {
     CompactCB = aCompactCB;
     pvUserData = pvData;
-    return TRUE;
+    return true;
 }
 
 //-----------------------------------------------------------------------------
 // Archive compacting
 
-BOOL WINAPI SFileCompactArchive(HANDLE hMpq, const char * szListFile, BOOL /* bReserved */)
+bool WINAPI SFileCompactArchive(HANDLE hMpq, const char * szListFile, bool /* bReserved */)
 {
     LARGE_INTEGER ByteOffset;
     LARGE_INTEGER ByteCount;
@@ -559,7 +555,7 @@ BOOL WINAPI SFileCompactArchive(HANDLE hMpq, const char * szListFile, BOOL /* bR
     int nError = ERROR_SUCCESS;
 
     // Test the valid parameters
-    if(IsValidMpqHandle(ha) == FALSE)
+    if(!IsValidMpqHandle(ha))
         nError = ERROR_INVALID_HANDLE;
     if(ha->dwFlags & MPQ_FLAG_READ_ONLY)
         nError = ERROR_ACCESS_DENIED;
@@ -699,7 +695,7 @@ BOOL WINAPI SFileCompactArchive(HANDLE hMpq, const char * szListFile, BOOL /* bR
 //-----------------------------------------------------------------------------
 // Changing hash table size
 
-BOOL WINAPI SFileSetHashTableSize(HANDLE hMpq, DWORD dwNewTableSize)
+bool WINAPI SFileSetHashTableSize(HANDLE hMpq, DWORD dwNewTableSize)
 {
     SFILE_FIND_DATA sf;
     TMPQArchive * ha = (TMPQArchive *)hMpq;
@@ -712,11 +708,11 @@ BOOL WINAPI SFileSetHashTableSize(HANDLE hMpq, DWORD dwNewTableSize)
     HANDLE hFind;
     DWORD dwOldTableSize = ha->pHeader->dwHashTableSize;
     DWORD dwIndex;
-    BOOL bFoundSomething = TRUE;
+    bool bFoundSomething = true;
     int nError = ERROR_SUCCESS;
 
     // Test the valid parameters
-    if(IsValidMpqHandle(ha) == FALSE)
+    if(!IsValidMpqHandle(ha))
         nError = ERROR_INVALID_HANDLE;
     if(ha->dwFlags & MPQ_FLAG_READ_ONLY)
         nError = ERROR_ACCESS_DENIED;

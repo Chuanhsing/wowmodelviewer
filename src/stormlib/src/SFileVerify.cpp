@@ -468,7 +468,7 @@ static DWORD VerifyStrongSignatureWithKey(
     // Import the Blizzard key in OpenSSL format
     if(!decode_base64_key(szPublicKey, &key))
     {
-        assert(FALSE);
+        assert(false);
         return ERROR_VERIFY_FAILED;
     }
 
@@ -571,7 +571,7 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
         dwCrc32 = crc32(0, Z_NULL, 0);
 
         // Also turn on sector checksum verification
-        hf->bCheckSectorCRCs = TRUE;
+        hf->bCheckSectorCRCs = true;
 
         // Go through entire file and update both CRC32 and MD5
         for(;;)

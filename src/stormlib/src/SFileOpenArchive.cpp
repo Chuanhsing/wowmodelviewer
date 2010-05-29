@@ -21,12 +21,12 @@
 /* Local functions                                                           */
 /*****************************************************************************/
 
-static BOOL IsAviFile(TMPQHeader * pHeader)
+static bool IsAviFile(TMPQHeader * pHeader)
 {
     DWORD * AviHdr = (DWORD *)pHeader;
 
     // Test for 'RIFF', 'AVI ' or 'LIST'
-    return (AviHdr[0] == 0x46464952 && AviHdr[2] == 0x20495641 && AviHdr[3] == 0x5453494C);
+    return (bool)(AviHdr[0] == 0x46464952 && AviHdr[2] == 0x20495641 && AviHdr[3] == 0x5453494C);
 }
 
 // This function gets the right positions of the hash table and the block table.
@@ -80,7 +80,7 @@ LCID WINAPI SFileSetLocale(LCID lcNewLocale)
 //   dwFlags    - If contains MPQ_OPEN_NO_LISTFILE, then the internal list file will not be used.
 //   phMpq      - Pointer to store open archive handle
 
-BOOL SFileOpenArchiveEx(
+bool SFileOpenArchiveEx(
     const char * szMpqName,
     DWORD dwAccessMode,
     DWORD dwFlags,
@@ -273,17 +273,32 @@ BOOL SFileOpenArchiveEx(
     // Allocate buffers
     if(nError == ERROR_SUCCESS)
     {
+        DWORD dwHashTableSize = ha->pHeader->dwHashTableSize;
+        DWORD dwBlockTableSize = ha->pHeader->dwBlockTableSize;
+
+        //
+        // Note: It is allowed that either of the tables sizes is zero.
+        // If this is the case, we increase the table size to 1
+        // to prevent unpredictable results from allocating 0 bytes of memory
+        // 
+
+        if(dwHashTableSize == 0)
+            dwHashTableSize++;
+        if(dwBlockTableSize == 0)
+            dwBlockTableSize++;
+
         //
         // Note that the block table should be at least as large 
         // as the hash table (for later file additions).
         //
-        // Note that the block table *can* be lbigger than the hash table.
+        // Note that the block table *can* be bigger than the hash table.
         // We have to deal with this properly.
         //
         
-        ha->dwBlockTableMax = STORMLIB_MAX(ha->pHeader->dwHashTableSize, ha->pHeader->dwBlockTableSize);
-
-        ha->pHashTable     = ALLOCMEM(TMPQHash, ha->pHeader->dwHashTableSize);
+        ha->dwBlockTableMax = STORMLIB_MAX(dwHashTableSize, dwBlockTableSize);
+        
+        // Allocate all three MPQ tables
+        ha->pHashTable = ALLOCMEM(TMPQHash, dwHashTableSize);
         ha->pBlockTable    = ALLOCMEM(TMPQBlock, ha->dwBlockTableMax);
         ha->pExtBlockTable = ALLOCMEM(TMPQBlockEx, ha->dwBlockTableMax);
         if(!ha->pHashTable || !ha->pBlockTable || !ha->pExtBlockTable)
@@ -306,8 +321,8 @@ BOOL SFileOpenArchiveEx(
     {
         TMPQHash * pHashEnd = ha->pHashTable + ha->pHeader->dwHashTableSize;
         TMPQHash * pHash;
-        BOOL bFoundGoodEntry = FALSE;
-        BOOL bFileIsEmpty = TRUE;
+        bool bFoundGoodEntry = false;
+        bool bFileIsEmpty = true;
 
         // We have to convert the hash table from LittleEndian
         BSWAP_ARRAY32_UNSIGNED(ha->pHashTable, dwBytes);
@@ -323,17 +338,17 @@ BOOL SFileOpenArchiveEx(
         for(pHash = ha->pHashTable; pHash < pHashEnd; pHash++)
         {
             if(pHash->dwBlockIndex < ha->pHeader->dwBlockTableSize)
-                bFileIsEmpty = FALSE;                    
+                bFileIsEmpty = false;
 
             if(pHash->lcLocale == 0 && pHash->wPlatform == 0 && pHash->dwBlockIndex <= ha->pHeader->dwBlockTableSize)
             {
-                bFoundGoodEntry = TRUE;
+                bFoundGoodEntry = true;
                 break;
             }
         }
 
         // If we haven't found at least 1 good entry, then the hash table is corrupt
-        if(bFileIsEmpty == FALSE && bFoundGoodEntry == FALSE)
+        if(bFileIsEmpty == false && bFoundGoodEntry == false)
             nError = ERROR_FILE_CORRUPT;
     }
 
@@ -366,7 +381,7 @@ BOOL SFileOpenArchiveEx(
     {
         TMPQBlock * pBlockEnd = ha->pBlockTable + ha->pHeader->dwBlockTableSize;
         TMPQBlock * pBlock = ha->pBlockTable;
-        BOOL bBlockTableEncrypted = FALSE;
+        bool bBlockTableEncrypted = false;
 
         // Verify all blocks entries in the table
         // The loop usually stops at the first entry
@@ -376,7 +391,7 @@ BOOL SFileOpenArchiveEx(
             // Note that this may change in next MPQ versions
             if(pBlock->dwFlags & 0x000000FF)
             {
-                bBlockTableEncrypted = TRUE;
+                bBlockTableEncrypted = true;
                 break;
             }
 
@@ -406,7 +421,7 @@ BOOL SFileOpenArchiveEx(
                            FILE_BEGIN);
             ReadFile(ha->hFile, ha->pExtBlockTable, dwBytes, &dwTransferred, NULL);
 
-            // We have to convert every WORD in ext block table from LittleEndian
+            // We have to convert every USHORT in ext block table from LittleEndian
             BSWAP_ARRAY16_UNSIGNED(ha->pExtBlockTable, dwBytes);
 
             // The extended block table is not encrypted (so far)
@@ -415,12 +430,12 @@ BOOL SFileOpenArchiveEx(
         }
     }
 
-    // Verify both block tables (If the MPQ file is not protected)
+    // Verify both block tables (if the MPQ file is not protected)
     if(nError == ERROR_SUCCESS && (ha->dwFlags & MPQ_FLAG_PROTECTED) == 0)
     {
         LARGE_INTEGER RawFilePos;
         TMPQBlockEx * pBlockEx = ha->pExtBlockTable;
-        TMPQBlock * pBlockEnd = ha->pBlockTable + dwMaxBlockIndex + 1;
+        TMPQBlock * pBlockEnd = ha->pBlockTable + dwMaxBlockIndex;
         TMPQBlock * pBlock   = ha->pBlockTable;
 
         // If the MPQ file is not protected,
@@ -486,14 +501,14 @@ BOOL SFileOpenArchiveEx(
     return (nError == ERROR_SUCCESS);
 }
 
-BOOL WINAPI SFileOpenArchive(const char * szMpqName, DWORD dwPriority, DWORD dwFlags, HANDLE * phMpq)
+bool WINAPI SFileOpenArchive(const char * szMpqName, DWORD dwPriority, DWORD dwFlags, HANDLE * phMpq)
 {
     dwPriority = dwPriority;
     return SFileOpenArchiveEx(szMpqName, GENERIC_READ, dwFlags, phMpq);
 }
 
 //-----------------------------------------------------------------------------
-// BOOL SFileFlushArchive(HANDLE hMpq)
+// bool SFileFlushArchive(HANDLE hMpq)
 //
 // Saves all dirty data into MPQ archive.
 // Has similar effect like SFileCLoseArchive, but the archive is not closed.
@@ -501,17 +516,17 @@ BOOL WINAPI SFileOpenArchive(const char * szMpqName, DWORD dwPriority, DWORD dwF
 // and terminating without calling SFileCloseArchive might corrupt the archive.
 //
 
-BOOL WINAPI SFileFlushArchive(HANDLE hMpq)
+bool WINAPI SFileFlushArchive(HANDLE hMpq)
 {
     TMPQArchive * ha = (TMPQArchive *)hMpq;
     int nResultError = ERROR_SUCCESS;
     int nError;
 
     // Do nothing if 'hMpq' is bad parameter
-    if(IsValidMpqHandle(ha) == FALSE)
+    if(!IsValidMpqHandle(ha))
     {
         SetLastError(ERROR_INVALID_HANDLE);
-        return FALSE;
+        return false;
     }
 
     // If the archive has been changed, update the changes on the disk drive.
@@ -534,17 +549,17 @@ BOOL WINAPI SFileFlushArchive(HANDLE hMpq)
     // Return the error
     if(nResultError != ERROR_SUCCESS)
         SetLastError(nResultError);
-    return (BOOL)(nResultError == ERROR_SUCCESS);
+    return (bool)(nResultError == ERROR_SUCCESS);
 }
 
 //-----------------------------------------------------------------------------
-// BOOL SFileCloseArchive(HANDLE hMpq);
+// bool SFileCloseArchive(HANDLE hMpq);
 //
 
-BOOL WINAPI SFileCloseArchive(HANDLE hMpq)
+bool WINAPI SFileCloseArchive(HANDLE hMpq)
 {
     TMPQArchive * ha = (TMPQArchive *)hMpq;
-    BOOL bResult;
+    bool bResult;
 
     // Flush all unsaved data to the storage
     bResult = SFileFlushArchive(hMpq);

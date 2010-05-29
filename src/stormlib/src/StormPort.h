@@ -51,6 +51,7 @@
     #define PLATFORM_32BIT
   #endif
 
+  #define PLATFORM_WINDOWS
   #define PLATFORM_DEFINED                  // The platform is known now
 
 #endif
@@ -72,18 +73,12 @@
     #define PLATFORM_LITTLE_ENDIAN  1       // Apple is now making Macs with Intel CPUs
   #endif
   
-  #if __LP64__
-    #define PLATFORM_64BIT
-  #else
-    #define PLATFORM_32BIT
-  #endif
-  
+  #define PLATFORM_MAC
   #define PLATFORM_DEFINED                  // The platform is known now
 
 #endif
 
 // Assumption: we are not on Windows nor Macintosh, so this must be linux *grin*
-// Ladik : Why the hell Linux does not use some OS-dependent #define ?
 #if !defined(PLATFORM_DEFINED)
 
   #include <sys/types.h>
@@ -99,35 +94,37 @@
   #include <assert.h>
 
   #define PLATFORM_LITTLE_ENDIAN  1
+  #define PLATFORM_LINUX
   #define PLATFORM_DEFINED
   #define LANG_NEUTRAL   0
 
-#endif  /* not __powerc */
+#endif
 
-
-#if !defined(WIN32) && !defined(WIN64)
+// Definition of Windows-specific structures for non-Windows platforms
+#ifndef PLATFORM_WINDOWS
+  #if __LP64__
+    #define PLATFORM_64BIT
+  #else
+    #define PLATFORM_32BIT
+  #endif
 
   // Typedefs for ANSI C
   typedef unsigned char  BYTE;
-  typedef int16_t        SHORT;
-  typedef uint16_t       WORD;
-  typedef uint16_t       USHORT;
-  typedef int32_t        LONG;
-  typedef uint32_t       DWORD;
-  typedef intptr_t       DWORD_PTR;
-  typedef intptr_t       LONG_PTR;
-  typedef intptr_t       INT_PTR;
-  typedef int64_t        LONGLONG;
-  typedef signed char    BOOL;
+  typedef unsigned short USHORT;
+  typedef int            LONG;
+  typedef unsigned int   DWORD;
+  typedef long           DWORD_PTR;
+  typedef long           LONG_PTR;
+  typedef long           INT_PTR;
+  typedef long long      LONGLONG;
   typedef void         * HANDLE;
   typedef void         * LPOVERLAPPED; // Unsupported on Linux and Mac
   typedef char           TCHAR;
-  typedef uint32_t       LCID;
-  typedef unsigned int   UINT;
+  typedef unsigned int   LCID;
   typedef LONG         * PLONG;
   typedef DWORD        * LPDWORD;
   typedef BYTE         * LPBYTE;
-  
+
   typedef struct _FILETIME
   { 
       DWORD dwLowDateTime; 
@@ -163,15 +160,6 @@
     #define MAX_PATH 1024
   #endif
 
-  #ifndef TRUE
-    #define TRUE (BOOL)1
-  #endif
-
-  #ifndef FALSE
-    #define FALSE (BOOL)0
-  #endif
-
-  #define VOID     void
   #define WINAPI 
 
   #define FILE_BEGIN    SEEK_SET
@@ -183,7 +171,6 @@
   #define GENERIC_READ    0x80000000
   
   #define ERROR_SUCCESS                     0
-  #define ERROR_INVALID_FUNCTION            1
   #define ERROR_FILE_NOT_FOUND              2
   #define ERROR_ACCESS_DENIED               5
   #define ERROR_INVALID_HANDLE              6
@@ -194,11 +181,9 @@
   #define ERROR_READ_FAULT                 30
   #define ERROR_GEN_FAILURE                31
   #define ERROR_HANDLE_EOF                 38
-  #define ERROR_HANDLE_DISK_FULL           39
   #define ERROR_NOT_SUPPORTED              50
   #define ERROR_INVALID_PARAMETER          87
   #define ERROR_DISK_FULL                 112
-  #define ERROR_CALL_NOT_IMPLEMENTED      120
   #define ERROR_ALREADY_EXISTS            183
   #define ERROR_CAN_NOT_COMPLETE         1003
   #define ERROR_PARAMETER_QUOTA_EXCEEDED 1283
@@ -218,22 +203,22 @@
 
   // Emulation of functions for file I/O available in Win32
   HANDLE CreateFile(const char * lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, void * lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
-  BOOL   CloseHandle(HANDLE hObject);
+  bool   CloseHandle(HANDLE hObject);
 
   DWORD  GetFileSize(HANDLE hFile, DWORD * lpFileSizeHigh);
   DWORD  SetFilePointer(HANDLE, LONG lDistanceToMove, LONG * lpDistanceToMoveHigh, DWORD dwMoveMethod);
-  BOOL   SetEndOfFile(HANDLE hFile);
+  bool   SetEndOfFile(HANDLE hFile);
 
-  BOOL   GetFileTime(HANDLE hFile, LPFILETIME lpCreationTime, LPFILETIME lpLastAccessTime, LPFILETIME lpLastWriteTime);
+  bool   GetFileTime(HANDLE hFile, LPFILETIME lpCreationTime, LPFILETIME lpLastAccessTime, LPFILETIME lpLastWriteTime);
 
-  BOOL   ReadFile(HANDLE hFile, void * lpBuffer, DWORD nNumberOfBytesToRead, DWORD * lpNumberOfBytesRead, void * lpOverLapped);
-  BOOL   WriteFile(HANDLE hFile, const void * lpBuffer, DWORD nNumberOfBytesToWrite, DWORD * lpNumberOfBytesWritten, void * lpOverLapped);
+  bool   ReadFile(HANDLE hFile, void * lpBuffer, DWORD nNumberOfBytesToRead, DWORD * lpNumberOfBytesRead, void * lpOverLapped);
+  bool   WriteFile(HANDLE hFile, const void * lpBuffer, DWORD nNumberOfBytesToWrite, DWORD * lpNumberOfBytesWritten, void * lpOverLapped);
 
-  BOOL   IsBadReadPtr(const void * ptr, int size);
+  bool   IsBadReadPtr(const void * ptr, int size);
   DWORD  GetFileAttributes(const char * szileName);
 
-  BOOL   DeleteFile(const char * lpFileName);
-  BOOL   MoveFile(const char * lpFromFileName, const char * lpToFileName);
+  bool   DeleteFile(const char * lpFileName);
+  bool   MoveFile(const char * lpFromFileName, const char * lpToFileName);
 
   #define strnicmp strncasecmp
 

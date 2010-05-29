@@ -702,7 +702,7 @@ int WINAPI SCompExplode(char * pbOutBuffer, int * pcbOutBuffer, char * pbInBuffe
     if(!Decompress_PKLIB(pbOutBuffer, &cbOutBuffer, pbInBuffer, cbInBuffer))
     {
         SetLastError(ERROR_GEN_FAILURE);
-        return FALSE;
+        return false;
     }
 
     *pcbOutBuffer = cbOutBuffer;
@@ -767,7 +767,7 @@ int WINAPI SCompCompress(
     if(cbInBuffer == 0)
     {
         *pcbOutBuffer = 0;
-        return TRUE;
+        return true;
     }
 
     // Setup the compression function array
