@@ -47,8 +47,8 @@ void SaveBaseFile();
 void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init);
 void ExportWMOtoLWO(WMO *m, const char *fn);
 void ExportWMOObjectstoLWO(WMO *m, const char *fn);
+void ExportADTtoLWO(MapTile *m, const char *fn);
 #ifdef _DEBUG
-	void ExportADTtoLWO(MapTile *m, const char *fn);
 	void ExportWMOtoLWO2(WMO *m, const char *fn);
 #endif
 
