@@ -305,6 +305,11 @@ void CharControl::UpdateModel(Attachment *a)
 		}
 	}
 	cd.maxHairStyle = (int)styles.size();
+#if 1 // for worgen female
+	if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen 
+		cd.maxHairStyle = 21;
+	}
+#endif // for worgen female
 
 	if (cd.maxFaceType==0) cd.maxFaceType = 1;
 	if (cd.maxSkinColor==0) cd.maxSkinColor = 1;
@@ -856,6 +861,17 @@ void CharControl::RefreshModel()
 			}
 		}
 	}
+#if 1 // for worgen female
+	if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen 
+		for(int i=1; i<=21; i++) {
+			int section = i - 1;
+			for (size_t j=0; j<model->geosets.size(); j++) {
+				if (model->geosets[j].id == i)
+					model->showGeosets[j] = (cd.hairStyle==section) && showHair;
+			}
+		}
+	}
+#endif // for worgen female
 
 	// hair
 	try {
