@@ -100,7 +100,14 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 						break;
 				}
 				break;
-			case 3: // Character\Worgen\Female\Hair00_00.blp
+			case 3: // Character\Worgen\Hair00_00.blp
+				for(int i=0; i<20; i++) {
+					fn.Printf(_T("Character\\Worgen\\Hair00_%02d.blp"), i);
+					if (MPQFile::getSize(fn.fn_str()) > 0)
+						n++;
+					else
+						break;
+				}
 				break;
 			case 4: // Character\Worgen\Male\WorgenMaleNakedPelvisSkin00_00.blp
 				for(int i=0; i<20; i++) {
@@ -159,7 +166,14 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
 						break;
 				}
 				break;
-			case 3: // Character\Worgen\Female\Hair00_00.blp
+			case 3: // Character\Worgen\Hair00_00.blp
+				for(int i=0; i<20; i++) {
+					fn.Printf(_T("Character\\Worgen\\Hair%02d_%02d.blp"), i, color);
+					if (MPQFile::getSize(fn.fn_str()) > 0)
+						n++;
+					else
+						break;
+				}
 				break;
 			case 4: // Character\Worgen\Male\WorgenMaleNakedPelvisSkin00_00.blp
 				for(int i=0; i<20; i++) {

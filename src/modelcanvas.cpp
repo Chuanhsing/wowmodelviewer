@@ -359,7 +359,6 @@ Attachment* ModelCanvas::LoadCharModel(const char *fn)
 
 void ModelCanvas::LoadADT(wxString fn)
 {
-#ifdef	_DEBUG
 	OldinitShaders();
 
 	root->model = NULL;
@@ -377,7 +376,6 @@ void ModelCanvas::LoadADT(wxString fn)
 		} else
 			wxDELETE(adt);
 	}
-#endif
 }
 
 void ModelCanvas::LoadWMO(wxString fn)

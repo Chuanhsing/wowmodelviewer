@@ -760,10 +760,13 @@ void CharControl::RefreshModel()
 		if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen
 			wxString fn;
 			fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), 0, cd.skinColor);
-			tex.addLayer(fn, CR_BASE, 0);
-			fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d_Extra.blp"), 0, cd.skinColor);
 			if (MPQFile::getSize(fn.mb_str()) > 0)
+				tex.addLayer(fn, CR_BASE, 0);
+			fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d_Extra.blp"), 0, cd.skinColor);
+			if (MPQFile::getSize(fn.mb_str()) > 0) {
 				furTex = texturemanager.add(std::string(fn.mb_str()));
+				model->textures[4] = furTex;
+			}
 		}
 #endif // for worgen female
 
@@ -792,9 +795,11 @@ void CharControl::RefreshModel()
 				if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen
 					wxString fn;
 					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), 0, cd.skinColor);
-					tex.addLayer(fn, CR_PELVIS_UPPER, 1); // pants
+					if (MPQFile::getSize(fn.mb_str()) > 0)
+						tex.addLayer(fn, CR_PELVIS_UPPER, 1); // pants
 					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleNakedTorsoSkin%02d_%02d.blp"), 0, cd.skinColor);
-					tex.addLayer(fn, CR_TORSO_UPPER, 1); // top
+					if (MPQFile::getSize(fn.mb_str()) > 0)
+						tex.addLayer(fn, CR_TORSO_UPPER, 1); // top
 				}
 #endif // for worgen female
 		}
@@ -811,9 +816,11 @@ void CharControl::RefreshModel()
 			if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen
 				wxString fn;
 				fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), cd.faceType, cd.skinColor);
-				tex.addLayer(fn, CR_FACE_UPPER, 1);
+				if (MPQFile::getSize(fn.mb_str()) > 0)
+					tex.addLayer(fn, CR_FACE_UPPER, 1);
 				fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleFaceLower%02d_%02d.blp"), cd.faceType, cd.skinColor);
-				tex.addLayer(fn, CR_FACE_LOWER, 1);
+				if (MPQFile::getSize(fn.mb_str()) > 0)
+					tex.addLayer(fn, CR_FACE_LOWER, 1);
 			}
 #endif // for worgen female
 
@@ -903,6 +910,16 @@ void CharControl::RefreshModel()
 		wxLogMessage(_T("DBC hair Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 		hairTex = 0;
 	}
+#if 1 // for worgen female
+		if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen
+			wxString fn;
+			fn.Printf(_T("Character\\Worgen\\Hair00_%02d.blp"), cd.hairColor);
+			if (MPQFile::getSize(fn.mb_str()) > 0) {
+				hairTex = texturemanager.add(std::string(fn.mb_str()));
+				model->textures[2] = hairTex;
+			}
+		}
+#endif // for worgen female
 
 	// If they have no hair, toggle the 'bald' flag.
 	if (!showHair)
@@ -1660,7 +1677,7 @@ void CharControl::RefreshCreatureItem(int slot)
 							mp = (path + r.getString(ItemDisplayDB::Skin)).mb_str();
 							mp.append(".blp");
 							tex = texturemanager.add(mp);
-							m->replaceTextures[2] = tex;
+							m->replaceTextures[TEXTURE_CAPE] = tex;
 							succ = true;
 						}
 					}
