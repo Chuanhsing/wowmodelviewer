@@ -202,7 +202,7 @@ public:
 	static const size_t Tex1 = 4;		// string
 	static const size_t Tex2 = 5;		// string
 	static const size_t Tex3 = 6;		// string
-	static const size_t Flags = 7;		// uint		(As specified in http://www.madx.dk/wowdev/wiki/index.php?title=CharSections.dbc)
+	//static const size_t Flags = 7;		// uint		(As specified in http://www.madx.dk/wowdev/wiki/index.php?title=CharSections.dbc)
 	static const size_t Section = 8;	// uint
 	static const size_t Color = 9;		// uint
 	#endif

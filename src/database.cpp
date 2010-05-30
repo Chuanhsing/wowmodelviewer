@@ -1,5 +1,6 @@
 
 #include "database.h"
+#include "mpq.h"
 
 ItemDatabase		items;
 // dbs
@@ -77,6 +78,45 @@ int CharHairGeosetsDB::getGeosetsFor(unsigned int race, unsigned int gender)
 int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigned int type, unsigned int section, unsigned int npc)
 {
 	int n = 0;
+#if 1 // for worgen female
+	if (gameVersion >= 40000 && race == 22 && gender == 1) { // worgen female
+		wxString fn;
+		switch(type) { // 0: base, 1: face, 2: facial, 3: hair, 4: underwear
+			case 0: // Character\Worgen\Female\WorgenFemaleSkin00_12.blp
+				for(int i=0; i<20; i++) {
+					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), section, i);
+					if (MPQFile::getSize(fn.fn_str()) > 0)
+						n++;
+					else
+						break;
+				}
+				break;
+			case 1: // Character\Worgen\Female\WorgenFemaleFaceUpper27_09.blp
+				for(int i=0; i<30; i++) {
+					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), section, i);
+					if (MPQFile::getSize(fn.fn_str()) > 0)
+						n++;
+					else
+						break;
+				}
+				break;
+			case 3: // Character\Worgen\Female\Hair00_00.blp
+				break;
+			case 4: // Character\Worgen\Male\WorgenMaleNakedPelvisSkin00_00.blp
+				for(int i=0; i<20; i++) {
+					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), section, i);
+					if (MPQFile::getSize(fn.fn_str()) > 0)
+						n++;
+					else
+						break;
+				}
+				break;
+		}
+	}
+	// if already in dbc
+	if (n > 0)
+		return n;
+#endif // for worgen female
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
 		// don't allow NPC skins ;(
@@ -90,12 +130,52 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 		}
 		#endif
 	}
+
     return n;
 }
 
 int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsigned int type, unsigned int color, unsigned int npc)
 {
 	int n = 0;
+#if 1 // for worgen female
+	if (gameVersion >= 40000 && race == 22 && gender == 1) { // worgen female
+		wxString fn;
+		switch(type) { // 0: base, 1: face, 2: facial, 3: hair, 4: underwear
+			case 0: // Character\Worgen\Female\WorgenFemaleSkin00_12.blp
+				for(int i=0; i<20; i++) {
+					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), i, color);
+					if (MPQFile::getSize(fn.fn_str()) > 0)
+						n++;
+					else
+						break;
+				}
+				break;
+			case 1: // Character\Worgen\Female\WorgenFemaleFaceUpper27_09.blp
+				for(int i=0; i<30; i++) {
+					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), i, color);
+					if (MPQFile::getSize(fn.fn_str()) > 0)
+						n++;
+					else
+						break;
+				}
+				break;
+			case 3: // Character\Worgen\Female\Hair00_00.blp
+				break;
+			case 4: // Character\Worgen\Male\WorgenMaleNakedPelvisSkin00_00.blp
+				for(int i=0; i<20; i++) {
+					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), i, color);
+					if (MPQFile::getSize(fn.fn_str()) > 0)
+						n++;
+					else
+						break;
+				}
+				break;
+		}
+	}
+	// if already in dbc
+	if (n > 0)
+		return n;
+#endif // for worgen female
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
 		#ifndef WotLK

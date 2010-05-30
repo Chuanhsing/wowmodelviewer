@@ -212,7 +212,7 @@ void getGamePath()
 	// If we found an install then set the game path, otherwise just set to C:\ for now
 	if (sName >= 0) {
 		gamePath = sNames[sName];
-		gamePath.append(_T("Data")+SLASH);
+		gamePath.Append(_T("Data\\"));
 	} else {
 		gamePath = _T("C:")+SLASH;
 		if (!wxFileExists(gamePath + SLASH + _T("data") + SLASH + _T("common.MPQ")) && !gamePath.empty()){
@@ -224,13 +224,13 @@ void getGamePath()
     gamePath = wxT("/Applications/World\\ of\\ Warcraft/");
 	if (!wxFileExists(gamePath + SLASH + _T("data") + SLASH + _T("common.MPQ")) && !gamePath.empty()){
         gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"),gamePath);
-		gamePath.append(SLASH+_T("Data")+SLASH);
+		gamePath.Append(_T("/Data/"));
     }
 #else // Linux
 	gamePath = _T(".")+SLASH;
 	if (!wxFileExists(gamePath + SLASH + _T("data") + SLASH + _T("common.MPQ")) && !gamePath.empty()){
 		gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"),gamePath);
-		gamePath.append(SLASH+_T("Data")+SLASH);
+		gamePath.Append(_T("/Data/"));
 	}
 #endif
 }

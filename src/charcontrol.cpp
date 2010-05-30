@@ -253,42 +253,6 @@ void CharControl::UpdateModel(Attachment *a)
 		// out of the ChrRaces.dbc.  Going to have to hardcode the values.
 		CharRacesDB::Record raceRec = racedb.getByName(wxString(raceName.c_str(), wxConvUTF8));
 		race = raceRec.getUInt(CharRacesDB::RaceID);
-		
-		/*
-		if (raceName == "Human")
-			race = 1;
-		else if (raceName == "Orc")
-			race = 2;
-		else if (raceName == "Dwarf")
-			race = 3;
-		else if (raceName == "Nightelf")
-			race = 4;
-		else if (raceName == "Scourge")
-			race = 5;
-		else if (raceName == "Tauren")
-			race = 6;
-		else if (raceName == "Gnome")
-			race = 7;
-		else if (raceName == "Troll")
-			race = 8;
-		else if (raceName == "Goblin")
-			race = 9;
-		else if (raceName == "Bloodelf")
-			race = 10;
-		else if (raceName == "Draenei")
-			race = 11;
-		else if (raceName == "Felorc")
-			race = 12;
-		else if (raceName == "Naga_")
-			race = 13;
-		else if (raceName == "Broken")
-			race = 14;
-		else if (raceName == "Skeleton")
-			race = 15;
-		else
-			race = 0;
-		*/
-
 		gender = (genderName == "female" || genderName == "Female" || genderName == "FEMALE") ? 1 : 0;
 	
 	} catch (CharRacesDB::NotFound) {
@@ -787,6 +751,16 @@ void CharControl::RefreshModel()
 	} catch (CharSectionsDB::NotFound) {
 		wxLogMessage(_T("Assertion base character Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 	}
+#if 1 // for worgen female
+		if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen
+			wxString fn;
+			fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), 0, cd.skinColor);
+			tex.addLayer(fn, CR_BASE, 0);
+			fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d_Extra.blp"), 0, cd.skinColor);
+			if (MPQFile::getSize(fn.mb_str()) > 0)
+				furTex = texturemanager.add(std::string(fn.mb_str()));
+		}
+#endif // for worgen female
 
 	// HACK: for goblin males, explicitly load a hair texture
 	if (cd.race == 9 && cd.gender == 0 && gobTex == 0 && gameVersion < 40000) {
@@ -809,6 +783,15 @@ void CharControl::RefreshModel()
 			} catch (CharSectionsDB::NotFound) {
 				wxLogMessage(_T("DBC underwear Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 			}
+#if 1 // for worgen female
+				if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen
+					wxString fn;
+					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), 0, cd.skinColor);
+					tex.addLayer(fn, CR_PELVIS_UPPER, 1); // pants
+					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleNakedTorsoSkin%02d_%02d.blp"), 0, cd.skinColor);
+					tex.addLayer(fn, CR_TORSO_UPPER, 1); // top
+				}
+#endif // for worgen female
 		}
 
 		// face
@@ -819,6 +802,15 @@ void CharControl::RefreshModel()
 		} catch (CharSectionsDB::NotFound) {
 			wxLogMessage(_T("DBC face Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 		}
+#if 1 // for worgen female
+			if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen
+				wxString fn;
+				fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), cd.faceType, cd.skinColor);
+				tex.addLayer(fn, CR_FACE_UPPER, 1);
+				fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleFaceLower%02d_%02d.blp"), cd.faceType, cd.skinColor);
+				tex.addLayer(fn, CR_FACE_LOWER, 1);
+			}
+#endif // for worgen female
 
 		// facial feature geosets
 		try {
