@@ -32,14 +32,14 @@ void OldinitShaders()
 	supportShaders = isExtensionSupported("ARB_vertex_program") && isExtensionSupported("ARB_fragment_program");
 	if (supportShaders) {
 		// init extension stuff
-		//glARB = () SDL_GL_GetProcAddress("");
-		// TODO
-		//glProgramStringARB = (PFNGLPROGRAMSTRINGARBPROC) SDL_GL_GetProcAddress("glProgramStringARB");
-		//glBindProgramARB = (PFNGLBINDPROGRAMARBPROC) SDL_GL_GetProcAddress("glBindProgramARB");
-		//glDeleteProgramsARB = (PFNGLDELETEPROGRAMSARBPROC) SDL_GL_GetProcAddress("glDeleteProgramsARB");
-		//glGenProgramsARB = (PFNGLGENPROGRAMSARBPROC) SDL_GL_GetProcAddress("glGenProgramsARB");
-		//glProgramLocalParameter4fARB = (PFNGLPROGRAMLOCALPARAMETER4FARBPROC) SDL_GL_GetProcAddress("glProgramLocalParameter4fARB");
-
+#ifdef	_WINDOWS
+		//glARB = () wglGetProcAddress("");
+		glProgramStringARB = (PFNGLPROGRAMSTRINGARBPROC) wglGetProcAddress("glProgramStringARB");
+		glBindProgramARB = (PFNGLBINDPROGRAMARBPROC) wglGetProcAddress("glBindProgramARB");
+		glDeleteProgramsARB = (PFNGLDELETEPROGRAMSARBPROC) wglGetProcAddress("glDeleteProgramsARB");
+		glGenProgramsARB = (PFNGLGENPROGRAMSARBPROC) wglGetProcAddress("glGenProgramsARB");
+		glProgramLocalParameter4fARB = (PFNGLPROGRAMLOCALPARAMETER4FARBPROC) wglGetProcAddress("glProgramLocalParameter4fARB");
+#endif
 		// init various shaders here
 		OldreloadShaders();
 	}

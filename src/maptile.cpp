@@ -1781,12 +1781,10 @@ void MapChunk::draw()
 		//Vec3D shc = gWorld->skies->colorSet[SHADOW_COLOR] * 0.3f;
 		//glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, shc.x,shc.y,shc.z,1);
 		glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, 0.09f, 0.07f, 0.05f, 0.9f);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDrawElements(GL_TRIANGLE_STRIP, striplen, GL_UNSIGNED_SHORT, strip);
 
 		terrainShaders[nTextures-1]->unbind();
-
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glDrawElements(GL_TRIANGLE_STRIP, striplen, GL_UNSIGNED_SHORT, strip);
 	} else {
 		// FIXED-FUNCTION
 
