@@ -20,6 +20,8 @@ struct ModelData {
 	Vertex3f normal;
 	unsigned short groupIndex;
 	char boneid;
+	char boneidEx[3];
+	char weight[4];
 };
 
 struct GroupData {
@@ -73,5 +75,10 @@ void ExportM2toX3D(Model *m, const char *fn, bool init);
 void ExportM2toXHTML(Model *m, const char *fn, bool init);
 void ExportWMOtoX3D(WMO *m, const char *fn);
 void ExportWMOtoXHTML(WMO *m, const char *fn);
+
+// Ogre XML
+void ExportM2toOgreXml(Model *m, const char *fn, bool init);
+void ExportWMOtoOgreXml(WMO *m, const char *fn);
+
 
 #endif

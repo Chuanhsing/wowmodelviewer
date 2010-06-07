@@ -47,6 +47,7 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	EVT_MENU(ID_MODELEXPORT_3DS, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_X3D, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_XHTML, ModelViewer::OnExport)
+	EVT_MENU(ID_MODELEXPORT_OGRE, ModelViewer::OnExport)
 	// --
 	EVT_MENU(ID_FILE_RESETLAYOUT, ModelViewer::OnToggleCommand)
 	// --
@@ -294,6 +295,9 @@ void ModelViewer::InitMenu()
 	exportMenu->Append(ID_MODELEXPORT_3DS, _("3DS..."));
 	exportMenu->Append(ID_MODELEXPORT_X3D, _("X3D..."));
 	exportMenu->Append(ID_MODELEXPORT_XHTML, _("X3D in XHTML..."));
+#ifdef _DEBUG
+	exportMenu->Append(ID_MODELEXPORT_OGRE, _("Ogre XML..."));
+#endif
 
 	// -= Enable/Disable Model Exporters =-
 	// If you don't support WMOs or M2 files yet, you can disable export for that in filecontrol.cpp,
@@ -2902,6 +2906,26 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				ExportM2toXHTML(canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		}
+#ifdef _DEBUG
+	} else if (id == ID_MODELEXPORT_OGRE) {
+		// TODO: export to dotScene format, not simple mesh
+		newfilename << _T(".mesh.xml");
+		if (canvas->model) {
+			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("Ogre XML (*.mesh.xml)|*.mesh.xml"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			if (dialog.ShowModal()==wxID_OK) {
+				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+
+				ExportM2toOgreXml(canvas->model, dialog.GetPath().fn_str(), init);
+			}
+		} else if (canvas->wmo) {
+			wxFileDialog dialog(this, _T("Export World Model Object..."), wxEmptyString, newfilename, _T("Ogre XML (*.mesh.xml)|*.mesh.xml"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			if (dialog.ShowModal()==wxID_OK) {
+				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+
+				ExportWMOtoOgreXml(canvas->wmo, dialog.GetPath().fn_str());
+			}
+		}
+#endif
 	}
 }
 
