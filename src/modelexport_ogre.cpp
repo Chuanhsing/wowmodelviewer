@@ -46,7 +46,11 @@ public:
         return stream_;
     }
 
+#ifdef _WINDOWS
 	tabbed_ostream& operator<<(tabbed_ostream& (__cdecl *_Pfn)(tabbed_ostream&))
+#else
+	tabbed_ostream& operator<<(tabbed_ostream& (__attribute__((cdecl)) *_Pfn)(tabbed_ostream&))
+#endif
 	{   
 		(*_Pfn)(*(tabbed_ostream *)this);
 		return (*this);
@@ -130,21 +134,21 @@ struct ExportData {
 
 };
 
-typedef uint32			Time;
-typedef map<Time, int>	Timeline;
+typedef uint32			TimeT;
+typedef map<TimeT, int>	Timeline;
 
 static const int KEY_TRANSLATE	= 1;
 static const int KEY_ROTATE		= 2;
 static const int KEY_SCALE		= 4;
 
-static void WriteMesh(const ExportData &data, const char *filename);
-static void WriteMaterial(const ExportData &data, const char *filename);
-static void WriteSkeleton(const ExportData &data, const char *filename);
+static void WriteMesh(const ExportData &data, wxString filename);
+static void WriteMaterial(const ExportData &data, wxString filename);
+static void WriteSkeleton(const ExportData &data, wxString filename);
 
 void ExportM2toOgreXml(Model *m, const char *fn, bool init) {
 	assert( m && fn );
 
-	wxString meshName(fn);
+	wxString meshName(fn, wxConvUTF8);
 	wxString baseName = (meshName.Right(9).CmpNoCase(_T(".mesh.xml")) == 0) ? (meshName.Left(meshName.Length() - 9)) : meshName;
 	wxString matName = baseName + _T(".material");
 	wxString sktName = baseName + _T(".skeleton.xml");
@@ -161,10 +165,10 @@ void ExportWMOtoOgreXml(WMO *wmo, const char *fn) {
 	assert( wmo && fn);
 }
 
-static void updateTimeline(Timeline &timeline, vector<Time> &times, int keyMask) {
+static void updateTimeline(Timeline &timeline, vector<TimeT> &times, int keyMask) {
 	size_t numTimes = times.size();
 	for (size_t n = 0; n < numTimes; n++) {
-		Time time = times[n];
+		TimeT time = times[n];
 		Timeline::iterator it = timeline.find(time);
 		if (it != timeline.end()) {
 			it->second |= keyMask;
@@ -180,8 +184,8 @@ void write(ofstream &f, const T &t) {
 	f.write((char *)(&t), sizeof(T));
 }
 
-static void WriteMesh(const ExportData &data, const char *filename) {
-	ofstream f(filename, ios::trunc);
+static void WriteMesh(const ExportData &data, wxString filename) {
+	ofstream f(filename.mb_str(), ios::trunc);
 	if (!f.good())
 		return;
 
@@ -226,7 +230,7 @@ static void WriteMesh(const ExportData &data, const char *filename) {
 	}
 	s << lt << "</submeshes>" << endl;
 
-	wxString sktName = data.baseName.AfterLast('\\') + ".skeleton";
+	wxString sktName = data.baseName.AfterLast('\\') + _T(".skeleton");
 	s << "<skeletonlink name=\"" << sktName << "\" />" << endl;
 
 	s << "<boneassignments>" << endl;
@@ -246,8 +250,8 @@ static void WriteMesh(const ExportData &data, const char *filename) {
 	f.close();
 }
 
-static void WriteMaterial(const ExportData &data, const char *filename) {
-	ofstream f(filename, ios::trunc);
+static void WriteMaterial(const ExportData &data, wxString filename) {
+	ofstream f(filename.mb_str(), ios::trunc);
 	if (!f.good())
 		return;
 
@@ -268,9 +272,9 @@ static void WriteMaterial(const ExportData &data, const char *filename) {
 			s << "texture_unit" << endl;
 			s << "{" << endl;
 			s << rt;
-			wxString texName = GetM2TextureName(data.model, data.fn, p, n) + ".tga";
+			wxString texName = GetM2TextureName(data.model, data.fn, p, n) + _T(".tga");
 			s << "texture " << texName << " -1" << endl;
-			SaveTexture(data.baseName.BeforeLast('\\') + "\\" + texName);
+			SaveTexture(data.baseName.BeforeLast('\\') + _T("\\") + texName);
 			s << lt << "}" << endl;
 			s << lt << "}" << endl;
 			s << lt << "}" << endl;
@@ -281,8 +285,8 @@ static void WriteMaterial(const ExportData &data, const char *filename) {
 	f.close();
 }
 
-static void WriteSkeleton(const ExportData &data, const char *filename) {
-	ofstream f(filename, ios::trunc);
+static void WriteSkeleton(const ExportData &data, wxString filename) {
+	ofstream f(filename.mb_str(), ios::trunc);
 	if (!f.good())
 		return;
 
@@ -339,7 +343,7 @@ static void WriteSkeleton(const ExportData &data, const char *filename) {
 			}
 			else {
 				it->second++;
-				name += wxString::Format("%i", it->second);
+				name += wxString::Format(_T("%i"), it->second);
 			}
 			// TODO: if GlobalSequence used, animation.length must be GlobalSequence[bone.seq] time, not animation.length time
 			s << "<animation name=\"" << name << "\" length=\"" << ((anim.timeEnd - anim.timeStart) / 1000.0f) << "\">" << endl;
