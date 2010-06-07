@@ -551,6 +551,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\modelexport_ogre.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\modelexportoptions.cpp"
 				>
 			</File>
