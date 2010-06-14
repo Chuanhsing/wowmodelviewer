@@ -22,11 +22,29 @@ END_EVENT_TABLE()
 enum FilterModes {
 	FILE_FILTER_MODEL=0,
 	FILE_FILTER_WMO,
-	FILE_FILTER_SOUND,
+	FILE_FILTER_ADT,
+	FILE_FILTER_WAV,
+	FILE_FILTER_MP3,
 	FILE_FILTER_IMAGE,
-	FILE_FILTER_ADT
+	FILE_FILTER_BLS,
+	FILE_FILTER_DBC,
+	FILE_FILTER_LUA,
+	FILE_FILTER_XML,
+
+	FILE_FILTER_MAX
 };
 
+/*
+All suffixs in MPQ:
+.adt .anim .blob .BLP .bls .bundle .cfg .css .db .dbc .DELETE .dll .error .exe
+.gif .html .icns .ini .jpg .js .log .lua .M2 .mp3 .mpq .nib .not .pdf .plist .png
+.rsrc .sbt .SIG .skin .test .tiff .toc .trs .TTF .txt .url .uvw .wav .wdl .wdt
+.wfx .what .wmo .wtf .xib .xml .xsd .zmp 
+*/
+static wxString content;
+static wxString filterString;
+static wxString filterStrings[] = {_T("m2"), _T("wmo"), _T("adt"), _T("wav"), _T("mp3"), _T("blp"), _T("bls"), _T("dbc"), _T("lua"), _T("xml")};
+static wxString chos[] = {_T("Models"), _T("WMOs"), _T("ADTs"), _T("WAVs"), _T("MP3s"), _T("Images"), _T("Shaders"), _T("DBCs"), _T("LUAs"), _T("XMLs")};
 
 FileControl::FileControl(wxWindow* parent, wxWindowID id)
 {
@@ -42,7 +60,6 @@ FileControl::FileControl(wxWindow* parent, wxWindowID id)
 		txtContent = new wxTextCtrl(this, ID_FILELIST_CONTENT, wxEmptyString, wxPoint(10, 10), wxSize(110, 20), wxTE_PROCESS_ENTER, wxDefaultValidator);
 		btnSearch = new wxButton(this, ID_FILELIST_SEARCH, _("Clear"), wxPoint(120, 10), wxSize(46,20));
 		fileTree = new wxTreeCtrl(this, ID_FILELIST, wxPoint(0, 35), wxSize(250,600), wxTR_HIDE_ROOT|wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_FULL_ROW_HIGHLIGHT|wxTR_NO_LINES);
-		wxString chos[] = {_T("Models"), _T("WMOs"), _T("Sounds"), _T("Images"), _T("ADTs")};
 		choFilter = new wxChoice(this, ID_FILELIST_FILTER, wxPoint(10, 645), wxSize(110, 10), WXSIZEOF(chos), chos);
 		choFilter->SetSelection(filterMode);
 #ifdef	PLAY_MUSIC
@@ -63,9 +80,7 @@ FileControl::~FileControl()
 	choFilter->Destroy();
 }
 
-wxString content;
-
-bool filterModelsSearch(std::string s)
+bool filterSearch(std::string s)
 {
 	const size_t len = s.length();
 	if (len < 4) 
@@ -73,71 +88,7 @@ bool filterModelsSearch(std::string s)
 
 	wxString temp(s.c_str(), wxConvUTF8);
 	temp.MakeLower();
-	if (!temp.EndsWith(wxT("m2")))
-		return false;
-	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
-		return false;
-
-	return true;
-}
-
-bool filterWMOsSearch(std::string s)
-{
-	const size_t len = s.length();
-	if (len < 4) 
-		return false;
-
-	wxString temp(s.c_str(), wxConvUTF8);
-	temp.MakeLower();
-	if (!temp.EndsWith(wxT("wmo")))
-		return false;
-	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
-		return false;
-
-	return true;
-}
-
-bool filterSoundsSearch(std::string s)
-{
-	const size_t len = s.length();
-	if (len < 4) 
-		return false;
-
-	wxString temp(s.c_str(), wxConvUTF8);
-	temp.MakeLower();
-	if (!temp.EndsWith(wxT("wav")) && !temp.EndsWith(wxT("mp3")))
-		return false;
-	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
-		return false;
-
-	return true;
-}
-
-bool filterGraphicsSearch(std::string s)
-{
-	const size_t len = s.length();
-	if (len < 4) 
-		return false;
-
-	wxString temp(s.c_str(), wxConvUTF8);
-	temp.MakeLower();
-	if (!temp.EndsWith(wxT("blp")))
-		return false;
-	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
-		return false;
-
-	return true;
-}
-
-bool filterADTsSearch(std::string s)
-{
-	const size_t len = s.length();
-	if (len < 4) 
-		return false;
-
-	wxString temp(s.c_str(), wxConvUTF8);
-	temp.MakeLower();
-	if (!temp.EndsWith(wxT("adt")))
+	if (!temp.EndsWith(filterString))
 		return false;
 	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
 		return false;
@@ -154,16 +105,8 @@ void FileControl::Init(ModelViewer* mv)
 	// and puts them into an array to be processed into out file tree
 	content = txtContent->GetValue().MakeLower().Trim();
 
-	if (filterMode == FILE_FILTER_MODEL)
-		getFileLists(filelist, filterModelsSearch);
-	else if (filterMode == FILE_FILTER_WMO)
-		getFileLists(filelist, filterWMOsSearch);
-	else if (filterMode == FILE_FILTER_SOUND)
-		getFileLists(filelist, filterSoundsSearch);
-	else if (filterMode == FILE_FILTER_IMAGE)
-		getFileLists(filelist, filterGraphicsSearch);
-	else if (filterMode == FILE_FILTER_ADT)
-		getFileLists(filelist, filterADTsSearch);
+	filterString = filterStrings[filterMode];
+	getFileLists(filelist, filterSearch);
 
 	// Put all the viewable files into our File Tree.
 	TreeStack stack;
