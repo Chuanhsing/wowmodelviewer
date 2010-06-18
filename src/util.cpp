@@ -44,7 +44,7 @@ long interfaceID = -1;
 int ssCounter = 100; // ScreenShot Counter
 int imgFormat = 0;
 
-wxString locales[8] = {_T("enUS"), _T("koKR"), _T("frFR"), _T("deDE"), _T("zhCN"),  _T("zhTW"),  _T("esES"),  _T("ruRU")};
+wxString locales[] = {_T("enUS"), _T("koKR"), _T("frFR"), _T("deDE"), _T("zhCN"),  _T("zhTW"),  _T("esES"),  _T("ruRU")};
 
 /*
 wxString langCSConv[] =
@@ -61,13 +61,14 @@ wxString langCSConv[] =
 wxString CSConvStr;
 */
 
+// Convert UTF8 string to local string
 wxString CSConv(wxString str)
 {
 	if (langID <= 0) // || langCSConv[langID].IsEmpty())
 		return str;
 	return wxConvLocal.cWC2WX(wxConvUTF8.cMB2WC(str.mb_str())); // from private.h
-	//CSConvStr = wxCSConv(langCSConv[langID]).cWC2WX(wxConvUTF8.cMB2WC(str));
-	//return CSConvStr;
+	// old way
+	//return wxCSConv(langCSConv[langID]).cWC2WX(wxConvUTF8.cMB2WC(str));
 }
 
 float frand()
@@ -165,7 +166,9 @@ void getGamePath()
 	unsigned char path[1024];
 	memset(path, 0, sizeof(path));
 
-	wxString sNames[5];
+	wxString sNames[3];
+	int sTypes[3];
+
 	int nNames = 0;
 	int sName = 0;
 
@@ -181,7 +184,6 @@ void getGamePath()
 		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\Beta")
 #endif
 		 };
-	int sTypes[3];
 
 	for (uint32 i=0; i<WXSIZEOF(regpaths); i++) {
 		l = RegOpenKeyEx((HKEY)HKEY_LOCAL_MACHINE, regpaths[i], 0, KEY_QUERY_VALUE, &key);
@@ -217,7 +219,7 @@ void getGamePath()
 		gamePath = _T("C:")+SLASH;
 		if (!wxFileExists(gamePath + SLASH + _T("data") + SLASH + _T("common.MPQ")) && !gamePath.empty()){
 			gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"),gamePath);
-			gamePath.append(SLASH+_T("Data")+SLASH);
+			gamePath.Append(_T("\\Data\\"));
 		}
 	}
 #elif _MAC // Mac OS X

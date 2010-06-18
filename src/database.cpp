@@ -956,8 +956,6 @@ Column 4, wtf are .mdl files? they're from warcraft 3?
 col 5 and 6? figure out what they're for.
 Column5 is either Spell Type,  or Spell slot or something similar
 */
-
-
 SpellEffectsDB::Record SpellEffectsDB::getByName(const wxString name)
 {
 	for(Iterator i=begin(); i!=end(); ++i)

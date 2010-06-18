@@ -47,11 +47,7 @@ Settings_Page1::Settings_Page1(wxWindow* parent, wxWindowID id)
 	chkbox[CHECK_RANDOMSKIN] = new wxCheckBox(this, ID_SETTINGS_RANDOMSKIN, _("Random Skins"), wxPoint(150,50), wxDefaultSize, 0);
 	chkbox[CHECK_HIDEHELMET] = new wxCheckBox(this, ID_SETTINGS_HIDEHELMET, _("Hide Helmet"), wxPoint(150,75), wxDefaultSize, 0);
 	chkbox[CHECK_KNIGHTEYEGLOW] = new wxCheckBox(this, ID_SETTINGS_KNIGHTEYEGLOW, _("Eye Glow"), wxPoint(150,100), wxDefaultSize, 0);
-	//chkbox[CHECK_RANDOMCHAR] = new wxCheckBox(this, ID_SETTINGS_RANDOMCHAR, _("Random Characters"), wxPoint(5,50), wxDefaultSize, 0);
-	//chkbox[CHECK_SAVELAYOUT] = new wxCheckBox(this, ID_SETTINGS_SAVELAYOUT, _("Save Layout on Exit"), wxPoint(150,100), wxDefaultSize, 0);
-	//chkbox[CHECK_INITSTARTUP] = new wxCheckBox(this, ID_SETTINGS_INITSTARTUP, _("Init on Startup"), wxPoint(5,100), wxDefaultSize, 0);
 
-	
 	wxStaticText *lbl2 = new wxStaticText(this, wxID_ANY, _("MPQ Archives order and files to load"), wxPoint(0,140), wxDefaultSize, 0);
 	mpqList = new wxListBox(this, wxID_ANY, wxPoint(0,160), wxSize(380, 190), mpqArchives, wxLB_SINGLE|wxLB_HSCROLL, wxDefaultValidator);
 	wxButton *btn1 = new wxButton(this, ID_SETTINGS_UP, _("Move Up"), wxPoint(5,355), wxSize(70,25), 0);
@@ -120,16 +116,10 @@ void Settings_Page1::OnCheck(wxCommandEvent &event)
 {
 	int id = event.GetId();
 
-	if (id==ID_SETTINGS_RANDOMCHAR) {
-		
-	} else if (id==ID_SETTINGS_RANDOMSKIN) {
+	if (id==ID_SETTINGS_RANDOMSKIN) {
 		useRandomLooks = event.IsChecked();
 	} else if (id==ID_SETTINGS_LOCALFILES) {
 		useLocalFiles = event.IsChecked();
-	} else if (id==ID_SETTINGS_INITSTARTUP) {
-
-	} else if (id==ID_SETTINGS_SAVELAYOUT) {
-
 	} else if (id==ID_SETTINGS_HIDEHELMET) {
 		bHideHelmet = event.IsChecked();
 	} else if (id==ID_SETTINGS_SHOWPARTICLE) {

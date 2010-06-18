@@ -613,9 +613,11 @@ void ModelCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 		if (wmo)
 			RenderWMO();
 		else if (model)
-			Render();
+			RenderModel();
 		else if (adt)
 			RenderADT();
+		else
+			Render();
 	}
 }
 
@@ -1000,7 +1002,22 @@ inline void ModelCanvas::RenderBackground()
 	glMatrixMode(GL_MODELVIEW);
 }
 
-inline void ModelCanvas::Render()
+void ModelCanvas::Render()
+{
+	// Sets the "clear" colour.  Without this you get the "ghosting" effecting 
+	// as the buffer doesn't get set/cleared.
+	if (video.useMasking)
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	else
+		glClearColor(vecBGColor.x, vecBGColor.y, vecBGColor.z, 0.0f);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+	InitView();
+
+	SwapBuffers();
+}
+
+inline void ModelCanvas::RenderModel()
 {
 	// Sets the "clear" colour.  Without this you get the "ghosting" effecting 
 	// as the buffer doesn't get set/cleared.

@@ -63,7 +63,6 @@ ModelExportOptions_General::ModelExportOptions_General(wxWindow* parent, wxWindo
 
 	chkbox[MEO_CHECK_PRESERVE_DIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_PRESERVE_DIR, _T("Preserve Directory Structure"), wxPoint(5,5), wxDefaultSize, 0);
 	chkbox[MEO_CHECK_USE_WMV_POSROT] = new wxCheckBox(this, ID_EXPORTOPTIONS_USE_WMV_POSROT, _T("Use Position and Rotation from WMV"), wxPoint(5,22), wxDefaultSize, 0);
-	
 }
 
 

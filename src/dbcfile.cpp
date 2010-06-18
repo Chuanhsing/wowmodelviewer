@@ -40,6 +40,7 @@ bool DBCFile::open()
 	fieldCount = nb;
 	stringSize = ss;
 	//assert(fieldCount*4 == recordSize);
+	// not always true, but it works fine till now
 	assert(fieldCount*4 >= recordSize);
 
 	data = new unsigned char[recordSize*recordCount+stringSize];

@@ -233,7 +233,7 @@ public:
 	static const size_t femaleModeID = 5;	// unit
 	static const size_t ShortName = 6;		// string, Name, represented by only 2 chars
 	static const size_t Name = 11;			// string, Model name, 10048 to 11
-	static const size_t FullName = 14;		// string, localization, Name with spaces & such.
+	//static const size_t FullName = 14;		// string, localization, Name with spaces & such.
 	static const size_t GeoType1 = 65;		// string, Facial Feature Type for Men
 	//static const size_t GeoType2 = 66;		// string, Facial Feature Type for Women
 	//static const size_t GeoType3 = 67;		// string, Changes Hair to this value. (IE: Hair for everyone, but Horns for Tauren)
@@ -586,8 +586,8 @@ public:
 	/// Fields
 	static const size_t ID = 0;				// uint
 	static const size_t EffectName = 1;		// string
-	static const size_t ModelName = 2;		// string
-	static const size_t SpellType = 3;		// uint
+	//static const size_t ModelName = 2;		// string
+	//static const size_t SpellType = 3;		// uint
 	//static const size_t UnknownValue2 = 4;	// uint
 
 	Record getById(unsigned int id);

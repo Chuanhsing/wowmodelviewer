@@ -175,6 +175,7 @@ public:
 	// Main render routines which call the sub routines
 	void Render();
 	void RenderToTexture();
+	void RenderModel();
 	void RenderWMO();
 	void RenderADT();
 	void RenderToBuffer();
