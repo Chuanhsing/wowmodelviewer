@@ -163,11 +163,11 @@ void FileControl::Init(ModelViewer* mv)
 				
 				//if (colour == true) {
 					if ((*it).col == 0)
-						fileTree->SetItemTextColour(newItem.first, *wxBLACK);
+						fileTree->SetItemTextColour(newItem.first, *wxBLACK);				// patch.mpq
 					else if ((*it).col == 1)
-						fileTree->SetItemTextColour(newItem.first, *wxBLUE);
+						fileTree->SetItemTextColour(newItem.first, *wxBLUE);				// patch-2.mpq
 					else if ((*it).col == 2)
-						fileTree->SetItemTextColour(newItem.first, *wxRED);
+						fileTree->SetItemTextColour(newItem.first, *wxRED);					// patch-3.mpq
 					else if ((*it).col == 3)
 						fileTree->SetItemTextColour(newItem.first, wxColour(0,170,0));		// Green
 					else if ((*it).col == 4)
@@ -176,6 +176,8 @@ void FileControl::Init(ModelViewer* mv)
 						fileTree->SetItemTextColour(newItem.first, wxColour(35,130,179));	// Frozen Blue
 					else if ((*it).col == 6)
 						fileTree->SetItemTextColour(newItem.first, wxColour(233,109,17));	// Destruction Orange
+					else if ((*it).col == 7)
+						fileTree->SetItemTextColour(newItem.first, *wxCYAN);				// patch-4.mpq
 					else
 						fileTree->SetItemTextColour(newItem.first, *wxLIGHT_GREY);
 
@@ -192,11 +194,11 @@ void FileControl::Init(ModelViewer* mv)
 
 		item = fileTree->AppendItem(stack[stack.size()-1].first, wxString(fileName.c_str(), *wxConvCurrent), -1, -1, new FileTreeData(str));
 		if ((*it).col == 0)
-			fileTree->SetItemTextColour(item, *wxBLACK);
+			fileTree->SetItemTextColour(item, *wxBLACK);				// patch.mpq
 		else if ((*it).col == 1)
-			fileTree->SetItemTextColour(item, *wxBLUE);
+			fileTree->SetItemTextColour(item, *wxBLUE);					// patch-2.mpq
 		else if ((*it).col == 2)
-			fileTree->SetItemTextColour(item, *wxRED);
+			fileTree->SetItemTextColour(item, *wxRED);					// patch-3.mpq
 		else if ((*it).col == 3)
 			fileTree->SetItemTextColour(item, wxColour(0,170,0));		// Green
 		else if ((*it).col == 4)
@@ -205,6 +207,8 @@ void FileControl::Init(ModelViewer* mv)
 			fileTree->SetItemTextColour(item, wxColour(35,130,179));	// Frozen Blue
 		else if ((*it).col == 6)
 			fileTree->SetItemTextColour(item, wxColour(233,109,17));	// Destruction Orange
+		else if ((*it).col == 7)
+			fileTree->SetItemTextColour(item, *wxCYAN);				// patch-4.mpq
 		else
 			fileTree->SetItemTextColour(item, *wxLIGHT_GREY);
 

@@ -280,6 +280,8 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 				col = 5; // Frozen Blue
 			else if (temp.Find(_T("expansion3.mpq")) > -1)
 				col = 6; // Destruction Orange
+			else if (temp.Find(_T("patch-4.mpq")) > -1)
+				col = 7; // Cyan
 
 			if (size > 0 ) {
 				unsigned char *buffer = new unsigned char[size];
