@@ -1014,6 +1014,17 @@ void ModelCanvas::Render()
 
 	InitView();
 
+	// If masking isn't enabled
+	if (!video.useMasking) {
+		// Draw the background image if any
+		if(drawBackground)
+			RenderBackground();
+
+		// render the skybox, if any
+		if (drawSky && skyModel && sky->model)
+			RenderSkybox();
+	}
+
 	SwapBuffers();
 }
 

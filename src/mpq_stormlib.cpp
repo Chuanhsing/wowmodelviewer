@@ -60,29 +60,35 @@ MPQFile::openFile(const char* filename)
 	pointer = 0;
 	size = 0;
 	if( useLocalFiles ) {
-		wxString fn = gamePath;
-		fn.Append(wxString(filename, wxConvUTF8));
+		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
+		wxString fn2 = fn1;
+		fn1.Append(wxString(filename, wxConvUTF8));
+		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
 
-		if (wxFile::Exists(fn)) {
-			// success
-			wxFile file;
-			// if successfully opened
-			if (file.Open(fn, wxFile::read)) {
-				size = file.Length();
-				if (size > 0) {
-					buffer = new unsigned char[size];
-					// if successfully read data
-					if (file.Read(buffer, size) > 0) {
-						eof = false;
-						file.Close();
-						return;
-					} else {
-						wxDELETEA(buffer);
-						eof = true;
-						size = 0;
+		wxString fns[] = { fn1, fn2 };
+		for(int i=0; i<WXSIZEOF(fns); i++) {
+			wxString fn = fns[i];
+			if (wxFile::Exists(fn)) {
+				// success
+				wxFile file;
+				// if successfully opened
+				if (file.Open(fn, wxFile::read)) {
+					size = file.Length();
+					if (size > 0) {
+						buffer = new unsigned char[size];
+						// if successfully read data
+						if (file.Read(buffer, size) > 0) {
+							eof = false;
+							file.Close();
+							return;
+						} else {
+							wxDELETEA(buffer);
+							eof = true;
+							size = 0;
+						}
 					}
+					file.Close();
 				}
-				file.Close();
 			}
 		}
 	}
@@ -135,10 +141,17 @@ MPQFile::~MPQFile()
 bool MPQFile::exists(const char* filename)
 {
 	if( useLocalFiles ) {
-		wxString fn = gamePath;
-		fn.Append(wxString(filename, wxConvUTF8));
-		if (wxFile::Exists(fn))
-			return true;
+		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
+		wxString fn2 = fn1;
+		fn1.Append(wxString(filename, wxConvUTF8));
+		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
+
+		wxString fns[] = { fn1, fn2 };
+		for(int i=0; i<WXSIZEOF(fns); i++) {
+			wxString fn = fns[i];
+			if (wxFile::Exists(fn))
+				return true;
+		}
 	}
 
 	for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end();++i)
@@ -209,11 +222,18 @@ size_t MPQFile::getSize()
 int MPQFile::getSize(const char* filename)
 {
 	if( useLocalFiles ) {
-		wxString fn = gamePath;
-		fn.Append(wxString(filename, wxConvUTF8));
-		if (wxFile::Exists(fn)) {
-			wxFile file(fn);
-			return file.Length();
+		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
+		wxString fn2 = fn1;
+		fn1.Append(wxString(filename, wxConvUTF8));
+		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
+
+		wxString fns[] = { fn1, fn2 };
+		for(int i=0; i<WXSIZEOF(fns); i++) {
+			wxString fn = fns[i];
+			if (wxFile::Exists(fn)) {
+				wxFile file(fn);
+				return file.Length();
+			}
 		}
 	}
 

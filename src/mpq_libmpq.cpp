@@ -58,7 +58,7 @@ MPQFile::openFile(const char* filename)
 	pointer = 0;
 	size = 0;
 	if( useLocalFiles ) {
-		wxString fn = gamePath;
+		wxString fn = wxGetCwd()+SLASH+_T("Import")+SLASH;
 		fn.Append(wxString(filename, wxConvUTF8));
 
 		if (wxFile::Exists(fn)) {
@@ -128,7 +128,7 @@ MPQFile::~MPQFile()
 bool MPQFile::exists(const char* filename)
 {
 	if( useLocalFiles ) {
-		wxString fn = gamePath;
+		wxString fn = wxGetCwd()+SLASH+_T("Import")+SLASH;
 		fn.Append(wxString(filename, wxConvUTF8));
 		if (wxFile::Exists(fn))
 			return true;
@@ -202,7 +202,7 @@ size_t MPQFile::getSize()
 int MPQFile::getSize(const char* filename)
 {
 	if( useLocalFiles ) {
-		wxString fn = gamePath;
+		wxString fn = wxGetCwd()+SLASH+_T("Import")+SLASH;
 		fn.Append(wxString(filename, wxConvUTF8));
 		if (wxFile::Exists(fn)) {
 			wxFile file(fn);
