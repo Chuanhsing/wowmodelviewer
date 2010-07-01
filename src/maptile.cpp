@@ -403,7 +403,7 @@ MapTile::MapTile(wxString filename): topnode(0,0,16), nWMO(0), nMDX(0)
 			f.read(buf, size);
 			buf[size] = 0;
 			char *p=buf;
-			int t=0;
+			//int t=0;
 			while (p<buf+size) {
 				string texpath(p);
 				p+=strlen(p)+1;
@@ -666,7 +666,7 @@ MapTile::MapTile(wxString filename): topnode(0,0,16), nWMO(0), nMDX(0)
 					if( mh2oi->ofsHeigthAlpha != 0 && mh2oi->flags == 2 && mh2oi->type == 2 )
 					{
 						unsigned char* pUnknowns = (unsigned char*)f.getPointer()+mh2oi->ofsHeigthAlpha;
-						for( unsigned g = 0; g < (mh2oi->w + 1) * (mh2oi->h + 1); g++ )
+						for( int g = 0; g < (mh2oi->w + 1) * (mh2oi->h + 1); g++ )
 						{
 							waterLayer.alphas.push_back( pUnknowns[g] );
 						}
@@ -675,7 +675,7 @@ MapTile::MapTile(wxString filename): topnode(0,0,16), nWMO(0), nMDX(0)
 					{
 						float* pHeights = (float*)(f.getPointer()+mh2oi->ofsHeigthAlpha);
 						unsigned char* pUnknowns = (unsigned char*)f.getPointer()+mh2oi->ofsHeigthAlpha + sizeof( float ) * (mh2oi->w + 1) * (mh2oi->h + 1);
-						for( unsigned g = 0; g < (mh2oi->w + 1) * (mh2oi->h + 1); g++ )
+						for( int g = 0; g < (mh2oi->w + 1) * (mh2oi->h + 1); g++ )
 						{
 							waterLayer.heights.push_back( pHeights[g] );
 							waterLayer.alphas.push_back( pUnknowns[g] );
@@ -685,7 +685,7 @@ MapTile::MapTile(wxString filename): topnode(0,0,16), nWMO(0), nMDX(0)
 					{
 						float* pHeights = (float*)(f.getPointer()+mh2oi->ofsHeigthAlpha);
 						//unsigned char* pUnknowns = (unsigned char*)f.getPointer()+mh2oi->ofsHeigthAlpha + sizeof( float ) * (mh2oi->w + 1) * (mh2oi->h + 1);
-						for( unsigned g = 0; g < (mh2oi->w + 1) * (mh2oi->h + 1); g++ )
+						for( int g = 0; g < (mh2oi->w + 1) * (mh2oi->h + 1); g++ )
 						{
 							waterLayer.heights.push_back( pHeights[g] );
 							//waterLayer.alphas.push_back( pUnknowns[g] );
@@ -974,13 +974,12 @@ Flag		Meaning
 0x40		MCCV chunk available
 0x8000		Unknown, but heavily used in TBC.
 */
-void MapChunk::initTextures(char *basename, int first, int last)
+void MapChunk::initTextures(std::string basename, int first, int last)
 {
 	char buf[256];
 	for (int i=first; i<=last; i++) {
-		sprintf(buf, "%s.%d.blp", basename, i);
+		sprintf(buf, "%s.%d.blp", basename.c_str(), i);
 		wTextures.push_back(texturemanager.add(buf));
-		//wTextures.push_back(video.textures.add(buf));
 	}
 }
 
@@ -1055,7 +1054,7 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 	*/
 	struct MCLY mcly[4];
 	memset(mcly, 0, sizeof(struct MCLY)*4);
-	size_t comp_sizes[4] = { 0, 0, 0, 0 };
+	//size_t comp_sizes[4] = { 0, 0, 0, 0 };
 	hasholes = (holes != 0);
 
 	/*
@@ -1682,14 +1681,14 @@ void MapChunk::drawPass(int anim)
 		glPushMatrix();
 
 		// note: this is ad hoc and probably completely wrong
-		int spd = (anim & 0x08) | ((anim & 0x10) >> 2) | ((anim & 0x20) >> 4) | ((anim & 0x40) >> 6);
+		//int spd = (anim & 0x08) | ((anim & 0x10) >> 2) | ((anim & 0x20) >> 4) | ((anim & 0x40) >> 6);
 		int dir = anim & 0x07;
 		const float texanimxtab[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 		const float texanimytab[8] = {1, 1, 0, -1, -1, -1, 0, 1};
 		float fdx = -texanimxtab[dir], fdy = texanimytab[dir];
 
-		int detail_size = 1;
-		int animspd = (int)(200.0f * detail_size);
+		//int detail_size = 1;
+		//int animspd = (int)(200.0f * detail_size);
 		//float f = ( ((int)(gWorld->animtime*(spd/15.0f))) % animspd) / (float)animspd;
 		int f = 0; // TODO
 		glTranslatef(f*fdx,f*fdy,0);
@@ -1929,7 +1928,7 @@ void MapChunk::drawWater()
 
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	
-	GLfloat col[2][4] = { { 0.f, 0.f, 1.f, 1.0f, }, { 0.f, 0.f, 1.f, 1.0f, }, };
+	//GLfloat col[2][4] = { { 0.f, 0.f, 1.f, 1.0f, }, { 0.f, 0.f, 1.f, 1.0f, }, };
 
 	const float wr = 1.0f;
 	for( unsigned asd = 0; asd < 2; asd++ )

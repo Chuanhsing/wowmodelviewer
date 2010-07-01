@@ -2,15 +2,15 @@
 #define LIGHTCONTROL_H
 
 // wxWidgets
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include <wx/wx.h>
 #endif
 
-#include "wx/colordlg.h"
+#include <wx/colordlg.h>
 // --
 
 // OpenGL headers
@@ -56,7 +56,7 @@ class LightControl: public wxWindow
 	//GUI objects
 	//wxStaticText *lblCol
 	wxStaticText *lblDiff, *lblAmb, *lblSpec;
-	wxStaticText *lblPos, *lblIntensity;
+	wxStaticText *lblPos, *lblIntensity, *lblTar, *lblAlpha;
 	wxTextCtrl *txtPosX, *txtPosY, *txtPosZ;
 	wxTextCtrl *txtTarX, *txtTarY, *txtTarZ;
 	wxCheckBox *enabled, *relative;

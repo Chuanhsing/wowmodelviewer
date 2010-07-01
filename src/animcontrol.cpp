@@ -1,7 +1,7 @@
 #include "animcontrol.h"
 #include "util.h"
 #include "globalvars.h"
-#include "wx/wx.h"
+#include <wx/wx.h>
 
 IMPLEMENT_CLASS(AnimControl, wxWindow)
 

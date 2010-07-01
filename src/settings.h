@@ -3,15 +3,15 @@
 #define SETTINGS_H
 
 // WX Headers
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include <wx/wx.h>
 #endif
 
-#include "wx/notebook.h"
+#include <wx/notebook.h>
 
 // Custom headers
 #include "util.h"
@@ -26,6 +26,8 @@ class Settings_Page1: public wxWindow
 	wxCheckBox *chkbox[NUM_SETTINGS1_CHECK];
 	wxListBox *mpqList;
 	wxTextCtrl *txtPath;
+	wxStaticText *lbl2;
+	wxButton *btn1, *btn2, *btn3, *btn4, *btn5;
 
 public:
 

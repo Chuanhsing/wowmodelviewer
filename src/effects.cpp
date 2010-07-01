@@ -199,8 +199,8 @@ void EnchantsDialog::InitObjects()
 	text1 = new wxStaticText(this, -1, _T("Enchantments:"), wxPoint(10, 110), wxDefaultSize);
 	effectsListbox = new wxListBox(this, -1, wxPoint(10,130), wxSize(180,160), choices, wxLB_SINGLE);
 	
-	wxButton *btnOK = new wxButton(this, ID_ENCHANTSOK, _("OK"), wxPoint(90,295), wxSize(50,22));
-	wxButton *btnCancel = new wxButton(this, ID_ENCHANTSCANCEL, _("Cancel"), wxPoint(140,295), wxSize(50,22));
+	btnOK = new wxButton(this, ID_ENCHANTSOK, _("OK"), wxPoint(90,295), wxSize(50,22));
+	btnCancel = new wxButton(this, ID_ENCHANTSCANCEL, _("Cancel"), wxPoint(140,295), wxSize(50,22));
 
 	Initiated = true;
 }

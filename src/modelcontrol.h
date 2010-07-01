@@ -1,12 +1,12 @@
 #ifndef MODELCONTROL_H
 #define MODELCONTROL_H
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include <wx/wx.h>
 #endif
 
 #include "model.h"
@@ -38,7 +38,7 @@ class ModelControl: public wxWindow
 	wxSlider *alpha, *scale;
 	wxCheckBox *bones, *box, *render, *wireframe, *texture, *particles;
 	wxCheckListBox *geosets;
-	wxStaticText *lblGeosets, *lblLod, *lblScale, *lblAlpha;
+	wxStaticText *lblGeosets, *lblLod, *lblScale, *lblAlpha, *lblXYZ;
 	wxTextCtrl *txtX, *txtY, *txtZ;
 
 	// List of models in the scene.

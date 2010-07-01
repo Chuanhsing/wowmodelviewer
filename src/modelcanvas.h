@@ -1,12 +1,12 @@
 #ifndef MODELCANVAS_H
 #define MODELCANVAS_H
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include <wx/wx.h>
 #endif
 
 // wx
@@ -19,11 +19,9 @@
     #include <GL/glew.h>
     #include <GL/glxew.h>
 #endif
-#include "wx/glcanvas.h"
-
-
-#include "wx/window.h"
-#include "wx/treectrl.h"
+#include <wx/glcanvas.h>
+#include <wx/window.h>
+#include <wx/treectrl.h>
 
 // stl
 #include <string>

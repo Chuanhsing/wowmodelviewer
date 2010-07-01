@@ -27,7 +27,7 @@ IMPLEMENT_APP(WowModelViewApp)
 bool WowModelViewApp::OnInit()
 {
 	frame = NULL;
-	FILE *LogFile = NULL;
+	LogFile = NULL;
 
 
 	// Error & Logging settings

@@ -251,7 +251,7 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 		useReplaceTextures[i] = false;
 	}
 
-	for (int i=0; i<ATT_MAX; i++) 
+	for (unsigned int i=0; i<ATT_MAX; i++) 
 		attLookup[i] = -1;
 
 	for (int i=0; i<BONE_MAX; i++) 

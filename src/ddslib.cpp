@@ -686,6 +686,7 @@ static int DDSDecompressDXT4( ddsBuffer_t *dds, int width, int height, unsigned 
 DDSDecompressARGB8888()
 decompresses an argb 8888 format texture
 */
+#if 0
 static int DDSDecompressARGB8888( ddsBuffer_t *dds, int width, int height, unsigned char *pixels )
 {
 	int							x, y;
@@ -712,7 +713,7 @@ static int DDSDecompressARGB8888( ddsBuffer_t *dds, int width, int height, unsig
 	/* return ok */
 	return 0;
 }
-
+#endif
 
 
 ///*

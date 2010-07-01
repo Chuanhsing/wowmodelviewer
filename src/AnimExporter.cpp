@@ -36,7 +36,7 @@ CAnimationExporter::CAnimationExporter(wxWindow* parent, wxWindowID id, const wx
 	lblFile = new wxStaticText(this, wxID_ANY, wxEmptyString, wxPoint(10,5), wxSize(320,20));
 	lblCurFrame = new wxStaticText(this, wxID_ANY, _T("Current Frame: 0"), wxPoint(10,25), wxSize(100,20));
 	
-	wxStaticText *lblTotalFrame = new wxStaticText(this, wxID_ANY, _T("Total Frames:"), wxPoint(10,45), wxDefaultSize);
+	lblTotalFrame = new wxStaticText(this, wxID_ANY, _T("Total Frames:"), wxPoint(10,45), wxDefaultSize);
 	txtFrames = new wxTextCtrl(this, ID_GIFTOTALFRAME, wxEmptyString, wxPoint(90,45), wxSize(30,18));
 	
 	cbTrans = new wxCheckBox(this, ID_GIFTRANSPARENT, _T("Transparency"), wxPoint(10,65), wxDefaultSize, 0);
@@ -45,13 +45,13 @@ CAnimationExporter::CAnimationExporter(wxWindow* parent, wxWindowID id, const wx
 	cbDither = new wxCheckBox(this, ID_GIFDIFFUSE, _T("Error Diffusion"), wxPoint(10,85), wxDefaultSize, 0);
 	cbShrink = new wxCheckBox(this, ID_GIFSHRINK, _T("Resize"), wxPoint(130,85), wxDefaultSize, 0);
 
-	wxStaticText *lblSize = new wxStaticText(this, wxID_ANY, _T("Size Dimensions:"), wxPoint(10,105), wxDefaultSize);
+	lblSize = new wxStaticText(this, wxID_ANY, _T("Size Dimensions:"), wxPoint(10,105), wxDefaultSize);
 	txtSizeX = new wxTextCtrl(this, wxID_ANY, _T("0"), wxPoint(100,105), wxSize(40,18));
 	txtSizeX->Enable(false);
 	txtSizeY = new wxTextCtrl(this, wxID_ANY, _T("0"), wxPoint(150,105), wxSize(40,18));
 	txtSizeY->Enable(false);
 
-	wxStaticText *lblDelay = new wxStaticText(this, wxID_ANY, _T("Gif Frame Delay: (1-100)"), wxPoint(10,128), wxDefaultSize);
+	lblDelay = new wxStaticText(this, wxID_ANY, _T("Gif Frame Delay: (1-100)"), wxPoint(10,128), wxDefaultSize);
 	txtDelay = new wxTextCtrl(this, wxID_ANY, _T("5"), wxPoint(140,125), wxSize(30,18));
 	
 	btnStart = new wxButton(this, ID_GIFSTART, _T("Start"), wxPoint(10,155), wxSize(62,26));

@@ -3,6 +3,7 @@
 
 class Liquid;
 
+#include <string>
 #include "video.h"
 #include "mpq.h"
 #include "maptile.h"
@@ -22,7 +23,7 @@ class Liquid {
 	float texRepeats;
 
 	void initGeometry(MPQFile &f);
-	void initTextures(char *basename, int first, int last);
+	void initTextures(std::string basename, int first, int last);
 
 	int type;
 	

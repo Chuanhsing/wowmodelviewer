@@ -172,7 +172,7 @@ void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, 
 void WriteLWSceneLight(ofstream &fs, uint32 &lcount, Vec3D LPos, uint32 Ltype, Vec3D Lcolor, float Lintensity, bool useAtten, float AttenEnd, float defRange = 2.5, wxString prefix = wxEmptyString, uint32 ParentNum = -1)
 {
 	bool isParented = false;
-	if (ParentNum > -1)
+	if (ParentNum >= 0)
 		isParented = true;
 	if (!prefix.IsEmpty())
 		prefix = _T(" "+prefix);
@@ -786,8 +786,8 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 	uint32 RangeEnd = 0;
 
 	uint32 mcount = 0; // Model Count
-	uint32 lcount = 0; // Light Count
-	uint32 bcount = 0; // Bone Count
+	//uint32 lcount = 0; // Light Count
+	//uint32 bcount = 0; // Bone Count
 
 	Vec3D ZeroPos(0,0,0);
 	Vec3D ZeroRot(0,0,0);
@@ -4162,17 +4162,11 @@ void ExportWMOtoLWO2(WMO *m, const char *fn)
 	wxString filename(fn, wxConvUTF8);
 
 	wxString Tags[1];
-	int TagCount = 0;
+	//int TagCount = 0;
 	int LayerNum = 1;
 	std::vector<LWLayer> Layers;
 
-
-
-
-
-
 	WriteLWObject(filename, Tags, LayerNum, Layers);
-
 
 /*
 	uint32 counter=0;

@@ -3,15 +3,15 @@
 #define MODELEXPORTOPTIONS_H
 
 // WX Headers
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include <wx/wx.h>
 #endif
 
-#include "wx/notebook.h"
+#include <wx/notebook.h>
 
 // Custom headers
 #include "util.h"
@@ -64,6 +64,7 @@ class ModelExportOptions_X3D: public wxWindow
     DECLARE_EVENT_TABLE()
 
     wxCheckBox *chkbox[NUM_MEO3_CHECK];
+    wxFlexGridSizer *top;
 
 public:
 

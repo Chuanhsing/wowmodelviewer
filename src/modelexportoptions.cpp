@@ -68,7 +68,7 @@ ModelExportOptions_General::ModelExportOptions_General(wxWindow* parent, wxWindo
 
 void ModelExportOptions_General::OnButton(wxCommandEvent &event)
 {
-	int id = event.GetId();
+	//int id = event.GetId();
 }
 
 void ModelExportOptions_General::OnCheck(wxCommandEvent &event)
@@ -110,10 +110,10 @@ ModelExportOptions_Control::ModelExportOptions_Control(wxWindow* parent, wxWindo
 
 ModelExportOptions_Control::~ModelExportOptions_Control()
 {
-	page1->Destroy();
-	page2->Destroy();
-    page3->Destroy();
-	notebook->Destroy();
+	//page1->Destroy();
+	//page2->Destroy();
+    //page3->Destroy();
+	//notebook->Destroy();
 }
 
 void ModelExportOptions_Control::Open()
@@ -173,7 +173,7 @@ void ModelExportOptions_Lightwave::Update()
 
 void ModelExportOptions_Lightwave::OnButton(wxCommandEvent &event)
 {
-	int id = event.GetId();
+	//int id = event.GetId();
 	
 }
 
@@ -210,7 +210,7 @@ ModelExportOptions_X3D::ModelExportOptions_X3D(wxWindow* parent, wxWindowID id)
         wxLogMessage(_T("GUI Error: ModelExportOptions_X3D"));
         return;
     }
-    wxFlexGridSizer *top = new wxFlexGridSizer(1);
+    top = new wxFlexGridSizer(1);
 
     chkbox[MEO_CHECK_EXPORT_ANIMATION] = new wxCheckBox(this, ID_EXPORTOPTIONS_X3D_EXPORT_ANIMATION, _("Export keyframe animation"), wxPoint(5,5), wxDefaultSize, 0);
     chkbox[MEO_CHECK_CENTER_MODEL] = new wxCheckBox(this, ID_EXPORTOPTIONS_X3D_CENTER_MODEL, _("Add Transform to center model"), wxPoint(160,5), wxDefaultSize, 0);

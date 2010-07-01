@@ -123,12 +123,11 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 		timer.SetOwner(this, ID_TIMER);
 		timer.Start(TIME_STEP);
 
-		wxDisplay *disp = new wxDisplay(0);
-		int bpp = disp->GetCurrentMode().bpp;
-
 		// Initiate our default OpenGL settings
 		wxLogMessage(_T("Initiating OpenGL..."));
 #ifdef _WINDOWS
+		wxDisplay *disp = new wxDisplay(0);
+		int bpp = disp->GetCurrentMode().bpp;
 		video.SetHandle((HWND)this->GetHandle(), bpp);
 #endif
 	}
@@ -581,8 +580,6 @@ void ModelCanvas::InitGL()
 	// Initiate our default OpenGL settings
 	SetCurrent();
 	video.InitGL();
-
-	GLenum err = 0;
 
 	// If no g_modelViewer->lightControl object, exit for now
 	if (!g_modelViewer || !g_modelViewer->lightControl)
@@ -1506,9 +1503,6 @@ inline void ModelCanvas::RenderWMOToBuffer()
 
 void ModelCanvas::RenderToBuffer()
 {
-	GLuint lightID = 0;
-
-	
 	if (!init || !video.supportFBO) {
 		InitGL();
 		g_modelViewer->lightControl->UpdateGL();

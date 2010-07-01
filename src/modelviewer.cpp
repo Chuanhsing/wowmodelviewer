@@ -1405,7 +1405,6 @@ bool ModelViewer::Init()
 		video.SetMode();
 		if (!video.render) // Something bad must of happened - find a new working display mode
 			video.GetAvailableMode();
-	/*
 	} else {
 		wxLogMessage(_T("Error: Failed to find a compatible graphics mode.  Finding first available display mode..."));
 		video.GetAvailableMode(); // Get first available display mode that supports the current desktop colour bitdepth
@@ -1776,7 +1775,7 @@ void ModelViewer::OnEffects(wxCommandEvent &event)
 		// make sure m is a valid pointer to a model
 		if (m) {
 			// This is an error check to make sure the creature can be equipped.
-			for(int k=0; k<m->ATT_MAX; k++){
+			for(unsigned int k=0; k<m->ATT_MAX; k++){
 				if (m->attLookup[k] == PS_RIGHT_PALM) {
 					SelectCreatureItem(CS_HAND_RIGHT, 0, charControl, canvas);
 					break;
@@ -1792,7 +1791,7 @@ void ModelViewer::OnEffects(wxCommandEvent &event)
 		// make sure m is a valid pointer to a model
 		if (m) {
 			// This is an error check to make sure the creature can be equipped.
-			for(int k=0; k<m->ATT_MAX; k++){
+			for(unsigned int k=0; k<m->ATT_MAX; k++){
 				if (m->attLookup[k] == PS_LEFT_PALM) {
 					SelectCreatureItem(CS_HAND_LEFT, 0, charControl, canvas);
 					break;

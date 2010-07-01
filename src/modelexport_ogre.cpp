@@ -298,7 +298,7 @@ static void WriteSkeleton(const ExportData &data, wxString filename) {
 	s << rt;
 	size_t numBones = data.numBones();
 	for (size_t n = 0; n < numBones; n++) {
-		Bone &b = data.getBone(n);
+		//Bone &b = data.getBone(n);
 		Vec3D v = data.getBoneParentTrans(n);
 		s << "<bone id=\"" << n << "\" name=\"" << n << "\">" << endl;
 		s << rt;
@@ -362,7 +362,7 @@ static void WriteSkeleton(const ExportData &data, wxString filename) {
 					s << rt;
 					size_t ntrans = 0;
 					size_t nrot = 0;
-					size_t nscale = 0;
+					//size_t nscale = 0;
 					for (Timeline::iterator it = timeline.begin(); it != timeline.end(); it++) {
 						s << "<keyframe time=\"" << (it->first / 1000.0f) << "\">" << endl;
 						s << rt;

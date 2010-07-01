@@ -39,8 +39,6 @@ ArrowControl::ArrowControl(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
 		_T("Unknown"), _T("Unknown"), _T("R-Back"), _T("L-Back"), _T("M-Back"), _T("Belly"),  
 		_T("L-Back"), _T("R-Back"), _T("L-Hip"), _T("R-Hip"), _T("Bust"), _T("Right palm")};
 
-	// Item\\Objectcomponents\\ammo\\ 
-
 	joint = new wxComboBox(this, ID_ARROW_JOINT, wxEmptyString, wxPoint(5,5), wxSize(130,20), WXSIZEOF(loc), loc, wxCB_READONLY);
 	const wxString models[] = {_T("arrowacidflight_01.m2"), _T("arrowfireflight_01.m2"), _T("arrowflight_01.m2"), _T("arrowiceflight_01.m2"), _T("arrowmagicflight_01.m2")};
 	model = new wxComboBox(this, ID_ARROW_MODEL,wxEmptyString, wxPoint(5,30), wxSize(130,20), WXSIZEOF(models), models, wxCB_READONLY);

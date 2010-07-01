@@ -100,7 +100,7 @@ LightControl::LightControl(wxWindow* parent, wxWindowID id)
 	txtPosZ = new wxTextCtrl(this, ID_LIGHTPOSZ, _T("0.0"), wxPoint(5,215), wxSize(60,20), wxTE_PROCESS_ENTER);
 
 	//position
-	wxStaticText *lblTar = new wxStaticText(this, wxID_ANY, _("Target XYZ"), wxPoint(80,155), wxDefaultSize);
+	lblTar = new wxStaticText(this, wxID_ANY, _("Target XYZ"), wxPoint(80,155), wxDefaultSize);
 	txtTarX = new wxTextCtrl(this, ID_LIGHTTARX, _T("0.0"), wxPoint(80,175), wxSize(60,20), wxTE_PROCESS_ENTER);
 	txtTarY = new wxTextCtrl(this, ID_LIGHTTARY, _T("0.0"), wxPoint(80,195), wxSize(60,20), wxTE_PROCESS_ENTER);
 	txtTarZ = new wxTextCtrl(this, ID_LIGHTTARZ, _T("0.0"), wxPoint(80,215), wxSize(60,20), wxTE_PROCESS_ENTER);
@@ -110,7 +110,7 @@ LightControl::LightControl(wxWindow* parent, wxWindowID id)
 	lintensity = new wxSlider(this, ID_LIGHTLINTENSITY, 0, 0, 100, wxPoint(45, 310), wxSize(100, 30), wxSL_HORIZONTAL|wxSL_LABELS);
 	qintensity = new wxSlider(this, ID_LIGHTQINTENSITY, 0, 0, 100, wxPoint(45, 340), wxSize(100, 30), wxSL_HORIZONTAL|wxSL_LABELS);
 
-	wxStaticText *lblAlpha = new wxStaticText(this, wxID_ANY, _("Arc:"), wxPoint(2,375), wxDefaultSize);
+	lblAlpha = new wxStaticText(this, wxID_ANY, _("Arc:"), wxPoint(2,375), wxDefaultSize);
 	alpha = new wxSlider(this, ID_LIGHTALPHA, 0, 0, 90, wxPoint(45, 375), wxSize(100, 30), wxSL_HORIZONTAL|wxSL_LABELS);
 	alpha->Enable(false);
 

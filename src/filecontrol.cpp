@@ -152,7 +152,6 @@ void FileControl::Init(ModelViewer* mv)
 		
 		// starting at p, append extra folders
 		size_t start = p;
-		bool colour=false;
 		for (; p<str.length(); p++) {
 			if (str[p]=='\\') {
 				// we've hit a folder, push it onto the stack

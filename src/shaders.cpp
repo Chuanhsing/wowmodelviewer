@@ -1,4 +1,5 @@
 #include "shaders.h"
+#include <string>
 //#include "wowmapview.h"
 
 bool supportShaders = false;
@@ -17,10 +18,10 @@ PFNGLPROGRAMLOCALPARAMETER4FARBPROC glProgramLocalParameter4fARB;
 ShaderPair *terrainShaders[4]={0,0,0,0}, *wmoShader=0, *waterShaders[1]={0};
 
 // TODO
-bool isExtensionSupported(char *s)
+bool isExtensionSupported(std::string s)
 {
 	bool ret;
-	ret = glewIsSupported("GL_ARB_vertex_program") == GL_TRUE ? true : false;
+	ret = glewIsSupported(s.c_str()) == GL_TRUE ? true : false;
 	
 	return ret;
 }

@@ -1,12 +1,12 @@
 #ifndef EFFECTS_H
 #define EFFECTS_H
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include <wx/wx.h>
 #endif
 
 #include "database.h"
@@ -58,6 +58,7 @@ class EnchantsDialog : public wxDialog {
 	wxRadioBox *slot;
 	wxListBox *effectsListbox;
 	wxStaticText *text1;
+	wxButton *btnOK, *btnCancel;
 
 	bool EnchantsInitiated;
 	bool Initiated;

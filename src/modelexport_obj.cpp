@@ -239,7 +239,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 
 			bool nomatch = true;
 			for (int t=0;t<=m->nTextures; t++) {
-				if (t == mat->tex) {
+				if (t == (int)mat->tex) {
 					texarray[mat->tex] = wxString(m->textures[t-1].c_str(), wxConvUTF8);
 					texarray[mat->tex] = texarray[mat->tex].BeforeLast('.');
 					nomatch = false;

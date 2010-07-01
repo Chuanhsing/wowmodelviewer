@@ -48,13 +48,13 @@ Settings_Page1::Settings_Page1(wxWindow* parent, wxWindowID id)
 	chkbox[CHECK_HIDEHELMET] = new wxCheckBox(this, ID_SETTINGS_HIDEHELMET, _("Hide Helmet"), wxPoint(150,75), wxDefaultSize, 0);
 	chkbox[CHECK_KNIGHTEYEGLOW] = new wxCheckBox(this, ID_SETTINGS_KNIGHTEYEGLOW, _("Eye Glow"), wxPoint(150,100), wxDefaultSize, 0);
 
-	wxStaticText *lbl2 = new wxStaticText(this, wxID_ANY, _("MPQ Archives order and files to load"), wxPoint(0,140), wxDefaultSize, 0);
+	lbl2 = new wxStaticText(this, wxID_ANY, _("MPQ Archives order and files to load"), wxPoint(0,140), wxDefaultSize, 0);
 	mpqList = new wxListBox(this, wxID_ANY, wxPoint(0,160), wxSize(380, 190), mpqArchives, wxLB_SINGLE|wxLB_HSCROLL, wxDefaultValidator);
-	wxButton *btn1 = new wxButton(this, ID_SETTINGS_UP, _("Move Up"), wxPoint(5,355), wxSize(70,25), 0);
-	wxButton *btn2 = new wxButton(this, ID_SETTINGS_DOWN, _("Move Down"), wxPoint(80,355), wxSize(70,25), 0);
-	wxButton *btn3 = new wxButton(this, ID_SETTINGS_ADD, _("Add"), wxPoint(155,355), wxSize(70,25), 0);
-	wxButton *btn4 = new wxButton(this, ID_SETTINGS_REMOVE, _("Remove"), wxPoint(230,355), wxSize(70,25), 0);
-	wxButton *btn5 = new wxButton(this, ID_SETTINGS_CLEAR, _("Clear"), wxPoint(305,355), wxSize(70,25), 0);
+	btn1 = new wxButton(this, ID_SETTINGS_UP, _("Move Up"), wxPoint(5,355), wxSize(70,25), 0);
+	btn2 = new wxButton(this, ID_SETTINGS_DOWN, _("Move Down"), wxPoint(80,355), wxSize(70,25), 0);
+	btn3 = new wxButton(this, ID_SETTINGS_ADD, _("Add"), wxPoint(155,355), wxSize(70,25), 0);
+	btn4 = new wxButton(this, ID_SETTINGS_REMOVE, _("Remove"), wxPoint(230,355), wxSize(70,25), 0);
+	btn5 = new wxButton(this, ID_SETTINGS_CLEAR, _("Clear"), wxPoint(305,355), wxSize(70,25), 0);
 }
 
 
@@ -317,9 +317,9 @@ SettingsControl::SettingsControl(wxWindow* parent, wxWindowID id)
 
 SettingsControl::~SettingsControl()
 {
-	page1->Destroy();
-	page2->Destroy();
-	notebook->Destroy();
+	//page1->Destroy();
+	//page2->Destroy();
+	//notebook->Destroy();
 }
 
 

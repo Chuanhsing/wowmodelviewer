@@ -1,7 +1,9 @@
 #ifndef DISPLAYABLE_H
 #define DISPLAYABLE_H
 
-#pragma warning( disable : 4100 )
+#ifdef _WINDOWS
+    #pragma warning( disable : 4100 )
+#endif
 
 class Displayable
 {

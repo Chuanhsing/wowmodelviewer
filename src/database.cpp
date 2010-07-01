@@ -498,7 +498,7 @@ ItemSetDB::Record ItemSetDB::getById(unsigned int id)
 void ItemSetDB::cleanup(ItemDatabase &p_itemdb)
 {
 	for(Iterator i=begin(); i!=end(); ++i) {
-		for (int j=0; j<NumItems; j++) {
+		for (unsigned int j=0; j<NumItems; j++) {
 			int id;
 			if (gameVersion == 40000)
 				id = i->getUInt(ItemIDBaseV400+j);

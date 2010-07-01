@@ -1,15 +1,17 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
-#pragma warning( disable : 4100 )
+#ifdef _WINDOWS
+    #pragma warning( disable : 4100 )
+#endif
 
 // wxWidgets
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include <wx/wx.h>
 #endif
 
 // STL

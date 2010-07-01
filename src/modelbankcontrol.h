@@ -1,12 +1,12 @@
 #ifndef MODELBANKCONTROL_H
 #define MODELBANKCONTROL_H
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include <wx/wx.h>
 #endif
 
 #include <wx/arrstr.h>

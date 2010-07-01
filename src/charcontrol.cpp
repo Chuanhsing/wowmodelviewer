@@ -731,7 +731,7 @@ void CharControl::RefreshModel()
 	capeTex = 0;
 
 	// Reset geosets
-	for (int i=0; i<cd.NUM_GEOSETS; i++) 
+	for (unsigned int i=0; i<cd.NUM_GEOSETS; i++) 
 		cd.geosets[i] = 1;
 	cd.geosets[1] = cd.geosets[2] = cd.geosets[3] = 0;
 
@@ -870,8 +870,8 @@ void CharControl::RefreshModel()
 	}
 #if 1 // for worgen female
 	if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen 
-		for(int i=1; i<=21; i++) {
-			int section = i - 1;
+		for(unsigned int i=1; i<=21; i++) {
+			unsigned int section = i - 1;
 			for (size_t j=0; j<model->geosets.size(); j++) {
 				if (model->geosets[j].id == i)
 					model->showGeosets[j] = (cd.hairStyle==section) && showHair;
@@ -1114,7 +1114,7 @@ void CharControl::RefreshNPCModel()
 	capeTex = 0;
 
 	// Reset geosets
-	for (int i=0; i<cd.NUM_GEOSETS; i++) 
+	for (unsigned int i=0; i<cd.NUM_GEOSETS; i++) 
 		cd.geosets[i] = 1;
 	cd.geosets[1] = cd.geosets[2] = cd.geosets[3] = 0;
 

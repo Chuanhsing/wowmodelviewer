@@ -301,11 +301,11 @@ void Liquid::draw()
 	}
 }
 
-void Liquid::initTextures(char *basename, int first, int last)
+void Liquid::initTextures(std::string basename, int first, int last)
 {
 	char buf[256];
 	for (int i=first; i<=last; i++) {
-		sprintf(buf, "%s.%d.blp", basename, i);
+		sprintf(buf, "%s.%d.blp", basename.c_str(), i);
 		int tex = texturemanager.add(buf);
 		textures.push_back(tex);
 	}

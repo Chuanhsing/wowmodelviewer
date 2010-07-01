@@ -1,18 +1,18 @@
 #ifndef ITEMSELECTION_H
 #define ITEMSELECTION_H
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include <wx/wx.h>
 #endif
 
 // wx
-#include "wx/regex.h"
-#include "wx/choicdlg.h"
-#include "wx/listctrl.h"
+#include <wx/regex.h>
+#include <wx/choicdlg.h>
+#include <wx/listctrl.h>
 
 // stl
 #include <vector>

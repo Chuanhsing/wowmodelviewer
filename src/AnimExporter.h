@@ -4,10 +4,7 @@
 #include "util.h"
 
 // wxwidgets
-#include "wx/wx.h"
-//#include "wx/frame.h"
-//#include "wx/stattext.h"
-//#include "wx/button.h"
+#include <wx/wx.h>
 
 #include "modelcanvas.h"
 #ifdef _WINDOWS
@@ -47,7 +44,7 @@ private:
 	wxString m_strFilename;		// Filename to save our animated gif into.
 
 	//GUI objects
-	wxStaticText *lblCurFrame, *lblFile;
+	wxStaticText *lblCurFrame, *lblFile, *lblTotalFrame, *lblSize, *lblDelay;
 	wxButton *btnStart, *btnCancel;
 	wxTextCtrl *txtFrames, *txtSizeX, *txtSizeY, *txtDelay;
 	wxCheckBox *cbTrans, *cbDither, *cbShrink, *cbGrey, *cbPng;

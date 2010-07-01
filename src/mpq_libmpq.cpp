@@ -249,7 +249,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 		if(fileno != LIBMPQ_EFILE_NOT_FOUND) {
 			// Found!
 			size_t size = libmpq_file_info(&mpq_a, LIBMPQ_FILE_UNCOMPRESSED_SIZE, fileno);
-			int retVal = libmpq_file_info(&mpq_a, LIBMPQ_FILE_COMPRESSION_TYPE, fileno);
+			//int retVal = libmpq_file_info(&mpq_a, LIBMPQ_FILE_COMPRESSION_TYPE, fileno);
 			// If retVal is 512, its compressed, if its 0 then its uncompressed
 
 			wxString temp(mpq_a.filename, wxConvUTF8);
