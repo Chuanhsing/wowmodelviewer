@@ -2408,56 +2408,61 @@ void ModelViewer::ModelInfo()
 	xml << "  </GlobalSequences>" << endl;
 
 	xml << "  <Animations>" << endl;
-	for(size_t i=0; i<m->header.nAnimations; i++) {
-		xml << "    <Animation id=\"" << i << "\">" << endl;
-		xml << "      <animID>"<< m->anims[i].animID << "</animID>" << endl;
-		// subAnimID
-		xml << "      <length>"<< m->anims[i].timeEnd << "</length>" << endl;
-		xml << "      <moveSpeed>"<< m->anims[i].moveSpeed << "</moveSpeed>" << endl;
-		xml << "      <flags>"<< m->anims[i].flags << "</flags>" << endl;
-		xml << "      <probability>"<< m->anims[i].probability << "</probability>" << endl;
-		xml << "      <d1>"<< m->anims[i].d1 << "</d1>" << endl;
-		xml << "      <d2>"<< m->anims[i].d2 << "</d2>" << endl;
-		xml << "      <playSpeed>"<< m->anims[i].playSpeed << "</playSpeed>" << endl;
-		xml << "      <boxA>"<< m->anims[i].boxA << "</boxA>" << endl;
-		xml << "      <boxB>"<< m->anims[i].boxB << "</boxB>" << endl;
-		xml << "      <rad>"<< m->anims[i].rad << "</rad>" << endl;
-		xml << "      <NextAnimation>"<< m->anims[i].NextAnimation << "</NextAnimation>" << endl;
-		xml << "      <Index>"<< m->anims[i].Index << "</Index>" << endl;
-		xml << "    </Animation>" << endl;
-
+	if (m->anims) {
+		for(size_t i=0; i<m->header.nAnimations; i++) {
+			xml << "    <Animation id=\"" << i << "\">" << endl;
+			xml << "      <animID>"<< m->anims[i].animID << "</animID>" << endl;
+			// subAnimID
+			xml << "      <length>"<< m->anims[i].timeEnd << "</length>" << endl;
+			xml << "      <moveSpeed>"<< m->anims[i].moveSpeed << "</moveSpeed>" << endl;
+			xml << "      <flags>"<< m->anims[i].flags << "</flags>" << endl;
+			xml << "      <probability>"<< m->anims[i].probability << "</probability>" << endl;
+			xml << "      <d1>"<< m->anims[i].d1 << "</d1>" << endl;
+			xml << "      <d2>"<< m->anims[i].d2 << "</d2>" << endl;
+			xml << "      <playSpeed>"<< m->anims[i].playSpeed << "</playSpeed>" << endl;
+			xml << "      <boxA>"<< m->anims[i].boxA << "</boxA>" << endl;
+			xml << "      <boxB>"<< m->anims[i].boxB << "</boxB>" << endl;
+			xml << "      <rad>"<< m->anims[i].rad << "</rad>" << endl;
+			xml << "      <NextAnimation>"<< m->anims[i].NextAnimation << "</NextAnimation>" << endl;
+			xml << "      <Index>"<< m->anims[i].Index << "</Index>" << endl;
+			xml << "    </Animation>" << endl;
+		}
 	}
 	xml << "  </Animations>" << endl;
 
 	xml << "  <AnimationLookups>" << endl;
-	for(size_t i=0; i<m->header.nAnimationLookup; i++)
-		xml << "    <AnimationLookup id=\"" << i << "\">" << m->animLookups[i] << "</AnimationLookup>" << endl;
+	if (m->animLookups) {
+		for(size_t i=0; i<m->header.nAnimationLookup; i++)
+			xml << "    <AnimationLookup id=\"" << i << "\">" << m->animLookups[i] << "</AnimationLookup>" << endl;
+	}
 	xml << "  </AnimationLookups>" << endl;
 
 	xml << "  <Bones>" << endl;
-	for(size_t i=0; i<m->header.nBones; i++) {
-		xml << "    <Bone id=\"" << i << "\">" << endl;
-		xml << "      <keyboneid>"<< m->bones[i].boneDef.keyboneid << "</keyboneid>" << endl;
-		xml << "      <billboard>"<< m->bones[i].billboard << "</billboard>" << endl;
-		xml << "      <parent>"<< m->bones[i].boneDef.parent << "</parent>" << endl;
-		xml << "      <geoid>"<< m->bones[i].boneDef.geoid << "</geoid>" << endl;
-		xml << "      <unknown>"<< m->bones[i].boneDef.unknown << "</unknown>" << endl;
+	if (m->bones) {
+		for(size_t i=0; i<m->header.nBones; i++) {
+			xml << "    <Bone id=\"" << i << "\">" << endl;
+			xml << "      <keyboneid>"<< m->bones[i].boneDef.keyboneid << "</keyboneid>" << endl;
+			xml << "      <billboard>"<< m->bones[i].billboard << "</billboard>" << endl;
+			xml << "      <parent>"<< m->bones[i].boneDef.parent << "</parent>" << endl;
+			xml << "      <geoid>"<< m->bones[i].boneDef.geoid << "</geoid>" << endl;
+			xml << "      <unknown>"<< m->bones[i].boneDef.unknown << "</unknown>" << endl;
 #if 0 // too huge
-		// AB translation
-		xml << "      <trans>" << endl;
-		xml << m->bones[i].trans;
-		xml << "      </trans>" << endl;
-		// AB rotation
-		xml << "      <rot>" << endl;
-		xml << m->bones[i].rot;
-		xml << "      </rot>" << endl;
-		// AB scaling
-		xml << "      <scale>" << endl;
-		xml << m->bones[i].scale;
-		xml << "      </scale>" << endl;
+			// AB translation
+			xml << "      <trans>" << endl;
+			xml << m->bones[i].trans;
+			xml << "      </trans>" << endl;
+			// AB rotation
+			xml << "      <rot>" << endl;
+			xml << m->bones[i].rot;
+			xml << "      </rot>" << endl;
+			// AB scaling
+			xml << "      <scale>" << endl;
+			xml << m->bones[i].scale;
+			xml << "      </scale>" << endl;
 #endif
-		xml << "      <pivot>"<< m->bones[i].boneDef.pivot << "</pivot>" << endl;
-		xml << "    </Bone>" << endl;
+			xml << "      <pivot>"<< m->bones[i].boneDef.pivot << "</pivot>" << endl;
+			xml << "    </Bone>" << endl;
+		}
 	}
 	xml << "  </Bones>" << endl;
 
@@ -2570,13 +2575,15 @@ void ModelViewer::ModelInfo()
 	xml << "	</Colors>" << endl;
 
 	xml << "	<Transparency>" << endl;
-	for(size_t i=0; i<m->header.nTransparency; i++) {
-		xml << "    <Tran id=\"" << i << "\">" << endl;
-		// AB trans
-		xml << "    <trans>" << endl;
-		xml << m->transparency[i].trans;
-		xml << "    </trans>" << endl;
-		xml << "    </Tran>" << endl;
+	if (m->transparency) {
+		for(size_t i=0; i<m->header.nTransparency; i++) {
+			xml << "    <Tran id=\"" << i << "\">" << endl;
+			// AB trans
+			xml << "    <trans>" << endl;
+			xml << m->transparency[i].trans;
+			xml << "    </trans>" << endl;
+			xml << "    </Tran>" << endl;
+		}
 	}
 	xml << "	</Transparency>" << endl;
 
@@ -2604,31 +2611,35 @@ void ModelViewer::ModelInfo()
 	xml << "  <Effects>" << endl;
 
 	xml << "	<TexAnims>" << endl;
-	for(size_t i=0; i<m->header.nTexAnims; i++) {
-		xml << "	  <TexAnim id=\"" << i << "\">" << endl;
-		// AB trans
-		xml << "    <trans>" << endl;
-		xml << m->texAnims[i].trans;
-		xml << "    </trans>" << endl;
-		// AB rot
-		xml << "    <rot>" << endl;
-		xml << m->texAnims[i].rot;
-		xml << "    </rot>" << endl;
-		// AB scale
-		xml << "    <scale>" << endl;
-		xml << m->texAnims[i].scale;
-		xml << "    </scale>" << endl;
-		xml << "	  </TexAnim>" << endl;
+	if (m->texAnims) {
+		for(size_t i=0; i<m->header.nTexAnims; i++) {
+			xml << "	  <TexAnim id=\"" << i << "\">" << endl;
+			// AB trans
+			xml << "    <trans>" << endl;
+			xml << m->texAnims[i].trans;
+			xml << "    </trans>" << endl;
+			// AB rot
+			xml << "    <rot>" << endl;
+			xml << m->texAnims[i].rot;
+			xml << "    </rot>" << endl;
+			// AB scale
+			xml << "    <scale>" << endl;
+			xml << m->texAnims[i].scale;
+			xml << "    </scale>" << endl;
+			xml << "	  </TexAnim>" << endl;
+		}
 	}
 	xml << "	</TexAnims>" << endl;
 
-	xml << "	<RibbonEmitters></RibbonEmitters>" << endl;
+	xml << "	<RibbonEmitters></RibbonEmitters>" << endl; // TODO
 
 	xml << "	<Particles>" << endl;
-	for (size_t i=0; i<m->header.nParticleEmitters; i++) {
-		xml << "	  <Particle id=\"" << i << "\">" << endl;
-		xml << m->particleSystems[i];
-		xml << "	  </Particle>" << endl;
+	if (m->particleSystems) {
+		for (size_t i=0; i<m->header.nParticleEmitters; i++) {
+			xml << "	  <Particle id=\"" << i << "\">" << endl;
+			xml << m->particleSystems[i];
+			xml << "	  </Particle>" << endl;
+		}
 	}
 	xml << "	</Particles>" << endl;
 
@@ -2651,10 +2662,12 @@ void ModelViewer::ModelInfo()
 	xml << "	</Attachments>" << endl;
 
 	xml << "	<Events>" << endl;
-	for (size_t i=0; i<m->header.nEvents; i++) {
-		xml << "	  <Event id=\"" << i << "\">" << endl;
-		xml << m->events[i];
-		xml << "	  </Event>" << endl;
+	if (m->events) {
+		for (size_t i=0; i<m->header.nEvents; i++) {
+			xml << "	  <Event id=\"" << i << "\">" << endl;
+			xml << m->events[i];
+			xml << "	  </Event>" << endl;
+		}
 	}
 	xml << "	</Events>" << endl;
 

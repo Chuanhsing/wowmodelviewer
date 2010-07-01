@@ -255,7 +255,9 @@ public:
 		type = b.type;
 		seq = b.seq;
 		if (seq!=-1) {
-			assert(gs);
+			if (!gs)
+				return;
+			//assert(gs);
 		}
 
 #ifndef	WotLK
@@ -284,7 +286,9 @@ public:
 		#endif
 
 		// times
-		assert(b.nTimes == b.nKeys);
+		if (b.nTimes != b.nKeys)
+			return;
+		//assert(b.nTimes == b.nKeys);
 #ifdef WotLK // by Flow
 		sizes = b.nTimes;
 		if( b.nTimes == 0 )
@@ -361,7 +365,9 @@ public:
 		type = b.type;
 		seq = b.seq;
 		if (seq!=-1) {
-			assert(gs);
+			if (!gs)
+				return;
+			//assert(gs);
 		}
 
 #ifndef	WotLK
@@ -372,7 +378,9 @@ public:
 #endif
 
 		// times
-		assert(b.nTimes == b.nKeys);
+		if (b.nTimes != b.nKeys)
+			return;
+		//assert(b.nTimes == b.nKeys);
 		sizes = b.nTimes;
 		if( b.nTimes == 0 )
 			return;
