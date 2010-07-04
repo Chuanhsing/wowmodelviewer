@@ -50,7 +50,7 @@
 
 // defines
 #define APP_TITLE _T("World of Warcraft Model Viewer")
-#define APP_VERSION _T("v0.7.0.1 r251")		// Revision number should match the revision number on GoogleCode.
+#define APP_VERSION _T("v0.7.0.1 r252")		// Revision number should match the revision number on GoogleCode.
 #ifdef _DEBUG
 	#define APP_ISDEBUG _T(" Debug")
 #else

@@ -352,7 +352,16 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			}
 			
 			// Hard coded skin additions - missing from DBC ?
-			if (fn == _T("Creature\\Furbolg\\furbolg.mdx")) {
+			if (fn == _T("Creature\\Dragonnefarianzombified\\dragonnefarianzombified.mdx")) {
+				TextureGroup grp;
+				grp.tex[0] = "dragonnefarianzombified1";
+				grp.tex[1] = "dragonnefarianzombified2";
+				grp.tex[2] = "dragonnefarianzombified3";
+				grp.base = 11;
+				grp.count = 3;
+				skins.insert(grp);
+				return FillSkinSelector(skins);
+			} else if (fn == _T("Creature\\Furbolg\\furbolg.mdx")) {
 				TextureGroup grp;
 				grp.tex[0] = "FurbolgSkinPanda";
 				grp.tex[1] = "FurbolgStuffWhite";
