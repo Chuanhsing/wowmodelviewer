@@ -70,7 +70,8 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 	//order = mta.s2;
 	order = mta.ParticleType>0 ? -1 : 0;
 	parent = model->bones + mta.bone;
-    
+
+	emitter = 0;
 	switch (mta.EmitterType) {
 	case 1:
 		emitter = new PlaneParticleEmitter(this);
@@ -108,7 +109,10 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 	tofs = frand();
 
 	// init tiles
-	for (int i=0; i<rows*cols; i++) {
+	int maxtiles = rows*cols;
+	if (maxtiles > MAX_PARTICLES)
+		maxtiles = MAX_PARTICLES;
+	for (int i=0; i<maxtiles; i++) {
 		TexCoordSet tc;
 		initTile(tc.tc,i);
 		tiles.push_back(tc);
@@ -281,7 +285,7 @@ void ParticleSystem::draw()
 		glDisable(GL_ALPHA_TEST);
 		break;
 	default:
-		wxLogMessage(_T("[Error] %s:%s#%d blend unknown: %d"), blend);
+		wxLogMessage(_T("blend unknown: %d"), blend);
 	}
 	
 	//glDisable(GL_LIGHTING);
