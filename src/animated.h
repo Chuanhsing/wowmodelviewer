@@ -152,6 +152,8 @@ public:
 		// obtain a time value and a data range
 		if (seq>-1) {
 			// TODO
+			if (!globals)
+				return T();
 			if (globals[seq]==0) 
 				time = 0;
 			else 
