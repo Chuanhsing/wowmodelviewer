@@ -109,10 +109,7 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 	tofs = frand();
 
 	// init tiles
-	int maxtiles = rows*cols;
-	if (maxtiles > MAX_PARTICLES)
-		maxtiles = MAX_PARTICLES;
-	for (int i=0; i<maxtiles; i++) {
+	for (int i=0; i<rows*cols; i++) {
 		TexCoordSet tc;
 		initTile(tc.tc,i);
 		tiles.push_back(tc);

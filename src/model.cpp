@@ -320,7 +320,7 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 	memcpy(&header, f.getBuffer(), sizeof(ModelHeader));
 	animated = isAnimated(f) || forceAnim;  // isAnimated will set animGeometry and animTextures
 
-	wxLogMessage(_T("Loading model: %s\n"), tempname.c_str());
+	wxLogMessage(_T("Loading model: %s, size: %d\n"), tempname.c_str(), f.getSize());
 
 	// Error check
 	if (header.id[0] != 'M' && header.id[1] != 'D' && header.id[2] != '2' && header.id[3] != '0') {
@@ -1106,12 +1106,24 @@ void Model::initAnimated(MPQFile &f)
 
 	// particle systems
 	if (header.nParticleEmitters) {
-		ModelParticleEmitterDef *pdefs = (ModelParticleEmitterDef *)(f.getBuffer() + header.ofsParticleEmitters);
-		particleSystems = new ParticleSystem[header.nParticleEmitters];
-		hasParticles = true;
-		for (size_t i=0; i<header.nParticleEmitters; i++) {
-			particleSystems[i].model = this;
-			particleSystems[i].init(f, pdefs[i], globalSequences);
+		if (header.version[0] >= 0x10) {
+			ModelParticleEmitterDefV10 *pdefsV10 = (ModelParticleEmitterDefV10 *)(f.getBuffer() + header.ofsParticleEmitters);
+			ModelParticleEmitterDef *pdefs;
+			particleSystems = new ParticleSystem[header.nParticleEmitters];
+			hasParticles = true;
+			for (size_t i=0; i<header.nParticleEmitters; i++) {
+				pdefs = (ModelParticleEmitterDef *) &pdefsV10[i];
+				particleSystems[i].model = this;
+				particleSystems[i].init(f, *pdefs, globalSequences);
+			}
+		} else {
+			ModelParticleEmitterDef *pdefs = (ModelParticleEmitterDef *)(f.getBuffer() + header.ofsParticleEmitters);
+			particleSystems = new ParticleSystem[header.nParticleEmitters];
+			hasParticles = true;
+			for (size_t i=0; i<header.nParticleEmitters; i++) {
+				particleSystems[i].model = this;
+				particleSystems[i].init(f, pdefs[i], globalSequences);
+			}
 		}
 	}
 

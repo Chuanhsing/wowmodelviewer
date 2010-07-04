@@ -195,7 +195,6 @@ struct ModelHeader {
 	uint32 ofsRibbonEmitters; // Things swirling around. See the CoT-entrance for light-trails.
 	uint32 nParticleEmitters; // V, Effects
 	uint32 ofsParticleEmitters; // Spells and weapons, doodads and loginscreens use them. Blood dripping of a blade? Particles.
-
 };
 #endif
 
@@ -545,6 +544,46 @@ struct ModelParticleEmitterDef {
 	AnimationBlock en;
 };
 
+struct ModelParticleEmitterDefV10 {
+    int32 id;
+	int32 flags;
+	Vec3D pos; // The position. Relative to the following bone.
+	int16 bone; // The bone its attached to.
+	int16 texture; // And the texture that is used.
+	int32 nModelFileName;
+	int32 ofsModelFileName;
+	int32 nParticleFileName;
+	int32 ofsParticleFileName; // TODO
+	int8 blend;
+	int8 EmitterType; // EmitterType	 1 - Plane (rectangle), 2 - Sphere, 3 - Spline? (can't be bothered to find one)
+	int16 ParticleColor; // This one is used so you can assign a color to specific particles. They loop over all 
+						 // particles and compare +0x2A to 11, 12 and 13. If that matches, the colors from the dbc get applied.
+	int8 ParticleType; // 0 "normal" particle, 
+					   // 1 large quad from the particle's origin to its position (used in Moonwell water effects)
+					   // 2 seems to be the same as 0 (found some in the Deeprun Tram blinky-lights-sign thing)
+	int8 HeadorTail; // 0 - Head, 1 - Tail, 2 - Both
+	int16 TextureTileRotation; // TODO, Rotation for the texture tile. (Values: -1,0,1)
+	int16 cols; // How many different frames are on that texture? People should learn what rows and cols are.
+	int16 rows; // Its different everywhere. I just took it random.
+	AnimationBlock EmissionSpeed; // All of the following blocks should be floats.
+	AnimationBlock SpeedVariation; // Variation in the flying-speed. (range: 0 to 1)
+	AnimationBlock VerticalRange; // Drifting away vertically. (range: 0 to pi)
+	AnimationBlock HorizontalRange; // They can do it horizontally too! (range: 0 to 2*pi)
+	AnimationBlock Gravity; // Fall down, apple!
+	AnimationBlock Lifespan; // Everyone has to die.
+	int32 unknown;
+	AnimationBlock EmissionRate; // Stread your particles, emitter.
+	int32 unknown2;
+	AnimationBlock EmissionAreaLength; // Well, you can do that in this area.
+	AnimationBlock EmissionAreaWidth;
+	AnimationBlock Gravity2; // A second gravity? Its strong.
+	ModelParticleParams p;
+	AnimationBlock en;
+	int32 unknown3; // 12319
+	int32 unknown4; // 12319
+	int32 unknown5; // 12319
+	int32 unknown6; // 12319
+};
 
 struct ModelRibbonEmitterDef {
 	int32 id;
