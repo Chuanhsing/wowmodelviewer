@@ -374,16 +374,12 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 		memcpy(globalSequences, (f.getBuffer() + header.ofsGlobalSequences), header.nGlobalSequences * sizeof(uint32));
 	}
 
-	if (forceAnim) 
+	if (forceAnim)
 		animBones = true;
 
-	// 4.0.0.12319 with version 10 and bugged
-	//if (header.version[0] >= 10)
-	//	animated = false;
-
-	if (animated) 
+	if (animated)
 		initAnimated(f);
-	else 
+	else
 		initStatic(f);
 
 	f.close();
@@ -1138,7 +1134,7 @@ void Model::initAnimated(MPQFile &f)
 	}
 
 	// just use the first camera, meh
-	if (0 && header.nCameras>0) {
+	if (header.version[0] <= 9 && header.nCameras>0) {
 		ModelCameraDef *camDefs = (ModelCameraDef*)(f.getBuffer() + header.ofsCameras);
 		cam.init(f, camDefs[0], globalSequences);
 		hasCamera = true;

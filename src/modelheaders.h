@@ -190,7 +190,7 @@ struct ModelHeader {
 	uint32 nCameras; // S, Miscellaneous
 	uint32 ofsCameras; // The cameras are present in most models for having a model in the Character-Tab.
 	uint32 nCameraLookup; // Miscellaneous
-	uint32 ofsCameraLookup; // And lookup-time again.
+	uint32 ofsCameraLookup; // And lookup-time again, unit16
 	uint32 nRibbonEmitters; // U, Effects
 	uint32 ofsRibbonEmitters; // Things swirling around. See the CoT-entrance for light-trails.
 	uint32 nParticleEmitters; // V, Effects
@@ -454,6 +454,17 @@ struct ModelCameraDef {
 	AnimationBlock rot; // The camera can have some roll-effect. Its 0 to 2*Pi.
 };
 
+struct ModelCameraDefV10 {
+	int32 id; // 0 is potrait camera, 1 characterinfo camera; -1 if none; referenced in CamLookup_Table
+	float farclip; // Where it stops to be drawn.
+	float nearclip; // Far and near. Both of them.
+	AnimationBlock transPos; // How the cameras position moves. Should be 3*3 floats. (? WoW parses 36 bytes = 3*3*sizeof(float))
+	Vec3D pos; // float, Where the camera is located.
+	AnimationBlock transTarget; // How the target moves. Should be 3*3 floats. (?)
+	Vec3D target; // float, Where the camera points to.
+	AnimationBlock rot; // The camera can have some roll-effect. Its 0 to 2*Pi. 3 Floats!
+	AnimationBlock AnimBlock4; // One Float.
+};
 
 #ifndef WotLK
 struct ModelParticleParams {
