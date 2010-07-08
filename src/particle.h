@@ -75,7 +75,7 @@ public:
 	Model *model;
 	float tofs;
 
-	ParticleSystem(): emitter(0), mid(0), rem(0)
+	ParticleSystem(): mid(0), emitter(0), rem(0)
 	{
 		blend = 0;
 		order = 0;

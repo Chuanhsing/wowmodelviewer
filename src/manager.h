@@ -24,7 +24,7 @@ class ManagedItem {
 	int refcount;
 public:
 	std::string name;
-	ManagedItem(std::string n): name(n), refcount(0) { }
+	ManagedItem(std::string n): refcount(0), name(n) { }
 	virtual ~ManagedItem() {}
 
 	void addref()

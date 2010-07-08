@@ -90,7 +90,8 @@ const int mapbufsize = 9*9 + 8*8;
 class MapNode {
 public:
 
-	MapNode(int x, int y, int s):px(x),py(y),size(s),mt(0), vmin(0), vmax(0), vcenter(0) 
+	MapNode(int x, int y, int s)
+		:px(x), py(y), size(s), vmin(0), vmax(0), vcenter(0), mt(0)
 	{
 		for(int i=0; i<4; i++)
 			children[i] = 0;

@@ -460,9 +460,9 @@ struct ItemRecord {
 	bool discovery;
 
 	ItemRecord(const char* line);
-	ItemRecord():id(0), type(0), itemclass(-1), subclass(-1), model(0), sheath(0), quality(0), discovery(false)
+	ItemRecord():id(0), itemclass(-1), subclass(-1), type(0), model(0), sheath(0), quality(0), discovery(false)
 	{}
-	ItemRecord(wxString name, int type): id(0), name(name), type(type), itemclass(-1), subclass(-1), model(0), sheath(0), quality(0), discovery(false)
+	ItemRecord(wxString name, int type): name(name), id(0), itemclass(-1), subclass(-1), type(type), model(0), sheath(0), quality(0), discovery(false)
 	{}
 	/*
 	ItemRecord(const ItemRecord &r): id(r.id), name(r.name), itemclass(r.itemclass), subclass(r.subclass), type(r.type), model(r.model), sheath(r.sheath), quality(r.quality)
@@ -550,7 +550,7 @@ struct NPCRecord
 
 	NPCRecord(const char* line);
 	NPCRecord(): id(0), model(0) {}
-	NPCRecord(const NPCRecord &r): id(r.id), name(r.name), model(r.model), type(r.type) {}
+	NPCRecord(const NPCRecord &r): name(r.name), id(r.id), model(r.model), type(r.type) {}
 
 	const bool operator< (const NPCRecord &r) const
 	{ 

@@ -304,7 +304,7 @@ void MapTile::initDisplay()
 MapTile is ADT
 http://madx.dk/wowdev/wiki/index.php?title=ADT
 */
-MapTile::MapTile(wxString filename): topnode(0,0,16), nWMO(0), nMDX(0)
+MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 {
 	x = atoi((char *)filename.Mid(filename.Len()-9, 2).c_str());
 	z = atoi((char *)filename.Mid(filename.Len()-6, 2).c_str());

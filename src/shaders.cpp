@@ -62,7 +62,7 @@ void OldreloadShaders()
 	waterShaders[0] = new ShaderPair(0, "shaders/wateroutdoor.fs", true);
 }
 
-Shader::Shader(GLenum target, const char *program, bool fromFile):id(0),target(target)
+Shader::Shader(GLenum target, const char *program, bool fromFile):target(target), id(0)
 {
 	if (!program || !strlen(program)) {
 		ok = true;

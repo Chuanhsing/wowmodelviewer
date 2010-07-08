@@ -81,9 +81,9 @@ public:
 			return wxString(reinterpret_cast<char*>(file.stringTable + stringOffset), wxConvUTF8);
 		}
 	private:
-		Record(DBCFile &file, unsigned char *offset): file(file), offset(offset) {}
-		unsigned char *offset;
 		DBCFile &file;
+		unsigned char *offset;
+		Record(DBCFile &file, unsigned char *offset): file(file), offset(offset) {}
 
 		friend class DBCFile;
 		friend class Iterator;
