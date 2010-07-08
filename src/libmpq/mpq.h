@@ -246,15 +246,6 @@ int libmpq_wave_decompress_stereo(char *out_buf, int *out_length, char *in_buf, 
 int libmpq_wave_decompress_mono(char *out_buf, int *out_length, char *in_buf, int in_length);
 int libmpq_multi_decompress(char *out_buf, int *pout_length, char *in_buf, int in_length);
 
-static decompress_table dcmp_table[] = {
-	{0x08, libmpq_pkzip_decompress},		/* Decompression with Pkware Data Compression Library */
-	{0x02, libmpq_zlib_decompress},			/* Decompression with the "zlib" library */
-	{0x01, libmpq_huff_decompress},			/* Huffmann decompression */
-	{0x80, libmpq_wave_decompress_stereo},		/* WAVE decompression for stereo waves */
-	{0x40, libmpq_wave_decompress_mono},		/* WAVE decompression for mono waves */
-	{0x10, libmpq_bzip2_decompress}			/* decompression with bzip2 library. */
-};
-
 #ifdef __cplusplus
 };  // extern "C"
 #endif

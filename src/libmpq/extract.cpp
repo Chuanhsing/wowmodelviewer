@@ -36,6 +36,15 @@
 #include "wave.h"
 
 
+static decompress_table dcmp_table[] = {
+	{0x08, libmpq_pkzip_decompress},		/* Decompression with Pkware Data Compression Library */
+	{0x02, libmpq_zlib_decompress},			/* Decompression with the "zlib" library */
+	{0x01, libmpq_huff_decompress},			/* Huffmann decompression */
+	{0x80, libmpq_wave_decompress_stereo},		/* WAVE decompression for stereo waves */
+	{0x40, libmpq_wave_decompress_mono},		/* WAVE decompression for mono waves */
+	{0x10, libmpq_bzip2_decompress}			/* decompression with bzip2 library. */
+};
+
 /*
  *  Support functions for PKWARE data compression library.
  *

@@ -116,11 +116,13 @@ static unsigned short pkzip_code_asc[] = {
 };
 
 /* Local variables */
+/*
 static char copyright[] = "PKWARE Data Compression Library for Win32\r\n"
                           "Copyright 1989-1995 PKWARE Inc.  All Rights Reserved\r\n"
                           "Patent No. 5,051,745\r\n"
                           "PKWARE Data Compression Library Reg. U.S. Pat. and Tm. Off.\r\n"
                           "Version 1.11\r\n";
+*/
 
 /* Local functions */
 static void libmpq_pkzip_gen_decode_tabs(long count, unsigned char *bits, unsigned char *code, unsigned char *buf2) {
