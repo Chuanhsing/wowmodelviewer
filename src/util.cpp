@@ -174,14 +174,14 @@ void getGamePath()
 
 	// if it failed, look for World of Warcraft install
 	const wxString regpaths[] = {
-#ifdef _WIN32
-		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft"),
-		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\PTR"),
-		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\Beta")
-#else //_WIN64
+#ifdef _WIN64
 		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft"),
 		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\PTR"),
 		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\Beta")
+#else //_WIN32
+		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft"),
+		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\PTR"),
+		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\Beta")
 #endif
 		 };
 

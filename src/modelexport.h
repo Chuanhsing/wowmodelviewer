@@ -80,5 +80,8 @@ void ExportWMOtoXHTML(WMO *m, const char *fn);
 void ExportM2toOgreXml(Model *m, const char *fn, bool init);
 void ExportWMOtoOgreXml(WMO *m, const char *fn);
 
+// FBX
+void ExportM2toFBX(Model* m, const char* fn, bool init);
+void ExportWMOtoFBX(WMO* m, const char* fn);
 
 #endif
