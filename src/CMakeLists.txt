@@ -25,7 +25,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}
 )
 
 add_definitions(
-    -DWotLK
+    -DWotLK -Wall -g
 )
 
 if (USE_STORM)

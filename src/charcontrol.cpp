@@ -2124,7 +2124,7 @@ void CharControl::selectMount()
 		}
 		
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
-			wxString str((*it).fn.c_str(), wxConvUTF8);
+			wxString str((*it).displayName.c_str(), wxConvUTF8);
 			str.MakeLower();
 			creaturemodels.push_back(str);
 			ridablelist.push_back(knownRidable.Index(str, false)!=wxNOT_FOUND);

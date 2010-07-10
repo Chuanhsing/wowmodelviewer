@@ -320,11 +320,8 @@ void ModelBankControl::LoadList()
 	char tag[5] = {0,0,0,0,0};
 
 	file.Read(&tag, 4);
-
-	wxString marker = wxString(tag, wxConvUTF8).SubString(0,1);
-
-	if (marker != _T("MB"))
-		return;
+    if(strncmp(tag, "MB", 2)!=0)
+        return;
 
 	long fileID = 0;
 	wxString(tag, wxConvUTF8).SubString(2,4).ToLong(&fileID);

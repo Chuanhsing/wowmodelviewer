@@ -9,16 +9,17 @@
 #include <vector>
 
 struct FileTreeItem {
-	std::string fn;
-	int col;
+    std::string displayName;
+	std::string fileName;
+	int color;
 
 	/// Comparison
 	bool operator<(const FileTreeItem &i) const {
-		return fn < i.fn;
+		return fileName < i.fileName;
 	}
 
 	bool operator>(const FileTreeItem &i) const {
-		return fn < i.fn;
+		return fileName < i.fileName;
 	}
 };
 

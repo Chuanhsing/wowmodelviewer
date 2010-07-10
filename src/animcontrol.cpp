@@ -688,7 +688,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 		grp.base = 11;
 		grp.count = 1;
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
-			wxString str((*it).fn.c_str(), wxConvUTF8);
+			wxString str((*it).displayName.c_str(), wxConvUTF8);
 			grp.tex[0] = std::string((char *)str.BeforeLast(_T('.')).AfterLast(SLASH).c_str());
 			skins.insert(grp);
 		}
@@ -752,7 +752,7 @@ bool AnimControl::UpdateItemModel(Model *m)
 		grp.base = 2;
 		grp.count = 1;
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
-			wxString str((*it).fn.c_str(), wxConvUTF8);
+			wxString str((*it).displayName.c_str(), wxConvUTF8);
 			grp.tex[0] = std::string((char *)str.BeforeLast(_T('.')).AfterLast(SLASH).c_str());
 			skins.insert(grp);
 		}

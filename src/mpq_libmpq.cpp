@@ -4,6 +4,7 @@
 #include <wx/file.h>
 
 #include <vector>
+#include <algorithm>
 
 #include "util.h"
 
@@ -252,23 +253,20 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 			//int retVal = libmpq_file_info(&mpq_a, LIBMPQ_FILE_COMPRESSION_TYPE, fileno);
 			// If retVal is 512, its compressed, if its 0 then its uncompressed
 
-			wxString temp(mpq_a.filename, wxConvUTF8);
-			temp.MakeLower();
 			int col = 0; // Black
-
-			if (temp.Find(_T("patch.mpq")) > -1)
+			if (strstr(mpq_a.filename, "patch.MPQ"))
 				col = 1; // Blue
-			else if (temp.Find(_T("patch-2.mpq")) > -1)
+			else if (strstr(mpq_a.filename, "patch-2.MPQ"))
 				col = 2; // Red
-			else if (temp.Find(_T("patch-3.mpq")) > -1)
+			else if (strstr(mpq_a.filename, "patch-3.MPQ"))
 				col = 3; // Green
-			else if (temp.Find(_T("expansion.mpq")) > -1)
+			else if (strstr(mpq_a.filename, "expansion.MPQ"))
 				col = 4; // Outlands Purple
-			else if (temp.Find(_T("expansion2.mpq")) > -1 || temp.Find(_T("lichking.mpq")) > -1)
+			else if (strstr(mpq_a.filename, "expansion2.MPQ") || strstr(mpq_a.filename, "lichking.MPQ"))
 				col = 5; // Frozen Blue
-			else if (temp.Find(_T("expansion3.mpq")) > -1)
+			else if (strstr(mpq_a.filename, "expansion3.MPQ"))
 				col = 6; // Destruction Orange
-			else if (temp.Find(_T("patch-4.mpq")) > -1)
+			else if (strstr(mpq_a.filename, "patch-4.MPQ"))
 				col = 7; // Cyan
 
 			// TODO: Add handling for uncompressed files.
@@ -284,34 +282,29 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 						if (*q==13) 
 							break;
 					} while (q++<=end);
-
-					wxString line(reinterpret_cast<char *>(p), wxConvUTF8, q-p);
-					if (line.Length()==0) 
+                    std::string line(reinterpret_cast<char *>(p), q-p);
+					if (line.length()==0) 
 						break;
 					//p += line.length();
 					p = q + 2;
 					//line.erase(line.length()-2, 2); // delete \r\n
 
-					if (filterfunc(std::string(line.mb_str()))) {
-						
+					if (filterfunc(line)) {
 						// This is just to help cleanup Duplicates
 						// Ideally I should tokenise the string and clean it up automatically
-						line.MakeLower();
-						line[0] = char(line.GetChar(0) - 32);
-						int ret = line.Find('\\');
+                        FileTreeItem tmp;
+                        tmp.fileName = line;
+						std::transform(line.begin(), line.end(), line.begin(), ::tolower);
+						line[0] = toupper(line[0]);
+						int ret = line.find('\\');
 						if (ret>-1)
-							line[ret+1] = char(line.GetChar(ret+1) - 32);
-
-						FileTreeItem tmp;
-						tmp.fn = line.mb_str();
-						tmp.col = col;
+							line[ret+1] = toupper(line.at(ret+1));
+                        tmp.displayName = line;
+						tmp.color = col;
 						dest.insert(tmp);
 					}
 				}
-				
 				wxDELETEA(buffer);
-				p = NULL;
-				end = NULL;
 			}
 		}
 	}

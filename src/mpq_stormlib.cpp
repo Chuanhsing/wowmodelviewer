@@ -333,8 +333,8 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 							line[ret+1] = char(line.GetChar(ret+1) - 32);
 
 						FileTreeItem tmp;
-						tmp.fn = line.mb_str();
-						tmp.col = col;
+						tmp.displayName = line.mb_str();
+						tmp.color = col;
 						dest.insert(tmp);
 					}
 				}
