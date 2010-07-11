@@ -104,6 +104,7 @@ DWORD FindFreeMpqSpace(TMPQArchive * ha, PLARGE_INTEGER pMpqPos);
 // Common functions - MPQ File
 
 TMPQFile * CreateMpqFile(TMPQArchive * ha, const char * szFileName);
+int  LoadMpqTable(TMPQArchive * ha, PLARGE_INTEGER pByteOffset, void * pvTable, DWORD dwCompressedSize, DWORD dwRealSize, const char * szKey);
 int  AllocateSectorBuffer(TMPQFile * hf);
 int  AllocateSectorOffsets(TMPQFile * hf, bool bLoadFromFile);
 int  AllocateSectorChecksums(TMPQFile * hf, bool bLoadFromFile);
@@ -121,6 +122,7 @@ void FreeMPQArchive(TMPQArchive *& ha);
 bool CheckWildCard(const char * szString, const char * szWildCard);
 const char * GetPlainLocalFileName(const char * szFileName);
 const char * GetPlainMpqFileName(const char * szFileName);
+bool IsInternalMpqFileName(const char * szFileName);
 
 //-----------------------------------------------------------------------------
 // Support for adding files to the MPQ

@@ -169,16 +169,14 @@ static void CalculateArchiveRange(
 {
     LARGE_INTEGER TempPos;
     LARGE_INTEGER MaxPos;
-    DWORD dwBytesRead = 0;
     char szMapHeader[0x200];
 
     // Get the MPQ begin
     pSI->BeginMpqData.QuadPart = ha->MpqPos.QuadPart;
 
     // Warcraft III maps are signed from the map header to the end
-    SetFilePointer(ha->hFile, 0, NULL, FILE_BEGIN);
-    ReadFile(ha->hFile, szMapHeader, sizeof(szMapHeader), &dwBytesRead, NULL);
-    if(dwBytesRead == sizeof(szMapHeader))
+    TempPos.QuadPart = 0;
+    if(FileStream_Read(ha->pStream, &TempPos, szMapHeader, sizeof(szMapHeader)))
     {
         // Is it a map header ?
         if(szMapHeader[0] == 'H' && szMapHeader[1] == 'M' && szMapHeader[2] == '3' && szMapHeader[3] == 'W')
@@ -215,7 +213,7 @@ static void CalculateArchiveRange(
     pSI->EndMpqData.QuadPart = TempPos.QuadPart;
 
     // Get the size of the entire file
-    pSI->EndOfFile.LowPart = GetFileSize(ha->hFile, (LPDWORD)&pSI->EndOfFile.HighPart);
+    FileStream_GetSize(ha->pStream, &pSI->EndOfFile);
 }
 
 static bool QueryMpqSignatureInfo(
@@ -256,9 +254,7 @@ static bool QueryMpqSignatureInfo(
     if(ExtraBytes.HighPart == 0 && ExtraBytes.LowPart >= (MPQ_STRONG_SIGNATURE_SIZE + 4))
     {
         // Read the strong signature
-        SetFilePointer(ha->hFile, pSI->EndMpqData.LowPart, &pSI->EndMpqData.HighPart, FILE_BEGIN);
-        ReadFile(ha->hFile, pSI->Signature, (MPQ_STRONG_SIGNATURE_SIZE + 4), &pSI->cbSignatureSize, NULL);
-        if(pSI->cbSignatureSize != (MPQ_STRONG_SIGNATURE_SIZE + 4))
+        if(!FileStream_Read(ha->pStream, &pSI->EndMpqData, pSI->Signature, (MPQ_STRONG_SIGNATURE_SIZE + 4)))
             return false;
 
         // Check the signature header "NGIS"
@@ -282,7 +278,6 @@ static bool CalculateMpqHashMd5(
     LARGE_INTEGER EndBuffer;
     hash_state md5_state;
     LPBYTE pbDigestBuffer = NULL;
-    DWORD dwBytesRead = 0;
 
     // Allocate buffer for creating the MPQ digest.
     pbDigestBuffer = ALLOCMEM(BYTE, MPQ_DIGEST_UNIT_SIZE);
@@ -292,8 +287,7 @@ static bool CalculateMpqHashMd5(
     // Initialize the MD5 hash state
     md5_init(&md5_state);
 
-    // Set the MPQ file pointer to the begin of the hashed area
-    SetFilePointer(ha->hFile, pSI->BeginMpqData.LowPart, &pSI->BeginMpqData.HighPart, FILE_BEGIN);
+    // Set the byte offset of begin of the data
     BeginBuffer = pSI->BeginMpqData;
 
     // Create the digest
@@ -306,14 +300,20 @@ static bool CalculateMpqHashMd5(
 
         // Check the number of bytes remaining
         BytesRemaining.QuadPart = pSI->EndMpqData.QuadPart - BeginBuffer.QuadPart;
-        if(BytesRemaining.HighPart == 0 && BytesRemaining.LowPart < MPQ_DIGEST_UNIT_SIZE)
+        if(BytesRemaining.QuadPart < MPQ_DIGEST_UNIT_SIZE)
             dwToRead = BytesRemaining.LowPart;
+        if(dwToRead == 0)
+            break;
 
         // Read the next chunk 
-        ReadFile(ha->hFile, pbDigestBuffer, dwToRead, &dwBytesRead, NULL);
-        if(dwBytesRead == 0)
-            break;
-        EndBuffer.QuadPart = BeginBuffer.QuadPart + dwBytesRead;
+        if(!FileStream_Read(ha->pStream, &BeginBuffer, pbDigestBuffer, dwToRead))
+        {
+            FREEMEM(pbDigestBuffer);
+            return false;
+        }
+
+        // Move the current byte offset
+        EndBuffer.QuadPart = BeginBuffer.QuadPart + dwToRead;
 
         // Check if the signature is within the loaded digest
         if(BeginBuffer.QuadPart <= pSI->BeginExclude.QuadPart && pSI->BeginExclude.QuadPart < EndBuffer.QuadPart)
@@ -327,16 +327,16 @@ static bool CalculateMpqHashMd5(
             if(pbSigBegin == NULL)
                 pbSigBegin = pbDigestBuffer;
             if(pbSigEnd == NULL)
-                pbSigEnd = pbDigestBuffer + dwBytesRead;
+                pbSigEnd = pbDigestBuffer + dwToRead;
 
             memset(pbSigBegin, 0, (pbSigEnd - pbSigBegin));
         }
 
         // Pass the buffer to the hashing function
-        md5_process(&md5_state, pbDigestBuffer, dwBytesRead);
+        md5_process(&md5_state, pbDigestBuffer, dwToRead);
 
         // Move pointers
-        BeginBuffer.QuadPart += dwBytesRead;
+        BeginBuffer.QuadPart += dwToRead;
     }
 
     // Finalize the MD5 hash
@@ -375,7 +375,6 @@ static bool CalculateMpqHashSha1(
     hash_state sha1_state_temp;
     hash_state sha1_state;
     LPBYTE pbDigestBuffer = NULL;
-    DWORD dwBytesRead = 0;
 
     // Allocate buffer for creating the MPQ digest.
     pbDigestBuffer = ALLOCMEM(BYTE, MPQ_DIGEST_UNIT_SIZE);
@@ -385,8 +384,7 @@ static bool CalculateMpqHashSha1(
     // Initialize SHA1 state structure
     sha1_init(&sha1_state);
 
-    // Set the MPQ file pointer to the begin of the MPQ
-    SetFilePointer(ha->hFile, pSI->BeginMpqData.LowPart, &pSI->BeginMpqData.HighPart, FILE_BEGIN);
+    // Calculate begin of data to be hashed
     BeginBuffer = pSI->BeginMpqData;
 
     // Create the digest
@@ -397,19 +395,23 @@ static bool CalculateMpqHashSha1(
 
         // Check the number of bytes remaining
         BytesRemaining.QuadPart = pSI->EndMpqData.QuadPart - BeginBuffer.QuadPart;
-        if(BytesRemaining.HighPart == 0 && BytesRemaining.LowPart < MPQ_DIGEST_UNIT_SIZE)
+        if(BytesRemaining.QuadPart < MPQ_DIGEST_UNIT_SIZE)
             dwToRead = BytesRemaining.LowPart;
-
-        // Read the next chunk 
-        ReadFile(ha->hFile, pbDigestBuffer, dwToRead, &dwBytesRead, NULL);
-        if(dwBytesRead == 0)
+        if(dwToRead == 0)
             break;
 
+        // Read the next chunk 
+        if(!FileStream_Read(ha->pStream, &BeginBuffer, pbDigestBuffer, dwToRead))
+        {
+            FREEMEM(pbDigestBuffer);
+            return false;
+        }
+
         // Pass the buffer to the hashing function
-        sha1_process(&sha1_state, pbDigestBuffer, dwBytesRead);
+        sha1_process(&sha1_state, pbDigestBuffer, dwToRead);
 
         // Move pointers
-        BeginBuffer.QuadPart += dwBytesRead;
+        BeginBuffer.QuadPart += dwToRead;
     }
 
     // Add all three known tails and generate three hashes
@@ -417,7 +419,7 @@ static bool CalculateMpqHashSha1(
     sha1_done(&sha1_state_temp, sha1_tail0);
 
     memcpy(&sha1_state_temp, &sha1_state, sizeof(hash_state));
-    AddTailToSha1(&sha1_state_temp, GetPlainLocalFileName(ha->szFileName));
+    AddTailToSha1(&sha1_state_temp, GetPlainLocalFileName(ha->pStream->szFileName));
     sha1_done(&sha1_state_temp, sha1_tail1);
 
     memcpy(&sha1_state_temp, &sha1_state, sizeof(hash_state));
@@ -581,7 +583,7 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
             if(dwBytesRead == 0)
             {
                 if(GetLastError() == ERROR_CHECKSUM_ERROR)
-                    dwVerifyResult |= VERIFY_ERROR_SECTOR_CHECKSUM;
+                    dwVerifyResult |= VERIFY_SECTOR_CHECKSUM_ERROR;
                 break;
             }
 
@@ -597,36 +599,51 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
             dwTotalBytes -= dwBytesRead;
         }
 
-        // Check if total bytes loaded matches
-        if(dwTotalBytes != 0)
-            dwVerifyResult |= VERIFY_ERROR_READ_FILE;
+        // If the file has sector checksums, indicate it in the flags
+        if((hf->pBlock->dwFlags & MPQ_FILE_SECTOR_CRC) && hf->SectorChksums != NULL && hf->SectorChksums[0] != 0)
+            dwVerifyResult |= VERIFY_SECTORS_HAVE_CHECKSUM;
 
-        // Check if the CRC32 matches
-        if((dwFlags & MPQ_ATTRIBUTE_CRC32) && hf->pCrc32 != NULL)
+        // Check if the entire file has been read
+        // No point in checking CRC32 and MD5 if not
+        if(dwTotalBytes == 0)
         {
-            // Some files may have their CRC zeroed
-            if(hf->pCrc32[0] != 0 && dwCrc32 != hf->pCrc32[0])
-                dwVerifyResult |= VERIFY_ERROR_FILE_CHECKSUM;
-        }
-
-        // Check if MD5 matches
-        if((dwFlags & MPQ_ATTRIBUTE_MD5) && hf->pMd5 != NULL)
-        {
-            md5_done(&md5_state, Md5.Value);
-
-            // Some files have the MD5 zeroed. Don't check MD5 in that case
-            if(is_valid_md5(hf->pMd5->Value))
+            // Check if the CRC32 matches
+            if((dwFlags & MPQ_ATTRIBUTE_CRC32) && hf->pCrc32 != NULL)
             {
-                if(memcmp(Md5.Value, hf->pMd5->Value, sizeof(TMPQMD5)))
-                    dwVerifyResult |= VERIFY_ERROR_FILE_MD5;
+                // Some files may have their CRC zeroed
+                if(hf->pCrc32[0] != 0)
+                {
+                    dwVerifyResult |= VERIFY_FILE_HAS_CHECKSUM;
+                    if(dwCrc32 != hf->pCrc32[0])
+                        dwVerifyResult |= VERIFY_FILE_CHECKSUM_ERROR;
+                }
             }
+
+            // Check if MD5 matches
+            if((dwFlags & MPQ_ATTRIBUTE_MD5) && hf->pMd5 != NULL)
+            {
+                md5_done(&md5_state, Md5.Value);
+
+                // Some files have the MD5 zeroed. Don't check MD5 in that case
+                if(is_valid_md5(hf->pMd5->Value))
+                {
+                    dwVerifyResult |= VERIFY_FILE_HAS_MD5;
+                    if(memcmp(Md5.Value, hf->pMd5->Value, sizeof(TMPQMD5)))
+                        dwVerifyResult |= VERIFY_FILE_MD5_ERROR;
+                }
+            }
+        }
+        else
+        {
+            dwVerifyResult |= VERIFY_READ_ERROR;
         }
 
         SFileCloseFile(hFile);
     }
     else
     {
-        dwVerifyResult |= VERIFY_ERROR_OPEN_FILE;
+        // Remember that the file couldn't be open
+        dwVerifyResult |= VERIFY_OPEN_ERROR;
     }
 
     return dwVerifyResult;

@@ -701,7 +701,7 @@ int WINAPI SCompExplode(char * pbOutBuffer, int * pcbOutBuffer, char * pbInBuffe
     // Perform decompression
     if(!Decompress_PKLIB(pbOutBuffer, &cbOutBuffer, pbInBuffer, cbInBuffer))
     {
-        SetLastError(ERROR_GEN_FAILURE);
+        SetLastError(ERROR_FILE_CORRUPT);
         return false;
     }
 
@@ -899,7 +899,7 @@ int WINAPI SCompDecompress(
     char *   pbInput;                       // Where to store decompressed data
     unsigned uCompressionMask;              // Decompressions applied to the data
     int      cbOutBuffer = *pcbOutBuffer;   // Current size of the output buffer
-    int      cbInLength = cbInBuffer;       // Current size of the input buffer
+    int      cbInLength;                    // Current size of the input buffer
     int      nCompressCount = 0;            // Number of compressions to be applied
     int      nCompressIndex = 0;
     int      nResult = 1;
@@ -924,8 +924,11 @@ int WINAPI SCompDecompress(
     
     // Get applied compression types and decrement data length
     uCompressionMask = (unsigned char)*pbInBuffer++;              
-    pbInput = pbInBuffer;
     cbInBuffer--;
+
+    // Get current compressed data and length of it
+    pbInput = pbInBuffer;
+    cbInLength = cbInBuffer;
 
     //
     // Beginning with Starcraft II, the decompression byte can no longer contain
@@ -992,7 +995,7 @@ int WINAPI SCompDecompress(
             nResult = DecompressFuncArray[i](pbOutput, &cbOutBuffer, pbInput, cbInLength);
             if(nResult == 0 || cbOutBuffer == 0)
             {
-                SetLastError(ERROR_GEN_FAILURE);
+                SetLastError(ERROR_FILE_CORRUPT);
                 nResult = 0;
                 break;
             }

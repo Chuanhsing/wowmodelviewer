@@ -22,22 +22,21 @@ LIBRARY  = libStorm.dylib
 OBJS_CPP = src/adpcm/adpcm.obj \
            src/huffman/huff.obj \
            src/sparse/sparse.obj \
+           src/FileStream.obj \
            src/SCommon.obj \
            src/SCompression.obj \
            src/SFileAddFile.obj \
            src/SFileAttributes.obj \
            src/SFileCompactArchive.obj \
-           src/SFileCreateArchiveEx.obj \
+           src/SFileCreateArchive.obj \
            src/SFileExtractFile.obj \
            src/SFileFindFile.obj \
            src/SFileListFile.obj \
            src/SFileOpenArchive.obj \
            src/SFileOpenFileEx.obj \
            src/SFileReadFile.obj \
-           src/SFileVerify.obj \
+           src/SFileVerify.obj
 
-           src/StormPortMac.cpp
-              
 
 OBJS_C   = src/libtomcrypt/src/hashes/hash_memory.obj \
            src/libtomcrypt/src/hashes/md5.obj \

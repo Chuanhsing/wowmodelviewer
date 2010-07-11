@@ -8,32 +8,42 @@ LIBRARY StormLib.dll
 
 EXPORTS
 
+    SFileOpenArchive
+    SFileCreateArchive
+    SFileCreateArchiveEx
+
     SFileSetLocale
     SFileGetLocale
-    SFileOpenArchive
+    SFileFlushArchive
     SFileCloseArchive
+
+    SFileAddListFile
+
+    SFileSetCompactCallback
+    SFileCompactArchive
+    
+    SFileSetHashTableSize    
+    
+    SFileCreateAttributes
+    SFileGetAttributes
+    SFileSetAttributes
+    SFileUpdateFileAttributes
     
     SFileOpenFileEx
-    SFileCloseFile
     SFileGetFileSize
     SFileSetFilePointer
     SFileReadFile
+    SFileCloseFile
     
-    SFileAddListFile
-    
-    SFileCreateArchiveEx
-    
-    SFileAddFileEx
-    SFileAddFile
-    SFileAddWave
-    SFileRemoveFile
-    SFileRenameFile
-    SFileSetFileLocale
-    SFileSetDataCompression
-
     SFileHasFile
     SFileGetFileName
     SFileGetFileInfo
+
+    SFileExtractFile
+
+    SFileVerifyFile
+
+    SFileVerifyArchive
 
     SFileFindFirstFile
     SFileFindNextFile
@@ -43,16 +53,21 @@ EXPORTS
     SListFileFindNextFile
     SListFileFindClose
 
-    SFileSetCompactCallback
-    SFileCompactArchive
-
     SFileEnumLocales
+    
+    SFileCreateFile
+    SFileWriteFile
+    SFileFinishFile
+    SFileAddFileEx
+    SFileAddFile
+    SFileAddWave
+    SFileRemoveFile
+    SFileRenameFile
+    SFileSetFileLocale
+    SFileSetDataCompression
+    SFileSetAddFileCallback
 
     SCompImplode
     SCompExplode
     SCompCompress   
     SCompDecompress 
-
-    SFileVerifyFile
-    SFileVerifyArchive
-    SFileExtractFile

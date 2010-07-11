@@ -24,12 +24,13 @@ LIBRARY  = StormLib.dll
 OBJS_CPP = src/adpcm/adpcm.o \
            src/huffman/huff.o \
            src/sparse/sparse.o \
+           src/FileStream.o \
            src/SCommon.o \
            src/SCompression.o \
            src/SFileAddFile.o \
            src/SFileAttributes.o \
            src/SFileCompactArchive.o \
-           src/SFileCreateArchiveEx.o \
+           src/SFileCreateArchive.o \
            src/SFileExtractFile.o \
            src/SFileFindFile.o \
            src/SFileListFile.o \

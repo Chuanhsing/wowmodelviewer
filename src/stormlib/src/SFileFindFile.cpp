@@ -22,13 +22,10 @@
 
 static bool IsValidSearchHandle(TMPQSearch * hs)
 {
-    if(hs == NULL || IsBadReadPtr(hs, sizeof(TMPQSearch)))
+    if(hs == NULL)
         return false;
 
-    if(!IsValidMpqHandle(hs->ha))
-        return false;
-
-    return true;
+    return IsValidMpqHandle(hs->ha);
 }
 
 bool CheckWildCard(const char * szString, const char * szWildCard)

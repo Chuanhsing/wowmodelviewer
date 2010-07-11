@@ -16,82 +16,187 @@
 //-----------------------------------------------------------------------------
 // Listfile entry structure
 
-#define LISTFILE_CACHE_SIZE 0x1000      // Size of one cache element
-#define NO_MORE_CHARACTERS 256
-#define HASH_TABLE_SIZE    31           // Initial hash table size (should be a prime number)
+#define CACHE_BUFFER_SIZE  0x1000       // Size of the cache buffer
 
 struct TListFileCache
 {
     HANDLE  hFile;                      // Stormlib file handle
     char  * szMask;                     // File mask
     DWORD   dwFileSize;                 // Total size of the cached file
-    DWORD   dwBuffSize;                 // File of the cache
     DWORD   dwFilePos;                  // Position of the cache in the file
     BYTE  * pBegin;                     // The begin of the listfile cache
     BYTE  * pPos;
     BYTE  * pEnd;                       // The last character in the file cache
 
-    BYTE Buffer[1];                     // Listfile cache itself
+    BYTE Buffer[CACHE_BUFFER_SIZE];     // Listfile cache itself
 };
 
 //-----------------------------------------------------------------------------
 // Local functions (cache)
 
+static TListFileCache * CreateListFileCache(HANDLE hMpq, const char * szListFile)
+{
+    TListFileCache * pCache = NULL;
+    HANDLE hListFile = NULL;
+    DWORD dwSearchScope = SFILE_OPEN_LOCAL_FILE;
+    DWORD dwBytesRead = 0;
+    int nError = ERROR_SUCCESS;
+
+    // If the szListFile is NULL, it means we have to open internal listfile
+    if(szListFile == NULL)
+    {
+        // Use SFILE_OPEN_ANY_LOCALE for listfile. This will allow us to load
+        // the listfile even if there is only non-neutral version of the listfile in the MPQ
+        dwSearchScope = SFILE_OPEN_ANY_LOCALE;
+        szListFile = LISTFILE_NAME;
+    }
+
+    // Open the local/internal listfile
+    if(!SFileOpenFileEx(hMpq, szListFile, dwSearchScope, &hListFile))
+        nError = GetLastError();
+
+    // Allocate cache for one file block
+    if(nError == ERROR_SUCCESS)
+    {
+        pCache = (TListFileCache *)ALLOCMEM(TListFileCache, 1);
+        if(pCache == NULL)
+            nError = ERROR_NOT_ENOUGH_MEMORY;
+    }
+
+    if(nError == ERROR_SUCCESS)
+    {
+        // Initialize the file cache
+        memset(pCache, 0, sizeof(TListFileCache));
+        pCache->dwFileSize = SFileGetFileSize(hListFile, NULL);
+        pCache->hFile = hListFile;
+
+        // Fill the cache
+        SFileReadFile(hListFile, pCache->Buffer, CACHE_BUFFER_SIZE, &dwBytesRead, NULL);
+        if(dwBytesRead == 0)
+            nError = GetLastError();
+    }
+
+    // Initialize the pointers
+    if(nError == ERROR_SUCCESS)
+    {
+        pCache->pBegin =
+        pCache->pPos = &pCache->Buffer[0];
+        pCache->pEnd = pCache->pBegin + dwBytesRead;
+    }
+    else
+    {
+        SListFileFindClose((HANDLE)pCache);
+        SetLastError(nError);
+        pCache = NULL;
+    }
+
+    // Return the cache
+    return pCache;
+}
+
 // Reloads the cache. Returns number of characters
 // that has been loaded into the cache.
-static DWORD ReloadCache(TListFileCache * pCache)
+static DWORD ReloadListFileCache(TListFileCache * pCache)
 {
-    // Check if there is enough characters in the cache
-    // If not, we have to load more
+    DWORD dwBytesToRead;
+    DWORD dwBytesRead = 0;
+
+    // Only do something if the cache is empty
     if(pCache->pPos >= pCache->pEnd)
     {
-        // If the cache is already at the end, do nothing more
-        if((pCache->dwFilePos + pCache->dwBuffSize) >= pCache->dwFileSize)
+        __TryReadBlock:
+
+        // Move the file position forward
+        pCache->dwFilePos += CACHE_BUFFER_SIZE;
+        if(pCache->dwFilePos >= pCache->dwFileSize)
             return 0;
 
-        pCache->dwFilePos += pCache->dwBuffSize;
-        SFileReadFile(pCache->hFile, pCache->Buffer, pCache->dwBuffSize, &pCache->dwBuffSize, NULL);
-        if(pCache->dwBuffSize == 0)
-            return 0;
+        // Get the number of bytes remaining
+        dwBytesToRead = pCache->dwFileSize - pCache->dwFilePos;
+        if(dwBytesToRead > CACHE_BUFFER_SIZE)
+            dwBytesToRead = CACHE_BUFFER_SIZE;
+
+        // Load the next data chunk to the cache
+        SFileSetFilePointer(pCache->hFile, pCache->dwFilePos, NULL, FILE_BEGIN);
+        SFileReadFile(pCache->hFile, pCache->Buffer, CACHE_BUFFER_SIZE, &dwBytesRead, NULL);
+
+        // If we didn't read anything, it might mean that the block
+        // of the file is not available (in case of partial MPQs).
+        // We sill skip it and try to read next block, until we reach
+        // the end of the file.
+        if(dwBytesRead == 0)
+            goto __TryReadBlock;
 
         // Set the buffer pointers
         pCache->pBegin =
         pCache->pPos = &pCache->Buffer[0];
-        pCache->pEnd = pCache->pBegin + pCache->dwBuffSize;
+        pCache->pEnd = pCache->pBegin + dwBytesRead;
     }
 
-    return pCache->dwBuffSize;
+    return dwBytesRead;
 }
 
-static size_t ReadLine(TListFileCache * pCache, char * szLine, int nMaxChars)
+static size_t ReadListFileLine(TListFileCache * pCache, char * szLine, int nMaxChars)
 {
     char * szLineBegin = szLine;
     char * szLineEnd = szLine + nMaxChars - 1;
+    char * szExtraString = NULL;
     
-__BeginLoading:
-
     // Skip newlines, spaces, tabs and another non-printable stuff
-    while(pCache->pPos < pCache->pEnd && *pCache->pPos <= 0x20)
+    for(;;)
+    {
+        // If we need to reload the cache, do it
+        if(pCache->pPos == pCache->pEnd)
+        {
+            if(ReloadListFileCache(pCache) == 0)
+                break;
+        }
+
+        // If we found a non-whitespace character, stop
+        if(*pCache->pPos > 0x20)
+            break;
+
+        // Skip the character
         pCache->pPos++;
+    }
 
     // Copy the remaining characters
-    while(pCache->pPos < pCache->pEnd && szLine < szLineEnd)
+    while(szLine < szLineEnd)
     {
+        // If we need to reload the cache, do it now and resume copying
+        if(pCache->pPos == pCache->pEnd)
+        {
+            if(ReloadListFileCache(pCache) == 0)
+                break;
+        }
+
         // If we have found a newline, stop loading
         if(*pCache->pPos == 0x0D || *pCache->pPos == 0x0A)
             break;
 
+        // Blizzard listfiles can also contain information about patch:
+        // Pass1\Files\MacOS\unconditional\user\Background Downloader.app\Contents\Info.plist~Patch(Data#frFR#base-frFR,1326)
+        if(*pCache->pPos == '~')
+            szExtraString = szLine;
+
+        // Copy the character
         *szLine++ = *pCache->pPos++;
     }
 
-    // If we now need to reload the cache, do it
-    if(pCache->pPos == pCache->pEnd)
+    // Terminate line with zero
+    *szLine = 0;
+
+    // If there was extra string after the file name, clear it
+    if(szExtraString != NULL)
     {
-        if(ReloadCache(pCache) > 0)
-            goto __BeginLoading;
+        if(szExtraString[0] == '~' && szExtraString[1] == 'P')
+        {
+            szLine = szExtraString;
+            *szExtraString = 0;
+        }
     }
 
-    *szLine = 0;
+    // Return the length of the line
     return (szLine - szLineBegin);
 }
 
@@ -353,66 +458,19 @@ int WINAPI SFileAddListFile(HANDLE hMpq, const char * szListFile)
 {
     TListFileCache * pCache = NULL;
     TMPQArchive * ha = (TMPQArchive *)hMpq;
-    HANDLE hListFile = NULL;
-    char  szFileName[MAX_PATH + 1];
-    DWORD dwSearchScope = SFILE_OPEN_LOCAL_FILE;
-    DWORD dwCacheSize = 0;
-    DWORD dwFileSize = 0;
+    char  szFileName[MAX_PATH];
     size_t nLength = 0;
     int nError = ERROR_SUCCESS;
 
-    // If the szListFile is NULL, it means we have to open internal listfile
-    if(szListFile == NULL)
-    {
-        // Use SFILE_OPEN_ANY_LOCALE for listfile. This will allow us to load 
-        dwSearchScope = SFILE_OPEN_ANY_LOCALE;
-        szListFile = LISTFILE_NAME;
-    }
-
-    // Open the local/internal listfile
-    if(nError == ERROR_SUCCESS)
-    {
-        if(!SFileOpenFileEx((HANDLE)ha, szListFile, dwSearchScope, &hListFile))
-            nError = GetLastError();
-    }
+    // Load the listfile to cache
+    pCache = CreateListFileCache(hMpq, szListFile);
+    if(pCache == NULL)
+        nError = GetLastError();
 
     if(nError == ERROR_SUCCESS)
     {
-        dwCacheSize = 
-        dwFileSize = SFileGetFileSize(hListFile, NULL);
-
-        // Try to allocate memory for the complete file. If it fails,
-        // load the part of the file
-        pCache = (TListFileCache *)ALLOCMEM(char, (sizeof(TListFileCache) + dwCacheSize));
-        if(pCache == NULL)
-        {
-            dwCacheSize = LISTFILE_CACHE_SIZE;
-            pCache = (TListFileCache *)ALLOCMEM(char, sizeof(TListFileCache) + dwCacheSize);
-        }
-
-        if(pCache == NULL)
-            nError = ERROR_NOT_ENOUGH_MEMORY;
-    }
-
-    if(nError == ERROR_SUCCESS)
-    {
-        // Initialize the file cache
-        memset(pCache, 0, sizeof(TListFileCache));
-        pCache->hFile      = hListFile;
-        pCache->dwFileSize = dwFileSize;
-        pCache->dwBuffSize = dwCacheSize;
-        pCache->dwFilePos  = 0;
-
-        // Fill the cache
-        SFileReadFile(hListFile, pCache->Buffer, pCache->dwBuffSize, &pCache->dwBuffSize, NULL);
-
-        // Initialize the pointers
-        pCache->pBegin =
-        pCache->pPos = &pCache->Buffer[0];
-        pCache->pEnd = pCache->pBegin + pCache->dwBuffSize;
-
         // Load the node list. Add the node for every locale in the archive
-        while((nLength = ReadLine(pCache, szFileName, sizeof(szFileName) - 1)) > 0)
+        while((nLength = ReadListFileLine(pCache, szFileName, sizeof(szFileName))) > 0)
             SListFileCreateNodeForAllLocales(ha, szFileName);
 
         // Also, add three special files to the listfile:
@@ -434,75 +492,34 @@ int WINAPI SFileAddListFile(HANDLE hMpq, const char * szListFile)
 HANDLE WINAPI SListFileFindFirstFile(HANDLE hMpq, const char * szListFile, const char * szMask, SFILE_FIND_DATA * lpFindFileData)
 {
     TListFileCache * pCache = NULL;
-    TMPQArchive * ha = (TMPQArchive *)hMpq;
-    HANDLE hListFile = NULL;
-    DWORD dwSearchScope = SFILE_OPEN_LOCAL_FILE;
-    DWORD dwCacheSize = 0;
-    DWORD dwFileSize = 0;
     size_t nLength = 0;
     int nError = ERROR_SUCCESS;
 
     // Initialize the structure with zeros
     memset(lpFindFileData, 0, sizeof(SFILE_FIND_DATA));
 
-    // If the szListFile is NULL, it means we have to open internal listfile
-    if(szListFile == NULL)
+    // Load the listfile to cache
+    pCache = CreateListFileCache(hMpq, szListFile);
+    if(pCache == NULL)
+        nError = GetLastError();
+
+    // Allocate file mask
+    if(nError == ERROR_SUCCESS && szMask != NULL)
     {
-        szListFile = LISTFILE_NAME;
-        dwSearchScope = SFILE_OPEN_FROM_MPQ;
-    }
-
-    // Open the local/internal listfile
-    if(nError == ERROR_SUCCESS)
-    {
-        if(!SFileOpenFileEx((HANDLE)ha, szListFile, dwSearchScope, &hListFile))
-            nError = GetLastError();
-    }
-
-    if(nError == ERROR_SUCCESS)
-    {
-        dwCacheSize = 
-        dwFileSize = SFileGetFileSize(hListFile, NULL);
-
-        // Try to allocate memory for the complete file. If it fails,
-        // load the part of the file
-        pCache = (TListFileCache *)ALLOCMEM(char, sizeof(TListFileCache) + dwCacheSize);
-        if(pCache == NULL)
-        {
-            dwCacheSize = LISTFILE_CACHE_SIZE;
-            pCache = (TListFileCache *)ALLOCMEM(char, sizeof(TListFileCache) + dwCacheSize);
-        }
-
-        if(pCache == NULL)
+        pCache->szMask = ALLOCMEM(char, strlen(szMask) + 1);
+        if(pCache->szMask != NULL)
+            strcpy(pCache->szMask, szMask);
+        else
             nError = ERROR_NOT_ENOUGH_MEMORY;
     }
 
+    // Perform file search
     if(nError == ERROR_SUCCESS)
     {
-        // Initialize the file cache
-        memset(pCache, 0, sizeof(TListFileCache));
-        pCache->hFile      = hListFile;
-        pCache->dwFileSize = dwFileSize;
-        pCache->dwBuffSize = dwCacheSize;
-        pCache->dwFilePos  = 0;
-        if(szMask != NULL)
-        {
-            pCache->szMask = ALLOCMEM(char, strlen(szMask) + 1);
-            strcpy(pCache->szMask, szMask);
-        }
-
-        // Fill the cache
-        SFileReadFile(hListFile, pCache->Buffer, pCache->dwBuffSize, &pCache->dwBuffSize, NULL);
-
-        // Initialize the pointers
-        pCache->pBegin =
-        pCache->pPos = &pCache->Buffer[0];
-        pCache->pEnd = pCache->pBegin + pCache->dwBuffSize;
-
         for(;;)
         {
             // Read the (next) line
-            nLength = ReadLine(pCache, lpFindFileData->cFileName, sizeof(lpFindFileData->cFileName));
+            nLength = ReadListFileLine(pCache, lpFindFileData->cFileName, sizeof(lpFindFileData->cFileName));
             if(nLength == 0)
             {
                 nError = ERROR_NO_MORE_FILES;
@@ -537,7 +554,7 @@ bool WINAPI SListFileFindNextFile(HANDLE hFind, SFILE_FIND_DATA * lpFindFileData
     for(;;)
     {
         // Read the (next) line
-        nLength = ReadLine(pCache, lpFindFileData->cFileName, sizeof(lpFindFileData->cFileName));
+        nLength = ReadListFileLine(pCache, lpFindFileData->cFileName, sizeof(lpFindFileData->cFileName));
         if(nLength == 0)
         {
             nError = ERROR_NO_MORE_FILES;

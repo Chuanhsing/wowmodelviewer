@@ -216,8 +216,28 @@
 			Name="Source Files"
 			>
 			<File
+				RelativePath=".\src\FileStream.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\src\SCommon.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="DebugAD|Win32"
 					>
@@ -271,47 +291,7 @@
 				RelativePath=".\src\SCompression.cpp"
 				>
 				<FileConfiguration
-					Name="DebugAD|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="ReleaseAD|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="ReleaseAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="ReleaseAS|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="ReleaseAS|x64"
+					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -322,6 +302,14 @@
 			<File
 				RelativePath=".\src\SFileAddFile.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="DebugAD|Win32"
 					>
@@ -375,6 +363,14 @@
 				RelativePath=".\src\SFileAttributes.cpp"
 				>
 				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="DebugAD|Win32"
 					>
 					<Tool
@@ -427,6 +423,14 @@
 				RelativePath=".\src\SFileCompactArchive.cpp"
 				>
 				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="DebugAD|Win32"
 					>
 					<Tool
@@ -476,8 +480,16 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\src\SFileCreateArchiveEx.cpp"
+				RelativePath=".\src\SFileCreateArchive.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="DebugAD|Win32"
 					>
@@ -531,6 +543,14 @@
 				RelativePath=".\src\SFileExtractFile.cpp"
 				>
 				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="DebugAD|Win32"
 					>
 					<Tool
@@ -582,6 +602,14 @@
 			<File
 				RelativePath=".\src\SFileFindFile.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="DebugAD|Win32"
 					>
@@ -635,6 +663,14 @@
 				RelativePath=".\src\SFileListFile.cpp"
 				>
 				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="DebugAD|Win32"
 					>
 					<Tool
@@ -686,6 +722,14 @@
 			<File
 				RelativePath=".\src\SFileOpenArchive.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="DebugAD|Win32"
 					>
@@ -739,6 +783,14 @@
 				RelativePath=".\src\SFileOpenFileEx.cpp"
 				>
 				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="DebugAD|Win32"
 					>
 					<Tool
@@ -790,6 +842,14 @@
 			<File
 				RelativePath=".\src\SFileReadFile.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="DebugAD|Win32"
 					>
@@ -843,6 +903,14 @@
 				RelativePath=".\src\SFileVerify.cpp"
 				>
 				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="DebugAD|Win32"
 					>
 					<Tool
@@ -894,14 +962,38 @@
 			<File
 				RelativePath=".\test\starcraft_lzma.asm"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="MASM"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\test\starcraft_sparse.asm"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="MASM"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\test\Test.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
 			</File>
 			<Filter
 				Name="adpcm"

@@ -25,8 +25,12 @@ static bool IsAviFile(TMPQHeader * pHeader)
 {
     DWORD * AviHdr = (DWORD *)pHeader;
 
+#ifdef PLATFORM_LITTLE_ENDIAN
     // Test for 'RIFF', 'AVI ' or 'LIST'
-    return (bool)(AviHdr[0] == 0x46464952 && AviHdr[2] == 0x20495641 && AviHdr[3] == 0x5453494C);
+    return (AviHdr[0] == 0x46464952 && AviHdr[2] == 0x20495641 && AviHdr[3] == 0x5453494C);
+#else
+    return (AviHdr[0] == 0x52494646 && AviHdr[2] == 0x41564920 && AviHdr[3] == 0x4C495354);
+#endif
 }
 
 // This function gets the right positions of the hash table and the block table.
@@ -73,46 +77,47 @@ LCID WINAPI SFileSetLocale(LCID lcNewLocale)
 }
 
 //-----------------------------------------------------------------------------
-// SFileOpenArchiveEx (not a public function !!!)
+// SFileOpenArchive
 //
 //   szFileName - MPQ archive file name to open
 //   dwPriority - When SFileOpenFileEx called, this contains the search priority for searched archives
-//   dwFlags    - If contains MPQ_OPEN_NO_LISTFILE, then the internal list file will not be used.
+//   dwFlags    - See MPQ_OPEN_XXX in StormLib.h
 //   phMpq      - Pointer to store open archive handle
 
-bool SFileOpenArchiveEx(
+bool WINAPI SFileOpenArchive(
     const char * szMpqName,
-    DWORD dwAccessMode,
+    DWORD dwPriority,
     DWORD dwFlags,
     HANDLE * phMpq)
 {
     LARGE_INTEGER FileSize = {0};
+    TFileStream * pStream = NULL;       // Open file stream
     TMPQArchive * ha = NULL;            // Archive handle
-    HANDLE hFile = INVALID_HANDLE_VALUE;// Opened archive file handle
-    DWORD dwMaxBlockIndex = 0;          // Maximum value of block entry
-    DWORD dwTransferred;                // Number of bytes read
+    DWORD dwCompressedTableSize = 0;    // Size of compressed block/hash table
+    DWORD dwTableSize = 0;              // Size of block/hash table
     DWORD dwBytes = 0;                  // Number of bytes to read
     int nError = ERROR_SUCCESS;   
 
-    // Check the right parameters
+    // Verify the parameters
     if(szMpqName == NULL || *szMpqName == 0 || phMpq == NULL)
         nError = ERROR_INVALID_PARAMETER;
 
-    // One time initializations of MPQ cryptography
+    // One time initialization of MPQ cryptography
     InitializeMpqCryptography();
+    dwPriority = dwPriority;
 
     // Open the MPQ archive file
     if(nError == ERROR_SUCCESS)
     {
-        hFile = CreateFile(szMpqName, dwAccessMode, FILE_SHARE_READ, NULL, MPQ_OPEN_EXISTING, 0, NULL);
-        if(hFile == INVALID_HANDLE_VALUE)
+        pStream = FileStream_OpenFile(szMpqName, (dwFlags & MPQ_OPEN_READ_ONLY) ? false : true);
+        if(pStream == NULL)
             nError = GetLastError();
     }
     
     // Allocate the MPQhandle
     if(nError == ERROR_SUCCESS)
     {
-        FileSize.LowPart = GetFileSize(hFile, (LPDWORD)&FileSize.HighPart);
+        FileStream_GetSize(pStream, &FileSize);
         if((ha = ALLOCMEM(TMPQArchive, 1)) == NULL)
             nError = ERROR_NOT_ENOUGH_MEMORY;
     }
@@ -121,14 +126,13 @@ bool SFileOpenArchiveEx(
     if(nError == ERROR_SUCCESS)
     {
         memset(ha, 0, sizeof(TMPQArchive));
-        strncpy(ha->szFileName, szMpqName, strlen(szMpqName));
-        ha->hFile      = hFile;
+        ha->pStream    = pStream;
         ha->pHeader    = &ha->Header;
         ha->pListFile  = NULL;
-        hFile = INVALID_HANDLE_VALUE;
+        pStream = NULL;
 
         // Remember if the archive is open for write
-        if((dwAccessMode & GENERIC_WRITE) == 0)
+        if(ha->pStream->StreamFlags & STREAM_FLAG_READ_ONLY)
             ha->dwFlags |= MPQ_FLAG_READ_ONLY;
 
         // Also remember if we shall check sector CRCs when reading file
@@ -144,10 +148,12 @@ bool SFileOpenArchiveEx(
 
         for(;;)
         {
-            // Invalidate the MPQ ID and read the eventual header
-            SetFilePointer(ha->hFile, SearchPos.LowPart, &SearchPos.HighPart, FILE_BEGIN);
-            ReadFile(ha->hFile, ha->pHeader, MPQ_HEADER_SIZE_V2, &dwTransferred, NULL);
-            dwHeaderID = BSWAP_INT32_UNSIGNED(ha->pHeader->dwID);
+            // Read the eventual MPQ header
+            if(!FileStream_Read(ha->pStream, &SearchPos, ha->pHeader, MPQ_HEADER_SIZE_V2))
+            {
+                nError = GetLastError();
+                break;
+            }
 
             // Special check : Some MPQs are actually AVI files, only with
             // changed extension.
@@ -157,14 +163,8 @@ bool SFileOpenArchiveEx(
                 break;
             }
 
-            // If different number of bytes read, break the loop
-            if(dwTransferred != MPQ_HEADER_SIZE_V2)
-            {
-                nError = ERROR_BAD_FORMAT;
-                break;
-            }
-
             // If there is the MPQ user data signature, process it
+            dwHeaderID = BSWAP_INT32_UNSIGNED(ha->pHeader->dwID);
             if(dwHeaderID == ID_MPQ_USERDATA && ha->pUserData == NULL)
             {
                 // Ignore the MPQ user data completely if the caller wants to open the MPQ as V1.0
@@ -305,104 +305,87 @@ bool SFileOpenArchiveEx(
             nError = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Read the hash table into memory
+    // Read the hash table.
+    // "interface.MPQ.part" in trial version of World of Warcraft
+    // has compressed block table and hash table.
     if(nError == ERROR_SUCCESS)
     {
-        dwBytes = ha->pHeader->dwHashTableSize * sizeof(TMPQHash);
-        SetFilePointer(ha->hFile, ha->HashTablePos.LowPart, &ha->HashTablePos.HighPart, FILE_BEGIN);
-        ReadFile(ha->hFile, ha->pHashTable, dwBytes, &dwTransferred, NULL);
+        dwCompressedTableSize = ha->pHeader->dwHashTableSize * sizeof(TMPQHash);
+        dwTableSize = dwCompressedTableSize;
 
-        if(dwTransferred != dwBytes)
-            nError = ERROR_FILE_CORRUPT;
-    }
-
-    // Decrypt hash table and check if it is correctly decrypted
-    if(nError == ERROR_SUCCESS)
-    {
-        TMPQHash * pHashEnd = ha->pHashTable + ha->pHeader->dwHashTableSize;
-        TMPQHash * pHash;
-        bool bFoundGoodEntry = false;
-        bool bFileIsEmpty = true;
-
-        // We have to convert the hash table from LittleEndian
-        BSWAP_ARRAY32_UNSIGNED(ha->pHashTable, dwBytes);
-        DecryptMpqTable(ha->pHashTable, dwBytes, "(hash table)");
-
-        //
-        // Check hash table if is correctly decrypted
-        // 
-        // Ladik: Some MPQ protectors corrupt the hash table by rewriting part of it.
-        // To be able to open these, we will check if there is at least one valid hash table item
-        // 
-
-        for(pHash = ha->pHashTable; pHash < pHashEnd; pHash++)
+        // If the block table follows the hash table
+        // and if position of the block table is lower
+        // than uncompressed size of hash table,
+        // it means that the hash table is compressed
+        if(ha->BlockTablePos.QuadPart > ha->HashTablePos.QuadPart)
         {
-            if(pHash->dwBlockIndex < ha->pHeader->dwBlockTableSize)
-                bFileIsEmpty = false;
-
-            if(pHash->lcLocale == 0 && pHash->wPlatform == 0 && pHash->dwBlockIndex <= ha->pHeader->dwBlockTableSize)
+            if((ha->HashTablePos.QuadPart + dwTableSize) > ha->BlockTablePos.QuadPart)
             {
-                bFoundGoodEntry = true;
-                break;
+                dwCompressedTableSize = (DWORD)(ha->BlockTablePos.QuadPart - ha->HashTablePos.QuadPart);
+//              bHashTableCompressed = true;
             }
         }
 
-        // If we haven't found at least 1 good entry, then the hash table is corrupt
-        if(bFileIsEmpty == false && bFoundGoodEntry == false)
-            nError = ERROR_FILE_CORRUPT;
+        //
+        // Note: We will not check if the hash table is properly decrypted.
+        // Some MPQ protectors corrupt the hash table by rewriting part of it.
+        // The way how MPQ tables work allows arbitrary values for unused entries.
+        // 
+
+        // Read the hash table into memory
+        nError = LoadMpqTable(ha, &ha->HashTablePos, ha->pHashTable, dwCompressedTableSize, dwTableSize, "(hash table)");
     }
 
     // Now, read the block table
     if(nError == ERROR_SUCCESS)
     {
-        // Load the block table to memory
-        dwBytes = ha->pHeader->dwBlockTableSize * sizeof(TMPQBlock);
+        dwCompressedTableSize = ha->pHeader->dwBlockTableSize * sizeof(TMPQBlock);
+        dwTableSize = dwCompressedTableSize;
+
+        // Pre-zero the entire block table
         memset(ha->pBlockTable, 0, (ha->dwBlockTableMax * sizeof(TMPQBlock)));
-        SetFilePointer(ha->hFile, ha->BlockTablePos.LowPart, &ha->BlockTablePos.HighPart, FILE_BEGIN);
-        ReadFile(ha->hFile, ha->pBlockTable, dwBytes, &dwTransferred, NULL);
+
+        // Check whether block table is compressed
+        if(ha->ExtBlockTablePos.QuadPart != 0)
+        {
+            if(ha->ExtBlockTablePos.QuadPart > ha->BlockTablePos.QuadPart)
+            {
+                if((ha->BlockTablePos.QuadPart + dwTableSize) > ha->ExtBlockTablePos.QuadPart)
+                {
+                    dwCompressedTableSize = (DWORD)(ha->ExtBlockTablePos.QuadPart - ha->BlockTablePos.QuadPart);
+//                  bBlockTableCompressed = true;
+                }
+            }
+        }
+        else
+        {
+            if(ha->pHeader->dwArchiveSize > ha->pHeader->dwBlockTablePos)
+            {
+                if((ha->pHeader->dwBlockTablePos + dwTableSize) > ha->pHeader->dwArchiveSize)
+                {
+                    dwCompressedTableSize = (DWORD)(ha->pHeader->dwArchiveSize - ha->pHeader->dwBlockTablePos);
+//                  bBlockTableCompressed = true;
+                }
+            }
+        }
 
         // I have found a MPQ which claimed 0x200 entries in the block table,
         // but the file was cut and there was only 0x1A0 entries.
-        // We will handle this case properly, even if that means 
-        // omiting another integrity check of the MPQ
-        if(dwTransferred < dwBytes)
-            dwBytes = dwTransferred;
-        BSWAP_ARRAY32_UNSIGNED(ha->pBlockTable, dwBytes);
-
-        // If nothing was read, we assume the file is corrupt.
-        if(dwTransferred != dwBytes)
-            nError = ERROR_FILE_CORRUPT;
-    }
-
-    // Decrypt block table.
-    // Some MPQs don't have the block table decrypted, e.g. cracked Diablo version
-    // We have to check if block table is really encrypted
-    if(nError == ERROR_SUCCESS)
-    {
-        TMPQBlock * pBlockEnd = ha->pBlockTable + ha->pHeader->dwBlockTableSize;
-        TMPQBlock * pBlock = ha->pBlockTable;
-        bool bBlockTableEncrypted = false;
-
-        // Verify all blocks entries in the table
-        // The loop usually stops at the first entry
-        while(pBlock < pBlockEnd)
+        // We will handle this case properly.
+        if((ha->BlockTablePos.QuadPart + dwCompressedTableSize) > FileSize.QuadPart)
         {
-            // The lower 8 bits of the MPQ flags are always zero.
-            // Note that this may change in next MPQ versions
-            if(pBlock->dwFlags & 0x000000FF)
-            {
-                bBlockTableEncrypted = true;
-                break;
-            }
-
-            // Move to the next block table entry
-            pBlock++;
+            dwCompressedTableSize = (DWORD)(FileSize.QuadPart - ha->BlockTablePos.QuadPart);
+            dwTableSize = dwCompressedTableSize;
         }
 
-        if(bBlockTableEncrypted)
-        {
-            DecryptMpqTable(ha->pBlockTable, dwBytes, "(block table)");
-        }
+        //
+        // One of the first cracked versions of Diablo had block table unencrypted 
+        // StormLib does NOT supports such MPQs anymore, as they are incompatible
+        // with compressed block table feature
+        //
+
+        // Read the block table
+        nError = LoadMpqTable(ha, &ha->BlockTablePos, ha->pBlockTable, dwCompressedTableSize, dwTableSize, "(block table)");
     }
 
     // Now, read the extended block table.
@@ -415,18 +398,11 @@ bool SFileOpenArchiveEx(
         if(ha->pHeader->ExtBlockTablePos.QuadPart != 0)
         {
             dwBytes = ha->pHeader->dwBlockTableSize * sizeof(TMPQBlockEx);
-            SetFilePointer(ha->hFile,
-                           ha->ExtBlockTablePos.LowPart,
-                          &ha->ExtBlockTablePos.HighPart,
-                           FILE_BEGIN);
-            ReadFile(ha->hFile, ha->pExtBlockTable, dwBytes, &dwTransferred, NULL);
+            if(!FileStream_Read(ha->pStream, &ha->ExtBlockTablePos, ha->pExtBlockTable, dwBytes))
+                nError = GetLastError();
 
             // We have to convert every USHORT in ext block table from LittleEndian
             BSWAP_ARRAY16_UNSIGNED(ha->pExtBlockTable, dwBytes);
-
-            // The extended block table is not encrypted (so far)
-            if(dwTransferred != dwBytes)
-                nError = ERROR_FILE_CORRUPT;
         }
     }
 
@@ -434,34 +410,42 @@ bool SFileOpenArchiveEx(
     if(nError == ERROR_SUCCESS && (ha->dwFlags & MPQ_FLAG_PROTECTED) == 0)
     {
         LARGE_INTEGER RawFilePos;
-        TMPQBlockEx * pBlockEx = ha->pExtBlockTable;
-        TMPQBlock * pBlockEnd = ha->pBlockTable + dwMaxBlockIndex;
-        TMPQBlock * pBlock   = ha->pBlockTable;
+        TMPQBlockEx * pBlockEx;
+        TMPQBlock * pBlock;
+        TMPQHash * pHashEnd = ha->pHashTable + ha->pHeader->dwHashTableSize;
+        TMPQHash * pHash;
 
-        // If the MPQ file is not protected,
-        // we will check if all sizes in the block table is correct.
-        for(; pBlock < pBlockEnd; pBlock++, pBlockEx++)
+        // Parse the hash table and the block table
+        for(pHash = ha->pHashTable; pHash < pHashEnd; pHash++)
         {
-            if(pBlock->dwFlags & MPQ_FILE_EXISTS)
+            if(pHash->dwBlockIndex < ha->pHeader->dwBlockTableSize)
             {
-                // Get the 64-bit file position
-                RawFilePos.HighPart = pBlockEx->wFilePosHigh;
-                RawFilePos.LowPart = pBlock->dwFilePos;
+                // Get both block table entries
+                pBlockEx = ha->pExtBlockTable + pHash->dwBlockIndex;
+                pBlock = ha->pBlockTable + pHash->dwBlockIndex;
 
-                // Begin of the file must be within range
-                RawFilePos.QuadPart += ha->MpqPos.QuadPart;
-                if(RawFilePos.QuadPart > FileSize.QuadPart)
+                // If the file exists, check if it doesn't go beyond the end of the file
+                if(pBlock->dwFlags & MPQ_FILE_EXISTS)
                 {
-                    nError = ERROR_BAD_FORMAT;
-                    break;
-                }
+                    // Get the 64-bit file position
+                    RawFilePos.HighPart = pBlockEx->wFilePosHigh;
+                    RawFilePos.LowPart = pBlock->dwFilePos;
 
-                // End of the file must be within range
-                RawFilePos.QuadPart += pBlock->dwCSize;
-                if(RawFilePos.QuadPart > FileSize.QuadPart)
-                {
-                    nError = ERROR_BAD_FORMAT;
-                    break;
+                    // Begin of the file must be within range
+                    RawFilePos.QuadPart += ha->MpqPos.QuadPart;
+                    if(RawFilePos.QuadPart > FileSize.QuadPart)
+                    {
+                        nError = ERROR_FILE_CORRUPT;
+                        break;
+                    }
+
+                    // End of the file must be within range
+                    RawFilePos.QuadPart += pBlock->dwCSize;
+                    if(RawFilePos.QuadPart > FileSize.QuadPart)
+                    {
+                        nError = ERROR_FILE_CORRUPT;
+                        break;
+                    }
                 }
             }
         }
@@ -490,21 +474,14 @@ bool SFileOpenArchiveEx(
     // Cleanup and exit
     if(nError != ERROR_SUCCESS)
     {
+        FileStream_Close(pStream);
         FreeMPQArchive(ha);
-        if(hFile != INVALID_HANDLE_VALUE)
-            CloseHandle(hFile);
         SetLastError(nError);
         ha = NULL;
     }
 
     *phMpq = ha;
     return (nError == ERROR_SUCCESS);
-}
-
-bool WINAPI SFileOpenArchive(const char * szMpqName, DWORD dwPriority, DWORD dwFlags, HANDLE * phMpq)
-{
-    dwPriority = dwPriority;
-    return SFileOpenArchiveEx(szMpqName, GENERIC_READ, dwFlags, phMpq);
 }
 
 //-----------------------------------------------------------------------------
@@ -549,7 +526,7 @@ bool WINAPI SFileFlushArchive(HANDLE hMpq)
     // Return the error
     if(nResultError != ERROR_SUCCESS)
         SetLastError(nResultError);
-    return (bool)(nResultError == ERROR_SUCCESS);
+    return (nResultError == ERROR_SUCCESS);
 }
 
 //-----------------------------------------------------------------------------

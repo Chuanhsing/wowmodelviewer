@@ -567,6 +567,58 @@
 			Name="Source Files"
 			>
 			<File
+				RelativePath=".\src\FileStream.cpp"
+				>
+				<FileConfiguration
+					Name="DebugAD|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAS|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAS|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\src\SCommon.cpp"
 				>
 				<FileConfiguration
@@ -827,7 +879,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\src\SFileCreateArchiveEx.cpp"
+				RelativePath=".\src\SFileCreateArchive.cpp"
 				>
 				<FileConfiguration
 					Name="DebugAD|Win32"

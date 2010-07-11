@@ -40,7 +40,6 @@ static int WriteDataToMpqFile(
     TMPQBlock * pBlock = hf->pBlock;
     BYTE * pbCompressed = NULL;         // Compressed (target) data
     BYTE * pbToWrite = NULL;            // Data to write to the file
-    DWORD dwTransferred = 0;            // Number of bytes read or written
     int nCompressionLevel = -1;         // ADPCM compression level (only used for wave files)
     int nError = ERROR_SUCCESS;
 
@@ -56,26 +55,6 @@ static int WriteDataToMpqFile(
     if((hf->dwFilePos + dwDataSize) > pBlock->dwFSize)
         return ERROR_DISK_FULL;
     pbToWrite = hf->pbFileSector;
-
-    // If we are going to write the data, set the file position and
-    // also allocate compression buffer
-    if((hf->dwFilePos + dwDataSize) >= hf->dwSectorSize || (hf->dwFilePos + dwDataSize) >= pBlock->dwFSize)
-    {
-        // Set the position in the file
-        ByteOffset.QuadPart = hf->RawFilePos.QuadPart;
-        ByteOffset.QuadPart += pBlock->dwCSize;
-        SetFilePointer(ha->hFile, ByteOffset.LowPart, (PLONG)&ByteOffset.HighPart, FILE_BEGIN);
-
-        // If the file is compressed, allocate buffer for the compressed data.
-        // Note that we allocate buffer that is a bit longer than sector size,
-        // for case if the compression method performs a buffer overrun
-        if(pBlock->dwFlags & MPQ_FILE_COMPRESSED)
-        {
-            pbToWrite = pbCompressed = ALLOCMEM(BYTE, hf->dwSectorSize + 0x100);
-            if(pbCompressed == NULL)
-                nError = ERROR_NOT_ENOUGH_MEMORY;
-        }
-    }
 
     // Now write all data to the file sector buffer
     if(nError == ERROR_SUCCESS)
@@ -106,9 +85,23 @@ static int WriteDataToMpqFile(
             // then write the data to the MPQ
             if(dwBytesInSector >= hf->dwSectorSize || hf->dwFilePos >= pBlock->dwFSize)
             {
+                // Set the position in the file
+                ByteOffset.QuadPart = hf->RawFilePos.QuadPart;
+                ByteOffset.QuadPart += pBlock->dwCSize;
+
+                // If the file is compressed, allocate buffer for the compressed data.
+                // Note that we allocate buffer that is a bit longer than sector size,
+                // for case if the compression method performs a buffer overrun
+                if((pBlock->dwFlags & MPQ_FILE_COMPRESSED) && pbCompressed == NULL)
+                {
+                    pbToWrite = pbCompressed = ALLOCMEM(BYTE, hf->dwSectorSize + 0x100);
+                    if(pbCompressed == NULL)
+                        nError = ERROR_NOT_ENOUGH_MEMORY;
+                }
+
                 // Update CRC32 and MD5 of the file
                 md5_process((hash_state *)hf->hctx, hf->pbFileSector, dwBytesInSector);
-                crc32(hf->dwCrc32, hf->pbFileSector, dwBytesInSector);
+                hf->dwCrc32 = crc32(hf->dwCrc32, hf->pbFileSector, dwBytesInSector);
 
                 // Compress the file sector, if needed
                 if(pBlock->dwFlags & MPQ_FILE_COMPRESSED)
@@ -161,10 +154,9 @@ static int WriteDataToMpqFile(
                 }
 
                 // Write the file sector
-                WriteFile(ha->hFile, pbToWrite, dwBytesInSector, &dwTransferred, NULL);
-                if(dwTransferred != dwBytesInSector)
+                if(!FileStream_Write(ha->pStream, &ByteOffset, pbToWrite, dwBytesInSector))
                 {
-                    nError = ERROR_DISK_FULL;
+                    nError = GetLastError();
                     break;
                 }
 
@@ -173,7 +165,7 @@ static int WriteDataToMpqFile(
                     AddFileCB(pvUserData, hf->dwFilePos, pBlock->dwFSize, false);
 
                 // Update the compressed file size
-                pBlock->dwCSize += dwTransferred;
+                pBlock->dwCSize += dwBytesInSector;
                 dwBytesInSector = 0;
                 dwSectorIndex++;
             }
@@ -199,7 +191,6 @@ static int RecryptFileData(
     TMPQBlockEx * pBlockEx = hf->pBlockEx;
     TMPQBlock * pBlock = hf->pBlock;
     DWORD dwBytesToRecrypt = pBlock->dwCSize;
-    DWORD dwTransferred;
     DWORD dwOldKey;
     DWORD dwNewKey;
     int nError = ERROR_SUCCESS;
@@ -229,7 +220,6 @@ static int RecryptFileData(
     hf->MpqFilePos.LowPart = pBlock->dwFilePos;
     hf->MpqFilePos.HighPart = pBlockEx->wFilePosHigh;
     hf->RawFilePos.QuadPart = ha->MpqPos.QuadPart + hf->MpqFilePos.QuadPart;
-    SetFilePointer(ha->hFile, hf->RawFilePos.LowPart, &hf->RawFilePos.HighPart, FILE_BEGIN);
 
     // Allocate buffer for file transfer
     nError = AllocateSectorBuffer(hf);
@@ -258,12 +248,9 @@ static int RecryptFileData(
         BSWAP_ARRAY32_UNSIGNED(SectorOffsetsCopy, dwArraySize);
 
         // Write the recrypted array back
-        SetFilePointer(ha->hFile, hf->RawFilePos.LowPart, &hf->RawFilePos.HighPart, FILE_BEGIN);
-        WriteFile(ha->hFile, SectorOffsetsCopy, dwArraySize, &dwTransferred, NULL);
+        if(!FileStream_Write(ha->pStream, &hf->RawFilePos, SectorOffsetsCopy, dwArraySize))
+            nError = GetLastError();
         FREEMEM(SectorOffsetsCopy);
-
-        if(dwTransferred != dwArraySize)
-            nError = ERROR_WRITE_FAULT;
     }
 
     // Now we have to recrypt all file sectors. We do it without
@@ -288,13 +275,11 @@ static int RecryptFileData(
 
             // Calculate the raw file offset of the file sector
             CalculateRawSectorOffset(RawFilePos, hf, dwRawByteOffset);
-            SetFilePointer(ha->hFile, RawFilePos.LowPart, &RawFilePos.HighPart, FILE_BEGIN);
 
             // Read the file sector
-            ReadFile(ha->hFile, hf->pbFileSector, dwRawDataInSector, &dwTransferred, NULL);
-            if(dwTransferred != dwRawDataInSector)
+            if(!FileStream_Read(ha->pStream, &RawFilePos, hf->pbFileSector, dwRawDataInSector))
             {
-                nError = ERROR_FILE_CORRUPT;
+                nError = GetLastError();
                 break;
             }
 
@@ -307,11 +292,9 @@ static int RecryptFileData(
             BSWAP_ARRAY32_UNSIGNED(hf->pbFileSector, dwRawDataInSector);
 
             // Write the sector back
-            SetFilePointer(ha->hFile, RawFilePos.LowPart, &RawFilePos.HighPart, FILE_BEGIN);
-            WriteFile(ha->hFile, hf->pbFileSector, dwRawDataInSector, &dwTransferred, NULL);
-            if(dwTransferred != dwRawDataInSector)
+            if(!FileStream_Write(ha->pStream, &RawFilePos, hf->pbFileSector, dwRawDataInSector))
             {
-                nError = ERROR_FILE_CORRUPT;
+                nError = GetLastError();
                 break;
             }
 
@@ -359,16 +342,15 @@ int SFileAddFile_Init(
     // If the MPQ header has not yet been written, do it now
     if(nError == ERROR_SUCCESS && (ha->dwFlags & MPQ_FLAG_NO_HEADER))
     {
-        DWORD dwTransferred;
+        // Remember the header size before swapping
+        DWORD dwBytesToWrite = ha->pHeader->dwHeaderSize;
 
         BSWAP_TMPQHEADER(ha->pHeader);
-        WriteFile(ha->hFile, ha->pHeader, ha->pHeader->dwHeaderSize, &dwTransferred, NULL);
-        BSWAP_TMPQHEADER(ha->pHeader);
-
-        if(dwTransferred == ha->pHeader->dwHeaderSize)
+        if(FileStream_Write(ha->pStream, &ha->MpqPos, ha->pHeader, dwBytesToWrite))
             ha->dwFlags &= ~MPQ_FLAG_NO_HEADER;
         else
-            nError = ERROR_DISK_FULL;
+            nError = GetLastError();
+        BSWAP_TMPQHEADER(ha->pHeader);
     }
 
     if(nError == ERROR_SUCCESS)
@@ -477,12 +459,12 @@ int SFileAddFile_Init(
             memset(hf->pMd5, 0, sizeof(TMPQMD5));
             hf->pCrc32[0] = 0;
 
-            // Initialize the file's FILETIME, CRC32 and MD5
+            // Initialize the file time, CRC32 and MD5
             assert(sizeof(hf->hctx) >= sizeof(hash_state));
             md5_init((hash_state *)hf->hctx);
             hf->dwCrc32 = crc32(0, Z_NULL, 0);
 
-            // If the caller gave us a FILETIME, use it.
+            // If the caller gave us a file time, use it.
             if(pFT != NULL)
                 *hf->pFileTime = *pFT;
         }
@@ -504,7 +486,6 @@ int SFileAddFile_Write(TMPQFile * hf, const void * pvData, DWORD dwSize, DWORD d
     TMPQArchive * ha;
     TMPQBlock * pBlock;
     DWORD dwSectorPosLen = 0;
-    DWORD dwTransferred = 0;            // Number of bytes read or written
     int nError = ERROR_SUCCESS;
 
     // Don't bother if the caller gave us zero size
@@ -552,11 +533,9 @@ int SFileAddFile_Write(TMPQFile * hf, const void * pvData, DWORD dwSize, DWORD d
         // at the moment, as it will be written again after writing all file sectors.
         if(hf->SectorOffsets != NULL)
         {
-            SetFilePointer(ha->hFile, hf->RawFilePos.LowPart, (PLONG)&hf->RawFilePos.HighPart, FILE_BEGIN);
             dwSectorPosLen = hf->dwSectorCount * sizeof(DWORD);
-            WriteFile(ha->hFile, hf->SectorOffsets, dwSectorPosLen, &dwTransferred, NULL);
-            if(dwTransferred != dwSectorPosLen)
-                nError = ERROR_DISK_FULL;
+            if(!FileStream_Write(ha->pStream, &hf->RawFilePos, hf->SectorOffsets, dwSectorPosLen))
+                nError = GetLastError();
 
             pBlock->dwCSize += dwSectorPosLen;
         }
@@ -570,6 +549,10 @@ int SFileAddFile_Write(TMPQFile * hf, const void * pvData, DWORD dwSize, DWORD d
     // we need to re-save sector offset table
     if((nError == ERROR_SUCCESS) && (hf->dwFilePos >= pBlock->dwFSize))
     {
+        // Finish calculating CRC32
+        if(hf->pCrc32 != NULL)
+            *hf->pCrc32 = hf->dwCrc32;
+
         // Finish calculating MD5
         if(hf->pMd5 != NULL)
             md5_done((hash_state *)hf->hctx, hf->pMd5->Value);
@@ -676,12 +659,8 @@ bool WINAPI SFileCreateFile(
         nError = ERROR_ACCESS_DENIED;
     
     // Don't allow to add any of the internal files
-    if(!_stricmp(szArchivedName, LISTFILE_NAME))
-        nError = ERROR_ACCESS_DENIED;
-    if(!_stricmp(szArchivedName, ATTRIBUTES_NAME))
-        nError = ERROR_ACCESS_DENIED;
-    if(!_stricmp(szArchivedName, SIGNATURE_NAME))
-        nError = ERROR_ACCESS_DENIED;
+    if(IsInternalMpqFileName(szArchivedName))
+        nError = ERROR_INTERNAL_FILE;
 
     // Perform validity check of the MPQ flags
     if(nError == ERROR_SUCCESS)
@@ -701,7 +680,7 @@ bool WINAPI SFileCreateFile(
     // Deal with the errors
     if(nError != ERROR_SUCCESS)
         SetLastError(nError);
-    return (bool)(nError == ERROR_SUCCESS);
+    return (nError == ERROR_SUCCESS);
 }
 
 bool WINAPI SFileWriteFile(
@@ -747,7 +726,7 @@ bool WINAPI SFileWriteFile(
     // Deal with errors
     if(nError != ERROR_SUCCESS)
         SetLastError(nError);
-    return (bool)(nError == ERROR_SUCCESS);
+    return (nError == ERROR_SUCCESS);
 }
 
 bool WINAPI SFileFinishFile(HANDLE hFile)
@@ -768,7 +747,7 @@ bool WINAPI SFileFinishFile(HANDLE hFile)
     // Deal with errors
     if(nError != ERROR_SUCCESS)
         SetLastError(nError);
-    return (bool)(nError == ERROR_SUCCESS);
+    return (nError == ERROR_SUCCESS);
 }
 
 //-----------------------------------------------------------------------------
@@ -782,14 +761,14 @@ bool WINAPI SFileAddFileEx(
     DWORD dwCompression,            // Compression of the first sector
     DWORD dwCompressionNext)        // Compression of next sectors
 {
+    LARGE_INTEGER FileSize = {0};
     TMPQFileTime ft = {0, 0};
+    TFileStream * pStream = NULL;
     HANDLE hMpqFile = NULL;
-    HANDLE hFile = INVALID_HANDLE_VALUE;
     LPBYTE pbFileData = NULL;
-    DWORD dwFileSizeHigh = 0;
-    DWORD dwTransferred;
+    DWORD dwBytesRemaining = 0;
+    DWORD dwBytesToRead;
     DWORD dwSectorSize = 0x1000;
-    DWORD dwFileSize = 0;
     int nError = ERROR_SUCCESS;
 
     // Check parameters
@@ -799,23 +778,24 @@ bool WINAPI SFileAddFileEx(
     // Open added file
     if(nError == ERROR_SUCCESS)
     {
-        hFile = CreateFile(szFileName, GENERIC_READ, FILE_SHARE_READ, 0, MPQ_OPEN_EXISTING, 0, NULL);
-        if(hFile == INVALID_HANDLE_VALUE)
+        pStream = FileStream_OpenFile(szFileName, false);
+        if(pStream == NULL)
             nError = GetLastError();
     }
 
     // Get the file size and file time
     if(nError == ERROR_SUCCESS)
     {
-        GetFileTime(hFile, NULL, NULL, (LPFILETIME)&ft);
-        dwFileSize = GetFileSize(hFile, &dwFileSizeHigh);
-        if(dwFileSizeHigh != 0)
-            nError = ERROR_PARAMETER_QUOTA_EXCEEDED;
+        FileStream_GetLastWriteTime(pStream, &ft);
+        FileStream_GetSize(pStream, &FileSize);
+        if(FileSize.HighPart != 0)
+            nError = ERROR_DISK_FULL;
     }
 
     // Allocate data buffer for reading from the source file
     if(nError == ERROR_SUCCESS)
     {
+        dwBytesRemaining = FileSize.LowPart;
         pbFileData = ALLOCMEM(BYTE, dwSectorSize);
         if(pbFileData == NULL)
             nError = ERROR_NOT_ENOUGH_MEMORY;
@@ -839,23 +819,34 @@ bool WINAPI SFileAddFileEx(
         }
 
         // Initiate adding file to the MPQ
-        if(!SFileCreateFile(hMpq, szArchivedName, &ft, dwFileSize, lcFileLocale, dwFlags, &hMpqFile))
+        if(!SFileCreateFile(hMpq, szArchivedName, &ft, FileSize.LowPart, lcFileLocale, dwFlags, &hMpqFile))
             nError = GetLastError();
     }
 
     // Write the file data to the MPQ
-    while(nError == ERROR_SUCCESS)
+    while(dwBytesRemaining != 0 && nError == ERROR_SUCCESS)
     {
+        // Get the number of bytes remaining in the source file
+        dwBytesToRead = dwBytesRemaining;
+        if(dwBytesToRead > dwSectorSize)
+            dwBytesToRead = dwSectorSize;
+
         // Read data from the local file
-        ReadFile(hFile, pbFileData, dwSectorSize, &dwTransferred, NULL);
-        if(dwTransferred == 0)
+        if(!FileStream_Read(pStream, NULL, pbFileData, dwBytesToRead))
+        {
+            nError = GetLastError();
             break;
+        }
 
         // Add the file sectors to the MPQ
-        if(!SFileWriteFile(hMpqFile, pbFileData, dwTransferred, dwCompression))
+        if(!SFileWriteFile(hMpqFile, pbFileData, dwBytesToRead, dwCompression))
+        {
             nError = GetLastError();
+            break;
+        }
 
         // Set the next data compression
+        dwBytesRemaining -= dwBytesToRead;
         dwCompression = dwCompressionNext;
     }
 
@@ -869,11 +860,11 @@ bool WINAPI SFileAddFileEx(
     // Cleanup and exit
     if(pbFileData != NULL)
         FREEMEM(pbFileData);
-    if(hFile != INVALID_HANDLE_VALUE)
-        CloseHandle(hFile);
+    if(pStream != NULL)
+        FileStream_Close(pStream);
     if(nError != ERROR_SUCCESS)
         SetLastError(nError);
-    return (bool)(nError == ERROR_SUCCESS);
+    return (nError == ERROR_SUCCESS);
 }
                                                                                                                                  
 // Adds a data file into the archive
@@ -965,12 +956,8 @@ bool WINAPI SFileRemoveFile(HANDLE hMpq, const char * szFileName, DWORD dwSearch
         // Do not allow to remove internal files
         if(dwSearchScope != SFILE_OPEN_BY_INDEX)
         {
-            if(!_stricmp(szFileName, LISTFILE_NAME))
-                nError = ERROR_ACCESS_DENIED;
-            if(!_stricmp(szFileName, ATTRIBUTES_NAME))
-                nError = ERROR_ACCESS_DENIED;
-            if(!_stricmp(szFileName, SIGNATURE_NAME))
-                nError = ERROR_ACCESS_DENIED;
+            if(IsInternalMpqFileName(szFileName))
+                nError = ERROR_INTERNAL_FILE;
         }
     }
 
@@ -1065,20 +1052,9 @@ bool WINAPI SFileRenameFile(HANDLE hMpq, const char * szFileName, const char * s
             nError = ERROR_ACCESS_DENIED;
 
         // Do not allow to rename any of the internal files
-        if(!_stricmp(szFileName, LISTFILE_NAME))
-            nError = ERROR_ACCESS_DENIED;
-        if(!_stricmp(szFileName, ATTRIBUTES_NAME))
-            nError = ERROR_ACCESS_DENIED;
-        if(!_stricmp(szFileName, SIGNATURE_NAME))
-            nError = ERROR_ACCESS_DENIED;
-
         // Also do not allow to rename any of files to an internal file
-        if(!_stricmp(szNewFileName, LISTFILE_NAME))
-            nError = ERROR_ACCESS_DENIED;
-        if(!_stricmp(szNewFileName, ATTRIBUTES_NAME))
-            nError = ERROR_ACCESS_DENIED;
-        if(!_stricmp(szNewFileName, SIGNATURE_NAME))
-            nError = ERROR_ACCESS_DENIED;
+        if(IsInternalMpqFileName(szFileName) || IsInternalMpqFileName(szNewFileName))
+            nError = ERROR_INTERNAL_FILE;
     }
 
     // Get the hash table entry for the original file
@@ -1189,6 +1165,13 @@ bool WINAPI SFileSetFileLocale(HANDLE hFile, LCID lcNewLocale)
     if(!IsValidFileHandle(hf))
     {
         SetLastError(ERROR_INVALID_HANDLE);
+        return false;
+    }
+
+    // Do not allow to change locale of any internal file
+    if(IsInternalMpqFileName(hf->szFileName))
+    {
+        SetLastError(ERROR_INTERNAL_FILE);
         return false;
     }
 

@@ -45,21 +45,25 @@ static bool IsPseudoFileName(const char * szFileName, DWORD * pdwFileIndex)
 
 static bool OpenLocalFile(const char * szFileName, HANDLE * phFile)
 {
+    TFileStream * pStream;
     TMPQFile * hf = NULL;
-    HANDLE hFile = CreateFile(szFileName, GENERIC_READ, FILE_SHARE_READ, NULL, MPQ_OPEN_EXISTING, 0, NULL);
-
-    if(hFile != INVALID_HANDLE_VALUE)
+    
+    pStream = FileStream_OpenFile(szFileName, false);
+    if(pStream != NULL)
     {
         // Allocate and initialize file handle
         hf = CreateMpqFile(NULL, szFileName);
         if(hf != NULL)
         {
-            hf->hFile = hFile;
+            hf->pStream = pStream;
             *phFile = hf;
             return true;
         }
         else
+        {
+            FileStream_Close(pStream);
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+        }
     }
     *phFile = NULL;
     return false;
@@ -220,13 +224,18 @@ bool WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
                     break;
                 }
 
-                // Is it a pseudo-name ("FileXXXXXXXX.ext") ?
-                if(!IsPseudoFileName(szFileName, &dwBlockIndex))
+                // First of all, check the name as-is
+                pHash = GetHashEntryLocale(ha, szFileName, lcFileLocale);
+                if(pHash != NULL)
                 {
                     nHandleSize = sizeof(TMPQFile) + strlen(szFileName);
-                    pHash = GetHashEntryLocale(ha, szFileName, lcFileLocale);
-                    if(pHash == NULL)
-                        nError = ERROR_FILE_NOT_FOUND;
+                    break;
+                }
+
+                // If the file doesn't exist in the MPQ, check file pseudo-name ("FileXXXXXXXX.ext")
+                if(!IsPseudoFileName(szFileName, &dwBlockIndex))
+                {
+                    nError = ERROR_FILE_NOT_FOUND;
                     break;
                 }
 
@@ -264,8 +273,12 @@ bool WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
 
             case SFILE_OPEN_LOCAL_FILE:
 
-                // Just pass it fuhrter, let CreateFile
-                // deal with eventual invalid parameters
+                if(szFileName == NULL || *szFileName == 0)
+                {
+                    nError = ERROR_INVALID_PARAMETER;
+                    break;
+                }
+
                 return OpenLocalFile(szFileName, phFile); 
 
             default:
@@ -319,7 +332,6 @@ bool WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
     if(nError == ERROR_SUCCESS)
     {
         memset(hf, 0, nHandleSize);
-        hf->hFile    = INVALID_HANDLE_VALUE;
         hf->ha       = ha;
         hf->pBlockEx = pBlockEx;
         hf->pBlock   = pBlock;
@@ -373,8 +385,8 @@ bool WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
     // Cleanup
     if(nError != ERROR_SUCCESS)
     {
-        FreeMPQFile(hf);
         SetLastError(nError);
+        FreeMPQFile(hf);
     }
 
     *phFile = hf;

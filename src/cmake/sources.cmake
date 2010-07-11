@@ -14,12 +14,13 @@ set(STORM_SOURCES
     stormlib/src/adpcm/adpcm.cpp
     stormlib/src/huffman/huff.cpp
     stormlib/src/sparse/sparse.cpp
+    stormlib/src/FileStream.cpp
     stormlib/src/SCommon.cpp
     stormlib/src/SCompression.cpp
     stormlib/src/SFileAddFile.cpp
     stormlib/src/SFileAttributes.cpp
     stormlib/src/SFileCompactArchive.cpp
-    stormlib/src/SFileCreateArchiveEx.cpp
+    stormlib/src/SFileCreateArchive.cpp
     stormlib/src/SFileExtractFile.cpp
     stormlib/src/SFileFindFile.cpp
     stormlib/src/SFileListFile.cpp

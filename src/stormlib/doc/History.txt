@@ -2,6 +2,17 @@
   StormLib history
   ================
 
+ Version 7.10
+ 
+ - Support for partial MPQs ("interface.MPQ.part")
+ - Fixed memory leak that has occured when writing more than one sector to the file at once
+
+ Version 7.01
+ 
+ - Support for adding files from memory
+ - Fixed improper validation of handles to MPQ file and MPQ archive
+ - Fixed bug where StormLib didn't save CRC32 of the file when added to archive
+
  Version 7.00
 
  - Properly deals with MPQs protected by w3xMaster
