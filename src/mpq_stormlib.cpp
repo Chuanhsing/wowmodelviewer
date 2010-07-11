@@ -323,16 +323,17 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 					//line.erase(line.length()-2, 2); // delete \r\n
 
 					if (filterfunc(std::string(line.mb_str()))) {
-						
 						// This is just to help cleanup Duplicates
 						// Ideally I should tokenise the string and clean it up automatically
+						FileTreeItem tmp;
+						
+						tmp.fileName = line.mb_str();
 						line.MakeLower();
-						line[0] = char(line.GetChar(0) - 32);
+						line[0] = toupper(line.GetChar(0));
 						int ret = line.Find('\\');
 						if (ret>-1)
-							line[ret+1] = char(line.GetChar(ret+1) - 32);
+							line[ret+1] = toupper(line.GetChar(ret+1));
 
-						FileTreeItem tmp;
 						tmp.displayName = line.mb_str();
 						tmp.color = col;
 						dest.insert(tmp);
