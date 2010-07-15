@@ -59,29 +59,35 @@ MPQFile::openFile(const char* filename)
 	pointer = 0;
 	size = 0;
 	if( useLocalFiles ) {
-		wxString fn = wxGetCwd()+SLASH+_T("Import")+SLASH;
-		fn.Append(wxString(filename, wxConvUTF8));
+		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
+		wxString fn2 = fn1;
+		fn1.Append(wxString(filename, wxConvUTF8));
+		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
 
-		if (wxFile::Exists(fn)) {
-			// success
-			wxFile file;
-			// if successfully opened
-			if (file.Open(fn, wxFile::read)) {
-				size = file.Length();
-				if (size > 0) {
-					buffer = new unsigned char[size];
-					// if successfully read data
-					if (file.Read(buffer, size) > 0) {
-						eof = false;
-						file.Close();
-						return;
-					} else {
-						wxDELETEA(buffer);
-						eof = true;
-						size = 0;
+		wxString fns[] = { fn1, fn2 };
+		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
+			wxString fn = fns[i];
+			if (wxFile::Exists(fn)) {
+				// success
+				wxFile file;
+				// if successfully opened
+				if (file.Open(fn, wxFile::read)) {
+					size = file.Length();
+					if (size > 0) {
+						buffer = new unsigned char[size];
+						// if successfully read data
+						if (file.Read(buffer, size) > 0) {
+							eof = false;
+							file.Close();
+							return;
+						} else {
+							wxDELETEA(buffer);
+							eof = true;
+							size = 0;
+						}
 					}
+					file.Close();
 				}
-				file.Close();
 			}
 		}
 	}
@@ -129,10 +135,17 @@ MPQFile::~MPQFile()
 bool MPQFile::exists(const char* filename)
 {
 	if( useLocalFiles ) {
-		wxString fn = wxGetCwd()+SLASH+_T("Import")+SLASH;
-		fn.Append(wxString(filename, wxConvUTF8));
-		if (wxFile::Exists(fn))
-			return true;
+		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
+		wxString fn2 = fn1;
+		fn1.Append(wxString(filename, wxConvUTF8));
+		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
+
+		wxString fns[] = { fn1, fn2 };
+		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
+			wxString fn = fns[i];
+			if (wxFile::Exists(fn))
+				return true;
+		}
 	}
 
 	for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end();++i)
@@ -203,11 +216,18 @@ size_t MPQFile::getSize()
 int MPQFile::getSize(const char* filename)
 {
 	if( useLocalFiles ) {
-		wxString fn = wxGetCwd()+SLASH+_T("Import")+SLASH;
-		fn.Append(wxString(filename, wxConvUTF8));
-		if (wxFile::Exists(fn)) {
-			wxFile file(fn);
-			return file.Length();
+		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
+		wxString fn2 = fn1;
+		fn1.Append(wxString(filename, wxConvUTF8));
+		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
+
+		wxString fns[] = { fn1, fn2 };
+		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
+			wxString fn = fns[i];
+			if (wxFile::Exists(fn)) {
+				wxFile file(fn);
+				return file.Length();
+			}
 		}
 	}
 
@@ -220,6 +240,39 @@ int MPQFile::getSize(const char* filename)
 	}
 
 	return 0;
+}
+
+char* MPQFile::getArchive(const char* filename)
+{
+	static char archive[512];
+	if( useLocalFiles ) {
+		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
+		wxString fn2 = fn1;
+		fn1.Append(wxString(filename, wxConvUTF8));
+		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
+
+		wxString fns[] = { fn1, fn2 };
+		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
+			wxString fn = fns[i];
+			if (wxFile::Exists(fn)) {
+				strncpy(archive, fn.mb_str(), sizeof(archive));
+				return archive;
+			}
+		}
+	}
+
+	for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end();++i)
+	{
+		mpq_archive &mpq_a = **i;
+		int fileno = libmpq_file_number(&mpq_a, filename);
+		if (fileno != LIBMPQ_EFILE_NOT_FOUND) {
+			strncpy(archive, mpq_a.filename, sizeof(archive));
+			return archive;
+		}
+	}
+
+	strncpy(archive, "unknown", sizeof(archive));
+	return archive;
 }
 
 size_t MPQFile::getPos()

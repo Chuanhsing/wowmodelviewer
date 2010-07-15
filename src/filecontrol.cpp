@@ -343,7 +343,7 @@ void FileControl::OnPopupClick(wxCommandEvent &evt)
 		mcPlayer->Play();
 		wxLogMessage(_T("Playing: %s, Vol: %f, State: %d"), filename.c_str(), mcPlayer->GetVolume(), mcPlayer->GetState());
 #endif
-	} else if (ID_FILELIST_VIEW) {
+	} else if (id == ID_FILELIST_VIEW) {
 		ExportPNG(val, _T("png"));
 		wxFileName fn(val);
 		wxString temp;
@@ -383,6 +383,11 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 	if (temp.EndsWith(_T("blp"))) {
 		infoMenu.Append(ID_FILELIST_VIEW, _T("&View"), _T("View this object"));
 	}
+	infoMenu.AppendSeparator();
+	wxString archive(MPQFile::getArchive(tdata->fn.c_str()), wxConvUTF8);
+	infoMenu.Append(ID_FILELIST, archive, archive);
+	wxString size = wxString::Format("Size: %d", MPQFile::getSize(tdata->fn.c_str()));
+	infoMenu.Append(ID_FILELIST, size, size);
 	infoMenu.Connect(wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&FileControl::OnPopupClick, NULL, this);
 	PopupMenu(&infoMenu);
 }

@@ -65,6 +65,7 @@ public:
 
 	static bool exists(const char* filename);
 	static int getSize(const char* filename); // Used to do a quick check to see if a file is corrupted
+	static char* getArchive(const char* filename);
 };
 
 inline void flipcc(char *fcc)

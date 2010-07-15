@@ -253,6 +253,40 @@ int MPQFile::getSize(const char* filename)
 	return 0;
 }
 
+char* MPQFile::getArchive(const char* filename)
+{
+	static char archive[512];
+	if( useLocalFiles ) {
+		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
+		wxString fn2 = fn1;
+		fn1.Append(wxString(filename, wxConvUTF8));
+		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
+
+		wxString fns[] = { fn1, fn2 };
+		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
+			wxString fn = fns[i];
+			if (wxFile::Exists(fn)) {
+				strncpy(archive, fn.mb_str(), sizeof(archive));
+				return archive;
+			}
+		}
+	}
+
+	for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end();++i)
+	{
+		HANDLE &mpq_a = *i->second;
+		HANDLE fh;
+		
+		if( !SFileOpenFileEx( mpq_a, filename, 0, &fh ) )
+			continue;
+
+		strncpy(archive, i->first.c_str(), sizeof(archive));
+		return archive;
+	}
+	strncpy(archive, "unknown", sizeof(archive));
+	return archive;
+}
+
 size_t MPQFile::getPos()
 {
 	return pointer;
