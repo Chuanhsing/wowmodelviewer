@@ -386,7 +386,7 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 	infoMenu.AppendSeparator();
 	wxString archive(MPQFile::getArchive(tdata->fn.c_str()), wxConvUTF8);
 	infoMenu.Append(ID_FILELIST, archive, archive);
-	wxString size = wxString::Format("Size: %d", MPQFile::getSize(tdata->fn.c_str()));
+	wxString size = wxString::Format(_T("Size: %d"), MPQFile::getSize(tdata->fn.c_str()));
 	infoMenu.Append(ID_FILELIST, size, size);
 	infoMenu.Connect(wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&FileControl::OnPopupClick, NULL, this);
 	PopupMenu(&infoMenu);
