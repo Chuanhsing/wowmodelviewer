@@ -101,11 +101,11 @@ typedef struct tagcomplex {
 
 typedef unsigned char  BYTE;
 typedef unsigned short WORD;
-typedef unsigned long  DWORD;
+typedef unsigned int  DWORD;
 typedef unsigned int   UINT;
 
 typedef DWORD          COLORREF;
-typedef unsigned int   HANDLE;
+typedef void*   HANDLE;
 typedef void*          HRGN;
 
 #ifndef BOOL

@@ -66,7 +66,7 @@ MPQFile::openFile(const char* filename)
 		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
 
 		wxString fns[] = { fn1, fn2 };
-		for(int i=0; i<WXSIZEOF(fns); i++) {
+		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
 			wxString fn = fns[i];
 			if (wxFile::Exists(fn)) {
 				// success
@@ -147,7 +147,7 @@ bool MPQFile::exists(const char* filename)
 		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
 
 		wxString fns[] = { fn1, fn2 };
-		for(int i=0; i<WXSIZEOF(fns); i++) {
+		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
 			wxString fn = fns[i];
 			if (wxFile::Exists(fn))
 				return true;
@@ -228,7 +228,7 @@ int MPQFile::getSize(const char* filename)
 		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
 
 		wxString fns[] = { fn1, fn2 };
-		for(int i=0; i<WXSIZEOF(fns); i++) {
+		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
 			wxString fn = fns[i];
 			if (wxFile::Exists(fn)) {
 				wxFile file(fn);

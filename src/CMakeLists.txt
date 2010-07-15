@@ -10,7 +10,7 @@ find_package(ZLIB REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(PNG REQUIRED)
 
-set(USE_STORM 0)
+set(USE_STORM 1)
 
 include(${wxWidgets_USE_FILE})
 include(cmake/sources.cmake)
