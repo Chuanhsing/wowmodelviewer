@@ -532,6 +532,8 @@ public:
 
 	Record getById(int id, int subid);
 
+	static const size_t ClassIDV400 = 1;	// int
+	static const size_t SubClassIDV400 = 2;	// int
 	static const size_t HandsV400 = 10;		// int
 	static const size_t NameV400 = 11;		// string
 };

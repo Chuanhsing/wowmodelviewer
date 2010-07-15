@@ -818,8 +818,13 @@ ItemSubClassDB::Record ItemSubClassDB::getById(int id, int subid)
 {
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
-		if (i->getInt(ClassID)==id && i->getInt(SubClassID)==subid)
-			return (*i);
+		if (gameVersion == 40000) {
+			if (i->getInt(ClassIDV400)==id && i->getInt(SubClassIDV400)==subid)
+				return (*i);
+		} else {
+			if (i->getInt(ClassID)==id && i->getInt(SubClassID)==subid)
+				return (*i);
+		}
 	}
 	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();

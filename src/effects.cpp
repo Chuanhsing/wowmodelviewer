@@ -48,9 +48,16 @@ void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent
 
 	map<pair<int,int>, int> subclasslookup;
 	for (ItemSubClassDB::Iterator it=subclassdb.begin(); it != subclassdb.end(); ++it) {
-		int cl = it->getInt(ItemSubClassDB::ClassID);
-		int scl = it->getInt(ItemSubClassDB::SubClassID);
-
+		int cl;
+		if (gameVersion == 40000)
+			cl = it->getInt(ItemSubClassDB::ClassIDV400);
+		else
+			cl = it->getInt(ItemSubClassDB::ClassID);
+		int scl;
+		if (gameVersion == 40000)
+			scl = it->getInt(ItemSubClassDB::SubClassIDV400);
+		else
+			scl = it->getInt(ItemSubClassDB::SubClassID);
 		// only add the subclass if it was found in the itemlist
 		if (cl>0 && subclassesFound.find(pair<int,int>(cl, scl)) != subclassesFound.end()) {
 			wxString str;
