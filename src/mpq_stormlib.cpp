@@ -62,10 +62,12 @@ MPQFile::openFile(const char* filename)
 	if( useLocalFiles ) {
 		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
 		wxString fn2 = fn1;
+		wxString fn3 = gamePath;
 		fn1.Append(wxString(filename, wxConvUTF8));
 		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
+		fn3.Append(wxString(filename, wxConvUTF8));
 
-		wxString fns[] = { fn1, fn2 };
+		wxString fns[] = { fn1, fn2, fn3 };
 		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
 			wxString fn = fns[i];
 			if (wxFile::Exists(fn)) {
@@ -143,10 +145,12 @@ bool MPQFile::exists(const char* filename)
 	if( useLocalFiles ) {
 		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
 		wxString fn2 = fn1;
+		wxString fn3 = gamePath;
 		fn1.Append(wxString(filename, wxConvUTF8));
 		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
+		fn3.Append(wxString(filename, wxConvUTF8));
 
-		wxString fns[] = { fn1, fn2 };
+		wxString fns[] = { fn1, fn2, fn3 };
 		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
 			wxString fn = fns[i];
 			if (wxFile::Exists(fn))
@@ -224,10 +228,12 @@ int MPQFile::getSize(const char* filename)
 	if( useLocalFiles ) {
 		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
 		wxString fn2 = fn1;
+		wxString fn3 = gamePath;
 		fn1.Append(wxString(filename, wxConvUTF8));
 		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
+		fn3.Append(wxString(filename, wxConvUTF8));
 
-		wxString fns[] = { fn1, fn2 };
+		wxString fns[] = { fn1, fn2, fn3 };
 		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
 			wxString fn = fns[i];
 			if (wxFile::Exists(fn)) {
@@ -259,10 +265,12 @@ char* MPQFile::getArchive(const char* filename)
 	if( useLocalFiles ) {
 		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
 		wxString fn2 = fn1;
+		wxString fn3 = gamePath;
 		fn1.Append(wxString(filename, wxConvUTF8));
 		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
+		fn3.Append(wxString(filename, wxConvUTF8));
 
-		wxString fns[] = { fn1, fn2 };
+		wxString fns[] = { fn1, fn2, fn3 };
 		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
 			wxString fn = fns[i];
 			if (wxFile::Exists(fn)) {
