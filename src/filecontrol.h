@@ -26,11 +26,14 @@ public:
 	wxButton *btnSearch;
 	wxTextCtrl *txtContent;
 	wxChoice *choFilter;
+	int filterMode;
+	wxChoice *mpqFilter;
+	int filterModeMPQ;
 	wxTreeItemId CurrentItem;
 #ifdef	PLAY_MUSIC
 	wxMediaCtrl *mcPlayer;
 #endif
-	int filterMode;
+
 
 	ModelViewer* modelviewer; // point to parent
 	

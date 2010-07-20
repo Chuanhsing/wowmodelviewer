@@ -16,6 +16,7 @@ BEGIN_EVENT_TABLE(FileControl, wxWindow)
 	EVT_BUTTON(ID_FILELIST_SEARCH, FileControl::OnButton)
 	EVT_TEXT_ENTER(ID_FILELIST_CONTENT, FileControl::OnButton)
 	EVT_CHOICE(ID_FILELIST_FILTER, FileControl::OnChoice)
+	EVT_CHOICE(ID_FILELIST_FILTER_MPQ, FileControl::OnChoice)
 	EVT_TREE_ITEM_MENU(ID_FILELIST, FileControl::OnTreeMenu)
 END_EVENT_TABLE()
 
@@ -44,12 +45,15 @@ All suffixs in MPQ:
 static wxString content;
 static wxString filterString;
 static wxString filterStrings[] = {_T("m2"), _T("wmo"), _T("adt"), _T("wav"), _T("mp3"), _T("blp"), _T("bls"), _T("dbc"), _T("lua"), _T("xml")};
-static wxString chos[] = {_T("Models"), _T("WMOs"), _T("ADTs"), _T("WAVs"), _T("MP3s"), _T("Images"), _T("Shaders"), _T("DBCs"), _T("LUAs"), _T("XMLs")};
+static wxString chos[] = {_T("Models (*.m2)"), _T("WMOs (*.wmo)"), _T("ADTs (*.adt)"), _T("WAVs (*.wav)"), _T("MP3s (*.mp3)"), _T("Images (*.blp)"), _T("Shaders (*.bls)"), _T("DBCs (*.dbc)"), _T("LUAs (*.lua)"), _T("XMLs (*.xml)")};
+static wxString filterArchive;
+static wxArrayString filterArchives;
 
 FileControl::FileControl(wxWindow* parent, wxWindowID id)
 {
 	modelviewer = NULL;
 	filterMode = FILE_FILTER_MODEL;
+	filterModeMPQ = 0;
 
 	if (Create(parent, id, wxDefaultPosition, wxSize(170,700), 0, _T("ModelControlFrame")) == false) {
 		wxLogMessage(_T("GUI Error: Failed to create a window for our FileControl!"));
@@ -59,9 +63,16 @@ FileControl::FileControl(wxWindow* parent, wxWindowID id)
 	try {
 		txtContent = new wxTextCtrl(this, ID_FILELIST_CONTENT, wxEmptyString, wxPoint(10, 10), wxSize(110, 20), wxTE_PROCESS_ENTER, wxDefaultValidator);
 		btnSearch = new wxButton(this, ID_FILELIST_SEARCH, _("Clear"), wxPoint(120, 10), wxSize(46,20));
-		fileTree = new wxTreeCtrl(this, ID_FILELIST, wxPoint(0, 35), wxSize(250,600), wxTR_HIDE_ROOT|wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_FULL_ROW_HIGHLIGHT|wxTR_NO_LINES);
-		choFilter = new wxChoice(this, ID_FILELIST_FILTER, wxPoint(10, 645), wxSize(110, 10), WXSIZEOF(chos), chos);
+		fileTree = new wxTreeCtrl(this, ID_FILELIST, wxPoint(0, 35), wxSize(250,580), wxTR_HIDE_ROOT|wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_FULL_ROW_HIGHLIGHT|wxTR_NO_LINES);
+		choFilter = new wxChoice(this, ID_FILELIST_FILTER, wxPoint(10, 620), wxSize(130, 10), WXSIZEOF(chos), chos);
 		choFilter->SetSelection(filterMode);
+
+		filterArchives.Add(wxEmptyString);
+		for (size_t i=0; i<mpqArchives.GetCount(); i++) {
+			filterArchives.Add(mpqArchives[i].AfterLast(SLASH));
+		}
+		mpqFilter = new wxChoice(this, ID_FILELIST_FILTER_MPQ, wxPoint(10, 645), wxSize(130, 10), filterArchives);
+		mpqFilter->SetSelection(filterModeMPQ);
 #ifdef	PLAY_MUSIC
 		mcPlayer = new wxMediaCtrl(this, ID_FILELIST_PLAY, wxEmptyString, wxPoint(0,670), wxSize(280,50));
 		mcPlayer->SetVolume(1.0);
@@ -86,10 +97,20 @@ bool filterSearch(std::string s)
 	if (len < 4) 
 		return false;
 
+	// filter suffix
 	wxString temp(s.c_str(), wxConvUTF8);
 	temp.MakeLower();
-	if (!temp.EndsWith(filterString))
+	if (!filterString.IsEmpty() && !temp.EndsWith(filterString))
 		return false;
+
+	// filter mpq
+	if (!filterArchive.IsEmpty()) {
+		wxString archive(MPQFile::getArchive(s.c_str()), wxConvUTF8);
+		if (!archive.EndsWith(filterArchive))
+			return false;
+	}
+
+	// filter text input
 	if (!content.IsEmpty() && temp.Find(content) == wxNOT_FOUND)
 		return false;
 
@@ -106,6 +127,7 @@ void FileControl::Init(ModelViewer* mv)
 	content = txtContent->GetValue().MakeLower().Trim();
 
 	filterString = filterStrings[filterMode];
+	filterArchive = filterArchives[filterModeMPQ];
 	getFileLists(filelist, filterSearch);
 
 	// Put all the viewable files into our File Tree.
@@ -193,7 +215,7 @@ void FileControl::Init(ModelViewer* mv)
 				//	colour = true;
 				//}
 				//fileTree->SetItemBackgroundColour(newItem.first, wxColour(237,243,254));
-					
+
 				stack.push_back(newItem);
 			}
 		}
@@ -256,6 +278,12 @@ void FileControl::OnChoice(wxCommandEvent &event)
 		int curSelection = choFilter->GetCurrentSelection();
 		if (curSelection >= 0 && curSelection != filterMode) {
 			filterMode = curSelection;
+			Init();
+		}
+	} else if (id == ID_FILELIST_FILTER_MPQ) {
+		int curSelection = mpqFilter->GetCurrentSelection();
+		if (curSelection != filterModeMPQ) {
+			filterModeMPQ = curSelection;
 			Init();
 		}
 	}
