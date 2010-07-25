@@ -82,8 +82,9 @@ bool SaveScene(KFbxSdkManager* pSdkManager, KFbxDocument* pScene, const char* pF
                 if (pSdkManager->GetIOPluginRegistry()->WriterIsFBX(lFormatIndex))
                 {
                     KString lDesc =pSdkManager->GetIOPluginRegistry()->GetWriterFormatDescription(lFormatIndex);
-                    char *lASCII = "ascii";
-                    if (lDesc.Find(lASCII)>=0)
+                    //char* format = "ascii";
+					char* format = "binary";
+                    if (lDesc.Find(format)>=0)
                     {
                         pFileFormat = lFormatIndex;
                         break;
@@ -691,7 +692,7 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 				Bone& bone = m->bones[j];
 				if (uses_anim(bone, i)) {
 					Timeline timeline;
-					if (bone.parent == -1)
+					if (bone.parent <= 0)
 						updateTimeline(timeline, bone.trans.times[i], KEY_TRANSLATE);
 					updateTimeline(timeline, bone.rot.times[i], KEY_ROTATE);
 					updateTimeline(timeline, bone.scale.times[i], KEY_SCALE);
