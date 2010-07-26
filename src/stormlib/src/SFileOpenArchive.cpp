@@ -21,6 +21,8 @@
 /* Local functions                                                           */
 /*****************************************************************************/
 
+DWORD TryDecryptHetBlock(TMPQXXXBlock * pData);
+
 static bool IsAviFile(TMPQHeader * pHeader)
 {
     DWORD * AviHdr = (DWORD *)pHeader;
@@ -36,23 +38,58 @@ static bool IsAviFile(TMPQHeader * pHeader)
 // This function gets the right positions of the hash table and the block table.
 static void RelocateMpqTablePositions(TMPQArchive * ha)
 {
-    TMPQHeader2 * pHeader = ha->pHeader;
+    TMPQHeader * pHeader = ha->pHeader;
 
-    // Set the proper hash table position
+    // Calculate the file position of the HET block
+    if(pHeader->dwHETBlockPosHigh || pHeader->dwHETBlockPosLow)
+    {
+        ha->HETBlockPos.HighPart = pHeader->dwHETBlockPosHigh;
+        ha->HETBlockPos.LowPart = pHeader->dwHETBlockPosLow;
+        ha->HETBlockPos.QuadPart += ha->MpqPos.QuadPart;
+    }
+
+    // Calculate the file position of the BET block
+    if(pHeader->dwBETBlockPosHigh || pHeader->dwBETBlockPosLow)
+    {
+        ha->BETBlockPos.HighPart = pHeader->dwBETBlockPosHigh;
+        ha->BETBlockPos.LowPart = pHeader->dwBETBlockPosLow;
+        ha->BETBlockPos.QuadPart += ha->MpqPos.QuadPart;
+    }
+
+    // Calculate the file position of the hash table
     ha->HashTablePos.HighPart = pHeader->wHashTablePosHigh;
     ha->HashTablePos.LowPart = pHeader->dwHashTablePos;
     ha->HashTablePos.QuadPart += ha->MpqPos.QuadPart;
 
-    // Set the proper block table position
+    // Calculate the file position of the block table
     ha->BlockTablePos.HighPart = pHeader->wBlockTablePosHigh;
     ha->BlockTablePos.LowPart = pHeader->dwBlockTablePos;
     ha->BlockTablePos.QuadPart += ha->MpqPos.QuadPart;
 
-    // Set the proper position of the extended block table
-    if(pHeader->ExtBlockTablePos.QuadPart != 0)
+    // Calculate the file position of the extended block table
+    if(pHeader->dwExtBlockTablePosHigh || pHeader->dwExtBlockTablePosLow)
     {
-        ha->ExtBlockTablePos = pHeader->ExtBlockTablePos;
+        ha->ExtBlockTablePos.HighPart = pHeader->dwExtBlockTablePosHigh;
+        ha->ExtBlockTablePos.LowPart = pHeader->dwExtBlockTablePosLow;
         ha->ExtBlockTablePos.QuadPart += ha->MpqPos.QuadPart;
+    }
+
+    // Calculate the size of the archive from MPQ header to the end of the archive
+    if(pHeader->dwHeaderSize >= MPQ_HEADER_SIZE_V2 + sizeof(DWORD) * 2)
+    {
+        ha->ArchiveSize.HighPart = pHeader->dwArchiveSizeHigh;
+        ha->ArchiveSize.LowPart = pHeader->dwArchiveSizeLow;
+    }
+    else if(pHeader->dwExtBlockTablePosHigh || pHeader->dwExtBlockTablePosLow)
+    {
+        ha->ArchiveSize.HighPart = pHeader->dwExtBlockTablePosHigh;
+        ha->ArchiveSize.LowPart = pHeader->dwExtBlockTablePosLow;
+        ha->ArchiveSize.QuadPart += (pHeader->dwBlockTableSize * sizeof(TMPQBlockEx));
+    }
+    else
+    {
+        ha->ArchiveSize.HighPart = 0;
+        ha->ArchiveSize.LowPart = pHeader->dwArchiveSize;
     }
 }
 
@@ -127,7 +164,7 @@ bool WINAPI SFileOpenArchive(
     {
         memset(ha, 0, sizeof(TMPQArchive));
         ha->pStream    = pStream;
-        ha->pHeader    = &ha->Header;
+        ha->pHeader    = (TMPQHeader *)ha->HeaderData;
         ha->pListFile  = NULL;
         pStream = NULL;
 
@@ -149,7 +186,7 @@ bool WINAPI SFileOpenArchive(
         for(;;)
         {
             // Read the eventual MPQ header
-            if(!FileStream_Read(ha->pStream, &SearchPos, ha->pHeader, MPQ_HEADER_SIZE_V2))
+            if(!FileStream_Read(ha->pStream, &SearchPos, ha->HeaderData, MPQ_HEADER_SIZE_V1))
             {
                 nError = GetLastError();
                 break;
@@ -185,35 +222,66 @@ bool WINAPI SFileOpenArchive(
             // There must be MPQ header signature
             if(dwHeaderID == ID_MPQ)
             {
-                BSWAP_TMPQHEADER(ha->pHeader);
+                DWORD  dwHeaderSize;
+                USHORT wFormatVersion;
+                bool   bFormatOK = false;
 
                 // Save the position where the MPQ header has been found
                 if(ha->pUserData == NULL)
                     ha->UserDataPos = SearchPos;
                 ha->MpqPos = SearchPos;
 
-                // If valid signature has been found, break the loop
-                if(ha->pHeader->wFormatVersion == MPQ_FORMAT_VERSION_1)
+                // If valid header version 1 has been found, break the loop
+                wFormatVersion = BSWAP_INT16_UNSIGNED(ha->pHeader->wFormatVersion);
+                dwHeaderSize = BSWAP_INT32_UNSIGNED(ha->pHeader->dwHeaderSize);
+
+                // Check for MPQ format 1.0
+                switch(wFormatVersion)
                 {
-                    // W3M Map Protectors set some garbage value into the "dwHeaderSize"
-                    // field of MPQ header. This value is apparently ignored by Storm.dll
-                    if(ha->pHeader->dwHeaderSize != MPQ_HEADER_SIZE_V1)
-                    {
-                        ha->pHeader->dwHeaderSize = MPQ_HEADER_SIZE_V1;
-                        ha->dwFlags |= MPQ_FLAG_PROTECTED;
-                    }
-					break;
+                    case MPQ_FORMAT_VERSION_1:
+
+                        if(dwHeaderSize != MPQ_HEADER_SIZE_V1)
+                        {
+                            dwHeaderSize = MPQ_HEADER_SIZE_V1;
+                            ha->dwFlags |= MPQ_FLAG_PROTECTED;
+                        }
+                        bFormatOK = true;
+                        break;
+
+                    case MPQ_FORMAT_VERSION_2:
+
+                        if(dwHeaderSize != MPQ_HEADER_SIZE_V2)
+                        {
+                            dwHeaderSize = MPQ_HEADER_SIZE_V3;
+                            ha->dwFlags |= MPQ_FLAG_PROTECTED;
+                        }
+                        bFormatOK = true;
+                        break;
+
+                    default:
+                        
+                        // Wow.exe doesn't really care about format number if it's > 1,
+                        // as long as the header size is greater or equal to 0x2C
+                        if(dwHeaderSize > MPQ_HEADER_SIZE_V3)
+                            dwHeaderSize = MPQ_HEADER_SIZE_V3;
+                        if(dwHeaderSize >= MPQ_HEADER_SIZE_V2)
+                            bFormatOK = true;
+                        break;
                 }
 
-                if(ha->pHeader->wFormatVersion == MPQ_FORMAT_VERSION_2)
+                // If the format is OK, read the rest (if needed), BSWAP it and go on.
+                if(bFormatOK)
                 {
-                    // W3M Map Protectors set some garbage value into the "dwHeaderSize"
-                    // field of MPQ header. This value is apparently ignored by Storm.dll
-                    if(ha->pHeader->dwHeaderSize != MPQ_HEADER_SIZE_V2)
+                    // Read the rest of the file header, if needed
+                    if(dwHeaderSize > MPQ_HEADER_SIZE_V1)
                     {
-                        ha->pHeader->dwHeaderSize = MPQ_HEADER_SIZE_V2;
-                        ha->dwFlags |= MPQ_FLAG_PROTECTED;
+                        if(!FileStream_Read(ha->pStream, &SearchPos, ha->HeaderData, dwHeaderSize))
+                            nError = GetLastError();
                     }
+
+                    // Swap the header and fix the header size
+                    BSWAP_TMPQHEADER(ha->pHeader);
+                    ha->pHeader->dwHeaderSize = dwHeaderSize;
 					break;
                 }
 
@@ -246,22 +314,32 @@ bool WINAPI SFileOpenArchive(
             ha->pUserData = NULL;
         }
 
-        // Clear the fields not supported in older formats
-        if(ha->pHeader->wFormatVersion < MPQ_FORMAT_VERSION_2)
-        {
-            ha->pHeader->ExtBlockTablePos.QuadPart = 0;
-            ha->pHeader->wBlockTablePosHigh = 0;
-            ha->pHeader->wHashTablePosHigh = 0;
-        }
-
         // Both MPQ_OPEN_NO_LISTFILE or MPQ_OPEN_NO_ATTRIBUTES trigger read only mode
         if(dwFlags & (MPQ_OPEN_NO_LISTFILE | MPQ_OPEN_NO_ATTRIBUTES))
             ha->dwFlags |= MPQ_FLAG_READ_ONLY;
+
+        // If the size of the header is greater than in WoW-Cataclysm BETA,
+        // force read only mode
+        if(ha->pHeader->dwHeaderSize > MPQ_HEADER_SIZE_V3)
+            ha->dwFlags |= MPQ_FLAG_READ_ONLY;
+
+        // Clear the rest of the header
+        if(ha->pHeader->dwHeaderSize < sizeof(ha->HeaderData))
+        {
+            LPBYTE pbHeader = (LPBYTE)ha->pHeader;
+            size_t nLength = sizeof(ha->HeaderData) - ha->pHeader->dwHeaderSize;
+
+            memset(pbHeader + ha->pHeader->dwHeaderSize, 0, nLength);
+        }
 
         ha->dwSectorSize = (0x200 << ha->pHeader->wSectorSize);
         RelocateMpqTablePositions(ha);
 
         // Verify if neither table is outside the file
+        if(ha->HETBlockPos.QuadPart > FileSize.QuadPart)
+            nError = ERROR_BAD_FORMAT;
+        if(ha->BETBlockPos.QuadPart > FileSize.QuadPart)
+            nError = ERROR_BAD_FORMAT;
         if(ha->HashTablePos.QuadPart > FileSize.QuadPart)
             nError = ERROR_BAD_FORMAT;
         if(ha->BlockTablePos.QuadPart > FileSize.QuadPart)
@@ -273,8 +351,8 @@ bool WINAPI SFileOpenArchive(
     // Allocate buffers
     if(nError == ERROR_SUCCESS)
     {
-        DWORD dwHashTableSize = ha->pHeader->dwHashTableSize;
         DWORD dwBlockTableSize = ha->pHeader->dwBlockTableSize;
+        DWORD dwHashTableSize = ha->pHeader->dwHashTableSize;
 
         //
         // Note: It is allowed that either of the tables sizes is zero.
@@ -297,12 +375,58 @@ bool WINAPI SFileOpenArchive(
         
         ha->dwBlockTableMax = STORMLIB_MAX(dwHashTableSize, dwBlockTableSize);
         
+        // Allocate space for HET block
+        if(ha->HETBlockPos.QuadPart && ha->BETBlockPos.QuadPart > ha->HETBlockPos.QuadPart)
+        {
+            ha->dwHETBlockSize = (DWORD)(ha->BETBlockPos.QuadPart - ha->HETBlockPos.QuadPart);
+            if(ha->dwHETBlockSize != 0)
+            {
+                ha->pHETBlock = (TMPQXXXBlock *)ALLOCMEM(BYTE, ha->dwHETBlockSize);
+                if(ha->pHETBlock == NULL)
+                    nError = ERROR_NOT_ENOUGH_MEMORY;
+            }
+        }
+
+        // Allocate space for BET block
+        if(ha->BETBlockPos.QuadPart != 0 && ha->HashTablePos.QuadPart > ha->BETBlockPos.QuadPart)
+        {
+            ha->dwBETBlockSize = (DWORD)(ha->HashTablePos.QuadPart - ha->BETBlockPos.QuadPart);
+            if(ha->dwBETBlockSize != 0)
+            {
+                ha->pBETBlock = (TMPQXXXBlock *)ALLOCMEM(BYTE, ha->dwBETBlockSize);
+                if(ha->pBETBlock == NULL)
+                    nError = ERROR_NOT_ENOUGH_MEMORY;
+            }
+        }
+
         // Allocate all three MPQ tables
         ha->pHashTable = ALLOCMEM(TMPQHash, dwHashTableSize);
         ha->pBlockTable    = ALLOCMEM(TMPQBlock, ha->dwBlockTableMax);
         ha->pExtBlockTable = ALLOCMEM(TMPQBlockEx, ha->dwBlockTableMax);
         if(!ha->pHashTable || !ha->pBlockTable || !ha->pExtBlockTable)
             nError = ERROR_NOT_ENOUGH_MEMORY;
+    }
+
+    // Read the HET block, if present
+    if(nError == ERROR_SUCCESS && ha->dwHETBlockSize)
+    {
+        if(!FileStream_Read(ha->pStream, &ha->HETBlockPos, ha->pHETBlock, ha->dwHETBlockSize))
+            nError = GetLastError();
+        BSWAP_ARRAY32_UNSIGNED(ha->pHETBlock, sizeof(TMPQXXXBlock));
+
+        // The purpose of HET and BET blocks is unknown.
+        // The data don't appear to be compressed
+        // (or at least my attempts to decrypt them by brute-force failed)
+        // Wow-Cataclysm itself doesn't care about them.
+//      TryDecryptHetBlock(ha->pHETBlock);
+    }
+
+    // Read the BET block, if present
+    if(nError == ERROR_SUCCESS && ha->dwBETBlockSize)
+    {
+        if(!FileStream_Read(ha->pStream, &ha->BETBlockPos, ha->pBETBlock, ha->dwBETBlockSize))
+            nError = GetLastError();
+        BSWAP_ARRAY32_UNSIGNED(ha->pBETBlock, sizeof(TMPQXXXBlock));
     }
 
     // Read the hash table.
@@ -359,13 +483,13 @@ bool WINAPI SFileOpenArchive(
         }
         else
         {
-            if(ha->pHeader->dwArchiveSize > ha->pHeader->dwBlockTablePos)
+            LARGE_INTEGER ArchiveSize;
+
+            ArchiveSize.QuadPart = ha->ArchiveSize.QuadPart + ha->MpqPos.QuadPart;
+            if(ArchiveSize.QuadPart > ha->BlockTablePos.QuadPart)
             {
-                if((ha->pHeader->dwBlockTablePos + dwTableSize) > ha->pHeader->dwArchiveSize)
-                {
-                    dwCompressedTableSize = (DWORD)(ha->pHeader->dwArchiveSize - ha->pHeader->dwBlockTablePos);
-//                  bBlockTableCompressed = true;
-                }
+                dwCompressedTableSize = (DWORD)(ArchiveSize.QuadPart - ha->BlockTablePos.QuadPart);
+//              bBlockTableCompressed = true;
             }
         }
 
@@ -395,7 +519,7 @@ bool WINAPI SFileOpenArchive(
     {
         memset(ha->pExtBlockTable, 0, ha->dwBlockTableMax * sizeof(TMPQBlockEx));
 
-        if(ha->pHeader->ExtBlockTablePos.QuadPart != 0)
+        if(ha->pHeader->dwExtBlockTablePosHigh || ha->pHeader->dwExtBlockTablePosLow)
         {
             dwBytes = ha->pHeader->dwBlockTableSize * sizeof(TMPQBlockEx);
             if(!FileStream_Read(ha->pStream, &ha->ExtBlockTablePos, ha->pExtBlockTable, dwBytes))

@@ -59,6 +59,7 @@
 /*                      Fixed compacting MPQs that contain single unit files */
 /* 26.04.10  7.00  Lad  Major rewrite                                        */
 /* 08.06.10  7.10  Lad  Support for partial MPQs                             */
+/* 08.06.10  7.11  Lad  Support for MPQs v 3.0                               */
 /*****************************************************************************/
 
 #ifndef __STORMLIB_H_
@@ -203,6 +204,7 @@
 #define SFILE_INFO_BLOCK_TABLE       7      // Pointer to Block Table (TMPQBlock *)
 #define SFILE_INFO_NUM_FILES         8      // Real number of files within archive
 #define SFILE_INFO_STREAM_FLAGS      9      // Stream flags for the MPQ. See STREAM_FLAG_XXX
+#define SFILE_INFO_IS_READ_ONLY     10      // TRUE of the MPQ was open as read only
 //------
 #define SFILE_INFO_HASH_INDEX      100      // Hash index of file in MPQ
 #define SFILE_INFO_CODENAME1       101      // The first codename of the file
@@ -221,11 +223,12 @@
 #define SIGNATURE_NAME        "(signature)" // Name of internal signature
 #define ATTRIBUTES_NAME      "(attributes)" // Name of internal attributes file
 
-#define STORMLIB_VERSION             0x070A // Current version of StormLib (7.10)
-#define STORMLIB_VERSION_STRING      "7.10"
+#define STORMLIB_VERSION             0x070B // Current version of StormLib (7.10)
+#define STORMLIB_VERSION_STRING      "7.11"
 
 #define MPQ_FORMAT_VERSION_1              0 // Up to The Burning Crusade
 #define MPQ_FORMAT_VERSION_2              1 // The Burning Crusade and newer 
+#define MPQ_FORMAT_VERSION_3              2 // WoW Cataclysm Beta and newer
 
 // Flags for MPQ attributes
 #define MPQ_ATTRIBUTE_CRC32      0x00000001 // The "(attributes)" contains CRC32 for each file
@@ -357,6 +360,7 @@ struct TFileStream
 
 #define MPQ_HEADER_SIZE_V1    0x20
 #define MPQ_HEADER_SIZE_V2    0x2C
+#define MPQ_HEADER_SIZE_V3    0x44
 
 struct TMPQUserData
 {
@@ -383,14 +387,15 @@ struct TMPQHeader
     // Size of the archive header
     DWORD dwHeaderSize;                   
 
-    // Size of MPQ archive
+    // 32-bit size of MPQ archive
     // This field is deprecated in the Burning Crusade MoPaQ format, and the size of the archive
     // is calculated as the size from the beginning of the archive to the end of the hash table,
     // block table, or extended block table (whichever is largest).
     DWORD dwArchiveSize;
 
-    // 0 = Original format
-    // 1 = Extended format (The Burning Crusade and newer)
+    // 0 = Format 1.0 (up to The Burning Crusade)
+    // 1 = Format 2.0 (The Burning Crusade and newer)
+    // 2 = Format 3.0 (WoW - Cataclysm beta or newer)
     USHORT wFormatVersion;
 
     // Power of two exponent specifying the number of 512-byte disk sectors in each file sector
@@ -410,22 +415,33 @@ struct TMPQHeader
     
     // Number of entries in the block table
     DWORD dwBlockTableSize;
-};
 
+    //-- MPQ HEADER v 2.0 -------------------------------------------
 
-// Extended MPQ file header. Valid only if wFormatVersion is 1 or higher
-struct TMPQHeader2 : public TMPQHeader
-{
     // Offset to the beginning of the extended block table, relative to the beginning of the archive.
-    LARGE_INTEGER ExtBlockTablePos;
+    DWORD dwExtBlockTablePosLow;
+    DWORD dwExtBlockTablePosHigh;
 
     // High 16 bits of the hash table offset for large archives.
     USHORT wHashTablePosHigh;
 
     // High 16 bits of the block table offset for large archives.
     USHORT wBlockTablePosHigh;
-};
 
+    //-- MPQ HEADER v 3.0 -------------------------------------------
+
+    // 64-bit version of the archive size
+    DWORD dwArchiveSizeLow;
+    DWORD dwArchiveSizeHigh;
+
+    // 64-bit position of the "BET" block
+    DWORD dwBETBlockPosLow;
+    DWORD dwBETBlockPosHigh;
+
+    // 64-bit position of the "HET" block
+    DWORD dwHETBlockPosLow;
+    DWORD dwHETBlockPosHigh;
+};
 
 // Hash entry. All files in the archive are searched by their hashes.
 struct TMPQHash
@@ -527,6 +543,16 @@ struct TMPQAttributes
     TMPQMD5      * pMd5;                // Array of MD5
 };
 
+// HET and BET block. It's purpose is unknown at the moment
+struct TMPQXXXBlock
+{
+    DWORD dwSignature;                  // 'HET\x1A' or 'BET\x1A'
+    DWORD dwVersion;                    // Seems to be always 1
+    DWORD dwDataSize;                   // Size of the following data
+
+    // Followed by the data (variable length)
+};
+
 // Archive handle structure
 struct TMPQArchive
 {
@@ -534,21 +560,28 @@ struct TMPQArchive
 
     LARGE_INTEGER  UserDataPos;         // Position of user data (relative to the begin of the file)
     LARGE_INTEGER  MpqPos;              // MPQ header offset (relative to the begin of the file)
+    LARGE_INTEGER  HETBlockPos;         // Offset of the HET block (relative to the begin of the file)
+    LARGE_INTEGER  BETBlockPos;         // Offset of the BET block (relative to the begin of the file)
     LARGE_INTEGER  HashTablePos;        // Hash table offset (relative to the begin of the file)
     LARGE_INTEGER  BlockTablePos;       // Block table offset (relative to the begin of the file)
     LARGE_INTEGER  ExtBlockTablePos;    // Ext. block table offset (relative to the begin of the file)
+    LARGE_INTEGER  ArchiveSize;         // Size of the archive (from MPQ header to the end of the archive)
 
     TMPQUserData * pUserData;           // MPQ user data (NULL if not present in the file)
-    TMPQHeader2  * pHeader;             // MPQ file header
+    TMPQHeader   * pHeader;             // MPQ file header
+    TMPQXXXBlock * pHETBlock;
+    TMPQXXXBlock * pBETBlock;
     TMPQHash     * pHashTable;          // Hash table
     TMPQBlock    * pBlockTable;         // Block table
     TMPQBlockEx  * pExtBlockTable;      // Extended block table
     
     TMPQUserData   UserData;            // MPQ user data. Valid only when ID_MPQ_USERDATA has been found
-    TMPQHeader2    Header;              // MPQ header
+    DWORD          HeaderData[MPQ_HEADER_SIZE_V3 / 4];  // Storage for MPQ header
 
     TMPQAttributes*pAttributes;         // MPQ attributes from "(attributes)" file (NULL if none)
     TFileNode   ** pListFile;           // File name array
+    DWORD          dwHETBlockSize;
+    DWORD          dwBETBlockSize;
     DWORD          dwBlockTableMax;     // Number of entries allocated for the block table
     DWORD          dwSectorSize;        // Default size of one file sector
     DWORD          dwFlags;             // See MPQ_FLAG_XXXXX

@@ -1513,8 +1513,9 @@ int main(void)
 //      nError = TestSectorCompress(MPQ_SECTOR_SIZE);
 
     // Test the archive open and close
-//  if(nError == ERROR_SUCCESS)
-//      nError = TestArchiveOpenAndClose(MAKE_PATH("StarCraft II Beta/ChokePointCanyon.SC2Map"));
+    if(nError == ERROR_SUCCESS)
+//      nError = TestArchiveOpenAndClose(MAKE_PATH("PartialMPQs/interface.MPQ.part"));
+        nError = TestArchiveOpenAndClose(MAKE_PATH("WoW-Cataclysm/expansion-locale-frFR.MPQ"));
                                                                              
 //  if(nError == ERROR_SUCCESS)
 //      nError = TestFindFiles(MAKE_PATH("Warcraft III/HumanEd.mpq"));
@@ -1523,8 +1524,8 @@ int main(void)
 //  if(nError == ERROR_SUCCESS)
 //      nError = TestCreateArchiveV2(MAKE_PATH("Test.mpq"));
 
-    if(nError == ERROR_SUCCESS)
-        nError = TestCreateArchiveFromMemory(MAKE_PATH("Test-leak.mpq"));
+//  if(nError == ERROR_SUCCESS)
+//      nError = TestCreateArchiveFromMemory(MAKE_PATH("Test-leak.mpq"));
 
 //  if(nError == ERROR_SUCCESS)
 //      nError = TestFileReadAndWrite(MAKE_PATH("Warcraft III/(10)DustwallowKeys.w3m"), "war3map.j");

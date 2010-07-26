@@ -792,6 +792,7 @@ bool WINAPI SFileGetFileInfo(
     TMPQHash * pHash;
     TMPQFile * hf = (TMPQFile *)hMpqOrFile;
     DWORD cbLengthNeeded = 0;
+    DWORD dwIsReadOnly;
     DWORD dwFileCount = 0;
     DWORD dwFileKey;
     int nError = ERROR_SUCCESS;
@@ -870,6 +871,13 @@ bool WINAPI SFileGetFileInfo(
         case SFILE_INFO_STREAM_FLAGS:   // Stream flags for the MPQ. See STREAM_FLAG_XXX
             VERIFY_MPQ_HANDLE(ha);
             GIVE_32BIT_VALUE(ha->pStream->StreamFlags);
+            break;
+
+        case SFILE_INFO_IS_READ_ONLY:
+            VERIFY_MPQ_HANDLE(ha);
+
+            dwIsReadOnly = ((ha->pStream->StreamFlags & STREAM_FLAG_READ_ONLY) || (ha->dwFlags & MPQ_FLAG_READ_ONLY));
+            GIVE_32BIT_VALUE(dwIsReadOnly);
             break;
 
         case SFILE_INFO_HASH_INDEX:

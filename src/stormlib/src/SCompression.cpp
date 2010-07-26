@@ -543,7 +543,7 @@ static int Decompress_LZMA(char * pbOutBuffer, int * pcbOutBuffer, char * pbInBu
 /*                                                                            */
 /******************************************************************************/
 
-static void Compress_SPARSE(
+void Compress_SPARSE(
     char * pbOutBuffer,
     int * pcbOutBuffer,
     char * pbInBuffer,
@@ -554,7 +554,7 @@ static void Compress_SPARSE(
     CompressSparse((unsigned char *)pbOutBuffer, pcbOutBuffer, (unsigned char *)pbInBuffer, cbInBuffer);
 }
 
-static int Decompress_SPARSE(char * pbOutBuffer, int * pcbOutBuffer, char * pbInBuffer, int cbInBuffer)
+int Decompress_SPARSE(char * pbOutBuffer, int * pcbOutBuffer, char * pbInBuffer, int cbInBuffer)
 {
     return DecompressSparse((unsigned char *)pbOutBuffer, pcbOutBuffer, (unsigned char *)pbInBuffer, cbInBuffer);
 }

@@ -31,7 +31,7 @@ USHORT  wPlatform = 0;                      // File platform
 #define MPQ_HASH_NAME_B         0x200
 #define MPQ_HASH_FILE_KEY       0x300
 
-#define STORM_BUFFER_SIZE   0x500
+#define STORM_BUFFER_SIZE       0x500
 
 static DWORD StormBuffer[STORM_BUFFER_SIZE];    // Buffer for the decryption engine
 static bool  bMpqCryptographyInitialized = false;
@@ -254,6 +254,55 @@ DWORD DetectFileKeyByKnownContent(void * pvFileContent, DWORD nDwords, ...)
     }
     return 0;
 }
+/*
+DWORD TryDecryptHetBlock(TMPQXXXBlock * pData)
+{
+    DWORD dwDecrypted0 = 0x00000020;
+    DWORD dwDecrypted;
+    BYTE pbDecompressed[0x1000];
+    BYTE pbCompressed[0x1000];
+
+    DWORD * pdwContent = (DWORD *)pData + 3;
+    DWORD saveKey1;
+    DWORD dwTemp;
+    int cbOutBuffer;
+    int nResult;
+
+    for(DWORD dwUpper = 0; dwUpper < 0x01000000; dwUpper++)
+    {
+        dwDecrypted = dwDecrypted0 | (dwUpper << 0x08);
+
+        dwTemp = (*pdwContent ^ dwDecrypted) - 0xEEEEEEEE;
+        for(int i = 0; i < 0x100; i++)      // Try all 256 possibilities
+        {
+            DWORD seed1;
+            DWORD seed2 = 0xEEEEEEEE;
+            DWORD ch;
+
+            // Try the first DWORD
+            seed1  = dwTemp - StormBuffer[0x400 + i];
+            seed2 += StormBuffer[0x400 + (seed1 & 0xFF)];
+            ch     = pdwContent[0] ^ (seed1 + seed2);
+
+            if(ch == dwDecrypted)
+            {
+                saveKey1 = seed1;
+
+                // Try to decrypt it
+                memcpy(pbCompressed, (pData + 1), pData->dwDataSize);
+                DecryptMpqBlock(pbCompressed, pData->dwDataSize, saveKey1);
+
+                // Try to decompress it
+                cbOutBuffer = sizeof(pbDecompressed);
+                nResult = SCompDecompress((char *)pbDecompressed, &cbOutBuffer, (char *)pbCompressed, (int)pData->dwDataSize);
+                if(nResult && cbOutBuffer >= (int)pData->dwDataSize)
+                    cbOutBuffer = cbOutBuffer;
+            }
+        }
+    }
+    return 0;
+}
+*/
 
 DWORD DetectFileKeyByContent(void * pvFileContent, DWORD dwFileSize)
 {
@@ -553,7 +602,7 @@ DWORD FindFreeMpqSpace(TMPQArchive * ha, PLARGE_INTEGER pMpqPos)
     TMPQBlock * pBlockEnd = ha->pBlockTable + ha->pHeader->dwBlockTableSize;
     TMPQBlock * pBlock = ha->pBlockTable;
 
-    // The initial store position is after MPQ header
+    // The initial MPQ position is after MPQ header
     MpqPos.QuadPart = ha->pHeader->dwHeaderSize;
 
     // Parse the entire block table
@@ -613,43 +662,65 @@ DWORD FindFreeMpqSpace(TMPQArchive * ha, PLARGE_INTEGER pMpqPos)
 static void CalculateTablePositions(TMPQArchive * ha)
 {
     LARGE_INTEGER TablePos;                 // A table position, relative to the begin of the MPQ
+    TMPQHeader * pHeader = ha->pHeader;
 
-    // Hash table position is calculated as position beyond
+    // Find the first block that is beyond any file
     // the latest stored file
     FindFreeMpqSpace(ha, &TablePos);
+    
+    // First following is the HET block
+    if(ha->pHETBlock && ha->dwHETBlockSize)
+    {
+        ha->HETBlockPos.QuadPart = ha->MpqPos.QuadPart + TablePos.QuadPart;
+        pHeader->dwHETBlockPosHigh = TablePos.HighPart;
+        pHeader->dwHETBlockPosLow = TablePos.LowPart;
+        TablePos.QuadPart += ha->dwHETBlockSize;
+    }
+
+    // Then the BET block
+    if(ha->pBETBlock && ha->dwBETBlockSize)
+    {
+        ha->BETBlockPos.QuadPart = ha->MpqPos.QuadPart + TablePos.QuadPart;
+        pHeader->dwBETBlockPosHigh = TablePos.HighPart;
+        pHeader->dwBETBlockPosLow = TablePos.LowPart;
+        TablePos.QuadPart += ha->dwBETBlockSize;
+    }
+
+    // Next following is the hash table
     ha->HashTablePos.QuadPart = ha->MpqPos.QuadPart + TablePos.QuadPart;
+    pHeader->dwHashTablePos = TablePos.LowPart;
+    pHeader->wHashTablePosHigh = (USHORT)TablePos.HighPart;
+    TablePos.QuadPart += pHeader->dwHashTableSize * sizeof(TMPQHash);
 
-    // Update the hash table position in the MPQ header
-    ha->pHeader->dwHashTablePos = TablePos.LowPart;
-    ha->pHeader->wHashTablePosHigh = (USHORT)TablePos.HighPart;
-
-    // Block table follows immediately after the hash table
-    TablePos.QuadPart += ha->pHeader->dwHashTableSize * sizeof(TMPQHash);
+    // ... followed by the block table
     ha->BlockTablePos.QuadPart = ha->MpqPos.QuadPart + TablePos.QuadPart;
-
-    // Update block table position in the MPQ header
-    ha->pHeader->dwBlockTablePos = TablePos.LowPart;
-    ha->pHeader->wBlockTablePosHigh = (USHORT)TablePos.HighPart;
+    pHeader->dwBlockTablePos = TablePos.LowPart;
+    pHeader->wBlockTablePosHigh = (USHORT)TablePos.HighPart;
+    TablePos.QuadPart += pHeader->dwBlockTableSize * sizeof(TMPQBlock);
 
     // Extended block table follows the old block table
     // Note that we will only use extended block table
     // if the current position is beyond 4 GB. 
-    TablePos.QuadPart += ha->pHeader->dwBlockTableSize * sizeof(TMPQBlock);
     if(TablePos.HighPart != 0)
     {
         ha->ExtBlockTablePos.QuadPart = ha->MpqPos.QuadPart + TablePos.QuadPart;
-        ha->pHeader->ExtBlockTablePos = TablePos;
-
-        TablePos.QuadPart += ha->pHeader->dwBlockTableSize * sizeof(TMPQBlockEx);
+        pHeader->dwExtBlockTablePosHigh = TablePos.HighPart;
+        pHeader->dwExtBlockTablePosLow = TablePos.LowPart;
+        TablePos.QuadPart += pHeader->dwBlockTableSize * sizeof(TMPQBlockEx);
     }
     else
     {
-        ha->pHeader->ExtBlockTablePos.QuadPart = 0;
+        pHeader->dwExtBlockTablePosHigh = 0;
+        pHeader->dwExtBlockTablePosLow = 0;
         ha->ExtBlockTablePos.QuadPart = 0;
     }
 
-    // Update archive size in the header (only valid for MPQ v1)
-    ha->pHeader->dwArchiveSize = (TablePos.HighPart == 0) ? TablePos.LowPart : 0;
+    // Update 32-bit archive size in the header
+    pHeader->dwArchiveSize = TablePos.LowPart;
+
+    // Update 64-bit archive size in the header
+    pHeader->dwArchiveSizeHigh = TablePos.HighPart;
+    pHeader->dwArchiveSizeLow = TablePos.LowPart;
 }
 
 TMPQFile * CreateMpqFile(TMPQArchive * ha, const char * szFileName)
@@ -777,11 +848,6 @@ int AllocateSectorOffsets(TMPQFile * hf, bool bLoadFromFile)
         hf->dwDataSectors++;
 
     // Calculate the number of file sectors
-    // Note: I've seen corrupted MPQs that had MPQ_FILE_SECTOR_CRC flag absent,
-    // but there was one extra sector offset, with the same value as the last one,
-    // which corresponds to files with MPQ_FILE_SECTOR_CRC set, but with sector
-    // checksums not present. StormLib doesn't handle such MPQs in any special way.
-    // Compacting archive on such MPQs fails.
     hf->dwSectorCount = (pBlock->dwFSize / hf->dwSectorSize) + 1;
     if(pBlock->dwFSize % hf->dwSectorSize)
         hf->dwSectorCount++;
@@ -791,6 +857,8 @@ int AllocateSectorOffsets(TMPQFile * hf, bool bLoadFromFile)
     // Only allocate and load the table if the file is compressed
     if(pBlock->dwFlags & MPQ_FILE_COMPRESSED)
     {
+        __LoadSectorOffsets:
+
         // Allocate the sector offset table
         hf->SectorOffsets = ALLOCMEM(DWORD, hf->dwSectorCount);
         if(hf->SectorOffsets == NULL)
@@ -834,9 +902,28 @@ int AllocateSectorOffsets(TMPQFile * hf, bool bLoadFromFile)
             }
 
             //
+            // I've seen MPQs that had MPQ_FILE_SECTOR_CRC flag absent,
+            // but there was one extra entry in the sector offset table
+            // (Example: expansion-locale-frFR.MPQ from WoW Cataclysm BETA)
+            // We detect such behavior here by verifying the value
+            // of the first entry in the sector offset table
+            // 
+
+            if(hf->SectorOffsets[0] == ((hf->dwSectorCount + 1) * sizeof(DWORD)))
+            {
+                // Free the current sector offset table
+                FREEMEM(hf->SectorOffsets);
+                hf->SectorOffsets = NULL;
+
+                // Increment number of data sectors by 1 and retry
+                hf->dwSectorCount++;
+                goto __LoadSectorOffsets;
+            }
+
+            //
             // Check if the sector positions are correct.
             // I saw a protector who puts negative offset into the sector offset table.
-            // Because there are always at least 2 sector positions, we can check their difference
+            // Because there are always at least 2 sector offsets, we can check their difference
             //
 
             if((hf->SectorOffsets[1] - hf->SectorOffsets[0]) > ha->dwSectorSize)
@@ -1064,6 +1151,24 @@ int SaveMPQTables(TMPQArchive * ha)
         BSWAP_TMPQHEADER(ha->pHeader);
     }
 
+    // Write the HET block, if any
+    if(nError == ERROR_SUCCESS && ha->pHETBlock && ha->dwHETBlockSize)
+    {
+        BSWAP_ARRAY32_UNSIGNED(ha->pHETBlock, sizeof(TMPQXXXBlock));
+        if(!FileStream_Write(ha->pStream, &ha->HETBlockPos, ha->pHETBlock, ha->dwHETBlockSize))
+            nError = GetLastError();
+        BSWAP_ARRAY32_UNSIGNED(ha->pHETBlock, sizeof(TMPQXXXBlock));
+    }
+
+    // Write the BET block, if any
+    if(nError == ERROR_SUCCESS && ha->pHETBlock && ha->dwHETBlockSize)
+    {
+        BSWAP_ARRAY32_UNSIGNED(ha->pBETBlock, sizeof(TMPQXXXBlock));
+        if(!FileStream_Write(ha->pStream, &ha->BETBlockPos, ha->pBETBlock, ha->dwBETBlockSize))
+            nError = GetLastError();
+        BSWAP_ARRAY32_UNSIGNED(ha->pBETBlock, sizeof(TMPQXXXBlock));
+    }
+
     // Write the hash table
     if(nError == ERROR_SUCCESS)
     {
@@ -1097,7 +1202,7 @@ int SaveMPQTables(TMPQArchive * ha)
     }
 
     // Write the extended block table
-    if(nError == ERROR_SUCCESS && ha->pHeader->ExtBlockTablePos.QuadPart != 0)
+    if(nError == ERROR_SUCCESS && (ha->pHeader->dwExtBlockTablePosHigh || ha->pHeader->dwExtBlockTablePosLow))
     {
         // We expect format V2 or newer in this case
         assert(ha->pHeader->wFormatVersion >= MPQ_FORMAT_VERSION_2);
@@ -1139,6 +1244,10 @@ void FreeMPQArchive(TMPQArchive *& ha)
             FREEMEM(ha->pBlockTable);
         if(ha->pHashTable != NULL)
             FREEMEM(ha->pHashTable);
+        if(ha->pHETBlock != NULL)
+            FREEMEM(ha->pHETBlock);
+        if(ha->pBETBlock != NULL)
+            FREEMEM(ha->pBETBlock);
         if(ha->pListFile != NULL)
             SListFileFreeListFile(ha);
         if(ha->pAttributes != NULL)
@@ -1268,13 +1377,24 @@ void ConvertTMPQHeader(void *header)
 
 	if(theHeader->wFormatVersion >= MPQ_FORMAT_VERSION_2)
 	{
-		DWORD dwTemp = theHeader->ExtBlockTablePos.LowPart;
-		theHeader->ExtBlockTablePos.LowPart = theHeader->ExtBlockTablePos.HighPart;
-		theHeader->ExtBlockTablePos.HighPart = dwTemp;
-		theHeader->ExtBlockTablePos.LowPart = SwapULong(theHeader->ExtBlockTablePos.LowPart);
-		theHeader->ExtBlockTablePos.HighPart = SwapULong(theHeader->ExtBlockTablePos.HighPart);
-		theHeader->wHashTablePosHigh = SwapUShort(theHeader->wHashTablePosHigh);
+		// Swap the extended block table position
+		theHeader->dwExtBlockTablePosLow = SwapULong(theHeader->dwExtBlockTablePosLow);
+		theHeader->dwExtBlockTablePosHigh = SwapULong(theHeader->dwExtBlockTablePosHigh);
+		
+        theHeader->wHashTablePosHigh = SwapUShort(theHeader->wHashTablePosHigh);
 		theHeader->wBlockTablePosHigh = SwapUShort(theHeader->wBlockTablePosHigh);
+
+        if(theHeader->wFormatVersion >= MPQ_FORMAT_VERSION_3)
+    	{
+            theHeader->dwArchiveSizeLow = SwapULong(theHeader->dwArchiveSizeLow);
+            theHeader->dwArchiveSizeHigh = SwapULong(theHeader->dwArchiveSizeHigh);
+
+            theHeader->dwBETBlockPosLow = SwapULong(theHeader->dwBETBlockPosLow);
+            theHeader->dwBETBlockPosHigh = SwapULong(theHeader->dwBETBlockPosHigh);
+
+            theHeader->dwHETBlockPosLow = SwapULong(theHeader->dwHETBlockPosLow);
+            theHeader->dwHETBlockPosHigh = SwapULong(theHeader->dwHETBlockPosHigh);
+        }
 	}
 }
 

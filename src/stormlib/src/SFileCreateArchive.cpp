@@ -114,7 +114,7 @@ bool WINAPI SFileCreateArchive(const char * szMpqName, DWORD dwFlags, DWORD dwHa
         ha->dwSectorSize    = 0x200 << DEFAULT_SECTOR_SIZE;
         ha->UserDataPos     = MpqPos;
         ha->MpqPos          = MpqPos;
-        ha->pHeader         = &ha->Header;
+        ha->pHeader         = (TMPQHeader *)ha->HeaderData;
         ha->dwBlockTableMax = STORMLIB_MAX(dwHashTableSize, dwBlockTableSize);
         ha->pHashTable      = ALLOCMEM(TMPQHash, dwHashTableSize);
         ha->pBlockTable     = ALLOCMEM(TMPQBlock, ha->dwBlockTableMax);
@@ -129,10 +129,10 @@ bool WINAPI SFileCreateArchive(const char * szMpqName, DWORD dwFlags, DWORD dwHa
     // Fill the MPQ header and all buffers
     if(nError == ERROR_SUCCESS)
     {
-        TMPQHeader2 * pHeader = ha->pHeader;
+        TMPQHeader * pHeader = ha->pHeader;
         DWORD dwHeaderSize = (wFormatVersion == MPQ_FORMAT_VERSION_2) ? MPQ_HEADER_SIZE_V2 : MPQ_HEADER_SIZE_V1;
 
-        memset(pHeader, 0, sizeof(TMPQHeader2));
+        memset(pHeader, 0, sizeof(ha->HeaderData));
         pHeader->dwID             = ID_MPQ;
         pHeader->dwHeaderSize     = dwHeaderSize;
         pHeader->dwArchiveSize    = pHeader->dwHeaderSize + dwHashTableSize * sizeof(TMPQHash);
