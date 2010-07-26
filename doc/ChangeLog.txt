@@ -1,5 +1,44 @@
 World of Warcraft Model Viewer v0.7.0.1
 
+r268
+ - You can now Filter your search by file type. (M2, WMO, ADT, etc...)
+ - You can now filter your search by MPQ file.
+ - WMV Will now export to the FBX format, thanks to zhing on the wowmodelviewer.com forums.
+ - Lightwave Exporter:
+  - M2 Scene files will now export Bones. Weight Maps are not yet implemented, so deformations are not yet correct.
+  - Cameras will now export at their proper World location.
+ - Updated Ridable Creatures list.
+ - CSV files updated for 3.3.5!
+ - Increased Linux Compatibility.
+ - More checks on global sequence
+ - The gamePath can now be used as a localPath.
+ - Fixed a bug where useLocalFile read files from current path, not game path.
+ - Fixed Partical Error
+ - Cataclysm Updates:
+  - Updated to latest Build.
+  - Updated for v10 M2 files.
+  - Hard fix for dragonnefarianzombified.m2
+ - Fixed PNG type 0
+ - Dev Work:
+  - Lots of Code Cleanup.
+  - Lots of ADT Prep.
+  - Updated to StormLib 7.10
+  - Updated wxWidgets-2.8.10 to wxWidgets-2.8.11
+  - Added FBX support files. No need to download the SDK!
+  - Mac Compatibility fixes.
+  - Re-included GLEW
+  - Updated GLEW and libs to 1.5.4
+  - removed unneeded .lib files
+  - fixed some compiler warnings.
+  - updated various elements of the vcproj file.
+  - Fixed ItemSubClass.dbc changes.
+  - Patch by andor.herendi@husgep.hu - Support for display and filename, but not yet implemented at the file loading. And a few lines code cleaning.
+  - Core Rearrange for -Wall
+  - Cinematic Camera Database added.
+  - Added shaders
+  - Made various updates to the Windows installers.
+  - Made custom installer graphic. (Source PSD file included.)
+
 r206
  - You can now Save Files listed in WMV to your Hard-drive. Use File->Save File... or Right-Click the file in the File List!
  - You can now browser Sounds, Images and ADTs in the file List.

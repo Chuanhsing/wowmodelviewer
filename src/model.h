@@ -216,8 +216,10 @@ struct ModelCamera {
 	float nearclip, farclip, fov;
 	Animated<Vec3D> tPos, tTarget;
 	Animated<float> rot;
+	Vec3D WorldOffset;
+	float WorldRotation;
 
-	void init(MPQFile &f, ModelCameraDef &mcd, uint32 *global);
+	void init(MPQFile &f, ModelCameraDef &mcd, uint32 *global, wxString modelname);
 	void setup(int time=0);
 
 	ModelCamera():ok(false) {}

@@ -69,7 +69,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_39D2F5D6A3E34393A93C4FCD09DC29D8"
+        "MsmKey" = "8:_3E55543B56C54514BA75FC51F05AEB03"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_490AAFF7A8314392948BFB7D55C19E54"
         "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -88,7 +94,7 @@
         "Entry"
         {
         "MsmKey" = "8:_4F068D3280C148C0A10E489FBB607086"
-        "OwnerKey" = "8:_39D2F5D6A3E34393A93C4FCD09DC29D8"
+        "OwnerKey" = "8:_490AAFF7A8314392948BFB7D55C19E54"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -244,7 +250,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\WMV_Installer_v0701_r206_Win64.msi"
+        "OutputFilename" = "8:Release\\WMV_Installer_v0701_r268_Win64.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -462,6 +468,26 @@
             "TargetName" = "8:npcs.csv"
             "Tag" = "8:"
             "Folder" = "8:_96826D1D2EFA4E39A49C9BFD79E90161"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3E55543B56C54514BA75FC51F05AEB03"
+            {
+            "SourcePath" = "8:..\\..\\..\\bin_support\\Windows\\64bit\\fbxsdk_20113_amd64.dll"
+            "TargetName" = "8:fbxsdk_20113_amd64.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_296025CC5E4C487297BD0E52D9BB7E38"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -991,14 +1017,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:World of Warcraft Model Viewer 64-bit"
-        "ProductCode" = "8:{3747D749-D0E1-4D83-96CA-F108CFE7370F}"
-        "PackageCode" = "8:{9AF7C152-2DAB-4477-9C09-8A429C27322D}"
+        "ProductCode" = "8:{A1FFE3B1-8D29-4DD3-A761-1F94D60ECEF1}"
+        "PackageCode" = "8:{6443957D-29BC-4ABE-8279-A42CC4005218}"
         "UpgradeCode" = "8:{69AA293E-260B-47B1-A596-44671A8B6EDF}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:07.01.206"
+        "ProductVersion" = "8:07.01.268"
         "Manufacturer" = "8:WoWModelViewer.org"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1503,7 +1529,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_39D2F5D6A3E34393A93C4FCD09DC29D8"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_490AAFF7A8314392948BFB7D55C19E54"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"

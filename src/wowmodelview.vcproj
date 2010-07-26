@@ -113,7 +113,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy ..\bin_support\Windows\32bit\cximagecrtd.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\glew32d.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\* $(OutDir)\enUS\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;"
+				CommandLine="copy ..\bin_support\Windows\32bit\cximagecrtd.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\glew32d.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\fbxsdk_20113d.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\* $(OutDir)\enUS\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -211,7 +211,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy ..\bin_support\Windows\64bit\cximagecrtd.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\glew32d.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\* $(OutDir)\enUS\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;"
+				CommandLine="copy ..\bin_support\Windows\64bit\cximagecrtd.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\glew32d.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\fbxsdk_20113_amd64d.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\* $(OutDir)\enUS\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -318,7 +318,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy ..\bin_support\Windows\32bit\cximagecrt.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\glew32.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\*.csv $(OutDir)\enUS\&#x0D;&#x0A;mkdir $(OutDir)\zhCN&#x0D;&#x0A;copy ..\bin\zhCN\*.csv $(OutDir)\zhCN\&#x0D;&#x0A;mkdir $(OutDir)\zhTW&#x0D;&#x0A;copy ..\bin\zhTW\*.csv $(OutDir)\zhTW\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\mo&#x0D;&#x0A;copy po\*.mo $(OutDir)\mo\&#x0D;&#x0A;mkdir $(OutDir)\Export&#x0D;&#x0A;mkdir $(OutDir)\Import&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\msvcr90.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\msvcp90.dll $(OutDir)\&#x0D;&#x0A;copy ..\doc\ChangeLog.txt $(OutDir)\&#x0D;&#x0A;copy ..\bin\COPYING $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\userSettings&#x0D;&#x0A;copy ..\bin\userSettings\*.* $(OutDir)\userSettings&#x0D;&#x0A;"
+				CommandLine="copy ..\bin_support\Windows\32bit\cximagecrt.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\glew32.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\fbxsdk_20113.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\*.csv $(OutDir)\enUS\&#x0D;&#x0A;mkdir $(OutDir)\zhCN&#x0D;&#x0A;copy ..\bin\zhCN\*.csv $(OutDir)\zhCN\&#x0D;&#x0A;mkdir $(OutDir)\zhTW&#x0D;&#x0A;copy ..\bin\zhTW\*.csv $(OutDir)\zhTW\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\mo&#x0D;&#x0A;copy po\*.mo $(OutDir)\mo\&#x0D;&#x0A;mkdir $(OutDir)\Export&#x0D;&#x0A;mkdir $(OutDir)\Import&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\msvcr90.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\msvcp90.dll $(OutDir)\&#x0D;&#x0A;copy ..\doc\ChangeLog.txt $(OutDir)\&#x0D;&#x0A;copy ..\bin\COPYING $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\userSettings&#x0D;&#x0A;copy ..\bin\userSettings\*.* $(OutDir)\userSettings&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -426,7 +426,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy ..\bin_support\Windows\64bit\cximagecrt.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\glew32.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\*.csv $(OutDir)\enUS\&#x0D;&#x0A;mkdir $(OutDir)\zhCN&#x0D;&#x0A;copy ..\bin\zhCN\*.csv $(OutDir)\zhCN\&#x0D;&#x0A;mkdir $(OutDir)\zhTW&#x0D;&#x0A;copy ..\bin\zhTW\*.csv $(OutDir)\zhTW\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\mo&#x0D;&#x0A;copy po\*.mo $(OutDir)\mo\&#x0D;&#x0A;mkdir $(OutDir)\Export&#x0D;&#x0A;mkdir $(OutDir)\Import&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\msvcr90.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\msvcp90.dll $(OutDir)\&#x0D;&#x0A;copy ..\doc\ChangeLog.txt $(OutDir)\&#x0D;&#x0A;copy ..\bin\COPYING $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\userSettings&#x0D;&#x0A;copy ..\bin\userSettings\*.* $(OutDir)\userSettings&#x0D;&#x0A;"
+				CommandLine="copy ..\bin_support\Windows\64bit\cximagecrt.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\glew32.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\fbxsdk_20113_amd64.dll $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\*.csv $(OutDir)\enUS\&#x0D;&#x0A;mkdir $(OutDir)\zhCN&#x0D;&#x0A;copy ..\bin\zhCN\*.csv $(OutDir)\zhCN\&#x0D;&#x0A;mkdir $(OutDir)\zhTW&#x0D;&#x0A;copy ..\bin\zhTW\*.csv $(OutDir)\zhTW\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\mo&#x0D;&#x0A;copy po\*.mo $(OutDir)\mo\&#x0D;&#x0A;mkdir $(OutDir)\Export&#x0D;&#x0A;mkdir $(OutDir)\Import&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\msvcr90.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\msvcp90.dll $(OutDir)\&#x0D;&#x0A;copy ..\doc\ChangeLog.txt $(OutDir)\&#x0D;&#x0A;copy ..\bin\COPYING $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\userSettings&#x0D;&#x0A;copy ..\bin\userSettings\*.* $(OutDir)\userSettings&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -535,6 +535,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\modelexport_fbx.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\modelexport_lwo.cpp"
 				>
 			</File>
@@ -547,11 +551,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\modelexport_x3d.cpp"
+				RelativePath=".\modelexport_ogre.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\modelexport_ogre.cpp"
+				RelativePath=".\modelexport_x3d.cpp"
 				>
 			</File>
 			<File
@@ -674,6 +678,10 @@
 			</File>
 			<File
 				RelativePath=".\enums.h"
+				>
+			</File>
+			<File
+				RelativePath=".\fbxsdk.h"
 				>
 			</File>
 			<File

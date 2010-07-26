@@ -57,6 +57,7 @@ class LightSkyBoxDB;
 class SpellItemEnchantmentDB;
 class ItemVisualsDB;
 class ItemDB;
+class CamCinematicDB;
 
 // dbs
 extern ItemDatabase	items;
@@ -82,6 +83,7 @@ extern LightSkyBoxDB skyboxdb;
 extern SpellItemEnchantmentDB spellitemenchantmentdb;
 extern ItemVisualsDB itemvisualsdb;
 extern ItemDB itemdb;
+extern CamCinematicDB camcinemadb;
 
 class ItemDB: public DBCFile
 {
@@ -690,6 +692,25 @@ public:
 	Record getByFilename(wxString fn);
 	Record getByNPCID(unsigned int id);
 
+};
+
+class CamCinematicDB: public DBCFile
+{
+public:
+	CamCinematicDB(): DBCFile("DBFilesClient\\CinematicCamera.dbc") {}
+	~CamCinematicDB() {}
+
+	// WotLK Fields
+	static const size_t CamCineID = 0;		// uint
+	static const size_t CamModel = 1;		// string, ends in .mdx
+	static const size_t VoiceoverID = 2;	// uint
+	static const size_t PosX = 3;			// float
+	static const size_t PosZ = 4;			// float
+	static const size_t PosY = 5;			// float
+	static const size_t Rot = 6;			// float
+
+	Record getById(unsigned int id);
+	Record getByCamModel(wxString fn);
 };
 
 

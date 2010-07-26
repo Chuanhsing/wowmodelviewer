@@ -637,6 +637,8 @@ void ModelViewer::InitDatabase()
 		wxLogMessage(_T("Error: Could not open the Start Outfit NPC DB."));
 	if(!npctypedb.open())
 		wxLogMessage(_T("Error: Could not open the Creature Type DB."));
+	if(!camcinemadb.open())
+		wxLogMessage(_T("Error: Could not open the Cinema Camera DB."));
 
 	if(!itemdisplaydb.open())
 		wxLogMessage(_T("Error: Could not open the ItemDisplayInfo DB."));
@@ -1362,8 +1364,8 @@ bool ModelViewer::InitMPQArchives()
 	}else if (strncmp((char*)toc, "40000", 5) == 0) {
 		wxLogMessage(info);
 		if (gameVersion != 40000){
-			wxString info = _T("Notice: Cataclysm is still under development.\nMissing or incorrect data may not be a WMV issue.");
-			wxMessageBox(info,_T("Cataclysm Detected!"),wxOK);
+			wxString catinfo = _T("Notice: Cataclysm is still under development.\nMissing or incorrect data may not be a WMV issue.");
+			wxMessageBox(catinfo,_T("Cataclysm Detected!"),wxOK);
 			gameVersion = 40000;
 		}
 		langOffset = 0;
@@ -2938,7 +2940,6 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				ExportWMOtoOgreXml(canvas->wmo, dialog.GetPath().fn_str());
 			}
 		}
-#ifdef FBX
 	} else if (id == ID_MODELEXPORT_FBX) {
 		newfilename << _T(".fbx");
 		if (canvas->model) {
@@ -2956,7 +2957,6 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				ExportWMOtoFBX(canvas->wmo, dialog.GetPath().fn_str());
 			}
 		}
-#endif // FBX
 	}
 }
 

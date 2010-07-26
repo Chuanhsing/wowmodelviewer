@@ -30,6 +30,7 @@ NPCDB				npcdb;
 LightSkyBoxDB			skyboxdb;
 SpellItemEnchantmentDB	spellitemenchantmentdb;
 ItemVisualsDB			itemvisualsdb;
+CamCinematicDB		 camcinemadb;
 
 // ANIMDB.H
 AnimDB::Record AnimDB::getByAnimID(unsigned int id)
@@ -44,7 +45,22 @@ AnimDB::Record AnimDB::getByAnimID(unsigned int id)
 	throw NotFound();
 }
 // --
-
+// CAMCINEMADB.H
+CamCinematicDB::Record CamCinematicDB::getByCamModel(wxString fn)
+{
+	wxLogMessage("Searching for CamModel...");
+	// Brute force search for now
+	for (Iterator i=begin(); i!=end(); ++i)
+	{
+		wxLogMessage("Iteration %i",i);
+		wxString str(i->getString(CamModel));
+		wxLogMessage("CamModel: $s, VS $s", str, fn);
+		if(str.IsSameAs(fn, false) == true)
+			return (*i);
+	}
+	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	throw NotFound();
+}
 
 // --
 // CHARDB.H
@@ -406,6 +422,7 @@ NPCDB::Record NPCDB::getByNPCID(unsigned int id)
 	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
+
 // --
 
 

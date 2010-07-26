@@ -15,7 +15,7 @@
 void WriteLWSceneEnvKey(ofstream &fs, uint32 Chan, float value, float time, uint32 spline = 0)
 {
 	fs << _T("  Key ");				// Announces the start of a Key
-	fs << value;				// The Key's Value;
+	fs << value;					// The Key's Value;
 	fs << _T(" " << time);			// Time, in seconds, a float. This can be negative, zero or positive. Keys are listed in the envelope in increasing time order.
 	fs << _T(" " << spline);		// The curve type, an integer: 0 - TCB, 1 - Hermite, 2 - 1D Bezier (obsolete, equivalent to Hermite), 3 - Linear, 4 - Stepped, 5 - 2D Bezier
 	fs << _T(" 0 0 0 0 0 0 \n");	// Curve Data 1-6, all 0s for now.
@@ -27,9 +27,9 @@ void WriteLWSceneEnvChannel(ofstream &fs, uint32 ChanNum, float value, float tim
 {
 	fs << _T("Channel " << ChanNum << "\n");	// Channel Number
 	fs << _T("{ Envelope\n");
-	fs << _T("  1\n");						// Number of Keys in this envelope.
+	fs << _T("  1\n");							// Number of Keys in this envelope.
 	WriteLWSceneEnvKey(fs,ChanNum,value,time,spline);
-	fs << _T("  Behaviors 1 1\n");			// Pre/Post Behaviors. Defaults to 1 - Constant.
+	fs << _T("  Behaviors 1 1\n");				// Pre/Post Behaviors. Defaults to 1 - Constant.
 	fs << _T("}\n");
 }
 
@@ -815,6 +815,13 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 	if (modelExport_UseWMVPosRot == true){
 		ObjPos = m->pos;
 		ObjRot = m->rot;
+	}
+	if (m->hasCamera == true){
+		ModelCamera *cam = &m->cam;
+		if (cam->WorldOffset != Vec3D(0,0,0)){
+			ObjPos = cam->WorldOffset;
+			ObjRot = QuaternionToXYZ(Vec3D(0,0,0), cam->WorldRotation);
+		}
 	}
 	float temp;
 	temp = ObjRot.y;
@@ -3079,26 +3086,33 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 
 	// Build Surface Name Database
 	std::vector<std::string> surfarray;
-	std::vector<std::string> sfix;
-	std::vector<uint16> sfix2;
-	std::vector<uint16> check;
+	//std::vector<std::string> sfix;
+	//std::vector<uint16> sfix2;
+	//std::vector<uint16> check;
 	for (uint16 t=0;t<m->nTextures;t++){
 		wxString tex = wxString(m->textures[t].c_str(), wxConvUTF8).BeforeLast(_T('.'));
-		surfarray.push_back((char *)tex.c_str());
-		//sfix.push_back(tex.c_str());
-		sfix2.push_back(t);
-		check.push_back(0);
+		bool texfound = false;
+		for (unsigned int x=0;x<surfarray.size();x++){
+			if (surfarray[x] == tex){
+				texfound = true;
+				break;
+			}
+		}
+		if (texfound == false){
+			surfarray.push_back((char *)tex.c_str());
+		}
 	}
+	/*
 	// Rename duplicate names
 	for (uint16 t=0;t<surfarray.size();t++){
-		uint16 mod = 0;
+		//uint16 mod = 0;
 		for (uint16 k=0;k<surfarray.size();k++){
 			if ((t!=k)&&(surfarray[sfix2[t]] == surfarray[sfix2[k]])&&(check[k]==0)){
 				//sfix[t] = wxString(surfarray[t] + wxString::Format(_T("_v%02i"),mod));
 				//sfix[k] = wxString(surfarray[k] + wxString::Format(_T("_v%02i"),mod+1));
 				sfix2[k] = sfix2[t];
 				//sfix2[t] = t-1;
-				mod++;
+				//mod++;
 				check[k] = 1;
 				
 				// This code can erase the extra surface names.
@@ -3107,14 +3121,14 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 					if ((sfix2[g] - 1)>-1){
 						sfix2[g] -= 1;
 					}
-				}*/
+				}
 				//surfarray.erase(surfarray.begin() + k);//, surfarray.begin() + k+1);
 				//wxLogMessage("Deleting duplicate.");
 				//k++;
 			}
 		}
 	}
-
+*/
 
 #ifdef _DEBUG
 	wxLogMessage(_T("Texture List"));
@@ -3538,11 +3552,21 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 			for (uint32 k=0; k<batch->indexCount; k+=3) {
 				LW_WriteVX(f,counter,ptagSize);
 
-				int texid = m->mat[batch->texture].tex-1;
-				int surfID = PartCounter + texid;
-				if (check[texid] == 1){
-					surfID = PartCounter + sfix2[texid];
+				int texnum = m->mat[batch->texture].tex;
+				wxString tex = wxString(m->textures[texnum].c_str(), wxConvUTF8).BeforeLast(_T('.'));
+				int texid = 0;
+				for (unsigned int x=0;x<surfarray.size();x++){
+					if (surfarray[x] == tex){
+						texid = x;
+						break;
+					}
 				}
+
+				int surfID = PartCounter + texid;
+				wxLogMessage(_T("Texture: %s, TexNum: %i, TexID: %i, SurfID: %i"), tex.c_str(), texnum, texid, surfID);
+				//if (check[texid] == 1){
+				//	surfID = PartCounter + sfix2[texid];
+				//}
 
 				u16 = MSB2(surfID);
 				f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -3709,12 +3733,12 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 	// Cleanup, Isle 3!
 	surfarray.erase(surfarray.begin(),surfarray.end());
 	surfarray.~vector();
-	sfix.erase(sfix.begin(),sfix.end());
-	sfix.~vector();
-	sfix2.erase(sfix2.begin(),sfix2.end());
-	sfix2.~vector();
-	check.erase(check.begin(),check.end());
-	check.~vector();	
+//	sfix.erase(sfix.begin(),sfix.end());
+//	sfix.~vector();
+//	sfix2.erase(sfix2.begin(),sfix2.end());
+//	sfix2.~vector();
+//	check.erase(check.begin(),check.end());
+//	check.~vector();	
 
 	// Export Lights & Doodads
 	if ((modelExport_LW_ExportDoodads == true)||(modelExport_LW_ExportLights == true)){
@@ -4854,7 +4878,166 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 	}
 	LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("ADT"));
 
-	
+	wxLogMessage(_T("Starting Lightwave ADT Model Export Function..."));
+	unsigned int fileLen = 0;
+	int off_t;
+
+	// ===================================================
+	// FORM		// Format Declaration
+	//
+	// Always exempt from the length of the file!
+	// ===================================================
+	f.Write("FORM", 4);
+	f.Write(reinterpret_cast<char *>(&fileLen), 4);
+
+	// ===================================================
+	// LWO2
+	//
+	// Declares this is the Lightwave Object 2 file format.
+	// LWOB is the first format. It doesn't have a lot of the cool stuff LWO2 has...
+	// ===================================================
+	f.Write("LWO2", 4);
+	fileLen += 4;
+
+	// ===================================================
+	// TAGS
+	//
+	// Used for various Strings. Known string types, in order:
+	//		Sketch Color Names
+	//		Part Names
+	//		Surface Names
+	// ===================================================
+	/*
+	f.Write("TAGS", 4);
+	uint32 tagsSize = 0;
+	u32 = 0;
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+
+	uint32 counter=0;
+	uint32 TagCounter=0;
+	uint16 PartCounter=0;
+	uint16 SurfCounter=0;
+	unsigned int numVerts = 0;
+	unsigned int numGroups = 0;
+
+	// Build Surface Name Database
+	std::vector<std::string> surfarray;
+	std::vector<std::string> sfix;
+	std::vector<uint16> sfix2;
+	std::vector<uint16> check;
+	for (uint16 t=0;t<m->nTextures;t++){
+		wxString tex = wxString(m->textures[t].c_str(), wxConvUTF8).BeforeLast(_T('.'));
+		surfarray.push_back((char *)tex.c_str());
+		//sfix.push_back(tex.c_str());
+		sfix2.push_back(t);
+		check.push_back(0);
+	}
+	// Rename duplicate names
+	for (uint16 t=0;t<surfarray.size();t++){
+		uint16 mod = 0;
+		for (uint16 k=0;k<surfarray.size();k++){
+			if ((t!=k)&&(surfarray[sfix2[t]] == surfarray[sfix2[k]])&&(check[k]==0)){
+				//sfix[t] = wxString(surfarray[t] + wxString::Format(_T("_v%02i"),mod));
+				//sfix[k] = wxString(surfarray[k] + wxString::Format(_T("_v%02i"),mod+1));
+				sfix2[k] = sfix2[t];
+				//sfix2[t] = t-1;
+				mod++;
+				check[k] = 1;
+				*/
+				// This code can erase the extra surface names.
+				// Not used because we don't have a (sucessful) way to convert the deleted name's IDs to the other ID.
+				/*for (int g=t;g>0;g--){
+					if ((sfix2[g] - 1)>-1){
+						sfix2[g] -= 1;
+					}
+				}*/
+				//surfarray.erase(surfarray.begin() + k);//, surfarray.begin() + k+1);
+				//wxLogMessage("Deleting duplicate.");
+				//k++;
+	/*
+			}
+		}
+	}
+
+
+#ifdef _DEBUG
+	wxLogMessage(_T("Texture List"));
+	for (uint16 x=0;x<m->nTextures;x++){
+		wxLogMessage(_T("[ID:%02i] = %s"),x,m->textures[x].data());
+	}
+
+	wxLogMessage(_T("Surface List"));
+	for (uint16 x=0;x<surfarray.size();x++){
+		wxLogMessage(_T("[ID:%02i] = %s"),x,surfarray[x].c_str());
+	}
+#endif
+	*/
+
+	// ===================================================
+	// LAYR
+	//
+	// Specifies the start of a new layer. Each layer has it's own Point & Poly
+	// chunk, which tells it what data is on what layer. It's probably best
+	// to only have 1 layer for now.
+	// ===================================================
+	f.Write("LAYR", 4);
+	u32 = MSB4<uint32>(18);
+	fileLen += 8;
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	ub = 0;
+	for(int i=0; i<18; i++) {
+		f.Write(reinterpret_cast<char *>(&ub), 1);
+	}
+	fileLen += 18;
+
+	// ===================================================
+	// PNTS Chunk
+	//
+	// Point data
+	// ===================================================
+	uint32 pointsSize = 0;
+	f.Write("PNTS", 4);
+	u32 = MSB4<uint32>(pointsSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	fileLen += 8;
+
+	uint16 point = 0;
+	for (int c1=0;c1<16;c1++){
+		for (int c2=0;c2<16;c2++){
+			Vec3D v;
+
+			v = m->chunks[c1][c2].tv[c1+c2];
+
+			f.Write(reinterpret_cast<char *>(&v.x), 4);
+			f.Write(reinterpret_cast<char *>(&v.y), 4);
+			f.Write(reinterpret_cast<char *>(&v.z), 4);
+			pointsSize += 12;
+
+			point++;
+		}
+	}
+
+#ifdef _DEBUG
+	//wxLogMessage(_T("ADT Point Count: %i, Stored Indices: %i, Stored Verticies: %i"),numVerts, bindice, gverts);
+#endif
+
+
+	fileLen += pointsSize;
+	off_t = -4-pointsSize;
+	f.SeekO(off_t, wxFromCurrent);
+	u32 = MSB4<uint32>(pointsSize);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+
+	// ===================================================
+
+	f.SeekO(4, wxFromStart);
+	u32 = MSB4<uint32>(fileLen);
+	f.Write(reinterpret_cast<char *>(&u32), 4);
+	f.SeekO(0, wxFromEnd);
+
+	f.Close();
 
 	wxLogMessage(_T("ADT Export completed."));
 }

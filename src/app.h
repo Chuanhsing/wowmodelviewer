@@ -37,6 +37,26 @@
 		#pragma message("     Adding library: glew32.lib" ) 
 		#pragma comment( lib, "glew32.lib" )
 	#endif
+	
+	// FBX Libraries
+	#ifdef _WIN64
+		#ifdef _DEBUG
+			#pragma message("     Adding library: fbxsdk_20113_amd64d.lib" ) 
+			#pragma comment( lib, "fbxsdk_20113_amd64d.lib" )
+		#else
+			#pragma message("     Adding library: fbxsdk_20113_amd64.lib" ) 
+			#pragma comment( lib, "fbxsdk_20113_amd64.lib" )
+		#endif
+	#else
+		#ifdef _DEBUG
+			#pragma message("     Adding library: fbxsdk_20113d.lib" ) 
+			#pragma comment( lib, "fbxsdk_20113d.lib" )
+		#else
+			#pragma message("     Adding library: fbxsdk_20113.lib" ) 
+			#pragma comment( lib, "fbxsdk_20113.lib" )
+		#endif
+	#endif
+	
 
 	#pragma message("     Adding library: uxtheme.lib" ) 
 	#pragma comment( lib, "uxtheme.lib" ) // WinXP Theme Engine

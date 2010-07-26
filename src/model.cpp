@@ -1136,7 +1136,7 @@ void Model::initAnimated(MPQFile &f)
 	// just use the first camera, meh
 	if (header.version[0] <= 9 && header.nCameras>0) {
 		ModelCameraDef *camDefs = (ModelCameraDef*)(f.getBuffer() + header.ofsCameras);
-		cam.init(f, camDefs[0], globalSequences);
+		cam.init(f, camDefs[0], globalSequences, modelname);
 		hasCamera = true;
 	}
 
@@ -1895,7 +1895,7 @@ void TextureAnim::setup(int anim)
 	}
 }
 
-void ModelCamera::init(MPQFile &f, ModelCameraDef &mcd, uint32 *global)
+void ModelCamera::init(MPQFile &f, ModelCameraDef &mcd, uint32 *global, wxString modelname)
 {
 	ok = true;
     nearclip = mcd.nearclip;
@@ -1908,6 +1908,29 @@ void ModelCamera::init(MPQFile &f, ModelCameraDef &mcd, uint32 *global)
 	rot.init(mcd.rot, f, global);
 	tPos.fix(fixCoordSystem);
 	tTarget.fix(fixCoordSystem);
+
+	Vec3D wopos = Vec3D(0,0,0);
+	float worot = 0.0f;
+	if (modelname.Find(_T("Cameras\\"))>-1) {
+		try {
+			wxLogMessage(_T("Trying Camera DB..."));
+			wxString mn = modelname.BeforeLast(_T('.')).Append(_T(".mdx"));
+			wxLogMessage(_T("ModelName: %s"),mn);
+			CamCinematicDB::Record r = camcinemadb.getByCamModel(mn.c_str());
+			wxLogMessage(_T("Setting variables.."));
+			wopos = Vec3D(r.getFloat(camcinemadb.PosX),r.getFloat(camcinemadb.PosZ),r.getFloat(camcinemadb.PosY));
+			worot = r.getFloat(camcinemadb.Rot);
+		}
+		catch (CamCinematicDB::NotFound) {
+			wxLogMessage(_T("DBFilesClient/CinematicCamera.dbc not found."));
+			wopos = Vec3D(0,0,0);
+			worot = 0.0f;
+		}
+		wxLogMessage("WorldPos: %f, %f, %f", wopos.x, wopos.y, wopos.z);
+		wxLogMessage("WorldRot: %f", worot);
+	}
+	WorldOffset = fixCoordSystem(wopos);
+	WorldRotation = worot;
 }
 
 void ModelCamera::setup(int time)
