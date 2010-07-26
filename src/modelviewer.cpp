@@ -61,7 +61,7 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	EVT_MENU(ID_SHOW_LIGHT, ModelViewer::OnToggleDock)
 	EVT_MENU(ID_SHOW_MODEL, ModelViewer::OnToggleDock)
 	EVT_MENU(ID_SHOW_MODELBANK, ModelViewer::OnToggleDock)	
-	EVT_MENU(ID_SHOW_MODELOPENED, ModelViewer::OnToggleDock)	
+	EVT_MENU(ID_EXPORT_TEXTURES, ModelViewer::OnToggleDock)	
 	// --
 	EVT_MENU(ID_SHOW_MASK, ModelViewer::OnToggleCommand)
 	//EVT_MENU(ID_SHOW_WIREFRAME, ModelViewer::OnToggleCommand)
@@ -275,7 +275,7 @@ void ModelViewer::InitMenu()
 	fileMenu->Append(ID_FILE_TEXEXPORT, _("Export Texture"));
 	fileMenu->Enable(ID_FILE_TEXEXPORT, false);
 */
-	fileMenu->Append(ID_SHOW_MODELOPENED, _("Export Textures..."));
+	fileMenu->Append(ID_EXPORT_TEXTURES, _("Export Textures..."));
 
 	// --== New Model Export Menu! ==--
 	//To add your exporter, simply copy the bottom line below, and change the nessicary information.
@@ -296,9 +296,7 @@ void ModelViewer::InitMenu()
 	exportMenu->Append(ID_MODELEXPORT_3DS, _("3DS..."));
 	exportMenu->Append(ID_MODELEXPORT_X3D, _("X3D..."));
 	exportMenu->Append(ID_MODELEXPORT_XHTML, _("X3D in XHTML..."));
-//#ifdef _DEBUG
 	exportMenu->Append(ID_MODELEXPORT_OGRE, _("Ogre XML..."));
-//#endif
 	exportMenu->Append(ID_MODELEXPORT_FBX, _("FBX..."));
 
 	// -= Enable/Disable Model Exporters =-
@@ -308,6 +306,7 @@ void ModelViewer::InitMenu()
 
 	// -= Create Model Export Menu =-
 	fileMenu->Append(ID_FILE_MODELEXPORT_MENU, _("Export Model"), exportMenu);
+	fileMenu->Enable(ID_FILE_MODELEXPORT_MENU, false);
 
 	// --== Continue regular menu ==--
 	fileMenu->AppendSeparator();
@@ -1465,7 +1464,7 @@ void ModelViewer::OnToggleDock(wxCommandEvent &event)
 		settingsControl->Open();
 	} else if (id==ID_SHOW_MODELBANK) {
 		interfaceManager.GetPane(modelbankControl).Show(true);
-	} else if (id==ID_SHOW_MODELOPENED) {
+	} else if (id==ID_EXPORT_TEXTURES) {
 		interfaceManager.GetPane(modelOpened).Show(true);
 	}else if(id==ID_MODELEXPORT_OPTIONS){
 		interfaceManager.GetPane(exportOptionsControl).Show(true);

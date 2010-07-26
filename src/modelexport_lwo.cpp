@@ -5005,16 +5005,17 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 	uint16 point = 0;
 	for (int c1=0;c1<16;c1++){
 		for (int c2=0;c2<16;c2++){
-			Vec3D v;
+			for (int num=0;num<145;num++){
+				MapChunk *chunk = &m->chunks[c1][c2];
+				Vec3D vert = chunk->tv[num];
 
-			v = m->chunks[c1][c2].tv[c1+c2];
+				f.Write(reinterpret_cast<char *>(&vert.x), 4);
+				f.Write(reinterpret_cast<char *>(&vert.y), 4);
+				f.Write(reinterpret_cast<char *>(&vert.z), 4);
+				pointsSize += 12;
 
-			f.Write(reinterpret_cast<char *>(&v.x), 4);
-			f.Write(reinterpret_cast<char *>(&v.y), 4);
-			f.Write(reinterpret_cast<char *>(&v.z), 4);
-			pointsSize += 12;
-
-			point++;
+				point++;
+			}
 		}
 	}
 

@@ -482,12 +482,13 @@ void FileControl::ClearCanvas()
 
 void FileControl::UpdateInterface()
 {
-	// Disable whatever formats can't be export yet!
+	// Disable whatever formats can't be export yet.
 
 	// You MUST put true in one if the other is false! Otherwise, if they open the other model type and go back,
 	// your function will still be disabled!!
 	if (modelviewer->isModel == true){
 		// If it's an M2 file...
+		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);	// Currently totally disabled. No support at all...
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, true);
@@ -496,7 +497,10 @@ void FileControl::UpdateInterface()
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OGRE, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_FBX, true);
 
+		// Enable Controls for Characters
 		modelviewer->charMenu->Enable(ID_SAVE_CHAR, true);
 		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, true);
 		modelviewer->charMenu->Enable(ID_SHOW_EARS, true);
@@ -513,6 +517,8 @@ void FileControl::UpdateInterface()
 		modelviewer->charMenu->Enable(ID_MOUNT_CHARACTER, true);
 		modelviewer->charMenu->Enable(ID_CHAR_RANDOMISE, true);
 	}else if (modelviewer->isADT == true){
+		// If it's an ADT file...
+		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OBJ, false);
@@ -521,6 +527,37 @@ void FileControl::UpdateInterface()
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, false);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, false);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OGRE, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_FBX, false);
+
+		modelviewer->charMenu->Enable(ID_SAVE_CHAR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_EARS, false);
+		modelviewer->charMenu->Enable(ID_SHOW_HAIR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_FACIALHAIR, false);
+		modelviewer->charMenu->Enable(ID_SHOW_FEET, false);
+		modelviewer->charMenu->Enable(ID_SHEATHE, false);
+		modelviewer->charMenu->Enable(ID_SAVE_EQUIPMENT, false);
+		modelviewer->charMenu->Enable(ID_LOAD_EQUIPMENT, false);
+		modelviewer->charMenu->Enable(ID_CLEAR_EQUIPMENT, false);
+		modelviewer->charMenu->Enable(ID_LOAD_SET, false);
+		modelviewer->charMenu->Enable(ID_LOAD_START, false);
+		modelviewer->charMenu->Enable(ID_LOAD_NPC_START, false);
+		modelviewer->charMenu->Enable(ID_MOUNT_CHARACTER, false);
+		modelviewer->charMenu->Enable(ID_CHAR_RANDOMISE, false);
+	}else if (modelviewer->isWMO == true){
+		// If the object is a WMO file...
+		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OBJ, true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OGRE, false);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_FBX, false);
 
 		modelviewer->charMenu->Enable(ID_SAVE_CHAR, false);
 		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, false);
@@ -538,15 +575,8 @@ void FileControl::UpdateInterface()
 		modelviewer->charMenu->Enable(ID_MOUNT_CHARACTER, false);
 		modelviewer->charMenu->Enable(ID_CHAR_RANDOMISE, false);
 	}else{
-		// If the object is a WMO file...
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, true);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OBJ, true);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, false);
+		// If it's not a 3D file...
+		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,false); // Disable Exporters
 
 		modelviewer->charMenu->Enable(ID_SAVE_CHAR, false);
 		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, false);
@@ -576,6 +606,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 	// make sure that a valid Tree Item was actually selected.
 	if (!item.IsOk() || !modelviewer->canvas){
 		modelviewer->fileMenu->Enable(ID_MODELEXPORT_BASE,false);
+		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,false);
 		return;
 	}
 
@@ -584,11 +615,13 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 	// make sure the data (file name) is valid
 	if (!data){
 		modelviewer->fileMenu->Enable(ID_MODELEXPORT_BASE,false);
+		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,false);
 		return; // isn't valid, exit.
 	}
 
 	CurrentItem = item;
 	modelviewer->fileMenu->Enable(ID_MODELEXPORT_BASE,true);
+	modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,true);
 
 	if (filterMode == FILE_FILTER_MODEL) {
 		// Exit, if its the same model thats currently loaded

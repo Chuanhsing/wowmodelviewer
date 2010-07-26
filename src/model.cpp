@@ -1918,7 +1918,7 @@ void ModelCamera::init(MPQFile &f, ModelCameraDef &mcd, uint32 *global, wxString
 			wxLogMessage(_T("ModelName: %s"),mn);
 			CamCinematicDB::Record r = camcinemadb.getByCamModel(mn.c_str());
 			wxLogMessage(_T("Setting variables.."));
-			wopos = Vec3D(r.getFloat(camcinemadb.PosX),r.getFloat(camcinemadb.PosZ),r.getFloat(camcinemadb.PosY));
+			wopos = fixCoordSystem(Vec3D(r.getFloat(camcinemadb.PosX),r.getFloat(camcinemadb.PosY),r.getFloat(camcinemadb.PosZ)));
 			worot = r.getFloat(camcinemadb.Rot);
 		}
 		catch (CamCinematicDB::NotFound) {
