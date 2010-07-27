@@ -3093,7 +3093,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 		wxString tex = wxString(m->textures[t].c_str(), wxConvUTF8).BeforeLast(_T('.'));
 		bool texfound = false;
 		for (unsigned int x=0;x<surfarray.size();x++){
-			if (surfarray[x] == tex){
+			if (strcmp(surfarray[x].c_str(), (char*)tex.c_str()) == 0){
 				texfound = true;
 				break;
 			}
@@ -3117,7 +3117,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 				
 				// This code can erase the extra surface names.
 				// Not used because we don't have a (sucessful) way to convert the deleted name's IDs to the other ID.
-				/*for (int g=t;g>0;g--){
+				for (int g=t;g>0;g--){
 					if ((sfix2[g] - 1)>-1){
 						sfix2[g] -= 1;
 					}
@@ -3128,7 +3128,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 			}
 		}
 	}
-*/
+    */
 
 #ifdef _DEBUG
 	wxLogMessage(_T("Texture List"));
@@ -3556,7 +3556,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 				wxString tex = wxString(m->textures[texnum].c_str(), wxConvUTF8).BeforeLast(_T('.'));
 				int texid = 0;
 				for (unsigned int x=0;x<surfarray.size();x++){
-					if (surfarray[x] == tex){
+					if (strcmp(surfarray[x].c_str(), (char*)tex.c_str()) == 0){
 						texid = x;
 						break;
 					}

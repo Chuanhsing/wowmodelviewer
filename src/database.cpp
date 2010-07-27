@@ -48,13 +48,13 @@ AnimDB::Record AnimDB::getByAnimID(unsigned int id)
 // CAMCINEMADB.H
 CamCinematicDB::Record CamCinematicDB::getByCamModel(wxString fn)
 {
-	wxLogMessage("Searching for CamModel...");
+	wxLogMessage(_T("Searching for CamModel..."));
 	// Brute force search for now
 	for (Iterator i=begin(); i!=end(); ++i)
 	{
-		wxLogMessage("Iteration %i",i);
+		//wxLogMessage(_T("Iteration %i"),i);
 		wxString str(i->getString(CamModel));
-		wxLogMessage("CamModel: $s, VS $s", str, fn);
+		wxLogMessage(_T("CamModel: %s, VS %s"), str.c_str(), fn.c_str());
 		if(str.IsSameAs(fn, false) == true)
 			return (*i);
 	}

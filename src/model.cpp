@@ -1915,7 +1915,7 @@ void ModelCamera::init(MPQFile &f, ModelCameraDef &mcd, uint32 *global, wxString
 		try {
 			wxLogMessage(_T("Trying Camera DB..."));
 			wxString mn = modelname.BeforeLast(_T('.')).Append(_T(".mdx"));
-			wxLogMessage(_T("ModelName: %s"),mn);
+			wxLogMessage(_T("ModelName: %s"), mn.c_str());
 			CamCinematicDB::Record r = camcinemadb.getByCamModel(mn.c_str());
 			wxLogMessage(_T("Setting variables.."));
 			wopos = fixCoordSystem(Vec3D(r.getFloat(camcinemadb.PosX),r.getFloat(camcinemadb.PosY),r.getFloat(camcinemadb.PosZ)));
@@ -1926,8 +1926,8 @@ void ModelCamera::init(MPQFile &f, ModelCameraDef &mcd, uint32 *global, wxString
 			wopos = Vec3D(0,0,0);
 			worot = 0.0f;
 		}
-		wxLogMessage("WorldPos: %f, %f, %f", wopos.x, wopos.y, wopos.z);
-		wxLogMessage("WorldRot: %f", worot);
+		wxLogMessage(_T("WorldPos: %f, %f, %f"), wopos.x, wopos.y, wopos.z);
+		wxLogMessage(_T("WorldRot: %f"), worot);
 	}
 	WorldOffset = fixCoordSystem(wopos);
 	WorldRotation = worot;
