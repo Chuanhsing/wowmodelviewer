@@ -498,7 +498,11 @@ void FileControl::UpdateInterface()
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OGRE, true);
+#ifdef	_WINDOWS
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_FBX, true);
+#else
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_FBX, false);
+#endif
 
 		// Enable Controls for Characters
 		modelviewer->charMenu->Enable(ID_SAVE_CHAR, true);
@@ -520,7 +524,11 @@ void FileControl::UpdateInterface()
 		// If it's an ADT file...
 		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode
+#ifdef _DEBUG		// Debug Only Support for Exporting, until we get it working.
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, true);
+#else
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, false);
+#endif
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OBJ, false);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);

@@ -5007,8 +5007,11 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 		for (int c2=0;c2<16;c2++){
 			for (int num=0;num<145;num++){
 				MapChunk *chunk = &m->chunks[c1][c2];
-				Vec3D vert = chunk->tv[num];
-
+				//wxLogMessage("Vert Coords: x:%f, y:%f, z:%f",chunk->tv[num].x,chunk->tv[num].y, chunk->tv[num].z);
+				Vec3D vert;
+				vert.x = MSB4<float>(chunk->tv[num].x);
+				vert.y = MSB4<float>(chunk->tv[num].y); // We don't switch this, because it's already correct.
+				vert.z = MSB4<float>(chunk->tv[num].z);
 				f.Write(reinterpret_cast<char *>(&vert.x), 4);
 				f.Write(reinterpret_cast<char *>(&vert.y), 4);
 				f.Write(reinterpret_cast<char *>(&vert.z), 4);
@@ -5020,7 +5023,7 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 	}
 
 #ifdef _DEBUG
-	//wxLogMessage(_T("ADT Point Count: %i, Stored Indices: %i, Stored Verticies: %i"),numVerts, bindice, gverts);
+	wxLogMessage(_T("ADT Point Count: %i"),point);
 #endif
 
 
