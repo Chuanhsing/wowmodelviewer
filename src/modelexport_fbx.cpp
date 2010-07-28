@@ -37,6 +37,7 @@ void InitializeSdkObjects(KFbxSdkManager*& pSdkManager, KFbxScene*& pScene) {
 
 	// Load plugins from the executable directory
 	KString lPath = KFbxGetApplicationDirectory();
+	lPath += "FBXPlugins\\";
 #if defined(KARCH_ENV_WIN)
 	KString lExtension = "dll";
 #elif defined(KARCH_ENV_MACOSX)
@@ -232,97 +233,6 @@ bool LoadScene(KFbxSdkManager* pSdkManager, KFbxDocument* pScene, const char* pF
     lImporter->Destroy();
 
     return lStatus;
-}
-
-// Add the specified node to the node array. Also, add recursively
-// all the parent node of the specified node to the array.
-void AddNodeRecursively(KArrayTemplate<KFbxNode*>& pNodeArray, KFbxNode* pNode)
-{
-	if (pNode)
-	{
-		AddNodeRecursively(pNodeArray, pNode->GetParent());
-
-		if (pNodeArray.Find(pNode) == -1)
-		{
-			// Node not in the list, add it
-			pNodeArray.Add(pNode);
-		}
-	}
-}
-
-// Store the Bind Pose
-void StoreBindPose(KFbxScene* pScene, KFbxNode* pPatch, KFbxNode* pSkeletonRoot)
-{
-	// In the bind pose, we must store all the link's global matrix at the time of the bind.
-	// Plus, we must store all the parent(s) global matrix of a link, even if they are not
-	// themselves deforming any model.
-
-	// In this example, since there is only one model deformed, we don't need walk through 
-	// the scene
-	//
-
-	// Now list the all the link involve in the patch deformation
-	KArrayTemplate<KFbxNode*> lClusteredFbxNodes;
-	int                       i, j;
-
-	if (pPatch && pPatch->GetNodeAttribute())
-	{
-		int lSkinCount=0;
-		int lClusterCount=0;
-		switch (pPatch->GetNodeAttribute()->GetAttributeType())
-		{
-		case KFbxNodeAttribute::eMESH:
-		case KFbxNodeAttribute::eNURB:
-		case KFbxNodeAttribute::ePATCH:
-
-			lSkinCount = ((KFbxGeometry*)pPatch->GetNodeAttribute())->GetDeformerCount(KFbxDeformer::eSKIN);
-			//Go through all the skins and count them
-			//then go through each skin and get their cluster count
-			for(i=0; i<lSkinCount; ++i)
-			{
-				KFbxSkin *lSkin=(KFbxSkin*)((KFbxGeometry*)pPatch->GetNodeAttribute())->GetDeformer(i, KFbxDeformer::eSKIN);
-				lClusterCount+=lSkin->GetClusterCount();
-			}
-			break;
-		}
-		//if we found some clusters we must add the node
-		if (lClusterCount)
-		{
-			//Again, go through all the skins get each cluster link and add them
-			for (i=0; i<lSkinCount; ++i)
-			{
-				KFbxSkin *lSkin=(KFbxSkin*)((KFbxGeometry*)pPatch->GetNodeAttribute())->GetDeformer(i, KFbxDeformer::eSKIN);
-				lClusterCount=lSkin->GetClusterCount();
-				for (j=0; j<lClusterCount; ++j)
-				{
-					KFbxNode* lClusterNode = lSkin->GetCluster(j)->GetLink();
-					AddNodeRecursively(lClusteredFbxNodes, lClusterNode);
-				}
-
-			}
-
-			// Add the patch to the pose
-			lClusteredFbxNodes.Add(pPatch);
-		}
-	}
-
-	// Now create a bind pose with the link list
-	if (lClusteredFbxNodes.GetCount())
-	{
-		// A pose must be named. Arbitrarily use the name of the patch node.
-		KFbxPose* lPose = KFbxPose::Create(pScene,pPatch->GetName());
-
-		for (i=0; i<lClusteredFbxNodes.GetCount(); i++)
-		{
-			KFbxNode*  lKFbxNode   = lClusteredFbxNodes.GetAt(i);
-			KFbxMatrix lBindMatrix = pScene->GetEvaluator()->GetNodeGlobalTransform(lKFbxNode);
-
-			lPose->Add(lKFbxNode, lBindMatrix);
-		}
-
-		// Add the pose to the scene
-		pScene->AddPose(lPose);
-	}
 }
 
 // Create materials.
@@ -566,32 +476,44 @@ void RotationMatrixToEulerAnglesXYZ(const Matrix& rkRot,
 	}
 }
 
-void QuatToEuler(const Quaternion& quat, Vec3D& rot)
-{
-	double sqw;
-	double sqx;
-	double sqy;
-	double sqz;
-
-	double rotxrad;
-	double rotyrad;
-	double rotzrad;
-
-	sqw = quat.w * quat.w;
-	sqx = quat.x * quat.x;
-	sqy = quat.y * quat.y;
-	sqz = quat.z * quat.z;
-
-	rotxrad = (double)atan2l(2.0 * ( quat.y * quat.z + quat.x * quat.w ) , ( -sqx - sqy + sqz + sqw ));
-	rotyrad = (double)asinl(-2.0 * ( quat.x * quat.z - quat.y * quat.w ));
-	rotzrad = (double)atan2l(2.0 * ( quat.x * quat.y + quat.z * quat.w ) , (  sqx - sqy - sqz + sqw ));
-
-	rot.x = rotxrad * (180.0 / FBX_PI);
-	rot.y = rotyrad * (180.0 / FBX_PI);
-	rot.z = rotzrad * (180.0 / FBX_PI);
-
-	return;
-}
+static const char* g_bone_names[] = {
+	"LARM",
+	"RARM",
+	"LSHOULDER",
+	"RSHOULDER",
+	"STOMACH",
+	"WAIST",
+	"HEAD",
+	"JAW",
+	"RFINGER1",
+	"RFINGER2",
+	"RFINGER3",
+	"RFINGERS",
+	"RTHUMB",
+	"LFINGER1",
+	"LFINGER2",
+	"LFINGER3",
+	"LFINGERS",
+	"LTHUMB",
+	"BTH",
+	"CSR",
+	"CSL",
+	"BREATH",
+	"NAME",
+	"NAMEMOUNT",
+	"CHD",
+	"CCH",
+	"ROOT",
+	"WHEEL1",
+	"WHEEL2",
+	"WHEEL3",
+	"WHEEL4",
+	"WHEEL5",
+	"WHEEL6",
+	"WHEEL7",
+	"WHEEL8",
+	""
+};
 
 // Create skeleton.
 void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const char* fn) {
@@ -613,9 +535,17 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 		if (pid > -1)
 			trans -= m->bones[pid].pivot;
 
+		
 		KString bone_name(g_fbx_name.c_str());
 		bone_name += "_bone_";
-		bone_name += static_cast<int>(i);
+		int j = 0;
+		for (; j < BONE_MAX; ++j) {
+			if (m->keyBoneLookup[j] == static_cast<int>(i)) {
+				bone_name += g_bone_names[j];
+				break;
+			}
+		}
+		if (j == BONE_MAX) bone_name += static_cast<int>(i);
 
 		KFbxNode* skeleton_node = KFbxNode::Create(scene, bone_name);
 		bone_nodes.push_back(skeleton_node);
@@ -660,7 +590,7 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 	map<wxString, int> anim_names;
 	size_t num_of_anims = m->header.nAnimations;
 #ifdef _DEBUG
-	for (size_t i = 0; i < 1; ++i)
+	for (size_t i = 0; i < 2; ++i)
 #else
 	for (size_t i = 0; i < num_of_anims; ++i)
 #endif
@@ -692,8 +622,7 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 				Bone& bone = m->bones[j];
 				if (uses_anim(bone, i)) {
 					Timeline timeline;
-					if (bone.parent <= 0)
-						updateTimeline(timeline, bone.trans.times[i], KEY_TRANSLATE);
+					updateTimeline(timeline, bone.trans.times[i], KEY_TRANSLATE);
 					updateTimeline(timeline, bone.rot.times[i], KEY_ROTATE);
 					updateTimeline(timeline, bone.scale.times[i], KEY_SCALE);
 					size_t ntrans = 0;
@@ -713,8 +642,12 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 					KTime time;
 					for (Timeline::iterator it = timeline.begin(); it != timeline.end(); it++) {
 						time.SetSecondDouble(static_cast<double>(it->first) / 1000.0);
-						if (it->second & KEY_TRANSLATE) {
-							Vec3D v = bone.trans.data[i][ntrans];
+						if (it->second & KEY_TRANSLATE && ntrans < bone.trans.data[i].size()) {
+							Vec3D v = bone.trans.getValue(i, it->first);
+							if (bone.parent >= 0) {
+								Bone& parent_bone = m->bones[bone.parent];
+								v += (bone.pivot - parent_bone.pivot);
+							}
 							ntrans++;
 
 							t_curve_x->KeyModifyBegin();
@@ -737,7 +670,7 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 						}
 						if (it->second & KEY_ROTATE) {
 							float x, y, z;
-							Quaternion q = bone.rot.data[i][nrot];
+							Quaternion q = bone.rot.getValue(i, it->first);
 							Quaternion tq;
 							tq.x = q.w; tq.y = q.x; tq.z = q.y; tq.w = q.z;
 							Matrix mtx;
@@ -746,11 +679,6 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 							x = x * (180.0f / static_cast<float>(FBX_PI));
 							y = y * (180.0f / static_cast<float>(FBX_PI));
 							z = z * (180.0f / static_cast<float>(FBX_PI));
-							//Vec3D v;
-							//QuatToEuler(q, v);
-							//x = v.x;
-							//y = v.y;
-							//z = v.z;
 							nrot++;
 
 							r_curve_x->KeyModifyBegin();
@@ -772,7 +700,7 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 							r_curve_z->KeyModifyEnd();
 						}
 						if (it->second & KEY_SCALE) {
-							Vec3D& v = bone.scale.data[i][nscale];
+							Vec3D& v = bone.scale.getValue(i, it->first);
 							nscale++;
 
 							s_curve_x->KeyModifyBegin();
