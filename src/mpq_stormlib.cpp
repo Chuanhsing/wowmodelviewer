@@ -14,7 +14,7 @@ ArchiveSet gOpenArchives;
 
 MPQArchive::MPQArchive(const char* filename)
 {
-	bool result = !!SFileOpenArchive( filename, 0, 0, &mpq_a );
+	bool result = !!SFileOpenArchive( filename, 0, MPQ_OPEN_READ_ONLY, &mpq_a );
 
 	wxLogMessage(_T("Opening %s"), filename);
 	if(!result) {

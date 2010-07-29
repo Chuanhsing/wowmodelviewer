@@ -1544,6 +1544,7 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 				LoadChar(loadDialog.GetPath().mb_str());
 			}
 		}
+		fileControl->UpdateInterface();
 		break;
 
 	case ID_IMPORT_CHAR:

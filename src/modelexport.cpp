@@ -7,7 +7,7 @@
 
 #include "CxImage/ximage.h"
 
-// 2 methods to go,  just export the entire m2 model.
+// 2 methods to go, just export the entire m2 model.
 // or use our "drawing" routine to export only whats being drawn.
 
 // SaveTexture

@@ -21,6 +21,7 @@ public:
 	void OnPopupClick(wxCommandEvent &evt);
 	void Export(wxString val, int select);
 	void ExportPNG(wxString val, wxString suffix);
+	void UpdateInterface();
 
 	wxTreeCtrl *fileTree;
 	wxButton *btnSearch;
@@ -34,12 +35,10 @@ public:
 	wxMediaCtrl *mcPlayer;
 #endif
 
-
 	ModelViewer* modelviewer; // point to parent
-	
+
 private:
 	void ClearCanvas();
-	void UpdateInterface();
 };
 
 class FileTreeData:public wxTreeItemData

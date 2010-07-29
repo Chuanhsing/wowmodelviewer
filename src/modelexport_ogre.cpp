@@ -148,6 +148,8 @@ static void WriteSkeleton(const ExportData &data, wxString filename);
 void ExportM2toOgreXml(Model *m, const char *fn, bool init) {
 	assert( m && fn );
 
+	LogExportData(_T("OgreXML"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
+
 	wxString meshName(fn, wxConvUTF8);
 	wxString baseName = (meshName.Right(9).CmpNoCase(_T(".mesh.xml")) == 0) ? (meshName.Left(meshName.Length() - 9)) : meshName;
 	wxString matName = baseName + _T(".material");
@@ -163,6 +165,7 @@ void ExportM2toOgreXml(Model *m, const char *fn, bool init) {
 
 void ExportWMOtoOgreXml(WMO *wmo, const char *fn) {
 	assert( wmo && fn);
+	//LogExportData(_T("OgreXML"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("WMO"));
 }
 
 static void updateTimeline(Timeline &timeline, vector<TimeT> &times, int keyMask) {

@@ -77,7 +77,7 @@ struct LWPoly {
 // Layer Data
 struct LWLayer {
 	// Layer Data
-	wxString Name;					// Name of the Layer
+	wxString Name;					// Name of the Layer, Optional
 
 	// Points Block
 	unsigned long long PointCount;	// Number of Points in this Layer

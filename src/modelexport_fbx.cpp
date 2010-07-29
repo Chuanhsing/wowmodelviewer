@@ -734,6 +734,8 @@ void ExportM2toFBX(Model* m, const char* fn, bool init) {
 	g_fbx_basename = (g_fbx_meshname.Right(9).CmpNoCase(_T(".fbx")) == 0) ? (g_fbx_meshname.Left(g_fbx_meshname.Length() - 9)) : g_fbx_meshname;
 	g_fbx_name = g_fbx_basename.AfterLast('\\');
 
+	LogExportData(_T("FBX"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
+
 	KFbxSdkManager* sdk_mgr = 0;
 	KFbxScene* scene = NULL;
 
@@ -765,6 +767,7 @@ void ExportM2toFBX(Model* m, const char* fn, bool init) {
 }
 
 void ExportWMOtoFBX(WMO* m, const char* fn) {
+ //   LogExportData(_T("FBX"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("WMO"));
  //   KFbxSdkManager* sdk_mgr = 0;
  //   KFbxScene* scene = NULL;
 
