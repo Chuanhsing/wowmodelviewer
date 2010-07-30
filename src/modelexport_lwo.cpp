@@ -845,7 +845,14 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 					Pos -= m->bones[cbone->parent].transPivot;
 			}
 			Pos.z = -Pos.z;
-			WriteLWSceneBone(fs, wxString::Format(_T("Bone_%03i"),x), 1, Pos, Vec3D(0,0,0), 0.25, x, ModelID, cbone->parent);
+			wxString bone_name = wxString::Format(_T("Bone_%03i"),x);
+			for (int j=0; j<BONE_MAX; ++j) {
+				if (m->keyBoneLookup[j] == static_cast<int>(x)) {
+					bone_name = Bone_Names[j];
+					break;
+				}
+			}
+			WriteLWSceneBone(fs, bone_name, 1, Pos, Vec3D(0,0,0), 0.25, x, ModelID, cbone->parent);
 		}
 	}
 
@@ -1582,43 +1589,46 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	wxLogMessage(_T("M2 UV data Written for %s"),m->fullname.c_str());
 #endif
 
-	//m->header;
-	/*
+	//m->header
 	//Vertex Mapping
-	f.Write(_T("VMAP"), 4);
-	u32 = MSB4<uint32>(vmapSize);
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	fileLen += 8;
-	// UV Data
-	f.Write(_T("WGHT"), 4);
-	dimension = MSB2(1);
-	f.Write(reinterpret_cast<char *>(&dimension), 2);
-	f.Write(_T("Texture"), 7);
-	ub = 0;
-	f.Write(reinterpret_cast<char *>(&ub), 1);
-	vmapSize += 14;
+	/*
+	for (uint16 b=0;b<m->header.nBones;b++){
+		f.Write(_T("VMAP"), 4);
+		u32 = MSB4<uint32>(vmapSize);
+		f.Write(reinterpret_cast<char *>(&u32), 4);
+		fileLen += 8;
+		// UV Data
+		f.Write(_T("WGHT"), 4);
+		dimension = MSB2(1);
+		f.Write(reinterpret_cast<char *>(&dimension), 2);
+		f.Write(_T("Texture"), 7);
+		ub = 0;
+		f.Write(reinterpret_cast<char *>(&ub), 1);
+		vmapSize += 14;
 
-	counter = 0;
+		counter = 0;
 
-	for (uint32 i=0; i<m->passes.size(); i++) {
-		ModelRenderPass &p = m->passes[i];
+		for (uint32 i=0; i<m->passes.size(); i++) {
+			ModelRenderPass &p = m->passes[i];
 
-		if (p.init(m)){
-			for(uint32 k=0, b=p.indexStart;k<p.indexCount;k++,b++) {
-				uint16 a = m->indices[b];
+			if (p.init(m)){
+				for(uint32 k=0, b=p.indexStart;k<p.indexCount;k++,b++) {
+					uint16 a = m->indices[b];
 
-				LW_WriteVX(f,counter,vmapSize);
+					LW_WriteVX(f,counter,vmapSize);
 
-				f32 = MSB4<float>(m->origVertices[a].texcoords.x);
-				f.Write(reinterpret_cast<char *>(&f32), 4);
-				f32 = MSB4<float>(1 - m->origVertices[a].texcoords.y);
-				f.Write(reinterpret_cast<char *>(&f32), 4);
-				vmapSize += 8;
-				counter++;
+					f32 = MSB4<float>(m->origVertices[a].weights[0]);
+					f.Write(reinterpret_cast<char *>(&f32), 4);
+					f32 = MSB4<float>(1 - m->origVertices[a].texcoords.y);
+					f.Write(reinterpret_cast<char *>(&f32), 4);
+					vmapSize += 8;
+					counter++;
+				}
 			}
 		}
 	}
-
+	*/
+	/*
 	if (att!=NULL){
 		Model *attM = NULL;
 		if (att->model) {
@@ -1681,11 +1691,11 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	u32 = MSB4<uint32>(vmapSize);
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	f.SeekO(0, wxFromEnd);
-
+	*/
 #ifdef _DEBUG
 	wxLogMessage(_T("M2 Weight data Written for %s"),m->fullname.c_str());
 #endif
-*/
+
 
 	// --
 	// POLYGON CHUNK

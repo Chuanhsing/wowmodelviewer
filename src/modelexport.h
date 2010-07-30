@@ -29,6 +29,46 @@ struct GroupData {
 	Model *m;
 };
 
+static const char* Bone_Names[] = {
+	"ArmL",
+	"ArmR",
+	"ShoulderL",
+	"ShoulderR",
+	"SpineLow",
+	"Waist",
+	"Head",
+	"Jaw",
+	"RFingerIndex",
+	"RFingerMiddle",
+	"RFingerPinky",
+	"RFingerRing",
+	"RThumb",
+	"LFingerIndex",
+	"LFingerMiddle",
+	"LFingerPinky",
+	"LFingerRing",
+	"LThumb",
+	"BTH",
+	"CSR",
+	"CSL",
+	"Breath",
+	"Name",
+	"NameMount",
+	"CHD",
+	"CCH",
+	"Root",
+	"Wheel1",
+	"Wheel2",
+	"Wheel3",
+	"Wheel4",
+	"Wheel5",
+	"Wheel6",
+	"Wheel7",
+	"Wheel8",
+	""
+};
+
+
 // Common functions
 void LogExportData(wxString FileExtension, wxString Directory, wxString ExportType);
 void SaveTexture(wxString fn);

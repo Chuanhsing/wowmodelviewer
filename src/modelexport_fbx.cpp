@@ -476,45 +476,6 @@ void RotationMatrixToEulerAnglesXYZ(const Matrix& rkRot,
 	}
 }
 
-static const char* g_bone_names[] = {
-	"LARM",
-	"RARM",
-	"LSHOULDER",
-	"RSHOULDER",
-	"STOMACH",
-	"WAIST",
-	"HEAD",
-	"JAW",
-	"RFINGER1",
-	"RFINGER2",
-	"RFINGER3",
-	"RFINGERS",
-	"RTHUMB",
-	"LFINGER1",
-	"LFINGER2",
-	"LFINGER3",
-	"LFINGERS",
-	"LTHUMB",
-	"BTH",
-	"CSR",
-	"CSL",
-	"BREATH",
-	"NAME",
-	"NAMEMOUNT",
-	"CHD",
-	"CCH",
-	"ROOT",
-	"WHEEL1",
-	"WHEEL2",
-	"WHEEL3",
-	"WHEEL4",
-	"WHEEL5",
-	"WHEEL6",
-	"WHEEL7",
-	"WHEEL8",
-	""
-};
-
 // Create skeleton.
 void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const char* fn) {
 	// Get the scene¡¯s root node.
@@ -541,7 +502,7 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 		int j = 0;
 		for (; j < BONE_MAX; ++j) {
 			if (m->keyBoneLookup[j] == static_cast<int>(i)) {
-				bone_name += g_bone_names[j];
+				bone_name += Bone_Names[j];
 				break;
 			}
 		}
