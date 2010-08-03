@@ -52,8 +52,8 @@ ModelControl::ModelControl(wxWindow* parent, wxWindowID id)
 		modelname = new wxComboBox(this, ID_MODEL_NAME, wxEmptyString, wxPoint(5,5), wxSize(150,16), 0, NULL, wxCB_READONLY);
 		
 		lblLod = new wxStaticText(this, wxID_ANY, _("View"), wxPoint(5,25), wxDefaultSize);
-		lod = new wxComboBox(this, ID_MODEL_LOD, wxEmptyString, wxPoint(5,40), wxSize(120,16), 0, NULL, wxCB_READONLY, wxDefaultValidator, _T("LOD")); //|wxCB_SORT); //wxPoint(66,10)
-		lod->Enable(false);
+		cbLod = new wxComboBox(this, ID_MODEL_LOD, wxEmptyString, wxPoint(5,40), wxSize(120,16), 0, NULL, wxCB_READONLY, wxDefaultValidator, _T("LOD")); //|wxCB_SORT); //wxPoint(66,10)
+		//cbLod->Enable(false);
 
 		lblAlpha = new wxStaticText(this, wxID_ANY, _("Alpha"), wxPoint(5,65), wxDefaultSize);
 		alpha = new wxSlider(this, ID_MODEL_ALPHA, 100, 0, 100, wxPoint(45, 65), wxSize(110, 30), wxSL_HORIZONTAL);
@@ -69,7 +69,7 @@ ModelControl::ModelControl(wxWindow* parent, wxWindowID id)
 		particles = new wxCheckBox(this, ID_MODEL_PARTICLES, _("Particles"), wxPoint(5, 215), wxDefaultSize);
 
 		lblGeosets = new wxStaticText(this, wxID_ANY, _("Show Geosets"), wxPoint(5,235), wxDefaultSize);
-		geosets = new wxCheckListBox(this, ID_MODEL_GEOSETS, wxPoint(5, 250), wxSize(150,120), 0, NULL, 0, wxDefaultValidator, _T("GeosetsList"));
+		clbGeosets = new wxCheckListBox(this, ID_MODEL_GEOSETS, wxPoint(5, 250), wxSize(150,120), 0, NULL, 0, wxDefaultValidator, _T("GeosetsList"));
 		
 		lblXYZ = new wxStaticText(this, wxID_ANY, _T("X\nY\nZ"), wxPoint(2,380), wxSize(20,60));
 		txtX = new wxTextCtrl(this, ID_MODEL_X, _T("0.0"), wxPoint(25,380), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
@@ -82,7 +82,7 @@ ModelControl::ModelControl(wxWindow* parent, wxWindowID id)
 ModelControl::~ModelControl()
 {
 	modelname->Destroy();
-	lod->Destroy();
+	cbLod->Destroy();
 	alpha->Destroy();
 	scale->Destroy();
 	bones->Destroy();
@@ -91,7 +91,7 @@ ModelControl::~ModelControl()
 	wireframe->Destroy();
 	texture->Destroy();
 	particles->Destroy();
-	geosets->Destroy();
+	clbGeosets->Destroy();
 	txtX->Destroy();
 	txtY->Destroy();
 	txtZ->Destroy();
@@ -188,23 +188,21 @@ void ModelControl::Update()
 	if (!model)
 		return;
 
-	/*
 	// Loop through all the views.
-	lod->Clear();
+	cbLod->Clear();
 	if (model->header.nViews == 1) {
-		lod->Append(_T("1 (Only View)"));
+		cbLod->Append(_T("1 (Only View)"));
 	} else if (model->header.nViews == 2) {
-		lod->Append(_T("1 (Worst)"));
-		lod->Append(_T("2 (Best)"));
+		cbLod->Append(_T("1 (Worst)"));
+		cbLod->Append(_T("2 (Best)"));
 	} else {
-		lod->Append(_T("1 (Worst)"));
+		cbLod->Append(_T("1 (Worst)"));
 		for (unsigned int i=1; i<(model->header.nViews-1); i++) {
-			lod->Append(wxString::Format("%i", i+1));
+			cbLod->Append(wxString::Format("%i", i+1));
 		}
-		lod->Append(wxString::Format("%i (Best)", model->header.nViews));
+		cbLod->Append(wxString::Format("%i (Best)", model->header.nViews));
 	}
-	lod->SetSelection(lod->GetCount() - 1);
-	*/
+	cbLod->SetSelection(0);
 
 	// Loop through all the geosets.
 	wxArrayString geosetItems;
@@ -221,10 +219,10 @@ void ModelControl::Update()
 			geosetItems.Add(wxString::Format(_T("%i [%i]"), i, mesh), 1);
 	}
 	//geosets->InsertItems(items, 0);
-	geosets->Set(geosetItems, 0);
+	clbGeosets->Set(geosetItems, 0);
 
 	for (unsigned int i=0; i<model->geosets.size(); i++) {
-		geosets->Check(i, model->showGeosets[i]);
+		clbGeosets->Check(i, model->showGeosets[i]);
 	}
 
 	bones->SetValue(model->showBones);
@@ -270,10 +268,10 @@ void ModelControl::OnCombo(wxCommandEvent &event)
 		return;
 
 	int id = event.GetId();
-	
+
 	if (id == ID_MODEL_LOD) {
 		int value = event.GetInt();
-		
+
 		MPQFile f(model->name.c_str());
 		if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
 			wxLogMessage(_T("ERROR - unable to open MPQFile: [%s]"), model->name.c_str());
@@ -296,7 +294,6 @@ void ModelControl::OnCombo(wxCommandEvent &event)
 
 		f.close();
 	} else if (id == ID_MODEL_NAME) {
-		// Error check
 		/* Alfred 2009/07/16 fix crash, remember CurrentSelection before UpdateModel() */
 		int CurrentSelection = modelname->GetCurrentSelection();
 		if (CurrentSelection < (int)attachments.size()) {
@@ -316,7 +313,7 @@ void ModelControl::OnList(wxCommandEvent &event)
 		return;
 
 	for (unsigned int i=0; i<model->geosets.size(); i++) {
-		model->showGeosets[i] = geosets->IsChecked(i);
+		model->showGeosets[i] = clbGeosets->IsChecked(i);
 	}
 }
 

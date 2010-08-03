@@ -762,188 +762,9 @@ void Model::initCommon(MPQFile &f)
 		// just use the first LOD/view
 		// First LOD/View being the worst?
 		// TODO: Add support for selecting the LOD.
-		// indices - allocate space, too
-		// header.nViews;
 		// int viewLOD = 0; // sets LOD to worst
 		// int viewLOD = header.nViews - 1; // sets LOD to best
-		//setLOD(f, header.nViews - 1); // Set the default Level of Detail to the best possible. 
-
-		// Old method - use this to try to determine a bug.
-		// just use the first LOD/view
-
-		// indices - allocate space, too
-#ifdef WotLK
-		// remove suffix .M2
-		lodname = modelname.BeforeLast(_T('.'));
-		fullname = lodname;
-		lodname.Append(_T("00.skin")); // Lods: 00, 01, 02, 03
-		MPQFile g((char *)lodname.c_str());
-		g_modelViewer->modelOpened->Add(lodname);
-		if (g.isEof()) {
-			wxLogMessage(_T("Error: Unable to load Lods: [%s]"), lodname.c_str());
-			g.close();
-			return;
-		}
-		
-		ModelView *view = (ModelView*)(g.getBuffer());
-
-		if (view->id[0] != 'S' || view->id[1] != 'K' || view->id[2] != 'I' || view->id[3] != 'N') {
-			wxLogMessage(_T("Error: Unable to load Lods: [%s]"), lodname.c_str());
-			g.close();
-			return;
-		}
-
-		// Indices,  Triangles
-		uint16 *indexLookup = (uint16*)(g.getBuffer() + view->ofsIndex);
-		uint16 *triangles = (uint16*)(g.getBuffer() + view->ofsTris);
-		nIndices = view->nTris;
-		indices = new uint16[nIndices];
-		for (size_t i = 0; i<nIndices; i++) {
-	        indices[i] = indexLookup[triangles[i]];
-		}
-
-		// render ops
-		ModelGeoset *ops = (ModelGeoset*)(g.getBuffer() + view->ofsSub);
-		ModelTexUnit *tex = (ModelTexUnit*)(g.getBuffer() + view->ofsTex);
-#else // not WotLK
-		ModelView *view = (ModelView*)(f.getBuffer() + header.ofsViews);
-
-		// Indices,  Triangles
-		uint16 *indexLookup = (uint16*)(f.getBuffer() + view->ofsIndex);
-		uint16 *triangles = (uint16*)(f.getBuffer() + view->ofsTris);
-		nIndices = view->nTris;
-		indices = new uint16[nIndices];
-		for (size_t i = 0; i<nIndices; i++) {
-	        indices[i] = indexLookup[triangles[i]];
-		}
-
-		// render ops
-		ModelGeoset *ops = (ModelGeoset*)(f.getBuffer() + view->ofsSub);
-		ModelTexUnit *tex = (ModelTexUnit*)(f.getBuffer() + view->ofsTex);
-#endif // WotLK
-
-		ModelRenderFlags *renderFlags = (ModelRenderFlags*)(f.getBuffer() + header.ofsTexFlags);
-		uint16 *texlookup = (uint16*)(f.getBuffer() + header.ofsTexLookup);
-		uint16 *texanimlookup = (uint16*)(f.getBuffer() + header.ofsTexAnimLookup);
-		int16 *texunitlookup = (int16*)(f.getBuffer() + header.ofsTexUnitLookup);
-
-		
-		showGeosets = new bool[view->nSub];
-		for (size_t i=0; i<view->nSub; i++) {
-			geosets.push_back(ops[i]);
-			showGeosets[i] = true;
-		}
-
-		for (size_t j = 0; j<view->nTex; j++) {
-			ModelRenderPass pass;
-
-			pass.useTex2 = false;
-			pass.useEnvMap = false;
-			pass.cull = false;
-			pass.trans = false;
-			pass.unlit = false;
-			pass.noZWrite = false;
-			pass.billboard = false;
-
-			//pass.texture2 = 0;
-			size_t geoset = tex[j].op;
-			
-			pass.geoset = (int)geoset;
-
-			pass.indexStart = ops[geoset].istart;
-			pass.indexCount = ops[geoset].icount;
-			pass.vertexStart = ops[geoset].vstart;
-			pass.vertexEnd = pass.vertexStart + ops[geoset].vcount;
-			
-			pass.order = tex[j].shading; //pass.order = 0;
-			
-			//TextureID texid = textures[texlookup[tex[j].textureid]];
-			//pass.texture = texid;
-			pass.tex = texlookup[tex[j].textureid];
-			
-			/*
-			// Render Flags
-			flags:
-			0x01 = Unlit
-			0x02 = ? glow effects ? no zwrite?
-			0x04 = Two-sided (no backface culling if set)
-			0x08 = (probably billboarded)
-			0x10 = Disable z-buffer?
-
-			blend:
-			Value	 Mapped to	 Meaning
-			0	 	0	 		Combiners_Opaque
-			1	 	1	 		Combiners_Mod
-			2	 	1	 		Combiners_Decal
-			3	 	1	 		Combiners_Add
-			4	 	1	 		Combiners_Mod2x
-			5	 	4	 		Combiners_Fade
-			6	 	4	 		Used in the Deeprun Tram subway glass, supposedly (src=dest_color, dest=src_color) (?)
-			*/
-			// TODO: figure out these flags properly -_-
-			ModelRenderFlags &rf = renderFlags[tex[j].flagsIndex];
-			
-			pass.blendmode = rf.blend;
-			//if (rf.blend == 0) // Test to disable/hide different blend types
-			//	continue;
-
-			pass.color = tex[j].colorIndex;
-			pass.opacity = transLookup[tex[j].transid];
-
-			pass.unlit = (rf.flags & RENDERFLAGS_UNLIT)!= 0;
-
-			// This is wrong but meh.. best I could get it so far.
-			//pass.cull = (rf.flags & 0x04)==0 && pass.blendmode!=1 && pass.blendmode!=4 && (rf.flags & 17)!=17;
-			//pass.cull = false; // quick test
-			pass.cull = (rf.flags & RENDERFLAGS_TWOSIDED)==0 && rf.blend==0;
-
-			pass.billboard = (rf.flags & RENDERFLAGS_BILLBOARD) != 0;
-
-			pass.useEnvMap = (texunitlookup[tex[j].texunit] == -1) && pass.billboard && rf.blend>2; //&& rf.blend<5; // Use environmental reflection effects?
-
-			// Disable environmental mapping if its been unchecked.
-			//if (pass.useEnvMap && !video.useEnvMapping)
-			//	pass.useEnvMap = false;
-
-
-			//pass.noZWrite = (texdef[pass.tex].flags & 3)!=0;
-			/*
-			if (name == "Creature\\Turkey\\turkey.m2") // manual fix as I just bloody give up.
-				pass.noZWrite = false;
-			else
-				pass.noZWrite = (pass.blendmode>1);
-			*/
-				//pass.noZWrite = (pass.blendmode>1) && !(rf.blend==4 && rf.flags==17);
-			pass.noZWrite = (rf.flags & RENDERFLAGS_ZBUFFERED) != 0;
-
-			// ToDo: Work out the correct way to get the true/false of transparency
-			pass.trans = (pass.blendmode>0) && (pass.opacity>0);	// Transparency - not the correct way to get transparency
-
-			pass.p = ops[geoset].BoundingBox[0].z;
-
-			// Texture flags
-			pass.swrap = (texdef[pass.tex].flags & TEXTURE_WRAPX) != 0; // Texture wrap X
-			pass.twrap = (texdef[pass.tex].flags & TEXTURE_WRAPY) != 0; // Texture wrap Y
-			
-			if (animTextures) {
-				// tex[j].flags: Usually 16 for static textures, and 0 for animated textures.	
-				if (tex[j].flags & TEXTUREUNIT_STATIC) {
-					pass.texanim = -1; // no texture animation
-				} else {
-					pass.texanim = texanimlookup[tex[j].texanimid];
-				}
-			} else {
-				pass.texanim = -1; // no texture animation
-			}
-
-			passes.push_back(pass);
-		}
-
-#ifdef WotLK
-		g.close();
-#endif
-		// transparent parts come later
-		std::sort(passes.begin(), passes.end());
+		setLOD(f, 0); // Set the default Level of Detail to the best possible. 
 	}
 
 	// zomg done
@@ -1155,57 +976,87 @@ void Model::initAnimated(MPQFile &f)
 
 void Model::setLOD(MPQFile &f, int index)
 {
-	/*
-	// I thought the view controlled the Level of detail,  but that doesn't seem to be the case.
-	// Seems to only control the render order.  Which makes this function useless and not needed :(
-	
 	// Texture definitions
 	ModelTextureDef *texdef = (ModelTextureDef*)(f.getBuffer() + header.ofsTextures);
 
 	// Transparency
 	int16 *transLookup = (int16*)(f.getBuffer() + header.ofsTransparencyLookup);
 
-	// Level of Detail View
-	ModelView *view = (ModelView*)(f.getBuffer() + header.ofsViews);
+	// I thought the view controlled the Level of detail,  but that doesn't seem to be the case.
+	// Seems to only control the render order.  Which makes this function useless and not needed :(
+#ifdef WotLK
+	// remove suffix .M2
+	fullname = modelname.BeforeLast(_T('.'));
+	lodname = fullname.Append(wxString::Format("%02d.skin", index)); // Lods: 00, 01, 02, 03
+	MPQFile g((char *)lodname.c_str());
+	g_modelViewer->modelOpened->Add(lodname);
+	if (g.isEof()) {
+		wxLogMessage(_T("Error: Unable to load Lods: [%s]"), lodname.c_str());
+		g.close();
+		return;
+	}
+	
+	ModelView *view = (ModelView*)(g.getBuffer());
 
-	uint16 *indexLookup = (uint16*)(f.getBuffer() + view[index].ofsIndex);
-	uint16 *triangles = (uint16*)(f.getBuffer() + view[index].ofsTris);
+	if (view->id[0] != 'S' || view->id[1] != 'K' || view->id[2] != 'I' || view->id[3] != 'N') {
+		wxLogMessage(_T("Error: Unable to load Lods: [%s]"), lodname.c_str());
+		g.close();
+		return;
+	}
+
+	// Indices,  Triangles
+	uint16 *indexLookup = (uint16*)(g.getBuffer() + view->ofsIndex);
+	uint16 *triangles = (uint16*)(g.getBuffer() + view->ofsTris);
 	nIndices = view->nTris;
-
-	wxDELETEA(indices);
-
 	indices = new uint16[nIndices];
 	for (size_t i = 0; i<nIndices; i++) {
         indices[i] = indexLookup[triangles[i]];
 	}
 
 	// render ops
-	ModelGeoset *ops = (ModelGeoset*)(f.getBuffer() + view[index].ofsSub);
-	ModelTexUnit *tex = (ModelTexUnit*)(f.getBuffer() + view[index].ofsTex);
+	ModelGeoset *ops = (ModelGeoset*)(g.getBuffer() + view->ofsSub);
+	ModelTexUnit *tex = (ModelTexUnit*)(g.getBuffer() + view->ofsTex);
+#else // not WotLK
+	ModelView *view = (ModelView*)(f.getBuffer() + header.ofsViews);
+
+	// Indices,  Triangles
+	uint16 *indexLookup = (uint16*)(f.getBuffer() + view->ofsIndex);
+	uint16 *triangles = (uint16*)(f.getBuffer() + view->ofsTris);
+	nIndices = view->nTris;
+	indices = new uint16[nIndices];
+	for (size_t i = 0; i<nIndices; i++) {
+        indices[i] = indexLookup[triangles[i]];
+	}
+
+	// render ops
+	ModelGeoset *ops = (ModelGeoset*)(f.getBuffer() + view->ofsSub);
+	ModelTexUnit *tex = (ModelTexUnit*)(f.getBuffer() + view->ofsTex);
+#endif // WotLK
+
 	ModelRenderFlags *renderFlags = (ModelRenderFlags*)(f.getBuffer() + header.ofsTexFlags);
 	uint16 *texlookup = (uint16*)(f.getBuffer() + header.ofsTexLookup);
 	uint16 *texanimlookup = (uint16*)(f.getBuffer() + header.ofsTexAnimLookup);
 	int16 *texunitlookup = (int16*)(f.getBuffer() + header.ofsTexUnitLookup);
 
 	wxDELETEA(showGeosets);
-
-	showGeosets = new bool[view[index].nSub];
-	for (size_t i=0; i<view[index].nSub; i++) {
+	showGeosets = new bool[view->nSub];
+	for (size_t i=0; i<view->nSub; i++) {
 		geosets.push_back(ops[i]);
 		showGeosets[i] = true;
 	}
 
 	passes.clear();
-	for (size_t j=0; j<view[index].nTex; j++) {
+	for (size_t j = 0; j<view->nTex; j++) {
 		ModelRenderPass pass;
 
 		pass.useTex2 = false;
 		pass.useEnvMap = false;
 		pass.cull = false;
-		pass.Trans = false;
+		pass.trans = false;
 		pass.unlit = false;
 		pass.noZWrite = false;
-		
+		pass.billboard = false;
+
 		//pass.texture2 = 0;
 		size_t geoset = tex[j].op;
 		
@@ -1216,50 +1067,78 @@ void Model::setLOD(MPQFile &f, int index)
 		pass.vertexStart = ops[geoset].vstart;
 		pass.vertexEnd = pass.vertexStart + ops[geoset].vcount;
 
-		pass.order = tex[j].order; //pass.order = 0;
-		
+		pass.order = 0;
+
 		//TextureID texid = textures[texlookup[tex[j].textureid]];
 		//pass.texture = texid;
 		pass.tex = texlookup[tex[j].textureid];
-		
+
+		/*
+		// Render Flags
+		flags:
+		0x01 = Unlit
+		0x02 = ? glow effects ? no zwrite?
+		0x04 = Two-sided (no backface culling if set)
+		0x08 = (probably billboarded)
+		0x10 = Disable z-buffer?
+
+		blend:
+		Value	 Mapped to	 Meaning
+		0	 	0	 		Combiners_Opaque
+		1	 	1	 		Combiners_Mod
+		2	 	1	 		Combiners_Decal
+		3	 	1	 		Combiners_Add
+		4	 	1	 		Combiners_Mod2x
+		5	 	4	 		Combiners_Fade
+		6	 	4	 		Used in the Deeprun Tram subway glass, supposedly (src=dest_color, dest=src_color) (?)
+		*/
 		// TODO: figure out these flags properly -_-
 		ModelRenderFlags &rf = renderFlags[tex[j].flagsIndex];
 		
 		pass.blendmode = rf.blend;
+		//if (rf.blend == 0) // Test to disable/hide different blend types
+		//	continue;
+
 		pass.color = tex[j].colorIndex;
 		pass.opacity = transLookup[tex[j].transid];
 
-		//if (name == "Creature\\Kelthuzad\\kelthuzad.m2")
-			pass.useEnvMap = (texunitlookup[tex[j].texunit] == -1) && ((rf.flags & 0x10) !=0) && rf.blend>2; // Use environmental reflection effects?
-		//else
-		//	pass.useEnvMap = (texunitlookup[tex[j].texunit] == -1) && ((rf.flags & 0x10) !=0);
+		pass.unlit = (rf.flags & RENDERFLAGS_UNLIT)!= 0;
 
 		// This is wrong but meh.. best I could get it so far.
 		//pass.cull = (rf.flags & 0x04)==0 && pass.blendmode!=1 && pass.blendmode!=4 && (rf.flags & 17)!=17;
-		pass.cull = false; // quick test
+		//pass.cull = false; // quick test
+		pass.cull = (rf.flags & RENDERFLAGS_TWOSIDED)==0 && rf.blend==0;
 
-		pass.unlit = (rf.flags & 0x01)!=0;
+		pass.billboard = (rf.flags & RENDERFLAGS_BILLBOARD) != 0;
+
+		pass.useEnvMap = (texunitlookup[tex[j].texunit] == -1) && pass.billboard && rf.blend>2; //&& rf.blend<5; // Use environmental reflection effects?
+
+		// Disable environmental mapping if its been unchecked.
+		if (pass.useEnvMap && !video.useEnvMapping)
+			pass.useEnvMap = false;
 
 		//pass.noZWrite = (texdef[pass.tex].flags & 3)!=0;
+		/*
 		if (name == "Creature\\Turkey\\turkey.m2") // manual fix as I just bloody give up.
 			pass.noZWrite = false;
 		else
-			pass.noZWrite = (pass.blendmode>1) && !(rf.blend==4 && rf.flags==17);
-
-		//pass.noZWrite = false; // quick test
+			pass.noZWrite = (pass.blendmode>1);
+		*/
+			//pass.noZWrite = (pass.blendmode>1) && !(rf.blend==4 && rf.flags==17);
+		pass.noZWrite = (rf.flags & RENDERFLAGS_ZBUFFERED) != 0;
 
 		// ToDo: Work out the correct way to get the true/false of transparency
-		pass.Trans = (pass.blendmode>0) && (pass.opacity>0);	// Transparency - not the correct way to get transparency
+		pass.trans = (pass.blendmode>0) && (pass.opacity>0);	// Transparency - not the correct way to get transparency
 
-		pass.p = ops[geoset].v.z;
+		pass.p = ops[geoset].BoundingBox[0].z;
 
-		pass.swrap = (texdef[pass.tex].flags & 1) != 0;
-		pass.twrap = (texdef[pass.tex].flags & 2) != 0;
+		// Texture flags
+		pass.swrap = (texdef[pass.tex].flags & TEXTURE_WRAPX) != 0; // Texture wrap X
+		pass.twrap = (texdef[pass.tex].flags & TEXTURE_WRAPY) != 0; // Texture wrap Y
 		
-
 		if (animTextures) {
-			//if (tex[j].flags & 16) {
-			if (tex[j].flags & 15) {
+			// tex[j].flags: Usually 16 for static textures, and 0 for animated textures.	
+			if (tex[j].flags & TEXTUREUNIT_STATIC) {
 				pass.texanim = -1; // no texture animation
 			} else {
 				pass.texanim = texanimlookup[tex[j].texanimid];
@@ -1268,12 +1147,14 @@ void Model::setLOD(MPQFile &f, int index)
 			pass.texanim = -1; // no texture animation
 		}
 
-        passes.push_back(pass);
+		passes.push_back(pass);
 	}
 
+#ifdef WotLK
+	g.close();
+#endif
 	// transparent parts come later
-	std::sort(passes.begin(), passes.end()); 
-	*/
+	std::sort(passes.begin(), passes.end());
 }
 
 void Model::calcBones(int anim, int time)

@@ -34,10 +34,10 @@ class ModelControl: public wxWindow
 	DECLARE_CLASS(ModelControl)
 	DECLARE_EVENT_TABLE()
 	
-	wxComboBox *lod, *modelname;
+	wxComboBox *cbLod, *modelname;
 	wxSlider *alpha, *scale;
 	wxCheckBox *bones, *box, *render, *wireframe, *texture, *particles;
-	wxCheckListBox *geosets;
+	wxCheckListBox *clbGeosets;
 	wxStaticText *lblGeosets, *lblLod, *lblScale, *lblAlpha, *lblXYZ;
 	wxTextCtrl *txtX, *txtY, *txtZ;
 
