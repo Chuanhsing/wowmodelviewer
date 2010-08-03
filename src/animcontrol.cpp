@@ -16,6 +16,7 @@ BEGIN_EVENT_TABLE(AnimControl, wxWindow)
 
 	EVT_CHECKBOX(ID_OLDSTYLE, AnimControl::OnCheck)
 	EVT_CHECKBOX(ID_ANIM_LOCK, AnimControl::OnCheck)
+	EVT_CHECKBOX(ID_ANIM_NEXT, AnimControl::OnCheck)
 
 	EVT_BUTTON(ID_PLAY, AnimControl::OnButton)
 	EVT_BUTTON(ID_PAUSE, AnimControl::OnButton)
@@ -93,11 +94,15 @@ AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 	btnNext = new wxButton(this, ID_NEXTANIM, _T(">>"), wxPoint(115,64), wxSize(45,20));
 	
 	lockAnims = new wxCheckBox(this, ID_ANIM_LOCK, _("Lock Animations"), wxPoint(170,40), wxDefaultSize, 0);
-	lockAnims->SetValue(true);
 	bLockAnims = true;
+	lockAnims->SetValue(bLockAnims);
 	oldStyle = new wxCheckBox(this, ID_OLDSTYLE, _("Auto Animate"), wxPoint(170,64), wxDefaultSize, 0);
 	bOldStyle = true;
-	oldStyle->SetValue(true);
+	oldStyle->SetValue(bOldStyle);
+	nextAnims = new wxCheckBox(this, ID_ANIM_NEXT, _("Next Animations"), wxPoint(430,10), wxDefaultSize, 0);
+	bNextAnims = false;
+	nextAnims->SetValue(bNextAnims);
+
 }
 
 AnimControl::~AnimControl()
@@ -235,17 +240,17 @@ void AnimControl::UpdateModel(Model *m)
 		frameSlider->SetRange(g_selModel->anims[useanim].timeStart, g_selModel->anims[useanim].timeEnd);
 		frameSlider->SetTickFreq(g_selModel->anims[useanim].playSpeed, 1);
 		
-		g_selModel->animManager->Set(0, useanim, 0);
-#if 0
-		int NextAnimation = useanim;
-		for(size_t i=1; i<4; i++) {
-			NextAnimation = g_selModel->anims[NextAnimation].NextAnimation;
-			if (NextAnimation >= 0)
-				g_selModel->animManager->addAnim(NextAnimation, loopList->GetSelection());
-			else
-				break;
+		g_selModel->animManager->SetAnim(0, useanim, 0);
+		if (bNextAnims) {
+			int NextAnimation = useanim;
+			for(size_t i=1; i<4; i++) {
+				NextAnimation = g_selModel->anims[NextAnimation].NextAnimation;
+				if (NextAnimation >= 0)
+					g_selModel->animManager->AddAnim(NextAnimation, loopList->GetSelection());
+				else
+					break;
+			}
 		}
-#endif
 		g_selModel->animManager->Play();
 	}
 
@@ -853,6 +858,20 @@ void AnimControl::OnCheck(wxCommandEvent &event)
 			speedMouthLabel->Show(false);
 			//btnPauseMouth->Show(false);
 		}
+	} else if  (event.GetId() == ID_ANIM_NEXT) {
+		bNextAnims = event.IsChecked();
+		if (bNextAnims) {
+			int NextAnimation = selectedAnim;
+			for(size_t i=1; i<4; i++) {
+				NextAnimation = g_selModel->anims[NextAnimation].NextAnimation;
+				if (NextAnimation >= 0)
+					g_selModel->animManager->AddAnim(NextAnimation, loopList->GetSelection());
+				else
+					break;
+			}
+		} else {
+			g_selModel->animManager->SetCount(1);
+		}
 	}
 }
 
@@ -873,17 +892,17 @@ void AnimControl::OnAnim(wxCommandEvent &event)
 			if (bOldStyle == true) {
 				g_selModel->currentAnim = selectedAnim;
 				g_selModel->animManager->Stop();
-				g_selModel->animManager->Set(0, selectedAnim, loopList->GetSelection());
-#if 0
-				int NextAnimation = selectedAnim;
-				for(size_t i=1; i<4; i++) {
-					NextAnimation = g_selModel->anims[NextAnimation].NextAnimation;
-					if (NextAnimation >= 0)
-						g_selModel->animManager->addAnim(NextAnimation, loopList->GetSelection());
-					else
-						break;
+				g_selModel->animManager->SetAnim(0, selectedAnim, loopList->GetSelection());
+				if (bNextAnims) {
+					int NextAnimation = selectedAnim;
+					for(size_t i=1; i<4; i++) {
+						NextAnimation = g_selModel->anims[NextAnimation].NextAnimation;
+						if (NextAnimation >= 0)
+							g_selModel->animManager->AddAnim(NextAnimation, loopList->GetSelection());
+						else
+							break;
+					}
 				}
-#endif
 				g_selModel->animManager->Play();
 				
 				frameSlider->SetRange(g_selModel->anims[selectedAnim].timeStart, g_selModel->anims[selectedAnim].timeEnd);
@@ -949,17 +968,17 @@ void AnimControl::OnLoop(wxCommandEvent &event)
 {
 	if (bOldStyle == true) {
 		g_selModel->animManager->Stop();
-		g_selModel->animManager->Set(0, selectedAnim, loopList->GetSelection());
-#if 0
-		int NextAnimation = selectedAnim;
-		for(size_t i=1; i<4; i++) {
-			NextAnimation = g_selModel->anims[NextAnimation].NextAnimation;
-			if (NextAnimation >= 0)
-				g_selModel->animManager->addAnim(NextAnimation, loopList->GetSelection());
-			else
-				break;
+		g_selModel->animManager->SetAnim(0, selectedAnim, loopList->GetSelection());
+		if (bNextAnims) {
+			int NextAnimation = selectedAnim;
+			for(size_t i=1; i<4; i++) {
+				NextAnimation = g_selModel->anims[NextAnimation].NextAnimation;
+				if (NextAnimation >= 0)
+					g_selModel->animManager->AddAnim(NextAnimation, loopList->GetSelection());
+				else
+					break;
+			}
 		}
-#endif
 		g_selModel->animManager->Play();
 	} 
 }

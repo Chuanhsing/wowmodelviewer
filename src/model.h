@@ -70,8 +70,9 @@ public:
 	AnimManager(ModelAnimation *anim);
 	~AnimManager();
 	
+	void SetCount(int count);
 	void AddAnim(unsigned int id, short loop); // Adds an animation to our array.
-	void Set(short index, unsigned int id, short loop); // sets one of the 4 existing animations and changes it (not really used currently)
+	void SetAnim(short index, unsigned int id, short loop); // sets one of the 4 existing animations and changes it (not really used currently)
 	
 	void SetSecondary(int id) {
 		AnimIDSecondary = id;

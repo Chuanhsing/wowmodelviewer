@@ -60,7 +60,7 @@ class AnimControl: public wxWindow
 	wxStaticText *wmoLabel,*speedLabel, *speedMouthLabel, *frameLabel;
 	wxSlider *speedSlider, *speedMouthSlider, *frameSlider;
 	wxButton *btnAdd;
-	wxCheckBox *lockAnims;
+	wxCheckBox *lockAnims, *nextAnims;
 
 	wxButton *btnPlay, *btnPause, *btnStop, *btnClear, *btnPrev, *btnNext;
 	wxCheckBox *oldStyle;
@@ -103,6 +103,7 @@ public:
 	int selectedAnim3;
 	bool bOldStyle;
 	bool bLockAnims;
+	bool bNextAnims;
 };
 
 

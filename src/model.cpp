@@ -40,6 +40,10 @@ AnimManager::~AnimManager() {
 	anims = NULL;
 }
 
+void AnimManager::SetCount(int count)
+{
+	Count = count;
+}
 
 void AnimManager::AddAnim(unsigned int id, short loops) {
 	if (Count > 3)
@@ -50,7 +54,7 @@ void AnimManager::AddAnim(unsigned int id, short loops) {
 	Count++;
 }
 
-void AnimManager::Set(short index, unsigned int id, short loops) {
+void AnimManager::SetAnim(short index, unsigned int id, short loops) {
 	// error check, we currently only support 4 animations.
 	if (index > 3)
 		return;
@@ -75,7 +79,7 @@ void AnimManager::Play() {
 	//if (Frame == 0 && PlayID == 0) {
 		CurLoop = animList[PlayIndex].Loops;
 		Frame = anims[animList[PlayIndex].AnimID].timeStart;
-		TotalFrames = anims[animList[PlayIndex].AnimID].timeEnd - anims[animList[PlayIndex].AnimID].timeStart;
+		TotalFrames = GetFrameCount();
 	//}
 
 	Paused = false;
@@ -116,6 +120,7 @@ void AnimManager::Next() {
 			PlayIndex = 0;
 		}
 	}
+	g_selModel->currentAnim = animList[PlayIndex].AnimID;
 	
 	Frame = anims[animList[PlayIndex].AnimID].timeStart;
 #ifdef WotLK
@@ -987,7 +992,8 @@ void Model::setLOD(MPQFile &f, int index)
 #ifdef WotLK
 	// remove suffix .M2
 	fullname = modelname.BeforeLast(_T('.'));
-	lodname = fullname.Append(wxString::Format("%02d.skin", index)); // Lods: 00, 01, 02, 03
+	lodname = fullname;
+	lodname.Append(wxString::Format("%02d.skin", index)); // Lods: 00, 01, 02, 03
 	MPQFile g((char *)lodname.c_str());
 	g_modelViewer->modelOpened->Add(lodname);
 	if (g.isEof()) {
@@ -995,7 +1001,7 @@ void Model::setLOD(MPQFile &f, int index)
 		g.close();
 		return;
 	}
-	
+
 	ModelView *view = (ModelView*)(g.getBuffer());
 
 	if (view->id[0] != 'S' || view->id[1] != 'K' || view->id[2] != 'I' || view->id[3] != 'N') {
@@ -1399,13 +1405,10 @@ bool ModelRenderPass::init(Model *m)
 	// blend mode
 	switch (blendmode) {
 	case BM_OPAQUE:	// 0
-		glDisable(GL_BLEND);
-		glDisable(GL_ALPHA_TEST);
 		break;
 	case BM_TRANSPARENT: // 1
-		glDisable(GL_BLEND);
 		glEnable(GL_ALPHA_TEST);
-		//glAlphaFunc(GL_GEQUAL,0.7f);
+		glAlphaFunc(GL_GEQUAL,0.7f);
 		
 		/*
 		// Tex settings
@@ -1418,17 +1421,15 @@ bool ModelRenderPass::init(Model *m)
 		
 		break;
 	case BM_ALPHA_BLEND: // 2
-		glDisable(GL_ALPHA_TEST);
+		//glDisable(GL_ALPHA_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // default blend func
 		break;
 	case BM_ADDITIVE: // 3
-		glDisable(GL_ALPHA_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_COLOR, GL_ONE);
 		break;
 	case BM_ADDITIVE_ALPHA: // 4
-		glDisable(GL_ALPHA_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
@@ -1442,7 +1443,6 @@ bool ModelRenderPass::init(Model *m)
 		
 		break;
 	case BM_MODULATE:	// 5
-		glDisable(GL_ALPHA_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR);
 		
@@ -1462,7 +1462,6 @@ bool ModelRenderPass::init(Model *m)
 
 		break;
 	case BM_MODULATEX2:	// 6, not sure if this is right
-		glDisable(GL_ALPHA_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_DST_COLOR,GL_SRC_COLOR);	
 		
@@ -1483,15 +1482,12 @@ bool ModelRenderPass::init(Model *m)
 		break;
 	default:
 		wxLogMessage(_T("[Error] Unknown blendmode: %d\n"), blendmode);
-		glDisable(GL_ALPHA_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR);
 	}
 
-	if (cull)
-		glEnable(GL_CULL_FACE);
-	else
-		glDisable(GL_CULL_FACE);
+	//if (cull)
+	//	glEnable(GL_CULL_FACE);
 
 	// Texture wrapping around the geometry
 	if (swrap)
@@ -1534,9 +1530,6 @@ bool ModelRenderPass::init(Model *m)
 	// don't use lighting on the surface
 	if (unlit) {
 		glDisable(GL_LIGHTING);
-		// unfogged = unlit?
-		if((blendmode==3)||(blendmode==4))
-			glDisable(GL_FOG);
 	}
 
 	if (blendmode<=1 && ocol.w<1.0f)
@@ -1621,8 +1614,6 @@ void ModelRenderPass::deinit()
 
 	if (unlit) {
 		glEnable(GL_LIGHTING);
-		if((blendmode==3)||(blendmode==4))
-			glEnable(GL_FOG);
 	}
 
 	//if (billboard)

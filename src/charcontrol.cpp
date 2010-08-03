@@ -2340,7 +2340,7 @@ void CharControl::OnUpdateItem(int type, int id)
 			if (model->header.nAnimationLookup >= ANIMATION_MOUNT && model->animLookups[ANIMATION_MOUNT] >= 0) {
 					model->animManager->Stop();
 					model->currentAnim = model->animLookups[ANIMATION_MOUNT];
-					model->animManager->Set(0,(short)model->currentAnim,0);
+					model->animManager->SetAnim(0,(short)model->currentAnim,0);
 			}
 			
 			g_canvas->curAtt = g_canvas->root;
