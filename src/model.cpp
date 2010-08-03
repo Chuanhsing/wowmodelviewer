@@ -1008,6 +1008,7 @@ void Model::setLOD(MPQFile &f, int index)
 	uint16 *indexLookup = (uint16*)(g.getBuffer() + view->ofsIndex);
 	uint16 *triangles = (uint16*)(g.getBuffer() + view->ofsTris);
 	nIndices = view->nTris;
+	wxDELETEA(indices);
 	indices = new uint16[nIndices];
 	for (size_t i = 0; i<nIndices; i++) {
         indices[i] = indexLookup[triangles[i]];
@@ -1023,6 +1024,7 @@ void Model::setLOD(MPQFile &f, int index)
 	uint16 *indexLookup = (uint16*)(f.getBuffer() + view->ofsIndex);
 	uint16 *triangles = (uint16*)(f.getBuffer() + view->ofsTris);
 	nIndices = view->nTris;
+	wxDELETE(indices);
 	indices = new uint16[nIndices];
 	for (size_t i = 0; i<nIndices; i++) {
         indices[i] = indexLookup[triangles[i]];
@@ -1073,25 +1075,6 @@ void Model::setLOD(MPQFile &f, int index)
 		//pass.texture = texid;
 		pass.tex = texlookup[tex[j].textureid];
 
-		/*
-		// Render Flags
-		flags:
-		0x01 = Unlit
-		0x02 = ? glow effects ? no zwrite?
-		0x04 = Two-sided (no backface culling if set)
-		0x08 = (probably billboarded)
-		0x10 = Disable z-buffer?
-
-		blend:
-		Value	 Mapped to	 Meaning
-		0	 	0	 		Combiners_Opaque
-		1	 	1	 		Combiners_Mod
-		2	 	1	 		Combiners_Decal
-		3	 	1	 		Combiners_Add
-		4	 	1	 		Combiners_Mod2x
-		5	 	4	 		Combiners_Fade
-		6	 	4	 		Used in the Deeprun Tram subway glass, supposedly (src=dest_color, dest=src_color) (?)
-		*/
 		// TODO: figure out these flags properly -_-
 		ModelRenderFlags &rf = renderFlags[tex[j].flagsIndex];
 		
@@ -1102,29 +1085,19 @@ void Model::setLOD(MPQFile &f, int index)
 		pass.color = tex[j].colorIndex;
 		pass.opacity = transLookup[tex[j].transid];
 
-		pass.unlit = (rf.flags & RENDERFLAGS_UNLIT)!= 0;
+		pass.unlit = (rf.flags & RENDERFLAGS_UNLIT) != 0;
 
-		// This is wrong but meh.. best I could get it so far.
-		//pass.cull = (rf.flags & 0x04)==0 && pass.blendmode!=1 && pass.blendmode!=4 && (rf.flags & 17)!=17;
-		//pass.cull = false; // quick test
 		pass.cull = (rf.flags & RENDERFLAGS_TWOSIDED)==0 && rf.blend==0;
 
 		pass.billboard = (rf.flags & RENDERFLAGS_BILLBOARD) != 0;
 
-		pass.useEnvMap = (texunitlookup[tex[j].texunit] == -1) && pass.billboard && rf.blend>2; //&& rf.blend<5; // Use environmental reflection effects?
+		// Use environmental reflection effects?
+		pass.useEnvMap = (texunitlookup[tex[j].texunit] == -1) && pass.billboard && rf.blend>2; //&& rf.blend<5; 
 
 		// Disable environmental mapping if its been unchecked.
 		if (pass.useEnvMap && !video.useEnvMapping)
 			pass.useEnvMap = false;
 
-		//pass.noZWrite = (texdef[pass.tex].flags & 3)!=0;
-		/*
-		if (name == "Creature\\Turkey\\turkey.m2") // manual fix as I just bloody give up.
-			pass.noZWrite = false;
-		else
-			pass.noZWrite = (pass.blendmode>1);
-		*/
-			//pass.noZWrite = (pass.blendmode>1) && !(rf.blend==4 && rf.flags==17);
 		pass.noZWrite = (rf.flags & RENDERFLAGS_ZBUFFERED) != 0;
 
 		// ToDo: Work out the correct way to get the true/false of transparency
@@ -1360,204 +1333,216 @@ void Model::animate(int anim)
 bool ModelRenderPass::init(Model *m)
 {
 	// May aswell check that we're going to render the geoset before doing all this crap.
-	if (m->showGeosets[geoset]) {
+	if (!m->showGeosets[geoset])
+		return false;
 
-		// COLOUR
-		// Get the colour and transparency and check that we should even render
-		ocol = Vec4D(1.0f, 1.0f, 1.0f, m->trans);
-		ecol = Vec4D(0.0f, 0.0f, 0.0f, 0.0f);
+	// COLOUR
+	// Get the colour and transparency and check that we should even render
+	ocol = Vec4D(1.0f, 1.0f, 1.0f, m->trans);
+	ecol = Vec4D(0.0f, 0.0f, 0.0f, 0.0f);
 
-		//if (m->trans == 1.0f)
-		//	return false;
+	//if (m->trans == 1.0f)
+	//	return false;
 
-		// emissive colors
-		if (color!=-1 && m->colors && m->colors[color].color.uses(0)) {
+	// emissive colors
+	if (color!=-1 && m->colors && m->colors[color].color.uses(0)) {
 #ifdef WotLK /* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
-			Vec3D c = m->colors[color].color.getValue(0,m->animtime);
-			if (m->colors[color].opacity.uses(m->anim)) {
-				float o = m->colors[color].opacity.getValue(m->anim,m->animtime);
-				ocol.w = o;
-			}
-#else
-			Vec3D c = m->colors[color].color.getValue(m->anim,m->animtime);
+		Vec3D c = m->colors[color].color.getValue(0,m->animtime);
+		if (m->colors[color].opacity.uses(m->anim)) {
 			float o = m->colors[color].opacity.getValue(m->anim,m->animtime);
 			ocol.w = o;
-#endif
-
-			if (unlit) {
-				ocol.x = c.x; ocol.y = c.y; ocol.z = c.z;
-			} else {
-				ocol.x = ocol.y = ocol.z = 0;
-			}
-
-			ecol = Vec4D(c, ocol.w);
-			glMaterialfv(GL_FRONT, GL_EMISSION, ecol);
 		}
-
-		// opacity
-		if (opacity!=-1) {
-#ifdef WotLK /* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
-			if (m->transparency && m->transparency[opacity].trans.uses(0))
-				ocol.w *= m->transparency[opacity].trans.getValue(0, m->animtime);
 #else
-			ocol.w *= m->transparency[opacity].trans.getValue(m->anim, m->animtime);
+		Vec3D c = m->colors[color].color.getValue(m->anim,m->animtime);
+		float o = m->colors[color].opacity.getValue(m->anim,m->animtime);
+		ocol.w = o;
 #endif
+
+		if (unlit) {
+			ocol.x = c.x; ocol.y = c.y; ocol.z = c.z;
+		} else {
+			ocol.x = ocol.y = ocol.z = 0;
 		}
 
-		// exit and return false before affecting the opengl render state
-		if (!((ocol.w > 0) && (color==-1 || ecol.w > 0)))
-			return false;
-
-		// TEXTURE
-		// bind to our texture
-		GLuint bindtex = 0;
-		if (m->specialTextures[tex]==-1) 
-			bindtex = m->textures[tex];
-		else 
-			bindtex = m->replaceTextures[m->specialTextures[tex]];
-
-		glBindTexture(GL_TEXTURE_2D, bindtex);
-		// --
-
-		// TODO: Add proper support for multi-texturing.
-
-		// ALPHA BLENDING
-		// blend mode
-		switch (blendmode) {
-		case BM_OPAQUE:	// 0			
-			break;
-		case BM_TRANSPARENT: // 1
-			glEnable(GL_ALPHA_TEST);
-			glAlphaFunc(GL_GEQUAL,0.7f);
-			
-			/*
-			// Tex settings
-			glTexEnvf(GL_TEXTURE_ENV,GL_ALPHA_SCALE,1.000000);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE0_ALPHA,GL_PREVIOUS);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE1_ALPHA,GL_TEXTURE);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE2_ALPHA,GL_CONSTANT);
-			glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_ALPHA,GL_MODULATE);
-			*/
-			
-			break;
-		case BM_ALPHA_BLEND: // 2
-			//glEnable(GL_ALPHA_TEST);
- 			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			break;
-		case BM_ADDITIVE: // 3
- 			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_COLOR, GL_ONE);
-			break;
-		case BM_ADDITIVE_ALPHA: // 4
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-
-			/*
-			glTexEnvf(GL_TEXTURE_ENV,GL_ALPHA_SCALE,1.000000);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE0_ALPHA,GL_PREVIOUS);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE1_ALPHA,GL_TEXTURE);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE2_ALPHA,GL_CONSTANT);
-			glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_ALPHA,GL_MODULATE);
-			*/
-			
-			break;
-		case BM_MODULATE:	// 5
- 			glEnable(GL_BLEND);
-			glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR);
-			
-			/*
-			// Texture settings.
-			glTexEnvf(GL_TEXTURE_ENV,GL_RGB_SCALE,1.000000);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE0_RGB,GL_TEXTURE);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE1_RGB,GL_PREVIOUS);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE2_RGB,GL_PREVIOUS);
-			glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_RGB,GL_INTERPOLATE);
-			glTexEnvf(GL_TEXTURE_ENV,GL_ALPHA_SCALE,1.000000);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE0_ALPHA,GL_PREVIOUS);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE1_ALPHA,GL_TEXTURE);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE2_ALPHA,GL_CONSTANT);
-			glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_ALPHA,GL_REPLACE);
-			*/
-
-			break;
-		case BM_MODULATEX2:	// 6, not sure if this is right
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_DST_COLOR,GL_SRC_COLOR);	
-			
-			/*
-			// Texture settings.
-			glTexEnvf(GL_TEXTURE_ENV,GL_RGB_SCALE,1.000000);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE0_RGB,GL_TEXTURE);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE1_RGB,GL_PREVIOUS);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE2_RGB,GL_PREVIOUS);
-			glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_RGB,GL_INTERPOLATE);
-			glTexEnvf(GL_TEXTURE_ENV,GL_ALPHA_SCALE,1.000000);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE0_ALPHA,GL_PREVIOUS);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE1_ALPHA,GL_TEXTURE);
-			glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE2_ALPHA,GL_CONSTANT);
-			glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_ALPHA,GL_REPLACE);
-			*/
-			
-			break;
-		default:
-			wxLogMessage(_T("[Error] Unknown blendmode: %d\n"), blendmode);
- 			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		}
-
-		//if (cull)
-		//	glEnable(GL_CULL_FACE);
-
-		// Texture wrapping around the geometry
-		if (swrap)
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-		if (twrap)
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
-
-		// no writing to the depth buffer.
-		if (noZWrite)
-			glDepthMask(GL_FALSE);
-
-		// Environmental mapping, material, and effects
-		if (useEnvMap) {
-			// Turn on the 'reflection' shine, using 18.0f as that is what WoW uses based on the reverse engineering
-			// This is now set in InitGL(); - no need to call it every render.
-			glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 18.0f);
-
-			// env mapping
-			glEnable(GL_TEXTURE_GEN_S);
-			glEnable(GL_TEXTURE_GEN_T);
-
-			const GLint maptype = GL_SPHERE_MAP;
-			//const GLint maptype = GL_REFLECTION_MAP_ARB;
-
-			glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, maptype);
-			glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, maptype);
-		}
-
-		if (texanim!=-1) {
-			glMatrixMode(GL_TEXTURE);
-			glPushMatrix();
-
-			m->texAnims[texanim].setup(texanim);
-		}
-
-		// color
-		glColor4fv(ocol);
-		//glMaterialfv(GL_FRONT, GL_SPECULAR, ocol);
-
-		// don't use lighting on the surface
-		if (unlit)
-			glDisable(GL_LIGHTING);
-
-		if (blendmode<=1 && ocol.w<1.0f)
-			glEnable(GL_BLEND);
-
-		return true;
+		ecol = Vec4D(c, ocol.w);
+		glMaterialfv(GL_FRONT, GL_EMISSION, ecol);
 	}
 
-	return false;
+	// opacity
+	if (opacity!=-1) {
+#ifdef WotLK /* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
+		if (m->transparency && m->transparency[opacity].trans.uses(0))
+			ocol.w *= m->transparency[opacity].trans.getValue(0, m->animtime);
+#else
+		ocol.w *= m->transparency[opacity].trans.getValue(m->anim, m->animtime);
+#endif
+	}
+
+	// exit and return false before affecting the opengl render state
+	if (!((ocol.w > 0) && (color==-1 || ecol.w > 0)))
+		return false;
+
+	// TEXTURE
+	// bind to our texture
+	GLuint bindtex = 0;
+	if (m->specialTextures[tex]==-1) 
+		bindtex = m->textures[tex];
+	else 
+		bindtex = m->replaceTextures[m->specialTextures[tex]];
+
+	glBindTexture(GL_TEXTURE_2D, bindtex);
+	// --
+
+	// TODO: Add proper support for multi-texturing.
+
+	// ALPHA BLENDING
+	// blend mode
+	switch (blendmode) {
+	case BM_OPAQUE:	// 0
+		glDisable(GL_BLEND);
+		glDisable(GL_ALPHA_TEST);
+		break;
+	case BM_TRANSPARENT: // 1
+		glDisable(GL_BLEND);
+		glEnable(GL_ALPHA_TEST);
+		//glAlphaFunc(GL_GEQUAL,0.7f);
+		
+		/*
+		// Tex settings
+		glTexEnvf(GL_TEXTURE_ENV,GL_ALPHA_SCALE,1.000000);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE0_ALPHA,GL_PREVIOUS);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE1_ALPHA,GL_TEXTURE);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE2_ALPHA,GL_CONSTANT);
+		glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_ALPHA,GL_MODULATE);
+		*/
+		
+		break;
+	case BM_ALPHA_BLEND: // 2
+		glDisable(GL_ALPHA_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // default blend func
+		break;
+	case BM_ADDITIVE: // 3
+		glDisable(GL_ALPHA_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_COLOR, GL_ONE);
+		break;
+	case BM_ADDITIVE_ALPHA: // 4
+		glDisable(GL_ALPHA_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+		/*
+		glTexEnvf(GL_TEXTURE_ENV,GL_ALPHA_SCALE,1.000000);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE0_ALPHA,GL_PREVIOUS);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE1_ALPHA,GL_TEXTURE);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE2_ALPHA,GL_CONSTANT);
+		glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_ALPHA,GL_MODULATE);
+		*/
+		
+		break;
+	case BM_MODULATE:	// 5
+		glDisable(GL_ALPHA_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR);
+		
+		/*
+		// Texture settings.
+		glTexEnvf(GL_TEXTURE_ENV,GL_RGB_SCALE,1.000000);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE0_RGB,GL_TEXTURE);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE1_RGB,GL_PREVIOUS);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE2_RGB,GL_PREVIOUS);
+		glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_RGB,GL_INTERPOLATE);
+		glTexEnvf(GL_TEXTURE_ENV,GL_ALPHA_SCALE,1.000000);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE0_ALPHA,GL_PREVIOUS);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE1_ALPHA,GL_TEXTURE);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE2_ALPHA,GL_CONSTANT);
+		glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_ALPHA,GL_REPLACE);
+		*/
+
+		break;
+	case BM_MODULATEX2:	// 6, not sure if this is right
+		glDisable(GL_ALPHA_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_DST_COLOR,GL_SRC_COLOR);	
+		
+		/*
+		// Texture settings.
+		glTexEnvf(GL_TEXTURE_ENV,GL_RGB_SCALE,1.000000);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE0_RGB,GL_TEXTURE);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE1_RGB,GL_PREVIOUS);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE2_RGB,GL_PREVIOUS);
+		glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_RGB,GL_INTERPOLATE);
+		glTexEnvf(GL_TEXTURE_ENV,GL_ALPHA_SCALE,1.000000);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE0_ALPHA,GL_PREVIOUS);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE1_ALPHA,GL_TEXTURE);
+		glTexEnvi(GL_TEXTURE_ENV,GL_SOURCE2_ALPHA,GL_CONSTANT);
+		glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_ALPHA,GL_REPLACE);
+		*/
+		
+		break;
+	default:
+		wxLogMessage(_T("[Error] Unknown blendmode: %d\n"), blendmode);
+		glDisable(GL_ALPHA_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR);
+	}
+
+	if (cull)
+		glEnable(GL_CULL_FACE);
+	else
+		glDisable(GL_CULL_FACE);
+
+	// Texture wrapping around the geometry
+	if (swrap)
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+	if (twrap)
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+
+	// no writing to the depth buffer.
+	if (noZWrite)
+		glDepthMask(GL_FALSE);
+
+	// Environmental mapping, material, and effects
+	if (useEnvMap) {
+		// Turn on the 'reflection' shine, using 18.0f as that is what WoW uses based on the reverse engineering
+		// This is now set in InitGL(); - no need to call it every render.
+		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 18.0f);
+
+		// env mapping
+		glEnable(GL_TEXTURE_GEN_S);
+		glEnable(GL_TEXTURE_GEN_T);
+
+		const GLint maptype = GL_SPHERE_MAP;
+		//const GLint maptype = GL_REFLECTION_MAP_ARB;
+
+		glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, maptype);
+		glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, maptype);
+	}
+
+	if (texanim!=-1) {
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix();
+
+		m->texAnims[texanim].setup(texanim);
+	}
+
+	// color
+	glColor4fv(ocol);
+	//glMaterialfv(GL_FRONT, GL_SPECULAR, ocol);
+
+	// don't use lighting on the surface
+	if (unlit) {
+		glDisable(GL_LIGHTING);
+		// unfogged = unlit?
+		if((blendmode==3)||(blendmode==4))
+			glDisable(GL_FOG);
+	}
+
+	if (blendmode<=1 && ocol.w<1.0f)
+		glEnable(GL_BLEND);
+
+	return true;
 }
 
 void ModelRenderPass::deinit()
@@ -1634,8 +1619,11 @@ void ModelRenderPass::deinit()
 		glMatrixMode(GL_MODELVIEW);
 	}
 
-	if (unlit)
+	if (unlit) {
 		glEnable(GL_LIGHTING);
+		if((blendmode==3)||(blendmode==4))
+			glEnable(GL_FOG);
+	}
 
 	//if (billboard)
 	//	glPopMatrix();

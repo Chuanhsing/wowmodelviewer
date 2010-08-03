@@ -394,12 +394,13 @@ Mode   Shading     String
 
 */
 
+// block X - render flags
+/* flags */
 #define	RENDERFLAGS_UNLIT	1
 #define	RENDERFLAGS_UNFOGGED	2
 #define	RENDERFLAGS_TWOSIDED	4
 #define	RENDERFLAGS_BILLBOARD	8
 #define	RENDERFLAGS_ZBUFFERED	16
-// block X - render flags
 struct ModelRenderFlags {
 	uint16 flags;
 	//unsigned char f1;

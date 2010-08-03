@@ -544,6 +544,17 @@ enum WOW_LOCALE {
 };
 
 // copied from the .mdl docs? this might be completely wrong
+/*
+Blending mode
+Value	 Mapped to	 Meaning
+0	 0	 Combiners_Opaque
+1	 1	 Combiners_Mod
+2	 1	 Combiners_Decal
+3	 1	 Combiners_Add
+4	 1	 Combiners_Mod2x
+5	 4	 Combiners_Fade
+6	 4	 Used in the Deeprun Tram subway glass, supposedly (src=dest_color, dest=src_color) (?)
+*/
 enum BlendModes {
 	BM_OPAQUE,
 	BM_TRANSPARENT,
