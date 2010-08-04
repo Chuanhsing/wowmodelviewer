@@ -198,9 +198,9 @@ void ModelControl::Update()
 	} else {
 		cbLod->Append(_T("1 (Worst)"));
 		for (unsigned int i=1; i<(model->header.nViews-1); i++) {
-			cbLod->Append(wxString::Format("%i", i+1));
+			cbLod->Append(wxString::Format(_T("%i"), i+1));
 		}
-		cbLod->Append(wxString::Format("%i (Best)", model->header.nViews));
+		cbLod->Append(wxString::Format(_T("%i (Best)"), model->header.nViews));
 	}
 	cbLod->SetSelection(0);
 

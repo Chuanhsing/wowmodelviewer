@@ -756,7 +756,6 @@ void Model::initCommon(MPQFile &f)
 	}
 
 	// init transparency
-	int16 *transLookup = (int16*)(f.getBuffer() + header.ofsTransparencyLookup);
 	if (header.nTransparency) {
 		transparency = new ModelTransparency[header.nTransparency];
 		ModelTransDef *trDefs = (ModelTransDef*)(f.getBuffer() + header.ofsTransparency);
@@ -994,7 +993,7 @@ void Model::setLOD(MPQFile &f, int index)
 	// remove suffix .M2
 	fullname = modelname.BeforeLast(_T('.'));
 	lodname = fullname;
-	lodname.Append(wxString::Format("%02d.skin", index)); // Lods: 00, 01, 02, 03
+	lodname.Append(wxString::Format(_T("%02d.skin"), index)); // Lods: 00, 01, 02, 03
 	MPQFile g((char *)lodname.c_str());
 	g_modelViewer->modelOpened->Add(lodname);
 	if (g.isEof()) {

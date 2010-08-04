@@ -488,39 +488,39 @@ void ModelViewer::InitMenu()
 	// menuBar->EnableTop(2, false);
 	
 	// Hotkeys / shortcuts
-	wxAcceleratorEntry entries[26];
-	entries[0].Set(wxACCEL_NORMAL,  WXK_F5,     ID_SAVE_EQUIPMENT);
-	entries[1].Set(wxACCEL_NORMAL,  WXK_F6,     ID_LOAD_EQUIPMENT);
-	entries[2].Set(wxACCEL_NORMAL,  WXK_F7,     ID_SAVE_CHAR);
-	entries[3].Set(wxACCEL_NORMAL,	WXK_F8,     ID_LOAD_CHAR);
-	entries[4].Set(wxACCEL_CTRL,	(int)'b',	ID_SHOW_BOUNDS);
-	//entries[5].Set(wxACCEL_NORMAL,	(int)'B',	ID_SHOW_BOUNDS);
-	entries[6].Set(wxACCEL_CTRL,	(int)'X',	ID_FILE_EXIT);
-	entries[7].Set(wxACCEL_NORMAL,	WXK_F12,	ID_FILE_SCREENSHOT);
-	entries[8].Set(wxACCEL_CTRL,	(int)'e',	ID_SHOW_EARS);
-	entries[9].Set(wxACCEL_CTRL,	(int)'h',	ID_SHOW_HAIR);
-	entries[10].Set(wxACCEL_CTRL, (int)'f',	ID_SHOW_FACIALHAIR);
-	entries[11].Set(wxACCEL_CTRL, (int)'z',	ID_SHEATHE);
-	entries[12].Set(wxACCEL_CTRL, (int)'l',	ID_BACKGROUND);
-	entries[13].Set(wxACCEL_CTRL, (int)'+',		ID_ZOOM_IN);
-	entries[14].Set(wxACCEL_CTRL, (int)'-',		ID_ZOOM_OUT);
-	entries[15].Set(wxACCEL_CTRL, (int)'s',		ID_FILE_SCREENSHOTCONFIG);
-	entries[16].Set(wxACCEL_NORMAL, WXK_F9,		ID_CLEAR_EQUIPMENT);
-	entries[17].Set(wxACCEL_NORMAL, WXK_F10,	ID_CHAR_RANDOMISE);
+	wxAcceleratorEntry entries[25];
+	int keys = 0;
+	entries[keys++].Set(wxACCEL_NORMAL,  WXK_F5,     ID_SAVE_EQUIPMENT);
+	entries[keys++].Set(wxACCEL_NORMAL,  WXK_F6,     ID_LOAD_EQUIPMENT);
+	entries[keys++].Set(wxACCEL_NORMAL,  WXK_F7,     ID_SAVE_CHAR);
+	entries[keys++].Set(wxACCEL_NORMAL,	WXK_F8,     ID_LOAD_CHAR);
+	entries[keys++].Set(wxACCEL_CTRL,	(int)'b',	ID_SHOW_BOUNDS);
+	entries[keys++].Set(wxACCEL_CTRL,	(int)'X',	ID_FILE_EXIT);
+	entries[keys++].Set(wxACCEL_NORMAL,	WXK_F12,	ID_FILE_SCREENSHOT);
+	entries[keys++].Set(wxACCEL_CTRL,	(int)'e',	ID_SHOW_EARS);
+	entries[keys++].Set(wxACCEL_CTRL,	(int)'h',	ID_SHOW_HAIR);
+	entries[keys++].Set(wxACCEL_CTRL, (int)'f',	ID_SHOW_FACIALHAIR);
+	entries[keys++].Set(wxACCEL_CTRL, (int)'z',	ID_SHEATHE);
+	entries[keys++].Set(wxACCEL_CTRL, (int)'l',	ID_BACKGROUND);
+	entries[keys++].Set(wxACCEL_CTRL, (int)'+',		ID_ZOOM_IN);
+	entries[keys++].Set(wxACCEL_CTRL, (int)'-',		ID_ZOOM_OUT);
+	entries[keys++].Set(wxACCEL_CTRL, (int)'s',		ID_FILE_SCREENSHOTCONFIG);
+	entries[keys++].Set(wxACCEL_NORMAL, WXK_F9,		ID_CLEAR_EQUIPMENT);
+	entries[keys++].Set(wxACCEL_NORMAL, WXK_F10,	ID_CHAR_RANDOMISE);
 
 	// Temporary saves
-	entries[18].Set(wxACCEL_NORMAL, WXK_F1,		ID_SAVE_TEMP1);
-	entries[19].Set(wxACCEL_NORMAL, WXK_F2,		ID_SAVE_TEMP2);
-	entries[20].Set(wxACCEL_NORMAL, WXK_F3,		ID_SAVE_TEMP3);
-	entries[21].Set(wxACCEL_NORMAL, WXK_F4,		ID_SAVE_TEMP4);
+	entries[keys++].Set(wxACCEL_NORMAL, WXK_F1,		ID_SAVE_TEMP1);
+	entries[keys++].Set(wxACCEL_NORMAL, WXK_F2,		ID_SAVE_TEMP2);
+	entries[keys++].Set(wxACCEL_NORMAL, WXK_F3,		ID_SAVE_TEMP3);
+	entries[keys++].Set(wxACCEL_NORMAL, WXK_F4,		ID_SAVE_TEMP4);
 
 	// Temp loads
-	entries[22].Set(wxACCEL_CTRL,	WXK_F1,		ID_LOAD_TEMP1);
-	entries[23].Set(wxACCEL_CTRL,	WXK_F2,		ID_LOAD_TEMP2);
-	entries[24].Set(wxACCEL_CTRL,	WXK_F3,		ID_LOAD_TEMP3);
-	entries[25].Set(wxACCEL_CTRL,	WXK_F4,		ID_LOAD_TEMP4);
+	entries[keys++].Set(wxACCEL_CTRL,	WXK_F1,		ID_LOAD_TEMP1);
+	entries[keys++].Set(wxACCEL_CTRL,	WXK_F2,		ID_LOAD_TEMP2);
+	entries[keys++].Set(wxACCEL_CTRL,	WXK_F3,		ID_LOAD_TEMP3);
+	entries[keys++].Set(wxACCEL_CTRL,	WXK_F4,		ID_LOAD_TEMP4);
 
-	wxAcceleratorTable accel(26, entries);
+	wxAcceleratorTable accel(keys, entries);
 	this->SetAcceleratorTable(accel);
 }
 
@@ -649,7 +649,6 @@ void ModelViewer::InitDatabase()
 	else
 		setsdb.cleanup(items);
 
-//	char filename[20];
 	filename = locales[langID]+SLASH+_T("npcs.csv");
 	if(!wxFile::Exists(filename))
 		filename = locales[0]+SLASH+_T("npcs.csv");
@@ -855,8 +854,6 @@ void ModelViewer::SaveSession()
 	pConfig->Write(_T("SampleBuffer"), video.curCap.sampleBuffer);
 	pConfig->Write(_T("StencilBuffer"), video.curCap.stencil);
 	pConfig->Write(_T("ZBuffer"), video.curCap.zBuffer);
-	
-
 
 	pConfig->SetPath(_T("/Session"));
 	// Attempt at saving colour values as 3 byte hex - loss of accuracy from float
@@ -1378,6 +1375,7 @@ bool ModelViewer::InitMPQArchives()
 		gameVersion = 30300;
 	}
 
+	// log for debug
 	const char *component = "component.wow-data.txt";
 	MPQFile f2(component);
 	if (!f2.isEof()) {

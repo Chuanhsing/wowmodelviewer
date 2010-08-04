@@ -50,7 +50,7 @@ AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 	animCList2->Show(false);
 
 	lockText = new wxTextCtrl(this, ID_ANIM_SECONDARY_TEXT, wxEmptyString, wxPoint(300, 64), wxSize(20, 20), wxTE_PROCESS_ENTER, wxDefaultValidator);
-	lockText->SetValue(wxString::Format("%d", UPPER_BODY_BONES));
+	lockText->SetValue(wxString::Format(_T("%d"), UPPER_BODY_BONES));
 	lockText->Enable(false);
 	lockText->Show(false);
 
