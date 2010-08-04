@@ -12,6 +12,7 @@ extern ModelViewer *g_modelViewer;
 
 AnimManager::AnimManager(ModelAnimation *anim) {
 	AnimIDSecondary = -1;
+	SecondaryCount = UPPER_BODY_BONES;
 	AnimIDMouth = -1;
 	anims = anim;
 	AnimParticles = false;
@@ -1180,7 +1181,7 @@ void Model::calcBones(int anim, int time)
 			t = time;
 		}
 
-		for (size_t i=0; i<5; i++) { // only goto 5, otherwise it affects the hip/waist rotation for the lower-body.
+		for (size_t i=0; i<animManager->GetSecondaryCount(); i++) { // only goto 5, otherwise it affects the hip/waist rotation for the lower-body.
 			if (keyBoneLookup[i] > -1)
 				bones[keyBoneLookup[i]].calcMatrix(bones, a, t);
 		}
@@ -1200,14 +1201,12 @@ void Model::calcBones(int anim, int time)
 		}
 
 		// still not sure what 18-26 bone lookups are but I think its more for things like wrist, etc which are not as visually obvious.
-		for (size_t i=18; i<BONE_MAX; i++) {
+		for (size_t i=BONE_BTH; i<BONE_MAX; i++) {
 			if (keyBoneLookup[i] > -1)
 				bones[keyBoneLookup[i]].calcMatrix(bones, a, t);
 		}
 		// =====
 
-		
-		
 		if (charModelDetails.closeRHand) {
 			a = closeFistID;
 			t = anims[closeFistID].timeStart+1;
@@ -1241,6 +1240,43 @@ void Model::calcBones(int anim, int time)
 		// The following line fixes 'mounts' in that the character doesn't get rotated, but it also screws up the rotation for the entire model :(
 		//bones[18].calcMatrix(bones, anim, time, false);
 
+		// Animate key skeletal bones except the fingers which we do later.
+		// -----
+		int a, t;
+
+		// if we have a "secondary animation" selected,  animate upper body using that.
+		if (animManager->GetSecondaryID() > -1) {
+			a = animManager->GetSecondaryID();
+			t = animManager->GetSecondaryFrame();
+		} else {
+			a = anim;
+			t = time;
+		}
+
+		for (size_t i=0; i<animManager->GetSecondaryCount(); i++) { // only goto 5, otherwise it affects the hip/waist rotation for the lower-body.
+			if (keyBoneLookup[i] > -1)
+				bones[keyBoneLookup[i]].calcMatrix(bones, a, t);
+		}
+
+		if (animManager->GetMouthID() > -1) {
+			// Animate the head and jaw
+			if (keyBoneLookup[BONE_HEAD] > -1)
+					bones[keyBoneLookup[BONE_HEAD]].calcMatrix(bones, animManager->GetMouthID(), animManager->GetMouthFrame());
+			if (keyBoneLookup[BONE_JAW] > -1)
+					bones[keyBoneLookup[BONE_JAW]].calcMatrix(bones, animManager->GetMouthID(), animManager->GetMouthFrame());
+		} else {
+			// Animate the head and jaw
+			if (keyBoneLookup[BONE_HEAD] > -1)
+					bones[keyBoneLookup[BONE_HEAD]].calcMatrix(bones, a, t);
+			if (keyBoneLookup[BONE_JAW] > -1)
+					bones[keyBoneLookup[BONE_JAW]].calcMatrix(bones, a, t);
+		}
+
+		// still not sure what 18-26 bone lookups are but I think its more for things like wrist, etc which are not as visually obvious.
+		for (size_t i=BONE_ROOT; i<BONE_MAX; i++) {
+			if (keyBoneLookup[i] > -1)
+				bones[keyBoneLookup[i]].calcMatrix(bones, a, t);
+		}
 	}
 
 	// Animate everything thats left with the 'default' animation

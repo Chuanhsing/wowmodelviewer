@@ -53,6 +53,7 @@ class AnimManager {
 
 	int AnimIDSecondary;
 	unsigned int FrameSecondary;
+	size_t SecondaryCount;
 
 	int AnimIDMouth;
 	unsigned int FrameMouth;
@@ -81,6 +82,8 @@ public:
 	void ClearSecondary() { AnimIDSecondary = -1; }
 	int GetSecondaryID() { return AnimIDSecondary; }
 	unsigned int GetSecondaryFrame() { return FrameSecondary; }
+	void SetSecondaryCount(int count) {	SecondaryCount = count; }
+	size_t GetSecondaryCount() { return SecondaryCount; }
 
 	// For independent mouth movement.
 	void SetMouth(int id) {

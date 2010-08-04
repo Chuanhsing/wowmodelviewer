@@ -1506,7 +1506,8 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 		video.useMasking = !video.useMasking;
 
 	case ID_SHOW_BOUNDS:
-		canvas->model->showBounds = !canvas->model->showBounds;
+		if (canvas->model)
+			canvas->model->showBounds = !canvas->model->showBounds;
 		break;
 
 	case ID_SHOW_GRID:

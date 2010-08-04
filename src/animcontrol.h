@@ -61,6 +61,7 @@ class AnimControl: public wxWindow
 	wxSlider *speedSlider, *speedMouthSlider, *frameSlider;
 	wxButton *btnAdd;
 	wxCheckBox *lockAnims, *nextAnims;
+	wxTextCtrl *lockText;
 
 	wxButton *btnPlay, *btnPause, *btnStop, *btnClear, *btnPrev, *btnNext;
 	wxCheckBox *oldStyle;

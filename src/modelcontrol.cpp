@@ -64,17 +64,17 @@ ModelControl::ModelControl(wxWindow* parent, wxWindowID id)
 		bones = new wxCheckBox(this, ID_MODEL_BONES, _("Bones"), wxPoint(5, 115), wxDefaultSize);
 		box = new wxCheckBox(this, ID_MODEL_BOUNDS, _("Bounds"), wxPoint(5, 135), wxDefaultSize);
 		render = new wxCheckBox(this, ID_MODEL_RENDER, _("Render"), wxPoint(5, 155), wxDefaultSize);
-		wireframe = new wxCheckBox(this, ID_MODEL_WIREFRAME, _("Wireframe"), wxPoint(5, 175), wxDefaultSize);
-		texture = new wxCheckBox(this, ID_MODEL_TEXTURE, _("Texture"), wxPoint(5, 195), wxDefaultSize);
-		particles = new wxCheckBox(this, ID_MODEL_PARTICLES, _("Particles"), wxPoint(5, 215), wxDefaultSize);
+		wireframe = new wxCheckBox(this, ID_MODEL_WIREFRAME, _("Wireframe"), wxPoint(75, 115), wxDefaultSize);
+		texture = new wxCheckBox(this, ID_MODEL_TEXTURE, _("Texture"), wxPoint(75, 135), wxDefaultSize);
+		particles = new wxCheckBox(this, ID_MODEL_PARTICLES, _("Particles"), wxPoint(75, 155), wxDefaultSize);
 
-		lblGeosets = new wxStaticText(this, wxID_ANY, _("Show Geosets"), wxPoint(5,235), wxDefaultSize);
-		clbGeosets = new wxCheckListBox(this, ID_MODEL_GEOSETS, wxPoint(5, 250), wxSize(150,120), 0, NULL, 0, wxDefaultValidator, _T("GeosetsList"));
+		lblGeosets = new wxStaticText(this, wxID_ANY, _("Show Geosets"), wxPoint(5,175), wxDefaultSize);
+		clbGeosets = new wxCheckListBox(this, ID_MODEL_GEOSETS, wxPoint(5, 190), wxSize(150,120), 0, NULL, 0, wxDefaultValidator, _T("GeosetsList"));
 		
-		lblXYZ = new wxStaticText(this, wxID_ANY, _T("X\nY\nZ"), wxPoint(2,380), wxSize(20,60));
-		txtX = new wxTextCtrl(this, ID_MODEL_X, _T("0.0"), wxPoint(25,380), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
-		txtY = new wxTextCtrl(this, ID_MODEL_Y, _T("0.0"), wxPoint(25,400), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
-		txtZ = new wxTextCtrl(this, ID_MODEL_Z, _T("0.0"), wxPoint(25,420), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		lblXYZ = new wxStaticText(this, wxID_ANY, _T("X\nY\nZ"), wxPoint(2,320), wxSize(20,60));
+		txtX = new wxTextCtrl(this, ID_MODEL_X, _T("0.0"), wxPoint(25,320), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		txtY = new wxTextCtrl(this, ID_MODEL_Y, _T("0.0"), wxPoint(25,340), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		txtZ = new wxTextCtrl(this, ID_MODEL_Z, _T("0.0"), wxPoint(25,360), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
 
 	} catch(...) {};
 }

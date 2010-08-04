@@ -8,6 +8,7 @@ IMPLEMENT_CLASS(AnimControl, wxWindow)
 BEGIN_EVENT_TABLE(AnimControl, wxWindow)
 	EVT_COMBOBOX(ID_ANIM, AnimControl::OnAnim)
 	EVT_COMBOBOX(ID_ANIM_SECONDARY, AnimControl::OnAnim)
+	EVT_TEXT_ENTER(ID_ANIM_SECONDARY_TEXT, AnimControl::OnButton)
 	EVT_COMBOBOX(ID_ANIM_MOUTH, AnimControl::OnAnim)
 
 	EVT_COMBOBOX(ID_LOOPS, AnimControl::OnLoop)
@@ -35,7 +36,7 @@ AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 {
 	wxLogMessage(_T("Creating Anim Control..."));
 
-	if(Create(parent, id, wxDefaultPosition, wxSize(700,90), 0, _T("AnimControlFrame")) == false) {
+	if(Create(parent, id, wxDefaultPosition, wxSize(700,120), 0, _T("AnimControlFrame")) == false) {
 		wxMessageBox(_T("Failed to create a window for our AnimControl!"), _T("Error"));
 		wxLogMessage(_T("GUI Error: Failed to create a window for our AnimControl!"));
 		return;
@@ -44,30 +45,36 @@ AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 	const wxString strLoops[10] = {_T("0"), _T("1"), _T("2"), _T("3"), _T("4"), _T("5"), _T("6"), _T("7"), _T("8"), _T("9")};
 	
 	animCList = new wxComboBox(this, ID_ANIM, _("Animation"), wxPoint(10,10), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Animation")); //|wxCB_SORT); //wxPoint(66,10)
-	animCList2 = new wxComboBox(this, ID_ANIM_SECONDARY, _("Secondary"), wxPoint(170,10), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Secondary")); //|wxCB_SORT); //wxPoint(66,10)
+	animCList2 = new wxComboBox(this, ID_ANIM_SECONDARY, _("Secondary"), wxPoint(10,95), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Secondary")); //|wxCB_SORT); //wxPoint(66,10)
 	animCList2->Enable(false);
 	animCList2->Show(false);
 
+	lockText = new wxTextCtrl(this, ID_ANIM_SECONDARY_TEXT, wxEmptyString, wxPoint(300, 64), wxSize(20, 20), wxTE_PROCESS_ENTER, wxDefaultValidator);
+	lockText->SetValue(wxString::Format("%d", UPPER_BODY_BONES));
+	lockText->Enable(false);
+	lockText->Show(false);
+
 	// Our hidden head/mouth related controls
-	animCList3 = new wxComboBox(this, ID_ANIM_MOUTH, _("Mouth"), wxPoint(10,100), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Secondary")); //|wxCB_SORT); //wxPoint(66,10)
+	animCList3 = new wxComboBox(this, ID_ANIM_MOUTH, _("Mouth"), wxPoint(170,95), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Secondary")); //|wxCB_SORT); //wxPoint(66,10)
 	animCList3->Enable(false);
 	animCList3->Show(false);
 
 	//btnPauseMouth = new wxButton(this, ID_PAUSE_MOUTH, _("Pause"), wxPoint(160,100), wxSize(45,20));
 	//btnPauseMouth->Show(false);
 
-	speedMouthSlider = new wxSlider(this, ID_SPEED_MOUTH, 10, 0, 40, wxPoint(255,100), wxSize(100,38), wxSL_AUTOTICKS);
+	speedMouthLabel = new wxStaticText(this, -1, _("Speed: 1.0x"), wxPoint(340,95), wxDefaultSize);
+	speedMouthLabel->Show(false);
+
+	speedMouthSlider = new wxSlider(this, ID_SPEED_MOUTH, 10, 0, 40, wxPoint(415,95), wxSize(100,38), wxSL_AUTOTICKS);
 	speedMouthSlider->SetTickFreq(10, 1);
 	speedMouthSlider->Show(false);
 
-	speedMouthLabel = new wxStaticText(this, -1, _("Speed: 1.0x"), wxPoint(180,100), wxDefaultSize);
-	speedMouthLabel->Show(false);
 	// ---
 
 	loopList = new wxComboBox(this, ID_LOOPS, wxT("0"), wxPoint(330, 10), wxSize(40,16), 10, strLoops, wxCB_READONLY, wxDefaultValidator, wxT("Loops")); //|wxCB_SORT); //wxPoint(66,10)
 	btnAdd = new wxButton(this, ID_ADDANIM, _("Add"), wxPoint(380, 10), wxSize(45,20));
 
-	skinList = new wxComboBox(this, ID_SKIN, _("Skin"), wxPoint(170,10), wxSize(144,16), 0, NULL, wxCB_READONLY);
+	skinList = new wxComboBox(this, ID_SKIN, _("Skin"), wxPoint(170,10), wxSize(150,16), 0, NULL, wxCB_READONLY);
 	skinList->Show(FALSE);
 	randomSkins = true;
 	defaultDoodads = true;
@@ -93,10 +100,11 @@ AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 	btnPrev = new wxButton(this, ID_PREVANIM, _T("<<"), wxPoint(62,64), wxSize(45,20));
 	btnNext = new wxButton(this, ID_NEXTANIM, _T(">>"), wxPoint(115,64), wxSize(45,20));
 	
-	lockAnims = new wxCheckBox(this, ID_ANIM_LOCK, _("Lock Animations"), wxPoint(170,40), wxDefaultSize, 0);
+	lockAnims = new wxCheckBox(this, ID_ANIM_LOCK, _("Lock Animations"), wxPoint(170,64), wxDefaultSize, 0);
 	bLockAnims = true;
 	lockAnims->SetValue(bLockAnims);
-	oldStyle = new wxCheckBox(this, ID_OLDSTYLE, _("Auto Animate"), wxPoint(170,64), wxDefaultSize, 0);
+
+	oldStyle = new wxCheckBox(this, ID_OLDSTYLE, _("Auto Animate"), wxPoint(170,40), wxDefaultSize, 0);
 	bOldStyle = true;
 	oldStyle->SetValue(bOldStyle);
 	nextAnims = new wxCheckBox(this, ID_ANIM_NEXT, _("Next Animations"), wxPoint(430,10), wxDefaultSize, 0);
@@ -175,6 +183,7 @@ void AnimControl::UpdateModel(Model *m)
 		useanim = g_selModel->currentAnim;
 */
 
+	/*
 	if (g_selModel->charModelDetails.isChar) { // only display the "secondary" animation list if its a character
 		animCList2->Select(useanim);
 		animCList2->Show(true);
@@ -183,10 +192,11 @@ void AnimControl::UpdateModel(Model *m)
 		btnAdd->Show(true);
 	} else {
 		animCList2->Show(false);
-		lockAnims->Show(false);
+		lockAnims->Show(true);
 		loopList->Show(false);
 		btnAdd->Show(false);
 	}
+	*/
 
 	// Animation stuff
 	if (g_selModel->animated && g_selModel->anims) {
@@ -213,10 +223,10 @@ void AnimControl::UpdateModel(Model *m)
 			}
 
 			animCList->Append(strName);
-			if (g_selModel->charModelDetails.isChar) {
+			//if (g_selModel->charModelDetails.isChar) {
 				animCList2->Append(strName);
 				animCList3->Append(strName);
-			}
+			//}
 		}
 
 		if (useanim != -1) {
@@ -241,7 +251,7 @@ void AnimControl::UpdateModel(Model *m)
 		frameSlider->SetTickFreq(g_selModel->anims[useanim].playSpeed, 1);
 		
 		g_selModel->animManager->SetAnim(0, useanim, 0);
-		if (bNextAnims) {
+		if (bNextAnims && g_selModel) {
 			int NextAnimation = useanim;
 			for(size_t i=1; i<4; i++) {
 				NextAnimation = g_selModel->anims[NextAnimation].NextAnimation;
@@ -832,6 +842,11 @@ void AnimControl::OnButton(wxCommandEvent &event)
 	} else if (id == ID_NEXTANIM) {
 		g_selModel->animManager->NextFrame();
 		SetAnimFrame(g_selModel->animManager->GetFrame());
+	} else if (id == ID_ANIM_SECONDARY_TEXT) {
+		int count = wxAtoi(lockText->GetValue());
+		if (count <= 0)
+			count = UPPER_BODY_BONES;
+		g_selModel->animManager->SetSecondaryCount(count);
 	}
 }
 
@@ -841,17 +856,24 @@ void AnimControl::OnCheck(wxCommandEvent &event)
 		bOldStyle = event.IsChecked();
 	else if (event.GetId() == ID_ANIM_LOCK) {
 		bLockAnims = event.IsChecked();
-		animCList2->Enable(bLockAnims==false);
-		if (bLockAnims)
-			g_selModel->animManager->ClearSecondary();
 
-		if (wxGetKeyState(WXK_SHIFT) && event.IsChecked()==false) {
+		if (bLockAnims == false) {
+			animCList2->Enable(true);
+			animCList2->Show(true);
+			lockText->Enable(true);
+			lockText->Show(true);
 			animCList3->Enable(true);
 			animCList3->Show(true);
 			speedMouthSlider->Show(true);
 			speedMouthLabel->Show(true);
 			//btnPauseMouth->Show(true);
 		} else {
+			if (g_selModel)
+				g_selModel->animManager->ClearSecondary();
+			animCList2->Enable(false);
+			animCList2->Show(false);
+			lockText->Enable(false);
+			lockText->Show(false);
 			animCList3->Enable(false);
 			animCList3->Show(false);
 			speedMouthSlider->Show(false);
@@ -860,7 +882,7 @@ void AnimControl::OnCheck(wxCommandEvent &event)
 		}
 	} else if  (event.GetId() == ID_ANIM_NEXT) {
 		bNextAnims = event.IsChecked();
-		if (bNextAnims) {
+		if (bNextAnims && g_selModel) {
 			int NextAnimation = selectedAnim;
 			for(size_t i=1; i<4; i++) {
 				NextAnimation = g_selModel->anims[NextAnimation].NextAnimation;
@@ -893,7 +915,7 @@ void AnimControl::OnAnim(wxCommandEvent &event)
 				g_selModel->currentAnim = selectedAnim;
 				g_selModel->animManager->Stop();
 				g_selModel->animManager->SetAnim(0, selectedAnim, loopList->GetSelection());
-				if (bNextAnims) {
+				if (bNextAnims && g_selModel) {
 					int NextAnimation = selectedAnim;
 					for(size_t i=1; i<4; i++) {
 						NextAnimation = g_selModel->anims[NextAnimation].NextAnimation;
@@ -969,7 +991,7 @@ void AnimControl::OnLoop(wxCommandEvent &event)
 	if (bOldStyle == true) {
 		g_selModel->animManager->Stop();
 		g_selModel->animManager->SetAnim(0, selectedAnim, loopList->GetSelection());
-		if (bNextAnims) {
+		if (bNextAnims && g_selModel) {
 			int NextAnimation = selectedAnim;
 			for(size_t i=1; i<4; i++) {
 				NextAnimation = g_selModel->anims[NextAnimation].NextAnimation;
