@@ -1024,7 +1024,7 @@ static bool EncryptedFile_Read(
         }
         else
         {
-            assert(FALSE);
+            assert(false);
         }
 
         // Free decryption buffer        

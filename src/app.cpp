@@ -368,7 +368,7 @@ bool WowModelViewApp::LoadSettings()
 		const wxString defaultArchives[] = {_T("patch-9.mpq"),_T("patch-8.mpq"),_T("patch-7.mpq"),_T("patch-6.mpq"),
 			_T("patch-5.mpq"),_T("patch-4.mpq"),_T("patch-3.mpq"),_T("patch-2.mpq"),_T("patch.mpq"),
 			_T("expansion3.mpq"),_T("expansion2.mpq"),_T("expansion1.mpq"),_T("lichking.mpq"),_T("expansion.mpq"),
-			_T("world.mpq"),_T("art.mpq"),_T("common-3.mpq"),_T("common-2.mpq"), _T("common.mpq")};
+			_T("world.mpq"),_T("sound.mpq"),_T("art.mpq"),_T("common-3.mpq"),_T("common-2.mpq"), _T("common.mpq")};
 		const wxString localeArchives[] = {_T("patch-%s-9.mpq"),_T("patch-%s-8.mpq"),_T("patch-%s-7.mpq"),
 			_T("patch-%s-6.mpq"),_T("patch-%s-5.mpq"),_T("patch-%s-4.mpq"),_T("patch-%s-3.mpq"), _T("patch-%s-2.mpq"), 
 			_T("patch-%s.mpq"), _T("expansion3-locale-%s.mpq"), _T("expansion2-locale-%s.mpq"), 
