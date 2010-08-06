@@ -806,7 +806,7 @@ static int TestArchiveOpenAndClose(const char * szMpqName)
     if(nError == ERROR_SUCCESS)
     {
         printf("Opening archive %s ...\n", szMpqName);
-        if(!SFileOpenArchive(szMpqName, 0, MPQ_OPEN_CHECK_SECTOR_CRC, &hMpq))
+        if(!SFileOpenArchive(szMpqName, 0, MPQ_OPEN_ENCRYPTED, &hMpq))
             nError = GetLastError();
     }
 
@@ -1515,7 +1515,7 @@ int main(void)
     // Test the archive open and close
     if(nError == ERROR_SUCCESS)
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("PartialMPQs/interface.MPQ.part"));
-        nError = TestArchiveOpenAndClose(MAKE_PATH("WoW-Cataclysm/expansion-locale-frFR.MPQ"));
+        nError = TestArchiveOpenAndClose(MAKE_PATH("Starcraft II/Installer Tome 1.MPQE"));
                                                                              
 //  if(nError == ERROR_SUCCESS)
 //      nError = TestFindFiles(MAKE_PATH("Warcraft III/HumanEd.mpq"));

@@ -122,6 +122,7 @@
 // Values for TFileStream::Flags
 #define STREAM_FLAG_READ_ONLY          0x01 // The stream is read only
 #define STREAM_FLAG_PART_FILE          0x02 // The stream is a PART file.
+#define STREAM_FLAG_ENCRYPTED_FILE     0x04 // The stream is an encrypted MPQ (MPQE).
 
 // Values for SFileOpenArchive
 #define SFILE_OPEN_HARD_DISK_FILE         2 // Open the archive on HDD
@@ -244,6 +245,7 @@
 #define MPQ_OPEN_FORCE_MPQ_V1        0x0040 // Always open the archive as MPQ v 1.00, ignore the "wFormatVersion" variable in the header
 #define MPQ_OPEN_CHECK_SECTOR_CRC    0x0080 // On files with MPQ_FILE_SECTOR_CRC, the CRC will be checked when reading file
 #define MPQ_OPEN_READ_ONLY           0x0100 // Open the archive for read-only access
+#define MPQ_OPEN_ENCRYPTED           0x0200 // Opens an encrypted MPQ archive (Example: Starcraft II installation)
 
 // Flags for SFileCreateArchive
 #define MPQ_CREATE_ARCHIVE_V1    0x00000000 // Creates archive with size up to 4GB
@@ -689,6 +691,7 @@ __inline void DebugFree(void * ptr)
 
 TFileStream * FileStream_CreateFile(const char * szFileName);
 TFileStream * FileStream_OpenFile(const char * szFileName, bool bWriteAccess);
+TFileStream * FileStream_OpenEncrypted(const char * szFileName);
 bool FileStream_GetPos(TFileStream * pStream, LARGE_INTEGER * pByteOffset);
 bool FileStream_Read(TFileStream * pStream, LARGE_INTEGER * pByteOffset, void * pvBuffer, DWORD dwBytesToRead);
 bool FileStream_Write(TFileStream * pStream, LARGE_INTEGER * pByteOffset, const void * pvBuffer, DWORD dwBytesToWrite);

@@ -133,6 +133,7 @@ bool WINAPI SFileOpenArchive(
     DWORD dwCompressedTableSize = 0;    // Size of compressed block/hash table
     DWORD dwTableSize = 0;              // Size of block/hash table
     DWORD dwBytes = 0;                  // Number of bytes to read
+    bool bMpqHeaderTrimmed = false;
     int nError = ERROR_SUCCESS;   
 
     // Verify the parameters
@@ -146,9 +147,18 @@ bool WINAPI SFileOpenArchive(
     // Open the MPQ archive file
     if(nError == ERROR_SUCCESS)
     {
-        pStream = FileStream_OpenFile(szMpqName, (dwFlags & MPQ_OPEN_READ_ONLY) ? false : true);
-        if(pStream == NULL)
-            nError = GetLastError();
+        if(!(dwFlags & MPQ_OPEN_ENCRYPTED))
+        {
+            pStream = FileStream_OpenFile(szMpqName, (dwFlags & MPQ_OPEN_READ_ONLY) ? false : true);
+            if(pStream == NULL)
+                nError = GetLastError();
+        }
+        else
+        {
+            pStream = FileStream_OpenEncrypted(szMpqName);
+            if(pStream == NULL)
+                nError = GetLastError();
+        }
     }
     
     // Allocate the MPQhandle
@@ -169,7 +179,7 @@ bool WINAPI SFileOpenArchive(
         pStream = NULL;
 
         // Remember if the archive is open for write
-        if(ha->pStream->StreamFlags & STREAM_FLAG_READ_ONLY)
+        if(ha->pStream->StreamFlags & (STREAM_FLAG_READ_ONLY | STREAM_FLAG_ENCRYPTED_FILE))
             ha->dwFlags |= MPQ_FLAG_READ_ONLY;
 
         // Also remember if we shall check sector CRCs when reading file
@@ -263,7 +273,10 @@ bool WINAPI SFileOpenArchive(
                         // Wow.exe doesn't really care about format number if it's > 1,
                         // as long as the header size is greater or equal to 0x2C
                         if(dwHeaderSize > MPQ_HEADER_SIZE_V3)
+                        {
                             dwHeaderSize = MPQ_HEADER_SIZE_V3;
+                            bMpqHeaderTrimmed = true;
+                        }
                         if(dwHeaderSize >= MPQ_HEADER_SIZE_V2)
                             bFormatOK = true;
                         break;
@@ -318,9 +331,8 @@ bool WINAPI SFileOpenArchive(
         if(dwFlags & (MPQ_OPEN_NO_LISTFILE | MPQ_OPEN_NO_ATTRIBUTES))
             ha->dwFlags |= MPQ_FLAG_READ_ONLY;
 
-        // If the size of the header is greater than in WoW-Cataclysm BETA,
-        // force read only mode
-        if(ha->pHeader->dwHeaderSize > MPQ_HEADER_SIZE_V3)
+        // If we had to trim the MPQ header, force read-only access
+        if(bMpqHeaderTrimmed)
             ha->dwFlags |= MPQ_FLAG_READ_ONLY;
 
         // Clear the rest of the header
@@ -400,7 +412,7 @@ bool WINAPI SFileOpenArchive(
         }
 
         // Allocate all three MPQ tables
-        ha->pHashTable = ALLOCMEM(TMPQHash, dwHashTableSize);
+        ha->pHashTable     = ALLOCMEM(TMPQHash, dwHashTableSize);
         ha->pBlockTable    = ALLOCMEM(TMPQBlock, ha->dwBlockTableMax);
         ha->pExtBlockTable = ALLOCMEM(TMPQBlockEx, ha->dwBlockTableMax);
         if(!ha->pHashTable || !ha->pBlockTable || !ha->pExtBlockTable)

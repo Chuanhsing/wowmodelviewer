@@ -67,7 +67,25 @@ struct TPartFileStream : public TFileStream
     DWORD          PartCount;               // Number of file parts. Used by partial file stream
     DWORD          PartSize;                // Size of one part. Used by partial file stream
 
-    PART_FILE_MAP_ENTRY PartMap[1];          // File map, variable length
+    PART_FILE_MAP_ENTRY PartMap[1];         // File map, variable length
+};
+
+#define MPQE_CHUNK_SIZE 0x40                // Size of one chunk to be decrypted
+
+struct TEncryptedStream : public TFileStream
+{
+    BYTE Key[MPQE_CHUNK_SIZE];              // File key
+};
+
+//-----------------------------------------------------------------------------
+// Decryption keys
+
+BYTE MpqeKey_Starcraft2_Install[] =
+{
+    0x65, 0x78, 0x70, 0x61, 0x6e, 0x64, 0x20, 0x33, 0x32, 0x2d, 0x62, 0x79, 0x74, 0x65, 0x20, 0x6b,
+    0x41, 0x4e, 0x47, 0x59, 0x00, 0x00, 0x00, 0x00, 0x32, 0x39, 0x5a, 0x48, 0x36, 0x4e, 0x41, 0x32,
+    0x00, 0x00, 0x00, 0x00, 0x48, 0x52, 0x47, 0x46, 0x38, 0x55, 0x44, 0x47, 0x30, 0x30, 0x30, 0x30,
+    0x4e, 0x59, 0x38, 0x32, 0x47, 0x38, 0x4d, 0x4e, 0x30, 0x30, 0x30, 0x30, 0x36, 0x41, 0x33, 0x44
 };
 
 //-----------------------------------------------------------------------------
@@ -480,7 +498,7 @@ static bool File_Read(
         // we have to update the file position
         if(pByteOffset->QuadPart != pStream->RawFilePos.QuadPart)
         {
-            lseek64((intptr_t)pStream->hFile, (off_t)pByteOffset->QuadPart, SEEK_SET);
+            lseek64((intptr_t)pStream->hFile, (off64_t)pByteOffset->QuadPart, SEEK_SET);
             pStream->RawFilePos.QuadPart = pByteOffset->QuadPart;
         }
 
@@ -567,7 +585,7 @@ static bool File_Write(
         // we have to update the file position
         if(pByteOffset->QuadPart != pStream->RawFilePos.QuadPart)
         {
-            lseek64((intptr_t)pStream->hFile, (off_t)pByteOffset->QuadPart, SEEK_SET);
+            lseek64((intptr_t)pStream->hFile, (off64_t)pByteOffset->QuadPart, SEEK_SET);
             pStream->RawFilePos.QuadPart = pByteOffset->QuadPart;
         }
 
@@ -835,6 +853,217 @@ static bool PartFile_SetSize(
 }
 
 //-----------------------------------------------------------------------------
+// Stream functions - encrypted stream
+
+static DWORD Rol32(DWORD dwValue, DWORD dwRolCount)
+{
+    DWORD dwShiftRight = 32 - dwRolCount;
+
+    return (dwValue << dwRolCount) | (dwValue >> dwShiftRight);
+}
+
+static void DecryptMpqChunk(
+    LPDWORD MpqData,
+    LPBYTE pbKey,
+    PLARGE_INTEGER pByteOffset,
+    DWORD dwLength)
+{
+    LARGE_INTEGER ChunkOffset;
+    DWORD KeyShuffled[0x10];
+    DWORD KeyMirror[0x10];
+    DWORD RoundCount = 0x14;
+
+    // Prepare the key
+    ChunkOffset.QuadPart = pByteOffset->QuadPart / MPQE_CHUNK_SIZE;
+    memcpy(KeyMirror, pbKey, MPQE_CHUNK_SIZE);
+    BSWAP_ARRAY32_UNSIGNED(KeyMirror, MPQE_CHUNK_SIZE);
+    KeyMirror[0x05] = ChunkOffset.HighPart;
+    KeyMirror[0x08] = ChunkOffset.LowPart;
+
+    while(dwLength >= MPQE_CHUNK_SIZE)
+    {
+        // Shuffle the key - part 1
+        KeyShuffled[0x0E] = KeyMirror[0x00];
+        KeyShuffled[0x0C] = KeyMirror[0x01];
+        KeyShuffled[0x05] = KeyMirror[0x02];
+        KeyShuffled[0x0F] = KeyMirror[0x03];
+        KeyShuffled[0x0A] = KeyMirror[0x04];
+        KeyShuffled[0x07] = KeyMirror[0x05];
+        KeyShuffled[0x0B] = KeyMirror[0x06];
+        KeyShuffled[0x09] = KeyMirror[0x07];
+        KeyShuffled[0x03] = KeyMirror[0x08];
+        KeyShuffled[0x06] = KeyMirror[0x09];
+        KeyShuffled[0x08] = KeyMirror[0x0A];
+        KeyShuffled[0x0D] = KeyMirror[0x0B];
+        KeyShuffled[0x02] = KeyMirror[0x0C];
+        KeyShuffled[0x04] = KeyMirror[0x0D];
+        KeyShuffled[0x01] = KeyMirror[0x0E];
+        KeyShuffled[0x00] = KeyMirror[0x0F];
+        
+        // Shuffle the key - part 2
+        for(DWORD i = 0; i < RoundCount; i += 2)
+        {
+            KeyShuffled[0x0A] = KeyShuffled[0x0A] ^ Rol32((KeyShuffled[0x0E] + KeyShuffled[0x02]), 0x07);
+            KeyShuffled[0x03] = KeyShuffled[0x03] ^ Rol32((KeyShuffled[0x0A] + KeyShuffled[0x0E]), 0x09);
+            KeyShuffled[0x02] = KeyShuffled[0x02] ^ Rol32((KeyShuffled[0x03] + KeyShuffled[0x0A]), 0x0D);
+            KeyShuffled[0x0E] = KeyShuffled[0x0E] ^ Rol32((KeyShuffled[0x02] + KeyShuffled[0x03]), 0x12);
+
+            KeyShuffled[0x07] = KeyShuffled[0x07] ^ Rol32((KeyShuffled[0x0C] + KeyShuffled[0x04]), 0x07);
+            KeyShuffled[0x06] = KeyShuffled[0x06] ^ Rol32((KeyShuffled[0x07] + KeyShuffled[0x0C]), 0x09);
+            KeyShuffled[0x04] = KeyShuffled[0x04] ^ Rol32((KeyShuffled[0x06] + KeyShuffled[0x07]), 0x0D);
+            KeyShuffled[0x0C] = KeyShuffled[0x0C] ^ Rol32((KeyShuffled[0x04] + KeyShuffled[0x06]), 0x12);
+
+            KeyShuffled[0x0B] = KeyShuffled[0x0B] ^ Rol32((KeyShuffled[0x05] + KeyShuffled[0x01]), 0x07);
+            KeyShuffled[0x08] = KeyShuffled[0x08] ^ Rol32((KeyShuffled[0x0B] + KeyShuffled[0x05]), 0x09);
+            KeyShuffled[0x01] = KeyShuffled[0x01] ^ Rol32((KeyShuffled[0x08] + KeyShuffled[0x0B]), 0x0D);
+            KeyShuffled[0x05] = KeyShuffled[0x05] ^ Rol32((KeyShuffled[0x01] + KeyShuffled[0x08]), 0x12);
+
+            KeyShuffled[0x09] = KeyShuffled[0x09] ^ Rol32((KeyShuffled[0x0F] + KeyShuffled[0x00]), 0x07);
+            KeyShuffled[0x0D] = KeyShuffled[0x0D] ^ Rol32((KeyShuffled[0x09] + KeyShuffled[0x0F]), 0x09);
+            KeyShuffled[0x00] = KeyShuffled[0x00] ^ Rol32((KeyShuffled[0x0D] + KeyShuffled[0x09]), 0x0D);
+            KeyShuffled[0x0F] = KeyShuffled[0x0F] ^ Rol32((KeyShuffled[0x00] + KeyShuffled[0x0D]), 0x12);
+
+            KeyShuffled[0x04] = KeyShuffled[0x04] ^ Rol32((KeyShuffled[0x0E] + KeyShuffled[0x09]), 0x07);
+            KeyShuffled[0x08] = KeyShuffled[0x08] ^ Rol32((KeyShuffled[0x04] + KeyShuffled[0x0E]), 0x09);
+            KeyShuffled[0x09] = KeyShuffled[0x09] ^ Rol32((KeyShuffled[0x08] + KeyShuffled[0x04]), 0x0D);
+            KeyShuffled[0x0E] = KeyShuffled[0x0E] ^ Rol32((KeyShuffled[0x09] + KeyShuffled[0x08]), 0x12);
+
+            KeyShuffled[0x01] = KeyShuffled[0x01] ^ Rol32((KeyShuffled[0x0C] + KeyShuffled[0x0A]), 0x07);
+            KeyShuffled[0x0D] = KeyShuffled[0x0D] ^ Rol32((KeyShuffled[0x01] + KeyShuffled[0x0C]), 0x09);
+            KeyShuffled[0x0A] = KeyShuffled[0x0A] ^ Rol32((KeyShuffled[0x0D] + KeyShuffled[0x01]), 0x0D);
+            KeyShuffled[0x0C] = KeyShuffled[0x0C] ^ Rol32((KeyShuffled[0x0A] + KeyShuffled[0x0D]), 0x12);
+
+            KeyShuffled[0x00] = KeyShuffled[0x00] ^ Rol32((KeyShuffled[0x05] + KeyShuffled[0x07]), 0x07);
+            KeyShuffled[0x03] = KeyShuffled[0x03] ^ Rol32((KeyShuffled[0x00] + KeyShuffled[0x05]), 0x09);
+            KeyShuffled[0x07] = KeyShuffled[0x07] ^ Rol32((KeyShuffled[0x03] + KeyShuffled[0x00]), 0x0D);
+            KeyShuffled[0x05] = KeyShuffled[0x05] ^ Rol32((KeyShuffled[0x07] + KeyShuffled[0x03]), 0x12);
+
+            KeyShuffled[0x02] = KeyShuffled[0x02] ^ Rol32((KeyShuffled[0x0F] + KeyShuffled[0x0B]), 0x07);
+            KeyShuffled[0x06] = KeyShuffled[0x06] ^ Rol32((KeyShuffled[0x02] + KeyShuffled[0x0F]), 0x09);
+            KeyShuffled[0x0B] = KeyShuffled[0x0B] ^ Rol32((KeyShuffled[0x06] + KeyShuffled[0x02]), 0x0D);
+            KeyShuffled[0x0F] = KeyShuffled[0x0F] ^ Rol32((KeyShuffled[0x0B] + KeyShuffled[0x06]), 0x12);
+        }
+
+        // Decrypt one data chunk
+        BSWAP_ARRAY32_UNSIGNED(MpqData, MPQE_CHUNK_SIZE);
+        MpqData[0x00] = MpqData[0x00] ^ (KeyShuffled[0x0E] + KeyMirror[0x00]);
+        MpqData[0x01] = MpqData[0x01] ^ (KeyShuffled[0x04] + KeyMirror[0x0D]);
+        MpqData[0x02] = MpqData[0x02] ^ (KeyShuffled[0x08] + KeyMirror[0x0A]);
+        MpqData[0x03] = MpqData[0x03] ^ (KeyShuffled[0x09] + KeyMirror[0x07]);
+        MpqData[0x04] = MpqData[0x04] ^ (KeyShuffled[0x0A] + KeyMirror[0x04]);
+        MpqData[0x05] = MpqData[0x05] ^ (KeyShuffled[0x0C] + KeyMirror[0x01]);
+        MpqData[0x06] = MpqData[0x06] ^ (KeyShuffled[0x01] + KeyMirror[0x0E]);
+        MpqData[0x07] = MpqData[0x07] ^ (KeyShuffled[0x0D] + KeyMirror[0x0B]);
+        MpqData[0x08] = MpqData[0x08] ^ (KeyShuffled[0x03] + KeyMirror[0x08]);
+        MpqData[0x09] = MpqData[0x09] ^ (KeyShuffled[0x07] + KeyMirror[0x05]);
+        MpqData[0x0A] = MpqData[0x0A] ^ (KeyShuffled[0x05] + KeyMirror[0x02]);
+        MpqData[0x0B] = MpqData[0x0B] ^ (KeyShuffled[0x00] + KeyMirror[0x0F]);
+        MpqData[0x0C] = MpqData[0x0C] ^ (KeyShuffled[0x02] + KeyMirror[0x0C]);
+        MpqData[0x0D] = MpqData[0x0D] ^ (KeyShuffled[0x06] + KeyMirror[0x09]);
+        MpqData[0x0E] = MpqData[0x0E] ^ (KeyShuffled[0x0B] + KeyMirror[0x06]);
+        MpqData[0x0F] = MpqData[0x0F] ^ (KeyShuffled[0x0F] + KeyMirror[0x03]);
+        BSWAP_ARRAY32_UNSIGNED(MpqData, MPQE_CHUNK_SIZE);
+
+        // Update byte offset in the key
+        KeyMirror[0x08]++;
+        if(KeyMirror[0x08] == 0)
+            KeyMirror[0x05]++;
+
+        // Move pointers and decrease number of bytes to decrypt
+        MpqData  += (MPQE_CHUNK_SIZE / sizeof(DWORD));
+        dwLength -= MPQE_CHUNK_SIZE;
+    }
+}
+
+static bool EncryptedFile_Read(
+    TEncryptedStream * pStream,             // Pointer to an open stream
+    LARGE_INTEGER * pByteOffset,            // Pointer to file byte offset. If NULL, it reads from the current position
+    void * pvBuffer,                        // Pointer to data to be read
+    DWORD dwBytesToRead)                    // Number of bytes to read from the file
+{
+    LARGE_INTEGER StartOffset;              // Offset of the first byte to be read from the file
+    LARGE_INTEGER ByteOffset;               // Offset that the caller wants
+    LARGE_INTEGER EndOffset;                // End offset that is to be read from the file
+    DWORD dwBytesToAllocate;
+    DWORD dwBytesToDecrypt;
+    DWORD dwOffsetInCache;
+    LPBYTE pbMpqData = NULL;
+    bool bResult = false;
+
+    // Get the byte offset
+    if(pByteOffset != NULL)
+        ByteOffset.QuadPart = pByteOffset->QuadPart;
+    else
+        ByteOffset.QuadPart = pStream->RawFilePos.QuadPart;
+
+    // Cut it down to MPQE chunk size
+    StartOffset.QuadPart = ByteOffset.QuadPart;
+    StartOffset.LowPart = StartOffset.LowPart & ~(MPQE_CHUNK_SIZE - 1);
+    EndOffset.QuadPart = ByteOffset.QuadPart + dwBytesToRead;
+
+    // Calculate number of bytes to decrypt
+    dwBytesToDecrypt = (DWORD)(EndOffset.QuadPart - StartOffset.QuadPart);
+    dwBytesToAllocate = (dwBytesToDecrypt + (MPQE_CHUNK_SIZE - 1)) & ~(MPQE_CHUNK_SIZE - 1);
+
+    // Allocate buffers for encrypted and decrypted data
+    pbMpqData = ALLOCMEM(BYTE, dwBytesToAllocate);
+    if(pbMpqData)
+    {
+        // Get the offset of the desired data in the cache
+        dwOffsetInCache = (DWORD)(ByteOffset.QuadPart - StartOffset.QuadPart);
+
+        // Read the file from the stream as-is
+        if(File_Read(pStream, &StartOffset, pbMpqData, dwBytesToDecrypt))
+        {
+            // Decrypt the data
+            DecryptMpqChunk((LPDWORD)pbMpqData, pStream->Key, &StartOffset, dwBytesToAllocate);
+
+            // Copy the decrypted data
+            memcpy(pvBuffer, pbMpqData + dwOffsetInCache, dwBytesToRead);
+            bResult = true;
+        }
+        else
+        {
+            assert(FALSE);
+        }
+
+        // Free decryption buffer        
+        FREEMEM(pbMpqData);
+    }
+
+    // Free buffers and exit
+    return bResult;
+}
+
+static bool EncryptedFile_Write(
+    TEncryptedStream * pStream,             // Pointer to an open stream
+    LARGE_INTEGER * pByteOffset,            // Pointer to file byte offset. If NULL, it reads from the current position
+    const void * pvBuffer,                  // Pointer to data to be read
+    DWORD dwBytesToRead)                    // Number of bytes to read from the file
+{
+    // Keep compiler happy
+    dwBytesToRead = dwBytesToRead;
+    pByteOffset = pByteOffset;
+    pvBuffer = pvBuffer;
+    pStream = pStream;
+
+    // Not allowed
+    return false;
+}
+
+static bool EncryptedFile_SetSize(
+    TEncryptedStream * pStream,             // Pointer to an open stream
+    LARGE_INTEGER * pNewSize)               // new size of the file
+{
+    // Keep compiler happy
+    pStream = pStream;
+    pNewSize = pNewSize;
+
+    // Not allowed
+    return false;
+}
+
+//-----------------------------------------------------------------------------
 // Public functions
 
 //
@@ -1021,6 +1250,44 @@ TFileStream * FileStream_OpenFile(
     // reset the file position to begin of the file
     FileStream_Read(pStream, &ByteOffset, NULL, 0);
     return pStream;
+}
+
+TFileStream * FileStream_OpenEncrypted(const char * szFileName)
+{
+    TEncryptedStream * pEncryptedStream;
+    TFileStream * pStream;
+    
+    // Open the file as raw stream
+    pStream = FileStream_OpenRawFile(szFileName, false);
+    if(pStream)
+    {
+        // Allocate new stream for handling encryption
+        pEncryptedStream = ALLOCMEM(TEncryptedStream, 1);
+        if(pEncryptedStream != NULL)
+        {
+            // Copy the file stream to the encrypted stream
+            memset(pEncryptedStream, 0, sizeof(TEncryptedStream));
+            memcpy(pEncryptedStream, pStream, sizeof(TFileStream));
+
+            // Assign functions
+            pEncryptedStream->StreamRead    = (STREAM_READ)EncryptedFile_Read;
+            pEncryptedStream->StreamWrite   = (STREAM_WRITE)EncryptedFile_Write;
+            pEncryptedStream->StreamSetSize = (STREAM_SETSIZE)EncryptedFile_SetSize;
+            pEncryptedStream->StreamFlags  |= (STREAM_FLAG_READ_ONLY | STREAM_FLAG_ENCRYPTED_FILE);
+
+            // Get the file key
+            // Note: So far, the only encrypted MPQs are in Starcraft 2 installer.
+            // We extend this later if we see more encrypted MPQs in the wild.
+            memcpy(pEncryptedStream->Key, MpqeKey_Starcraft2_Install, sizeof(MpqeKey_Starcraft2_Install));
+            BSWAP_ARRAY32_UNSIGNED(pEncryptedStream->Key, sizeof(MpqeKey_Starcraft2_Install));
+
+            FREEMEM(pStream);
+        }
+
+        return pEncryptedStream;
+    }
+
+    return NULL;
 }
 
 // This function returns the current file position
