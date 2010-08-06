@@ -166,11 +166,8 @@ void getGamePath()
 	unsigned char path[1024];
 	memset(path, 0, sizeof(path));
 
-	wxString sNames[3];
-	int sTypes[3];
-
-	int nNames = 0;
-	int sName = 0;
+	wxArrayString sNames;
+	wxString sName = wxEmptyString;
 
 	// if it failed, look for World of Warcraft install
 	const wxString regpaths[] = {
@@ -192,28 +189,19 @@ void getGamePath()
 			s = sizeof(path);
 			l = RegQueryValueEx(key, _T("InstallPath"), 0, &t,(LPBYTE)path, &s);
 			if (l == ERROR_SUCCESS && wxDir::Exists(path)) {
-				sNames[nNames] = path;
-				if (i==1)
-					sTypes[nNames] = 1;
-				else
-					sTypes[nNames] = 0;
-				nNames++;
+				sNames.Add(path);
 			}
 			RegCloseKey(key);
 		}
 	}
-	if (nNames == 1)
-		sName = 0;
-	else if (nNames >= 1) {
-		sName = wxGetSingleChoiceIndex(_T("Please select a Path:"), _T("Path"), nNames, sNames);
-		if (sName == -1)
-			sName = 0;
-	} else
-		sName = -1;
+	if (sNames.size() == 1)
+		sName = sNames[0];
+	else if (sNames.size() > 1)
+		sName = wxGetSingleChoice(_T("Please select a Path:"), _T("Path"), sNames);
 
 	// If we found an install then set the game path, otherwise just set to C:\ for now
-	if (sName >= 0) {
-		gamePath = sNames[sName];
+	if (sName != wxEmptyString) {
+		gamePath = sName;
 		gamePath.Append(_T("Data\\"));
 	} else {
 		gamePath = _T("C:")+SLASH;
