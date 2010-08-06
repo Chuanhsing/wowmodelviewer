@@ -844,8 +844,10 @@ void AnimControl::OnButton(wxCommandEvent &event)
 		SetAnimFrame(g_selModel->animManager->GetFrame());
 	} else if (id == ID_ANIM_SECONDARY_TEXT) {
 		int count = wxAtoi(lockText->GetValue());
-		if (count <= 0)
+		if (count < 0)
 			count = UPPER_BODY_BONES;
+		if (count > BONE_MAX)
+			count = BONE_MAX;
 		g_selModel->animManager->SetSecondaryCount(count);
 	}
 }

@@ -345,21 +345,30 @@ bool WowModelViewApp::LoadSettings()
 	if (gamePath.Last() != SLASH)
 		gamePath.Append(SLASH, 1);
 
-	if (!wxFileExists(gamePath + wxT("common.MPQ"))){
+	// 4.0.0.12694 remove common.MPQ and add world.MPQ
+	if (!wxFileExists(gamePath + wxT("common.MPQ")) && !wxFileExists(gamePath + wxT("world.MPQ"))){
 		wxLogMessage(_T("World of Warcraft Data Directory Not Found. Returned GamePath: %s"),gamePath.c_str());
 		wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("Fatal Error: Could not find your World of Warcraft Data folder."), wxT("World of Warcraft Not Found"), wxOK | wxICON_ERROR);
 		dial->ShowModal();
 		return true;
 	}
 
-	
 	if (mpqArchives.GetCount()==0) {
 		//enUS(enGB), koKR, frFR, deDE, zhCN, zhTW, esES, ruRU
-		const wxString locales[] = {_T("enUS"), _T("koKR"), _T("frFR"), _T("deDE"), _T("zhCN"),  _T("zhTW"),  _T("esES"),  _T("ruRU")};
-		const wxString locales2[] = {_T("enGB"), wxEmptyString, wxEmptyString, wxEmptyString, _T("enCN"), _T("enTW"), _T("esMX"), wxEmptyString};
+		const wxString locales[] = {_T("enUS"), _T("koKR"), _T("frFR"), _T("deDE"), 
+			_T("zhCN"), _T("zhTW"), _T("esES"), _T("ruRU")};
+		const wxString locales2[] = {_T("enGB"), wxEmptyString, wxEmptyString, wxEmptyString, 
+			_T("enCN"), _T("enTW"), _T("esMX"), wxEmptyString};
 
-		const wxString defaultArchives[] = {_T("patch-9.mpq"),_T("patch-8.mpq"),_T("patch-7.mpq"),_T("patch-6.mpq"),_T("patch-5.mpq"),_T("patch-4.mpq"),_T("patch-3.mpq"),_T("patch-2.mpq"),_T("patch.mpq"),_T("expansion3.mpq"),_T("expansion2.mpq"),_T("lichking.mpq"),_T("expansion.mpq"),_T("common-3.mpq"),_T("common-2.mpq"), _T("common.mpq")};
-		const wxString localeArchives[] = {_T("patch-%s-9.mpq"),_T("patch-%s-8.mpq"),_T("patch-%s-7.mpq"),_T("patch-%s-6.mpq"),_T("patch-%s-5.mpq"),_T("patch-%s-4.mpq"),_T("patch-%s-3.mpq"), _T("patch-%s-2.mpq"), _T("patch-%s.mpq"), _T("expansion3-locale-%s.mpq"), _T("expansion2-locale-%s.mpq"), _T("lichking-locale-%s.mpq"), _T("expansion-locale-%s.mpq"), _T("locale-%s.mpq"), _T("base-%s.mpq")};
+		const wxString defaultArchives[] = {_T("patch-9.mpq"),_T("patch-8.mpq"),_T("patch-7.mpq"),_T("patch-6.mpq"),
+			_T("patch-5.mpq"),_T("patch-4.mpq"),_T("patch-3.mpq"),_T("patch-2.mpq"),_T("patch.mpq"),
+			_T("expansion3.mpq"),_T("expansion2.mpq"),_T("expansion1.mpq"),_T("lichking.mpq"),_T("expansion.mpq"),
+			_T("world.mpq"),_T("art.mpq"),_T("common-3.mpq"),_T("common-2.mpq"), _T("common.mpq")};
+		const wxString localeArchives[] = {_T("patch-%s-9.mpq"),_T("patch-%s-8.mpq"),_T("patch-%s-7.mpq"),
+			_T("patch-%s-6.mpq"),_T("patch-%s-5.mpq"),_T("patch-%s-4.mpq"),_T("patch-%s-3.mpq"), _T("patch-%s-2.mpq"), 
+			_T("patch-%s.mpq"), _T("expansion3-locale-%s.mpq"), _T("expansion2-locale-%s.mpq"), 
+			_T("expansion1-locale-%s.mpq"), _T("lichking-locale-%s.mpq"), _T("expansion-locale-%s.mpq"), 
+			_T("locale-%s.mpq"), _T("base-%s.mpq")};
 
 		wxArrayString baseMpqs;
 		wxDir::GetAllFiles(gamePath, &baseMpqs, wxEmptyString, wxDIR_FILES);
