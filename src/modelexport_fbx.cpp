@@ -16,6 +16,8 @@
 #define IOS_REF (*(pSdkManager->GetIOSettings()))
 #endif
 
+#define SCALE_FACTOR 50.0f
+
 wxString g_fbx_meshname;
 wxString g_fbx_basename;
 wxString g_fbx_name;
@@ -312,7 +314,7 @@ void CreateMesh(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const char*
 	// Fill data.
 	for (size_t i = 0; i < num_of_vertices; i++) {
 		ModelVertex &v = m->origVertices[i];
-		vertices[i].Set(v.pos.x, v.pos.y, v.pos.z);
+		vertices[i].Set(v.pos.x * SCALE_FACTOR, v.pos.y * SCALE_FACTOR, v.pos.z * SCALE_FACTOR);
 		layer_normal->GetDirectArray().Add(KFbxVector4(v.normal.x, v.normal.y, v.normal.z));
 		layer_texcoord->GetDirectArray().Add(KFbxVector2(v.texcoords.x, 1.0 - v.texcoords.y));
 	}
@@ -487,8 +489,20 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 	KFbxSkin* skin = KFbxSkin::Create(scene, "");
 	std::vector<KFbxNode*> bone_nodes;
 	std::vector<KFbxCluster*> bone_clusters;
-	KFbxNode* bone_root_node = 0;
+	std::vector<KFbxSkeleton::ESkeletonType> bone_types;
 	size_t num_of_bones = m->header.nBones;
+	// Set bone type.
+	for (size_t i = 0; i < num_of_bones; ++i) {
+		Bone &bone = m->bones[i];
+		if (bone.parent == -1) {
+			bone_types.push_back(KFbxSkeleton::eROOT);
+		} else {
+			if (bone_types[bone.parent] != KFbxSkeleton::eROOT)
+				bone_types[bone.parent] = KFbxSkeleton::eLIMB;
+			bone_types.push_back(KFbxSkeleton::eLIMB_NODE);
+		}
+	}
+	// Create bone.
 	for (size_t i = 0; i < num_of_bones; ++i) {
 		Bone &bone = m->bones[i];
 		Vec3D trans = bone.pivot;
@@ -496,7 +510,6 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 		if (pid > -1)
 			trans -= m->bones[pid].pivot;
 
-		
 		KString bone_name(g_fbx_name.c_str());
 		bone_name += "_bone_";
 		int j = 0;
@@ -510,18 +523,23 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 
 		KFbxNode* skeleton_node = KFbxNode::Create(scene, bone_name);
 		bone_nodes.push_back(skeleton_node);
-		skeleton_node->LclTranslation.Set(KFbxVector4(trans.x, trans.y, trans.z));
+		skeleton_node->LclTranslation.Set(KFbxVector4(trans.x * SCALE_FACTOR, trans.y * SCALE_FACTOR, trans.z * SCALE_FACTOR));
 
 		KFbxSkeleton* skeleton_attribute = KFbxSkeleton::Create(scene, bone_name);
-		if (pid == -1) {
+		if (bone_types[i] == KFbxSkeleton::eROOT) {
 			skeleton_attribute->SetSkeletonType(KFbxSkeleton::eROOT);
+			skeleton_attribute->Size.Set(100.0 * SCALE_FACTOR);
 			node->AddChild(skeleton_node);
-			bone_root_node = skeleton_node;
+		} else if (bone_types[i] == KFbxSkeleton::eLIMB) {
+			skeleton_attribute->SetSkeletonType(KFbxSkeleton::eLIMB);
+			skeleton_attribute->LimbLength.Set(100.0 * SCALE_FACTOR * (sqrtf(trans.x * trans.x + trans.y * trans.y + trans.z * trans.z)));
+			bone_nodes[pid]->AddChild(skeleton_node);
 		} else {
 			skeleton_attribute->SetSkeletonType(KFbxSkeleton::eLIMB_NODE);
+			skeleton_attribute->Size.Set(100.0 * SCALE_FACTOR);
 			bone_nodes[pid]->AddChild(skeleton_node);
 		}
-		skeleton_node->SetNodeAttribute(skeleton_attribute);    
+		skeleton_node->SetNodeAttribute(skeleton_attribute);
 
 		KFbxCluster* cluster = KFbxCluster::Create(scene, "");
 		bone_clusters.push_back(cluster);
@@ -613,19 +631,19 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 
 							t_curve_x->KeyModifyBegin();
 							int key_index = t_curve_x->KeyAdd(time);
-							t_curve_x->KeySetValue(key_index, v.x);
+							t_curve_x->KeySetValue(key_index, v.x * SCALE_FACTOR);
 							t_curve_x->KeySetInterpolation(key_index, bone.trans.type == INTERPOLATION_LINEAR ? KFbxAnimCurveDef::eINTERPOLATION_LINEAR : KFbxAnimCurveDef::eINTERPOLATION_CUBIC);
 							t_curve_x->KeyModifyEnd();
 
 							t_curve_y->KeyModifyBegin();
 							key_index = t_curve_y->KeyAdd(time);
-							t_curve_y->KeySetValue(key_index, v.y);
+							t_curve_y->KeySetValue(key_index, v.y * SCALE_FACTOR);
 							t_curve_y->KeySetInterpolation(key_index, bone.trans.type == INTERPOLATION_LINEAR ? KFbxAnimCurveDef::eINTERPOLATION_LINEAR : KFbxAnimCurveDef::eINTERPOLATION_CUBIC);
 							t_curve_y->KeyModifyEnd();
 
 							t_curve_z->KeyModifyBegin();
 							key_index = t_curve_z->KeyAdd(time);
-							t_curve_z->KeySetValue(key_index, v.z);
+							t_curve_z->KeySetValue(key_index, v.z * SCALE_FACTOR);
 							t_curve_z->KeySetInterpolation(key_index, bone.trans.type == INTERPOLATION_LINEAR ? KFbxAnimCurveDef::eINTERPOLATION_LINEAR : KFbxAnimCurveDef::eINTERPOLATION_CUBIC);
 							t_curve_z->KeyModifyEnd();
 						}
@@ -692,7 +710,7 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 // FBX
 void ExportM2toFBX(Model* m, const char* fn, bool init) {
 	g_fbx_meshname = wxString(fn, wxConvUTF8);
-	g_fbx_basename = (g_fbx_meshname.Right(9).CmpNoCase(_T(".fbx")) == 0) ? (g_fbx_meshname.Left(g_fbx_meshname.Length() - 9)) : g_fbx_meshname;
+	g_fbx_basename = (g_fbx_meshname.Right(4).CmpNoCase(_T(".fbx")) == 0) ? (g_fbx_meshname.Left(g_fbx_meshname.Length() - 4)) : g_fbx_meshname;
 	g_fbx_name = g_fbx_basename.AfterLast('\\');
 
 	LogExportData(_T("FBX"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
