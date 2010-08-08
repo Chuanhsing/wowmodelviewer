@@ -49,6 +49,7 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	EVT_MENU(ID_MODELEXPORT_XHTML, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_OGRE, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_FBX, ModelViewer::OnExport)
+	EVT_MENU(ID_MODELEXPORT_M3, ModelViewer::OnExport)
 	// --
 	EVT_MENU(ID_FILE_RESETLAYOUT, ModelViewer::OnToggleCommand)
 	// --
@@ -298,6 +299,7 @@ void ModelViewer::InitMenu()
 	exportMenu->Append(ID_MODELEXPORT_XHTML, _("X3D in XHTML..."));
 	exportMenu->Append(ID_MODELEXPORT_OGRE, _("Ogre XML..."));
 	exportMenu->Append(ID_MODELEXPORT_FBX, _("FBX..."));
+	exportMenu->Append(ID_MODELEXPORT_M3, _("M3..."));
 
 	// -= Enable/Disable Model Exporters =-
 	// If you don't support WMOs or M2 files yet, you can disable export for that in filecontrol.cpp,
@@ -2939,6 +2941,18 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				ExportWMOtoOgreXml(canvas->wmo, dialog.GetPath().fn_str());
 			}
 		}
+#ifdef	_DEBUG
+	} else if (id == ID_MODELEXPORT_M3) {
+		newfilename << _T(".m3");
+		if (canvas->model) {
+			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("Starcraft II (*.m3)|*.m3"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			if (dialog.ShowModal()==wxID_OK) {
+				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+
+				ExportM2toM3(canvas->model, dialog.GetPath().fn_str(), init);
+			}
+		}
+#endif
 #ifdef	_WINDOWS
 	} else if (id == ID_MODELEXPORT_FBX) {
 		newfilename << _T(".fbx");

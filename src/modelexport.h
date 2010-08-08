@@ -90,9 +90,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init);
 void ExportWMOtoLWO(WMO *m, const char *fn);
 void ExportWMOObjectstoLWO(WMO *m, const char *fn);
 void ExportADTtoLWO(MapTile *m, const char *fn);
-#ifdef _DEBUG
-	void ExportWMOtoLWO2(WMO *m, const char *fn);
-#endif
+void ExportWMOtoLWO2(WMO *m, const char *fn);
 
 // Wavefront Object
 void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init);
@@ -123,5 +121,8 @@ void ExportWMOtoOgreXml(WMO *m, const char *fn);
 // FBX
 void ExportM2toFBX(Model* m, const char* fn, bool init);
 void ExportWMOtoFBX(WMO* m, const char* fn);
+
+// M3
+void ExportM2toM3(Model* m, const char* fn, bool init);
 
 #endif
