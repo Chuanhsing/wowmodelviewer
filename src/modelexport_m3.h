@@ -3,27 +3,13 @@
 
 /* http://code.google.com/p/libm3/wiki/Structs */
 
-struct VEC2
-{
-    float x, y;
-};
-
-struct VEC3
-{
-    float x, y, z;
-};
-
-struct VEC4
-{
-    float x, y, z, w;
-};
-
+// Size = 16 byte / 0x10 byte
 struct QUAT
 {
     float x, y, z, w;
 };
 
-//Size = 32 byte / 0x20 byte
+// Size = 32 byte / 0x20 byte
 struct sphere
 {
 	Vec3D min;
@@ -83,30 +69,30 @@ struct MD34
 // Size = 784 byte / 0x310 byte
 struct MODL
 {
-	Reference Modelname;
+	Reference name;
 	uint32 type;
-	Reference mSEQS;
-	Reference mSTC;
-	Reference mSTG;
+	Reference mSEQS;		// sequenceHeader
+	Reference mSTC;			// sequenceData
+	Reference mSTG;			// sequenceLookup
 	Vec3D v3d1;
 	uint32 d10;
 	Reference mSTS;
 	Reference mBone;
 	uint32 nSkinnedBones;
 	uint32 vertFlags;
-	Reference mVert;
-	Reference mDIV;
-	Reference mBoneLU;
+	Reference mVert;		// vertexData
+	Reference mDIV;			// views
+	Reference mBoneLU;		// boneLookup
 	sphere boundSphere;
 	int d2[15];
 	Reference mAttach;
-	Reference mAttachLU;
-	Reference mLite;
+	Reference mAttachLU;	// attachLookup
+	Reference mLite;		// Lights
 	Reference mSHBX;
-	Reference mCam;
+	Reference mCam;			// Camera
 	Reference D;
-	Reference mMatLU;
-	Reference mMat;
+	Reference mMatLU;		// materialLookup
+	Reference mMat;			// material
 	Reference mDIS;
 	Reference mCMP;
 	Reference mTER;
@@ -149,7 +135,7 @@ struct BONE
     /*0x10*/ int16 parent;
     /*0x12*/ uint16 s1;
     /*0x14*/ AnimRef transid; //unique animation ID ref
-    /*0x1C*/ VEC3 pos; //bone position is relative to parent bone and its rotation
+    /*0x1C*/ Vec3D pos; //bone position is relative to parent bone and its rotation
     /*0x28*/ int32 d2[4];
     /*0x38*/ AnimRef rotid;
     /*0x40*/ QUAT rot; //initial bone rotation
@@ -157,8 +143,8 @@ struct BONE
     /*0x5C*/ float f1;
     /*0x60*/ int32 d4;
     /*0x64*/ AnimRef scaleid;
-    /*0x6C*/ VEC3 scale; //initial scale
-    /*0x78*/ VEC3 v1;
+    /*0x6C*/ Vec3D scale; //initial scale
+    /*0x78*/ Vec3D v1;
     /*0x84*/ int32 d5[6];
     //appears to have another animation ref at 0x8C but not sure what for
 };
@@ -229,14 +215,15 @@ struct LAYR
     float f9[2];
 };
 
-// Size = 32 byte / 0x20 byte
+// Size = 52 byte / 0x34 byte
 // Incomplete
 struct DIV
 {
     /*0x00*/ Reference faces;
-    /*0x08*/ Reference REGN;
-    /*0x10*/ Reference BAT;
-    /*0x18*/ Reference MSEC;
+    /*0x0C*/ Reference REGN;	// submesh
+    /*0x18*/ Reference BAT;
+    /*0x24*/ Reference MSEC;
+    /*0x30*/ uint32 unk;
 };
 
 // Size = 14 byte / 0x0E byte
@@ -281,8 +268,8 @@ struct CAM
 {
     /*0x00*/ int32 d1;
     /*0x04*/ Reference name;
-    /*0x0C*/ uint16 flags1;
-    /*0x0E*/ uint16 flags2;
+    /*0x10*/ uint16 flags1;
+    /*0x12*/ uint16 flags2;
 };
 
 // Size = 388 byte / 0x184 byte
@@ -291,33 +278,33 @@ struct PROJ
 {
 };
 
-// Size = 96 byte/ 0x60 byte
+// Size = 100 byte/ 0x64 byte
 // Incomplete
 struct EVNT
 {
     /*0x00*/ Reference name;
-    /*0x08*/ int16 unk1[4];
-    /*0x10*/ float matrix[4][4];
-    /*0x50*/ int32 unk2[4];
+    /*0x0C*/ int16 unk1[4];
+    /*0x14*/ float matrix[4][4];
+    /*0x54*/ int32 unk2[4];
 };
 
-// Size = 16 byte / 0x10 byte
+// Size = 20 byte / 0x14 byte
 // Incomplete
 struct ATT
 {
     /*0x00*/ int32 unk;
     /*0x04*/ Reference name;
-    /*0x0C*/ int32 bone;
+    /*0x10*/ int32 bone;
 };
 
-// Size = 24 byte / 0x18 byte
+// Size = 32 byte / 0x20 byte
 // Complete
 struct SD
 {
     /*0x00*/ Reference timeline;
-    /*0x08*/ uint32 flags;
-    /*0x0C*/ uint32 length;
-    /*0x08*/ Reference data;
+    /*0x0C*/ uint32 flags;
+    /*0x10*/ uint32 length;
+    /*0x14*/ Reference data;
 };
 
 // Size = 96 byte / 0x60 byte
@@ -327,16 +314,15 @@ struct SEQS
     /*0x00*/ int32 d1;
     /*0x04*/ int32 d2;
     /*0x08*/ Reference name;
-    /*0x14*/ int32 d3;
-    /*0x18*/ int32 length;
+    /*0x14*/ int32 animStart;
+    /*0x18*/ int32 length;			// animLength
     /*0x1C*/ float moveSpeed;
     /*0x20*/ uint32 flags;
     /*0x24*/ uint32 frequency;
     /*0x28*/ uint32 ReplayStart;
-    /*0x2C*/ int32 unk[3];
+    /*0x2C*/ int32 d4[3];
     /*0x38*/ sphere boundSphere;
-    /*0x58*/ int32 d5;
-    /*0x5C*/ int32 d6;
+    /*0x58*/ int32 d5[2];
 };
 
 // Size = 4 byte / 0x04 byte
@@ -347,35 +333,56 @@ struct AnimationIndex
     /*0x02*/ uint16 sdind; //seq data array index
 };
 
-// Size = 140 byte / 0x8C byte
+// Size = 204 byte / 0xCC byte
 // Incomplete
+/*
+These blocks works like some sort of headers for sequences, referencing Sequence Data 
+blocks and some other stuff.
+
+Seems there can be more than one STC block per sequence if there are several versions 
+of an animation sequence. STG represents an STC lookup table for each SEQS entry. 
+Example: Cover Full, Cover Shield
+
+Bones, among other structures, reference the Sequence Data located in these structs for animation.
+*/
 struct STC
 {
     /*0x00*/ Reference name;
-    /*0x08*/ uint32 d1;
-    /*0x0C*/ uint16 indSEQ[2]; //points to animation in SEQS chunk, twice for some reason
-    /*0x10*/ Reference animid; //list of unique uint32s used in chunks with animation. The index of these correspond with the data in the next reference.
-    /*0x18*/ Reference animindex; //lookup table, connects animid with it's animation data, nEntries of AnimationIndex reference using U32_ id
-    /*0x20*/ uint32 d2;
-    /*0x24*/ Reference SeqData[13]; //SD3V - Trans, SD4Q - Rotation, SDR3 - Scale?, SDFG - Flags, SDMB - Bounding Boxes?
+    /*0x0C*/ uint32 d1;
+    /*0x10*/ uint16 indSEQ[2]; //points to animation in SEQS chunk, twice for some reason
+    /*0x14*/ Reference animid; //list of unique uint32s used in chunks with animation. The index of these correspond with the data in the next reference.
+    /*0x20*/ Reference animindex; //lookup table, connects animid with it's animation data, nEntries of AnimationIndex reference using U32_ id
+    /*0x2C*/ uint32 d2;
+    /*0x30*/ Reference Events;
+    /*0x3C*/ Reference r1;
+    /*0x48*/ Reference Trans; // SD3V - Trans
+    /*0x54*/ Reference Rot; // SD4Q - Rotation
+    /*0x60*/ Reference r2;
+    /*0x6C*/ Reference r3[6]; // SDR3 - Scale?, SDFG - Flags, SDMB - Bounding Boxes?
+    /*0xB4*/ Reference Flags;
+    /*0xC0*/ Reference bounds;
 };
 
-// Size = 24 byte / 0x18 byte
+// Size = 28 byte / 0x1C byte
 // Incomplete
 struct STS
 {
     /*0x00*/ Reference animid; // uint32
-    /*0x08*/ int32 unk[3];
-    /*0x14*/ int16 s1;
-    /*0x16*/ int16 s2;
+    /*0x0C*/ int32 unk[3];
+    /*0x18*/ int16 s1;
+    /*0x1A*/ int16 s2;
 };
 
-// Size = 16 byte / 0x10 byte
+// Size = 24 byte / 0x18 byte
 // Complete
+/*
+The number of STG blocks in a .m3 file equals the number of SEQS blocks, and tells 
+where in the STC list the animations of the corresponding SEQS block starts.
+*/
 struct STG
 {
     /*0x00*/ Reference name;
-    /*0x08*/ Reference stcID;
+    /*0x0C*/ Reference stcID;
 };
 
 // Size = 28 byte / 0x1C byte
@@ -393,6 +400,78 @@ struct IREF
     float matrix[4][4];
 };
 
+/*
+In the .m3 files, the vertex data seems to be contained within a uint8 block.
 
+MODL-> flags defines some vertex stuff:
+
+0x20000 = has vertices
+0x40000 = has 1 extra UV coords
+0x80000 = has 2 extra UV coords
+0x100000 = has 3 extra UV coords
+
+Each UV texture coordinate must be divided by 2046.0 to get its true float value. In 3ds 
+max, the Y-UV coord must be flipped (1 - UV.y) for textures to be displayed on the mesh 
+properly.
+
+Vertex Weighting‘ø
+
+Each vertex boneIndex is not an index into the global bone entries found in MODL but 
+rather a reference into the bonelookup. However, it's not just an index into the 
+bonelookup entries either. In order to find the correct bone to weight the vertice 
+to, the boneIndex value uses submesh information found in the REGN indBone value to 
+grab the right bone in the bonelookup entries. So in order to calculate the correct 
+boneIndex:
+
+1. Find which REGN entry the vertex belongs to
+2. Add the REGN.indBone to the vertex.boneIndex value
+3. Grab the bonelookup value your new index points to
+4. Get the bone the bonelookup value refers to
+*/
+struct Vertex32 // 32 byte
+{
+    Vec3D pos;
+    char boneWeight[4];
+    char boneIndex[4]; //index in boneLookup of vertex submesh
+    char normal[4];  // x, y, z, w (w is the scale)
+    uint16 uv[2];
+    char tangents[4];
+};
+
+struct Vertex36 // 36 byte
+{
+    Vec3D pos;
+    char boneWeight[4];
+    char boneIndex[4]; //index in boneLookup of vertex submesh
+    char normal[4];  // x, y, z, w (w is the scale)
+    uint16 uv1[2];
+    uint16 uv2[2];
+    char tangents[4];
+};
+
+struct Vertex40 // 40 byte
+{
+    Vec3D pos;
+    char boneWeight[4];
+    char boneIndex[4]; //index in boneLookup of vertex submesh
+    char normal[4];  // x, y, z, w (w is the scale)
+    uint16 uv1[2];
+    uint16 uv2[2];
+    uint16 uv3[2];
+    char tangents[4];
+};
+
+struct Vertex44 // 44 byte
+{
+    Vec3D pos;
+    char boneWeight[4];
+    char boneIndex[4]; //index in boneLookup of vertex submesh
+    char normal[4];  // x, y, z, w (w is the scale)
+    uint16 uv1[2];
+    uint16 uv2[2];
+    uint16 uv3[2];
+    uint16 uv4[2];
+    char tangents[4];
+};
 
 #endif
