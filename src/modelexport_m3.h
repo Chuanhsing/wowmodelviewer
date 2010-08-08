@@ -23,6 +23,7 @@ struct QUAT
     float x, y, z, w;
 };
 
+//Size = 32 byte / 0x20 byte
 struct sphere
 {
 	Vec3D min;
@@ -68,7 +69,7 @@ struct AnimRef
     /*0x04*/ uint32 animid; //a unique uint32 value referenced in STC.animid and STS.animid
 };
 
-// Size = 32 byte / 0x20 byte
+// Size = 24 byte / 0x18 byte
 // Complete
 struct MD34
 { 
@@ -76,7 +77,7 @@ struct MD34
     /*0x04*/ uint32 ofsRefs;
     /*0x08*/ uint32 nRefs;
 	/*0x0C*/ Reference mref;
-    /*0x18*/ char padding[8];
+	/*0x18*/ char padding[8];
 };
 
 // Size = 784 byte / 0x310 byte
@@ -319,22 +320,23 @@ struct SD
     /*0x08*/ Reference data;
 };
 
-// Size = 88 byte / 0x58 byte
+// Size = 96 byte / 0x60 byte
 // Incomplete
 struct SEQS
 {
     /*0x00*/ int32 d1;
     /*0x04*/ int32 d2;
     /*0x08*/ Reference name;
-    /*0x10*/ int32 d3;
-    /*0x14*/ int32 length;
-    /*0x18*/ int32 d4;
-    /*0x1C*/ uint32 flags;
-    /*0x20*/ int32 unk[5];
-    /*0x34*/ Vec3D extents[2];
-    /*0x4C*/ float radius;
-    /*0x50*/ int32 d5;
-    /*0x54*/ int32 d6;
+    /*0x14*/ int32 d3;
+    /*0x18*/ int32 length;
+    /*0x1C*/ float moveSpeed;
+    /*0x20*/ uint32 flags;
+    /*0x24*/ uint32 frequency;
+    /*0x28*/ uint32 ReplayStart;
+    /*0x2C*/ int32 unk[3];
+    /*0x38*/ sphere boundSphere;
+    /*0x58*/ int32 d5;
+    /*0x5C*/ int32 d6;
 };
 
 // Size = 4 byte / 0x04 byte
