@@ -292,6 +292,20 @@ static int CopyMpqFileSectors(
         }
     }
 
+    // If we have to save patch header, do it
+    if(nError == ERROR_SUCCESS && hf->pPatchHeader != NULL)
+    {
+        BSWAP_INT32_UNSIGNED(hf->pPatchHeader->dwLength);
+        BSWAP_INT32_UNSIGNED(hf->pPatchHeader->dwFlags);
+        BSWAP_INT32_UNSIGNED(hf->pPatchHeader->dwDataSize);
+        if(!FileStream_Write(pNewStream, NULL, hf->pPatchHeader, hf->pPatchHeader->dwLength))
+            nError = GetLastError();
+
+        // Note: In wow-update-12694.MPQ, the dwCSize doesn't
+        // include the patch header on some files.
+        dwCSize += hf->pPatchHeader->dwLength;
+    }
+
     // If we have to save sector offset table, do it.
     if(nError == ERROR_SUCCESS && hf->SectorOffsets != NULL)
     {
@@ -476,6 +490,15 @@ static int CopyMpqFiles(TMPQArchive * ha, DWORD * pFileKeys, TFileStream * pNewS
 
             // Set the file decryption key
             hf->dwFileKey = pFileKeys[pBlock - ha->pBlockTable];
+            hf->dwDataSize = pBlock->dwFSize;
+
+            // If the file is a patch file, load the patch header
+            if(pBlock->dwFlags & MPQ_FILE_PATCH_FILE)
+            {
+                nError = AllocatePatchHeader(hf, true);
+                if(nError != ERROR_SUCCESS)
+                    break;
+            }
 
             // Allocate buffers for file sector and sector offset table
             nError = AllocateSectorBuffer(hf);
@@ -487,6 +510,7 @@ static int CopyMpqFiles(TMPQArchive * ha, DWORD * pFileKeys, TFileStream * pNewS
             if(nError != ERROR_SUCCESS)
                 break;
 
+            // Also load sector checksums, if any
             if(pBlock->dwFlags & MPQ_FILE_SECTOR_CRC)
             {
                 nError = AllocateSectorChecksums(hf, false);

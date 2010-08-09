@@ -796,7 +796,7 @@ __TryAgain:
 
 static int TestArchiveOpenAndClose(const char * szMpqName)
 {
-    const char * szFileName1 = LISTFILE_NAME;
+    const char * szFileName1 = "deDE\\DBFilesClient\\CreatureFamily.dbc";
     const char * szFileName2 = MAKE_PATH(LISTFILE_NAME);
     HANDLE hFile1 = NULL;
     HANDLE hFile2 = NULL;
@@ -820,15 +820,14 @@ static int TestArchiveOpenAndClose(const char * szMpqName)
         }
     }
 
-    // Open local listfile
+    // Dummy read from the file
     if(nError == ERROR_SUCCESS)
-    {
-        if(!SFileOpenFileEx(hMpq, szFileName2, SFILE_OPEN_LOCAL_FILE, &hFile2))
-        {
-            nError = GetLastError();
-            printf("%s - file integrity error\n", szFileName2);
-        }
-    }
+	{
+		DWORD dwBytesRead = 0;
+		BYTE Buffer[0x1000];
+
+		SFileReadFile(hFile1, Buffer, sizeof(Buffer), &dwBytesRead);
+	}
 
     // Verify the MPQ listfile
     if(nError == ERROR_SUCCESS)
@@ -838,8 +837,6 @@ static int TestArchiveOpenAndClose(const char * szMpqName)
             nError = ERROR_CAN_NOT_COMPLETE;
     }
 
-    if(hFile2 != NULL)
-        SFileCloseFile(hFile2);
     if(hFile1 != NULL)
         SFileCloseFile(hFile1);
     if(hMpq != NULL)
@@ -1514,8 +1511,7 @@ int main(void)
 
     // Test the archive open and close
     if(nError == ERROR_SUCCESS)
-//      nError = TestArchiveOpenAndClose(MAKE_PATH("PartialMPQs/interface.MPQ.part"));
-        nError = TestArchiveOpenAndClose(MAKE_PATH("Starcraft II/Installer Tome 1.MPQE"));
+        nError = TestArchiveOpenAndClose(MAKE_PATH("Starcraft II/Installer UI 2 frFR.MPQE"));
                                                                              
 //  if(nError == ERROR_SUCCESS)
 //      nError = TestFindFiles(MAKE_PATH("Warcraft III/HumanEd.mpq"));
@@ -1539,7 +1535,7 @@ int main(void)
 
     // Compact the archive        
 //  if(nError == ERROR_SUCCESS)
-//      nError = TestMpqCompacting(MAKE_PATH("war3_orig.mpq"));
+//      nError = TestMpqCompacting(MAKE_PATH("wow-update-12694.MPQ"));
     
     // Create copy of the archive, appending some bytes before the MPQ header
 //  if(nError == ERROR_SUCCESS)

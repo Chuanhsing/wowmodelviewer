@@ -343,7 +343,8 @@ bool WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
         hf->RawFilePos.QuadPart = hf->MpqFilePos.QuadPart + ha->MpqPos.QuadPart;
 
         hf->dwHashIndex  = dwHashIndex;
-        hf->dwBlockIndex = dwBlockIndex; 
+        hf->dwBlockIndex = dwBlockIndex;
+        hf->dwDataSize   = pBlock->dwFSize;
 
         // If the MPQ has sector CRC enabled, enable if for the file
         if(ha->dwFlags & MPQ_FLAG_CHECK_SECTOR_CRC)
@@ -369,6 +370,13 @@ bool WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
             if(!SFileGetFileName(hf, hf->szFileName))
                 nError = GetLastError();
         }
+    }
+
+    // If the file is actually a patch file, we have to load the patch file header
+    if(nError == ERROR_SUCCESS && hf->pBlock->dwFlags & MPQ_FILE_PATCH_FILE)
+    {
+        assert(hf->pPatchHeader == NULL);
+        nError = AllocatePatchHeader(hf, true);
     }
 
     // Resolve pointers to file's attributes

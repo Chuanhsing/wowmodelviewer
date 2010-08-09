@@ -437,6 +437,7 @@ int SFileAddFile_Init(
         // Initialize the hash entry for the file
         hf->pHash->dwBlockIndex = hf->dwBlockIndex;
         hf->pHash->lcLocale = (USHORT)lcLocale;
+        hf->dwDataSize = dwFileSize;
 
         // Initialize the block table entry for the file
         hf->pBlockEx->wFilePosHigh = (USHORT)hf->MpqFilePos.HighPart;

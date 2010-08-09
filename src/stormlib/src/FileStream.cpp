@@ -78,17 +78,6 @@ struct TEncryptedStream : public TFileStream
 };
 
 //-----------------------------------------------------------------------------
-// Decryption keys
-
-BYTE MpqeKey_Starcraft2_Install[] =
-{
-    0x65, 0x78, 0x70, 0x61, 0x6e, 0x64, 0x20, 0x33, 0x32, 0x2d, 0x62, 0x79, 0x74, 0x65, 0x20, 0x6b,
-    0x41, 0x4e, 0x47, 0x59, 0x00, 0x00, 0x00, 0x00, 0x32, 0x39, 0x5a, 0x48, 0x36, 0x4e, 0x41, 0x32,
-    0x00, 0x00, 0x00, 0x00, 0x48, 0x52, 0x47, 0x46, 0x38, 0x55, 0x44, 0x47, 0x30, 0x30, 0x30, 0x30,
-    0x4e, 0x59, 0x38, 0x32, 0x47, 0x38, 0x4d, 0x4e, 0x30, 0x30, 0x30, 0x30, 0x36, 0x41, 0x33, 0x44
-};
-
-//-----------------------------------------------------------------------------
 // Non-Windows support for LastError
 
 #ifndef PLATFORM_WINDOWS
@@ -854,6 +843,32 @@ static bool PartFile_SetSize(
 
 //-----------------------------------------------------------------------------
 // Stream functions - encrypted stream
+//
+// Note: In original Starcraft II Installer.exe:                       Suffix derived from battle.net auth. code
+// Address of decryption routine: 0053A3D0                             http://us.battle.net/static/mediakey/sc2-authenticationcode-enUS.txt
+// Pointer to decryptor object: ECX                                    Numbers mean offset of 4-char group of auth code
+// Pointer to key: ECX+0x5C                                            -0C-    -1C--08-    -18--04-    -14--00-    -10-
+static const char * MpqeKey_Starcraft2_Install_enUS = "expand 32-byte kTFD80000ETR5VM5G0000K859RE5N0000WT6F3DH500005LXG";
+static const char * MpqeKey_Starcraft2_Install_enGB = "expand 32-byte kANGY000029ZH6NA20000HRGF8UDG0000NY82G8MN00006A3D";
+static const char * MpqeKey_Starcraft2_Install_deDE = "expand 32-byte kSSXH00004XFXK4KX00008EKJD3CA0000Y64ZY45M0000YD9V";
+static const char * MpqeKey_Starcraft2_Install_esES = "expand 32-byte kQU4Y0000XKTQ94PF0000N4R4UAXE0000AZ248WLK0000249P";
+static const char * MpqeKey_Starcraft2_Install_frFR = "expand 32-byte kFWPQ00006EAJ8HJE0000PFER9K9300008MA2ZG7J0000UA76";
+static const char * MpqeKey_Starcraft2_Install_itIT = "expand 32-byte kXV7E00008BL2TVAP0000GVMWUNNN0000SVBWNE7C00003G2B";
+static const char * MpqeKey_Starcraft2_Install_plPL = "expand 32-byte k83U6000048L6LULJ00004MQDB8ME0000UP6K2NSF0000YHA3";
+static const char * MpqeKey_Starcraft2_Install_ruRU = "expand 32-byte k9SH70000YEGT4BAT0000QDK978W60000V9NLVHB30000D68V";
+
+static const char * MpqKeyArray[] =
+{
+    MpqeKey_Starcraft2_Install_enUS,
+    MpqeKey_Starcraft2_Install_enGB,
+    MpqeKey_Starcraft2_Install_deDE,
+    MpqeKey_Starcraft2_Install_esES,
+    MpqeKey_Starcraft2_Install_frFR,
+    MpqeKey_Starcraft2_Install_itIT,
+    MpqeKey_Starcraft2_Install_plPL,
+    MpqeKey_Starcraft2_Install_ruRU,
+    NULL
+};
 
 static DWORD Rol32(DWORD dwValue, DWORD dwRolCount)
 {
@@ -973,6 +988,39 @@ static void DecryptMpqChunk(
         MpqData  += (MPQE_CHUNK_SIZE / sizeof(DWORD));
         dwLength -= MPQE_CHUNK_SIZE;
     }
+}
+
+
+static bool DetectFileKey(TEncryptedStream * pStream)
+{
+    LARGE_INTEGER ByteOffset = {{0}};
+    BYTE EncryptedHeader[MPQE_CHUNK_SIZE];
+    BYTE FileHeader[MPQE_CHUNK_SIZE];
+
+    // Load the chunk from the file
+    if(!FileStream_Read(pStream, &ByteOffset, EncryptedHeader, sizeof(EncryptedHeader)))
+        return false;
+
+    // We just try all known keys one by one
+    for(int i = 0; MpqKeyArray[i] != NULL; i++)
+    {
+        // Copy the key there
+        memcpy(pStream->Key, MpqKeyArray[i], MPQE_CHUNK_SIZE);
+        BSWAP_ARRAY32_UNSIGNED(pStream->Key, MPQE_CHUNK_SIZE);
+
+        // Try to decrypt with the given key 
+        memcpy(FileHeader, EncryptedHeader, MPQE_CHUNK_SIZE);
+        DecryptMpqChunk((LPDWORD)FileHeader, pStream->Key, &ByteOffset, MPQE_CHUNK_SIZE);
+
+        // We check the decrypoted data
+        // All known encrypted MPQs have header at the begin of the file,
+        // so we check for MPQ signature there.
+        if(FileHeader[0] == 'M' && FileHeader[1] == 'P' && FileHeader[2] == 'Q')
+            return true;
+    }
+
+    // Key not found, sorry
+    return false;
 }
 
 static bool EncryptedFile_Read(
@@ -1256,7 +1304,7 @@ TFileStream * FileStream_OpenEncrypted(const char * szFileName)
 {
     TEncryptedStream * pEncryptedStream;
     TFileStream * pStream;
-    
+
     // Open the file as raw stream
     pStream = FileStream_OpenRawFile(szFileName, false);
     if(pStream)
@@ -1276,10 +1324,11 @@ TFileStream * FileStream_OpenEncrypted(const char * szFileName)
             pEncryptedStream->StreamFlags  |= (STREAM_FLAG_READ_ONLY | STREAM_FLAG_ENCRYPTED_FILE);
 
             // Get the file key
-            // Note: So far, the only encrypted MPQs are in Starcraft 2 installer.
-            // We extend this later if we see more encrypted MPQs in the wild.
-            memcpy(pEncryptedStream->Key, MpqeKey_Starcraft2_Install, sizeof(MpqeKey_Starcraft2_Install));
-            BSWAP_ARRAY32_UNSIGNED(pEncryptedStream->Key, sizeof(MpqeKey_Starcraft2_Install));
+            if(!DetectFileKey(pEncryptedStream))
+            {
+                FREEMEM(pEncryptedStream);
+                pEncryptedStream = NULL;
+            }
 
             FREEMEM(pStream);
         }

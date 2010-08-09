@@ -240,7 +240,7 @@ static bool QueryMpqSignatureInfo(
         // We have to exclude the signature file from the digest
         pSI->BeginExclude.QuadPart = ha->MpqPos.QuadPart + hf->pBlock->dwFilePos;
         pSI->EndExclude.QuadPart = pSI->BeginExclude.QuadPart + hf->pBlock->dwCSize;
-        dwFileSize = hf->pBlock->dwFSize;
+        dwFileSize = hf->dwDataSize;
 
         // Close the file
         SFileCloseFile(hFile);

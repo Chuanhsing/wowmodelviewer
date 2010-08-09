@@ -11,6 +11,7 @@
 
 #define __STORMLIB_SELF__
 #define __INCLUDE_COMPRESSION__
+#define __INCLUDE_CRYPTOGRAPHY__
 #include "StormLib.h"
 #include "SCommon.h"
 
@@ -59,8 +60,8 @@ static int ReadMpqSectors(TMPQFile * hf, BYTE * pbBuffer, DWORD dwByteOffset, DW
     // Note that files stored in single units are processed by a separate function
 
     // If there is not enough bytes remaining, cut dwBytesToRead
-    if((dwByteOffset + dwBytesToRead) > pBlock->dwFSize)
-        dwBytesToRead = pBlock->dwFSize - dwByteOffset;
+    if((dwByteOffset + dwBytesToRead) > hf->dwDataSize)
+        dwBytesToRead = hf->dwDataSize - dwByteOffset;
     dwRawBytesToRead = dwBytesToRead;
 
     // Perform all necessary work to do with compressed files
@@ -207,68 +208,127 @@ static int ReadMpqSectors(TMPQFile * hf, BYTE * pbBuffer, DWORD dwByteOffset, DW
 
 static int ReadMpqFileSingleUnit(TMPQFile * hf, void * pvBuffer, DWORD dwToRead, DWORD * pdwBytesRead)
 {
+    LARGE_INTEGER RawFilePos = hf->RawFilePos;
     TMPQArchive * ha = hf->ha;
     TMPQBlock * pBlock = hf->pBlock;
     BYTE * pbCompressed = NULL;
     BYTE * pbRawData = NULL;
+    int nError;
 
-    // If the file buffer is not allocated yet, do it, and reload the buffer
+    // If the file buffer is not allocated yet, do it.
     if(hf->pbFileSector == NULL)
     {
-        // Allocate buffer for the entire file
-        hf->pbFileSector = ALLOCMEM(BYTE, pBlock->dwFSize);
-        if(hf->pbFileSector == NULL)
-            return ERROR_NOT_ENOUGH_MEMORY;
-        hf->dwSectorOffs = SFILE_INVALID_POS;
+        nError = AllocateSectorBuffer(hf);
+        if(nError != ERROR_SUCCESS)
+            return nError;
         pbRawData = hf->pbFileSector;
     }
+
+    // If the file is a patch file, adjust raw data offset
+    if(hf->pPatchHeader != NULL)
+        RawFilePos.QuadPart += hf->pPatchHeader->dwLength;
 
     // If the file buffer is not loaded yet, do it
     if(hf->dwSectorOffs != 0)
     {
-        // If the file is compressed, we have to allocate buffer for compressed data
-        if(hf->pBlock->dwCSize < hf->pBlock->dwFSize)
+        //
+        // In "wow-update-12694.MPQ" from Wow-Cataclysm BETA:
+        //
+        // File                                    CmpSize FileSize  Data
+        // --------------------------------------  ------- --------  ---------------
+        // esES\DBFilesClient\LightSkyBox.dbc      0xBE    0xBC      Is compressed
+        // deDE\DBFilesClient\MountCapability.dbc  0x93    0x77      Is uncompressed
+        // 
+        // Now tell me how to deal with this mess. Apparently
+        // someone made a mistake at Blizzard ...
+        //
+
+        if(hf->pPatchHeader != NULL && (pBlock->dwFlags & MPQ_FILE_COMPRESS))
         {
+            // Allocate space for 
             pbCompressed = ALLOCMEM(BYTE, hf->pBlock->dwCSize);
             if(pbCompressed == NULL)
                 return ERROR_NOT_ENOUGH_MEMORY;
-            pbRawData = pbCompressed;
-        }
 
-        // Read the entire file
-        if(!FileStream_Read(ha->pStream, &hf->RawFilePos, pbRawData, pBlock->dwCSize))
-        {
-            FREEMEM(pbCompressed);
-            return GetLastError();
-        }
+            // Read the entire file
+            if(!FileStream_Read(ha->pStream, &RawFilePos, pbCompressed, pBlock->dwCSize))
+            {
+                FREEMEM(pbCompressed);
+                return GetLastError();
+            }
 
-        // If the file is encrypted, we have to decrypt the data first
-        if(pBlock->dwFlags & MPQ_FILE_ENCRYPTED)
-        {
-            BSWAP_ARRAY32_UNSIGNED(pbRawData, pBlock->dwCSize);
-            DecryptMpqBlock(pbRawData, pBlock->dwCSize, hf->dwFileKey);
-            BSWAP_ARRAY32_UNSIGNED(pbRawData, pBlock->dwCSize);
-        }
+            // We assume that patch files are not encrypted
+            assert((pBlock->dwFlags & MPQ_FILE_ENCRYPTED) == 0);
+            assert((pBlock->dwFlags & MPQ_FILE_IMPLODE) == 0);
 
-        // If the file is compressed, we have to decompress it now
-        if(pBlock->dwCSize < pBlock->dwFSize)
-        {
-            int cbOutBuffer = (int)pBlock->dwFSize;
-            int nResult = 0;
-
-            // Note: Single unit files compressed with IMPLODE are not supported by Blizzard
-            if(pBlock->dwFlags & MPQ_FILE_IMPLODE)
-                nResult = SCompExplode((char *)hf->pbFileSector, &cbOutBuffer, (char *)pbRawData, (int)pBlock->dwCSize);
-            if(pBlock->dwFlags & MPQ_FILE_COMPRESS)
-                nResult = SCompDecompress((char *)hf->pbFileSector, &cbOutBuffer, (char *)pbRawData, (int)pBlock->dwCSize);
+            // If the file is compressed, we have to decompress it now
+            if(pbCompressed[0] != 'P' || pbCompressed[1] != 'T' || pbCompressed[2] != 'C' || pbCompressed[3] != 'H')
+            {
+                int cbOutBuffer = (int)hf->dwDataSize;
+                int nResult = SCompDecompress((char *)hf->pbFileSector,
+                                                     &cbOutBuffer,
+                                              (char *)pbCompressed,
+                                                 (int)pBlock->dwCSize);
+                if(nResult == 0)
+                {
+                    FREEMEM(pbCompressed);
+                    return ERROR_FILE_CORRUPT;
+                }
+            }
+            else
+            {
+                memcpy(hf->pbFileSector, pbCompressed, hf->dwDataSize);
+            }
 
             // Free the decompression buffer.
             FREEMEM(pbCompressed);
-            if(nResult == 0)
-                return ERROR_FILE_CORRUPT;
+        }
+        else
+        {
+            // If the file is compressed, we have to allocate buffer for compressed data
+            if(hf->pBlock->dwCSize < hf->dwDataSize)
+            {
+                pbCompressed = ALLOCMEM(BYTE, hf->pBlock->dwCSize);
+                if(pbCompressed == NULL)
+                    return ERROR_NOT_ENOUGH_MEMORY;
+                pbRawData = pbCompressed;
+            }
+
+            // Read the entire file
+            if(!FileStream_Read(ha->pStream, &RawFilePos, pbRawData, pBlock->dwCSize))
+            {
+                FREEMEM(pbCompressed);
+                return GetLastError();
+            }
+
+            // If the file is encrypted, we have to decrypt the data first
+            if(pBlock->dwFlags & MPQ_FILE_ENCRYPTED)
+            {
+                BSWAP_ARRAY32_UNSIGNED(pbRawData, pBlock->dwCSize);
+                DecryptMpqBlock(pbRawData, pBlock->dwCSize, hf->dwFileKey);
+                BSWAP_ARRAY32_UNSIGNED(pbRawData, pBlock->dwCSize);
+            }
+
+            // If the file is compressed, we have to decompress it now
+            if(pBlock->dwCSize < hf->dwDataSize)
+            {
+                int cbOutBuffer = (int)hf->dwDataSize;
+                int nResult = 0;
+
+                // Note: Single unit files compressed with IMPLODE are not supported by Blizzard
+                if(pBlock->dwFlags & MPQ_FILE_IMPLODE)
+                    nResult = SCompExplode((char *)hf->pbFileSector, &cbOutBuffer, (char *)pbRawData, (int)pBlock->dwCSize);
+                if(pBlock->dwFlags & MPQ_FILE_COMPRESS)
+                    nResult = SCompDecompress((char *)hf->pbFileSector, &cbOutBuffer, (char *)pbRawData, (int)pBlock->dwCSize);
+
+                // Free the decompression buffer.
+                FREEMEM(pbCompressed);
+                if(nResult == 0)
+                    return ERROR_FILE_CORRUPT;
+            }
         }
 
-        // The sector is now properly loaded
+        // The file sector is now properly loaded
         hf->dwSectorOffs = 0;
     }
 
@@ -277,15 +337,15 @@ static int ReadMpqFileSingleUnit(TMPQFile * hf, void * pvBuffer, DWORD dwToRead,
     if(hf->dwSectorOffs == 0)
     {
         // File position is greater or equal to file size ?
-        if(hf->dwFilePos >= pBlock->dwFSize)
+        if(hf->dwFilePos >= hf->dwDataSize)
         {
             *pdwBytesRead = 0;
             return ERROR_SUCCESS;
         }
 
         // If not enough bytes remaining in the file, cut them
-        if((pBlock->dwFSize - hf->dwFilePos) < dwToRead)
-            dwToRead = (pBlock->dwFSize - hf->dwFilePos);
+        if((hf->dwDataSize - hf->dwFilePos) < dwToRead)
+            dwToRead = (hf->dwDataSize - hf->dwFilePos);
 
         // Copy the bytes
         memcpy(pvBuffer, hf->pbFileSector + hf->dwFilePos, dwToRead);
@@ -303,7 +363,6 @@ static int ReadMpqFileSingleUnit(TMPQFile * hf, void * pvBuffer, DWORD dwToRead,
 static int ReadMpqFile(TMPQFile * hf, void * pvBuffer, DWORD dwBytesToRead, DWORD * pdwBytesRead)
 {
     TMPQArchive * ha = hf->ha;
-    TMPQBlock * pBlock = hf->pBlock;
     BYTE * pbBuffer = (BYTE *)pvBuffer;
     DWORD dwTotalBytesRead = 0;                         // Total bytes read in all three parts
     DWORD dwSectorSizeMask = ha->dwSectorSize - 1;      // Mask for block size, usually 0x0FFF
@@ -312,15 +371,15 @@ static int ReadMpqFile(TMPQFile * hf, void * pvBuffer, DWORD dwBytesToRead, DWOR
     int nError;
 
     // If the file position is at or beyond end of file, do nothing
-    if(hf->dwFilePos >= pBlock->dwFSize)
+    if(hf->dwFilePos >= hf->dwDataSize)
     {
         *pdwBytesRead = 0;
         return ERROR_SUCCESS;
     }
 
     // If not enough bytes in the file remaining, cut them
-    if(dwBytesToRead > (pBlock->dwFSize - hf->dwFilePos))
-        dwBytesToRead = (pBlock->dwFSize - hf->dwFilePos);
+    if(dwBytesToRead > (hf->dwDataSize - hf->dwFilePos))
+        dwBytesToRead = (hf->dwDataSize - hf->dwFilePos);
 
     // Compute sector position in the file
     dwFileSectorPos = hf->dwFilePos & ~dwSectorSizeMask;  // Position in the block
@@ -353,8 +412,8 @@ static int ReadMpqFile(TMPQFile * hf, void * pvBuffer, DWORD dwBytesToRead, DWOR
         }
         else
         {
-            if((dwFileSectorPos + dwBytesInSector) > pBlock->dwFSize)
-                dwBytesInSector = pBlock->dwFSize - dwFileSectorPos;
+            if((dwFileSectorPos + dwBytesInSector) > hf->dwDataSize)
+                dwBytesInSector = hf->dwDataSize - dwFileSectorPos;
         }
 
         // Copy the data from the offset in the loaded sector to the end of the sector
@@ -527,7 +586,7 @@ DWORD WINAPI SFileGetFileSize(HANDLE hFile, DWORD * pdwFileSizeHigh)
         else
         {
             FileSize.HighPart = 0;
-            FileSize.LowPart = hf->pBlock->dwFSize;
+            FileSize.LowPart = hf->dwDataSize;
         }
 
         // If opened from archive, return file size
@@ -581,7 +640,7 @@ DWORD WINAPI SFileSetFilePointer(HANDLE hFile, LONG lFilePos, LONG * plFilePosHi
             else
             {
                 FilePosition.HighPart = 0;
-                FilePosition.LowPart = hf->pBlock->dwFSize;
+                FilePosition.LowPart = hf->dwDataSize;
             }
             break;
 
@@ -598,7 +657,7 @@ DWORD WINAPI SFileSetFilePointer(HANDLE hFile, LONG lFilePos, LONG * plFilePosHi
     else
     {
         FileSize.HighPart = 0;
-        FileSize.LowPart = hf->pBlock->dwFSize;
+        FileSize.LowPart = hf->dwDataSize;
     }
 
 
@@ -907,7 +966,7 @@ bool WINAPI SFileGetFileInfo(
 
         case SFILE_INFO_FILE_SIZE:
             VERIFY_FILE_HANDLE(hf);
-            GIVE_32BIT_VALUE(hf->pBlock->dwFSize);
+            GIVE_32BIT_VALUE(hf->dwDataSize);
             break;
 
         case SFILE_INFO_COMPRESSED_SIZE:

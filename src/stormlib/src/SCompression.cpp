@@ -911,7 +911,9 @@ int WINAPI SCompDecompress(
         return 1;
     }
 
+/*
     // If the input length is the same as output length, do nothing.
+    // Unfortunately, some data in WoW-Cataclysm BETA MPQs are like that ....
     if(cbInBuffer == cbOutBuffer)
     {
         // If the buffers are equal, don't copy anything.
@@ -921,7 +923,8 @@ int WINAPI SCompDecompress(
         memcpy(pbOutBuffer, pbInBuffer, cbInBuffer);
         return 1;
     }
-    
+*/
+
     // Get applied compression types and decrement data length
     uCompressionMask = (unsigned char)*pbInBuffer++;              
     cbInBuffer--;

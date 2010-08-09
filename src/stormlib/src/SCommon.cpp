@@ -810,16 +810,74 @@ int AllocateSectorBuffer(TMPQFile * hf)
 
     // Caller of AllocateSectorBuffer must ensure these
     assert(hf->pbFileSector == NULL);
+    assert(hf->dwDataSize != 0);
     assert(hf->pBlock != NULL);
     assert(hf->ha != NULL);
 
     // Determine the file sector size and allocate buffer for it
-    hf->dwSectorSize = (hf->pBlock->dwFlags & MPQ_FILE_SINGLE_UNIT) ? hf->pBlock->dwFSize : ha->dwSectorSize;
+    hf->dwSectorSize = (hf->pBlock->dwFlags & MPQ_FILE_SINGLE_UNIT) ? hf->dwDataSize : ha->dwSectorSize;
     hf->pbFileSector = ALLOCMEM(BYTE, hf->dwSectorSize);
     hf->dwSectorOffs = SFILE_INVALID_POS;
 
     // Return result
     return (hf->pbFileSector != NULL) ? (int)ERROR_SUCCESS : (int)ERROR_NOT_ENOUGH_MEMORY;
+}
+
+// Allocates sector offset table
+int AllocatePatchHeader(TMPQFile * hf, bool bLoadFromFile)
+{
+    TMPQArchive * ha = hf->ha;
+    DWORD dwLength = 0x1C;
+
+    // The following conditions must be true
+    assert(hf->pBlock->dwFlags & MPQ_FILE_PATCH_FILE);
+    assert(hf->pPatchHeader == NULL);
+
+__AllocateAndLoadPatchHdr:
+
+    // Allocate space for patch header. Start with default size,
+    // and if its size if bigger, then we reload them
+    hf->pPatchHeader = (TMPQPatchFile *)ALLOCMEM(BYTE, dwLength);
+    if(hf->pPatchHeader == NULL)
+        return ERROR_NOT_ENOUGH_MEMORY;
+
+    // Pre-fill the patch header with zeros
+    memset(hf->pPatchHeader, 0, dwLength);
+    hf->pPatchHeader->dwLength = dwLength;
+
+    // Do we have to load the patch header from the file ?
+    if(bLoadFromFile)
+    {
+        // Load the patch header
+        if(!FileStream_Read(ha->pStream, &hf->RawFilePos, hf->pPatchHeader, dwLength))
+        {
+            // Free the sector offsets
+            FREEMEM(hf->pPatchHeader);
+            hf->pPatchHeader = NULL;
+            return GetLastError();
+        }
+
+        // Perform necessary swapping
+        BSWAP_INT32_UNSIGNED(hf->pPatchHeader->dwLength);
+        BSWAP_INT32_UNSIGNED(hf->pPatchHeader->dwFlags);
+        BSWAP_INT32_UNSIGNED(hf->pPatchHeader->dwDataSize);
+
+        // Verify the size of the patch header
+        // If it's not default size, we have to reload them
+        if(hf->pPatchHeader->dwLength > dwLength)
+        {
+            dwLength = hf->pPatchHeader->dwLength;
+            FREEMEM(hf->pPatchHeader);
+            hf->pPatchHeader = NULL;
+
+            goto __AllocateAndLoadPatchHdr;
+        }
+
+        // Patch file data size according to the patch header
+        hf->dwDataSize = hf->pPatchHeader->dwDataSize;
+    }
+
+    return ERROR_SUCCESS;
 }
 
 // Allocates sector offset table
@@ -831,6 +889,7 @@ int AllocateSectorOffsets(TMPQFile * hf, bool bLoadFromFile)
 
     // Caller of AllocateSectorOffsets must ensure these
     assert(hf->SectorOffsets == NULL);
+    assert(hf->dwDataSize != 0);
     assert(hf->pBlock != NULL);
     assert(hf->ha != NULL);
 
@@ -843,13 +902,13 @@ int AllocateSectorOffsets(TMPQFile * hf, bool bLoadFromFile)
     }
 
     // Calculate the number of data sectors
-    hf->dwDataSectors = (pBlock->dwFSize / hf->dwSectorSize);
-    if(pBlock->dwFSize % hf->dwSectorSize)
+    hf->dwDataSectors = (hf->dwDataSize / hf->dwSectorSize);
+    if(hf->dwDataSize % hf->dwSectorSize)
         hf->dwDataSectors++;
 
     // Calculate the number of file sectors
-    hf->dwSectorCount = (pBlock->dwFSize / hf->dwSectorSize) + 1;
-    if(pBlock->dwFSize % hf->dwSectorSize)
+    hf->dwSectorCount = (hf->dwDataSize / hf->dwSectorSize) + 1;
+    if(hf->dwDataSize % hf->dwSectorSize)
         hf->dwSectorCount++;
     if(pBlock->dwFlags & MPQ_FILE_SECTOR_CRC)
         hf->dwSectorCount++;
@@ -870,8 +929,13 @@ int AllocateSectorOffsets(TMPQFile * hf, bool bLoadFromFile)
         // Only read from the file if we are supposed to do so
         if(bLoadFromFile)
         {
+            LARGE_INTEGER RawFilePos = hf->RawFilePos;
+
+            if(hf->pPatchHeader != NULL)
+                RawFilePos.QuadPart += hf->pPatchHeader->dwLength;
+
             // Load the sector offsets from the file
-            if(!FileStream_Read(ha->pStream, &hf->RawFilePos, hf->SectorOffsets, dwArraySize))
+            if(!FileStream_Read(ha->pStream, &RawFilePos, hf->SectorOffsets, dwArraySize))
             {
                 // Free the sector offsets
                 FREEMEM(hf->SectorOffsets);
@@ -1021,6 +1085,10 @@ void CalculateRawSectorOffset(
     {
         RawFilePos.QuadPart = hf->RawFilePos.QuadPart + dwSectorOffset;
     }
+
+    // We also have to add patch header size, if patch header is present
+    if(hf->pPatchHeader != NULL)
+        RawFilePos.QuadPart += hf->pPatchHeader->dwLength;
 }
 
 int WriteSectorOffsets(TMPQFile * hf)
@@ -1106,6 +1174,8 @@ void FreeMPQFile(TMPQFile *& hf)
 {
     if(hf != NULL)
     {
+        if(hf->pPatchHeader != NULL)
+            FREEMEM(hf->pPatchHeader);
         if(hf->SectorOffsets != NULL)
             FREEMEM(hf->SectorOffsets);
         if(hf->SectorChksums != NULL)

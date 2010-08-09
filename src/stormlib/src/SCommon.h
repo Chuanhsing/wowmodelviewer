@@ -106,6 +106,7 @@ DWORD FindFreeMpqSpace(TMPQArchive * ha, PLARGE_INTEGER pMpqPos);
 TMPQFile * CreateMpqFile(TMPQArchive * ha, const char * szFileName);
 int  LoadMpqTable(TMPQArchive * ha, PLARGE_INTEGER pByteOffset, void * pvTable, DWORD dwCompressedSize, DWORD dwRealSize, const char * szKey);
 int  AllocateSectorBuffer(TMPQFile * hf);
+int  AllocatePatchHeader(TMPQFile * hf, bool bLoadFromFile);
 int  AllocateSectorOffsets(TMPQFile * hf, bool bLoadFromFile);
 int  AllocateSectorChecksums(TMPQFile * hf, bool bLoadFromFile);
 void CalculateRawSectorOffset(LARGE_INTEGER & RawFilePos, TMPQFile * hf, DWORD dwSectorOffset);

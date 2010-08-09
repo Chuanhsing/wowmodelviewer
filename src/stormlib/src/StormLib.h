@@ -152,6 +152,7 @@
 #define MPQ_FILE_COMPRESSED      0x0000FF00 // File is compressed
 #define MPQ_FILE_ENCRYPTED       0x00010000 // Indicates whether file is encrypted 
 #define MPQ_FILE_FIX_KEY         0x00020000 // File decryption key has to be fixed
+#define MPQ_FILE_PATCH_FILE      0x00100000 // The file is a patch file. Raw file data begin with TMPQPatchFile structure
 #define MPQ_FILE_SINGLE_UNIT     0x01000000 // File is stored as a single unit, rather than split into sectors (Thx, Quantam)
 #define MPQ_FILE_DELETE_MARKER   0x02000000 // File is a deletion marker, indicating that the file no longer exists.
                                             // The file is only 1 byte long and its name is a hash
@@ -168,6 +169,7 @@
                                   MPQ_FILE_COMPRESS      |  \
                                   MPQ_FILE_ENCRYPTED     |  \
                                   MPQ_FILE_FIX_KEY       |  \
+                                  MPQ_FILE_PATCH_FILE    |  \
                                   MPQ_FILE_SINGLE_UNIT   |  \
                                   MPQ_FILE_DELETE_MARKER |  \
                                   MPQ_FILE_SECTOR_CRC    |  \
@@ -522,19 +524,6 @@ struct TMPQFileTime
     DWORD dwFileTimeHigh;               // High DWORD of the file time
 };
 
-struct TFileNode
-{
-    DWORD dwRefCount;                   // Number of references
-                                        // There can be more files that have the same name.
-                                        // (e.g. multiple language files). We don't want to
-                                        // have an entry for each of them, so the entries will be referenced.
-                                        // When a number of node references reaches zero, 
-                                        // the node will be deleted
-
-    size_t nLength;                     // File name length
-    char  szFileName[1];                // File name, variable length
-};
-
 // Data from (attributes) file
 struct TMPQAttributes
 {
@@ -553,6 +542,29 @@ struct TMPQXXXBlock
     DWORD dwDataSize;                   // Size of the following data
 
     // Followed by the data (variable length)
+};
+
+// Patch file header
+struct TMPQPatchFile
+{
+	DWORD dwLength;                     // Length of patch file header, in bytes
+	DWORD dwFlags;                      // Flags. 0x80000000 = MD5 (?)
+	DWORD dwDataSize;                   // Uncompressed size of the patch file
+	BYTE  md5[0x10];                    // MD5 of the entire patch file after decompression
+};
+
+// File node for in-memory listfile
+struct TFileNode
+{
+    DWORD dwRefCount;                   // Number of references
+                                        // There can be more files that have the same name.
+                                        // (e.g. multiple language files). We don't want to
+                                        // have an entry for each of them, so the entries will be referenced.
+                                        // When a number of node references reaches zero, 
+                                        // the node will be deleted
+
+    size_t nLength;                     // File name length
+    char  szFileName[1];                // File name, variable length
 };
 
 // Archive handle structure
@@ -603,10 +615,12 @@ struct TMPQFile
     LARGE_INTEGER  MpqFilePos;          // Offset in MPQ archive (relative to MPQ header)
     DWORD          dwMagic;             // 'FILE'
 
-    DWORD        * SectorOffsets;       // Position of each file sector, relative to the begin of the file. Only for compressed files.
+    TMPQPatchFile* pPatchHeader;        // Header for patch file, if present
+	DWORD        * SectorOffsets;       // Position of each file sector, relative to the begin of the file. Only for compressed files.
     DWORD        * SectorChksums;       // Array of ADLER32 values for each sector
     DWORD          dwDataSectors;       // Number of data sectors in the file
     DWORD          dwSectorCount;       // Number of entries in the sector offset table
+    DWORD          dwDataSize;          // Size of data in the file (on patch files, this differs from file size in block table entry)
 
     BYTE         * pbFileSector;        // Last loaded file sector. For single unit files, entire file content
     DWORD          dwSectorOffs;        // File position of currently loaded file sector
