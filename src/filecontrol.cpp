@@ -492,6 +492,8 @@ void FileControl::UpdateInterface()
 	if (modelviewer->isModel == true){
 		// If it's an M2 file...
 		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,true);
+		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, true);
+
 		for (int x=0;x<ExporterTypeCount;x++){
 			modelviewer->exportMenu->Enable(Exporter_Types[x].ID, Exporter_Types[x].canM2);
 		}
