@@ -327,7 +327,6 @@ public:
 	ModelHeader header;
 	ModelCamera cam;
 #ifdef WotLK
-	wxString fullname;
 	wxString modelname;
 	wxString lodname;
 #endif

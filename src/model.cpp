@@ -833,7 +833,7 @@ void Model::initAnimated(MPQFile &f)
 			anims[i].NextAnimation = animsWotLK.NextAnimation;
 			anims[i].Index = animsWotLK.Index;
 
-			sprintf(tempname, "%s%04d-%02d.anim", (char *)fullname.c_str(), anims[i].animID, animsWotLK.subAnimID);
+			sprintf(tempname, "%s%04d-%02d.anim", (char *)modelname.BeforeLast(_T('.')).c_str(), anims[i].animID, animsWotLK.subAnimID);
 			if (MPQFile::getSize(tempname) > 0) {
 				animfiles[i].openFile(tempname);
 				g_modelViewer->modelOpened->Add(wxString(tempname, wxConvUTF8));
@@ -991,8 +991,7 @@ void Model::setLOD(MPQFile &f, int index)
 	// Seems to only control the render order.  Which makes this function useless and not needed :(
 #ifdef WotLK
 	// remove suffix .M2
-	fullname = modelname.BeforeLast(_T('.'));
-	lodname = fullname;
+	lodname = modelname.BeforeLast(_T('.'));
 	lodname.Append(wxString::Format(_T("%02d.skin"), index)); // Lods: 00, 01, 02, 03
 	MPQFile g((char *)lodname.c_str());
 	g_modelViewer->modelOpened->Add(lodname);

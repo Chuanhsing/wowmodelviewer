@@ -2328,7 +2328,6 @@ void ModelViewer::ModelInfo()
 
 	xml << "<m2>" << endl;
 	xml << "  <info>" << endl;
-	xml << "    <fullname>" <<m->fullname.c_str()  << "</fullname>" << endl;
 	xml << "    <modelname>" <<m->modelname.c_str()  << "</modelname>" << endl;
 	xml << "  </info>" << endl;
 	xml << "  <header>" << endl;
@@ -2418,6 +2417,14 @@ void ModelViewer::ModelInfo()
 			xml << "    <Animation id=\"" << i << "\">" << endl;
 			xml << "      <animID>"<< m->anims[i].animID << "</animID>" << endl;
 			// subAnimID
+			wxString strName;
+			try {
+				AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
+				strName = rec.getString(AnimDB::Name);
+			} catch (AnimDB::NotFound) {
+				strName = _T("???");
+			}
+			xml << "      <animName>"<< strName.c_str() << "</animName>" << endl;
 			xml << "      <length>"<< m->anims[i].timeEnd << "</length>" << endl;
 			xml << "      <moveSpeed>"<< m->anims[i].moveSpeed << "</moveSpeed>" << endl;
 			xml << "      <flags>"<< m->anims[i].flags << "</flags>" << endl;
@@ -2485,13 +2492,12 @@ void ModelViewer::ModelInfo()
 	xml << "  <Vertices>" << m->header.nVertices << "</Vertices>" << endl;
 	xml << "  <Views>" << endl;
 
-	xml << "  <Indices>" << view->nIndex << "</Indices>" << endl;
-	xml << "  <Triangles>" << view->nTris << "</Triangles>" << endl;
-	xml << "  <Properties>" << view->nProps << "</Properties>" << endl;
-	xml << "  <Subs>" << view->nSub << "</Subs>" << endl;
-	xml << "  <Texs>" << view->nTex << "</Texs>" << endl;
+	xml << "  <Indices>" << view->nIndex << "</Indices>" << endl; // TODO
+	xml << "  <Triangles>" << view->nTris << "</Triangles>" << endl; // TODO
+	xml << "  <Properties>" << view->nProps << "</Properties>" << endl; // TODO
+	xml << "  <Subs>" << view->nSub << "</Subs>" << endl; // TODO
+	xml << "  <Texs>" << view->nTex << "</Texs>" << endl; // TODO
 
-	
 	xml << "	<RenderPasses>" << endl;
 	for (size_t i=0; i<m->passes.size(); i++) {
 		xml << "	  <RenderPass id=\"" << i << "\">" << endl;
@@ -2531,8 +2537,10 @@ void ModelViewer::ModelInfo()
 		xml << "      <vcount>" << m->geosets[i].vcount << "</vcount>" << endl;
 		xml << "      <istart>" << m->geosets[i].istart << "</istart>" << endl;
 		xml << "      <icount>" << m->geosets[i].icount << "</icount>" << endl;
-		xml << "      <nBones>" << m->geosets[i].nBones << "</nBones>" << endl;
+		xml << "      <totalBones>" << m->geosets[i].totalBones << "</totalBones>" << endl;
 		xml << "      <StartBones>" << m->geosets[i].StartBones << "</StartBones>" << endl;
+		xml << "      <rootBone>" << m->geosets[i].rootBone << "</rootBone>" << endl;
+		xml << "      <nBones>" << m->geosets[i].nBones << "</nBones>" << endl;
 		xml << "      <BoundingBox>" << m->geosets[i].BoundingBox[0] << "</BoundingBox>" << endl;
 		xml << "      <BoundingBox>" << m->geosets[i].BoundingBox[1] << "</BoundingBox>" << endl;
 		xml << "      <radius>" << m->geosets[i].radius << "</radius>" << endl;

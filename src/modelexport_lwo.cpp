@@ -1032,11 +1032,11 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 	#ifdef _DEBUG
 	// Debug Texture List
-	wxLogMessage(_T("M2 Texture List for %s:"),wxString(m->fullname.c_str()));
+	wxLogMessage(_T("M2 Texture List for %s:"),wxString(m->modelname.c_str()));
 	for (unsigned short i=0; i<m->TextureList.size(); i++) {
 		wxLogMessage(_T("Texture List[%i] = %s"),i,wxString(m->TextureList[i]));
 	}
-	wxLogMessage(_T("M2 Texture List Complete for %s"),wxString(m->fullname.c_str()));
+	wxLogMessage(_T("M2 Texture List Complete for %s"),wxString(m->modelname.c_str()));
 	#endif
 
 	// Mesh & Slot names
@@ -1126,7 +1126,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	}
 
 	#ifdef _DEBUG
-	wxLogMessage(_T("M2 Part Names Written for %s"),m->fullname.c_str());
+	wxLogMessage(_T("M2 Part Names Written for %s"),m->modelname.c_str());
 	#endif
 
 	// Surface Name
@@ -1227,7 +1227,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	fileLen += tagsSize;
 	// ================
 	#ifdef _DEBUG
-	wxLogMessage(_T("M2 Surface Names Written for %s"),m->fullname.c_str());
+	wxLogMessage(_T("M2 Surface Names Written for %s"),m->modelname.c_str());
 	#endif
 
 	
@@ -1250,7 +1250,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	fileLen += 18;
 	// ================
 	#ifdef _DEBUG
-	wxLogMessage(_T("M2 Layer Defined for %s"),m->fullname.c_str());
+	wxLogMessage(_T("M2 Layer Defined for %s"),m->modelname.c_str());
 	#endif
 
 	// --
@@ -1376,7 +1376,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			Attachment *att2 = att->children[i];
 			for (uint32 j=0; j<att2->children.size(); j++) {
 				Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
-				wxLogMessage(_T("Loaded Attached 2nd Child Model %s for export."),mAttChild->fullname.c_str());
+				wxLogMessage(_T("Loaded Attached 2nd Child Model %s for export."),mAttChild->modelname.c_str());
 
 				if (mAttChild){
 					int boneID = -1;
@@ -1456,7 +1456,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.SeekO(0, wxFromEnd);
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 Point Data Written for %s"),m->fullname.c_str());
+	wxLogMessage(_T("M2 Point Data Written for %s"),m->modelname.c_str());
 #endif
 
 /*
@@ -1586,7 +1586,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 UV data Written for %s"),m->fullname.c_str());
+	wxLogMessage(_T("M2 UV data Written for %s"),m->modelname.c_str());
 #endif
 
 	//m->header
@@ -1693,7 +1693,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.SeekO(0, wxFromEnd);
 	*/
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 Weight data Written for %s"),m->fullname.c_str());
+	wxLogMessage(_T("M2 Weight data Written for %s"),m->modelname.c_str());
 #endif
 
 
@@ -1841,7 +1841,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	fileLen += polySize;
 	// ========
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 Polygons Written for %s"),m->fullname.c_str());
+	wxLogMessage(_T("M2 Polygons Written for %s"),m->modelname.c_str());
 #endif
 
 	// The PTAG chunk associates tags with polygons. In this case, it identifies which surface is assigned to each polygon. 
@@ -2029,7 +2029,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 PTag Surface data Written for %s"),m->fullname.c_str());
+	wxLogMessage(_T("M2 PTag Surface data Written for %s"),m->modelname.c_str());
 #endif
 
 	// --
@@ -2133,7 +2133,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.SeekO(0, wxFromEnd);
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 VMAD data Written for %s"),m->fullname.c_str());
+	wxLogMessage(_T("M2 VMAD data Written for %s"),m->modelname.c_str());
 #endif
 
 	
@@ -2478,7 +2478,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 Images & Image Data Written for %s"),m->fullname.c_str());
+	wxLogMessage(_T("M2 Images & Image Data Written for %s"),m->modelname.c_str());
 #endif
 
 	// --
@@ -2605,7 +2605,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	}
 	// ================
 #ifdef _DEBUG
-	wxLogMessage(_T("M2 Surface Data Written for %s"),m->fullname.c_str());
+	wxLogMessage(_T("M2 Surface Data Written for %s"),m->modelname.c_str());
 #endif
 
 	f.SeekO(4, wxFromStart);
@@ -2614,7 +2614,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.SeekO(0, wxFromEnd);
 
 	f.Close();
-	wxLogMessage(_T("M2 %s Successfully written!"),m->fullname.c_str());
+	wxLogMessage(_T("M2 %s Successfully written!"),m->modelname.c_str());
 
 	ExportM2toScene(m,fn,init);
 }

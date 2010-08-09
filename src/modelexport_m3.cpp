@@ -125,9 +125,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		logAnimations[nAnimations] = i;
 		nAnimations++;
 	}
+	int chunk_offset, datachunk_offset;
 
 	RefEntry("SQES", f.Tell(), nAnimations, 1);
-	int seqs_offset = f.Tell();
+	chunk_offset = f.Tell();
 	mdata.mSEQS.nEntries = nAnimations;
 	mdata.mSEQS.ref = fHead.nRefs++;
 	SEQS *seqs = new SEQS[nAnimations];
@@ -143,8 +144,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Write(&end, sizeof(end));
 		padding(&f);
 	}
-	int after_seqs = f.Tell();
-	f.Seek(seqs_offset, wxFromStart);
+	datachunk_offset = f.Tell();
+	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<nAnimations; i++) {
 		int j = logAnimations[i];
 		seqs[i].d1 = -1;
@@ -159,11 +160,11 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Write(&seqs[i], sizeof(SEQS));
 	}
 	wxDELETEA(seqs);
-	f.Seek(after_seqs, wxFromStart);
+	f.Seek(datachunk_offset, wxFromStart);
 
 	// mSTC
 	RefEntry("_CTS", f.Tell(), nAnimations, 4);
-	int stc_offset = f.Tell();
+	chunk_offset = f.Tell();
 	mdata.mSTC.nEntries = nAnimations;
 	mdata.mSTC.ref = fHead.nRefs++;
 	STC *stcs = new STC[nAnimations];
@@ -221,17 +222,17 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		RefEntry("Q4DS", f.Tell(), stcs[i].Rot.nEntries, 0);
 		f.Write(&sd, sizeof(sd));
 	}
-	after_seqs = f.Tell();
-	f.Seek(stc_offset, wxFromStart);
+	datachunk_offset = f.Tell();
+	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<nAnimations; i++) {
 		f.Write(&stcs[i], sizeof(STC));
 	}
 	wxDELETEA(stcs);
-	f.Seek(after_seqs, wxFromStart);
+	f.Seek(datachunk_offset, wxFromStart);
 
 	// mSTG
 	RefEntry("_GTS", f.Tell(), nAnimations, 0);
-	int stg_offset = f.Tell();
+	chunk_offset = f.Tell();
 	mdata.mSTG.nEntries = nAnimations;
 	mdata.mSTG.ref = fHead.nRefs++;
 	STG *stgs = new STG[nAnimations];
@@ -257,29 +258,146 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Write(&i, sizeof(uint32));
 		padding(&f);
 	}
-	after_seqs = f.Tell();
-	f.Seek(stg_offset, wxFromStart);
+	datachunk_offset = f.Tell();
+	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<nAnimations; i++) {
 		f.Write(&stgs[i], sizeof(STG));
 	}
 	wxDELETEA(stgs);
-	f.Seek(after_seqs, wxFromStart);
+	f.Seek(datachunk_offset, wxFromStart);
 
 	// mSTS
 /*
 	RefEntry("_STS", f.Tell(), mSEQS.nEntries, 0);
 	mdata.mSTS.nEntries = mSTS.nEntries;
 	mdata.mSTS.ref = fHead.nRefs++;
+*/
 
 	// mBone
-	
+	mdata.mBone.nEntries = m->header.nBones;
+	mdata.mBone.ref = fHead.nRefs++;
+	RefEntry("ENOB", f.Tell(), mdata.mBone.nEntries, 0);
+	chunk_offset = f.Tell();
+	BONE *bones = new BONE[mdata.mBone.nEntries];
+	memset(bones, 0, sizeof(BONE)*mdata.mBone.nEntries);
+	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
+		bones[i].d1 = -1;
+		f.Write(&bones[i], sizeof(BONE));
+	}
+	padding(&f);
+	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
+		// name
+		wxString strName = wxString::Format(_T("Bone_%d"), i);
+		bones[i].name.nEntries = strName.length()+1;
+		bones[i].name.ref = fHead.nRefs++;
+		RefEntry("RAHC", f.Tell(), bones[i].name.nEntries, 0);
+		f.Write(strName.c_str(), strName.length());
+		f.Write(&end, sizeof(end));
+		padding(&f);
+	}
+	datachunk_offset = f.Tell();
+	f.Seek(chunk_offset, wxFromStart);
+	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
+		f.Write(&bones[i], sizeof(BONE));
+	}
+	wxDELETEA(bones);
+	f.Seek(datachunk_offset, wxFromStart);
+
 	// mVert
-	RefEntry("__8U", f.Tell(), 0, 0);
-	mdata.mVert.nEntries = mVert.nEntries;
+	mdata.mVert.nEntries = m->header.nVertices*sizeof(Vertex32);
 	mdata.mVert.ref = fHead.nRefs++;
-*/
+	RefEntry("__8U", f.Tell(), mdata.mVert.nEntries, 0);
+	MPQFile mpqf(m->modelname.c_str());
+	ModelVertex *verts = (ModelVertex*)(mpqf.getBuffer() + m->header.ofsVertices);
+	for(int i=0; i<m->header.nVertices; i++) {
+		Vertex32 vert;
+		memset(&vert, 0, sizeof(vert));
+		vert.pos = verts[i].pos;
+		memcpy(vert.pos, verts[i].pos, sizeof(vert.pos));
+		memcpy(vert.weBone, verts[i].weights, 4);
+		memcpy(vert.weIndice, verts[i].bones, 4);
+		// Vec3D normal -> char normal[4], TODO
+		vert.normal[0] = verts[i].normal.x*0x80;
+		vert.normal[1] = verts[i].normal.y*0x80;
+		vert.normal[2] = verts[i].normal.z*0x80;
+		// Vec2D texcoords -> uint16 uv[2], TODO
+		vert.uv[0] = verts[i].texcoords.x*0x800;
+		vert.uv[1] = verts[i].texcoords.y*0x800;
+		f.Write(&vert, sizeof(vert));
+	}
+	padding(&f);
+	mpqf.close();
+
 	// mDIV
-	
+	mdata.mDIV.nEntries = 1;
+	mdata.mDIV.ref = fHead.nRefs++;
+	RefEntry("_VID", f.Tell(), mdata.mDIV.nEntries, 0);
+	chunk_offset = f.Tell();
+	DIV div;
+	memset(&div, 0, sizeof(div));
+	f.Write(&div, sizeof(div));
+	padding(&f);
+	// mDIV.faces = m->view.nTriangles
+	MPQFile mpqfv(m->lodname.c_str());
+	ModelView *view = (ModelView*)(mpqfv.getBuffer());
+	div.faces.nEntries = view->nTris;
+	div.faces.ref = fHead.nRefs++;
+	RefEntry("_61U", f.Tell(), div.faces.nEntries, 0);
+	for(uint16 i=1; i<=div.faces.nEntries; i++) {
+		f.Write(&i, sizeof(uint16));
+	}
+	padding(&f);
+	// mDiv.meash
+	div.REGN.nEntries = view->nTex;
+	div.REGN.ref = fHead.nRefs++;
+	RefEntry("NGER", f.Tell(), div.REGN.nEntries, 0);
+	ModelGeoset *ops = (ModelGeoset*)(mpqfv.getBuffer() + view->ofsSub);
+	ModelTexUnit *tex = (ModelTexUnit*)(mpqfv.getBuffer() + view->ofsTex);
+	int indBone = 0;
+	for (size_t j=0; j<view->nTex; j++) {
+		size_t geoset = tex[j].op;
+
+		REGN regn;
+		memset(&regn, 0, sizeof(regn));
+		regn.indFaces = ops[geoset].istart;
+		regn.numFaces = ops[geoset].icount;
+		regn.indVert = ops[geoset].vstart;
+		regn.numVert = ops[geoset].vcount;
+		regn.boneCount = ops[geoset].nBones;
+		regn.indBone = indBone;
+		regn.numBone = ops[geoset].nBones;
+		indBone += regn.boneCount;
+		f.Write(&regn, sizeof(regn));
+	}
+	padding(&f);
+	// mDiv.BAT
+	div.BAT.nEntries = view->nTex;
+	div.BAT.ref = fHead.nRefs++;
+	RefEntry("_TAB", f.Tell(), div.BAT.nEntries, 0);
+	for (size_t j=0; j<view->nTex; j++) {
+		BAT bat;
+		memset(&bat, 0, sizeof(bat));
+		bat.subid = j;
+		bat.matid = j;
+		bat.s2 = -1;
+		f.Write(&bat, 0xE); // sizeof(bat) is buggy to 0x10
+	}
+	padding(&f);
+	// mDiv.MSEC
+	div.MSEC.nEntries = 1;
+	div.MSEC.ref = fHead.nRefs++;
+	RefEntry("CESM", f.Tell(), div.MSEC.nEntries, 0);
+	MSEC msec;
+	memset(&msec, 0, sizeof(msec));
+	f.Write(&msec, sizeof(msec));
+	padding(&f);
+
+	datachunk_offset = f.Tell();
+	f.Seek(chunk_offset, wxFromStart);
+	f.Write(&div, sizeof(div));
+	f.Seek(datachunk_offset, wxFromStart);
+	mpqfv.close();
+
 	// mBoneLU
 	
 	// boundSphere

@@ -125,28 +125,29 @@ struct MODL
 	uint32 d9[4];
 };
 
-// Size = 156 byte / 0x9C byte
+// Size = 160 byte / 0xA0 byte
 // Incomplete
 struct BONE
 {
     /*0x00*/ int32 d1; // Keybone?
-    /*0x04*/ Reference name;
-    /*0x0C*/ uint32 flags; //2560 = Weighted vertices rendered, 512 = not rendered
-    /*0x10*/ int16 parent;
-    /*0x12*/ uint16 s1;
-    /*0x14*/ AnimRef transid; //unique animation ID ref
-    /*0x1C*/ Vec3D pos; //bone position is relative to parent bone and its rotation
-    /*0x28*/ int32 d2[4];
-    /*0x38*/ AnimRef rotid;
-    /*0x40*/ QUAT rot; //initial bone rotation
-    /*0x50*/ int32 d3[3];
-    /*0x5C*/ float f1;
-    /*0x60*/ int32 d4;
-    /*0x64*/ AnimRef scaleid;
-    /*0x6C*/ Vec3D scale; //initial scale
-    /*0x78*/ Vec3D v1;
-    /*0x84*/ int32 d5[6];
-    //appears to have another animation ref at 0x8C but not sure what for
+    /*0x04*/ Reference name; // bonename
+    /*0x10*/ uint32 flags; //2560 = Weighted vertices rendered, 512 = not rendered
+    /*0x14*/ int16 parent; // boneparent
+    /*0x16*/ uint16 s1; // always 0
+    /*0x1A*/ AnimRef transid; //unique animation ID ref
+    /*0x20*/ Vec3D pos; //bone position is relative to parent bone and its rotation
+    /*0x2C*/ Vec3D pos2;
+    /*0x38*/ float f1;
+    /*0x3C*/ AnimRef rotid;
+    /*0x44*/ QUAT rot; //initial bone rotation
+    /*0x54*/ QUAT rot2;
+    /*0x64*/ float f2;
+    /*0x68*/ AnimRef scaleid;
+    /*0x70*/ Vec3D scale; //initial scale
+    /*0x7C*/ Vec3D scale2;
+    /*0x88*/ int32 d3;
+    /*0x90*/ AnimRef unk2;
+    /*0x94*/ int32 d4[3];
 };
 
 // Size = 8 byte / 0x08 byte
@@ -237,19 +238,21 @@ struct BAT
     /*0x0C*/ int16 s2; //usually -1
 };
 
-//Size = 28 byte / 0x1C byte
+//Size = 26 byte / 0x24 byte
 // Incomplete
 struct REGN
 {
-    /*0x00*/ uint32 d1; //always 0?
-    /*0x04*/ uint16 indVert;
-    /*0x06*/ uint16 numVert;
-    /*0x08*/ uint32 indFaces;
-    /*0x0C*/ uint32 numFaces;
-    /*0x10*/ uint16 boneCount; //boneLookup total count (redundant?)
-    /*0x12*/ uint16 indBone; //indice into boneLookup
-    /*0x14*/ uint16 numBone; //number of bones used from boneLookup
-    /*0x16*/ uint16 s1[3]; //flags? vital for sc2 engine rendering the geometry
+    /*0x00*/ uint32 d1[2]; //always 0?
+    /*0x08*/ uint32 indVert;
+    /*0x0C*/ uint32 numVert;
+    /*0x10*/ uint32 indFaces;
+    /*0x14*/ uint32 numFaces;
+    /*0x18*/ uint16 boneCount; //boneLookup total count (redundant?)
+    /*0x1A*/ uint16 indBone; //indice into boneLookup
+    /*0x1C*/ uint16 numBone; //number of bones used from boneLookup
+    /*0x1E*/ uint16 s2; //flags? vital for sc2 engine rendering the geometry
+    /*0x20*/ unsigned char b1[2];
+    /*0x22*/ uint16 s3;
 };
 
 // Size = 72 byte / 0x48 byte
@@ -258,8 +261,8 @@ struct MSEC
 {
     /*0x00*/ uint32 d1; //always 0?
     /*0x04*/ AnimRef bounds; //Bounding box animation ref in STC
-    /*0x0C*/ //extent ext1; //Some kind of mesh extent? TODO
-    /*0x28*/ uint32 d2[8];
+    /*0x0C*/ sphere ext1; //Some kind of mesh extent? TODO
+    /*0x2C*/ uint32 d2[7];
 };
 
 // Size = 176 byte / 0xB0 byte
@@ -431,10 +434,10 @@ boneIndex:
 struct Vertex32 // 32 byte
 {
     Vec3D pos;
-    char boneWeight[4];
-    char boneIndex[4]; //index in boneLookup of vertex submesh
-    char normal[4];  // x, y, z, w (w is the scale)
-    uint16 uv[2];
+    char weBone[4]; // fltByte
+    unsigned char weIndice[4]; //index in boneLookup of vertex submesh
+    char normal[4];  // fltNormal, x, y, z, w (w is the scale)
+    uint16 uv[2]; // uvShort
     char tangents[4];
 };
 
