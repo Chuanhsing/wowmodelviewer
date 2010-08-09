@@ -16,7 +16,7 @@ void padding(wxFFile *f, int pads=16)
 	}
 }
 
-void RefEntry(char *id, uint32 offset, uint32 nEntries, uint32 vers)
+void RefEntry(const char *id, uint32 offset, uint32 nEntries, uint32 vers)
 {
 	ReferenceEntry re;
 	strncpy(re.id, id, 4);
@@ -63,7 +63,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	// Modelname
 	wxString n(fn, wxConvUTF8);
 	n = n.AfterLast('\\').BeforeLast('.');
-	n.Append(".max");
+	n.Append(_T(".max"));
 
 	RefEntry("RAHC", f.Tell(), n.length()+1, 0);
 	f.Write(n.c_str(), n.length());
@@ -76,8 +76,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	mdata.type = 0x180d53;
 	
 	// mSEQS
-	int nAnimations = 0;
-	int *logAnimations = new int[m->header.nAnimations];
+	uint32 nAnimations = 0;
+	uint32 *logAnimations = new uint32[m->header.nAnimations];
 	wxString *nameAnimations = new wxString[m->header.nAnimations];
 	int Walks = 0, Stands =0, Attacks = 0, Deaths = 0;
 	for(uint32 i=0; i<m->header.nAnimations; i++) {
@@ -135,7 +135,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Seek(sizeof(SEQS)*nAnimations, wxFromCurrent);
 
 	for(uint32 i=0; i<nAnimations; i++) {
-		int j = logAnimations[i];
 		wxString strName = nameAnimations[i];
 		seqs[i].name.nEntries = strName.length()+1;
 		seqs[i].name.ref = fHead.nRefs++;
@@ -170,42 +169,104 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	STC *stcs = new STC[nAnimations];
 	memset(stcs, 0, sizeof(STC)*nAnimations);
 	for(uint32 i=0; i<nAnimations; i++) {
+		stcs[i].indSEQ[0] = stcs[i].indSEQ[0] = i;
 		f.Write(&stcs[i], sizeof(STC));
 	}
 	padding(&f);
 	for(uint32 i=0; i<nAnimations; i++) {
 		// name
 		wxString strName = nameAnimations[i];
-		strName.Append("_full");
+		strName.Append(_T("_full"));
 		stcs[i].name.nEntries = strName.length()+1;
 		stcs[i].name.ref = fHead.nRefs++;
 		RefEntry("RAHC", f.Tell(), stcs[i].name.nEntries, 0);
 		f.Write(strName.c_str(), strName.length());
 		f.Write(&end, sizeof(end));
 		padding(&f);
+
 		// animid
-		
-		// animoffs
-		
-		// events, VEDS
-		
-		// trans, V3DS
-		
-		// rot, Q4DS
+		stcs[i].animid.nEntries = 4;
+		stcs[i].animid.ref = fHead.nRefs++;
+		RefEntry("_23U", f.Tell(), stcs[i].animid.nEntries, 0);
+		uint32 pad = 0;
+		for(uint32 j=0; j<stcs[i].animid.nEntries; j++)
+			f.Write(&pad, sizeof(pad));
+		padding(&f);
+
+		// animindex
+		stcs[i].animindex.nEntries = 4;
+		stcs[i].animindex.ref = fHead.nRefs++;
+		RefEntry("_23U", f.Tell(), stcs[i].animindex.nEntries, 0);
+		for(uint32 j=0; j<stcs[i].animindex.nEntries; j++)
+			f.Write(&pad, sizeof(pad));
+		padding(&f);
+
+		// Events, VEDS
+		stcs[i].Events.nEntries = 1;
+		stcs[i].Events.ref = fHead.nRefs++;
+		RefEntry("VEDS", f.Tell(), stcs[i].Events.nEntries, 0);
+		SD sd;
+		memset(&sd, 0, sizeof(sd));
+		f.Write(&sd, sizeof(sd));
+
+		// Trans, V3DS
+		stcs[i].Trans.nEntries = 1;
+		stcs[i].Trans.ref = fHead.nRefs++;
+		RefEntry("V3DS", f.Tell(), stcs[i].Trans.nEntries, 0);
+		f.Write(&sd, sizeof(sd));
+
+		// Rot, Q4DS
+		stcs[i].Rot.nEntries = 1;
+		stcs[i].Rot.ref = fHead.nRefs++;
+		RefEntry("Q4DS", f.Tell(), stcs[i].Rot.nEntries, 0);
+		f.Write(&sd, sizeof(sd));
 	}
 	after_seqs = f.Tell();
 	f.Seek(stc_offset, wxFromStart);
 	for(uint32 i=0; i<nAnimations; i++) {
 		f.Write(&stcs[i], sizeof(STC));
 	}
+	wxDELETEA(stcs);
 	f.Seek(after_seqs, wxFromStart);
-/*
+
 	// mSTG
-	RefEntry("_GTS", f.Tell(), mSEQS.nEntries, 0);
-	mdata.mSTG.nEntries = mSTG.nEntries;
+	RefEntry("_GTS", f.Tell(), nAnimations, 0);
+	int stg_offset = f.Tell();
+	mdata.mSTG.nEntries = nAnimations;
 	mdata.mSTG.ref = fHead.nRefs++;
+	STG *stgs = new STG[nAnimations];
+	memset(stgs, 0, sizeof(STG)*nAnimations);
+	for(uint32 i=0; i<nAnimations; i++) {
+		f.Write(&stgs[i], sizeof(STG));
+	}
+	padding(&f);
+	for(uint32 i=0; i<nAnimations; i++) {
+		// name
+		wxString strName = nameAnimations[i];
+		stgs[i].name.nEntries = strName.length()+1;
+		stgs[i].name.ref = fHead.nRefs++;
+		RefEntry("RAHC", f.Tell(), stgs[i].name.nEntries, 0);
+		f.Write(strName.c_str(), strName.length());
+		f.Write(&end, sizeof(end));
+		padding(&f);
+		
+		// stcID
+		stgs[i].stcID.nEntries = 1;
+		stgs[i].stcID.ref = fHead.nRefs++;
+		RefEntry("_23U", f.Tell(), stgs[i].stcID.nEntries, 0);
+		f.Write(&i, sizeof(uint32));
+		padding(&f);
+	}
+	after_seqs = f.Tell();
+	f.Seek(stg_offset, wxFromStart);
+	for(uint32 i=0; i<nAnimations; i++) {
+		f.Write(&stgs[i], sizeof(STG));
+	}
+	wxDELETEA(stgs);
+	f.Seek(after_seqs, wxFromStart);
 
 	// mSTS
+/*
 	RefEntry("_STS", f.Tell(), mSEQS.nEntries, 0);
 	mdata.mSTS.nEntries = mSTS.nEntries;
 	mdata.mSTS.ref = fHead.nRefs++;

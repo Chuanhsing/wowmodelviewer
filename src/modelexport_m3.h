@@ -298,7 +298,7 @@ struct ATT
 };
 
 // Size = 32 byte / 0x20 byte
-// Complete
+// Complete, Animationblock, SD3V, SD4Q
 struct SD
 {
     /*0x00*/ Reference timeline;
