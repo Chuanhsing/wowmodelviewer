@@ -1,6 +1,7 @@
 #include "modelviewer.h"
 #include "globalvars.h"
 #include "mpq.h"
+#include "exporters.h"
 #include "CxImage/ximage.h"
 
 typedef std::pair<wxTreeItemId, std::string> TreeStackItem;
@@ -491,20 +492,9 @@ void FileControl::UpdateInterface()
 	if (modelviewer->isModel == true){
 		// If it's an M2 file...
 		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,true);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, true);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);	// Currently totally disabled. No support at all...
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, true);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OBJ, true);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, true);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, true);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, true);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, true);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OGRE, true);
-#ifdef	_WINDOWS
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_FBX, true);
-#else
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_FBX, false);
-#endif
+		for (int x=0;x<ExporterTypeCount;x++){
+			modelviewer->exportMenu->Enable(Exporter_Types[x].ID, Exporter_Types[x].canM2);
+		}
 
 		// Enable Controls for Characters
 		modelviewer->charMenu->Enable(ID_SAVE_CHAR, true);
@@ -526,19 +516,16 @@ void FileControl::UpdateInterface()
 		// If it's an ADT file...
 		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode
-#ifdef _DEBUG		// Debug Only Support for Exporting, until we get it working.
+
+		for (int x=0;x<ExporterTypeCount;x++){
+			modelviewer->exportMenu->Enable(Exporter_Types[x].ID, Exporter_Types[x].canADT);
+		}
+
+		// Hard-coded Debug Work-arounds.
+		// Used for Debug Only Support for Exporting
+#ifdef _DEBUG
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, true);
-#else
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, false);
 #endif
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OBJ, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OGRE, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_FBX, false);
 
 		modelviewer->charMenu->Enable(ID_SAVE_CHAR, false);
 		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, false);
@@ -559,15 +546,10 @@ void FileControl::UpdateInterface()
 		// If the object is a WMO file...
 		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, true);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OBJ, true);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_MS3D, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_3DS, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_X3D, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_XHTML, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_OGRE, false);
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_FBX, false);
+
+		for (int x=0;x<ExporterTypeCount;x++){
+			modelviewer->exportMenu->Enable(Exporter_Types[x].ID, Exporter_Types[x].canWMO);
+		}
 
 		modelviewer->charMenu->Enable(ID_SAVE_CHAR, false);
 		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, false);

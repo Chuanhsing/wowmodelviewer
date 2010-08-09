@@ -41,20 +41,20 @@ Settings_Page1::Settings_Page1(wxWindow* parent, wxWindowID id)
 		return;
 	}
 
-	chkbox[CHECK_SHOWPARTICLE] = new wxCheckBox(this, ID_SETTINGS_SHOWPARTICLE, _("Show Particle"), wxPoint(5,50), wxDefaultSize, 0);
-	chkbox[CHECK_ZEROPARTICLE] = new wxCheckBox(this, ID_SETTINGS_ZEROPARTICLE, _("Zero Particle"), wxPoint(5,75), wxDefaultSize, 0);
-	chkbox[CHECK_LOCALFILES] = new wxCheckBox(this, ID_SETTINGS_LOCALFILES, _("Use Local Files"), wxPoint(5,100), wxDefaultSize, 0);
-	chkbox[CHECK_RANDOMSKIN] = new wxCheckBox(this, ID_SETTINGS_RANDOMSKIN, _("Random Skins"), wxPoint(150,50), wxDefaultSize, 0);
-	chkbox[CHECK_HIDEHELMET] = new wxCheckBox(this, ID_SETTINGS_HIDEHELMET, _("Hide Helmet"), wxPoint(150,75), wxDefaultSize, 0);
-	chkbox[CHECK_KNIGHTEYEGLOW] = new wxCheckBox(this, ID_SETTINGS_KNIGHTEYEGLOW, _("Eye Glow"), wxPoint(150,100), wxDefaultSize, 0);
+	chkbox[CHECK_SHOWPARTICLE] = new wxCheckBox(this, ID_SETTINGS_SHOWPARTICLE, _T("Show Particle"), wxPoint(5,50), wxDefaultSize, 0);
+	chkbox[CHECK_ZEROPARTICLE] = new wxCheckBox(this, ID_SETTINGS_ZEROPARTICLE, _T("Zero Particle"), wxPoint(5,75), wxDefaultSize, 0);
+	chkbox[CHECK_LOCALFILES] = new wxCheckBox(this, ID_SETTINGS_LOCALFILES, _T("Use Local Files"), wxPoint(5,100), wxDefaultSize, 0);
+	chkbox[CHECK_RANDOMSKIN] = new wxCheckBox(this, ID_SETTINGS_RANDOMSKIN, _T("Random Skins"), wxPoint(150,50), wxDefaultSize, 0);
+	chkbox[CHECK_HIDEHELMET] = new wxCheckBox(this, ID_SETTINGS_HIDEHELMET, _T("Hide Helmet"), wxPoint(150,75), wxDefaultSize, 0);
+	chkbox[CHECK_KNIGHTEYEGLOW] = new wxCheckBox(this, ID_SETTINGS_KNIGHTEYEGLOW, _T("Eye Glow"), wxPoint(150,100), wxDefaultSize, 0);
 
-	lbl2 = new wxStaticText(this, wxID_ANY, _("MPQ Archives order and files to load"), wxPoint(0,140), wxDefaultSize, 0);
+	lbl2 = new wxStaticText(this, wxID_ANY, _T("MPQ Archives order and files to load"), wxPoint(0,140), wxDefaultSize, 0);
 	mpqList = new wxListBox(this, wxID_ANY, wxPoint(0,160), wxSize(380, 190), mpqArchives, wxLB_SINGLE|wxLB_HSCROLL, wxDefaultValidator);
-	btn1 = new wxButton(this, ID_SETTINGS_UP, _("Move Up"), wxPoint(5,355), wxSize(70,25), 0);
-	btn2 = new wxButton(this, ID_SETTINGS_DOWN, _("Move Down"), wxPoint(80,355), wxSize(70,25), 0);
-	btn3 = new wxButton(this, ID_SETTINGS_ADD, _("Add"), wxPoint(155,355), wxSize(70,25), 0);
-	btn4 = new wxButton(this, ID_SETTINGS_REMOVE, _("Remove"), wxPoint(230,355), wxSize(70,25), 0);
-	btn5 = new wxButton(this, ID_SETTINGS_CLEAR, _("Clear"), wxPoint(305,355), wxSize(70,25), 0);
+	btn1 = new wxButton(this, ID_SETTINGS_UP, _T("Move Up"), wxPoint(5,355), wxSize(70,25), 0);
+	btn2 = new wxButton(this, ID_SETTINGS_DOWN, _T("Move Down"), wxPoint(80,355), wxSize(70,25), 0);
+	btn3 = new wxButton(this, ID_SETTINGS_ADD, _T("Add"), wxPoint(155,355), wxSize(70,25), 0);
+	btn4 = new wxButton(this, ID_SETTINGS_REMOVE, _T("Remove"), wxPoint(230,355), wxSize(70,25), 0);
+	btn5 = new wxButton(this, ID_SETTINGS_CLEAR, _T("Clear"), wxPoint(305,355), wxSize(70,25), 0);
 }
 
 

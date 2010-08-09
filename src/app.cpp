@@ -318,6 +318,8 @@ bool WowModelViewApp::LoadSettings()
 	//pConfig->Read(_T("AntiAlias"), &useAntiAlias, true);
 	//pConfig->Read(_T("DisableHWAcc"), &disableHWAcc, false);
 	pConfig->Read(_T("DefaultFormat"), &imgFormat, 0);
+
+	pConfig->Read(_T("PerferedExporter"), &Perfered_Exporter, -1);
 	pConfig->Read(_T("ModelExportInitOnly"), &modelExportInitOnly, true);
 	pConfig->Read(_T("ModelExportPreserveDirs"), &modelExport_PreserveDir, true);
 	pConfig->Read(_T("ModelExportUseWMVPosRot"), &modelExport_UseWMVPosRot, false);
@@ -483,6 +485,8 @@ void WowModelViewApp::SaveSettings()
 	//pConfig->Write(_T("AntiAlias"), useAntiAlias);
 	//pConfig->Write(_T("DisableHWAcc"), disableHWAcc);
 	pConfig->Write(_T("DefaultFormat"), imgFormat);
+
+	pConfig->Write(_T("PerferedExporter"), Perfered_Exporter);
 	pConfig->Write(_T("ModelExportInitOnly"), modelExportInitOnly);
 	pConfig->Write(_T("ModelExportPreserveDirs"), modelExport_PreserveDir);
 	pConfig->Write(_T("ModelExportUseWMVPosRot"), modelExport_UseWMVPosRot);

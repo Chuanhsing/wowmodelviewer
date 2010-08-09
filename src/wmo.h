@@ -46,7 +46,7 @@ public:
 	Vec3D *vertices, *normals;
 	Vec2D *texcoords;
 	unsigned short *indices;
-	int nTriangles, nVertices, nIndices;
+	uint32 nTriangles, nVertices, nIndices;
 	unsigned int *cv;
 	unsigned short *materials;
 	WMOBatch *batches;

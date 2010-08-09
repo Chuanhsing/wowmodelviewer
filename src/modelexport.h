@@ -13,6 +13,10 @@ struct Vertex3f {
 	float z;
 };
 
+struct RGBColor{
+	uint8 r, g, b;
+};
+
 struct ModelData {
 	Vertex3f vertex;
 	float tu;

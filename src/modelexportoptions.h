@@ -17,12 +17,15 @@
 #include "util.h"
 #include "enums.h"
 
+// Options Functions
 class ModelExportOptions_General: public wxWindow
 {
 	DECLARE_CLASS(ModelExportOptions_General)
     DECLARE_EVENT_TABLE()
 
 	wxCheckBox *chkbox[NUM_MEO1_CHECK];
+	wxComboBox *ddextype;
+	wxStaticText *text;
 	//wxListBox *mpqList;
 	//wxTextCtrl *txtPath;
 
@@ -35,6 +38,7 @@ public:
 
 	void OnButton(wxCommandEvent &event);
 	void OnCheck(wxCommandEvent &event);
+	void OnComboBox(wxCommandEvent &event);
 };
 
 class ModelExportOptions_Lightwave: public wxWindow

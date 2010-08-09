@@ -2,14 +2,13 @@
 #include "modelviewer.h"
 #include "globalvars.h"
 #include "mpq.h"
+#include "exporters.h"
 
 // default colour values
 const static float def_ambience[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 const static float def_diffuse[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 const static float def_emission[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 const static float def_specular[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-
-//test comment ~ZT
 
 // Class event handler/importer
 IMPLEMENT_CLASS(ModelViewer, wxFrame)
@@ -282,14 +281,27 @@ void ModelViewer::InitMenu()
 	//To add your exporter, simply copy the bottom line below, and change the nessicary information.
 
 	exportMenu = new wxMenu;
-	exportMenu->AppendCheckItem(ID_MODELEXPORT_INIT, _("Initial Pose Only"));
+	exportMenu->AppendCheckItem(ID_MODELEXPORT_INIT, _T("Initial Pose Only"));
 	exportMenu->Check(ID_MODELEXPORT_INIT, modelExportInitOnly);
 	exportMenu->AppendSeparator();
-	exportMenu->Append(ID_MODELEXPORT_OPTIONS, _("Export Options..."));
+	exportMenu->Append(ID_MODELEXPORT_OPTIONS, _T("Export Options..."));
 	exportMenu->AppendSeparator();
 #ifdef _DEBUG
-	exportMenu->Append(ID_MODELEXPORT_LWO2, _("Experimental Lightwave..."));
+	// Debug Only Exporters
+	exportMenu->Append(ID_MODELEXPORT_LWO2, _T("Experimental Lightwave..."));
+	exportMenu->AppendSeparator();
 #endif
+	// Perfered Exporter First
+	if (Perfered_Exporter != -1) {
+		exportMenu->Append(Exporter_Types[Perfered_Exporter].ID, Exporter_Types[Perfered_Exporter].MenuText);
+	}
+	// The Rest
+	for (uint16 x=0;x<10;x++){
+		if (x != Perfered_Exporter) {
+			exportMenu->Append(Exporter_Types[x].ID, Exporter_Types[x].MenuText);
+		}
+	}
+	/*
 	exportMenu->Append(ID_MODELEXPORT_LWO, _("Lightwave..."));
 	exportMenu->Append(ID_MODELEXPORT_OBJ, _("Wavefront OBJ..."));
 	exportMenu->Append(ID_MODELEXPORT_COLLADA, _("Collada..."));
@@ -300,6 +312,7 @@ void ModelViewer::InitMenu()
 	exportMenu->Append(ID_MODELEXPORT_OGRE, _("Ogre XML..."));
 	exportMenu->Append(ID_MODELEXPORT_FBX, _("FBX..."));
 	exportMenu->Append(ID_MODELEXPORT_M3, _("M3..."));
+	*/
 
 	// -= Enable/Disable Model Exporters =-
 	// If you don't support WMOs or M2 files yet, you can disable export for that in filecontrol.cpp,

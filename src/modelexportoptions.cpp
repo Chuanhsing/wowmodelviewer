@@ -1,6 +1,8 @@
 // Copied from Settings.cpp
 
+#include "globalvars.h"
 #include "modelexportoptions.h"
+#include "exporters.h"
 #include "enums.h"
 
 //#include "globalvars.h"
@@ -14,6 +16,7 @@ IMPLEMENT_CLASS(ModelExportOptions_Lightwave, wxWindow)
 IMPLEMENT_CLASS(ModelExportOptions_X3D, wxWindow)
 
 BEGIN_EVENT_TABLE(ModelExportOptions_General, wxWindow)
+	EVT_COMBOBOX(ID_EXPORTOPTIONS_PERFERED_EXPORTER,ModelExportOptions_General::OnComboBox)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_PRESERVE_DIR, ModelExportOptions_General::OnCheck)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_USE_WMV_POSROT, ModelExportOptions_General::OnCheck)
 	/*
@@ -60,9 +63,12 @@ ModelExportOptions_General::ModelExportOptions_General(wxWindow* parent, wxWindo
 		wxLogMessage(_T("GUI Error: ModelExportOptions_General"));
 		return;
 	}
+	wxFlexGridSizer *top = new wxFlexGridSizer(1);
 
-	chkbox[MEO_CHECK_PRESERVE_DIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_PRESERVE_DIR, _T("Preserve Directory Structure"), wxPoint(5,5), wxDefaultSize, 0);
-	chkbox[MEO_CHECK_USE_WMV_POSROT] = new wxCheckBox(this, ID_EXPORTOPTIONS_USE_WMV_POSROT, _T("Use Position and Rotation from WMV"), wxPoint(5,22), wxDefaultSize, 0);
+	text = new wxStaticText(this, wxID_ANY, _T("Perferred Exporter:"), wxPoint(5,9), wxDefaultSize, 0);
+	top->Add(ddextype = new wxComboBox(this, ID_EXPORTOPTIONS_PERFERED_EXPORTER, _T("Perferred Exporter"), wxPoint(105,5), wxDefaultSize, 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
+	chkbox[MEO_CHECK_PRESERVE_DIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_PRESERVE_DIR, _T("Preserve Directory Structure"), wxPoint(5,30), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_USE_WMV_POSROT] = new wxCheckBox(this, ID_EXPORTOPTIONS_USE_WMV_POSROT, _T("Use Position and Rotation from WMV"), wxPoint(5,50), wxDefaultSize, 0);
 }
 
 
@@ -82,8 +88,28 @@ void ModelExportOptions_General::OnCheck(wxCommandEvent &event)
 	}
 }
 
+void ModelExportOptions_General::OnComboBox(wxCommandEvent &event)
+{
+	int id = event.GetId();
+
+	if (id==ID_EXPORTOPTIONS_PERFERED_EXPORTER){
+		Perfered_Exporter = (ddextype->GetCurrentSelection()-1);
+
+		g_modelViewer->InitMenu();
+		g_fileControl->UpdateInterface();
+	}
+}
+
 void ModelExportOptions_General::Update()
 {
+	ddextype->Clear();
+	ddextype->Append(wxString(wxT("None")));
+	for (int x=0;x<ExporterTypeCount;x++){
+		ddextype->Append(Exporter_Types[x].Name);
+	}
+	ddextype->SetSelection(Perfered_Exporter+1);
+
+	//Perfered_Exporter
 	chkbox[MEO_CHECK_PRESERVE_DIR]->SetValue(modelExport_PreserveDir);
 	chkbox[MEO_CHECK_USE_WMV_POSROT]->SetValue(modelExport_UseWMVPosRot);
 }
@@ -166,7 +192,6 @@ void ModelExportOptions_Lightwave::Update()
 	//ddextype->Append(wxString("as a Single Object"));
 	//ddextype->Append(wxString("as a Single Object, Per Group"));
 	ddextype->SetSelection(modelExport_LW_DoodadsAs);
-
 	ddextype->Enable(modelExport_LW_ExportDoodads);
 
 }

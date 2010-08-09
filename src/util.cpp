@@ -25,6 +25,7 @@ bool bZeroParticle = true;
 
 // Model Export Options
 // General Options
+int Perfered_Exporter = -1; // Defaults to None
 bool modelExportInitOnly = true;
 bool modelExport_PreserveDir = true;
 bool modelExport_UseWMVPosRot = false;
@@ -180,7 +181,7 @@ void getGamePath()
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\PTR"),
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\Beta")
 #endif
-		 };
+	};
 
 	for (uint32 i=0; i<WXSIZEOF(regpaths); i++) {
 		l = RegOpenKeyEx((HKEY)HKEY_LOCAL_MACHINE, regpaths[i], 0, KEY_QUERY_VALUE, &key);
