@@ -307,7 +307,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	mdata.mVert.nEntries = m->header.nVertices*sizeof(Vertex32);
 	mdata.mVert.ref = fHead.nRefs++;
 	RefEntry("__8U", f.Tell(), mdata.mVert.nEntries, 0);
-	MPQFile mpqf(m->modelname.c_str());
+	MPQFile mpqf((char *)m->modelname.c_str());
 	ModelVertex *verts = (ModelVertex*)(mpqf.getBuffer() + m->header.ofsVertices);
 	for(int i=0; i<m->header.nVertices; i++) {
 		Vertex32 vert;
@@ -326,7 +326,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Write(&vert, sizeof(vert));
 	}
 	padding(&f);
-	mpqf.close();
+
 
 	// mDIV
 	mdata.mDIV.nEntries = 1;
@@ -338,7 +338,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Write(&div, sizeof(div));
 	padding(&f);
 	// mDIV.faces = m->view.nTriangles
-	MPQFile mpqfv(m->lodname.c_str());
+	MPQFile mpqfv((char *)m->lodname.c_str());
 	ModelView *view = (ModelView*)(mpqfv.getBuffer());
 	div.faces.nEntries = view->nTris;
 	div.faces.ref = fHead.nRefs++;
@@ -396,55 +396,55 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Seek(chunk_offset, wxFromStart);
 	f.Write(&div, sizeof(div));
 	f.Seek(datachunk_offset, wxFromStart);
-	mpqfv.close();
 
 	// mBoneLU
-	
+/*
+	uint16 *boneLookup = (uint16 *)mpqf.getBuffer() + m->header.ofsBoneLookup;
+	mdata.mBoneLU.nEntries = m->header.nBoneLookup;
+	mdata.mBoneLU.ref = fHead.nRefs++;
+	RefEntry("_61U", f.Tell(), mdata.mBoneLU.nEntries, 0);
+	f.Write(&boneLookup, mdata.mBoneLU.nEntries*sizeof(uint16));
+*/
+
 	// boundSphere
 	
 	// mAttach
-	
+	ModelAttachmentDef *attachments = (ModelAttachmentDef*)(mpqf.getBuffer() + m->header.ofsAttachments);
+	mdata.mAttach.nEntries = m->header.nAttachments;
+	mdata.mAttach.ref = fHead.nRefs++;
+	RefEntry("_TTA", f.Tell(), mdata.mAttach.nEntries, 0);
+	chunk_offset = f.Tell();
+	ATT *atts = new ATT[mdata.mAttach.nEntries];
+	memset(atts, 0, sizeof(ATT)*mdata.mAttach.nEntries);
+	for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
+		atts[i].flag = -1;
+		atts[i].bone = attachments[i].bone;
+		f.Write(&atts[i], sizeof(ATT));
+	}
+	padding(&f);
+	for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
+		// name
+		wxString strName = wxString::Format(_T("ATT_%d"), i);
+		atts[i].name.nEntries = strName.length()+1;
+		atts[i].name.ref = fHead.nRefs++;
+		RefEntry("RAHC", f.Tell(), atts[i].name.nEntries, 0);
+		f.Write(strName.c_str(), strName.length());
+		f.Write(&end, sizeof(end));
+		padding(&f);
+	}
+	datachunk_offset = f.Tell();
+	f.Seek(chunk_offset, wxFromStart);
+	for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
+		f.Write(&atts[i], sizeof(ATT));
+	}
+	wxDELETEA(atts);
+	f.Seek(datachunk_offset, wxFromStart);
+
 	// mAttachLU
-	
-	// mLite
-	
-	// mSHBX
-	
-	// mCam
-	
+
 	// mMatLU
 	
 	// mMat
-	
-	// mDIS
-	
-	// mCMP
-	
-	// mTER
-	
-	// mVOL
-	
-	// mCREP
-	
-	// mPar
-	
-	// mParc
-	
-	// mRibbon
-	
-	// mPROJ
-	
-	// mFOR
-	
-	// mWRP
-	
-	// mPHRB
-	
-	// mIKJT
-	
-	// mPATU
-	
-	// mTRGD
 	
 	// mIREF
 	
@@ -468,5 +468,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Write(&fHead, sizeof(fHead));
 	f.Write(&mdata, sizeof(mdata));
 
+	mpqf.close();
+	mpqfv.close();
 	f.Close();
 }

@@ -295,7 +295,7 @@ struct EVNT
 // Incomplete
 struct ATT
 {
-    /*0x00*/ int32 unk;
+    /*0x00*/ int32 flag;
     /*0x04*/ Reference name;
     /*0x10*/ int32 bone;
 };

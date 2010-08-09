@@ -2478,11 +2478,16 @@ void ModelViewer::ModelInfo()
 	}
 	xml << "  </Bones>" << endl;
 
-	xml << "  <BoneLookups></BoneLookups>" << endl;
+	xml << "  <BoneLookups>" << endl;
+	uint16 *boneLookup = (uint16 *)f.getBuffer() + m->header.ofsBoneLookup;
+	for(size_t i=0; i<m->header.nBoneLookup; i++) {
+		xml << "    <BoneLookup id=\"" << i << "\">" << boneLookup[i] << "</BoneLookup>" << endl;
+	}
+	xml << "  </BoneLookups>" << endl;
 
 	xml << "  <KeyBoneLookups>" << endl;
 	for(size_t i=0; i<m->header.nKeyBoneLookup; i++)
-		xml << "<KeyBoneLookup id=\"" << i << "\">" << m->keyBoneLookup[i] << "</KeyBoneLookup>" << endl;
+		xml << "    <KeyBoneLookup id=\"" << i << "\">" << m->keyBoneLookup[i] << "</KeyBoneLookup>" << endl;
 	xml << "  </KeyBoneLookups>" << endl;
 
 	xml << "  </SkeletonAndAnimation>" << endl;
@@ -2616,7 +2621,13 @@ void ModelViewer::ModelInfo()
 	}
 	xml << "	</Textures>" << endl;
 
-	xml << "	<TextureLookup></TextureLookup>" << endl;
+	xml << "  <TexLookups>" << endl;
+	uint16 *texLookup = (uint16 *)f.getBuffer() + m->header.ofsTexLookup;
+	for(size_t i=0; i<m->header.nTexLookup; i++) {
+		xml << "    <TexLookup id=\"" << i << "\">" << texLookup[i] << "</TexLookup>" << endl;
+	}
+	xml << "  </TexLookups>" << endl;
+
 	xml << "	<ReplacableTextureLookup></ReplacableTextureLookup>" << endl;
 
 	xml << "  </GeometryAndRendering>" << endl;
@@ -2673,6 +2684,13 @@ void ModelViewer::ModelInfo()
 		xml << "	  </Attachment>" << endl;
 	}
 	xml << "	</Attachments>" << endl;
+
+	xml << "  <AttachLookups>" << endl;
+	uint16 *attachLookup = (uint16 *)f.getBuffer() + m->header.ofsAttachLookup;
+	for(size_t i=0; i<m->header.nAttachLookup; i++) {
+		xml << "    <AttachLookup id=\"" << i << "\">" << attachLookup[i] << "</AttachLookup>" << endl;
+	}
+	xml << "  </AttachLookups>" << endl;
 
 	xml << "	<Events>" << endl;
 	if (m->events) {

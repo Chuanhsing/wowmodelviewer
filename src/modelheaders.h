@@ -163,7 +163,7 @@ struct ModelHeader {
 	uint32 nTexLookup; // TextureAndTheifAnimation
 	uint32 ofsTexLookup; // The same for textures.
 
-	uint32 nTexUnitLookup;		// L, TextureAndTheifAnimation
+	uint32 nTexUnitLookup;		// L, TextureAndTheifAnimation, seems gone after Cataclysm
 	uint32 ofsTexUnitLookup; // And texture units. Somewhere they have to be too.
 	uint32 nTransparencyLookup; // M, ColorsAndTransparency
 	uint32 ofsTransparencyLookup; // Everything needs its lookup. Here are the transparencies.
