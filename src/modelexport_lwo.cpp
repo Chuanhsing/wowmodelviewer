@@ -129,8 +129,10 @@ void WriteLWSceneObject(ofstream &fs, wxString Filename, AnimationData AnimData,
 
 void WriteLWSceneObject2(ofstream &fs, LWSceneObj Object)
 {
+	/*
 	bool isLabeled = false;
 	bool isParented = false;
+	*/
 
 	if (Object.isNull == true){
 		fs << _T("AddNullObject");
@@ -774,7 +776,7 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 
 // Scene Writer
 void ExportLightwaveScene(LWScene SceneData){
-	wxLogMessage("Export Lightwave Scene Function running.");
+	wxLogMessage(_T("Export Lightwave Scene Function running."));
 
 	wxString SceneName = SceneData.FilePath + SceneData.FileName;
 
@@ -3998,7 +4000,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 	// Other Declares
 	int off_t;
-	uint16 dimension;
+	//uint16 dimension;
 	uint16 zero = 0;
 
 	// Needed Numbers
@@ -4034,7 +4036,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 	if (!f.IsOk()) {
 		wxMessageBox(_T("Unable to open file. Could not export model."),_T("Error"));
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file);
+		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file.c_str());
 		return false;
 	}
 
@@ -4071,7 +4073,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		fileLen += 8;
 
 		// Parts
-		for (int i=0; i<Object.PartNames.size(); i++){
+		for (size_t i=0; i<Object.PartNames.size(); i++){
 			wxString PartName = Object.PartNames[i];
 
 			PartName.Append(_T('\0'));
@@ -4081,7 +4083,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			tagsSize += (uint32)PartName.length();
 		}
 		// Surfaces
-		for (int i=0; i<Object.Surfaces.size(); i++){
+		for (size_t i=0; i<Object.Surfaces.size(); i++){
 			wxString SurfName = Object.Surfaces[i].Name;
 
 			SurfName.Append(_T('\0'));
@@ -4148,7 +4150,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		fileLen += 8 + pointsSize;	// Corrects the filesize...
 
 		// Writes the point data
-		for (int i=0; i<cLyr.Points.size(); i++) {
+		for (size_t i=0; i<cLyr.Points.size(); i++) {
 			Vec3D vert;
 			vert.x = MSB4<float>(cLyr.Points[i].PointData.x);
 			vert.y = MSB4<float>(cLyr.Points[i].PointData.z);
@@ -4399,7 +4401,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 		Layer.BoundingBox2 = m->v2;
 
 		uint32 PolyCounter = 0;
-		uint32 PartCounter = 0;
+		//uint32 PartCounter = 0;
 		uint32 SurfCounter = 0;
 		uint32 PrevGVerts = 0;
 
@@ -4409,12 +4411,12 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 			// Process each group's batches.
 			uint32 GPolyCounter = 0;
 			uint32 GVertCounter = 0;
-			Object.PartNames.push_back(group->name);
+			Object.PartNames.push_back(wxString(group->name.c_str(), wxConvUTF8));
 
 			for (int b=0; b<group->nBatches; b++)	{
 				WMOBatch *batch = &group->batches[b];
 
-				LWSurface Surface(wxString(m->textures[batch->texture]).AfterLast('\\').BeforeLast('.'),m->textures[batch->texture]);
+				LWSurface Surface(wxString(m->textures[batch->texture].c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.'),wxString(m->textures[batch->texture].c_str(), wxConvUTF8));
 				Object.Surfaces.push_back(Surface);
 				uint32 *Vect2Point = new uint32[group->nVertices];
 
@@ -4433,7 +4435,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 				}
 
 				// Process Indices
-				for(int ii=batch->indexStart;ii<(batch->indexStart+batch->indexCount);ii+=3,GVertCounter++){
+				for(unsigned int ii=batch->indexStart;ii<(batch->indexStart+batch->indexCount);ii+=3,GVertCounter++){
 					// --== Polygon Data ==--	
 					LWPoly Poly;
 					Poly.PolyData.numVerts = 3;
@@ -4449,7 +4451,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 						uint32 a = GPolyCounter + mod;
 						uint32 b = group->IndiceToVerts[a];
 
-						wxLogMessage("Group: %i, a: %i, b:%i, PrevGVerts: %i, Final Indice: %i",g,a,b,PrevGVerts,PrevGVerts+b);
+						wxLogMessage(_T("Group: %i, a: %i, b:%i, PrevGVerts: %i, Final Indice: %i"),g,a,b,PrevGVerts,PrevGVerts+b);
 						
 						Poly.PolyData.indice[x] = Vect2Point[b];
 					}
@@ -4460,7 +4462,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 				SurfCounter++;
 			}
 			PrevGVerts += GVertCounter;
-			wxLogMessage("PrevGVerts: %i",PrevGVerts);
+			wxLogMessage(_T("PrevGVerts: %i"),PrevGVerts);
 		}
 
 		Object.Layers.push_back(Layer);

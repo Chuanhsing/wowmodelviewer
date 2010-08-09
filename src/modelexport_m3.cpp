@@ -309,7 +309,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	RefEntry("__8U", f.Tell(), mdata.mVert.nEntries, 0);
 	MPQFile mpqf((char *)m->modelname.c_str());
 	ModelVertex *verts = (ModelVertex*)(mpqf.getBuffer() + m->header.ofsVertices);
-	for(int i=0; i<m->header.nVertices; i++) {
+	for(uint32 i=0; i<m->header.nVertices; i++) {
 		Vertex32 vert;
 		memset(&vert, 0, sizeof(vert));
 		vert.pos = verts[i].pos;
