@@ -1,7 +1,23 @@
 #ifndef MODELEXPORT_M3_H
 #define MODELEXPORT_M3_H
 
-/* http://code.google.com/p/libm3/wiki/Structs */
+/*
+Most contents are retrived from http://code.google.com/p/libm3/w/list
+
+Thanks dot.qwerty, madyavic
+*/
+
+/*
++--------------------------------+
+|           MD34 Head            |
++--------------------------------+
+|           MODL Head            |
++--------------------------------+
+|          MODL Content          |
++--------------------------------+
+|         ReferenceEntry         |
++--------------------------------+
+*/
 
 // Size = 16 byte / 0x10 byte
 struct QUAT
@@ -18,6 +34,7 @@ struct sphere
 	uint32 flags;
 };
 
+// Size = 68 byte / 0x44 byte
 struct matrix
 {
 	Vec4D a;
@@ -29,6 +46,18 @@ struct matrix
 
 // Size = 12 byte / 0x0C byte
 // Complete, struct HeadRef
+/*
+The file header contains the number of reference lists in the file, along with 
+the offset where their headers start.
+
+Each reference header contains the data type in the list, the number of entries 
+in that list, along with the offset where that list starts.
+
+There is a fourth value in the reference header, which purpose is unknown. But 
+the size of the block can depend on this value. For example the MODL block in 
+units/buildings have a different value here compared to the MODL block in 
+skyboxes, and the size of the block / number of fields in the block is different.
+*/
 struct Reference 
 {
     /*0x00*/ uint32 nEntries; // nData
@@ -48,11 +77,48 @@ struct ReferenceEntry
 
 // Size = 8 Byte / 0x08 byte
 // Incomplete
-struct AnimRef
+/*
+Animation References
+
+Each animation sequence has related SD-blocks which references the data used by 
+the animation. Animation references use a unique uint32 ID to reference sequence 
+animation data found in STC. Following animation references are two values, the 
+initial value before animation and another value of the same type that seems to 
+have no effect. Following these is a uint32 flag that seems to always be 0. The 
+value types depend on the animation reference (i.e. VEC3D, Quat, uint32, etc).
+*/
+struct AnimationReference
 {
     /*0x00*/ uint16 flags; //usually 1
     /*0x02*/ uint16 animflag; //6 indicates animation data present
     /*0x04*/ uint32 animid; //a unique uint32 value referenced in STC.animid and STS.animid
+};
+
+// Size = 20 Byte / 0x14 byte
+struct Aref_UINT32
+{
+    AnimationReference AnimRef; //STC/STS reference
+    uint32 value; //initial value
+    uint32 unValue; //unused value
+    uint32 flag; //seems unused, 0
+};
+
+// Size = 36 Byte / 0x24 byte
+struct Aref_VEC3D
+{
+    AnimationReference AnimRef; //STC/STS reference
+    Vec3D value; //initial value
+    Vec3D unValue; //unused value
+    uint32 flag; //seems unused, 0
+};
+
+// Size = 44 Byte / 0x2C byte
+struct Aref_QUAT
+{
+    AnimationReference AnimRef; //STC/STS reference
+    QUAT value; //initial value
+    QUAT unValue; //unused value
+    uint32 flags; //seems unused, 0
 };
 
 // Size = 24 byte / 0x18 byte
@@ -127,6 +193,76 @@ struct MODL
 
 // Size = 160 byte / 0xA0 byte
 // Incomplete
+/*
+The bones as defined in the .m3 files.
+
+Bone Flags
+Most flags have been determined through the previewer.
+
+Bit Index	Bit Address	 Flag	 Description
+1	 0x1	 Inherit translation	 Inherit translation from parent bone
+2	 0x2	 Inherit scale	 Inherit scale from parent bone
+3	 0x4	 Inherit rotation	 Inherit rotation from parent bone
+5	 0x10	 Billboard (1)	 Billboard bone
+7	 0x40	 Billboard (2)	 Billboard bone (again)
+9	 0x100	 2D Projection	 Projects the bone in 2D?
+10	 0x200	 Animated	 Bone has STC (transform) data. Will ignore STC data if set to false
+11	 0x400	 Inverse Kinematics	 Grants the bone IK properties in the game engine
+12	 0x800	 Skinned	 Bone has associated geometry. Necessary for rendering geometry weighted to the bone
+14	 0x2000	 Unknown	 Always set to true in Blizzard models. No apparent effect
+
+Extra Bone Information
+Bone Configuration
+M3 bones have two initial configurations that are in two different formats. The 
+bindpose is first setup using bone matrices which can be found in the IREF 
+chunks. Secondly, once the mesh is weighted to the bones, the initial position, 
+rotation and scale values are applied to a bone in relation to the parent bone 
+if the bone has one. In 3ds Max to apply these transformations appropriately, 
+you have to begin at the deepest bones first and work your way up. This places 
+the model in what I've decided to call the base pose. It's unclear what the 
+purpose of the base pose is, but it seems to have relevance to how the model 
+behaves in the absence of sequence transform data. This is different to WoW's M2 
+model format which had pivot points for their bones to setup the bindpose and 
+lacked any kind of base pose.
+
+Some of Blizzards models use a terrible feature of 3ds Max that allows you to 
+mirror bones by using negative scales. Examples of this can be found in 
+Immortal.m3 and DarkTemplar.m3 aswell as I'm sure other models where the 
+original artist has decided to mirror the bones through this tool. This can 
+cause serious problems when correctly trying to animate bones outside of the 
+Starcraft engine. In 3ds Max this is particularly a problem as rotations do 
+not factor in the negative scaling resulting in improper orientation of bones 
+during animations. A workaround is to force the bones to use a transform matrix 
+with the negative scaling applied for each rotation keyframe and remove the 
+extra keyframes generated in the scale and translation controllers.
+
+Animation References
+M3's use an odd system for referencing their animation data. There is a global 
+list of all animation data represented in the STC structures for each animation 
+sequence. AnimationReferences found in bones contain animflags of 6 when they 
+contain data for at least one of the animations. Regardless of whether they 
+contain data, they will always have a unique uint32 ID which I suppose is 
+randomly generated. These ID's are referenced in MODL.STC.animid list if there 
+is animation data present for that particular animation type in that particular 
+animation sequence, if they are not referenced it indicates there is null 
+animation data for that animation type.
+
+In order to gather the correct animation data from the reference, you must 
+iterate through the STC.animid list of uint32 ID's and find the matching ID in 
+the list. Once you find that index, you check the same index in the next section 
+of STC.animindex which provides the sequence data index and the index into the 
+sequence data array present in STC.
+
+As an example (all values are arbitrary), if you're trying to find rotation data 
+in a bone, you grab the rot.AnimRef.animid from the bone. You go to the animation 
+sequence data you want to animate this bone with, say MODL.STC[2], iterate through 
+STC[2].animid until you find the animid in the list and record its index as 6. You 
+go to STC[2].animind[6] and record the STC[2].animind[6].aind as 8 and 
+STC[2].animind[6].sdind as 3. You'll find the appropriate sequence data for that 
+bone in the MODL.STC[2].SeqData[3].SD4Q[8] SD (Sequence Data) chunk and can animate 
+the bone accordingly. I hope this clarifies how animation data is referenced in the 
+M3 file format.
+*/
 struct BONE
 {
     /*0x00*/ int32 d1; // Keybone?
@@ -134,19 +270,19 @@ struct BONE
     /*0x10*/ uint32 flags; //2560 = Weighted vertices rendered, 512 = not rendered
     /*0x14*/ int16 parent; // boneparent
     /*0x16*/ uint16 s1; // always 0
-    /*0x1A*/ AnimRef transid; //unique animation ID ref
+    /*0x1A*/ AnimationReference transid; //unique animation ID ref
     /*0x20*/ Vec3D pos; //bone position is relative to parent bone and its rotation
     /*0x2C*/ Vec3D pos2;
     /*0x38*/ float f1;
-    /*0x3C*/ AnimRef rotid;
+    /*0x3C*/ AnimationReference rotid;
     /*0x44*/ QUAT rot; //initial bone rotation
     /*0x54*/ QUAT rot2;
     /*0x64*/ float f2;
-    /*0x68*/ AnimRef scaleid;
+    /*0x68*/ AnimationReference scaleid;
     /*0x70*/ Vec3D scale; //initial scale
     /*0x7C*/ Vec3D scale2;
     /*0x88*/ int32 d3;
-    /*0x90*/ AnimRef unk2;
+    /*0x90*/ AnimationReference unk2;
     /*0x94*/ int32 d4[3];
 };
 
@@ -160,13 +296,92 @@ struct MATM
 
 // Size = 212 bytes / 0xD4 bytes
 // Incomplete
+/*
+Material definitions for the M3 model. Materials act as a container for a group 
+of bitmaps such as diffuse, specular, emissive, etc. They have general 
+properties that play a role in how the bitmaps are ultimately rendered on the 
+model. MATM are referenced in the DIV BAT matid's and function as a lookup table 
+into these definitions.
+
+Layers
+Each layer index corresponds to a specific type of map. Some don't appear to do 
+anything, even the previewer doesn't disclose their purpose. It's been found that 
+some of the maps don't need to point to a real map to still have an effect on the 
+material, such as Alpha Map properties when the alpha blend modes are used. More 
+on that in the LAYR definition. Each LAYR must have a referenced chunk even if it's 
+blank or else the previewer will crash.
+
+Layer Index	Map Type
+0	 Diffuse
+1	 Decal
+2	 Specular
+3	 Emissive (1)
+4	 Emissive (2)
+6	 Envio (Reflective)
+7	 Envio Mask
+8	 Alpha Mask
+10	 Normal
+11	 Height
+
+Flags
+Most of these determined through the previewer.
+Bit Index	Bit Address	 Flag
+3	 0x4	 Unfogged (1)
+4	 0x8	 Two-sided
+5	 0x10	 Unshaded
+6	 0x20	 No shadows cast
+7	 0x40	 No hit test
+8	 0x80	 No shadows received
+9	 0x100	 Depth prepass
+10	 0x200	 Use terrain HDR
+12	 0x800	 Splat UV fix
+13	 0x1000	 Soft blending
+14	 0x2000	 Unfogged (2)
+
+Blendmodes
+Value	Mode
+0	 Opaque
+1	 Alpha Blend
+2	 Add
+3	 Alpha Add
+4	 Mod
+5	 Mod 2x
+
+Layer/Emissive Blendmodes
+Value	Mode
+0	 Mod
+1	 Mod 2x
+2	 Add
+3	 Blend
+4	 Team Colour Emissive Add
+5	 Team Colour Diffuse Add
+
+Specular Types
+Value	Type
+0	 RGB
+1	 Alpha Only
+*/
 struct MAT
 {
     Reference name;
-    int32 d1[8];
-    float x, y;
-    Reference layers[13];//0 - Diffuse, 1 - Decal, 2 - Specular, 3 - Emissive, 9 - Normal
-    int32 d2[15];
+    uint32 d1;
+    uint32 flags;
+    uint32 blendMode;
+    uint32 priority;
+    uint32 d2;
+    float specularity;
+    uint32 d3;
+    uint32 cutoutThresh;
+    float SpecMult;
+    float EmisMult;
+    Reference layers[13];
+    uint32 d4;
+    uint32 layerBlend;
+    uint32 emisBlend;
+    uint32 d5; //controls emissive blending in someway, should be set to 2
+    uint32 specType;
+    Aref_UINT32 ar1;
+    Aref_UINT32 ar2;
 };
 
 // Size = 352 bytes / 0x160 bytes
@@ -175,38 +390,38 @@ struct LAYR
 {
     uint32 d1;
     Reference name;
-    AnimRef ar1;
+    AnimationReference ar1;
     uint32 d2[6]; //d2[5] determines team colour
-    AnimRef ar2;
+    AnimationReference ar2;
     float f1[2];
     uint32 d3;
-    AnimRef ar3;
+    AnimationReference ar3;
     uint32 d4[4];
     int32 d5;
     uint32 d6[5];
-    AnimRef ar4;
+    AnimationReference ar4;
     uint32 d7[3];
-    AnimRef ar5;
+    AnimationReference ar5;
     uint32 d8[5];
-    AnimRef ar6;
+    AnimationReference ar6;
     uint32 d9[2];
-    AnimRef ar7;
+    AnimationReference ar7;
     float f2[2];
     uint32 d10[3];
-    AnimRef ar8;
+    AnimationReference ar8;
     float f3;
     uint32 d11;
     float f4;
     uint32 d12[4];
-    AnimRef ar9;
+    AnimationReference ar9;
     float f5[4];
     uint32 d13;
-    AnimRef ar10;
+    AnimationReference ar10;
     uint32 d14[3];
-    AnimRef ar11;
+    AnimationReference ar11;
     float f6[2];
     uint32 d15;
-    AnimRef ar12;
+    AnimationReference ar12;
     float f7[2];
     uint32 d16;
     int32 d17;
@@ -260,7 +475,7 @@ struct REGN
 struct MSEC
 {
     /*0x00*/ uint32 d1; //always 0?
-    /*0x04*/ AnimRef bounds; //Bounding box animation ref in STC
+    /*0x04*/ AnimationReference bounds; //Bounding box animation ref in STC
     /*0x0C*/ sphere ext1; //Some kind of mesh extent? TODO
     /*0x2C*/ uint32 d2[7];
 };
@@ -283,6 +498,22 @@ struct PROJ
 
 // Size = 100 byte/ 0x64 byte
 // Incomplete
+/*
+Event definitions as defined in the .m3 files and found referenced in the STC 
+definitions. It contains something that looks like a matrix, though I am not 
+sure what it is used for.
+
+A default event is present for every sequence with the name 'Evt_SeqEnd' that 
+generally fires on the last frame of the sequence. This event is mainly used 
+in sequences that loop. It indicates at which frame the sequence should end 
+and when the next sequence should begin in the loop. I believe this has been 
+implemented to allow greater control of how the sequences flow in the loop as 
+opposed to how they play out when called alone. If these events are absent, 
+looped sequences that are called will play one of the sequences in the loop 
+and freeze on the last frame without continuing through the loop. These events 
+must be generated on export if you intend to have the model sequences loop 
+properly within the game engine.
+*/
 struct EVNT
 {
     /*0x00*/ Reference name;
@@ -312,6 +543,61 @@ struct SD
 
 // Size = 96 byte / 0x60 byte
 // Incomplete
+/*
+Header for animation sequences defined in the .m3 files.
+
+Main header for the various sequences of a model. The STG chunk contains the 
+same amount of indices as this block and functions as a lookup table that 
+connects STC transformation data to a particular SEQS entry. Some models 
+(Marine.m3) have multiple STC blocks for a single SEQS entry, the purpose 
+of which is poorly understood.
+
+Sequence Flags
+Bit Index	Bit Address	 Flag	 Description
+1	 0x1	 Non-Looping	 If set true, sequence is non-looping
+2	 0x2	 Global Sequence (hard)	 Forces sequence to play regardless of other sequences
+4	 0x8	 Global Sequence (previewer)	 Sets Global Sequence true in previewer but otherwise has no effect
+
+The looping flag works inversely, so that if it's set to true it is non-looping. 
+The hard global sequence flag forces the model to play the sequence endlessly 
+and it would seem no other sequence can affect the model. The previewer global 
+sequence flag sets the Global Animation boolean to true in the previewer but 
+seems to have no apparent affect on the model. Further testing with the global 
+flags is required.
+
+Sequence ID's
+Names function as an ID within the engine to call certain sequences in response 
+to particular game events (Walk when moving, Stand when idle, Attack when 
+attacking, etc). Multiple sequences for the same sequence ID need to have 
+numbers appended after a space to avoid sequence calling conflicts (i.e. Stand 
+01, Attack 03).
+
+Frequency
+Frequency determines the probability a sequence will be called. It's only relevant 
+if multiple sequences are defined for the same sequence ID. What's interesting is 
+that this is a uint32 value and not a float. From what I have observed, the values 
+function as a ratio in comparison to the other sequence frequencies in the group. 
+This is different from the WoW format which used percentages. For example, say 
+Attack 01 has a frequency of 3 while Attack 02 has a frequency of 1. I believe 
+this means Attack 01 is three times more likely to be called than Attack 02. 
+Frequency values can then be arbitrary however in Blizzard models it is common to 
+see either values around 1 or values around 100.
+
+Start and End frames
+Start and end frames can be set for sequences that determine ultimately at what 
+frame the sequence begins and ends along the sequences timeline. Almost all 
+Blizzard models I have looked at start at frame 0 and end at the final frame 
+of the sequence.
+
+There is additional Start and End frames for a Replay setting (seen in the 
+previewer). I have not done any testing but I assume that this is used to play 
+a different timeframe range when the sequence has been called multiple times 
+within a loop. Most Blizzard models I have looked at set their replay start 
+and end frames to 1, which results in a length of 0 indicated in the previewer. 
+I believe if the length is 0, the animation will be played from start to finish 
+as normal regardless of it being looped. I may follow up with further tests to 
+see if this is correct.
+*/
 struct SEQS
 {
     /*0x00*/ int32 d1;
@@ -319,11 +605,12 @@ struct SEQS
     /*0x08*/ Reference name;
     /*0x14*/ int32 animStart;
     /*0x18*/ int32 length;			// animLength
-    /*0x1C*/ float moveSpeed;
+    /*0x1C*/ float moveSpeed;		// used in movement sequences (Walk, Run)
     /*0x20*/ uint32 flags;
-    /*0x24*/ uint32 frequency;
+    /*0x24*/ uint32 frequency;		// how often it plays
     /*0x28*/ uint32 ReplayStart;
-    /*0x2C*/ int32 d4[3];
+    /*0x2C*/ uint32 ReplayEnd;
+    /*0x2C*/ int32 d4[2];
     /*0x38*/ sphere boundSphere;
     /*0x58*/ int32 d5[2];
 };
