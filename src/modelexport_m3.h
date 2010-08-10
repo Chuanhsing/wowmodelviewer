@@ -44,8 +44,6 @@ struct matrix
 	/*0x40*/ uint32 flags;
 };
 
-// Size = 12 byte / 0x0C byte
-// Complete, struct HeadRef
 /*
 The file header contains the number of reference lists in the file, along with 
 the offset where their headers start.
@@ -58,6 +56,8 @@ the size of the block can depend on this value. For example the MODL block in
 units/buildings have a different value here compared to the MODL block in 
 skyboxes, and the size of the block / number of fields in the block is different.
 */
+// Size = 12 byte / 0x0C byte
+// Complete, struct HeadRef
 struct Reference 
 {
     /*0x00*/ uint32 nEntries; // nData
@@ -75,8 +75,6 @@ struct ReferenceEntry
     /*0x0C*/ uint32 vers; // Possibly nReferences;
 };
 
-// Size = 8 Byte / 0x08 byte
-// Incomplete
 /*
 Animation References
 
@@ -87,6 +85,8 @@ initial value before animation and another value of the same type that seems to
 have no effect. Following these is a uint32 flag that seems to always be 0. The 
 value types depend on the animation reference (i.e. VEC3D, Quat, uint32, etc).
 */
+// Size = 8 Byte / 0x08 byte
+// Incomplete
 struct AnimationReference
 {
     /*0x00*/ uint16 flags; //usually 1
@@ -113,11 +113,11 @@ struct Aref_VEC3D
 };
 
 // Size = 44 Byte / 0x2C byte
-struct Aref_QUAT
+struct Aref_VEC4D
 {
     /*0x00*/ AnimationReference AnimRef; //STC/STS reference
-    /*0x08*/ QUAT value; //initial value
-    /*0x18*/ QUAT unValue; //unused value
+    /*0x08*/ Vec4D value; //initial value
+    /*0x18*/ Vec4D unValue; //unused value
     /*0x28*/ uint32 flags; //seems unused, 0
 };
 
@@ -135,7 +135,6 @@ struct MD34
 // vertFlags
 #define	VERT_EXISTS	0x20000
 #define	VERT_36		0x40000
-
 // Size = 784 byte / 0x310 byte
 struct MODL
 {
@@ -195,8 +194,6 @@ struct MODL
 	/*0x300*/ uint32 d9[4];
 };
 
-// Size = 160 byte / 0xA0 byte
-// Incomplete
 /*
 The bones as defined in the .m3 files.
 
@@ -267,6 +264,8 @@ bone in the MODL.STC[2].SeqData[3].SD4Q[8] SD (Sequence Data) chunk and can anim
 the bone accordingly. I hope this clarifies how animation data is referenced in the 
 M3 file format.
 */
+// Size = 160 byte / 0xA0 byte
+// Incomplete
 struct BONE
 {
     /*0x00*/ int32 d1; // Keybone?
@@ -274,20 +273,10 @@ struct BONE
     /*0x10*/ uint32 flags; //2560 = Weighted vertices rendered, 512 = not rendered
     /*0x14*/ int16 parent; // boneparent
     /*0x16*/ uint16 s1; // always 0
-    /*0x1A*/ AnimationReference transid; //unique animation ID ref
-    /*0x20*/ Vec3D pos; //bone position is relative to parent bone and its rotation
-    /*0x2C*/ Vec3D pos2;
-    /*0x38*/ float f1;
-    /*0x3C*/ AnimationReference rotid;
-    /*0x44*/ QUAT rot; //initial bone rotation
-    /*0x54*/ QUAT rot2;
-    /*0x64*/ float f2;
-    /*0x68*/ AnimationReference scaleid;
-    /*0x70*/ Vec3D scale; //initial scale
-    /*0x7C*/ Vec3D scale2;
-    /*0x88*/ int32 d3;
-    /*0x90*/ AnimationReference unk2;
-    /*0x94*/ int32 d4[3];
+    /*0x1A*/ Aref_VEC3D initTrans; //bone position is relative to parent bone and its rotation
+    /*0x3C*/ Aref_VEC4D initRot; //initial bone rotation
+    /*0x68*/ Aref_VEC3D initScale; //initial scale
+    /*0x90*/ Aref_UINT32 ar1;
 };
 
 // Size = 8 byte / 0x08 byte
@@ -298,8 +287,6 @@ struct MATM
     /*0x04*/ uint32 matind; //MAT index
 };
 
-// Size = 212 bytes / 0xD4 bytes
-// Incomplete
 /*
 Material definitions for the M3 model. Materials act as a container for a group 
 of bitmaps such as diffuse, specular, emissive, etc. They have general 
@@ -365,6 +352,8 @@ Value	Type
 0	 RGB
 1	 Alpha Only
 */
+// Size = 212 bytes / 0xD4 bytes
+// Incomplete
 struct MAT
 {
     Reference name;
@@ -500,8 +489,6 @@ struct PROJ
 {
 };
 
-// Size = 100 byte/ 0x64 byte
-// Incomplete
 /*
 Event definitions as defined in the .m3 files and found referenced in the STC 
 definitions. It contains something that looks like a matrix, though I am not 
@@ -518,6 +505,8 @@ and freeze on the last frame without continuing through the loop. These events
 must be generated on export if you intend to have the model sequences loop 
 properly within the game engine.
 */
+// Size = 100 byte/ 0x64 byte
+// Incomplete
 struct EVNT
 {
     /*0x00*/ Reference name;
@@ -547,8 +536,6 @@ struct SD
     /*0x14*/ Reference data;
 };
 
-// Size = 96 byte / 0x60 byte
-// Incomplete
 /*
 Header for animation sequences defined in the .m3 files.
 
@@ -604,6 +591,8 @@ I believe if the length is 0, the animation will be played from start to finish
 as normal regardless of it being looped. I may follow up with further tests to 
 see if this is correct.
 */
+// Size = 96 byte / 0x60 byte
+// Incomplete
 struct SEQS
 {
     /*0x00*/ int32 d1;
@@ -691,9 +680,9 @@ struct STC
 struct STS
 {
     /*0x00*/ Reference animid; // uint32
-    /*0x0C*/ int32 unk[3];
+    /*0x0C*/ int32 d1[3];
     /*0x18*/ int16 s1;
-    /*0x1A*/ int16 s2;
+    /*0x1A*/ uint16 s2;
 };
 
 // Size = 24 byte / 0x18 byte
