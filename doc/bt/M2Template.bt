@@ -1,5 +1,5 @@
-#include "C:\M2_Types_WOTLK.bt"
-//#include "C:\M2_Types_BC.bt"
+#include "M2_Types_WOTLK.bt"
+//#include "M2_Types_BC.bt"
 
 FSeek(0);
 struct GI {
@@ -21,15 +21,12 @@ struct GI {
 
     FSeek(O_PHYS);
     struct {
-        Vec3D Box1;
-        Vec3D Box2;
-    
-        float Modifier1;
-        Vec2D ValuePair1;
-        float Modifier2;
-        Vec2D ValuePair2;
-    
-	    Vec2D Parameters;
+        Vec3D VertexBox1;
+        Vec3D VertexBox2;
+        float VertexRadius;
+        Vec3D BoundingBox1;
+        Vec3D BoundingBox2;
+    	Vec2D BoundingRadius;
     } PhysicsSettings;
 
     FSeek(0);

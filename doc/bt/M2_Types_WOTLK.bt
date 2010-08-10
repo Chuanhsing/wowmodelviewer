@@ -602,7 +602,7 @@ typedef struct {
 } VIEW;
 
 typedef struct {
-	int32 animid;
+	int32 keyboneid;
     E_BONESFLAGS flags;
 	int16 parent;
 	int16 geoid;
