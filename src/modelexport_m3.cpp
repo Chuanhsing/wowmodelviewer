@@ -85,18 +85,18 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	for(uint32 i=0; i<m->header.nAnimations; i++) {
 		wxString strName;
 		try {
-			AnimDB::Record rec = animdb.getByAnimID(g_selModel->anims[i].animID);
+			AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
 			strName = rec.getString(AnimDB::Name);
 		} catch (AnimDB::NotFound) {
 			strName = _T("???");
 		}
-		if (!strName.StartsWith(_T("Walk")) && !strName.StartsWith(_T("Stand")) && 
+		if (!strName.StartsWith(_T("Run")) && !strName.StartsWith(_T("Stand")) && 
 				!strName.StartsWith(_T("Attack")) && !strName.StartsWith(_T("Death")))
 			continue;
 		if (strName.StartsWith(_T("StandWound")))
 			continue;
 		nameAnimations[i] = strName;
-		if (strName.StartsWith(_T("Walk"))) {
+		if (strName.StartsWith(_T("Run"))) {
 			if (Walks == 0)
 				nameAnimations[nAnimations] = _T("Walk");
 			else
@@ -185,6 +185,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		padding(&f);
 
 		// animid
+		int anim_offset = logAnimations[i];
 		stcs[i].animid.nEntries = 4; // Error
 		stcs[i].animid.ref = ++fHead.nRefs;
 		RefEntry("_23U", f.Tell(), stcs[i].animid.nEntries, 0);
@@ -201,25 +202,146 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			f.Write(&pad, sizeof(pad));
 		padding(&f);
 
+
+		SD *sds;
+		int ii;
+		int chunk_offset2, datachunk_offset2;
+
 		// Events, VEDS
 		stcs[i].Events.nEntries = 1;
 		stcs[i].Events.ref = ++fHead.nRefs;
 		RefEntry("VEDS", f.Tell(), stcs[i].Events.nEntries, 0);
+		chunk_offset2 = f.Tell();
 		SD sd;
 		memset(&sd, 0, sizeof(sd));
+		f.Seek(sizeof(sd), wxFromCurrent);
+		for(int j=0; j<m->header.nBones; j++) {
+			if (m->bones[j].trans.uses(anim_offset)) {
+				int counts = m->bones[j].trans.data[anim_offset].size();
+				sd.length = m->bones[j].trans.times[anim_offset][counts-1];
+				break;
+			}
+		}
+		sd.timeline.nEntries = 1;
+		sd.timeline.ref = ++fHead.nRefs;
+		RefEntry("_23I", f.Tell(), sd.timeline.nEntries, 0);
+		f.Write(&sd.length, sizeof(int32));
+		padding(&f);
+		sd.data.nEntries = 1;
+		sd.data.ref = ++fHead.nRefs;
+		RefEntry("TNVE", f.Tell(), sd.data.nEntries, 0);
+		EVNT evnt;
+		// name
+		strName = _T("Evt_SeqEnd");
+		evnt.name.nEntries = strName.length();
+		evnt.name.ref = ++fHead.nRefs;
+		evnt.d1 = -1;
+		evnt.s1 = -1;
+		f.Write(&evnt, sizeof(evnt));
+		padding(&f);
+		RefEntry("RAHC", f.Tell(), evnt.name.nEntries, 0);
+		f.Write(strName.c_str(), strName.length());
+		f.Write(&end, sizeof(end));
+		padding(&f);
+		datachunk_offset2 = f.Tell();
+		f.Seek(chunk_offset2, wxFromStart);
 		f.Write(&sd, sizeof(sd));
+		f.Seek(datachunk_offset2, wxFromStart);
 
 		// Trans, V3DS
-		stcs[i].Trans.nEntries = 1;
+		for(int j=0; j<m->header.nBones; j++) {
+			if (m->bones[j].trans.uses(anim_offset)) {
+				stcs[i].Trans.nEntries++;
+			}
+		}
 		stcs[i].Trans.ref = ++fHead.nRefs;
 		RefEntry("V3DS", f.Tell(), stcs[i].Trans.nEntries, 0);
-		f.Write(&sd, sizeof(sd));
+		chunk_offset2 = f.Tell();
+		sds = new SD[stcs[i].Trans.nEntries];
+		memset(sds, 0, sizeof(SD)*stcs[i].Trans.nEntries);
+		f.Seek(sizeof(sd)*stcs[i].Trans.nEntries, wxFromCurrent);
+		ii=0;
+		for(int j=0; j<m->header.nBones; j++) {
+			if (m->bones[j].trans.uses(anim_offset)) {
+				int counts = m->bones[j].trans.data[anim_offset].size();
+				sds[ii].timeline.nEntries = counts;
+				sds[ii].timeline.ref = ++fHead.nRefs;
+				RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
+				for (int k=0; k<counts; k++) {
+					f.Write(&m->bones[j].trans.times[anim_offset][k], sizeof(int32));
+				}
+				padding(&f);
+				sds[ii].length = m->bones[j].trans.times[anim_offset][counts-1];
+				sds[ii].data.nEntries = counts;
+				sds[ii].data.ref = ++fHead.nRefs;
+				RefEntry("3CEV", f.Tell(), sds[ii].data.nEntries, 0);
+				for (int k=0; k<counts; k++) {
+					f.Write(&m->bones[j].trans.data[anim_offset][k].x, sizeof(int32));
+					f.Write(&m->bones[j].trans.data[anim_offset][k].y, sizeof(int32));
+					f.Write(&m->bones[j].trans.data[anim_offset][k].z, sizeof(int32));
+				}
+				padding(&f);
+				ii++;
+			}
+		}
+		datachunk_offset2 = f.Tell();
+		f.Seek(chunk_offset2, wxFromStart);
+		for(int j=0; j<stcs[i].Trans.nEntries; j++) {
+			f.Write(&sds[j], sizeof(sd));
+		}
+		wxDELETEA(sds);
+		f.Seek(datachunk_offset2, wxFromStart);
 
 		// Rot, Q4DS
+#if 0
 		stcs[i].Rot.nEntries = 1;
 		stcs[i].Rot.ref = ++fHead.nRefs;
 		RefEntry("Q4DS", f.Tell(), stcs[i].Rot.nEntries, 0);
 		f.Write(&sd, sizeof(sd));
+#else
+		for(int j=0; j<m->header.nBones; j++) {
+			if (m->bones[j].rot.uses(anim_offset)) {
+				stcs[i].Rot.nEntries++;
+			}
+		}
+		stcs[i].Rot.ref = ++fHead.nRefs;
+		RefEntry("Q4DS", f.Tell(), stcs[i].Rot.nEntries, 0);
+		chunk_offset2 = f.Tell();
+		sds = new SD[stcs[i].Rot.nEntries];
+		memset(sds, 0, sizeof(SD)*stcs[i].Rot.nEntries);
+		f.Seek(sizeof(sd)*stcs[i].Rot.nEntries, wxFromCurrent);
+		ii=0;
+		for(int j=0; j<m->header.nBones; j++) {
+			if (m->bones[j].rot.uses(anim_offset)) {
+				int counts = m->bones[j].rot.data[anim_offset].size();
+				sds[ii].timeline.nEntries = counts;
+				sds[ii].timeline.ref = ++fHead.nRefs;
+				RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
+				for (int k=0; k<counts; k++) {
+					f.Write(&m->bones[j].rot.times[anim_offset][k], sizeof(int32));
+				}
+				padding(&f);
+				sds[ii].length = m->bones[j].rot.times[anim_offset][counts-1];
+				sds[ii].data.nEntries = counts;
+				sds[ii].data.ref = ++fHead.nRefs;
+				RefEntry("3CEV", f.Tell(), sds[ii].data.nEntries, 0);
+				for (int k=0; k<counts; k++) {
+					f.Write(&m->bones[j].rot.data[anim_offset][k].x, sizeof(int32));
+					f.Write(&m->bones[j].rot.data[anim_offset][k].y, sizeof(int32));
+					f.Write(&m->bones[j].rot.data[anim_offset][k].z, sizeof(int32));
+				}
+				padding(&f);
+				ii++;
+			}
+		}
+		datachunk_offset2 = f.Tell();
+		f.Seek(chunk_offset2, wxFromStart);
+		for(int j=0; j<stcs[i].Rot.nEntries; j++) {
+			f.Write(&sds[j], sizeof(sd));
+		}
+		wxDELETEA(sds);
+		f.Seek(datachunk_offset2, wxFromStart);
+#endif
 	}
 	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);

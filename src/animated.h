@@ -491,8 +491,9 @@ public:
 		out << "      <seq>"<< v.seq << "</seq>" << endl;
 		out << "      <anims>"<< endl;
 		for(size_t j=0; j<v.sizes; j++) {
+			if (j != 0) continue; // only output walk animation
 			if (v.uses((unsigned int)j)) {
-				out << "    <anim id=\"" << j << "\">" << endl;
+				out << "    <anim id=\"" << j << "\" size=\""<< v.data[j].size() <<"\">" << endl;
 				for(size_t k=0; k<v.data[j].size(); k++) {
 					out << "      <data time=\"" << v.times[j][k]  << "\">" << v.data[j][k] << "</data>" << endl;
 				}

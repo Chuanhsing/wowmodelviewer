@@ -2419,12 +2419,12 @@ void ModelViewer::ModelInfo()
 
 	xml << "  <SkeletonAndAnimation>" << endl;
 
-	xml << "  <GlobalSequences counts=\"" << m->header.nGlobalSequences << "\">" << endl;
+	xml << "  <GlobalSequences size=\"" << m->header.nGlobalSequences << "\">" << endl;
 	for(size_t i=0; i<m->header.nGlobalSequences; i++)
 		xml << "<Sequence>" << m->globalSequences[i] << "</Sequence>" << endl;
 	xml << "  </GlobalSequences>" << endl;
 
-	xml << "  <Animations counts=\"" << m->header.nAnimations << "\">" << endl;
+	xml << "  <Animations size=\"" << m->header.nAnimations << "\">" << endl;
 	if (m->anims) {
 		for(size_t i=0; i<m->header.nAnimations; i++) {
 			xml << "    <Animation id=\"" << i << "\">" << endl;
@@ -2455,14 +2455,14 @@ void ModelViewer::ModelInfo()
 	}
 	xml << "  </Animations>" << endl;
 
-	xml << "  <AnimationLookups counts=\"" << m->header.nAnimationLookup << "\">" << endl;
+	xml << "  <AnimationLookups size=\"" << m->header.nAnimationLookup << "\">" << endl;
 	if (m->animLookups) {
 		for(size_t i=0; i<m->header.nAnimationLookup; i++)
 			xml << "    <AnimationLookup id=\"" << i << "\">" << m->animLookups[i] << "</AnimationLookup>" << endl;
 	}
 	xml << "  </AnimationLookups>" << endl;
 
-	xml << "  <Bones counts=\"" << m->header.nBones << "\">" << endl;
+	xml << "  <Bones size=\"" << m->header.nBones << "\">" << endl;
 	if (m->bones) {
 		for(size_t i=0; i<m->header.nBones; i++) {
 			xml << "    <Bone id=\"" << i << "\">" << endl;
@@ -2471,7 +2471,7 @@ void ModelViewer::ModelInfo()
 			xml << "      <parent>"<< m->bones[i].boneDef.parent << "</parent>" << endl;
 			xml << "      <geoid>"<< m->bones[i].boneDef.geoid << "</geoid>" << endl;
 			xml << "      <unknown>"<< m->bones[i].boneDef.unknown << "</unknown>" << endl;
-#if 0 // too huge
+#if 1 // too huge
 			// AB translation
 			xml << "      <trans>" << endl;
 			xml << m->bones[i].trans;
@@ -2491,14 +2491,14 @@ void ModelViewer::ModelInfo()
 	}
 	xml << "  </Bones>" << endl;
 
-	xml << "  <BoneLookups counts=\"" << m->header.nBoneLookup << "\">" << endl;
+	xml << "  <BoneLookups size=\"" << m->header.nBoneLookup << "\">" << endl;
 	uint16 *boneLookup = (uint16 *)(f.getBuffer() + m->header.ofsBoneLookup);
 	for(size_t i=0; i<m->header.nBoneLookup; i++) {
 		xml << "    <BoneLookup id=\"" << i << "\">" << boneLookup[i] << "</BoneLookup>" << endl;
 	}
 	xml << "  </BoneLookups>" << endl;
 
-	xml << "  <KeyBoneLookups counts=\"" << m->header.nKeyBoneLookup << "\">" << endl;
+	xml << "  <KeyBoneLookups size=\"" << m->header.nKeyBoneLookup << "\">" << endl;
 	for(size_t i=0; i<m->header.nKeyBoneLookup; i++)
 		xml << "    <KeyBoneLookup id=\"" << i << "\">" << m->keyBoneLookup[i] << "</KeyBoneLookup>" << endl;
 	xml << "  </KeyBoneLookups>" << endl;
@@ -2507,7 +2507,7 @@ void ModelViewer::ModelInfo()
 
 	xml << "  <GeometryAndRendering>" << endl;
 
-	xml << "  <Vertices counts=\"" << m->header.nVertices << "\">" << endl;
+	xml << "  <Vertices size=\"" << m->header.nVertices << "\">" << endl;
 	ModelVertex *verts = (ModelVertex*)(f.getBuffer() + m->header.ofsVertices);
 	for(uint32 i=0; i<m->header.nVertices; i++) {
 		xml << "    <Vertice id=\"" << i << "\">" << endl;
@@ -2517,16 +2517,16 @@ void ModelViewer::ModelInfo()
 	xml << "  </Vertices>" << endl; // TODO
 	xml << "  <Views>" << endl;
 
-	xml << "  <Indices counts=\"" << view->nIndex << "\">" << endl;
+	xml << "  <Indices size=\"" << view->nIndex << "\">" << endl;
 	xml << "  </Indices>" << endl; // TODO
-	xml << "  <Triangles counts=\""<< view->nTris << "\">" << endl;
+	xml << "  <Triangles size=\""<< view->nTris << "\">" << endl;
 	xml << "  </Triangles>" << endl; // TODO
-	xml << "  <Properties counts=\"" << view->nProps << "\">" << endl;
+	xml << "  <Properties size=\"" << view->nProps << "\">" << endl;
 	xml << "  </Properties>" << endl; // TODO
-	xml << "  <Subs counts=\"" << view->nSub << "\">" << endl;
+	xml << "  <Subs size=\"" << view->nSub << "\">" << endl;
 	xml << "  </Subs>" << endl; // TODO
 
-	xml << "	<RenderPasses counts=\"" << m->passes.size() << "\">" << endl;
+	xml << "	<RenderPasses size=\"" << m->passes.size() << "\">" << endl;
 	for (size_t i=0; i<m->passes.size(); i++) {
 		xml << "	  <RenderPass id=\"" << i << "\">" << endl;
 		ModelRenderPass &p = m->passes[i];
@@ -2557,7 +2557,7 @@ void ModelViewer::ModelInfo()
 	}
 	xml << "	</RenderPasses>" << endl;
 
-	xml << "	<Geosets counts=\"" << m->geosets.size() << "\">" << endl;
+	xml << "	<Geosets size=\"" << m->geosets.size() << "\">" << endl;
 	for (size_t i=0; i<m->geosets.size(); i++) {
 		xml << "	  <Geoset id=\"" << i << "\">" << endl;
 		xml << "      <id>" << m->geosets[i].id << "</id>" << endl;
@@ -2577,7 +2577,7 @@ void ModelViewer::ModelInfo()
 	xml << "	</Geosets>" << endl;
 
 	ModelTexUnit *tex = (ModelTexUnit*)(g.getBuffer() + view->ofsTex);
-	xml << "	<TexUnits counts=\"" << view->nTex << "\">" << endl;
+	xml << "	<TexUnits size=\"" << view->nTex << "\">" << endl;
 	for (size_t i=0; i<view->nTex; i++) {
 		xml << "	  <TexUnit id=\"" << i << "\">" << endl;
 		xml << "      <flags>" << tex[i].flags << "</flags>" << endl;
@@ -2600,7 +2600,7 @@ void ModelViewer::ModelInfo()
 
 	xml << "  <RenderFlags></RenderFlags>" << endl;
 
-	xml << "	<Colors counts=\"" << m->header.nColors << "\">" << endl;
+	xml << "	<Colors size=\"" << m->header.nColors << "\">" << endl;
 	for(size_t i=0; i<m->header.nColors; i++) {
 		xml << "    <Color id=\"" << i << "\">" << endl;
 		// AB color
@@ -2615,7 +2615,7 @@ void ModelViewer::ModelInfo()
 	}
 	xml << "	</Colors>" << endl;
 
-	xml << "	<Transparency counts=\"" << m->header.nTransparency << "\">" << endl;
+	xml << "	<Transparency size=\"" << m->header.nTransparency << "\">" << endl;
 	if (m->transparency) {
 		for(size_t i=0; i<m->header.nTransparency; i++) {
 			xml << "    <Tran id=\"" << i << "\">" << endl;
@@ -2631,7 +2631,7 @@ void ModelViewer::ModelInfo()
 	xml << "  <TransparencyLookup></TransparencyLookup>" << endl;
 
 	ModelTextureDef *texdef = (ModelTextureDef*)(f.getBuffer() + m->header.ofsTextures);
-	xml << "	<Textures counts=\"" << m->header.nTextures << "\">" << endl;
+	xml << "	<Textures size=\"" << m->header.nTextures << "\">" << endl;
 	for(size_t i=0; i<m->header.nTextures; i++) {
 		xml << "	  <Texture id=\"" << i << "\">" << endl;
 		xml << "      <type>" << texdef[i].type << "</type>" << endl;
@@ -2644,7 +2644,7 @@ void ModelViewer::ModelInfo()
 	}
 	xml << "	</Textures>" << endl;
 
-	xml << "  <TexLookups counts=\"" << m->header.nTexLookup << "\">" << endl;
+	xml << "  <TexLookups size=\"" << m->header.nTexLookup << "\">" << endl;
 	uint16 *texLookup = (uint16 *)(f.getBuffer() + m->header.ofsTexLookup);
 	for(size_t i=0; i<m->header.nTexLookup; i++) {
 		xml << "    <TexLookup id=\"" << i << "\">" << texLookup[i] << "</TexLookup>" << endl;
@@ -2657,7 +2657,7 @@ void ModelViewer::ModelInfo()
 
 	xml << "  <Effects>" << endl;
 
-	xml << "	<TexAnims counts=\"" << m->header.nTexAnims << "\">" << endl;
+	xml << "	<TexAnims size=\"" << m->header.nTexAnims << "\">" << endl;
 	if (m->texAnims) {
 		for(size_t i=0; i<m->header.nTexAnims; i++) {
 			xml << "	  <TexAnim id=\"" << i << "\">" << endl;
@@ -2680,7 +2680,7 @@ void ModelViewer::ModelInfo()
 
 	xml << "	<RibbonEmitters></RibbonEmitters>" << endl; // TODO
 
-	xml << "	<Particles counts=\"" << m->header.nParticleEmitters << "\">" << endl;
+	xml << "	<Particles size=\"" << m->header.nParticleEmitters << "\">" << endl;
 	if (m->particleSystems) {
 		for (size_t i=0; i<m->header.nParticleEmitters; i++) {
 			xml << "	  <Particle id=\"" << i << "\">" << endl;
@@ -2698,7 +2698,7 @@ void ModelViewer::ModelInfo()
 	xml << "	<Lights></Lights>" << endl;
 	xml << "	<Cameras></Cameras>" << endl;
 
-	xml << "	<Attachments counts=\"" << m->header.nAttachments << "\">" << endl;
+	xml << "	<Attachments size=\"" << m->header.nAttachments << "\">" << endl;
 	for (size_t i=0; i<m->header.nAttachments; i++) {
 		xml << "	  <Attachment id=\"" << i << "\">" << endl;
 		xml << "      <id>" << m->atts[i].id << "</id>" << endl;
@@ -2708,14 +2708,14 @@ void ModelViewer::ModelInfo()
 	}
 	xml << "	</Attachments>" << endl;
 
-	xml << "  <AttachLookups counts=\"" << m->header.nAttachLookup << "\">" << endl;
+	xml << "  <AttachLookups size=\"" << m->header.nAttachLookup << "\">" << endl;
 	uint16 *attachLookup = (uint16 *)(f.getBuffer() + m->header.ofsAttachLookup);
 	for(size_t i=0; i<m->header.nAttachLookup; i++) {
 		xml << "    <AttachLookup id=\"" << i << "\">" << attachLookup[i] << "</AttachLookup>" << endl;
 	}
 	xml << "  </AttachLookups>" << endl;
 
-	xml << "	<Events counts=\"" << m->header.nEvents << "\">" << endl;
+	xml << "	<Events size=\"" << m->header.nEvents << "\">" << endl;
 	if (m->events) {
 		for (size_t i=0; i<m->header.nEvents; i++) {
 			xml << "	  <Event id=\"" << i << "\">" << endl;

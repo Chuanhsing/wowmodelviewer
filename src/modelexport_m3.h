@@ -521,7 +521,9 @@ properly within the game engine.
 struct EVNT
 {
     /*0x00*/ Reference name;
-    /*0x0C*/ int16 unk1[4];
+    /*0x0C*/ int32 d1;
+    /*0x10*/ int16 s1;
+    /*0x0C*/ uint16 s2;
     /*0x14*/ float matrix[4][4];
     /*0x54*/ int32 unk2[4];
 };
