@@ -26,7 +26,7 @@ struct QUAT
 };
 
 // Size = 32 byte / 0x20 byte
-struct sphere
+struct Sphere
 {
 	/*0x00*/ Vec3D min;
 	/*0x0C*/ Vec3D max;
@@ -152,7 +152,7 @@ struct MODL
 	/*0x64*/ Reference mVert;		// vertexData
 	/*0x70*/ Reference mDIV;			// views
 	/*0x7C*/ Reference mBoneLU;		// boneLookup
-	/*0x88*/ sphere boundSphere;
+	/*0x88*/ Sphere boundSphere;
 	/*0xA8*/ int d2[15];
 	/*0xE4*/ Reference mAttach;
 	/*0xF0*/ Reference mAttachLU;	// attachLookup
@@ -184,7 +184,7 @@ struct MODL
 	/*0x240*/ Reference mIREF;
 	/*0x24C*/ int d7[2];
 	/*0x254*/ matrix mat;
-	/*0x298*/ sphere ext2;
+	/*0x298*/ Sphere ext2;
 	/*0x2B8*/ Reference mSGSS;
 	/*0x2C4*/ Reference mATVL;
 	/*0x2D0*/ Reference F;
@@ -352,7 +352,7 @@ Value	Type
 0	 RGB
 1	 Alpha Only
 */
-// Size = 212 bytes / 0xD4 bytes
+// Size = 268 bytes / 0x10C bytes
 // Incomplete
 struct MAT
 {
@@ -363,7 +363,7 @@ struct MAT
     uint32 priority;
     uint32 d2;
     float specularity;
-    uint32 d3;
+    float f1;
     uint32 cutoutThresh;
     float SpecMult;
     float EmisMult;
@@ -469,7 +469,7 @@ struct MSEC
 {
     /*0x00*/ uint32 d1; //always 0?
     /*0x04*/ AnimationReference bounds; //Bounding box animation ref in STC
-    /*0x0C*/ sphere ext1; //Some kind of mesh extent? TODO
+    /*0x0C*/ Sphere ext1; //Some kind of mesh extent? TODO
     /*0x2C*/ uint32 d2[7];
 };
 
@@ -606,7 +606,7 @@ struct SEQS
     /*0x28*/ uint32 ReplayStart;
     /*0x2C*/ uint32 ReplayEnd;
     /*0x2C*/ int32 d4[2];
-    /*0x38*/ sphere boundSphere;
+    /*0x38*/ Sphere boundSphere;
     /*0x58*/ int32 d5[2];
 };
 

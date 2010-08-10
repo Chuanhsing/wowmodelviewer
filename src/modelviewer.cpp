@@ -2709,7 +2709,7 @@ void ModelViewer::ModelInfo()
 	xml << "	</Attachments>" << endl;
 
 	xml << "  <AttachLookups size=\"" << m->header.nAttachLookup << "\">" << endl;
-	uint16 *attachLookup = (uint16 *)(f.getBuffer() + m->header.ofsAttachLookup);
+	int16 *attachLookup = (int16 *)(f.getBuffer() + m->header.ofsAttachLookup);
 	for(size_t i=0; i<m->header.nAttachLookup; i++) {
 		xml << "    <AttachLookup id=\"" << i << "\">" << attachLookup[i] << "</AttachLookup>" << endl;
 	}

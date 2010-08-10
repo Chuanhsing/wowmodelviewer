@@ -154,11 +154,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		seqs[i].d2 = -1;
 		seqs[i].length = m->anims[j].timeEnd;
 		seqs[i].moveSpeed = m->anims[j].moveSpeed;
-		seqs[i].frequency = m->anims[j].playSpeed; //
+		seqs[i].frequency = m->anims[j].playSpeed; // ?
 		seqs[i].ReplayStart = 1;
-		seqs[i].d4[0] = 1;
-		seqs[i].d4[1] = 0x64;
-		seqs[i].boundSphere.radius = m->anims[j].rad; //
+		seqs[i].ReplayEnd = 1;
+		seqs[i].d4[0] = 0x64;
+		seqs[i].boundSphere.min = m->header.ps.VertexBox[0];
+		seqs[i].boundSphere.max = m->header.ps.VertexBox[1];
+		seqs[i].boundSphere.radius = m->header.ps.VertexRadius;
 		f.Write(&seqs[i], sizeof(SEQS));
 	}
 	wxDELETEA(seqs);
@@ -552,20 +554,25 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);
+	div.unk = 1;
 	f.Write(&div, sizeof(div));
 	f.Seek(datachunk_offset, wxFromStart);
 
 	// mBoneLU
-/*
-	uint16 *boneLookup = (uint16 *)mpqf.getBuffer() + m->header.ofsBoneLookup;
+	uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
 	mdata.mBoneLU.nEntries = m->header.nBoneLookup;
 	mdata.mBoneLU.ref = ++fHead.nRefs;
 	RefEntry("_61U", f.Tell(), mdata.mBoneLU.nEntries, 0);
-	f.Write(&boneLookup, mdata.mBoneLU.nEntries*sizeof(uint16));
-*/
+	for(uint16 i=0; i<mdata.mBoneLU.nEntries; i++) {
+		f.Write(&boneLookup[i], sizeof(uint16));
+	}
+	padding(&f);
 
 	// boundSphere
-	
+	mdata.boundSphere.min = m->header.ps.VertexBox[0];
+	mdata.boundSphere.max = m->header.ps.VertexBox[1];
+	mdata.boundSphere.radius = m->header.ps.VertexRadius;
+
 	// mAttach
 	ModelAttachmentDef *attachments = (ModelAttachmentDef*)(mpqf.getBuffer() + m->header.ofsAttachments);
 	mdata.mAttach.nEntries = m->header.nAttachments;
@@ -597,13 +604,44 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Seek(datachunk_offset, wxFromStart);
 
 	// mAttachLU
+	int16 *attachLookup = (int16 *)(mpqf.getBuffer() + m->header.ofsAttachLookup);
+	mdata.mAttachLU.nEntries = m->header.nAttachLookup;
+	mdata.mAttachLU.ref = ++fHead.nRefs;
+	RefEntry("_61U", f.Tell(), mdata.mAttachLU.nEntries, 0);
+	for(uint16 i=0; i<mdata.mAttachLU.nEntries; i++) {
+		f.Write(&attachLookup[i], sizeof(int16));
+	}
+	padding(&f);
 
 	// mMatLU
 	
 	// mMat
-/*
-	mdata.mMat.nEntries = m->header.nTextures;
-*/
+	mdata.mMat.nEntries = view->nTex;
+	mdata.mMat.ref = ++fHead.nRefs;
+	RefEntry("_TAM", f.Tell(), mdata.mMat.nEntries, 0);
+	chunk_offset = f.Tell();
+	MAT *mats = new MAT[mdata.mMat.nEntries];
+	memset(mats, 0, sizeof(MAT)*mdata.mMat.nEntries);
+	f.Seek(sizeof(MAT)*mdata.mMat.nEntries, wxFromCurrent);
+	padding(&f);
+	for(uint32 i=0; i<mdata.mMat.nEntries; i++) {
+		// name
+		wxString strName = wxString::Format(_T("Mat_%2d"), i);
+		mats[i].name.nEntries = strName.length()+1;
+		mats[i].name.ref = ++fHead.nRefs;
+		RefEntry("RAHC", f.Tell(), mats[i].name.nEntries, 0);
+		f.Write(strName.c_str(), strName.length());
+		f.Write(&end, sizeof(end));
+		padding(&f);
+	}
+	datachunk_offset = f.Tell();
+	f.Seek(chunk_offset, wxFromStart);
+	for(uint32 i=0; i<mdata.mMat.nEntries; i++) {
+		f.Write(&mats[i], sizeof(MAT));
+	}
+	wxDELETE(mats);
+	f.Seek(datachunk_offset, wxFromStart);
+
 	
 	// mIREF
 	
