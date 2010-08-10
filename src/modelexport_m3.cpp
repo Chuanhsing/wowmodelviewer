@@ -303,6 +303,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	wxDELETEA(bones);
 	f.Seek(datachunk_offset, wxFromStart);
 
+	// vertFlags
+	mdata.vertFlags = 0x182007D;
+
 	// mVert
 	mdata.mVert.nEntries = m->header.nVertices*sizeof(Vertex32);
 	mdata.mVert.ref = fHead.nRefs++;
@@ -317,16 +320,15 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		memcpy(vert.weBone, verts[i].weights, 4);
 		memcpy(vert.weIndice, verts[i].bones, 4);
 		// Vec3D normal -> char normal[4], TODO
-		vert.normal[0] = verts[i].normal.x*0x80;
-		vert.normal[1] = verts[i].normal.y*0x80;
-		vert.normal[2] = verts[i].normal.z*0x80;
+		vert.normal[0] = (verts[i].normal.x+1)*0xFF/2;
+		vert.normal[1] = (verts[i].normal.y+1)*0xFF/2;
+		vert.normal[2] = (verts[i].normal.z+1)*0xFF/2;
 		// Vec2D texcoords -> uint16 uv[2], TODO
 		vert.uv[0] = verts[i].texcoords.x*0x800;
 		vert.uv[1] = verts[i].texcoords.y*0x800;
 		f.Write(&vert, sizeof(vert));
 	}
 	padding(&f);
-
 
 	// mDIV
 	mdata.mDIV.nEntries = 1;

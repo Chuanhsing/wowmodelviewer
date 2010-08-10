@@ -28,20 +28,20 @@ struct QUAT
 // Size = 32 byte / 0x20 byte
 struct sphere
 {
-	Vec3D min;
-	Vec3D max;
-	float radius;
-	uint32 flags;
+	/*0x00*/ Vec3D min;
+	/*0x0C*/ Vec3D max;
+	/*0x18*/ float radius;
+	/*0x1C*/ uint32 flags;
 };
 
 // Size = 68 byte / 0x44 byte
 struct matrix
 {
-	Vec4D a;
-	Vec4D b;
-	Vec4D c;
-	Vec4D d;
-	uint32 flags;
+	/*0x00*/ Vec4D a;
+	/*0x10*/ Vec4D b;
+	/*0x20*/ Vec4D c;
+	/*0x30*/ Vec4D d;
+	/*0x40*/ uint32 flags;
 };
 
 // Size = 12 byte / 0x0C byte
@@ -97,28 +97,28 @@ struct AnimationReference
 // Size = 20 Byte / 0x14 byte
 struct Aref_UINT32
 {
-    AnimationReference AnimRef; //STC/STS reference
-    uint32 value; //initial value
-    uint32 unValue; //unused value
-    uint32 flag; //seems unused, 0
+    /*0x00*/ AnimationReference AnimRef; //STC/STS reference
+    /*0x08*/ uint32 value; //initial value
+    /*0x0C*/ uint32 unValue; //unused value
+    /*0x10*/ uint32 flag; //seems unused, 0
 };
 
 // Size = 36 Byte / 0x24 byte
 struct Aref_VEC3D
 {
-    AnimationReference AnimRef; //STC/STS reference
-    Vec3D value; //initial value
-    Vec3D unValue; //unused value
-    uint32 flag; //seems unused, 0
+    /*0x00*/ AnimationReference AnimRef; //STC/STS reference
+    /*0x08*/ Vec3D value; //initial value
+    /*0x14*/ Vec3D unValue; //unused value
+    /*0x20*/ uint32 flag; //seems unused, 0
 };
 
 // Size = 44 Byte / 0x2C byte
 struct Aref_QUAT
 {
-    AnimationReference AnimRef; //STC/STS reference
-    QUAT value; //initial value
-    QUAT unValue; //unused value
-    uint32 flags; //seems unused, 0
+    /*0x00*/ AnimationReference AnimRef; //STC/STS reference
+    /*0x08*/ QUAT value; //initial value
+    /*0x18*/ QUAT unValue; //unused value
+    /*0x28*/ uint32 flags; //seems unused, 0
 };
 
 // Size = 24 byte / 0x18 byte
@@ -132,63 +132,67 @@ struct MD34
 	/*0x18*/ char padding[8];
 };
 
+// vertFlags
+#define	VERT_EXISTS	0x20000
+#define	VERT_36		0x40000
+
 // Size = 784 byte / 0x310 byte
 struct MODL
 {
-	Reference name;
-	uint32 type;
-	Reference mSEQS;		// sequenceHeader
-	Reference mSTC;			// sequenceData
-	Reference mSTG;			// sequenceLookup
-	Vec3D v3d1;
-	uint32 d10;
-	Reference mSTS;
-	Reference mBone;
-	uint32 nSkinnedBones;
-	uint32 vertFlags;
-	Reference mVert;		// vertexData
-	Reference mDIV;			// views
-	Reference mBoneLU;		// boneLookup
-	sphere boundSphere;
-	int d2[15];
-	Reference mAttach;
-	Reference mAttachLU;	// attachLookup
-	Reference mLite;		// Lights
-	Reference mSHBX;
-	Reference mCam;			// Camera
-	Reference D;
-	Reference mMatLU;		// materialLookup
-	Reference mMat;			// material
-	Reference mDIS;
-	Reference mCMP;
-	Reference mTER;
-	Reference mVOL;
-	Reference r1;
-	Reference mCREP;
-	Reference mPar;
-	Reference mParc;
-	Reference mRibbon;
-	Reference mPROJ;
-	Reference mFOR;
-	Reference mWRP;
-	Reference r2;
-	Reference mPHRB;
-	Reference r3[3];
-	Reference mIKJT;
-	Reference r4;
-	Reference mPATU;
-	Reference mTRGD;
-	Reference mIREF;
-	int d7[2];
-	matrix mat;
-	sphere ext2;
-	Reference mSGSS;
-	Reference mATVL;
-	Reference F;
-	Reference G;
-	Reference mBBSC;
-	Reference mTMD;
-	uint32 d9[4];
+	/*0x00*/ Reference name;
+	/*0x0C*/ uint32 type;
+	/*0x10*/ Reference mSEQS;		// sequenceHeader
+	/*0x1C*/ Reference mSTC;			// sequenceData
+	/*0x28*/ Reference mSTG;			// sequenceLookup
+	/*0x34*/ Vec3D v3d1;
+	/*0x40*/ uint32 d10;
+	/*0x44*/ Reference mSTS;
+	/*0x50*/ Reference mBone;
+	/*0x5C*/ uint32 nSkinnedBones;
+	/*0x60*/ uint32 vertFlags;
+	/*0x64*/ Reference mVert;		// vertexData
+	/*0x70*/ Reference mDIV;			// views
+	/*0x7C*/ Reference mBoneLU;		// boneLookup
+	/*0x88*/ sphere boundSphere;
+	/*0xA8*/ int d2[15];
+	/*0xE4*/ Reference mAttach;
+	/*0xF0*/ Reference mAttachLU;	// attachLookup
+	/*0xFC*/ Reference mLite;		// Lights
+	/*0x108*/ Reference mSHBX;
+	/*0x114*/ Reference mCam;			// Camera
+	/*0x120*/ Reference D;
+	/*0x12C*/ Reference mMatLU;		// materialLookup
+	/*0x138*/ Reference mMat;			// material
+	/*0x144*/ Reference mDIS;
+	/*0x150*/ Reference mCMP;
+	/*0x15C*/ Reference mTER;
+	/*0x168*/ Reference mVOL;
+	/*0x174*/ Reference r1;
+	/*0x180*/ Reference mCREP;
+	/*0x18C*/ Reference mPar;
+	/*0x198*/ Reference mParc;
+	/*0x1A4*/ Reference mRibbon;
+	/*0x1B0*/ Reference mPROJ;
+	/*0x1BC*/ Reference mFOR;
+	/*0x1C8*/ Reference mWRP;
+	/*0x1D4*/ Reference r2;
+	/*0x1E0*/ Reference mPHRB;
+	/*0x1EC*/ Reference r3[3];
+	/*0x210*/ Reference mIKJT;
+	/*0x21C*/ Reference r4;
+	/*0x228*/ Reference mPATU;
+	/*0x234*/ Reference mTRGD;
+	/*0x240*/ Reference mIREF;
+	/*0x24C*/ int d7[2];
+	/*0x254*/ matrix mat;
+	/*0x298*/ sphere ext2;
+	/*0x2B8*/ Reference mSGSS;
+	/*0x2C4*/ Reference mATVL;
+	/*0x2D0*/ Reference F;
+	/*0x2DC*/ Reference G;
+	/*0x2E8*/ Reference mBBSC;
+	/*0x2F4*/ Reference mTMD;
+	/*0x300*/ uint32 d9[4];
 };
 
 // Size = 160 byte / 0xA0 byte
@@ -453,7 +457,7 @@ struct BAT
     /*0x0C*/ int16 s2; //usually -1
 };
 
-//Size = 26 byte / 0x24 byte
+//Size = 36 byte / 0x24 byte
 // Incomplete
 struct REGN
 {
@@ -634,6 +638,28 @@ of an animation sequence. STG represents an STC lookup table for each SEQS entry
 Example: Cover Full, Cover Shield
 
 Bones, among other structures, reference the Sequence Data located in these structs for animation.
+
+Sequence Data Types
+Known Sequence Data types:
+
+SD ID	Index	 Type	 Data ID	 Found In	 Description
+SDEV	 0	Event	EVNT	 Unknown	 Event Animation?
+SD2V	 1	Vector 2D	VEC2	 PAR	 Unknown
+SD3V	 2	Vector 3D	VEC3	BONE	 Translation/Scale
+SD4Q	 3	Quaternion	QUAT	BONE	 Rotation
+SDR3	 5	Float	REAL	 PAR	 Unknown
+SDS6	 7	int16	 I16	 Unknown	 Unknown
+SDFG	 11	int32	FLAG	 RIB	 Flags?
+SDMB	 12	Extent	BNDS	MSEC	 Bounding Box
+
+Sequence Data Information
+Translation and Scaling animation data use the same Sequence Data entry, SD3V 
+which uses VEC3's for keyframes. EVNT animations determine the end of an 
+animation sequence. Sequences that are part of a looped series require 
+'Evt_SeqEnd' EVNT keyframes so that they only loop once in the sequence. 
+Examples of these animations are Stand animations, which typically all loop, 
+but each only plays once in the loop and are picked based on their frequency 
+setting of their corresponding SEQS entry.
 */
 struct STC
 {
@@ -643,14 +669,19 @@ struct STC
     /*0x14*/ Reference animid; //list of unique uint32s used in chunks with animation. The index of these correspond with the data in the next reference.
     /*0x20*/ Reference animindex; //lookup table, connects animid with it's animation data, nEntries of AnimationIndex reference using U32_ id
     /*0x2C*/ uint32 d2;
-    /*0x30*/ Reference Events;
-    /*0x3C*/ Reference r1;
+    /*0x30*/ Reference Events; // EVNT
+    /*0x3C*/ Reference r1; // SD2V
     /*0x48*/ Reference Trans; // SD3V - Trans
     /*0x54*/ Reference Rot; // SD4Q - Rotation
     /*0x60*/ Reference r2;
-    /*0x6C*/ Reference r3[6]; // SDR3 - Scale?, SDFG - Flags, SDMB - Bounding Boxes?
-    /*0xB4*/ Reference Flags;
-    /*0xC0*/ Reference bounds;
+    /*0x6C*/ Reference r3; // SDR3 - Scale?
+    /*0x78*/ Reference r4;
+    /*0x84*/ Reference r5; // SDS6
+    /*0x90*/ Reference r6;
+    /*0x9C*/ Reference r7;
+    /*0xA8*/ Reference r8;
+    /*0xB4*/ Reference Flags; // SDFG - Flags
+    /*0xC0*/ Reference bounds; // SDMB - Bounding Boxes?
 };
 
 // Size = 28 byte / 0x1C byte
@@ -704,7 +735,7 @@ Each UV texture coordinate must be divided by 2046.0 to get its true float value
 max, the Y-UV coord must be flipped (1 - UV.y) for textures to be displayed on the mesh 
 properly.
 
-Vertex Weighting‘ø
+Vertex Weighting
 
 Each vertex boneIndex is not an index into the global bone entries found in MODL but 
 rather a reference into the bonelookup. However, it's not just an index into the 
@@ -720,12 +751,12 @@ boneIndex:
 */
 struct Vertex32 // 32 byte
 {
-    Vec3D pos;
-    char weBone[4]; // fltByte
-    unsigned char weIndice[4]; //index in boneLookup of vertex submesh
-    char normal[4];  // fltNormal, x, y, z, w (w is the scale)
-    uint16 uv[2]; // uvShort
-    char tangents[4];
+    /*0x00*/ Vec3D pos;
+    /*0x0C*/ char weBone[4]; // fltByte
+    /*0x10*/ unsigned char weIndice[4]; //index in boneLookup of vertex submesh
+    /*0x14*/ char normal[4];  // fltNormal, x, y, z, w (w is the scale)
+    /*0x18*/ uint16 uv[2]; // uvShort
+    /*0x1C*/ char tangents[4];
 };
 
 struct Vertex36 // 36 byte
