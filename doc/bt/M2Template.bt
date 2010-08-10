@@ -26,7 +26,7 @@ struct GI {
         float VertexRadius;
         Vec3D BoundingBox1;
         Vec3D BoundingBox2;
-    	Vec2D BoundingRadius;
+    	float BoundingRadius;
     } PhysicsSettings;
 
     FSeek(0);
