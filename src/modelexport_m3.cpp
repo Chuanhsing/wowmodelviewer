@@ -367,7 +367,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<mdata.mSTC.nEntries; i++) {
-		stcs[i].indSEQ[0] = stcs[i].indSEQ[0] = i;
+		stcs[i].indSEQ[0] = stcs[i].indSEQ[1] = i;
 		f.Write(&stcs[i], sizeof(STC));
 	}
 	f.Seek(datachunk_offset, wxFromStart);
@@ -450,7 +450,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	// mBone
 	mdata.mBone.nEntries = m->header.nBones;
 	mdata.mBone.ref = ++fHead.nRefs;
-	RefEntry("ENOB", f.Tell(), mdata.mBone.nEntries, 0);
+	RefEntry("ENOB", f.Tell(), mdata.mBone.nEntries, 1);
 	chunk_offset = f.Tell();
 	BONE *bones = new BONE[mdata.mBone.nEntries];
 	memset(bones, 0, sizeof(BONE)*mdata.mBone.nEntries);
@@ -529,7 +529,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	// mDIV
 	mdata.mDIV.nEntries = 1;
 	mdata.mDIV.ref = ++fHead.nRefs;
-	RefEntry("_VID", f.Tell(), mdata.mDIV.nEntries, 0);
+	RefEntry("_VID", f.Tell(), mdata.mDIV.nEntries, 2);
 	chunk_offset = f.Tell();
 	DIV div;
 	memset(&div, 0, sizeof(div));
@@ -548,7 +548,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	// mDiv.meash
 	div.REGN.nEntries = view->nTex;
 	div.REGN.ref = ++fHead.nRefs;
-	RefEntry("NGER", f.Tell(), div.REGN.nEntries, 0);
+	RefEntry("NGER", f.Tell(), div.REGN.nEntries, 3);
 	ModelGeoset *ops = (ModelGeoset*)(mpqfv.getBuffer() + view->ofsSub);
 	ModelTexUnit *tex = (ModelTexUnit*)(mpqfv.getBuffer() + view->ofsTex);
 	int indBone = 0;
@@ -571,7 +571,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	// mDiv.BAT
 	div.BAT.nEntries = view->nTex;
 	div.BAT.ref = ++fHead.nRefs;
-	RefEntry("_TAB", f.Tell(), div.BAT.nEntries, 0);
+	RefEntry("_TAB", f.Tell(), div.BAT.nEntries, 1);
 	for (size_t j=0; j<view->nTex; j++) {
 		BAT bat;
 		memset(&bat, 0, sizeof(bat));
@@ -584,7 +584,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	// mDiv.MSEC
 	div.MSEC.nEntries = 1;
 	div.MSEC.ref = ++fHead.nRefs;
-	RefEntry("CESM", f.Tell(), div.MSEC.nEntries, 0);
+	RefEntry("CESM", f.Tell(), div.MSEC.nEntries, 1);
 	MSEC msec;
 	memset(&msec, 0, sizeof(msec));
 	f.Write(&msec, sizeof(msec));
@@ -666,7 +666,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	// mMat
 	mdata.mMat.nEntries = view->nTex;
 	mdata.mMat.ref = ++fHead.nRefs;
-	RefEntry("_TAM", f.Tell(), mdata.mMat.nEntries, 0);
+	RefEntry("_TAM", f.Tell(), mdata.mMat.nEntries, 0xF);
 	chunk_offset = f.Tell();
 	MAT *mats = new MAT[mdata.mMat.nEntries];
 	memset(mats, 0, sizeof(MAT)*mdata.mMat.nEntries);
@@ -683,13 +683,34 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		padding(&f);
 
 		// layers
-		mats[i].layers[0].nEntries = 1; // LAYER_Diff
-		mats[i].layers[0].ref = ++fHead.nRefs;
-		RefEntry("RYAL", f.Tell(), mats[i].layers[0].nEntries, 0);
-		LAYR layer;
-		memset(&layer, 0, sizeof(layer));
-		f.Write(&layer, sizeof(layer));
-		padding(&f);
+		int chunk_offset2, datachunk_offset2;
+		for(uint32 j=0; j<13; j++) {
+			mats[i].layers[j].nEntries = 1; // LAYER_Diff
+			mats[i].layers[j].ref = ++fHead.nRefs;
+			RefEntry("RYAL", f.Tell(), mats[i].layers[j].nEntries, 0x16);
+			chunk_offset2 = f.Tell();
+			LAYR layer;
+			memset(&layer, 0, sizeof(layer));
+			layer.brightness_mult1.value = 1.0f;
+			layer.uvTiling.value = Vec2D(1.0f, 1.0f);
+			layer.d20 = -1;
+			f.Write(&layer, sizeof(layer));
+			padding(&f);
+
+			if (j == 0) {
+				wxString strName = wxString::Format(_T("Mat_%2d.tga"), i);
+				layer.name.nEntries = strName.length()+1;
+				layer.name.ref = ++fHead.nRefs;
+				RefEntry("RAHC", f.Tell(), layer.name.nEntries, 0);
+				f.Write(strName.c_str(), strName.length());
+				f.Write(&end, sizeof(end));
+				padding(&f);
+			}
+			datachunk_offset2 = f.Tell();
+			f.Seek(chunk_offset2, wxFromStart);
+			f.Write(&layer, sizeof(layer));
+			f.Seek(datachunk_offset2, wxFromStart);
+		}
 	}
 	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);
@@ -713,6 +734,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		memset(&mat, 0, sizeof(mat));
 		f.Write(&mat, sizeof(mat));
 	}
+	padding(&f);
 
 	// 4. ReferenceEntry
 	fHead.ofsRefs = f.Tell();
