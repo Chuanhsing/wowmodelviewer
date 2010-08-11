@@ -483,7 +483,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		bones[i].initTrans.value = mb[i].pivot;
 		for(uint32 j=0; j<mdata.mSTC.nEntries; j++) {
 			int anim_offset = logAnimations[j];
-			if (m->bones[i].trans.uses(anim_offset)) {
+			if (m->bones[i].rot.uses(anim_offset)) {
 				bones[i].initRot.AnimRef.animid = i | (3 << 16);
 				break;
 			}
