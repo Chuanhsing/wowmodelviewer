@@ -796,7 +796,7 @@ __TryAgain:
 
 static int TestArchiveOpenAndClose(const char * szMpqName)
 {
-    const char * szFileName1 = "deDE\\DBFilesClient\\CreatureFamily.dbc";
+    const char * szFileName1 = LISTFILE_NAME;
     const char * szFileName2 = MAKE_PATH(LISTFILE_NAME);
     HANDLE hFile1 = NULL;
     HANDLE hFile2 = NULL;
@@ -806,7 +806,7 @@ static int TestArchiveOpenAndClose(const char * szMpqName)
     if(nError == ERROR_SUCCESS)
     {
         printf("Opening archive %s ...\n", szMpqName);
-        if(!SFileOpenArchive(szMpqName, 0, MPQ_OPEN_ENCRYPTED, &hMpq))
+        if(!SFileOpenArchive(szMpqName, 0, 0 /*MPQ_OPEN_ENCRYPTED*/, &hMpq))
             nError = GetLastError();
     }
 
@@ -1511,7 +1511,9 @@ int main(void)
 
     // Test the archive open and close
     if(nError == ERROR_SUCCESS)
-        nError = TestArchiveOpenAndClose(MAKE_PATH("Starcraft II/Installer UI 2 frFR.MPQE"));
+        nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/expansion-locale-frFR.MPQ"));
+//      nError = TestArchiveOpenAndClose(MAKE_PATH("PartialMPQs/interface.MPQ.part"));
+//      nError = TestArchiveOpenAndClose(MAKE_PATH("Starcraft II/Installer Tome 1.MPQE"));
                                                                              
 //  if(nError == ERROR_SUCCESS)
 //      nError = TestFindFiles(MAKE_PATH("Warcraft III/HumanEd.mpq"));

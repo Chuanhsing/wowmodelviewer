@@ -11,7 +11,6 @@
 
 #define __STORMLIB_SELF__
 #define __INCLUDE_COMPRESSION__
-#define __INCLUDE_CRYPTOGRAPHY__
 #include "StormLib.h"
 #include "SCommon.h"
 

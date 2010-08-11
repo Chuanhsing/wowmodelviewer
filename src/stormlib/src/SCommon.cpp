@@ -254,55 +254,6 @@ DWORD DetectFileKeyByKnownContent(void * pvFileContent, DWORD nDwords, ...)
     }
     return 0;
 }
-/*
-DWORD TryDecryptHetBlock(TMPQXXXBlock * pData)
-{
-    DWORD dwDecrypted0 = 0x00000020;
-    DWORD dwDecrypted;
-    BYTE pbDecompressed[0x1000];
-    BYTE pbCompressed[0x1000];
-
-    DWORD * pdwContent = (DWORD *)pData + 3;
-    DWORD saveKey1;
-    DWORD dwTemp;
-    int cbOutBuffer;
-    int nResult;
-
-    for(DWORD dwUpper = 0; dwUpper < 0x01000000; dwUpper++)
-    {
-        dwDecrypted = dwDecrypted0 | (dwUpper << 0x08);
-
-        dwTemp = (*pdwContent ^ dwDecrypted) - 0xEEEEEEEE;
-        for(int i = 0; i < 0x100; i++)      // Try all 256 possibilities
-        {
-            DWORD seed1;
-            DWORD seed2 = 0xEEEEEEEE;
-            DWORD ch;
-
-            // Try the first DWORD
-            seed1  = dwTemp - StormBuffer[0x400 + i];
-            seed2 += StormBuffer[0x400 + (seed1 & 0xFF)];
-            ch     = pdwContent[0] ^ (seed1 + seed2);
-
-            if(ch == dwDecrypted)
-            {
-                saveKey1 = seed1;
-
-                // Try to decrypt it
-                memcpy(pbCompressed, (pData + 1), pData->dwDataSize);
-                DecryptMpqBlock(pbCompressed, pData->dwDataSize, saveKey1);
-
-                // Try to decompress it
-                cbOutBuffer = sizeof(pbDecompressed);
-                nResult = SCompDecompress((char *)pbDecompressed, &cbOutBuffer, (char *)pbCompressed, (int)pData->dwDataSize);
-                if(nResult && cbOutBuffer >= (int)pData->dwDataSize)
-                    cbOutBuffer = cbOutBuffer;
-            }
-        }
-    }
-    return 0;
-}
-*/
 
 DWORD DetectFileKeyByContent(void * pvFileContent, DWORD dwFileSize)
 {

@@ -232,6 +232,7 @@
 #define MPQ_FORMAT_VERSION_1              0 // Up to The Burning Crusade
 #define MPQ_FORMAT_VERSION_2              1 // The Burning Crusade and newer 
 #define MPQ_FORMAT_VERSION_3              2 // WoW Cataclysm Beta and newer
+#define MPQ_FORMAT_VERSION_4              3 // WoW Cataclysm Beta and newer
 
 // Flags for MPQ attributes
 #define MPQ_ATTRIBUTE_CRC32      0x00000001 // The "(attributes)" contains CRC32 for each file
@@ -365,6 +366,7 @@ struct TFileStream
 #define MPQ_HEADER_SIZE_V1    0x20
 #define MPQ_HEADER_SIZE_V2    0x2C
 #define MPQ_HEADER_SIZE_V3    0x44
+#define MPQ_HEADER_SIZE_V4    0xD0
 
 struct TMPQUserData
 {
@@ -542,6 +544,7 @@ struct TMPQXXXBlock
     DWORD dwDataSize;                   // Size of the following data
 
     // Followed by the data (variable length)
+    DWORD Data[1];
 };
 
 // Patch file header
@@ -590,7 +593,7 @@ struct TMPQArchive
     TMPQBlockEx  * pExtBlockTable;      // Extended block table
     
     TMPQUserData   UserData;            // MPQ user data. Valid only when ID_MPQ_USERDATA has been found
-    DWORD          HeaderData[MPQ_HEADER_SIZE_V3 / 4];  // Storage for MPQ header
+    DWORD          HeaderData[MPQ_HEADER_SIZE_V4 / 4];  // Storage for MPQ header
 
     TMPQAttributes*pAttributes;         // MPQ attributes from "(attributes)" file (NULL if none)
     TFileNode   ** pListFile;           // File name array

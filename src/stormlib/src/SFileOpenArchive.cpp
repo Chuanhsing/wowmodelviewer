@@ -21,7 +21,31 @@
 /* Local functions                                                           */
 /*****************************************************************************/
 
-DWORD TryDecryptHetBlock(TMPQXXXBlock * pData);
+#ifdef _DEBUG
+static void TestBETBlock(TMPQXXXBlock * pBETBlock, DWORD cbBetBlock)
+{
+    PDWORD BetBlock = NULL;
+    DWORD BetBlockOffsets[0x13];
+    DWORD var_4;
+
+    if(pBETBlock != NULL && cbBetBlock >= 0x4C)
+    {
+        memset(BetBlockOffsets, 0, sizeof(BetBlockOffsets));
+        memcpy(BetBlockOffsets, pBETBlock->Data, sizeof(BetBlockOffsets));
+        if(BetBlockOffsets[0] > pBETBlock->dwDataSize)
+            return;
+
+        BetBlock = (PDWORD)ALLOCMEM(BYTE, 0x0C);
+        var_4 = 0;
+
+        if(BetBlock != NULL)
+        {
+
+
+        }
+    }
+}
+#endif
 
 static bool IsAviFile(TMPQHeader * pHeader)
 {
@@ -260,24 +284,19 @@ bool WINAPI SFileOpenArchive(
 
                     case MPQ_FORMAT_VERSION_2:
 
-                        if(dwHeaderSize != MPQ_HEADER_SIZE_V2)
-                        {
-                            dwHeaderSize = MPQ_HEADER_SIZE_V3;
-                            ha->dwFlags |= MPQ_FLAG_PROTECTED;
-                        }
-                        bFormatOK = true;
+                        if(dwHeaderSize == MPQ_HEADER_SIZE_V2)
+                            bFormatOK = true;
                         break;
 
-                    default:
+                    case MPQ_FORMAT_VERSION_3:
                         
-                        // Wow.exe doesn't really care about format number if it's > 1,
-                        // as long as the header size is greater or equal to 0x2C
-                        if(dwHeaderSize > MPQ_HEADER_SIZE_V3)
-                        {
-                            dwHeaderSize = MPQ_HEADER_SIZE_V3;
-                            bMpqHeaderTrimmed = true;
-                        }
-                        if(dwHeaderSize >= MPQ_HEADER_SIZE_V2)
+                        // For MPQ format version 3, it either has to be 0x2C or 0x44
+                        if(dwHeaderSize == MPQ_HEADER_SIZE_V2 || dwHeaderSize == MPQ_HEADER_SIZE_V3)
+                            bFormatOK = true;
+                        break;
+
+                    case MPQ_FORMAT_VERSION_4:
+                        if(dwHeaderSize >= MPQ_HEADER_SIZE_V4)
                             bFormatOK = true;
                         break;
                 }
@@ -426,11 +445,8 @@ bool WINAPI SFileOpenArchive(
             nError = GetLastError();
         BSWAP_ARRAY32_UNSIGNED(ha->pHETBlock, sizeof(TMPQXXXBlock));
 
-        // The purpose of HET and BET blocks is unknown.
-        // The data don't appear to be compressed
-        // (or at least my attempts to decrypt them by brute-force failed)
-        // Wow-Cataclysm itself doesn't care about them.
-//      TryDecryptHetBlock(ha->pHETBlock);
+        // The purpose of HET block is unknown
+        DecryptMpqTable(ha->pHETBlock->Data, ha->pHETBlock->dwDataSize, "(hash table)");
     }
 
     // Read the BET block, if present
@@ -439,6 +455,13 @@ bool WINAPI SFileOpenArchive(
         if(!FileStream_Read(ha->pStream, &ha->BETBlockPos, ha->pBETBlock, ha->dwBETBlockSize))
             nError = GetLastError();
         BSWAP_ARRAY32_UNSIGNED(ha->pBETBlock, sizeof(TMPQXXXBlock));
+
+        // The purpose of BET block is unknown
+        DecryptMpqTable(ha->pBETBlock->Data, ha->pBETBlock->dwDataSize, "(block table)");
+
+#ifdef _DEBUG
+        TestBETBlock(ha->pBETBlock, ha->pBETBlock->dwDataSize);
+#endif
     }
 
     // Read the hash table.
