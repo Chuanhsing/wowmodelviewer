@@ -94,6 +94,15 @@ struct AnimationReference
     /*0x04*/ uint32 animid; //a unique uint32 value referenced in STC.animid and STS.animid
 };
 
+// Size = 16 Byte / 0x10 byte
+struct Aref_UINT16
+{
+    /*0x00*/ AnimationReference AnimRef; //STC/STS reference
+    /*0x08*/ uint16 value; //initial value
+    /*0x0A*/ uint16 unValue; //unused value
+    /*0x0C*/ uint32 flag; //seems unused, 0
+};
+
 // Size = 20 Byte / 0x14 byte
 struct Aref_UINT32
 {
@@ -101,6 +110,15 @@ struct Aref_UINT32
     /*0x08*/ uint32 value; //initial value
     /*0x0C*/ uint32 unValue; //unused value
     /*0x10*/ uint32 flag; //seems unused, 0
+};
+
+// Size = 28 Byte / 0x1C byte
+struct Aref_VEC2D
+{
+    /*0x00*/ AnimationReference AnimRef; //STC/STS reference
+    /*0x08*/ Vec2D value; //initial value
+    /*0x10*/ Vec2D unValue; //unused value
+    /*0x18*/ uint32 flag; //seems unused, 0
 };
 
 // Size = 36 Byte / 0x24 byte
@@ -119,6 +137,24 @@ struct Aref_VEC4D
     /*0x08*/ Vec4D value; //initial value
     /*0x18*/ Vec4D unValue; //unused value
     /*0x28*/ uint32 flags; //seems unused, 0
+};
+
+// Size = 20 Byte / 0x14 byte
+struct Aref_fltByte4D
+{
+    /*0x00*/ AnimationReference AnimRef; //STC/STS reference
+    /*0x08*/ uint8 value[4]; //initial value
+    /*0x0C*/ uint8 unValue[4]; //unused value
+    /*0x10*/ uint32 flag; //seems unused, 0
+};
+
+// Size = 20 Byte / 0x14 byte
+struct Aref_FLOAT
+{
+    /*0x00*/ AnimationReference AnimRef; //STC/STS reference
+    /*0x08*/ float value; //initial value
+    /*0x0C*/ float unValue; //unused value
+    /*0x10*/ uint32 flag; //seems unused, 0
 };
 
 // Size = 24 byte / 0x18 byte
@@ -377,51 +413,37 @@ struct MAT
     Aref_UINT32 ar2;
 };
 
-// Size = 352 bytes / 0x160 bytes
+// Size = 356 bytes / 0x164 bytes
 // Incomplete
 struct LAYR
 {
     uint32 d1;
     Reference name;
-    AnimationReference ar1;
-    uint32 d2[6]; //d2[5] determines team colour
-    AnimationReference ar2;
-    float f1[2];
-    uint32 d3;
-    AnimationReference ar3;
-    uint32 d4[4];
-    int32 d5;
-    uint32 d6[5];
-    AnimationReference ar4;
-    uint32 d7[3];
-    AnimationReference ar5;
-    uint32 d8[5];
-    AnimationReference ar6;
-    uint32 d9[2];
-    AnimationReference ar7;
-    float f2[2];
-    uint32 d10[3];
-    AnimationReference ar8;
-    float f3;
-    uint32 d11;
-    float f4;
-    uint32 d12[4];
-    AnimationReference ar9;
-    float f5[4];
-    uint32 d13;
-    AnimationReference ar10;
-    uint32 d14[3];
-    AnimationReference ar11;
-    float f6[2];
-    uint32 d15;
-    AnimationReference ar12;
-    float f7[2];
-    uint32 d16;
-    int32 d17;
-    uint32 d18;
-    float f8;
-    uint32 d19;
-    float f9[2];
+	Aref_fltByte4D Colour;
+	uint32 flags;
+	uint32 uvmapChannel;
+	uint32 renderFlags;
+	Aref_FLOAT brightness_mult1;
+	Aref_FLOAT brightness_mult2;
+	uint32 d4;
+	uint8 colour[4]; // fltByte
+	uint32 d6[2];
+	int32 d7;
+	uint32 d8[2];
+	Aref_UINT32 ar1;
+	Aref_VEC2D ar2;
+	Aref_UINT16 ar3;
+	Aref_VEC2D ar4;
+	Aref_VEC3D uvAngle;
+	Aref_VEC2D uvTiling;
+	Aref_UINT32 ar5;
+	Aref_FLOAT ar6;
+	Aref_FLOAT brightness;
+	int32 d20;
+	uint32 shadingFlags;
+	float tintStrength;
+	float tintUnk;
+	float f8[2];
 };
 
 // Size = 52 byte / 0x34 byte
