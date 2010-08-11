@@ -13,7 +13,7 @@ struct Vertex3f {
 	float z;
 };
 
-struct RGBColor{
+struct RGB_Color{
 	uint8 r, g, b;
 };
 
