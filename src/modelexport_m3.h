@@ -527,16 +527,19 @@ and freeze on the last frame without continuing through the loop. These events
 must be generated on export if you intend to have the model sequences loop 
 properly within the game engine.
 */
-// Size = 100 byte/ 0x64 byte
+// Size = 104 byte/ 0x68 byte
 // Incomplete
 struct EVNT
 {
     /*0x00*/ Reference name;
     /*0x0C*/ int32 d1;
     /*0x10*/ int16 s1;
-    /*0x0C*/ uint16 s2;
-    /*0x14*/ float matrix[4][4];
-    /*0x54*/ int32 unk2[4];
+    /*0x12*/ uint16 s2;
+    /*0x14*/ Vec4D a;
+	/*0x24*/ Vec4D b;
+	/*0x34*/ Vec4D c;
+	/*0x44*/ Vec4D d;
+	/*0x54*/ int32 d2[5];
 };
 
 // Size = 20 byte / 0x14 byte

@@ -267,6 +267,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		evnt.name.ref = ++fHead.nRefs;
 		evnt.d1 = -1;
 		evnt.s1 = -1;
+		evnt.a = Vec4D(1.0f, 0.0f, 0.0f, 0.0f);
+		evnt.b = Vec4D(0.0f, 1.0f, 0.0f, 0.0f);
+		evnt.c = Vec4D(0.0f, 0.0f, 1.0f, 0.0f);
+		evnt.d = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
 		f.Write(&evnt, sizeof(evnt));
 		padding(&f);
 		RefEntry("RAHC", f.Tell(), evnt.name.nEntries, 0);
@@ -494,6 +498,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	wxDELETEA(bones);
 	f.Seek(datachunk_offset, wxFromStart);
 
+	//
+	mdata.nSkinnedBones = mdata.mBone.nEntries;
 	// vertFlags
 	mdata.vertFlags = 0x182007D;
 
