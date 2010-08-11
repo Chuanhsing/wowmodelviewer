@@ -498,8 +498,21 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	wxDELETEA(bones);
 	f.Seek(datachunk_offset, wxFromStart);
 
-	//
-	mdata.nSkinnedBones = mdata.mBone.nEntries;
+	// nSkinnedBones
+	ModelVertex *verts = (ModelVertex*)(mpqf.getBuffer() + m->header.ofsVertices);
+	uint8 *skinned = new uint8[mdata.mBone.nEntries];
+	memset(skinned, 0, sizeof(uint8)*mdata.mBone.nEntries);
+	for(uint32 i=0; i<m->header.nVertices; i++) {
+		for(uint32 j=0; j<4; j++) {
+			if (verts[i].weights[j] != 0)
+				skinned[verts[i].bones[j]] = 1;
+		}
+	}
+	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
+		if (skinned[i] == 1)
+			mdata.nSkinnedBones ++;
+	}
+	wxDELETEA(skinned);
 	// vertFlags
 	mdata.vertFlags = 0x182007D;
 
@@ -507,7 +520,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	mdata.mVert.nEntries = m->header.nVertices*sizeof(Vertex32);
 	mdata.mVert.ref = ++fHead.nRefs;
 	RefEntry("__8U", f.Tell(), mdata.mVert.nEntries, 0);
-	ModelVertex *verts = (ModelVertex*)(mpqf.getBuffer() + m->header.ofsVertices);
 	for(uint32 i=0; i<m->header.nVertices; i++) {
 		Vertex32 vert;
 		memset(&vert, 0, sizeof(vert));
@@ -598,11 +610,11 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	// mBoneLU
 	uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
-	mdata.mBoneLU.nEntries = m->header.nBoneLookup;
+	mdata.mBoneLU.nEntries = mdata.mBone.nEntries;
 	mdata.mBoneLU.ref = ++fHead.nRefs;
 	RefEntry("_61U", f.Tell(), mdata.mBoneLU.nEntries, 0);
 	for(uint16 i=0; i<mdata.mBoneLU.nEntries; i++) {
-		f.Write(&boneLookup[i], sizeof(uint16));
+		f.Write(&i, sizeof(uint16));
 	}
 	padding(&f);
 
