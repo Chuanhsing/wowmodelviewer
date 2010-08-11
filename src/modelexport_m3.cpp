@@ -578,6 +578,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		regn.boneCount = ops[geoset].nBones;
 		regn.indBone = indBone;
 		regn.numBone = ops[geoset].nBones;
+		regn.b1[0] = regn.b1[1] = 1;
 		indBone += regn.boneCount;
 		f.Write(&regn, sizeof(regn));
 	}
@@ -656,12 +657,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Seek(datachunk_offset, wxFromStart);
 
 	// mAttachLU
-	int16 *attachLookup = (int16 *)(mpqf.getBuffer() + m->header.ofsAttachLookup);
-	mdata.mAttachLU.nEntries = m->header.nAttachLookup;
+	//int16 *attachLookup = (int16 *)(mpqf.getBuffer() + m->header.ofsAttachLookup);
+	mdata.mAttachLU.nEntries = mdata.mAttach.nEntries;
 	mdata.mAttachLU.ref = ++fHead.nRefs;
 	RefEntry("_61U", f.Tell(), mdata.mAttachLU.nEntries, 0);
 	for(uint16 i=0; i<mdata.mAttachLU.nEntries; i++) {
-		f.Write(&attachLookup[i], sizeof(int16));
+		int16 ii = -1;
+		f.Write(&ii, sizeof(int16)); // Error
 	}
 	padding(&f);
 
@@ -669,7 +671,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	mdata.mMatLU.nEntries = view->nTex;
 	mdata.mMatLU.ref = ++fHead.nRefs;
 	RefEntry("MTAM", f.Tell(), mdata.mMatLU.nEntries, 0);
-	for(uint32 i=0; i<mdata.mMat.nEntries; i++) {
+	for(uint32 i=0; i<mdata.mMatLU.nEntries; i++) {
 		MATM matm;
 		matm.nmat = 1;
 		matm.matind = i;
