@@ -480,7 +480,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				break;
 			}
 		}
-		bones[i].initTrans.value = mb[i].pivot;
+		bones[i].initTrans.value.x = mb[i].pivot.x;
+		bones[i].initTrans.value.y = mb[i].pivot.z;
+		bones[i].initTrans.value.z = mb[i].pivot.y;
 		for(uint32 j=0; j<mdata.mSTC.nEntries; j++) {
 			int anim_offset = logAnimations[j];
 			if (m->bones[i].rot.uses(anim_offset)) {
@@ -742,9 +744,16 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	mdata.mIREF.ref = ++fHead.nRefs;
 	RefEntry("FERI", f.Tell(), mdata.mIREF.nEntries, 0);
 	for(uint32 i=0; i<mdata.mIREF.nEntries; i++) {
-		matrix mat;
-		memset(&mat, 0, sizeof(mat));
-		f.Write(&mat, sizeof(mat));
+		IREF iref;
+		memset(&iref, 0, sizeof(iref));
+		iref.matrix[0][1] = 2.0f;
+		iref.matrix[1][0] = -2.0f;
+		iref.matrix[2][2] = 2.0f;
+		iref.matrix[3][0] = -m->bones[i].pivot.x;
+		iref.matrix[3][1] = -m->bones[i].pivot.z;
+		iref.matrix[3][2] = -m->bones[i].pivot.y;
+		iref.matrix[3][3] = 1.0f;
+		f.Write(&iref, sizeof(iref));
 	}
 	padding(&f);
 
