@@ -534,8 +534,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	div.faces.nEntries = view->nTris;
 	div.faces.ref = ++fHead.nRefs;
 	RefEntry("_61U", f.Tell(), div.faces.nEntries, 0);
-	for(uint16 i=1; i<=div.faces.nEntries; i++) {
-		f.Write(&i, sizeof(uint16)); // Error
+	uint16 *triangles = (uint16*)(mpqfv.getBuffer() + view->ofsTris);
+	for(uint16 i=0; i<div.faces.nEntries; i++) {
+		f.Write(&triangles[i], sizeof(uint16)); // Error
 	}
 	padding(&f);
 	// mDiv.meash
