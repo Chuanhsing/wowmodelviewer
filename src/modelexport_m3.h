@@ -444,16 +444,16 @@ struct LAYR
 	Aref_VEC2D ar2;
 	Aref_UINT16 ar3;
 	Aref_VEC2D ar4;
-	Aref_VEC3D uvAngle;
+	Aref_VEC3D uvAngle; //max angle = uvAngle * 50 * -1
 	Aref_VEC2D uvTiling;
 	Aref_UINT32 ar5;
 	Aref_FLOAT ar6;
 	Aref_FLOAT brightness;
-	int32 d20;
+	int32 d20; //unknown purpose, seems to affect uv coords, should be set to -1
 	uint32 shadingFlags;
-	float tintStrength;
-	float tintUnk;
-	float f8[2];
+	float tintStrength; //set to 4 by default in Blizzard models
+	float tintUnk; //unknown purpose relating to tint
+	float f8[2]; //seems to be more settings for tint
 };
 
 // Size = 52 byte / 0x34 byte
@@ -492,7 +492,7 @@ struct REGN
     /*0x1C*/ uint16 numBone; //number of bones used from boneLookup
     /*0x1E*/ uint16 s2; //flags? vital for sc2 engine rendering the geometry
     /*0x20*/ unsigned char b1[2];
-    /*0x22*/ uint16 s3;
+    /*0x22*/ uint16 rootBone;
 };
 
 // Size = 72 byte / 0x48 byte
@@ -500,9 +500,7 @@ struct REGN
 struct MSEC
 {
     /*0x00*/ uint32 d1; //always 0?
-    /*0x04*/ AnimationReference bounds; //Bounding box animation ref in STC
-    /*0x0C*/ Sphere ext1; //Some kind of mesh extent? TODO
-    /*0x2C*/ uint32 d2[7];
+    /*0x04*/ Aref_Sphere bndSphere;
 };
 
 // Size = 176 byte / 0xB0 byte
@@ -630,19 +628,18 @@ see if this is correct.
 // Incomplete
 struct SEQS
 {
-    /*0x00*/ int32 d1;
-    /*0x04*/ int32 d2;
+    /*0x00*/ int32 d1[2]; //usually -1
     /*0x08*/ Reference name;
     /*0x14*/ int32 animStart;
     /*0x18*/ int32 length;			// animLength
     /*0x1C*/ float moveSpeed;		// used in movement sequences (Walk, Run)
     /*0x20*/ uint32 flags;
     /*0x24*/ uint32 frequency;		// how often it plays
-    /*0x28*/ uint32 ReplayStart;
-    /*0x2C*/ uint32 ReplayEnd;
-    /*0x2C*/ int32 d4[2];
+    /*0x28*/ uint32 ReplayStart;	// in most Blizzard models set to 1
+    /*0x2C*/ uint32 ReplayEnd;		// in most Blizzard models set to 1
+    /*0x2C*/ int32 d4[2];			// usually 0
     /*0x38*/ Sphere boundSphere;
-    /*0x58*/ int32 d5[2];
+    /*0x58*/ int32 d5[2];			// usually 0
 };
 
 // Size = 4 byte / 0x04 byte
@@ -722,10 +719,10 @@ struct STC
 // Incomplete
 struct STS
 {
-    /*0x00*/ Reference animid; // uint32
-    /*0x0C*/ int32 d1[3];
-    /*0x18*/ int16 s1;
-    /*0x1A*/ uint16 s2;
+    /*0x00*/ Reference animid;	// uint32 values, same as what's in STC?
+    /*0x0C*/ int32 d1[3];		// usually -1
+    /*0x18*/ int16 s1;			// usually -1
+    /*0x1A*/ uint16 s2;			// usually 0
 };
 
 // Size = 24 byte / 0x18 byte
@@ -744,8 +741,7 @@ struct STG
 // Incomplete
 struct BNDS
 {
-    /*0x00*/ Vec3D extents1[2];
-    /*0x18*/ float radius1;
+    /*0x00*/ Sphere bndSphere;
 };
 
 // Size = 64 byte / 0x40 byte

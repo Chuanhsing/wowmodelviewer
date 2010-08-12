@@ -167,8 +167,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<nAnimations; i++) {
 		int j = logAnimations[i];
-		seqs[i].d1 = -1;
-		seqs[i].d2 = -1;
+		seqs[i].d1[0] = -1;
+		seqs[i].d1[1] = -1;
 		seqs[i].length = m->anims[j].timeEnd;
 		seqs[i].moveSpeed = m->anims[j].moveSpeed;
 		seqs[i].frequency = m->anims[j].playSpeed; // ?
@@ -485,7 +485,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
 		bones[i].d1 = -1;
-		bones[i].flags = 0xA0000;
+		bones[i].flags = 0xA00;
 		bones[i].parent = mb[i].parent;
 		for(uint32 j=0; j<mdata.mSTC.nEntries; j++) {
 			int anim_offset = logAnimations[j];
@@ -512,6 +512,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		bones[i].initScale.value = Vec3D(1.0f, 1.0f, 1.0f);
 		bones[i].initScale.unValue = Vec3D(1.0f, 1.0f, 1.0f);
 		bones[i].ar1.AnimRef.animid = i | (6 << 16);
+		bones[i].ar1.value = 1;
+		bones[i].ar1.unValue = 1;
 		f.Write(&bones[i], sizeof(BONE));
 	}
 	wxDELETEA(bones);
@@ -735,7 +737,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			// layers
 			int chunk_offset2, datachunk_offset2;
 			for(uint32 j=0; j<13; j++) {
-				mats[i].layers[j].nEntries = 1; // LAYER_Diff
+				mats[i].layers[j].nEntries = 1;
 				mats[i].layers[j].ref = ++fHead.nRefs;
 				RefEntry("RYAL", f.Tell(), mats[i].layers[j].nEntries, 0x16);
 				chunk_offset2 = f.Tell();
@@ -747,7 +749,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				f.Write(&layer, sizeof(layer));
 				padding(&f);
 
-				if (j == 0) {
+				if (j == 0) { // LAYER_Diff
 					wxString strName = wxString::Format(_T("Mat_%2d.tga"), i);
 					layer.name.nEntries = strName.Len()+1;
 					layer.name.ref = ++fHead.nRefs;
@@ -792,6 +794,12 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Write(&iref, sizeof(iref));
 	}
 	padding(&f);
+
+	//
+	mdata.mat.a = Vec4D(1.0f, 0.0f, 0.0f, 0.0f);
+	mdata.mat.b = Vec4D(0.0f, 1.0f, 0.0f, 0.0f);
+	mdata.mat.c = Vec4D(0.0f, 0.0f, 1.0f, 0.0f);
+	mdata.mat.d = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
 
 	// 4. ReferenceEntry
 	fHead.ofsRefs = f.Tell();
