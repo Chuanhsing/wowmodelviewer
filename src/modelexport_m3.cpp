@@ -207,13 +207,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		// animid
 		for(int j=0; j<m->header.nBones; j++) {
 			if (m->bones[j].trans.uses(anim_offset)) {
-				stcs[i].Trans.nEntries++;
+				stcs[i].arVec3D.nEntries++;
 			}
 			if (m->bones[j].rot.uses(anim_offset)) {
-				stcs[i].Rot.nEntries++;
+				stcs[i].arQuat.nEntries++;
 			}
 		}
-		stcs[i].animid.nEntries = stcs[i].Trans.nEntries + stcs[i].Rot.nEntries;
+		stcs[i].animid.nEntries = stcs[i].arVec3D.nEntries + stcs[i].arQuat.nEntries;
 		stcs[i].animid.ref = ++fHead.nRefs;
 		RefEntry("_23U", f.Tell(), stcs[i].animid.nEntries, 0);
 		for(int j=0; j<m->header.nBones; j++) {
@@ -298,13 +298,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Seek(datachunk_offset2, wxFromStart);
 
 		// Trans, V3DS
-		if (stcs[i].Trans.nEntries > 0) {
-			stcs[i].Trans.ref = ++fHead.nRefs;
-			RefEntry("V3DS", f.Tell(), stcs[i].Trans.nEntries, 0);
+		if (stcs[i].arVec3D.nEntries > 0) {
+			stcs[i].arVec3D.ref = ++fHead.nRefs;
+			RefEntry("V3DS", f.Tell(), stcs[i].arVec3D.nEntries, 0);
 			chunk_offset2 = f.Tell();
-			sds = new SD[stcs[i].Trans.nEntries];
-			memset(sds, 0, sizeof(SD)*stcs[i].Trans.nEntries);
-			f.Seek(sizeof(sd)*stcs[i].Trans.nEntries, wxFromCurrent);
+			sds = new SD[stcs[i].arVec3D.nEntries];
+			memset(sds, 0, sizeof(SD)*stcs[i].arVec3D.nEntries);
+			f.Seek(sizeof(sd)*stcs[i].arVec3D.nEntries, wxFromCurrent);
 			ii=0;
 			for(int j=0; j<m->header.nBones; j++) {
 				if (m->bones[j].trans.uses(anim_offset)) {
@@ -331,7 +331,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			}
 			datachunk_offset2 = f.Tell();
 			f.Seek(chunk_offset2, wxFromStart);
-			for(int j=0; j<stcs[i].Trans.nEntries; j++) {
+			for(int j=0; j<stcs[i].arVec3D.nEntries; j++) {
 				f.Write(&sds[j], sizeof(sd));
 			}
 			wxDELETEA(sds);
@@ -339,13 +339,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		}
 
 		// Rot, Q4DS
-		if (stcs[i].Rot.nEntries > 0) {
-			stcs[i].Rot.ref = ++fHead.nRefs;
-			RefEntry("Q4DS", f.Tell(), stcs[i].Rot.nEntries, 0);
+		if (stcs[i].arQuat.nEntries > 0) {
+			stcs[i].arQuat.ref = ++fHead.nRefs;
+			RefEntry("Q4DS", f.Tell(), stcs[i].arQuat.nEntries, 0);
 			chunk_offset2 = f.Tell();
-			sds = new SD[stcs[i].Rot.nEntries];
-			memset(sds, 0, sizeof(SD)*stcs[i].Rot.nEntries);
-			f.Seek(sizeof(sd)*stcs[i].Rot.nEntries, wxFromCurrent);
+			sds = new SD[stcs[i].arQuat.nEntries];
+			memset(sds, 0, sizeof(SD)*stcs[i].arQuat.nEntries);
+			f.Seek(sizeof(sd)*stcs[i].arQuat.nEntries, wxFromCurrent);
 			ii=0;
 			for(int j=0; j<m->header.nBones; j++) {
 				if (m->bones[j].rot.uses(anim_offset)) {
@@ -373,7 +373,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			}
 			datachunk_offset2 = f.Tell();
 			f.Seek(chunk_offset2, wxFromStart);
-			for(int j=0; j<stcs[i].Rot.nEntries; j++) {
+			for(int j=0; j<stcs[i].arQuat.nEntries; j++) {
 				f.Write(&sds[j], sizeof(sd));
 			}
 			wxDELETEA(sds);

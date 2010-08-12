@@ -34,6 +34,13 @@ struct Sphere
 	/*0x1C*/ uint32 flags;
 };
 
+struct Sphere2
+{
+	/*0x00*/ Vec3D min;
+	/*0x0C*/ Vec3D max;
+	/*0x18*/ float radius;
+};
+
 // Size = 68 byte / 0x44 byte
 struct matrix
 {
@@ -162,8 +169,8 @@ struct Aref_Colour
 struct Aref_Sphere
 {
     AnimationReference AnimRef; //STC/STS reference
-    Sphere value; //initial value
-    Sphere unValue; //unused value
+    Sphere2 value; //initial value
+    Sphere2 unValue; //unused value
     uint32 flags; //seems unused, 0    
 }; //used in SDMB anim blocks, as BNDS data type
 
@@ -181,6 +188,8 @@ struct MD34
 // vertFlags
 #define	VERT_EXISTS	0x20000
 #define	VERT_36		0x40000
+#define	VERT_40		0x80000
+#define	VERT_44		0x100000
 // Size = 784 byte / 0x310 byte
 struct MODL
 {
@@ -701,18 +710,18 @@ struct STC
     /*0x20*/ Reference animindex; //lookup table, connects animid with it's animation data, nEntries of AnimationIndex reference using U32_ id
     /*0x2C*/ uint32 d2;
     /*0x30*/ Reference Events; // EVNT
-    /*0x3C*/ Reference r1; // SD2V
-    /*0x48*/ Reference Trans; // SD3V - Trans
-    /*0x54*/ Reference Rot; // SD4Q - Rotation
-    /*0x60*/ Reference r2;
-    /*0x6C*/ Reference r3; // SDR3 - Scale?
-    /*0x78*/ Reference r4;
-    /*0x84*/ Reference r5; // SDS6
-    /*0x90*/ Reference r6;
-    /*0x9C*/ Reference r7;
-    /*0xA8*/ Reference r8;
-    /*0xB4*/ Reference Flags; // SDFG - Flags
-    /*0xC0*/ Reference bounds; // SDMB - Bounding Boxes?
+    /*0x3C*/ Reference arVec2D; // SD2V
+    /*0x48*/ Reference arVec3D; // SD3V - Trans
+    /*0x54*/ Reference arQuat; // SD4Q - Rotation
+    /*0x60*/ Reference arColour;
+    /*0x6C*/ Reference arFloat; // SDR3 - Scale?
+    /*0x78*/ Reference r3;
+    /*0x84*/ Reference arInt16; // SDS6
+    /*0x90*/ Reference r4;
+    /*0x9C*/ Reference r5;
+    /*0xA8*/ Reference r6;
+    /*0xB4*/ Reference arFlags; // SDFG - Flags
+    /*0xC0*/ Reference arBounds; // SDMB - Bounding Boxes?
 };
 
 // Size = 28 byte / 0x1C byte
@@ -741,7 +750,7 @@ struct STG
 // Incomplete
 struct BNDS
 {
-    /*0x00*/ Sphere bndSphere;
+    /*0x00*/ Sphere2 bndSphere;
 };
 
 // Size = 64 byte / 0x40 byte
