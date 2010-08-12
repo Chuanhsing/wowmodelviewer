@@ -26,6 +26,26 @@ void RefEntry(const char *id, uint32 offset, uint32 nEntries, uint32 vers)
 	reList.push_back(re);
 }
 
+uint32 nSkinnedBones(Model *m, MPQFile *mpqf, uint32 start, uint32 num)
+{
+	ModelVertex *verts = (ModelVertex*)(mpqf->getBuffer() + m->header.ofsVertices);
+	uint8 *skinned = new uint8[m->header.nBones];
+	memset(skinned, 0, sizeof(uint8)*m->header.nBones);
+	uint32 nSkinnedBones = 0;
+	for(uint32 i=start; i<(start+num); i++) {
+		for(uint32 j=0; j<4; j++) {
+			if (verts[i].weights[j] != 0)
+				skinned[verts[i].bones[j]] = 1;
+		}
+	}
+	for(uint32 i=0; i<m->header.nBones; i++) {
+		if (skinned[i] == 1)
+			nSkinnedBones ++;
+	}
+	wxDELETEA(skinned);
+	return nSkinnedBones;
+}
+
 void ExportM2toM3(Model *m, const char *fn, bool init)
 {
 	if (!m)
@@ -473,6 +493,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				break;
 			}
 		}
+		bones[i].initTrans.AnimRef.animid = i | (2 << 16);
 		bones[i].initTrans.value.x = mb[i].pivot.x;
 		bones[i].initTrans.value.y = mb[i].pivot.z;
 		bones[i].initTrans.value.z = mb[i].pivot.y;
@@ -483,35 +504,25 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				break;
 			}
 		}
+		bones[i].initRot.AnimRef.animid = i | (3 << 16);
 		bones[i].initRot.value = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
 		bones[i].initRot.unValue = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
-		//bones[i].initScale.AnimRef.animid = i | (5 << 16);
+		bones[i].initScale.AnimRef.animid = i | (5 << 16);
 		bones[i].initScale.value = Vec3D(1.0f, 1.0f, 1.0f);
 		bones[i].initScale.unValue = Vec3D(1.0f, 1.0f, 1.0f);
+		bones[i].ar1.AnimRef.animid = i | (6 << 16);
 		f.Write(&bones[i], sizeof(BONE));
 	}
 	wxDELETEA(bones);
 	f.Seek(datachunk_offset, wxFromStart);
 
 	// nSkinnedBones
-	ModelVertex *verts = (ModelVertex*)(mpqf.getBuffer() + m->header.ofsVertices);
-	uint8 *skinned = new uint8[mdata.mBone.nEntries];
-	memset(skinned, 0, sizeof(uint8)*mdata.mBone.nEntries);
-	for(uint32 i=0; i<m->header.nVertices; i++) {
-		for(uint32 j=0; j<4; j++) {
-			if (verts[i].weights[j] != 0)
-				skinned[verts[i].bones[j]] = 1;
-		}
-	}
-	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
-		if (skinned[i] == 1)
-			mdata.nSkinnedBones ++;
-	}
-	wxDELETEA(skinned);
+	mdata.nSkinnedBones = nSkinnedBones(m, &mpqf, 0, m->header.nVertices);
 	// vertFlags
 	mdata.vertFlags = 0x182007D;
 
 	// mVert
+	ModelVertex *verts = (ModelVertex*)(mpqf.getBuffer() + m->header.ofsVertices);
 	mdata.mVert.nEntries = m->header.nVertices*sizeof(Vertex32);
 	mdata.mVert.ref = ++fHead.nRefs;
 	RefEntry("__8U", f.Tell(), mdata.mVert.nEntries, 0);
@@ -568,9 +579,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		regn.numFaces = ops[geoset].icount;
 		regn.indVert = ops[geoset].vstart;
 		regn.numVert = ops[geoset].vcount;
-		regn.boneCount = ops[geoset].nBones;
+		regn.boneCount = nSkinnedBones(m, &mpqf, regn.indVert, regn.numVert);
 		regn.indBone = indBone;
-		regn.numBone = ops[geoset].nBones;
+		regn.numBone = regn.boneCount;
 		regn.b1[0] = regn.b1[1] = 1;
 		indBone += regn.boneCount;
 		f.Write(&regn, sizeof(regn));
@@ -606,11 +617,35 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	// mBoneLU
 	uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
-	mdata.mBoneLU.nEntries = mdata.mBone.nEntries;
+	std::vector<uint16> bLookup;
+	for (size_t j=0; j<view->nTex; j++) {
+		size_t geoset = tex[j].op;
+		std::vector<uint16> bLookup2; // local bLookup
+		bLookup2.clear();
+
+		for(uint32 i=ops[geoset].vstart; i<(ops[geoset].vstart+ops[geoset].vcount); i++) {
+			for(uint32 k=0; k<4; k++) {
+				if (verts[i].weights[k] != 0) {
+					bool bFound = false;
+					for(uint32 m=0; m<bLookup2.size(); m++) {
+						if (bLookup2[m] == verts[i].bones[k])
+							bFound = true;
+					}
+					if (bFound == false)
+						bLookup2.push_back(verts[i].bones[k]);
+				}
+			}
+		}
+		// push local bLookup to global, and lookup it in boneLookup
+		for(uint32 i=0; i<bLookup2.size(); i++) {
+			bLookup.push_back(boneLookup[bLookup2[i]]);
+		}
+	}
+	mdata.mBoneLU.nEntries = bLookup.size();
 	mdata.mBoneLU.ref = ++fHead.nRefs;
 	RefEntry("_61U", f.Tell(), mdata.mBoneLU.nEntries, 0);
-	for(uint16 i=0; i<mdata.mBoneLU.nEntries; i++) {
-		f.Write(&i, sizeof(uint16));
+	for(uint16 i=0; i<bLookup.size(); i++) {
+		f.Write(&bLookup[i], sizeof(uint16));
 	}
 	padding(&f);
 
