@@ -84,6 +84,8 @@ animation data found in STC. Following animation references are two values, the
 initial value before animation and another value of the same type that seems to 
 have no effect. Following these is a uint32 flag that seems to always be 0. The 
 value types depend on the animation reference (i.e. VEC3D, Quat, uint32, etc).
+I'm willing to bet there's 13 different Animation Reference types based on the 
+fact that [STC] has 13 static reference arrays for sequence data.
 */
 // Size = 8 Byte / 0x08 byte
 // Incomplete
@@ -101,7 +103,7 @@ struct Aref_UINT16
     /*0x08*/ uint16 value; //initial value
     /*0x0A*/ uint16 unValue; //unused value
     /*0x0C*/ uint32 flag; //seems unused, 0
-};
+}; //used in SDS6 anim blocks, as I16_ data type
 
 // Size = 20 Byte / 0x14 byte
 struct Aref_UINT32
@@ -110,7 +112,7 @@ struct Aref_UINT32
     /*0x08*/ uint32 value; //initial value
     /*0x0C*/ uint32 unValue; //unused value
     /*0x10*/ uint32 flag; //seems unused, 0
-};
+}; //used in SDFG anim blocks, as FLAG data type
 
 // Size = 28 Byte / 0x1C byte
 struct Aref_VEC2D
@@ -119,7 +121,7 @@ struct Aref_VEC2D
     /*0x08*/ Vec2D value; //initial value
     /*0x10*/ Vec2D unValue; //unused value
     /*0x18*/ uint32 flag; //seems unused, 0
-};
+}; //used in SD2V anim blocks, as VEC2 data type
 
 // Size = 36 Byte / 0x24 byte
 struct Aref_VEC3D
@@ -128,7 +130,7 @@ struct Aref_VEC3D
     /*0x08*/ Vec3D value; //initial value
     /*0x14*/ Vec3D unValue; //unused value
     /*0x20*/ uint32 flag; //seems unused, 0
-};
+}; //used in SD3V anim blocks, as VEC3 data type
 
 // Size = 44 Byte / 0x2C byte
 struct Aref_VEC4D
@@ -137,16 +139,7 @@ struct Aref_VEC4D
     /*0x08*/ Vec4D value; //initial value
     /*0x18*/ Vec4D unValue; //unused value
     /*0x28*/ uint32 flags; //seems unused, 0
-};
-
-// Size = 20 Byte / 0x14 byte
-struct Aref_fltByte4D
-{
-    /*0x00*/ AnimationReference AnimRef; //STC/STS reference
-    /*0x08*/ uint8 value[4]; //initial value
-    /*0x0C*/ uint8 unValue[4]; //unused value
-    /*0x10*/ uint32 flag; //seems unused, 0
-};
+}; //used in SD4Q anim blocks, as QUAT data type
 
 // Size = 20 Byte / 0x14 byte
 struct Aref_FLOAT
@@ -155,7 +148,24 @@ struct Aref_FLOAT
     /*0x08*/ float value; //initial value
     /*0x0C*/ float unValue; //unused value
     /*0x10*/ uint32 flag; //seems unused, 0
-};
+}; //used in SDR3 anim blocks, as REAL data type
+
+// Size = 20 Byte / 0x14 byte
+struct Aref_Colour
+{
+    /*0x00*/ AnimationReference AnimRef; //STC/STS reference
+    /*0x08*/ uint8 value[4]; //b, g, r, alpha initial value 
+    /*0x0C*/ uint8 unValue[4]; //unused value
+    /*0x10*/ uint32 flags; //seems unused, 0
+}; //used in SDCC anim blocks, as COL data type
+
+struct Aref_Sphere
+{
+    AnimationReference AnimRef; //STC/STS reference
+    Sphere value; //initial value
+    Sphere unValue; //unused value
+    uint32 flags; //seems unused, 0    
+}; //used in SDMB anim blocks, as BNDS data type
 
 // Size = 24 byte / 0x18 byte
 // Complete
@@ -419,7 +429,7 @@ struct LAYR
 {
     uint32 d1;
     Reference name;
-	Aref_fltByte4D Colour;
+	Aref_Colour Colour;
 	uint32 flags;
 	uint32 uvmapChannel;
 	uint32 renderFlags;
@@ -663,10 +673,11 @@ SDEV	 0	Event	EVNT	 Unknown	 Event Animation?
 SD2V	 1	Vector 2D	VEC2	 PAR	 Unknown
 SD3V	 2	Vector 3D	VEC3	BONE	 Translation/Scale
 SD4Q	 3	Quaternion	QUAT	BONE	 Rotation
+SDCC	 4	Colour (4 byte floats)	COL	 RIB	 Colour (Blue, Green, Red, Alpha)
 SDR3	 5	Float	REAL	 PAR	 Unknown
 SDS6	 7	int16	 I16	 Unknown	 Unknown
 SDFG	 11	int32	FLAG	 RIB	 Flags?
-SDMB	 12	Extent	BNDS	MSEC	 Bounding Box
+SDMB	 12	Extent	BNDS	MSEC	 Bounding Sphere
 
 Sequence Data Information
 Translation and Scaling animation data use the same Sequence Data entry, SD3V 
@@ -676,6 +687,13 @@ animation sequence. Sequences that are part of a looped series require
 Examples of these animations are Stand animations, which typically all loop, 
 but each only plays once in the loop and are picked based on their frequency 
 setting of their corresponding SEQS entry.
+
+Animation References
+Animation references indirectly reference the data found in the Sequence Data 
+arrays. See the BONE animation data description to get a handle on how STC 
+data is referenced using animation references. I believe there will be a total 
+of 13 different types of animation references, one for each index of the 
+sequence data array. So far only some have been discovered within M3 files.
 */
 struct STC
 {

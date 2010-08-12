@@ -663,7 +663,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	RefEntry("_61U", f.Tell(), mdata.mAttachLU.nEntries, 0);
 	for(uint16 i=0; i<mdata.mAttachLU.nEntries; i++) {
 		int16 ii = -1;
-		f.Write(&ii, sizeof(int16)); // Error
+		f.Write(&ii, sizeof(int16));
 	}
 	padding(&f);
 
@@ -761,6 +761,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	// 4. ReferenceEntry
 	fHead.ofsRefs = f.Tell();
+	fHead.nRefs = reList.size(); // MODL Ref
 
 	for(size_t i=0; i<reList.size(); i++) {
 		f.Write(&reList[i], sizeof(ReferenceEntry));
