@@ -329,10 +329,10 @@ struct ModelGeoset {
 	uint16 vcount;	// num vertices, Number of vertices.
 	uint16 istart;	// first index, Starting triangle index (that's 3* the number of triangles drawn so far).
 	uint16 icount;	// num indices, Number of triangle indices.
-	uint16 totalBones;
+	uint16 nSkinnedBones;	// number of bone indices, Number of elements in the bone lookup table.
 	uint16 StartBones;		// ? always 1 to 4, Starting index in the bone lookup table.
 	uint16 rootBone;		// root bone?
-	uint16 nBones;		// number of bone indices, Number of elements in the bone lookup table.
+	uint16 nBones;		// 
 	Vec3D BoundingBox[2];
 	float radius;
 };

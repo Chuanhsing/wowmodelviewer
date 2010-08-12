@@ -52,14 +52,14 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	fHead.mref.nEntries = 1;
 	fHead.mref.ref = ++fHead.nRefs;
 	memset(&fHead.padding, 0xAA, sizeof(fHead.padding));
-	f.Write(&fHead, sizeof(fHead));
+	f.Seek(sizeof(fHead), wxFromCurrent);
 
 	// 2. ModelHead
 	RefEntry("LDOM", f.Tell(), 1, 0x17);
 
 	struct MODL mdata;
 	memset(&mdata, 0, sizeof(mdata));
-	f.Write(&mdata, sizeof(mdata));
+	f.Seek(sizeof(mdata), wxFromCurrent);
 
 	// 3. Content
 	// Modelname
@@ -67,13 +67,11 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	n = n.AfterLast('\\').BeforeLast('.');
 	n.Append(_T(".max"));
 
-	RefEntry("RAHC", f.Tell(), n.length()+1, 0);
-	f.Write(n.c_str(), n.length());
-	char end=0;
-	f.Write(&end, sizeof(end));
-	padding(&f);
-	mdata.name.nEntries = n.length()+1;
+	mdata.name.nEntries = n.Len()+1;
 	mdata.name.ref = ++fHead.nRefs;
+	RefEntry("RAHC", f.Tell(), mdata.name.nEntries, 0);
+	f.Write(n.c_str(), n.Len()+1);
+	padding(&f);
 
 	mdata.type = 0x180d53;
 	
@@ -139,11 +137,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	padding(&f);
 	for(uint32 i=0; i<nAnimations; i++) {
 		wxString strName = nameAnimations[i];
-		seqs[i].name.nEntries = strName.length()+1;
+		seqs[i].name.nEntries = strName.Len()+1;
 		seqs[i].name.ref = ++fHead.nRefs;
 		RefEntry("RAHC", f.Tell(), seqs[i].name.nEntries, 0);
-		f.Write(strName.c_str(), strName.length());
-		f.Write(&end, sizeof(end));
+		f.Write(strName.c_str(), strName.Len()+1);
 		padding(&f);
 	}
 	datachunk_offset = f.Tell();
@@ -181,11 +178,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		// name
 		wxString strName = nameAnimations[i];
 		strName.Append(_T("_full"));
-		stcs[i].name.nEntries = strName.length()+1;
+		stcs[i].name.nEntries = strName.Len()+1;
 		stcs[i].name.ref = ++fHead.nRefs;
 		RefEntry("RAHC", f.Tell(), stcs[i].name.nEntries, 0);
-		f.Write(strName.c_str(), strName.length());
-		f.Write(&end, sizeof(end));
+		f.Write(strName.c_str(), strName.Len()+1);
 		padding(&f);
 
 		// animid
@@ -263,7 +259,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		EVNT evnt;
 		// name
 		strName = _T("Evt_SeqEnd");
-		evnt.name.nEntries = strName.length();
+		evnt.name.nEntries = strName.Len()+1;
 		evnt.name.ref = ++fHead.nRefs;
 		evnt.d1 = -1;
 		evnt.s1 = -1;
@@ -274,8 +270,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Write(&evnt, sizeof(evnt));
 		padding(&f);
 		RefEntry("RAHC", f.Tell(), evnt.name.nEntries, 0);
-		f.Write(strName.c_str(), strName.length());
-		f.Write(&end, sizeof(end));
+		f.Write(strName.c_str(), strName.Len()+1);
 		padding(&f);
 		datachunk_offset2 = f.Tell();
 		f.Seek(chunk_offset2, wxFromStart);
@@ -384,11 +379,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	for(uint32 i=0; i<mdata.mSTG.nEntries; i++) {
 		// name
 		wxString strName = nameAnimations[i];
-		stgs[i].name.nEntries = strName.length()+1;
+		stgs[i].name.nEntries = strName.Len()+1;
 		stgs[i].name.ref = ++fHead.nRefs;
 		RefEntry("RAHC", f.Tell(), stgs[i].name.nEntries, 0);
-		f.Write(strName.c_str(), strName.length());
-		f.Write(&end, sizeof(end));
+		f.Write(strName.c_str(), strName.Len()+1);
 		padding(&f);
 		
 		// stcID
@@ -460,11 +454,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
 		// name
 		wxString strName = wxString::Format(_T("Bone_%d"), i);
-		bones[i].name.nEntries = strName.length()+1;
+		bones[i].name.nEntries = strName.Len()+1;
 		bones[i].name.ref = ++fHead.nRefs;
 		RefEntry("RAHC", f.Tell(), bones[i].name.nEntries, 0);
-		f.Write(strName.c_str(), strName.length());
-		f.Write(&end, sizeof(end));
+		f.Write(strName.c_str(), strName.Len()+1);
 		padding(&f);
 	}
 	datachunk_offset = f.Tell();
@@ -627,119 +620,124 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	mdata.boundSphere.radius = m->header.ps.VertexRadius;
 
 	// mAttach
-	ModelAttachmentDef *attachments = (ModelAttachmentDef*)(mpqf.getBuffer() + m->header.ofsAttachments);
-	mdata.mAttach.nEntries = m->header.nAttachments;
-	mdata.mAttach.ref = ++fHead.nRefs;
-	RefEntry("_TTA", f.Tell(), mdata.mAttach.nEntries, 0);
-	chunk_offset = f.Tell();
-	ATT *atts = new ATT[mdata.mAttach.nEntries];
-	memset(atts, 0, sizeof(ATT)*mdata.mAttach.nEntries);
-	f.Seek(sizeof(ATT)*mdata.mAttach.nEntries, wxFromCurrent);
-	padding(&f);
-	for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
-		// name
-		wxString strName = wxString::Format(_T("ATT_%d"), i);
-		atts[i].name.nEntries = strName.length()+1;
-		atts[i].name.ref = ++fHead.nRefs;
-		RefEntry("RAHC", f.Tell(), atts[i].name.nEntries, 0);
-		f.Write(strName.c_str(), strName.length());
-		f.Write(&end, sizeof(end));
+	if (m->header.nAttachments) {
+		ModelAttachmentDef *attachments = (ModelAttachmentDef*)(mpqf.getBuffer() + m->header.ofsAttachments);
+		mdata.mAttach.nEntries = m->header.nAttachments;
+		mdata.mAttach.ref = ++fHead.nRefs;
+		RefEntry("_TTA", f.Tell(), mdata.mAttach.nEntries, 0);
+		chunk_offset = f.Tell();
+		ATT *atts = new ATT[mdata.mAttach.nEntries];
+		memset(atts, 0, sizeof(ATT)*mdata.mAttach.nEntries);
+		f.Seek(sizeof(ATT)*mdata.mAttach.nEntries, wxFromCurrent);
 		padding(&f);
+		for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
+			// name
+			wxString strName = wxString::Format(_T("ATT_%d"), i);
+			atts[i].name.nEntries = strName.Len()+1;
+			atts[i].name.ref = ++fHead.nRefs;
+			RefEntry("RAHC", f.Tell(), atts[i].name.nEntries, 0);
+			f.Write(strName.c_str(), strName.Len()+1);
+			padding(&f);
+		}
+		datachunk_offset = f.Tell();
+		f.Seek(chunk_offset, wxFromStart);
+		for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
+			atts[i].flag = -1;
+			atts[i].bone = attachments[i].bone;
+			f.Write(&atts[i], sizeof(ATT));
+		}
+		wxDELETEA(atts);
+		f.Seek(datachunk_offset, wxFromStart);
 	}
-	datachunk_offset = f.Tell();
-	f.Seek(chunk_offset, wxFromStart);
-	for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
-		atts[i].flag = -1;
-		atts[i].bone = attachments[i].bone;
-		f.Write(&atts[i], sizeof(ATT));
-	}
-	wxDELETEA(atts);
-	f.Seek(datachunk_offset, wxFromStart);
 
 	// mAttachLU
 	//int16 *attachLookup = (int16 *)(mpqf.getBuffer() + m->header.ofsAttachLookup);
-	mdata.mAttachLU.nEntries = mdata.mAttach.nEntries;
-	mdata.mAttachLU.ref = ++fHead.nRefs;
-	RefEntry("_61U", f.Tell(), mdata.mAttachLU.nEntries, 0);
-	for(uint16 i=0; i<mdata.mAttachLU.nEntries; i++) {
-		int16 ii = -1;
-		f.Write(&ii, sizeof(int16));
+	if (mdata.mAttach.nEntries) {
+		mdata.mAttachLU.nEntries = mdata.mAttach.nEntries;
+		mdata.mAttachLU.ref = ++fHead.nRefs;
+		RefEntry("_61U", f.Tell(), mdata.mAttachLU.nEntries, 0);
+		for(uint16 i=0; i<mdata.mAttachLU.nEntries; i++) {
+			int16 ii = -1;
+			f.Write(&ii, sizeof(int16));
+		}
+		padding(&f);
 	}
-	padding(&f);
 
 	// mMatLU
-	mdata.mMatLU.nEntries = view->nTex;
-	mdata.mMatLU.ref = ++fHead.nRefs;
-	RefEntry("MTAM", f.Tell(), mdata.mMatLU.nEntries, 0);
-	for(uint32 i=0; i<mdata.mMatLU.nEntries; i++) {
-		MATM matm;
-		matm.nmat = 1;
-		matm.matind = i;
-		f.Write(&matm, sizeof(matm));
+	if (view->nTex) {
+		mdata.mMatLU.nEntries = view->nTex;
+		mdata.mMatLU.ref = ++fHead.nRefs;
+		RefEntry("MTAM", f.Tell(), mdata.mMatLU.nEntries, 0);
+		for(uint32 i=0; i<mdata.mMatLU.nEntries; i++) {
+			MATM matm;
+			matm.nmat = 1;
+			matm.matind = i;
+			f.Write(&matm, sizeof(matm));
+		}
+		padding(&f);
 	}
-	padding(&f);
 
 	// mMat
-	mdata.mMat.nEntries = view->nTex;
-	mdata.mMat.ref = ++fHead.nRefs;
-	RefEntry("_TAM", f.Tell(), mdata.mMat.nEntries, 0xF);
-	chunk_offset = f.Tell();
-	MAT *mats = new MAT[mdata.mMat.nEntries];
-	memset(mats, 0, sizeof(MAT)*mdata.mMat.nEntries);
-	f.Seek(sizeof(MAT)*mdata.mMat.nEntries, wxFromCurrent);
-	padding(&f);
-	for(uint32 i=0; i<mdata.mMat.nEntries; i++) {
-		// name
-		wxString strName = wxString::Format(_T("Mat_%2d"), i);
-		mats[i].name.nEntries = strName.length()+1;
-		mats[i].name.ref = ++fHead.nRefs;
-		RefEntry("RAHC", f.Tell(), mats[i].name.nEntries, 0);
-		f.Write(strName.c_str(), strName.length());
-		f.Write(&end, sizeof(end));
+	if (view->nTex) {
+		mdata.mMat.nEntries = view->nTex;
+		mdata.mMat.ref = ++fHead.nRefs;
+		RefEntry("_TAM", f.Tell(), mdata.mMat.nEntries, 0xF);
+		chunk_offset = f.Tell();
+		MAT *mats = new MAT[mdata.mMat.nEntries];
+		memset(mats, 0, sizeof(MAT)*mdata.mMat.nEntries);
+		f.Seek(sizeof(MAT)*mdata.mMat.nEntries, wxFromCurrent);
 		padding(&f);
-
-		// layers
-		int chunk_offset2, datachunk_offset2;
-		for(uint32 j=0; j<13; j++) {
-			mats[i].layers[j].nEntries = 1; // LAYER_Diff
-			mats[i].layers[j].ref = ++fHead.nRefs;
-			RefEntry("RYAL", f.Tell(), mats[i].layers[j].nEntries, 0x16);
-			chunk_offset2 = f.Tell();
-			LAYR layer;
-			memset(&layer, 0, sizeof(layer));
-			layer.brightness_mult1.value = 1.0f;
-			layer.uvTiling.value = Vec2D(1.0f, 1.0f);
-			layer.d20 = -1;
-			f.Write(&layer, sizeof(layer));
+		for(uint32 i=0; i<mdata.mMat.nEntries; i++) {
+			// name
+			wxString strName = wxString::Format(_T("Mat_%2d"), i);
+			mats[i].name.nEntries = strName.Len()+1;
+			mats[i].name.ref = ++fHead.nRefs;
+			RefEntry("RAHC", f.Tell(), mats[i].name.nEntries, 0);
+			f.Write(strName.c_str(), strName.Len()+1);
 			padding(&f);
 
-			if (j == 0) {
-				wxString strName = wxString::Format(_T("Mat_%2d.tga"), i);
-				layer.name.nEntries = strName.length()+1;
-				layer.name.ref = ++fHead.nRefs;
-				RefEntry("RAHC", f.Tell(), layer.name.nEntries, 0);
-				f.Write(strName.c_str(), strName.length());
-				f.Write(&end, sizeof(end));
+			// layers
+			int chunk_offset2, datachunk_offset2;
+			for(uint32 j=0; j<13; j++) {
+				mats[i].layers[j].nEntries = 1; // LAYER_Diff
+				mats[i].layers[j].ref = ++fHead.nRefs;
+				RefEntry("RYAL", f.Tell(), mats[i].layers[j].nEntries, 0x16);
+				chunk_offset2 = f.Tell();
+				LAYR layer;
+				memset(&layer, 0, sizeof(layer));
+				layer.brightness_mult1.value = 1.0f;
+				layer.uvTiling.value = Vec2D(1.0f, 1.0f);
+				layer.d20 = -1;
+				f.Write(&layer, sizeof(layer));
 				padding(&f);
+
+				if (j == 0) {
+					wxString strName = wxString::Format(_T("Mat_%2d.tga"), i);
+					layer.name.nEntries = strName.Len()+1;
+					layer.name.ref = ++fHead.nRefs;
+					RefEntry("RAHC", f.Tell(), layer.name.nEntries, 0);
+					f.Write(strName.c_str(), strName.Len()+1);
+					padding(&f);
+				}
+				datachunk_offset2 = f.Tell();
+				f.Seek(chunk_offset2, wxFromStart);
+				f.Write(&layer, sizeof(layer));
+				f.Seek(datachunk_offset2, wxFromStart);
 			}
-			datachunk_offset2 = f.Tell();
-			f.Seek(chunk_offset2, wxFromStart);
-			f.Write(&layer, sizeof(layer));
-			f.Seek(datachunk_offset2, wxFromStart);
 		}
+		datachunk_offset = f.Tell();
+		f.Seek(chunk_offset, wxFromStart);
+		for(uint32 i=0; i<mdata.mMat.nEntries; i++) {
+			mats[i].cutoutThresh = 0xC8;
+			mats[i].SpecMult = 1;
+			mats[i].EmisMult = 1;
+			mats[i].layerBlend = 2;
+			mats[i].emisBlend = 2;
+			f.Write(&mats[i], sizeof(MAT));
+		}
+		wxDELETE(mats);
+		f.Seek(datachunk_offset, wxFromStart);
 	}
-	datachunk_offset = f.Tell();
-	f.Seek(chunk_offset, wxFromStart);
-	for(uint32 i=0; i<mdata.mMat.nEntries; i++) {
-		mats[i].cutoutThresh = 0xC8;
-		mats[i].SpecMult = 1;
-		mats[i].EmisMult = 1;
-		mats[i].layerBlend = 2;
-		mats[i].emisBlend = 2;
-		f.Write(&mats[i], sizeof(MAT));
-	}
-	wxDELETE(mats);
-	f.Seek(datachunk_offset, wxFromStart);
 
 	// mIREF
 	mdata.mIREF.nEntries = mdata.mBone.nEntries;

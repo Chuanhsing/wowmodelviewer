@@ -2565,7 +2565,7 @@ void ModelViewer::ModelInfo()
 		xml << "      <vcount>" << m->geosets[i].vcount << "</vcount>" << endl;
 		xml << "      <istart>" << m->geosets[i].istart << "</istart>" << endl;
 		xml << "      <icount>" << m->geosets[i].icount << "</icount>" << endl;
-		xml << "      <totalBones>" << m->geosets[i].totalBones << "</totalBones>" << endl;
+		xml << "      <nSkinnedBones>" << m->geosets[i].nSkinnedBones << "</nSkinnedBones>" << endl;
 		xml << "      <StartBones>" << m->geosets[i].StartBones << "</StartBones>" << endl;
 		xml << "      <rootBone>" << m->geosets[i].rootBone << "</rootBone>" << endl;
 		xml << "      <nBones>" << m->geosets[i].nBones << "</nBones>" << endl;
