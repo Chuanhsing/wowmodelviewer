@@ -360,11 +360,12 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					sds[ii].length = m->bones[j].rot.times[anim_offset][counts-1];
 					sds[ii].data.nEntries = counts;
 					sds[ii].data.ref = ++fHead.nRefs;
-					RefEntry("3CEV", f.Tell(), sds[ii].data.nEntries, 0);
+					RefEntry("TAUQ", f.Tell(), sds[ii].data.nEntries, 0);
 					for (int k=0; k<counts; k++) {
 						f.Write(&m->bones[j].rot.data[anim_offset][k].x, sizeof(int32));
 						f.Write(&m->bones[j].rot.data[anim_offset][k].y, sizeof(int32));
 						f.Write(&m->bones[j].rot.data[anim_offset][k].z, sizeof(int32));
+						f.Write(&m->bones[j].rot.data[anim_offset][k].w, sizeof(int32));
 					}
 					padding(&f);
 					ii++;
