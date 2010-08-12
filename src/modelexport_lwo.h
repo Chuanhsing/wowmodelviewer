@@ -92,7 +92,7 @@ struct LWLight{
 	uint32 LightID;
 	AnimationData AnimData;
 	wxString Name;
-	RGBColor Color;
+	RGB_Color Color;
 	uint8 LightType;
 	float FalloffRadius;
 	wxString ParentID;

@@ -4430,7 +4430,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 					// Weight Data not needed for WMOs
 					// Vertex Colors (NYI)
 
-					Vect2Point[v] = Layer.Points.size();
+					Vect2Point[v] = (uint32)Layer.Points.size();
 					Layer.Points.push_back(Point);
 				}
 
