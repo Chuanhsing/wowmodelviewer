@@ -296,7 +296,6 @@ class Model: public ManagedItem, public Displayable
 	void lightsOn(GLuint lbase);
 	void lightsOff(GLuint lbase);
 
-	Vec3D *bounds;
 	uint16 *boundTris;
 
 public:
@@ -308,6 +307,7 @@ public:
 	ParticleSystem	*particleSystems;
 	RibbonEmitter	*ribbons;
 	ModelEvent		*events;
+	Vec3D *bounds;
 
 public:
 	// Raw Data

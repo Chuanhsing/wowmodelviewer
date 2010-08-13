@@ -357,6 +357,17 @@ void InitCommon(Attachment *att, bool init, ModelData *&verts, GroupData *&group
 	wxLogMessage(_T("Finished InitCommon Function."));
 }
 
+// Change a Vec3D so it now faces forwards
+void MakeModelFaceForwards(Vec3D &vect){
+	Vec3D Temp;
+
+	Temp.x = 0-vect.z;
+	Temp.y = vect.y;
+	Temp.z = 0-vect.x;
+
+	vect = Temp;
+}
+
 // Get Proper Texture Names for an M2 File
 wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassNumber){
 	wxString texName = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8).BeforeLast(_T('.'));

@@ -192,6 +192,8 @@ struct LWObject {
 	std::vector<LWLayer> Layers;		// List of Layers (usually 1) that make up the Geometery.
 	std::vector<LWClip> Images;			// List of all the Unique Images used in the model.
 	std::vector<LWSurface> Surfaces;	// List of the Surfaces used in the model.
+
+	wxString SourceType;			// M2, WMO or ADT
 };
 
 #endif

@@ -914,6 +914,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 			// ObjRot = QuaternionToXYZ(Vec3D(0,0,0), cam->WorldRotation);
 		}
 	}
+	MakeModelFaceForwards(ObjPos);
 	float temp;
 	temp = ObjRot.y;
 	ObjRot.y = ObjRot.z;
@@ -936,6 +937,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 					Pos -= m->bones[cbone->parent].transPivot;
 			}
 			Pos.z = -Pos.z;
+			MakeModelFaceForwards(Pos);
 			wxString bone_name = wxString::Format(_T("Bone_%03i"),x);
 			for (int j=0; j<BONE_MAX; ++j) {
 				if (m->keyBoneLookup[j] == static_cast<int>(x)) {
@@ -961,6 +963,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 		if (cam->tTarget.data[anim].size() > 1){
 			for (unsigned int x=0;x<cam->tTarget.data[anim].size();x++){
 				Vec3D a = cam->target + cam->tTarget.data[anim][x];
+				MakeModelFaceForwards(a);
 				uint32 ctime = cam->tTarget.times[anim][x]/30;
 				a.x = -a.x;
 				a.z = -a.z;
@@ -983,6 +986,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 			for (unsigned int x=0;x<cam->tPos.data[anim].size();x++){
 				// Position Data
 				Vec3D p_val = cam->pos + cam->tPos.data[anim][x];
+				MakeModelFaceForwards(p_val);
 				uint32 ctime = cam->tPos.times[anim][x]/30;
 				float p_time = ctime/30;
 				if (ctime > RangeEnd)
@@ -1001,9 +1005,11 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 			WriteLWSceneEnvArray(fs,0,ZeroFloat,time,splines);
 			WriteLWSceneEnvArray(fs,0,ZeroFloat,time,splines);
 		}else{
-			WriteLWSceneEnvChannel(fs,0,cam->pos.x,0);
-			WriteLWSceneEnvChannel(fs,1,cam->pos.y,0);
-			WriteLWSceneEnvChannel(fs,2,-(cam->pos.z),0);
+			Vec3D vect = cam->pos;
+			MakeModelFaceForwards(vect);
+			WriteLWSceneEnvChannel(fs,0,vect.x,0);
+			WriteLWSceneEnvChannel(fs,1,vect.y,0);
+			WriteLWSceneEnvChannel(fs,2,vect.z,0);
 			WriteLWSceneEnvChannel(fs,3,0,0);
 			WriteLWSceneEnvChannel(fs,4,0,0);
 			WriteLWSceneEnvChannel(fs,5,0,0);
@@ -1366,14 +1372,19 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 				uint16 a = m->indices[b];
 				Vec3D vert;
 				if ((init == false)&&(m->vertices)) {
-					vert.x = MSB4<float>(m->vertices[a].x);
-					vert.y = MSB4<float>(m->vertices[a].y);
-					vert.z = MSB4<float>(0-m->vertices[a].z);
+					Vec3D vect = m->vertices[a];
+					MakeModelFaceForwards(vect);
+					vert.x = MSB4<float>(vect.x);
+					vert.y = MSB4<float>(vect.y);
+					vert.z = MSB4<float>(vect.z);
 				} else {
-					vert.x = MSB4<float>(m->origVertices[a].pos.x);
-					vert.y = MSB4<float>(m->origVertices[a].pos.y);
-					vert.z = MSB4<float>(0-m->origVertices[a].pos.z);
+					Vec3D vect = m->origVertices[a].pos;
+					MakeModelFaceForwards(vect);
+					vert.x = MSB4<float>(vect.x);
+					vert.y = MSB4<float>(vect.y);
+					vert.z = MSB4<float>(vect.z);
 				}
+				
 				f.Write(reinterpret_cast<char *>(&vert.x), 4);
 				f.Write(reinterpret_cast<char *>(&vert.y), 4);
 				f.Write(reinterpret_cast<char *>(&vert.z), 4);
@@ -1443,14 +1454,19 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 							uint16 a = attM->indices[b];
 							Vec3D vert;
 							if ((init == false)&&(attM->vertices)) {
-								vert.x = MSB4<float>((attM->vertices[a].x * scale.x) + pos.x);
-								vert.y = MSB4<float>((attM->vertices[a].y * scale.y) + pos.y);
-								vert.z = MSB4<float>(0-(attM->vertices[a].z * scale.z) - pos.z);
+								Vec3D vect = attM->vertices[a];
+								MakeModelFaceForwards(vect);
+								vert.z = MSB4<float>((vect.x * scale.x) + pos.x);
+								vert.y = MSB4<float>((vect.y * scale.y) + pos.y);
+								vert.x = MSB4<float>((vect.z * scale.z) + pos.z);
 							} else {
-								vert.x = MSB4<float>((attM->origVertices[a].pos.x * scale.x) + pos.x);
-								vert.y = MSB4<float>((attM->origVertices[a].pos.y * scale.y) + pos.y);
-								vert.z = MSB4<float>(0-(attM->origVertices[a].pos.z * scale.z) - pos.z);
+								Vec3D vect = attM->origVertices[a].pos;
+								MakeModelFaceForwards(vect);
+								vert.z = MSB4<float>((vect.x * scale.x) + pos.x);
+								vert.y = MSB4<float>((vect.y * scale.y) + pos.y);
+								vert.x = MSB4<float>((vect.z * scale.z) - pos.z);
 							}
+							MakeModelFaceForwards(vert);
 							f.Write(reinterpret_cast<char *>(&vert.x), 4);
 							f.Write(reinterpret_cast<char *>(&vert.y), 4);
 							f.Write(reinterpret_cast<char *>(&vert.z), 4);
@@ -1506,6 +1522,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 							pos.z = mat.m[2][3];
 						}
 					}
+					MakeModelFaceForwards(pos);
 
 					for (uint32 i=0; i<mAttChild->passes.size(); i++) {
 						ModelRenderPass &p = mAttChild->passes[i];
@@ -1516,14 +1533,19 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 								uint16 a = mAttChild->indices[b];
 								Vec3D vert;
 								if ((init == false)&&(mAttChild->vertices)) {
-									vert.x = MSB4<float>((mAttChild->vertices[a].x * scale.x) + pos.x);
-									vert.y = MSB4<float>((mAttChild->vertices[a].y * scale.y) + pos.y);
-									vert.z = MSB4<float>(0-(mAttChild->vertices[a].z * scale.z) - pos.z);
+									Vec3D vect = mAttChild->vertices[a];
+									MakeModelFaceForwards(vect);
+									vert.z = MSB4<float>((vect.x * scale.x) + pos.x);
+									vert.y = MSB4<float>((vect.y * scale.y) + pos.y);
+									vert.x = MSB4<float>((vect.z * scale.z) + pos.z);
 								} else {
-									vert.x = MSB4<float>((mAttChild->origVertices[a].pos.x * scale.x) + pos.x);
-									vert.y = MSB4<float>((mAttChild->origVertices[a].pos.y * scale.y) + pos.y);
-									vert.z = MSB4<float>(0-(mAttChild->origVertices[a].pos.z * scale.z) - pos.z);
+									Vec3D vect = mAttChild->origVertices[a].pos;
+									MakeModelFaceForwards(vect);
+									vert.z = MSB4<float>((vect.x * scale.x) + pos.x);
+									vert.y = MSB4<float>((vect.y * scale.y) + pos.y);
+									vert.x = MSB4<float>((vect.z * scale.z) + pos.z);
 								}
+								MakeModelFaceForwards(vert);
 								f.Write(reinterpret_cast<char *>(&vert.x), 4);
 								f.Write(reinterpret_cast<char *>(&vert.y), 4);
 								f.Write(reinterpret_cast<char *>(&vert.z), 4);
@@ -3985,11 +4007,13 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 	*/
 
 	// Check to see if we have any data to generate this file.
-	if (Object.Layers.size() < 1){
+	if ((Object.Layers.size() < 1) || (Object.Layers[0].Points.size() < 1)){
 		wxMessageBox(_T("No Layer Data found.\nUnable to write object file."),_T("Error"));
 		wxLogMessage(_T("Error: No Layer Data. Unable to write object file."));
 		return false;
 	}
+
+	LogExportData("LWO",filename.BeforeLast(SLASH),Object.SourceType);
 
    	// -----------------------------------------
 	// Initial Variables
@@ -4112,6 +4136,9 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 	for (uint16 l=0;l<(uint16)Object.Layers.size();l++){
 		LWLayer cLyr = Object.Layers[l];
 		// Define a Layer & It's data
+		cLyr.Name.Append(_T('\0'));
+		if (fmod((float)cLyr.Name.length(), 2.0f) > 0)
+			cLyr.Name.Append(_T('\0'));
 		uint16 LayerNameSize = (uint16)cLyr.Name.length();
 		uint32 LayerSize = 18+LayerNameSize;
 		f.Write("LAYR", 4);
@@ -4161,6 +4188,10 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			f.Write(reinterpret_cast<char *>(&vert.z), 4);
 		}
 /*
+		// --== Bounding Box Info ==--
+		// Skipping for now.
+
+
 		// --== Vertex Mapping ==--
 		bool hasVertColors = false;
 
@@ -4385,16 +4416,159 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 
 // No longer writes data to a LWO file. Instead, it collects the data, and send it to a seperate function that writes the actual file.
-void ExportWMOtoLWO2(WMO *m, const char *fn){
+void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init){
 	wxString filename(fn, wxConvUTF8);
 
 	LWObject Object;
+	Object.SourceType = "M2";
 
 	// Main Object
 	if (m) {
 		LWLayer Layer;
-		// LayerName currently causes a bug if the name is not even. Just Disabled for now.
-		//Layer.Name = wxString(m->name).AfterLast('\\').BeforeLast('.');
+		Layer.Name = wxString(m->name).AfterLast('\\').BeforeLast('.');
+
+		// Bounding Box for the Layer
+		Layer.BoundingBox1 = m->bounds[0];
+		Layer.BoundingBox2 = m->bounds[1];
+
+		uint32 PolyCounter = 0;
+		uint32 SurfCounter = 0;
+		uint32 PrevGVerts = 0;
+
+		// Mesh & Slot names
+		wxString meshes[19] = {_T("Hairstyles"), _T("Facial1"), _T("Facial2"), _T("Facial3"), _T("Braces"), _T("Boots"), wxEmptyString, _T("Ears"), _T("Wristbands"),  _T("Kneepads"), _T("Pants"), _T("Pants"), _T("Tarbard"), _T("Trousers"), wxEmptyString, _T("Cape"), wxEmptyString, _T("Eyeglows"), _T("Belt") };
+		wxString slots[15] = {_T("Helm"), wxEmptyString, _T("Shoulder"), wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, _T("Right Hand Item"), _T("Left Hand Item"), wxEmptyString, wxEmptyString, _T("Quiver") };
+
+		// Process Passes
+		for (unsigned short i=0; i<m->passes.size(); i++) {
+			ModelRenderPass &p = m->passes[i];
+			if (p.init(m)){
+				// Main Model
+				int g = p.geoset;
+
+				wxString partName, matName;
+				
+				// Part Names
+				int mesh = m->geosets[g].id / 100;
+				if (m->modelType == MT_CHAR && mesh < 19 && meshes[mesh] != wxEmptyString){
+					partName = wxString::Format(_T("Geoset %03i - %s"),g,meshes[mesh].c_str());
+				}else{
+					partName = wxString::Format(_T("Geoset %03i"),g);
+				}
+				Object.PartNames.push_back(partName);
+
+				// Surface Name
+				matName = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.'));
+				if (matName.Len() == 0)
+					matName = wxString::Format(_T("Material_%03i"), p.tex);
+				LWSurface Surface(matName,wxString(m->TextureList[p.tex].c_str(), wxConvUTF8));
+				Object.Surfaces.push_back(Surface);
+
+				// Points
+				for (uint32 k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
+					uint16 a = m->indices[b];
+					Vec3D vert;
+					if ((init == false)&&(m->vertices)) {
+						vert.x = MSB4<float>(m->vertices[a].x);
+						vert.y = MSB4<float>(m->vertices[a].y);
+						vert.z = MSB4<float>(0-m->vertices[a].z);
+					} else {
+						vert.x = MSB4<float>(m->origVertices[a].pos.x);
+						vert.y = MSB4<float>(m->origVertices[a].pos.y);
+						vert.z = MSB4<float>(0-m->origVertices[a].pos.z);
+					}
+					LWPoint Point;
+					Point.PointData = vert;
+					Point.UVData = m->origVertices[a].texcoords;
+
+					Layer.Points.push_back(Point);
+				}
+
+
+				// --== Attachments ==--
+			}
+		}
+
+
+
+/*
+		for (int g=0;g<m->nGroups; g++) {
+			WMOGroup *group = &m->groups[g];
+			// Process each group's batches.
+			uint32 GPolyCounter = 0;
+			uint32 GVertCounter = 0;
+			Object.PartNames.push_back(wxString(group->name.c_str(), wxConvUTF8));
+
+			for (int b=0; b<group->nBatches; b++)	{
+				WMOBatch *batch = &group->batches[b];
+
+				LWSurface Surface(wxString(m->textures[batch->texture].c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.'),wxString(m->textures[batch->texture].c_str(), wxConvUTF8));
+				Object.Surfaces.push_back(Surface);
+				uint32 *Vect2Point = new uint32[group->nVertices];
+
+				// Process Verticies
+				for (uint32 v=batch->vertexStart; v<batch->vertexEnd; v++) {
+					// --== Point Data ==--
+					LWPoint Point;
+
+					Point.PointData = group->vertices[v];		// Points
+					Point.UVData = group->texcoords[v];		// UVs
+					// Weight Data not needed for WMOs
+					// Vertex Colors (NYI)
+
+					Vect2Point[v] = (uint32)Layer.Points.size();
+					Layer.Points.push_back(Point);
+				}
+
+				// Process Indices
+				for(unsigned int ii=batch->indexStart;ii<(batch->indexStart+batch->indexCount);ii+=3,GVertCounter++){
+					// --== Polygon Data ==--	
+					LWPoly Poly;
+					Poly.PolyData.numVerts = 3;
+					for (int x=0;x<3;x++,PolyCounter++,GPolyCounter++){
+						// Without Mod, Polys will face the wrong way.
+						int mod = 0;
+						if (x==1){
+							mod = 1;
+						}else if (x==2){
+							mod = -1;
+						}
+
+						uint32 a = GPolyCounter + mod;
+						uint32 b = group->IndiceToVerts[a];
+
+						wxLogMessage(_T("Group: %i, a: %i, b:%i, PrevGVerts: %i, Final Indice: %i"),g,a,b,PrevGVerts,PrevGVerts+b);
+						
+						Poly.PolyData.indice[x] = Vect2Point[b];
+					}
+					Poly.PartTagID = g;
+					Poly.SurfTagID = m->nGroups + SurfCounter;
+					Layer.Polys.push_back(Poly);
+				}
+				SurfCounter++;
+			}
+			PrevGVerts += GVertCounter;
+			wxLogMessage(_T("PrevGVerts: %i"),PrevGVerts);
+		}
+*/
+		Object.Layers.push_back(Layer);
+	}
+
+	// Doodads as seperate Layer here.
+
+	WriteLWObject(filename, Object);
+}
+
+void ExportWMOtoLWO2(WMO *m, const char *fn){
+	wxString filename(fn, wxConvUTF8);
+
+	LWObject Object;
+	Object.SourceType = "WMO";
+
+	// Main Object
+	if (m) {
+		LWLayer Layer;
+		Layer.Name = wxString(m->name).AfterLast('\\').BeforeLast('.');
 
 		// Bounding Box for the Layer
 		Layer.BoundingBox1 = m->v1;
@@ -4472,6 +4646,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 
 	WriteLWObject(filename, Object);
 }
+
 
 void ExportADTtoLWO(MapTile *m, const char *fn){
 	wxString file = wxString(fn, wxConvUTF8);
