@@ -832,9 +832,18 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		iref.matrix[0][1] = 1.0f;
 		iref.matrix[1][0] = -1.0f;
 		iref.matrix[2][2] = 1.0f;
+#ifdef	ROOT_BONE
+		if (i > 0) {
+			i -= 1;
+			iref.matrix[3][0] = -m->bones[i].pivot.x;
+			iref.matrix[3][1] = m->bones[i].pivot.z;
+			iref.matrix[3][2] = -m->bones[i].pivot.y;
+		}
+#else
 		iref.matrix[3][0] = -m->bones[i].pivot.x;
 		iref.matrix[3][1] = m->bones[i].pivot.z;
 		iref.matrix[3][2] = -m->bones[i].pivot.y;
+#endif
 		iref.matrix[3][3] = 1.0f;
 		f.Write(&iref, sizeof(iref));
 	}
