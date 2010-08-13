@@ -22,6 +22,7 @@ bool bHideHelmet = false;
 bool bKnightEyeGlow = true;
 bool bShowParticle = true;
 bool bZeroParticle = true;
+bool bAlternate = false; // for zhCN alternate.MPQ
 
 // Model Export Options
 // General Options

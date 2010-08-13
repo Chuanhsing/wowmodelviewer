@@ -21,6 +21,7 @@ BEGIN_EVENT_TABLE(Settings_Page1, wxWindow)
 	EVT_CHECKBOX(ID_SETTINGS_ZEROPARTICLE, Settings_Page1::OnCheck)
 	EVT_CHECKBOX(ID_SETTINGS_LOCALFILES, Settings_Page1::OnCheck)
 	EVT_CHECKBOX(ID_SETTINGS_KNIGHTEYEGLOW, Settings_Page1::OnCheck)
+	EVT_CHECKBOX(ID_SETTINGS_ALTERNATE, Settings_Page1::OnCheck)
 END_EVENT_TABLE()
 
 
@@ -41,6 +42,7 @@ Settings_Page1::Settings_Page1(wxWindow* parent, wxWindowID id)
 		return;
 	}
 
+	chkbox[CHECK_ALTERNATE] = new wxCheckBox(this, ID_SETTINGS_ALTERNATE, _T("Alternate"), wxPoint(5,25), wxDefaultSize, 0);
 	chkbox[CHECK_SHOWPARTICLE] = new wxCheckBox(this, ID_SETTINGS_SHOWPARTICLE, _T("Show Particle"), wxPoint(5,50), wxDefaultSize, 0);
 	chkbox[CHECK_ZEROPARTICLE] = new wxCheckBox(this, ID_SETTINGS_ZEROPARTICLE, _T("Zero Particle"), wxPoint(5,75), wxDefaultSize, 0);
 	chkbox[CHECK_LOCALFILES] = new wxCheckBox(this, ID_SETTINGS_LOCALFILES, _T("Use Local Files"), wxPoint(5,100), wxDefaultSize, 0);
@@ -128,6 +130,8 @@ void Settings_Page1::OnCheck(wxCommandEvent &event)
 		bZeroParticle = event.IsChecked();
 	} else if (id==ID_SETTINGS_KNIGHTEYEGLOW) {
 		bKnightEyeGlow = event.IsChecked();
+	} else if (id==ID_SETTINGS_ALTERNATE) {
+		bAlternate = event.IsChecked();
 	}
 }
 
@@ -139,6 +143,7 @@ void Settings_Page1::Update()
 	chkbox[CHECK_KNIGHTEYEGLOW]->SetValue(bKnightEyeGlow);
 	chkbox[CHECK_SHOWPARTICLE]->SetValue(bShowParticle);
 	chkbox[CHECK_ZEROPARTICLE]->SetValue(bZeroParticle);
+	chkbox[CHECK_ALTERNATE]->SetValue(bAlternate);
 }
 
 Settings_Page2::Settings_Page2(wxWindow* parent, wxWindowID id)

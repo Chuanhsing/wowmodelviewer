@@ -832,6 +832,7 @@ void ModelViewer::LoadSession()
 		pConfig->Read(_T("HideHelmet"), &bHideHelmet, false);
 		pConfig->Read(_T("ShowParticle"), &bShowParticle, true);
 		pConfig->Read(_T("ZeroParticle"), &bZeroParticle, true);
+		pConfig->Read(_T("Alternate"), &bAlternate, true);
 		pConfig->Read(_T("KnightEyeGlow"), &bKnightEyeGlow, true);
 		pConfig->Read(_T("DBackground"), &canvas->drawBackground, false);
 		pConfig->Read(_T("BackgroundImage"), &bgImagePath, wxEmptyString);
@@ -884,6 +885,7 @@ void ModelViewer::SaveSession()
 		pConfig->Write(_T("HideHelmet"), bHideHelmet);
 		pConfig->Write(_T("ShowParticle"), bShowParticle);
 		pConfig->Write(_T("ZeroParticle"), bZeroParticle);
+		pConfig->Write(_T("Alternate"), bAlternate);
 		pConfig->Write(_T("KnightEyeGlow"), bKnightEyeGlow);
 
 		pConfig->Write(_T("DBackground"), canvas->drawBackground);
@@ -962,7 +964,7 @@ void ModelViewer::LoadModel(const wxString fn)
 	isModel = true;
 
 	// check if this is a character model
-	isChar = (fn.StartsWith(_T("Char"), false));
+	isChar = (fn.StartsWith(_T("Char"), false) || fn.StartsWith(_T("Alternate\\Char"), false));
 
 	Attachment *modelAtt = NULL;
 

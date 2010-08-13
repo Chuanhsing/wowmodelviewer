@@ -50,6 +50,8 @@ extern bool bHideHelmet;
 extern bool bKnightEyeGlow;
 extern bool bShowParticle;
 extern bool bZeroParticle;
+extern bool bAlternate;
+
 extern int Perfered_Exporter;
 extern bool modelExportInitOnly;
 extern bool modelExport_PreserveDir;

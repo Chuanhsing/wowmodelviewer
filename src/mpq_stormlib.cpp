@@ -95,6 +95,37 @@ MPQFile::openFile(const char* filename)
 		}
 	}
 
+	if (bAlternate && !wxString(filename, wxConvUTF8).StartsWith(_T("Alternate"), false)) {
+		wxString alterName = wxString::Format(_T("alternate%c%s"), SLASH, filename);
+
+		for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end(); ++i)
+		{
+			HANDLE &mpq_a = *i->second;
+
+			HANDLE fh;
+
+			if( !SFileOpenFileEx( mpq_a, alterName.c_str(), 0, &fh ) )
+				continue;
+
+			// Found!
+			DWORD filesize = SFileGetFileSize( fh );
+			size = filesize;
+
+			// HACK: in patch.mpq some files don't want to open and give 1 for filesize
+			if (size<=1) {
+				eof = true;
+				buffer = 0;
+				return;
+			}
+
+			buffer = new unsigned char[size];
+			SFileReadFile( fh, buffer, (DWORD)size );
+			SFileCloseFile( fh );
+
+			return;
+		}
+	}
+
 	for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end(); ++i)
 	{
 		HANDLE &mpq_a = *i->second;
