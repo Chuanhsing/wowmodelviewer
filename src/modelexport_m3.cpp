@@ -274,6 +274,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		}
 		sd.timeline.nEntries = 1;
 		sd.timeline.ref = ++fHead.nRefs;
+		sd.length = 3333; // fix me
+		sd.flags = 1;
 		RefEntry("_23I", f.Tell(), sd.timeline.nEntries, 0);
 		f.Write(&sd.length, sizeof(int32));
 		padding(&f);
@@ -293,6 +295,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		evnt.c = Vec4D(0.0f, 0.0f, 1.0f, 0.0f);
 		evnt.d = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
 		evnt.d2[0] = 4;
+		
 		f.Write(&evnt, sizeof(evnt));
 		padding(&f);
 		RefEntry("RAHC", f.Tell(), evnt.name.nEntries, 0);
@@ -326,10 +329,16 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					sds[ii].data.nEntries = counts;
 					sds[ii].data.ref = ++fHead.nRefs;
 					RefEntry("3CEV", f.Tell(), sds[ii].data.nEntries, 0);
+
 					for (int k=0; k<counts; k++) {
-						f.Write(&m->bones[j].trans.data[anim_offset][k].x, sizeof(int32));
-						f.Write(&m->bones[j].trans.data[anim_offset][k].y, sizeof(int32));
-						f.Write(&m->bones[j].trans.data[anim_offset][k].z, sizeof(int32));
+						Vec3D tran = m->bones[j].pivot;
+						tran += m->bones[j].trans.data[anim_offset][k];
+						tran.z *= -1.0f;
+
+						f.Write(&tran, sizeof(tran));
+						//f.Write(&m->bones[j].trans.data[anim_offset][k].x, sizeof(int32));
+						//f.Write(&m->bones[j].trans.data[anim_offset][k].y, sizeof(int32));
+						//f.Write(&m->bones[j].trans.data[anim_offset][k].z, sizeof(int32));
 					}
 					padding(&f);
 					ii++;
@@ -368,10 +377,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					sds[ii].data.ref = ++fHead.nRefs;
 					RefEntry("TAUQ", f.Tell(), sds[ii].data.nEntries, 0);
 					for (int k=0; k<counts; k++) {
-						f.Write(&m->bones[j].rot.data[anim_offset][k].x, sizeof(int32));
-						f.Write(&m->bones[j].rot.data[anim_offset][k].y, sizeof(int32));
-						f.Write(&m->bones[j].rot.data[anim_offset][k].z, sizeof(int32));
-						f.Write(&m->bones[j].rot.data[anim_offset][k].w, sizeof(int32));
+						Vec4D rot;
+						rot.x = -m->bones[j].rot.data[anim_offset][k].x;
+						rot.y = m->bones[j].rot.data[anim_offset][k].z;
+						rot.z = -m->bones[j].rot.data[anim_offset][k].y;
+						rot.w = m->bones[j].rot.data[anim_offset][k].w;
+
+						f.Write(&rot, sizeof(rot));
 					}
 					padding(&f);
 					ii++;
@@ -483,6 +495,12 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	for(uint32 i=0; i<m->header.nBones; i++) {
 		boneList.push_back(mb[i]);
 	}
+#ifdef	ROOT_BONE
+	ModelBoneDef animBone;
+	memset(&animBone, 0, sizeof(animBone));
+	animBone.parent = -2;
+	boneList.push_back(animBone);
+#endif
 
 	mdata.mBone.nEntries = boneList.size();
 	mdata.mBone.ref = ++fHead.nRefs;
@@ -498,6 +516,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 #ifdef	ROOT_BONE
 		if (i == 0)
 			strName = _T("Bone_Root");
+		else if (i == mdata.mBone.nEntries - 1)
+			strName =_T("_M3_Anim_Data");
 		else
 			strName = wxString::Format(_T("Bone_%d"), i-1);
 #else
@@ -529,9 +549,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		}
 #endif
 		bones[i].initTrans.AnimRef.animid = i | (2 << 16);
-		bones[i].initTrans.value.x = boneList[i].pivot.x;
-		bones[i].initTrans.value.y = boneList[i].pivot.z;
-		bones[i].initTrans.value.z = boneList[i].pivot.y;
+		bones[i].initTrans.value = boneList[i].pivot;
+		if (bones[i].parent > -1) {
+			bones[i].initTrans.value -= boneList[bones[i].parent].pivot ;
+		}
 #if 0
 		for(uint32 j=0; j<mdata.mSTC.nEntries; j++) {
 			int anim_offset = logAnimations[j];
@@ -680,7 +701,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		}
 		// push local bLookup to global, and lookup it in boneLookup
 		for(uint32 i=0; i<bLookup2.size(); i++) {
-			bLookup.push_back(boneLookup[bLookup2[i]]);
+			bLookup.push_back(boneLookup[bLookup2[i]] + 1);
 		}
 	}
 	mdata.mBoneLU.nEntries = bLookup.size();
@@ -793,7 +814,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				layer.colour[3] = 255;
 				f.Write(&layer, sizeof(layer));
 				padding(&f);
-
+/*
 				if (j == 0) { // LAYER_Diff
 					wxString strName = wxString::Format(_T("Mat_%2d.tga"), i);
 					layer.name.nEntries = strName.Len()+1;
@@ -802,6 +823,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					f.Write(strName.c_str(), strName.Len()+1);
 					padding(&f);
 				}
+*/
 				datachunk_offset2 = f.Tell();
 				f.Seek(chunk_offset2, wxFromStart);
 				f.Write(&layer, sizeof(layer));
@@ -816,6 +838,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			mats[i].EmisMult = 1;
 			mats[i].layerBlend = 2;
 			mats[i].emisBlend = 2;
+			mats[i].d5 = 2;
 			f.Write(&mats[i], sizeof(MAT));
 		}
 		wxDELETE(mats);
@@ -833,12 +856,11 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		iref.matrix[1][0] = -1.0f;
 		iref.matrix[2][2] = 1.0f;
 #ifdef	ROOT_BONE
-		if (i > 0) {
-			i -= 1;
-			iref.matrix[3][0] = -m->bones[i].pivot.x;
-			iref.matrix[3][1] = m->bones[i].pivot.z;
-			iref.matrix[3][2] = -m->bones[i].pivot.y;
-		}
+		if (i > 0 && i < mdata.mIREF.nEntries - 1) {
+			iref.matrix[3][0] = -m->bones[i-1].pivot.x;
+			iref.matrix[3][1] = m->bones[i-1].pivot.z;
+			iref.matrix[3][2] = -m->bones[i-1].pivot.y;
+		} 
 #else
 		iref.matrix[3][0] = -m->bones[i].pivot.x;
 		iref.matrix[3][1] = m->bones[i].pivot.z;
@@ -850,10 +872,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	padding(&f);
 
 	//
-	mdata.mat.a = Vec4D(1.0f, 0.0f, 0.0f, 0.0f);
-	mdata.mat.b = Vec4D(0.0f, 1.0f, 0.0f, 0.0f);
-	mdata.mat.c = Vec4D(0.0f, 0.0f, 1.0f, 0.0f);
-	mdata.mat.d = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
+	//mdata.mat.a = Vec4D(1.0f, 0.0f, 0.0f, 0.0f);
+	//mdata.mat.b = Vec4D(0.0f, 1.0f, 0.0f, 0.0f);
+	//mdata.mat.c = Vec4D(0.0f, 0.0f, 1.0f, 0.0f);
+	//mdata.mat.d = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
 
 	// 4. ReferenceEntry
 	fHead.ofsRefs = f.Tell();
