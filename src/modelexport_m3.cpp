@@ -214,39 +214,43 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			}
 		}
 		stcs[i].animid.nEntries = stcs[i].arVec3D.nEntries + stcs[i].arQuat.nEntries;
-		stcs[i].animid.ref = ++fHead.nRefs;
-		RefEntry("_23U", f.Tell(), stcs[i].animid.nEntries, 0);
-		for(int j=0; j<m->header.nBones; j++) {
-			if (m->bones[j].trans.uses(anim_offset)) {
-				int16 p = 2;
-				f.Write(&j, sizeof(int16));
-				f.Write(&p, sizeof(int16));
+		if (stcs[i].animid.nEntries > 0) {
+			stcs[i].animid.ref = ++fHead.nRefs;
+			RefEntry("_23U", f.Tell(), stcs[i].animid.nEntries, 0);
+			for(int j=0; j<m->header.nBones; j++) {
+				if (m->bones[j].trans.uses(anim_offset)) {
+					int16 p = 2;
+					f.Write(&j, sizeof(int16));
+					f.Write(&p, sizeof(int16));
+				}
+				if (m->bones[j].rot.uses(anim_offset)) {
+					int16 p = 3;
+					f.Write(&j, sizeof(int16));
+					f.Write(&p, sizeof(int16));
+				}
 			}
-			if (m->bones[j].rot.uses(anim_offset)) {
-				int16 p = 3;
-				f.Write(&j, sizeof(int16));
-				f.Write(&p, sizeof(int16));
-			}
+			padding(&f);
 		}
-		padding(&f);
 
 		// animindex
 		stcs[i].animindex.nEntries = stcs[i].animid.nEntries;
-		stcs[i].animindex.ref = ++fHead.nRefs;
-		RefEntry("_23U", f.Tell(), stcs[i].animindex.nEntries, 0);
-		for(int j=0; j<m->header.nBones; j++) {
-			if (m->bones[j].trans.uses(anim_offset)) {
-				int16 p = 2;
-				f.Write(&j, sizeof(int16));
-				f.Write(&p, sizeof(int16));
+		if (stcs[i].animindex.nEntries > 0){
+			stcs[i].animindex.ref = ++fHead.nRefs;
+			RefEntry("_23U", f.Tell(), stcs[i].animindex.nEntries, 0);
+			for(int j=0; j<m->header.nBones; j++) {
+				if (m->bones[j].trans.uses(anim_offset)) {
+					int16 p = 2;
+					f.Write(&j, sizeof(int16));
+					f.Write(&p, sizeof(int16));
+				}
+				if (m->bones[j].rot.uses(anim_offset)) {
+					int16 p = 3;
+					f.Write(&j, sizeof(int16));
+					f.Write(&p, sizeof(int16));
+				}
 			}
-			if (m->bones[j].rot.uses(anim_offset)) {
-				int16 p = 3;
-				f.Write(&j, sizeof(int16));
-				f.Write(&p, sizeof(int16));
-			}
+			padding(&f);
 		}
-		padding(&f);
 
 
 		SD *sds;
@@ -434,21 +438,23 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		int anim_offset = logAnimations[i];
 
 		stss[i].animid.nEntries = stcs[i].animid.nEntries;
-		stss[i].animid.ref = ++fHead.nRefs;
-		RefEntry("_23U", f.Tell(), stss[i].animid.nEntries, 0);
-		for(int j=0; j<m->header.nBones; j++) {
-			if (m->bones[j].trans.uses(anim_offset)) {
-				int16 p = 2;
-				f.Write(&j, sizeof(int16));
-				f.Write(&p, sizeof(int16));
+		if (stss[i].animid.nEntries) {
+			stss[i].animid.ref = ++fHead.nRefs;
+			RefEntry("_23U", f.Tell(), stss[i].animid.nEntries, 0);
+			for(int j=0; j<m->header.nBones; j++) {
+				if (m->bones[j].trans.uses(anim_offset)) {
+					int16 p = 2;
+					f.Write(&j, sizeof(int16));
+					f.Write(&p, sizeof(int16));
+				}
+				if (m->bones[j].rot.uses(anim_offset)) {
+					int16 p = 3;
+					f.Write(&j, sizeof(int16));
+					f.Write(&p, sizeof(int16));
+				}
 			}
-			if (m->bones[j].rot.uses(anim_offset)) {
-				int16 p = 3;
-				f.Write(&j, sizeof(int16));
-				f.Write(&p, sizeof(int16));
-			}
+			padding(&f);
 		}
-		padding(&f);
 	}
 	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);
