@@ -484,6 +484,12 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 	KFbxNode* root_node = scene->GetRootNode();
 	// Get the mesh's node.
 	KFbxNode* node = root_node->FindChild(g_fbx_name.c_str());
+	KFbxNode* bone_group_node = KFbxNode::Create(scene, g_fbx_name.c_str());
+	KFbxSkeleton* bone_group_skeleton_attribute = KFbxSkeleton::Create(scene, g_fbx_name.c_str());
+	bone_group_skeleton_attribute->SetSkeletonType(KFbxSkeleton::eROOT);
+	bone_group_skeleton_attribute->Size.Set(100.0 * SCALE_FACTOR);
+	bone_group_node->SetNodeAttribute(bone_group_skeleton_attribute);
+	root_node->AddChild(bone_group_node);
 	KFbxXMatrix matrix;
 
 	KFbxSkin* skin = KFbxSkin::Create(scene, "");
@@ -529,7 +535,7 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 		if (bone_types[i] == KFbxSkeleton::eROOT) {
 			skeleton_attribute->SetSkeletonType(KFbxSkeleton::eROOT);
 			skeleton_attribute->Size.Set(100.0 * SCALE_FACTOR);
-			node->AddChild(skeleton_node);
+			bone_group_node->AddChild(skeleton_node);
 		} else if (bone_types[i] == KFbxSkeleton::eLIMB) {
 			skeleton_attribute->SetSkeletonType(KFbxSkeleton::eLIMB);
 			skeleton_attribute->LimbLength.Set(100.0 * SCALE_FACTOR * (sqrtf(trans.x * trans.x + trans.y * trans.y + trans.z * trans.z)));
