@@ -220,12 +220,14 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			for(int j=0; j<m->header.nBones; j++) {
 				if (m->bones[j].trans.uses(anim_offset)) {
 					int16 p = 2;
-					f.Write(&j, sizeof(int16));
+					int16 a = j + 1;
+					f.Write(&a, sizeof(int16));
 					f.Write(&p, sizeof(int16));
 				}
 				if (m->bones[j].rot.uses(anim_offset)) {
 					int16 p = 3;
-					f.Write(&j, sizeof(int16));
+					int16 a = j + 1;
+					f.Write(&a, sizeof(int16));
 					f.Write(&p, sizeof(int16));
 				}
 			}
@@ -237,16 +239,20 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		if (stcs[i].animindex.nEntries > 0){
 			stcs[i].animindex.ref = ++fHead.nRefs;
 			RefEntry("_23U", f.Tell(), stcs[i].animindex.nEntries, 0);
+			int16 tcount = 0;
+			int16 rcount = 0;
 			for(int j=0; j<m->header.nBones; j++) {
 				if (m->bones[j].trans.uses(anim_offset)) {
 					int16 p = 2;
-					f.Write(&j, sizeof(int16));
+					f.Write(&tcount, sizeof(int16));
 					f.Write(&p, sizeof(int16));
+					tcount++;
 				}
 				if (m->bones[j].rot.uses(anim_offset)) {
 					int16 p = 3;
-					f.Write(&j, sizeof(int16));
+					f.Write(&rcount, sizeof(int16));
 					f.Write(&p, sizeof(int16));
+					rcount++;
 				}
 			}
 			padding(&f);
@@ -274,7 +280,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		}
 		sd.timeline.nEntries = 1;
 		sd.timeline.ref = ++fHead.nRefs;
-		sd.length = 3333; // fix me
 		sd.flags = 1;
 		RefEntry("_23I", f.Tell(), sd.timeline.nEntries, 0);
 		f.Write(&sd.length, sizeof(int32));
@@ -331,14 +336,17 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					RefEntry("3CEV", f.Tell(), sds[ii].data.nEntries, 0);
 
 					for (int k=0; k<counts; k++) {
-						Vec3D tran = m->bones[j].pivot;
+						Vec3D tran;
+						if (m->bones[j].parent > -1)
+							tran = m->bones[j].pivot - m->bones[m->bones[j].parent].pivot;
+						else
+							tran = m->bones[j].pivot;
 						tran += m->bones[j].trans.data[anim_offset][k];
 						tran.z *= -1.0f;
 
-						f.Write(&tran, sizeof(tran));
-						//f.Write(&m->bones[j].trans.data[anim_offset][k].x, sizeof(int32));
-						//f.Write(&m->bones[j].trans.data[anim_offset][k].y, sizeof(int32));
-						//f.Write(&m->bones[j].trans.data[anim_offset][k].z, sizeof(int32));
+						f.Write(&tran.x, sizeof(int32));
+						f.Write(&tran.z, sizeof(int32));
+						f.Write(&tran.y, sizeof(int32));
 					}
 					padding(&f);
 					ii++;
@@ -581,27 +589,80 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	// vertFlags
 	mdata.vertFlags = 0x182007D;
 
-	// mVert
+	// mBoneLU
+	ModelView *view = (ModelView*)(mpqfv.getBuffer());
+	ModelGeoset *ops = (ModelGeoset*)(mpqfv.getBuffer() + view->ofsSub);
+	ModelTexUnit *tex = (ModelTexUnit*)(mpqfv.getBuffer() + view->ofsTex);
 	ModelVertex *verts = (ModelVertex*)(mpqf.getBuffer() + m->header.ofsVertices);
+	uint16 *trianglelookup = (uint16*)(mpqfv.getBuffer() + view->ofsIndex);
+	uint16 *triangles = (uint16*)(mpqfv.getBuffer() + view->ofsTris);
+
+	uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
+	std::vector<uint16> bLookup;
+	for (size_t j=0; j<view->nTex; j++) {
+		size_t geoset = tex[j].op;
+		std::vector<uint16> bLookup2; // local bLookup
+		bLookup2.clear();
+
+		for(uint32 i=ops[geoset].vstart; i<(ops[geoset].vstart+ops[geoset].vcount); i++) {
+			for(uint32 k=0; k<4; k++) {
+				if (verts[i].weights[k] != 0) {
+					bool bFound = false;
+					for(uint32 m=0; m<bLookup2.size(); m++) {
+						if (bLookup2[m] == verts[i].bones[k])
+							bFound = true;
+					}
+					if (bFound == false)
+						bLookup2.push_back(verts[i].bones[k]);
+				}
+			}
+		}
+		// push local bLookup to global, and lookup it in boneLookup
+		for(uint32 i=0; i<bLookup2.size(); i++) {
+			bLookup.push_back(boneLookup[bLookup2[i]] + 1);
+		}
+	}
+
+	// mVert
 	mdata.mVert.nEntries = m->header.nVertices*sizeof(Vertex32);
 	mdata.mVert.ref = ++fHead.nRefs;
 	RefEntry("__8U", f.Tell(), mdata.mVert.nEntries, 0);
 	for(uint32 i=0; i<m->header.nVertices; i++) {
 		Vertex32 vert;
 		memset(&vert, 0, sizeof(vert));
-		vert.pos.x = verts[i].pos.y; 
-		vert.pos.y = -verts[i].pos.x; 
-		vert.pos.z = verts[i].pos.z; 
+		vert.pos.x = verts[trianglelookup[i]].pos.y; 
+		vert.pos.y = -verts[trianglelookup[i]].pos.x; 
+		vert.pos.z = verts[trianglelookup[i]].pos.z;  
 		//vert.pos = verts[i].pos;
-		memcpy(vert.weBone, verts[i].weights, 4);
-		memcpy(vert.weIndice, verts[i].bones, 4);
+		memcpy(vert.weBone, verts[trianglelookup[i]].weights, 4);
+
+		int idx;
+		for (uint32 k=0; k<4; k++)
+		{
+			if (verts[trianglelookup[i]].weights[k] != 0) {
+				idx = -1;
+				for(uint32 c=0;c<bLookup.size();c++)
+				{
+					if (verts[trianglelookup[i]].bones[k] + 1 == bLookup[c])
+					{
+						idx = c;
+						break;
+					}
+				}
+				if (idx == -1)
+						vert.weIndice[k]  = 0;
+				else
+						vert.weIndice[k] = idx;
+			}
+		}
+		//memcpy(vert.weIndice, verts[i].bones, 4);
 		// Vec3D normal -> char normal[4], TODO
-		vert.normal[0] = (verts[i].normal.x+1)*0xFF/2;
-		vert.normal[1] = (verts[i].normal.y+1)*0xFF/2;
-		vert.normal[2] = (verts[i].normal.z+1)*0xFF/2;
+		vert.normal[0] = (verts[trianglelookup[i]].normal.x+1)*0xFF/2;
+		vert.normal[1] = (verts[trianglelookup[i]].normal.y+1)*0xFF/2;
+		vert.normal[2] = (verts[trianglelookup[i]].normal.z+1)*0xFF/2;
 		// Vec2D texcoords -> uint16 uv[2], TODO
-		vert.uv[0] = verts[i].texcoords.x*0x800;
-		vert.uv[1] = verts[i].texcoords.y*0x800;
+		vert.uv[0] = verts[trianglelookup[i]].texcoords.x*0x800;
+		vert.uv[1] = verts[trianglelookup[i]].texcoords.y*0x800;
 		f.Write(&vert, sizeof(vert));
 	}
 	padding(&f);
@@ -616,11 +677,11 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Seek(sizeof(div), wxFromCurrent);
 	padding(&f);
 	// mDIV.faces = m->view.nTriangles
-	ModelView *view = (ModelView*)(mpqfv.getBuffer());
+	
 	div.faces.nEntries = view->nTris;
 	div.faces.ref = ++fHead.nRefs;
 	RefEntry("_61U", f.Tell(), div.faces.nEntries, 0);
-	uint16 *triangles = (uint16*)(mpqfv.getBuffer() + view->ofsTris);
+	
 	for(uint16 i=0; i<div.faces.nEntries; i++) {
 		f.Write(&triangles[i], sizeof(uint16)); // Error
 	}
@@ -629,8 +690,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	div.REGN.nEntries = view->nTex;
 	div.REGN.ref = ++fHead.nRefs;
 	RefEntry("NGER", f.Tell(), div.REGN.nEntries, 3);
-	ModelGeoset *ops = (ModelGeoset*)(mpqfv.getBuffer() + view->ofsSub);
-	ModelTexUnit *tex = (ModelTexUnit*)(mpqfv.getBuffer() + view->ofsTex);
+
 	int indBone = 0;
 	for (size_t j=0; j<view->nTex; j++) {
 		size_t geoset = tex[j].op;
@@ -679,31 +739,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Seek(datachunk_offset, wxFromStart);
 
 	// mBoneLU
-	uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
-	std::vector<uint16> bLookup;
-	for (size_t j=0; j<view->nTex; j++) {
-		size_t geoset = tex[j].op;
-		std::vector<uint16> bLookup2; // local bLookup
-		bLookup2.clear();
-
-		for(uint32 i=ops[geoset].vstart; i<(ops[geoset].vstart+ops[geoset].vcount); i++) {
-			for(uint32 k=0; k<4; k++) {
-				if (verts[i].weights[k] != 0) {
-					bool bFound = false;
-					for(uint32 m=0; m<bLookup2.size(); m++) {
-						if (bLookup2[m] == verts[i].bones[k])
-							bFound = true;
-					}
-					if (bFound == false)
-						bLookup2.push_back(verts[i].bones[k]);
-				}
-			}
-		}
-		// push local bLookup to global, and lookup it in boneLookup
-		for(uint32 i=0; i<bLookup2.size(); i++) {
-			bLookup.push_back(boneLookup[bLookup2[i]] + 1);
-		}
-	}
 	mdata.mBoneLU.nEntries = bLookup.size();
 	mdata.mBoneLU.ref = ++fHead.nRefs;
 	RefEntry("_61U", f.Tell(), mdata.mBoneLU.nEntries, 0);
