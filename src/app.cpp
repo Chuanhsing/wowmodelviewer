@@ -284,6 +284,98 @@ namespace {
 	}
 }
 
+void searchMPQs()
+{
+	//enUS(enGB), koKR, frFR, deDE, zhCN, zhTW, esES, ruRU
+	const int localeSets = 8;
+	const wxString locales[] = {
+		// sets 0
+		_T("enUS"), _T("koKR"), _T("frFR"), _T("deDE"), 
+		_T("zhCN"), _T("zhTW"), _T("esES"), _T("ruRU"),
+		// sets 1
+		_T("enGB"), wxEmptyString, wxEmptyString, wxEmptyString, 
+		_T("enCN"), _T("enTW"), _T("esMX"), wxEmptyString
+		};
+
+	const wxString defaultArchives[] = {_T("patch-9.mpq"),_T("patch-8.mpq"),_T("patch-7.mpq"),_T("patch-6.mpq"),
+		_T("patch-5.mpq"),_T("patch-4.mpq"),_T("patch-3.mpq"),_T("patch-2.mpq"),_T("patch.mpq"),_T("alternate.mpq"),
+		_T("expansion3.mpq"),_T("expansion2.mpq"),_T("expansion1.mpq"),_T("lichking.mpq"),_T("expansion.mpq"),
+		_T("world.mpq"),_T("sound.mpq"),_T("art.mpq"),_T("common-3.mpq"),_T("common-2.mpq"), _T("common.mpq")};
+	const wxString localeArchives[] = {_T("patch-%s-9.mpq"),_T("patch-%s-8.mpq"),_T("patch-%s-7.mpq"),
+		_T("patch-%s-6.mpq"),_T("patch-%s-5.mpq"),_T("patch-%s-4.mpq"),_T("patch-%s-3.mpq"), _T("patch-%s-2.mpq"), 
+		_T("patch-%s.mpq"), _T("expansion3-locale-%s.mpq"), _T("expansion2-locale-%s.mpq"), 
+		_T("expansion1-locale-%s.mpq"), _T("lichking-locale-%s.mpq"), _T("expansion-locale-%s.mpq"), 
+		_T("locale-%s.mpq"), _T("base-%s.mpq")};
+
+	wxArrayString baseMpqs;
+	wxDir::GetAllFiles(gamePath, &baseMpqs, wxEmptyString, wxDIR_FILES);
+
+	for (size_t i = 0; i < WXSIZEOF(defaultArchives); i++) {
+		wxLogMessage(_T("Searching for MPQ archive %s..."), defaultArchives[i].c_str());
+
+		for (size_t j = 0; j < baseMpqs.size(); j++) {
+			wxString baseName = wxFileName(baseMpqs[j]).GetFullName();
+			if(baseName.CmpNoCase(defaultArchives[i]) == 0) {
+				mpqArchives.Add(baseMpqs[j]);
+
+				wxLogMessage(_T("- Found MPQ archive: %s"), baseMpqs[j].c_str());
+				if (baseName.CmpNoCase(_T("alternate.mpq")))
+					bAlternate = true;
+			}
+		}
+	}
+
+	wxArrayString avaiLocales;
+	for (size_t i = 0; i < WXSIZEOF(locales); i++) {
+		if (locales[i].IsEmpty())
+			continue;
+		wxString localePath = gamePath;
+
+		localePath.Append(locales[i]);
+		localePath.Append(_T("/"));
+		if (wxDir::Exists(localePath)) {
+			avaiLocales.Add(locales[i]);
+		}
+	}
+	wxString sLocale;
+	if (avaiLocales.size() == 1)
+		sLocale = avaiLocales[0];
+	else
+		sLocale = wxGetSingleChoice(_T("Please select a Locale:"), _T("Locale"), avaiLocales);
+	for (size_t i = 0; i < WXSIZEOF(locales); i++) {
+		if (locales[i] == sLocale) {
+			wxString localePath = gamePath;
+
+			localePath.Append(locales[i]);
+			localePath.Append(_T("/"));
+			if (wxDir::Exists(localePath)) {
+				wxArrayString localeMpqs;
+				wxDir::GetAllFiles(localePath, &localeMpqs, wxEmptyString, wxDIR_FILES);
+
+				for (size_t j = 0; j < WXSIZEOF(localeArchives); j++) {
+					for (size_t k = 0; k < localeMpqs.size(); k++) {
+						wxString baseName = wxFileName(localeMpqs[k]).GetFullName();
+						wxString neededMpq = wxString::Format(localeArchives[j], locales[i].c_str());
+
+						if(baseName.CmpNoCase(neededMpq) == 0) {
+							mpqArchives.Add(localeMpqs[k]);
+						}
+					}
+				}
+			}
+
+			langID = i % localeSets;
+			break;
+		}
+	}
+
+	if (langID == -1) {
+		langID = traverseLocaleMPQs(locales, WXSIZEOF(locales), localeArchives, WXSIZEOF(localeArchives), gamePath);
+		if (langID != -1)
+			langID = langID % localeSets;
+	}
+}
+
 bool WowModelViewApp::LoadSettings()
 {
 	// Application Config Settings
@@ -356,94 +448,7 @@ bool WowModelViewApp::LoadSettings()
 	}
 
 	if (mpqArchives.GetCount()==0) {
-		//enUS(enGB), koKR, frFR, deDE, zhCN, zhTW, esES, ruRU
-		const int localeSets = 8;
-		const wxString locales[] = {
-			// sets 0
-			_T("enUS"), _T("koKR"), _T("frFR"), _T("deDE"), 
-			_T("zhCN"), _T("zhTW"), _T("esES"), _T("ruRU"),
-			// sets 1
-			_T("enGB"), wxEmptyString, wxEmptyString, wxEmptyString, 
-			_T("enCN"), _T("enTW"), _T("esMX"), wxEmptyString
-			};
-
-		const wxString defaultArchives[] = {_T("patch-9.mpq"),_T("patch-8.mpq"),_T("patch-7.mpq"),_T("patch-6.mpq"),
-			_T("patch-5.mpq"),_T("patch-4.mpq"),_T("patch-3.mpq"),_T("patch-2.mpq"),_T("patch.mpq"),_T("alternate.mpq"),
-			_T("expansion3.mpq"),_T("expansion2.mpq"),_T("expansion1.mpq"),_T("lichking.mpq"),_T("expansion.mpq"),
-			_T("world.mpq"),_T("sound.mpq"),_T("art.mpq"),_T("common-3.mpq"),_T("common-2.mpq"), _T("common.mpq")};
-		const wxString localeArchives[] = {_T("patch-%s-9.mpq"),_T("patch-%s-8.mpq"),_T("patch-%s-7.mpq"),
-			_T("patch-%s-6.mpq"),_T("patch-%s-5.mpq"),_T("patch-%s-4.mpq"),_T("patch-%s-3.mpq"), _T("patch-%s-2.mpq"), 
-			_T("patch-%s.mpq"), _T("expansion3-locale-%s.mpq"), _T("expansion2-locale-%s.mpq"), 
-			_T("expansion1-locale-%s.mpq"), _T("lichking-locale-%s.mpq"), _T("expansion-locale-%s.mpq"), 
-			_T("locale-%s.mpq"), _T("base-%s.mpq")};
-
-		wxArrayString baseMpqs;
-		wxDir::GetAllFiles(gamePath, &baseMpqs, wxEmptyString, wxDIR_FILES);
-
-		for (size_t i = 0; i < WXSIZEOF(defaultArchives); i++) {
-			wxLogMessage(_T("Searching for MPQ archive %s..."), defaultArchives[i].c_str());
-
-			for (size_t j = 0; j < baseMpqs.size(); j++) {
-				wxString baseName = wxFileName(baseMpqs[j]).GetFullName();
-				if(baseName.CmpNoCase(defaultArchives[i]) == 0) {
-					mpqArchives.Add(baseMpqs[j]);
-
-					wxLogMessage(_T("- Found MPQ archive: %s"), baseMpqs[j].c_str());
-					if (baseName.CmpNoCase(_T("alternate.mpq")))
-						bAlternate = true;
-				}
-			}
-		}
-
-		wxArrayString avaiLocales;
-		for (size_t i = 0; i < WXSIZEOF(locales); i++) {
-			if (locales[i].IsEmpty())
-				continue;
-			wxString localePath = gamePath;
-
-			localePath.Append(locales[i]);
-			localePath.Append(_T("/"));
-			if (wxDir::Exists(localePath)) {
-				avaiLocales.Add(locales[i]);
-			}
-		}
-		wxString sLocale;
-		if (avaiLocales.size() == 1)
-			sLocale = avaiLocales[0];
-		else
-			sLocale = wxGetSingleChoice(_T("Please select a Locale:"), _T("Locale"), avaiLocales);
-		for (size_t i = 0; i < WXSIZEOF(locales); i++) {
-			if (locales[i] == sLocale) {
-				wxString localePath = gamePath;
-
-				localePath.Append(locales[i]);
-				localePath.Append(_T("/"));
-				if (wxDir::Exists(localePath)) {
-					wxArrayString localeMpqs;
-					wxDir::GetAllFiles(localePath, &localeMpqs, wxEmptyString, wxDIR_FILES);
-
-					for (size_t j = 0; j < WXSIZEOF(localeArchives); j++) {
-						for (size_t k = 0; k < localeMpqs.size(); k++) {
-							wxString baseName = wxFileName(localeMpqs[k]).GetFullName();
-							wxString neededMpq = wxString::Format(localeArchives[j], locales[i].c_str());
-
-							if(baseName.CmpNoCase(neededMpq) == 0) {
-								mpqArchives.Add(localeMpqs[k]);
-							}
-						}
-					}
-				}
-
-				langID = i % localeSets;
-				break;
-			}
-		}
-
-		if (langID == -1) {
-			langID = traverseLocaleMPQs(locales, WXSIZEOF(locales), localeArchives, WXSIZEOF(localeArchives), gamePath);
-			if (langID != -1)
-				langID = langID % localeSets;
-		}
+		searchMPQs();
 	}
 	// -------
 	

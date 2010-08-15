@@ -2,6 +2,7 @@
 #include "settings.h"
 #include "enums.h"
 #include "util.h"
+#include "app.h"
 
 #include "globalvars.h"
 
@@ -56,7 +57,7 @@ Settings_Page1::Settings_Page1(wxWindow* parent, wxWindowID id)
 	btn2 = new wxButton(this, ID_SETTINGS_DOWN, _T("Move Down"), wxPoint(80,355), wxSize(70,25), 0);
 	btn3 = new wxButton(this, ID_SETTINGS_ADD, _T("Add"), wxPoint(155,355), wxSize(70,25), 0);
 	btn4 = new wxButton(this, ID_SETTINGS_REMOVE, _T("Remove"), wxPoint(230,355), wxSize(70,25), 0);
-	btn5 = new wxButton(this, ID_SETTINGS_CLEAR, _T("Clear"), wxPoint(305,355), wxSize(70,25), 0);
+	btn5 = new wxButton(this, ID_SETTINGS_CLEAR, _T("Reset"), wxPoint(305,355), wxSize(70,25), 0);
 }
 
 
@@ -111,6 +112,9 @@ void Settings_Page1::OnButton(wxCommandEvent &event)
 	} else if (id==ID_SETTINGS_CLEAR) {
 		mpqArchives.Clear();
 		mpqList->Clear();
+		getGamePath();
+		searchMPQs();
+		mpqList->Set(mpqArchives);
 	}
 }
 

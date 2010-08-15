@@ -193,5 +193,7 @@ public:
 	FILE *LogFile;
 };
 
+void searchMPQs();
+
 #endif
 
