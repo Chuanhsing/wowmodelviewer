@@ -63,8 +63,6 @@ extern int modelExport_LW_DoodadsAs;
 extern bool modelExport_X3D_ExportAnimation;
 extern bool modelExport_X3D_CenterModel;
 
-//extern bool hasBeta;
-
 extern wxArrayString mpqArchives;
 
 extern long langID;

@@ -112,6 +112,7 @@ void Settings_Page1::OnButton(wxCommandEvent &event)
 	} else if (id==ID_SETTINGS_CLEAR) {
 		mpqArchives.Clear();
 		mpqList->Clear();
+		langID = -1;
 		getGamePath();
 		searchMPQs();
 		mpqList->Set(mpqArchives);

@@ -324,7 +324,6 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 	ok = true;
 	
 	memcpy(&header, f.getBuffer(), sizeof(ModelHeader));
-	animated = isAnimated(f) || forceAnim;  // isAnimated will set animGeometry and animTextures
 
 	wxLogMessage(_T("Loading model: %s, size: %d\n"), tempname.c_str(), f.getSize());
 
@@ -335,6 +334,8 @@ Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(fo
 		f.close();
 		return;
 	}
+
+	animated = isAnimated(f) || forceAnim;  // isAnimated will set animGeometry and animTextures
 
 #ifdef WotLK
 	modelname = tempname;
