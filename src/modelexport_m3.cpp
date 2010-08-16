@@ -3,6 +3,8 @@
 #include "modelexport_m3.h"
 #include "modelcanvas.h"
 
+#define	ROOT_BONE
+
 static std::vector<ReferenceEntry> reList;
 
 void padding(wxFFile *f, int pads=16)
@@ -29,6 +31,7 @@ void RefEntry(const char *id, uint32 offset, uint32 nEntries, uint32 vers)
 uint32 nSkinnedBones(Model *m, MPQFile *mpqf, uint32 start, uint32 num)
 {
 	ModelVertex *verts = (ModelVertex*)(mpqf->getBuffer() + m->header.ofsVertices);
+	ModelBoneDef *mb = (ModelBoneDef*)(mpqf->getBuffer() + m->header.ofsBones);
 	uint8 *skinned = new uint8[m->header.nBones];
 	memset(skinned, 0, sizeof(uint8)*m->header.nBones);
 	uint32 nSkinnedBones = 0;
@@ -40,9 +43,26 @@ uint32 nSkinnedBones(Model *m, MPQFile *mpqf, uint32 start, uint32 num)
 	}
 	for(uint32 i=0; i<m->header.nBones; i++) {
 		if (skinned[i] == 1)
+		{
+			uint32 j = i;
+			while(1)
+			{
+				if(mb[j].parent > -1)
+				{
+					j = mb[j].parent;
+					skinned[j] = 1;
+				}
+				else
+					break;
+			}
+		}
+	}
+	for(uint32 i=0; i<m->header.nBones; i++) {
+		if (skinned[i] == 1)
 			nSkinnedBones ++;
 	}
 	wxDELETEA(skinned);
+	nSkinnedBones++;
 	return nSkinnedBones;
 }
 
@@ -220,13 +240,21 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			for(int j=0; j<m->header.nBones; j++) {
 				if (m->bones[j].trans.uses(anim_offset)) {
 					int16 p = 2;
+#ifdef	ROOT_BONE
 					int16 a = j + 1;
+#else
+					int16 a = j;
+#endif
 					f.Write(&a, sizeof(int16));
 					f.Write(&p, sizeof(int16));
 				}
 				if (m->bones[j].rot.uses(anim_offset)) {
 					int16 p = 3;
+#ifdef	ROOT_BONE
 					int16 a = j + 1;
+#else
+					int16 a = j;
+#endif
 					f.Write(&a, sizeof(int16));
 					f.Write(&p, sizeof(int16));
 				}
@@ -466,12 +494,22 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			for(int j=0; j<m->header.nBones; j++) {
 				if (m->bones[j].trans.uses(anim_offset)) {
 					int16 p = 2;
-					f.Write(&j, sizeof(int16));
+#ifdef	ROOT_BONE
+					int16 a = j + 1;
+#else
+					int16 a = j;
+#endif
+					f.Write(&a, sizeof(int16));
 					f.Write(&p, sizeof(int16));
 				}
 				if (m->bones[j].rot.uses(anim_offset)) {
 					int16 p = 3;
-					f.Write(&j, sizeof(int16));
+#ifdef	ROOT_BONE
+					int16 a = j + 1;
+#else
+					int16 a = j;
+#endif
+					f.Write(&a, sizeof(int16));
 					f.Write(&p, sizeof(int16));
 				}
 			}
@@ -493,7 +531,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	// mBone
 	std::vector<ModelBoneDef> boneList;
 	ModelBoneDef *mb = (ModelBoneDef*)(mpqf.getBuffer() + m->header.ofsBones);
-#define	ROOT_BONE
+
 #ifdef	ROOT_BONE
 	ModelBoneDef rootBone;
 	memset(&rootBone, 0, sizeof(rootBone));
@@ -540,6 +578,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
+		
 		bones[i].d1 = -1;
 		bones[i].flags = 0xA00;
 #ifdef	ROOT_BONE
@@ -547,6 +586,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 #else
 		bones[i].parent = boneList[i].parent;
 #endif
+		//if (bones[i].parent > 0)
+		//	mdata.nSkinnedBones ++;
 #if 0
 		for(uint32 j=0; j<mdata.mSTC.nEntries; j++) {
 			int anim_offset = logAnimations[j];
@@ -557,6 +598,18 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		}
 #endif
 		bones[i].initTrans.AnimRef.animid = i | (2 << 16);
+		if (i > 0 && i < mdata.mBone.nEntries - 1)
+		{
+			for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
+			{
+				int anim_offset = logAnimations[j];
+				if (m->bones[i-1].trans.uses(anim_offset))
+				{	
+					bones[i].initTrans.AnimRef.flags = 1;
+					bones[i].initTrans.AnimRef.animflag = 6;	
+				}
+			}
+		}
 		bones[i].initTrans.value = boneList[i].pivot;
 		if (bones[i].parent > -1) {
 			bones[i].initTrans.value -= boneList[bones[i].parent].pivot ;
@@ -570,9 +623,34 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			}
 		}
 #endif
-		bones[i].initRot.AnimRef.animid = i | (3 << 16);
-		bones[i].initRot.value = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
-		bones[i].initRot.unValue = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
+#ifdef	ROOT_BONE
+		if (i == 0)
+		{
+			bones[i].initRot.AnimRef.animid = i | (3 << 16);
+			bones[i].initRot.value = Vec4D(0.0f, 0.0f, -sqrt(0.5f), sqrt(0.5f));
+			bones[i].initRot.unValue = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
+		}
+		else
+		{
+#endif
+			bones[i].initRot.AnimRef.animid = i | (3 << 16);
+			bones[i].initRot.value = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
+			bones[i].initRot.unValue = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
+			if (i > 0 && i < mdata.mBone.nEntries - 1)
+			{
+				for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
+				{
+					int anim_offset = logAnimations[j];
+					if (m->bones[i-1].rot.uses(anim_offset))
+					{	
+						bones[i].initRot.AnimRef.flags = 1;
+						bones[i].initRot.AnimRef.animflag = 6;	
+					}
+				}
+			}
+#ifdef	ROOT_BONE
+		}
+#endif
 		bones[i].initScale.AnimRef.animid = i | (5 << 16);
 		bones[i].initScale.value = Vec3D(1.0f, 1.0f, 1.0f);
 		bones[i].initScale.unValue = Vec3D(1.0f, 1.0f, 1.0f);
@@ -586,6 +664,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	// nSkinnedBones
 	mdata.nSkinnedBones = nSkinnedBones(m, &mpqf, 0, m->header.nVertices);
+	//mdata.nSkinnedBones+=1;
+
 	// vertFlags
 	mdata.vertFlags = 0x182007D;
 
@@ -599,6 +679,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
 	std::vector<uint16> bLookup;
+	std::vector<uint16> bLookupcnt;
 	for (size_t j=0; j<view->nTex; j++) {
 		size_t geoset = tex[j].op;
 		std::vector<uint16> bLookup2; // local bLookup
@@ -606,20 +687,22 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 		for(uint32 i=ops[geoset].vstart; i<(ops[geoset].vstart+ops[geoset].vcount); i++) {
 			for(uint32 k=0; k<4; k++) {
-				if (verts[i].weights[k] != 0) {
+				if (verts[trianglelookup[i]].weights[k] != 0) {
 					bool bFound = false;
 					for(uint32 m=0; m<bLookup2.size(); m++) {
-						if (bLookup2[m] == verts[i].bones[k])
+						if (bLookup2[m] == verts[trianglelookup[i]].bones[k])
 							bFound = true;
 					}
 					if (bFound == false)
-						bLookup2.push_back(verts[i].bones[k]);
+						bLookup2.push_back(verts[trianglelookup[i]].bones[k]);
 				}
 			}
 		}
+		bLookupcnt.push_back(bLookup2.size());
 		// push local bLookup to global, and lookup it in boneLookup
 		for(uint32 i=0; i<bLookup2.size(); i++) {
-			bLookup.push_back(boneLookup[bLookup2[i]] + 1);
+			//bLookup.push_back(boneLookup[bLookup2[i]]);
+			bLookup.push_back(bLookup2[i]);
 		}
 	}
 
@@ -643,7 +726,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				idx = -1;
 				for(uint32 c=0;c<bLookup.size();c++)
 				{
-					if (verts[trianglelookup[i]].bones[k] + 1 == bLookup[c])
+					if (verts[trianglelookup[i]].bones[k] == bLookup[c])
 					{
 						idx = c;
 						break;
@@ -652,7 +735,16 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				if (idx == -1)
 						vert.weIndice[k]  = 0;
 				else
-						vert.weIndice[k] = idx;
+				{
+					for(uint32 d=0;d<bLookupcnt.size();d++)
+					{
+						if (idx >= bLookupcnt[d])
+							idx -= bLookupcnt[d];
+						else
+							break;
+					}
+					vert.weIndice[k] = idx;
+				}
 			}
 		}
 		//memcpy(vert.weIndice, verts[i].bones, 4);
@@ -683,7 +775,19 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	RefEntry("_61U", f.Tell(), div.faces.nEntries, 0);
 	
 	for(uint16 i=0; i<div.faces.nEntries; i++) {
-		f.Write(&triangles[i], sizeof(uint16)); // Error
+		uint16 tidx = 0;
+		for (size_t j=0; j<view->nTex; j++) {
+			size_t geoset = tex[j].op;
+			if (triangles[i] >= ops[geoset].vstart && triangles[i] < ops[geoset].vstart+ops[geoset].vcount)
+			{
+				tidx = triangles[i] - ops[geoset].vstart;
+				break;
+			}
+		}
+
+
+		//f.Write(&triangles[i], sizeof(uint16)); // Error
+		f.Write(&tidx, sizeof(uint16));
 	}
 	padding(&f);
 	// mDiv.meash
@@ -701,9 +805,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		regn.numFaces = ops[geoset].icount;
 		regn.indVert = ops[geoset].vstart;
 		regn.numVert = ops[geoset].vcount;
-		regn.boneCount = nSkinnedBones(m, &mpqf, regn.indVert, regn.numVert);
+		regn.boneCount = bLookupcnt[j]; //nSkinnedBones(m, &mpqf, regn.indVert, regn.numVert);
 		regn.indBone = indBone;
-		regn.numBone = regn.boneCount;
+		regn.numBone = bLookupcnt[j]; //regn.boneCount;
 		regn.b1[0] = regn.b1[1] = 1;
 		indBone += regn.boneCount;
 		f.Write(&regn, sizeof(regn));
@@ -743,7 +847,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	mdata.mBoneLU.ref = ++fHead.nRefs;
 	RefEntry("_61U", f.Tell(), mdata.mBoneLU.nEntries, 0);
 	for(uint16 i=0; i<bLookup.size(); i++) {
-		f.Write(&bLookup[i], sizeof(uint16));
+		uint16 idx = bLookup[i] + 1; 
+		f.Write(&idx, sizeof(uint16));
 	}
 	padding(&f);
 
