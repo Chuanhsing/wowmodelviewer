@@ -118,6 +118,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	// mSEQS
 	uint32 nAnimations = 0;
 	uint32 *logAnimations = new uint32[m->header.nAnimations];
+	uint32 *reAnimations = new uint32[m->header.nAnimations];
 	wxString *nameAnimations = new wxString[m->header.nAnimations];
 	int Walks = 0, Stands =0, Attacks = 0, Deaths = 0;
 	for(uint32 i=0; i<m->header.nAnimations; i++) {
@@ -133,6 +134,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			continue;
 		if (strName.StartsWith(_T("StandWound")))
 			continue;
+		//if (strName != _T("Run"))
+		//	continue;
 		nameAnimations[i] = strName;
 		if (strName.StartsWith(_T("Run"))) {
 			if (Walks == 0)
@@ -165,7 +168,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		}
 
 		logAnimations[nAnimations] = i;
+		reAnimations[i] = nAnimations; 
 		nAnimations++;
+		//break;
 	}
 	int chunk_offset, datachunk_offset;
 
@@ -243,7 +248,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			stcs[i].animid.ref = ++fHead.nRefs;
 			RefEntry("_23U", f.Tell(), stcs[i].animid.nEntries, 0);
 			for(int j=0; j<m->header.nBones; j++) {
-				if (m->bones[j].trans.uses(anim_offset)) {
+				if (m->bones[j].trans.uses(anim_offset) && m->bones[j].trans.data[anim_offset].size() > 0) {
 					int16 p = 2;
 #ifdef	ROOT_BONE
 					int16 a = j + 1;
@@ -253,7 +258,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					f.Write(&a, sizeof(int16));
 					f.Write(&p, sizeof(int16));
 				}
-				if (m->bones[j].scale.uses(anim_offset)) {
+				if (m->bones[j].scale.uses(anim_offset) && m->bones[j].scale.data[anim_offset].size() > 0) {
 					int16 p = 5;
 #ifdef	ROOT_BONE
 					int16 a = j + 1;
@@ -263,7 +268,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					f.Write(&a, sizeof(int16));
 					f.Write(&p, sizeof(int16));
 				}
-				if (m->bones[j].rot.uses(anim_offset)) {
+				if (m->bones[j].rot.uses(anim_offset) && m->bones[j].rot.data[anim_offset].size() > 0) {
 					int16 p = 3;
 #ifdef	ROOT_BONE
 					int16 a = j + 1;
@@ -321,9 +326,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		memset(&sd, 0, sizeof(sd));
 		f.Seek(sizeof(sd), wxFromCurrent);
 		for(int j=0; j<m->header.nBones; j++) {
-			if (m->bones[j].trans.uses(anim_offset)) {
+			if (m->bones[j].trans.uses(anim_offset) && m->bones[j].trans.data[anim_offset].size() > 0) {
 				//int counts = m->bones[j].trans.data[anim_offset].size();
-				sd.length = seqs[anim_offset].length;  //m->bones[j].trans.times[anim_offset][counts-1];
+				sd.length = seqs[reAnimations[anim_offset]].length;  //m->bones[j].trans.times[anim_offset][counts-1];
 				break;
 			}
 		}
@@ -380,7 +385,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 						f.Write(&m->bones[j].trans.times[anim_offset][k], sizeof(int32));
 					}
 					padding(&f);
-					sds[ii].length = seqs[anim_offset].length; //m->bones[j].trans.times[anim_offset][counts-1];
+					sds[ii].length = seqs[reAnimations[anim_offset]].length; //m->bones[j].trans.times[anim_offset][counts-1];
 					sds[ii].data.nEntries = counts;
 					sds[ii].data.ref = ++fHead.nRefs;
 					RefEntry("3CEV", f.Tell(), sds[ii].data.nEntries, 0);
@@ -411,7 +416,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 						f.Write(&m->bones[j].scale.times[anim_offset][k], sizeof(int32));
 					}
 					padding(&f);
-					sds[ii].length = seqs[anim_offset].length; //m->bones[j].scale.times[anim_offset][counts-1];
+					sds[ii].length = seqs[reAnimations[anim_offset]].length; //m->bones[j].scale.times[anim_offset][counts-1];
 					sds[ii].data.nEntries = counts;
 					sds[ii].data.ref = ++fHead.nRefs;
 					RefEntry("3CEV", f.Tell(), sds[ii].data.nEntries, 0);
@@ -448,7 +453,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			f.Seek(sizeof(sd)*stcs[i].arQuat.nEntries, wxFromCurrent);
 			ii=0;
 			for(int j=0; j<m->header.nBones; j++) {
-				if (m->bones[j].rot.uses(anim_offset) && m->bones[j].rot.data[anim_offset].size()) {
+				if (m->bones[j].rot.uses(anim_offset) && m->bones[j].rot.data[anim_offset].size() > 0) {
 					int counts = m->bones[j].rot.data[anim_offset].size();
 					sds[ii].timeline.nEntries = counts;
 					sds[ii].timeline.ref = ++fHead.nRefs;
@@ -457,7 +462,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 						f.Write(&m->bones[j].rot.times[anim_offset][k], sizeof(int32));
 					}
 					padding(&f);
-					sds[ii].length = seqs[anim_offset].length; //m->bones[j].rot.times[anim_offset][counts-1];
+					sds[ii].length = seqs[reAnimations[anim_offset]].length; //m->bones[j].rot.times[anim_offset][counts-1];
 					sds[ii].data.nEntries = counts;
 					sds[ii].data.ref = ++fHead.nRefs;
 					RefEntry("TAUQ", f.Tell(), sds[ii].data.nEntries, 0);
@@ -765,8 +770,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
 	std::vector<uint16> bLookup;
 	std::vector<uint16> bLookupcnt;
-	for (size_t j=0; j<view->nTex; j++) {
-		size_t geoset = tex[j].op;
+	for (size_t j=0; j<view->nSub; j++) {
+		size_t geoset = j;//tex[j].op;
 		std::vector<uint16> bLookup2; // local bLookup
 		bLookup2.clear();
 
@@ -805,8 +810,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		memcpy(vert.weBone, verts[trianglelookup[i]].weights, 4);
 
 		uint16 tidx = 0;
-		for (size_t j=0; j<view->nTex; j++) {
-			size_t geoset = tex[j].op;
+		for (size_t j=0; j<view->nSub; j++) {
+			size_t geoset = j;//tex[j].op;
 			if (trianglelookup[i] >= ops[geoset].vstart && trianglelookup[i] < ops[geoset].vstart+ops[geoset].vcount)
 				break;
 			tidx += bLookupcnt[j];
@@ -869,8 +874,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	
 	for(uint16 i=0; i<div.faces.nEntries; i++) {
 		uint16 tidx = 0;
-		for (size_t j=0; j<view->nTex; j++) {
-			size_t geoset = tex[j].op;
+		for (size_t j=0; j<view->nSub; j++) {
+			size_t geoset = j;//tex[j].op;
 			if (triangles[i] >= ops[geoset].vstart && triangles[i] < ops[geoset].vstart+ops[geoset].vcount)
 			{
 				tidx = triangles[i] - ops[geoset].vstart;
@@ -884,13 +889,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	}
 	padding(&f);
 	// mDiv.meash
-	div.REGN.nEntries = view->nTex;
+	div.REGN.nEntries = view->nSub;
 	div.REGN.ref = ++fHead.nRefs;
 	RefEntry("NGER", f.Tell(), div.REGN.nEntries, 3);
 
 	int indBone = 0;
-	for (size_t j=0; j<view->nTex; j++) {
-		size_t geoset = tex[j].op;
+	for (size_t j=0; j<view->nSub; j++) {
+		size_t geoset = j;//tex[j].op;
 
 		REGN regn;
 		memset(&regn, 0, sizeof(regn));
@@ -907,10 +912,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	}
 	padding(&f);
 	// mDiv.BAT
-	div.BAT.nEntries = view->nTex;
+	div.BAT.nEntries = view->nSub;
 	div.BAT.ref = ++fHead.nRefs;
 	RefEntry("_TAB", f.Tell(), div.BAT.nEntries, 1);
-	for (size_t j=0; j<view->nTex; j++) {
+	for (size_t j=0; j<view->nSub; j++) {
 		BAT bat;
 		memset(&bat, 0, sizeof(bat));
 		bat.subid = j;
