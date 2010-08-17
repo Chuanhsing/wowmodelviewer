@@ -368,21 +368,12 @@ Layer Index	Map Type
 8	 Alpha Mask
 10	 Normal
 11	 Height
-
+*/
+#define	MAT_LAYER_DIFF			(0)
+#define	MAT_LAYER_ALPHA			(7)
+/*
 Flags
 Most of these determined through the previewer.
-Bit Index	Bit Address	 Flag
-3	 0x4	 Unfogged (1)
-4	 0x8	 Two-sided
-5	 0x10	 Unshaded
-6	 0x20	 No shadows cast
-7	 0x40	 No hit test
-8	 0x80	 No shadows received
-9	 0x100	 Depth prepass
-10	 0x200	 Use terrain HDR
-12	 0x800	 Splat UV fix
-13	 0x1000	 Soft blending
-14	 0x2000	 Unfogged (2)
 */
 #define MAT_FLAG_UNFOGGED		(0x4)
 #define MAT_FLAG_TWOSIDED		(0x8)
@@ -395,17 +386,17 @@ Bit Index	Bit Address	 Flag
 #define MAT_FLAG_SPLATUVFIX		(0x800)
 #define MAT_FLAG_SOFTBLENDING	(0x1000)
 #define MAT_FLAG_UNFOGGED2		(0x2000)
-
 /*
 Blendmodes
 Value	Mode
-0	 Opaque
-1	 Alpha Blend
-2	 Add
-3	 Alpha Add
-4	 Mod
-5	 Mod 2x
-
+*/
+#define	MAT_BLEND_OPAQUE		(0)
+#define	MAT_BLEND_ALPHABLEND	(1)
+#define	MAT_BLEND_ADD			(2)
+#define	MAT_BLEND_ALPHAADD		(3)
+#define	MAT_BLEND_MOD			(4)
+#define	MAT_BLEND_MOD2x			(5)
+/*
 Layer/Emissive Blendmodes
 Value	Mode
 0	 Mod

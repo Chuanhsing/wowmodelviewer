@@ -405,7 +405,7 @@ struct ModelRenderFlags {
 	uint16 flags;
 	//unsigned char f1;
 	//unsigned char f2;
-	uint16 blend;
+	uint16 blend; // see enums.h, enum BlendModes
 };
 
 // block G - color defs

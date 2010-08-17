@@ -933,7 +933,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	std::vector<MeshMap> MeshtoMat;
 	for (uint32 i=0; i<view->nTex; i++)
 	{
-		if (tex[i].texunit < m->header.nTexLookup && texunitlookup[tex[i].texunit] == 0)
+		if (tex[i].texunit < m->header.nTexUnitLookup && texunitlookup[tex[i].texunit] == 0)
 		{	
 			int idx = -1;
 
@@ -1129,7 +1129,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				f.Write(&layer, sizeof(layer));
 				padding(&f);
 
-				if (j == 0) { // LAYER_Diff
+				if (j == MAT_LAYER_DIFF) { // LAYER_Diff
 					int texid = MATtable[i].texid;
 					wxString strName = wxString(m->TextureList[texid].c_str(), wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
 					strName.Append(_T(".tga"));
@@ -1140,7 +1140,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					padding(&f);
 				}
 
-				if (j == 7 && MATtable[i].blend == 1) // LAYER_Alpha
+				if (j == MAT_LAYER_ALPHA && 
+					(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA)) // LAYER_Alpha
 				{
 					int texid = MATtable[i].texid;
 					wxString strName = wxString(m->TextureList[texid].c_str(), wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
@@ -1162,16 +1163,38 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		datachunk_offset = f.Tell();
 		f.Seek(chunk_offset, wxFromStart);
 		for(uint32 i=0; i<mdata.mMat.nEntries; i++) {
-			mats[i].cutoutThresh = 0xC8;
 			mats[i].SpecMult = 1;
 			mats[i].EmisMult = 1;
 			mats[i].layerBlend = 2;
 			mats[i].emisBlend = 2;
 			mats[i].d5 = 2;
-			if (MATtable[i].blend == 3)
-				mats[i].blendMode = 2; 
-			else
-				mats[i].blendMode = 0; 
+			switch(MATtable[i].blend)
+			{
+				case BM_OPAQUE: 
+					mats[i].blendMode = MAT_BLEND_OPAQUE; 
+					mats[i].cutoutThresh = 0;
+					break;
+				case BM_ALPHA_BLEND: 
+					mats[i].blendMode = MAT_BLEND_ALPHABLEND; 
+					mats[i].cutoutThresh = 16;
+					break;
+				case BM_ADDITIVE: 
+					mats[i].blendMode = MAT_BLEND_ADD; 
+					mats[i].cutoutThresh = 0;
+					break;
+				case BM_ADDITIVE_ALPHA: 
+					mats[i].blendMode = MAT_BLEND_ALPHAADD; 
+					mats[i].cutoutThresh = 16;
+					break;
+				case BM_MODULATE: 
+					mats[i].blendMode = MAT_BLEND_MOD; 
+					mats[i].cutoutThresh = 0;
+					break;
+				default: 
+					mats[i].blendMode = MAT_BLEND_OPAQUE;
+					mats[i].cutoutThresh = 0;
+			}
+
 			if (MATtable[i].flags & RENDERFLAGS_UNLIT)
 				mats[i].flags |= MAT_FLAG_UNSHADED;
 			if (MATtable[i].flags & RENDERFLAGS_UNFOGGED)
