@@ -768,6 +768,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	uint16 *trianglelookup = (uint16*)(mpqfv.getBuffer() + view->ofsIndex);
 	uint16 *triangles = (uint16*)(mpqfv.getBuffer() + view->ofsTris);
 
+	
+
 	uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
 	std::vector<uint16> bLookup;
 	std::vector<uint16> bLookupcnt;
@@ -910,15 +912,88 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Write(&regn, sizeof(regn));
 	}
 	padding(&f);
+
+
+	//prepare BAT table
+
+	ModelRenderFlags *renderflags = (ModelRenderFlags *)(mpqf.getBuffer() + m->header.ofsTexFlags);
+
+	typedef struct {
+		uint16 texid;
+		uint16 flags;
+		uint16 blend;
+	} MATmap;
+
+	typedef struct {
+		uint16 subid;
+		uint16 matid;
+	} MeshMap;
+
+
+	std::vector<MATmap> MATtable;
+	std::vector<MeshMap> MeshtoMat;
+	for (uint32 i=0; i<view->nTex; i++)
+	{
+		if (tex[i].texunit < m->header.nTexLookup && texlookup[tex[i].texunit] == 0)
+		{	
+			int idx = -1;
+
+			for(uint32 j=0; j<MATtable.size(); j++)
+			{
+				if (MATtable[j].texid == tex[i].textureid && 
+					MATtable[j].blend == renderflags[tex[i].flagsIndex].blend &&
+					MATtable[j].flags == renderflags[tex[i].flagsIndex].flags)
+				{
+					idx = j;
+					break;
+				}
+			}
+			if (idx < 0)
+			{
+				MATmap bm;
+				bm.texid = tex[i].textureid;
+				bm.flags = renderflags[tex[i].flagsIndex].flags;
+				bm.blend = renderflags[tex[i].flagsIndex].blend;
+				idx = MATtable.size();
+				MATtable.push_back(bm);
+				
+				MeshMap mm;
+				mm.subid = tex[i].op;
+				mm.matid = idx;
+				MeshtoMat.push_back(mm);
+			}
+			else
+			{
+				int found = 0;
+				for(uint32 k=0; k<MeshtoMat.size(); k++)
+				{
+					if (MeshtoMat[k].subid == tex[i].op && MeshtoMat[k].matid == idx)
+					{
+						found = 1;
+						break;
+					}
+				}
+				if (found == 0)
+				{
+					MeshMap mm;
+					mm.subid = tex[i].op;
+					mm.matid = idx;
+					MeshtoMat.push_back(mm);
+				}
+			}
+		}
+	}
+
+
 	// mDiv.BAT
-	div.BAT.nEntries = view->nSub;
+	div.BAT.nEntries = MeshtoMat.size(); //view->nSub;
 	div.BAT.ref = ++fHead.nRefs;
 	RefEntry("_TAB", f.Tell(), div.BAT.nEntries, 1);
-	for (size_t j=0; j<view->nSub; j++) {
+	for (size_t j=0; j<div.BAT.nEntries; j++) {
 		BAT bat;
 		memset(&bat, 0, sizeof(bat));
-		bat.subid = j;
-		bat.matid = j;  // Error
+		bat.subid = MeshtoMat[j].subid;
+		bat.matid = MeshtoMat[j].matid;  // Error
 		bat.s2 = -1;
 		f.Write(&bat, 0xE); // sizeof(bat) is buggy to 0x10
 	}
@@ -1001,8 +1076,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	}
 #endif
 	// mMatLU
-	if (view->nTex) {
-		mdata.mMatLU.nEntries = view->nTex;
+	if (MATtable.size() > 0) {
+		mdata.mMatLU.nEntries = MATtable.size();
 		mdata.mMatLU.ref = ++fHead.nRefs;
 		RefEntry("MTAM", f.Tell(), mdata.mMatLU.nEntries, 0);
 		for(uint32 i=0; i<mdata.mMatLU.nEntries; i++) {
@@ -1015,8 +1090,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	}
 
 	// mMat
-	if (view->nTex) {
-		mdata.mMat.nEntries = view->nTex;
+	if (MATtable.size() > 0) {
+		mdata.mMat.nEntries = MATtable.size();
 		mdata.mMat.ref = ++fHead.nRefs;
 		RefEntry("_TAM", f.Tell(), mdata.mMat.nEntries, 0xF);
 		chunk_offset = f.Tell();
@@ -1056,12 +1131,25 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				padding(&f);
 
 				if (j == 0) { // LAYER_Diff
-					int texid = texlookup[tex[i].textureid];
+					int texid = MATtable[i].texid;
 					wxString strName = wxString(m->TextureList[texid].c_str(), wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
 					strName.Append(_T(".tga"));
 					layer.name.nEntries = strName.Len()+1;
 					layer.name.ref = ++fHead.nRefs;
 					RefEntry("RAHC", f.Tell(), layer.name.nEntries, 0);
+					f.Write(strName.c_str(), strName.Len()+1);
+					padding(&f);
+				}
+
+				if (j == 7 && MATtable[i].blend == 1) // LAYER_Alpha
+				{
+					int texid = MATtable[i].texid;
+					wxString strName = wxString(m->TextureList[texid].c_str(), wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
+					strName.Append(_T(".tga"));
+					layer.name.nEntries = strName.Len()+1;
+					layer.name.ref = ++fHead.nRefs;
+					RefEntry("RAHC", f.Tell(), layer.name.nEntries, 0);
+					layer.renderFlags = 2;   // Alpha Only
 					f.Write(strName.c_str(), strName.Len()+1);
 					padding(&f);
 				}
@@ -1081,6 +1169,18 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			mats[i].layerBlend = 2;
 			mats[i].emisBlend = 2;
 			mats[i].d5 = 2;
+			if (MATtable[i].blend == 3)
+				mats[i].blendMode = 2; 
+			else
+				mats[i].blendMode = 0; 
+			if (MATtable[i].flags & RENDERFLAGS_UNLIT)
+				mats[i].flags |= MAT_FLAG_UNSHADED;
+			if (MATtable[i].flags & RENDERFLAGS_UNFOGGED)
+				mats[i].flags |= MAT_FLAG_UNFOGGED;
+			if (MATtable[i].flags & RENDERFLAGS_TWOSIDED)
+				mats[i].flags |= MAT_FLAG_TWOSIDED;
+			if (MATtable[i].flags & RENDERFLAGS_BILLBOARD)
+				mats[i].flags |= MAT_FLAG_DEPTHPREPASS;
 			f.Write(&mats[i], sizeof(MAT));
 		}
 		wxDELETE(mats);
@@ -1131,6 +1231,23 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Seek(0, wxFromStart);
 	f.Write(&fHead, sizeof(fHead));
 	f.Write(&mdata, sizeof(mdata));
+
+	// save textures
+	for (size_t i=0; i<m->passes.size(); i++) {
+		ModelRenderPass &p = m->passes[i];
+
+		if (p.init(m)) {
+			wxString texName = GetM2TextureName(m,fn,p,(int)i);
+			texName.Append(_T(".tga"));
+
+			wxString texFilename(fn, wxConvUTF8);
+			texFilename = texFilename.BeforeLast(SLASH);
+			texFilename += SLASH;
+			texFilename += texName;
+			wxLogMessage(_T("Exporting Image: %s"),texFilename.c_str());
+			SaveTexture(texFilename);
+		}
+	}
 
 	wxDELETEA(seqs);
 	wxDELETEA(stcs);

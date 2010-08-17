@@ -2991,7 +2991,6 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				ExportWMOtoOgreXml(canvas->wmo, dialog.GetPath().fn_str());
 			}
 		}
-#ifdef	_DEBUG
 	} else if (id == ID_MODELEXPORT_M3) {
 		newfilename << _T(".m3");
 		if (canvas->model) {
@@ -3002,7 +3001,6 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				ExportM2toM3(canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		}
-#endif
 #ifdef	_WINDOWS
 	} else if (id == ID_MODELEXPORT_FBX) {
 		newfilename << _T(".fbx");

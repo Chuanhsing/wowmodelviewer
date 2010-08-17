@@ -383,7 +383,20 @@ Bit Index	Bit Address	 Flag
 12	 0x800	 Splat UV fix
 13	 0x1000	 Soft blending
 14	 0x2000	 Unfogged (2)
+*/
+#define MAT_FLAG_UNFOGGED		(0x4)
+#define MAT_FLAG_TWOSIDED		(0x8)
+#define MAT_FLAG_UNSHADED		(0x10)
+#define MAT_FLAG_NOSHADOWSCAST	(0x20)
+#define MAT_FLAG_NOHITTEST		(0x40)
+#define MAT_FLAG_NOSHADOWSRECEIVED	(0x80)
+#define MAT_FLAG_DEPTHPREPASS	(0x100)
+#define MAT_FLAG_USETERRAINHDR	(0x200)
+#define MAT_FLAG_SPLATUVFIX		(0x800)
+#define MAT_FLAG_SOFTBLENDING	(0x1000)
+#define MAT_FLAG_UNFOGGED2		(0x2000)
 
+/*
 Blendmodes
 Value	Mode
 0	 Opaque
