@@ -447,6 +447,29 @@ struct TMPQHeader
     // 64-bit position of the "HET" block
     DWORD dwHETBlockPosLow;
     DWORD dwHETBlockPosHigh;
+
+    //-- MPQ HEADER v 4.0 -------------------------------------------
+
+    // Compressed size of the hash table
+    DWORD dwHashTableSizeLo;
+    DWORD dwHashTableSizeHi;
+
+    // Compressed size of the block table
+    DWORD dwBlockTableSizeLo;
+    DWORD dwBlockTableSizeHi;
+
+    // Compressed size of the extended block table
+    DWORD dwExtBlockTableSizeLo;
+    DWORD dwExtBlockTableSizeHi;
+
+    // Compressed size of the HET block
+    DWORD dwHetBlockSizeLo;
+    DWORD dwHetBlockSizeHi;
+
+    // Compressed size of the BET block
+    DWORD dwBetBlockSizeLo;
+    DWORD dwBetBlockSizeHi;
+
 };
 
 // Hash entry. All files in the archive are searched by their hashes.

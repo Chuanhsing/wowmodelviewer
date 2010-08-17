@@ -84,71 +84,6 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="DebugAD|x64"
-			OutputDirectory="../lib/Windows/64bit"
-			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
-			ConfigurationType="4"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				MinimalRebuild="false"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
-				WarningLevel="1"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\$(ProjectName)DAD.lib"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="StormLib.bat $(PlatformName) $(ConfigurationName)"
-			/>
-		</Configuration>
-		<Configuration
 			Name="DebugAS|Win32"
 			OutputDirectory="../lib/Windows/32bit"
 			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
@@ -169,71 +104,6 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				MinimalRebuild="false"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				UsePrecompiledHeader="0"
-				WarningLevel="1"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\$(ProjectName)DAS.lib"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="StormLib.bat $(PlatformName) $(ConfigurationName)"
-			/>
-		</Configuration>
-		<Configuration
-			Name="DebugAS|x64"
-			OutputDirectory="../lib/Windows/64bit"
-			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
-			ConfigurationType="4"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -340,6 +210,198 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="ReleaseAS|Win32"
+			OutputDirectory="../lib/Windows/32bit"
+			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
+			ConfigurationType="4"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				RuntimeLibrary="0"
+				UsePrecompiledHeader="0"
+				WarningLevel="1"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)\$(ProjectName)RAS.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="StormLib.bat $(PlatformName) $(ConfigurationName)"
+			/>
+		</Configuration>
+		<Configuration
+			Name="DebugAD|x64"
+			OutputDirectory="../lib/Windows/64bit"
+			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
+			ConfigurationType="4"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				MinimalRebuild="false"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="1"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)\$(ProjectName)DAD.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="StormLib.bat $(PlatformName) $(ConfigurationName)"
+			/>
+		</Configuration>
+		<Configuration
+			Name="DebugAS|x64"
+			OutputDirectory="../lib/Windows/64bit"
+			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
+			ConfigurationType="4"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				MinimalRebuild="false"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="0"
+				WarningLevel="1"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)\$(ProjectName)DAS.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="StormLib.bat $(PlatformName) $(ConfigurationName)"
+			/>
+		</Configuration>
+		<Configuration
 			Name="ReleaseAD|x64"
 			OutputDirectory="../lib/Windows/64bit"
 			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
@@ -384,68 +446,6 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile="$(OutDir)\$(ProjectName)RAD.lib"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="StormLib.bat $(PlatformName) $(ConfigurationName)"
-			/>
-		</Configuration>
-		<Configuration
-			Name="ReleaseAS|Win32"
-			OutputDirectory="../lib/Windows/32bit"
-			IntermediateDirectory="./bin/$(ProjectName)/$(PlatformName)/$(ConfigurationName)"
-			ConfigurationType="4"
-			CharacterSet="2"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
-				RuntimeLibrary="0"
-				UsePrecompiledHeader="0"
-				WarningLevel="1"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\$(ProjectName)RAS.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -578,14 +578,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -594,7 +586,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -602,7 +594,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -630,14 +630,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -646,7 +638,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -654,7 +646,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -682,14 +682,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -698,7 +690,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -706,7 +698,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -734,14 +734,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -750,7 +742,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -758,7 +750,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -786,14 +786,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -802,7 +794,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -810,7 +802,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -838,14 +838,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -854,7 +846,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -862,7 +854,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -890,14 +890,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -906,7 +898,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -914,7 +906,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -942,14 +942,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -958,7 +950,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -966,7 +958,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -994,14 +994,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -1010,7 +1002,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1018,7 +1010,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1046,14 +1046,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -1062,7 +1054,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1070,7 +1062,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1098,14 +1098,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -1114,7 +1106,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1122,7 +1114,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1150,14 +1150,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -1166,7 +1158,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1174,7 +1166,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1202,14 +1202,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -1218,7 +1210,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1226,7 +1218,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1254,14 +1254,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					>
 					<Tool
@@ -1270,7 +1262,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1278,7 +1270,15 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1307,15 +1307,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					ExcludedFromBuild="true"
 					>
@@ -1325,7 +1316,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1334,7 +1325,16 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1365,15 +1365,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="DebugAD|x64"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						WarningLevel="4"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="ReleaseAD|Win32"
 					ExcludedFromBuild="true"
 					>
@@ -1383,7 +1374,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAD|x64"
+					Name="ReleaseAS|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1392,7 +1383,16 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="ReleaseAS|Win32"
+					Name="DebugAD|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						WarningLevel="4"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="ReleaseAD|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -2311,6 +2311,14 @@
 				</File>
 				<File
 					RelativePath=".\src\zlib\zutil.c"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="jenkins"
+				>
+				<File
+					RelativePath=".\src\jenkins\lookup3.c"
 					>
 				</File>
 			</Filter>

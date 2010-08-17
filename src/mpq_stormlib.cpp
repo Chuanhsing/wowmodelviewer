@@ -104,7 +104,7 @@ MPQFile::openFile(const char* filename)
 
 			HANDLE fh;
 
-			if( !SFileOpenFileEx( mpq_a, alterName.c_str(), 0, &fh ) )
+			if( !SFileOpenFileEx( mpq_a, (char*)alterName.c_str(), 0, &fh ) )
 				continue;
 
 			// Found!

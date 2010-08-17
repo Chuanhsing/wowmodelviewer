@@ -41,7 +41,7 @@ void SaveTexture(wxString fn)
 	if (fn.Last() == 'a') {
 		// starcraft II needs 17 bytes as 8
 		wxFFile f;
-		f.Open(fn.mb_str(), "r+b");
+		f.Open(fn, _T("r+b"));
 		if (f.IsOpened()) {
 			f.Seek(17, wxFromStart);
 			char c=8;
@@ -382,15 +382,12 @@ void MakeModelFaceForwards(Vec3D &vect){
 // Get Proper Texture Names for an M2 File
 wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassNumber){
 	wxString texName = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8).BeforeLast(_T('.'));
-	wxString texPath = texName.BeforeLast(SLASH);
 	if (m->modelType == MT_CHAR){
 		texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName.AfterLast(SLASH);
 	}else if ((texName.Find(SLASH) <= 0)&&(texName == _T("Cape"))){
 		texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
-		texPath = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 	}else if (texName.Find(SLASH) <= 0){
 		texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName;
-		texPath = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 	}else{
 		texName = texName.AfterLast(SLASH);
 	}

@@ -4013,7 +4013,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		return false;
 	}
 
-	LogExportData("LWO",filename.BeforeLast(SLASH),Object.SourceType);
+	LogExportData(_T("LWO"),filename.BeforeLast(SLASH),Object.SourceType);
 
    	// -----------------------------------------
 	// Initial Variables
@@ -4420,24 +4420,24 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init){
 	wxString filename(fn, wxConvUTF8);
 
 	LWObject Object;
-	Object.SourceType = "M2";
+	Object.SourceType = _T("M2");
 
 	// Main Object
 	if (m) {
 		LWLayer Layer;
-		Layer.Name = wxString(m->name).AfterLast('\\').BeforeLast('.');
+		Layer.Name = wxString(m->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
 
 		// Bounding Box for the Layer
 		Layer.BoundingBox1 = m->bounds[0];
 		Layer.BoundingBox2 = m->bounds[1];
 
-		uint32 PolyCounter = 0;
-		uint32 SurfCounter = 0;
-		uint32 PrevGVerts = 0;
+		//uint32 PolyCounter = 0;
+		//uint32 SurfCounter = 0;
+		//uint32 PrevGVerts = 0;
 
 		// Mesh & Slot names
 		wxString meshes[19] = {_T("Hairstyles"), _T("Facial1"), _T("Facial2"), _T("Facial3"), _T("Braces"), _T("Boots"), wxEmptyString, _T("Ears"), _T("Wristbands"),  _T("Kneepads"), _T("Pants"), _T("Pants"), _T("Tarbard"), _T("Trousers"), wxEmptyString, _T("Cape"), wxEmptyString, _T("Eyeglows"), _T("Belt") };
-		wxString slots[15] = {_T("Helm"), wxEmptyString, _T("Shoulder"), wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, _T("Right Hand Item"), _T("Left Hand Item"), wxEmptyString, wxEmptyString, _T("Quiver") };
+		//wxString slots[15] = {_T("Helm"), wxEmptyString, _T("Shoulder"), wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, _T("Right Hand Item"), _T("Left Hand Item"), wxEmptyString, wxEmptyString, _T("Quiver") };
 
 		// Process Passes
 		for (unsigned short i=0; i<m->passes.size(); i++) {
@@ -4563,12 +4563,12 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 	wxString filename(fn, wxConvUTF8);
 
 	LWObject Object;
-	Object.SourceType = "WMO";
+	Object.SourceType = _T("WMO");
 
 	// Main Object
 	if (m) {
 		LWLayer Layer;
-		Layer.Name = wxString(m->name).AfterLast('\\').BeforeLast('.');
+		Layer.Name = wxString(m->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
 
 		// Bounding Box for the Layer
 		Layer.BoundingBox1 = m->v1;

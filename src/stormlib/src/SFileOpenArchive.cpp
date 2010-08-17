@@ -21,30 +21,544 @@
 /* Local functions                                                           */
 /*****************************************************************************/
 
-#ifdef _DEBUG
-static void TestBETBlock(TMPQXXXBlock * pBETBlock, DWORD cbBetBlock)
+#ifdef __STORMLIB_TEST__
+
+#include <vector>
+#include <iterator>
+
+using namespace std;
+
+typedef struct _INT128
 {
-    PDWORD BetBlock = NULL;
-    DWORD BetBlockOffsets[0x13];
-    DWORD var_4;
+    DWORD dw1;
+    DWORD dw2;
+    DWORD dw3;
+    DWORD dw4;
+} INT128, *PINT128;
 
-    if(pBETBlock != NULL && cbBetBlock >= 0x4C)
+class BIT_ARRAY
+{
+    public:
+
+    BIT_ARRAY(DWORD dwSizeInBytes, BYTE bFillPattern);
+
+    void LoadBits(unsigned int nBitPosition,
+                  unsigned int nBitLength,
+                  void * pbBuffer,
+                  int nResultSize);
+
+    LPBYTE pbElements;
+    DWORD NumberOfBits;
+};
+
+class PARSED_HET_DATA
+{
+    public:
+
+    PARSED_HET_DATA(DWORD BetBlockOffsets, DWORD dwOpenFlags);
+
+    void CalculateMasks(DWORD arg_0);
+
+    DWORD field_0;
+    DWORD field_4;
+    DWORD field_8;
+    LPBYTE field_C;
+    BIT_ARRAY * field_10;
+    DWORD field_14;
+    DWORD field_18;
+    DWORD dwNumberOfBits;
+    LARGE_INTEGER AndMask64;
+    LARGE_INTEGER OrMask64;
+};
+
+
+class PARSED_BET_DATA
+{
+    public:
+
+    PARSED_BET_DATA(DWORD BetBlockOffsets, DWORD dwOpenFlags);
+
+    vector<int> field_0;
+    DWORD field_18;
+    DWORD field_1C;
+    DWORD field_20;
+    DWORD field_24;
+    DWORD field_28;
+    DWORD field_2C;
+    DWORD field_30;
+    DWORD field_34;
+    DWORD field_38;
+    DWORD field_3C;
+    DWORD field_40;
+    DWORD field_44;
+    DWORD field_48;
+    DWORD field_4C;
+    BIT_ARRAY * field_50;
+    BIT_ARRAY * field_54;
+    DWORD field_58;
+    vector<INT64>  field_5C;
+    vector<DWORD>  field_74;
+    vector<INT128> field_8C;
+    vector<BYTE>   field_A4;
+    DWORD dwOpenFlags;
+
+};
+
+typedef struct _MPQ_FILE_STRUCT_3A
+{
+    DWORD field_0;
+    DWORD field_4;
+    DWORD field_8;
+    DWORD field_C;
+    DWORD field_10;
+    DWORD field_14;
+    DWORD field_18;
+    DWORD result64_lo;
+    DWORD result64_hi;
+    DWORD result32;
+    DWORD result128_1;
+    DWORD result128_2;
+    DWORD result128_3;
+    DWORD result128_4;
+    USHORT field_38;
+
+} MPQ_FILE_STRUCT_3A, *PMPQ_FILE_STRUCT_3A;
+
+
+
+BIT_ARRAY::BIT_ARRAY(DWORD aNumberOfBits, BYTE bFillPattern)
+{
+    pbElements = ALLOCMEM(BYTE, (aNumberOfBits + 7) / 8);
+    
+    memset(pbElements, bFillPattern, (aNumberOfBits + 7) / 8);
+    NumberOfBits = aNumberOfBits;
+}
+
+void BIT_ARRAY::LoadBits(
+    unsigned int nBitPosition,
+    unsigned int nBitLength,
+    void * pvBuffer,
+    int /* nResultByteSize */)
+{
+    unsigned char * pbBuffer;
+    unsigned int nNextBytePosition;                     // EBX
+    unsigned int nBytePosition = (nBitPosition / 8);    // ESI
+    unsigned int nByteLength = (nBitLength / 8);        // ECX
+    unsigned int nBitOffset = (nBitPosition & 0x07);    // AL
+    unsigned char BitBuffer;
+
+    // Adjust the buffer pointer
+    pbBuffer = (unsigned char *)pvBuffer - nBytePosition;
+    nNextBytePosition = nBytePosition + 1;
+
+    // Copy whole bytes, if any
+    while(nByteLength > 0)
     {
-        memset(BetBlockOffsets, 0, sizeof(BetBlockOffsets));
-        memcpy(BetBlockOffsets, pBETBlock->Data, sizeof(BetBlockOffsets));
-        if(BetBlockOffsets[0] > pBETBlock->dwDataSize)
-            return;
-
-        BetBlock = (PDWORD)ALLOCMEM(BYTE, 0x0C);
-        var_4 = 0;
-
-        if(BetBlock != NULL)
+        if(nBitOffset != 0)
         {
-
-
+            BitBuffer = (unsigned char)((pbElements[nBytePosition] >> nBitOffset) | (pbElements[nNextBytePosition] << (0x08 - nBitOffset)));
         }
+        else
+        {
+            BitBuffer = pbElements[nBytePosition];
+        }
+
+        pbBuffer[nBytePosition++] = BitBuffer;
+        nNextBytePosition++;
+        nByteLength--;
+    }
+
+    // Get the rest of the bits
+    nBitLength = (nBitLength & 0x07);
+    if(nBitLength != 0)
+    {
+        BitBuffer = pbElements[nBytePosition];
+        pbBuffer[nBytePosition] = (unsigned char)(BitBuffer >> nBitOffset);
+
+        if((8 - nBitOffset) < nBitLength)
+            pbBuffer[nBytePosition] = (unsigned char)((pbElements[nNextBytePosition] << (8 - nBitOffset)) | (pbElements[nBytePosition] >> nBitOffset));
+
+        pbBuffer[nBytePosition] &= (0x01 << nBitLength) - 1;
     }
 }
+
+
+PARSED_HET_DATA::PARSED_HET_DATA(DWORD arg_0, DWORD dwBitCount)
+{
+    LARGE_INTEGER MulResult;
+    
+    field_0 = 0;
+    field_4 = 0;
+    field_8 = 0;
+    field_C = NULL;
+    field_10 = NULL;
+    field_14 = arg_0;
+
+    MulResult.QuadPart = 0xAAAAAAAB4 * arg_0;
+    field_18 = MulResult.HighPart / 8;
+
+    // Calculate number of bits that is needed for arg_0
+    while(arg_0 > 0)
+    {
+        arg_0 >>= 1;
+        field_8++;
+    }
+
+    field_0 = field_8;
+    field_C = ALLOCMEM(BYTE, field_18);
+    CalculateMasks(dwBitCount);
+}
+
+void PARSED_HET_DATA::CalculateMasks(DWORD dwBitCount)
+{
+    dwNumberOfBits = dwBitCount;
+    if(dwNumberOfBits == 0x40)
+    {
+        AndMask64.QuadPart = 0;
+    }
+    else
+    {
+        AndMask64.QuadPart = (LONGLONG)1 << dwNumberOfBits;
+    }
+
+    AndMask64.QuadPart--;
+    OrMask64.QuadPart = (LONGLONG)1 << (dwNumberOfBits - 1);
+}
+
+PARSED_BET_DATA::PARSED_BET_DATA(DWORD BetBlockOffsets, DWORD dwOpenFlags)
+{
+    field_18 = 0;
+    field_1C = 0;
+    field_20 = 0;
+    field_24 = 0;
+    field_28 = 0;
+    field_2C = 0;
+    field_30 = 0;
+    field_34 = 0;
+    field_38 = 0;
+    field_3C = 0;
+    field_40 = 0;
+    field_44 = 0;
+    field_48 = 0;
+    field_4C = 0;
+    field_50 = NULL;
+    field_54 = NULL;
+    field_58 = BetBlockOffsets;
+    dwOpenFlags = dwOpenFlags;
+
+    if(dwOpenFlags & 0x80)
+        field_74.resize(field_58);
+
+    if(dwOpenFlags & 0x40)
+        field_8C.resize(field_58);
+
+    if(dwOpenFlags & 0x100)
+        field_5C.resize(field_58);
+
+    if(dwOpenFlags & 0x1000)
+        field_A4.resize((field_58 + 7) >> 0x03);
+}
+
+static PARSED_HET_DATA * ParseHetBlock(LPVOID pvHetBlockData, DWORD cbHetBlock)
+{
+    PARSED_HET_DATA * pParsedHetData = NULL;
+    LPBYTE pbSrcData = (LPBYTE)pvHetBlockData + 0x20;
+    DWORD HetBlockOffsets[0x08];
+
+    if(pvHetBlockData == NULL || cbHetBlock >= 0x20)
+    {
+        memcpy(HetBlockOffsets, pvHetBlockData, sizeof(HetBlockOffsets));
+        BSWAP_ARRAY32_UNSIGNED(HetBlockOffsets, sizeof(HetBlockOffsets));
+        if(HetBlockOffsets[0] > cbHetBlock)
+            return NULL;
+
+        pParsedHetData = new PARSED_HET_DATA(HetBlockOffsets[0x01], HetBlockOffsets[0x03]);
+        if(pParsedHetData != NULL)
+        {
+            memcpy(&pParsedHetData->field_0, &HetBlockOffsets[0x04], 0x0C);
+            
+            memcpy(pParsedHetData->field_C, pbSrcData, HetBlockOffsets[0x02]);
+            pbSrcData += HetBlockOffsets[0x02];
+
+            pParsedHetData->field_10 = new BIT_ARRAY(pParsedHetData->field_0 * pParsedHetData->field_18, 0xFF);
+            memcpy(pParsedHetData->field_10->pbElements, pbSrcData, HetBlockOffsets[0x07]);
+        }
+    }
+
+    return pParsedHetData;
+}
+
+static PARSED_BET_DATA * ParseBetBlock(LPVOID pvBetBlockData, DWORD cbBetBlock, DWORD dwOpenFlags)
+{
+    PARSED_BET_DATA * pParsedBetData = NULL;
+    LPBYTE pbSrcData = (LPBYTE)pvBetBlockData + 0x4C;
+    DWORD BetBlockOffsets[0x13];
+    DWORD LengthInBytes;
+
+    if(pvBetBlockData != NULL && cbBetBlock >= 0x4C)
+    {
+        // Copy the numbers
+        memcpy(BetBlockOffsets, pvBetBlockData, sizeof(BetBlockOffsets));
+        BSWAP_ARRAY32_UNSIGNED(BetBlockOffsets, sizeof(BetBlockOffsets));
+        if(BetBlockOffsets[0] > cbBetBlock)
+            return NULL;
+
+        // Operator new
+        pParsedBetData = new PARSED_BET_DATA(BetBlockOffsets[1], dwOpenFlags);
+        memcpy(&pParsedBetData->field_18, &BetBlockOffsets[0x03], 0x2C);
+
+        pParsedBetData->field_0.resize(BetBlockOffsets[0x12]);
+        if(BetBlockOffsets[0x12] > 0)
+        {
+            PDWORD pdwBetData10 = (PDWORD)pbSrcData;
+
+            for(DWORD i = 0; i < BetBlockOffsets[0x12]; i++)
+            {
+                pParsedBetData->field_0[i] = *pdwBetData10++;
+            }
+
+            pbSrcData = (LPBYTE)pdwBetData10;
+        }
+
+        pParsedBetData->field_54 = new BIT_ARRAY(pParsedBetData->field_18 * pParsedBetData->field_58, 0);
+        LengthInBytes = pParsedBetData->field_54 ? (pParsedBetData->field_54->NumberOfBits + 7) / 8 : 0;
+        memcpy(pParsedBetData->field_54->pbElements, pbSrcData, LengthInBytes);
+        pbSrcData += LengthInBytes;
+
+        memcpy(&pParsedBetData->field_44, &BetBlockOffsets[0x0E], 0x0C);
+        
+        pParsedBetData->field_50 = new BIT_ARRAY(pParsedBetData->field_44 * pParsedBetData->field_58, 0);
+        LengthInBytes = pParsedBetData->field_50 ? (pParsedBetData->field_50->NumberOfBits + 7) / 8 : 0;
+        memcpy(pParsedBetData->field_50->pbElements, pbSrcData, LengthInBytes);
+        pbSrcData += LengthInBytes;
+    }
+
+    return pParsedBetData;
+}
+
+//-----------------------------------------------------------------------------
+// 
+
+extern "C" void sub_6CAB90(const char * szFileName, size_t nLength, PDWORD pdwValue1, PDWORD pdwValue2);
+extern "C" ULONGLONG _stdcall sub_417540(DWORD, DWORD, DWORD, DWORD);
+
+extern "C" ULONGLONG wow_HashStringJenkins(const char * szFileName);
+
+/*
+static void sub_6CAB90(
+    const char * szLocFileName,
+    size_t cchLength,
+    PDWORD pdwValue2,
+    PDWORD pdwValue1)
+{
+    DWORD dwValue1 = *pdwValue1;    // ECX
+    DWORD dwValue2;
+
+    ESI = ECX = EDI = dwValue1 + cchLength + 0x21524111;
+    EDI += *pdwValue2;
+
+
+
+
+
+}
+*/
+
+/*
+static LONGLONG sub_8F8FC0(LONGLONG MaskedHash64, DWORD field_18, DWORD arg_C)
+{
+    if(arg_C == 0)
+        return MaskedValue64 / field_18;
+
+
+}
+*/
+
+extern "C" DWORD wow_CalculateExtBlockIndex(
+    PARSED_HET_DATA * pParsedHetData, 
+    PARSED_BET_DATA * pParsedBetData,
+    PULARGE_INTEGER pFileNameHash);
+
+static DWORD CalculateExtBlockIndex(
+    PARSED_HET_DATA * pParsedHetData, 
+    PARSED_BET_DATA * pParsedBetData,
+    PULARGE_INTEGER pFileNameHash)
+{
+    ULONGLONG MaskedHash64;
+    ULONGLONG AndMask64 = pParsedHetData->AndMask64.QuadPart;
+    ULONGLONG OrMask64 = pParsedHetData->OrMask64.QuadPart;
+    ULONGLONG SearchValue_2;
+    DWORD StartIndex;
+    DWORD CurrIndex;
+    BYTE SearchValue_1;
+
+    // Change the file name hash, so it only contains required
+    // number of bits, and always has the highest bit set
+    MaskedHash64 = (pFileNameHash->QuadPart & AndMask64) | OrMask64;
+    
+    // Calculate the starting index to the field_C table
+    CurrIndex = StartIndex = (DWORD)(MaskedHash64 % pParsedHetData->field_18);
+
+    // Highest 8 bits of the masked name hash is the primary identification value
+    SearchValue_1 = (BYTE)(MaskedHash64 >> (pParsedHetData->dwNumberOfBits - 8));
+
+    // Remaining lower bits are the secondary identification value
+    SearchValue_2 = MaskedHash64 & (AndMask64 >> 0x08);
+
+    // Go through hash table until we find a terminator
+    while(pParsedHetData->field_C[CurrIndex] != 0)
+    {
+        // Did we find match ?
+        if(pParsedHetData->field_C[CurrIndex] == SearchValue_1)
+        {
+            ULONGLONG Result64 = 0;
+            DWORD dwExtBlockIndex = 0;
+
+            // field_10 contains array of indexes to the BET table
+            pParsedHetData->field_10->LoadBits(pParsedHetData->field_0 * CurrIndex, // BitPosition
+                                               pParsedHetData->field_8,             // BitLength
+                                              &dwExtBlockIndex,                     // Target pointer
+                                               4);
+
+            // field_50 is a "confirmation" value to the BET table index found
+            pParsedBetData->field_50->LoadBits(pParsedBetData->field_44 * dwExtBlockIndex, // BitPosition
+                                               pParsedBetData->field_4C,            // BitLength
+                                              &Result64,                            // Target pointer
+                                               8);
+            if(Result64 == SearchValue_2)
+                return dwExtBlockIndex;
+        }
+
+        // Move to the next entry in the primary search table
+        CurrIndex = (CurrIndex + 1) % pParsedHetData->field_18;
+        
+        // If we came to the start index again, we are done
+        if(CurrIndex == StartIndex)
+            break;
+    }
+
+    return 0xFFFFFFFF;
+}
+
+static bool sub_6D0B60(
+    PARSED_BET_DATA * pParsedBetData,
+    DWORD dwExtBlockIndex,
+    PMPQ_FILE_STRUCT_3A pResult)
+{
+    if(pParsedBetData->field_54 == 0)
+        return false;
+
+    memset(pResult, 0, sizeof(MPQ_FILE_STRUCT_3A));
+
+    pParsedBetData->field_54->LoadBits(pParsedBetData->field_1C + pParsedBetData->field_18 * dwExtBlockIndex,
+                                       pParsedBetData->field_30,
+                                      &pResult->field_0,
+                                       8);
+
+    pParsedBetData->field_54->LoadBits(pParsedBetData->field_20 + pParsedBetData->field_18 * dwExtBlockIndex,
+                                       pParsedBetData->field_34,
+                                      &pResult->field_10,
+                                       8);
+
+    pParsedBetData->field_54->LoadBits(pParsedBetData->field_24 + pParsedBetData->field_18 * dwExtBlockIndex,
+                                       pParsedBetData->field_38,
+                                      &pResult->field_8,
+                                       8);
+
+    if(pParsedBetData->field_0.size() == 0)
+        return false;
+
+    if(pParsedBetData->field_0.size() != 1)
+    {
+        pParsedBetData->field_54->LoadBits(pParsedBetData->field_24 + pParsedBetData->field_18 * dwExtBlockIndex,
+                                           pParsedBetData->field_3C,
+                                          &pResult->field_18,
+                                           4);
+        
+        if(pParsedBetData->field_0.size() > pResult->field_18)
+            return false;
+        pResult->field_18 = pParsedBetData->field_0[pResult->field_18];
+    }
+    else
+    {
+        pResult->field_18 = pParsedBetData->field_0[0];
+    }
+
+    if(pParsedBetData->dwOpenFlags & 0x200)
+    {
+        BYTE OneByte = 0;
+
+        pParsedBetData->field_54->LoadBits(pParsedBetData->field_24 + pParsedBetData->field_18 * dwExtBlockIndex,
+                                           pParsedBetData->field_40,
+                                          &OneByte,
+                                           1);
+        pResult->field_38 = (OneByte > 0) ? 1 : 0;
+    }
+
+    return true;
+}
+
+static void sub_6D1100(TMPQArchive * ha, PARSED_BET_DATA * pParsedBetData, PMPQ_FILE_STRUCT_3A pResult, DWORD dwExtBlockIndex)
+{
+    MPQ_FILE_STRUCT_3A result;    
+    LARGE_INTEGER temp_li;
+    LPBYTE pointer_to_struct_3A;
+    BYTE byte_A9E170[] = {0x80, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
+
+    DWORD dwOpenFlags = 0;
+
+
+    if(pParsedBetData != NULL)
+    {
+        sub_6D0B60(pParsedBetData, dwExtBlockIndex, &result);
+
+        if(dwOpenFlags & 0x80)
+        {
+            result.result32 = pParsedBetData->field_74[dwExtBlockIndex];
+        }
+
+        if(dwOpenFlags & 0x40)
+        {
+            INT128 result128 = pParsedBetData->field_8C[dwExtBlockIndex];
+
+            result.result128_1 = result128.dw1;
+            result.result128_2 = result128.dw2;
+            result.result128_3 = result128.dw3;
+            result.result128_4 = result128.dw4;
+        }
+
+        if(dwOpenFlags & 0x100)
+        {         
+            INT64 result64 = pParsedBetData->field_5C[dwExtBlockIndex];
+
+            result.result64_hi = (DWORD)(result64 >> 0x20);
+            result.result64_lo = (DWORD)(result64 & 0xFFFFFFFF);
+        }
+
+        if(dwOpenFlags & 0x1000)
+        {
+            BYTE BitMask = byte_A9E170[dwExtBlockIndex & 0x07];
+
+            result.field_38 = (pParsedBetData->field_A4[dwExtBlockIndex / 8] & BitMask) ? 0x100 : 0;
+        }
+
+        // 0x3A bytes !!!
+        memcpy(pResult, &result, sizeof(MPQ_FILE_STRUCT_3A));
+    }
+    else
+    {
+/*
+        // pArchive->field_26C is apparently a vector of MPQ_FILE_STRUCT_3A
+        temp_li.QuadPart = (ULONGLONG)0x8D3DCB09 * (pArchive->field_270 - pArchive->field_26C);
+        temp_li.HighPart = (temp_li.HighPart + (pArchive->field_270 - pArchive->field_26C)) >> 0x05;
+        eax = (temp_li.HighPart >> 0x05) + temp_li.HighPart;
+        assert(dwExtBlockIndex < eax);
+
+        memcpy(pResult, &pArchive->field_26C[dwExtBlockIndex], sizeof(MPQ_FILE_STRUCT_3A));
+*/
+    }
+}
+
 #endif
 
 static bool IsAviFile(TMPQHeader * pHeader)
@@ -406,30 +920,6 @@ bool WINAPI SFileOpenArchive(
         
         ha->dwBlockTableMax = STORMLIB_MAX(dwHashTableSize, dwBlockTableSize);
         
-        // Allocate space for HET block
-        if(ha->HETBlockPos.QuadPart && ha->BETBlockPos.QuadPart > ha->HETBlockPos.QuadPart)
-        {
-            ha->dwHETBlockSize = (DWORD)(ha->BETBlockPos.QuadPart - ha->HETBlockPos.QuadPart);
-            if(ha->dwHETBlockSize != 0)
-            {
-                ha->pHETBlock = (TMPQXXXBlock *)ALLOCMEM(BYTE, ha->dwHETBlockSize);
-                if(ha->pHETBlock == NULL)
-                    nError = ERROR_NOT_ENOUGH_MEMORY;
-            }
-        }
-
-        // Allocate space for BET block
-        if(ha->BETBlockPos.QuadPart != 0 && ha->HashTablePos.QuadPart > ha->BETBlockPos.QuadPart)
-        {
-            ha->dwBETBlockSize = (DWORD)(ha->HashTablePos.QuadPart - ha->BETBlockPos.QuadPart);
-            if(ha->dwBETBlockSize != 0)
-            {
-                ha->pBETBlock = (TMPQXXXBlock *)ALLOCMEM(BYTE, ha->dwBETBlockSize);
-                if(ha->pBETBlock == NULL)
-                    nError = ERROR_NOT_ENOUGH_MEMORY;
-            }
-        }
-
         // Allocate all three MPQ tables
         ha->pHashTable     = ALLOCMEM(TMPQHash, dwHashTableSize);
         ha->pBlockTable    = ALLOCMEM(TMPQBlock, ha->dwBlockTableMax);
@@ -439,29 +929,23 @@ bool WINAPI SFileOpenArchive(
     }
 
     // Read the HET block, if present
-    if(nError == ERROR_SUCCESS && ha->dwHETBlockSize)
+    if(nError == ERROR_SUCCESS && ha->HETBlockPos.QuadPart && ha->BETBlockPos.QuadPart > ha->HETBlockPos.QuadPart)
     {
-        if(!FileStream_Read(ha->pStream, &ha->HETBlockPos, ha->pHETBlock, ha->dwHETBlockSize))
-            nError = GetLastError();
-        BSWAP_ARRAY32_UNSIGNED(ha->pHETBlock, sizeof(TMPQXXXBlock));
-
-        // The purpose of HET block is unknown
-        DecryptMpqTable(ha->pHETBlock->Data, ha->pHETBlock->dwDataSize, "(hash table)");
+        ha->dwHETBlockSize = (DWORD)(ha->BETBlockPos.QuadPart - ha->HETBlockPos.QuadPart);
+        if(ha->dwHETBlockSize != 0)
+        {
+            nError = LoadXXXBlock(ha, &ha->pHETBlock, ha->HETBlockPos, ha->dwHETBlockSize, "(hash table)");
+        }
     }
 
     // Read the BET block, if present
-    if(nError == ERROR_SUCCESS && ha->dwBETBlockSize)
+    if(nError == ERROR_SUCCESS && ha->BETBlockPos.QuadPart != 0 && ha->HashTablePos.QuadPart > ha->BETBlockPos.QuadPart)
     {
-        if(!FileStream_Read(ha->pStream, &ha->BETBlockPos, ha->pBETBlock, ha->dwBETBlockSize))
-            nError = GetLastError();
-        BSWAP_ARRAY32_UNSIGNED(ha->pBETBlock, sizeof(TMPQXXXBlock));
-
-        // The purpose of BET block is unknown
-        DecryptMpqTable(ha->pBETBlock->Data, ha->pBETBlock->dwDataSize, "(block table)");
-
-#ifdef _DEBUG
-        TestBETBlock(ha->pBETBlock, ha->pBETBlock->dwDataSize);
-#endif
+        ha->dwBETBlockSize = (DWORD)(ha->HashTablePos.QuadPart - ha->BETBlockPos.QuadPart);
+        if(ha->dwBETBlockSize != 0)
+        {
+            nError = LoadXXXBlock(ha, &ha->pBETBlock, ha->BETBlockPos, ha->dwBETBlockSize, "(block table)");
+        }
     }
 
     // Read the hash table.
@@ -629,6 +1113,46 @@ bool WINAPI SFileOpenArchive(
         if(nError == ERROR_SUCCESS)
             SAttrLoadAttributes(ha);
     }
+
+#ifdef __STORMLIB_TEST__
+    if(ha->pHETBlock != NULL && ha->pBETBlock != NULL)
+    {
+        SFILE_FIND_DATA sf;
+        PARSED_HET_DATA * pParsedHetData;
+        PARSED_BET_DATA * pParsedBetData;
+        HANDLE hFind;
+        BOOL bResult = 1;
+
+        pParsedHetData = ParseHetBlock(&ha->pHETBlock->Data, ha->pHETBlock->dwDataSize);
+        pParsedBetData = ParseBetBlock(&ha->pBETBlock->Data, ha->pBETBlock->dwDataSize, 0);
+        if(pParsedHetData && pParsedBetData)
+        {
+            hFind = SFileFindFirstFile((HANDLE)ha, "*", &sf, NULL);
+            while(hFind && bResult)
+            {
+                MPQ_FILE_STRUCT_3A Result3A;
+                TMPQHash * pHash;
+                ULARGE_INTEGER FileNameHash;
+                DWORD dwExtBlockIndex;
+
+                FileNameHash.QuadPart = HashStringJenkins(sf.cFileName);
+                dwExtBlockIndex = CalculateExtBlockIndex(pParsedHetData, pParsedBetData, &FileNameHash);
+                pHash = GetHashEntryAny(ha, sf.cFileName);
+//              dwExtBlockIndex = wow_CalculateExtBlockIndex(pParsedHetData, pParsedBetData, &FileNameHash);
+                
+                if(dwExtBlockIndex != 0xFFFFFFFF)
+                {
+                    sub_6D1100(ha, pParsedBetData, &Result3A, dwExtBlockIndex);
+                }
+
+                bResult = SFileFindNextFile(hFind, &sf);
+            }
+        }
+
+        delete pParsedBetData;
+        delete pParsedHetData;
+    }
+#endif // __STORMLIB_TEST__
 
     // Cleanup and exit
     if(nError != ERROR_SUCCESS)

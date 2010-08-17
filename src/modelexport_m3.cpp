@@ -4,9 +4,20 @@
 #include "modelcanvas.h"
 
 #define	ROOT_BONE
+float boneScale = 0.5;
 
 static std::vector<ReferenceEntry> reList;
-float boneScale = 0.5;
+
+typedef struct {
+	uint16 texid;
+	uint16 flags;
+	uint16 blend;
+} MATmap;
+
+typedef struct {
+	uint16 subid;
+	uint16 matid;
+} MeshMap;
 
 void padding(wxFFile *f, int pads=16)
 {
@@ -917,19 +928,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	//prepare BAT table
 
 	ModelRenderFlags *renderflags = (ModelRenderFlags *)(mpqf.getBuffer() + m->header.ofsTexFlags);
-
-	typedef struct {
-		uint16 texid;
-		uint16 flags;
-		uint16 blend;
-	} MATmap;
-
-	typedef struct {
-		uint16 subid;
-		uint16 matid;
-	} MeshMap;
-
-
 	std::vector<MATmap> MATtable;
 	std::vector<MeshMap> MeshtoMat;
 	for (uint32 i=0; i<view->nTex; i++)

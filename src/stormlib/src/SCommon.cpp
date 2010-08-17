@@ -102,6 +102,47 @@ DWORD DecryptFileKey(const char * szFileName)
 }
 
 //-----------------------------------------------------------------------------
+// Calculates a Jenkin's Encrypting and decrypting MPQ file data
+
+ULONGLONG HashStringJenkins(const char * szFileName)
+{
+    char * szTemp;
+    char szLocFileName[0x108];
+    char chOneChar;
+    size_t nLength = 0;
+    unsigned int primary_hash = 1;
+    unsigned int secondary_hash = 2;
+
+    // This is required to produce defined results
+    assert(szFileName != NULL);
+
+    // Normalize the file name - convert to uppercase, and convert "/" to "\\".
+    if(szFileName != NULL)
+    {
+        szTemp = szLocFileName;
+        while(*szFileName != 0)
+        {
+            chOneChar = (char)tolower(*szFileName++);
+            if(chOneChar == '/')
+                chOneChar = '\\';
+
+            *szTemp++ = chOneChar;
+        }
+
+        nLength = szTemp - szLocFileName;
+        *szTemp = 0;
+    }
+
+    // Thanks Quantam for finding out what the algorithm is.
+    // I am really getting old for reversing large chunks of assembly
+    // that does hashing :-)
+    hashlittle2(szLocFileName, nLength, &secondary_hash, &primary_hash);
+
+    // Combine those 2 together
+    return (ULONGLONG)primary_hash * (ULONGLONG)0x100000000 + (ULONGLONG)secondary_hash;
+}
+
+//-----------------------------------------------------------------------------
 // Encrypting and decrypting MPQ file data
 
 void EncryptMpqBlock(void * pvFileBlock, DWORD dwLength, DWORD dwSeed1)
@@ -692,6 +733,66 @@ TMPQFile * CreateMpqFile(TMPQArchive * ha, const char * szFileName)
     }
 
     return hf;
+}
+
+// Loads HET and/or BET block
+int LoadXXXBlock(
+    TMPQArchive * ha,
+    TMPQXXXBlock ** ppXxxBlock,
+    LARGE_INTEGER ByteOffset,
+    DWORD dwDataSize,
+    const char * szKey)
+{
+    #define OFFSET_OF_XXX_DATA 0x0C
+
+    TMPQXXXBlock * pXxxBlockCompressed = NULL;
+    TMPQXXXBlock * pXxxBlock = NULL;
+    int nError = ERROR_SUCCESS;
+
+    // Allocate buffer for the block
+    pXxxBlock = (TMPQXXXBlock *)ALLOCMEM(BYTE, dwDataSize);
+    if(pXxxBlock == NULL)
+        return ERROR_NOT_ENOUGH_MEMORY;
+
+    // Load the block from the MPQ
+    if(!FileStream_Read(ha->pStream, &ByteOffset, pXxxBlock, dwDataSize))
+        nError = GetLastError();
+    BSWAP_ARRAY32_UNSIGNED(pXxxBlock, sizeof(TMPQXXXBlock));
+    dwDataSize -= OFFSET_OF_XXX_DATA;
+
+    // Decrypt the block
+    if(nError == ERROR_SUCCESS)
+    {
+        BSWAP_ARRAY32_UNSIGNED(pbToRead, dwDataSize);
+        DecryptMpqTable(&pXxxBlock->Data[0], dwDataSize, szKey);
+        BSWAP_ARRAY32_UNSIGNED(pbToRead, dwDataSize);
+
+        // If the block is compressed, decompress it
+        if(pXxxBlock->dwDataSize > dwDataSize)
+        {
+            pXxxBlockCompressed = pXxxBlock;
+            pXxxBlock = (TMPQXXXBlock *)ALLOCMEM(BYTE, pXxxBlockCompressed->dwDataSize + OFFSET_OF_XXX_DATA);
+            if(pXxxBlock != NULL)
+            {
+                int cbOutBuffer = (int)pXxxBlockCompressed->dwDataSize;
+                int cbInBuffer = (int)dwDataSize;
+
+                // Decompress the XXX block 
+                pXxxBlock->dwSignature = pXxxBlockCompressed->dwSignature;
+                pXxxBlock->dwVersion   = pXxxBlockCompressed->dwVersion;
+                pXxxBlock->dwDataSize  = pXxxBlockCompressed->dwDataSize;
+                SCompDecompress((char *)&pXxxBlock->Data, &cbOutBuffer, (char *)&pXxxBlockCompressed->Data, cbInBuffer);
+            }
+
+            // Free the compressed block
+            FREEMEM(pXxxBlockCompressed);
+        }
+
+        // Now store the loaded block into the given buffer
+        *ppXxxBlock = pXxxBlock;
+    }
+
+    return nError;
 }
 
 // Loads a table from MPQ.

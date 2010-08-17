@@ -213,6 +213,7 @@ set(STORM_SOURCES
     stormlib/src/pklib/crc32.c
     stormlib/src/pklib/explode.c
     stormlib/src/pklib/implode.c
+    stormlib/src/jenkins/lookup3.c
 )
 
 if (UNIX)

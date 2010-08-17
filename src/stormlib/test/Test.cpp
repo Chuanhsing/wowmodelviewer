@@ -424,137 +424,6 @@ static int TestPartFileRead(const char * szFileName)
 }
 
 //-----------------------------------------------------------------------------
-// Compare sparse compression
-
-#ifdef PLATFORM_WINDOWS
-extern "C" void starcraft_compress_sparse(char * pbOutBuffer, int * pcbOutBuffer, char * pbInBuffer, int cbInBuffer);
-extern "C" int starcraft_decompress_sparse(char * pbOutBuffer, int * pcbOutBuffer, char * pbInBuffer, int cbInBuffer);
-void Compress_SPARSE(char * pbOutBuffer, int * pcbOutBuffer, char * pbInBuffer, int cbInBuffer, int * pCmpType, int nCmpLevel);
-int Decompress_SPARSE(char * pbOutBuffer, int * pcbOutBuffer, char * pbInBuffer, int cbInBuffer);
-
-static int CompareSparseCompressions(int nSectorSize)
-{
-    LPBYTE pbCompressed1 = NULL;            // Compressed by our code
-    LPBYTE pbCompressed2 = NULL;            // Compressed by Blizzard's code
-    LPBYTE pbDecompressed1 = NULL;          // Decompressed by our code
-    LPBYTE pbDecompressed2 = NULL;          // Decompressed by Blizzard's code
-    LPBYTE pbOriginalData = NULL;
-    int nError = ERROR_SUCCESS;
-
-    // Allocate buffers
-    // Must allocate twice blocks due to probable bug in Storm.dll.
-    // Storm.dll corrupts stack when uncompresses data with PKWARE DCL
-    // and no compression occurs.
-    pbDecompressed1 = new BYTE [nSectorSize];
-    pbDecompressed2 = new BYTE [nSectorSize];
-    pbCompressed1 = new BYTE [nSectorSize];
-    pbCompressed2 = new BYTE [nSectorSize];
-    pbOriginalData = new BYTE[nSectorSize];
-    if(!pbDecompressed1 || !pbDecompressed2 || !pbCompressed1 || !pbCompressed2 || !pbOriginalData)
-        nError = ERROR_NOT_ENOUGH_MEMORY;
-
-    if(nError == ERROR_SUCCESS)
-    {
-        for(int i = 0; i < 100000; i++)
-        {
-            int   nDcmpLength1;
-            int   nDcmpLength2;
-            int   nCmpLength1;
-            int   nCmpLength2;
-            int   nDiff;
-
-            clreol();
-            printf("Testing compression of sector %u\r", i + 1);
-
-            // Generate random data sector
-            GenerateRandomDataBlock(pbOriginalData, nSectorSize);
-
-__TryToCompress:
-
-            // Compress the sector by both methods
-            nCmpLength1 = nCmpLength2 = nSectorSize;
-            Compress_SPARSE((char *)pbCompressed1, &nCmpLength1, (char *)pbOriginalData, nSectorSize, 0, 0);
-            starcraft_compress_sparse((char *)pbCompressed2, &nCmpLength2, (char *)pbOriginalData, nSectorSize);
-
-            // Compare the length of the output data
-            if(nCmpLength1 != nCmpLength2)
-            {
-                printf("Difference in compressed blocks lengths (%u vs %u)\n", nCmpLength1, nCmpLength2);
-                goto __TryToCompress;
-            }
-
-            // Compare the output
-            if((nDiff = GetFirstDiffer(pbCompressed1, pbCompressed2, nCmpLength1)) != -1)
-            {
-                printf("Difference in compressed blocks (offset 0x%08X)\n", nDiff);
-                goto __TryToCompress;
-            }
-
-            // Check for data overflow
-            if(pbCompressed1[nSectorSize] != 0xFD || pbCompressed2[nSectorSize] != 0xFD)
-            {
-                printf("Damage after compressed sector !!!\n");
-                goto __TryToCompress;
-            }
-
-__TryToDecompress:
-
-            // Only test decompression when the compression actually succeeded
-            if(nCmpLength1 < nSectorSize)
-            {
-                // Decompress both data
-                nDcmpLength2 = nDcmpLength1 = nSectorSize;
-                Decompress_SPARSE((char *)pbDecompressed1, &nDcmpLength1, (char *)pbCompressed1, nCmpLength1);
-                starcraft_decompress_sparse((char *)pbDecompressed2, &nDcmpLength2, (char *)pbCompressed2, nCmpLength2);
-
-                // Compare the length of the output data
-                if(nDcmpLength1 != nDcmpLength2)
-                {
-                    printf("Difference in compressed blocks lengths (%u vs %u)\n", nDcmpLength1, nDcmpLength2);
-                    goto __TryToDecompress;
-                }
-
-                // Compare the output
-                if((nDiff = GetFirstDiffer(pbDecompressed1, pbDecompressed2, nDcmpLength1)) != -1)
-                {
-                    printf("Difference in decompressed blocks (offset 0x%08X)\n", nDiff);
-                    goto __TryToDecompress;
-                }
-
-                // Check for data overflow
-                if(pbDecompressed1[nSectorSize] != 0xFD || pbDecompressed1[nSectorSize] != 0xFD)
-                {
-                    printf("Damage after decompressed sector !!!\n");
-                    goto __TryToDecompress;
-                }
-
-                // Compare the decompressed data against original data
-                if((nDiff = GetFirstDiffer(pbDecompressed1, pbOriginalData, nDcmpLength1)) != -1)
-                {
-                    printf("Difference between original data and decompressed data (offset 0x%08X)\n", nDiff);
-                    goto __TryToDecompress;
-                }
-            }
-        }
-    }
-
-    // Cleanup
-    if(pbOriginalData != NULL)
-        delete [] pbOriginalData;
-    if(pbCompressed2 != NULL)
-        delete [] pbCompressed2;
-    if(pbCompressed1 != NULL)
-        delete [] pbCompressed1;
-    if(pbDecompressed2 != NULL)
-        delete [] pbDecompressed2;
-    if(pbDecompressed1 != NULL)
-        delete [] pbDecompressed1;
-    clreol();
-    return nError;
-}
-#endif // PLATFORM_WINDOWS
-
-//-----------------------------------------------------------------------------
 // Compare LZMA decompression
 
 #ifdef PLATFORM_WINDOWS
@@ -1500,10 +1369,9 @@ int main(void)
 //  if(nError == ERROR_SUCCESS)
 //      nError = TestPartFileRead(MAKE_PATH("PartialMPQs/patch.MPQ.part"));
 
-    // Test "sparse" compression method against the code ripped from Starcraft II
+    // Test LZMA compression method against the code ripped from Starcraft II
 //  if(nError == ERROR_SUCCESS)
 //      nError = CompareLzmaCompressions(MPQ_SECTOR_SIZE);
-//      nError = CompareSparseCompressions(MPQ_SECTOR_SIZE);
 
     // Test compression methods
 //  if(nError == ERROR_SUCCESS)

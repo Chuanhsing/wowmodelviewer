@@ -50,6 +50,7 @@
 
 #ifdef __INCLUDE_CRYPTOGRAPHY__
 #include "libtomcrypt/src/headers/tomcrypt.h"
+#include "jenkins/lookup.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -70,6 +71,7 @@ extern LCID lcFileLocale;                   // Preferred file locale
 void InitializeMpqCryptography();
 
 DWORD DecryptFileKey(const char * szFileName);
+ULONGLONG HashStringJenkins(const char * szFileName);
 
 void  EncryptMpqBlock(void * pvFileBlock, DWORD dwLength, DWORD dwFileKey);
 void  DecryptMpqBlock(void * pvFileBlock, DWORD dwLength, DWORD dwFileKey);
@@ -104,6 +106,7 @@ DWORD FindFreeMpqSpace(TMPQArchive * ha, PLARGE_INTEGER pMpqPos);
 // Common functions - MPQ File
 
 TMPQFile * CreateMpqFile(TMPQArchive * ha, const char * szFileName);
+int  LoadXXXBlock(TMPQArchive * ha, TMPQXXXBlock ** ppXxxBlock, LARGE_INTEGER ByteOffset, DWORD dwBlockSize, const char * szKey);
 int  LoadMpqTable(TMPQArchive * ha, PLARGE_INTEGER pByteOffset, void * pvTable, DWORD dwCompressedSize, DWORD dwRealSize, const char * szKey);
 int  AllocateSectorBuffer(TMPQFile * hf);
 int  AllocatePatchHeader(TMPQFile * hf, bool bLoadFromFile);
