@@ -202,9 +202,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		seqs[i].ReplayStart = 1;
 		seqs[i].ReplayEnd = 1;
 		seqs[i].d4[0] = 0x64;
-		seqs[i].boundSphere.min = m->header.ps.VertexBox[0];
-		seqs[i].boundSphere.max = m->header.ps.VertexBox[1];
-		seqs[i].boundSphere.radius = m->header.ps.VertexRadius;
+		seqs[i].boundSphere.min = m->header.boundSphere.min;
+		seqs[i].boundSphere.max = m->header.boundSphere.max;
+		seqs[i].boundSphere.radius = m->header.boundSphere.radius;
 		f.Write(&seqs[i], sizeof(SEQS));
 	}
 	
@@ -1024,9 +1024,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	padding(&f);
 
 	// boundSphere
-	mdata.boundSphere.min = m->header.ps.VertexBox[0];
-	mdata.boundSphere.max = m->header.ps.VertexBox[1];
-	mdata.boundSphere.radius = m->header.ps.VertexRadius;
+	mdata.boundSphere.min = m->header.boundSphere.min;
+	mdata.boundSphere.max = m->header.boundSphere.max;
+	mdata.boundSphere.radius = m->header.boundSphere.radius;
 
 	// mAttach
 	// this makes some read errors in sc2 editor

@@ -8,6 +8,13 @@ struct Vertex {
     float x, y, z;
 };
 
+struct Sphere
+{
+	/*0x00*/ Vec3D min;
+	/*0x0C*/ Vec3D max;
+	/*0x18*/ float radius;
+};
+
 struct CharModelDetails {
 	bool closeRHand;
 	bool closeLHand;
@@ -21,14 +28,6 @@ struct CharModelDetails {
 		isChar = false;
 		isMounted = false;
 	}
-};
-
-//float floats[14];
-struct PhysicsSettings {
-	Vec3D VertexBox[2];
-	float VertexRadius;
-	Vec3D BoundingBox[2];
-	float BoundingRadius;
 };
 
 #ifndef WotLK
@@ -87,7 +86,8 @@ struct ModelHeader {
 	uint32 nTexAnimLookup;
 	uint32 ofsTexAnimLookup;
 
-	float floats[14];
+	Sphere collisionSphere;
+	Sphere boundSphere;
 
 	uint32 nBoundingTriangles;
 	uint32 ofsBoundingTriangles;
@@ -170,7 +170,8 @@ struct ModelHeader {
 	uint32 nTexAnimLookup; // TextureAndTheifAnimation
 	uint32 ofsTexAnimLookup; // Wait. Do we have animated Textures? Wasn't ofsTexAnims deleted? oO
 
-	struct PhysicsSettings ps;
+	Sphere collisionSphere;
+	Sphere boundSphere;
 
 	uint32 nBoundingTriangles; // Miscellaneous
 	uint32 ofsBoundingTriangles;
@@ -216,8 +217,7 @@ struct ModelAnimation {
 	uint32 d2;
 	uint32 playSpeed;  // note: this can't be play speed because it's 0 for some models
 
-	Vec3D boxA, boxB; // Minimum Extent, Maximum Extend
-	float rad; // Bounds Radius
+	Sphere boundSphere;
 
 	int16 NextAnimation;
 	int16 Index;
@@ -237,8 +237,7 @@ struct ModelAnimationWotLK {
 	uint32 d2;
 	uint32 playSpeed;  // note: this can't be play speed because it's 0 for some models
 
-	Vec3D boxA, boxB; // Minimum Extent, Maximum Extend
-	float rad;  // Bounds Radius
+	Sphere boundSphere;
 
 	int16 NextAnimation;
 	int16 Index;

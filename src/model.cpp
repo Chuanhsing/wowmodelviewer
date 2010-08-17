@@ -830,7 +830,7 @@ void Model::initAnimated(MPQFile &f)
 			anims[i].d1 = animsWotLK.d1;
 			anims[i].d2 = animsWotLK.d2;
 			anims[i].playSpeed = animsWotLK.playSpeed;
-			anims[i].rad = animsWotLK.rad;
+			anims[i].boundSphere.radius = animsWotLK.boundSphere.radius;
 			anims[i].NextAnimation = animsWotLK.NextAnimation;
 			anims[i].Index = animsWotLK.Index;
 

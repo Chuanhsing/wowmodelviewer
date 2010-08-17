@@ -20,13 +20,15 @@ Thanks dot.qwerty, madyavic
 */
 
 // Size = 16 byte / 0x10 byte
+/*
 struct QUAT
 {
     float x, y, z, w;
 };
+*/
 
 // Size = 32 byte / 0x20 byte
-struct Sphere
+struct SphereF
 {
 	/*0x00*/ Vec3D min;
 	/*0x0C*/ Vec3D max;
@@ -34,15 +36,8 @@ struct Sphere
 	/*0x1C*/ uint32 flags;
 };
 
-struct Sphere2
-{
-	/*0x00*/ Vec3D min;
-	/*0x0C*/ Vec3D max;
-	/*0x18*/ float radius;
-};
-
 // Size = 68 byte / 0x44 byte
-struct matrix
+struct MatrixF
 {
 	/*0x00*/ Vec4D a;
 	/*0x10*/ Vec4D b;
@@ -169,8 +164,8 @@ struct Aref_Colour
 struct Aref_Sphere
 {
     AnimationReference AnimRef; //STC/STS reference
-    Sphere2 value; //initial value
-    Sphere2 unValue; //unused value
+    Sphere value; //initial value
+    Sphere unValue; //unused value
     uint32 flags; //seems unused, 0    
 }; //used in SDMB anim blocks, as BNDS data type
 
@@ -186,9 +181,9 @@ struct MD34
 };
 
 // vertFlags
-#define	VERT_EXISTS	0x20000
-#define	VERT_36		0x40000
-#define	VERT_40		0x80000
+#define	VERT_EXISTS	0x020000
+#define	VERT_36		0x040000
+#define	VERT_40		0x080000
 #define	VERT_44		0x100000
 // Size = 784 byte / 0x310 byte
 struct MODL
@@ -207,7 +202,7 @@ struct MODL
 	/*0x64*/ Reference mVert;		// vertexData
 	/*0x70*/ Reference mDIV;			// views
 	/*0x7C*/ Reference mBoneLU;		// boneLookup
-	/*0x88*/ Sphere boundSphere;
+	/*0x88*/ SphereF boundSphere;
 	/*0xA8*/ int d2[15];
 	/*0xE4*/ Reference mAttach;
 	/*0xF0*/ Reference mAttachLU;	// attachLookup
@@ -238,8 +233,8 @@ struct MODL
 	/*0x234*/ Reference mTRGD;
 	/*0x240*/ Reference mIREF;
 	/*0x24C*/ int d7[2];
-	/*0x254*/ matrix mat;
-	/*0x298*/ Sphere ext2;
+	/*0x254*/ MatrixF mat;
+	/*0x298*/ SphereF ext2;
 	/*0x2B8*/ Reference mSGSS;
 	/*0x2C4*/ Reference mATVL;
 	/*0x2D0*/ Reference F;
@@ -651,7 +646,7 @@ struct SEQS
     /*0x28*/ uint32 ReplayStart;	// in most Blizzard models set to 1
     /*0x2C*/ uint32 ReplayEnd;		// in most Blizzard models set to 1
     /*0x2C*/ int32 d4[2];			// usually 0
-    /*0x38*/ Sphere boundSphere;
+    /*0x38*/ SphereF boundSphere;
     /*0x58*/ int32 d5[2];			// usually 0
 };
 
@@ -715,10 +710,10 @@ struct STC
     /*0x2C*/ uint32 d2;
     /*0x30*/ Reference Events; // EVNT
     /*0x3C*/ Reference arVec2D; // SD2V
-    /*0x48*/ Reference arVec3D; // SD3V - Trans
+    /*0x48*/ Reference arVec3D; // SD3V - Trans, Scale
     /*0x54*/ Reference arQuat; // SD4Q - Rotation
     /*0x60*/ Reference arColour;
-    /*0x6C*/ Reference arFloat; // SDR3 - Scale?
+    /*0x6C*/ Reference arFloat; // SDR3
     /*0x78*/ Reference r3;
     /*0x84*/ Reference arInt16; // SDS6
     /*0x90*/ Reference r4;
@@ -754,7 +749,7 @@ struct STG
 // Incomplete
 struct BNDS
 {
-    /*0x00*/ Sphere2 bndSphere;
+    /*0x00*/ Sphere bndSphere;
 };
 
 // Size = 64 byte / 0x40 byte
@@ -802,6 +797,7 @@ struct Vertex32 // 32 byte
     /*0x1C*/ char tangents[4];
 };
 
+#if 0
 struct Vertex36 // 36 byte
 {
     Vec3D pos;
@@ -837,5 +833,6 @@ struct Vertex44 // 44 byte
     uint16 uv4[2];
     char tangents[4];
 };
+#endif // 0
 
 #endif
