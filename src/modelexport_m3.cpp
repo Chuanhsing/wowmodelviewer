@@ -1141,7 +1141,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				}
 
 				if (j == MAT_LAYER_ALPHA && 
-					(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA)) // LAYER_Alpha
+					(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_TRANSPARENT)) // LAYER_Alpha
 				{
 					int texid = MATtable[i].texid;
 					wxString strName = wxString(m->TextureList[texid].c_str(), wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
@@ -1173,6 +1173,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				case BM_OPAQUE: 
 					mats[i].blendMode = MAT_BLEND_OPAQUE; 
 					mats[i].cutoutThresh = 0;
+					break;
+				case BM_TRANSPARENT: 
+					mats[i].blendMode = MAT_BLEND_OPAQUE; 
+					mats[i].cutoutThresh = 180;
 					break;
 				case BM_ALPHA_BLEND: 
 					mats[i].blendMode = MAT_BLEND_ALPHABLEND; 
