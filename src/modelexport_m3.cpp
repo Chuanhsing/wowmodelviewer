@@ -763,6 +763,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	ModelView *view = (ModelView*)(mpqfv.getBuffer());
 	ModelGeoset *ops = (ModelGeoset*)(mpqfv.getBuffer() + view->ofsSub);
 	ModelTexUnit *tex = (ModelTexUnit*)(mpqfv.getBuffer() + view->ofsTex);
+	uint16 *texlookup = (uint16*)(mpqf.getBuffer() + m->header.ofsTexLookup);
 	ModelVertex *verts = (ModelVertex*)(mpqf.getBuffer() + m->header.ofsVertices);
 	uint16 *trianglelookup = (uint16*)(mpqfv.getBuffer() + view->ofsIndex);
 	uint16 *triangles = (uint16*)(mpqfv.getBuffer() + view->ofsTris);
@@ -882,9 +883,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				break;
 			}
 		}
-
-
-		//f.Write(&triangles[i], sizeof(uint16)); // Error
+		//f.Write(&triangles[i], sizeof(uint16));
 		f.Write(&tidx, sizeof(uint16));
 	}
 	padding(&f);
@@ -919,7 +918,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		BAT bat;
 		memset(&bat, 0, sizeof(bat));
 		bat.subid = j;
-		bat.matid = j;
+		bat.matid = j;  // Error
 		bat.s2 = -1;
 		f.Write(&bat, 0xE); // sizeof(bat) is buggy to 0x10
 	}
@@ -956,6 +955,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	mdata.boundSphere.radius = m->header.ps.VertexRadius;
 
 	// mAttach
+	// this makes some read errors in sc2 editor
 #if 0
 	if (m->header.nAttachments) {
 		ModelAttachmentDef *attachments = (ModelAttachmentDef*)(mpqf.getBuffer() + m->header.ofsAttachments);
@@ -1026,7 +1026,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		padding(&f);
 		for(uint32 i=0; i<mdata.mMat.nEntries; i++) {
 			// name
-			wxString strName = wxString::Format(_T("Mat_%2d"), i);
+			wxString ff = wxString(fn, wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
+			wxString strName = wxString::Format(_T("%sMat_%02d"), ff.c_str(), i+1);
 			mats[i].name.nEntries = strName.Len()+1;
 			mats[i].name.ref = ++fHead.nRefs;
 			RefEntry("RAHC", f.Tell(), mats[i].name.nEntries, 0);
@@ -1055,7 +1056,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				padding(&f);
 
 				if (j == 0) { // LAYER_Diff
-					wxString strName = wxString::Format(_T("Mat_%2d.tga"), i);
+					int texid = texlookup[tex[i].textureid];
+					wxString strName = wxString(m->TextureList[texid].c_str(), wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
+					strName.Append(_T(".tga"));
 					layer.name.nEntries = strName.Len()+1;
 					layer.name.ref = ++fHead.nRefs;
 					RefEntry("RAHC", f.Tell(), layer.name.nEntries, 0);
