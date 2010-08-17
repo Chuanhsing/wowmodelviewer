@@ -121,6 +121,7 @@
   typedef LONG         * PLONG;
   typedef DWORD        * LPDWORD;
   typedef BYTE         * LPBYTE;
+  typedef unsigned long long ULONGLONG;
 
   typedef union _LARGE_INTEGER
   {
