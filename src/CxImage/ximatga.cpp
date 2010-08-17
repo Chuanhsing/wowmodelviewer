@@ -148,7 +148,7 @@ bool CxImageTGA::Encode(CxFile * hFile)
     tgaHead.ImageWidth=(WORD)head.biWidth;		// Image Width
     tgaHead.ImageHeight=(WORD)head.biHeight;	// Image Height
     tgaHead.PixelDepth=(BYTE)head.biBitCount;	// Pixel Depth
-    tgaHead.ImagDesc=0;					// Image Descriptor
+    tgaHead.ImagDesc=8;					// Image Descriptor // 2010.08.17 sc2 editor need 8
 
 	if (pAlpha && head.biBitCount==24) tgaHead.PixelDepth=32; 
 

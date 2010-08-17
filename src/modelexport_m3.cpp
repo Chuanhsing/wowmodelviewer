@@ -764,13 +764,12 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	ModelGeoset *ops = (ModelGeoset*)(mpqfv.getBuffer() + view->ofsSub);
 	ModelTexUnit *tex = (ModelTexUnit*)(mpqfv.getBuffer() + view->ofsTex);
 	uint16 *texlookup = (uint16*)(mpqf.getBuffer() + m->header.ofsTexLookup);
+	uint16 *texunitlookup = (uint16*)(mpqf.getBuffer() + m->header.ofsTexUnitLookup);
 	ModelVertex *verts = (ModelVertex*)(mpqf.getBuffer() + m->header.ofsVertices);
 	uint16 *trianglelookup = (uint16*)(mpqfv.getBuffer() + view->ofsIndex);
 	uint16 *triangles = (uint16*)(mpqfv.getBuffer() + view->ofsTris);
-
-	
-
 	uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
+
 	std::vector<uint16> bLookup;
 	std::vector<uint16> bLookupcnt;
 	for (size_t j=0; j<view->nSub; j++) {
@@ -934,13 +933,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	std::vector<MeshMap> MeshtoMat;
 	for (uint32 i=0; i<view->nTex; i++)
 	{
-		if (tex[i].texunit < m->header.nTexLookup && texlookup[tex[i].texunit] == 0)
+		if (tex[i].texunit < m->header.nTexLookup && texunitlookup[tex[i].texunit] == 0)
 		{	
 			int idx = -1;
 
 			for(uint32 j=0; j<MATtable.size(); j++)
 			{
-				if (MATtable[j].texid == tex[i].textureid && 
+				if (MATtable[j].texid == texlookup[tex[i].textureid] && 
 					MATtable[j].blend == renderflags[tex[i].flagsIndex].blend &&
 					MATtable[j].flags == renderflags[tex[i].flagsIndex].flags)
 				{
@@ -951,7 +950,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			if (idx < 0)
 			{
 				MATmap bm;
-				bm.texid = tex[i].textureid;
+				bm.texid = texlookup[tex[i].textureid];
 				bm.flags = renderflags[tex[i].flagsIndex].flags;
 				bm.blend = renderflags[tex[i].flagsIndex].blend;
 				idx = MATtable.size();
