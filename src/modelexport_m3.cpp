@@ -6,6 +6,7 @@
 #define	ROOT_BONE
 
 static std::vector<ReferenceEntry> reList;
+float boneScale = 0.5;
 
 void padding(wxFFile *f, int pads=16)
 {
@@ -193,18 +194,18 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<nAnimations; i++) {
-		int j = logAnimations[i];
+		int anim_offset = logAnimations[i];
 		seqs[i].d1[0] = -1;
 		seqs[i].d1[1] = -1;
-		seqs[i].length = m->anims[j].timeEnd;
-		seqs[i].moveSpeed = m->anims[j].moveSpeed;
-		seqs[i].frequency = m->anims[j].playSpeed; // ?
+		seqs[i].length = m->anims[anim_offset].timeEnd;
+		seqs[i].moveSpeed = m->anims[anim_offset].moveSpeed;
+		seqs[i].frequency = m->anims[anim_offset].playSpeed; // ?
 		seqs[i].ReplayStart = 1;
 		seqs[i].ReplayEnd = 1;
 		seqs[i].d4[0] = 0x64;
-		seqs[i].boundSphere.min = m->header.boundSphere.min;
-		seqs[i].boundSphere.max = m->header.boundSphere.max;
-		seqs[i].boundSphere.radius = m->header.boundSphere.radius;
+		seqs[i].boundSphere.min = m->anims[anim_offset].boundSphere.min;
+		seqs[i].boundSphere.max = m->anims[anim_offset].boundSphere.max;
+		seqs[i].boundSphere.radius = m->anims[anim_offset].boundSphere.radius;
 		f.Write(&seqs[i], sizeof(SEQS));
 	}
 	
@@ -720,7 +721,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		if (i == 0)
 		{
 			bones[i].initScale.AnimRef.animid = i | (5 << 16);
-			bones[i].initScale.value = Vec3D(1.0f, 1.0f, 1.0f);
+			bones[i].initScale.value = Vec3D(1.0f, 1.0f, 1.0f)*boneScale;
 			bones[i].initScale.unValue = Vec3D(1.0f, 1.0f, 1.0f);
 		}
 		else
@@ -1023,10 +1024,11 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	}
 	padding(&f);
 
-	// boundSphere
-	mdata.boundSphere.min = m->header.boundSphere.min;
-	mdata.boundSphere.max = m->header.boundSphere.max;
-	mdata.boundSphere.radius = m->header.boundSphere.radius;
+	// boundSphere, m->header.boundSphere is too big
+	int anim_offset = logAnimations[0];
+	mdata.boundSphere.min = m->anims[anim_offset].boundSphere.min;
+	mdata.boundSphere.max = m->anims[anim_offset].boundSphere.max;
+	mdata.boundSphere.radius = m->anims[anim_offset].boundSphere.radius;
 
 	// mAttach
 	// this makes some read errors in sc2 editor
