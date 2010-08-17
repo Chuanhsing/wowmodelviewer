@@ -1236,7 +1236,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		ModelRenderPass &p = m->passes[i];
 
 		if (p.init(m)) {
-			wxString texName = GetM2TextureName(m,fn,p,(int)i);
+			wxString texName = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8).BeforeLast(_T('.')).AfterLast(SLASH);
 			texName.Append(_T(".tga"));
 
 			wxString texFilename(fn, wxConvUTF8);

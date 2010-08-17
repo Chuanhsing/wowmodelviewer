@@ -38,6 +38,17 @@ void SaveTexture(wxString fn)
 		newImage->Save(fn.mb_str(), CXIMAGE_FORMAT_TGA);
 
 	newImage->Destroy();
+	if (fn.Last() == 'a') {
+		// starcraft II needs 17 bytes as 8
+		wxFFile f;
+		f.Open(fn.mb_str(), "r+b");
+		if (f.IsOpened()) {
+			f.Seek(17, wxFromStart);
+			char c=8;
+			f.Write(&c, sizeof(char));
+			f.Close();
+		}
+	}
 	wxDELETE(newImage);
 	wxDELETEA(pixels);
 }
