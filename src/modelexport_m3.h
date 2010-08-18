@@ -181,10 +181,10 @@ struct MD34
 };
 
 // vertFlags
-#define	VERT_EXISTS	0x020000
-#define	VERT_36		0x040000
-#define	VERT_40		0x080000
-#define	VERT_44		0x100000
+#define	VERTFLAGS_VERT32		0x020000
+#define	VERTFLAGS_VERT36		0x040000
+#define	VERTFLAGS_VERT40		0x080000
+#define	VERTFLAGS_VERT44		0x100000
 // Size = 784 byte / 0x310 byte
 struct MODL
 {
@@ -244,6 +244,15 @@ struct MODL
 	/*0x300*/ uint32 d9[4];
 };
 
+#define	BONE_FLAGS_INHERIT_TRANSLATION	0x1
+#define	BONE_FLAGS_INHERIT_SCALE		0x2
+#define	BONE_FLAGS_INHERIT_ROTATION		0x4
+#define	BONE_FLAGS_BILLBOARD1			0x10
+#define	BONE_FLAGS_BILLBOARD2			0x40
+#define	BONE_FLAGS_2D_PROJECTION		0x100
+#define	BONE_FLAGS_ANIMATED				0x200
+#define	BONE_FLAGS_INVERSE_KINEMATICS	0x400
+#define	BONE_FLAGS_SKINNED				0x800
 /*
 The bones as defined in the .m3 files.
 
@@ -358,8 +367,9 @@ Layer Index	Map Type
 2	 Specular
 3	 Emissive (1)
 4	 Emissive (2)
+5    Reflect
 6	 Envio (Reflective)
-7	 Envio Mask
+7	 Alpha
 8	 Alpha Mask
 10	 Normal
 11	 Height
@@ -431,6 +441,14 @@ struct MAT
     Aref_UINT32 ar2;
 };
 
+#define	LAYR_FLAGS_TEXWRAP_X			(0x4)
+#define	LAYR_FLAGS_TEXWRAP_Y			(0x8)
+#define	LAYR_FLAGS_TEXBLACK				(0x10)
+#define	LAYR_FLAGS_COLOR				(0x400)
+#define	LAYR_RENDERFLAGS_ALPHATEAMCOLOR	(0x1)
+#define	LAYR_RENDERFLAGS_ALPHAONLY		(0x2)
+#define	LAYR_RENDERFLAGS_ALPHASHADING	(0x4)
+#define	LAYR_RENDERFLAGS_TEXGARBLE		(0x8)
 // Size = 356 bytes / 0x164 bytes
 // Incomplete
 struct LAYR

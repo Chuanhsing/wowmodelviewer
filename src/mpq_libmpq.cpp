@@ -9,7 +9,7 @@
 #include "util.h"
 
 typedef std::vector<mpq_archive*> ArchiveSet;
-ArchiveSet gOpenArchives;
+static ArchiveSet gOpenArchives;
 
 MPQArchive::MPQArchive(const char* filename)
 {

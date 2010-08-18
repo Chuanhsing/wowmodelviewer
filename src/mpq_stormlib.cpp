@@ -10,7 +10,7 @@
 using namespace std;
 
 typedef vector< pair< string, HANDLE* > > ArchiveSet;
-ArchiveSet gOpenArchives;
+static ArchiveSet gOpenArchives;
 
 MPQArchive::MPQArchive(const char* filename)
 {

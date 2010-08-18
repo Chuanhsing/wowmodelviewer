@@ -112,6 +112,8 @@ class ModelCanvas:
     DECLARE_EVENT_TABLE()
 	
 	float time, modelsize;
+	DWORD lastTime;
+	//DWORD pauseTime;
 	SceneState sceneState[4]; // 4 scene states for F1-F4
 
 	void CreateTexture(wxString filename, GLuint texture);

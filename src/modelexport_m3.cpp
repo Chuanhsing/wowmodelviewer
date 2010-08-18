@@ -4,46 +4,7 @@
 #include "modelcanvas.h"
 
 #define	ROOT_BONE
-float boneScale = 0.5;
-
-static const char* M3_Bone_Names[] = {
-	"Ref_Weapon Left", //"ArmL", // 0
-	"Ref_Weapon Right", //"ArmR",
-	"Ref_Hardpoint", //"ShoulderL",
-	"Ref_Hardpoint", //"ShoulderR",
-	"Ref_Hardpoint", //"SpineLow",
-	"Ref_Hardpoint", //"Waist", // 5
-	"Ref_Head", //"Head",
-	"Ref_Hardpoint", //"Jaw",
-	"Ref_Hardpoint", //"RFingerIndex",
-	"Ref_Hardpoint", //"RFingerMiddle",
-	"Ref_Hardpoint", //"RFingerPinky", // 10
-	"Ref_Hardpoint", //"RFingerRing",
-	"Ref_Hardpoint", //"RThumb",
-	"Ref_Hardpoint", //"LFingerIndex",
-	"Ref_Hardpoint", //"LFingerMiddle",
-	"Ref_Hardpoint", //"LFingerPinky", // 15
-	"Ref_Hardpoint", //"LFingerRing",
-	"Ref_Hardpoint", //"LThumb",
-	"Ref_Hardpoint", //"BTH",
-	"Ref_Hardpoint", //"CSR",
-	"Ref_Hardpoint", //"CSL", // 20
-	"Ref_Hardpoint", //"Breath",
-	"Ref_Overhead", //"Name",
-	"Ref_Hardpoint", //"NameMount",
-	"Ref_Hardpoint", //"CHD",
-	"Ref_Hardpoint", //"CCH", // 25
-	"Ref_Hardpoint", //"Root",
-	"Ref_Hardpoint", //"Wheel1",
-	"Ref_Hardpoint", //"Wheel2",
-	"Ref_Hardpoint", //"Wheel3",
-	"Ref_Hardpoint", //"Wheel4", // 30
-	"Ref_Hardpoint", //"Wheel5",
-	"Ref_Hardpoint", //"Wheel6",
-	"Ref_Hardpoint", //"Wheel7",
-	"Ref_Hardpoint", //"Wheel8",
-	NULL
-};
+static float boneScale = 0.5;
 
 static const char* M3_Attach_Names[] = {
 	"Ref_Hardpoint",   // 0
@@ -740,7 +701,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
 		
 		bones[i].d1 = -1;
-		bones[i].flags = 0xA00;
+		bones[i].flags = BONE_FLAGS_ANIMATED | BONE_FLAGS_SKINNED;
 #ifdef	ROOT_BONE
 		bones[i].parent = boneList[i].parent + 1;
 #else
@@ -868,11 +829,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	std::vector<uint16> bLookup;
 	std::vector<uint16> bLookupcnt;
 	for (size_t j=0; j<view->nSub; j++) {
-		size_t geoset = j;//tex[j].op;
 		std::vector<uint16> bLookup2; // local bLookup
 		bLookup2.clear();
 
-		for(uint32 i=ops[geoset].vstart; i<(ops[geoset].vstart+ops[geoset].vcount); i++) {
+		for(uint32 i=ops[j].vstart; i<(ops[j].vstart+ops[j].vcount); i++) {
 			for(uint32 k=0; k<4; k++) {
 				if (verts[trianglelookup[i]].weights[k] != 0) {
 					bool bFound = false;
@@ -905,8 +865,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 		uint16 tidx = 0;
 		for (size_t j=0; j<view->nSub; j++) {
-			size_t geoset = j;//tex[j].op;
-			if (trianglelookup[i] >= ops[geoset].vstart && trianglelookup[i] < ops[geoset].vstart+ops[geoset].vcount)
+			if (trianglelookup[i] >= ops[j].vstart && trianglelookup[i] < ops[j].vstart+ops[j].vcount)
 				break;
 			tidx += bLookupcnt[j];
 		}
@@ -940,11 +899,11 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			}
 		}
 		//memcpy(vert.weIndice, verts[i].bones, 4);
-		// Vec3D normal -> char normal[4], TODO
+		// Vec3D normal -> char normal[4]
 		vert.normal[0] = (verts[trianglelookup[i]].normal.x+1)*0xFF/2;
 		vert.normal[1] = (verts[trianglelookup[i]].normal.y+1)*0xFF/2;
 		vert.normal[2] = (verts[trianglelookup[i]].normal.z+1)*0xFF/2;
-		// Vec2D texcoords -> uint16 uv[2], TODO
+		// Vec2D texcoords -> uint16 uv[2]
 		vert.uv[0] = verts[trianglelookup[i]].texcoords.x*0x800;
 		vert.uv[1] = verts[trianglelookup[i]].texcoords.y*0x800;
 		f.Write(&vert, sizeof(vert));
@@ -960,19 +919,17 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	memset(&div, 0, sizeof(div));
 	f.Seek(sizeof(div), wxFromCurrent);
 	padding(&f);
-	// mDIV.faces = m->view.nTriangles
-	
+
 	div.faces.nEntries = view->nTris;
 	div.faces.ref = ++fHead.nRefs;
 	RefEntry("_61U", f.Tell(), div.faces.nEntries, 0);
-	
+
 	for(uint16 i=0; i<div.faces.nEntries; i++) {
 		uint16 tidx = 0;
 		for (size_t j=0; j<view->nSub; j++) {
-			size_t geoset = j;//tex[j].op;
-			if (triangles[i] >= ops[geoset].vstart && triangles[i] < ops[geoset].vstart+ops[geoset].vcount)
+			if (triangles[i] >= ops[j].vstart && triangles[i] < ops[j].vstart+ops[j].vcount)
 			{
-				tidx = triangles[i] - ops[geoset].vstart;
+				tidx = triangles[i] - ops[j].vstart;
 				break;
 			}
 		}
@@ -987,14 +944,12 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	int indBone = 0;
 	for (size_t j=0; j<view->nSub; j++) {
-		size_t geoset = j;//tex[j].op;
-
 		REGN regn;
 		memset(&regn, 0, sizeof(regn));
-		regn.indFaces = ops[geoset].istart;
-		regn.numFaces = ops[geoset].icount;
-		regn.indVert = ops[geoset].vstart;
-		regn.numVert = ops[geoset].vcount;
+		regn.indFaces = ops[j].istart;
+		regn.numFaces = ops[j].icount;
+		regn.indVert = ops[j].vstart;
+		regn.numVert = ops[j].vcount;
 		regn.boneCount = bLookupcnt[j]; //nSkinnedBones(m, &mpqf, regn.indVert, regn.numVert);
 		regn.indBone = indBone;
 		regn.numBone = bLookupcnt[j]; //regn.boneCount;
@@ -1006,7 +961,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 
 	//prepare BAT table
-
 	ModelRenderFlags *renderflags = (ModelRenderFlags *)(mpqf.getBuffer() + m->header.ofsTexFlags);
 	std::vector<MATmap> MATtable;
 	std::vector<MeshMap> MeshtoMat;
@@ -1071,7 +1025,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		BAT bat;
 		memset(&bat, 0, sizeof(bat));
 		bat.subid = MeshtoMat[j].subid;
-		bat.matid = MeshtoMat[j].matid;  // Error
+		bat.matid = MeshtoMat[j].matid;
 		bat.s2 = -1;
 		f.Write(&bat, 0xE); // sizeof(bat) is buggy to 0x10
 	}
@@ -1097,7 +1051,11 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	mdata.mBoneLU.ref = ++fHead.nRefs;
 	RefEntry("_61U", f.Tell(), mdata.mBoneLU.nEntries, 0);
 	for(uint16 i=0; i<bLookup.size(); i++) {
-		uint16 idx = bLookup[i] + 1; 
+#ifdef	BONE_ROOT
+		uint16 idx = bLookup[i] + 1;
+#else
+		uint16 idx = bLookup[i];
+#endif
 		f.Write(&idx, sizeof(uint16));
 	}
 	padding(&f);
@@ -1128,16 +1086,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 			wxString strName = _T("Ref_Hardpoint");
 
-/*			
-			for(j = 0; j < BONE_MAX; j++) {
-				if (m->keyBoneLookup[j] == attachments[i].bone) {
-					strName = wxString(M3_Bone_Names[j], wxConvUTF8);
-					AttRefName.push_back(strName);
-					break;
-				}
-			}
-
-*/
 			if (attachments[i].id < M3_ATTACH_MAX)
 				strName = wxString(M3_Attach_Names[attachments[i].id], wxConvUTF8);
 
@@ -1152,7 +1100,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			if (count > 1)
 				strName += wxString::Format(_T(" %02d"), count - 1);
 
-			//wxString strName = wxString::Format(_T("ATT_%d"), i);
 			atts[i].name.nEntries = strName.Len()+1;
 			atts[i].name.ref = ++fHead.nRefs;
 			RefEntry("RAHC", f.Tell(), atts[i].name.nEntries, 0);
@@ -1230,7 +1177,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				chunk_offset2 = f.Tell();
 				LAYR layer;
 				memset(&layer, 0, sizeof(layer));
-				layer.flags = 236;
+				layer.flags = 236; // 0xEC, C=TEXWRAP_X|TEXWRAP_Y
 				layer.brightness_mult1.value = 1.0f;
 				layer.brightness_mult1.unValue = 1.0f;
 				layer.uvTiling.value = Vec2D(1.0f, 1.0f);
@@ -1242,7 +1189,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				f.Write(&layer, sizeof(layer));
 				padding(&f);
 
-				if (j == MAT_LAYER_DIFF) { // LAYER_Diff
+				if (j == MAT_LAYER_DIFF) {
 					int texid = MATtable[i].texid;
 					wxString strName = wxString(m->TextureList[texid].c_str(), wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
 					strName.Append(_T(".tga"));
@@ -1262,7 +1209,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					layer.name.nEntries = strName.Len()+1;
 					layer.name.ref = ++fHead.nRefs;
 					RefEntry("RAHC", f.Tell(), layer.name.nEntries, 0);
-					layer.renderFlags = 2;   // Alpha Only
+					layer.renderFlags = LAYR_RENDERFLAGS_ALPHAONLY;
 					f.Write(strName.c_str(), strName.Len()+1);
 					padding(&f);
 				}
@@ -1375,7 +1322,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	for (size_t i=0; i<m->passes.size(); i++) {
 		ModelRenderPass &p = m->passes[i];
 
-		if (p.init(m)) {
+		if (p.init(m)) { // init to bind textureid
 			wxString texName = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8).BeforeLast(_T('.')).AfterLast(SLASH);
 			texName.Append(_T(".tga"));
 

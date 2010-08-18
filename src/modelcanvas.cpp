@@ -6,14 +6,11 @@
 #include "globalvars.h"
 #include "CxImage/ximage.h"
 
-const float defaultMatrix[] = {1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000};
+static const float defaultMatrix[] = {1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000,0.000000,0.000000,0.000000,0.000000,1.000000};
 
 //float animSpeed = 1.0f;
-const float piover180 = 0.0174532925f;
-const float rad2deg = 57.295779513f;
-
-DWORD lastTime = 0;
-DWORD pauseTime = 0;
+static const float piover180 = 0.0174532925f;
+static const float rad2deg = 57.295779513f;
 
 IMPLEMENT_CLASS(ModelCanvas, wxWindow)
 BEGIN_EVENT_TABLE(ModelCanvas, wxWindow)
