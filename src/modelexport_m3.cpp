@@ -1048,7 +1048,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	mdata.mBoneLU.ref = ++fHead.nRefs;
 	RefEntry("_61U", f.Tell(), mdata.mBoneLU.nEntries, 0);
 	for(uint16 i=0; i<bLookup.size(); i++) {
-#ifdef	BONE_ROOT
+#ifdef	ROOT_BONE
 		uint16 idx = bLookup[i] + 1;
 #else
 		uint16 idx = bLookup[i];
@@ -1107,7 +1107,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Seek(chunk_offset, wxFromStart);
 		for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
 			atts[i].flag = -1;
-#ifdef	BONE_ROOT
+#ifdef	ROOT_BONE
 			atts[i].bone = attachments[i].bone + 1;
 #else
 			atts[i].bone = attachments[i].bone;
