@@ -1188,12 +1188,14 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 				if (j == MAT_LAYER_DIFF) {
 					int texid = MATtable[i].texid;
-					wxString strName = wxString(m->TextureList[texid].c_str(), wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
-					strName.Append(_T(".tga"));
-					layer.name.nEntries = strName.Len()+1;
+					wxString texName = wxString(m->TextureList[texid].c_str(), wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
+					if (texName == _T("Cape") || texName.StartsWith(_T("ChangableTexture")))
+						texName = wxString(fn, wxConvUTF8).BeforeLast(_T('.')).AfterLast(SLASH)+_T('_')+texName;
+					texName.Append(_T(".tga"));
+					layer.name.nEntries = texName.Len()+1;
 					layer.name.ref = ++fHead.nRefs;
 					RefEntry("RAHC", f.Tell(), layer.name.nEntries, 0);
-					f.Write(strName.c_str(), strName.Len()+1);
+					f.Write(texName.c_str(), texName.Len()+1);
 					padding(&f);
 				}
 
@@ -1201,13 +1203,15 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_TRANSPARENT)) // LAYER_Alpha
 				{
 					int texid = MATtable[i].texid;
-					wxString strName = wxString(m->TextureList[texid].c_str(), wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
-					strName.Append(_T(".tga"));
-					layer.name.nEntries = strName.Len()+1;
+					wxString texName = wxString(m->TextureList[texid].c_str(), wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
+					if (texName == _T("Cape") || texName.StartsWith(_T("ChangableTexture")))
+						texName = wxString(fn, wxConvUTF8).BeforeLast(_T('.')).AfterLast(SLASH)+_T('_')+texName;
+					texName.Append(_T(".tga"));
+					layer.name.nEntries = texName.Len()+1;
 					layer.name.ref = ++fHead.nRefs;
 					RefEntry("RAHC", f.Tell(), layer.name.nEntries, 0);
 					layer.renderFlags = LAYR_RENDERFLAGS_ALPHAONLY;
-					f.Write(strName.c_str(), strName.Len()+1);
+					f.Write(texName.c_str(), texName.Len()+1);
 					padding(&f);
 				}
 
@@ -1321,6 +1325,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 		if (p.init(m)) { // init to bind textureid
 			wxString texName = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8).BeforeLast(_T('.')).AfterLast(SLASH);
+			if (texName == _T("Cape") || texName.StartsWith(_T("ChangableTexture")))
+				texName = wxString(fn, wxConvUTF8).BeforeLast(_T('.')).AfterLast(SLASH)+_T('_')+texName;
 			texName.Append(_T(".tga"));
 
 			wxString texFilename(fn, wxConvUTF8);

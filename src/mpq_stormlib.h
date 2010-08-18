@@ -15,11 +15,11 @@ struct FileTreeItem {
 
 	/// Comparison
 	bool operator<(const FileTreeItem &i) const {
-		return fileName < i.fileName;
+		return displayName < i.displayName;
 	}
 
 	bool operator>(const FileTreeItem &i) const {
-		return fileName < i.fileName;
+		return displayName < i.displayName;
 	}
 };
 
