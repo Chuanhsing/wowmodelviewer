@@ -6,6 +6,71 @@
 #define	ROOT_BONE
 float boneScale = 0.5;
 
+static const char* M3_Bone_Names[] = {
+	"Ref_Weapon Left", //"ArmL", // 0
+	"Ref_Weapon Right", //"ArmR",
+	"Ref_Hardpoint", //"ShoulderL",
+	"Ref_Hardpoint", //"ShoulderR",
+	"Ref_Hardpoint", //"SpineLow",
+	"Ref_Hardpoint", //"Waist", // 5
+	"Ref_Head", //"Head",
+	"Ref_Hardpoint", //"Jaw",
+	"Ref_Hardpoint", //"RFingerIndex",
+	"Ref_Hardpoint", //"RFingerMiddle",
+	"Ref_Hardpoint", //"RFingerPinky", // 10
+	"Ref_Hardpoint", //"RFingerRing",
+	"Ref_Hardpoint", //"RThumb",
+	"Ref_Hardpoint", //"LFingerIndex",
+	"Ref_Hardpoint", //"LFingerMiddle",
+	"Ref_Hardpoint", //"LFingerPinky", // 15
+	"Ref_Hardpoint", //"LFingerRing",
+	"Ref_Hardpoint", //"LThumb",
+	"Ref_Hardpoint", //"BTH",
+	"Ref_Hardpoint", //"CSR",
+	"Ref_Hardpoint", //"CSL", // 20
+	"Ref_Hardpoint", //"Breath",
+	"Ref_Overhead", //"Name",
+	"Ref_Hardpoint", //"NameMount",
+	"Ref_Hardpoint", //"CHD",
+	"Ref_Hardpoint", //"CCH", // 25
+	"Ref_Hardpoint", //"Root",
+	"Ref_Hardpoint", //"Wheel1",
+	"Ref_Hardpoint", //"Wheel2",
+	"Ref_Hardpoint", //"Wheel3",
+	"Ref_Hardpoint", //"Wheel4", // 30
+	"Ref_Hardpoint", //"Wheel5",
+	"Ref_Hardpoint", //"Wheel6",
+	"Ref_Hardpoint", //"Wheel7",
+	"Ref_Hardpoint", //"Wheel8",
+	NULL
+};
+
+static const char* M3_Attach_Names[] = {
+	"Ref_Hardpoint",   // 0
+	"Ref_Weapon Right",
+	"Ref_Weapon Left",
+	"Ref_Hardpoint",
+	"Ref_Hardpoint",
+	"Ref_Hardpoint",   //5
+	"Ref_Hardpoint",
+	"Ref_Hardpoint",
+	"Ref_Hardpoint",
+	"Ref_Hardpoint",
+	"Ref_Hardpoint",   //10
+	"Ref_Hardpoint",
+	"Ref_Hardpoint",
+	"Ref_Hardpoint",
+	"Ref_Hardpoint",
+	"Ref_Target",     //15
+	"Ref_Target", 
+	"Ref_Hardpoint", 
+	"Ref_Head", 
+	"Ref_Origin",
+	"Ref_Overhead",   //20
+};
+
+#define	M3_ATTACH_MAX (21)
+
 static std::vector<ReferenceEntry> reList;
 
 typedef struct {
@@ -18,6 +83,11 @@ typedef struct {
 	uint16 subid;
 	uint16 matid;
 } MeshMap;
+
+Vec3D fixCoord(Vec3D v)
+{
+	return Vec3D(v.y, -v.x, v.z);
+}
 
 void padding(wxFFile *f, int pads=16)
 {
@@ -214,9 +284,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		seqs[i].ReplayStart = 1;
 		seqs[i].ReplayEnd = 1;
 		seqs[i].d4[0] = 0x64;
-		seqs[i].boundSphere.min = m->anims[anim_offset].boundSphere.min;
-		seqs[i].boundSphere.max = m->anims[anim_offset].boundSphere.max;
-		seqs[i].boundSphere.radius = m->anims[anim_offset].boundSphere.radius;
+		seqs[i].boundSphere.min = fixCoord(m->anims[logAnimations[0]].boundSphere.min) * boneScale;
+		seqs[i].boundSphere.max = fixCoord(m->anims[logAnimations[0]].boundSphere.max) * boneScale;
+		seqs[i].boundSphere.radius = m->anims[logAnimations[0]].boundSphere.radius * boneScale;
 		f.Write(&seqs[i], sizeof(SEQS));
 	}
 	
@@ -635,17 +705,30 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	padding(&f);
 	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
 		// name
-		wxString strName;
+		wxString strName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast('.')+_T('_');
 #ifdef	ROOT_BONE
 		if (i == 0)
-			strName = _T("Bone_Root");
+			strName += _T("Bone_Root");
 		else if (i == mdata.mBone.nEntries - 1)
 			strName =_T("_M3_Anim_Data");
 		else
-			strName = wxString::Format(_T("Bone_%d"), i-1);
+			strName += wxString::Format(_T("Bone%d"), i-1);
+
+		for(uint32 j=0; j < BONE_MAX; j++) {
+			if (m->keyBoneLookup[j] == i-1) {
+				strName += _T("_")+wxString(Bone_Names[j], wxConvUTF8);
+			}
+		}
 #else
-		strName = wxString::Format(_T("Bone_%d"), i);
+		strName = wxString::Format(_T("Bone%d"), i);
+
+		for(uint32 j=0; j < m->header.nKeyBoneLookup; j++) {
+			if (m->keyBoneLookup[j] == i) {
+				strName += _T("_")+wxString(Bone_Names[j], wxConvUTF8);
+			}
+		}
 #endif
+
 		bones[i].name.nEntries = strName.Len()+1;
 		bones[i].name.ref = ++fHead.nRefs;
 		RefEntry("RAHC", f.Tell(), bones[i].name.nEntries, 0);
@@ -817,10 +900,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	for(uint32 i=0; i<m->header.nVertices; i++) {
 		Vertex32 vert;
 		memset(&vert, 0, sizeof(vert));
-		vert.pos.x = verts[trianglelookup[i]].pos.y; 
-		vert.pos.y = -verts[trianglelookup[i]].pos.x; 
-		vert.pos.z = verts[trianglelookup[i]].pos.z;  
-		//vert.pos = verts[i].pos;
+		vert.pos = fixCoord(verts[trianglelookup[i]].pos); 
 		memcpy(vert.weBone, verts[trianglelookup[i]].weights, 4);
 
 		uint16 tidx = 0;
@@ -1024,18 +1104,19 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	// boundSphere, m->header.boundSphere is too big
 	int anim_offset = logAnimations[0];
-	mdata.boundSphere.min = m->anims[anim_offset].boundSphere.min;
-	mdata.boundSphere.max = m->anims[anim_offset].boundSphere.max;
-	mdata.boundSphere.radius = m->anims[anim_offset].boundSphere.radius;
+	mdata.boundSphere.min = fixCoord(m->anims[anim_offset].boundSphere.min) * boneScale;
+	mdata.boundSphere.max = fixCoord(m->anims[anim_offset].boundSphere.max) * boneScale;
+	mdata.boundSphere.radius = m->anims[anim_offset].boundSphere.radius * boneScale;
 
 	// mAttach
 	// this makes some read errors in sc2 editor
-#if 0
+	std::vector<wxString> AttRefName;
+
 	if (m->header.nAttachments) {
 		ModelAttachmentDef *attachments = (ModelAttachmentDef*)(mpqf.getBuffer() + m->header.ofsAttachments);
 		mdata.mAttach.nEntries = m->header.nAttachments;
 		mdata.mAttach.ref = ++fHead.nRefs;
-		RefEntry("_TTA", f.Tell(), mdata.mAttach.nEntries, 0);
+		RefEntry("_TTA", f.Tell(), mdata.mAttach.nEntries, 1);
 		chunk_offset = f.Tell();
 		ATT *atts = new ATT[mdata.mAttach.nEntries];
 		memset(atts, 0, sizeof(ATT)*mdata.mAttach.nEntries);
@@ -1043,7 +1124,35 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		padding(&f);
 		for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
 			// name
-			wxString strName = wxString::Format(_T("ATT_%d"), i);
+			uint32 j=0;
+
+			wxString strName = _T("Ref_Hardpoint");
+
+/*			
+			for(j = 0; j < BONE_MAX; j++) {
+				if (m->keyBoneLookup[j] == attachments[i].bone) {
+					strName = wxString(M3_Bone_Names[j], wxConvUTF8);
+					AttRefName.push_back(strName);
+					break;
+				}
+			}
+
+*/
+			if (attachments[i].id < M3_ATTACH_MAX)
+				strName = wxString(M3_Attach_Names[attachments[i].id], wxConvUTF8);
+
+			AttRefName.push_back(strName);
+
+			int count = 0;
+			for(uint32 j=0; j < AttRefName.size(); j++) {
+				if (AttRefName[j] == strName)
+					count++;
+			}
+
+			if (count > 1)
+				strName += wxString::Format(_T(" %02d"), count - 1);
+
+			//wxString strName = wxString::Format(_T("ATT_%d"), i);
 			atts[i].name.nEntries = strName.Len()+1;
 			atts[i].name.ref = ++fHead.nRefs;
 			RefEntry("RAHC", f.Tell(), atts[i].name.nEntries, 0);
@@ -1054,7 +1163,11 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Seek(chunk_offset, wxFromStart);
 		for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
 			atts[i].flag = -1;
+#ifdef	BONE_ROOT
+			atts[i].bone = attachments[i].bone + 1;
+#else
 			atts[i].bone = attachments[i].bone;
+#endif
 			f.Write(&atts[i], sizeof(ATT));
 		}
 		wxDELETEA(atts);
@@ -1073,7 +1186,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		}
 		padding(&f);
 	}
-#endif
+
 	// mMatLU
 	if (MATtable.size() > 0) {
 		mdata.mMatLU.nEntries = MATtable.size();

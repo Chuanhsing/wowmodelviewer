@@ -34,37 +34,37 @@ struct GroupData {
 };
 
 static const char* Bone_Names[] = {
-	"ArmL",
+	"ArmL", // 0
 	"ArmR",
 	"ShoulderL",
 	"ShoulderR",
 	"SpineLow",
-	"Waist",
+	"Waist", // 5
 	"Head",
 	"Jaw",
 	"RFingerIndex",
 	"RFingerMiddle",
-	"RFingerPinky",
+	"RFingerPinky", // 10
 	"RFingerRing",
 	"RThumb",
 	"LFingerIndex",
 	"LFingerMiddle",
-	"LFingerPinky",
+	"LFingerPinky", // 15
 	"LFingerRing",
 	"LThumb",
 	"BTH",
 	"CSR",
-	"CSL",
+	"CSL", // 20
 	"Breath",
 	"Name",
 	"NameMount",
 	"CHD",
-	"CCH",
+	"CCH", // 25
 	"Root",
 	"Wheel1",
 	"Wheel2",
 	"Wheel3",
-	"Wheel4",
+	"Wheel4", // 30
 	"Wheel5",
 	"Wheel6",
 	"Wheel7",

@@ -10,6 +10,18 @@
 int globalTime = 0;
 extern ModelViewer *g_modelViewer;
 
+/*
+attach.id
+"Left wrist (shield) / Mount", "Right Palm", "Left Palm", "Right Elbow", "Left Elbow", -- 0 - 4
+					"Right Shoulder", "Left Shoulder", "Right Knee", "Left Knee", "Right Hip", -- 5 - 9
+					"Left Hip", "Helmet", "Back", "Right Shoulder Horizontal", "Left Shoulder Horizontal", -- 10 - 14
+					"Front Hit Region", "Rear Hit Region", "Mouth", "Head Region", "Base", -- 15 - 19
+					"Above", "Pre-Cast 1 L", "Pre-Cast 1 R", "Pre-Cast 2 L", "Pre-Cast 2 R", -- 20 - 24
+					"Pre-Cast 3", "Upper Back Sheath R", "Upper Back Sheath L", "Middle Back Sheath", "Belly", -- 25 - 29
+					"Reverse Back, Up Back L", "Right Back", "Left Hip Sheath", "Right Hip Sheath", "Spell Impact", -- 30 - 34
+					"Right Palm (Unk1)", "Right Palm (Unk2)"
+*/
+
 AnimManager::AnimManager(ModelAnimation *anim) {
 	AnimIDSecondary = -1;
 	SecondaryCount = UPPER_BODY_BONES;
@@ -830,6 +842,8 @@ void Model::initAnimated(MPQFile &f)
 			anims[i].d1 = animsWotLK.d1;
 			anims[i].d2 = animsWotLK.d2;
 			anims[i].playSpeed = animsWotLK.playSpeed;
+			anims[i].boundSphere.min = animsWotLK.boundSphere.min;
+			anims[i].boundSphere.max = animsWotLK.boundSphere.max;
 			anims[i].boundSphere.radius = animsWotLK.boundSphere.radius;
 			anims[i].NextAnimation = animsWotLK.NextAnimation;
 			anims[i].Index = animsWotLK.Index;
