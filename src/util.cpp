@@ -39,6 +39,9 @@ int modelExport_LW_DoodadsAs = 0;
 // X3D Options
 bool modelExport_X3D_ExportAnimation = false;
 bool modelExport_X3D_CenterModel = true;
+// M3 Options
+float modelExport_M3_BoundScale = 0.5f;
+float modelExport_M3_SphereScale = 0.5f;
 
 long langID = -1;
 long langOffset = -1;

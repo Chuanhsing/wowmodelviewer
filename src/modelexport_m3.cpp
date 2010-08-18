@@ -4,33 +4,30 @@
 #include "modelcanvas.h"
 
 #define	ROOT_BONE
-static float boneScale = 0.5;
 
-static const char* M3_Attach_Names[] = {
-	"Ref_Hardpoint",   // 0
-	"Ref_Weapon Right",
-	"Ref_Weapon Left",
-	"Ref_Hardpoint",
-	"Ref_Hardpoint",
-	"Ref_Hardpoint",   //5
-	"Ref_Hardpoint",
-	"Ref_Hardpoint",
-	"Ref_Hardpoint",
-	"Ref_Hardpoint",
-	"Ref_Hardpoint",   //10
-	"Ref_Hardpoint",
-	"Ref_Hardpoint",
-	"Ref_Hardpoint",
-	"Ref_Hardpoint",
-	"Ref_Target",     //15
-	"Ref_Target", 
-	"Ref_Hardpoint", 
-	"Ref_Head", 
-	"Ref_Origin",
-	"Ref_Overhead",   //20
+wxString M3_Attach_Names[] = {
+	_T("Ref_Hardpoint"),   // 0
+	_T("Ref_Weapon Right"),
+	_T("Ref_Weapon Left"),
+	_T("Ref_Hardpoint"),
+	_T("Ref_Hardpoint"),
+	_T("Ref_Hardpoint"),   //5
+	_T("Ref_Hardpoint"),
+	_T("Ref_Hardpoint"),
+	_T("Ref_Hardpoint"),
+	_T("Ref_Hardpoint"),
+	_T("Ref_Hardpoint"),   //10
+	_T("Ref_Hardpoint"),
+	_T("Ref_Hardpoint"),
+	_T("Ref_Hardpoint"),
+	_T("Ref_Hardpoint"),
+	_T("Ref_Target"),     //15
+	_T("Ref_Target"), 
+	_T("Ref_Hardpoint"), 
+	_T("Ref_Head"), 
+	_T("Ref_Origin"),
+	_T("Ref_Overhead"),   //20
 };
-
-#define	M3_ATTACH_MAX (21)
 
 static std::vector<ReferenceEntry> reList;
 
@@ -245,9 +242,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		seqs[i].ReplayStart = 1;
 		seqs[i].ReplayEnd = 1;
 		seqs[i].d4[0] = 0x64;
-		seqs[i].boundSphere.min = fixCoord(m->anims[logAnimations[0]].boundSphere.min) * boneScale;
-		seqs[i].boundSphere.max = fixCoord(m->anims[logAnimations[0]].boundSphere.max) * boneScale;
-		seqs[i].boundSphere.radius = m->anims[logAnimations[0]].boundSphere.radius * boneScale;
+		seqs[i].boundSphere.min = fixCoord(m->anims[logAnimations[0]].boundSphere.min) * modelExport_M3_SphereScale;
+		seqs[i].boundSphere.max = fixCoord(m->anims[logAnimations[0]].boundSphere.max) * modelExport_M3_SphereScale;
+		seqs[i].boundSphere.radius = m->anims[logAnimations[0]].boundSphere.radius * modelExport_M3_SphereScale;
 		f.Write(&seqs[i], sizeof(SEQS));
 	}
 	
@@ -676,7 +673,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			strName += wxString::Format(_T("Bone%d"), i-1);
 
 		for(uint32 j=0; j < BONE_MAX; j++) {
-			if (m->keyBoneLookup[j] == i-1) {
+			if (i > 0 && m->keyBoneLookup[j] == i-1) {
 				strName += _T("_")+wxString(Bone_Names[j], wxConvUTF8);
 			}
 		}
@@ -776,7 +773,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		if (i == 0)
 		{
 			bones[i].initScale.AnimRef.animid = i | (5 << 16);
-			bones[i].initScale.value = Vec3D(1.0f, 1.0f, 1.0f)*boneScale;
+			bones[i].initScale.value = Vec3D(1.0f, 1.0f, 1.0f)*modelExport_M3_BoundScale;
 			bones[i].initScale.unValue = Vec3D(1.0f, 1.0f, 1.0f);
 		}
 		else
@@ -1062,9 +1059,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	// boundSphere, m->header.boundSphere is too big
 	int anim_offset = logAnimations[0];
-	mdata.boundSphere.min = fixCoord(m->anims[anim_offset].boundSphere.min) * boneScale;
-	mdata.boundSphere.max = fixCoord(m->anims[anim_offset].boundSphere.max) * boneScale;
-	mdata.boundSphere.radius = m->anims[anim_offset].boundSphere.radius * boneScale;
+	mdata.boundSphere.min = fixCoord(m->anims[anim_offset].boundSphere.min) * modelExport_M3_SphereScale;
+	mdata.boundSphere.max = fixCoord(m->anims[anim_offset].boundSphere.max) * modelExport_M3_SphereScale;
+	mdata.boundSphere.radius = m->anims[anim_offset].boundSphere.radius * modelExport_M3_SphereScale;
 
 	// mAttach
 	// this makes some read errors in sc2 editor
@@ -1086,7 +1083,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 			wxString strName = _T("Ref_Hardpoint");
 
-			if (attachments[i].id < M3_ATTACH_MAX)
+			if (attachments[i].id < WXSIZEOF(M3_Attach_Names))
 				strName = wxString(M3_Attach_Names[attachments[i].id], wxConvUTF8);
 
 			AttRefName.push_back(strName);

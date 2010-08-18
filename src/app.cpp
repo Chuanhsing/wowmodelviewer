@@ -447,6 +447,9 @@ bool WowModelViewApp::LoadSettings()
 	pConfig->Read(_T("ModelExportLWExportDoodads"), &modelExport_LW_ExportDoodads, true);
 	pConfig->Read(_T("ModelExportLWDoodadsAs"), &modelExport_LW_DoodadsAs, 0);
 
+	//pConfig->Read(_T("ModelExportM3BoundScale"), &modelExport_M3_BoundScale, 0.5f);
+	//pConfig->Read(_T("ModelExportM3SphereScale"), &modelExport_M3_SphereScale, 0.5f);
+
 
 	// Data path and mpq archive stuff
 	wxString archives;
@@ -528,6 +531,9 @@ void WowModelViewApp::SaveSettings()
 	pConfig->Write(_T("ModelExportLWExportLights"), modelExport_LW_ExportLights);
 	pConfig->Write(_T("ModelExportLWExportDoodads"), modelExport_LW_ExportDoodads);
 	pConfig->Write(_T("ModelExportLWDoodadsAs"), modelExport_LW_DoodadsAs);
+
+	//pConfig->Write(_T("ModelExportM3BoundScale"), modelExport_M3_BoundScale);
+	//pConfig->Write(_T("ModelExportM3SphereScale"), modelExport_M3_SphereScale);
 
 	wxString archives;
 

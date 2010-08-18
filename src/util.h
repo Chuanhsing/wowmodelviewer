@@ -62,6 +62,8 @@ extern bool modelExport_LW_ExportDoodads;
 extern int modelExport_LW_DoodadsAs;
 extern bool modelExport_X3D_ExportAnimation;
 extern bool modelExport_X3D_CenterModel;
+extern float modelExport_M3_BoundScale;
+extern float modelExport_M3_SphereScale;
 
 extern wxArrayString mpqArchives;
 

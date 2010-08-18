@@ -80,6 +80,24 @@ public:
     void OnCheck(wxCommandEvent &event);
 };
 
+class ModelExportOptions_M3: public wxWindow
+{
+    DECLARE_CLASS(ModelExportOptions_M3)
+    DECLARE_EVENT_TABLE()
+
+    wxStaticText *stBoundScale, *stSphereScale;
+	wxButton *bApply;
+
+public:
+	wxTextCtrl *tcBoundScale, *tcSphereScale;
+
+    ModelExportOptions_M3(wxWindow* parent, wxWindowID id);
+	~ModelExportOptions_M3() {};
+
+    void Update();
+	void OnButton(wxCommandEvent &event);
+};
+
 class ModelExportOptions_Control: public wxWindow
 {
 	DECLARE_CLASS(ModelExportOptions_Control)
@@ -89,13 +107,14 @@ class ModelExportOptions_Control: public wxWindow
 	ModelExportOptions_General *page1;
 	ModelExportOptions_Lightwave *page2;
     ModelExportOptions_X3D *page3;
+	ModelExportOptions_M3 *page4;
 public:
 
 	ModelExportOptions_Control(wxWindow* parent, wxWindowID id);
 	~ModelExportOptions_Control();
 	
 	void Open();
-	void Close();
+	void OnClose(wxCloseEvent &event);
 };
 
 #endif

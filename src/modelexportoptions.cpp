@@ -14,6 +14,7 @@ IMPLEMENT_CLASS(ModelExportOptions_Control, wxWindow)
 IMPLEMENT_CLASS(ModelExportOptions_General, wxWindow)
 IMPLEMENT_CLASS(ModelExportOptions_Lightwave, wxWindow)
 IMPLEMENT_CLASS(ModelExportOptions_X3D, wxWindow)
+IMPLEMENT_CLASS(ModelExportOptions_M3, wxWindow)
 
 BEGIN_EVENT_TABLE(ModelExportOptions_General, wxWindow)
 	EVT_COMBOBOX(ID_EXPORTOPTIONS_PERFERED_EXPORTER,ModelExportOptions_General::OnComboBox)
@@ -39,19 +40,23 @@ BEGIN_EVENT_TABLE(ModelExportOptions_Lightwave, wxWindow)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_PRESERVE_DIR, ModelExportOptions_Lightwave::OnCheck)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_EXPORTLIGHTS, ModelExportOptions_Lightwave::OnCheck)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_EXPORTDOODADS, ModelExportOptions_Lightwave::OnCheck)
-	EVT_COMBOBOX(ID_EXPORTOPTIONS_LW_DOODADSAS,ModelExportOptions_Lightwave::OnComboBox)
+	EVT_COMBOBOX(ID_EXPORTOPTIONS_LW_DOODADSAS, ModelExportOptions_Lightwave::OnComboBox)
 	
 	// EVT_BUTTON(ID_SETTINGS_APPLY, ModelExportOptions_Lightwave::OnButton)
 END_EVENT_TABLE()
 
 
 BEGIN_EVENT_TABLE(ModelExportOptions_Control, wxWindow)
-	
+	//EVT_CLOSE(ModelExportOptions_Control::OnClose)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(ModelExportOptions_X3D, wxWindow)
     EVT_CHECKBOX(ID_EXPORTOPTIONS_X3D_EXPORT_ANIMATION, ModelExportOptions_X3D::OnCheck)
     EVT_CHECKBOX(ID_EXPORTOPTIONS_X3D_CENTER_MODEL, ModelExportOptions_X3D::OnCheck)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(ModelExportOptions_M3, wxWindow)
+	EVT_BUTTON(ID_EXPORTOPTIONS_M3_APPLY, ModelExportOptions_M3::OnButton)
 END_EVENT_TABLE()
 
 
@@ -66,7 +71,7 @@ ModelExportOptions_General::ModelExportOptions_General(wxWindow* parent, wxWindo
 	wxFlexGridSizer *top = new wxFlexGridSizer(1);
 
 	text = new wxStaticText(this, wxID_ANY, _T("Perferred Exporter:"), wxPoint(5,9), wxDefaultSize, 0);
-	top->Add(ddextype = new wxComboBox(this, ID_EXPORTOPTIONS_PERFERED_EXPORTER, _T("Perferred Exporter"), wxPoint(105,5), wxDefaultSize, 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
+	top->Add(ddextype = new wxComboBox(this, ID_EXPORTOPTIONS_PERFERED_EXPORTER, _T("Perferred Exporter"), wxPoint(115,5), wxDefaultSize, 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
 	chkbox[MEO_CHECK_PRESERVE_DIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_PRESERVE_DIR, _T("Preserve Directory Structure"), wxPoint(5,30), wxDefaultSize, 0);
 	chkbox[MEO_CHECK_USE_WMV_POSROT] = new wxCheckBox(this, ID_EXPORTOPTIONS_USE_WMV_POSROT, _T("Use Position and Rotation from WMV"), wxPoint(5,50), wxDefaultSize, 0);
 }
@@ -128,10 +133,12 @@ ModelExportOptions_Control::ModelExportOptions_Control(wxWindow* parent, wxWindo
 	page1 = new ModelExportOptions_General(notebook, ID_EXPORTOPTIONS_PAGE_GENERAL);
 	page2 = new ModelExportOptions_Lightwave(notebook, ID_EXPORTOPTIONS_PAGE_LIGHTWAVE);
     page3 = new ModelExportOptions_X3D(notebook, ID_EXPORTOPTIONS_PAGE_X3D);
+	page4 = new ModelExportOptions_M3(notebook, ID_EXPORTOPTIONS_PAGE_M3);
 
 	notebook->AddPage(page1, _T("General"), false, -1);
 	notebook->AddPage(page2, _T("Lightwave"), false);
     notebook->AddPage(page3, _T("X3D and XHTML"), false);
+	notebook->AddPage(page4, _T("M3"), false);
 }
 
 ModelExportOptions_Control::~ModelExportOptions_Control()
@@ -139,6 +146,7 @@ ModelExportOptions_Control::~ModelExportOptions_Control()
 	//page1->Destroy();
 	//page2->Destroy();
     //page3->Destroy();
+	//page4->Destroy();
 	//notebook->Destroy();
 }
 
@@ -149,11 +157,12 @@ void ModelExportOptions_Control::Open()
 	page1->Update();
 	page2->Update();
     page3->Update();
+	page4->Update();
 }
 
-void ModelExportOptions_Control::Close()
+void ModelExportOptions_Control::OnClose(wxCloseEvent &event)
 {
-	
+
 }
 
 
@@ -259,4 +268,35 @@ void ModelExportOptions_X3D::OnCheck(wxCommandEvent &event)
     }else if (id==ID_EXPORTOPTIONS_X3D_CENTER_MODEL){
         modelExport_X3D_CenterModel = event.IsChecked();
     }
+}
+
+// -= M3 Options =-
+
+ModelExportOptions_M3::ModelExportOptions_M3(wxWindow* parent, wxWindowID id)
+{
+    if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, _T("ModelExportOptions_M3")) == false) {
+        wxLogMessage(_T("GUI Error: ModelExportOptions_M3"));
+        return;
+    }
+
+	stBoundScale = new wxStaticText(this, wxID_ANY, _T("Bound Scale"), wxPoint(5, 5));
+	tcBoundScale = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 5));
+	stSphereScale = new wxStaticText(this, wxID_ANY, _T("Sphere Scale"), wxPoint(5, 25));
+	tcSphereScale = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 25));
+	bApply = new wxButton(this, ID_EXPORTOPTIONS_M3_APPLY, _T("Apply"), wxPoint(205, 5));
+}
+
+void ModelExportOptions_M3::Update()
+{
+	tcBoundScale->SetValue(wxString::Format(_T("%0.2f"), modelExport_M3_BoundScale));
+	tcSphereScale->SetValue(wxString::Format(_T("%0.2f"), modelExport_M3_SphereScale));
+}
+
+void ModelExportOptions_M3::OnButton(wxCommandEvent &event)
+{
+	int id = event.GetId();
+	if (id == ID_EXPORTOPTIONS_M3_APPLY) {
+		modelExport_M3_BoundScale = wxAtof(tcBoundScale->GetValue());
+		modelExport_M3_SphereScale = wxAtof(tcSphereScale->GetValue());
+	}
 }
