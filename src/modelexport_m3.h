@@ -242,6 +242,12 @@ struct MODL
 	/*0x2E8*/ Reference mBBSC;
 	/*0x2F4*/ Reference mTMD;
 	/*0x300*/ uint32 d9[4];
+
+	void init()
+	{
+		type = 0x180d53;
+		vertFlags = 0x182007D;
+	}
 };
 
 #define	BONE_FLAGS_INHERIT_TRANSLATION	0x1
@@ -356,6 +362,11 @@ struct MATM
 {
     /*0x00*/ uint32 nmat; //usually only 1
     /*0x04*/ uint32 matind; //MAT index
+
+	void init()
+	{
+		nmat = 1;
+	}
 };
 
 /*
