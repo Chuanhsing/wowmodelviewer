@@ -305,7 +305,7 @@ void WriteLWSceneLight(ofstream &fs, uint32 &lcount, Vec3D LPos, uint32 Ltype, V
 
 // VX is Lightwave Shorthand for any Point Number, because Lightwave stores points differently if they're over a certain threshold.
 void LW_WriteVX(wxFFileOutputStream &f, uint32 p, uint32 &Size){
-	if (p < 0xFF00){
+	if (p <= 0xFF00){
 		uint16 indice = MSB2(p & 0x0000FFFF);
 		f.Write(reinterpret_cast<char *>(&indice),2);
 		Size += 2;
@@ -4136,11 +4136,14 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 	for (uint16 l=0;l<(uint16)Object.Layers.size();l++){
 		LWLayer cLyr = Object.Layers[l];
 		// Define a Layer & It's data
-		cLyr.Name.Append(_T('\0'));
+		if (cLyr.Name.length() > 0)
+			cLyr.Name.Append(_T('\0'));
 		if (fmod((float)cLyr.Name.length(), 2.0f) > 0)
 			cLyr.Name.Append(_T('\0'));
 		uint16 LayerNameSize = (uint16)cLyr.Name.length();
-		uint32 LayerSize = 18+LayerNameSize;
+		uint32 LayerSize = 16+LayerNameSize;
+		if (cLyr.ParentLayer)
+			LayerSize += 2;
 		f.Write("LAYR", 4);
 		u32 = MSB4<uint32>(LayerSize);
 		f.Write(reinterpret_cast<char *>(&u32), 4);
@@ -4160,8 +4163,11 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			f.Write(cLyr.Name, LayerNameSize);
 		}
 		// Parent
-		f.Write(reinterpret_cast<char *>(&zero), 2);
-		fileLen += LayerSize;
+		if (cLyr.ParentLayer){
+			int pLyr = MSB2(cLyr.ParentLayer);
+			f.Write(reinterpret_cast<char *>(&pLyr), 2);
+			fileLen += LayerSize;
+		}
 
 		// -------------------------------------------------
 		// Points Chunk
@@ -4180,8 +4186,8 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		for (size_t i=0; i<cLyr.Points.size(); i++) {
 			Vec3D vert;
 			vert.x = MSB4<float>(cLyr.Points[i].PointData.x);
-			vert.y = MSB4<float>(cLyr.Points[i].PointData.z);
-			vert.z = MSB4<float>(cLyr.Points[i].PointData.y);
+			vert.y = MSB4<float>(cLyr.Points[i].PointData.y);
+			vert.z = MSB4<float>(cLyr.Points[i].PointData.z);
 
 			f.Write(reinterpret_cast<char *>(&vert.x), 4);
 			f.Write(reinterpret_cast<char *>(&vert.y), 4);
@@ -4340,65 +4346,79 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			f.Write(reinterpret_cast<char *>(&u32), 4);
 			f.SeekO(0, wxFromEnd);
 			fileLen += polySize;
-		}
 
+			// The PTAG chunk associates tags with polygons. In this case, it identifies which part or surface is assigned to each polygon. 
+			// The first number in each pair is a 0-based index into the most recent POLS chunk, and the second is a 0-based 
+			// index into the TAGS chunk.
 
-		// The PTAG chunk associates tags with polygons. In this case, it identifies which part or surface is assigned to each polygon. 
-		// The first number in each pair is a 0-based index into the most recent POLS chunk, and the second is a 0-based 
-		// index into the TAGS chunk.
+			// NOTE: Every PTAG type needs a seperate PTAG call!
 
-		// NOTE: Every PTAG type needs a seperate PTAG call!
+			// Parts PolyTag
+			if (Object.PartNames.size() > 0){
+				f.Write(_T("PTAG"), 4);
+				uint32 ptagSize = 4;
+				u32 = MSB4<uint32>(ptagSize);
+				f.Write(reinterpret_cast<char *>(&u32), 4);
+				fileLen += 8;
+				f.Write(_T("PART"), 4);
 
-		// Parts PolyTag
-		if (Object.PartNames.size() > 0){
-			f.Write(_T("PTAG"), 4);
-			uint32 ptagSize = 4;
-			u32 = MSB4<uint32>(ptagSize);
-			f.Write(reinterpret_cast<char *>(&u32), 4);
-			fileLen += 8;
-			f.Write(_T("PART"), 4);
+				for (unsigned int x=0;x<cLyr.Polys.size();x++){
+					LWPoly Poly = cLyr.Polys[x];
+					LW_WriteVX(f,x,ptagSize);
 
-			for (unsigned int x=0;x<cLyr.Polys.size();x++){
-				LWPoly Poly = cLyr.Polys[x];
-				LW_WriteVX(f,x,ptagSize);
+					u16 = MSB2(Poly.PartTagID);
+					f.Write(reinterpret_cast<char *>(&u16), 2);
+					ptagSize += 2;
+				}
+				fileLen += ptagSize;
 
-				u16 = MSB2(Poly.PartTagID);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
-				ptagSize += 2;
+				off_t = -4-ptagSize;
+				f.SeekO(off_t, wxFromCurrent);
+				u32 = MSB4<uint32>(ptagSize);
+				f.Write(reinterpret_cast<char *>(&u32), 4);
+				f.SeekO(0, wxFromEnd);
 			}
-			fileLen += ptagSize;
 
-			off_t = -4-ptagSize;
-			f.SeekO(off_t, wxFromCurrent);
-			u32 = MSB4<uint32>(ptagSize);
-			f.Write(reinterpret_cast<char *>(&u32), 4);
-			f.SeekO(0, wxFromEnd);
+			// Surface PolyTag
+			if (Object.Surfaces.size() > 0){
+				f.Write(_T("PTAG"), 4);
+				uint32 ptagSize = 4;
+				u32 = MSB4<uint32>(ptagSize);
+				f.Write(reinterpret_cast<char *>(&u32), 4);
+				fileLen += 8;
+				f.Write(_T("SURF"), 4);
+
+				for (unsigned int x=0;x<cLyr.Polys.size();x++){
+					LWPoly Poly = cLyr.Polys[x];
+					LW_WriteVX(f,x,ptagSize);
+
+					u16 = MSB2(Poly.SurfTagID);
+					f.Write(reinterpret_cast<char *>(&u16), 2);
+					ptagSize += 2;
+				}
+				fileLen += ptagSize;
+
+				off_t = -4-ptagSize;
+				f.SeekO(off_t, wxFromCurrent);
+				u32 = MSB4<uint32>(ptagSize);
+				f.Write(reinterpret_cast<char *>(&u32), 4);
+				f.SeekO(0, wxFromEnd);
+			}
 		}
 
-		// Surface PolyTag
+		// Clips (Images)
+
+		// Surfaces
 		if (Object.Surfaces.size() > 0){
-			f.Write(_T("PTAG"), 4);
-			uint32 ptagSize = 4;
-			u32 = MSB4<uint32>(ptagSize);
-			f.Write(reinterpret_cast<char *>(&u32), 4);
-			fileLen += 8;
-			f.Write(_T("SURF"), 4);
+			for (int x=0;x<Object.Surfaces.size();x++){
+				LWSurface cSurf = Object.Surfaces[x];
 
-			for (unsigned int x=0;x<cLyr.Polys.size();x++){
-				LWPoly Poly = cLyr.Polys[x];
-				LW_WriteVX(f,x,ptagSize);
+				// Temp Values
+				Vec4D Color = Vec4D(1,1,1,1);
+				float reflect = 0.0f;
 
-				u16 = MSB2(Poly.SurfTagID);
-				f.Write(reinterpret_cast<char *>(&u16), 2);
-				ptagSize += 2;
+				LW_WriteSurface(f,cSurf.Name, Color, reflect, cSurf.isDoubleSided, (uint32)Object.PartNames.size() + x, cSurf.Comment, fileLen);
 			}
-			fileLen += ptagSize;
-
-			off_t = -4-ptagSize;
-			f.SeekO(off_t, wxFromCurrent);
-			u32 = MSB4<uint32>(ptagSize);
-			f.Write(reinterpret_cast<char *>(&u32), 4);
-			f.SeekO(0, wxFromEnd);
 		}
 	}
 
@@ -4426,18 +4446,48 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init){
 	if (m) {
 		LWLayer Layer;
 		Layer.Name = wxString(m->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
+		Layer.ParentLayer = -1;
 
 		// Bounding Box for the Layer
 		Layer.BoundingBox1 = m->bounds[0];
 		Layer.BoundingBox2 = m->bounds[1];
 
-		//uint32 PolyCounter = 0;
-		//uint32 SurfCounter = 0;
+		uint32 PolyCounter = 0;
+		//uint32 PartCounter = 0;
+		uint32 SurfCounter = 0;
 		//uint32 PrevGVerts = 0;
 
 		// Mesh & Slot names
 		wxString meshes[19] = {_T("Hairstyles"), _T("Facial1"), _T("Facial2"), _T("Facial3"), _T("Braces"), _T("Boots"), wxEmptyString, _T("Ears"), _T("Wristbands"),  _T("Kneepads"), _T("Pants"), _T("Pants"), _T("Tarbard"), _T("Trousers"), wxEmptyString, _T("Cape"), wxEmptyString, _T("Eyeglows"), _T("Belt") };
 		//wxString slots[15] = {_T("Helm"), wxEmptyString, _T("Shoulder"), wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, _T("Right Hand Item"), _T("Left Hand Item"), wxEmptyString, wxEmptyString, _T("Quiver") };
+
+		// Build Part Names
+		// Seperated from the rest of the build for various reasons.
+		for (unsigned short i=0; i<m->passes.size(); i++) {
+			ModelRenderPass &p = m->passes[i];
+			if (p.init(m)){
+				// Main Model
+				int g = p.geoset;
+				bool isFound = false;
+				wxString partName, matName;
+				
+				// Part Names
+				int mesh = m->geosets[g].id / 100;
+				if (m->modelType == MT_CHAR && mesh < 19 && meshes[mesh] != wxEmptyString){
+					partName = wxString::Format(_T("Geoset %03i - %s"),g,meshes[mesh].c_str());
+				}else{
+					partName = wxString::Format(_T("Geoset %03i"),g);
+				}
+				for (int x=0;x<Object.PartNames.size();x++){
+					if (Object.PartNames[x] == partName){
+						isFound = true;
+						break;
+					}
+				}
+				if (isFound == false)
+					Object.PartNames.push_back(partName);
+			}
+		}
 
 		// Process Passes
 		for (unsigned short i=0; i<m->passes.size(); i++) {
@@ -4445,6 +4495,9 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init){
 			if (p.init(m)){
 				// Main Model
 				int g = p.geoset;
+				bool isFound = false;
+				int partID = i;
+				int surfID = i;
 
 				wxString partName, matName;
 				
@@ -4455,27 +4508,47 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init){
 				}else{
 					partName = wxString::Format(_T("Geoset %03i"),g);
 				}
-				Object.PartNames.push_back(partName);
+				for (int x=0;x<Object.PartNames.size();x++){
+					if (Object.PartNames[x] == partName){
+						partID = x;
+						break;
+					}
+				}
 
 				// Surface Name
 				matName = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.'));
 				if (matName.Len() == 0)
 					matName = wxString::Format(_T("Material_%03i"), p.tex);
-				LWSurface Surface(matName,wxString(m->TextureList[p.tex].c_str(), wxConvUTF8));
-				Object.Surfaces.push_back(Surface);
+
+				for (int x=0;x<Object.Surfaces.size();x++){
+					if (Object.Surfaces[x].Name == matName){
+						isFound = true;
+						surfID = x;
+						break;
+					}
+				}
+
+				//if (isFound == false){
+					bool doubesided = (p.cull?true:false);
+					wxLogMessage(_T("Doublesided: %s, P.Cull: %s"),(doubesided?_T("true"):_T("false")),(p.cull?_T("true"):_T("false")));
+					LWSurface Surface(matName,wxString(m->TextureList[p.tex].c_str(), wxConvUTF8),doubesided);
+					Object.Surfaces.push_back(Surface);
+				//}
 
 				// Points
 				for (uint32 k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 					uint16 a = m->indices[b];
 					Vec3D vert;
 					if ((init == false)&&(m->vertices)) {
-						vert.x = MSB4<float>(m->vertices[a].x);
-						vert.y = MSB4<float>(m->vertices[a].y);
-						vert.z = MSB4<float>(0-m->vertices[a].z);
+						vert = m->vertices[a];
+						/*vert.x = m->vertices[a].x;
+						vert.y = m->vertices[a].y;
+						vert.z = m->vertices[a].z;*/
 					} else {
-						vert.x = MSB4<float>(m->origVertices[a].pos.x);
-						vert.y = MSB4<float>(m->origVertices[a].pos.y);
-						vert.z = MSB4<float>(0-m->origVertices[a].pos.z);
+						vert = m->origVertices[a].pos;
+						/*vert.x = m->origVertices[a].pos.x;
+						vert.y = m->origVertices[a].pos.y;
+						vert.z = m->origVertices[a].pos.z;*/
 					}
 					LWPoint Point;
 					Point.PointData = vert;
@@ -4484,11 +4557,23 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init){
 					Layer.Points.push_back(Point);
 				}
 
-
-				// --== Attachments ==--
+				// Polys
+				for (unsigned int k=0; k<p.indexCount; k+=3) {
+					LWPoly Poly;
+					Poly.PolyData.numVerts = 3;
+					for (int x=0;x<3;x++,PolyCounter++){						
+						Poly.PolyData.indice[x] = PolyCounter;
+					}
+					Poly.PartTagID = partID;
+					Poly.SurfTagID = (uint32)Object.PartNames.size() + SurfCounter;
+					Layer.Polys.push_back(Poly);
+				}
+				SurfCounter++;
 			}
+			//PartCounter++;
 		}
 
+		// --== Attachments ==--
 
 
 /*
@@ -4569,6 +4654,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 	if (m) {
 		LWLayer Layer;
 		Layer.Name = wxString(m->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
+		Layer.ParentLayer = -1;
 
 		// Bounding Box for the Layer
 		Layer.BoundingBox1 = m->v1;
@@ -4599,7 +4685,11 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 					// --== Point Data ==--
 					LWPoint Point;
 
-					Point.PointData = group->vertices[v];		// Points
+					// Points
+					// Using straight verts causes the model to come out on it's side.
+					Point.PointData.x = group->vertices[v].x;
+					Point.PointData.y = group->vertices[v].z;
+					Point.PointData.z = group->vertices[v].y;
 					Point.UVData = group->texcoords[v];		// UVs
 					// Weight Data not needed for WMOs
 					// Vertex Colors (NYI)
@@ -4609,7 +4699,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 				}
 
 				// Process Indices
-				for(unsigned int ii=batch->indexStart;ii<(batch->indexStart+batch->indexCount);ii+=3,GVertCounter++){
+				for (uint32 i=0; i<batch->indexCount; i+=3, GPolyCounter++) {
 					// --== Polygon Data ==--	
 					LWPoly Poly;
 					Poly.PolyData.numVerts = 3;
@@ -4623,10 +4713,9 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 						}
 
 						uint32 a = GPolyCounter + mod;
-						uint32 b = group->IndiceToVerts[a];
+						uint32 b = group->IndiceToVerts[group->indices[a]];
 
 						wxLogMessage(_T("Group: %i, a: %i, b:%i, PrevGVerts: %i, Final Indice: %i"),g,a,b,PrevGVerts,PrevGVerts+b);
-						
 						Poly.PolyData.indice[x] = Vect2Point[b];
 					}
 					Poly.PartTagID = g;

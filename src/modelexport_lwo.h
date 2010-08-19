@@ -153,6 +153,7 @@ struct LWPoly {
 struct LWLayer {
 	// Layer Data
 	wxString Name;					// Name of the Layer, Optional
+	int ParentLayer;				// 0-based number of parent layer. -1 or omitted for no parent.
 
 	// Points Block
 	std::vector<LWPoint>Points;		// Various Point Blocks used by this layer.
@@ -178,11 +179,17 @@ struct LWSurface {
 	wxString Name;		// The Surface's Name
 	wxString Comment;	// Comment for the surface.
 
+	bool isDoubleSided;	// Should it show the same surface on both sides of a poly.
+
 	// Colors & Values
 	// NYI
-	LWSurface(wxString name, wxString comment){
+
+	// Constructors
+	LWSurface(wxString name, wxString comment, bool doublesided = false){
 		Name = name;
 		Comment = comment;
+
+		isDoubleSided = doublesided;
 	}
 };
 
