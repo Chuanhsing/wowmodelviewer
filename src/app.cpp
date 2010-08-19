@@ -404,6 +404,7 @@ void searchMPQs()
 
 bool WowModelViewApp::LoadSettings()
 {
+	wxString tmp;
 	// Application Config Settings
 	wxFileConfig *pConfig = new wxFileConfig(_T("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
 	
@@ -447,8 +448,11 @@ bool WowModelViewApp::LoadSettings()
 	pConfig->Read(_T("ModelExportLWExportDoodads"), &modelExport_LW_ExportDoodads, true);
 	pConfig->Read(_T("ModelExportLWDoodadsAs"), &modelExport_LW_DoodadsAs, 0);
 
-	//pConfig->Read(_T("ModelExportM3BoundScale"), &modelExport_M3_BoundScale, 0.5f);
-	//pConfig->Read(_T("ModelExportM3SphereScale"), &modelExport_M3_SphereScale, 0.5f);
+	pConfig->Read(_T("ModelExportM3BoundScale"), &tmp, _T("0.5"));
+	modelExport_M3_BoundScale = wxAtof(tmp);
+	pConfig->Read(_T("ModelExportM3SphereScale"), &tmp, _T("0.5"));
+	modelExport_M3_SphereScale = wxAtof(tmp);
+	pConfig->Read(_T("ModelExportM3TexturePath"), &modelExport_M3_TexturePath, wxEmptyString);
 
 
 	// Data path and mpq archive stuff
@@ -532,8 +536,9 @@ void WowModelViewApp::SaveSettings()
 	pConfig->Write(_T("ModelExportLWExportDoodads"), modelExport_LW_ExportDoodads);
 	pConfig->Write(_T("ModelExportLWDoodadsAs"), modelExport_LW_DoodadsAs);
 
-	//pConfig->Write(_T("ModelExportM3BoundScale"), modelExport_M3_BoundScale);
-	//pConfig->Write(_T("ModelExportM3SphereScale"), modelExport_M3_SphereScale);
+	pConfig->Write(_T("ModelExportM3BoundScale"), wxString::Format(_T("%0.2f"), modelExport_M3_BoundScale));
+	pConfig->Write(_T("ModelExportM3SphereScale"), wxString::Format(_T("%0.2f"), modelExport_M3_SphereScale));
+	pConfig->Write(_T("ModelExportM3TexturePath"), modelExport_M3_TexturePath);
 
 	wxString archives;
 

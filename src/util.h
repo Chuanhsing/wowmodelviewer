@@ -64,6 +64,7 @@ extern bool modelExport_X3D_ExportAnimation;
 extern bool modelExport_X3D_CenterModel;
 extern float modelExport_M3_BoundScale;
 extern float modelExport_M3_SphereScale;
+extern wxString modelExport_M3_TexturePath;
 
 extern wxArrayString mpqArchives;
 

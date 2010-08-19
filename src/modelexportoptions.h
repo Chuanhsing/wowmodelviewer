@@ -86,10 +86,11 @@ class ModelExportOptions_M3: public wxWindow
     DECLARE_EVENT_TABLE()
 
     wxStaticText *stBoundScale, *stSphereScale;
+	wxStaticText *stTexturePath;
 	wxButton *bApply;
 
 public:
-	wxTextCtrl *tcBoundScale, *tcSphereScale;
+	wxTextCtrl *tcBoundScale, *tcSphereScale, *tcTexturePathValue;
 
     ModelExportOptions_M3(wxWindow* parent, wxWindowID id);
 	~ModelExportOptions_M3() {};

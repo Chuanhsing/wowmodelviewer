@@ -42,6 +42,7 @@ bool modelExport_X3D_CenterModel = true;
 // M3 Options
 float modelExport_M3_BoundScale = 0.5f;
 float modelExport_M3_SphereScale = 0.5f;
+wxString modelExport_M3_TexturePath = _T("");
 
 long langID = -1;
 long langOffset = -1;

@@ -279,10 +279,12 @@ ModelExportOptions_M3::ModelExportOptions_M3(wxWindow* parent, wxWindowID id)
         return;
     }
 
-	stBoundScale = new wxStaticText(this, wxID_ANY, _T("Bound Scale"), wxPoint(5, 5));
+	stBoundScale = new wxStaticText(this, wxID_ANY, _T("Bound Scale"), wxPoint(5, 8));
 	tcBoundScale = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 5));
-	stSphereScale = new wxStaticText(this, wxID_ANY, _T("Sphere Scale"), wxPoint(5, 25));
-	tcSphereScale = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 25));
+	stSphereScale = new wxStaticText(this, wxID_ANY, _T("Sphere Scale"), wxPoint(5, 33));
+	tcSphereScale = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 30));
+	stTexturePath = new wxStaticText(this, wxID_ANY, _T("Texture Path"), wxPoint(5, 58));
+	tcTexturePathValue = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 55), wxSize(250, 25));
 	bApply = new wxButton(this, ID_EXPORTOPTIONS_M3_APPLY, _T("Apply"), wxPoint(205, 5));
 }
 
@@ -290,6 +292,7 @@ void ModelExportOptions_M3::Update()
 {
 	tcBoundScale->SetValue(wxString::Format(_T("%0.2f"), modelExport_M3_BoundScale));
 	tcSphereScale->SetValue(wxString::Format(_T("%0.2f"), modelExport_M3_SphereScale));
+	tcTexturePathValue->SetValue(modelExport_M3_TexturePath);
 }
 
 void ModelExportOptions_M3::OnButton(wxCommandEvent &event)
@@ -298,5 +301,6 @@ void ModelExportOptions_M3::OnButton(wxCommandEvent &event)
 	if (id == ID_EXPORTOPTIONS_M3_APPLY) {
 		modelExport_M3_BoundScale = wxAtof(tcBoundScale->GetValue());
 		modelExport_M3_SphereScale = wxAtof(tcSphereScale->GetValue());
-	}
+		modelExport_M3_TexturePath = tcTexturePathValue->GetValue();
+	} 
 }
