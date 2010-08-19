@@ -575,7 +575,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				sds[ii].timeline.nEntries = m->texAnims[M2TexAnimId[j]].trans.times[0].size();
 				sds[ii].timeline.ref = ++fHead.nRefs;
 				RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
-				for (int k=0; k<counts; k++) {
+				for (int k=0; k<sds[ii].timeline.nEntries; k++) {
 					f.Write(&m->texAnims[M2TexAnimId[j]].trans.times[0][k], sizeof(int32));
 				}
 				padding(&f);
@@ -583,7 +583,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				sds[ii].data.nEntries = sds[ii].timeline.nEntries;
 				sds[ii].data.ref = ++fHead.nRefs;
 				RefEntry("2CEV", f.Tell(), sds[ii].data.nEntries, 0);
-				for (int k=0; k<counts; k++) {
+				for (int k=0; k<sds[ii].data.nEntries; k++) {
 					Vec3D tran;
 					tran.x = -m->texAnims[M2TexAnimId[j]].trans.data[0][k].x;
 					tran.y = -m->texAnims[M2TexAnimId[j]].trans.data[0][k].y;
