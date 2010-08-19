@@ -4,7 +4,7 @@
 #include "exporters.h"
 #include "CxImage/ximage.h"
 
-typedef std::pair<wxTreeItemId, std::string> TreeStackItem;
+typedef std::pair<wxTreeItemId, wxString> TreeStackItem;
 typedef std::vector<TreeStackItem> TreeStack;
 
 IMPLEMENT_CLASS(FileControl, wxWindow)
@@ -94,7 +94,7 @@ FileControl::~FileControl()
 	choFilter->Destroy();
 }
 
-bool filterSearch(std::string s)
+bool filterSearch(wxString s)
 {
 	const size_t len = s.length();
 	if (len < 4) 
@@ -146,13 +146,13 @@ void FileControl::Init(ModelViewer* mv)
 	size_t index=0;
 
 	for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
-		const std::string &str = (*it).displayName;
+		const wxString &str = (*it).displayName;
 		size_t p = 0;
 		size_t i;
 
 		// find the matching place in the stack
 		for (i=1; i<stack.size(); i++) {
-			std::string &comp = stack[i].second;
+			wxString &comp = stack[i].second;
 			bool match = true;
 			for (unsigned int j=0; j<comp.length(); j++) {
 				if (comp[j] != str[p+j]) {
@@ -223,7 +223,7 @@ void FileControl::Init(ModelViewer* mv)
 			}
 		}
 		// now start was at the character after the last \\, so we append a filename
-		std::string fileName = str.substr(start);
+		wxString fileName = str.substr(start);
 
 		item = fileTree->AppendItem(stack[stack.size()-1].first, wxString(fileName.c_str(), *wxConvCurrent), -1, -1, new FileTreeData(str));
         switch(it->color){
@@ -331,7 +331,7 @@ void FileControl::ExportPNG(wxString val, wxString suffix)
 	wxFileName fn(val);
 	if (fn.GetExt().Lower() != _T("blp"))
 		return;
-	TextureID temptex = texturemanager.add(std::string(val.mb_str()));
+	TextureID temptex = texturemanager.add(wxString(val.mb_str()));
 	Texture &tex = *((Texture*)texturemanager.items[temptex]);
 	if (tex.w == 0 || tex.h == 0)
 		return;

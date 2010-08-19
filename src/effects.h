@@ -21,7 +21,7 @@ void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent
 
 struct NumStringPair {
 	int id;
-	std::string name;
+	wxString name;
 
 	const bool operator< (const NumStringPair &p) const {
 		return name < p.name;
@@ -31,7 +31,7 @@ struct NumStringPair {
 struct EnchantsRec {
 	unsigned int id;
 	unsigned int index[5];
-	std::string name;
+	wxString name;
 
 	const bool operator< (const EnchantsRec &p) const {
 		return name < p.name;
@@ -42,7 +42,7 @@ struct EnchantsRec {
 struct SpellRec {
 	unsigned int index;
 	unsigned int id;
-	std::string name;
+	wxString name;
 
 };
 */

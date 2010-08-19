@@ -92,7 +92,7 @@ int randint(int lower, int upper)
     return lower + (int)((upper+1-lower)*frand());
 }
 
-void fixname(std::string &name)
+void fixname(wxString &name)
 {
 	for (uint32 i=0; i<name.length(); i++) {
 		if (i>0 && name[i]>='A' && name[i]<='Z' && isalpha(name[i-1])) {

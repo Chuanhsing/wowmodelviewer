@@ -7,10 +7,11 @@
 #include <string>
 #include <set>
 #include <vector>
+#include <wx/wx.h>
 
 struct FileTreeItem {
-    std::string displayName;
-	std::string fileName;
+    wxString displayName;
+	wxString fileName;
 	int color;
 
 	/// Comparison
@@ -79,8 +80,8 @@ inline void flipcc(char *fcc)
 	fcc[2]=t;
 }
 
-inline bool defaultFilterFunc(std::string) { return true; }
-void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string) = defaultFilterFunc);
+inline bool defaultFilterFunc(wxString) { return true; }
+void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString) = defaultFilterFunc);
 
 
 #endif

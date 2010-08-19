@@ -44,8 +44,8 @@ private:
 class FileTreeData:public wxTreeItemData
 {
 public:
-	std::string fn;
-	FileTreeData(std::string fn):fn(fn) {}
+	wxString fn;
+	FileTreeData(wxString fn):fn(fn) {}
 };
 
 #endif

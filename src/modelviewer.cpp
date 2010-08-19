@@ -1464,24 +1464,24 @@ void ModelViewer::OnToggleDock(wxCommandEvent &event)
 	int id = event.GetId();
 
 	// wxAUI Stuff
-	if (id==ID_SHOW_FILE_LIST)
+	if (id==ID_SHOW_FILE_LIST) {
 		interfaceManager.GetPane(fileControl).Show(true);
-	else if (id==ID_SHOW_ANIM)
+	} else if (id==ID_SHOW_ANIM) {
 		interfaceManager.GetPane(animControl).Show(true);
-	else if (id==ID_SHOW_CHAR && isChar)
+	} else if (id==ID_SHOW_CHAR && isChar) {
 		interfaceManager.GetPane(charControl).Show(true);
-	else if (id==ID_SHOW_LIGHT)
+	} else if (id==ID_SHOW_LIGHT) {
 		interfaceManager.GetPane(lightControl).Show(true);
-	else if (id==ID_SHOW_MODEL)
+	} else if (id==ID_SHOW_MODEL) {
 		interfaceManager.GetPane(modelControl).Show(true);
-	else if (id==ID_SHOW_SETTINGS) {
+	} else if (id==ID_SHOW_SETTINGS) {
 		interfaceManager.GetPane(settingsControl).Show(true);
 		settingsControl->Open();
 	} else if (id==ID_SHOW_MODELBANK) {
 		interfaceManager.GetPane(modelbankControl).Show(true);
 	} else if (id==ID_EXPORT_TEXTURES) {
 		interfaceManager.GetPane(modelOpened).Show(true);
-	}else if(id==ID_MODELEXPORT_OPTIONS){
+	} else if(id==ID_MODELEXPORT_OPTIONS) {
 		interfaceManager.GetPane(exportOptionsControl).Show(true);
 		exportOptionsControl->Open();
 	}
@@ -1872,7 +1872,7 @@ void ModelViewer::OnMount(wxCommandEvent &event)
 	bool mountable = (root->header.nAttachLookup > mountSlot) && (root->attLookup[mountSlot]!=-1);
 	if (!mountable) return;
 
-	std::string fn = charControl->selectCharModel();
+	wxString fn = charControl->selectCharModel();
 	if (fn.length()==0) return;
 
 	canvas->root->delChildren();
@@ -2025,7 +2025,7 @@ void ModelViewer::OnBackground(wxCommandEvent &event)
 
 			wxSingleChoiceDialog skyDialog(this, _("Choose"), _("Select a Sky Box"), skyboxes);
 			if (skyDialog.ShowModal() == wxID_OK && skyDialog.GetStringSelection() != wxEmptyString) {
-				canvas->skyModel = new Model(std::string(skyDialog.GetStringSelection().mb_str()), false);
+				canvas->skyModel = new Model(wxString(skyDialog.GetStringSelection().mb_str()), false);
 				canvas->sky->model = canvas->skyModel;
 			}
 		}

@@ -1,7 +1,7 @@
 #include "dbcfile.h"
 #include "mpq.h"
 
-DBCFile::DBCFile(const std::string &filename) : filename(filename)
+DBCFile::DBCFile(const wxString &filename) : filename(filename)
 {
 	data = NULL;
 }

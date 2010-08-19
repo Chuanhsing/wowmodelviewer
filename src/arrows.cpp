@@ -67,7 +67,7 @@ void ArrowControl::OnButton(wxCommandEvent &event)
 	int id = event.GetId();
 
 	if(id == ID_ARROW_ATTACH) {
-		std::string mp = "Item\\ObjectComponents\\Ammo\\Arrow_A_01Brown.blp";
+		wxString mp = "Item\\ObjectComponents\\Ammo\\Arrow_A_01Brown.blp";
 		
 		curAtt = charAtt->addChild((_T("Item\\Objectcomponents\\ammo\\") + model->GetStringSelection()).mb_str(), joint->GetSelection(), -1);
 		atts.push_back(curAtt);

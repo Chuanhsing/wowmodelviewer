@@ -62,7 +62,7 @@ public:
 	bool ok;
 
 	bool outdoorLights;
-	std::string name, desc;
+	wxString name, desc;
 
 	WMOGroup() : dl(0), ddr(0), vertices(NULL), normals(NULL), texcoords(NULL), indices(NULL), materials(NULL), batches(NULL) {}
 	~WMOGroup();
@@ -174,7 +174,7 @@ public:
 	unsigned int d1;
 	
 	Model *model;
-	std::string filename;
+	wxString filename;
 	int id;
 	unsigned int scale;
 	float frot;
@@ -225,8 +225,8 @@ public:
 	WMOMaterial *mat;
 	bool ok;
 	char *groupnames;
-	std::vector<std::string> textures;
-	std::vector<std::string> models;
+	std::vector<wxString> textures;
+	std::vector<wxString> models;
 	std::vector<WMOModelInstance> modelis;
 	ModelManager loadedModels;
 
@@ -244,7 +244,7 @@ public:
 	Model *skybox;
 	int sbid;
 
-	WMO(std::string name);
+	WMO(wxString name);
 	~WMO();
 	
 	int doodadset;
@@ -264,7 +264,7 @@ public:
 /*
 class WMOManager: public SimpleManager {
 public:
-	int add(std::string name);
+	int add(wxString name);
 };
 
 

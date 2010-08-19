@@ -9,7 +9,7 @@
 class DBCFile
 {
 public:
-	DBCFile(const std::string &filename);
+	DBCFile(const wxString &filename);
 	~DBCFile();
 
 	// Open database. It must be openened before it can be used.
@@ -21,13 +21,13 @@ public:
 	class Exception
 	{
 	public:
-		Exception(const std::string &message): message(message)
+		Exception(const wxString &message): message(message)
 		{ }
 		virtual ~Exception()
 		{ }
-		const std::string &getMessage() {return message;}
+		const wxString &getMessage() {return message;}
 	private:
-		std::string message;
+		wxString message;
 	};
 
 	// 
@@ -129,7 +129,7 @@ public:
 	size_t getFieldCount() const { return fieldCount; }
 
 private:
-	std::string filename;
+	wxString filename;
 	size_t recordSize;
 	size_t recordCount;
 	size_t fieldCount;

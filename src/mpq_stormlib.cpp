@@ -9,7 +9,7 @@
 
 using namespace std;
 
-typedef vector< pair< string, HANDLE* > > ArchiveSet;
+typedef vector< pair< wxString, HANDLE* > > ArchiveSet;
 static ArchiveSet gOpenArchives;
 
 MPQArchive::MPQArchive(const char* filename)
@@ -344,7 +344,7 @@ unsigned char* MPQFile::getPointer()
 
 #include <wx/tokenzr.h>
 
-void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
+void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 {
 	for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end();++i)
 	{
@@ -395,7 +395,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 					p = q + 2;
 					//line.erase(line.length()-2, 2); // delete \r\n
 
-					if (filterfunc(std::string(line.mb_str()))) {
+					if (filterfunc(wxString(line.mb_str()))) {
 						// This is just to help cleanup Duplicates
 						// Ideally I should tokenise the string and clean it up automatically
 						FileTreeItem tmp;

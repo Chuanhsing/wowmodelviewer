@@ -9,8 +9,8 @@
 #include <vector>
 
 struct FileTreeItem {
-	std::string fileName;
-    std::string displayName;
+	wxString fileName;
+    wxString displayName;
 	int color;
 
 	/// Comparison
@@ -79,8 +79,8 @@ inline void flipcc(char *fcc)
 	fcc[2]=t;
 }
 
-inline bool defaultFilterFunc(std::string) { return true; }
-void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string) = defaultFilterFunc);
+inline bool defaultFilterFunc(wxString) { return true; }
+void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString) = defaultFilterFunc);
 
 
 #endif

@@ -244,7 +244,7 @@ void FilteredChoiceDialog::DoFilter()
 
 void FilteredChoiceDialog::InitFilter()
 {
-	std::string f = "^.*";
+	wxString f = "^.*";
     wxString pattern(m_pattern->GetValue());
 	for (size_t i=0; i<pattern.Length(); i++) {
 		char c = pattern[i];

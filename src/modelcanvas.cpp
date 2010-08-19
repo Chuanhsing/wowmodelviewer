@@ -377,7 +377,7 @@ void ModelCanvas::LoadADT(wxString fn)
 void ModelCanvas::LoadWMO(wxString fn)
 {
 	if (!wmo) {
-		wmo = new WMO(std::string(fn.mb_str()));
+		wmo = new WMO(wxString(fn.mb_str()));
 		root->model = wmo;
 	}
 }

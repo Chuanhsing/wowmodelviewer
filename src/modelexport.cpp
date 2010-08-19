@@ -68,7 +68,7 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString su
 	wxFileName fn(file);
 	if (fn.GetExt().Lower() != _T("blp"))
 		return;
-	TextureID temptex = texturemanager.add(std::string(file.mb_str()));
+	TextureID temptex = texturemanager.add(wxString(file.mb_str()));
 	Texture &tex = *((Texture*)texturemanager.items[temptex]);
 	if (tex.w == 0 || tex.h == 0)
 		return;

@@ -122,7 +122,7 @@ public:
 	unsigned int areaID;
 
 	std::vector<GLuint> wTextures;
-	void initTextures(std::string basename, int first, int last);
+	void initTextures(wxString basename, int first, int last);
 
 	bool haswater;
 	std::vector< SWaterLayer > waterLayer;
@@ -174,9 +174,9 @@ const int stripsize2 = 16*18 + 7*2 + 8*2;
 
 class MapTile: public Displayable {
 public:
-	std::vector<std::string> textures;
-	std::vector<std::string> wmos;
-	std::vector<std::string> models;
+	std::vector<wxString> textures;
+	std::vector<wxString> wmos;
+	std::vector<wxString> models;
 
 	//std::vector<WMOInstance> wmois;
 	//std::vector<ModelInstance> modelis;

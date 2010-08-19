@@ -243,8 +243,8 @@ void CharControl::UpdateModel(Attachment *a)
 	size_t p2 = model->name.find_first_of('\\', p1+1);
 	size_t p3 = model->name.find_first_of('\\', p2+1);
 
-	std::string raceName = model->name.substr(p1+1,p2-p1-1);
-	std::string genderName = model->name.substr(p2+1,p3-p2-1);
+	wxString raceName = model->name.substr(p1+1,p2-p1-1);
+	wxString genderName = model->name.substr(p2+1,p3-p2-1);
 
 	unsigned int race, gender;
 
@@ -403,8 +403,8 @@ void CharControl::UpdateNPCModel(Attachment *a, unsigned int id)
 	size_t p2 = model->name.find_first_of('\\', p1+1);
 	size_t p3 = model->name.find_first_of('\\', p2+1);
 
-	std::string raceName = model->name.substr(p1+1,p2-p1-1);
-	std::string genderName = model->name.substr(p2+1,p3-p2-1);
+	wxString raceName = model->name.substr(p1+1,p2-p1-1);
+	wxString genderName = model->name.substr(p2+1,p3-p2-1);
 
 	int race = 0, gender = 0;
 
@@ -553,8 +553,8 @@ void CharControl::OnCheck(wxCommandEvent &event)
 		size_t p2 = model->name.find_first_of('\\', p1+1);
 		size_t p3 = model->name.find_first_of('\\', p2+1);
 
-		std::string raceName = model->name.substr(p1+1,p2-p1-1);
-		std::string genderName = model->name.substr(p2+1,p3-p2-1);
+		wxString raceName = model->name.substr(p1+1,p2-p1-1);
+		wxString genderName = model->name.substr(p2+1,p3-p2-1);
 
 		unsigned int race, gender;
 
@@ -751,7 +751,7 @@ void CharControl::RefreshModel()
 		// Tauren fur
 		wxString furTexName = rec.getString(CharSectionsDB::Tex2);
 		if (!furTexName.IsEmpty())
-			furTex = texturemanager.add(std::string(furTexName.mb_str()));
+			furTex = texturemanager.add(wxString(furTexName.mb_str()));
 
 	} catch (CharSectionsDB::NotFound) {
 		wxLogMessage(_T("Assertion base character Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
@@ -764,7 +764,7 @@ void CharControl::RefreshModel()
 				tex.addLayer(fn, CR_BASE, 0);
 			fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d_Extra.blp"), 0, cd.skinColor);
 			if (MPQFile::getSize(fn.mb_str()) > 0) {
-				furTex = texturemanager.add(std::string(fn.mb_str()));
+				furTex = texturemanager.add(wxString(fn.mb_str()));
 				model->textures[4] = furTex;
 			}
 		}
@@ -885,7 +885,7 @@ void CharControl::RefreshModel()
 		rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, cd.hairStyle, cd.hairColor, 0);
 		wxString hairTexfn = rec.getString(CharSectionsDB::Tex1);
 		if (!hairTexfn.IsEmpty()) 
-			hairTex = texturemanager.add(std::string(hairTexfn.mb_str()));
+			hairTex = texturemanager.add(wxString(hairTexfn.mb_str()));
 		else {
 			// oops, looks like we're missing a hair texture. Let's try with hair style #0.
 			// (only a problem for orcs with no hair but some beard
@@ -893,7 +893,7 @@ void CharControl::RefreshModel()
 				rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, 0, cd.hairColor, 0);
 				hairTexfn = rec.getString(CharSectionsDB::Tex1);
 				if (!hairTexfn.IsEmpty()) 
-					hairTex = texturemanager.add(std::string(hairTexfn.mb_str()));
+					hairTex = texturemanager.add(wxString(hairTexfn.mb_str()));
 				else 
 					hairTex = 0;
 			} catch (CharSectionsDB::NotFound) {
@@ -915,7 +915,7 @@ void CharControl::RefreshModel()
 			wxString fn;
 			fn.Printf(_T("Character\\Worgen\\Hair00_%02d.blp"), cd.hairColor);
 			if (MPQFile::getSize(fn.mb_str()) > 0) {
-				hairTex = texturemanager.add(std::string(fn.mb_str()));
+				hairTex = texturemanager.add(wxString(fn.mb_str()));
 				model->textures[2] = hairTex;
 			}
 		}
@@ -1166,7 +1166,7 @@ void CharControl::RefreshNPCModel()
 		// Tauren fur
 		wxString furTexName = rec.getString(CharSectionsDB::Tex2);
 		if (!furTexName.IsEmpty())
-			furTex = texturemanager.add(std::string(furTexName.mb_str()));
+			furTex = texturemanager.add(wxString(furTexName.mb_str()));
 
 	} catch (...) {
 		wxLogMessage(_T("Exception base layer Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
@@ -1177,12 +1177,12 @@ void CharControl::RefreshNPCModel()
 		CharSectionsDB::Record rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, cd.hairStyle, cd.hairColor, cd.useNPC);
 		wxString hairTexfn = rec.getString(CharSectionsDB::Tex1);
 		if (!hairTexfn.IsEmpty()) {
-			hairTex = texturemanager.add(std::string(hairTexfn.mb_str()));
+			hairTex = texturemanager.add(wxString(hairTexfn.mb_str()));
 		} else {
 			rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, 1, cd.hairColor, cd.useNPC);
 			hairTexfn = rec.getString(CharSectionsDB::Tex1);
 			if (!hairTexfn.IsEmpty()) 
-				hairTex = texturemanager.add(std::string(hairTexfn.mb_str()));
+				hairTex = texturemanager.add(wxString(hairTexfn.mb_str()));
 			else 
 				hairTex = 0;
 		}
@@ -1412,7 +1412,7 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 			// load the cape texture
 			wxString tex = r.getString(ItemDisplayDB::Skin);
 			if (!tex.IsEmpty()) 
-				capeTex = texturemanager.add(std::string(AnimControl::makeSkinTexture("Item\\ObjectComponents\\Cape\\",tex.mb_str()).mb_str()));
+				capeTex = texturemanager.add(wxString(AnimControl::makeSkinTexture("Item\\ObjectComponents\\Cape\\",tex.mb_str()).mb_str()));
 		}
 
 		// robe
@@ -1527,7 +1527,7 @@ void CharControl::RefreshItem(int slot)
 			ItemDisplayDB::Record r = itemdisplaydb.getById(ItemID);
 
 			GLuint tex;
-			std::string mp;
+			wxString mp;
 			bool succ = false;
 			Attachment *att = NULL;
 			Model *m = NULL;
@@ -1661,7 +1661,7 @@ void CharControl::RefreshCreatureItem(int slot)
 			ItemDisplayDB::Record r = itemdisplaydb.getById(item.model);
 
 			GLuint tex;
-			std::string mp;
+			wxString mp;
 			bool succ = false;
 			Attachment *att = NULL;
 			Model *m = NULL;
@@ -1774,7 +1774,7 @@ void CharTexture::compose(TextureID texID)
 {
 	// if we only have one texture then don't bother with compositing
 	if (components.size()==1) {
-		Texture temp(std::string(components[0].name.mb_str()));
+		Texture temp(wxString(components[0].name.mb_str()));
 		texturemanager.LoadBLP(texID, &temp);
 		return;
 	}
@@ -1788,7 +1788,7 @@ void CharTexture::compose(TextureID texID)
 	for (std::vector<CharTextureComponent>::iterator it = components.begin(); it != components.end(); ++it) {
 		CharTextureComponent &comp = *it;
 		const CharRegionCoords &coords = regions[comp.region];
-		TextureID temptex = texturemanager.add(std::string(comp.name.mb_str()));
+		TextureID temptex = texturemanager.add(wxString(comp.name.mb_str()));
 		Texture &tex = *((Texture*)texturemanager.items[temptex]);
 
 		// Alfred 2009.07.03, tex width or height can't be zero
@@ -2087,7 +2087,7 @@ void CharControl::selectStart()
 	itemDialog->Show();
 }
 
-bool filterCreatures(std::string fn)
+bool filterCreatures(wxString fn)
 {
 	wxString tmp(fn.c_str(), wxConvUTF8);
 	tmp.MakeLower();
@@ -2317,7 +2317,7 @@ void CharControl::OnUpdateItem(int type, int id)
 			g_animControl->UpdateModel(model);
 		} else {
 			//wxString fn(creaturemodels[id-1].c_str());
-			Model *m = new Model(std::string(creaturemodels[id-1].mb_str()), false);
+			Model *m = new Model(wxString(creaturemodels[id-1].mb_str()), false);
 			m->isMount = true;
 
 			// TODO: check if model is ridable
@@ -2541,11 +2541,11 @@ void CharControl::OnTabardSpin(wxSpinEvent &event)
 	RefreshModel();
 }
 
-string TabardDetails::GetBackgroundTex(int slot)
+wxString TabardDetails::GetBackgroundTex(int slot)
 {
 	ostringstream tmpStream;
 
-	string tmpU = "textures\\GuildEmblems\\Background_";
+	wxString tmpU = "textures\\GuildEmblems\\Background_";
 	if (Background < 10)
 		tmpU += "0";
 	tmpStream << Background;
@@ -2561,11 +2561,11 @@ string TabardDetails::GetBackgroundTex(int slot)
 		return tmpL;
 }
 
-string TabardDetails::GetBorderTex(int slot)
+wxString TabardDetails::GetBorderTex(int slot)
 {
 	ostringstream tmpStream;
 
-	string tmpU = "textures\\GuildEmblems\\Border_";
+	wxString tmpU = "textures\\GuildEmblems\\Border_";
 
 	if (Border < 10)
 		tmpU += "0";
@@ -2590,11 +2590,11 @@ string TabardDetails::GetBorderTex(int slot)
 		return tmpL;
 }
 
-string TabardDetails::GetIconTex(int slot)
+wxString TabardDetails::GetIconTex(int slot)
 {
 	ostringstream tmpStream;
 
-	string tmpU = "textures\\GuildEmblems\\Emblem_";
+	wxString tmpU = "textures\\GuildEmblems\\Emblem_";
 
 	if(Icon < 10)
 		tmpU += "0";
@@ -2723,7 +2723,7 @@ void CharDetails::loadStart(StartOutfitDB &start, ItemDatabase &items, int setid
 	} catch (ItemSetDB::NotFound) {}
 }
 
-const std::string CharControl::selectCharModel()
+const wxString CharControl::selectCharModel()
 {
 /* // Alfred 2009.07.21 called by OnMount, but not complete
 	wxArrayString arr;
@@ -2744,7 +2744,7 @@ const std::string CharControl::selectCharModel()
 		string genderStr = gender ? "Female" : "Male";
 		try {
 			CharRacesDB::Record r = racedb.getById(raceid);
-			std::string path = "Character\\";
+			wxString path = "Character\\";
 			path += r.getString(CharRacesDB::Name).mb_str();
 			path += "\\" + genderStr + "\\";
 			path += r.getString(CharRacesDB::Name).mb_str();

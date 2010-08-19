@@ -311,8 +311,7 @@ void AnimControl::UpdateWMO(WMO *w, int group)
 
 	// get wmo name or current wmogroup name/descr
 	if (group>=-1 && group<g_selWMO->nGroups) {
-		std::string label;
-		label = w->name.substr(w->name.find_last_of('\\')+1);
+		wxString label = w->name.substr(w->name.find_last_of('\\')+1);
 		if (group>=0) {
 			label += " - " + g_selWMO->groups[group].name;
 			if (g_selWMO->groups[group].desc.length()) {
@@ -327,7 +326,7 @@ void AnimControl::UpdateWMO(WMO *w, int group)
 }
 
 wxString sFilterDir;
-bool filterDir(std::string fn)
+bool filterDir(wxString fn)
 {
 	wxString tmp(fn.c_str(), wxConvUTF8);
 	tmp.MakeLower();
@@ -704,7 +703,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 		grp.count = 1;
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
 			wxString str((*it).displayName.c_str(), wxConvUTF8);
-			grp.tex[0] = std::string((char *)str.BeforeLast(_T('.')).AfterLast(SLASH).c_str());
+			grp.tex[0] = wxString((char *)str.BeforeLast(_T('.')).AfterLast(SLASH).c_str());
 			skins.insert(grp);
 		}
 	}
@@ -768,7 +767,7 @@ bool AnimControl::UpdateItemModel(Model *m)
 		grp.count = 1;
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
 			wxString str((*it).displayName.c_str(), wxConvUTF8);
-			grp.tex[0] = std::string((char *)str.BeforeLast(_T('.')).AfterLast(SLASH).c_str());
+			grp.tex[0] = wxString((char *)str.BeforeLast(_T('.')).AfterLast(SLASH).c_str());
 			skins.insert(grp);
 		}
 	}
@@ -790,7 +789,7 @@ bool AnimControl::FillSkinSelector(TextureSet &skins)
 			skinList->Append(texname);
 			const  char * sName = g_selModel->name.c_str();
 			texname = wxString(sName, wxConvUTF8).BeforeLast(SLASH) << _T("\\") << texname << _T(".blp");
-			std::string sTexname = std::string(wxString(texname.c_str()).mb_str());
+			wxString sTexname = wxString(wxString(texname.c_str()).mb_str());
 			g_selModel->TextureList.push_back(sTexname);
 			//g_selModel->TextureList.push_back( wxString(texname.c_str()).mb_str() );
 			TextureGroup *grp = new TextureGroup(*it);
@@ -1013,7 +1012,7 @@ void AnimControl::SetSkin(int num)
 	for (int i=0; i<grp->count; i++) {
 		if (g_selModel->useReplaceTextures[grp->base+i]) {
 			texturemanager.del(g_selModel->replaceTextures[grp->base+i]);
-			g_selModel->replaceTextures[grp->base+i] = texturemanager.add(std::string(makeSkinTexture(g_selModel->name.c_str(), grp->tex[i].c_str()).mb_str()));
+			g_selModel->replaceTextures[grp->base+i] = texturemanager.add(wxString(makeSkinTexture(g_selModel->name.c_str(), grp->tex[i].c_str()).mb_str()));
 		}
 	}
 

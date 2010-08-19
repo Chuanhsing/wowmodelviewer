@@ -317,11 +317,11 @@ public:
 	Vec2D *texCoords;
 	uint16 *indices;
 	uint32 nIndices;
-	std::vector<std::string> TextureList;
+	std::vector<wxString> TextureList;
 	// --
 
 public:
-	Model(std::string name, bool forceAnim=false);
+	Model(wxString name, bool forceAnim=false);
 	~Model();
 
 	ModelHeader header;
@@ -429,7 +429,7 @@ public:
 
 class ModelManager: public SimpleManager {
 public:
-	int add(std::string name);
+	int add(wxString name);
 
 	ModelManager() : v(0) {}
 

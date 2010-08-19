@@ -22,7 +22,7 @@ extern float animSpeed;
 struct TextureGroup {
 	static const int num = 3;
 	int base, count;
-	std::string tex[num];
+	wxString tex[num];
 	TextureGroup()
 	{
 		for (int i=0; i<num; i++) {
@@ -97,7 +97,7 @@ public:
 	bool randomSkins;
 	bool defaultDoodads;
 
-	std::string oldname;
+	wxString oldname;
 
 	int selectedAnim;
 	int selectedAnim2;

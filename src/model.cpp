@@ -248,7 +248,7 @@ void AnimManager::Clear() {
 	Frame = 0;
 }
 
-Model::Model(std::string name, bool forceAnim) : ManagedItem(name), forceAnim(forceAnim)
+Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(forceAnim)
 {
 	if (name == "")
 		return;
@@ -2162,7 +2162,7 @@ void Model::drawParticles()
 }
 
 // Adds models to the model manager, used by WMO's
-int ModelManager::add(std::string name)
+int ModelManager::add(wxString name)
 {
 	int id;
 	if (names.find(name) != names.end()) {

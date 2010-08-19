@@ -712,7 +712,7 @@ inline void VideoSettings::SetCurrent()
 #endif
 }
 
-GLuint TextureManager::add(std::string name)
+GLuint TextureManager::add(wxString name)
 {
 	GLuint id = 0;
 

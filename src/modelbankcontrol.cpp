@@ -111,7 +111,7 @@ void ModelBankControl::LoadModel()
 		grp.count = (int)cd.textures.Count();
 		grp.base = 11;
 		for (int i=0; i<grp.count; i++) 
-			grp.tex[i] = std::string(cd.textures[i].mb_str());
+			grp.tex[i] = wxString(cd.textures[i].mb_str());
 
 		int val = g_animControl->AddSkin(grp);
 		g_animControl->SetSkin(val);

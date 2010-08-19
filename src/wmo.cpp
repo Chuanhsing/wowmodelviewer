@@ -5,7 +5,7 @@
 
 using namespace std;
 
-WMO::WMO(std::string name): ManagedItem(name)
+WMO::WMO(wxString name): ManagedItem(name)
 {
 	
 	MPQFile f(name.c_str());
@@ -75,7 +75,7 @@ WMO::WMO(std::string name): ManagedItem(name)
 				WMOMaterial *m = &mat[i];
 				f.read(m, 0x40);
 
-				string texpath(texbuf+m->nameStart);
+				wxString texpath(texbuf+m->nameStart);
 				fixname(texpath);
 
 				m->tex = texturemanager.add(texpath);
@@ -131,7 +131,7 @@ WMO::WMO(std::string name): ManagedItem(name)
 				char *p=ddnames,*end=p+size;
 				
 				while (p<end) {
-					string path(p);
+					wxString path(p);
 					p+=strlen(p)+1;
 					while ((p<end) && (*p==0)) p++;
 
@@ -178,7 +178,7 @@ WMO::WMO(std::string name): ManagedItem(name)
 			// Skybox. Always 00 00 00 00. Skyboxes are now defined in DBCs (Light.dbc etc.). 
 			// Contained a M2 filename that was used as skybox.
 			if (size>4) {
-				string path = (char*)f.getPointer();
+				wxString path = (char*)f.getPointer();
 				fixname(path);
 				if (path.length()) {
 					//gLog("SKYBOX:\n");
@@ -266,7 +266,7 @@ WMO::~WMO()
 		//gLog("Unloading WMO %s\n", name.c_str());
 		delete[] groups;
 
-		for (vector<string>::iterator it = textures.begin(); it != textures.end(); ++it) {
+		for (vector<wxString>::iterator it = textures.begin(); it != textures.end(); ++it) {
             texturemanager.delbyname(*it);
 		}
 
@@ -702,8 +702,8 @@ void WMOGroup::initDisplayList()
 	else 
 		fog = gh.fogs[0];
 
-	name = string(wmo->groupnames + gh.nameStart);
-	desc = string(wmo->groupnames + gh.nameStart2);
+	name = wxString(wmo->groupnames + gh.nameStart);
+	desc = wxString(wmo->groupnames + gh.nameStart2);
 
 	b1 = Vec3D(gh.box1[0], gh.box1[2], -gh.box1[1]);
 	b2 = Vec3D(gh.box2[0], gh.box2[2], -gh.box2[1]);
@@ -1272,7 +1272,7 @@ void WMOFog::setup()
 
 /*
 
-int WMOManager::add(std::string name)
+int WMOManager::add(wxString name)
 {
 	int id;
 	if (names.find(name) != names.end()) {

@@ -2956,7 +2956,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 	if (modelExport_LW_ExportDoodads ==  true){
 		if (modelExport_LW_DoodadsAs == 1){
 			// Copy Model-list into an array
-			std::vector<std::string> modelarray = m->models;
+			std::vector<wxString> modelarray = m->models;
 
 			// Remove the WMO
 			wxDELETE(g_modelViewer->canvas->wmo);
@@ -3208,7 +3208,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 	unsigned int numGroups = 0;
 
 	// Build Surface Name Database
-	std::vector<std::string> surfarray;
+	std::vector<wxString> surfarray;
 	//std::vector<std::string> sfix;
 	//std::vector<uint16> sfix2;
 	//std::vector<uint16> check;
@@ -4729,8 +4729,8 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 	unsigned int numGroups = 0;
 
 	// Build Surface Name Database
-	std::vector<std::string> surfarray;
-	std::vector<std::string> sfix;
+	std::vector<wxString> surfarray;
+	std::vector<wxString> sfix;
 	std::vector<uint16> sfix2;
 	std::vector<uint16> check;
 	for (uint16 t=0;t<m->nTextures;t++){

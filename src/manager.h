@@ -23,8 +23,8 @@
 class ManagedItem {
 	int refcount;
 public:
-	std::string name;
-	ManagedItem(std::string n): refcount(0), name(n) { }
+	wxString name;
+	ManagedItem(wxString n): refcount(0), name(n) { }
 	virtual ~ManagedItem() {}
 
 	void addref()
@@ -44,14 +44,14 @@ public:
 template <class IDTYPE>
 class Manager {
 public:
-	std::map<std::string, IDTYPE> names;
+	std::map<wxString, IDTYPE> names;
 	std::map<IDTYPE, ManagedItem*> items;
 
 	Manager()
 	{
 	}
 
-	virtual IDTYPE add(std::string name) = 0;
+	virtual IDTYPE add(wxString name) = 0;
 
 	virtual void del(IDTYPE id)
 	{
@@ -78,7 +78,7 @@ public:
 		}
 	}
 
-	void delbyname(std::string name)
+	void delbyname(wxString name)
 	{
 		if (has(name)) 
 			del(get(name));
@@ -86,17 +86,17 @@ public:
 
 	virtual void doDelete(IDTYPE id) {}
 
-	bool has(std::string name)
+	bool has(wxString name)
 	{
 		return (names.find(name) != names.end());
 	}
 
-	IDTYPE get(std::string name)
+	IDTYPE get(wxString name)
 	{
 		return names[name];
 	}
 
-	std::string get(IDTYPE id)
+	wxString get(IDTYPE id)
 	{
 		return names[id];
 	}
@@ -122,7 +122,7 @@ public:
 	}
 
 protected:
-	void do_add(std::string name, IDTYPE id, ManagedItem* item)
+	void do_add(wxString name, IDTYPE id, ManagedItem* item)
 	{
 		names[name] = id;
 		item->addref();

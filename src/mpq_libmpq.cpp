@@ -301,7 +301,7 @@ unsigned char* MPQFile::getPointer()
 
 #include <wx/tokenzr.h>
 
-void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
+void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 {
 	for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end();++i)
 	{
@@ -343,7 +343,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(std::string))
 						if (*q==13) 
 							break;
 					} while (q++<=end);
-                    std::string line(reinterpret_cast<char *>(p), q-p);
+                    wxString line(reinterpret_cast<char *>(p), q-p);
 					if (line.length()==0) 
 						break;
 					//p += line.length();

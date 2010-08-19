@@ -301,7 +301,7 @@ void Liquid::draw()
 	}
 }
 
-void Liquid::initTextures(std::string basename, int first, int last)
+void Liquid::initTextures(wxString basename, int first, int last)
 {
 	char buf[256];
 	for (int i=first; i<=last; i++) {

@@ -445,7 +445,7 @@ void ModelOpened::ExportPNG(wxString val, wxString suffix)
 	wxFileName fn(val);
 	if (fn.GetExt().Lower() != _T("blp"))
 		return;
-	TextureID temptex = texturemanager.add(std::string(val.mb_str()));
+	TextureID temptex = texturemanager.add(wxString(val.mb_str()));
 	Texture &tex = *((Texture*)texturemanager.items[temptex]);
 	if (tex.w == 0 || tex.h == 0)
 		return;

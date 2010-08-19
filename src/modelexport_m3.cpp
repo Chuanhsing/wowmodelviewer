@@ -303,8 +303,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 
 	// Modelname
-	wxString n(fn, wxConvUTF8);
-	n = n.AfterLast('\\');
+	wxString n = wxString(fn, wxConvUTF8).AfterLast('\\');
 	NameRefEntry(&mdata.name, n, &f);
 
 	// mSEQS
@@ -1121,8 +1120,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		padding(&f);
 		for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
 			// name
-			uint32 j=0;
-
 			wxString strName = _T("Ref_Hardpoint");
 
 			if (attachments[i].id < WXSIZEOF(M3_Attach_Names))

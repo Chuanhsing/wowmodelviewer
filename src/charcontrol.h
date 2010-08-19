@@ -96,9 +96,9 @@ struct TabardDetails
 
 	bool showCustom;
 
-	std::string GetIconTex(int slot);
-	std::string GetBorderTex(int slot);
-	std::string GetBackgroundTex(int slot);
+	wxString GetIconTex(int slot);
+	wxString GetBorderTex(int slot);
+	wxString GetBackgroundTex(int slot);
 };
 
 struct CharDetails
@@ -199,7 +199,7 @@ public:
 	void selectMount();
 	void selectNPC(int type);
 
-	const std::string selectCharModel();
+	const wxString selectCharModel();
 };
 
 

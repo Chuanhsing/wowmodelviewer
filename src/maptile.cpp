@@ -405,12 +405,12 @@ MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 			char *p=buf;
 			//int t=0;
 			while (p<buf+size) {
-				string texpath(p);
+				wxString texpath(p);
 				p+=strlen(p)+1;
 				fixname(texpath);
 
 				if (video.supportShaders) {
-					string texshader = texpath;
+					wxString texshader = texpath;
 					// load the specular texture instead
 					texshader.insert(texshader.length()-4,"_s");
 					if (MPQFile::exists(texshader.c_str()))
@@ -436,7 +436,7 @@ MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 			char *p=buf;
 			int t=0;
 			while (p<buf+size) {
-				string path(p);
+				std::string path(p);
 				p+=strlen(p)+1;
 				fixname(path);
 
@@ -465,7 +465,7 @@ MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 			buf[size] = 0;
 			char *p=buf;
 			while (p<buf+size) {
-				string path(p);
+				std::string path(p);
 				p+=strlen(p)+1;
 				fixname(path);
 
@@ -771,7 +771,7 @@ MapTile::~MapTile()
 		}
 	}
 
-	for (vector<string>::iterator it = textures.begin(); it != textures.end(); ++it) {
+	for (vector<wxString>::iterator it = textures.begin(); it != textures.end(); ++it) {
 		texturemanager.delbyname(*it);
 	}
 
@@ -974,7 +974,7 @@ Flag		Meaning
 0x40		MCCV chunk available
 0x8000		Unknown, but heavily used in TBC.
 */
-void MapChunk::initTextures(std::string basename, int first, int last)
+void MapChunk::initTextures(wxString basename, int first, int last)
 {
 	char buf[256];
 	for (int i=first; i<=last; i++) {
