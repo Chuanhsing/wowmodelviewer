@@ -8,7 +8,7 @@ using namespace std;
 WMO::WMO(wxString name): ManagedItem(name)
 {
 	
-	MPQFile f(name.c_str());
+	MPQFile f((char *)name.c_str());
 	ok = !f.isEof();
 	if (!ok) {
 		wxLogMessage(_T("Error: Couldn't load WMO %s."), name.c_str());
@@ -75,7 +75,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 				WMOMaterial *m = &mat[i];
 				f.read(m, 0x40);
 
-				wxString texpath(texbuf+m->nameStart);
+				wxString texpath(texbuf+m->nameStart, wxConvUTF8);
 				fixname(texpath);
 
 				m->tex = texturemanager.add(texpath);
@@ -131,7 +131,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 				char *p=ddnames,*end=p+size;
 				
 				while (p<end) {
-					wxString path(p);
+					wxString path(p, wxConvUTF8);
 					p+=strlen(p)+1;
 					while ((p<end) && (*p==0)) p++;
 
@@ -178,7 +178,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 			// Skybox. Always 00 00 00 00. Skyboxes are now defined in DBCs (Light.dbc etc.). 
 			// Contained a M2 filename that was used as skybox.
 			if (size>4) {
-				wxString path = (char*)f.getPointer();
+				wxString path = wxString((char*)f.getPointer(), wxConvUTF8);
 				fixname(path);
 				if (path.length()) {
 					//gLog("SKYBOX:\n");
@@ -702,8 +702,8 @@ void WMOGroup::initDisplayList()
 	else 
 		fog = gh.fogs[0];
 
-	name = wxString(wmo->groupnames + gh.nameStart);
-	desc = wxString(wmo->groupnames + gh.nameStart2);
+	name = wxString(wmo->groupnames + gh.nameStart, wxConvUTF8);
+	desc = wxString(wmo->groupnames + gh.nameStart2, wxConvUTF8);
 
 	b1 = Vec3D(gh.box1[0], gh.box1[2], -gh.box1[1]);
 	b2 = Vec3D(gh.box2[0], gh.box2[2], -gh.box2[1]);
@@ -1344,7 +1344,7 @@ std::set<int> WMOInstance::ids;
 
 void WMOModelInstance::init(char *fname, MPQFile &f)
 {
-	filename = fname;
+	filename = wxString(fname, wxConvUTF8);
 	model = 0;
 
 	float ff[3],temp;

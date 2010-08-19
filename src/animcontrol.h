@@ -26,7 +26,7 @@ struct TextureGroup {
 	TextureGroup()
 	{
 		for (int i=0; i<num; i++) {
-			tex[i] = "";
+			tex[i] = _T("");
 		}
 	}
 
@@ -92,7 +92,7 @@ public:
 	void SetAnimSpeed(float speed);
 	void SetAnimFrame(int frame);
 
-	static wxString makeSkinTexture(const char *texfn, const char *skin);
+	static wxString makeSkinTexture(wxString texfn, wxString skin);
 
 	bool randomSkins;
 	bool defaultDoodads;

@@ -250,7 +250,7 @@ void AnimManager::Clear() {
 
 Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(forceAnim)
 {
-	if (name == "")
+	if (name == _T(""))
 		return;
 
 	// replace .MDX with .M2
@@ -660,8 +660,8 @@ void Model::initCommon(MPQFile &f)
 			if (texdef[i].type == TEXTURE_FILENAME) {
 				strncpy(texname, (const char*)f.getBuffer() + texdef[i].nameOfs, texdef[i].nameLen);
 				texname[texdef[i].nameLen] = 0;
-				textures[i] = texturemanager.add(texname);
-				TextureList.push_back(texname);
+				textures[i] = texturemanager.add(wxString(texname, wxConvUTF8));
+				TextureList.push_back(wxString(texname, wxConvUTF8));
 				wxLogMessage(_T("Info: Added %s to the TextureList."), texname);
 			} else {
 				// special texture - only on characters and such...
@@ -691,7 +691,7 @@ void Model::initCommon(MPQFile &f)
 					}
 					strncpy(texname,(const char*)(tex.c_str()),tex.Len());
 					wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
-					TextureList.push_back(texname);
+					TextureList.push_back(wxString(texname, wxConvUTF8));
 				}else{
 					wxString tex;
 					if (texdef[i].type == TEXTURE_HAIR){
@@ -713,7 +713,7 @@ void Model::initCommon(MPQFile &f)
 					}
 					strncpy(texname,(const char*)(tex.c_str()),tex.Len());
 					wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
-					TextureList.push_back(texname);
+					TextureList.push_back(wxString(texname, wxConvUTF8));
 				}
 
 				if (texdef[i].type < TEXTURE_MAX)
@@ -721,7 +721,7 @@ void Model::initCommon(MPQFile &f)
 
 				if (texdef[i].type == TEXTURE_ARMORREFLECT) {
 					// a fix for weapons with type-3 textures.
-					replaceTextures[texdef[i].type] = texturemanager.add("Item\\ObjectComponents\\Weapon\\ArmorReflect4.BLP");
+					replaceTextures[texdef[i].type] = texturemanager.add(_T("Item\\ObjectComponents\\Weapon\\ArmorReflect4.BLP"));
 				}
 			}
 		}

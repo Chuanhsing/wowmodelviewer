@@ -108,7 +108,7 @@ bool filterSearch(wxString s)
 
 	// filter mpq
 	if (!filterArchive.IsEmpty()) {
-		wxString archive(MPQFile::getArchive(s.c_str()), wxConvUTF8);
+		wxString archive(MPQFile::getArchive((char *)s.c_str()), wxConvUTF8);
 		if (!archive.EndsWith(filterArchive))
 			return false;
 	}
@@ -140,7 +140,7 @@ void FileControl::Init(ModelViewer* mv)
 	fileTree->DeleteAllItems();
 	fileTree->AddRoot(_T("Root"));
 	root.first = fileTree->GetRootItem();
-	root.second = "";
+	root.second = _T("");
 	stack.push_back(root);
 
 	size_t index=0;
@@ -331,7 +331,7 @@ void FileControl::ExportPNG(wxString val, wxString suffix)
 	wxFileName fn(val);
 	if (fn.GetExt().Lower() != _T("blp"))
 		return;
-	TextureID temptex = texturemanager.add(wxString(val.mb_str()));
+	TextureID temptex = texturemanager.add(val);
 	Texture &tex = *((Texture*)texturemanager.items[temptex]);
 	if (tex.w == 0 || tex.h == 0)
 		return;
@@ -415,9 +415,9 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 		infoMenu.Append(ID_FILELIST_VIEW, _T("&View"), _T("View this object"));
 	}
 	infoMenu.AppendSeparator();
-	wxString archive(MPQFile::getArchive(tdata->fn.c_str()), wxConvUTF8);
+	wxString archive(MPQFile::getArchive((char *)tdata->fn.c_str()), wxConvUTF8);
 	infoMenu.Append(ID_FILELIST, archive, archive);
-	wxString size = wxString::Format(_T("Size: %d"), MPQFile::getSize(tdata->fn.c_str()));
+	wxString size = wxString::Format(_T("Size: %d"), MPQFile::getSize((char *)tdata->fn.c_str()));
 	infoMenu.Append(ID_FILELIST, size, size);
 	infoMenu.Connect(wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&FileControl::OnPopupClick, NULL, this);
 	PopupMenu(&infoMenu);
@@ -661,7 +661,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		int id = -1;
 		if (!isroot) {
 			char idnum[4];
-			strncpy(idnum, data->fn.c_str() + strlen(data->fn.c_str())-7,3);
+			strncpy(idnum, (char *)data->fn.c_str() + strlen((char *)data->fn.c_str())-7,3);
 			//wxString(data->fn.Substr((data->fn.Length() - 7), 3)).ToLong(&id);
 			idnum[3]=0;
 			sscanf(idnum,"%d",&id);

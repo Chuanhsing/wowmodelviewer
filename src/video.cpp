@@ -793,7 +793,7 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 	// bind the texture
 	glBindTexture(GL_TEXTURE_2D, id);
 	
-	MPQFile f(tex->name.c_str());
+	MPQFile f((char *)tex->name.c_str());
 	if (g_modelViewer) {
 		g_modelViewer->modelOpened->Add(wxString(tex->name.c_str(), wxConvUTF8));
 	}

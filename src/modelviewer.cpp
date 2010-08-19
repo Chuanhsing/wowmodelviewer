@@ -1095,7 +1095,7 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 			for (int i=0; i<TextureGroup::num; i++) {
 				wxString skin(modelRec.getString(CreatureSkinDB::Skin + i));
 				
-				grp.tex[i] = skin.mb_str();
+				grp.tex[i] = skin;
 				if (skin.length() > 0)
 					count++;
 			}
@@ -2025,7 +2025,7 @@ void ModelViewer::OnBackground(wxCommandEvent &event)
 
 			wxSingleChoiceDialog skyDialog(this, _("Choose"), _("Select a Sky Box"), skyboxes);
 			if (skyDialog.ShowModal() == wxID_OK && skyDialog.GetStringSelection() != wxEmptyString) {
-				canvas->skyModel = new Model(wxString(skyDialog.GetStringSelection().mb_str()), false);
+				canvas->skyModel = new Model(wxString(skyDialog.GetStringSelection()), false);
 				canvas->sky->model = canvas->skyModel;
 			}
 		}

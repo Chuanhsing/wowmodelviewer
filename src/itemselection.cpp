@@ -244,15 +244,15 @@ void FilteredChoiceDialog::DoFilter()
 
 void FilteredChoiceDialog::InitFilter()
 {
-	wxString f = "^.*";
+	wxString f = _T("^.*");
     wxString pattern(m_pattern->GetValue());
 	for (size_t i=0; i<pattern.Length(); i++) {
 		char c = pattern[i];
-		if (c=='?') f.append(".");
-		else if (c=='*') f.append(".*");
+		if (c=='?') f.append(_T("."));
+		else if (c=='*') f.append(_T(".*"));
 		else f.append(1,c);
 	}
-	f.append(".*$");
+	f.append(_T(".*$"));
 
 	filter.Compile(wxString(f.c_str(), wxConvUTF8), wxRE_ICASE);
 }

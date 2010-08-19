@@ -3216,13 +3216,13 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 		wxString tex = wxString(m->textures[t].c_str(), wxConvUTF8).BeforeLast(_T('.'));
 		bool texfound = false;
 		for (unsigned int x=0;x<surfarray.size();x++){
-			if (strcmp(surfarray[x].c_str(), (char*)tex.c_str()) == 0){
+			if (strcmp((char *)surfarray[x].c_str(), (char*)tex.c_str()) == 0){
 				texfound = true;
 				break;
 			}
 		}
 		if (texfound == false){
-			surfarray.push_back((char *)tex.c_str());
+			surfarray.push_back(tex);
 		}
 	}
 	/*
@@ -3679,7 +3679,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 				wxString tex = wxString(m->textures[texnum].c_str(), wxConvUTF8).BeforeLast(_T('.'));
 				int texid = 0;
 				for (unsigned int x=0;x<surfarray.size();x++){
-					if (strcmp(surfarray[x].c_str(), (char*)tex.c_str()) == 0){
+					if (strcmp((char *)surfarray[x].c_str(), (char*)tex.c_str()) == 0){
 						texid = x;
 						break;
 					}

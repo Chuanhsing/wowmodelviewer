@@ -253,7 +253,7 @@ void CharControl::UpdateModel(Attachment *a)
 		// out of the ChrRaces.dbc.  Going to have to hardcode the values.
 		CharRacesDB::Record raceRec = racedb.getByName(wxString(raceName.c_str(), wxConvUTF8));
 		race = raceRec.getUInt(CharRacesDB::RaceID);
-		gender = (genderName == "female" || genderName == "Female" || genderName == "FEMALE") ? 1 : 0;
+		gender = (genderName.Lower() == _T("female")) ? 1 : 0;
 	
 	} catch (CharRacesDB::NotFound) {
 		// wtf
@@ -412,7 +412,7 @@ void CharControl::UpdateNPCModel(Attachment *a, unsigned int id)
 		CharRacesDB::Record raceRec = racedb.getByName(wxString(raceName.c_str(), wxConvUTF8));
 		race = raceRec.getUInt(CharRacesDB::RaceID);
 
-		gender = (genderName == "Female") ? 1 : 0;
+		gender = (genderName.Lower() == _T("female")) ? 1 : 0;
 	} catch (CharRacesDB::NotFound) {
 		// wtf
 		race = 0;
@@ -751,7 +751,7 @@ void CharControl::RefreshModel()
 		// Tauren fur
 		wxString furTexName = rec.getString(CharSectionsDB::Tex2);
 		if (!furTexName.IsEmpty())
-			furTex = texturemanager.add(wxString(furTexName.mb_str()));
+			furTex = texturemanager.add(furTexName);
 
 	} catch (CharSectionsDB::NotFound) {
 		wxLogMessage(_T("Assertion base character Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
@@ -764,7 +764,7 @@ void CharControl::RefreshModel()
 				tex.addLayer(fn, CR_BASE, 0);
 			fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d_Extra.blp"), 0, cd.skinColor);
 			if (MPQFile::getSize(fn.mb_str()) > 0) {
-				furTex = texturemanager.add(wxString(fn.mb_str()));
+				furTex = texturemanager.add(fn);
 				model->textures[4] = furTex;
 			}
 		}
@@ -772,7 +772,7 @@ void CharControl::RefreshModel()
 
 	// HACK: for goblin males, explicitly load a hair texture
 	if (cd.race == 9 && cd.gender == 0 && gobTex == 0 && gameVersion < 40000) {
-        gobTex = texturemanager.add("Creature\\Goblin\\Goblin.blp");		
+        gobTex = texturemanager.add(_T("Creature\\Goblin\\Goblin.blp"));	
 	}
 
 	// Hair related boolean flags
@@ -885,7 +885,7 @@ void CharControl::RefreshModel()
 		rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, cd.hairStyle, cd.hairColor, 0);
 		wxString hairTexfn = rec.getString(CharSectionsDB::Tex1);
 		if (!hairTexfn.IsEmpty()) 
-			hairTex = texturemanager.add(wxString(hairTexfn.mb_str()));
+			hairTex = texturemanager.add(hairTexfn);
 		else {
 			// oops, looks like we're missing a hair texture. Let's try with hair style #0.
 			// (only a problem for orcs with no hair but some beard
@@ -893,7 +893,7 @@ void CharControl::RefreshModel()
 				rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, 0, cd.hairColor, 0);
 				hairTexfn = rec.getString(CharSectionsDB::Tex1);
 				if (!hairTexfn.IsEmpty()) 
-					hairTex = texturemanager.add(wxString(hairTexfn.mb_str()));
+					hairTex = texturemanager.add(hairTexfn);
 				else 
 					hairTex = 0;
 			} catch (CharSectionsDB::NotFound) {
@@ -915,7 +915,7 @@ void CharControl::RefreshModel()
 			wxString fn;
 			fn.Printf(_T("Character\\Worgen\\Hair00_%02d.blp"), cd.hairColor);
 			if (MPQFile::getSize(fn.mb_str()) > 0) {
-				hairTex = texturemanager.add(wxString(fn.mb_str()));
+				hairTex = texturemanager.add(fn);
 				model->textures[2] = hairTex;
 			}
 		}
@@ -1166,7 +1166,7 @@ void CharControl::RefreshNPCModel()
 		// Tauren fur
 		wxString furTexName = rec.getString(CharSectionsDB::Tex2);
 		if (!furTexName.IsEmpty())
-			furTex = texturemanager.add(wxString(furTexName.mb_str()));
+			furTex = texturemanager.add(furTexName);
 
 	} catch (...) {
 		wxLogMessage(_T("Exception base layer Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
@@ -1177,12 +1177,12 @@ void CharControl::RefreshNPCModel()
 		CharSectionsDB::Record rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, cd.hairStyle, cd.hairColor, cd.useNPC);
 		wxString hairTexfn = rec.getString(CharSectionsDB::Tex1);
 		if (!hairTexfn.IsEmpty()) {
-			hairTex = texturemanager.add(wxString(hairTexfn.mb_str()));
+			hairTex = texturemanager.add(hairTexfn);
 		} else {
 			rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, 1, cd.hairColor, cd.useNPC);
 			hairTexfn = rec.getString(CharSectionsDB::Tex1);
 			if (!hairTexfn.IsEmpty()) 
-				hairTex = texturemanager.add(wxString(hairTexfn.mb_str()));
+				hairTex = texturemanager.add(hairTexfn);
 			else 
 				hairTex = 0;
 		}
@@ -1412,7 +1412,7 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 			// load the cape texture
 			wxString tex = r.getString(ItemDisplayDB::Skin);
 			if (!tex.IsEmpty()) 
-				capeTex = texturemanager.add(wxString(AnimControl::makeSkinTexture("Item\\ObjectComponents\\Cape\\",tex.mb_str()).mb_str()));
+				capeTex = texturemanager.add(AnimControl::makeSkinTexture(_T("Item\\ObjectComponents\\Cape\\"),tex));
 		}
 
 		// robe
@@ -1533,29 +1533,29 @@ void CharControl::RefreshItem(int slot)
 			Model *m = NULL;
 
 			if (id1>=0) {
-				mp = (path + r.getString(ItemDisplayDB::Model)).mb_str();
+				mp = (path + r.getString(ItemDisplayDB::Model));
 
 				if (slot==CS_HEAD) {
 					// sigh, head items have more crap to sort out
 					mp = mp.substr(0, mp.length()-4); // delete .mdx
-					mp.append("_");
+					mp.append(_T("_"));
 					try {
 						CharRacesDB::Record race = racedb.getById(cd.race);
-						mp.append(race.getString(CharRacesDB::ShortName).mb_str());
-						mp.append(cd.gender?"F":"M");
-						mp.append(".m2");
+						mp.append(race.getString(CharRacesDB::ShortName));
+						mp.append(cd.gender?_T("F"):_T("M"));
+						mp.append(_T(".m2"));
 					} catch (CharRacesDB::NotFound) {
-						mp = "";
+						mp = _T("");
 					}
 				}
 
 				if (mp.length()) {
-					att = charAtt->addChild(mp.c_str(), id1, slot);
+					att = charAtt->addChild((char *)mp.c_str(), id1, slot);
 					if (att) {
 						m = static_cast<Model*>(att->model);
 						if (m->ok) {
-							mp = (path + r.getString(ItemDisplayDB::Skin)).mb_str();
-							mp.append(".blp");
+							mp = (path + r.getString(ItemDisplayDB::Skin));
+							mp.append(_T(".blp"));
 							tex = texturemanager.add(mp);
 							m->replaceTextures[TEXTURE_CAPE] = tex;
 							
@@ -1565,14 +1565,14 @@ void CharControl::RefreshItem(int slot)
 				}
 			}
 			if (id2>=0) {
-				mp = (path + r.getString(ItemDisplayDB::Model2)).mb_str();
+				mp = (path + r.getString(ItemDisplayDB::Model2));
 				if (mp.length()) {
-					att = charAtt->addChild(mp.c_str(), id2, slot);
+					att = charAtt->addChild((char *)mp.c_str(), id2, slot);
 					if (att) {
 						m = static_cast<Model*>(att->model);
 						if (m->ok) {
-							mp = (path + r.getString(ItemDisplayDB::Skin2)).mb_str();
-							mp.append(".blp");
+							mp = (path + r.getString(ItemDisplayDB::Skin2));
+							mp.append(_T(".blp"));
 							tex = texturemanager.add(mp);
 							m->replaceTextures[TEXTURE_CAPE] = tex;
 
@@ -1667,15 +1667,15 @@ void CharControl::RefreshCreatureItem(int slot)
 			Model *m = NULL;
 
 			if (id1>=0) {
-				mp = (path + r.getString(ItemDisplayDB::Model)).mb_str();
+				mp = (path + r.getString(ItemDisplayDB::Model));
 
 				if (mp.length()) {
-					att = g_canvas->root->addChild(mp.c_str(), id1, slot);
+					att = g_canvas->root->addChild((char *)mp.c_str(), id1, slot);
 					if (att) {
 						m = static_cast<Model*>(att->model);
 						if (m->ok) {
-							mp = (path + r.getString(ItemDisplayDB::Skin)).mb_str();
-							mp.append(".blp");
+							mp = (path + r.getString(ItemDisplayDB::Skin));
+							mp.append(_T(".blp"));
 							tex = texturemanager.add(mp);
 							m->replaceTextures[TEXTURE_CAPE] = tex;
 							succ = true;
@@ -1774,7 +1774,7 @@ void CharTexture::compose(TextureID texID)
 {
 	// if we only have one texture then don't bother with compositing
 	if (components.size()==1) {
-		Texture temp(wxString(components[0].name.mb_str()));
+		Texture temp(components[0].name);
 		texturemanager.LoadBLP(texID, &temp);
 		return;
 	}
@@ -1788,7 +1788,7 @@ void CharTexture::compose(TextureID texID)
 	for (std::vector<CharTextureComponent>::iterator it = components.begin(); it != components.end(); ++it) {
 		CharTextureComponent &comp = *it;
 		const CharRegionCoords &coords = regions[comp.region];
-		TextureID temptex = texturemanager.add(wxString(comp.name.mb_str()));
+		TextureID temptex = texturemanager.add(comp.name);
 		Texture &tex = *((Texture*)texturemanager.items[temptex]);
 
 		// Alfred 2009.07.03, tex width or height can't be zero
@@ -2035,7 +2035,7 @@ void CharControl::selectSet()
 	// Adds "none" to select
 	NumStringPair n; 
 	n.id = -1; 
-	n.name = wxString(_("---- None ----")).mb_str();
+	n.name = _("---- None ----");
 	items.push_back(n);
 
 	for (ItemSetDB::Iterator it = setsdb.begin(); it != setsdb.end(); ++it) {
@@ -2043,7 +2043,7 @@ void CharControl::selectSet()
 		if (setsdb.available(id)) {
 			NumStringPair p;
 			p.id = id;
-			p.name = CSConv(it->getString(ItemSetDB::Name + langOffset)).mb_str();
+			p.name = CSConv(it->getString(ItemSetDB::Name + langOffset));
 			items.push_back(p);
 		}
 	}
@@ -2317,7 +2317,7 @@ void CharControl::OnUpdateItem(int type, int id)
 			g_animControl->UpdateModel(model);
 		} else {
 			//wxString fn(creaturemodels[id-1].c_str());
-			Model *m = new Model(wxString(creaturemodels[id-1].mb_str()), false);
+			Model *m = new Model(creaturemodels[id-1], false);
 			m->isMount = true;
 
 			// TODO: check if model is ridable
@@ -2545,18 +2545,18 @@ wxString TabardDetails::GetBackgroundTex(int slot)
 {
 	ostringstream tmpStream;
 
-	wxString tmpU = "textures\\GuildEmblems\\Background_";
+	string tmpU = "textures\\GuildEmblems\\Background_";
 	if (Background < 10)
 		tmpU += "0";
 	tmpStream << Background;
 	tmpU += tmpStream.str();
 	tmpU += "_TU_U.blp";
 	
-	string tmpL = tmpU;
+	wxString tmpL = wxString(tmpU.c_str(), wxConvUTF8);
 	tmpL[37] = 'L';
 
 	if (slot == CR_TORSO_UPPER)
-		return tmpU;
+		return wxString(tmpU.c_str(), wxConvUTF8);
 	else
 		return tmpL;
 }
@@ -2565,7 +2565,7 @@ wxString TabardDetails::GetBorderTex(int slot)
 {
 	ostringstream tmpStream;
 
-	wxString tmpU = "textures\\GuildEmblems\\Border_";
+	string tmpU = "textures\\GuildEmblems\\Border_";
 
 	if (Border < 10)
 		tmpU += "0";
@@ -2585,16 +2585,16 @@ wxString TabardDetails::GetBorderTex(int slot)
 	tmpL[36] = 'L';
 
 	if (slot == CR_TORSO_UPPER)
-		return tmpU;
+		return wxString(tmpU.c_str(), wxConvUTF8);
 	else
-		return tmpL;
+		return wxString(tmpL.c_str(), wxConvUTF8);
 }
 
 wxString TabardDetails::GetIconTex(int slot)
 {
 	ostringstream tmpStream;
 
-	wxString tmpU = "textures\\GuildEmblems\\Emblem_";
+	string tmpU = "textures\\GuildEmblems\\Emblem_";
 
 	if(Icon < 10)
 		tmpU += "0";
@@ -2614,9 +2614,9 @@ wxString TabardDetails::GetIconTex(int slot)
 	tmpL[tmpU.length() - 7] = 'L';
 
 	if(slot == CR_TORSO_UPPER)
-		return tmpU;
+		return wxString(tmpU.c_str(), wxConvUTF8);
 	else
-		return tmpL;
+		return wxString(tmpL.c_str(), wxConvUTF8);
 }
 
 void CharDetails::save(wxString fn, TabardDetails *td)
@@ -2756,7 +2756,7 @@ const wxString CharControl::selectCharModel()
 	}
 	
 */
-	return "";
+	return _T("");
 }
 
 

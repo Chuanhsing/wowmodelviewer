@@ -21,18 +21,18 @@ void Liquid::initFromTerrain(MPQFile &f, int flags)
 	ydir = 1.0f;
 	if (flags & 16) {
 		// magma:
-		initTextures("XTextures\\lava\\lava", 1, 30);
+		initTextures(_T("XTextures\\lava\\lava"), 1, 30);
 		type = 0; // not colored
 	}
 	else if (flags & 4) {
 		// river/lake
-		initTextures("XTextures\\river\\lake_a", 1, 30); // TODO: rivers etc.?
+		initTextures(_T("XTextures\\river\\lake_a"), 1, 30); // TODO: rivers etc.?
 		type = 2; // dynamic colors
 		shader = 0;
 	}
 	else {
 		// ocean
-		initTextures("XTextures\\ocean\\ocean_h", 1, 30);
+		initTextures(_T("XTextures\\ocean\\ocean_h"), 1, 30);
 		/*
 		type = 1; // static color
 		col = Vec3D(0.0f, 0.1f, 0.4f); // TODO: figure out real ocean colors?
@@ -55,16 +55,16 @@ void Liquid::initFromWMO(MPQFile &f, WMOMaterial &mat, bool indoor)
 
 	// tmpflag is the flags value for the last drawn tile
 	if (tmpflag & 1) {
-		initTextures("XTextures\\slime\\slime", 1, 30);
+		initTextures(_T("XTextures\\slime\\slime"), 1, 30);
 		type = 0;
 		texRepeats = 2.0f;
 	}
 	else if (tmpflag & 2) {
-		initTextures("XTextures\\lava\\lava", 1, 30);
+		initTextures(_T("XTextures\\lava\\lava"), 1, 30);
 		type = 0;
 	}
 	else {
-		initTextures("XTextures\\river\\lake_a", 1, 30);
+		initTextures(_T("XTextures\\river\\lake_a"), 1, 30);
 		if (indoor) {
 			trans = true;
 			type = 1;
@@ -303,9 +303,9 @@ void Liquid::draw()
 
 void Liquid::initTextures(wxString basename, int first, int last)
 {
-	char buf[256];
+	wxString buf;
 	for (int i=first; i<=last; i++) {
-		sprintf(buf, "%s.%d.blp", basename.c_str(), i);
+		buf = wxString::Format(_T("%s.%d.blp"), basename.c_str(), i);
 		int tex = texturemanager.add(buf);
 		textures.push_back(tex);
 	}

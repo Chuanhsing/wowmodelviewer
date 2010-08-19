@@ -34,7 +34,7 @@ public:
 	class NotFound: public Exception
 	{
 	public:
-		NotFound(): Exception("Key was not found")
+		NotFound(): Exception(_T("Key was not found"))
 		{ }
 	};
 

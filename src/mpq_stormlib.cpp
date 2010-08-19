@@ -21,7 +21,7 @@ MPQArchive::MPQArchive(const char* filename)
 		wxLogMessage(_T("Error opening archive %s"), filename);
 		return;
 	}
-	gOpenArchives.push_back( make_pair( filename, &mpq_a ) );
+	gOpenArchives.push_back( make_pair( wxString(filename, wxConvUTF8), &mpq_a ) );
 }
 
 MPQArchive::~MPQArchive()
@@ -319,7 +319,7 @@ char* MPQFile::getArchive(const char* filename)
 		if( !SFileOpenFileEx( mpq_a, filename, 0, &fh ) )
 			continue;
 
-		strncpy(archive, i->first.c_str(), sizeof(archive));
+		strncpy(archive, (char *)i->first.c_str(), sizeof(archive));
 		return archive;
 	}
 	strncpy(archive, "unknown", sizeof(archive));
@@ -395,19 +395,19 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 					p = q + 2;
 					//line.erase(line.length()-2, 2); // delete \r\n
 
-					if (filterfunc(wxString(line.mb_str()))) {
+					if (filterfunc(wxString(line.mb_str(), wxConvUTF8))) {
 						// This is just to help cleanup Duplicates
 						// Ideally I should tokenise the string and clean it up automatically
 						FileTreeItem tmp;
 						
-						tmp.fileName = line.mb_str();
+						tmp.fileName = line;
 						line.MakeLower();
 						line[0] = toupper(line.GetChar(0));
 						int ret = line.Find('\\');
 						if (ret>-1)
 							line[ret+1] = toupper(line.GetChar(ret+1));
 
-						tmp.displayName = line.mb_str();
+						tmp.displayName = line;
 						tmp.color = col;
 						dest.insert(tmp);
 					}

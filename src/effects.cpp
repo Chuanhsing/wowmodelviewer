@@ -247,7 +247,7 @@ void EnchantsDialog::InitEnchants()
 	temp.index[2] = 0;
 	temp.index[3] = 0;
 	temp.index[4] = 0;
-	temp.name = "None";
+	temp.name = _T("None");
 	enchants.push_back(temp);
 
 	for (SpellItemEnchantmentDB::Iterator it=spellitemenchantmentdb.begin();  it!=spellitemenchantmentdb.end(); ++it) {
@@ -263,7 +263,7 @@ void EnchantsDialog::InitEnchants()
 				temp.id = visualid;
 				for(size_t i=0; i<5; i++)
 					temp.index[i] = it2->getInt(ItemVisualsDB::VisualID+1+i);
-				temp.name = CSConv(it->getString(SpellItemEnchantmentDB::Name + langOffset)).mb_str();
+				temp.name = CSConv(it->getString(SpellItemEnchantmentDB::Name + langOffset));
 				enchants.push_back(temp);
 				break;
 			}

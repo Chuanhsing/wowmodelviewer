@@ -8,7 +8,7 @@ DBCFile::DBCFile(const wxString &filename) : filename(filename)
 
 bool DBCFile::open()
 {
-	MPQFile f(filename.c_str());
+	MPQFile f((char *)filename.c_str());
 
 	// Need some error checking, otherwise an unhandled exception error occurs
 	// if people screw with the data path.

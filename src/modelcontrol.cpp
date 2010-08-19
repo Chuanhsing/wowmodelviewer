@@ -272,7 +272,7 @@ void ModelControl::OnCombo(wxCommandEvent &event)
 	if (id == ID_MODEL_LOD) {
 		int value = event.GetInt();
 
-		MPQFile f(model->name.c_str());
+		MPQFile f((char *)model->name.c_str());
 		if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
 			wxLogMessage(_T("ERROR - unable to open MPQFile: [%s]"), model->name.c_str());
 			f.close();
@@ -445,7 +445,7 @@ void ModelOpened::ExportPNG(wxString val, wxString suffix)
 	wxFileName fn(val);
 	if (fn.GetExt().Lower() != _T("blp"))
 		return;
-	TextureID temptex = texturemanager.add(wxString(val.mb_str()));
+	TextureID temptex = texturemanager.add(val);
 	Texture &tex = *((Texture*)texturemanager.items[temptex]);
 	if (tex.w == 0 || tex.h == 0)
 		return;

@@ -405,15 +405,15 @@ MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 			char *p=buf;
 			//int t=0;
 			while (p<buf+size) {
-				wxString texpath(p);
+				wxString texpath(p, wxConvUTF8);
 				p+=strlen(p)+1;
 				fixname(texpath);
 
 				if (video.supportShaders) {
 					wxString texshader = texpath;
 					// load the specular texture instead
-					texshader.insert(texshader.length()-4,"_s");
-					if (MPQFile::exists(texshader.c_str()))
+					texshader.insert(texshader.length()-4,_T("_s"));
+					if (MPQFile::exists((char *)texshader.c_str()))
 						texpath = texshader;
 				}
 
@@ -976,9 +976,9 @@ Flag		Meaning
 */
 void MapChunk::initTextures(wxString basename, int first, int last)
 {
-	char buf[256];
+	wxString buf;
 	for (int i=first; i<=last; i++) {
-		sprintf(buf, "%s.%d.blp", basename.c_str(), i);
+		buf = wxString::Format(_T("%s.%d.blp"), (char *)basename.c_str(), i);
 		wTextures.push_back(texturemanager.add(buf));
 	}
 }
@@ -1034,7 +1034,7 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 	//if (chunkflags & 4)
 	{
 		// river / lakes
-		initTextures("XTextures\\river\\lake_a", 1, 30); // TODO: rivers etc.?
+		initTextures(_T("XTextures\\river\\lake_a"), 1, 30); // TODO: rivers etc.?
 	}
 	//else if (chunkflags & 8)
 	/*{
