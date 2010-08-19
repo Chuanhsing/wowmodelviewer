@@ -572,29 +572,24 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			f.Seek(sizeof(sd)*stcs[i].arVec2D.nEntries, wxFromCurrent);
 			ii=0;
 			for(int j=0; j<M3TexAnimId.size(); j++) {
-				sds[ii].timeline.nEntries = 2;
+				sds[ii].timeline.nEntries = m->texAnims[M2TexAnimId[j]].trans.times[0].size();
 				sds[ii].timeline.ref = ++fHead.nRefs;
 				RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
-				int32 p;
-				p = m->texAnims[M2TexAnimId[j]].trans.times[0][0];
-				f.Write(&p, sizeof(int32));
-				p = m->texAnims[M2TexAnimId[j]].trans.times[0][1];
-				f.Write(&p, sizeof(int32));
+				for (int k=0; k<counts; k++) {
+					f.Write(&m->texAnims[M2TexAnimId[j]].trans.times[0][k], sizeof(int32));
+				}
 				padding(&f);
 				sds[ii].length = m->texAnims[M2TexAnimId[j]].trans.times[0][1];
-				sds[ii].data.nEntries = 2;
+				sds[ii].data.nEntries = sds[ii].timeline.nEntries;
 				sds[ii].data.ref = ++fHead.nRefs;
 				RefEntry("2CEV", f.Tell(), sds[ii].data.nEntries, 0);
-				Vec3D tran;
-
-				tran.x = -m->texAnims[M2TexAnimId[j]].trans.data[0][0].x;
-				tran.y = -m->texAnims[M2TexAnimId[j]].trans.data[0][0].y;
-				f.Write(&tran.x, sizeof(float));
-				f.Write(&tran.y, sizeof(float));
-				tran.x = -m->texAnims[M2TexAnimId[j]].trans.data[0][1].x;
-				tran.y = -m->texAnims[M2TexAnimId[j]].trans.data[0][1].y;
-				f.Write(&tran.x, sizeof(float));
-				f.Write(&tran.y, sizeof(float));
+				for (int k=0; k<counts; k++) {
+					Vec3D tran;
+					tran.x = -m->texAnims[M2TexAnimId[j]].trans.data[0][k].x;
+					tran.y = -m->texAnims[M2TexAnimId[j]].trans.data[0][k].y;
+					f.Write(&tran.x, sizeof(float));
+					f.Write(&tran.y, sizeof(float));
+				}
 				padding(&f);
 				ii++;
 			}
