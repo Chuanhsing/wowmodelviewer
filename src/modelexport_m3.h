@@ -336,6 +336,18 @@ struct BONE
     /*0x3C*/ Aref_VEC4D initRot; //initial bone rotation
     /*0x68*/ Aref_VEC3D initScale; //initial scale
     /*0x90*/ Aref_UINT32 ar1;
+
+	void init()
+	{
+		d1 = -1;
+		flags = BONE_FLAGS_ANIMATED | BONE_FLAGS_SKINNED;
+		initRot.value = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
+		initRot.unValue = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
+		initScale.value = Vec3D(1.0f, 1.0f, 1.0f);
+		initScale.unValue = Vec3D(1.0f, 1.0f, 1.0f);
+		ar1.value = 1;
+		ar1.unValue = 1;
+	}
 };
 
 // Size = 8 byte / 0x08 byte
@@ -440,6 +452,15 @@ struct MAT
     uint32 specType;
     Aref_UINT32 ar1;
     Aref_UINT32 ar2;
+
+	void init()
+	{
+		SpecMult = 1;
+		EmisMult = 1;
+		layerBlend = 2;
+		emisBlend = 2;
+		d5 = 2;
+	}
 };
 
 #define	LAYR_FLAGS_TEXWRAP_X			(0x4)
@@ -481,6 +502,19 @@ struct LAYR
 	float tintStrength; //set to 4 by default in Blizzard models
 	float tintUnk; //unknown purpose relating to tint
 	float f8[2]; //seems to be more settings for tint
+
+	void init()
+	{
+		flags = 236; // 0xEC, C=TEXWRAP_X|TEXWRAP_Y
+		brightness_mult1.value = 1.0f;
+		brightness_mult1.unValue = 1.0f;
+		uvTiling.value = Vec2D(1.0f, 1.0f);
+		d20 = -1;
+		colour[0] = 255;
+		colour[1] = 255;
+		colour[2] = 255;
+		colour[3] = 255;
+	}
 };
 
 // Size = 52 byte / 0x34 byte
@@ -492,6 +526,11 @@ struct DIV
     /*0x18*/ Reference BAT;
     /*0x24*/ Reference MSEC;
     /*0x30*/ uint32 unk;
+
+	void init()
+	{
+		unk = 1;
+	}
 };
 
 // Size = 14 byte / 0x0E byte
@@ -503,6 +542,11 @@ struct BAT
     /*0x06*/ uint16 s1[2];
     /*0x0A*/ uint16 matid; //MATM index (MATM is a material lookup table)
     /*0x0C*/ int16 s2; //usually -1
+
+	void init()
+	{
+		s2 = -1;
+	}
 };
 
 //Size = 36 byte / 0x24 byte
@@ -520,6 +564,11 @@ struct REGN
     /*0x1E*/ uint16 s2; //flags? vital for sc2 engine rendering the geometry
     /*0x20*/ unsigned char b1[2];
     /*0x22*/ uint16 rootBone;
+
+	void init()
+	{
+		b1[0] = b1[1] = 1;
+	}
 };
 
 // Size = 72 byte / 0x48 byte
@@ -575,6 +624,17 @@ struct EVNT
 	/*0x34*/ Vec4D c;
 	/*0x44*/ Vec4D d;
 	/*0x54*/ int32 d2[5];
+
+	void init()
+	{
+		d1 = -1;
+		s1 = -1;
+		a = Vec4D(1.0f, 0.0f, 0.0f, 0.0f);
+		b = Vec4D(0.0f, 1.0f, 0.0f, 0.0f);
+		c = Vec4D(0.0f, 0.0f, 1.0f, 0.0f);
+		d = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
+		d2[0] = 4;
+	}
 };
 
 // Size = 20 byte / 0x14 byte
@@ -594,6 +654,11 @@ struct SD
     /*0x0C*/ uint32 flags;
     /*0x10*/ uint32 length;
     /*0x14*/ Reference data;
+
+	void init()
+	{
+		flags = 1;
+	}
 };
 
 /*
@@ -667,6 +732,15 @@ struct SEQS
     /*0x2C*/ int32 d4[2];			// usually 0
     /*0x38*/ SphereF boundSphere;
     /*0x58*/ int32 d5[2];			// usually 0
+
+	void init()
+	{
+		d1[0] = -1;
+		d1[1] = -1;
+		ReplayStart = 1;
+		ReplayEnd = 1;
+		d4[0] = 0x64;
+	}
 };
 
 // Size = 4 byte / 0x04 byte
@@ -750,6 +824,14 @@ struct STS
     /*0x0C*/ int32 d1[3];		// usually -1
     /*0x18*/ int16 s1;			// usually -1
     /*0x1A*/ uint16 s2;			// usually 0
+
+	void init()
+	{
+		d1[0] = -1;
+		d1[1] = -1;
+		d1[2] = -1;
+		s1 = -1;
+	}
 };
 
 // Size = 24 byte / 0x18 byte
@@ -776,6 +858,14 @@ struct BNDS
 struct IREF
 {
     float matrix[4][4];
+
+	void init()
+	{
+		matrix[0][1] = 1.0f;
+		matrix[1][0] = -1.0f;
+		matrix[2][2] = 1.0f;
+		matrix[3][3] = 1.0f;
+	}
 };
 
 /*
