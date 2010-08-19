@@ -164,11 +164,11 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	uint16 *texlookup = (uint16*)(mpqf.getBuffer() + m->header.ofsTexLookup);
 	uint16 *texunitlookup = (uint16*)(mpqf.getBuffer() + m->header.ofsTexUnitLookup);
 	uint16 *texanimlookup = (uint16*)(mpqf.getBuffer() + m->header.ofsTexAnimLookup);
-	ModelTexAnimDef *texanim = (ModelTexAnimDef *)(mpqf.getBuffer() + m->header.ofsTexAnims);
+	//ModelTexAnimDef *texanim = (ModelTexAnimDef *)(mpqf.getBuffer() + m->header.ofsTexAnims);
 	ModelVertex *verts = (ModelVertex*)(mpqf.getBuffer() + m->header.ofsVertices);
 	uint16 *trianglelookup = (uint16*)(mpqfv.getBuffer() + view->ofsIndex);
 	uint16 *triangles = (uint16*)(mpqfv.getBuffer() + view->ofsTris);
-	uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
+	//uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
 	ModelRenderFlags *renderflags = (ModelRenderFlags *)(mpqf.getBuffer() + m->header.ofsTexFlags);
 	uint32 *logAnimations = new uint32[m->header.nAnimations];
 	uint32 *reAnimations = new uint32[m->header.nAnimations];
@@ -395,8 +395,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Seek(datachunk_offset, wxFromStart);
 
 	// mSTC
-
-
 	RefEntry("_CTS", f.Tell(), nAnimations, 4);
 	chunk_offset = f.Tell();
 	mdata.mSTC.nEntries = nAnimations;
@@ -520,8 +518,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Seek(sizeof(sd), wxFromCurrent);
 		for(int j=0; j<m->header.nBones; j++) {
 			if (m->bones[j].trans.uses(anim_offset) && m->bones[j].trans.data[anim_offset].size() > 0) {
-				//int counts = m->bones[j].trans.data[anim_offset].size();
-				sd.length = seqs[reAnimations[anim_offset]].length;  //m->bones[j].trans.times[anim_offset][counts-1];
+				sd.length = seqs[reAnimations[anim_offset]].length;  
 				break;
 			}
 		}
@@ -613,7 +610,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 						f.Write(&m->bones[j].trans.times[anim_offset][k], sizeof(int32));
 					}
 					padding(&f);
-					sds[ii].length = seqs[reAnimations[anim_offset]].length; //m->bones[j].trans.times[anim_offset][counts-1];
+					sds[ii].length = seqs[reAnimations[anim_offset]].length; 
 					sds[ii].data.nEntries = counts;
 					sds[ii].data.ref = ++fHead.nRefs;
 					RefEntry("3CEV", f.Tell(), sds[ii].data.nEntries, 0);
@@ -644,7 +641,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 						f.Write(&m->bones[j].scale.times[anim_offset][k], sizeof(int32));
 					}
 					padding(&f);
-					sds[ii].length = seqs[reAnimations[anim_offset]].length; //m->bones[j].scale.times[anim_offset][counts-1];
+					sds[ii].length = seqs[reAnimations[anim_offset]].length;
 					sds[ii].data.nEntries = counts;
 					sds[ii].data.ref = ++fHead.nRefs;
 					RefEntry("3CEV", f.Tell(), sds[ii].data.nEntries, 0);
@@ -690,7 +687,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 						f.Write(&m->bones[j].rot.times[anim_offset][k], sizeof(int32));
 					}
 					padding(&f);
-					sds[ii].length = seqs[reAnimations[anim_offset]].length; //m->bones[j].rot.times[anim_offset][counts-1];
+					sds[ii].length = seqs[reAnimations[anim_offset]].length;
 					sds[ii].data.nEntries = counts;
 					sds[ii].data.ref = ++fHead.nRefs;
 					RefEntry("TAUQ", f.Tell(), sds[ii].data.nEntries, 0);
@@ -830,12 +827,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	for(uint32 i=0; i<m->header.nBones; i++) {
 		boneList.push_back(mb[i]);
 	}
-#ifdef	ROOT_BONE
-	ModelBoneDef animBone;
-	memset(&animBone, 0, sizeof(animBone));
-	animBone.parent = -2;
-	boneList.push_back(animBone);
-#endif
 
 	mdata.mBone.nEntries = boneList.size();
 	mdata.mBone.ref = ++fHead.nRefs;
@@ -851,14 +842,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 #ifdef	ROOT_BONE
 		if (i == 0)
 			strName += _T("Bone_Root");
-		else if (i == mdata.mBone.nEntries - 1)
-			strName =_T("_M3_Anim_Data");
 		else
 			strName += wxString::Format(_T("Bone%d"), i-1);
 
 		for(uint32 j=0; j < BONE_MAX; j++) {
 			if (i > 0 && m->keyBoneLookup[j] == i-1) {
 				strName += _T("_")+wxString(Bone_Names[j], wxConvUTF8);
+				break;
 			}
 		}
 #else
@@ -867,6 +857,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		for(uint32 j=0; j < m->header.nKeyBoneLookup; j++) {
 			if (m->keyBoneLookup[j] == i) {
 				strName += _T("_")+wxString(Bone_Names[j], wxConvUTF8);
+				break;
 			}
 		}
 #endif
@@ -888,7 +879,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 #endif
 
 		bones[i].initTrans.AnimRef.animid = CreateAnimID(AR_Bone, i, 0, 2);
-		if (i > 0 && i < mdata.mBone.nEntries - 1)
+
+#ifdef	ROOT_BONE
+		if (i > 0)
 		{
 			for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
 			{
@@ -900,6 +893,17 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				}
 			}
 		}
+#else
+		for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
+		{
+			int anim_offset = logAnimations[j];
+			if (m->bones[i].trans.uses(anim_offset))
+			{	
+				bones[i].initTrans.AnimRef.flags = 1;
+				bones[i].initTrans.AnimRef.animflag = 6;	
+			}
+		}
+#endif
 		bones[i].initTrans.value = boneList[i].pivot;
 		if (bones[i].parent > -1) {
 			bones[i].initTrans.value -= boneList[bones[i].parent].pivot ;
@@ -913,20 +917,25 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		}
 		else
 		{
-#endif
-			if (i > 0 && i < mdata.mBone.nEntries - 1)
+			for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
 			{
-				for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
-				{
-					int anim_offset = logAnimations[j];
-					if (m->bones[i-1].rot.uses(anim_offset))
-					{	
-						bones[i].initRot.AnimRef.flags = 1;
-						bones[i].initRot.AnimRef.animflag = 6;	
-					}
+				int anim_offset = logAnimations[j];
+				if (m->bones[i-1].rot.uses(anim_offset))
+				{	
+					bones[i].initRot.AnimRef.flags = 1;
+					bones[i].initRot.AnimRef.animflag = 6;	
 				}
 			}
-#ifdef	ROOT_BONE
+		}
+#else
+		for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
+		{
+			int anim_offset = logAnimations[j];
+			if (m->bones[i].rot.uses(anim_offset))
+			{	
+				bones[i].initRot.AnimRef.flags = 1;
+				bones[i].initRot.AnimRef.animflag = 6;	
+			}
 		}
 #endif
 
@@ -938,20 +947,25 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		}
 		else
 		{
-#endif
-			if (i > 0 && i < mdata.mBone.nEntries - 1)
+			for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
 			{
-				for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
-				{
-					int anim_offset = logAnimations[j];
-					if (m->bones[i-1].scale.uses(anim_offset))
-					{	
-						bones[i].initScale.AnimRef.flags = 1;
-						bones[i].initScale.AnimRef.animflag = 6;	
-					}
+				int anim_offset = logAnimations[j];
+				if (m->bones[i-1].scale.uses(anim_offset))
+				{	
+					bones[i].initScale.AnimRef.flags = 1;
+					bones[i].initScale.AnimRef.animflag = 6;	
 				}
 			}
-#ifdef	ROOT_BONE
+		}
+#else
+		for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
+		{
+			int anim_offset = logAnimations[j];
+			if (m->bones[i].scale.uses(anim_offset))
+			{	
+				bones[i].initScale.AnimRef.flags = 1;
+				bones[i].initScale.AnimRef.animflag = 6;	
+			}
 		}
 #endif
 		bones[i].ar1.AnimRef.animid = CreateAnimID(AR_Bone, i, 0, 6);
@@ -1178,7 +1192,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	}
 
 	// mAttachLU
-	//int16 *attachLookup = (int16 *)(mpqf.getBuffer() + m->header.ofsAttachLookup);
 	if (mdata.mAttach.nEntries) {
 		mdata.mAttachLU.nEntries = mdata.mAttach.nEntries;
 		mdata.mAttachLU.ref = ++fHead.nRefs;
@@ -1382,7 +1395,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		memset(&iref, 0, sizeof(iref));
 		iref.init();
 #ifdef	ROOT_BONE
-		if (i > 0 && i < mdata.mIREF.nEntries - 1) {
+		if (i > 0) {
 			iref.matrix[3][0] = -m->bones[i-1].pivot.x;
 			iref.matrix[3][1] = m->bones[i-1].pivot.z;
 			iref.matrix[3][2] = -m->bones[i-1].pivot.y;
@@ -1436,6 +1449,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	wxDELETEA(seqs);
 	wxDELETEA(stcs);
+
+	wxDELETEA(logAnimations);
+	wxDELETEA(reAnimations);
+	wxDELETEA(nameAnimations);
 
 	mpqf.close();
 	mpqfv.close();
