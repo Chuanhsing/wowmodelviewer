@@ -375,6 +375,7 @@ Layer Index	Map Type
 11	 Height
 */
 #define	MAT_LAYER_DIFF			(0)
+#define	MAT_LAYER_EMISSIVE		(3)
 #define	MAT_LAYER_ALPHA			(7)
 /*
 Flags
