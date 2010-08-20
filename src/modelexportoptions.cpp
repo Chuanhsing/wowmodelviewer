@@ -298,6 +298,7 @@ void ModelExportOptions_M3::Update()
 	clbAnimations->Clear();
 	if (g_selModel && g_selModel->animated && g_selModel->anims) {
 		Model *m = g_selModel;
+		
 		for(int i=0; i<m->header.nAnimations; i++) {
 			wxString strName;
 			try {
@@ -308,9 +309,15 @@ void ModelExportOptions_M3::Update()
 			}
 			strName += wxString::Format(_T(" [%i]"), i);
 			clbAnimations->Append(strName);
-			if (m->anims[i].animID == 0 || m->anims[i].animID == 1 || m->anims[i].animID == 5) {
-				clbAnimations->Check(clbAnimations->GetCount()-1);
+			if (modelExport_M3_Anims.size() == 0) {
+				if (m->anims[i].animID == 0 || m->anims[i].animID == 1 || m->anims[i].animID == 5) {
+					clbAnimations->Check(clbAnimations->GetCount()-1);
+				}
 			}
+		}
+		for(int i=0; i<modelExport_M3_Anims.size(); i++) {
+			if (i < clbAnimations->GetCount())
+				clbAnimations->Check(i);
 		}
 	}
 }
@@ -328,7 +335,7 @@ void ModelExportOptions_M3::OnButton(wxCommandEvent &event)
 				continue;
 			modelExport_M3_Anims.push_back(i);
 		}
-	} else if (id == ID_EXPORTOPTIONS_M3_APPLY) {
+	} else if (id == ID_EXPORTOPTIONS_M3_RESET) {
 		//modelExport_M3_BoundScale = 0.5f;
 		//modelExport_M3_SphereScale = 0.5f;
 		//modelExport_M3_TexturePath = _T("");
