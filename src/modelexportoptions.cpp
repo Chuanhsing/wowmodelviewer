@@ -322,15 +322,16 @@ void ModelExportOptions_M3::OnButton(wxCommandEvent &event)
 		modelExport_M3_BoundScale = wxAtof(tcBoundScale->GetValue());
 		modelExport_M3_SphereScale = wxAtof(tcSphereScale->GetValue());
 		modelExport_M3_TexturePath = tcTexturePathValue->GetValue();
+		modelExport_M3_Anims.clear();
 		for(uint32 i=0; i<clbAnimations->GetCount(); i++) {
 			if (!clbAnimations->IsChecked(i))
 				continue;
 			modelExport_M3_Anims.push_back(i);
 		}
-	} else {
-		modelExport_M3_BoundScale = 0.5f;
-		modelExport_M3_SphereScale = 0.5f;
-		modelExport_M3_TexturePath = _T("");
+	} else if (id == ID_EXPORTOPTIONS_M3_APPLY) {
+		//modelExport_M3_BoundScale = 0.5f;
+		//modelExport_M3_SphereScale = 0.5f;
+		//modelExport_M3_TexturePath = _T("");
 		modelExport_M3_Anims.clear();
 		Update();
 	}

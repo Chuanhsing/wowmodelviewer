@@ -333,6 +333,17 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			}
 			if (strName == _T("Run"))
 				strName = _T("Walk");
+
+			uint32 counts = 0;
+			for(uint32 j=0; j<vAnimations.size(); j++) {
+				if (vAnimations[j] == strName) {
+					counts ++;
+				}
+			}
+			vAnimations.push_back(strName);
+			if (counts > 0)
+				strName += wxString::Format(_T(" %02d"), counts);
+
 			nameAnimations.push_back(strName);
 			nAnimations++;
 		}
