@@ -87,10 +87,11 @@ class ModelExportOptions_M3: public wxWindow
 
     wxStaticText *stBoundScale, *stSphereScale;
 	wxStaticText *stTexturePath;
-	wxButton *bApply;
+	wxButton *bApply, *bReset;
 
 public:
 	wxTextCtrl *tcBoundScale, *tcSphereScale, *tcTexturePathValue;
+	wxCheckListBox *clbAnimations;
 
     ModelExportOptions_M3(wxWindow* parent, wxWindowID id);
 	~ModelExportOptions_M3() {};

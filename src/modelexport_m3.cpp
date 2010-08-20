@@ -179,9 +179,12 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	uint16 *triangles = (uint16*)(mpqfv.getBuffer() + view->ofsTris);
 	//uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
 	ModelRenderFlags *renderflags = (ModelRenderFlags *)(mpqf.getBuffer() + m->header.ofsTexFlags);
-	uint32 *logAnimations = new uint32[m->header.nAnimations];
+	//uint32 *logAnimations = new uint32[m->header.nAnimations];
+	std::vector<int> logAnimations;
 	uint32 *reAnimations = new uint32[m->header.nAnimations];
-	wxString *nameAnimations = new wxString[m->header.nAnimations];
+	std::vector<wxString> vAnimations;
+	wxArrayString nameAnimations;
+	int chunk_offset, datachunk_offset;
 
 	std::vector<uint16> bLookup;
 	std::vector<uint16> bLookupcnt;
@@ -308,51 +311,77 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	// mSEQS
 	uint32 nAnimations = 0;
-	static std::vector<wxString> vAnimations;
-	for(uint32 i=0; i<m->header.nAnimations; i++) {
-		wxString strName;
-		try {
-			AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
-			strName = rec.getString(AnimDB::Name);
-		} catch (AnimDB::NotFound) {
-			strName = _T("???");
+	if (modelExport_M3_Anims.size() > 0) {
+		logAnimations = modelExport_M3_Anims;
+		for(int i=0; i<modelExport_M3_Anims.size(); i++) {
+			reAnimations[logAnimations[i]] = i;
 		}
-		if (!strName.StartsWith(_T("Run")) && !strName.StartsWith(_T("Stand")) && 
-				!strName.StartsWith(_T("Attack")) && !strName.StartsWith(_T("Death")))
-			continue;
-		if (strName.StartsWith(_T("StandWound")))
-			continue;
-		//if (strName != _T("Run"))
-		//	continue;
-		nameAnimations[i] = strName;
-		if (strName.StartsWith(_T("Run"))) {
-			nameAnimations[nAnimations] = _T("Walk");
-		}
-		if (strName.StartsWith(_T("Stand"))) {
-			nameAnimations[nAnimations] = _T("Stand");
-		}
-		if (strName.StartsWith(_T("Attack"))) {
-			nameAnimations[nAnimations] = _T("Attack");
-		}
-		if (strName.StartsWith(_T("Death"))) {
-			nameAnimations[nAnimations] = _T("Death");
-		}
-
-		uint32 counts = 0;
-		for(uint32 j=0; j<vAnimations.size(); j++) {
-			if (vAnimations[j] == nameAnimations[nAnimations]) {
-				counts ++;
+		for(uint32 i=0; i<m->header.nAnimations; i++) {
+			bool bFound = false;
+			for(int j=0; j<logAnimations.size(); j++) {
+				if (logAnimations[j] == i)
+					bFound = true;
 			}
+			if (bFound == false)
+				continue;
+			wxString strName;
+			try {
+				AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
+				strName = rec.getString(AnimDB::Name);
+			} catch (AnimDB::NotFound) {
+				strName = _T("???");
+			}
+			if (strName == _T("Run"))
+				strName = _T("Walk");
+			nameAnimations.push_back(strName);
+			nAnimations++;
 		}
-		vAnimations.push_back(nameAnimations[nAnimations]);
-		if (counts > 0)
-			nameAnimations[nAnimations] += wxString::Format(_T(" %02d"), counts);
+	} else {
+		for(uint32 i=0; i<m->header.nAnimations; i++) {
+			wxString strName;
+			try {
+				AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
+				strName = rec.getString(AnimDB::Name);
+			} catch (AnimDB::NotFound) {
+				strName = _T("???");
+			}
+			if (!strName.StartsWith(_T("Run")) && !strName.StartsWith(_T("Stand")) && 
+					!strName.StartsWith(_T("Attack")) && !strName.StartsWith(_T("Death")))
+				continue;
+			if (strName.StartsWith(_T("StandWound")))
+				continue;
+			//if (strName != _T("Run"))
+			//	continue;
+			if (strName.StartsWith(_T("Run"))) {
+				strName = _T("Walk");
+			}
+			if (strName.StartsWith(_T("Stand"))) {
+				strName = _T("Stand");
+			}
+			if (strName.StartsWith(_T("Attack"))) {
+				strName = _T("Attack");
+			}
+			if (strName.StartsWith(_T("Death"))) {
+				strName = _T("Death");
+			}
 
-		logAnimations[nAnimations] = i;
-		reAnimations[i] = nAnimations; 
-		nAnimations++;
+			uint32 counts = 0;
+			for(uint32 j=0; j<vAnimations.size(); j++) {
+				if (vAnimations[j] == strName) {
+					counts ++;
+				}
+			}
+			vAnimations.push_back(strName);
+			if (counts > 0)
+				strName += wxString::Format(_T(" %02d"), counts);
+
+			nameAnimations.push_back(strName);
+
+			logAnimations.push_back(i);
+			reAnimations[i] = nAnimations; 
+			nAnimations++;
+		}
 	}
-	int chunk_offset, datachunk_offset;
 
 	mdata.mSEQS.nEntries = nAnimations;
 	mdata.mSEQS.ref = reList.size();
@@ -1388,9 +1417,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	wxDELETEA(seqs);
 	wxDELETEA(stcs);
 
-	wxDELETEA(logAnimations);
 	wxDELETEA(reAnimations);
-	wxDELETEA(nameAnimations);
 
 	mpqf.close();
 	mpqfv.close();

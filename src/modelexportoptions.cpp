@@ -285,7 +285,9 @@ ModelExportOptions_M3::ModelExportOptions_M3(wxWindow* parent, wxWindowID id)
 	tcSphereScale = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 30));
 	stTexturePath = new wxStaticText(this, wxID_ANY, _T("Texture Path"), wxPoint(5, 58));
 	tcTexturePathValue = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 55), wxSize(250, 25));
-	bApply = new wxButton(this, ID_EXPORTOPTIONS_M3_APPLY, _T("Apply"), wxPoint(205, 5));
+	clbAnimations = new wxCheckListBox(this, ID_EXPORTOPTIONS_M3_ANIMS, wxPoint(5, 85), wxSize(250,165), 0, NULL, 0, wxDefaultValidator, _T("Animations"));
+	bApply = new wxButton(this, ID_EXPORTOPTIONS_M3_APPLY, _T("Apply"), wxPoint(5, 255));
+	bReset = new wxButton(this, ID_EXPORTOPTIONS_M3_RESET, _T("Reset"), wxPoint(95, 255));
 }
 
 void ModelExportOptions_M3::Update()
@@ -293,6 +295,24 @@ void ModelExportOptions_M3::Update()
 	tcBoundScale->SetValue(wxString::Format(_T("%0.2f"), modelExport_M3_BoundScale));
 	tcSphereScale->SetValue(wxString::Format(_T("%0.2f"), modelExport_M3_SphereScale));
 	tcTexturePathValue->SetValue(modelExport_M3_TexturePath);
+	clbAnimations->Clear();
+	if (g_selModel && g_selModel->animated && g_selModel->anims) {
+		Model *m = g_selModel;
+		for(int i=0; i<m->header.nAnimations; i++) {
+			wxString strName;
+			try {
+				AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
+				strName = rec.getString(AnimDB::Name);
+			} catch (AnimDB::NotFound) {
+				strName = _T("???");
+			}
+			strName += wxString::Format(_T(" [%i]"), i);
+			clbAnimations->Append(strName);
+			if (m->anims[i].animID == 0 || m->anims[i].animID == 1 || m->anims[i].animID == 5) {
+				clbAnimations->Check(clbAnimations->GetCount()-1);
+			}
+		}
+	}
 }
 
 void ModelExportOptions_M3::OnButton(wxCommandEvent &event)
@@ -302,5 +322,16 @@ void ModelExportOptions_M3::OnButton(wxCommandEvent &event)
 		modelExport_M3_BoundScale = wxAtof(tcBoundScale->GetValue());
 		modelExport_M3_SphereScale = wxAtof(tcSphereScale->GetValue());
 		modelExport_M3_TexturePath = tcTexturePathValue->GetValue();
-	} 
+		for(uint32 i=0; i<clbAnimations->GetCount(); i++) {
+			if (!clbAnimations->IsChecked(i))
+				continue;
+			modelExport_M3_Anims.push_back(i);
+		}
+	} else {
+		modelExport_M3_BoundScale = 0.5f;
+		modelExport_M3_SphereScale = 0.5f;
+		modelExport_M3_TexturePath = _T("");
+		modelExport_M3_Anims.clear();
+		Update();
+	}
 }

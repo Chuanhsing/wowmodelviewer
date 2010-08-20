@@ -199,13 +199,13 @@ void AnimControl::UpdateModel(Model *m)
 	*/
 
 	// Animation stuff
-	if (g_selModel->animated && g_selModel->anims) {
+	if (m->animated && m->anims) {
 		wxString strName;
 		wxString strStand;
 		int selectAnim = 0;
-		for (unsigned int i=0; i<g_selModel->header.nAnimations; i++) {			
+		for (unsigned int i=0; i<m->header.nAnimations; i++) {			
 			try {
-				AnimDB::Record rec = animdb.getByAnimID(g_selModel->anims[i].animID);
+				AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
 				strName = rec.getString(AnimDB::Name);
 			} catch (AnimDB::NotFound) {
 				strName = _T("???");
