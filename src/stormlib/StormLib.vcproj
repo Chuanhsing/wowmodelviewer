@@ -1191,6 +1191,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\src\SFilePatchArchives.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\SFileReadFile.cpp"
 				>
 				<FileConfiguration

@@ -109,13 +109,15 @@ TMPQFile * CreateMpqFile(TMPQArchive * ha, const char * szFileName);
 int  LoadXXXBlock(TMPQArchive * ha, TMPQXXXBlock ** ppXxxBlock, LARGE_INTEGER ByteOffset, DWORD dwBlockSize, const char * szKey);
 int  LoadMpqTable(TMPQArchive * ha, PLARGE_INTEGER pByteOffset, void * pvTable, DWORD dwCompressedSize, DWORD dwRealSize, const char * szKey);
 int  AllocateSectorBuffer(TMPQFile * hf);
-int  AllocatePatchHeader(TMPQFile * hf, bool bLoadFromFile);
+int  AllocatePatchInfo(TMPQFile * hf, bool bLoadFromFile);
 int  AllocateSectorOffsets(TMPQFile * hf, bool bLoadFromFile);
 int  AllocateSectorChecksums(TMPQFile * hf, bool bLoadFromFile);
 void CalculateRawSectorOffset(LARGE_INTEGER & RawFilePos, TMPQFile * hf, DWORD dwSectorOffset);
 int  WriteSectorOffsets(TMPQFile * hf);
 int  WriteSectorChecksums(TMPQFile * hf);
 void FreeMPQFile(TMPQFile *& hf);
+
+int  PatchFileData(TMPQFile * hf);
 
 int  SaveMPQTables(TMPQArchive * ha);
 void FreeMPQArchive(TMPQArchive *& ha);

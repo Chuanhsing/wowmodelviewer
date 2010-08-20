@@ -114,6 +114,7 @@
   typedef long           LONG_PTR;
   typedef long           INT_PTR;
   typedef long long      LONGLONG;
+  typedef unsigned long long ULONGLONG;
   typedef void         * HANDLE;
   typedef void         * LPOVERLAPPED; // Unsupported on Linux and Mac
   typedef char           TCHAR;
@@ -121,7 +122,6 @@
   typedef LONG         * PLONG;
   typedef DWORD        * LPDWORD;
   typedef BYTE         * LPBYTE;
-  typedef unsigned long long ULONGLONG;
 
   typedef union _LARGE_INTEGER
   {

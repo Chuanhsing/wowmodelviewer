@@ -293,17 +293,17 @@ static int CopyMpqFileSectors(
     }
 
     // If we have to save patch header, do it
-    if(nError == ERROR_SUCCESS && hf->pPatchHeader != NULL)
+    if(nError == ERROR_SUCCESS && hf->pPatchInfo != NULL)
     {
-        BSWAP_INT32_UNSIGNED(hf->pPatchHeader->dwLength);
-        BSWAP_INT32_UNSIGNED(hf->pPatchHeader->dwFlags);
-        BSWAP_INT32_UNSIGNED(hf->pPatchHeader->dwDataSize);
-        if(!FileStream_Write(pNewStream, NULL, hf->pPatchHeader, hf->pPatchHeader->dwLength))
+        BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwLength);
+        BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwFlags);
+        BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwDataSize);
+        if(!FileStream_Write(pNewStream, NULL, hf->pPatchInfo, hf->pPatchInfo->dwLength))
             nError = GetLastError();
 
         // Note: In wow-update-12694.MPQ, the dwCSize doesn't
         // include the patch header on some files.
-        dwCSize += hf->pPatchHeader->dwLength;
+        dwCSize += hf->pPatchInfo->dwLength;
     }
 
     // If we have to save sector offset table, do it.
@@ -495,7 +495,7 @@ static int CopyMpqFiles(TMPQArchive * ha, DWORD * pFileKeys, TFileStream * pNewS
             // If the file is a patch file, load the patch header
             if(pBlock->dwFlags & MPQ_FILE_PATCH_FILE)
             {
-                nError = AllocatePatchHeader(hf, true);
+                nError = AllocatePatchInfo(hf, true);
                 if(nError != ERROR_SUCCESS)
                     break;
             }

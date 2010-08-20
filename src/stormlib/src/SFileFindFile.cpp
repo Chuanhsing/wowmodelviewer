@@ -126,56 +126,85 @@ static int DoMPQSearch(TMPQSearch * hs, SFILE_FIND_DATA * lpFindFileData)
     DWORD dwHashIndex;
     DWORD dwBlockIndex;
 
-    // Do until a file is found or no more files
-    while(pHash < pHashEnd)
+    // Do that for all files in the patch chain
+    while(ha != NULL)
     {
-        pNode = ha->pListFile[hs->dwNextIndex++];
+        // Get the start ad end of the hash table
+        pHashEnd = ha->pHashTable + ha->pHeader->dwHashTableSize;
+        pHash = ha->pHashTable + hs->dwNextIndex;
 
-        // Is this entry occupied ?
-        // Note don't check the block index to HASH_ENTRY_DELETED.
-        // Various maliciously modified MPQs have garbage here
-        if(pHash->dwBlockIndex < ha->pHeader->dwBlockTableSize)
+        // Do until a file is found or no more files
+        while(pHash < pHashEnd)
         {
-            // Check if the file exists
-            pBlock = ha->pBlockTable + pHash->dwBlockIndex;
-            if((pBlock->dwFlags & MPQ_FILE_EXISTS) && (pNode != NULL))
+            pNode = ha->pListFile[hs->dwNextIndex++];
+
+            // Is this entry occupied ?
+            // Note: don't check the block index to HASH_ENTRY_DELETED.
+            // Various maliciously modified MPQs have garbage here
+            if((pHash->dwBlockIndex < ha->pHeader->dwBlockTableSize) && (pNode != NULL))
             {
-                // Check the file name.
-                if(CheckWildCard(pNode->szFileName, hs->szSearchMask))
+                // Check if the file exists
+                pBlock = ha->pBlockTable + pHash->dwBlockIndex;
+                if(pBlock->dwFlags & MPQ_FILE_EXISTS)
                 {
-                    // Calculate hash index
-                    dwHashIndex = (DWORD)(pHash - ha->pHashTable);
-                    dwBlockIndex = pHash->dwBlockIndex;
-
-                    // Fill the found entry
-                    lpFindFileData->dwHashIndex  = dwHashIndex;
-                    lpFindFileData->dwBlockIndex = pHash->dwBlockIndex;
-                    lpFindFileData->dwFileSize   = pBlock->dwFSize;
-                    lpFindFileData->dwFileFlags  = pBlock->dwFlags;
-                    lpFindFileData->dwCompSize   = pBlock->dwCSize;
-                    lpFindFileData->lcLocale     = pHash->lcLocale;
-
-                    // Fill the filetime
-                    lpFindFileData->dwFileTimeLo = 0;
-                    lpFindFileData->dwFileTimeHi = 0;
-                    if(ha->pAttributes != NULL && (ha->pAttributes->dwFlags & MPQ_ATTRIBUTE_FILETIME))
+                    // If we are already in the patch MPQ, we skip all files
+                    // that don't have the appropriate patch prefix and are patch files
+                    if(hs->bSearchingPatch)
                     {
-                        lpFindFileData->dwFileTimeLo = ha->pAttributes->pFileTime[dwBlockIndex].dwFileTimeLow;
-                        lpFindFileData->dwFileTimeHi = ha->pAttributes->pFileTime[dwBlockIndex].dwFileTimeHigh;
+                        // We want to return patch files, because the calling
+                        // application might want to update size
+//                      if(pBlock->dwFlags & MPQ_FILE_PATCH_FILE)
+//                          goto __SkipThisFile;
+                        if(_strnicmp(pNode->szFileName, hs->szPatchPrefix, hs->nPrefixLength))
+                            goto __SkipThisFile;
                     }
 
-                    // Fill the file name and plain file name
-                    strcpy(lpFindFileData->cFileName, pNode->szFileName);
-                    lpFindFileData->szPlainName = (char *)GetPlainMpqFileName(lpFindFileData->cFileName);
+                    // Check the file name.
+                    if(CheckWildCard(pNode->szFileName, hs->szSearchMask))
+                    {
+                        size_t nFileNameOffset = hs->bSearchingPatch ? hs->nPrefixLength : 0;
 
-                    // Fill the next entry
-                    return ERROR_SUCCESS;
+                        // Calculate hash index
+                        dwHashIndex = (DWORD)(pHash - ha->pHashTable);
+                        dwBlockIndex = pHash->dwBlockIndex;
+
+                        // Fill the found entry
+                        lpFindFileData->dwHashIndex  = dwHashIndex;
+                        lpFindFileData->dwBlockIndex = pHash->dwBlockIndex;
+                        lpFindFileData->dwFileSize   = pBlock->dwFSize;
+                        lpFindFileData->dwFileFlags  = pBlock->dwFlags;
+                        lpFindFileData->dwCompSize   = pBlock->dwCSize;
+                        lpFindFileData->lcLocale     = pHash->lcLocale;
+
+                        // Fill the filetime
+                        lpFindFileData->dwFileTimeLo = 0;
+                        lpFindFileData->dwFileTimeHi = 0;
+                        if(ha->pAttributes != NULL && (ha->pAttributes->dwFlags & MPQ_ATTRIBUTE_FILETIME))
+                        {
+                            lpFindFileData->dwFileTimeLo = ha->pAttributes->pFileTime[dwBlockIndex].dwFileTimeLow;
+                            lpFindFileData->dwFileTimeHi = ha->pAttributes->pFileTime[dwBlockIndex].dwFileTimeHigh;
+                        }
+
+                        // Fill the file name and plain file name
+                        strcpy(lpFindFileData->cFileName, pNode->szFileName + nFileNameOffset);
+                        lpFindFileData->szPlainName = (char *)GetPlainMpqFileName(lpFindFileData->cFileName);
+
+                        // Fill the next entry
+                        return ERROR_SUCCESS;
+                    }
                 }
             }
+
+            // Move to the next hash table entry
+            __SkipThisFile:
+
+            pHash++;
         }
 
-        // Move to the next hash table entry
-        pHash++;
+        // Move to the next patch in the patch chain
+        hs->bSearchingPatch = true;
+        hs->dwNextIndex = 0;
+        hs->ha = ha = ha->haPatch;
     }
 
     // No more files found, return error
@@ -225,8 +254,11 @@ HANDLE WINAPI SFileFindFirstFile(HANDLE hMpq, const char * szMask, SFILE_FIND_DA
     if(nError == ERROR_SUCCESS)
     {
         memset(hs, 0, sizeof(TMPQSearch));
-        hs->ha = ha;
         strcpy(hs->szSearchMask, szMask);
+        strcpy(hs->szPatchPrefix, ha->szPatchPrefix);
+        hs->bSearchingPatch = false;
+        hs->nPrefixLength = strlen(hs->szPatchPrefix);
+        hs->ha = ha;
         nError = DoMPQSearch(hs, lpFindFileData);
     }
 

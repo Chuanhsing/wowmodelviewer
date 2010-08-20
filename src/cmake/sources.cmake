@@ -26,6 +26,7 @@ set(STORM_SOURCES
     stormlib/src/SFileListFile.cpp
     stormlib/src/SFileOpenArchive.cpp
     stormlib/src/SFileOpenFileEx.cpp
+    stormlib/src/SFilePatchArchives.cpp
     stormlib/src/SFileReadFile.cpp
     stormlib/src/SFileVerify.cpp
     stormlib/src/libtomcrypt/src/hashes/hash_memory.c

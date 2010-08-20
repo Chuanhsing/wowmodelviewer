@@ -566,7 +566,7 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
     {
         // Get the file size
         hf = (TMPQFile *)hFile;
-        SFileGetFileInfo(hFile, SFILE_INFO_FILE_SIZE, &dwTotalBytes, sizeof(DWORD));
+        dwTotalBytes = SFileGetFileSize(hFile, NULL);
 
         // Initialize the CRC32 and MD5 contexts
         md5_init(&md5_state);

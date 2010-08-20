@@ -462,13 +462,17 @@ int WINAPI SFileAddListFile(HANDLE hMpq, const char * szListFile)
     size_t nLength = 0;
     int nError = ERROR_SUCCESS;
 
-    // Load the listfile to cache
-    pCache = CreateListFileCache(hMpq, szListFile);
-    if(pCache == NULL)
-        nError = GetLastError();
-
-    if(nError == ERROR_SUCCESS)
+    // Add the listfile for each MPQ in the patch chain
+    while(ha != NULL)
     {
+        // Load the listfile to cache
+        pCache = CreateListFileCache(hMpq, szListFile);
+        if(pCache == NULL)
+        {
+            nError = GetLastError();
+            break;
+        }
+
         // Load the node list. Add the node for every locale in the archive
         while((nLength = ReadListFileLine(pCache, szFileName, sizeof(szFileName))) > 0)
             SListFileCreateNodeForAllLocales(ha, szFileName);
@@ -478,11 +482,14 @@ int WINAPI SFileAddListFile(HANDLE hMpq, const char * szListFile)
         SListFileCreateNodeForAllLocales(ha, LISTFILE_NAME);
         SListFileCreateNodeForAllLocales(ha, SIGNATURE_NAME);
         SListFileCreateNodeForAllLocales(ha, ATTRIBUTES_NAME);
+
+        // Delete the cache
+        SListFileFindClose((HANDLE)pCache);
+
+        // Move to the next archive in the chain
+        ha = ha->haPatch;
     }
 
-    // Cleanup & exit
-    if(pCache != NULL)
-        SListFileFindClose((HANDLE)pCache);
     return nError;
 }
 

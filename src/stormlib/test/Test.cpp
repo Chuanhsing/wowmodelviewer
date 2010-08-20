@@ -666,7 +666,7 @@ __TryAgain:
 static int TestArchiveOpenAndClose(const char * szMpqName)
 {
     const char * szFileName1 = LISTFILE_NAME;
-    const char * szFileName2 = MAKE_PATH(LISTFILE_NAME);
+//  const char * szFileName2 = MAKE_PATH(LISTFILE_NAME);
     HANDLE hFile1 = NULL;
     HANDLE hFile2 = NULL;
     HANDLE hMpq = NULL;
@@ -1345,6 +1345,135 @@ static int TestCompareTwoArchives(
     return nError;
 }
 
+static int TestOpenPatchedArchive(const char * szMpqName, ...)
+{
+    HANDLE hFile = NULL;
+    HANDLE hMpq = NULL;
+    va_list argList;
+    const char * szFileName = "Interface\\GLUES\\MODELS\\UI_RS_TAUREN\\TAURENMALESKIN_EXTRA.BLP";
+    const char * szExtension;
+    const char * szLocale;
+    char szPatchPrefix[0x20];
+    LPBYTE pbFullFile = NULL;
+    DWORD dwFileSize;
+    int nError = ERROR_SUCCESS;
+
+    // Determine patch prefix for patches
+    strcpy(szPatchPrefix, "Base");
+    szExtension = strrchr(szMpqName, '.');
+    if(szExtension != NULL)
+    {
+        for(szLocale = szExtension; szLocale > szMpqName; szLocale--)
+        {
+            if(*szLocale == '-')
+            {
+                if((szExtension - szLocale) == 5)
+                {
+                    strncpy(szPatchPrefix, szLocale + 1, 4);
+                    szPatchPrefix[4] = 0;
+                }
+                break;
+            }
+        }
+    }
+
+    // Open the primary MPQ
+    printf("Opening %s ...\n", szMpqName);
+    if(!SFileOpenArchive(szMpqName, 0, MPQ_OPEN_READ_ONLY, &hMpq))
+    {
+        nError = GetLastError();
+        printf("Failed to open the archive %s ...\n", szMpqName);
+    }
+
+    // Add all patches
+    if(nError == ERROR_SUCCESS)
+    {
+        va_start(argList, szMpqName);
+        while((szMpqName = va_arg(argList, const char *)) != NULL)
+        {
+            printf("Adding patch %s ...\n", szMpqName);
+            if(!SFileOpenPatchArchive(hMpq, szMpqName, 0))
+            {
+                nError = GetLastError();
+                printf("Failed to add patch %s ...\n", szMpqName);
+            }
+        }
+        va_end(argList);
+    }
+
+    // Now set the path prefix for patch files
+    if(nError == ERROR_SUCCESS)
+    {
+        printf("Setting path for patch files ...\n");
+        if(!SFileSetPatchPathPrefix(hMpq, szPatchPrefix))
+        {
+            nError = GetLastError();
+            printf("Failed to set the path prefix for patch files.\n");
+        }
+    }
+/*
+    // Now search all files
+    if(nError == ERROR_SUCCESS)
+    {
+        SFILE_FIND_DATA sf;
+        HANDLE hFind;
+        BOOL bResult = TRUE;
+
+        hFind = SFileFindFirstFile(hMpq, "*", &sf, NULL);
+        while(hFind && bResult)
+        {
+            printf("%s\n", sf.cFileName);
+            bResult = SFileFindNextFile(hFind, &sf);
+        }
+    }
+*/
+    // Now try to open patched version of "Achievement.dbc"
+    if(nError == ERROR_SUCCESS)
+    {
+        printf("Opening patched file \"%s\" ...\n", szFileName);
+        if(!SFileOpenFileEx(hMpq, szFileName, SFILE_OPEN_PATCHED_FILE, &hFile))
+        {
+            nError = GetLastError();
+            printf("Failed to open patched file \"%s\"\n", szFileName);
+        }
+    }
+
+    // Verify of the patched version is correct
+    if(nError == ERROR_SUCCESS)
+    {
+        // Get the size of the full patched file
+        dwFileSize = SFileGetFileSize(hFile, NULL);
+        if(dwFileSize != 0)
+        {
+            // Allocate space for the full file
+            pbFullFile = new BYTE[dwFileSize];
+            if(pbFullFile != NULL)
+            {
+                if(!SFileReadFile(hFile, pbFullFile, dwFileSize))
+                {           
+                    nError = GetLastError();
+                    printf("Failed to read full patched file data \"%s\"\n", szFileName);
+                }
+                        
+                // Now try to read the data partially and compare it with the full file
+                for(int i = 0; i < 100000; i++)
+                {
+
+
+                }
+            }
+        }
+    }
+
+    // Close handles
+    if(pbFullFile != NULL)
+        delete [] pbFullFile;
+    if(hFile != NULL)
+        SFileCloseFile(hFile);
+    if(hMpq != NULL)
+        SFileCloseArchive(hMpq);
+    return nError;
+}
 
 //-----------------------------------------------------------------------------
 // Main
@@ -1378,8 +1507,8 @@ int main(void)
 //      nError = TestSectorCompress(MPQ_SECTOR_SIZE);
 
     // Test the archive open and close
-    if(nError == ERROR_SUCCESS)
-        nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/expansion-locale-frFR.MPQ"));
+//  if(nError == ERROR_SUCCESS)
+//      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/expansion-locale-frFR.MPQ"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("PartialMPQs/interface.MPQ.part"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("Starcraft II/Installer Tome 1.MPQE"));
                                                                              
@@ -1418,6 +1547,15 @@ int main(void)
 //                                      NULL,
 //                                      0x1001);
 //  }
+
+    if(nError == ERROR_SUCCESS)
+    {
+        nError = TestOpenPatchedArchive(MAKE_PATH("2011 - WoW-Cataclysm/locale-enUS.MPQ"),
+                                        MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12694.MPQ"),
+                                        MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12759.MPQ"),
+                                        NULL);
+    }
+
 
     // Remove the working directory
     clreol();

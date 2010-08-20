@@ -47,8 +47,8 @@
 /* 10.09.07  6.12  Lad  Support for MPQs protected by corrupting hash table  */
 /* 03.12.07  6.13  Lad  Support for MPQs with hash tbl size > block tbl size */
 /* 07.04.08  6.20  Lad  Added SFileFlushArchive                              */
-/* 09.04.08        Lad  Removed FilePointer variable from TMPQArchive, as    */
-/*                      it caused more problems than benefits                */
+/* 09.04.08        Lad  Removed FilePointer variable from MPQ handle         */
+/*                      structure, as it caused more problems than benefits  */
 /* 12.05.08  6.22  Lad  Support for w3xMaster map protector                  */
 /* 05.10.08  6.23  Lad  Support for protectors who set negative values in    */
 /*                      the table of file blocks                             */
@@ -59,7 +59,8 @@
 /*                      Fixed compacting MPQs that contain single unit files */
 /* 26.04.10  7.00  Lad  Major rewrite                                        */
 /* 08.06.10  7.10  Lad  Support for partial MPQs                             */
-/* 08.06.10  7.11  Lad  Support for MPQs v 3.0                               */
+/* 08.07.10  7.11  Lad  Support for MPQs v 3.0                               */
+/* 20.08.10  7.20  Lad  Support for opening multiple MPQs in patch mode      */
 /*****************************************************************************/
 
 #ifndef __STORMLIB_H_
@@ -119,6 +120,8 @@
 
 #define HASH_STATE_SIZE                0x60 // Size of LibTomCrypt's hash_state structure
 
+#define PATCH_PREFIX_LEN               0x20 // Maximum length of the patch prefix
+
 // Values for TFileStream::Flags
 #define STREAM_FLAG_READ_ONLY          0x01 // The stream is read only
 #define STREAM_FLAG_PART_FILE          0x02 // The stream is a PART file.
@@ -130,8 +133,9 @@
 
 // Values for SFileOpenFile
 #define SFILE_OPEN_FROM_MPQ      0x00000000 // Open the file from the MPQ archive
-#define SFILE_OPEN_BY_INDEX      0x00000001 // The 'szFileName' parameter is actually the file index
-#define SFILE_OPEN_ANY_LOCALE    0x00000002 // Reserved for StormLib internal use
+#define SFILE_OPEN_PATCHED_FILE  0x00000001 // Open the file from the MPQ archive
+#define SFILE_OPEN_BY_INDEX      0x00000002 // The 'szFileName' parameter is actually the file index
+#define SFILE_OPEN_ANY_LOCALE    0xFFFFFFFE // Reserved for StormLib internal use
 #define SFILE_OPEN_LOCAL_FILE    0xFFFFFFFF // Open the file from the MPQ archive
 
 // Flags for TMPQArchive::dwFlags
@@ -152,7 +156,7 @@
 #define MPQ_FILE_COMPRESSED      0x0000FF00 // File is compressed
 #define MPQ_FILE_ENCRYPTED       0x00010000 // Indicates whether file is encrypted 
 #define MPQ_FILE_FIX_KEY         0x00020000 // File decryption key has to be fixed
-#define MPQ_FILE_PATCH_FILE      0x00100000 // The file is a patch file. Raw file data begin with TMPQPatchFile structure
+#define MPQ_FILE_PATCH_FILE      0x00100000 // The file is a patch file. Raw file data begin with TPatchInfo structure
 #define MPQ_FILE_SINGLE_UNIT     0x01000000 // File is stored as a single unit, rather than split into sectors (Thx, Quantam)
 #define MPQ_FILE_DELETE_MARKER   0x02000000 // File is a deletion marker, indicating that the file no longer exists.
                                             // The file is only 1 byte long and its name is a hash
@@ -214,8 +218,8 @@
 #define SFILE_INFO_CODENAME2       102      // The second codename of the file
 #define SFILE_INFO_LOCALEID        103      // Locale ID of file in MPQ
 #define SFILE_INFO_BLOCKINDEX      104      // Index to Block Table
-#define SFILE_INFO_FILE_SIZE       105      // Original file size
-#define SFILE_INFO_COMPRESSED_SIZE 106      // Compressed file size
+#define SFILE_INFO_FILE_SIZE       105      // Original file size (from the block table)
+#define SFILE_INFO_COMPRESSED_SIZE 106      // Compressed file size (from the block table)
 #define SFILE_INFO_FLAGS           107      // File flags
 #define SFILE_INFO_POSITION        108      // File position within archive
 #define SFILE_INFO_KEY             109      // File decryption key
@@ -226,8 +230,8 @@
 #define SIGNATURE_NAME        "(signature)" // Name of internal signature
 #define ATTRIBUTES_NAME      "(attributes)" // Name of internal attributes file
 
-#define STORMLIB_VERSION             0x070B // Current version of StormLib (7.10)
-#define STORMLIB_VERSION_STRING      "7.11"
+#define STORMLIB_VERSION             0x0714 // Current version of StormLib (7.20)
+#define STORMLIB_VERSION_STRING      "7.20"
 
 #define MPQ_FORMAT_VERSION_1              0 // Up to The Burning Crusade
 #define MPQ_FORMAT_VERSION_2              1 // The Burning Crusade and newer 
@@ -571,13 +575,40 @@ struct TMPQXXXBlock
 };
 
 // Patch file header
-struct TMPQPatchFile
+struct TPatchInfo
 {
 	DWORD dwLength;                     // Length of patch file header, in bytes
 	DWORD dwFlags;                      // Flags. 0x80000000 = MD5 (?)
 	DWORD dwDataSize;                   // Uncompressed size of the patch file
 	BYTE  md5[0x10];                    // MD5 of the entire patch file after decompression
+
+    // Followed by the sector table (variable length)
 };
+
+// Header for PTCH files 
+struct TPatchHeader
+{
+    DWORD dwSignature;                  // 'PTCH'
+    DWORD dwSizeOfPatchData;            // Size of the entire patch data, not including the 'PTCH' signature itself
+    DWORD dwSizeBeforePatch;            // Size of the file before patch
+    DWORD dwSizeAfterPatch;             // Size of file after patch
+    
+    //-- MD5 block --------------------------------------
+    DWORD dwMD5;                        // 'MD5_'
+    DWORD dwMd5BlockSize;               // Size of the MD5 block, including the signature and size itself
+    BYTE md5_before_patch[0x10];        // MD5 of the original (unpached) file
+    BYTE md5_after_patch[0x10];         // MD5 of the patched file
+
+    //-- XFRM block -------------------------------------
+    DWORD dwXFRM;                       // 'XFRM'
+    DWORD dwXfrmBlockSize;              // Size of the XFRM block, includes XFRM header and patch data
+    DWORD dwBSD0;                       // Type of patch ('BSD0')
+    DWORD dwUnpackedSize;               // Unpacked size of the patch data
+
+    // Followed by 32-bit version of BSDIFF40 patch, compressed by RLE
+};
+
+#define SIZE_OF_XFRM_HEADER  0x10
 
 // File node for in-memory listfile
 struct TFileNode
@@ -614,9 +645,12 @@ struct TMPQArchive
     TMPQHash     * pHashTable;          // Hash table
     TMPQBlock    * pBlockTable;         // Block table
     TMPQBlockEx  * pExtBlockTable;      // Extended block table
-    
+
+    TMPQArchive  * haPatch;             // Pointer to patch archive, if any
+    char szPatchPrefix[PATCH_PREFIX_LEN]; // Prefix for file names in patch MPQs
+
     TMPQUserData   UserData;            // MPQ user data. Valid only when ID_MPQ_USERDATA has been found
-    DWORD          HeaderData[MPQ_HEADER_SIZE_V4 / 4];  // Storage for MPQ header
+    BYTE           HeaderData[MPQ_HEADER_SIZE_V4];  // Storage for MPQ header
 
     TMPQAttributes*pAttributes;         // MPQ attributes from "(attributes)" file (NULL if none)
     TFileNode   ** pListFile;           // File name array
@@ -641,14 +675,19 @@ struct TMPQFile
     LARGE_INTEGER  MpqFilePos;          // Offset in MPQ archive (relative to MPQ header)
     DWORD          dwMagic;             // 'FILE'
 
-    TMPQPatchFile* pPatchHeader;        // Header for patch file, if present
+    TMPQFile     * hfPatchFile;         // Pointer to open patch file
+    TPatchHeader * pPatchHeader;        // Patch header. Only used if the file is a patch file
+    LPBYTE         pbFileData;          // Loaded file data. Only used if the file is a patch file
+    DWORD          dwPatchedSize;       // Size of loaded patched data
+
+    TPatchInfo   * pPatchInfo;          // Patch info block, preceding the sector table
 	DWORD        * SectorOffsets;       // Position of each file sector, relative to the begin of the file. Only for compressed files.
     DWORD        * SectorChksums;       // Array of ADLER32 values for each sector
     DWORD          dwDataSectors;       // Number of data sectors in the file
     DWORD          dwSectorCount;       // Number of entries in the sector offset table
     DWORD          dwDataSize;          // Size of data in the file (on patch files, this differs from file size in block table entry)
 
-    BYTE         * pbFileSector;        // Last loaded file sector. For single unit files, entire file content
+    LPBYTE         pbFileSector;        // Last loaded file sector. For single unit files, entire file content
     DWORD          dwSectorOffs;        // File position of currently loaded file sector
     DWORD          dwSectorSize;        // Size of the file sector. For single unit files, this is equal to the file size
 
@@ -674,6 +713,9 @@ struct TMPQSearch
     DWORD  dwNextIndex;                 // Next hash index to be checked
     DWORD  dwName1;                     // Lastly found Name1
     DWORD  dwName2;                     // Lastly found Name2
+    size_t nPrefixLength;               // Length of the patch prefix
+    bool   bSearchingPatch;             // TRUE if searching patch MPQs
+    char   szPatchPrefix[PATCH_PREFIX_LEN];
     char   szSearchMask[1];             // Search mask (variable length)
 };
 
@@ -785,6 +827,13 @@ bool   WINAPI SFileCreateAttributes(HANDLE hMpq, DWORD dwFlags);
 DWORD  WINAPI SFileGetAttributes(HANDLE hMpq);
 bool   WINAPI SFileSetAttributes(HANDLE hMpq, DWORD dwFlags);
 bool   WINAPI SFileUpdateFileAttributes(HANDLE hMpq, const char * szFileName);
+
+//-----------------------------------------------------------------------------
+// Functions for manipulation with patch archives
+
+bool   WINAPI SFileOpenPatchArchive(HANDLE hMpq, const char * szPatchMpqName, DWORD dwFlags);
+bool   WINAPI SFileIsPatchedArchive(HANDLE hMpq);
+bool   WINAPI SFileSetPatchPathPrefix(HANDLE hMpq, const char * szPatchPrefix);
 
 //-----------------------------------------------------------------------------
 // Functions for file manipulation

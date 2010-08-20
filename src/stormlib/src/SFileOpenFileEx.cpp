@@ -69,6 +69,99 @@ static bool OpenLocalFile(const char * szFileName, HANDLE * phFile)
     return false;
 }
 
+bool OpenPatchedFile(HANDLE hMpq, const char * szFileName, DWORD dwReserved, HANDLE * phFile)
+{
+    TMPQArchive * ha = (TMPQArchive *)hMpq;
+    TMPQFile * hfBase;                      // Pointer to base open file
+    TMPQFile * hfLast;                      // The highest file in the chain that is not patch file
+    TMPQFile * hf;
+    HANDLE hPatchFile;
+    char szPatchFileName[MAX_PATH];
+
+    // Keep this flag here for future updates
+    UNREFERENCED_PARAMETER(dwReserved);
+
+    // First of all, try to open the file in the primary MPQ.
+    if(!SFileOpenFileEx((HANDLE)ha, szFileName, SFILE_OPEN_FROM_MPQ, phFile))
+    {
+        // If the open failed, we have to construct the patch file name
+        strcpy(szPatchFileName, ((TMPQArchive *)hMpq)->szPatchPrefix);
+        strcat(szPatchFileName, szFileName);
+        ha = ha->haPatch;
+
+        // Parse all patch files
+        while(ha != NULL)
+        {
+            // Attempt to open the file in patch MPQ
+            if(SFileOpenFileEx((HANDLE)ha, szPatchFileName, SFILE_OPEN_FROM_MPQ, phFile))
+                break;
+
+            // If there is no (longer a) patch available, then the file doesn't exist
+            if(ha->haPatch == NULL)
+                return false;
+
+            // Move to the next patch MPQ
+            ha = ha->haPatch;
+        }
+    }
+    else
+    {
+        strcpy(szPatchFileName, ((TMPQArchive *)hMpq)->szPatchPrefix);
+        strcat(szPatchFileName, szFileName);
+    }
+
+    // At this point, we require that the open file is not a patch
+    hfBase = hfLast = hf = (TMPQFile *)phFile[0];
+    if(hf->pBlock->dwFlags & MPQ_FILE_PATCH_FILE)
+    {
+        FreeMPQFile(hf);
+        SetLastError(ERROR_FILE_NOT_FOUND);
+        return false;
+    }
+
+    // Patch the file name so it doesn't have the patch prefix
+    strcpy(hf->szFileName, szFileName);
+    ha = ha->haPatch;
+
+    // Now keep going in the patch chain and open every patch file that is there
+    while(ha != NULL)
+    {
+        // Attempt to open a patch file from the patch MPQ
+        if(SFileOpenFileEx((HANDLE)ha, szPatchFileName, SFILE_OPEN_FROM_MPQ, &hPatchFile))
+        {
+            // Remember the new version
+            hf->hfPatchFile = (TMPQFile *)hPatchFile;
+            hf = hf->hfPatchFile;
+
+            // If we encountered a full replacement of the file, 
+            // we have to remember the highest full file
+            if((hf->pBlock->dwFlags & MPQ_FILE_PATCH_FILE) == 0)
+                hfLast = (TMPQFile *)hPatchFile;
+        }
+
+        // Move to the next patch in the chain
+        ha = ha->haPatch;
+    }
+
+    // Now we need to free all files that are below the highest unpatched version
+    while(hfBase != hfLast)
+    {
+        TMPQFile * hfNext = hfBase->hfPatchFile;
+
+        // Free the file below
+        hfBase->hfPatchFile = NULL;
+        FreeMPQFile(hfBase);
+
+        // Move the base to the next file
+        hfBase = hfNext;
+    }
+
+    // Give the updated base MPQ
+    if(phFile != NULL)
+        *phFile = (HANDLE)hfBase;
+    return true;
+}
+
 /*****************************************************************************/
 /* Public functions                                                          */
 /*****************************************************************************/
@@ -210,6 +303,11 @@ bool WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
     {
         switch(dwSearchScope)
         {
+            case SFILE_OPEN_PATCHED_FILE:
+
+                // We want to open the updated version of the file
+                return OpenPatchedFile(hMpq, szFileName, 0, phFile);
+
             case SFILE_OPEN_FROM_MPQ:
                 
                 if(!IsValidMpqHandle(ha))
@@ -375,8 +473,8 @@ bool WINAPI SFileOpenFileEx(HANDLE hMpq, const char * szFileName, DWORD dwSearch
     // If the file is actually a patch file, we have to load the patch file header
     if(nError == ERROR_SUCCESS && hf->pBlock->dwFlags & MPQ_FILE_PATCH_FILE)
     {
-        assert(hf->pPatchHeader == NULL);
-        nError = AllocatePatchHeader(hf, true);
+        assert(hf->pPatchInfo == NULL);
+        nError = AllocatePatchInfo(hf, true);
     }
 
     // Resolve pointers to file's attributes

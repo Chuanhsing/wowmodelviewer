@@ -59,13 +59,13 @@ class PARSED_HET_DATA
 
     void CalculateMasks(DWORD arg_0);
 
-    DWORD field_0;
-    DWORD field_4;
-    DWORD field_8;
-    LPBYTE field_C;
-    BIT_ARRAY * field_10;
+    DWORD  field_0;
+    DWORD  field_4;
+    DWORD  field_8;
+    LPBYTE pTable;
+    BIT_ARRAY * pBlockIndexes;
     DWORD field_14;
-    DWORD field_18;
+    DWORD dwTableSize;
     DWORD dwNumberOfBits;
     LARGE_INTEGER AndMask64;
     LARGE_INTEGER OrMask64;
@@ -190,12 +190,12 @@ PARSED_HET_DATA::PARSED_HET_DATA(DWORD arg_0, DWORD dwBitCount)
     field_0 = 0;
     field_4 = 0;
     field_8 = 0;
-    field_C = NULL;
-    field_10 = NULL;
+    pTable = NULL;
+    pBlockIndexes = NULL;
     field_14 = arg_0;
 
     MulResult.QuadPart = 0xAAAAAAAB4 * arg_0;
-    field_18 = MulResult.HighPart / 8;
+    dwTableSize = MulResult.HighPart / 8;
 
     // Calculate number of bits that is needed for arg_0
     while(arg_0 > 0)
@@ -205,7 +205,7 @@ PARSED_HET_DATA::PARSED_HET_DATA(DWORD arg_0, DWORD dwBitCount)
     }
 
     field_0 = field_8;
-    field_C = ALLOCMEM(BYTE, field_18);
+    pTable = ALLOCMEM(BYTE, dwTableSize);
     CalculateMasks(dwBitCount);
 }
 
@@ -277,11 +277,11 @@ static PARSED_HET_DATA * ParseHetBlock(LPVOID pvHetBlockData, DWORD cbHetBlock)
         {
             memcpy(&pParsedHetData->field_0, &HetBlockOffsets[0x04], 0x0C);
             
-            memcpy(pParsedHetData->field_C, pbSrcData, HetBlockOffsets[0x02]);
+            memcpy(pParsedHetData->pTable, pbSrcData, HetBlockOffsets[0x02]);
             pbSrcData += HetBlockOffsets[0x02];
 
-            pParsedHetData->field_10 = new BIT_ARRAY(pParsedHetData->field_0 * pParsedHetData->field_18, 0xFF);
-            memcpy(pParsedHetData->field_10->pbElements, pbSrcData, HetBlockOffsets[0x07]);
+            pParsedHetData->pBlockIndexes = new BIT_ARRAY(pParsedHetData->field_0 * pParsedHetData->dwTableSize, 0xFF);
+            memcpy(pParsedHetData->pBlockIndexes->pbElements, pbSrcData, HetBlockOffsets[0x07]);
         }
     }
 
@@ -396,8 +396,8 @@ static DWORD CalculateExtBlockIndex(
     // number of bits, and always has the highest bit set
     MaskedHash64 = (pFileNameHash->QuadPart & AndMask64) | OrMask64;
     
-    // Calculate the starting index to the field_C table
-    CurrIndex = StartIndex = (DWORD)(MaskedHash64 % pParsedHetData->field_18);
+    // Calculate the starting index to the extended hash table
+    CurrIndex = StartIndex = (DWORD)(MaskedHash64 % pParsedHetData->dwTableSize);
 
     // Highest 8 bits of the masked name hash is the primary identification value
     SearchValue_1 = (BYTE)(MaskedHash64 >> (pParsedHetData->dwNumberOfBits - 8));
@@ -406,16 +406,16 @@ static DWORD CalculateExtBlockIndex(
     SearchValue_2 = MaskedHash64 & (AndMask64 >> 0x08);
 
     // Go through hash table until we find a terminator
-    while(pParsedHetData->field_C[CurrIndex] != 0)
+    while(pParsedHetData->pTable[CurrIndex] != 0)
     {
         // Did we find match ?
-        if(pParsedHetData->field_C[CurrIndex] == SearchValue_1)
+        if(pParsedHetData->pTable[CurrIndex] == SearchValue_1)
         {
             ULONGLONG Result64 = 0;
             DWORD dwExtBlockIndex = 0;
 
-            // field_10 contains array of indexes to the BET table
-            pParsedHetData->field_10->LoadBits(pParsedHetData->field_0 * CurrIndex, // BitPosition
+            // pBlockIndexes contains array of indexes to the BET table
+            pParsedHetData->pBlockIndexes->LoadBits(pParsedHetData->field_0 * CurrIndex, // BitPosition
                                                pParsedHetData->field_8,             // BitLength
                                               &dwExtBlockIndex,                     // Target pointer
                                                4);
@@ -430,7 +430,7 @@ static DWORD CalculateExtBlockIndex(
         }
 
         // Move to the next entry in the primary search table
-        CurrIndex = (CurrIndex + 1) % pParsedHetData->field_18;
+        CurrIndex = (CurrIndex + 1) % pParsedHetData->dwTableSize;
         
         // If we came to the start index again, we are done
         if(CurrIndex == StartIndex)
@@ -501,12 +501,12 @@ static bool sub_6D0B60(
 static void sub_6D1100(TMPQArchive * ha, PARSED_BET_DATA * pParsedBetData, PMPQ_FILE_STRUCT_3A pResult, DWORD dwExtBlockIndex)
 {
     MPQ_FILE_STRUCT_3A result;    
-    LARGE_INTEGER temp_li;
-    LPBYTE pointer_to_struct_3A;
+//  LARGE_INTEGER temp_li;
+//  LPBYTE pointer_to_struct_3A;
     BYTE byte_A9E170[] = {0x80, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
 
     DWORD dwOpenFlags = 0;
-
+    UNREFERENCED_PARAMETER(ha);
 
     if(pParsedBetData != NULL)
     {
@@ -1115,7 +1115,7 @@ bool WINAPI SFileOpenArchive(
     }
 
 #ifdef __STORMLIB_TEST__
-    if(ha->pHETBlock != NULL && ha->pBETBlock != NULL)
+    if(nError == ERROR_SUCCESS && ha->pHETBlock != NULL && ha->pBETBlock != NULL)
     {
         SFILE_FIND_DATA sf;
         PARSED_HET_DATA * pParsedHetData;
