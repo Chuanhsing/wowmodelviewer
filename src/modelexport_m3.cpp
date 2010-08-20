@@ -189,7 +189,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	//uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
 
 	std::vector<int> logAnimations;
-	//uint32 *reAnimations = new uint32[m->header.nAnimations];
 	std::vector<wxString> vAnimations;
 	wxArrayString nameAnimations;
 	int chunk_offset, datachunk_offset;
@@ -320,9 +319,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	// mSEQS
 	if (modelExport_M3_Anims.size() > 0) {
 		logAnimations = modelExport_M3_Anims;
-		//for(int i=0; i<modelExport_M3_Anims.size(); i++) {
-		//	reAnimations[logAnimations[i]] = i;
-		//}
 		for(uint32 i=0; i<m->header.nAnimations; i++) {
 			bool bFound = false;
 			for(int j=0; j<logAnimations.size(); j++) {
@@ -394,7 +390,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 			nameAnimations.push_back(strName);
 
-			//reAnimations[i] = nameAnimations.size(); 
 			logAnimations.push_back(i);
 		}
 	}
@@ -1405,8 +1400,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	wxDELETEA(seqs);
 	wxDELETEA(stcs);
-
-	//wxDELETEA(reAnimations);
 
 	mpqf.close();
 	mpqfv.close();
