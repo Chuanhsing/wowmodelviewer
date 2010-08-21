@@ -30,7 +30,7 @@ class MPQArchive
 	//MPQHANDLE handle;
 	HANDLE mpq_a;
 public:
-	MPQArchive(const char* filename);
+	MPQArchive(wxString filename);
 	~MPQArchive();
 
 	void close();

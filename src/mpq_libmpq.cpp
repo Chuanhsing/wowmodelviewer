@@ -11,13 +11,13 @@
 typedef std::vector<mpq_archive*> ArchiveSet;
 static ArchiveSet gOpenArchives;
 
-MPQArchive::MPQArchive(const char* filename)
+MPQArchive::MPQArchive(wxString filename)
 {
-	int result = libmpq_archive_open(&mpq_a, (unsigned char*)filename);
+	int result = libmpq_archive_open(&mpq_a, (unsigned char*)filename.c_str());
 
-	wxLogMessage(_T("Opening %s"), filename);
+	wxLogMessage(_T("Opening %s"), filename.c_str());
 	if(result) {
-		wxLogMessage(_T("Error opening archive %s"), filename);
+		wxLogMessage(_T("Error opening archive %s"), filename.c_str());
 		return;
 	}
 	gOpenArchives.push_back(&mpq_a);

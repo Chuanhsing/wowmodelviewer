@@ -12,16 +12,20 @@ using namespace std;
 typedef vector< pair< wxString, HANDLE* > > ArchiveSet;
 static ArchiveSet gOpenArchives;
 
-MPQArchive::MPQArchive(const char* filename)
+MPQArchive::MPQArchive(wxString filename)
 {
-	bool result = !!SFileOpenArchive( filename, 0, MPQ_OPEN_READ_ONLY, &mpq_a );
+	// skip the PTCH files atrchives
+	if (filename.AfterLast(SLASH).StartsWith(_T("wow-update-")))
+		return;
 
-	wxLogMessage(_T("Opening %s"), filename);
+	bool result = !!SFileOpenArchive( filename.c_str(), 0, MPQ_OPEN_READ_ONLY, &mpq_a );
+
+	wxLogMessage(_T("Opening %s"), filename.c_str());
 	if(!result) {
-		wxLogMessage(_T("Error opening archive %s"), filename);
+		wxLogMessage(_T("Error opening archive %s"), filename.c_str());
 		return;
 	}
-	gOpenArchives.push_back( make_pair( wxString(filename, wxConvUTF8), &mpq_a ) );
+	gOpenArchives.push_back( make_pair( filename, &mpq_a ) );
 }
 
 MPQArchive::~MPQArchive()
@@ -131,6 +135,16 @@ MPQFile::openFile(const char* filename)
 		HANDLE &mpq_a = *i->second;
 
 		HANDLE fh;
+
+#if 0
+		for(int j=mpqArchives.GetCount()-1; j>=0; j--) {
+			wxString mpq = mpqArchives[j].AfterLast(SLASH);
+			if (!mpq.StartsWith(_T("wow-update-")))
+				continue;
+			SFileSetPatchPathPrefix(mpq_a, "enUS");
+			SFileOpenPatchArchive(mpq_a, mpq.c_str(), 0);
+		}
+#endif
 
 		if( !SFileOpenFileEx( mpq_a, filename, 0, &fh ) )
 			continue;

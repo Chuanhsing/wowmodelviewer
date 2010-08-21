@@ -1344,7 +1344,7 @@ bool ModelViewer::InitMPQArchives()
 
 	for (size_t i=0; i<mpqArchives.GetCount(); i++) {
 		if (wxFileName::FileExists(mpqArchives[i]))
-			archives.push_back(new MPQArchive(mpqArchives[i].mb_str()));
+			archives.push_back(new MPQArchive(mpqArchives[i]));
 	}
 
 	// Checks and logs the "TOC" version of the interface files that were loaded
