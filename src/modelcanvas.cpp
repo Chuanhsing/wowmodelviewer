@@ -1889,6 +1889,7 @@ void ModelCanvas::ResetViewWMO(int id)
 	if (!wmo || id>=wmo->nGroups) 
 		return;
 
+	wmo->viewrot = Vec3D(-90.0f, 0.0f, 0.0f);
 	//model->rot = Vec3D(0.0f, -90.0f, 0.0f);
 	//model->pos = Vec3D(0.0f, 0.0f, 5.0f);
 	Vec3D mid;

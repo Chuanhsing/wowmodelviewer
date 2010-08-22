@@ -362,7 +362,8 @@ void WMO::draw()
 
 	glRotatef(viewrot.y, 1, 0, 0);
 	glRotatef(viewrot.x, 0, 1, 0);
-	glTranslatef(0,0,-100);
+	glRotatef(viewrot.z, 0, 0, 1);
+	glTranslatef(-100,0,0);
 	glTranslatef(viewpos.x, viewpos.y, viewpos.z);
 
 	for (int i=0; i<nGroups; i++) {
