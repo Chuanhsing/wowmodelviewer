@@ -743,6 +743,24 @@ GLuint TextureManager::add(wxString name)
 }
 //#define SAVE_BLP
 
+bool TryLoadLocalTexture(const wxString& texName, int type, CxImage **imgptr)
+{
+	wxFileName fn = texName;
+	wxString fname = _T("Import") + (SLASH + fn.GetName()); // _T("...") + SLASH is wrong
+
+	if (type == CXIMAGE_FORMAT_PNG)
+		fname += _T(".png");
+	else if (type == CXIMAGE_FORMAT_TGA)
+		fname += _T(".tga");
+	else 
+		return false;
+
+	if (!wxFile::Exists(fname))
+		return false;
+	*imgptr = new (std::nothrow) CxImage(fname.mb_str(), type);
+	return true;
+}
+
 void TextureManager::LoadBLP(GLuint id, Texture *tex)
 {
 	// Vars
@@ -751,23 +769,13 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 	char attr[4];
 
 	if (useLocalFiles) {
-		wxFileName fn = wxString(tex->name.c_str(), wxConvUTF8);
-		wxString suffix = _T("png");
-		wxString filename = _T("Import")+SLASH+fn.GetName()+_T(".")+suffix;
+		wxString texName(tex->name.c_str(), wxConvUTF8);
 		BYTE *buffer = NULL;
 		CxImage *image = NULL;
 
-		if (wxFile::Exists(filename)) {
-			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_PNG);
-		} else {
-			suffix = _T("tga");
-			filename = _T("Import")+SLASH+fn.GetName()+_T(".")+suffix;
-			if (wxFile::Exists(filename)) {
-				image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_TGA);
-			}
-		}
-
-		if (image != NULL) {
+		if ((TryLoadLocalTexture(texName, CXIMAGE_FORMAT_PNG, &image) || 
+			 TryLoadLocalTexture(texName, CXIMAGE_FORMAT_TGA, &image)) 
+			 && image) {
 			long size = image->GetWidth() * image->GetHeight() * 4;
 			if (image->Encode2RGBA(buffer, size, true)) {
 				tex->w = image->GetWidth();
