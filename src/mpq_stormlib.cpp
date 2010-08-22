@@ -25,6 +25,16 @@ MPQArchive::MPQArchive(wxString filename)
 		wxLogMessage(_T("Error opening archive %s"), filename.c_str());
 		return;
 	}
+
+	// do patch
+	for(int j=mpqArchives.GetCount()-1; j>=0; j--) {
+		wxString mpq = mpqArchives[j].AfterLast(SLASH);
+		if (!mpq.StartsWith(_T("wow-update-")))
+			continue;
+		SFileOpenPatchArchive(mpq_a, mpq.c_str(), "enUS", 0);
+		wxLogMessage(_T("Appending patch %s on %s"), mpq.c_str(), filename.c_str());
+	}
+
 	gOpenArchives.push_back( make_pair( filename, &mpq_a ) );
 }
 
@@ -135,16 +145,6 @@ MPQFile::openFile(const char* filename)
 		HANDLE &mpq_a = *i->second;
 
 		HANDLE fh;
-
-#if 0
-		for(int j=mpqArchives.GetCount()-1; j>=0; j--) {
-			wxString mpq = mpqArchives[j].AfterLast(SLASH);
-			if (!mpq.StartsWith(_T("wow-update-")))
-				continue;
-			SFileSetPatchPathPrefix(mpq_a, "enUS");
-			SFileOpenPatchArchive(mpq_a, mpq.c_str(), 0);
-		}
-#endif
 
 		if( !SFileOpenFileEx( mpq_a, filename, 0, &fh ) )
 			continue;
