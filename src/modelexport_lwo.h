@@ -128,8 +128,14 @@ struct LWWeight{
 
 // Vertex Color Data
 struct LWVertexColor{
-	uint32 Index;
 	uint8 r, g, b, a;
+
+	LWVertexColor(uint8 R=255, uint8 G=255, uint8 B=255, uint8 A=255){
+		r = R;
+		g = G;
+		b = B;
+		a = A;
+	}
 };
 
 // Point Chunk Data
@@ -157,6 +163,7 @@ struct LWLayer {
 
 	// Points Block
 	std::vector<LWPoint>Points;		// Various Point Blocks used by this layer.
+	bool HasVectorColors;			// Is True if the layer has a Vector Color map
 	Vec3D BoundingBox1;				// First Corner of the Layer's Bounding Box
 	Vec3D BoundingBox2;				// Second Corner of the Layer's Bounding Box
 	// Point UV Data
@@ -164,6 +171,10 @@ struct LWLayer {
 	// Poly Block
 	std::vector<LWPoly> Polys;
 	// Poly UV Data
+
+	LWLayer(){
+		HasVectorColors = false;
+	}
 
 };
 
@@ -176,18 +187,24 @@ struct LWClip {
 
 // Surface Chunk Data
 struct LWSurface {
-	wxString Name;		// The Surface's Name
-	wxString Comment;	// Comment for the surface.
+	wxString Name;			// The Surface's Name
+	wxString Comment;		// Comment for the surface.
 
-	bool isDoubleSided;	// Should it show the same surface on both sides of a poly.
+	bool isDoubleSided;		// Should it show the same surface on both sides of a poly.
 
-	// Colors & Values
-	// NYI
+	// Images
+	uint32 Image_ColorID;	//Tag ID for the Color Image
+	uint32 Image_SpecID;	//Tag ID for the Specular Image
+	uint32 Image_TransID;	//Tag ID for the Transparancy Image
 
 	// Constructors
-	LWSurface(wxString name, wxString comment, bool doublesided = false){
+	LWSurface(wxString name, wxString comment, uint32 ColorID, uint32 SpecID=-1, uint32 TransID=-1, bool doublesided = false){
 		Name = name;
 		Comment = comment;
+
+		Image_ColorID = ColorID;
+		Image_SpecID = SpecID;
+		Image_TransID = TransID;
 
 		isDoubleSided = doublesided;
 	}

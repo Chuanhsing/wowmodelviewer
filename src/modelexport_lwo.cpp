@@ -3431,7 +3431,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 	for (int32 g=0; g<m->nGroups; g++) {
 		WMOGroup *group = &m->groups[g];
 
-		if (group->hascv){
+		if (group->hascv == true){
 			hasVertColors = true;
 		}
 		for (int32 b=0; b<group->nBatches; b++) {
@@ -4183,23 +4183,25 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		fileLen += 8 + pointsSize;	// Corrects the filesize...
 
 		// Writes the point data
-		for (size_t i=0; i<cLyr.Points.size(); i++) {
+		for (uint32 i=0; i<(uint32)cLyr.Points.size(); i++) {
+			Vec3D Points = cLyr.Points[i].PointData;
+			MakeModelFaceForwards(Points);		// Face the model Forwards
 			Vec3D vert;
-			vert.x = MSB4<float>(cLyr.Points[i].PointData.x);
-			vert.y = MSB4<float>(cLyr.Points[i].PointData.y);
-			vert.z = MSB4<float>(cLyr.Points[i].PointData.z);
+			vert.x = MSB4<float>(Points.x);
+			vert.y = MSB4<float>(Points.y);
+			vert.z = MSB4<float>(Points.z);
 
 			f.Write(reinterpret_cast<char *>(&vert.x), 4);
 			f.Write(reinterpret_cast<char *>(&vert.y), 4);
 			f.Write(reinterpret_cast<char *>(&vert.z), 4);
 		}
-/*
+
 		// --== Bounding Box Info ==--
 		// Skipping for now.
 
 
 		// --== Vertex Mapping ==--
-		bool hasVertColors = false;
+		// UV, Weights, Vertex Color Maps, etc.
 
 		// ===================================================
 		//VMPA		// Vertex Map Parameters, Always Preceeds a VMAP & VMAD. 4bytes: Size, then Num Vars (2) * 4 bytes.
@@ -4215,43 +4217,30 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		f.Write(reinterpret_cast<char *>(&u32), 4);
 		fileLen += 16;
 
-		// UV Data
+		// ===================================================
+		// Point UV Data (VMAP)
+		// ===================================================
 		uint32 vmapSize = 0;
-		counter = 0;
-
 		f.Write("VMAP", 4);
 		u32 = MSB4<uint32>(vmapSize);
 		f.Write(reinterpret_cast<char *>(&u32), 4);
 		fileLen += 8;
 		f.Write("TXUV", 4);
-		dimension = MSB2(2);
-		f.Write(reinterpret_cast<char *>(&dimension), 2);
+		u16 = MSB2(2);
+		f.Write(reinterpret_cast<char *>(&u16), 2);
 		f.Write(_T("Texture"), 7);
-		ub = 0;
-		f.Write(reinterpret_cast<char *>(&ub), 1);
+		f.Write(reinterpret_cast<char *>(&zero), 1);
 		vmapSize += 14;
 
-		for (int32 g=0; g<m->nGroups; g++) {
-			WMOGroup *group = &m->groups[g];
+		for (uint32 i=0; i<(uint32)cLyr.Points.size(); i++) {
+			LW_WriteVX(f,i,vmapSize);
 
-			if (group->hascv){
-				hasVertColors = true;
-			}
-			for (int32 b=0; b<group->nBatches; b++) {
-				WMOBatch *batch = &group->batches[b];
-				for(uint32 ii=0;ii<batch->indexCount;ii++) {
-					int a = group->indices[batch->indexStart + ii];
-
-					LW_WriteVX(f,counter,vmapSize);
-
-					f32 = MSB4<float>(m->groups[g].texcoords[a].x);
-					f.Write(reinterpret_cast<char *>(&f32), 4);
-					f32 = MSB4<float>(1 - m->groups[g].texcoords[a].y);
-					f.Write(reinterpret_cast<char *>(&f32), 4);
-					vmapSize += 8;
-					counter++;
-				}
-			}
+			Vec2D vert;
+			vert.x = MSB4<float>(cLyr.Points[i].UVData.x);
+			vert.y = MSB4<float>(-cLyr.Points[i].UVData.y);
+			f.Write(reinterpret_cast<char *>(&vert.x), 4);
+			f.Write(reinterpret_cast<char *>(&vert.y), 4);
+			vmapSize += 8;
 		}
 		fileLen += vmapSize;
 		off_t = -4-vmapSize;
@@ -4260,69 +4249,69 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		f.Write(reinterpret_cast<char *>(&u32), 4);
 		f.SeekO(0, wxFromEnd);
 
+		// ===================================================
+		// Vertex Map
+		// ===================================================
+		if (cLyr.HasVectorColors == true){
+			wxLogMessage(_T("Has Vector Colors"));
 
-		// -----------------------------------------
-		// Point Vertex Maps
-		// UV, Weights, Vertex Color Maps, etc.
-		// -----------------------------------------
-		f.Write("VMAP", 4);
-		uint32 vmapSize = 0;
-		u32 = MSB4<uint32>(vmapSize);
-		f.Write(reinterpret_cast<char *>(&u32), 4);
-		fileLen += 8;
-*/
-	/*
-		// UV Data
-		f.Write("TXUV", 4);
-		dimension = 2;
-		dimension = MSB2(dimension);
-		f.Write(reinterpret_cast<char *>(&dimension), 2);
-		vmapSize += 6;
+			f.Write("VMPA", 4);
+			u32 = MSB4<uint32>(8);	// We got 2 Paramaters, * 4 Bytes.
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			u32 = 4;				// Across Discontinuous Edges UV Sub Type
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			u32 = MSB4<uint32>(6);	// Default Gray
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			fileLen += 16;
 
-		wxString UVMapName;
-		UVMapName << filename << '\0';
-		if (fmod((float)UVMapName.length(), 2.0f) > 0)
-			UVMapName.Append(_T('\0'));
-		f.Write(UVMapName.data(), UVMapName.length());
-		vmapSize += UVMapName.length();
-		*/
-		/*
-		for (int g=0; g<m->nGroups; g++) {
-			for (int b=0; b<m->groups[g].nBatches; b++)
-			{
-				WMOBatch *batch = &m->groups[g].batches[b];
-				for(int ii=0;ii<batch->indexCount;ii++)
-				{
-					int a = m->groups[g].indices[batch->indexStart + ii];
-					u16 = MSB2(counter);
-					f.Write(reinterpret_cast<char *>(&u16), 2);
-					f32 = MSB4<float>(m->groups[g].texcoords[a].x);
-					f.Write(reinterpret_cast<char *>(&f32), 4);
-					f32 = MSB4<float>(1 - m->groups[g].texcoords[a].y);
-					f.Write(reinterpret_cast<char *>(&f32), 4);
-					counter++;
-					if (counter == 256)
-						counter = 0;
-					vmapSize += 10;
-				}
+			uint32 vmapSize = 0;
+			f.Write("VMAP", 4);
+			u32 = MSB4<uint32>(vmapSize);
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			fileLen += 8;
+			f.Write("RGBA", 4);
+			u16 = MSB2(4);
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f.Write("Colors", 6);
+			f.Write(reinterpret_cast<char *>(&zero), 2);
+			vmapSize += 14;
+
+			for (uint32 i=0;i<(uint32)cLyr.Points.size();i++) {
+				float rf,gf,bf,af;
+				rf = (float)(cLyr.Points[i].VertexColors.r/255.0f);
+				gf = (float)(cLyr.Points[i].VertexColors.g/255.0f);
+				bf = (float)(cLyr.Points[i].VertexColors.b/255.0f);
+				af = (float)((255.0f-cLyr.Points[i].VertexColors.a)/255.0f);
+				//wxLogMessage(_T("Point: %i - R:%f(%i), G:%f(%i), B:%f(%i), A:%f(%i)"),i,rf,cLyr.Points[i].VertexColors.r,gf,cLyr.Points[i].VertexColors.g,bf,cLyr.Points[i].VertexColors.b,af,cLyr.Points[i].VertexColors.a);
+
+				LW_WriteVX(f,i,vmapSize);
+
+				Vec4D vert;
+				vert.w = MSB4<float>(rf);
+				vert.x = MSB4<float>(gf);
+				vert.y = MSB4<float>(bf);
+				vert.z = MSB4<float>(af);
+				f.Write(reinterpret_cast<char *>(&vert.w), 4);
+				f.Write(reinterpret_cast<char *>(&vert.x), 4);
+				f.Write(reinterpret_cast<char *>(&vert.y), 4);
+				f.Write(reinterpret_cast<char *>(&vert.z), 4);
+				vmapSize += 16;
 			}
+			fileLen += vmapSize;
+			off_t = -4-vmapSize;
+			f.SeekO(off_t, wxFromCurrent);
+			u32 = MSB4<uint32>(vmapSize);
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			f.SeekO(0, wxFromEnd);
 		}
-		*/
-	/*
-		fileLen += vmapSize;
 
-		off_t = -4-vmapSize;
-		f.SeekO(off_t, wxFromCurrent);
-		u32 = MSB4<uint32>(vmapSize);
-		f.Write(reinterpret_cast<char *>(&u32), 4);
-		f.SeekO(0, wxFromEnd);
 
-*/
-		// -------------------------------------------------
-		// Polygon Chunk
-		// -------------------------------------------------
-
+		// --== Polygons ==--
 		if (cLyr.Polys.size() > 0){
+
+			// -------------------------------------------------
+			// Polygon Chunk
+			// -------------------------------------------------
 			f.Write("POLS", 4);
 			uint32 polySize = 4;
 			u32 = MSB4<uint32>(polySize);
@@ -4353,7 +4342,9 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 			// NOTE: Every PTAG type needs a seperate PTAG call!
 
+			// -------------------------------------------------
 			// Parts PolyTag
+			// -------------------------------------------------
 			if (Object.PartNames.size() > 0){
 				f.Write(_T("PTAG"), 4);
 				uint32 ptagSize = 4;
@@ -4379,7 +4370,9 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 				f.SeekO(0, wxFromEnd);
 			}
 
+			// -------------------------------------------------
 			// Surface PolyTag
+			// -------------------------------------------------
 			if (Object.Surfaces.size() > 0){
 				f.Write(_T("PTAG"), 4);
 				uint32 ptagSize = 4;
@@ -4405,20 +4398,61 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 				f.SeekO(0, wxFromEnd);
 			}
 		}
+	}
 
-		// Clips (Images)
+	// --== Clips (Images) ==--
+	if (Object.Images.size() > 0){
+		for (int x=0;x<Object.Images.size();x++){
+			LWClip cImg = Object.Images[x];
 
-		// Surfaces
-		if (Object.Surfaces.size() > 0){
-			for (int x=0;x<Object.Surfaces.size();x++){
-				LWSurface cSurf = Object.Surfaces[x];
+			int clipSize = 0;
+			f.Write("CLIP", 4);
+			u32 = MSB4<uint32>(clipSize);
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			fileLen += 8;
 
-				// Temp Values
-				Vec4D Color = Vec4D(1,1,1,1);
-				float reflect = 0.0f;
+			u32 = MSB4<uint32>(cImg.TagID);
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			f.Write("STIL", 4);
+			clipSize += 8;
 
-				LW_WriteSurface(f,cSurf.Name, Color, reflect, cSurf.isDoubleSided, (uint32)Object.PartNames.size() + x, cSurf.Comment, fileLen);
+			wxString ImgName = wxEmptyString;
+			if (modelExport_LW_PreserveDir == true){
+				ImgName += _T("Images/");
 			}
+			ImgName += wxString(cImg.Source + SLASH + cImg.Filename + wxString(_T(".tga")));
+			ImgName += _T('\0');
+			ImgName.Replace(_T("\\"),_T("/"));
+
+			if (fmod((float)ImgName.length(), 2.0f) > 0)
+					ImgName.Append(_T('\0'));
+
+			u16 = MSB2((unsigned short)ImgName.length());
+			f.Write(reinterpret_cast<char *>(&u16), 2);
+			f.Write(ImgName.data(), ImgName.length());
+			clipSize += (2+(int)ImgName.length());
+
+			// update the chunks length
+			off_t = -4-clipSize;
+			f.SeekO(off_t, wxFromCurrent);
+			u32 = MSB4<uint32>(clipSize);
+			f.Write(reinterpret_cast<char *>(&u32), 4);
+			f.SeekO(0, wxFromEnd);
+
+			fileLen += clipSize;
+		}
+	}
+
+	// --== Surfaces ==--
+	if (Object.Surfaces.size() > 0){
+		for (int x=0;x<Object.Surfaces.size();x++){
+			LWSurface cSurf = Object.Surfaces[x];
+
+			// Temp Values
+			Vec4D Color = Vec4D(1,1,1,1);
+			float reflect = 0.0f;
+
+			LW_WriteSurface(f,cSurf.Name, Color, reflect, cSurf.isDoubleSided, (uint32)Object.PartNames.size() + x, cSurf.Comment, fileLen);
 		}
 	}
 
@@ -4660,33 +4694,45 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 		Layer.BoundingBox1 = m->v1;
 		Layer.BoundingBox2 = m->v2;
 
-		uint32 PolyCounter = 0;
-		//uint32 PartCounter = 0;
 		uint32 SurfCounter = 0;
-		uint32 PrevGVerts = 0;
-		uint32 GVertCounter = 0;
 
 		// Process Groups
 		for (int g=0;g<m->nGroups; g++) {
 			WMOGroup *group = &m->groups[g];
-			// Process each group's batches.
 			uint32 GPolyCounter = 0;
-			GVertCounter = 0;
-			wxLogMessage(_T("\nGroup %i Info:\n   Batches: %i\n   Indices: %i\n   Vertices: %i"),g,group->nBatches,group->nIndices,group->nVertices);
 
+			//wxLogMessage(_T("\nGroup %i Info:\n   Batches: %i\n   Indices: %i\n   Vertices: %i"),g,group->nBatches,group->nIndices,group->nVertices);
 			Object.PartNames.push_back(wxString(group->name.c_str(), wxConvUTF8));
+
+			Layer.HasVectorColors = group->hascv;
 
 			// Points Batches
 			for (int b=0; b<group->nBatches; b++){
 				WMOBatch *batch = &group->batches[b];
-				wxLogMessage(_T("\nBatch %i Info:\n   Indice-Start: %i\n   Indice-Count: %i\n   Vert-Start: %i\n   Vert-End: %i"),b,batch->indexStart,batch->indexCount,batch->vertexStart,batch->vertexEnd);
+				//wxLogMessage(_T("\nBatch %i Info:\n   Indice-Start: %i\n   Indice-Count: %i\n   Vert-Start: %i\n   Vert-End: %i"),b,batch->indexStart,batch->indexCount,batch->vertexStart,batch->vertexEnd);
 				uint32 *Vert2Point = new uint32[group->nVertices];
 
+				uint32 t = batch->texture;
+				WMOMaterial *mat = &m->mat[t];
+				bool doubesided = ((mat->flags & WMO_MATERIAL_CULL)?false:true);
+
+				// Add Images to Model
+				LWClip ClipImage;
+				ClipImage.Filename = wxString(m->textures[t].c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
+				ClipImage.Source = wxString(m->textures[t].c_str(), wxConvUTF8).BeforeLast('\\');
+				ClipImage.TagID = m->nGroups + SurfCounter;
+				Object.Images.push_back(ClipImage);
+				// Save Image
+				SaveTexture2(ClipImage.Filename,ClipImage.Source,wxString(_T("LWO")),wxString(_T("tga")));
+
+				LWSurface Surface(wxString(m->textures[t].c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.'),wxString(m->textures[t].c_str(), wxConvUTF8),ClipImage.TagID,-1,-1,doubesided);
+				Object.Surfaces.push_back(Surface);
+
 				// Process Verticies
-				for (uint32 v=batch->vertexStart; v<=batch->vertexEnd; v++, GVertCounter++) {
-				//for (uint32 v=0;v<group->nVertices;v++){
+				for (uint32 v=batch->vertexStart; v<=batch->vertexEnd; v++) {
 					// --== Point Data ==--
 					LWPoint Point;
+					uint32 pointnum = (uint32)Layer.Points.size();
 
 					// Points
 					// Using straight verts causes the model to come out on it's side.
@@ -4695,38 +4741,33 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 					Point.PointData.z = group->vertices[v].y;
 					Point.UVData = group->texcoords[v];		// UVs
 					// Weight Data not needed for WMOs
-					// Vertex Colors (NYI)
 
-					uint32 pointnum = (uint32)Layer.Points.size();
+					// Vertex Colors
+					LWVertexColor vc;
+					if (group->hascv) {
+						vc.r = group->VertexColors[v].r;
+						vc.g = group->VertexColors[v].g;
+						vc.b = group->VertexColors[v].b;
+						vc.a = group->VertexColors[v].a;
+					}
+					Point.VertexColors = LWVertexColor(vc.r,vc.g,vc.b,vc.a);
+
 					Vert2Point[v] = pointnum;
-					wxLogMessage(_T("Vert %i = Point %i"),v,pointnum);
+					//wxLogMessage(_T("Vert %i = Point %i"),v,pointnum);
 					Layer.Points.push_back(Point);
 				}
-
-				LWSurface Surface(wxString(m->textures[batch->texture].c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.'),wxString(m->textures[batch->texture].c_str(), wxConvUTF8));
-				Object.Surfaces.push_back(Surface);
 
 				// Process Indices
 				for (uint32 i=0; i<batch->indexCount; i+=3) {
 					// --== Polygon Data ==--	
 					LWPoly Poly;
 					Poly.PolyData.numVerts = 3;
-					for (int x=0;x<3;x++,PolyCounter++){
-						// Without Mod, Polys will face the wrong way.
-						int mod = 0;
-						if (x==1){
-							mod = 1;
-						}else if (x==2){
-							mod = -1;
-						}
+					for (int x=0;x<3;x++){
+						uint32 a = batch->indexStart + i + x;
+						uint32 b = group->IndiceToVerts[a];
 
-						uint32 a = batch->indexStart + i + x + mod;
-						uint32 b = group->indices[a];
-						uint32 c = group->IndiceToVerts[a];
-						uint32 d = Vert2Point[c];
-
-						wxLogMessage(_T("Group: %i, a: %i, b:%i, c:%i, Final Indice: %i"),g,a,b,c,d);
-						Poly.PolyData.indice[x] = d;
+						//wxLogMessage(_T("Group: %i, a: %i, b:%i, Final Indice: %i"),g,a,b,Vert2Point[b]);
+						Poly.PolyData.indice[x] = Vert2Point[b];
 					}
 					Poly.PartTagID = g;
 					Poly.SurfTagID = m->nGroups + SurfCounter;
@@ -4734,11 +4775,14 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 				}
 				SurfCounter++;
 			}
-			//PrevGVerts += GVertCounter;
-			//wxLogMessage(_T("PrevGVerts: %i"),PrevGVerts);
 		}
-
 		Object.Layers.push_back(Layer);
+
+		// Surface Processing
+		for (uint16 t=0;t<m->nTextures;t++){
+
+		}
+		// Export Images
 	}
 
 	// Doodads as seperate Layer here.
