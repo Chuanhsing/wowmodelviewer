@@ -4664,24 +4664,27 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 		//uint32 PartCounter = 0;
 		uint32 SurfCounter = 0;
 		uint32 PrevGVerts = 0;
+		uint32 GVertCounter = 0;
 
 		// Process Groups
 		for (int g=0;g<m->nGroups; g++) {
 			WMOGroup *group = &m->groups[g];
 			// Process each group's batches.
 			uint32 GPolyCounter = 0;
-			uint32 GVertCounter = 0;
+			GVertCounter = 0;
+			wxLogMessage(_T("\nGroup %i Info:\n   Batches: %i\n   Indices: %i\n   Vertices: %i"),g,group->nBatches,group->nIndices,group->nVertices);
+
 			Object.PartNames.push_back(wxString(group->name.c_str(), wxConvUTF8));
 
-			for (int b=0; b<group->nBatches; b++)	{
+			// Points Batches
+			for (int b=0; b<group->nBatches; b++){
 				WMOBatch *batch = &group->batches[b];
-
-				LWSurface Surface(wxString(m->textures[batch->texture].c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.'),wxString(m->textures[batch->texture].c_str(), wxConvUTF8));
-				Object.Surfaces.push_back(Surface);
-				uint32 *Vect2Point = new uint32[group->nVertices];
+				wxLogMessage(_T("\nBatch %i Info:\n   Indice-Start: %i\n   Indice-Count: %i\n   Vert-Start: %i\n   Vert-End: %i"),b,batch->indexStart,batch->indexCount,batch->vertexStart,batch->vertexEnd);
+				uint32 *Vert2Point = new uint32[group->nVertices];
 
 				// Process Verticies
-				for (uint32 v=batch->vertexStart; v<batch->vertexEnd; v++) {
+				for (uint32 v=batch->vertexStart; v<=batch->vertexEnd; v++, GVertCounter++) {
+				//for (uint32 v=0;v<group->nVertices;v++){
 					// --== Point Data ==--
 					LWPoint Point;
 
@@ -4694,16 +4697,21 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 					// Weight Data not needed for WMOs
 					// Vertex Colors (NYI)
 
-					Vect2Point[v] = (uint32)Layer.Points.size();
+					uint32 pointnum = (uint32)Layer.Points.size();
+					Vert2Point[v] = pointnum;
+					wxLogMessage(_T("Vert %i = Point %i"),v,pointnum);
 					Layer.Points.push_back(Point);
 				}
 
+				LWSurface Surface(wxString(m->textures[batch->texture].c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.'),wxString(m->textures[batch->texture].c_str(), wxConvUTF8));
+				Object.Surfaces.push_back(Surface);
+
 				// Process Indices
-				for (uint32 i=0; i<batch->indexCount; i+=3, GPolyCounter++) {
+				for (uint32 i=0; i<batch->indexCount; i+=3) {
 					// --== Polygon Data ==--	
 					LWPoly Poly;
 					Poly.PolyData.numVerts = 3;
-					for (int x=0;x<3;x++,PolyCounter++,GPolyCounter++){
+					for (int x=0;x<3;x++,PolyCounter++){
 						// Without Mod, Polys will face the wrong way.
 						int mod = 0;
 						if (x==1){
@@ -4712,11 +4720,13 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 							mod = -1;
 						}
 
-						uint32 a = GPolyCounter + mod;
-						uint32 b = group->IndiceToVerts[group->indices[a]];
+						uint32 a = batch->indexStart + i + x + mod;
+						uint32 b = group->indices[a];
+						uint32 c = group->IndiceToVerts[a];
+						uint32 d = Vert2Point[c];
 
-						wxLogMessage(_T("Group: %i, a: %i, b:%i, PrevGVerts: %i, Final Indice: %i"),g,a,b,PrevGVerts,PrevGVerts+b);
-						Poly.PolyData.indice[x] = Vect2Point[b];
+						wxLogMessage(_T("Group: %i, a: %i, b:%i, c:%i, Final Indice: %i"),g,a,b,c,d);
+						Poly.PolyData.indice[x] = d;
 					}
 					Poly.PartTagID = g;
 					Poly.SurfTagID = m->nGroups + SurfCounter;
@@ -4724,8 +4734,8 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 				}
 				SurfCounter++;
 			}
-			PrevGVerts += GVertCounter;
-			wxLogMessage(_T("PrevGVerts: %i"),PrevGVerts);
+			//PrevGVerts += GVertCounter;
+			//wxLogMessage(_T("PrevGVerts: %i"),PrevGVerts);
 		}
 
 		Object.Layers.push_back(Layer);

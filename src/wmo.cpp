@@ -988,7 +988,7 @@ void WMOGroup::initDisplayList()
 
 	// assume that texturing is on, for unit 1
 
-	IndiceToVerts = new uint32[nIndices];
+	IndiceToVerts = new uint32[nIndices]+2;
 
 	for (int b=0; b<nBatches; b++) {
 		WMOBatch *batch = &batches[b];
@@ -996,10 +996,15 @@ void WMOGroup::initDisplayList()
 
 		// build indice to vert array.
 		//wxLogMessage("Indice to Vert Conversion Array for Batch %i:",b);
-		for (uint32 i=0;i<batch->indexCount;i++){
-			int a = indices[batch->indexStart + i];
-			IndiceToVerts[batch->indexStart + i] = a;
-			//wxLogMessage("Indice %i = Vert %i",batch->indexStart + i,a);
+		for (uint32 i=0;i<=batch->indexCount;i++){
+			uint32 a = indices[batch->indexStart + i];
+			for (uint32 j=batch->vertexStart;j<=batch->vertexEnd;j++){
+				if (vertices[a] == vertices[j]){
+					IndiceToVerts[batch->indexStart + i] = j;
+					//wxLogMessage(_T("Indice %i = Vert %i"),batch->indexStart + i,j);
+					break;
+				}
+			}
 		}
 
         // setup texture
