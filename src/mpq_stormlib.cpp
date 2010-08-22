@@ -12,7 +12,7 @@ using namespace std;
 typedef vector< pair< wxString, HANDLE* > > ArchiveSet;
 static ArchiveSet gOpenArchives;
 
-MPQArchive::MPQArchive(wxString filename)
+MPQArchive::MPQArchive(wxString filename) : ok(false)
 {
 	// skip the PTCH files atrchives
 	if (filename.AfterLast(SLASH).StartsWith(_T("wow-update-")))
@@ -35,6 +35,7 @@ MPQArchive::MPQArchive(wxString filename)
 		wxLogMessage(_T("Appending patch %s on %s"), mpq.c_str(), filename.c_str());
 	}
 
+	ok = true;
 	gOpenArchives.push_back( make_pair( filename, &mpq_a ) );
 }
 
@@ -53,6 +54,8 @@ MPQArchive::~MPQArchive()
 
 void MPQArchive::close()
 {
+	if (ok == false)
+		return;
 	SFileCloseArchive(mpq_a);
 	for(ArchiveSet::iterator it=gOpenArchives.begin(); it!=gOpenArchives.end();++it)
 	{

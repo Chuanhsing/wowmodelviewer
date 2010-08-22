@@ -29,6 +29,7 @@ class MPQArchive
 {
 	//MPQHANDLE handle;
 	HANDLE mpq_a;
+	bool ok;
 public:
 	MPQArchive(wxString filename);
 	~MPQArchive();
