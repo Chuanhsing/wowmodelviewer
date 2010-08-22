@@ -565,6 +565,8 @@ bool WINAPI SFileCompactArchive(HANDLE hMpq, const char * szListFile, bool /* bR
         nError = ERROR_INVALID_HANDLE;
     if(ha->dwFlags & MPQ_FLAG_READ_ONLY)
         nError = ERROR_ACCESS_DENIED;
+    if(ha->pHETBlock != NULL || ha->pBETBlock != NULL)
+        nError = ERROR_ACCESS_DENIED;
 
     // Create the table with file keys
     if(nError == ERROR_SUCCESS)
@@ -710,6 +712,8 @@ bool WINAPI SFileSetHashTableSize(HANDLE hMpq, DWORD dwNewTableSize)
     if(!IsValidMpqHandle(ha))
         nError = ERROR_INVALID_HANDLE;
     if(ha->dwFlags & MPQ_FLAG_READ_ONLY)
+        nError = ERROR_ACCESS_DENIED;
+    if(ha->pHETBlock != NULL || ha->pBETBlock != NULL)
         nError = ERROR_ACCESS_DENIED;
     
     // New hash table size must be a power of two

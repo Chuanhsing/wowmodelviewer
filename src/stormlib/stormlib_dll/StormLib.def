@@ -28,6 +28,9 @@ EXPORTS
     SFileGetAttributes
     SFileSetAttributes
     SFileUpdateFileAttributes
+
+    SFileOpenPatchArchive
+    SFileIsPatchedArchive
     
     SFileOpenFileEx
     SFileGetFileSize

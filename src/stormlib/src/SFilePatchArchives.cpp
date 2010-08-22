@@ -309,19 +309,52 @@ int PatchFileData(TMPQFile * hf)
 //-----------------------------------------------------------------------------
 // Public functions
 
-bool WINAPI SFileOpenPatchArchive(HANDLE hMpq, const char * szPatchMpqName, DWORD dwFlags)
+//
+// Patch prefix is the path subdirectory where the patched files are within MPQ.
+//
+// Example 1:
+// Main MPQ:  locale-enGB.MPQ
+// Patch MPQ: wow-update-12694.MPQ
+// File in main MPQ: DBFilesClient\Achievement.dbc
+// File in patch MPQ: enGB\DBFilesClient\Achievement.dbc
+// Path prefix: enGB
+//
+// Example 2:
+// Main MPQ:  expansion1.MPQ
+// Patch MPQ: wow-update-12694.MPQ
+// File in main MPQ: DBFilesClient\Achievement.dbc
+// File in patch MPQ: Base\DBFilesClient\Achievement.dbc
+// Path prefix: Base
+//
+
+bool WINAPI SFileOpenPatchArchive(
+    HANDLE hMpq,
+    const char * szPatchMpqName,
+    const char * szPatchPathPrefix,
+    DWORD dwFlags)
 {
     TMPQArchive * haPatch;
     TMPQArchive * ha = (TMPQArchive *)hMpq;
     HANDLE hPatchMpq = NULL;
+    size_t nLength = 0;
     int nError = ERROR_SUCCESS;
+
+    // Keep compiler happy
+    dwFlags = dwFlags;
 
     // Verify input parameters
     if(!IsValidMpqHandle(ha))
         nError = ERROR_INVALID_HANDLE;
     if(szPatchMpqName == NULL || *szPatchMpqName == 0)
         nError = ERROR_INVALID_PARAMETER;
-    UNREFERENCED_PARAMETER(dwFlags);
+
+    // Check the path prefix for patches
+    if(szPatchPathPrefix != NULL)
+    {
+        nLength = strlen(szPatchPathPrefix);
+        if(nLength > MPQ_PATCH_PREFIX_LEN - 2)
+            nError = ERROR_INVALID_PARAMETER;
+    }
 
     //
     // We don't allow adding patches to archives that have been open for write
@@ -335,15 +368,30 @@ bool WINAPI SFileOpenPatchArchive(HANDLE hMpq, const char * szPatchMpqName, DWOR
     // 5) Now what ?
     //
 
-    if((ha->pStream->StreamFlags & STREAM_FLAG_READ_ONLY) == 0)
-        nError = ERROR_ACCESS_DENIED;
+    if(nError == ERROR_SUCCESS)
+    {
+        if((ha->pStream->StreamFlags & STREAM_FLAG_READ_ONLY) == 0)
+            nError = ERROR_ACCESS_DENIED;
+    }
 
     // Open the archive like it is normal archive
     if(nError == ERROR_SUCCESS)
     {
-        if(!SFileOpenArchive(szPatchMpqName, 0, 0, &hPatchMpq))
+        if(!SFileOpenArchive(szPatchMpqName, 0, MPQ_OPEN_READ_ONLY, &hPatchMpq))
             return false;
         haPatch = (TMPQArchive *)hPatchMpq;
+
+        // Save the prefix for patch file names.
+        // Make sure that there is backslash after it
+        if(nLength > 0)
+        {
+            strcpy(haPatch->szPatchPrefix, szPatchPathPrefix);
+            if(haPatch->szPatchPrefix[nLength - 1] != '\\')
+            {
+                haPatch->szPatchPrefix[nLength++] = '\\';
+                haPatch->szPatchPrefix[nLength] = 0;
+            }
+        }
 
         // Now add the patch archive to the list of patches to the original MPQ
         while(ha != NULL)
@@ -375,56 +423,4 @@ bool WINAPI SFileIsPatchedArchive(HANDLE hMpq)
         return false;
 
     return (ha->haPatch != NULL);
-}
-
-//
-// Patch prefix is the path subdirectory where the patched files are within MPQ.
-//
-// Example 1:
-// Main MPQ:  locale-enGB.MPQ
-// Patch MPQ: wow-update-12694.MPQ
-// File in main MPQ: DBFilesClient\Achievement.dbc
-// File in patch MPQ: enGB\DBFilesClient\Achievement.dbc
-// Path prefix: enGB
-//
-// Example 2:
-// Main MPQ:  expansion1.MPQ
-// Patch MPQ: wow-update-12694.MPQ
-// File in main MPQ: DBFilesClient\Achievement.dbc
-// File in patch MPQ: Base\DBFilesClient\Achievement.dbc
-// Path prefix: Base
-//
-
-bool WINAPI SFileSetPatchPathPrefix(HANDLE hMpq, const char * szPatchPrefix)
-{
-    TMPQArchive * ha = (TMPQArchive *)hMpq;
-    size_t nLength;
-    int nError = ERROR_SUCCESS;
-
-    // Verify input parameters
-    if(!IsValidMpqHandle(ha))
-        nError = ERROR_INVALID_HANDLE;
-    if(szPatchPrefix == NULL || *szPatchPrefix == 0)
-        nError = ERROR_INVALID_PARAMETER;
-    
-    // Don't allow to set patch prefix that is too long
-    nLength = strlen(szPatchPrefix);
-    if(nLength > sizeof(ha->szPatchPrefix) - 2)
-        nError = ERROR_INVALID_PARAMETER;
-    
-    if(nError == ERROR_SUCCESS)
-    {
-        // Set the prefix. Make sure that there is slash after it
-        strcpy(ha->szPatchPrefix, szPatchPrefix);
-        if(ha->szPatchPrefix[nLength - 1] != '\\')
-        {
-            ha->szPatchPrefix[nLength++] = '\\';
-            ha->szPatchPrefix[nLength] = 0;
-        }
-
-        return true;
-    }
-
-    SetLastError(nError);
-    return false;
 }

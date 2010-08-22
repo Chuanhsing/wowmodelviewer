@@ -1350,10 +1350,10 @@ static int TestOpenPatchedArchive(const char * szMpqName, ...)
     HANDLE hFile = NULL;
     HANDLE hMpq = NULL;
     va_list argList;
-    const char * szFileName = "Interface\\GLUES\\MODELS\\UI_RS_TAUREN\\TAURENMALESKIN_EXTRA.BLP";
+    const char * szFileName = "DBFilesClient\\Achievement.dbc";
     const char * szExtension;
     const char * szLocale;
-    char szPatchPrefix[0x20];
+    char szPatchPrefix[MPQ_PATCH_PREFIX_LEN];
     LPBYTE pbFullFile = NULL;
     DWORD dwFileSize;
     int nError = ERROR_SUCCESS;
@@ -1392,7 +1392,7 @@ static int TestOpenPatchedArchive(const char * szMpqName, ...)
         while((szMpqName = va_arg(argList, const char *)) != NULL)
         {
             printf("Adding patch %s ...\n", szMpqName);
-            if(!SFileOpenPatchArchive(hMpq, szMpqName, 0))
+            if(!SFileOpenPatchArchive(hMpq, szMpqName, szPatchPrefix, 0))
             {
                 nError = GetLastError();
                 printf("Failed to add patch %s ...\n", szMpqName);
@@ -1401,16 +1401,6 @@ static int TestOpenPatchedArchive(const char * szMpqName, ...)
         va_end(argList);
     }
 
-    // Now set the path prefix for patch files
-    if(nError == ERROR_SUCCESS)
-    {
-        printf("Setting path for patch files ...\n");
-        if(!SFileSetPatchPathPrefix(hMpq, szPatchPrefix))
-        {
-            nError = GetLastError();
-            printf("Failed to set the path prefix for patch files.\n");
-        }
-    }
 /*
     // Now search all files
     if(nError == ERROR_SUCCESS)
@@ -1553,6 +1543,7 @@ int main(void)
         nError = TestOpenPatchedArchive(MAKE_PATH("2011 - WoW-Cataclysm/locale-enUS.MPQ"),
                                         MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12694.MPQ"),
                                         MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12759.MPQ"),
+                                        MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12803.MPQ"),
                                         NULL);
     }
 

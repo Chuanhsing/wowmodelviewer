@@ -72,71 +72,70 @@ static bool OpenLocalFile(const char * szFileName, HANDLE * phFile)
 bool OpenPatchedFile(HANDLE hMpq, const char * szFileName, DWORD dwReserved, HANDLE * phFile)
 {
     TMPQArchive * ha = (TMPQArchive *)hMpq;
-    TMPQFile * hfBase;                      // Pointer to base open file
+    TMPQFile * hfPatch;                     // Pointer to patch file
+    TMPQFile * hfBase = NULL;               // Pointer to base open file
     TMPQFile * hfLast;                      // The highest file in the chain that is not patch file
     TMPQFile * hf;
     HANDLE hPatchFile;
     char szPatchFileName[MAX_PATH];
 
     // Keep this flag here for future updates
-    UNREFERENCED_PARAMETER(dwReserved);
+    dwReserved = dwReserved;
 
-    // First of all, try to open the file in the primary MPQ.
-    if(!SFileOpenFileEx((HANDLE)ha, szFileName, SFILE_OPEN_FROM_MPQ, phFile))
+    // First of all, try to open the original version of the file in any of the patch chain
+    while(ha != NULL)
     {
-        // If the open failed, we have to construct the patch file name
-        strcpy(szPatchFileName, ((TMPQArchive *)hMpq)->szPatchPrefix);
+        // Construct the name of the patch file
+        strcpy(szPatchFileName, ha->szPatchPrefix);
         strcat(szPatchFileName, szFileName);
-        ha = ha->haPatch;
-
-        // Parse all patch files
-        while(ha != NULL)
+        if(SFileOpenFileEx((HANDLE)ha, szPatchFileName, SFILE_OPEN_FROM_MPQ, phFile))
         {
-            // Attempt to open the file in patch MPQ
-            if(SFileOpenFileEx((HANDLE)ha, szPatchFileName, SFILE_OPEN_FROM_MPQ, phFile))
-                break;
-
-            // If there is no (longer a) patch available, then the file doesn't exist
-            if(ha->haPatch == NULL)
-                return false;
-
-            // Move to the next patch MPQ
-            ha = ha->haPatch;
+            hfBase = (TMPQFile *)(*phFile);
+            break;
         }
+
+        // Move to the next file in the patch chain
+        ha = ha->haPatch;
     }
-    else
+
+    // If we couldn't find the file in any of the patches, it doesn't exist
+    hf = hfLast = hfBase;
+    if(hf == NULL)
     {
-        strcpy(szPatchFileName, ((TMPQArchive *)hMpq)->szPatchPrefix);
-        strcat(szPatchFileName, szFileName);
+        SetLastError(ERROR_FILE_NOT_FOUND);
+        return false;
     }
 
     // At this point, we require that the open file is not a patch
-    hfBase = hfLast = hf = (TMPQFile *)phFile[0];
     if(hf->pBlock->dwFlags & MPQ_FILE_PATCH_FILE)
     {
         FreeMPQFile(hf);
         SetLastError(ERROR_FILE_NOT_FOUND);
         return false;
     }
-
-    // Patch the file name so it doesn't have the patch prefix
-    strcpy(hf->szFileName, szFileName);
+    
+    // Move to the patch MPQ
     ha = ha->haPatch;
 
     // Now keep going in the patch chain and open every patch file that is there
     while(ha != NULL)
     {
-        // Attempt to open a patch file from the patch MPQ
+        // Construct patch file name
+        strcpy(szPatchFileName, ha->szPatchPrefix);
+        strcat(szPatchFileName, szFileName);
         if(SFileOpenFileEx((HANDLE)ha, szPatchFileName, SFILE_OPEN_FROM_MPQ, &hPatchFile))
         {
             // Remember the new version
-            hf->hfPatchFile = (TMPQFile *)hPatchFile;
-            hf = hf->hfPatchFile;
+            hfPatch = (TMPQFile *)hPatchFile;
 
             // If we encountered a full replacement of the file, 
             // we have to remember the highest full file
-            if((hf->pBlock->dwFlags & MPQ_FILE_PATCH_FILE) == 0)
-                hfLast = (TMPQFile *)hPatchFile;
+            if((hfPatch->pBlock->dwFlags & MPQ_FILE_PATCH_FILE) == 0)
+                hfLast = hfPatch;
+
+            // Set current patch tobase file and move on
+            hf->hfPatchFile = hfPatch;
+            hf = hfPatch;
         }
 
         // Move to the next patch in the chain

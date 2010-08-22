@@ -125,11 +125,13 @@ static int DoMPQSearch(TMPQSearch * hs, SFILE_FIND_DATA * lpFindFileData)
     TMPQHash * pHash = ha->pHashTable + hs->dwNextIndex;
     DWORD dwHashIndex;
     DWORD dwBlockIndex;
+    size_t nPrefixLength;
 
     // Do that for all files in the patch chain
     while(ha != NULL)
     {
         // Get the start ad end of the hash table
+        nPrefixLength = strlen(ha->szPatchPrefix);
         pHashEnd = ha->pHashTable + ha->pHeader->dwHashTableSize;
         pHash = ha->pHashTable + hs->dwNextIndex;
 
@@ -149,21 +151,19 @@ static int DoMPQSearch(TMPQSearch * hs, SFILE_FIND_DATA * lpFindFileData)
                 {
                     // If we are already in the patch MPQ, we skip all files
                     // that don't have the appropriate patch prefix and are patch files
-                    if(hs->bSearchingPatch)
+                    if(nPrefixLength)
                     {
                         // We want to return patch files, because the calling
                         // application might want to update size
 //                      if(pBlock->dwFlags & MPQ_FILE_PATCH_FILE)
 //                          goto __SkipThisFile;
-                        if(_strnicmp(pNode->szFileName, hs->szPatchPrefix, hs->nPrefixLength))
+                        if(_strnicmp(pNode->szFileName, ha->szPatchPrefix, nPrefixLength))
                             goto __SkipThisFile;
                     }
 
                     // Check the file name.
                     if(CheckWildCard(pNode->szFileName, hs->szSearchMask))
                     {
-                        size_t nFileNameOffset = hs->bSearchingPatch ? hs->nPrefixLength : 0;
-
                         // Calculate hash index
                         dwHashIndex = (DWORD)(pHash - ha->pHashTable);
                         dwBlockIndex = pHash->dwBlockIndex;
@@ -186,7 +186,7 @@ static int DoMPQSearch(TMPQSearch * hs, SFILE_FIND_DATA * lpFindFileData)
                         }
 
                         // Fill the file name and plain file name
-                        strcpy(lpFindFileData->cFileName, pNode->szFileName + nFileNameOffset);
+                        strcpy(lpFindFileData->cFileName, pNode->szFileName + nPrefixLength);
                         lpFindFileData->szPlainName = (char *)GetPlainMpqFileName(lpFindFileData->cFileName);
 
                         // Fill the next entry
@@ -202,7 +202,6 @@ static int DoMPQSearch(TMPQSearch * hs, SFILE_FIND_DATA * lpFindFileData)
         }
 
         // Move to the next patch in the patch chain
-        hs->bSearchingPatch = true;
         hs->dwNextIndex = 0;
         hs->ha = ha = ha->haPatch;
     }
@@ -255,9 +254,6 @@ HANDLE WINAPI SFileFindFirstFile(HANDLE hMpq, const char * szMask, SFILE_FIND_DA
     {
         memset(hs, 0, sizeof(TMPQSearch));
         strcpy(hs->szSearchMask, szMask);
-        strcpy(hs->szPatchPrefix, ha->szPatchPrefix);
-        hs->bSearchingPatch = false;
-        hs->nPrefixLength = strlen(hs->szPatchPrefix);
         hs->ha = ha;
         nError = DoMPQSearch(hs, lpFindFileData);
     }

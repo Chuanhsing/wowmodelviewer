@@ -120,7 +120,7 @@
 
 #define HASH_STATE_SIZE                0x60 // Size of LibTomCrypt's hash_state structure
 
-#define PATCH_PREFIX_LEN               0x20 // Maximum length of the patch prefix
+#define MPQ_PATCH_PREFIX_LEN           0x20 // Maximum length of the patch prefix
 
 // Values for TFileStream::Flags
 #define STREAM_FLAG_READ_ONLY          0x01 // The stream is read only
@@ -647,7 +647,7 @@ struct TMPQArchive
     TMPQBlockEx  * pExtBlockTable;      // Extended block table
 
     TMPQArchive  * haPatch;             // Pointer to patch archive, if any
-    char szPatchPrefix[PATCH_PREFIX_LEN]; // Prefix for file names in patch MPQs
+    char szPatchPrefix[MPQ_PATCH_PREFIX_LEN]; // Prefix for file names in patch MPQs
 
     TMPQUserData   UserData;            // MPQ user data. Valid only when ID_MPQ_USERDATA has been found
     BYTE           HeaderData[MPQ_HEADER_SIZE_V4];  // Storage for MPQ header
@@ -713,9 +713,6 @@ struct TMPQSearch
     DWORD  dwNextIndex;                 // Next hash index to be checked
     DWORD  dwName1;                     // Lastly found Name1
     DWORD  dwName2;                     // Lastly found Name2
-    size_t nPrefixLength;               // Length of the patch prefix
-    bool   bSearchingPatch;             // TRUE if searching patch MPQs
-    char   szPatchPrefix[PATCH_PREFIX_LEN];
     char   szSearchMask[1];             // Search mask (variable length)
 };
 
@@ -831,9 +828,8 @@ bool   WINAPI SFileUpdateFileAttributes(HANDLE hMpq, const char * szFileName);
 //-----------------------------------------------------------------------------
 // Functions for manipulation with patch archives
 
-bool   WINAPI SFileOpenPatchArchive(HANDLE hMpq, const char * szPatchMpqName, DWORD dwFlags);
+bool   WINAPI SFileOpenPatchArchive(HANDLE hMpq, const char * szPatchMpqName, const char * szPatchPathPrefix, DWORD dwFlags);
 bool   WINAPI SFileIsPatchedArchive(HANDLE hMpq);
-bool   WINAPI SFileSetPatchPathPrefix(HANDLE hMpq, const char * szPatchPrefix);
 
 //-----------------------------------------------------------------------------
 // Functions for file manipulation

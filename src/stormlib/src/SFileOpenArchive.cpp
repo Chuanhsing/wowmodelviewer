@@ -506,7 +506,7 @@ static void sub_6D1100(TMPQArchive * ha, PARSED_BET_DATA * pParsedBetData, PMPQ_
     BYTE byte_A9E170[] = {0x80, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
 
     DWORD dwOpenFlags = 0;
-    UNREFERENCED_PARAMETER(ha);
+    ha = ha;
 
     if(pParsedBetData != NULL)
     {
