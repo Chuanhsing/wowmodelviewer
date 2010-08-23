@@ -232,6 +232,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 			for(uint32 j=0; j<MATtable.size(); j++)
 			{
+
 				if (MATtable[j].texid == texlookup[tex[i].textureid] && 
 					MATtable[j].blend == renderflags[tex[i].flagsIndex].blend &&
 					MATtable[j].flags == renderflags[tex[i].flagsIndex].flags &&
@@ -468,14 +469,21 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			{
 				for(uint32 k=0; k<13; k++) 
 				{
-					if (k == MAT_LAYER_DIFF && (MATtable[j].blend != BM_ADDITIVE_ALPHA && MATtable[j].blend != BM_ADDITIVE)) 
+					//if (k == MAT_LAYER_DIFF && (MATtable[j].blend != BM_ADDITIVE_ALPHA && MATtable[j].blend != BM_ADDITIVE)) 
+					//{
+					//	M3OpacityAnimid.back().push_back(CreateAnimID(AR_Layer, j, k, 2));
+					//	M2OpacityIdx.back().push_back(MATtable[j].color);
+					//	stcs[i].arFloat.nEntries++;
+					//}
+
+					if (k == MAT_LAYER_EMISSIVE && (MATtable[j].blend == BM_ADDITIVE_ALPHA || MATtable[j].blend == BM_ADDITIVE)) 
 					{
 						M3OpacityAnimid.back().push_back(CreateAnimID(AR_Layer, j, k, 2));
 						M2OpacityIdx.back().push_back(MATtable[j].color);
 						stcs[i].arFloat.nEntries++;
 					}
 
-					if (k == MAT_LAYER_EMISSIVE && (MATtable[j].blend == BM_ADDITIVE_ALPHA || MATtable[j].blend == BM_ADDITIVE)) 
+					if (k == MAT_LAYER_ALPHA && MATtable[j].blend == BM_OPAQUE)
 					{
 						M3OpacityAnimid.back().push_back(CreateAnimID(AR_Layer, j, k, 2));
 						M2OpacityIdx.back().push_back(MATtable[j].color);
@@ -1363,11 +1371,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 					if (MATtable[i].animid != -1)
 						SetAnimed(layer.ar4.AnimRef);
-					if (MATtable[i].color != -1)
-					{
-						if (m->colors[MATtable[i].color].opacity.sizes != 0)
-							SetAnimed(layer.brightness_mult1.AnimRef);
-					}
 				}
 
 				if (j == MAT_LAYER_EMISSIVE && (MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_ADDITIVE)) 
@@ -1386,11 +1389,17 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				if (j == MAT_LAYER_ALPHA && 
 					(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_TRANSPARENT)) // LAYER_Alpha
 				{
-					NameRefEntry(&layer.name, texName, &f);
 					layer.renderFlags = LAYR_RENDERFLAGS_ALPHAONLY;
+					NameRefEntry(&layer.name, texName, &f);
 
 					if (MATtable[i].animid != -1)
 						SetAnimed(layer.ar4.AnimRef);
+				}
+				else if (j == MAT_LAYER_ALPHA && MATtable[i].blend == BM_OPAQUE && MATtable[i].color != -1)
+				{
+					NameRefEntry(&layer.name, _T("no name"), &f);
+					layer.renderFlags = LAYR_RENDERFLAGS_ALPHAONLY;
+					SetAnimed(layer.brightness_mult1.AnimRef);
 				}
 
 				datachunk_offset2 = f.Tell();
@@ -1411,7 +1420,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			{
 				case BM_OPAQUE: 
 					mats[i].blendMode = MAT_BLEND_OPAQUE; 
-					mats[i].cutoutThresh = 0;
+					mats[i].cutoutThresh = 1;
 					break;
 				case BM_TRANSPARENT: 
 					mats[i].blendMode = MAT_BLEND_OPAQUE; 
