@@ -423,8 +423,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	
 	f.Seek(datachunk_offset, wxFromStart);
 
-	std::vector <std::vector <uint32>> M3OpacityAnimid;
-	std::vector <std::vector <uint32>> M2OpacityIdx;
+	std::vector <std::vector <uint32> > M3OpacityAnimid;
+	std::vector <std::vector <uint32> > M2OpacityIdx;
 
 	// mSTC
 	mdata.mSTC.nEntries = mdata.mSEQS.nEntries;

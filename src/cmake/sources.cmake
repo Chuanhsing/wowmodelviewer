@@ -6,10 +6,6 @@ else ()
     list(REMOVE_ITEM WOWMV_SOURCES mpq_stormlib.cpp)
 endif ()
 
-if (UNIX)
-    list(REMOVE_ITEM WOWMV_SOURCES RenderTexture.cpp AVIGenerator.cpp)
-endif()
-
 set(STORM_SOURCES
     stormlib/src/adpcm/adpcm.cpp
     stormlib/src/huffman/huff.cpp
@@ -217,12 +213,11 @@ set(STORM_SOURCES
     stormlib/src/jenkins/lookup3.c
 )
 
-if (UNIX)
-    list(APPEND STORM_SOURCES stormlib/src/StormPortLinux.cpp)
-endif()
-
-if (MAC)
+if (APPLE)
     list(APPEND STORM_SOURCES stormlib/src/StormPortMac.cpp)
+else()
+    list(REMOVE_ITEM WOWMV_SOURCES RenderTexture.cpp AVIGenerator.cpp)
+    list(APPEND STORM_SOURCES stormlib/src/StormPortLinux.cpp)
 endif()
 
 set(MPQ_SOURCES
