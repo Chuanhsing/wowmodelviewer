@@ -259,7 +259,7 @@ PARSED_BET_DATA::PARSED_BET_DATA(DWORD BetBlockOffsets, DWORD dwOpenFlags)
         field_A4.resize((field_58 + 7) >> 0x03);
 }
 
-static PARSED_HET_DATA * ParseHetBlock(LPVOID pvHetBlockData, DWORD cbHetBlock)
+static PARSED_HET_DATA * ParseHetBlock(void * pvHetBlockData, DWORD cbHetBlock)
 {
     PARSED_HET_DATA * pParsedHetData = NULL;
     LPBYTE pbSrcData = (LPBYTE)pvHetBlockData + 0x20;
@@ -288,7 +288,7 @@ static PARSED_HET_DATA * ParseHetBlock(LPVOID pvHetBlockData, DWORD cbHetBlock)
     return pParsedHetData;
 }
 
-static PARSED_BET_DATA * ParseBetBlock(LPVOID pvBetBlockData, DWORD cbBetBlock, DWORD dwOpenFlags)
+static PARSED_BET_DATA * ParseBetBlock(void * pvBetBlockData, DWORD cbBetBlock, DWORD dwOpenFlags)
 {
     PARSED_BET_DATA * pParsedBetData = NULL;
     LPBYTE pbSrcData = (LPBYTE)pvBetBlockData + 0x4C;
@@ -310,7 +310,7 @@ static PARSED_BET_DATA * ParseBetBlock(LPVOID pvBetBlockData, DWORD cbBetBlock, 
         pParsedBetData->field_0.resize(BetBlockOffsets[0x12]);
         if(BetBlockOffsets[0x12] > 0)
         {
-            PDWORD pdwBetData10 = (PDWORD)pbSrcData;
+            LPDWORD pdwBetData10 = (LPDWORD)pbSrcData;
 
             for(DWORD i = 0; i < BetBlockOffsets[0x12]; i++)
             {
@@ -339,7 +339,6 @@ static PARSED_BET_DATA * ParseBetBlock(LPVOID pvBetBlockData, DWORD cbBetBlock, 
 //-----------------------------------------------------------------------------
 // 
 
-extern "C" void sub_6CAB90(const char * szFileName, size_t nLength, PDWORD pdwValue1, PDWORD pdwValue2);
 extern "C" ULONGLONG _stdcall sub_417540(DWORD, DWORD, DWORD, DWORD);
 
 extern "C" ULONGLONG wow_HashStringJenkins(const char * szFileName);
@@ -348,8 +347,8 @@ extern "C" ULONGLONG wow_HashStringJenkins(const char * szFileName);
 static void sub_6CAB90(
     const char * szLocFileName,
     size_t cchLength,
-    PDWORD pdwValue2,
-    PDWORD pdwValue1)
+    LPDWORD pdwValue2,
+    LPDWORD pdwValue1)
 {
     DWORD dwValue1 = *pdwValue1;    // ECX
     DWORD dwValue2;

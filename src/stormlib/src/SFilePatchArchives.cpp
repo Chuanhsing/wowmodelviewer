@@ -128,16 +128,16 @@ static int LoadMpqPatchFile(TMPQFile * hf)
 
 static LPBYTE PatchFileData(
     LPBYTE pbPatchData,
-    LPVOID pvOldData,
+    void * pvOldData,
     DWORD  cbOldData,
-    PDWORD pcbNewData)
+    LPDWORD pcbNewData)
 {
     PBLIZZARD_BSDIFF40_FILE pBsdiff = (PBLIZZARD_BSDIFF40_FILE)pbPatchData;
-    PDWORD pCtrlBlock;
+    LPDWORD pCtrlBlock;
     LPBYTE pDataBlock;
     LPBYTE pExtraBlock;
     LPBYTE pbNewData = NULL;
-    LPBYTE pbOldData = (PBYTE)pvOldData;
+    LPBYTE pbOldData = (LPBYTE)pvOldData;
     DWORD dwNewOffset = 0;                          // Current position to patch
     DWORD dwOldOffset = 0;                          // Current source position
     DWORD dwNewSize;                                // Patched file size
@@ -157,7 +157,7 @@ static LPBYTE PatchFileData(
     // 0000   4 bytes   Length to copy from the BSDIFF data block the new file
     // 0004   4 bytes   Length to copy from the BSDIFF extra block
     // 0008   4 bytes   Size to increment source file offset
-    pCtrlBlock = (PDWORD)pbPatchData;
+    pCtrlBlock = (LPDWORD)pbPatchData;
     pbPatchData += (size_t)pBsdiff->CtrlBlockSize;
 
     // Get the pointer to the data block

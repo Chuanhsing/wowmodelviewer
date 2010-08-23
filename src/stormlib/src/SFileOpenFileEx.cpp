@@ -91,6 +91,7 @@ bool OpenPatchedFile(HANDLE hMpq, const char * szFileName, DWORD dwReserved, HAN
         if(SFileOpenFileEx((HANDLE)ha, szPatchFileName, SFILE_OPEN_FROM_MPQ, phFile))
         {
             hfBase = (TMPQFile *)(*phFile);
+            strcpy(hfBase->szFileName, szFileName);
             break;
         }
 
@@ -127,6 +128,7 @@ bool OpenPatchedFile(HANDLE hMpq, const char * szFileName, DWORD dwReserved, HAN
         {
             // Remember the new version
             hfPatch = (TMPQFile *)hPatchFile;
+            strcpy(hfPatch->szFileName, szFileName);
 
             // If we encountered a full replacement of the file, 
             // we have to remember the highest full file
