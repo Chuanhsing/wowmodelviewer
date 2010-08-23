@@ -326,6 +326,11 @@ typedef struct {
 } SS <read=SSRead>;
 
 typedef struct {
+    uint32 nEntries;
+    uint32 ofsEntries;
+} AB_Header;
+
+typedef struct {
 	int16 type;		// interpolation type (0=none, 1=linear, 2=hermite)
 	int16 seq;		// global sequence id or -1
 //	uint32 nRanges;
@@ -337,11 +342,13 @@ typedef struct {
     local int pos = FTell();
     if(ofs1!=0) {
         FSeek(ofs1);
-	    uint32 nTimes;
-	    uint32 ofsTimes <format=hex>;
+        AB_Header Times[n1];
+	    //uint32 nTimes;
+	    //uint32 ofsTimes <format=hex>;
         FSeek(ofs2);
-	    uint32 nKeys;
-	    uint32 ofsKeys <format=hex>;
+        AB_Header Keys[n2];
+	    //uint32 nKeys;
+	    //uint32 ofsKeys <format=hex>;
         FSeek(pos);
     } else {
         FSeek(pos-16);
@@ -355,80 +362,104 @@ typedef struct {
 typedef struct {
     AB_HDR AB_UInt16_Header;
     local int ppos = FTell();
-    FSeek(0);
-    struct {
-        readAnimBlock("US",AB_UInt16_Header.ofsTimes,AB_UInt16_Header.nTimes,AB_UInt16_Header.ofsKeys,AB_UInt16_Header.nKeys);
-    } AB_UInt16_Data <optimize=false>;;
+    local int i;
+    for(i=0; i<AB_UInt16_Header.n1; i++) {
+        FSeek(0);
+        struct {
+            readAnimBlock("US",AB_UInt16_Header.Times[i].ofsEntries,AB_UInt16_Header.Times[i].nEntries,AB_UInt16_Header.Keys[i].ofsEntries,AB_UInt16_Header.Keys[i].nEntries);
+        } AB_UInt16_Data <optimize=false>;
+    }
     FSeek(ppos);
 } AB_UInt16 <read=ShowInfo_UInt16>;
 
 typedef struct {
     AB_HDR AB_Int16_Header;
     local int ppos = FTell();
-    FSeek(0);
-    struct {
-        readAnimBlock("S",AB_Int16_Header.ofsTimes,AB_Int16_Header.nTimes,AB_Int16_Header.ofsKeys,AB_Int16_Header.nKeys);
-    } AB_Int16_Data <optimize=false>;;
+    local int i;
+    for(i=0; i<AB_Int16_Header.n1; i++) {
+        FSeek(0);
+        struct {
+            readAnimBlock("S",AB_Int16_Header.Times[i].ofsEntries,AB_Int16_Header.Times[i].nEntries,AB_Int16_Header.Keys[i].ofsEntries,AB_Int16_Header.Keys[i].nEntries);
+        } AB_Int16_Data <optimize=false>;
+    }
     FSeek(ppos);
 } AB_Int16 <read=ShowInfo_Int16>;
 
 typedef struct {
     AB_HDR AB_UInt32_Header;
     local int ppos = FTell();
-    FSeek(0);
-    struct {
-        readAnimBlock("UI",AB_UInt32_Header.ofsTimes,AB_UInt32_Header.nTimes,AB_UInt32_Header.ofsKeys,AB_UInt32_Header.nKeys);
-    } AB_UInt32_Data <optimize=false>;;
+    local int i;
+    for(i=0; i<AB_UInt32_Header.n1; i++) {
+        FSeek(0);
+        struct {
+            readAnimBlock("UI",AB_UInt32_Header.Times[i].ofsEntries,AB_UInt32_Header.Times[i].nEntries,AB_UInt32_Header.Keys[i].ofsEntries,AB_UInt32_Header.Keys[i].nEntries);
+        } AB_UInt32_Data <optimize=false>;
+    }
     FSeek(ppos);
 } AB_UInt32 <read=ShowInfo_UInt32>;
 
 typedef struct {
     AB_HDR AB_Int32_Header;
     local int ppos = FTell();
-    FSeek(0);
-    struct {
-        readAnimBlock("I",AB_Int32_Header.ofsTimes,AB_Int32_Header.nTimes,AB_Int32_Header.ofsKeys,AB_Int32_Header.nKeys);
-    } AB_Int32_Data <optimize=false>;;
+    local int i;
+    for(i=0; i<AB_Int32_Header.n1; i++) {
+        FSeek(0);
+        struct {
+            readAnimBlock("I",AB_Int32_Header.Times[i].ofsEntries,AB_Int32_Header.Times[i].nEntries,AB_Int32_Header.Keys[i].ofsEntries,AB_Int32_Header.Keys[i].nEntries);
+        } AB_Int32_Data <optimize=false>;
+    }
     FSeek(ppos);
 } AB_Int32 <read=ShowInfo_Int32>;
 
 typedef struct {
     AB_HDR AB_Float_Header;
     local int ppos = FTell();
-    FSeek(0);
-    struct {
-        readAnimBlock("F",AB_Float_Header.ofsTimes,AB_Float_Header.nTimes,AB_Float_Header.ofsKeys,AB_Float_Header.nKeys);
-    } AB_Float_Data <optimize=false>;;
+    local int i;
+    for(i=0; i<AB_Float_Header.n1; i++) {
+        FSeek(0);
+        struct {
+            readAnimBlock("F",AB_Float_Header.Times[i].ofsEntries,AB_Float_Header.Times[i].nEntries,AB_Float_Header.Keys[i].ofsEntries,AB_Float_Header.Keys[i].nEntries);
+        } AB_Float_Data <optimize=false>;
+    }
     FSeek(ppos);
 } AB_Float <read=ShowInfo_Float>;
 
 typedef struct {
     AB_HDR AB_Vec3D_Header;
     local int ppos = FTell();
-    FSeek(0);
-    struct {
-        readAnimBlock("Vec3D",AB_Vec3D_Header.ofsTimes,AB_Vec3D_Header.nTimes,AB_Vec3D_Header.ofsKeys,AB_Vec3D_Header.nKeys);
-    } AB_Vec3D_Data <optimize=false>;;
+    local int i;
+    for(i=0; i<AB_Vec3D_Header.n1; i++) {
+        FSeek(0);
+        struct {
+            readAnimBlock("Vec3D",AB_Vec3D_Header.Times[i].ofsEntries,AB_Vec3D_Header.Times[i].nEntries,AB_Vec3D_Header.Keys[i].ofsEntries,AB_Vec3D_Header.Keys[i].nEntries);
+        } AB_Vec3D_Data <optimize=false>;
+    }
     FSeek(ppos);
 } AB_Vec3D <read=ShowInfo_Vec3D>;
 
 typedef struct {
     AB_HDR AB_Quat_Header;
     local int ppos = FTell();
-    FSeek(0);
-    struct {
-        readAnimBlock("Quat",AB_Quat_Header.ofsTimes,AB_Quat_Header.nTimes,AB_Quat_Header.ofsKeys,AB_Quat_Header.nKeys);
-    } AB_Quat_Data <optimize=false>;;
+    local int i;
+    for(i=0; i<AB_Quat_Header.n1; i++) {
+        FSeek(0);
+        struct {
+            readAnimBlock("Quat",AB_Quat_Header.Times[i].ofsEntries,AB_Quat_Header.Times[i].nEntries,AB_Quat_Header.Keys[i].ofsEntries,AB_Quat_Header.Keys[i].nEntries);
+        } AB_Quat_Data <optimize=false>;
+    }
     FSeek(ppos);
 } AB_Quat <read=ShowInfo_Quat>;
 
 typedef struct {
     AB_HDR AB_QuatS_Header;
     local int ppos = FTell();
-    FSeek(0);
-    struct {
-        readAnimBlock("QuatS",AB_QuatS_Header.ofsTimes,AB_QuatS_Header.nTimes,AB_QuatS_Header.ofsKeys,AB_QuatS_Header.nKeys);
-    } AB_QuatS_Data <optimize=false>;;
+    local int i;
+    for(i=0; i<AB_QuatS_Header.n1; i++) {
+        FSeek(0);
+        struct {
+            readAnimBlock("QuatS",AB_QuatS_Header.Times[i].ofsEntries,AB_QuatS_Header.Times[i].nEntries,AB_QuatS_Header.Keys[i].ofsEntries,AB_QuatS_Header.Keys[i].nEntries);
+        } AB_QuatS_Data <optimize=false>;
+    }
     FSeek(ppos);
 } AB_QuatS <read=ShowInfo_QuatS>;
 
@@ -496,8 +527,8 @@ typedef struct {
 	uint32 ofsAttachments <format=hex>;
 	uint32 nAttachLookup; // P
 	uint32 ofsAttachLookup <format=hex>;
-	uint32 nAttachments2; // Q
-	uint32 ofsAttachments2 <format=hex>;
+	uint32 nEvent; // Q
+	uint32 ofsEvent <format=hex>;
 	uint32 nLights; // R
 	uint32 ofsLights <format=hex>;
 	uint32 nCameras; // S
@@ -625,7 +656,7 @@ typedef struct {
 	AB_Float attStart;
 	AB_Float attEnd;
 	AB_UInt32 unk1;
-} LIGHT;
+} LIGHT <optimize=false>;
 
 typedef struct {
 	int32 id;
@@ -635,7 +666,7 @@ typedef struct {
 	AB_Vec3D transTarget;
 	Vec3D target;
 	AB_Quat rot;
-} CAMERA;
+} CAMERA <optimize=false>;
 
 typedef struct  {
     E_TEXTURETYPES type;
@@ -661,12 +692,12 @@ typedef struct {
 typedef struct {
 	AB_Vec3D color;
 	AB_UInt16 opacity;
-} COLOR;
+} COLOR <optimize=false>;
 
 
 typedef struct {
 	AB_UInt16 trans;
-} TRANSPARENCY;
+} TRANSPARENCY <optimize=false>;
 
 typedef struct {
 	AB_Vec3D trans;
@@ -701,7 +732,7 @@ typedef struct {
     FSeek(ofsKeys);
     Vec3D Colors[3];
     FSeek(ppos);
-} FBlock1 <optimize=false>;
+} FBlockVec3D <optimize=false>;
 
 typedef struct {
     uint32 nTimes;
@@ -714,7 +745,7 @@ typedef struct {
     FSeek(ofsKeys);
     short Values[3] <format=hex>;
     FSeek(ppos);
-} FBlock2 <optimize=false>;
+} FBlockUInt16 <optimize=false>;
 
 typedef struct {
     local int ppos = FTell();
@@ -732,13 +763,15 @@ typedef struct {
     Vec2D Values[3];
     FSeek(0);
     FSeek(ppos+16);
-} FBlock3  <optimize=false>;
+} FBlockVec2D  <optimize=false>;
 
 typedef struct {
-	FBlock1 UnknownFakeBlock1;
-	FBlock2 UnknownFakeBlock2;
-	FBlock3 Scale;
-	int32 d[10];
+	FBlockVec3D Colors;
+	FBlockUInt16 Opacity;
+	FBlockVec2D Scale;
+	int32 d[2];
+	FBlockUInt16 Intensity;
+	FBlockUInt16 unk2;
 	Vec3D unk;
 	Vec3D scale;
 	float slowdown;
@@ -760,12 +793,13 @@ typedef struct {
 	int16 texture;
 	int32 nModelName;
 	int32 ofsModelName <format=hex>;
-	int32 nZero2;
-	int32 ofsZero2 <format=hex>;
+	int32 nParticleFileName;
+	int32 ofsParticleFileName <format=hex>;
 	char blend;
-    int16 Emitter_type;
+    char Emitter_type;
 	int16 Particly_type;
-    char padd;
+    char ParticleType;
+	char HeadorTail;
 	int16 Texturerot;
 	int16 rows;
 	int16 cols;
@@ -786,10 +820,11 @@ typedef struct {
 	AB_UInt16 opacity;
 	AB_Float above;
 	AB_Float below;
-	float res, length, unk;
+	float res, length, Emissionangle;
 	int16 s1, s2;
 	AB_UInt32 unk1;
 	AB_UInt32 unk2;
+	int32 unknown; // wotlk
 } RIBBONEMITTER;
 
 typedef struct {
@@ -797,7 +832,7 @@ typedef struct {
 	int32 bone;
 	Vec3D pos;
 	AB_Int32 unk;
-} ATTACHMENT;
+} ATTACHMENT <optimize=false>;
 
 typedef struct {
 	char id[4];
@@ -806,11 +841,11 @@ typedef struct {
 	Vec3D pos;
 	int16 type;
 	int16 seq;
-	uint32 nRanges;
-	uint32 ofsRanges <format=hex>;
+	//uint32 nRanges;
+	//uint32 ofsRanges <format=hex>;
 	uint32 nTimes;
 	uint32 ofsTimes <format=hex>;
-} ATTACHMENT2 <read=ShowInfoAttachment2>;
+} EVENT <read=ShowInfoEvent>;
 
 // - Structs end ---------------
 
@@ -915,11 +950,12 @@ void readAnimBlock(char type[], int ofsTimes, int nTimes, int ofsKeys, int nKeys
         return;
     }
     FSeek(ofsTimes);
-    if(nTimes<3)
+    if(nTimes>0) // < 3
         uint32 times[nTimes];
-    else uint32 time;
+    else
+        uint32 time;
     FSeek(ofsKeys);
-    if(nTimes<3) {
+    if(nTimes>0) { // < 3
         if(type == "S") {
             int16 keys[nKeys];
         } else if(type == "I") {
@@ -937,11 +973,12 @@ void readAnimBlock(char type[], int ofsTimes, int nTimes, int ofsKeys, int nKeys
         } else if(type == "QuatS") {
             QuatS keys[nKeys];
         } 
-    } else uint32 key;
+    } else
+	uint32 key;
 }
 
 string ShowAnimBlockInfo(AB_HDR &hdr) {  
-    string s; if(hdr.nKeys > 0) { s = "used";  } else { s = "unused"; } return s;
+    string s; if(hdr.n1 > 0 && hdr.Keys[0].nEntries > 0) { s = "used";  } else { s = "unused"; } return s;
 }
 
 string ShowInfo_UInt16(AB_UInt16 &x) {
@@ -985,9 +1022,9 @@ string ReadBone(BONE &B) {
 }
 
 
-string ShowInfoAttachment2(ATTACHMENT2 &att)
+string ShowInfoEvent(EVENT &event)
 {  
-    string s; SPrintf( s, "%s - b%i",att.id,att.bone); return s;
+    string s; SPrintf( s, "%s - b%i",event.id,event.bone); return s;
 }
 
 // - Read&Write end ------------

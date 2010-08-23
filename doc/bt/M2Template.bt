@@ -107,10 +107,10 @@ struct GAR {
         FSeek( GeneralInformation.Offsets.ofsTexLookup);
         uint16 TexturesLookup[GeneralInformation.Offsets.nTexLookup];
 
-        //if(GeneralInformation.Version != 8) {
+        if(GeneralInformation.Offsets.nRibbonEmitters > 0) {
             FSeek( GeneralInformation.Offsets.ofsTexAnims);
             TEXTUREANIM TextureAnimations[GeneralInformation.Offsets.nTexAnims];
-       // }
+        }
 
         FSeek( GeneralInformation.Offsets.ofsTexAnimLookup);
         int16 TextureAnimationLookup[GeneralInformation.Offsets.nTexAnimLookup];
@@ -132,8 +132,10 @@ struct EF {
     FSeek( GeneralInformation.Offsets.ofsParticleEmitters);
     PARTICLEEMITTER ParticleEmitters[GeneralInformation.Offsets.nParticleEmitters];
     
-    FSeek( GeneralInformation.Offsets.ofsRibbonEmitters);
-    RIBBONEMITTER RibbonEmitters[GeneralInformation.Offsets.nRibbonEmitters];
+    if(GeneralInformation.Offsets.nRibbonEmitters > 0) {
+        FSeek( GeneralInformation.Offsets.ofsRibbonEmitters);
+        RIBBONEMITTER RibbonEmitters[GeneralInformation.Offsets.nRibbonEmitters];
+    }
     FSeek(0);
 } Effects <read=CommentEF>;
 
@@ -158,8 +160,8 @@ struct MSC {
         FSeek( GeneralInformation.Offsets.ofsAttachLookup);
         int16 AttachmentLookup[GeneralInformation.Offsets.nAttachLookup];
         
-        FSeek( GeneralInformation.Offsets.ofsAttachments2);
-        ATTACHMENT2 AttachmentsType2[GeneralInformation.Offsets.nAttachments2];
+        FSeek( GeneralInformation.Offsets.ofsEvent);
+        EVENT Event[GeneralInformation.Offsets.nEvent];
         FSeek(0);
     } Attachments <read=CommentMSC_A>;
 

@@ -281,16 +281,16 @@ struct ModelBoneDef {
 	int16 parent; // parent bone index
 	int16 geoid; // A geoset for this bone.
 	int32 unknown; // new int added to the bone definitions.  Added in WoW 2.0
-	AnimationBlock translation; // (short, vec3f)
-	AnimationBlock rotation; // (short, vec4s)
-	AnimationBlock scaling; // (short, vec3f)
+	AnimationBlock translation; // (Vec3D)
+	AnimationBlock rotation; // (QuatS)
+	AnimationBlock scaling; // (Vec3D)
 	Vec3D pivot;
 };
 
 struct ModelTexAnimDef {
-	AnimationBlock trans; // (short, vec3f)
-	AnimationBlock rot; // (short, vec4s)
-	AnimationBlock scale; // (short, vec3f)
+	AnimationBlock trans; // (Vec3D)
+	AnimationBlock rot; // (QuatS)
+	AnimationBlock scale; // (Vec3D)
 };
 
 struct ModelVertex {
@@ -412,13 +412,13 @@ struct ModelRenderFlags {
 // Referenced from the Texture Unit blocks in the LOD part. Contains a separate timeline for transparency values. 
 // If no animation is used, the given value is constant.
 struct ModelColorDef {
-	AnimationBlock color; // (short, vec3f) Three floats. One for each color.
-	AnimationBlock opacity; // (short, short) 0 - transparent, 0x7FFF - opaque.
+	AnimationBlock color; // (Vec3D) Three floats. One for each color.
+	AnimationBlock opacity; // (UInt16) 0 - transparent, 0x7FFF - opaque.
 };
 
 // block H - transparency defs
 struct ModelTransDef {
-	AnimationBlock trans;
+	AnimationBlock trans; // (UInt16)
 };
 
 #define	TEXTURE_MAX	32
@@ -433,13 +433,13 @@ struct ModelLightDef {
 	int16 type; // 0: Directional, 1: Point light
 	int16 bone; // If its attached to a bone, this is the bone. Else here is a nice -1.
 	Vec3D pos; // Position, Where is this light?
-	AnimationBlock ambientColor; // The ambient color. Three floats for RGB.
-	AnimationBlock ambientIntensity; // A float for the intensity.
-	AnimationBlock diffuseColor; // The diffuse color. Three floats for RGB.
-	AnimationBlock diffuseIntensity; // A float for the intensity again.
-	AnimationBlock attenuationStart; // This defines, where the light starts to be.
-	AnimationBlock attenuationEnd; // And where it stops.
-	AnimationBlock useAttenuation; // Its an integer and usually 1.
+	AnimationBlock ambientColor; // (Vec3D) The ambient color. Three floats for RGB.
+	AnimationBlock ambientIntensity; // (Float) A float for the intensity.
+	AnimationBlock diffuseColor; // (Vec3D) The diffuse color. Three floats for RGB.
+	AnimationBlock diffuseIntensity; // (Float) A float for the intensity again.
+	AnimationBlock attenuationStart; // (Float) This defines, where the light starts to be.
+	AnimationBlock attenuationEnd; // (Float) And where it stops.
+	AnimationBlock useAttenuation; // (Uint32) Its an integer and usually 1.
 };
 
 struct ModelCameraDef {
@@ -447,23 +447,23 @@ struct ModelCameraDef {
 	float fov; // No radians, no degrees. Multiply by 35 to get degrees.
 	float farclip; // Where it stops to be drawn.
 	float nearclip; // Far and near. Both of them.
-	AnimationBlock transPos; // How the cameras position moves. Should be 3*3 floats. (? WoW parses 36 bytes = 3*3*sizeof(float))
+	AnimationBlock transPos; // (Vec3D) How the cameras position moves. Should be 3*3 floats. (? WoW parses 36 bytes = 3*3*sizeof(float))
 	Vec3D pos; // float, Where the camera is located.
-	AnimationBlock transTarget; // How the target moves. Should be 3*3 floats. (?)
+	AnimationBlock transTarget; // (Vec3D) How the target moves. Should be 3*3 floats. (?)
 	Vec3D target; // float, Where the camera points to.
-	AnimationBlock rot; // The camera can have some roll-effect. Its 0 to 2*Pi.
+	AnimationBlock rot; // (Quat) The camera can have some roll-effect. Its 0 to 2*Pi.
 };
 
 struct ModelCameraDefV10 {
 	int32 id; // 0 is potrait camera, 1 characterinfo camera; -1 if none; referenced in CamLookup_Table
 	float farclip; // Where it stops to be drawn.
 	float nearclip; // Far and near. Both of them.
-	AnimationBlock transPos; // How the cameras position moves. Should be 3*3 floats. (? WoW parses 36 bytes = 3*3*sizeof(float))
+	AnimationBlock transPos; // (Vec3D) How the cameras position moves. Should be 3*3 floats. (? WoW parses 36 bytes = 3*3*sizeof(float))
 	Vec3D pos; // float, Where the camera is located.
-	AnimationBlock transTarget; // How the target moves. Should be 3*3 floats. (?)
+	AnimationBlock transTarget; // (Vec3D) How the target moves. Should be 3*3 floats. (?)
 	Vec3D target; // float, Where the camera points to.
-	AnimationBlock rot; // The camera can have some roll-effect. Its 0 to 2*Pi. 3 Floats!
-	AnimationBlock AnimBlock4; // One Float.
+	AnimationBlock rot; // (Quat) The camera can have some roll-effect. Its 0 to 2*Pi. 3 Floats!
+	AnimationBlock AnimBlock4; // (Float) One Float. cata
 };
 
 #ifndef WotLK
@@ -473,32 +473,32 @@ struct ModelParticleParams {
 	float sizes[3];
 	int16 d[10];
 	float unk[3];
-	float scales[3];
+	Vec3D scales;
 	float slowdown;
 	float rotation;	//Sprite Rotation
 	float unknown;
-	float Rot1[3];	//Model Rotation 1
-	float Rot2[3];	//Model Rotation 2
-	float Trans[3];	//Model Translation
+	Vec3D Rot1;	//Model Rotation 1
+	Vec3D Rot2;	//Model Rotation 2
+	Vec3D Trans;	//Model Translation
 	float f2[6];
 };
 #else
 struct ModelParticleParams {
-	FakeAnimationBlock colors; 	// (short, vec3f)	This one points to 3 floats defining red, green and blue.
-	FakeAnimationBlock opacity;      // (short, short)		Looks like opacity (short), Most likely they all have 3 timestamps for {start, middle, end}.
-	FakeAnimationBlock sizes; 		// (short, vec2f)	It carries two floats per key. (x and y scale)
+	FakeAnimationBlock colors; 	// (Vec3D)	This one points to 3 floats defining red, green and blue.
+	FakeAnimationBlock opacity;      // (UInt16)		Looks like opacity (short), Most likely they all have 3 timestamps for {start, middle, end}.
+	FakeAnimationBlock sizes; 		// (Vec2D)	It carries two floats per key. (x and y scale)
 	int32 d[2];
-	FakeAnimationBlock Intensity; 	// Some kind of intensity values seen: 0,16,17,32(if set to different it will have high intensity) (short, short)
-	FakeAnimationBlock unk2; 		// (short, short)
+	FakeAnimationBlock Intensity; 	// (UInt16) Some kind of intensity values seen: 0,16,17,32(if set to different it will have high intensity) 
+	FakeAnimationBlock unk2; 		// (UInt16)
 	float unk[3];
-	float scales[3];
+	Vec3D scales;
 	float slowdown;
 	float unknown1[2];
 	float rotation;				//Sprite Rotation
 	float unknown2[2];
-	float Rot1[3];					//Model Rotation 1
-	float Rot2[3];					//Model Rotation 2
-	float Trans[3];				//Model Translation
+	Vec3D Rot1;					//Model Rotation 1
+	Vec3D Rot2;					//Model Rotation 2
+	Vec3D Trans;				//Model Translation
 	float f2[4];
 	int32 nUnknownReference;
 	int32 ofsUnknownReferenc;
@@ -535,24 +535,24 @@ struct ModelParticleEmitterDef {
 #endif
 	int16 cols; // How many different frames are on that texture? People should learn what rows and cols are.
 	int16 rows; // Its different everywhere. I just took it random.
-	AnimationBlock EmissionSpeed; // All of the following blocks should be floats.
-	AnimationBlock SpeedVariation; // Variation in the flying-speed. (range: 0 to 1)
-	AnimationBlock VerticalRange; // Drifting away vertically. (range: 0 to pi)
-	AnimationBlock HorizontalRange; // They can do it horizontally too! (range: 0 to 2*pi)
-	AnimationBlock Gravity; // Fall down, apple!
-	AnimationBlock Lifespan; // Everyone has to die.
+	AnimationBlock EmissionSpeed; // (Float) All of the following blocks should be floats.
+	AnimationBlock SpeedVariation; // (Float) Variation in the flying-speed. (range: 0 to 1)
+	AnimationBlock VerticalRange; // (Float) Drifting away vertically. (range: 0 to pi)
+	AnimationBlock HorizontalRange; // (Float) They can do it horizontally too! (range: 0 to 2*pi)
+	AnimationBlock Gravity; // (Float) Fall down, apple!
+	AnimationBlock Lifespan; // (Float) Everyone has to die.
 #ifdef WotLK
 	int32 unknown;
 #endif
-	AnimationBlock EmissionRate; // Stread your particles, emitter.
+	AnimationBlock EmissionRate; // (Float) Stread your particles, emitter.
 #ifdef WotLK
 	int32 unknown2;
 #endif
-	AnimationBlock EmissionAreaLength; // Well, you can do that in this area.
-	AnimationBlock EmissionAreaWidth;
-	AnimationBlock Gravity2; // A second gravity? Its strong.
+	AnimationBlock EmissionAreaLength; // (Float) Well, you can do that in this area.
+	AnimationBlock EmissionAreaWidth; // (Float) 
+	AnimationBlock Gravity2; // (Float) A second gravity? Its strong.
 	ModelParticleParams p;
-	AnimationBlock en;
+	AnimationBlock en; // (UInt32)
 };
 
 struct ModelParticleEmitterDefV10 {
@@ -576,24 +576,24 @@ struct ModelParticleEmitterDefV10 {
 	int16 TextureTileRotation; // TODO, Rotation for the texture tile. (Values: -1,0,1)
 	int16 cols; // How many different frames are on that texture? People should learn what rows and cols are.
 	int16 rows; // Its different everywhere. I just took it random.
-	AnimationBlock EmissionSpeed; // All of the following blocks should be floats.
-	AnimationBlock SpeedVariation; // Variation in the flying-speed. (range: 0 to 1)
-	AnimationBlock VerticalRange; // Drifting away vertically. (range: 0 to pi)
-	AnimationBlock HorizontalRange; // They can do it horizontally too! (range: 0 to 2*pi)
-	AnimationBlock Gravity; // Fall down, apple!
-	AnimationBlock Lifespan; // Everyone has to die.
+	AnimationBlock EmissionSpeed; // (Float) All of the following blocks should be floats.
+	AnimationBlock SpeedVariation; // (Float) Variation in the flying-speed. (range: 0 to 1)
+	AnimationBlock VerticalRange; // (Float) Drifting away vertically. (range: 0 to pi)
+	AnimationBlock HorizontalRange; // (Float) They can do it horizontally too! (range: 0 to 2*pi)
+	AnimationBlock Gravity; // (Float) Fall down, apple!
+	AnimationBlock Lifespan; // (Float) Everyone has to die.
 	int32 unknown;
-	AnimationBlock EmissionRate; // Stread your particles, emitter.
+	AnimationBlock EmissionRate; // (Float) Stread your particles, emitter.
 	int32 unknown2;
-	AnimationBlock EmissionAreaLength; // Well, you can do that in this area.
-	AnimationBlock EmissionAreaWidth;
-	AnimationBlock Gravity2; // A second gravity? Its strong.
+	AnimationBlock EmissionAreaLength; // (Float) Well, you can do that in this area.
+	AnimationBlock EmissionAreaWidth; // (Float) 
+	AnimationBlock Gravity2; // (Float) A second gravity? Its strong.
 	ModelParticleParams p;
-	AnimationBlock en;
-	int32 unknown3; // 12319
-	int32 unknown4; // 12319
-	int32 unknown5; // 12319
-	int32 unknown6; // 12319
+	AnimationBlock en; // (UInt32)
+	int32 unknown3; // 12319, cata
+	int32 unknown4; // 12319, cata
+	int32 unknown5; // 12319, cata
+	int32 unknown6; // 12319, cata
 };
 
 struct ModelRibbonEmitterDef {
@@ -604,10 +604,10 @@ struct ModelRibbonEmitterDef {
 	int32 ofsTextures;
 	int32 nUnknown;
 	int32 ofsUnknown;
-	AnimationBlock color;
-	AnimationBlock opacity; // And an alpha value in a short, where: 0 - transparent, 0x7FFF - opaque.
-	AnimationBlock above; // The height above.
-	AnimationBlock below; // The height below. Do not set these to the same!
+	AnimationBlock color; // (Vec3D)
+	AnimationBlock opacity; // (UInt16) And an alpha value in a short, where: 0 - transparent, 0x7FFF - opaque.
+	AnimationBlock above; // (Float) The height above.
+	AnimationBlock below; // (Float) The height below. Do not set these to the same!
 	float res; // This defines how smooth the ribbon is. A low value may produce a lot of edges.
 	float length; // The length aka Lifespan.
 	float Emissionangle; // use arcsin(val) to get the angle in degree
@@ -698,8 +698,7 @@ struct ModelAttachmentDef {
 	int32 id; // Just an id. Is referenced in the enum POSITION_SLOTS.
 	int32 bone; // Somewhere it has to be attached.
 	Vec3D pos; // Relative to that bone of course.
-	AnimationBlock unk; // Its an integer in the data. It has been 1 on all models I saw. Whatever.
-		
+	AnimationBlock unk; // (Int32) Its an integer in the data. It has been 1 on all models I saw. Whatever.
 };
 
 #pragma pack(pop)
