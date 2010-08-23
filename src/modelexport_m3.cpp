@@ -864,7 +864,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 		for(uint32 j=0; j < BONE_MAX; j++) {
 			if (i > 0 && m->keyBoneLookup[j] == i-1) {
-				strName += _T("_")+wxString(Bone_Names[j], wxConvUTF8);
+				strName += _T("_")+Bone_Names[j];
 				break;
 			}
 		}
@@ -873,7 +873,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 		for(uint32 j=0; j < m->header.nKeyBoneLookup; j++) {
 			if (m->keyBoneLookup[j] == i) {
-				strName += _T("_")+wxString(Bone_Names[j], wxConvUTF8);
+				strName += _T("_")+Bone_Names[j];
 				break;
 			}
 		}

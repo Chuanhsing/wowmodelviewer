@@ -1796,7 +1796,7 @@ void ModelViewer::OnEffects(wxCommandEvent &event)
 		if (m) {
 			// This is an error check to make sure the creature can be equipped.
 			for(unsigned int k=0; k<m->ATT_MAX; k++){
-				if (m->attLookup[k] == PS_RIGHT_PALM) {
+				if (m->attLookup[k] == ATT_RIGHT_PALM) {
 					SelectCreatureItem(CS_HAND_RIGHT, 0, charControl, canvas);
 					break;
 				}
@@ -1812,7 +1812,7 @@ void ModelViewer::OnEffects(wxCommandEvent &event)
 		if (m) {
 			// This is an error check to make sure the creature can be equipped.
 			for(unsigned int k=0; k<m->ATT_MAX; k++){
-				if (m->attLookup[k] == PS_LEFT_PALM) {
+				if (m->attLookup[k] == ATT_LEFT_PALM) {
 					SelectCreatureItem(CS_HAND_LEFT, 0, charControl, canvas);
 					break;
 				}

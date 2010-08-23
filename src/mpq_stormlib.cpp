@@ -18,7 +18,7 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 	if (filename.AfterLast(SLASH).StartsWith(_T("wow-update-")))
 		return;
 
-	bool result = !!SFileOpenArchive( filename.c_str(), 0, MPQ_OPEN_READ_ONLY, &mpq_a );
+	bool result = !!SFileOpenArchive((char *) filename.c_str(), 0, MPQ_OPEN_READ_ONLY, &mpq_a );
 
 	wxLogMessage(_T("Opening %s"), filename.c_str());
 	if(!result) {
@@ -31,7 +31,7 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 		wxString mpq = mpqArchives[j].AfterLast(SLASH);
 		if (!mpq.StartsWith(_T("wow-update-")))
 			continue;
-		SFileOpenPatchArchive(mpq_a, mpq.c_str(), "enUS", 0);
+		SFileOpenPatchArchive(mpq_a, (char *)mpq.c_str(), "enUS", 0);
 		wxLogMessage(_T("Appending patch %s on %s"), mpq.c_str(), filename.c_str());
 	}
 

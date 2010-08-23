@@ -33,43 +33,89 @@ struct GroupData {
 	Model *m;
 };
 
-static const char* Bone_Names[] = {
-	"ArmL", // 0
-	"ArmR",
-	"ShoulderL",
-	"ShoulderR",
-	"SpineLow",
-	"Waist", // 5
-	"Head",
-	"Jaw",
-	"RFingerIndex",
-	"RFingerMiddle",
-	"RFingerPinky", // 10
-	"RFingerRing",
-	"RThumb",
-	"LFingerIndex",
-	"LFingerMiddle",
-	"LFingerPinky", // 15
-	"LFingerRing",
-	"LThumb",
-	"BTH",
-	"CSR",
-	"CSL", // 20
-	"Breath",
-	"Name",
-	"NameMount",
-	"CHD",
-	"CCH", // 25
-	"Root",
-	"Wheel1",
-	"Wheel2",
-	"Wheel3",
-	"Wheel4", // 30
-	"Wheel5",
-	"Wheel6",
-	"Wheel7",
-	"Wheel8",
-	""
+static wxString Attach_Names[] = { // enum POSITION_SLOTS
+	_T("Left wrist (shield) / Mount"), // 0
+	_T("Right Palm"), 
+	_T("Left Palm"), 
+	_T("Right Elbow"), 
+	_T("Left Elbow"), 
+	_T("Right Shoulder"), // 5
+	_T("Left Shoulder"), 
+	_T("Right Knee"), 
+	_T("Left Knee"), 
+	_T("Right Hip"),
+	_T("Left Hip"), // 10
+	_T("Helmet"), 
+	_T("Back"), 
+	_T("Right Shoulder Horizontal"), 
+	_T("Left Shoulder Horizontal"), 
+	_T("Front Hit Region"), // 15
+	_T("Rear Hit Region"), 
+	_T("Mouth"), 
+	_T("Head Region"), 
+	_T("Base"),
+	_T("Above"), // 20
+	_T("Pre-Cast 1 L"), 
+	_T("Pre-Cast 1 R"), 
+	_T("Pre-Cast 2 L"), 
+	_T("Pre-Cast 2 R"),
+	_T("Pre-Cast 3"), //25 
+	_T("Upper Back Sheath R"), 
+	_T("Upper Back Sheath L"), 
+	_T("Middle Back Sheath"), 
+	_T("Belly"), 
+	_T("Reverse Back, Up Back L"), //30
+	_T("Right Back"), 
+	_T("Left Hip Sheath"), 
+	_T("Right Hip Sheath"), 
+	_T("Spell Impact"),
+	_T("Right Palm (Unk1)"), //35
+	_T("Right Palm (Unk2)"),
+	_T("Demolishervehicle"),
+	_T("Demolishervehicle2"),
+	_T("Vehicle Seat1"),
+	_T("Vehicle Seat2"), // 40
+	_T("Vehicle Seat3"),
+	_T("Vehicle Seat4"),
+};
+
+static wxString Bone_Names[] = { // enum KeyBoneTable
+	_T("ArmL"), // 0
+	_T("ArmR"),
+	_T("ShoulderL"),
+	_T("ShoulderR"),
+	_T("SpineLow"),
+	_T("Waist"), // 5
+	_T("Head"),
+	_T("Jaw"),
+	_T("RFingerIndex"),
+	_T("RFingerMiddle"),
+	_T("RFingerPinky"), // 10
+	_T("RFingerRing"),
+	_T("RThumb"),
+	_T("LFingerIndex"),
+	_T("LFingerMiddle"),
+	_T("LFingerPinky"), // 15
+	_T("LFingerRing"),
+	_T("LThumb"),
+	_T("BTH"),
+	_T("CSR"),
+	_T("CSL"), // 20
+	_T("Breath"),
+	_T("Name"),
+	_T("NameMount"),
+	_T("CHD"),
+	_T("CCH"), // 25
+	_T("Root"),
+	_T("Wheel1"),
+	_T("Wheel2"),
+	_T("Wheel3"),
+	_T("Wheel4"), // 30
+	_T("Wheel5"),
+	_T("Wheel6"),
+	_T("Wheel7"),
+	_T("Wheel8"),
+	_T("")
 };
 
 

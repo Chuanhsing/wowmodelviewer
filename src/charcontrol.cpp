@@ -1450,20 +1450,20 @@ void CharControl::RefreshItem(int slot)
 		//float sc = 1.0f;
 
 		if (slot==CS_HEAD) {
-			id1 = PS_HELMET;
+			id1 = ATT_HELMET;
 			path = _T("Item\\ObjectComponents\\Head\\");
 		} else if (slot==CS_SHOULDER) {
-			id1 = PS_LEFT_SHOULDER;
-			id2 = PS_RIGHT_SHOULDER;
+			id1 = ATT_LEFT_SHOULDER;
+			id2 = ATT_RIGHT_SHOULDER;
 			path = _T("Item\\ObjectComponents\\Shoulder\\");
 		} else if (slot == CS_HAND_LEFT) {
-			id1 = PS_LEFT_PALM;
+			id1 = ATT_LEFT_PALM;
 			model->charModelDetails.closeLHand = true;
 		} else if (slot == CS_HAND_RIGHT) {
-			id1 = PS_RIGHT_PALM;
+			id1 = ATT_RIGHT_PALM;
 			model->charModelDetails.closeRHand = true;
 		} else if (slot == CS_QUIVER) {
-			id1 = PS_RIGHT_BACK_SHEATH;
+			id1 = ATT_RIGHT_BACK_SHEATH;
 			path = _T("Item\\ObjectComponents\\Quiver\\");
 		} else 
 			return;
@@ -1471,7 +1471,7 @@ void CharControl::RefreshItem(int slot)
 		if (slot==CS_HAND_LEFT || slot==CS_HAND_RIGHT) {
 			if (items.getById(itemnum).type == IT_SHIELD) {
 				path = _T("Item\\ObjectComponents\\Shield\\");
-				id1 = PS_LEFT_WRIST;
+				id1 = ATT_LEFT_WRIST;
 			} else {
 				path = _T("Item\\ObjectComponents\\Weapon\\");
 			}
@@ -1480,12 +1480,12 @@ void CharControl::RefreshItem(int slot)
 			// their correct positions
 			if (bSheathe && items.getById(itemnum).sheath>0) {	
 				id1 = items.getById(itemnum).sheath;
-				if (id1==PS_LEFT_HIP_SHEATH && slot==CS_HAND_LEFT)
-					id1 = PS_RIGHT_HIP_SHEATH;
+				if (id1==ATT_LEFT_HIP_SHEATH && slot==CS_HAND_LEFT)
+					id1 = ATT_RIGHT_HIP_SHEATH;
 
 				// One-handed Sword 2:7 && items.getById(itemnum).subclass==7
-				if (id1==PS_RIGHT_BACK_SHEATH && slot==CS_HAND_LEFT)
-					id1 = PS_LEFT_BACK_SHEATH;
+				if (id1==ATT_RIGHT_BACK_SHEATH && slot==CS_HAND_LEFT)
+					id1 = ATT_LEFT_BACK_SHEATH;
 
 				if (slot==CS_HAND_LEFT)
 					model->charModelDetails.closeLHand = false;
@@ -1641,16 +1641,16 @@ void CharControl::RefreshCreatureItem(int slot)
 		//float sc = 1.0f;
 
 		if (slot == CS_HAND_LEFT) 
-			id1 = PS_LEFT_PALM;
+			id1 = ATT_LEFT_PALM;
 		else if (slot == CS_HAND_RIGHT) 
-			id1 = PS_RIGHT_PALM;
+			id1 = ATT_RIGHT_PALM;
 		else 
 			return;
 
 		if (slot==CS_HAND_LEFT || slot==CS_HAND_RIGHT) {
 			if (items.getById(itemnum).type == IT_SHIELD) {
 				path = _T("Item\\ObjectComponents\\Shield\\");
-				id1 = PS_LEFT_WRIST;
+				id1 = ATT_LEFT_WRIST;
 			} else {
 				path = _T("Item\\ObjectComponents\\Weapon\\");
 			}

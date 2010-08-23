@@ -938,10 +938,10 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 			}
 			Pos.z = -Pos.z;
 			MakeModelFaceForwards(Pos);
-			wxString bone_name = wxString::Format(_T("Bone_%03i"),x);
+			wxString bone_name = wxString::Format(_T("Bone_%03i"), x);
 			for (int j=0; j<BONE_MAX; ++j) {
 				if (m->keyBoneLookup[j] == static_cast<int>(x)) {
-					bone_name = wxString(Bone_Names[j], wxConvUTF8);
+					bone_name = Bone_Names[j];
 					break;
 				}
 			}

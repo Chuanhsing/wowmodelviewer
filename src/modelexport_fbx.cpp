@@ -521,7 +521,7 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 		int j = 0;
 		for (; j < BONE_MAX; ++j) {
 			if (m->keyBoneLookup[j] == static_cast<int>(i)) {
-				bone_name += Bone_Names[j];
+				bone_name += Bone_Names[j].c_str();
 				break;
 			}
 		}

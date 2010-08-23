@@ -5567,7 +5567,7 @@ sub_4CDD70      endp
 ; =============== S U B R O U T I N E =======================================
 
 
-; int __cdecl sub_4CDD90(LPVOID lpAddress)
+; int __cdecl sub_4CDD90(void * lpAddress)
 sub_4CDD90      proc near               ; CODE XREF: sub_4CF810+53p
                                         ; sub_4CF810+73p
                                         ; DATA XREF: ...

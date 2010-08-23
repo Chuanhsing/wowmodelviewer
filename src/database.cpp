@@ -637,10 +637,10 @@ ItemRecord::ItemRecord(const char* line)
 		subclass = r.getInt(ItemDB::Subclass);
 		type = r.getInt(ItemDB::InventorySlot);
 		switch(r.getInt(ItemDB::Sheath)) {
-			case 1: sheath = PS_RIGHT_BACK_SHEATH; break;
-			case 2: sheath = PS_LEFT_BACK; break;
-			case 3: sheath = PS_LEFT_HIP_SHEATH; break;
-			case 4: sheath = PS_MIDDLE_BACK_SHEATH; break;
+			case 1: sheath = ATT_RIGHT_BACK_SHEATH; break;
+			case 2: sheath = ATT_LEFT_BACK; break;
+			case 3: sheath = ATT_LEFT_HIP_SHEATH; break;
+			case 4: sheath = ATT_MIDDLE_BACK_SHEATH; break;
 			default: sheath = 0;
 		}
 		discovery = false;
@@ -789,10 +789,10 @@ wxString ItemDatabase::addDiscoveryId(int id, wxString name)
 		rec.subclass = r.getInt(ItemDB::Subclass);
 		rec.type = r.getInt(ItemDB::InventorySlot);
 		switch(r.getInt(ItemDB::Sheath)) {
-			case 1: rec.sheath = PS_RIGHT_BACK_SHEATH; break;
-			case 2: rec.sheath = PS_LEFT_BACK; break;
-			case 3: rec.sheath = PS_LEFT_HIP_SHEATH; break;
-			case 4: rec.sheath = PS_MIDDLE_BACK_SHEATH; break;
+			case 1: rec.sheath = ATT_RIGHT_BACK_SHEATH; break;
+			case 2: rec.sheath = ATT_LEFT_BACK; break;
+			case 3: rec.sheath = ATT_LEFT_HIP_SHEATH; break;
+			case 4: rec.sheath = ATT_MIDDLE_BACK_SHEATH; break;
 			default: rec.sheath = 0;
 		}
 		rec.discovery = true;

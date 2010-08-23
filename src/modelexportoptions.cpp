@@ -299,7 +299,7 @@ void ModelExportOptions_M3::Update()
 	if (g_selModel && g_selModel->animated && g_selModel->anims) {
 		Model *m = g_selModel;
 		
-		for(int i=0; i<m->header.nAnimations; i++) {
+		for(uint32 i=0; i<m->header.nAnimations; i++) {
 			wxString strName;
 			try {
 				AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
@@ -315,7 +315,7 @@ void ModelExportOptions_M3::Update()
 				}
 			}
 		}
-		for(int i=0; i<modelExport_M3_Anims.size(); i++) {
+		for(uint32 i=0; i<modelExport_M3_Anims.size(); i++) {
 			if (i < clbAnimations->GetCount())
 				clbAnimations->Check(i);
 		}
