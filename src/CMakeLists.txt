@@ -42,6 +42,7 @@ endif()
 add_library(cximage STATIC ${CXIMAGE_SOURCES})
 
 if (APPLE)
+	message(STATUS "Using Mac OS X port")
 	add_definitions(-D_MAC)
 	add_definitions(-D_MAC_INTEL)
 
@@ -52,7 +53,10 @@ if (APPLE)
 	set_source_files_properties("${MACOSX_BUNDLE_ICON_FILE}" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 	
 	add_executable(wowmodelviewer MACOSX_BUNDLE ${WOWMV_SOURCES} ../bin_support/Icons/${MACOSX_BUNDLE_ICON_FILE})
-else()
+endif()
+
+if (${CMAKE_SYSTEM_NAME} STREQUAL Linux)
+	message(STATUS "Using Linux port")
 	add_definitions(-D_LINUX)
 	add_definitions(-D_LINUX32)
 

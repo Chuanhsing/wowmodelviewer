@@ -1,5 +1,5 @@
 file(GLOB WOWMV_SOURCES RELATIVE ${CMAKE_SOURCE_DIR} *.cpp)
-list(REMOVE_ITEM WOWMV_SOURCES particle_test.cpp modelexport_fbx.cpp)
+list(REMOVE_ITEM WOWMV_SOURCES particle_test.cpp modelexport_fbx.cpp RenderTexture.cpp AVIGenerator.cpp)
 if (USE_STORM)
     list(REMOVE_ITEM WOWMV_SOURCES mpq_libmpq.cpp)
 else ()
@@ -212,13 +212,6 @@ set(STORM_SOURCES
     stormlib/src/pklib/implode.c
     stormlib/src/jenkins/lookup3.c
 )
-
-if (APPLE)
-    list(APPEND STORM_SOURCES stormlib/src/StormPortMac.cpp)
-else()
-    list(REMOVE_ITEM WOWMV_SOURCES RenderTexture.cpp AVIGenerator.cpp)
-    list(APPEND STORM_SOURCES stormlib/src/StormPortLinux.cpp)
-endif()
 
 set(MPQ_SOURCES
     libmpq/common.cpp
