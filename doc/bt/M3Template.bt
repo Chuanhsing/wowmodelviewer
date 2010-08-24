@@ -3,7 +3,7 @@
 //
 // File: M3 Template
 // Author: NiNtoxicated
-// Revision: 0.97
+// Revision: 0.98
 // Purpose: Parse the Starcraft 2 Model File Format (.M3)
 //--------------------------------------
 
@@ -132,6 +132,11 @@ void Vec4DWrite( Vec4D &q, string s )
 {
     SScanf( s, "[%f, %f, %f, %f]", q.x, q.y, q.z, q.w);
 }
+
+typedef struct
+{
+    fltByte b, g, r, alpha;
+} Colour;
 
 typedef struct (int type)
 {
@@ -280,6 +285,26 @@ string Aref_VEC3DRead(Aref_VEC3D &v3d)
 void Aref_VEC3DWrite(Aref_VEC3D &v3d, string s)
 {
     SScanf( s, "[%f, %f, %f]", v3d.value.x, v3d.value.y, v3d.value.z);
+}
+
+typedef struct
+{
+    Animref Aref;
+    short value[3]; //initial value
+    short unValue[3]; //unused extra value
+    uint32 flags; //unused, 0
+} Aref_shrtVEC3D <read=Aref_shrtVEC3DRead, write = Aref_shrtVEC3DWrite>;
+
+string Aref_shrtVEC3DRead(Aref_shrtVEC3D &sv3d)
+{
+    string s;
+    SPrintf( s, "[%d, %d, %d]", sv3d.value[0], sv3d.value[1], sv3d.value[2]);
+    return s;
+}
+
+void Aref_shrtVEC3DWrite(Aref_shrtVEC3D &sv3d, string s)
+{
+    SScanf( s, "[%d, %d, %d]", sv3d.value[0], sv3d.value[1], sv3d.value[2]);
 }
 
 typedef struct
@@ -736,7 +761,7 @@ typedef struct
     if (flg_vert & 0x80000) {uvShort uv3[2];}
     if (flg_vert & 0x100000) {uvShort uv4[2];}
     fltByte tan[4];     
-} Vertex <read=VertexRead>; //unsigned bytes (8 bit)
+} Vertex <read=VertexRead>; //U8__
 
 string VertexRead(Vertex &v)
 {
@@ -789,15 +814,15 @@ typedef struct
 typedef struct
 {
     ulong unk1;
-    ushort subid;
+    ushort regnIndex;
     ushort unk2[2];
-    ushort matid;
-    short unk3;
+    ushort matmIndex;
+    short unk3; //-1
 } BAT_;
 
 typedef struct
 {
-    long flag;
+    long i1; //-1
     Ref name;
     ulong bone;
 } ATT_ <read=AttachRead>; //Attachments?
@@ -812,8 +837,8 @@ string AttachRead(ATT_ &a)
 typedef struct
 {
     //Material Lookup table
-    enum <ulong> matmEnum { MATM_Unk0, MATM_Normal, MATM_Displacement, MATM_Composite, MATM_Null, MATM_Unk5 } matType;
-    ulong MatInd; //Mat lookup reference
+    enum <ulong> matmEnum { MATM_Unk0, MATM_Standard, MATM_Displacement, MATM_Composite, MATM_Null, MATM_Unk5 } matType;
+    ulong matInd; //Mat lookup reference
 } MATM;
 
 typedef struct
@@ -885,7 +910,7 @@ typedef struct
 {
     ulong   d1;
     Ref     name;
-    Aref_fltByte4D Colour;
+    Aref_fltByte4D col1;
     struct
     {
         ulong bitFlag <format=binary>;
@@ -896,8 +921,8 @@ typedef struct
         ulong   texBlack : 1;
         ulong            : 5;
         ulong   useColour: 1;
-    } flags;
-    ulong   uvmapChannel;
+    } texFlags;
+    ulong   uvmapChannel; //flags, not a uint value
     struct
     {
         ulong bitFlag <format=binary>;
@@ -906,15 +931,11 @@ typedef struct
         ulong alphaOnly         : 1;
         ulong alphaShading      : 1;
         ulong texGarble01       : 1;
-        ulong unk1              : 1;
-        ulong unk2              : 1;
-        ulong unk3              : 1;
-        ulong unk4              : 1;
     } renderFlags;
     Aref_FLOAT brightness_mult1;
     Aref_FLOAT brightness_mult2;
     ulong   d4;
-    fltByte colour[4];
+    long  d5; //-1 to render texture
     ulong   d6[2];
     long    d7;
     ulong   d8[2];
@@ -922,32 +943,45 @@ typedef struct
     Aref_VEC2D ar2;
     Aref_UINT16 ar3;
     Aref_VEC2D ar4;
-    Aref_VEC3D uvAngle; //max = value * 50 * -1
+    Aref_VEC3D uvAngle; //3dsmaxAngle = value * 50 * -1
     Aref_VEC2D uvTiling;
     Aref_UINT32 ar5;
     Aref_FLOAT ar6;
     Aref_FLOAT brightness; //to 1.0
-    long    d20;
+    long    d20; //-1
     struct
     {
         ulong bitFlag <format=binary>;
         FSkip (-4);
         ulong tintInverse : 1;
         ulong tint : 1;
-        ulong tintAllOver : 1;
+        ulong useColour : 1; //same function as texFlags useColour
     } tintFlags;
     float   tintStrength;
     float   tintUnk;
     float   f8[2];        
 } LAYR <read=LAYRRead>; //Layer info?
 
+string LAYRRead(LAYR &l)
+{
+    string s;
+    if (l.name.HRef.nData > 1)
+    {
+        SPrintf( s, "%s", l.name.Block);
+        return s;
+    }
+    else
+    {
+        s = "(No Texture)";
+        return s;
+    }
+}
+
 typedef struct
 {
-    Ref     name;
+    Ref     bitmap;
     ulong d1;
-    Animref unk1;
-    float f1;
-    ulong d2[2];
+    Aref_FLOAT ar1;
     Ref     Normal;
     Ref     Strength;
     matFlags flags;
@@ -977,10 +1011,8 @@ string CMPRead(CMP_ &c)
 
 typedef struct
 {
-    ulong bone;
-    Animref unk1;
-    float f1;
-    ulong d2[2];
+    ulong matmIndex;
+    Aref_FLOAT ar1;
 } CMS_;
 
 typedef struct
@@ -996,42 +1028,68 @@ string TERRead(TER_ &t)
     return s;
 }
 
-string LAYRRead(LAYR &l)
+typedef struct
 {
-    string s;
-    if (l.name.HRef.nData > 1)
-    {
-        SPrintf( s, "%s", l.name.Block);
-        return s;
-    }
-    else
-    {
-        s = "(No Texture)";
-        return s;
-    }
-}
+    //determined through the beta previewer
+    ulong bitFlag <format=binary>;
+    FSkip (-4);
+    ulong sort                  : 1;
+    ulong collideTerrain        : 1;
+    ulong collideObjects        : 1;
+    ulong spawnOnBounce         : 1;
+    ulong useInnerShape         : 1;
+    ulong inheritEmissionParams : 1;
+    ulong inheritParentVel      : 1;
+    ulong sortByZHeight         : 1;
+    ulong reverseIteration      : 1;
+    ulong smoothRotation        : 1;
+    ulong bezSmoothRotation     : 1;
+    ulong smoothSize            : 1;
+    ulong bezSmoothSize         : 1;
+    ulong smoothColour          : 1;
+    ulong bezSmoothColour       : 1;
+    ulong litParts              : 1;
+    ulong randFlipbookStart     : 1;
+    ulong multiplyByGravity     : 1;
+    ulong clampTailParts        : 1;
+    ulong spawnTrailingParts    : 1;
+    ulong fixLengthTailParts    : 1;
+    ulong useVertexAlpha        : 1;
+    ulong modelParts            : 1;
+    ulong swapYZonModelParts    : 1;
+    ulong scaleTimeByParent     : 1;
+    ulong useLocalTime          : 1;
+    ulong simulateOnInit        : 1;
+    ulong copy                  : 1;
+} particleFlags;
 
 typedef struct
 {
     ulong bone;
-    ulong matid;
-    Aref_FLOAT ar1;
-    Aref_FLOAT ar2;
-    ulong d3;
-    Aref_UINT32 ar3;
-    Aref_UINT32 ar4;
-    Aref_UINT32 ar5;
-    Aref_UINT32 ar6;
-    Aref_FLOAT ar7;
-    Aref_FLOAT ar8;
+    ulong matmIndex;
+    Aref_FLOAT emisSpeedStart;
+    Aref_FLOAT speedVariation;
+    ulong enableSpeedVariation; //1 - On, 0 - Off
+    Aref_FLOAT yAngle;
+    Aref_FLOAT xAngle;
+    Aref_FLOAT xSpread;
+    Aref_FLOAT ySpread;
+    Aref_FLOAT lifespan;
+    Aref_FLOAT decay;
     ulong d9[4];
-    float f5[5];
-    Aref_VEC3D ar9;
-    Aref_VEC3D ar10;
-    Aref_fltByte4D ar11;
-    Aref_fltByte4D ar12;
-    Aref_fltByte4D ar13;
-    float f8;
+    float emisSpeedMid; //change in emission speed
+    float scaleRatio; //0 - 1.0, impacts on end scale
+    float f5[3];
+    Aref_VEC3D scale1; //[start, mid, end]
+    Aref_VEC3D speedUnk1;
+    //main particle colour attributes
+    struct
+    {
+        Aref_fltByte4D col1Start;
+        Aref_fltByte4D col1Mid;
+        Aref_fltByte4D col1End;
+    } Colour1StartMidEnd;
+    float emisSpeedEnd; //odd setting
     ulong d16;
     float f9[2];
     ulong d17[2];
@@ -1039,50 +1097,80 @@ typedef struct
     byte b5[4];
     ulong d18[3];
     float f10;
-    ulong d19[2];
-    Aref_FLOAT ar14;
-    ulong d20;
-    Aref_VEC3D ar15;
-    Aref_VEC3D ar16;
-    Aref_FLOAT ar17;
-    Aref_VEC2D ar18;
+    ulong d19; //possibly minimum particles? not sure
+    ulong maxParticles; //maximum amount of particles
+    Aref_FLOAT emissionRate; //rate at which particles are released till maxParticles
+    //particle types determined through beta previewer
+    enum <ulong> ptenum { ptPoint, ptPlane, ptSphere, ptBox, ptCylinder1, ptDisc, ptSpline, ptPlanarBillboard, ptPlanar, ptCylinder2, ptStarshaped   } particleType;
+    Aref_VEC3D headUnk1;
+    Aref_VEC3D tailUnk1;
+    Aref_FLOAT pivotSpread;
+    Aref_VEC2D spreadUnk1;
     Aref_VEC3D ar19;
-    ulong d21;
-    Aref_VEC3D ar20;
-    ulong d22;
-    Aref_fltByte4D ar21;
-    Aref_fltByte4D ar22;
-    Aref_fltByte4D ar23;
+    ulong enableRotate; //1 - On, 0 - Off
+    Aref_VEC3D rotate; //[rotSpread1, rotSpread2, spinSpeed]
+    ulong enableColour2; //1 - On, 0 - Off
+    //if enabled, seems to pick randomly between Colour1 and Colour2 values
+    struct
+    {
+        Aref_fltByte4D col2Start;
+        Aref_fltByte4D col2Mid;
+        Aref_fltByte4D col2End;
+    } Colour2StartMidEnd;
     ulong d23;
     Aref_UINT16 ar24;
-    byte b6[4];
-    float f11;
-    ulong d24;
-    ushort s1[4];
+    Colour col1;
+    float lifespanRatio;
+    ushort columns;
+    ushort rows;
+    float f15[2];
     ulong d25;
     float f12;
-    byte b7[4];
+    long i1; //must be -1 or will crash the previewe
     ulong d26[6];
     float f13;
     ulong d27[2];
     float f14;
     ulong d28;
+
+    /*
+    Following collection of Aref's appear to be completely unused
+
+    Have found no models that use them and altering their values seems to have
+    no effect
+    
+    Seem to have a new Aref type, Short Vec3D's, but that's only an assumption
+    as the amount of bytes between Aref's fits, must find a model that uses these...
+    */
+    
     Aref_UINT32 ar25;
-    Aref_UINT32 ar26;
-    ulong d29;
+    Aref_shrtVEC3D ar26;
     Aref_UINT32 ar27;
-    Aref_UINT32 ar28;
-    ulong d30;
+    Aref_shrtVEC3D ar28;
     Aref_UINT32 ar29;
-    Aref_UINT32 ar30;
-    ulong d31;
+    Aref_shrtVEC3D ar30;
     Aref_UINT32 ar31;
-    Aref_UINT32 ar32;
-    ulong d32;
+    Aref_shrtVEC3D ar32;
     Aref_UINT32 ar33;
-    Aref_UINT32 ar34;
-    ulong d33;
-    ulong unk[80];
+    Aref_shrtVEC3D ar34;
+    Aref_UINT32 ar35;
+    Aref_shrtVEC3D ar36;
+    Aref_UINT32 ar37;
+    Aref_shrtVEC3D ar38;
+    Aref_UINT32 ar39;
+    Aref_shrtVEC3D ar40;
+    Aref_UINT32 ar41;
+    Aref_UINT32 ar42;
+    Aref_UINT32 ar43;
+    particleFlags parFlags; //determined through beta previewer
+    ulong d29[6];
+    Aref_UINT32 ar44;
+    Aref_FLOAT ar45;
+    long i2; //must be -1
+    ulong d30;
+    Aref_UINT32 ar46;
+    Colour col4;
+    ulong unk[7];
 } PAR_;  //Particles
 
 typedef struct
