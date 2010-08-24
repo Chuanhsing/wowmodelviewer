@@ -189,7 +189,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	//ModelTexAnimDef *texanim = (ModelTexAnimDef *)(mpqf.getBuffer() + m->header.ofsTexAnims);
 	//uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
 
-	std::vector<int> logAnimations;
+	std::vector<uint32> logAnimations;
 	std::vector<wxString> vAnimations;
 	wxArrayString nameAnimations;
 	int chunk_offset, datachunk_offset;

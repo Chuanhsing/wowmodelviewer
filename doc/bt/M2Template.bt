@@ -36,9 +36,11 @@ struct GI {
 
 FSeek(0);
 struct AR {
-    FSeek( GeneralInformation.Offsets.ofsGlobalSequences);
-    uint32 GlobalSequences[GeneralInformation.Offsets.nGlobalSequences];
     FSeek(0);
+    if (GeneralInformation.Offsets.nGlobalSequences > 0) {
+        FSeek( GeneralInformation.Offsets.ofsGlobalSequences);
+        uint32 GlobalSequences[GeneralInformation.Offsets.nGlobalSequences];
+    }
 
     FSeek(0);
     struct AR_A {
@@ -88,8 +90,10 @@ struct GAR {
 
     FSeek(0);
     struct GAR_CT {
-        FSeek( GeneralInformation.Offsets.ofsColors);
-        COLOR Colors[GeneralInformation.Offsets.nColors];
+        if (GeneralInformation.Offsets.nColors > 0) {
+            FSeek( GeneralInformation.Offsets.ofsColors);
+            COLOR Colors[GeneralInformation.Offsets.nColors];
+        }
 
         FSeek( GeneralInformation.Offsets.ofsTransparency);
         TRANSPARENCY Transparency[GeneralInformation.Offsets.nTransparency];
@@ -143,8 +147,10 @@ struct EF {
 
 FSeek(0);
 struct MSC {
-    FSeek( GeneralInformation.Offsets.ofsLights);
-    LIGHT Lights[GeneralInformation.Offsets.nLights];
+    if (GeneralInformation.Offsets.nLights > 0) {
+        FSeek( GeneralInformation.Offsets.ofsLights);
+        LIGHT Lights[GeneralInformation.Offsets.nLights];
+    }
     
     FSeek( GeneralInformation.Offsets.ofsCameras);
     CAMERA Cameras[GeneralInformation.Offsets.nCameras];
@@ -159,18 +165,21 @@ struct MSC {
         
         FSeek( GeneralInformation.Offsets.ofsAttachLookup);
         int16 AttachmentLookup[GeneralInformation.Offsets.nAttachLookup];
-        
-        FSeek( GeneralInformation.Offsets.ofsEvent);
-        EVENT Event[GeneralInformation.Offsets.nEvent];
         FSeek(0);
     } Attachments <read=CommentMSC_A>;
+
+    FSeek(0);
+    FSeek( GeneralInformation.Offsets.ofsEvent);
+    EVENT Event[GeneralInformation.Offsets.nEvent];
 
     FSeek(0);
     struct MSC_B {
         FSeek( GeneralInformation.Offsets.ofsBoundingTriangles);
         Vec3D BTriangles[GeneralInformation.Offsets.nBoundingTriangles];
+
         FSeek( GeneralInformation.Offsets.ofsBoundingVertices);
         TI BVertices[GeneralInformation.Offsets.nBoundingVertices];
+
         FSeek( GeneralInformation.Offsets.ofsBoundingNormals);
         Vec3D BNormals[GeneralInformation.Offsets.nBoundingNormals];
         FSeek(0);
