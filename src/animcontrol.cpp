@@ -2,6 +2,7 @@
 #include "util.h"
 #include "globalvars.h"
 #include <wx/wx.h>
+#include "UserSkins.h"
 
 IMPLEMENT_CLASS(AnimControl, wxWindow)
 
@@ -145,6 +146,8 @@ void AnimControl::UpdateModel(Model *m)
 		}
 	}
 	// --
+
+	wxLogMessage(_T("Update model: %s"), m->name.c_str());
 
 	g_selModel = m;
 
@@ -343,12 +346,15 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 	TextureSet skins;
 
 	// see if this model has skins
+	wxLogMessage(_T("Searching skins for '%s'"), m->name.c_str());
 	try {
 		CreatureModelDB::Record rec = modeldb.getByFilename(fn);
 		// for character models, don't use skins
 		if (rec.getUInt(CreatureModelDB::Type) != 4) {
 			//TextureSet skins;
 			unsigned int modelid = rec.getUInt(CreatureModelDB::ModelID);
+
+			wxLogMessage(_T("Found model in CreatureModelDB, id: %u"), modelid);
 
 			for (CreatureSkinDB::Iterator it = skindb.begin();  it!=skindb.end();  ++it) {
 				if (it->getUInt(CreatureSkinDB::ModelID) == modelid) {
@@ -364,7 +370,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 						skins.insert(grp);
 				}
 			}
-			
+						
 			// Hard coded skin additions - missing from DBC ?
 			if (fn == _T("Creature\\Dragonnefarianzombified\\dragonnefarianzombified.mdx")) {
 				TextureGroup grp;
@@ -691,6 +697,20 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			*/
 		}
 	}
+	
+	wxString lwrName = fn;
+	lwrName.MakeLower();
+	if (gUserSkins.AddUserSkins(lwrName, skins)) 
+		wxLogMessage(_T("Found user skins"));
+
+#ifdef	DEBUG
+	wxLogMessage(_T("Found %d skins:"), skins.size());
+	for (TextureSet::iterator i=skins.begin(); i!=skins.end(); ++i) {
+		wxLogMessage(_T("- * %s"), i->tex[0].c_str());
+		wxLogMessage(_T("  * %s"), i->tex[1].c_str());
+		wxLogMessage(_T("  * %s"), i->tex[2].c_str());
+	}
+#endif
 
 	// Search the same directory for BLPs
 	std::set<FileTreeItem> filelist;

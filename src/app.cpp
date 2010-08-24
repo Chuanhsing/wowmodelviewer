@@ -1,4 +1,5 @@
 #include "app.h"
+#include "UserSkins.h"
 
 /*	THIS IS OUR MAIN "START UP" FILE.
 	App.cpp creates our wxApp class object.
@@ -65,6 +66,12 @@ bool WowModelViewApp::OnInit()
 	if (loadfail == true){
 		return false;
 	}
+
+	// Load user skins 
+	gUserSkins.LoadFile(userPath + SLASH + _T("Skins.txt"));
+	if (!gUserSkins.Loaded())
+		wxLogMessage("Warning: Failed to load user skins");
+
 
 #ifdef _WINDOWS
 	// This chunk of code is all related to locale translation (if a translation is available).

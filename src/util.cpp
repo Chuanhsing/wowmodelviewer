@@ -8,11 +8,16 @@
 #include <wx/dir.h>
 #include <wx/dirdlg.h>
 
+#include "UserSkins.h"
+
 wxString gamePath;
 wxString cfgPath;
 wxString bgImagePath;
 
 wxArrayString mpqArchives;
+
+UserSkins userSkins;
+UserSkins& gUserSkins = userSkins;;
 
 int gameVersion = 0;
 

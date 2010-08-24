@@ -69,6 +69,9 @@ extern std::vector<int> modelExport_M3_Anims;
 
 extern wxArrayString mpqArchives;
 
+class UserSkins;
+extern UserSkins& gUserSkins;
+
 extern long langID;
 extern long langOffset;
 extern long interfaceID;
