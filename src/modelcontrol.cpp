@@ -2,6 +2,8 @@
 #include "modelcontrol.h"
 #include "mpq.h"
 #include "CxImage/ximage.h"
+#include <wx/wx.h>
+#include <wx/ffile.h>
 
 IMPLEMENT_CLASS(ModelControl, wxWindow)
 
@@ -473,6 +475,18 @@ void ModelOpened::ExportPNG(wxString val, wxString suffix)
 	free(tempbuf);
 	newImage->Destroy();
 	wxDELETE(newImage);
+
+	if (suffix == _T("tga")) {
+		// starcraft II needs 17 bytes as 8
+		wxFFile f;
+		f.Open(temp, _T("r+b"));
+		if (f.IsOpened()) {
+			f.Seek(17, wxFromStart);
+			char c=8;
+			f.Write(&c, sizeof(char));
+			f.Close();
+		}
+	}
 }
 
 
