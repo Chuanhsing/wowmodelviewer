@@ -121,7 +121,8 @@ void AnimManager::Next() {
 			PlayIndex = 0;
 		}
 	}
-	g_selModel->currentAnim = animList[PlayIndex].AnimID;
+	// don't change g_selModel->currentAnim in AnimManager
+	//g_selModel->currentAnim = animList[PlayIndex].AnimID;
 	
 	Frame = anims[animList[PlayIndex].AnimID].timeStart;
 #ifdef WotLK
