@@ -24,7 +24,7 @@ static bool readline(std::istream& in, std::string& buf, size_t nr, bool skipEmp
 
 void UserSkins::LoadFile(const wxString &filename)
 {
-	std::ifstream in(filename.c_str());
+	std::ifstream in((char *)filename.c_str());
 	if (!in.is_open()) {
 		wxLogMessage(_T("Failed to open '%s' while loading user skins"), filename.c_str());
 		return;
@@ -37,7 +37,7 @@ void UserSkins::LoadFile(const wxString &filename)
 	size_t lineNr = 0;
 	while (readline(in, line, lineNr, true)) {
 		TextureSet set;
-		wxString model = line;
+		wxString model = wxString(line.c_str(), wxConvUTF8);
 		model.MakeLower();
 
 		if (!readline(in, line, lineNr)) {
@@ -45,7 +45,7 @@ void UserSkins::LoadFile(const wxString &filename)
 			return;
 		}
 
-		int numGroups = wxAtoi(line.c_str());
+		int numGroups = atoi(line.c_str());
 		if (numGroups < 0) {
 			wxLogMessage(_T("Error - UserSkins: negativ number of groups specified in line %d"), lineNr);
 			return;
@@ -60,7 +60,7 @@ void UserSkins::LoadFile(const wxString &filename)
 					wxLogMessage(_T("Error - UserSkins: unexpected EOF at line %d"), lineNr);
 					return;
 				}
-				grp.tex[i] = line;
+				grp.tex[i] = wxString(line.c_str(), wxConvUTF8);
 			}
 			grp.base = 11; // wtf is grp.base?? it's set to 11 everywhere else, so do it here...
 			grp.count = 3;

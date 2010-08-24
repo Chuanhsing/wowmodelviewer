@@ -70,7 +70,7 @@ bool WowModelViewApp::OnInit()
 	// Load user skins 
 	gUserSkins.LoadFile(userPath + SLASH + _T("Skins.txt"));
 	if (!gUserSkins.Loaded())
-		wxLogMessage("Warning: Failed to load user skins");
+		wxLogMessage(_T("Warning: Failed to load user skins"));
 
 
 #ifdef _WINDOWS

@@ -695,8 +695,8 @@ $CST
  * also contains positions for sheathed weapons, a shield, etc.
  */
 struct ModelAttachmentDef {
-	int32 id; // Just an id. Is referenced in the enum POSITION_SLOTS.
-	int32 bone; // Somewhere it has to be attached.
+	uint32 id; // Just an id. Is referenced in the enum POSITION_SLOTS.
+	uint32 bone; // Somewhere it has to be attached.
 	Vec3D pos; // Relative to that bone of course.
 	AnimationBlock unk; // (Int32) Its an integer in the data. It has been 1 on all models I saw. Whatever.
 };

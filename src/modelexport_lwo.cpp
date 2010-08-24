@@ -4402,7 +4402,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 	// --== Clips (Images) ==--
 	if (Object.Images.size() > 0){
-		for (int x=0;x<Object.Images.size();x++){
+		for (uint32 x=0;x<Object.Images.size();x++){
 			LWClip cImg = Object.Images[x];
 
 			int clipSize = 0;
@@ -4445,7 +4445,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 	// --== Surfaces ==--
 	if (Object.Surfaces.size() > 0){
-		for (int x=0;x<Object.Surfaces.size();x++){
+		for (uint32 x=0;x<Object.Surfaces.size();x++){
 			LWSurface cSurf = Object.Surfaces[x];
 
 			// Temp Values
@@ -4512,7 +4512,7 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init){
 				}else{
 					partName = wxString::Format(_T("Geoset %03i"),g);
 				}
-				for (int x=0;x<Object.PartNames.size();x++){
+				for (uint32 x=0;x<Object.PartNames.size();x++){
 					if (Object.PartNames[x] == partName){
 						isFound = true;
 						break;
@@ -4542,7 +4542,7 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init){
 				}else{
 					partName = wxString::Format(_T("Geoset %03i"),g);
 				}
-				for (int x=0;x<Object.PartNames.size();x++){
+				for (uint32 x=0;x<Object.PartNames.size();x++){
 					if (Object.PartNames[x] == partName){
 						partID = x;
 						break;
@@ -4554,7 +4554,7 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init){
 				if (matName.Len() == 0)
 					matName = wxString::Format(_T("Material_%03i"), p.tex);
 
-				for (int x=0;x<Object.Surfaces.size();x++){
+				for (uint32 x=0;x<Object.Surfaces.size();x++){
 					if (Object.Surfaces[x].Name == matName){
 						isFound = true;
 						surfID = x;
@@ -4699,7 +4699,7 @@ void ExportWMOtoLWO2(WMO *m, const char *fn){
 		// Process Groups
 		for (int g=0;g<m->nGroups; g++) {
 			WMOGroup *group = &m->groups[g];
-			uint32 GPolyCounter = 0;
+			//uint32 GPolyCounter = 0;
 
 			//wxLogMessage(_T("\nGroup %i Info:\n   Batches: %i\n   Indices: %i\n   Vertices: %i"),g,group->nBatches,group->nIndices,group->nVertices);
 			Object.PartNames.push_back(wxString(group->name.c_str(), wxConvUTF8));
