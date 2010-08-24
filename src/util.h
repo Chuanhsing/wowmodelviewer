@@ -36,7 +36,21 @@ using namespace std;
 
 #ifdef _WINDOWS
 	#define snprintf sprintf_s
-#endif 
+	typedef unsigned char uint8;
+	typedef char int8;
+	typedef unsigned __int16 uint16;
+	typedef __int16 int16;
+	typedef unsigned __int32 uint32;
+	typedef __int32 int32;
+#else
+	#include <stdint.h>
+	typedef uint8_t uint8;
+	typedef int8_t int8;
+	typedef uint16_t uint16;
+	typedef int16_t int16;
+	typedef uint32_t uint32;
+	typedef int32_t int32;
+#endif
 
 extern wxString gamePath;
 extern wxString cfgPath;
@@ -65,7 +79,7 @@ extern bool modelExport_X3D_CenterModel;
 extern float modelExport_M3_BoundScale;
 extern float modelExport_M3_SphereScale;
 extern wxString modelExport_M3_TexturePath;
-extern std::vector<int> modelExport_M3_Anims;
+extern std::vector<uint32> modelExport_M3_Anims;
 
 extern wxArrayString mpqArchives;
 
@@ -81,22 +95,6 @@ extern long versionID;
 
 extern wxString locales[];
 
-#ifdef _WINDOWS
-	typedef unsigned char uint8;
-	typedef char int8;
-	typedef unsigned __int16 uint16;
-	typedef __int16 int16;
-	typedef unsigned __int32 uint32;
-	typedef __int32 int32;
-#else
-	#include <stdint.h>
-	typedef uint8_t uint8;
-	typedef int8_t int8;
-	typedef uint16_t uint16;
-	typedef int16_t int16;
-	typedef uint32_t uint32;
-	typedef int32_t int32;
-#endif
 
 float frand();
 float randfloat(float lower, float upper);

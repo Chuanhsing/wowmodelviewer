@@ -48,7 +48,7 @@ bool modelExport_X3D_CenterModel = true;
 float modelExport_M3_BoundScale = 0.5f;
 float modelExport_M3_SphereScale = 0.5f;
 wxString modelExport_M3_TexturePath = _T("");
-std::vector<int> modelExport_M3_Anims;
+std::vector<uint32> modelExport_M3_Anims;
 
 long langID = -1;
 long langOffset = -1;

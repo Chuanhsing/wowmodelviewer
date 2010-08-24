@@ -650,7 +650,7 @@ MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 							co++;
 						memcpy( waterLayer.mask, f.getPointer() + mh2oi->ofsDisplayMask, co );
 
-						for( unsigned j = 0; j < waterLayer.w * waterLayer.h; j++ )
+						for( unsigned int j = 0; j < waterLayer.w * waterLayer.h; j++ )
 						{
 							if( getBitL2H( waterLayer.mask, j ) )		
 							{
