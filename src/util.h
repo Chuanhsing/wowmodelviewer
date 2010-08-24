@@ -80,6 +80,7 @@ extern float modelExport_M3_BoundScale;
 extern float modelExport_M3_SphereScale;
 extern wxString modelExport_M3_TexturePath;
 extern std::vector<uint32> modelExport_M3_Anims;
+extern wxArrayString modelExport_M3_AnimNames;
 
 extern wxArrayString mpqArchives;
 

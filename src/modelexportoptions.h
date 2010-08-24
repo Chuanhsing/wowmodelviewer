@@ -86,18 +86,20 @@ class ModelExportOptions_M3: public wxWindow
     DECLARE_EVENT_TABLE()
 
     wxStaticText *stBoundScale, *stSphereScale;
-	wxStaticText *stTexturePath;
-	wxButton *bApply, *bReset;
+	wxStaticText *stTexturePath, *stRename;
+	wxButton *bApply, *bReset, *bRename;
 
 public:
-	wxTextCtrl *tcBoundScale, *tcSphereScale, *tcTexturePathValue;
+	wxTextCtrl *tcBoundScale, *tcSphereScale, *tcTexturePath, *tcRename;
 	wxCheckListBox *clbAnimations;
+	wxArrayString asAnims;
 
     ModelExportOptions_M3(wxWindow* parent, wxWindowID id);
 	~ModelExportOptions_M3() {};
 
     void Update();
 	void OnButton(wxCommandEvent &event);
+	void OnChoice(wxCommandEvent &event);
 };
 
 class ModelExportOptions_Control: public wxWindow

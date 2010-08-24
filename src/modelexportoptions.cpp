@@ -57,6 +57,9 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(ModelExportOptions_M3, wxWindow)
 	EVT_BUTTON(ID_EXPORTOPTIONS_M3_APPLY, ModelExportOptions_M3::OnButton)
+	EVT_BUTTON(ID_EXPORTOPTIONS_M3_RESET, ModelExportOptions_M3::OnButton)
+	EVT_BUTTON(ID_EXPORTOPTIONS_M3_RENAME, ModelExportOptions_M3::OnButton)
+	EVT_LISTBOX(ID_EXPORTOPTIONS_M3_ANIMS, ModelExportOptions_M3::OnChoice)
 END_EVENT_TABLE()
 
 
@@ -284,18 +287,22 @@ ModelExportOptions_M3::ModelExportOptions_M3(wxWindow* parent, wxWindowID id)
 	stSphereScale = new wxStaticText(this, wxID_ANY, _T("Sphere Scale"), wxPoint(5, 33));
 	tcSphereScale = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 30));
 	stTexturePath = new wxStaticText(this, wxID_ANY, _T("Texture Path"), wxPoint(5, 58));
-	tcTexturePathValue = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 55), wxSize(250, 25));
+	tcTexturePath = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 55), wxSize(250, 25));
 	clbAnimations = new wxCheckListBox(this, ID_EXPORTOPTIONS_M3_ANIMS, wxPoint(5, 85), wxSize(250,165), 0, NULL, 0, wxDefaultValidator, _T("Animations"));
-	bApply = new wxButton(this, ID_EXPORTOPTIONS_M3_APPLY, _T("Apply"), wxPoint(5, 255));
-	bReset = new wxButton(this, ID_EXPORTOPTIONS_M3_RESET, _T("Reset"), wxPoint(95, 255));
+	stRename = new wxStaticText(this, wxID_ANY, _T("Rename"), wxPoint(5, 255));
+	tcRename = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 255), wxSize(250, 25));
+	bApply = new wxButton(this, ID_EXPORTOPTIONS_M3_APPLY, _T("Apply"), wxPoint(5, 285));
+	bReset = new wxButton(this, ID_EXPORTOPTIONS_M3_RESET, _T("Reset"), wxPoint(95, 285));
+	bRename = new wxButton(this, ID_EXPORTOPTIONS_M3_RENAME, _T("Rename"), wxPoint(185, 285));
 }
 
 void ModelExportOptions_M3::Update()
 {
 	tcBoundScale->SetValue(wxString::Format(_T("%0.2f"), modelExport_M3_BoundScale));
 	tcSphereScale->SetValue(wxString::Format(_T("%0.2f"), modelExport_M3_SphereScale));
-	tcTexturePathValue->SetValue(modelExport_M3_TexturePath);
+	tcTexturePath->SetValue(modelExport_M3_TexturePath);
 	clbAnimations->Clear();
+	asAnims.Clear();
 	if (g_selModel && g_selModel->animated && g_selModel->anims) {
 		Model *m = g_selModel;
 		
@@ -307,18 +314,35 @@ void ModelExportOptions_M3::Update()
 			} catch (AnimDB::NotFound) {
 				strName = _T("???");
 			}
+			asAnims.push_back(strName);
+
 			strName += wxString::Format(_T(" [%i]"), i);
 			clbAnimations->Append(strName);
-			if (modelExport_M3_Anims.size() == 0) {
+
+			// set default actions
+			if (modelExport_M3_Anims.size() == 0) { 
 				if (m->anims[i].animID == 0 || m->anims[i].animID == 1 || m->anims[i].animID == 5) {
 					clbAnimations->Check(clbAnimations->GetCount()-1);
 				}
 			}
 		}
 		for(uint32 i=0; i<modelExport_M3_Anims.size(); i++) {
-			if (i < clbAnimations->GetCount())
-				clbAnimations->Check(i);
+			uint32 j = modelExport_M3_Anims[i];
+			if (j >= clbAnimations->GetCount()) // error check
+				continue;
+			clbAnimations->Check(j);
+			asAnims[j] = modelExport_M3_AnimNames[i];
+			clbAnimations->SetString(j, clbAnimations->GetString(j)+_T("  :")+asAnims[j]);
 		}
+	}
+}
+
+void ModelExportOptions_M3::OnChoice(wxCommandEvent &event)
+{
+	int id = event.GetId();
+	if (id == ID_EXPORTOPTIONS_M3_ANIMS) {
+		int i = clbAnimations->GetSelection();
+		tcRename->SetValue(asAnims[i]);
 	}
 }
 
@@ -328,18 +352,29 @@ void ModelExportOptions_M3::OnButton(wxCommandEvent &event)
 	if (id == ID_EXPORTOPTIONS_M3_APPLY) {
 		modelExport_M3_BoundScale = wxAtof(tcBoundScale->GetValue());
 		modelExport_M3_SphereScale = wxAtof(tcSphereScale->GetValue());
-		modelExport_M3_TexturePath = tcTexturePathValue->GetValue();
+		modelExport_M3_TexturePath = tcTexturePath->GetValue();
 		modelExport_M3_Anims.clear();
+		modelExport_M3_AnimNames.clear();
 		for(uint32 i=0; i<clbAnimations->GetCount(); i++) {
 			if (!clbAnimations->IsChecked(i))
 				continue;
 			modelExport_M3_Anims.push_back(i);
+			modelExport_M3_AnimNames.push_back(asAnims[i]);
 		}
 	} else if (id == ID_EXPORTOPTIONS_M3_RESET) {
 		//modelExport_M3_BoundScale = 0.5f;
 		//modelExport_M3_SphereScale = 0.5f;
 		//modelExport_M3_TexturePath = _T("");
 		modelExport_M3_Anims.clear();
+		modelExport_M3_AnimNames.clear();
 		Update();
+	} else if (id == ID_EXPORTOPTIONS_M3_RENAME) {
+		int i = clbAnimations->GetSelection();
+		if (i > -1) {
+			asAnims[i] = tcRename->GetValue();
+			wxString strName = clbAnimations->GetString(i).BeforeFirst(']');
+			strName.Append(_T("]"));
+			clbAnimations->SetString(i, strName+_T("  :")+asAnims[i]);
+		}
 	}
 }

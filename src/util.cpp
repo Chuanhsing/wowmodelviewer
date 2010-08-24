@@ -49,6 +49,7 @@ float modelExport_M3_BoundScale = 0.5f;
 float modelExport_M3_SphereScale = 0.5f;
 wxString modelExport_M3_TexturePath = _T("");
 std::vector<uint32> modelExport_M3_Anims;
+wxArrayString modelExport_M3_AnimNames;
 
 long langID = -1;
 long langOffset = -1;

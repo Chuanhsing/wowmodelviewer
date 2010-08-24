@@ -324,22 +324,18 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		logAnimations = modelExport_M3_Anims;
 		for(uint32 i=0; i<m->header.nAnimations; i++) {
 			bool bFound = false;
-			for(uint32 j=0; j<logAnimations.size(); j++) {
-				if (logAnimations[j] == i)
+			uint32 pos;
+			for(pos=0; pos<logAnimations.size(); pos++) {
+				if (logAnimations[pos] == i) {
 					bFound = true;
+					break;
+				}
 			}
 			if (bFound == false)
 				continue;
-			wxString strName;
-			try {
-				AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
-				strName = rec.getString(AnimDB::Name);
-			} catch (AnimDB::NotFound) {
-				strName = _T("???");
-			}
-			if (strName == _T("Run"))
-				strName = _T("Walk");
+			wxString strName = modelExport_M3_AnimNames[pos];
 
+			// make name unique
 			uint32 counts = 0;
 			for(uint32 j=0; j<vAnimations.size(); j++) {
 				if (vAnimations[j] == strName) {
@@ -366,8 +362,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				continue;
 			if (strName.StartsWith(_T("StandWound")))
 				continue;
-			//if (strName != _T("Run"))
-			//	continue;
+
 			if (strName.StartsWith(_T("Run"))) {
 				strName = _T("Walk");
 			}
@@ -381,6 +376,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				strName = _T("Death");
 			}
 
+			// make name unique
 			uint32 counts = 0;
 			for(uint32 j=0; j<vAnimations.size(); j++) {
 				if (vAnimations[j] == strName) {
