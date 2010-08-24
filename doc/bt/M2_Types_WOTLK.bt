@@ -834,6 +834,19 @@ typedef struct {
 	AB_Int32 unk;
 } ATTACHMENT <optimize=false>;
 
+void readTimeBlock(char type[], int ofsTimes, int nTimes)
+{
+    if(ofsTimes > FileSize()) {
+        int NONE;
+        return;
+    }
+    FSeek(ofsTimes);
+    if (nTimes > 1)
+        uint32 times[nTimes];
+    else
+        uint32 time;
+}
+
 typedef struct {
 	char id[4];
 	int32 dbid;
@@ -843,9 +856,23 @@ typedef struct {
 	int16 seq;
 	//uint32 nRanges;
 	//uint32 ofsRanges <format=hex>;
-	uint32 nTimes;
-	uint32 ofsTimes <format=hex>;
-} EVENT <read=ShowInfoEvent>;
+	uint32 n1;
+	uint32 ofs1 <format=hex>;
+	if (n1 > 0) {
+		local int ppos = FTell();
+		FSeek(0);
+		FSeek(ofs1);
+		AB_Header Times[n1];
+		local int i, pppos;
+		for(i=0; i<n1; i++) {
+            FSeek(0);
+            struct {
+                readTimeBlock("UI", Times[i].ofsEntries, Times[i].nEntries);
+			} Times_Data <optimize=false>;
+		}
+	    FSeek(ppos);
+	}
+} EVENT <read=ShowInfoEvent, optimize=false>;
 
 // - Structs end ---------------
 
@@ -950,12 +977,12 @@ void readAnimBlock(char type[], int ofsTimes, int nTimes, int ofsKeys, int nKeys
         return;
     }
     FSeek(ofsTimes);
-    if(nTimes>0) // < 3
+    if(nTimes>1) // < 3
         uint32 times[nTimes];
     else
         uint32 time;
     FSeek(ofsKeys);
-    if(nTimes>0) { // < 3
+    if(nTimes>1) { // < 3
         if(type == "S") {
             int16 keys[nKeys];
         } else if(type == "I") {
