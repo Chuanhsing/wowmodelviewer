@@ -479,7 +479,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 						stcs[i].arFloat.nEntries++;
 					}
 
-					if (k == MAT_LAYER_ALPHA && MATtable[j].blend == BM_OPAQUE)
+					if (k == MAT_LAYER_ALPHA && (MATtable[j].blend == BM_OPAQUE || MATtable[j].blend == BM_ALPHA_BLEND))
 					{
 						M3OpacityAnimid.back().push_back(CreateAnimID(AR_Layer, j, k, 2));
 						M2OpacityIdx.back().push_back(MATtable[j].color);
@@ -1382,7 +1382,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					}
 				}
 
-				if (j == MAT_LAYER_ALPHA && 
+				if (j == MAT_LAYER_ALPHA && MATtable[i].blend == BM_OPAQUE && MATtable[i].color != -1)
+				{
+					NameRefEntry(&layer.name, _T("NoTexture"), &f);
+					layer.renderFlags = LAYR_RENDERFLAGS_ALPHAONLY;
+					SetAnimed(layer.brightness_mult1.AnimRef);
+				}
+				else if (j == MAT_LAYER_ALPHA && 
 					(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_TRANSPARENT)) // LAYER_Alpha
 				{
 					layer.renderFlags = LAYR_RENDERFLAGS_ALPHAONLY;
@@ -1390,12 +1396,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 					if (MATtable[i].animid != -1)
 						SetAnimed(layer.ar4.AnimRef);
-				}
-				else if (j == MAT_LAYER_ALPHA && MATtable[i].blend == BM_OPAQUE && MATtable[i].color != -1)
-				{
-					NameRefEntry(&layer.name, _T("no name"), &f);
-					layer.renderFlags = LAYR_RENDERFLAGS_ALPHAONLY;
-					SetAnimed(layer.brightness_mult1.AnimRef);
+					if (MATtable[i].color != -1)
+						SetAnimed(layer.brightness_mult1.AnimRef);
 				}
 
 				datachunk_offset2 = f.Tell();
