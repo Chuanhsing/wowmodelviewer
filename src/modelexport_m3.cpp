@@ -48,8 +48,8 @@ typedef struct {
 } MATmap;
 
 typedef struct {
-	uint16 subid;
-	uint16 matid;
+	uint16 regnIndex;
+	uint16 matmIndex;
 } MeshMap;
 
 uint32 CreateAnimID(int m3class, int key, int subkey, int idx)
@@ -254,8 +254,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				MATtable.push_back(bm);
 				
 				MeshMap mm;
-				mm.subid = tex[i].op;
-				mm.matid = idx;
+				mm.regnIndex = tex[i].op;
+				mm.matmIndex = idx;
 				MeshtoMat.push_back(mm);
 			}
 			else
@@ -263,7 +263,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				int found = 0;
 				for(uint32 k=0; k<MeshtoMat.size(); k++)
 				{
-					if (MeshtoMat[k].subid == tex[i].op && MeshtoMat[k].matid == idx)
+					if (MeshtoMat[k].regnIndex == tex[i].op && MeshtoMat[k].matmIndex == idx)
 					{
 						found = 1;
 						break;
@@ -272,8 +272,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				if (found == 0)
 				{
 					MeshMap mm;
-					mm.subid = tex[i].op;
-					mm.matid = idx;
+					mm.regnIndex = tex[i].op;
+					mm.matmIndex = idx;
 					MeshtoMat.push_back(mm);
 				}
 			}
@@ -1189,8 +1189,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		BAT bat;
 		memset(&bat, 0, sizeof(bat));
 		bat.init();
-		bat.subid = MeshtoMat[j].subid;
-		bat.matid = MeshtoMat[j].matid;
+		bat.regnIndex = MeshtoMat[j].regnIndex;
+		bat.matmIndex = MeshtoMat[j].matmIndex;
 		f.Write(&bat, 0xE); // sizeof(bat) is buggy to 0x10
 	}
 	padding(&f);
@@ -1267,7 +1267,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		datachunk_offset = f.Tell();
 		f.Seek(chunk_offset, wxFromStart);
 		for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
-			atts[i].flag = -1;
+			atts[i].init();
 #ifdef	ROOT_BONE
 			atts[i].bone = attachments[i].bone + 1;
 #else

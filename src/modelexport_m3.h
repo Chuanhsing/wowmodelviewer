@@ -107,6 +107,14 @@ struct Aref_UINT16
     /*0x0C*/ uint32 flag; //seems unused, 0
 }; //used in SDS6 anim blocks, as I16_ data type
 
+typedef struct
+{
+    AnimationReference AnimRef;
+    short value[3]; //initial value
+    short unValue[3]; //unused extra value
+    uint32 flags; //unused, 0
+} Aref_shrtVEC3D;
+
 // Size = 20 Byte / 0x14 byte
 struct Aref_UINT32
 {
@@ -161,6 +169,14 @@ struct Aref_Colour
     /*0x10*/ uint32 flags; //seems unused, 0
 }; //used in SDCC anim blocks, as COL data type
 
+typedef struct
+{
+    AnimationReference AnimRef;
+    uint8 value[4]; //initial value
+    uint8 unValue[4]; //unused extra value
+    uint32 flags; //unused, 0
+} Aref_fltByte4D;
+
 struct Aref_Sphere
 {
     AnimationReference AnimRef; //STC/STS reference
@@ -212,9 +228,9 @@ struct MODL
 	/*0x120*/ Reference D;
 	/*0x12C*/ Reference mMatLU;		// materialLookup
 	/*0x138*/ Reference mMat;			// material
-	/*0x144*/ Reference mDIS;
-	/*0x150*/ Reference mCMP;
-	/*0x15C*/ Reference mTER;
+	/*0x144*/ Reference mDIS;		// Displacement
+	/*0x150*/ Reference mCMP;		// Composite
+	/*0x15C*/ Reference mTER;		// Terrain
 	/*0x168*/ Reference mVOL;
 	/*0x174*/ Reference r1;
 	/*0x180*/ Reference mCREP;
@@ -495,7 +511,7 @@ struct LAYR
 	Aref_FLOAT brightness_mult1;
 	Aref_FLOAT brightness_mult2;
 	uint32 d4;
-	uint8 colour[4]; // fltByte
+	long d5; //-1 to render texture
 	uint32 d6[2];
 	int32 d7;
 	uint32 d8[2];
@@ -503,13 +519,13 @@ struct LAYR
 	Aref_VEC2D ar2;
 	Aref_UINT16 ar3;
 	Aref_VEC2D ar4;
-	Aref_VEC3D uvAngle; //max angle = uvAngle * 50 * -1
+	Aref_VEC3D uvAngle; //3dsmaxAngle angle = uvAngle * 50 * -1
 	Aref_VEC2D uvTiling;
 	Aref_UINT32 ar5;
 	Aref_FLOAT ar6;
-	Aref_FLOAT brightness;
+	Aref_FLOAT brightness; //to 1.0
 	int32 d20; //unknown purpose, seems to affect uv coords, should be set to -1
-	uint32 shadingFlags;
+	uint32 tintFlags; // tintInverse, tint, useColour
 	float tintStrength; //set to 4 by default in Blizzard models
 	float tintUnk; //unknown purpose relating to tint
 	float f8[2]; //seems to be more settings for tint
@@ -521,10 +537,7 @@ struct LAYR
 		brightness_mult1.unValue = 1.0f;
 		uvTiling.value = Vec2D(1.0f, 1.0f);
 		d20 = -1;
-		colour[0] = 255;
-		colour[1] = 255;
-		colour[2] = 255;
-		colour[3] = 255;
+		d5 = -1;
 	}
 };
 
@@ -549,9 +562,9 @@ struct DIV
 struct BAT
 {
     /*0x00*/ uint32 d1;
-    /*0x04*/ uint16 subid; //REGN index
+    /*0x04*/ uint16 regnIndex; //REGN index
     /*0x06*/ uint16 s1[2];
-    /*0x0A*/ uint16 matid; //MATM index (MATM is a material lookup table)
+    /*0x0A*/ uint16 matmIndex; //MATM index (MATM is a material lookup table)
     /*0x0C*/ int16 s2; //usually -1
 
 	void init()
@@ -652,9 +665,14 @@ struct EVNT
 // Incomplete
 struct ATT
 {
-    /*0x00*/ int32 flag;
+    /*0x00*/ int32 i1; // -1
     /*0x04*/ Reference name;
     /*0x10*/ int32 bone;
+
+	void init()
+	{
+		i1 = -1;
+	}
 };
 
 // Size = 32 byte / 0x20 byte
@@ -877,6 +895,146 @@ struct IREF
 		matrix[2][2] = 1.0f;
 		matrix[3][3] = 1.0f;
 	}
+};
+
+#define PARTICLEFLAG_sort                  0x1;
+#define PARTICLEFLAG_collideTerrain        0x2;
+#define PARTICLEFLAG_collideObjects        0x4;
+#define PARTICLEFLAG_spawnOnBounce         0x8;
+#define PARTICLEFLAG_useInnerShape         0x10;
+#define PARTICLEFLAG_inheritEmissionParams 0x20;
+#define PARTICLEFLAG_inheritParentVel      0x40;
+#define PARTICLEFLAG_sortByZHeight         0x80;
+#define PARTICLEFLAG_reverseIteration      0x100;
+#define PARTICLEFLAG_smoothRotation        0x200;
+#define PARTICLEFLAG_bezSmoothRotation     0x400;
+#define PARTICLEFLAG_smoothSize            0x800;
+#define PARTICLEFLAG_bezSmoothSize         0x1000;
+#define PARTICLEFLAG_smoothColour          0x2000;
+#define PARTICLEFLAG_bezSmoothColour       0x4000;
+#define PARTICLEFLAG_litParts              0x8000;
+#define PARTICLEFLAG_randFlipbookStart     0x10000;
+#define PARTICLEFLAG_multiplyByGravity     0x20000;
+#define PARTICLEFLAG_clampTailParts        0x40000;
+#define PARTICLEFLAG_spawnTrailingParts    0x80000;
+#define PARTICLEFLAG_fixLengthTailParts    0x100000;
+#define PARTICLEFLAG_useVertexAlpha        0x200000;
+#define PARTICLEFLAG_modelParts            0x400000;
+#define PARTICLEFLAG_swapYZonModelParts    0x800000;
+#define PARTICLEFLAG_scaleTimeByParent     0x1000000;
+#define PARTICLEFLAG_useLocalTime          0x2000000;
+#define PARTICLEFLAG_simulateOnInit        0x4000000;
+#define PARTICLEFLAG_copy                  0x8000000;
+
+struct PAR
+{
+	uint32 bone;
+	uint32 matmIndex;
+	Aref_FLOAT emisSpeedStart;
+    Aref_FLOAT speedVariation;
+    uint32 enableSpeedVariation; //1 - On, 0 - Off
+    Aref_FLOAT yAngle;
+    Aref_FLOAT xAngle;
+    Aref_FLOAT xSpread;
+    Aref_FLOAT ySpread;
+    Aref_FLOAT lifespan;
+    Aref_FLOAT decay;
+    uint32 d9[4];
+    float emisSpeedMid; //change in emission speed
+    float scaleRatio; //0 - 1.0, impacts on end scale
+    float f5[3];
+    Aref_VEC3D scale1; //[start, mid, end]
+    Aref_VEC3D speedUnk1;
+    //main particle colour attributes
+    //struct
+    //{
+        Aref_fltByte4D col1Start;
+        Aref_fltByte4D col1Mid;
+        Aref_fltByte4D col1End;
+    //} Colour1StartMidEnd;
+    float emisSpeedEnd; //odd setting
+    uint32 d16;
+    float f9[2];
+    uint32 d17[2];
+    byte b4[4];
+    byte b5[4];
+    uint32 d18[3];
+    float f10;
+    uint32 d19; //possibly minimum particles? not sure
+    uint32 maxParticles; //maximum amount of particles
+    Aref_FLOAT emissionRate; //rate at which particles are released till maxParticles
+    //particle types determined through beta previewer
+	uint32 ptenum;
+    //enum <uint32> ptenum { ptPoint, ptPlane, ptSphere, ptBox, ptCylinder1, ptDisc, ptSpline, ptPlanarBillboard, ptPlanar, ptCylinder2, ptStarshaped   } particleType;
+    Aref_VEC3D headUnk1;
+    Aref_VEC3D tailUnk1;
+    Aref_FLOAT pivotSpread;
+    Aref_VEC2D spreadUnk1;
+    Aref_VEC3D ar19;
+    uint32 enableRotate; //1 - On, 0 - Off
+    Aref_VEC3D rotate; //[rotSpread1, rotSpread2, spinSpeed]
+    uint32 enableColour2; //1 - On, 0 - Off
+    //if enabled, seems to pick randomly between Colour1 and Colour2 values
+    //struct
+    //{
+        Aref_fltByte4D col2Start;
+        Aref_fltByte4D col2Mid;
+        Aref_fltByte4D col2End;
+    //} Colour2StartMidEnd;
+    uint32 d23;
+    Aref_UINT16 ar24;
+    unsigned char col1[4]; // flyByte b, g, r, a
+    float lifespanRatio;
+    uint16 columns;
+    uint16 rows;
+    float f15[2];
+    uint32 d25;
+    float f12;
+    long i1; //must be -1 or will crash the previewe
+    uint32 d26[6];
+    float f13;
+    uint32 d27[2];
+    float f14;
+    uint32 d28;
+
+    /*
+    Following collection of Aref's appear to be completely unused
+
+    Have found no models that use them and altering their values seems to have
+    no effect
+    
+    Seem to have a new Aref type, Short Vec3D's, but that's only an assumption
+    as the amount of bytes between Aref's fits, must find a model that uses these...
+    */
+    
+    Aref_UINT32 ar25;
+    Aref_shrtVEC3D ar26;
+    Aref_UINT32 ar27;
+    Aref_shrtVEC3D ar28;
+    Aref_UINT32 ar29;
+    Aref_shrtVEC3D ar30;
+    Aref_UINT32 ar31;
+    Aref_shrtVEC3D ar32;
+    Aref_UINT32 ar33;
+    Aref_shrtVEC3D ar34;
+    Aref_UINT32 ar35;
+    Aref_shrtVEC3D ar36;
+    Aref_UINT32 ar37;
+    Aref_shrtVEC3D ar38;
+    Aref_UINT32 ar39;
+    Aref_shrtVEC3D ar40;
+    Aref_UINT32 ar41;
+    Aref_UINT32 ar42;
+    Aref_UINT32 ar43;
+    uint32 parFlags; //particleFlags, determined through beta previewer
+    uint32 d29[6];
+    Aref_UINT32 ar44;
+    Aref_FLOAT ar45;
+    long i2; //must be -1
+    uint32 d30;
+    Aref_UINT32 ar46;
+    unsigned char col4[4]; // flyByte b, g, r, a
+    uint32 unk[7];
 };
 
 /*
