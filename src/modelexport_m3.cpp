@@ -1478,9 +1478,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		par.emisSpeedMid = m->particleSystems[i].speed.data[0][0];
 		par.emisSpeedEnd = m->particleSystems[i].speed.data[0][0];
 		par.speedVariation.value = m->particleSystems[i].variation.data[0][0];  //particle[i].SpeedVariation.
-		par.xSpread.value = m->particleSystems[i].areaw.data[0][0];//m->particleSystems[i].spread.data[0][0];
-		par.ySpread.value = m->particleSystems[i].areal.data[0][0];//m->particleSystems[i].lat.data[0][0];
-		par.lifespan.value = //m->particleSystems[i].lifespan.data[0][0];
+		par.xSpread.value = m->particleSystems[i].spread.data[0][0];
+		par.ySpread.value = m->particleSystems[i].lat.data[0][0];
+		par.lifespan.value = m->particleSystems[i].lifespan.data[0][0];
 		par.scaleRatio = 1.0f;
 		par.scale1.value.x = m->particleSystems[i].sizes[0];//particle[i].p.scales[0];
 		par.scale1.value.y = m->particleSystems[i].sizes[1];//particle[i].p.scales[1];
@@ -1503,6 +1503,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		par.col1End.value[3] = (int)opacity[2] >> 7;
 
 
+		par.headUnk1.value.x = m->particleSystems[i].areaw.data[0][0];
+		par.headUnk1.value.y = m->particleSystems[i].areal.data[0][0];
 
 		par.f9[0] = 1.0f;
 		par.f9[1] = 1.0f;
