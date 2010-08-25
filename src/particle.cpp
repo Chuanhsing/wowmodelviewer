@@ -47,7 +47,7 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 #else
 		float opacity = *(short*)(f.getBuffer()+mta.p.opacity.ofsKeys+i*2);
 		colors[i] = Vec4D(colors2[i].x/255.0f, colors2[i].y/255.0f, colors2[i].z/255.0f, opacity/32767.0f);
-		sizes[i] = (*(float*)(f.getBuffer()+mta.p.sizes.ofsKeys+i*4))*mta.p.scales[i];
+		sizes[i] = (*(float*)(f.getBuffer()+mta.p.sizes.ofsKeys+i*sizeof(Vec2D)))*mta.p.scales[i];
 #endif
 	}
 #ifndef WotLK

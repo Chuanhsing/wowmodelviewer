@@ -4,13 +4,15 @@
 #include "modelcanvas.h"
 
 #define	ROOT_BONE	1
+#define	ENABLE_PARTICLE 1
 
 typedef enum M3_Class {
 	AR_Default,
 	AR_Bone,
 	AR_MSEC,
 	AR_Mat,
-	AR_Layer
+	AR_Layer,
+	AR_Par
 };
 
 static wxString M3_Attach_Names[] = {
@@ -465,12 +467,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			{
 				for(uint32 k=0; k<13; k++) 
 				{
-					//if (k == MAT_LAYER_DIFF && (MATtable[j].blend != BM_ADDITIVE_ALPHA && MATtable[j].blend != BM_ADDITIVE)) 
-					//{
-					//	M3OpacityAnimid.back().push_back(CreateAnimID(AR_Layer, j, k, 2));
-					//	M2OpacityIdx.back().push_back(MATtable[j].color);
-					//	stcs[i].arFloat.nEntries++;
-					//}
 
 					if (k == MAT_LAYER_EMISSIVE && (MATtable[j].blend == BM_ADDITIVE_ALPHA || MATtable[j].blend == BM_ADDITIVE)) 
 					{
@@ -915,7 +911,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	// mBone
 	std::vector<ModelBoneDef> boneList;
 
-#ifdef	ROOT_BONE
+#if	(ROOT_BONE == 1)
 	ModelBoneDef rootBone;
 	memset(&rootBone, 0, sizeof(rootBone));
 	rootBone.parent = -2;
@@ -1215,6 +1211,41 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		padding(&f);
 	}
 
+#ifdef	ENABLE_PARTICLE
+	ModelParticleEmitterDef *particle = (ModelParticleEmitterDef *)(mpqf.getBuffer() + m->header.ofsParticleEmitters);
+	// prepare particle texture
+	std::vector <int32> M3ParticleMap;
+	int partexstart = MATtable.size();
+	for (uint32 i=0; i < m->header.nParticleEmitters; i++)
+	{
+		int idx = -1;
+		if (particle[i].texture >= 0)
+		{
+			for (uint32 j = partexstart; j < MATtable.size(); j++)
+			{
+				if (MATtable[j].texid == particle[i].texture)
+				{
+					idx = j;
+					break;
+				}
+			}
+			if (idx == -1)
+			{
+				idx = MATtable.size();
+				MATmap bm;
+				bm.texid = particle[i].texture;
+				bm.flags = 0;
+				bm.blend = particle[i].blend;
+				bm.animid = -1;
+				bm.color = -1;
+				MATtable.push_back(bm);
+			}
+		}
+		M3ParticleMap.push_back(idx);
+	}
+#endif
+
+
 	// mMatLU
 	if (MATtable.size() > 0) {
 		mdata.mMatLU.nEntries = MATtable.size();
@@ -1382,6 +1413,133 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		wxDELETE(mats);
 		f.Seek(datachunk_offset, wxFromStart);
 	}
+
+#ifdef	ENABLE_PARTICLE
+
+	// mPar
+	mdata.mPar.nEntries = m->header.nParticleEmitters;
+	mdata.mPar.ref = reList.size();
+	RefEntry("_RAP", f.Tell(), mdata.mPar.nEntries, 12);
+	for(uint32 i=0; i<mdata.mPar.nEntries; i++) {
+		PAR par;
+		memset(&par, 0, sizeof(PAR));
+
+		par.emisSpeedStart.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 1);
+		par.speedVariation.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 2);
+		par.yAngle.AnimRef.animid =			CreateAnimID(AR_Par, i, 0, 3);
+		par.xAngle.AnimRef.animid =			CreateAnimID(AR_Par, i, 0, 4);
+		par.xSpread.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 5);
+		par.ySpread.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 6);
+		par.lifespan.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 7);
+		par.decay.AnimRef.animid =			CreateAnimID(AR_Par, i, 0, 8);
+		par.scale1.AnimRef.animid =			CreateAnimID(AR_Par, i, 0, 9);
+		par.speedUnk1.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 10);
+		par.col1Start.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 11);
+		par.col1Mid.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 12);
+		par.col1End.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 13);
+		par.emissionRate.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 14);
+		par.headUnk1.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 15);
+		par.tailUnk1.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 16);
+		par.pivotSpread.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 17);
+		par.spreadUnk1.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 18);
+		par.ar19.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 19);
+		par.rotate.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 20);
+		par.col2Start.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 21);
+		par.col2Mid.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 22);
+		par.col2End.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 23);
+		par.ar24.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 24);
+		par.ar25.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 25);
+		par.ar26.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 26);
+		par.ar27.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 27);
+		par.ar28.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 28);
+		par.ar29.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 29);
+		par.ar30.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 30);
+		par.ar31.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 31);
+		par.ar32.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 32);
+		par.ar33.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 33);
+		par.ar34.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 34);
+		par.ar35.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 35);
+		par.ar36.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 36);
+		par.ar37.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 37);
+		par.ar38.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 38);
+		par.ar39.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 39);
+		par.ar40.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 40);
+		par.ar41.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 41);
+		par.ar42.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 42);
+		par.ar43.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 43);
+		par.ar44.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 44);
+		par.ar45.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 45);
+		par.ar46.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 46);
+
+		par.matmIndex = M3ParticleMap[i];
+		par.bone = particle[i].bone + 1;
+		par.maxParticles = 1000;
+		par.emisSpeedStart.value = m->particleSystems[i].speed.data[0][0];  //particle[i].EmissionSpeed;
+		par.emisSpeedMid = m->particleSystems[i].speed.data[0][0];
+		par.emisSpeedEnd = m->particleSystems[i].speed.data[0][0];
+		par.speedVariation.value = m->particleSystems[i].variation.data[0][0];  //particle[i].SpeedVariation.
+		par.xSpread.value = m->particleSystems[i].areaw.data[0][0];//m->particleSystems[i].spread.data[0][0];
+		par.ySpread.value = m->particleSystems[i].areal.data[0][0];//m->particleSystems[i].lat.data[0][0];
+		par.lifespan.value = //m->particleSystems[i].lifespan.data[0][0];
+		par.scaleRatio = 1.0f;
+		par.scale1.value.x = m->particleSystems[i].sizes[0];//particle[i].p.scales[0];
+		par.scale1.value.y = m->particleSystems[i].sizes[1];//particle[i].p.scales[1];
+		par.scale1.value.z = m->particleSystems[i].sizes[2];//particle[i].p.scales[2];
+		Vec3D  colors2[3];
+		uint16 opacity[3];
+		memcpy(colors2, mpqf.getBuffer()+particle[i].p.colors.ofsKeys, sizeof(Vec3D)*3);
+		memcpy(opacity, mpqf.getBuffer()+particle[i].p.opacity.ofsKeys, sizeof(uint16)*3);
+		par.col1Start.value[0] = (int)colors2[0].z;
+		par.col1Start.value[1] = (int)colors2[0].y;
+		par.col1Start.value[2] = (int)colors2[0].x;
+		par.col1Start.value[3] = (int)opacity[0] >> 7;
+		par.col1Mid.value[0] = (int)colors2[1].z;
+		par.col1Mid.value[1] = (int)colors2[1].y;
+		par.col1Mid.value[2] = (int)colors2[1].x;
+		par.col1Mid.value[3] = (int)opacity[1] >> 7;
+		par.col1End.value[0] = (int)colors2[2].z;
+		par.col1End.value[1] = (int)colors2[2].y;
+		par.col1End.value[2] = (int)colors2[2].x;
+		par.col1End.value[3] = (int)opacity[2] >> 7;
+
+
+
+		par.f9[0] = 1.0f;
+		par.f9[1] = 1.0f;
+
+		par.d17[1] = 1;
+
+		par.f5[0] = 1;
+		par.f5[1] = 0.5;
+		par.f5[2] = 0.5;
+
+		if (particle[i].p.rotation > 0)
+		{
+			par.enableRotate = 1;
+			par.rotate.value.x = 0;
+			par.rotate.value.y = particle[i].p.rotation;
+			par.rotate.value.z = particle[i].p.rotation;
+		}
+
+		if (m->particleSystems[i].rate.data[0].size() > 0)
+			par.emissionRate.value = m->particleSystems[i].rate.data[0][0];
+		else
+			par.emissionRate.value = 0;	
+		par.columns = particle[i].cols;
+		par.rows = particle[i].rows;
+
+		par.enableSpeedVariation = 1;
+
+		if (particle[i].EmitterType == 1)
+			par.ptenum = 1;
+		else if (particle[i].EmitterType == 2)
+			par.ptenum = 2;
+
+		f.Write(&par, sizeof(PAR));
+	}
+	padding(&f);
+#endif
+
 
 	// mIREF
 	mdata.mIREF.nEntries = mdata.mBone.nEntries;

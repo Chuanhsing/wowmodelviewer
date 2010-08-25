@@ -46,10 +46,7 @@ struct TexCoordSet {
 };
 
 class ParticleSystem {
-	Animated<float> speed, variation, spread, lat, gravity, lifespan, rate, areal, areaw, deacceleration;
 	Animated<uint8> enabled;
-	Vec4D colors[3];
-	float sizes[3];
 	float mid, slowdown, rotation;
 	Vec3D pos;
 	GLuint texture;
@@ -74,6 +71,10 @@ class ParticleSystem {
 public:
 	Model *model;
 	float tofs;
+
+	Animated<float> speed, variation, spread, lat, gravity, lifespan, rate, areal, areaw, deacceleration;
+	Vec4D colors[3];
+	float sizes[3];
 
 	ParticleSystem(): mid(0), emitter(0), rem(0)
 	{

@@ -1027,8 +1027,8 @@ struct PAR
     uint32 d16;
     float f9[2];
     uint32 d17[2];
-    byte b4[4];
-    byte b5[4];
+    uint8 b4[4];
+    uint8 b5[4];
     uint32 d18[3];
     float f10;
     uint32 d19; //possibly minimum particles? not sure
