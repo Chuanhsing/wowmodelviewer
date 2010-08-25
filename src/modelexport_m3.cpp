@@ -3,7 +3,7 @@
 #include "modelexport_m3.h"
 #include "modelcanvas.h"
 
-#define	ROOT_BONE
+#define	ROOT_BONE	1
 
 typedef enum M3_Class {
 	AR_Default,
@@ -495,27 +495,15 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			RefEntry("_23U", f.Tell(), stcs[i].animid.nEntries, 0);
 			for(uint32 j=0; j<m->header.nBones; j++) {
 				if (m->bones[j].trans.data[anim_offset].size() > 0) {
-#ifdef	ROOT_BONE
-					uint32 p = CreateAnimID(AR_Bone, j+1, 0, 2);
-#else
-					uint32 p = CreateAnimID(AR_Bone, j, 0, 2);
-#endif
+					uint32 p = CreateAnimID(AR_Bone, j+ROOT_BONE, 0, 2);
 					f.Write(&p, sizeof(uint32));
 				}
 				if (m->bones[j].scale.data[anim_offset].size() > 0) {
-#ifdef	ROOT_BONE
-					uint32 p = CreateAnimID(AR_Bone, j+1, 0, 5);
-#else
-					uint32 p = CreateAnimID(AR_Bone, j, 0, 5);
-#endif
+					uint32 p = CreateAnimID(AR_Bone, j+ROOT_BONE, 0, 5);
 					f.Write(&p, sizeof(uint32));
 				}
 				if (m->bones[j].rot.data[anim_offset].size() > 0) {
-#ifdef	ROOT_BONE
-					uint32 p = CreateAnimID(AR_Bone, j+1, 0, 3);
-#else
-					uint32 p = CreateAnimID(AR_Bone, j, 0, 3);
-#endif
+					uint32 p = CreateAnimID(AR_Bone, j+ROOT_BONE, 0, 3);
 					f.Write(&p, sizeof(uint32));
 				}
 			}
@@ -889,27 +877,15 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 			for(uint32 j=0; j<m->header.nBones; j++) {
 				if (m->bones[j].trans.data[anim_offset].size() > 0) {
-#ifdef	ROOT_BONE
-					uint32 p = CreateAnimID(AR_Bone, j+1, 0, 2);
-#else
-					uint32 p = CreateAnimID(AR_Bone, j, 0, 2);
-#endif
+					uint32 p = CreateAnimID(AR_Bone, j+ROOT_BONE, 0, 2);
 					f.Write(&p, sizeof(uint32));
 				}
 				if (m->bones[j].scale.data[anim_offset].size() > 0) {
-#ifdef	ROOT_BONE
-					uint32 p = CreateAnimID(AR_Bone, j+1, 0, 5);
-#else
-					uint32 p = CreateAnimID(AR_Bone, j, 0, 5);
-#endif
+					uint32 p = CreateAnimID(AR_Bone, j+ROOT_BONE, 0, 5);
 					f.Write(&p, sizeof(uint32));
 				}
 				if (m->bones[j].rot.data[anim_offset].size() > 0) {
-#ifdef	ROOT_BONE
-					uint32 p = CreateAnimID(AR_Bone, j+1, 0, 3);
-#else
-					uint32 p = CreateAnimID(AR_Bone, j, 0, 3);
-#endif
+					uint32 p = CreateAnimID(AR_Bone, j+ROOT_BONE, 0, 3);
 					f.Write(&p, sizeof(uint32));
 				}
 			}
@@ -960,68 +936,42 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
 		// name
 		wxString strName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast('.')+_T('_');
-#ifdef	ROOT_BONE
-		if (i == 0)
+		if (i < ROOT_BONE)
 			strName += _T("Bone_Root");
 		else
-			strName += wxString::Format(_T("Bone%d"), i-1);
+			strName += wxString::Format(_T("Bone%d"), i-ROOT_BONE);
 
 		for(uint32 j=0; j < BONE_MAX; j++) {
-			if (i > 0 && m->keyBoneLookup[j] == i-1) {
+			if (i >= ROOT_BONE && m->keyBoneLookup[j] == i-ROOT_BONE) {
 				strName += _T("_")+Bone_Names[j];
 				break;
 			}
 		}
-#else
-		strName = wxString::Format(_T("Bone%d"), i);
-
-		for(uint32 j=0; j < m->header.nKeyBoneLookup; j++) {
-			if (m->keyBoneLookup[j] == i) {
-				strName += _T("_")+Bone_Names[j];
-				break;
-			}
-		}
-#endif
 		NameRefEntry(&bones[i].name, strName, &f);
 	}
 	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
 		bones[i].init();
-#ifdef	ROOT_BONE
-		bones[i].parent = boneList[i].parent + 1;
-#else
-		bones[i].parent = boneList[i].parent;
-#endif
-
+		bones[i].parent = boneList[i].parent + ROOT_BONE;
 		bones[i].initTrans.AnimRef.animid = CreateAnimID(AR_Bone, i, 0, 2);
 
-#ifdef	ROOT_BONE
-		if (i > 0)
+		if (i >= ROOT_BONE)
 		{
 			for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
 			{
 				int anim_offset = logAnimations[j];
-				if (m->bones[i-1].trans.data[anim_offset].size() > 0)
+				if (m->bones[i-ROOT_BONE].trans.data[anim_offset].size() > 0)
 					SetAnimed(bones[i].initTrans.AnimRef);
 			}
 		}
-#else
-		for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
-		{
-			int anim_offset = logAnimations[j];
-			if (m->bones[i].trans.data[anim_offset].size() > 0)
-				SetAnimed(bones[i].initTrans.AnimRef);
-		}
-#endif
 		bones[i].initTrans.value = boneList[i].pivot;
 		if (bones[i].parent > -1) {
 			bones[i].initTrans.value -= boneList[bones[i].parent].pivot ;
 		}
 
 		bones[i].initRot.AnimRef.animid = CreateAnimID(AR_Bone, i, 0, 3);
-#ifdef	ROOT_BONE
-		if (i == 0)
+		if (i < ROOT_BONE)
 		{
 			bones[i].initRot.value = Vec4D(0.0f, 0.0f, -sqrt(0.5f), sqrt(0.5f)); // face to minitor, tan(90)
 		}
@@ -1030,23 +980,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
 			{
 				int anim_offset = logAnimations[j];
-				if (m->bones[i-1].rot.data[anim_offset].size() > 0)
+				if (m->bones[i-ROOT_BONE].rot.data[anim_offset].size() > 0)
 					SetAnimed(bones[i].initRot.AnimRef);
 			}
 		}
-#else
-		for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
-		{
-			int anim_offset = logAnimations[j];
-			if (m->bones[i].rot.data[anim_offset].size() > 0)
-				SetAnimed(bones[i].initRot.AnimRef);
-			}
-		}
-#endif
 
 		bones[i].initScale.AnimRef.animid = CreateAnimID(AR_Bone, i, 0, 5);
-#ifdef	ROOT_BONE
-		if (i == 0)
+		if (i < ROOT_BONE)
 		{
 			bones[i].initScale.value = Vec3D(1.0f, 1.0f, 1.0f)*modelExport_M3_BoundScale; // scale root bone will affect the while model
 		}
@@ -1055,18 +995,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
 			{
 				int anim_offset = logAnimations[j];
-				if (m->bones[i-1].scale.data[anim_offset].size() > 0)
+				if (m->bones[i-ROOT_BONE].scale.data[anim_offset].size() > 0)
 					SetAnimed(bones[i].initScale.AnimRef);
 			}
 		}
-#else
-		for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
-		{
-			int anim_offset = logAnimations[j];
-			if (m->bones[i].scale.data[anim_offset].size() > 0)
-				SetAnimed(bones[i].initScale.AnimRef);
-		}
-#endif
 		bones[i].ar1.AnimRef.animid = CreateAnimID(AR_Bone, i, 0, 6);
 		f.Write(&bones[i], sizeof(BONE));
 	}
@@ -1215,11 +1147,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	mdata.mBoneLU.ref = reList.size();
 	RefEntry("_61U", f.Tell(), mdata.mBoneLU.nEntries, 0);
 	for(uint16 i=0; i<bLookup.size(); i++) {
-#ifdef	ROOT_BONE
-		uint16 idx = bLookup[i] + 1;
-#else
-		uint16 idx = bLookup[i];
-#endif
+		uint16 idx = bLookup[i] + ROOT_BONE;
 		f.Write(&idx, sizeof(uint16));
 	}
 	padding(&f);
@@ -1268,11 +1196,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Seek(chunk_offset, wxFromStart);
 		for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
 			atts[i].init();
-#ifdef	ROOT_BONE
-			atts[i].bone = attachments[i].bone + 1;
-#else
-			atts[i].bone = attachments[i].bone;
-#endif
+			atts[i].bone = attachments[i].bone + ROOT_BONE;
 			f.Write(&atts[i], sizeof(ATT));
 		}
 		wxDELETEA(atts);
@@ -1385,13 +1309,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				if (j == MAT_LAYER_ALPHA && MATtable[i].blend == BM_OPAQUE && MATtable[i].color != -1)
 				{
 					NameRefEntry(&layer.name, _T("NoTexture"), &f);
-					layer.renderFlags = LAYR_RENDERFLAGS_ALPHAONLY;
+					layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
 					SetAnimed(layer.brightness_mult1.AnimRef);
 				}
 				else if (j == MAT_LAYER_ALPHA && 
-					(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_TRANSPARENT)) // LAYER_Alpha
+					(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_TRANSPARENT))
 				{
-					layer.renderFlags = LAYR_RENDERFLAGS_ALPHAONLY;
+					layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
 					NameRefEntry(&layer.name, texName, &f);
 
 					if (MATtable[i].animid != -1)
@@ -1467,17 +1391,11 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		IREF iref;
 		memset(&iref, 0, sizeof(iref));
 		iref.init();
-#ifdef	ROOT_BONE
-		if (i > 0) {
-			iref.matrix[3][0] = -m->bones[i-1].pivot.x;
-			iref.matrix[3][1] = m->bones[i-1].pivot.z;
-			iref.matrix[3][2] = -m->bones[i-1].pivot.y;
+		if (i >= ROOT_BONE) {
+			iref.matrix[3][0] = -m->bones[i-ROOT_BONE].pivot.x;
+			iref.matrix[3][1] = m->bones[i-ROOT_BONE].pivot.z;
+			iref.matrix[3][2] = -m->bones[i-ROOT_BONE].pivot.y;
 		} 
-#else
-		iref.matrix[3][0] = -m->bones[i].pivot.x;
-		iref.matrix[3][1] = m->bones[i].pivot.z;
-		iref.matrix[3][2] = -m->bones[i].pivot.y;
-#endif
 		f.Write(&iref, sizeof(iref));
 	}
 	padding(&f);

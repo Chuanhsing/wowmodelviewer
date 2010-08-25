@@ -372,16 +372,27 @@ struct BONE
 	}
 };
 
+/*
+MATM is a material lookup table referenced by BAT structures in the DIV 
+definition. It functions as a reference to the type and the index of a 
+particular type of material. More information on materials can be found 
+in the material definitions documentation.
+*/
 // Size = 8 byte / 0x08 byte
 // Complete
+#define	MATM_TYPE_STANDARD		1	// MAT
+#define	MATM_TYPE_DISPLACEMENT	2	// DIS
+#define	MATM_TYPE_COMPOSITE		3	// CMP
+#define	MATM_TYPE_TERRIAN		4	// TER
+#define	MATM_TYPE_VOL			5	// VOL
 struct MATM
 {
-    /*0x00*/ uint32 nmat; //usually only 1
-    /*0x04*/ uint32 matind; //MAT index
+    /*0x00*/ uint32 matType; //see MATM_TYPE_*
+    /*0x04*/ uint32 matind; //index into matType array
 
 	void init()
 	{
-		nmat = 1;
+		matType = MATM_TYPE_STANDARD;
 	}
 };
 
@@ -490,14 +501,74 @@ struct MAT
 	}
 };
 
+// Displacement Material
+// Size = 68 bytes / 0x44 bytes
+// Incomplete
+struct DIS
+{
+    /*0x00*/ Reference name;
+    /*0x0C*/ uint32 d1;
+    /*0x10*/ Aref_FLOAT ar1;
+    /*0x24*/ Reference normalMap; //LAYR ref
+    /*0x30*/ Reference strengthMap; //LAYR ref
+    /*0x3C*/ uint32 flags; //see material flags
+    /*0x40*/ uint32 priority;
+};
+
+// Composite Material Reference
+// Size = 24 bytes / 0x18 bytes
+// Incomplete
+struct CMS
+{
+    /*0x00*/ uint32 matmIndex;
+    /*0x04*/ Aref_FLOAT ar1; //blend amount?
+};
+
+// Composite Material
+// Size = 12 bytes / 0x0C bytes
+// Incomplete
+struct CMP
+{
+    /*0x00*/ Reference name;
+    /*0x0C*/ uint32 d1;
+    /*0x10*/ Reference compositeMats; //CMS ref
+};
+
+// Terrain (Null) Material
+// Size = 24 bytes / 0x18 bytes
+// Complete
+struct TER
+{
+    /*0x00*/ Reference name;
+    /*0x0C*/ Reference nullMap; //usually blank LAYR ref
+};
+
+/*
+Bitmaps are referenced through LAYR definitions which are found referenced in 
+the materials.
+
+LAYR's can contain a path to an internal bitmap file which is usually a DDS 
+file or in the case of animated textures an OGV file. Even if they do not 
+contain a map path, they may still influence how a material is rendered. For 
+example, alpha map LAYR settings can influence the way standard materials are 
+rendered when alpha blend modes are used. More material information can be 
+found in the material definitions documentation.
+
+The previewer contains no information related to bitmaps except the bitmap 
+filename if it is present. This has made documenting the LAYR structure 
+accurately problematic.
+*/
 #define	LAYR_FLAGS_TEXWRAP_X			(0x4)
 #define	LAYR_FLAGS_TEXWRAP_Y			(0x8)
 #define	LAYR_FLAGS_TEXBLACK				(0x10)
 #define	LAYR_FLAGS_COLOR				(0x400)
-#define	LAYR_RENDERFLAGS_ALPHATEAMCOLOR	(0x1)
-#define	LAYR_RENDERFLAGS_ALPHAONLY		(0x2)
-#define	LAYR_RENDERFLAGS_ALPHASHADING	(0x4)
-#define	LAYR_RENDERFLAGS_TEXGARBLE		(0x8)
+#define	LAYR_ALPHAFLAGS_ALPHATEAMCOLOR	(0x1)
+#define	LAYR_ALPHAFLAGS_ALPHAONLY		(0x2)
+#define	LAYR_ALPHAFLAGS_ALPHASHADING	(0x4)
+#define	LAYR_ALPHAFLAGS_TEXGARBLE		(0x8)
+#define	LAYR_TINEFLAGS_INVERSETINT		(0x1)
+#define	LAYR_TINEFLAGS_TINT				(0x2)
+#define	LAYR_TINEFLAGS_USECOLOR			(0x4)
 // Size = 356 bytes / 0x164 bytes
 // Incomplete
 struct LAYR
@@ -505,39 +576,39 @@ struct LAYR
     uint32 d1;
     Reference name;
 	Aref_Colour Colour;
-	uint32 flags;
+	uint32 flags; // LAYR_FLAGS_*
 	uint32 uvmapChannel;
-	uint32 renderFlags;
+	uint32 alphaFlags; // LAYR_ALPHAFLAGS_*
 	Aref_FLOAT brightness_mult1;
 	Aref_FLOAT brightness_mult2;
 	uint32 d4;
-	long d5; //-1 to render texture
+	long d5; //should be set to -1 or else texture not rendered
 	uint32 d6[2];
-	int32 d7;
+	int32 d7; //set to -1 in animated bitmaps
 	uint32 d8[2];
 	Aref_UINT32 ar1;
 	Aref_VEC2D ar2;
 	Aref_UINT16 ar3;
 	Aref_VEC2D ar4;
-	Aref_VEC3D uvAngle; //3dsmaxAngle angle = uvAngle * 50 * -1
+	Aref_VEC3D uvAngle; //3dsAngle = value * 50 * -1
 	Aref_VEC2D uvTiling;
 	Aref_UINT32 ar5;
 	Aref_FLOAT ar6;
-	Aref_FLOAT brightness; //to 1.0
-	int32 d20; //unknown purpose, seems to affect uv coords, should be set to -1
-	uint32 tintFlags; // tintInverse, tint, useColour
+	Aref_FLOAT brightness; //0.0 to 1.0 only?
+	int32 d20; //seems to affect UV coords? should be set to -1
+	uint32 tintFlags; // LAYR_TINEFLAGS_*
 	float tintStrength; //set to 4 by default in Blizzard models
-	float tintUnk; //unknown purpose relating to tint
-	float f8[2]; //seems to be more settings for tint
+	float tintUnk; //0.0 to 1.0 only?
+	float tintUnk2[2]; //seems to be more settings for tint
 
 	void init()
 	{
 		flags = 236; // 0xEC, C=TEXWRAP_X|TEXWRAP_Y
+		d5 = -1;
 		brightness_mult1.value = 1.0f;
 		brightness_mult1.unValue = 1.0f;
 		uvTiling.value = Vec2D(1.0f, 1.0f);
 		d20 = -1;
-		d5 = -1;
 	}
 };
 
@@ -549,7 +620,7 @@ struct DIV
     /*0x0C*/ Reference REGN;	// submesh
     /*0x18*/ Reference BAT;
     /*0x24*/ Reference MSEC;
-    /*0x30*/ uint32 unk;
+    /*0x30*/ uint32 unk; //always 1?
 
 	void init()
 	{
