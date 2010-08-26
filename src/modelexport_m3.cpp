@@ -1322,6 +1322,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 					if (MATtable[i].animid != -1)
 						SetAnimed(layer.ar4.AnimRef);
+					if (i >= partexstart)
+					{
+						layer.flags |= LAYR_FLAGS_SPLIT;
+					}
 				}
 
 				if (j == MAT_LAYER_EMISSIVE && (MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_ADDITIVE)) 
@@ -1335,6 +1339,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 						if (m->colors[MATtable[i].color].opacity.sizes != 0)
 							SetAnimed(layer.brightness_mult1.AnimRef);
 					}
+					if (i >= partexstart)
+					{
+						layer.flags |= LAYR_FLAGS_SPLIT;
+					}
 				}
 
 				if (j == MAT_LAYER_ALPHA && MATtable[i].blend == BM_OPAQUE && MATtable[i].color != -1)
@@ -1346,13 +1354,25 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				else if (j == MAT_LAYER_ALPHA && 
 					(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_TRANSPARENT))
 				{
-					layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
-					NameRefEntry(&layer.name, texName, &f);
+					if (i >= partexstart)
+					{
+						if (MATtable[i].blend == BM_TRANSPARENT)
+						{
+							layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
+							NameRefEntry(&layer.name, texName, &f);
+							layer.flags |= LAYR_FLAGS_SPLIT;
+						}
+					}
+					else
+					{
+						layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
+						NameRefEntry(&layer.name, texName, &f);
 
-					if (MATtable[i].animid != -1)
-						SetAnimed(layer.ar4.AnimRef);
-					if (MATtable[i].color != -1)
-						SetAnimed(layer.brightness_mult1.AnimRef);
+						if (MATtable[i].animid != -1)
+							SetAnimed(layer.ar4.AnimRef);
+						if (MATtable[i].color != -1)
+							SetAnimed(layer.brightness_mult1.AnimRef);
+					}
 				}
 
 				datachunk_offset2 = f.Tell();
@@ -1479,7 +1499,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		par.emisSpeedEnd = m->particleSystems[i].speed.data[0][0];
 		par.speedVariation.value = m->particleSystems[i].variation.data[0][0];  //particle[i].SpeedVariation.
 		par.xSpread.value = m->particleSystems[i].spread.data[0][0];
-		par.ySpread.value = m->particleSystems[i].lat.data[0][0];
+		par.ySpread.value = m->particleSystems[i].spread.data[0][0]; //m->particleSystems[i].lat.data[0][0];
 		par.lifespan.value = m->particleSystems[i].lifespan.data[0][0];
 		par.scaleRatio = 1.0f;
 		par.scale1.value.x = m->particleSystems[i].sizes[0];//particle[i].p.scales[0];
@@ -1529,6 +1549,17 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			par.emissionRate.value = 0;	
 		par.columns = particle[i].cols;
 		par.rows = particle[i].rows;
+
+		if (par.columns > 1)
+			par.f15[0] = 1.0f / par.columns;
+		if (par.rows > 1)
+			par.f15[1] = 1.0f / par.rows;
+
+		if (par.columns > 1 || par.rows > 1)
+		{
+			par.parFlags |= PARTICLEFLAG_randFlipbookStart;
+		}
+		par.parFlags |= PARTICLEFLAG_useVertexAlpha;
 
 		par.enableSpeedVariation = 1;
 
