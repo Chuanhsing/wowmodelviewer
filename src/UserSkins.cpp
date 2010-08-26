@@ -24,7 +24,7 @@ static bool readline(std::istream& in, std::string& buf, size_t nr, bool skipEmp
 
 void UserSkins::LoadFile(const wxString &filename)
 {
-	std::ifstream in((char *)filename.c_str());
+	std::ifstream in((char *)filename.mb_str(), ifstream::in);
 	if (!in.is_open()) {
 		wxLogMessage(_T("Failed to open '%s' while loading user skins"), filename.c_str());
 		return;
@@ -55,15 +55,18 @@ void UserSkins::LoadFile(const wxString &filename)
 		
 		for (int g=0; g < numGroups; ++g) {
 			TextureGroup grp;
+			int count = 0;
 			for (int i=0; i < TextureGroup::num; ++i) {
 				if (!readline(in, line, lineNr)) {
 					wxLogMessage(_T("Error - UserSkins: unexpected EOF at line %d"), lineNr);
 					return;
 				}
 				grp.tex[i] = wxString(line.c_str(), wxConvUTF8);
+				if (grp.tex[i] != wxEmptyString)
+					count++;
 			}
 			grp.base = 11; // wtf is grp.base?? it's set to 11 everywhere else, so do it here...
-			grp.count = 3;
+			grp.count = count;
 			set.insert(grp);
 		}
 		skins.insert(std::make_pair(model, set));
