@@ -1438,7 +1438,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		par.col1Mid.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 12);
 		par.col1End.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 13);
 		par.emissionRate.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 14);
-		par.headUnk1.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 15);
+		par.emissionArea.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 15);
 		par.tailUnk1.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 16);
 		par.pivotSpread.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 17);
 		par.spreadUnk1.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 18);
@@ -1503,8 +1503,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		par.col1End.value[3] = (int)opacity[2] >> 7;
 
 
-		par.headUnk1.value.x = m->particleSystems[i].areaw.data[0][0];
-		par.headUnk1.value.y = m->particleSystems[i].areal.data[0][0];
+		par.emissionArea.value.x = m->particleSystems[i].areaw.data[0][0];
+		par.emissionArea.value.y = m->particleSystems[i].areal.data[0][0];
 
 		par.f9[0] = 1.0f;
 		par.f9[1] = 1.0f;

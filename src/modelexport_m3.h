@@ -1010,9 +1010,10 @@ struct PAR
     Aref_FLOAT ySpread;
     Aref_FLOAT lifespan;
     Aref_FLOAT decay;
-    uint32 d9[4];
+    uint32 enableDecay; //1 - On, 0 - Off
+    uint32 d9[3];
     float emisSpeedMid; //change in emission speed
-    float scaleRatio; //0 - 1.0, impacts on end scale
+    float scaleRatio; //0 - 1.0, impacts on scale range
     float f5[3];
     Aref_VEC3D scale1; //[start, mid, end]
     Aref_VEC3D speedUnk1;
@@ -1037,7 +1038,7 @@ struct PAR
     //particle types determined through beta previewer
 	uint32 ptenum;
     //enum <uint32> ptenum { ptPoint, ptPlane, ptSphere, ptBox, ptCylinder1, ptDisc, ptSpline, ptPlanarBillboard, ptPlanar, ptCylinder2, ptStarshaped   } particleType;
-    Aref_VEC3D headUnk1;
+    Aref_VEC3D emissionArea; //[width, length, spread]
     Aref_VEC3D tailUnk1;
     Aref_FLOAT pivotSpread;
     Aref_VEC2D spreadUnk1;
@@ -1061,7 +1062,7 @@ struct PAR
     float f15[2];
     uint32 d25;
     float f12;
-    long i1; //must be -1 or will crash the previewe
+    long i1; //must be -1 or will crash the previewer
     uint32 d26[6];
     float f13;
     uint32 d27[2];

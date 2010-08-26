@@ -25,11 +25,11 @@ local uint t_offs = 0; //tag offset
 local int tag_size = 16; //tag byte size
 local int i = 0; //used in for loops
 
-//Data types
-//Data types that need converting
+// ==================
+// ==  DATA TYPES  ==
+// ==================
 typedef ubyte fltByte <read=fltByteRead, write=fltByteWrite>;
 
-//Read-Write funcs for Data types
 string fltByteRead( fltByte b )
 {
     string s; 
@@ -135,7 +135,7 @@ void Vec4DWrite( Vec4D &q, string s )
 
 typedef struct
 {
-    fltByte b, g, r, alpha;
+    fltByte blue, green, red, alpha;
 } Colour;
 
 typedef struct (int type)
@@ -226,17 +226,21 @@ typedef struct
     }
 } Ref <optimize=false>;
 
+// =============================
+// ==  ANIM. REFERENCE TYPES  ==
+// =============================
+
 typedef struct
 {
-    ushort flag1;
-    ushort flag2;
+    ushort type;
+    ushort flags;
     ulong animid;
 } Animref <read=AnimrefRead>;
 
 string AnimrefRead(Animref &ar)
 {
     string s;
-    if (ar.flag2 == 6)
+    if (ar.flags == 6)
     {
         SPrintf( s, "<Animated>\tAnimid: %d", ar.animid);
     }
@@ -330,10 +334,10 @@ void Aref_VEC4DWrite(Aref_VEC4D &v4d, string s)
 typedef struct
 {
     Animref Aref;
-    fltByte value[4]; //initial value
-    fltByte unValue[4]; //unused extra value
+    Colour value; //initial value
+    Colour unValue; //unused extra value
     uint32 flags; //unused, 0
-} Aref_fltByte4D;
+} Aref_Colour; 
 
 typedef struct
 {
@@ -910,7 +914,7 @@ typedef struct
 {
     ulong   d1;
     Ref     name;
-    Aref_fltByte4D col1;
+    Aref_Colour initColour;
     struct
     {
         ulong bitFlag <format=binary>;
@@ -920,7 +924,7 @@ typedef struct
         ulong   texwrap_y: 1;
         ulong   texBlack : 1;
         ulong            : 5;
-        ulong   useColour: 1;
+        ulong   useColour: 1; //enables initColour
     } texFlags;
     ulong   uvmapChannel; //flags, not a uint value
     struct
@@ -1065,6 +1069,8 @@ typedef struct
 
 typedef struct
 {
+    //Courtesy of cutevisor:
+    //Most Vec3D values are [Start, End, Spread]
     ulong bone;
     ulong matmIndex;
     Aref_FLOAT emisSpeedStart;
@@ -1076,33 +1082,34 @@ typedef struct
     Aref_FLOAT ySpread;
     Aref_FLOAT lifespan;
     Aref_FLOAT decay;
-    ulong d9[4];
+    ulong enableDecay; //1 - On, 0 - Off
+    ulong d9[3];
     float emisSpeedMid; //change in emission speed
-    float scaleRatio; //0 - 1.0, impacts on end scale
+    float scaleRatio; //0 - 1.0, impacts on scale range
     float f5[3];
-    Aref_VEC3D scale1; //[start, mid, end]
+    Aref_VEC3D scale; //[start, end, range]
     Aref_VEC3D speedUnk1;
     //main particle colour attributes
     struct
     {
-        Aref_fltByte4D col1Start;
-        Aref_fltByte4D col1Mid;
-        Aref_fltByte4D col1End;
+        Aref_Colour col1Start;
+        Aref_Colour col1Mid;
+        Aref_Colour col1End;
     } Colour1StartMidEnd;
     float emisSpeedEnd; //odd setting
     ulong d16;
     float f9[2];
     ulong d17[2];
-    byte b4[4];
-    byte b5[4];
+    uint16 s1[2];
+    uint16 s2[2];
     ulong d18[3];
     float f10;
     ulong d19; //possibly minimum particles? not sure
     ulong maxParticles; //maximum amount of particles
     Aref_FLOAT emissionRate; //rate at which particles are released till maxParticles
     //particle types determined through beta previewer
-    enum <ulong> ptenum { ptPoint, ptPlane, ptSphere, ptBox, ptCylinder1, ptDisc, ptSpline, ptPlanarBillboard, ptPlanar, ptCylinder2, ptStarshaped   } particleType;
-    Aref_VEC3D headUnk1;
+    enum <ulong> pemitterType { ptPoint, ptPlane, ptSphere, ptBox, ptCylinder1, ptDisc, ptSpline, ptPlanarBillboard, ptPlanar, ptCylinder2, ptStarshaped   } particleType;
+    Aref_VEC3D emissionArea; //[width, length, spread]
     Aref_VEC3D tailUnk1;
     Aref_FLOAT pivotSpread;
     Aref_VEC2D spreadUnk1;
@@ -1113,9 +1120,9 @@ typedef struct
     //if enabled, seems to pick randomly between Colour1 and Colour2 values
     struct
     {
-        Aref_fltByte4D col2Start;
-        Aref_fltByte4D col2Mid;
-        Aref_fltByte4D col2End;
+        Aref_Colour col2Start;
+        Aref_Colour col2Mid;
+        Aref_Colour col2End;
     } Colour2StartMidEnd;
     ulong d23;
     Aref_UINT16 ar24;
@@ -1126,7 +1133,7 @@ typedef struct
     float f15[2];
     ulong d25;
     float f12;
-    long i1; //must be -1 or will crash the previewe
+    long i1; //must be -1 or will crash the previewer
     ulong d26[6];
     float f13;
     ulong d27[2];
@@ -1175,10 +1182,78 @@ typedef struct
 
 typedef struct
 {
-    ulong bone;
-    ulong d1;
-    Animref ar1;
-    ulong unk[183];
+    //determined through the beta previewer
+    uint32 bitFlag <format=binary>;
+    FSkip (-4);
+    uint32                          : 1;
+    uint32 collideWithTerrain       : 1; //0x2
+    uint32 collideWithObjects       : 1; //0x4
+    uint32 edgeFalloff              : 1; //0x8
+    uint32 inheritParentVelocity    : 1; //0x10
+    uint32 smoothSize               : 1; //0x20
+    uint32 bezierSmoothSize         : 1; //0x40
+    uint32 useVertexAlpha           : 1; //0x80
+    uint32 scaleTimeByParent        : 1; //0x100
+    uint32 forceLegacy              : 1; //0x200
+    uint32 useLocalTime             : 1; //0x400
+    uint32 simulateOnInit           : 1; //0x800
+    uint32 useLengthAndTime         : 1; //0x1000             
+} ribbonFlags;
+
+typedef struct
+{
+    uint32 bone;
+    uint32 matmIndex;
+    Aref_FLOAT renderSpeed; //determines how fast ribbon renders, can affect ribbon end point?
+    Aref_UINT32 ar2;
+    uint32 d1;
+    Aref_UINT32 ar3;
+    Aref_UINT32 ar4;
+    Aref_UINT32 ar5;
+    Aref_UINT32 ar6;
+    Aref_FLOAT ar7;
+    Aref_VEC3D ar8;
+    float emissionAngle; //determines where ribbon ends
+    float ribThickness; //0 - 1.0
+    float f1[3];
+    Aref_VEC3D ribScale; //[start, mid, end]
+    Aref_VEC3D ribRotate; //[rotSpread1, rotSpread2, unk]?
+    Aref_Colour ar11;
+    Aref_Colour ar12;
+    Aref_Colour ar13;
+    float f2; //affects render speed
+    uint32 d2;
+    float f3;
+    uint32 d3[8];
+    float f4;
+    uint32 d4;
+    //determined through previewer
+    enum <ulong> ribbonType { rtPlanarBillboarded, rtPlanar, rtCylinder, rtStarShaped    } ribType;
+    uint32 d5;
+    float emissionRate;
+    uint32 d6;
+    float f6;
+    Aref_FLOAT ribLength;
+    uint32 d7[4];
+    Aref_UINT32 visible; //animated FLAG, seems to switch ribbon on or off
+    ribbonFlags ribFlags; //determined through beta previewer
+    uint32 d8[5];
+    Aref_UINT32 ar16;
+    Aref_UINT32 ar17;
+    uint32 d9;
+    Aref_UINT32 ar18;
+    Aref_UINT32 ar19;
+    uint32 d10;
+    Aref_UINT32 ar20;
+    Aref_UINT32 ar21;
+    uint32 d11;
+    Aref_UINT32 ar22;
+    Aref_UINT32 ar23;
+    uint32 d12;
+    Aref_UINT32 ar24;
+    Aref_UINT32 ar25;
+    Aref_FLOAT ar26;
+    Aref_UINT32 ar27;
 } RIB_; //Ribbons
 
 typedef struct
