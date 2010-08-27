@@ -557,12 +557,17 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
     BYTE Buffer[0x1000];
     HANDLE hFile = NULL;
     DWORD dwVerifyResult = 0;
+    DWORD dwSearchScope = SFILE_OPEN_FROM_MPQ;
     DWORD dwTotalBytes = 0;
     DWORD dwBytesRead;
     DWORD dwCrc32;
 
+    // Fix the open type for patched archives
+    if(SFileIsPatchedArchive(hMpq))
+        dwSearchScope = SFILE_OPEN_PATCHED_FILE;
+
     // Attempt to open the file
-    if(SFileOpenFileEx(hMpq, szFileName, SFILE_OPEN_FROM_MPQ, &hFile))
+    if(SFileOpenFileEx(hMpq, szFileName, dwSearchScope, &hFile))
     {
         // Get the file size
         hf = (TMPQFile *)hFile;
@@ -605,32 +610,42 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
 
         // Check if the entire file has been read
         // No point in checking CRC32 and MD5 if not
+        // Skip checksum checks if the file has patches
         if(dwTotalBytes == 0)
         {
-            // Check if the CRC32 matches
-            if((dwFlags & MPQ_ATTRIBUTE_CRC32) && hf->pCrc32 != NULL)
+            // Check CRC32 and MD5 only if there is no patches
+            if(hf->hfPatchFile == NULL)
             {
-                // Some files may have their CRC zeroed
-                if(hf->pCrc32[0] != 0)
+                // Check if the CRC32 matches.
+                if((dwFlags & MPQ_ATTRIBUTE_CRC32) && hf->pCrc32 != NULL)
                 {
-                    dwVerifyResult |= VERIFY_FILE_HAS_CHECKSUM;
-                    if(dwCrc32 != hf->pCrc32[0])
-                        dwVerifyResult |= VERIFY_FILE_CHECKSUM_ERROR;
+                    // Some files may have their CRC zeroed
+                    if(hf->pCrc32[0] != 0)
+                    {
+                        dwVerifyResult |= VERIFY_FILE_HAS_CHECKSUM;
+                        if(dwCrc32 != hf->pCrc32[0])
+                            dwVerifyResult |= VERIFY_FILE_CHECKSUM_ERROR;
+                    }
+                }
+
+                // Check if MD5 matches
+                if((dwFlags & MPQ_ATTRIBUTE_MD5) && hf->pMd5 != NULL)
+                {
+                    md5_done(&md5_state, Md5.Value);
+
+                    // Some files have the MD5 zeroed. Don't check MD5 in that case
+                    if(is_valid_md5(hf->pMd5->Value))
+                    {
+                        dwVerifyResult |= VERIFY_FILE_HAS_MD5;
+                        if(memcmp(Md5.Value, hf->pMd5->Value, sizeof(TMPQMD5)))
+                            dwVerifyResult |= VERIFY_FILE_MD5_ERROR;
+                    }
                 }
             }
-
-            // Check if MD5 matches
-            if((dwFlags & MPQ_ATTRIBUTE_MD5) && hf->pMd5 != NULL)
+            else
             {
-                md5_done(&md5_state, Md5.Value);
-
-                // Some files have the MD5 zeroed. Don't check MD5 in that case
-                if(is_valid_md5(hf->pMd5->Value))
-                {
-                    dwVerifyResult |= VERIFY_FILE_HAS_MD5;
-                    if(memcmp(Md5.Value, hf->pMd5->Value, sizeof(TMPQMD5)))
-                        dwVerifyResult |= VERIFY_FILE_MD5_ERROR;
-                }
+                // Patched files are MD5-checked automatically
+                dwVerifyResult |= VERIFY_FILE_HAS_MD5;
             }
         }
         else
