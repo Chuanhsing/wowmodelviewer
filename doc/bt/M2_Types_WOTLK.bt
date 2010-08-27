@@ -660,12 +660,18 @@ typedef struct {
 
 typedef struct {
 	int32 id;
-	float fov, farclip, nearclip;
+    if (V_REQ != 16) {
+	float fov;
+    }
+    float farclip, nearclip;
 	AB_Vec3D transPos;
 	Vec3D pos;
 	AB_Vec3D transTarget;
 	Vec3D target;
 	AB_Quat rot;
+	if (V_REQ == 16) {
+		AB_Float unk;
+	}
 } CAMERA <optimize=false>;
 
 typedef struct  {
@@ -808,6 +814,9 @@ typedef struct {
     PARTICLEANIMS AnimatedParameters;
     PARTICLEPARAMS AdditionalParameters;
 	AB_UInt16 en;
+	if (V_REQ == 16) {
+		int32	unk[4];
+	}
 } PARTICLEEMITTER <optimize=false>;
 
 typedef struct {

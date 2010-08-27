@@ -228,7 +228,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	std::vector<MeshMap> MeshtoMat;
 	for (uint32 i=0; i<view->nTex; i++)
 	{
-		if (tex[i].texunit < m->header.nTexUnitLookup && texunitlookup[tex[i].texunit] == 0)
+		//if (tex[i].texunit < m->header.nTexUnitLookup && texunitlookup[tex[i].texunit] == 0) // cataclysm lost this table
 		{	
 			int idx = -1;
 
@@ -1314,7 +1314,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	uint32 partexstart = MATtable.size();
 	std::vector <int32> M3ParticleMap;
-	if (bShowParticle)
+	if (bShowParticle && gameVersion < 40000)
 	{
 		// prepare particle texture
 		for (uint32 i=0; i < m->header.nParticleEmitters; i++)
@@ -1423,7 +1423,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 					if (MATtable[i].animid != -1)
 						SetAnimed(layer.ar4.AnimRef);
-					if (bShowParticle && i >= partexstart)
+					if (bShowParticle && gameVersion < 40000 && i >= partexstart)
 						layer.flags |= LAYR_FLAGS_SPLIT;
 				}
 
@@ -1438,7 +1438,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 						if (m->colors[MATtable[i].color].opacity.sizes != 0)
 							SetAnimed(layer.brightness_mult1.AnimRef);
 					}
-					if (bShowParticle && i >= partexstart)
+					if (bShowParticle && gameVersion < 40000 && i >= partexstart)
 						layer.flags |= LAYR_FLAGS_SPLIT;
 				}
 
@@ -1458,7 +1458,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 						SetAnimed(layer.ar4.AnimRef);
 					if (MATtable[i].color != -1)
 						SetAnimed(layer.brightness_mult1.AnimRef);
-					if (bShowParticle && i >= partexstart)
+					if (bShowParticle && gameVersion < 40000 && i >= partexstart)
 						layer.flags |= LAYR_FLAGS_SPLIT;
 				}
 
@@ -1521,7 +1521,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Seek(datachunk_offset, wxFromStart);
 	}
 
-	if (bShowParticle)
+	if (bShowParticle && gameVersion < 40000)
 	{
 		// mPar
 		mdata.mPar.nEntries = m->header.nParticleEmitters;

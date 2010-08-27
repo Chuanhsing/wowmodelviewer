@@ -463,7 +463,7 @@ struct ModelCameraDefV10 {
 	AnimationBlock transTarget; // (Vec3D) How the target moves. Should be 3*3 floats. (?)
 	Vec3D target; // float, Where the camera points to.
 	AnimationBlock rot; // (Quat) The camera can have some roll-effect. Its 0 to 2*Pi. 3 Floats!
-	AnimationBlock AnimBlock4; // (Float) One Float. cata
+	AnimationBlock AnimBlock4; // (Float) One Float. cataclysm
 };
 
 #ifndef WotLK
@@ -592,11 +592,11 @@ struct ModelParticleEmitterDefV10 {
 	AnimationBlock EmissionAreaWidth; // (Float) 
 	AnimationBlock Gravity2; // (Float) A second gravity? Its strong.
 	ModelParticleParams p;
-	AnimationBlock en; // (UInt16)
-	int32 unknown3; // 12319, cata
-	int32 unknown4; // 12319, cata
-	int32 unknown5; // 12319, cata
-	int32 unknown6; // 12319, cata
+	AnimationBlock en; // (UInt16), seems unused in cataclysm
+	int32 unknown3; // 12319, cataclysm
+	int32 unknown4; // 12319, cataclysm
+	int32 unknown5; // 12319, cataclysm
+	int32 unknown6; // 12319, cataclysm
 };
 
 struct ModelRibbonEmitterDef {

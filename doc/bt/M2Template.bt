@@ -50,7 +50,7 @@ struct AR {
         FSeek( GeneralInformation.Offsets.ofsAnimationLookup);
         short AnimationLookupTable[GeneralInformation.Offsets.nAnimationLookup];
     
-        if(GeneralInformation.Version != 8) {
+        if(GeneralInformation.Version != 8 && GeneralInformation.Version != 16) {
             FSeek( GeneralInformation.Offsets.ofsD);
             SS BlockD[GeneralInformation.Offsets.nD];
         } 
@@ -80,7 +80,7 @@ struct GAR {
     FSeek( GeneralInformation.Offsets.ofsVertices);
     VERTEX Vertices[GeneralInformation.Offsets.nVertices];
 
-    if(GeneralInformation.Version != 8) {
+    if(GeneralInformation.Version != 8 && GeneralInformation.Version != 16) {
         FSeek( GeneralInformation.Offsets.ofsViews);
         VIEW Views[GeneralInformation.Offsets.nViews] <optimize=false>;
     }
