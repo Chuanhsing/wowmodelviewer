@@ -505,8 +505,11 @@ struct ModelParticleParams {
 };
 #endif
 
-#define	MODELPARTICLE_FLAGS_DONOTTRAIL			0x10
+#define	MODELPARTICLE_FLAGS_DONOTTRAIL		0x10
 #define	MODELPARTICLE_FLAGS_DONOTBILLBOARD	0x1000
+#define	MODELPARTICLE_EMITTER_PLANE			1
+#define	MODELPARTICLE_EMITTER_SPHERE		2
+#define	MODELPARTICLE_EMITTER_SPLINE		3
 struct ModelParticleEmitterDef {
     int32 id;
 	int32 flags; // MODELPARTICLE_FLAGS_*
@@ -530,11 +533,11 @@ struct ModelParticleEmitterDef {
 	int8 ParticleType; // 0 "normal" particle, 
 					   // 1 large quad from the particle's origin to its position (used in Moonwell water effects)
 					   // 2 seems to be the same as 0 (found some in the Deeprun Tram blinky-lights-sign thing)
-	int8 HeadorTail; // 0 - Head, 1 - Tail, 2 - Both
+	int8 HeaderTail; // 0 - Head, 1 - Tail, 2 - Both
 	int16 TextureTileRotation; // TODO, Rotation for the texture tile. (Values: -1,0,1)
 #endif
 	int16 cols; // How many different frames are on that texture? People should learn what rows and cols are.
-	int16 rows; // Its different everywhere. I just took it random.
+	int16 rows; // (2, 2) means slice texture to 2*2 pieces
 	AnimationBlock EmissionSpeed; // (Float) All of the following blocks should be floats.
 	AnimationBlock SpeedVariation; // (Float) Variation in the flying-speed. (range: 0 to 1)
 	AnimationBlock VerticalRange; // (Float) Drifting away vertically. (range: 0 to pi)
@@ -572,10 +575,10 @@ struct ModelParticleEmitterDefV10 {
 	int8 ParticleType; // 0 "normal" particle, 
 					   // 1 large quad from the particle's origin to its position (used in Moonwell water effects)
 					   // 2 seems to be the same as 0 (found some in the Deeprun Tram blinky-lights-sign thing)
-	int8 HeadorTail; // 0 - Head, 1 - Tail, 2 - Both
+	int8 HeaderTail; // 0 - Head, 1 - Tail, 2 - Both
 	int16 TextureTileRotation; // TODO, Rotation for the texture tile. (Values: -1,0,1)
 	int16 cols; // How many different frames are on that texture? People should learn what rows and cols are.
-	int16 rows; // Its different everywhere. I just took it random.
+	int16 rows; // (2, 2) means slice texture to 2*2 pieces
 	AnimationBlock EmissionSpeed; // (Float) All of the following blocks should be floats.
 	AnimationBlock SpeedVariation; // (Float) Variation in the flying-speed. (range: 0 to 1)
 	AnimationBlock VerticalRange; // (Float) Drifting away vertically. (range: 0 to pi)

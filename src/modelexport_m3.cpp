@@ -3,7 +3,7 @@
 #include "modelexport_m3.h"
 #include "modelcanvas.h"
 
-#define	ROOT_BONE	1
+#define	ROOT_BONE	(1)
 
 typedef enum M3_Class {
 	AR_Default,
@@ -1011,12 +1011,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	// mBone
 	std::vector<ModelBoneDef> boneList;
 
-#if	(ROOT_BONE == 1)
-	ModelBoneDef rootBone;
-	memset(&rootBone, 0, sizeof(rootBone));
-	rootBone.parent = -2;
-	boneList.push_back(rootBone);
-#endif
+	if (ROOT_BONE == 1) {
+		ModelBoneDef rootBone;
+		memset(&rootBone, 0, sizeof(rootBone));
+		rootBone.parent = -2;
+		boneList.push_back(rootBone);
+	}
+
 	for(uint32 i=0; i<m->header.nBones; i++) {
 		boneList.push_back(mb[i]);
 	}

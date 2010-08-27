@@ -75,13 +75,13 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 
 	emitter = 0;
 	switch (mta.EmitterType) {
-	case 1:
+	case MODELPARTICLE_EMITTER_PLANE:
 		emitter = new PlaneParticleEmitter(this);
 		break;
-	case 2:
+	case MODELPARTICLE_EMITTER_SPHERE:
 		emitter = new SphereParticleEmitter(this);
 		break;
-	case 3: // Spline? (can't be bothered to find one)
+	case MODELPARTICLE_EMITTER_SPLINE: // Spline? (can't be bothered to find one)
 	default:
 		wxLogMessage(_T("[Error] Unknown Emitter: %d\n"), mta.EmitterType);
 		break;
@@ -113,7 +113,7 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 	// init tiles
 	for (int i=0; i<rows*cols; i++) {
 		TexCoordSet tc;
-		initTile(tc.tc,i);
+		initTile(tc.tc, i);
 		tiles.push_back(tc);
 	}
 }
