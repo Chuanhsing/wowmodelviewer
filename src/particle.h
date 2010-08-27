@@ -51,7 +51,7 @@ class ParticleSystem {
 	GLuint texture;
 	ParticleEmitter *emitter;
 	ParticleList particles;
-	int blend, order, type;
+	int blend, order, ParticleType;
 	int manim, mtime;
 	int rows, cols;
 	std::vector<TexCoordSet> tiles;
@@ -63,7 +63,7 @@ class ParticleSystem {
 
 	// unknown parameters omitted for now ...
 	int32 flags;
-	int16 pType;
+	int16 EmitterType;
 
 	Bone *parent;
 
@@ -80,7 +80,7 @@ public:
 	{
 		blend = 0;
 		order = 0;
-		type = 0;
+		ParticleType = 0;
 		manim = 0;
 		mtime = 0;
 		rows = 0;
@@ -120,7 +120,7 @@ public:
 		out << "        <texture>" << v.texture << "</texture>" << endl;
 		out << "        <blend>" << v.blend << "</blend>" << endl;
 		out << "        <order>" << v.order << "</order>" << endl;
-		out << "        <type>" << v.type << "</type>" << endl;
+		out << "        <ParticleType>" << v.ParticleType << "</ParticleType>" << endl;
 		out << "        <manim>" << v.manim << "</manim>" << endl;
 		out << "        <mtime>" << v.mtime << "</mtime>" << endl;
 		out << "        <rows>" << v.rows << "</rows>" << endl;
@@ -128,7 +128,7 @@ public:
 		out << "        <billboard>" << v.billboard << "</billboard>" << endl;
 		out << "        <rem>" << v.rem << "</rem>" << endl;
 		out << "        <flags>" << v.flags << "</flags>" << endl;
-		out << "        <pTypes>" << v.pType << "</pTypes>" << endl;
+		out << "        <EmitterType>" << v.EmitterType << "</EmitterType>" << endl;
 		out << "        <tofs>" << v.tofs << "</tofs>" << endl;
 		return out;
 	}

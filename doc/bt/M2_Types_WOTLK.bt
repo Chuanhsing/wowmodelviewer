@@ -781,7 +781,9 @@ typedef struct {
 	Vec3D Rot1;	//Model Rotation 1
 	Vec3D Rot2;	//Model Rotation 2
 	Vec3D Trans;	//Model Translation
-	float f2[6];
+	float f2[4];
+	int32 ParticleType;
+	int32 ofsUnknownReferenc;
 } PARTICLEPARAMS;
 
 typedef struct {

@@ -1119,6 +1119,79 @@ struct PAR
     uint32 unk[7];
 };
 
+#define	RIBBON_TYPE_PLANARBILLBOARDED	0
+#define	RIBBON_TYPE_PLANAR				1
+#define	RIBBON_TYPE_CYLINDER			2
+#define	RIBBON_TYPE_STARSHAPED			3
+#define	RIBBON_FLAGS_collideWithTerrain		0x2
+#define	RIBBON_FLAGS_collideWithObjects		0x4
+#define	RIBBON_FLAGS_edgeFalloff			0x8
+#define	RIBBON_FLAGS_inheritParentVelocity	0x10
+#define	RIBBON_FLAGS_smoothSize				0x20
+#define	RIBBON_FLAGS_bezierSmoothSize		0x40
+#define	RIBBON_FLAGS_useVertexAlpha			0x80
+#define	RIBBON_FLAGS_scaleTimeByParent		0x100
+#define	RIBBON_FLAGS_forceLegacy			0x200
+#define	RIBBON_FLAGS_useLocalTime			0x400
+#define	RIBBON_FLAGS_simulateOnInit			0x800
+#define	RIBBON_FLAGS_useLengthAndTime		0x1000
+// Ribbons
+struct RIB
+{
+    uint32 bone;
+    uint32 matmIndex;
+    Aref_FLOAT renderSpeed; //determines how fast ribbon renders, can affect ribbon end point?
+    Aref_UINT32 ar2;
+    uint32 d1;
+    Aref_UINT32 ar3;
+    Aref_UINT32 ar4;
+    Aref_UINT32 ar5;
+    Aref_UINT32 ar6;
+    Aref_FLOAT ar7;
+    Aref_VEC3D ar8;
+    float emissionAngle; //determines where ribbon ends
+    float ribThickness; //0 - 1.0
+    float f1[3];
+    Aref_VEC3D ribScale; //[start, mid, end]
+    Aref_VEC3D ribRotate; //[rotSpread1, rotSpread2, unk]?
+    Aref_Colour ar11;
+    Aref_Colour ar12;
+    Aref_Colour ar13;
+    float f2; //affects render speed
+    uint32 d2;
+    float f3;
+    uint32 d3[8];
+    float f4;
+    uint32 d4;
+    //determined through previewer
+    uint32 ribbonType; //enum <ulong> ribbonType { rtPlanarBillboarded, rtPlanar, rtCylinder, rtStarShaped    } ribType;
+    uint32 d5;
+    float emissionRate;
+    uint32 d6;
+    float f6;
+    Aref_FLOAT ribLength;
+    uint32 d7[4];
+    Aref_UINT32 visible; //animated FLAG, seems to switch ribbon on or off
+    uint32 ribFlags; //ribbonFlags ribFlags; //determined through beta previewer
+    uint32 d8[5];
+    Aref_UINT32 ar16;
+    Aref_UINT32 ar17;
+    uint32 d9;
+    Aref_UINT32 ar18;
+    Aref_UINT32 ar19;
+    uint32 d10;
+    Aref_UINT32 ar20;
+    Aref_UINT32 ar21;
+    uint32 d11;
+    Aref_UINT32 ar22;
+    Aref_UINT32 ar23;
+    uint32 d12;
+    Aref_UINT32 ar24;
+    Aref_UINT32 ar25;
+    Aref_FLOAT ar26;
+    Aref_UINT32 ar27;
+};
+
 /*
 In the .m3 files, the vertex data seems to be contained within a uint8 block.
 

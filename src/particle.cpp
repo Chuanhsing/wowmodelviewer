@@ -26,7 +26,7 @@ T lifeRamp(float life, float mid, const T &a, const T &b, const T &c)
 
 void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *globals)
 {
-	speed.init	 (mta.EmissionSpeed, f, globals);
+	speed.init (mta.EmissionSpeed, f, globals);
 	variation.init (mta.SpeedVariation, f, globals);
 	spread.init (mta.VerticalRange, f, globals);
 	lat.init (mta.HorizontalRange, f, globals);
@@ -68,24 +68,10 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 	cols = mta.cols;
 	if (cols == 0)
 		cols = 1;
-	type = mta.ParticleType;
+	ParticleType = mta.ParticleType;
 	//order = mta.s2;
 	order = mta.ParticleType>0 ? -1 : 0;
 	parent = model->bones + mta.bone;
-
-	emitter = 0;
-	switch (mta.EmitterType) {
-	case MODELPARTICLE_EMITTER_PLANE:
-		emitter = new PlaneParticleEmitter(this);
-		break;
-	case MODELPARTICLE_EMITTER_SPHERE:
-		emitter = new SphereParticleEmitter(this);
-		break;
-	case MODELPARTICLE_EMITTER_SPLINE: // Spline? (can't be bothered to find one)
-	default:
-		wxLogMessage(_T("[Error] Unknown Emitter: %d\n"), mta.EmitterType);
-		break;
-	}
 
 	//transform = mta.flags & 1024;
 
@@ -102,15 +88,29 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 	billboard = !(mta.flags & MODELPARTICLE_FLAGS_DONOTBILLBOARD);
 
 	// diagnosis test info
-	pType = mta.EmitterType;
+	EmitterType = mta.EmitterType;
 	flags = mta.flags; // 0x10	Do not Trail
 
 	manim = mtime = 0;
 	rem = 0;
 
+	emitter = 0;
+	switch (EmitterType) {
+	case MODELPARTICLE_EMITTER_PLANE:
+		emitter = new PlaneParticleEmitter(this);
+		break;
+	case MODELPARTICLE_EMITTER_SPHERE:
+		emitter = new SphereParticleEmitter(this);
+		break;
+	case MODELPARTICLE_EMITTER_SPLINE: // Spline? (can't be bothered to find one)
+	default:
+		wxLogMessage(_T("[Error] Unknown Emitter: %d\n"), EmitterType);
+		break;
+	}
+
 	tofs = frand();
 
-	// init tiles
+	// init tiles, slice the texture
 	for (int i=0; i<rows*cols; i++) {
 		TexCoordSet tc;
 		initTile(tc.tc, i);
@@ -369,7 +369,7 @@ void ParticleSystem::draw()
 		 * 1	large quad from the particle's origin to its position (used in Moonwell water effects)
 		 * 2	seems to be the same as 0 (found some in the Deeprun Tram blinky-lights-sign thing)
  		 */
-		if (type==0 || type==2 ) {
+		if (ParticleType==0 || ParticleType==2) {
 			// TODO: figure out type 2 (deeprun tram subway sign)
 			// - doesn't seem to be any different from 0 -_-
 			// regular particles
@@ -418,7 +418,7 @@ void ParticleSystem::draw()
 				}
 				glEnd();
 			}
-		} else if (type==1) { // Sphere particles
+		} else if (ParticleType==1) { // Sphere particles
 			// particles from origin to position
 			/*
 			bv0 = mbb * Vec3D(0,-1.0f,0);

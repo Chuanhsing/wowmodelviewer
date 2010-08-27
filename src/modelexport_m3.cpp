@@ -1312,7 +1312,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		padding(&f);
 	}
 
-	int partexstart = MATtable.size();
+	uint32 partexstart = MATtable.size();
 	std::vector <int32> M3ParticleMap;
 	if (bShowParticle)
 	{

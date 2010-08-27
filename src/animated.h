@@ -164,7 +164,7 @@ public:
 			size_t t1, t2;
 			size_t pos=0;
 			float r;
-			int max_time = times[anim][times[anim].size()-1];
+			unsigned int max_time = times[anim][times[anim].size()-1];
 			//if (max_time > 0)
 			//	time %= max_time; // I think this might not be necessary?
 			if (time > max_time) {
