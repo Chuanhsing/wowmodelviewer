@@ -190,6 +190,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	ModelRenderFlags *renderflags = (ModelRenderFlags *)(mpqf.getBuffer() + m->header.ofsTexFlags);
 	//ModelTexAnimDef *texanim = (ModelTexAnimDef *)(mpqf.getBuffer() + m->header.ofsTexAnims);
 	//uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
+	ModelParticleEmitterDef *particle = (ModelParticleEmitterDef *)(mpqf.getBuffer() + m->header.ofsParticleEmitters);
 
 	std::vector<uint32> logAnimations;
 	std::vector<wxString> vAnimations;
@@ -463,7 +464,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		{
 			if (MATtable[j].color < 0)
 				continue;
-			if (m->colors[MATtable[j].color].opacity.data[anim_offset].size() > 0)
+			if ((m->colors[MATtable[j].color].opacity.seq == -1 &&  m->colors[MATtable[j].color].opacity.data[anim_offset].size() > 0) ||
+				(m->colors[MATtable[j].color].opacity.seq != -1 &&  m->colors[MATtable[j].color].opacity.data[0].size() > 0))
 			{
 				for(uint32 k=0; k<13; k++) 
 				{
@@ -475,7 +477,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 						stcs[i].arFloat.nEntries++;
 					}
 
-					if (k == MAT_LAYER_ALPHA && (MATtable[j].blend == BM_OPAQUE || MATtable[j].blend == BM_ALPHA_BLEND))
+					if (k == MAT_LAYER_ALPHA && (MATtable[j].blend == BM_OPAQUE || MATtable[j].blend == BM_ALPHA_BLEND || MATtable[j].blend == BM_ADDITIVE_ALPHA))
 					{
 						M3OpacityAnimid.back().push_back(CreateAnimID(AR_Layer, j, k, 2));
 						M2OpacityIdx.back().push_back(MATtable[j].color);
@@ -485,10 +487,22 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			}
 		}
 
+		for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+		{
+			if (particle[j].en.nTimes > 0 && 
+					((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
+					 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
+				stcs[i].arFloat.nEntries++;
+		}
+
 		stcs[i].animid.nEntries = stcs[i].arVec3D.nEntries + stcs[i].arQuat.nEntries + stcs[i].arVec2D.nEntries + stcs[i].arFloat.nEntries;
+
+		// anim reference id
 		if (stcs[i].animid.nEntries > 0) {
 			stcs[i].animid.ref = reList.size();
 			RefEntry("_23U", f.Tell(), stcs[i].animid.nEntries, 0);
+
+			// bone anim id
 			for(uint32 j=0; j<m->header.nBones; j++) {
 				if (m->bones[j].trans.data[anim_offset].size() > 0) {
 					uint32 p = CreateAnimID(AR_Bone, j+ROOT_BONE, 0, 2);
@@ -503,19 +517,33 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					f.Write(&p, sizeof(uint32));
 				}
 			}
+
+			// tex anim id
 			for(uint32 j=0; j<M3TexAnimId.size(); j++) 
 			{
 				uint32 p = M3TexAnimId[j];
 				f.Write(&p, sizeof(uint32));
 			}
-
+			
+			// mesh opacity id
 			for (uint32 j=0; j<M3OpacityAnimid.back().size(); j++)
 			{
 				uint32 p = M3OpacityAnimid.back()[j];
 				f.Write(&p, sizeof(uint32));
 			}
 
-			
+			// particle rate id
+			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+			{
+				if (particle[j].en.nTimes > 0 && 
+					((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
+					 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
+				{
+					uint32 p = CreateAnimID(AR_Par, j, 0, 14);
+					f.Write(&p, sizeof(uint32));
+				}
+			}
+
 			padding(&f);
 		}
 
@@ -526,40 +554,57 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			RefEntry("_23U", f.Tell(), stcs[i].animindex.nEntries, 0);
 			int16 tcount = 0;
 			int16 rcount = 0;
+			int16 fcount = 0;
 
+			// bone anim offset
 			for(uint32 j=0; j<m->header.nBones; j++) {
 				if (m->bones[j].trans.data[anim_offset].size() > 0) {
-					uint16 p = 2;
+					uint16 p = STC_INDEX_VEC3D;
 					f.Write(&tcount, sizeof(uint16));
 					f.Write(&p, sizeof(uint16));
 					tcount++;
 				}
 				if (m->bones[j].scale.data[anim_offset].size() > 0) {
-					uint16 p = 2;
+					uint16 p = STC_INDEX_VEC3D;
 					f.Write(&tcount, sizeof(uint16));
 					f.Write(&p, sizeof(uint16));
 					tcount++;
 				}
 				if (m->bones[j].rot.data[anim_offset].size() > 0) {
-					uint16 p = 3;
+					uint16 p = STC_INDEX_QUAT;
 					f.Write(&rcount, sizeof(uint16));
 					f.Write(&p, sizeof(uint16));
 					rcount++;
 				}
 			}
+			// tex anim offset
 			for(uint16 j=0; j<M3TexAnimId.size(); j++) 
 			{
-				int16 p = 1;
+				int16 p = STC_INDEX_VEC2D;
 				f.Write(&j, sizeof(uint16));
 				f.Write(&p, sizeof(uint16));
 			}
 
-
+			// mesh opacity offset
 			for (uint32 j=0; j<M3OpacityAnimid.back().size(); j++)
 			{
-				int16 p = 5;
-				f.Write(&j, sizeof(uint16));
+				int16 p = STC_INDEX_FLOAT;
+				f.Write(&fcount, sizeof(uint16));
 				f.Write(&p, sizeof(uint16));
+				fcount++;
+			}
+			// particle anim offset
+			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+			{
+				if (particle[j].en.nTimes > 0 && 
+					((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
+					 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
+				{
+					int16 p = STC_INDEX_FLOAT;
+					f.Write(&fcount, sizeof(uint16));
+					f.Write(&p, sizeof(uint16));
+					fcount++;
+				}
 			}
 
 			padding(&f);
@@ -787,14 +832,20 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 			for (uint32 j=0; j<M3OpacityAnimid.back().size(); j++)
 			{
-				if (m->colors[M2OpacityIdx.back()[j]].opacity.data[anim_offset].size() > 0)
+				if ((m->colors[M2OpacityIdx.back()[j]].opacity.seq == -1 &&  m->colors[M2OpacityIdx.back()[j]].opacity.data[anim_offset].size() > 0) ||
+				    (m->colors[M2OpacityIdx.back()[j]].opacity.seq != -1 &&  m->colors[M2OpacityIdx.back()[j]].opacity.data[0].size() > 0))
 				{
-					int counts = m->colors[M2OpacityIdx.back()[j]].opacity.data[anim_offset].size();
+					int animidx;
+					if (m->colors[M2OpacityIdx.back()[j]].opacity.seq == -1)
+						animidx = anim_offset;
+					else
+						animidx = 0;
+					int counts = m->colors[M2OpacityIdx.back()[j]].opacity.data[animidx].size();
 					sds[ii].timeline.nEntries = counts;
 					sds[ii].timeline.ref = reList.size();
 					RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
 					for (int k=0; k<counts; k++) {
-						f.Write(&m->colors[M2OpacityIdx.back()[j]].opacity.times[anim_offset][k], sizeof(int32));
+						f.Write(&m->colors[M2OpacityIdx.back()[j]].opacity.times[animidx][k], sizeof(int32));
 					}
 					padding(&f);
 					sds[ii].length = seqs[i].length;
@@ -802,13 +853,54 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					sds[ii].data.ref = reList.size();
 					RefEntry("LAER", f.Tell(), sds[ii].data.nEntries, 0);
 					for (int k=0; k<counts; k++) {
-						float opy = m->colors[M2OpacityIdx.back()[j]].opacity.data[anim_offset][k];
+						float opy = m->colors[M2OpacityIdx.back()[j]].opacity.data[animidx][k];
 						f.Write(&opy, sizeof(float));
 					}
 					padding(&f);
 					ii++;
 				}
 			}
+
+			// particle rate anim
+			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+			{
+				if (particle[j].en.nTimes > 0)
+				{
+					if ((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
+						(m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0))
+					{
+						int animidx;
+						if (m->particleSystems[j].enabled.seq == -1)
+							animidx = anim_offset;
+						else
+							animidx = 0;
+						int counts = m->particleSystems[j].enabled.data[animidx].size();
+						sds[ii].timeline.nEntries = counts;
+						sds[ii].timeline.ref = reList.size();
+						RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
+						for (int k=0; k<counts; k++) {
+							f.Write(&m->particleSystems[j].enabled.times[animidx][k], sizeof(int32));
+						}
+						padding(&f);
+						sds[ii].length = seqs[i].length;
+						sds[ii].data.nEntries = counts;
+						sds[ii].data.ref = reList.size();
+						RefEntry("LAER", f.Tell(), sds[ii].data.nEntries, 0);
+						for (int k=0; k<counts; k++) {
+							float rate;
+							if (m->particleSystems[j].enabled.data[animidx][k] && m->particleSystems[j].rate.data[0].size() > 0)
+								rate = m->particleSystems[i].rate.data[0][0];
+							else
+								rate = 0;	
+							f.Write(&rate, sizeof(float));
+						}
+						padding(&f);
+						ii++;
+					}
+				}
+			}
+
+
 			datachunk_offset2 = f.Tell();
 			f.Seek(chunk_offset2, wxFromStart);
 			for(uint32 j=0; j<stcs[i].arFloat.nEntries; j++) {
@@ -895,6 +987,15 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			{
 				uint32 p = M3OpacityAnimid[i][j];
 				f.Write(&p, sizeof(uint32));
+			}
+
+			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+			{
+				if (particle[j].en.nTimes > 0)
+				{
+					uint32 p = CreateAnimID(AR_Par, j, 0, 14);
+					f.Write(&p, sizeof(uint32));
+				}
 			}
 			padding(&f);
 		}
@@ -1212,7 +1313,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	}
 
 #ifdef	ENABLE_PARTICLE
-	ModelParticleEmitterDef *particle = (ModelParticleEmitterDef *)(mpqf.getBuffer() + m->header.ofsParticleEmitters);
 	// prepare particle texture
 	std::vector <int32> M3ParticleMap;
 	int partexstart = MATtable.size();
@@ -1235,7 +1335,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				MATmap bm;
 				bm.texid = particle[i].texture;
 				bm.flags = 0;
-				bm.blend = particle[i].blend;
+				bm.blend = BM_ADDITIVE_ALPHA; //particle[i].blend;
 				bm.animid = -1;
 				bm.color = -1;
 				MATtable.push_back(bm);
@@ -1322,10 +1422,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 					if (MATtable[i].animid != -1)
 						SetAnimed(layer.ar4.AnimRef);
+#ifdef	ENABLE_PARTICLE
 					if (i >= partexstart)
-					{
 						layer.flags |= LAYR_FLAGS_SPLIT;
-					}
+#endif
 				}
 
 				if (j == MAT_LAYER_EMISSIVE && (MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_ADDITIVE)) 
@@ -1339,10 +1439,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 						if (m->colors[MATtable[i].color].opacity.sizes != 0)
 							SetAnimed(layer.brightness_mult1.AnimRef);
 					}
+#ifdef	ENABLE_PARTICLE
 					if (i >= partexstart)
-					{
 						layer.flags |= LAYR_FLAGS_SPLIT;
-					}
+#endif
 				}
 
 				if (j == MAT_LAYER_ALPHA && MATtable[i].blend == BM_OPAQUE && MATtable[i].color != -1)
@@ -1354,25 +1454,17 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				else if (j == MAT_LAYER_ALPHA && 
 					(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_TRANSPARENT))
 				{
-					if (i >= partexstart)
-					{
-						if (MATtable[i].blend == BM_TRANSPARENT)
-						{
-							layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
-							NameRefEntry(&layer.name, texName, &f);
-							layer.flags |= LAYR_FLAGS_SPLIT;
-						}
-					}
-					else
-					{
-						layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
-						NameRefEntry(&layer.name, texName, &f);
+					layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
+					NameRefEntry(&layer.name, texName, &f);
 
-						if (MATtable[i].animid != -1)
-							SetAnimed(layer.ar4.AnimRef);
-						if (MATtable[i].color != -1)
-							SetAnimed(layer.brightness_mult1.AnimRef);
-					}
+					if (MATtable[i].animid != -1)
+						SetAnimed(layer.ar4.AnimRef);
+					if (MATtable[i].color != -1)
+						SetAnimed(layer.brightness_mult1.AnimRef);
+#ifdef	ENABLE_PARTICLE
+					if (i >= partexstart)
+						layer.flags |= LAYR_FLAGS_SPLIT;
+#endif
 				}
 
 				datachunk_offset2 = f.Tell();
@@ -1456,40 +1548,40 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		par.speedUnk1.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 10);
 		par.col1Start.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 11);
 		par.col1Mid.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 12);
-		par.col1End.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 13);
-		par.emissionRate.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 14);
-		par.emissionArea.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 15);
-		par.tailUnk1.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 16);
-		par.pivotSpread.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 17);
-		par.spreadUnk1.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 18);
-		par.ar19.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 19);
-		par.rotate.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 20);
-		par.col2Start.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 21);
-		par.col2Mid.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 22);
-		par.col2End.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 23);
-		par.ar24.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 24);
-		par.ar25.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 25);
-		par.ar26.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 26);
-		par.ar27.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 27);
-		par.ar28.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 28);
-		par.ar29.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 29);
-		par.ar30.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 30);
-		par.ar31.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 31);
-		par.ar32.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 32);
-		par.ar33.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 33);
-		par.ar34.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 34);
-		par.ar35.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 35);
-		par.ar36.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 36);
-		par.ar37.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 37);
-		par.ar38.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 38);
-		par.ar39.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 39);
-		par.ar40.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 40);
-		par.ar41.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 41);
-		par.ar42.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 42);
-		par.ar43.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 43);
-		par.ar44.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 44);
-		par.ar45.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 45);
-		par.ar46.AnimRef.animid = CreateAnimID(AR_Par, i, 0, 46);
+		par.col1End.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 13);
+		par.emissionRate.AnimRef.animid =	CreateAnimID(AR_Par, i, 0, 14);
+		par.emissionArea.AnimRef.animid =	CreateAnimID(AR_Par, i, 0, 15);
+		par.tailUnk1.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 16);
+		par.pivotSpread.AnimRef.animid =	CreateAnimID(AR_Par, i, 0, 17);
+		par.spreadUnk1.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 18);
+		par.ar19.AnimRef.animid =			CreateAnimID(AR_Par, i, 0, 19);
+		par.rotate.AnimRef.animid =			CreateAnimID(AR_Par, i, 0, 20);
+		par.col2Start.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 21);
+		par.col2Mid.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 22);
+		par.col2End.AnimRef.animid =		CreateAnimID(AR_Par, i, 0, 23);
+		par.ar24.AnimRef.animid =			CreateAnimID(AR_Par, i, 0, 24);
+		par.ar25.AnimRef.animid =			CreateAnimID(AR_Par, i, 0, 25);
+		par.ar26.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 26);
+		par.ar27.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 27);
+		par.ar28.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 28);
+		par.ar29.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 29);
+		par.ar30.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 30);
+		par.ar31.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 31);
+		par.ar32.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 32);
+		par.ar33.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 33);
+		par.ar34.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 34);
+		par.ar35.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 35);
+		par.ar36.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 36);
+		par.ar37.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 37);
+		par.ar38.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 38);
+		par.ar39.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 39);
+		par.ar40.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 40);
+		par.ar41.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 41);
+		par.ar42.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 42);
+		par.ar43.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 43);
+		par.ar44.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 44);
+		par.ar45.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 45);
+		par.ar46.AnimRef.animid = 			CreateAnimID(AR_Par, i, 0, 46);
 
 		par.matmIndex = M3ParticleMap[i];
 		par.bone = particle[i].bone + 1;
@@ -1567,6 +1659,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			par.ptenum = 1;
 		else if (particle[i].EmitterType == 2)
 			par.ptenum = 2;
+
+		if (particle[i].en.nTimes > 0)
+			SetAnimed(par.emissionRate.AnimRef);
 
 		f.Write(&par, sizeof(PAR));
 	}

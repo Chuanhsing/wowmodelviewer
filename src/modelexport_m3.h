@@ -895,6 +895,14 @@ data is referenced using animation references. I believe there will be a total
 of 13 different types of animation references, one for each index of the 
 sequence data array. So far only some have been discovered within M3 files.
 */
+#define	STC_INDEX_EVENT    (0)
+#define	STC_INDEX_VEC2D    (1)
+#define	STC_INDEX_VEC3D    (2)
+#define	STC_INDEX_QUAT     (3)
+#define	STC_INDEX_COLOR    (4)
+#define	STC_INDEX_FLOAT    (5)
+#define	STC_INDEX_INT16    (7)
+
 struct STC
 {
     /*0x00*/ Reference name;
