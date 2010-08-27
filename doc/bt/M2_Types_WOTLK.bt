@@ -805,7 +805,7 @@ typedef struct {
 	int16 cols;
     PARTICLEANIMS AnimatedParameters;
     PARTICLEPARAMS AdditionalParameters;
-	AB_UInt32 en;
+	AB_UInt16 en;
 } PARTICLEEMITTER <optimize=false>;
 
 typedef struct {

@@ -505,11 +505,11 @@ struct ModelParticleParams {
 };
 #endif
 
-#define	MODELPARTICLE_DONOTTRAIL			0x10
-#define	MODELPARTICLE_DONOTBILLBOARD	0x1000
+#define	MODELPARTICLE_FLAGS_DONOTTRAIL			0x10
+#define	MODELPARTICLE_FLAGS_DONOTBILLBOARD	0x1000
 struct ModelParticleEmitterDef {
     int32 id;
-	int32 flags;
+	int32 flags; // MODELPARTICLE_FLAGS_*
 	Vec3D pos; // The position. Relative to the following bone.
 	int16 bone; // The bone its attached to.
 	int16 texture; // And the texture that is used.
@@ -589,7 +589,7 @@ struct ModelParticleEmitterDefV10 {
 	AnimationBlock EmissionAreaWidth; // (Float) 
 	AnimationBlock Gravity2; // (Float) A second gravity? Its strong.
 	ModelParticleParams p;
-	AnimationBlock en; // (UInt32)
+	AnimationBlock en; // (UInt16)
 	int32 unknown3; // 12319, cata
 	int32 unknown4; // 12319, cata
 	int32 unknown5; // 12319, cata

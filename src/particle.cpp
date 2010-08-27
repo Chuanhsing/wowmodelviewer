@@ -18,8 +18,10 @@ Vec4D fromARGB(uint32 color)
 template<class T>
 T lifeRamp(float life, float mid, const T &a, const T &b, const T &c)
 {
-	if (life<=mid) return interpolate<T>(life / mid,a,b);
-	else return interpolate<T>((life-mid) / (1.0f-mid),b,c);
+	if (life<=mid) 
+		return interpolate<T>(life / mid,a,b);
+	else 
+		return interpolate<T>((life-mid) / (1.0f-mid),b,c);
 }
 
 void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *globals)
@@ -97,7 +99,7 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 	// 57 = Faith halo, ring?
 	// 9 = water elemental
 
-	billboard = !(mta.flags & MODELPARTICLE_DONOTBILLBOARD);
+	billboard = !(mta.flags & MODELPARTICLE_FLAGS_DONOTBILLBOARD);
 
 	// diagnosis test info
 	pType = mta.EmitterType;
@@ -142,16 +144,16 @@ void ParticleSystem::initTile(Vec2D *tc, int num)
 
 void ParticleSystem::update(float dt)
 {
+	int l_manim = manim;
 	if (bZeroParticle)
-		manim = 0;
-	float grav = gravity.getValue(manim, mtime);
-	float deaccel = deacceleration.getValue(manim, mtime);
+		l_manim = 0;
+	float grav = gravity.getValue(l_manim, mtime);
+	float deaccel = deacceleration.getValue(l_manim, mtime);
 
 	// spawn new particles
 	if (emitter) {
-		float frate = rate.getValue(manim, mtime);
-		float flife = 1.0f;
-		flife = lifespan.getValue(manim, mtime);
+		float frate = rate.getValue(l_manim, mtime);
+		float flife = lifespan.getValue(l_manim, mtime);
 
 		float ftospawn;
 		if (flife)
@@ -166,16 +168,16 @@ void ParticleSystem::update(float dt)
 			unsigned int tospawn = (int)ftospawn;
 
 			if ((tospawn + particles.size()) > MAX_PARTICLES) // Error check to prevent the program from trying to load insane amounts of particles.
-				tospawn = (unsigned int)particles.size() - MAX_PARTICLES;
+				tospawn = (unsigned int)(MAX_PARTICLES - particles.size());
 
 			rem = ftospawn - (float)tospawn;
 
-			float w = areal.getValue(manim, mtime) * 0.5f;
-			float l = areaw.getValue(manim, mtime) * 0.5f;
-			float spd = speed.getValue(manim, mtime);
-			float var = variation.getValue(manim, mtime);
-			float spr = spread.getValue(manim, mtime);
-			float spr2 = lat.getValue(manim, mtime);
+			float w = areal.getValue(l_manim, mtime) * 0.5f;
+			float l = areaw.getValue(l_manim, mtime) * 0.5f;
+			float spd = speed.getValue(l_manim, mtime);
+			float var = variation.getValue(l_manim, mtime);
+			float spr = spread.getValue(l_manim, mtime);
+			float spr2 = lat.getValue(l_manim, mtime);
 			bool en = true;
 			if (enabled.uses(manim))
 				en = enabled.getValue(manim, mtime)!=0;
@@ -185,7 +187,7 @@ void ParticleSystem::update(float dt)
 				for (unsigned int i=0; i<tospawn; i++) {
 					Particle p = emitter->newParticle(manim, mtime, w, l, spd, var, spr, spr2);
 					// sanity check:
-					//if (particles.size() < MAX_PARTICLES) // No need to check this every loop iteration. Already checked above.
+					if (particles.size() < MAX_PARTICLES) // No need to check this every loop iteration. Already checked above.
 						particles.push_back(p);
 				}
 			}
@@ -255,16 +257,16 @@ void ParticleSystem::draw()
 	//blend = 1;
 	// setup blend mode
 	switch (blend) {
-	case 0:
+	case BM_OPAQUE:
 		glDisable(GL_BLEND);
 		glDisable(GL_ALPHA_TEST);
 		break;
-	case 1:
+	case BM_TRANSPARENT:
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_COLOR, GL_ONE);
 		glDisable(GL_ALPHA_TEST);
 		break;
-	case 2:
+	case BM_ALPHA_BLEND:
 		glEnable(GL_BLEND);
 		// originally
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
@@ -272,15 +274,17 @@ void ParticleSystem::draw()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE); 
 		glDisable(GL_ALPHA_TEST);
 		break;
-	case 3:
+	case BM_ADDITIVE:
 		glDisable(GL_BLEND);
 		glEnable(GL_ALPHA_TEST);
 		break;
-	case 4:
+	case BM_ADDITIVE_ALPHA:
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		glDisable(GL_ALPHA_TEST);
 		break;
+	case BM_MODULATE:
+	case BM_MODULATEX2:
 	default:
 		wxLogMessage(_T("blend unknown: %d"), blend);
 	}
@@ -455,7 +459,7 @@ void ParticleSystem::draw()
 }
 
 //Generates the rotation matrix based on spread
-Matrix	SpreadMat;
+static Matrix	SpreadMat;
 void CalcSpreadMatrix(float Spread1,float Spread2, float w, float l)
 {
 	int i,j;
@@ -598,7 +602,10 @@ Particle PlaneParticleEmitter::newParticle(int anim, int time, float w, float l,
 	}
 
 	p.life = 0;
-	p.maxlife = sys->lifespan.getValue(anim, time);
+	int l_anim = anim;
+	if (bZeroParticle)
+		l_anim = 0;
+	p.maxlife = sys->lifespan.getValue(l_anim, time);
 	if (p.maxlife == 0)
 		p.maxlife = 1;
 
@@ -705,7 +712,10 @@ Particle SphereParticleEmitter::newParticle(int anim, int time, float w, float l
 	p.down = Vec3D(0,-1.0f,0);
 
 	p.life = 0;
-	p.maxlife = sys->lifespan.getValue(anim, time);
+	int l_anim = anim;
+	if (bZeroParticle)
+		l_anim = 0;
+	p.maxlife = sys->lifespan.getValue(l_anim, time);
 	if (p.maxlife == 0)
 		p.maxlife = 1;
 
