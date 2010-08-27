@@ -552,7 +552,7 @@ struct ModelParticleEmitterDef {
 	AnimationBlock EmissionAreaWidth; // (Float) 
 	AnimationBlock Gravity2; // (Float) A second gravity? Its strong.
 	ModelParticleParams p;
-	AnimationBlock en; // (UInt32)
+	AnimationBlock en; // (UInt16)
 };
 
 struct ModelParticleEmitterDefV10 {

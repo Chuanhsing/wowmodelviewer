@@ -1358,8 +1358,8 @@ void Model::animate(int anim)
 
 	for (size_t i=0; i<header.nParticleEmitters; i++) {
 		// random time distribution for teh win ..?
-		int pt = a.timeStart + (t + (int)(tmax*particleSystems[i].tofs)) % tmax;
-		particleSystems[i].setup(anim, pt);
+		//int pt = a.timeStart + (t + (int)(tmax*particleSystems[i].tofs)) % tmax;
+		particleSystems[i].setup(anim, t);
 	}
 
 	for (size_t i=0; i<header.nRibbonEmitters; i++) {

@@ -163,34 +163,54 @@ public:
 		if (data[anim].size()>1 && times[anim].size()>1) {
 			size_t t1, t2;
 			size_t pos=0;
+			float r;
 			int max_time = times[anim][times[anim].size()-1];
-			if (max_time > 0)
-				time %= max_time; // I think this might not be necessary?
-			for (size_t i=0; i<times[anim].size()-1; i++) {
-				if (time >= times[anim][i] && time < times[anim][i+1]) {
-					pos = i;
-					break;
-				}
-			}
-			t1 = times[anim][pos];
-			t2 = times[anim][pos+1];
-			float r = (time-t1)/(float)(t2-t1);
+			//if (max_time > 0)
+			//	time %= max_time; // I think this might not be necessary?
+			if (time > max_time) {
+				pos=times[anim].size()-1;
+				r = 1.0f;
 
-			if (type == INTERPOLATION_NONE) 
-				return data[anim][pos];
-			else if (type == INTERPOLATION_LINEAR) 
-				return interpolate<T>(r,data[anim][pos],data[anim][pos+1]);
-			else if (type==INTERPOLATION_HERMITE){
-				// INTERPOLATION_HERMITE is only used in cameras afaik?
-				return interpolateHermite<T>(r,data[anim][pos],data[anim][pos+1],in[anim][pos],out[anim][pos]);
+				if (type == INTERPOLATION_NONE) 
+					return data[anim][pos];
+				else if (type == INTERPOLATION_LINEAR) 
+					return interpolate<T>(r,data[anim][pos],data[anim][pos+1]);
+				else if (type==INTERPOLATION_HERMITE){
+					// INTERPOLATION_HERMITE is only used in cameras afaik?
+					return interpolateHermite<T>(r,data[anim][pos],data[anim][pos],in[anim][pos],out[anim][pos]);
+				}
+				else if (type==INTERPOLATION_BEZIER){
+					//Is this used ingame or only by custom models?
+					return interpolateBezier<T>(r,data[anim][pos],data[anim][pos],in[anim][pos],out[anim][pos]);
+				}
+				else //this shouldn't appear!
+					return data[anim][pos];
+			} else {
+				for (size_t i=0; i<times[anim].size()-1; i++) {
+					if (time >= times[anim][i] && time < times[anim][i+1]) {
+						pos = i;
+						break;
+					}
+				}
+				t1 = times[anim][pos];
+				t2 = times[anim][pos+1];
+				r = (time-t1)/(float)(t2-t1);
+
+				if (type == INTERPOLATION_NONE) 
+					return data[anim][pos];
+				else if (type == INTERPOLATION_LINEAR) 
+					return interpolate<T>(r,data[anim][pos],data[anim][pos+1]);
+				else if (type==INTERPOLATION_HERMITE){
+					// INTERPOLATION_HERMITE is only used in cameras afaik?
+					return interpolateHermite<T>(r,data[anim][pos],data[anim][pos+1],in[anim][pos],out[anim][pos]);
+				}
+				else if (type==INTERPOLATION_BEZIER){
+					//Is this used ingame or only by custom models?
+					return interpolateBezier<T>(r,data[anim][pos],data[anim][pos+1],in[anim][pos],out[anim][pos]);
+				}
+				else //this shouldn't appear!
+					return data[anim][pos];
 			}
-			else if (type==INTERPOLATION_BEZIER){
-				//Is this used ingame or only by custom models?
-				return interpolateBezier<T>(r,data[anim][pos],data[anim][pos+1],in[anim][pos],out[anim][pos]);
-			}
-			else //this shouldn't appear!
-				return data[anim][pos];
-			
 		} else {
 			// default value
 			if (data[anim].size() == 0)
