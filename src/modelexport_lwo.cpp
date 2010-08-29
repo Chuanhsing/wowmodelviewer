@@ -3676,6 +3676,14 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 				LW_WriteVX(f,counter,ptagSize);
 
 				int texnum = m->mat[batch->texture].tex;
+				if (m->textures.size() <= texnum) {
+					// something wrong here
+					wxLogMessage(_T("ERROR: TexSize: %i, BatTex: %i, TexNum: %i"), m->textures.size(), batch->texture, texnum);
+					if (m->textures.size() > batch->texture) // or we should use batch->texture?
+						texnum = batch->texture;
+					else
+						texnum = 0;
+				}
 				wxString tex = wxString(m->textures[texnum].c_str(), wxConvUTF8).BeforeLast(_T('.'));
 				int texid = 0;
 				for (unsigned int x=0;x<surfarray.size();x++){
