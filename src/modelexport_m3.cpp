@@ -228,7 +228,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	std::vector<MeshMap> MeshtoMat;
 	for (uint32 i=0; i<view->nTex; i++)
 	{
-		//if (tex[i].texunit < m->header.nTexUnitLookup && texunitlookup[tex[i].texunit] == 0) // cataclysm lost this table
+		if ((gameVersion < 40000 && tex[i].texunit < m->header.nTexUnitLookup && texunitlookup[tex[i].texunit] == 0) || gameVersion >= 40000) // cataclysm lost this table
 		{	
 			int idx = -1;
 
@@ -486,12 +486,15 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			}
 		}
 
-		for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+		if (bShowParticle  && gameVersion < 40000)
 		{
-			if (particle[j].en.nTimes > 0 && 
-					((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
-					 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
-				stcs[i].arFloat.nEntries++;
+			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+			{
+				if (particle[j].en.nTimes > 0 && 
+						((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
+						 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
+					stcs[i].arFloat.nEntries++;
+			}
 		}
 
 		stcs[i].animid.nEntries = stcs[i].arVec3D.nEntries + stcs[i].arQuat.nEntries + stcs[i].arVec2D.nEntries + stcs[i].arFloat.nEntries;
@@ -532,14 +535,17 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			}
 
 			// particle rate id
-			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+			if (bShowParticle  && gameVersion < 40000)
 			{
-				if (particle[j].en.nTimes > 0 && 
-					((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
-					 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
+				for (uint32 j=0; j<m->header.nParticleEmitters; j++)
 				{
-					uint32 p = CreateAnimID(AR_Par, j, 0, 14);
-					f.Write(&p, sizeof(uint32));
+					if (particle[j].en.nTimes > 0 && 
+						((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
+						 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
+					{
+						uint32 p = CreateAnimID(AR_Par, j, 0, 14);
+						f.Write(&p, sizeof(uint32));
+					}
 				}
 			}
 
@@ -593,19 +599,21 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				fcount++;
 			}
 			// particle anim offset
-			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+			if (bShowParticle  && gameVersion < 40000)
 			{
-				if (particle[j].en.nTimes > 0 && 
-					((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
-					 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
+				for (uint32 j=0; j<m->header.nParticleEmitters; j++)
 				{
-					int16 p = STC_INDEX_FLOAT;
-					f.Write(&fcount, sizeof(uint16));
-					f.Write(&p, sizeof(uint16));
-					fcount++;
+					if (particle[j].en.nTimes > 0 && 
+						((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
+						 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
+					{
+						int16 p = STC_INDEX_FLOAT;
+						f.Write(&fcount, sizeof(uint16));
+						f.Write(&p, sizeof(uint16));
+						fcount++;
+					}
 				}
 			}
-
 			padding(&f);
 		}
 
@@ -861,44 +869,46 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			}
 
 			// particle rate anim
-			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+			if (bShowParticle  && gameVersion < 40000)
 			{
-				if (particle[j].en.nTimes > 0)
+				for (uint32 j=0; j<m->header.nParticleEmitters; j++)
 				{
-					if ((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
-						(m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0))
+					if (particle[j].en.nTimes > 0)
 					{
-						int animidx;
-						if (m->particleSystems[j].enabled.seq == -1)
-							animidx = anim_offset;
-						else
-							animidx = 0;
-						int counts = m->particleSystems[j].enabled.data[animidx].size();
-						sds[ii].timeline.nEntries = counts;
-						sds[ii].timeline.ref = reList.size();
-						RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
-						for (int k=0; k<counts; k++) {
-							f.Write(&m->particleSystems[j].enabled.times[animidx][k], sizeof(int32));
-						}
-						padding(&f);
-						sds[ii].length = seqs[i].length;
-						sds[ii].data.nEntries = counts;
-						sds[ii].data.ref = reList.size();
-						RefEntry("LAER", f.Tell(), sds[ii].data.nEntries, 0);
-						for (int k=0; k<counts; k++) {
-							float rate;
-							if (m->particleSystems[j].enabled.data[animidx][k] && m->particleSystems[j].rate.data[0].size() > 0)
-								rate = m->particleSystems[i].rate.data[0][0];
+						if ((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
+							(m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0))
+						{
+							int animidx;
+							if (m->particleSystems[j].enabled.seq == -1)
+								animidx = anim_offset;
 							else
-								rate = 0;	
-							f.Write(&rate, sizeof(float));
+								animidx = 0;
+							int counts = m->particleSystems[j].enabled.data[animidx].size();
+							sds[ii].timeline.nEntries = counts;
+							sds[ii].timeline.ref = reList.size();
+							RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
+							for (int k=0; k<counts; k++) {
+								f.Write(&m->particleSystems[j].enabled.times[animidx][k], sizeof(int32));
+							}
+							padding(&f);
+							sds[ii].length = seqs[i].length;
+							sds[ii].data.nEntries = counts;
+							sds[ii].data.ref = reList.size();
+							RefEntry("LAER", f.Tell(), sds[ii].data.nEntries, 0);
+							for (int k=0; k<counts; k++) {
+								float rate;
+								if (m->particleSystems[j].enabled.data[animidx][k] && m->particleSystems[j].rate.data[0].size() > 0)
+									rate = m->particleSystems[i].rate.data[0][0];
+								else
+									rate = 0;	
+								f.Write(&rate, sizeof(float));
+							}
+							padding(&f);
+							ii++;
 						}
-						padding(&f);
-						ii++;
 					}
 				}
 			}
-
 
 			datachunk_offset2 = f.Tell();
 			f.Seek(chunk_offset2, wxFromStart);
@@ -988,12 +998,15 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				f.Write(&p, sizeof(uint32));
 			}
 
-			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+			if (bShowParticle  && gameVersion < 40000)
 			{
-				if (particle[j].en.nTimes > 0)
+				for (uint32 j=0; j<m->header.nParticleEmitters; j++)
 				{
-					uint32 p = CreateAnimID(AR_Par, j, 0, 14);
-					f.Write(&p, sizeof(uint32));
+					if (particle[j].en.nTimes > 0)
+					{
+						uint32 p = CreateAnimID(AR_Par, j, 0, 14);
+						f.Write(&p, sizeof(uint32));
+					}
 				}
 			}
 			padding(&f);
@@ -1584,14 +1597,14 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			par.emisSpeedStart.value = m->particleSystems[i].speed.data[0][0];  //particle[i].EmissionSpeed;
 			par.emisSpeedMid = m->particleSystems[i].speed.data[0][0];
 			par.emisSpeedEnd = m->particleSystems[i].speed.data[0][0];
-			par.speedVariation.value = m->particleSystems[i].variation.data[0][0];  //particle[i].SpeedVariation.
+			par.speedVariation.value = m->particleSystems[i].variation.data[0][0] * m->particleSystems[i].speed.data[0][0];  //particle[i].SpeedVariation.
 			par.xSpread.value = m->particleSystems[i].spread.data[0][0];
 			par.ySpread.value = m->particleSystems[i].spread.data[0][0]; //m->particleSystems[i].lat.data[0][0];
 			par.lifespan.value = m->particleSystems[i].lifespan.data[0][0];
-			par.scaleRatio = 1.0f;
-			par.scale1.value.x = m->particleSystems[i].sizes[0];//particle[i].p.scales[0];
-			par.scale1.value.y = m->particleSystems[i].sizes[1];//particle[i].p.scales[1];
-			par.scale1.value.z = m->particleSystems[i].sizes[2];//particle[i].p.scales[2];
+			par.scaleRatio = 0.5f;
+			par.scale1.value.x = m->particleSystems[i].sizes[0] * 2.0f;//particle[i].p.scales[0];
+			par.scale1.value.y = m->particleSystems[i].sizes[1] * 2.0f;//particle[i].p.scales[1];
+			par.scale1.value.z = m->particleSystems[i].sizes[2] * 2.0f;//particle[i].p.scales[2];
 			Vec3D  colors2[3];
 			uint16 opacity[3];
 			memcpy(colors2, mpqf.getBuffer()+particle[i].p.colors.ofsKeys, sizeof(Vec3D)*3);
