@@ -24,7 +24,7 @@ static bool readline(std::istream& in, std::string& buf, size_t nr, bool skipEmp
 
 void UserSkins::LoadFile(const wxString &filename)
 {
-	std::ifstream in((char *)filename.mb_str(), ifstream::in);
+	std::ifstream in((char *)filename.c_str(), ifstream::in);
 	if (!in.is_open()) {
 		wxLogMessage(_T("Failed to open '%s' while loading user skins"), filename.c_str());
 		return;

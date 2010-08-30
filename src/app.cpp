@@ -477,21 +477,19 @@ bool WowModelViewApp::LoadSettings()
 	}
 
 	if (gamePath.Last() != SLASH)
-		gamePath.Append(SLASH, 1);
+		gamePath.Append(SLASH);
 
-	// 4.0.0.12694 remove common.MPQ and add world.MPQ
-	if (!wxFileExists(gamePath + wxT("common.MPQ")) && !wxFileExists(gamePath + wxT("world.MPQ"))){
+	if (mpqArchives.GetCount()==0) {
+		searchMPQs();
+	}
+
+	// if we can't search any mpqs
+	if (mpqArchives.GetCount()==0) {
 		wxLogMessage(_T("World of Warcraft Data Directory Not Found. Returned GamePath: %s"),gamePath.c_str());
 		wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("Fatal Error: Could not find your World of Warcraft Data folder."), wxT("World of Warcraft Not Found"), wxOK | wxICON_ERROR);
 		dial->ShowModal();
 		return true;
 	}
-
-	if (mpqArchives.GetCount()==0) {
-		searchMPQs();
-	}
-	// -------
-	
 
 	// Clear our ini file config object
 	wxDELETE( pConfig );
@@ -503,8 +501,12 @@ bool WowModelViewApp::LoadSettings()
 
 		SaveSettings();
 	}
+
+	// initial interfaceID as langID
 	if (interfaceID == -1)
 		interfaceID = langID;
+
+	// initial langOffset
 	if (langOffset == -1) {
 		// gameVersion 40000 remove all other language strings
 		if (gameVersion == 40000)
