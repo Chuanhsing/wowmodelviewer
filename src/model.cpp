@@ -510,6 +510,7 @@ bool Model::isAnimated(MPQFile &f)
 			ModelBoneDef &bb = bo[i];
 			if (bb.translation.type || bb.rotation.type || bb.scaling.type) {
 				animBones = true;
+				animGeometry = true;
 				break;
 			}
 		}
