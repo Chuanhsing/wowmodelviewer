@@ -196,7 +196,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	std::vector<uint32> logAnimations;
 	wxArrayString vAnimations;
 	wxArrayString nameAnimations;
-	int chunk_offset, datachunk_offset;
+	int chunk_offset;
 
 	std::vector<uint16> bLookup;
 	std::vector<uint16> bLookupcnt;
@@ -414,7 +414,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	for(uint32 i=0; i<mdata.mSEQS.nEntries; i++) {
 		NameRefEntry(&seqs[i].name, nameAnimations[i], &f);
 	}
-	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<mdata.mSEQS.nEntries; i++) {
 		int anim_offset = logAnimations[i];
@@ -427,8 +426,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		seqs[i].boundSphere.radius = m->anims[logAnimations[0]].boundSphere.radius * modelExport_M3_SphereScale;
 		f.Write(&seqs[i], sizeof(SEQS));
 	}
-	
-	f.Seek(datachunk_offset, wxFromStart);
+	f.Seek(0, wxFromEnd);
 
 	std::vector <std::vector <uint32> > M3OpacityAnimid;
 	std::vector <std::vector <uint32> > M2OpacityIdx;
@@ -628,7 +626,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 		SD *sds;
 		int ii;
-		int chunk_offset2, datachunk_offset2;
+		int chunk_offset2;
 
 		// Events, VEDS
 		stcs[i].Events.nEntries = 1;
@@ -666,10 +664,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		RefEntry("RAHC", f.Tell(), evnt.name.nEntries, 0);
 		f.Write(strName.c_str(), strName.Len()+1);
 		padding(&f);
-		datachunk_offset2 = f.Tell();
 		f.Seek(chunk_offset2, wxFromStart);
 		f.Write(&sd, sizeof(sd));
-		f.Seek(datachunk_offset2, wxFromStart);
+		f.Seek(0, wxFromEnd);
 
 		// V2DS
 		if (stcs[i].arVec2D.nEntries > 0) {
@@ -702,13 +699,12 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				padding(&f);
 				ii++;
 			}
-			datachunk_offset2 = f.Tell();
 			f.Seek(chunk_offset2, wxFromStart);
 			for(uint32 j=0; j<stcs[i].arVec2D.nEntries; j++) {
 				f.Write(&sds[j], sizeof(sd));
 			}
 			wxDELETEA(sds);
-			f.Seek(datachunk_offset2, wxFromStart);
+			f.Seek(0, wxFromEnd);
 		}
 
 
@@ -781,13 +777,12 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					ii++;
 				}
 			}
-			datachunk_offset2 = f.Tell();
 			f.Seek(chunk_offset2, wxFromStart);
 			for(uint32 j=0; j<stcs[i].arVec3D.nEntries; j++) {
 				f.Write(&sds[j], sizeof(sd));
 			}
 			wxDELETEA(sds);
-			f.Seek(datachunk_offset2, wxFromStart);
+			f.Seek(0, wxFromEnd);
 		}
 
 		// Rot, Q4DS
@@ -826,13 +821,12 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					ii++;
 				}
 			}
-			datachunk_offset2 = f.Tell();
 			f.Seek(chunk_offset2, wxFromStart);
 			for(uint32 j=0; j<stcs[i].arQuat.nEntries; j++) {
 				f.Write(&sds[j], sizeof(sd));
 			}
 			wxDELETEA(sds);
-			f.Seek(datachunk_offset2, wxFromStart);
+			f.Seek(0, wxFromEnd);
 		}
 
 		// Float, 3RDS
@@ -917,23 +911,20 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					}
 				}
 			}
-
-			datachunk_offset2 = f.Tell();
 			f.Seek(chunk_offset2, wxFromStart);
 			for(uint32 j=0; j<stcs[i].arFloat.nEntries; j++) {
 				f.Write(&sds[j], sizeof(sd));
 			}
 			wxDELETEA(sds);
-			f.Seek(datachunk_offset2, wxFromStart);
+			f.Seek(0, wxFromEnd);
 		}
 	}
-	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<mdata.mSTC.nEntries; i++) {
 		stcs[i].indSEQ[0] = stcs[i].indSEQ[1] = i;
 		f.Write(&stcs[i], sizeof(STC));
 	}
-	f.Seek(datachunk_offset, wxFromStart);
+	f.Seek(0, wxFromEnd);
 
 	// mSTG
 	mdata.mSTG.nEntries = mdata.mSEQS.nEntries;
@@ -955,13 +946,12 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Write(&i, sizeof(uint32));
 		padding(&f);
 	}
-	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<mdata.mSTG.nEntries; i++) {
 		f.Write(&stgs[i], sizeof(STG));
 	}
 	wxDELETEA(stgs);
-	f.Seek(datachunk_offset, wxFromStart);
+	f.Seek(0, wxFromEnd);
 
 	// mSTS
 	mdata.mSTS.nEntries = mdata.mSEQS.nEntries;
@@ -1020,14 +1010,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			padding(&f);
 		}
 	}
-	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<mdata.mSTS.nEntries; i++) {
 		stss[i].init();
 		f.Write(&stss[i], sizeof(STS));
 	}
 	wxDELETEA(stss);
-	f.Seek(datachunk_offset, wxFromStart);
+	f.Seek(0, wxFromEnd);
 
 	// mBone
 	std::vector<ModelBoneDef> boneList;
@@ -1067,7 +1056,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		}
 		NameRefEntry(&bones[i].name, strName, &f);
 	}
-	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);
 	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
 		bones[i].init();
@@ -1121,7 +1109,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Write(&bones[i], sizeof(BONE));
 	}
 	wxDELETEA(bones);
-	f.Seek(datachunk_offset, wxFromStart);
+	f.Seek(0, wxFromEnd);
 
 	// nSkinnedBones
 	mdata.nSkinnedBones = nSkinnedBones(m, &mpqf);
@@ -1256,11 +1244,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	msec.bndSphere.AnimRef.animid = CreateAnimID(AR_MSEC, 0, 0, 1);
 	f.Write(&msec, sizeof(msec));
 	padding(&f);
-
-	datachunk_offset = f.Tell();
 	f.Seek(chunk_offset, wxFromStart);
 	f.Write(&div, sizeof(div));
-	f.Seek(datachunk_offset, wxFromStart);
+	f.Seek(0, wxFromEnd);
 
 	// mBoneLU
 	mdata.mBoneLU.nEntries = bLookup.size();
@@ -1312,7 +1298,6 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 			NameRefEntry(&atts[i].name, strName, &f);
 		}
-		datachunk_offset = f.Tell();
 		f.Seek(chunk_offset, wxFromStart);
 		for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
 			atts[i].init();
@@ -1320,7 +1305,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			f.Write(&atts[i], sizeof(ATT));
 		}
 		wxDELETEA(atts);
-		f.Seek(datachunk_offset, wxFromStart);
+		f.Seek(0, wxFromEnd);
 	}
 
 	// mAttachLU
@@ -1401,7 +1386,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			NameRefEntry(&mats[i].name, strName, &f);
 
 			// layers
-			int chunk_offset2, datachunk_offset2;
+			int chunk_offset2;
 			for(uint32 j=0; j<13; j++) {
 				mats[i].layers[j].nEntries = 1;
 				mats[i].layers[j].ref = reList.size();
@@ -1488,13 +1473,11 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 						layer.flags |= LAYR_FLAGS_SPLIT;
 				}
 
-				datachunk_offset2 = f.Tell();
 				f.Seek(chunk_offset2, wxFromStart);
 				f.Write(&layer, sizeof(layer));
-				f.Seek(datachunk_offset2, wxFromStart);
+				f.Seek(0, wxFromEnd);
 			}
 		}
-		datachunk_offset = f.Tell();
 		f.Seek(chunk_offset, wxFromStart);
 		for(uint32 i=0; i<mdata.mMat.nEntries; i++) {
 			mats[i].init();
@@ -1544,7 +1527,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			f.Write(&mats[i], sizeof(MAT));
 		}
 		wxDELETE(mats);
-		f.Seek(datachunk_offset, wxFromStart);
+		f.Seek(0, wxFromEnd);
 	}
 
 	if (bShowParticle && gameVersion < 40000)
