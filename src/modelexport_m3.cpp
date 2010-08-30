@@ -1418,13 +1418,24 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				padding(&f);
 
 				int texid = MATtable[i].texid;
-				wxString texName = wxString(m->TextureList[texid].c_str(), wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
-				if (texName == _T("Cape") || texName.StartsWith(_T("ChangableTexture")))
-					texName = wxString(fn, wxConvUTF8).BeforeLast(_T('.')).AfterLast(SLASH)+_T('_')+texName;
+				wxString texName;
+
+				if (m->specialTextures[texid] == -1)
+					texName = wxString(m->TextureList[texid].c_str(), wxConvUTF8);
+				else
+				{
+					if (m->useReplaceTextures[m->specialTextures[MATtable[i].texid]])
+						texName = texturemanager.items[m->replaceTextures[m->specialTextures[texid]]]->name;
+					else
+						texName = _T("NoTexture");
+				}
+
+				texName = texName.BeforeLast('.').AfterLast(SLASH);
 				texName.Append(_T(".tga"));
+
 				if (modelExport_M3_TexturePath.Len() > 0)
 				{
-					if (modelExport_M3_TexturePath[modelExport_M3_TexturePath.Len()] != '/' && modelExport_M3_TexturePath[modelExport_M3_TexturePath.Len()] != '\\')
+					if (modelExport_M3_TexturePath.Last() != '/' && modelExport_M3_TexturePath.Last() != '\\')
 						texName = modelExport_M3_TexturePath + SLASH + texName;
 					else
 						texName = modelExport_M3_TexturePath + texName;
@@ -1706,24 +1717,37 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Write(&fHead, sizeof(fHead));
 	f.Write(&mdata, sizeof(mdata));
 
+	
 	// save textures
-	for (size_t i=0; i<m->passes.size(); i++) {
-		ModelRenderPass &p = m->passes[i];
-		wxString texFilename(fn, wxConvUTF8);
-		texFilename = texFilename.BeforeLast(SLASH);
-		if (modelExport_M3_TexturePath.Len() > 0)
-			MakeDirs(texFilename, modelExport_M3_TexturePath);
+	wxString texFilename(fn, wxConvUTF8);
+	texFilename = texFilename.BeforeLast(SLASH);
+	if (modelExport_M3_TexturePath.Len() > 0)
+		MakeDirs(texFilename, modelExport_M3_TexturePath);
 
-		if (p.init(m)) { // init to bind textureid
-			wxString texName = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8).BeforeLast(_T('.')).AfterLast(SLASH);
-			if (texName == _T("Cape") || texName.StartsWith(_T("ChangableTexture")))
-				texName = wxString(fn, wxConvUTF8).BeforeLast(_T('.')).AfterLast(SLASH)+_T('_')+texName;
-			texName.Append(_T(".tga"));
+	for (size_t i=0; i < MATtable.size(); i++)
+	{
+		int texid = MATtable[i].texid;
+		wxString texName;
 
-			texName = texFilename + SLASH + modelExport_M3_TexturePath + SLASH + texName;
-			//wxLogMessage(_T("Exporting Image: %s"),texName.c_str());
-			SaveTexture(texName);
+		if (m->specialTextures[texid] == -1)
+			texName = wxString(m->TextureList[texid].c_str(), wxConvUTF8);
+		else
+		{
+			if (m->useReplaceTextures[m->specialTextures[texid]])
+				texName = texturemanager.items[m->replaceTextures[m->specialTextures[texid]]]->name;
+			else
+				continue;
 		}
+		GLuint bindtex = texturemanager.add(texName);
+		glBindTexture(GL_TEXTURE_2D, bindtex);
+
+		texName = texName.BeforeLast('.').AfterLast(SLASH);
+
+		texName.Append(_T(".tga"));
+		
+		texName = texFilename + SLASH + modelExport_M3_TexturePath + SLASH + texName;
+		//wxLogMessage(_T("Exporting Image: %s"),texName.c_str());
+		SaveTexture(texName);
 	}
 
 	wxDELETEA(seqs);
