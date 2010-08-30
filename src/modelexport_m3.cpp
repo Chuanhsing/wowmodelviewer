@@ -246,19 +246,22 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			}
 			if (idx < 0)
 			{
-				MATmap bm;
-				bm.texid = texlookup[tex[i].textureid];
-				bm.flags = renderflags[tex[i].flagsIndex].flags;
-				bm.blend = renderflags[tex[i].flagsIndex].blend;
-				bm.animid = texanimlookup[tex[i].texanimid];
-				bm.color = tex[i].colorIndex;
-				idx = MATtable.size();
-				MATtable.push_back(bm);
-				
-				MeshMap mm;
-				mm.regnIndex = tex[i].op;
-				mm.matmIndex = idx;
-				MeshtoMat.push_back(mm);
+				if (m->showGeosets[tex[i].op])
+				{
+					MATmap bm;
+					bm.texid = texlookup[tex[i].textureid];
+					bm.flags = renderflags[tex[i].flagsIndex].flags;
+					bm.blend = renderflags[tex[i].flagsIndex].blend;
+					bm.animid = texanimlookup[tex[i].texanimid];
+					bm.color = tex[i].colorIndex;
+					idx = MATtable.size();
+					MATtable.push_back(bm);
+					
+					MeshMap mm;
+					mm.regnIndex = tex[i].op;
+					mm.matmIndex = idx;
+					MeshtoMat.push_back(mm);
+				}
 			}
 			else
 			{
@@ -273,10 +276,13 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				}
 				if (found == 0)
 				{
-					MeshMap mm;
-					mm.regnIndex = tex[i].op;
-					mm.matmIndex = idx;
-					MeshtoMat.push_back(mm);
+					if (m->showGeosets[tex[i].op])
+					{
+						MeshMap mm;
+						mm.regnIndex = tex[i].op;
+						mm.matmIndex = idx;
+						MeshtoMat.push_back(mm);
+					}
 				}
 			}
 		}
@@ -1202,12 +1208,32 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	}
 	padding(&f);
 	// mDiv.meash
-	div.REGN.nEntries = view->nSub;
+
+	std::vector <int> MeshtoShow;
+	int meshcount = 0;
+	for (size_t j=0; j<view->nSub; j++) 
+	{
+		if (m->showGeosets[j])
+		{
+			MeshtoShow.push_back(meshcount);
+			meshcount++;
+		}
+		else
+			MeshtoShow.push_back(-1);
+	}
+
+	div.REGN.nEntries = meshcount; //view->nSub;
 	div.REGN.ref = reList.size();
 	RefEntry("NGER", f.Tell(), div.REGN.nEntries, 3);
 
 	int indBone = 0;
-	for (size_t j=0; j<view->nSub; j++) {
+	for (size_t j=0; j<view->nSub; j++) 
+	{
+		if (m->showGeosets[j] != true)
+		{
+			indBone += bLookupcnt[j];
+			continue;
+		}
 		REGN regn;
 		memset(&regn, 0, sizeof(regn));
 		regn.init();
@@ -1231,7 +1257,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		BAT bat;
 		memset(&bat, 0, sizeof(bat));
 		bat.init();
-		bat.regnIndex = MeshtoMat[j].regnIndex;
+		bat.regnIndex = MeshtoShow[MeshtoMat[j].regnIndex];
 		bat.matmIndex = MeshtoMat[j].matmIndex;
 		f.Write(&bat, 0xE); // sizeof(bat) is buggy to 0x10
 	}
