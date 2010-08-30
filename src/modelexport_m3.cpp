@@ -99,19 +99,21 @@ void NameRefEntry(Reference *name, wxString strName, wxFFile *f)
 	padding(f);
 }
 
-uint32 nSkinnedBones(Model *m, MPQFile *mpqf, uint32 start, uint32 num)
+uint32 nSkinnedBones(Model *m, MPQFile *mpqf)
 {
 	ModelVertex *verts = (ModelVertex*)(mpqf->getBuffer() + m->header.ofsVertices);
 	ModelBoneDef *mb = (ModelBoneDef*)(mpqf->getBuffer() + m->header.ofsBones);
 	uint8 *skinned = new uint8[m->header.nBones];
 	memset(skinned, 0, sizeof(uint8)*m->header.nBones);
 	uint32 nSkinnedBones = 0;
-	for(uint32 i=start; i<(start+num); i++) {
+
+	for(uint32 i=0; i < m->header.nVertices; i++) {
 		for(uint32 j=0; j<4; j++) {
 			if (verts[i].weights[j] != 0)
 				skinned[verts[i].bones[j]] = 1;
 		}
 	}
+
 	for(uint32 i=0; i<m->header.nBones; i++) {
 		if (skinned[i] == 1)
 		{
@@ -1122,7 +1124,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Seek(datachunk_offset, wxFromStart);
 
 	// nSkinnedBones
-	mdata.nSkinnedBones = nSkinnedBones(m, &mpqf, 0, m->header.nVertices);
+	mdata.nSkinnedBones = nSkinnedBones(m, &mpqf);
 
 	// mVert
 	mdata.mVert.nEntries = m->header.nVertices*sizeof(Vertex32);
@@ -1207,33 +1209,15 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		f.Write(&tidx, sizeof(uint16));
 	}
 	padding(&f);
+
 	// mDiv.meash
-
-	std::vector <int> MeshtoShow;
-	int meshcount = 0;
-	for (size_t j=0; j<view->nSub; j++) 
-	{
-		if (m->showGeosets[j])
-		{
-			MeshtoShow.push_back(meshcount);
-			meshcount++;
-		}
-		else
-			MeshtoShow.push_back(-1);
-	}
-
-	div.REGN.nEntries = meshcount; //view->nSub;
+	div.REGN.nEntries = view->nSub;
 	div.REGN.ref = reList.size();
 	RefEntry("NGER", f.Tell(), div.REGN.nEntries, 3);
 
 	int indBone = 0;
 	for (size_t j=0; j<view->nSub; j++) 
 	{
-		if (m->showGeosets[j] != true)
-		{
-			indBone += bLookupcnt[j];
-			continue;
-		}
 		REGN regn;
 		memset(&regn, 0, sizeof(regn));
 		regn.init();
@@ -1257,7 +1241,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		BAT bat;
 		memset(&bat, 0, sizeof(bat));
 		bat.init();
-		bat.regnIndex = MeshtoShow[MeshtoMat[j].regnIndex];
+		bat.regnIndex = MeshtoMat[j].regnIndex;
 		bat.matmIndex = MeshtoMat[j].matmIndex;
 		f.Write(&bat, 0xE); // sizeof(bat) is buggy to 0x10
 	}
