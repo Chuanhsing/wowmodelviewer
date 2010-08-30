@@ -392,6 +392,8 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 	}
 #endif
 
+	int count = skins.size();
+
 	// Search the same directory for BLPs
 	std::set<FileTreeItem> filelist;
 	sFilterDir = fn.BeforeLast(SLASH)+SLASH;
@@ -408,10 +410,15 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 		}
 	}
 
-	if (!skins.empty())
-		return FillSkinSelector(skins);
+	bool ret = false;
 
-	return false;
+	if (!skins.empty())
+		ret = FillSkinSelector(skins);
+
+	int mySkin = randomSkins ? randint(0, (int)count-1) : 0;
+	SetSkin(mySkin);
+
+	return ret;
 }
 
 bool AnimControl::UpdateItemModel(Model *m)
@@ -456,6 +463,7 @@ bool AnimControl::UpdateItemModel(Model *m)
 		}
 	}
 
+
 	// Search the same directory for BLPs
 	std::set<FileTreeItem> filelist;
 	sFilterDir = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(_T('.'));
@@ -472,10 +480,15 @@ bool AnimControl::UpdateItemModel(Model *m)
 		}
 	}
 
-	if (!skins.empty())
-		return FillSkinSelector(skins);
+	bool ret = false;
 
-	return false;
+	if (!skins.empty())
+		ret = FillSkinSelector(skins);
+
+	int mySkin = randomSkins ? randint(0, (int)skins.size()-1) : 0;
+	SetSkin(mySkin);
+
+	return ret;
 }
 
 
@@ -494,21 +507,8 @@ bool AnimControl::FillSkinSelector(TextureSet &skins)
 			skinList->SetClientData(num++, grp);
 		}
 
-		bool existingTexture = false;
-		for (int i = 0; i<TEXTURE_MAX; i++) {
-			if (g_selModel->replaceTextures[i] > 0) {
-				existingTexture = true;
-				break;
-			}
-		}
-
-		if (!existingTexture) {
-			int mySkin = randomSkins ? randint(0,(int)skins.size()-1) : 0;
-			SetSkin(mySkin);
-		}
-
-		bool ret = (skins.size() > 1);
-		skins.clear();
+		bool ret = (skins.size() > 0);
+		//skins.clear();
 		return ret;
 	} else 
 		return false;
