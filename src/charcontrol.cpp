@@ -2094,7 +2094,7 @@ bool filterCreatures(wxString fn)
 	return (tmp.StartsWith(_T("crea")) && tmp.EndsWith(_T("m2")));
 }
 
-std::vector<wxString> creaturemodels;
+wxArrayString creaturemodels;
 std::vector<bool> ridablelist;
 
 // TODO: Add an equivilant working version of this function for Linux / Mac OS X

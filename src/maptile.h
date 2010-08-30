@@ -174,9 +174,9 @@ const int stripsize2 = 16*18 + 7*2 + 8*2;
 
 class MapTile: public Displayable {
 public:
-	std::vector<wxString> textures;
-	std::vector<wxString> wmos;
-	std::vector<wxString> models;
+	wxArrayString textures;
+	wxArrayString wmos;
+	wxArrayString models;
 
 	//std::vector<WMOInstance> wmois;
 	//std::vector<ModelInstance> modelis;

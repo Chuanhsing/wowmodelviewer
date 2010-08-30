@@ -192,7 +192,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	ModelParticleEmitterDef *particle = (ModelParticleEmitterDef *)(mpqf.getBuffer() + m->header.ofsParticleEmitters);
 
 	std::vector<uint32> logAnimations;
-	std::vector<wxString> vAnimations;
+	wxArrayString vAnimations;
 	wxArrayString nameAnimations;
 	int chunk_offset, datachunk_offset;
 
@@ -1270,7 +1270,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 
 	// mAttach
 	// this makes some read errors in sc2 editor
-	std::vector<wxString> AttRefName;
+	wxArrayString AttRefName;
 
 	if (m->header.nAttachments) {
 		ModelAttachmentDef *attachments = (ModelAttachmentDef*)(mpqf.getBuffer() + m->header.ofsAttachments);

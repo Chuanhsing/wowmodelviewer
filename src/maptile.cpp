@@ -771,8 +771,8 @@ MapTile::~MapTile()
 		}
 	}
 
-	for (vector<wxString>::iterator it = textures.begin(); it != textures.end(); ++it) {
-		texturemanager.delbyname(*it);
+	for (int j=0; j<textures.size(); j++) {
+		texturemanager.delbyname(textures[j]);
 	}
 
 	/*

@@ -212,7 +212,7 @@ struct LWSurface {
 
 // The Master Structure for each individual LWO file.
 struct LWObject {
-	std::vector<wxString> PartNames;	// List of names for all the Parts;
+	wxArrayString PartNames;	// List of names for all the Parts;
 	std::vector<LWLayer> Layers;		// List of Layers (usually 1) that make up the Geometery.
 	std::vector<LWClip> Images;			// List of all the Unique Images used in the model.
 	std::vector<LWSurface> Surfaces;	// List of the Surfaces used in the model.

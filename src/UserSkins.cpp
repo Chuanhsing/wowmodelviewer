@@ -65,7 +65,7 @@ void UserSkins::LoadFile(const wxString &filename)
 				if (grp.tex[i] != wxEmptyString)
 					count++;
 			}
-			grp.base = 11; // wtf is grp.base?? it's set to 11 everywhere else, so do it here...
+			grp.base = CREATURE_REPLACABLE_BASE;
 			grp.count = count;
 			set.insert(grp);
 		}

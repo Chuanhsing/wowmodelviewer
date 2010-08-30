@@ -317,7 +317,7 @@ public:
 	Vec2D *texCoords;
 	uint16 *indices;
 	uint32 nIndices;
-	std::vector<wxString> TextureList;
+	wxArrayString TextureList;
 	// --
 
 public:

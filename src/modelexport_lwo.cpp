@@ -2956,7 +2956,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 	if (modelExport_LW_ExportDoodads ==  true){
 		if (modelExport_LW_DoodadsAs == 1){
 			// Copy Model-list into an array
-			std::vector<wxString> modelarray = m->models;
+			wxArrayString modelarray = m->models;
 
 			// Remove the WMO
 			wxDELETE(g_modelViewer->canvas->wmo);
@@ -3208,7 +3208,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 	unsigned int numGroups = 0;
 
 	// Build Surface Name Database
-	std::vector<wxString> surfarray;
+	wxArrayString surfarray;
 	//std::vector<std::string> sfix;
 	//std::vector<uint16> sfix2;
 	//std::vector<uint16> check;
@@ -3863,7 +3863,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 
 	// Cleanup, Isle 3!
 	surfarray.erase(surfarray.begin(),surfarray.end());
-	surfarray.~vector();
+	surfarray.Clear();
 //	sfix.erase(sfix.begin(),sfix.end());
 //	sfix.~vector();
 //	sfix2.erase(sfix2.begin(),sfix2.end());
@@ -4880,8 +4880,8 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 	unsigned int numGroups = 0;
 
 	// Build Surface Name Database
-	std::vector<wxString> surfarray;
-	std::vector<wxString> sfix;
+	wxArrayString surfarray;
+	wxArrayString sfix;
 	std::vector<uint16> sfix2;
 	std::vector<uint16> check;
 	for (uint16 t=0;t<m->nTextures;t++){

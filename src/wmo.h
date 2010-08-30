@@ -225,8 +225,8 @@ public:
 	WMOMaterial *mat;
 	bool ok;
 	char *groupnames;
-	std::vector<wxString> textures;
-	std::vector<wxString> models;
+	wxArrayString textures;
+	wxArrayString models;
 	std::vector<WMOModelInstance> modelis;
 	ModelManager loadedModels;
 

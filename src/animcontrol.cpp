@@ -367,7 +367,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 							count++;
 						}
 					}
-					grp.base = 11;
+					grp.base = CREATURE_REPLACABLE_BASE;
 					grp.count = count;
 					if (grp.tex[0].length() > 0) 
 						skins.insert(grp);
@@ -399,7 +399,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 	getFileLists(filelist, filterDir);
 	if (filelist.begin() != filelist.end()) {
 		TextureGroup grp;
-		grp.base = 11;
+		grp.base = CREATURE_REPLACABLE_BASE;
 		grp.count = 1;
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
 			wxString str((*it).displayName.c_str(), wxConvUTF8);
@@ -436,7 +436,7 @@ bool AnimControl::UpdateItemModel(Model *m)
 	for (ItemDisplayDB::Iterator it=itemdisplaydb.begin(); it!=itemdisplaydb.end(); ++it) {
 		if (fn.IsSameAs(it->getString(ItemDisplayDB::Model), false)) {
             TextureGroup grp;
-			grp.base = 2;
+			grp.base = ITEM_REPLACABLE_BASE;
 			grp.count = 1;
 			wxString skin = it->getString(ItemDisplayDB::Skin);
 			grp.tex[0] = skin;
@@ -447,7 +447,7 @@ bool AnimControl::UpdateItemModel(Model *m)
 		//if (!strcmp(it->getString(ItemDisplayDB::Model2), fn.c_str())) {
 		if (fn.IsSameAs(it->getString(ItemDisplayDB::Model2), false)) {
             TextureGroup grp;
-			grp.base = 2;
+			grp.base = ITEM_REPLACABLE_BASE;
 			grp.count = 1;
 			wxString skin = it->getString(ItemDisplayDB::Skin2);
 			grp.tex[0] = skin;
@@ -463,7 +463,7 @@ bool AnimControl::UpdateItemModel(Model *m)
 	getFileLists(filelist, filterDir);
 	if (filelist.begin() != filelist.end()) {
 		TextureGroup grp;
-		grp.base = 2;
+		grp.base = ITEM_REPLACABLE_BASE;
 		grp.count = 1;
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
 			wxString str((*it).displayName.c_str(), wxConvUTF8);
@@ -485,7 +485,7 @@ bool AnimControl::FillSkinSelector(TextureSet &skins)
 		int num = 0;
 		// fill our skin selector
 		for (TextureSet::iterator it = skins.begin(); it != skins.end(); ++it) {
-			wxString texname = wxString(it->tex[0].c_str(), *wxConvCurrent);
+			wxString texname = it->tex[0];
 			skinList->Append(texname);
 			texname = g_selModel->name.BeforeLast(SLASH) << _T("\\") << texname << _T(".blp");
 			g_selModel->TextureList.push_back(texname);
