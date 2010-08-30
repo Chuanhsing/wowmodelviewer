@@ -1420,8 +1420,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				int texid = MATtable[i].texid;
 				wxString texName;
 
+				/*
 				if (m->specialTextures[texid] == -1)
-					texName = wxString(m->TextureList[texid].c_str(), wxConvUTF8);
+					texName = m->TextureList[texid];
 				else
 				{
 					if (m->useReplaceTextures[m->specialTextures[MATtable[i].texid]])
@@ -1429,6 +1430,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					else
 						texName = _T("NoTexture");
 				}
+				*/
+				texName = m->TextureList[texid];
 
 				texName = texName.BeforeLast('.').AfterLast(SLASH);
 				texName.Append(_T(".tga"));
@@ -1729,8 +1732,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		int texid = MATtable[i].texid;
 		wxString texName;
 
+		/*
 		if (m->specialTextures[texid] == -1)
-			texName = wxString(m->TextureList[texid].c_str(), wxConvUTF8);
+			texName = m->TextureList[texid];
 		else
 		{
 			if (m->useReplaceTextures[m->specialTextures[texid]])
@@ -1738,6 +1742,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			else
 				continue;
 		}
+		*/
+		texName = m->TextureList[texid];
 		GLuint bindtex = texturemanager.add(texName);
 		glBindTexture(GL_TEXTURE_2D, bindtex);
 

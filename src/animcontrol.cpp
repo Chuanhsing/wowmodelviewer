@@ -359,13 +359,16 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			for (CreatureSkinDB::Iterator it = skindb.begin();  it!=skindb.end();  ++it) {
 				if (it->getUInt(CreatureSkinDB::ModelID) == modelid) {
 					TextureGroup grp;
+					int count = 0;
 					for (int i=0; i<TextureGroup::num; i++) {
 						wxString skin(it->getString(CreatureSkinDB::Skin + i));
-						
-						grp.tex[i] = skin;
+						if (skin != wxEmptyString) {
+							grp.tex[i] = skin;
+							count++;
+						}
 					}
 					grp.base = 11;
-					grp.count = 3;
+					grp.count = count;
 					if (grp.tex[0].length() > 0) 
 						skins.insert(grp);
 				}
@@ -705,9 +708,19 @@ void AnimControl::SetSkin(int num)
 {
 	TextureGroup *grp = (TextureGroup*) skinList->GetClientData(num);
 	for (int i=0; i<grp->count; i++) {
-		if (g_selModel->useReplaceTextures[grp->base+i]) {
-			texturemanager.del(g_selModel->replaceTextures[grp->base+i]);
-			g_selModel->replaceTextures[grp->base+i] = texturemanager.add(wxString(makeSkinTexture(g_selModel->name, grp->tex[i])));
+		int base = grp->base + i;
+		if (g_selModel->useReplaceTextures[base]) {
+			texturemanager.del(g_selModel->replaceTextures[base]);
+			wxString skin = makeSkinTexture(g_selModel->name, grp->tex[i]);
+			// refresh TextureList for further use
+			for (int j=0; j<TEXTURE_MAX; j++) {
+				if (base == g_selModel->specialTextures[j]) {
+					g_selModel->TextureList[j] = skin;
+					break;
+				}
+
+			}
+			g_selModel->replaceTextures[grp->base+i] = texturemanager.add(skin);
 		}
 	}
 
