@@ -751,7 +751,17 @@ void CharControl::RefreshModel()
 		// Tauren fur
 		wxString furTexName = rec.getString(CharSectionsDB::Tex2);
 		if (!furTexName.IsEmpty())
+		{
 			furTex = texturemanager.add(furTexName);
+			for (uint32 i=0; i< model->header.nTextures; i++)
+			{
+				if (model->specialTextures[i] == TEXTURE_FUR)
+				{
+					model->TextureList[i] = furTexName;
+					break;
+				}
+			}
+		}
 
 	} catch (CharSectionsDB::NotFound) {
 		wxLogMessage(_T("Assertion base character Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
@@ -885,7 +895,17 @@ void CharControl::RefreshModel()
 		rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, cd.hairStyle, cd.hairColor, 0);
 		wxString hairTexfn = rec.getString(CharSectionsDB::Tex1);
 		if (!hairTexfn.IsEmpty()) 
+		{
 			hairTex = texturemanager.add(hairTexfn);
+			for (uint32 i=0; i< model->header.nTextures; i++)
+			{
+				if (model->specialTextures[i] == TEXTURE_HAIR)
+				{
+					model->TextureList[i] = hairTexfn;
+					break;
+				}
+			}
+		}
 		else {
 			// oops, looks like we're missing a hair texture. Let's try with hair style #0.
 			// (only a problem for orcs with no hair but some beard
@@ -893,7 +913,17 @@ void CharControl::RefreshModel()
 				rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, 0, cd.hairColor, 0);
 				hairTexfn = rec.getString(CharSectionsDB::Tex1);
 				if (!hairTexfn.IsEmpty()) 
+				{
 					hairTex = texturemanager.add(hairTexfn);
+					for (uint32 i=0; i< model->header.nTextures; i++)
+					{
+						if (model->specialTextures[i] == TEXTURE_HAIR)
+						{
+							model->TextureList[i] = hairTexfn;
+							break;
+						}
+					}
+				}
 				else 
 					hairTex = 0;
 			} catch (CharSectionsDB::NotFound) {
@@ -1412,7 +1442,18 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 			// load the cape texture
 			wxString tex = r.getString(ItemDisplayDB::Skin);
 			if (!tex.IsEmpty()) 
-				capeTex = texturemanager.add(AnimControl::makeSkinTexture(_T("Item\\ObjectComponents\\Cape\\"),tex));
+			{
+				wxString texName = AnimControl::makeSkinTexture(_T("Item\\ObjectComponents\\Cape\\"),tex);
+				capeTex = texturemanager.add(texName);
+				for (uint32 i=0; i< model->header.nTextures; i++)
+				{
+					if (model->specialTextures[i] == TEXTURE_CAPE)
+					{
+						model->TextureList[i] = texName;
+						break;
+					}
+				}
+			}
 		}
 
 		// robe

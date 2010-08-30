@@ -183,6 +183,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	uint16 *trianglelookup = (uint16*)(mpqfv.getBuffer() + view->ofsIndex);
 	uint16 *triangles = (uint16*)(mpqfv.getBuffer() + view->ofsTris);
 
+	ModelTextureDef *texdef = (ModelTextureDef*)(mpqf.getBuffer() + m->header.ofsTextures);
 	uint16 *texlookup = (uint16*)(mpqf.getBuffer() + m->header.ofsTexLookup);
 	uint16 *texunitlookup = (uint16*)(mpqf.getBuffer() + m->header.ofsTexUnitLookup);
 	uint16 *texanimlookup = (uint16*)(mpqf.getBuffer() + m->header.ofsTexAnimLookup);
@@ -1415,9 +1416,18 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				int texid = MATtable[i].texid;
 				wxString texName;
 
-				texName = m->TextureList[texid];
+				if (texdef[texid].type == TEXTURE_BODY)
+				{
+					texName = m->modelname;
+					texName = texName.BeforeLast('.').AfterLast(SLASH);
+					texName += _T("_body"); 
+				}
+				else
+				{
+					texName = m->TextureList[texid];
+					texName = texName.BeforeLast('.').AfterLast(SLASH);
+				}
 
-				texName = texName.BeforeLast('.').AfterLast(SLASH);
 				texName.Append(_T(".tga"));
 
 				if (modelExport_M3_TexturePath.Len() > 0)
@@ -1714,11 +1724,20 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		int texid = MATtable[i].texid;
 		wxString texName;
 
-		texName = m->TextureList[texid];
-		GLuint bindtex = texturemanager.add(texName);
-		glBindTexture(GL_TEXTURE_2D, bindtex);
-
-		texName = texName.BeforeLast('.').AfterLast(SLASH);
+		if (texdef[texid].type == TEXTURE_BODY)
+		{
+			texName = m->modelname;
+			texName = texName.BeforeLast('.').AfterLast(SLASH);
+			texName += _T("_body"); 
+			glBindTexture(GL_TEXTURE_2D, m->replaceTextures[m->specialTextures[texid]]);
+		}
+		else
+		{
+			texName = m->TextureList[texid];
+			GLuint bindtex = texturemanager.add(texName);
+			glBindTexture(GL_TEXTURE_2D, bindtex);
+			texName = texName.BeforeLast('.').AfterLast(SLASH);
+		}
 
 		texName.Append(_T(".tga"));
 		
