@@ -603,7 +603,7 @@ void AnimControl::OnAnim(wxCommandEvent &event)
 			wxString val = animCList->GetValue();
 			int first = val.Find('[')+1;
 			int last = val.Find(']');
-			selectedAnim = wxStringToInt(val.Mid(first, last-first));
+			selectedAnim = wxAtoi(val.Mid(first, last-first));
 			
 			if (bLockAnims) {
 				//selectedAnim2 = -1;
@@ -636,14 +636,14 @@ void AnimControl::OnAnim(wxCommandEvent &event)
 		wxString val = animCList2->GetValue();
 		int first = val.Find('[')+1;
 		int last = val.Find(']');
-		selectedAnim2 = wxStringToInt(val.Mid(first, last-first));
+		selectedAnim2 = wxAtoi(val.Mid(first, last-first));
 
 		g_selModel->animManager->SetSecondary(selectedAnim2);
 	} else if (event.GetId() == ID_ANIM_MOUTH) {
 		wxString val = animCList3->GetValue();
 		int first = val.Find('[')+1;
 		int last = val.Find(']');
-		selectedAnim3 = wxStringToInt(val.Mid(first, last-first));
+		selectedAnim3 = wxAtoi(val.Mid(first, last-first));
 
 		//canvas->g_selModel->animManager->SetSecondary(selectedAnim2);
 		g_selModel->animManager->SetMouth(event.GetSelection());

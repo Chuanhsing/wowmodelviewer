@@ -357,7 +357,7 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 #endif
 
 	// Error check
-	// 10 1 0 0 = WoW 4.0.0.12319 models
+	// 0x10 1 0 0 = WoW 4.0.0.12319 models
 	// 9 1 0 0 = WoW 4.0 models
 	// 8 1 0 0 = WoW 3.0 models
 	// 4 1 0 0 = WoW 2.0 models

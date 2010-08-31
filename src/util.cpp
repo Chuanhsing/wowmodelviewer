@@ -120,13 +120,6 @@ void fixnamen(char *name, uint32 len)
 	}
 }
 
-int wxStringToInt(const wxString& str)
-{
-	long number = 0;
-	str.ToLong(&number);
-	return number;
-}
-
 // Byteswap for 2 Bytes
 unsigned short _SwapTwoBytes (unsigned short w)
 {
