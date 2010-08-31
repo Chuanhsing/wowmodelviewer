@@ -1099,7 +1099,7 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 				if (skin.length() > 0)
 					count++;
 			}
-			grp.base = CREATURE_REPLACABLE_BASE;
+			grp.base = TEXTURE_GAMEOBJECT1;
 			grp.count = count;
 			if (grp.tex[0].length() > 0) 
 				animControl->AddSkin(grp);

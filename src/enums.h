@@ -696,6 +696,7 @@ enum TextureTypes {
 	TEXTURE_FILENAME=0,			// Texture given in filename
 	TEXTURE_BODY,				// Body + clothes
 	TEXTURE_CAPE,				// Item, Capes ("Item\ObjectComponents\Cape\*.blp")
+	TEXTURE_ITEM=2,
 	TEXTURE_ARMORREFLECT,		// 
 	TEXTURE_HAIR=6,				// Hair, bear
 	TEXTURE_FUR=8,				// Tauren fur

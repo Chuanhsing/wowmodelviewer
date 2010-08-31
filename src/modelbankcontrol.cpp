@@ -109,7 +109,7 @@ void ModelBankControl::LoadModel()
 	} else if (cd.modelType == MT_NORMAL) {
 		TextureGroup grp;
 		grp.count = (int)cd.textures.Count();
-		grp.base = CREATURE_REPLACABLE_BASE;
+		grp.base = TEXTURE_GAMEOBJECT1;
 		for (int i=0; i<grp.count; i++) 
 			grp.tex[i] = cd.textures[i];
 

@@ -16,9 +16,6 @@
 
 extern float animSpeed;
 
-#define	ITEM_REPLACABLE_BASE	(2)
-#define	CREATURE_REPLACABLE_BASE	(11)
-
 // AnimationData.dbc
 #define	ANIM_STAND	0
 
