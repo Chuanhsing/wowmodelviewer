@@ -46,6 +46,7 @@ typedef struct {
 	uint16 blend;
 	int16  animid;
 	int16  color;
+	int16  eye;
 } MATmap;
 
 typedef struct {
@@ -320,6 +321,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					bm.blend = renderflags[tex[i].flagsIndex].blend;
 					bm.animid = texanimlookup[tex[i].texanimid];
 					bm.color = tex[i].colorIndex;
+					if (m->charModelDetails.isChar && ops[tex[i].op].id == 0 && tex[i].colorIndex >= 0)
+						bm.eye = 1;
+					else
+						bm.eye = 0;
 					idx = MATtable.size();
 					MATtable.push_back(bm);
 					
@@ -1456,6 +1461,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 					NameRefEntry(&layer.name, _T("NoTexture"), &f);
 					layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
 					SetAnimed(layer.brightness_mult1.AnimRef);
+					if (MATtable[i].eye == 1)
+						layer.brightness_mult1.value = 0;
 				}
 				else if (j == MAT_LAYER_ALPHA && 
 					(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_TRANSPARENT))
