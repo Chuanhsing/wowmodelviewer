@@ -184,15 +184,14 @@ void getGamePath()
 
 	// if it failed, look for World of Warcraft install
 	const wxString regpaths[] = {
-#ifdef _WIN64
+		// _WIN64
 		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft"),
 		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\PTR"),
 		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\Beta")
-#else //_WIN32
+		//_WIN32, but for compatible
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft"),
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\PTR"),
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\Beta")
-#endif
 	};
 
 	for (uint32 i=0; i<WXSIZEOF(regpaths); i++) {
@@ -218,24 +217,22 @@ void getGamePath()
 		gamePath.Append(_T("Data\\"));
 	} else {
 		gamePath = _T("C:\\Program Files\\World of Warcraft\\");
-		if (!wxFileExists(gamePath+_T("\\Data\\")+_T("common.MPQ")) && !wxFileExists(gamePath+_T("\\data\\")+_T("world.MPQ"))){
+		if (!wxFileExists(gamePath+_T("Wow.exe"))){
 			gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"), gamePath);
-			gamePath.Append(_T("\\Data\\"));
 		}
+		gamePath.Append(_T("Data\\"));
 	}
 #elif _MAC // Mac OS X
     gamePath = wxT("/Applications/World\\ of\\ Warcraft/");
-	if (!wxFileExists(gamePath+_T("/Data/")+_T("common.MPQ")) && !wxFileExists(gamePath+_T("/Data/")+_T("world.MPQ"))){
+	if (!wxFileExists(gamePath+_T("Wow.exe"))){
         gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"), gamePath);
-		gamePath.Append(_T("/Data/"));
     }
+	gamePath.Append(_T("Data/"));
 #else // Linux
 	gamePath = _T(".")+SLASH;
-	if (!wxFileExists(gamePath+_T("Data")+_T("common.MPQ")) && !wxFileExists(gamePath+_T("Data")+_T("world.MPQ"))){
+	if (!wxFileExists(gamePath+_T("Wow.exe"))){
 		gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"), gamePath);
-		gamePath.Append(_T("/Data/"));
 	}
+	gamePath.Append(_T("Data/"));
 #endif
 }
-
-
