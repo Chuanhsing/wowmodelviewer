@@ -194,6 +194,11 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	//uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
 	ModelParticleEmitterDef *particle = (ModelParticleEmitterDef *)(mpqf.getBuffer() + m->header.ofsParticleEmitters);
 
+	std::vector<Vertex32>	Verts;
+	std::vector<uint16>		Faces;
+	std::vector<REGN>		Regns;
+	std::vector<int>		MeshM2toM3;
+
 	std::vector<uint32> logAnimations;
 	wxArrayString vAnimations;
 	wxArrayString nameAnimations;
@@ -202,28 +207,86 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	std::vector<uint16> bLookup;
 	std::vector<uint16> bLookupcnt;
 
-	for (size_t j=0; j<view->nSub; j++) {
+	int boneidx = 0;
+	int vertidx = 0;
+	int faceidx = 0;
+
+	for (size_t j=0; j<view->nSub; j++) 
+	{
+		if (m->showGeosets[j] != true)
+		{
+			MeshM2toM3.push_back(-1);
+			continue;
+		}
+
 		std::vector<uint16> bLookup2; // local bLookup
 		bLookup2.clear();
 
+		REGN regn;
+		memset(&regn, 0, sizeof(regn));
+		regn.init();
+		Vertex32 vert;
+
 		for(uint32 i=ops[j].vstart; i<(ops[j].vstart+ops[j].vcount); i++) {
-			for(uint32 k=0; k<4; k++) {
+			memset(&vert, 0, sizeof(vert));
+			vert.pos = fixCoord(verts[trianglelookup[i]].pos); 
+			memcpy(vert.weBone, verts[trianglelookup[i]].weights, 4);
+			for (uint32 k=0; k<4; k++)
+			{
 				if (verts[trianglelookup[i]].weights[k] != 0) {
 					bool bFound = false;
 					for(uint32 m=0; m<bLookup2.size(); m++) {
 						if (bLookup2[m] == verts[trianglelookup[i]].bones[k])
+						{
 							bFound = true;
+							vert.weIndice[k] = m;
+							break;
+						}
 					}
 					if (bFound == false)
+					{
+						vert.weIndice[k] = bLookup2.size();
 						bLookup2.push_back(verts[trianglelookup[i]].bones[k]);
+					}
 				}
 			}
+			// Vec3D normal -> char normal[4]
+			vert.normal[0] = (verts[trianglelookup[i]].normal.x+1)*0xFF/2;
+			vert.normal[1] = (verts[trianglelookup[i]].normal.y+1)*0xFF/2;
+			vert.normal[2] = (verts[trianglelookup[i]].normal.z+1)*0xFF/2;
+			// Vec2D texcoords -> uint16 uv[2]
+			vert.uv[0] = verts[trianglelookup[i]].texcoords.x*0x800;
+			vert.uv[1] = verts[trianglelookup[i]].texcoords.y*0x800;
+
+			Verts.push_back(vert);
 		}
+
+		for(uint32 i = ops[j].istart; i < ops[j].istart + ops[j].icount; i++) {
+			uint16 face;
+			face = triangles[i] - ops[j].vstart;
+			Faces.push_back(face);
+		}
+
 		bLookupcnt.push_back(bLookup2.size());
 		// push local bLookup to global, and lookup it in boneLookup
 		for(uint32 i=0; i<bLookup2.size(); i++) {
 			bLookup.push_back(bLookup2[i]);
 		}
+
+		regn.boneCount = bLookup2.size();
+		regn.numBone = bLookup2.size();
+		regn.numFaces = ops[j].icount;
+		regn.numVert = ops[j].vcount;
+		regn.indBone = boneidx;
+		regn.indFaces = faceidx;
+		regn.indVert = vertidx;
+
+		MeshM2toM3.push_back(Regns.size());
+		Regns.push_back(regn);
+
+		boneidx += regn.numBone;
+		faceidx += regn.numFaces;
+		vertidx += regn.numVert;
 	}
 
 	//prepare BAT and MeshtoMat Table
@@ -1116,59 +1179,10 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	mdata.nSkinnedBones = nSkinnedBones(m, &mpqf);
 
 	// mVert
-	mdata.mVert.nEntries = m->header.nVertices*sizeof(Vertex32);
+	mdata.mVert.nEntries = Verts.size() * sizeof(Vertex32);//m->header.nVertices*sizeof(Vertex32);
 	mdata.mVert.ref = reList.size();
 	RefEntry("__8U", f.Tell(), mdata.mVert.nEntries, 0);
-	for(uint32 i=0; i<m->header.nVertices; i++) {
-		Vertex32 vert;
-		memset(&vert, 0, sizeof(vert));
-		vert.pos = fixCoord(verts[trianglelookup[i]].pos); 
-		memcpy(vert.weBone, verts[trianglelookup[i]].weights, 4);
-
-		uint16 tidx = 0;
-		for (size_t j=0; j<view->nSub; j++) {
-			if (trianglelookup[i] >= ops[j].vstart && trianglelookup[i] < ops[j].vstart+ops[j].vcount)
-				break;
-			tidx += bLookupcnt[j];
-		}
-
-		int idx;
-		for (uint32 k=0; k<4; k++)
-		{
-			if (verts[trianglelookup[i]].weights[k] != 0) {
-				idx = -1;
-				for(uint32 c=tidx; c<bLookup.size();c++)
-				{
-					if (verts[trianglelookup[i]].bones[k] == bLookup[c])
-					{
-						idx = c;
-						break;
-					}
-				}
-				if (idx == -1)
-						vert.weIndice[k]  = 0;
-				else
-				{
-					for(uint32 d=0;d<bLookupcnt.size();d++)
-					{
-						if (idx >= bLookupcnt[d])
-							idx -= bLookupcnt[d];
-						else
-							break;
-					}
-					vert.weIndice[k] = idx;
-				}
-			}
-		}
-		// Vec3D normal -> char normal[4]
-		vert.normal[0] = (verts[trianglelookup[i]].normal.x+1)*0xFF/2;
-		vert.normal[1] = (verts[trianglelookup[i]].normal.y+1)*0xFF/2;
-		vert.normal[2] = (verts[trianglelookup[i]].normal.z+1)*0xFF/2;
-		// Vec2D texcoords -> uint16 uv[2]
-		vert.uv[0] = verts[trianglelookup[i]].texcoords.x*0x800;
-		vert.uv[1] = verts[trianglelookup[i]].texcoords.y*0x800;
-		f.Write(&vert, sizeof(vert));
-	}
+	f.Write(&Verts.front(), mdata.mVert.nEntries);
 	padding(&f);
 
 	// mDIV
@@ -1182,44 +1196,18 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Seek(sizeof(div), wxFromCurrent);
 	padding(&f);
 
-	div.faces.nEntries = view->nTris;
+	// mDiv.Faces
+	div.faces.nEntries = Faces.size(); //view->nTris;
 	div.faces.ref = reList.size();
 	RefEntry("_61U", f.Tell(), div.faces.nEntries, 0);
-
-	for(uint16 i=0; i<div.faces.nEntries; i++) {
-		uint16 tidx = 0;
-		for (size_t j=0; j<view->nSub; j++) {
-			if (triangles[i] >= ops[j].vstart && triangles[i] < ops[j].vstart+ops[j].vcount)
-			{
-				tidx = triangles[i] - ops[j].vstart;
-				break;
-			}
-		}
-		f.Write(&tidx, sizeof(uint16));
-	}
+	f.Write(&Faces.front(), sizeof(uint16) * Faces.size());
 	padding(&f);
 
 	// mDiv.meash
-	div.REGN.nEntries = view->nSub;
+	div.REGN.nEntries = Regns.size(); //view->nSub;
 	div.REGN.ref = reList.size();
 	RefEntry("NGER", f.Tell(), div.REGN.nEntries, 3);
-
-	int indBone = 0;
-	for (size_t j=0; j<view->nSub; j++) 
-	{
-		REGN regn;
-		memset(&regn, 0, sizeof(regn));
-		regn.init();
-		regn.indFaces = ops[j].istart;
-		regn.numFaces = ops[j].icount;
-		regn.indVert = ops[j].vstart;
-		regn.numVert = ops[j].vcount;
-		regn.boneCount = bLookupcnt[j]; 
-		regn.indBone = indBone;
-		regn.numBone = bLookupcnt[j];
-		indBone += regn.boneCount;
-		f.Write(&regn, sizeof(regn));
-	}
+	f.Write(&Regns.front(), sizeof(REGN) * Regns.size());
 	padding(&f);
 
 	// mDiv.BAT
@@ -1230,7 +1218,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 		BAT bat;
 		memset(&bat, 0, sizeof(bat));
 		bat.init();
-		bat.regnIndex = MeshtoMat[j].regnIndex;
+		bat.regnIndex = MeshM2toM3[MeshtoMat[j].regnIndex];
 		bat.matmIndex = MeshtoMat[j].matmIndex;
 		f.Write(&bat, 0xE); // sizeof(bat) is buggy to 0x10
 	}
