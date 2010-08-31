@@ -969,7 +969,7 @@ void ModelViewer::LoadModel(const wxString fn)
 	Attachment *modelAtt = NULL;
 
 	if (isChar) {
-		modelAtt = canvas->LoadCharModel(fn.fn_str());
+		modelAtt = canvas->LoadCharModel(fn);
 
 		// error check
 		if (!modelAtt) {
@@ -980,7 +980,7 @@ void ModelViewer::LoadModel(const wxString fn)
 		canvas->model->modelType = MT_CHAR;
 
 	} else {
-		modelAtt = canvas->LoadCharModel(fn.fn_str()); //  change it from LoadModel, don't sure it's right or not.
+		modelAtt = canvas->LoadCharModel(fn); //  change it from LoadModel, don't sure it's right or not.
 
 		// error check
 		if (!modelAtt) {
@@ -1141,7 +1141,7 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 			//const char *newName = strModel.c_str();
 
 			Attachment *modelAtt;
-			modelAtt = canvas->LoadCharModel(strModel.mb_str());
+			modelAtt = canvas->LoadCharModel(strModel);
 			canvas->model->modelType = MT_NPC;
 
 			wxString fn(_T("Textures\\Bakednpctextures\\"));
@@ -1546,7 +1546,7 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 		{
 			wxFileDialog saveDialog(this, _("Save character"), wxEmptyString, wxEmptyString, _T("Character files (*.chr)|*.chr"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (saveDialog.ShowModal()==wxID_OK) {
-				SaveChar(saveDialog.GetPath().mb_str());
+				SaveChar(saveDialog.GetPath().fn_str());
 			}
 		}
 		break;
@@ -1557,7 +1557,7 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 				for (int i=0; i<NUM_CHAR_SLOTS; i++)
 					charControl->cd.equipment[i] = 0;
 				
-				LoadChar(loadDialog.GetPath().mb_str());
+				LoadChar(loadDialog.GetPath());
 			}
 		}
 		fileControl->UpdateInterface();
@@ -1631,7 +1631,9 @@ void ModelViewer::OnLightMenu(wxCommandEvent &event)
 
 			return;
 
-		} case ID_LT_LOAD: {
+		} 
+		case ID_LT_LOAD: 
+		{
 			wxFileDialog dialog(this, _("Load Lighting"), wxEmptyString, wxEmptyString, _T("Scene Lighting (*.lit)|*.lit"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 			
 			if (dialog.ShowModal()==wxID_OK) {
@@ -2034,9 +2036,9 @@ void ModelViewer::OnBackground(wxCommandEvent &event)
 	}
 }
 
-void ModelViewer::SaveChar(const char *fn)
+void ModelViewer::SaveChar(wxString fn)
 {
-	ofstream f(fn, ios_base::out|ios_base::trunc);
+	ofstream f(fn.fn_str(), ios_base::out|ios_base::trunc);
 	f << canvas->model->name << endl;
 	f << charControl->cd.race << " " << charControl->cd.gender << endl;
 	f << charControl->cd.skinColor << " " << charControl->cd.faceType << " " << charControl->cd.hairColor << " " << charControl->cd.hairStyle << " " << charControl->cd.facialHair << " " << charControl->cd.facialColor << endl;
@@ -2053,10 +2055,10 @@ void ModelViewer::SaveChar(const char *fn)
 	f.close();
 }
 
-void ModelViewer::LoadChar(const char *fn)
+void ModelViewer::LoadChar(wxString fn)
 {
 	std::string modelname;
-	ifstream f(fn);
+	ifstream f(fn.fn_str());
 	
 	f >> modelname; // model name
 
@@ -2313,11 +2315,11 @@ void ModelViewer::ModelInfo()
 	if (!canvas->model)
 		return;
 	Model *m = canvas->model;
-	const char *fn="ModelInfo.xml";
-	ofstream xml(fn, ios_base::out | ios_base::trunc);
+	wxString fn = _T("ModelInfo.xml");
+	ofstream xml(fn.fn_str(), ios_base::out | ios_base::trunc);
 
 	if (!xml.is_open()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
+		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn.c_str());
 		return;
 	}
 
@@ -2908,14 +2910,14 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportM2toOBJ(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+				ExportM2toOBJ(canvas->root, canvas->model, dialog.GetPath(), init);
 			}
 		} else if (canvas->wmo) {
 			wxFileDialog dialog(this, _T("Export World Model Object..."), wxEmptyString, newfilename, _T("Wavefront (*.obj)|*.obj"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportWMOtoOBJ(canvas->wmo, dialog.GetPath().fn_str());
+				ExportWMOtoOBJ(canvas->wmo, dialog.GetPath());
 			}
 		}
 	} else if (id == ID_MODELEXPORT_COLLADA) {

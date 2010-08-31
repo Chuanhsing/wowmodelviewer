@@ -145,8 +145,8 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init);
 void ExportWMOtoLWO2(WMO *m, const char *fn);
 
 // Wavefront Object
-void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init);
-void ExportWMOtoOBJ(WMO *m, const char *fn);
+void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init);
+void ExportWMOtoOBJ(WMO *m, wxString fn);
 
 // Milkshape
 void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init);

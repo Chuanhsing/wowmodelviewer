@@ -309,14 +309,14 @@ Attachment* ModelCanvas::AddModel(const char *fn)
 }
 #endif
 
-Attachment* ModelCanvas::LoadModel(const char *fn)
+Attachment* ModelCanvas::LoadModel(wxString fn)
 {
 	clearAttachments();
 	root->model = NULL;
 
 	wxDELETE(wmo);
 
-	model = new Model(wxString(fn, wxConvUTF8), true);
+	model = new Model(fn, true);
 	if (!model->ok) {
 		wxDELETE(model);
 		model = NULL;
@@ -331,7 +331,7 @@ Attachment* ModelCanvas::LoadModel(const char *fn)
 	return root;
 }
 
-Attachment* ModelCanvas::LoadCharModel(const char *fn)
+Attachment* ModelCanvas::LoadCharModel(wxString fn)
 {
 	clearAttachments();
 	root->model = NULL;
@@ -339,7 +339,7 @@ Attachment* ModelCanvas::LoadCharModel(const char *fn)
 	wxDELETE(wmo);
 
 	// Create new one
-	model = new Model(wxString(fn, wxConvUTF8), true);
+	model = new Model(fn, true);
 	if (!model->ok) {
 		wxDELETE(model);
 		model = NULL;

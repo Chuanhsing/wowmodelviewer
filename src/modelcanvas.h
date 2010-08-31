@@ -204,8 +204,8 @@ public:
 	void Zoom(float f, bool rel = false); // f = amount to zoom, rel = relative to model or not
 	void CheckMovement();	// move the character
 	
-	Attachment* LoadModel(const char* fn);
-	Attachment* LoadCharModel(const char* fn);
+	Attachment* LoadModel(wxString fn);
+	Attachment* LoadCharModel(wxString fn);
 #if 0
 	Attachment* AddModel(const char *fn);
 #endif
@@ -237,8 +237,8 @@ public:
 
 	// Attachment related functions
 	void clearAttachments();
-	int addAttachment(const char *model, Attachment *parent, int id, int slot);
-	void deleteSlot(int slot);
+	//int addAttachment(const char *model, Attachment *parent, int id, int slot);
+	//void deleteSlot(int slot);
 
 	// Background colour
 	Vec3D vecBGColor;

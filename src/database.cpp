@@ -662,47 +662,31 @@ ItemDatabase::ItemDatabase()
 	items.push_back(all);
 }
 
-/*
-ItemDatabase::ItemDatabase(const char* filename)
-{
-	ItemRecord all(_("---- None ----"), IT_ALL);
-	items.push_back(all);
-	std::ifstream fin(filename);
-	char line[512];
-	while (fin.getline(line,512)) {
-		ItemRecord rec(line);
-		if (rec.type > 0) {
-			items.push_back(rec);
-		}
-	}
-	fin.close();
-	sort(items.begin(), items.end());
-}*/
-
 void ItemDatabase::open(wxString filename)
 {
-	std::ifstream fin(filename.mb_str());
-	char line[512];
-	if (fin.is_open()) {
-		while (fin.getline(line,512)) {
-			ItemRecord rec(line);
+	wxTextFile fin;
+	if (fin.Open(filename)) {
+		wxString line;
+		for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
+			ItemRecord rec(line.c_str());
 			if (rec.type > 0) {
 				items.push_back(rec);
 			}
 		}
-		fin.close();
+		fin.Close();
 	}
 
-	std::ifstream fin2("discoveryitems.csv");
-	if (fin2.is_open()) {
-		while (fin2.getline(line,512)) {
+	wxTextFile fin2;;
+	if (fin2.Open("discoveryitems.csv")) {
+		wxString line;
+		for ( line = fin2.GetFirstLine(); !fin2.Eof(); line = fin2.GetNextLine() ) {
 			ItemRecord rec;
-			rec.getLine(line);
+			rec.getLine(line.c_str());
 			if (rec.type > 0) {
 				items.push_back(rec);
 			}
 		}
-		fin2.close();
+		fin2.Close();
 	}
 
 	sort(items.begin(), items.end());
@@ -891,21 +875,23 @@ NPCRecord::NPCRecord(const char* line)
 	}
 }
 
-NPCDatabase::NPCDatabase(const char* filename)
+NPCDatabase::NPCDatabase(wxString filename)
 {
 	//ItemRecord all(_("---- None ----"), IT_ALL);
 	//items.push_back(all);
 
-	std::ifstream fin(filename);
-	char line[512];
-	while (fin.getline(line,512)) {
-		NPCRecord rec(line);
-		if (rec.model > 0) {
-			npcs.push_back(rec);
+	wxTextFile fin(filename);
+	if (fin.Open(filename)) {
+		wxString line;
+		for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
+			NPCRecord rec(line.c_str());
+			if (rec.model > 0) {
+				npcs.push_back(rec);
+			}
 		}
+		fin.Close();
+		sort(npcs.begin(), npcs.end());
 	}
-	fin.close();
-	sort(npcs.begin(), npcs.end());
 
 	int j=0;
 	for (std::vector<NPCRecord>::iterator it=npcs.begin();	it!=npcs.end(); ++it)
@@ -917,16 +903,16 @@ NPCDatabase::NPCDatabase(const char* filename)
 
 void NPCDatabase::open(wxString filename)
 {
-	std::ifstream fin(filename.mb_str());
-	char line[512];
-	if (fin.is_open()) {
-		while (fin.getline(line,512)) {
-			NPCRecord rec(line);
+	wxTextFile fin(filename);
+	if (fin.Open(filename)) {
+		wxString line;
+		for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
+			NPCRecord rec(line.c_str());
 			if (rec.model > 0) {
 				npcs.push_back(rec);
 			}
 		}
-		fin.close();
+		fin.Close();
 		sort(npcs.begin(), npcs.end());
 	}
 }

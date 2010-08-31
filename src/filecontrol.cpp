@@ -108,7 +108,7 @@ bool filterSearch(wxString s)
 
 	// filter mpq
 	if (!filterArchive.IsEmpty()) {
-		wxString archive(MPQFile::getArchive((char *)s.c_str()), wxConvUTF8);
+		wxString archive = MPQFile::getArchive(s);
 		if (!archive.EndsWith(filterArchive))
 			return false;
 	}
@@ -415,7 +415,7 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 		infoMenu.Append(ID_FILELIST_VIEW, _T("&View"), _T("View this object"));
 	}
 	infoMenu.AppendSeparator();
-	wxString archive(MPQFile::getArchive((char *)tdata->fn.c_str()), wxConvUTF8);
+	wxString archive = MPQFile::getArchive(tdata->fn);
 	infoMenu.Append(ID_FILELIST, archive, archive);
 	wxString size = wxString::Format(_T("Size: %d"), MPQFile::getSize((char *)tdata->fn.c_str()));
 	infoMenu.Append(ID_FILELIST, size, size);

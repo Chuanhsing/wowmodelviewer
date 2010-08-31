@@ -187,8 +187,9 @@ void write(ofstream &f, const T &t) {
 	f.write((char *)(&t), sizeof(T));
 }
 
-static void WriteMesh(const ExportData &data, wxString filename) {
-	ofstream f(filename.mb_str(), ios::trunc);
+static void WriteMesh(const ExportData &data, wxString filename) 
+{
+	ofstream f(filename.fn_str(), ios::trunc);
 	if (!f.good())
 		return;
 
@@ -253,8 +254,9 @@ static void WriteMesh(const ExportData &data, wxString filename) {
 	f.close();
 }
 
-static void WriteMaterial(const ExportData &data, wxString filename) {
-	ofstream f(filename.mb_str(), ios::trunc);
+static void WriteMaterial(const ExportData &data, wxString filename) 
+{
+	ofstream f(filename.fn_str(), ios::trunc);
 	if (!f.good())
 		return;
 
@@ -288,8 +290,9 @@ static void WriteMaterial(const ExportData &data, wxString filename) {
 	f.close();
 }
 
-static void WriteSkeleton(const ExportData &data, wxString filename) {
-	ofstream f(filename.mb_str(), ios::trunc);
+static void WriteSkeleton(const ExportData &data, wxString filename) 
+{
+	ofstream f(filename.fn_str(), ios::trunc);
 	if (!f.good())
 		return;
 

@@ -780,7 +780,7 @@ void ExportLightwaveScene(LWScene SceneData){
 
 	wxString SceneName = SceneData.FilePath + SceneData.FileName;
 
-	ofstream fs(SceneName.mb_str(), ios_base::out | ios_base::trunc);
+	ofstream fs(SceneName.fn_str(), ios_base::out | ios_base::trunc);
 	if (!fs.is_open()) {
 		wxMessageBox(_T("Unable to open the scene file for exporting."),_T("Scene Export Failure"));
 		wxLogMessage(_T("Error: Unable to open file \"%s\". Could not export the scene."), SceneName.c_str());
@@ -860,7 +860,7 @@ void ExportM2toScene(Model *m, const char *fn, bool init){
 		SceneName << Path1 << SLASH << Path2 << SLASH << Name;
 	}
 
-	ofstream fs(SceneName.mb_str(), ios_base::out | ios_base::trunc);
+	ofstream fs(SceneName.fn_str(), ios_base::out | ios_base::trunc);
 
 	if (!fs.is_open()) {
 		wxMessageBox(_T("Unable to open the scene file for exporting."),_T("Scene Export Failure"));
@@ -2776,7 +2776,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 		SceneName << Path1 << SLASH << Path2 << SLASH << Name;
 	}
 
-	ofstream fs(SceneName.mb_str(), ios_base::out | ios_base::trunc);
+	ofstream fs(SceneName.fn_str(), ios_base::out | ios_base::trunc);
 
 	if (!fs.is_open()) {
 		wxMessageBox(_T("Unable to open the scene file for exporting."),_T("Scene Export Failure"));

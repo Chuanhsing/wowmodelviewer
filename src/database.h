@@ -484,7 +484,6 @@ struct ItemRecord {
 
 class ItemDatabase {
 public:
-//	ItemDatabase(const char* filename);
 	ItemDatabase();
 
 	std::vector<ItemRecord> items;
@@ -565,7 +564,7 @@ struct NPCRecord
 class NPCDatabase 
 {
 public:
-	NPCDatabase(const char* filename);
+	NPCDatabase(wxString filename);
 	NPCDatabase() { }
 
 	std::vector<NPCRecord> npcs;

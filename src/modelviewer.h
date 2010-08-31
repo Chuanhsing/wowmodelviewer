@@ -151,8 +151,8 @@ public:
 	void SaveLayout();
 	void ResetLayout();
 	// save + load character *.CHR files
-	void LoadChar(const char *fn);
-	void SaveChar(const char *fn);
+	void LoadChar(wxString fn);
+	void SaveChar(wxString fn);
 
 	void LoadModel(const wxString fn);
 	void LoadItem(unsigned int displayID);

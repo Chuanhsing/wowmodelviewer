@@ -307,9 +307,8 @@ int MPQFile::getSize(const char* filename)
 	return 0;
 }
 
-char* MPQFile::getArchive(const char* filename)
+wxString MPQFile::getArchive(wxString filename)
 {
-	static char archive[512];
 	if( useLocalFiles ) {
 		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
 		wxString fn2 = fn1;
@@ -322,8 +321,7 @@ char* MPQFile::getArchive(const char* filename)
 		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
 			wxString fn = fns[i];
 			if (wxFile::Exists(fn)) {
-				strncpy(archive, fn.mb_str(), sizeof(archive));
-				return archive;
+				return fn;
 			}
 		}
 	}
@@ -336,11 +334,10 @@ char* MPQFile::getArchive(const char* filename)
 		if( !SFileOpenFileEx( mpq_a, filename, 0, &fh ) )
 			continue;
 
-		strncpy(archive, (char *)i->first.c_str(), sizeof(archive));
-		return archive;
+		return wxString((char *)i->first.c_str(), wxConvUTF8);
 	}
-	strncpy(archive, "unknown", sizeof(archive));
-	return archive;
+
+	return _T("unknown");
 }
 
 size_t MPQFile::getPos()

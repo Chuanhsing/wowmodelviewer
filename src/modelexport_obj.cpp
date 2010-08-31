@@ -7,10 +7,10 @@
 
 //#include "CxImage/ximage.h"
 
-void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init)
+void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init)
 {
 	// Open file
-	ofstream f(fn, ios_base::out | ios_base::trunc);
+	ofstream f(fn.fn_str(), ios_base::out | ios_base::trunc);
 
 	if (!f.is_open()) {
 		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
@@ -189,11 +189,9 @@ void ExportM2toOBJ(Attachment *att, Model *m, const char *fn, bool init)
 	f.close();
 }
 
-void ExportWMOtoOBJ(WMO *m, const char *fn)
+void ExportWMOtoOBJ(WMO *m, wxString file)
 {
 	// Open file
-	wxString file = wxString(fn, wxConvUTF8);
-
 	if (modelExport_PreserveDir == true){
 		wxString Path1, Path2, Name;
 		Path1 << file.BeforeLast('\\');
@@ -206,19 +204,19 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 		file << Path1 << SLASH << Path2 << SLASH << Name;
 	}
 
-	ofstream f(file.mb_str(), ios_base::out | ios_base::trunc);
+	ofstream f(file.fn_str(), ios_base::out | ios_base::trunc);
 
 	if (!f.is_open()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
+		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file.c_str());
 		return;
 	}
-	LogExportData(_T("OBJ"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("WMO"));
+	LogExportData(_T("OBJ"),file.BeforeLast(SLASH),_T("WMO"));
 
 	wxString mtlName = file;
 	mtlName = mtlName.BeforeLast('.');
 	mtlName << _T(".mtl");
 
-	ofstream fm(mtlName.mb_str(), ios_base::out | ios_base::trunc);
+	ofstream fm(mtlName.fn_str(), ios_base::out | ios_base::trunc);
 	mtlName = mtlName.AfterLast(SLASH);
 
 	fm << "#" << endl;
@@ -235,7 +233,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];
 
-			wxString outname(fn, wxConvUTF8);
+			wxString outname = file;
 
 			bool nomatch = true;
 			for (int t=0;t<=m->nTextures; t++) {
@@ -282,7 +280,7 @@ void ExportWMOtoOBJ(WMO *m, const char *fn)
 			fm << "Ns 0.000000" << endl;
 			fm << "map_Kd " << texName.c_str() << endl << endl;
 
-			wxString texFilename(fn, wxConvUTF8);
+			wxString texFilename = file;
 			texFilename = texFilename.BeforeLast('\\');
 			texFilename += '\\';
 			texFilename += texName;

@@ -215,30 +215,6 @@ void EnchantsDialog::InitObjects()
 void EnchantsDialog::InitEnchants()
 {
 	EnchantsRec temp;
-/*
-	ifstream fin("enchants.csv");
-	char line[512];
-	while (fin.getline(line,512)) {
-		temp.id = 0;
-		temp.index[0] = 0;
-		temp.index[1] = 0;
-		temp.index[2] = 0;
-		temp.index[3] = 0;
-		temp.index[4] = 0;
-		temp.name = "nil";
-
-		sscanf(line, "%u,%u,%u,%u,%u,%u", &temp.id, &temp.index[0], &temp.index[1], &temp.index[2], &temp.index[3], &temp.index[4]);
-		for (size_t i=strlen(line)-2; i>1; i--) {
-			if (line[i]==',') {
-				temp.name = (line + i + 1);
-				break;
-			}
-		}
-		enchants.push_back(temp);
-	}
-	fin.close();
-*/
-	//std::sort(enchants.begin(), enchants.end());
 
 	// Alfred 2009.07.17 rewrite, use system database
 	temp.id = 0;
