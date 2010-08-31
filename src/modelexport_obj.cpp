@@ -13,7 +13,7 @@ void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init)
 	ofstream f(fn.fn_str(), ios_base::out | ios_base::trunc);
 
 	if (!f.is_open()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
+		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn.c_str());
 		return;
 	}
 	LogExportData(_T("OBJ"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
@@ -44,7 +44,7 @@ void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init)
 		ModelRenderPass &p = m->passes[i];
 			
 		if (p.init(m)) {
-			wxString texName = GetM2TextureName(m,fn,p,(int)i);
+			wxString texName = GetM2TextureName(m,(char *)fn.c_str(),p,(int)i);
 
 			fm << _T("newmtl ") << texName << endl;
 			texName << _T(".tga");

@@ -2973,7 +2973,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 				wxString dfile = wxString(fn,wxConvUTF8).BeforeLast(SLASH) << SLASH << cModelName.AfterLast(SLASH);
 				dfile = dfile.BeforeLast(_T('.')) << _T(".lwo");
 
-				g_modelViewer->canvas->LoadModel((char *)cModelName.c_str());
+				g_modelViewer->canvas->LoadModel(cModelName);
 				ExportM2toLWO(NULL, g_modelViewer->canvas->model, dfile.fn_str(), true);
 
 				wxLogMessage(_T("Export: Finished exporting doodad model: %s\n\n"),cModelName.c_str());

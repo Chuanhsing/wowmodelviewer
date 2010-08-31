@@ -668,7 +668,7 @@ void ItemDatabase::open(wxString filename)
 	if (fin.Open(filename)) {
 		wxString line;
 		for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
-			ItemRecord rec(line.c_str());
+			ItemRecord rec((char *)line.c_str());
 			if (rec.type > 0) {
 				items.push_back(rec);
 			}
@@ -677,11 +677,11 @@ void ItemDatabase::open(wxString filename)
 	}
 
 	wxTextFile fin2;;
-	if (fin2.Open("discoveryitems.csv")) {
+	if (fin2.Open(_T("discoveryitems.csv"))) {
 		wxString line;
 		for ( line = fin2.GetFirstLine(); !fin2.Eof(); line = fin2.GetNextLine() ) {
 			ItemRecord rec;
-			rec.getLine(line.c_str());
+			rec.getLine((char *)line.c_str());
 			if (rec.type > 0) {
 				items.push_back(rec);
 			}
@@ -884,7 +884,7 @@ NPCDatabase::NPCDatabase(wxString filename)
 	if (fin.Open(filename)) {
 		wxString line;
 		for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
-			NPCRecord rec(line.c_str());
+			NPCRecord rec((char *)line.c_str());
 			if (rec.model > 0) {
 				npcs.push_back(rec);
 			}
@@ -907,7 +907,7 @@ void NPCDatabase::open(wxString filename)
 	if (fin.Open(filename)) {
 		wxString line;
 		for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
-			NPCRecord rec(line.c_str());
+			NPCRecord rec((char *)line.c_str());
 			if (rec.model > 0) {
 				npcs.push_back(rec);
 			}

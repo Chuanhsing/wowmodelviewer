@@ -1546,7 +1546,7 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 		{
 			wxFileDialog saveDialog(this, _("Save character"), wxEmptyString, wxEmptyString, _T("Character files (*.chr)|*.chr"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (saveDialog.ShowModal()==wxID_OK) {
-				SaveChar(saveDialog.GetPath().fn_str());
+				SaveChar(saveDialog.GetPath());
 			}
 		}
 		break;

@@ -331,7 +331,7 @@ wxString MPQFile::getArchive(wxString filename)
 		HANDLE &mpq_a = *i->second;
 		HANDLE fh;
 		
-		if( !SFileOpenFileEx( mpq_a, filename, 0, &fh ) )
+		if( !SFileOpenFileEx( mpq_a, (char *)filename.c_str(), 0, &fh ) )
 			continue;
 
 		return wxString((char *)i->first.c_str(), wxConvUTF8);

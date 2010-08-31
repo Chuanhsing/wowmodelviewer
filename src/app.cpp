@@ -316,45 +316,6 @@ void searchMPQs()
 		_T("expansion1-locale-%s.mpq"), _T("lichking-locale-%s.mpq"), _T("expansion-locale-%s.mpq"), 
 		_T("locale-%s.mpq"), _T("base-%s.mpq")};
 
-	// search Partial MPQs;
-	wxArrayString baseMpqs;
-	wxDir::GetAllFiles(gamePath, &baseMpqs, wxEmptyString, wxDIR_FILES);
-	for (size_t j = 0; j < baseMpqs.size(); j++) {
-		wxString baseName = wxFileName(baseMpqs[j]).GetFullName();
-		if (baseName.Mid(0, 11).CmpNoCase(_T("wow-update-")) == 0 && baseName.AfterLast('.').CmpNoCase(_T("mpq")) == 0) {
-			bool bFound = false;
-			for(size_t i = 0; i<mpqArchives.size(); i++) {
-				int ver = wxAtoi(mpqArchives[i].BeforeLast('.').AfterLast('-'));
-				int bver = wxAtoi(baseName.BeforeLast('.').AfterLast('-'));
-				if (bver > ver) {
-					mpqArchives.Insert(baseMpqs[j], i);
-					bFound = true;
-					break;
-				}		
-			}
-			if (bFound == false)
-				mpqArchives.Add(baseMpqs[j]);
-
-			wxLogMessage(_T("- Found Partial MPQ archive: %s"), baseMpqs[j].c_str());
-		}
-	}
-
-	// default archives
-	for (size_t i = 0; i < WXSIZEOF(defaultArchives); i++) {
-		wxLogMessage(_T("Searching for MPQ archive %s..."), defaultArchives[i].c_str());
-
-		for (size_t j = 0; j < baseMpqs.size(); j++) {
-			wxString baseName = wxFileName(baseMpqs[j]).GetFullName();
-			if(baseName.CmpNoCase(defaultArchives[i]) == 0) {
-				mpqArchives.Add(baseMpqs[j]);
-
-				wxLogMessage(_T("- Found MPQ archive: %s"), baseMpqs[j].c_str());
-				if (baseName.CmpNoCase(_T("alternate.mpq")))
-					bAlternate = true;
-			}
-		}
-	}
-
 	// select avaiable locales
 	wxArrayString avaiLocales;
 	for (size_t i = 0; i < WXSIZEOF(locales); i++) {
@@ -373,6 +334,104 @@ void searchMPQs()
 		sLocale = avaiLocales[0];
 	else
 		sLocale = wxGetSingleChoice(_T("Please select a Locale:"), _T("Locale"), avaiLocales);
+
+	// search Partial MPQs
+	wxArrayString baseMpqs;
+	wxDir::GetAllFiles(gamePath, &baseMpqs, wxEmptyString, wxDIR_FILES);
+	for (size_t j = 0; j < baseMpqs.size(); j++) {
+		wxString baseName = wxFileName(baseMpqs[j]).GetFullName();
+		wxString cmpName = _T("wow-update-");
+		if (baseName.StartsWith(cmpName) && baseName.AfterLast('.').CmpNoCase(_T("mpq")) == 0) {
+			bool bFound = false;
+			for(size_t i = 0; i<mpqArchives.size(); i++) {
+				if (!mpqArchives[i].AfterLast(SLASH).StartsWith(cmpName))
+					continue;
+				int ver = wxAtoi(mpqArchives[i].BeforeLast('.').AfterLast('-'));
+				int bver = wxAtoi(baseName.BeforeLast('.').AfterLast('-'));
+				if (bver > ver) {
+					mpqArchives.Insert(baseMpqs[j], i);
+					bFound = true;
+					break;
+				}		
+			}
+			if (bFound == false)
+				mpqArchives.Add(baseMpqs[j]);
+
+			wxLogMessage(_T("- Found Partial MPQ archive: %s"), baseMpqs[j].c_str());
+		}
+	}
+
+	// search patch-base MPQs
+	wxArrayString baseCacheMpqs;
+	wxDir::GetAllFiles(gamePath+_T("Cache"), &baseCacheMpqs, wxEmptyString, wxDIR_FILES);
+	for (size_t j = 0; j < baseCacheMpqs.size(); j++) {
+		wxString baseName = baseCacheMpqs[j];
+		wxString fullName = wxFileName(baseName).GetFullName();
+		wxString cmpName = _T("patch-base-");
+		if (fullName.StartsWith(cmpName) && fullName.AfterLast('.').CmpNoCase(_T("mpq")) == 0) {
+			bool bFound = false;
+			for(size_t i = 0; i<mpqArchives.size(); i++) {
+				if (!mpqArchives[i].AfterLast(SLASH).StartsWith(cmpName))
+					continue;
+				int ver = wxAtoi(mpqArchives[i].BeforeLast('.').AfterLast('-'));
+				int bver = wxAtoi(fullName.BeforeLast('.').AfterLast('-'));
+				if (bver > ver) {
+					mpqArchives.Insert(baseName, i);
+					bFound = true;
+					break;
+				}		
+			}
+			if (bFound == false)
+				mpqArchives.Add(baseName);
+
+			wxLogMessage(_T("- Found Patch Base MPQ archive: %s"), baseName.c_str());
+		}
+	}
+	baseCacheMpqs.Clear();
+
+	// search base cache locale MPQs
+	wxArrayString baseCacheLocaleMpqs;
+	wxDir::GetAllFiles(gamePath+_T("Cache")+SLASH+sLocale, &baseCacheLocaleMpqs, wxEmptyString, wxDIR_FILES);
+	for (size_t j = 0; j < baseCacheLocaleMpqs.size(); j++) {
+		wxString baseName = baseCacheLocaleMpqs[j];
+		wxString fullName = wxFileName(baseName).GetFullName();
+		wxString cmpName = _T("patch-")+sLocale+_T("-");
+		if (fullName.StartsWith(cmpName) && fullName.AfterLast('.').CmpNoCase(_T("mpq")) == 0) {
+			bool bFound = false;
+			for(size_t i = 0; i<mpqArchives.size(); i++) {
+				if (!mpqArchives[i].AfterLast(SLASH).StartsWith(cmpName))
+					continue;
+				int ver = wxAtoi(mpqArchives[i].BeforeLast('.').AfterLast('-'));
+				int bver = wxAtoi(fullName.BeforeLast('.').AfterLast('-'));
+				if (bver > ver) {
+					mpqArchives.Insert(baseName, i);
+					bFound = true;
+					break;
+				}		
+			}
+			if (bFound == false)
+				mpqArchives.Add(baseName);
+
+			wxLogMessage(_T("- Found Patch Base Locale MPQ archive: %s"), baseName.c_str());
+		}
+	}
+	baseCacheLocaleMpqs.Clear();
+
+	// default archives
+	for (size_t i = 0; i < WXSIZEOF(defaultArchives); i++) {
+		wxLogMessage(_T("Searching for MPQ archive %s..."), defaultArchives[i].c_str());
+
+		for (size_t j = 0; j < baseMpqs.size(); j++) {
+			wxString baseName = wxFileName(baseMpqs[j]).GetFullName();
+			if(baseName.CmpNoCase(defaultArchives[i]) == 0) {
+				mpqArchives.Add(baseMpqs[j]);
+
+				wxLogMessage(_T("- Found MPQ archive: %s"), baseMpqs[j].c_str());
+				if (baseName.CmpNoCase(_T("alternate.mpq")))
+					bAlternate = true;
+			}
+		}
+	}
 
 	// add locale files
 	for (size_t i = 0; i < WXSIZEOF(locales); i++) {
