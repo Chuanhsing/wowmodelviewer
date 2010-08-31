@@ -140,7 +140,7 @@ uint32 nSkinnedBones(Model *m, MPQFile *mpqf)
 	return nSkinnedBones;
 }
 
-void ExportM2toM3(Model *m, const char *fn, bool init)
+void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 {
 	if (!m)
 		return;
@@ -198,6 +198,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	std::vector<Vertex32>	Verts;
 	std::vector<uint16>		Faces;
 	std::vector<REGN>		Regns;
+	std::vector<BONE>		Bones;
 	std::vector<int>		MeshM2toM3;
 
 	std::vector<uint32> logAnimations;
@@ -206,8 +207,8 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	int chunk_offset;
 
 	std::vector<uint16> bLookup;
-	std::vector<uint16> bLookupcnt;
 
+	// init mesh, vertex, face, mat
 	int boneidx = 0;
 	int vertidx = 0;
 	int faceidx = 0;
@@ -268,10 +269,9 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			Faces.push_back(face);
 		}
 
-		bLookupcnt.push_back(bLookup2.size());
 		// push local bLookup to global, and lookup it in boneLookup
 		for(uint32 i=0; i<bLookup2.size(); i++) {
-			bLookup.push_back(bLookup2[i]);
+			bLookup.push_back(bLookup2[i] + ROOT_BONE);
 		}
 
 		regn.boneCount = bLookup2.size();
@@ -392,8 +392,24 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			}
 		}
 	}
+/*
+	if (att->children.size() > 0)
+	{
+		for (uint32 i = 0; i < att->children[0]->children.size(); i++)
+		{
+			Attachment *att2 = att->children[0]->children[i];
+			Model *am = static_cast<Model*>(att2->model);
+			if (am)
+			{
+				MPQFile ampqf((char *)am->modelname.c_str());
+				MPQFile ampqfv((char *)am->lodname.c_str());
 
-
+				ampqf.close();
+				ampqfv.close();
+			}
+		}
+	}
+*/
 	// Modelname
 	wxString n = wxString(fn, wxConvUTF8).AfterLast('\\');
 	NameRefEntry(&mdata.name, n, &f);
@@ -471,6 +487,71 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 			logAnimations.push_back(i);
 		}
 	}
+
+	// init bones
+	if (ROOT_BONE == 1) {
+		BONE bone;
+		memset(&bone, 0, sizeof(BONE));
+		bone.init();
+		bone.parent = -1;
+		bone.initTrans.AnimRef.animid = CreateAnimID(AR_Bone, 0, 0, 2);
+		bone.initRot.AnimRef.animid = CreateAnimID(AR_Bone, 0, 0, 3);
+		bone.initRot.value = Vec4D(0.0f, 0.0f, -sqrt(0.5f), sqrt(0.5f));
+		bone.initScale.AnimRef.animid = CreateAnimID(AR_Bone, 0, 0, 5);
+		bone.initScale.value = Vec3D(1.0f, 1.0f, 1.0f)*modelExport_M3_BoundScale;
+		bone.ar1.AnimRef.animid = CreateAnimID(AR_Bone, 0, 0, 6);
+		
+		Bones.push_back(bone);
+	}
+
+	for(uint32 i=0; i<m->header.nBones; i++) {
+		BONE bone;
+		int  idx = Bones.size();
+		memset(&bone, 0, sizeof(BONE));
+		bone.init();
+		bone.parent = mb[i].parent + ROOT_BONE;
+		bone.initTrans.AnimRef.animid = CreateAnimID(AR_Bone, idx, 0, 2);
+		for (uint32 j=0; j<logAnimations.size(); j++)
+		{
+			int anim_offset = logAnimations[j];
+			if (m->bones[i].trans.data[anim_offset].size() > 0)
+			{
+				SetAnimed(bone.initTrans.AnimRef);
+				break;
+			}
+		}
+
+		bone.initTrans.value = mb[i].pivot;
+		if (bone.parent > (ROOT_BONE - 1))
+			bone.initTrans.value -= mb[bone.parent - ROOT_BONE].pivot ;
+
+		bone.initRot.AnimRef.animid = CreateAnimID(AR_Bone, idx, 0, 3);
+		for (uint32 j=0; j<logAnimations.size(); j++)
+		{
+			int anim_offset = logAnimations[j];
+			if (m->bones[i].rot.data[anim_offset].size() > 0)
+			{
+				SetAnimed(bone.initRot.AnimRef);
+				break;
+			}
+		}
+
+		bone.initScale.AnimRef.animid = CreateAnimID(AR_Bone, idx, 0, 5);
+		for (uint32 j=0; j<logAnimations.size(); j++)
+		{
+			int anim_offset = logAnimations[j];
+			if (m->bones[i].scale.data[anim_offset].size() > 0)
+			{
+				SetAnimed(bone.initScale.AnimRef);
+				break;
+			}
+		}
+		bone.ar1.AnimRef.animid = CreateAnimID(AR_Bone, idx, 0, 6);
+		Bones.push_back(bone);
+	}
+
+
+
 
 	mdata.mSEQS.nEntries = nameAnimations.size();
 	mdata.mSEQS.ref = reList.size();
@@ -1088,28 +1169,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	f.Seek(0, wxFromEnd);
 
 	// mBone
-	std::vector<ModelBoneDef> boneList;
-
-	if (ROOT_BONE == 1) {
-		ModelBoneDef rootBone;
-		memset(&rootBone, 0, sizeof(rootBone));
-		rootBone.parent = -2;
-		boneList.push_back(rootBone);
-	}
-
-	for(uint32 i=0; i<m->header.nBones; i++) {
-		boneList.push_back(mb[i]);
-	}
-
-	mdata.mBone.nEntries = boneList.size();
-	mdata.mBone.ref = reList.size();
-	RefEntry("ENOB", f.Tell(), mdata.mBone.nEntries, 1);
-	chunk_offset = f.Tell();
-	BONE *bones = new BONE[mdata.mBone.nEntries];
-	memset(bones, 0, sizeof(BONE)*mdata.mBone.nEntries);
-	f.Seek(sizeof(BONE)*mdata.mBone.nEntries, wxFromCurrent);
-	padding(&f);
-	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
+	for(uint32 i=0; i<Bones.size(); i++) {
 		// name
 		wxString strName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast('.')+_T('_');
 		if (i < ROOT_BONE)
@@ -1123,62 +1183,14 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 				break;
 			}
 		}
-		NameRefEntry(&bones[i].name, strName, &f);
+		NameRefEntry(&Bones[i].name, strName, &f);
 	}
-	f.Seek(chunk_offset, wxFromStart);
-	for(uint32 i=0; i<mdata.mBone.nEntries; i++) {
-		bones[i].init();
-		bones[i].parent = boneList[i].parent + ROOT_BONE;
-		bones[i].initTrans.AnimRef.animid = CreateAnimID(AR_Bone, i, 0, 2);
 
-		if (i >= ROOT_BONE)
-		{
-			for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
-			{
-				int anim_offset = logAnimations[j];
-				if (m->bones[i-ROOT_BONE].trans.data[anim_offset].size() > 0)
-					SetAnimed(bones[i].initTrans.AnimRef);
-			}
-		}
-		bones[i].initTrans.value = boneList[i].pivot;
-		if (bones[i].parent > -1) {
-			bones[i].initTrans.value -= boneList[bones[i].parent].pivot ;
-		}
-
-		bones[i].initRot.AnimRef.animid = CreateAnimID(AR_Bone, i, 0, 3);
-		if (i < ROOT_BONE)
-		{
-			bones[i].initRot.value = Vec4D(0.0f, 0.0f, -sqrt(0.5f), sqrt(0.5f)); // face to minitor, tan(90)
-		}
-		else
-		{
-			for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
-			{
-				int anim_offset = logAnimations[j];
-				if (m->bones[i-ROOT_BONE].rot.data[anim_offset].size() > 0)
-					SetAnimed(bones[i].initRot.AnimRef);
-			}
-		}
-
-		bones[i].initScale.AnimRef.animid = CreateAnimID(AR_Bone, i, 0, 5);
-		if (i < ROOT_BONE)
-		{
-			bones[i].initScale.value = Vec3D(1.0f, 1.0f, 1.0f)*modelExport_M3_BoundScale; // scale root bone will affect the while model
-		}
-		else
-		{
-			for (uint32 j=0; j<mdata.mSTS.nEntries; j++)
-			{
-				int anim_offset = logAnimations[j];
-				if (m->bones[i-ROOT_BONE].scale.data[anim_offset].size() > 0)
-					SetAnimed(bones[i].initScale.AnimRef);
-			}
-		}
-		bones[i].ar1.AnimRef.animid = CreateAnimID(AR_Bone, i, 0, 6);
-		f.Write(&bones[i], sizeof(BONE));
-	}
-	wxDELETEA(bones);
-	f.Seek(0, wxFromEnd);
+	mdata.mBone.nEntries = Bones.size();
+	mdata.mBone.ref = reList.size();
+	RefEntry("ENOB", f.Tell(), mdata.mBone.nEntries, 1);
+	f.Write(&Bones.front(), sizeof(BONE) * mdata.mBone.nEntries);
+	padding(&f);
 
 	// nSkinnedBones
 	mdata.nSkinnedBones = nSkinnedBones(m, &mpqf);
@@ -1205,14 +1217,14 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	div.faces.nEntries = Faces.size(); //view->nTris;
 	div.faces.ref = reList.size();
 	RefEntry("_61U", f.Tell(), div.faces.nEntries, 0);
-	f.Write(&Faces.front(), sizeof(uint16) * Faces.size());
+	f.Write(&Faces.front(), sizeof(uint16) * div.faces.nEntries);
 	padding(&f);
 
 	// mDiv.meash
 	div.REGN.nEntries = Regns.size(); //view->nSub;
 	div.REGN.ref = reList.size();
 	RefEntry("NGER", f.Tell(), div.REGN.nEntries, 3);
-	f.Write(&Regns.front(), sizeof(REGN) * Regns.size());
+	f.Write(&Regns.front(), sizeof(REGN) * div.REGN.nEntries);
 	padding(&f);
 
 	// mDiv.BAT
@@ -1246,10 +1258,7 @@ void ExportM2toM3(Model *m, const char *fn, bool init)
 	mdata.mBoneLU.nEntries = bLookup.size();
 	mdata.mBoneLU.ref = reList.size();
 	RefEntry("_61U", f.Tell(), mdata.mBoneLU.nEntries, 0);
-	for(uint16 i=0; i<bLookup.size(); i++) {
-		uint16 idx = bLookup[i] + ROOT_BONE;
-		f.Write(&idx, sizeof(uint16));
-	}
+	f.Write(&bLookup.front(), sizeof(uint16) * mdata.mBoneLU.nEntries );
 	padding(&f);
 
 	// boundSphere, m->header.boundSphere is too big

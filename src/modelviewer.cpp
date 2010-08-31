@@ -3001,8 +3001,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("Starcraft II (*.m3)|*.m3"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
-
-				ExportM2toM3(canvas->model, dialog.GetPath().fn_str(), init);
+				
+				ExportM2toM3(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		}
 #ifdef	_WINDOWS

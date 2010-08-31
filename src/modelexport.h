@@ -175,6 +175,6 @@ void ExportM2toFBX(Model* m, const char* fn, bool init);
 void ExportWMOtoFBX(WMO* m, const char* fn);
 
 // M3
-void ExportM2toM3(Model* m, const char* fn, bool init);
+void ExportM2toM3(Attachment *att, Model* m, const char* fn, bool init);
 
 #endif
