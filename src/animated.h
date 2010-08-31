@@ -174,7 +174,7 @@ public:
 				if (type == INTERPOLATION_NONE) 
 					return data[anim][pos];
 				else if (type == INTERPOLATION_LINEAR) 
-					return interpolate<T>(r,data[anim][pos],data[anim][pos+1]);
+					return interpolate<T>(r,data[anim][pos],data[anim][pos]);
 				else if (type==INTERPOLATION_HERMITE){
 					// INTERPOLATION_HERMITE is only used in cameras afaik?
 					return interpolateHermite<T>(r,data[anim][pos],data[anim][pos],in[anim][pos],out[anim][pos]);
