@@ -209,13 +209,14 @@ void ModelControl::Update()
 	// Loop through all the geosets.
 	wxArrayString geosetItems;
 	//geosets->Clear();
-	wxString meshes[19] = {_T("Hairstyles"), _T("Facial1"), _T("Facial2"), _T("Facial3"), _T("Braces"),
+	// enum CharGeosets
+	wxString meshes[NUM_GEOSETS] = {_T("Hairstyles"), _T("Facial1"), _T("Facial2"), _T("Facial3"), _T("Braces"),
 		_T("Boots"), wxEmptyString, _T("Ears"), _T("Wristbands"),  _T("Kneepads"),
-		 _T("Pants"), _T("Pants"), _T("Tarbard"), _T("Trousers"), wxEmptyString,
+		 _T("Pants"), _T("Pants"), _T("Tarbard"), _T("Trousers"), _T("Robe"),
 		  _T("Cape"), wxEmptyString, _T("Eyeglows"), _T("Belt") };
 	for (unsigned int i=0; i<model->geosets.size(); i++) {
 		int mesh = model->geosets[i].id / 100;
-		if (mesh < 19 && meshes[mesh] != wxEmptyString)
+		if (mesh < WXSIZEOF(meshes) && meshes[mesh] != wxEmptyString)
 			geosetItems.Add(wxString::Format(_T("%i [%s]"), i, meshes[mesh].c_str()), 1);
 		else
 			geosetItems.Add(wxString::Format(_T("%i [%i]"), i, mesh), 1);

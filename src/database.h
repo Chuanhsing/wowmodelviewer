@@ -173,7 +173,7 @@ public:
 	/// Fields
 	static const size_t CharHairGeosetID = 0;	// uint
 	static const size_t Race = 1;				// uint
-	static const size_t Gender = 2;				// uint
+	static const size_t Gender = 2;				// uint, 0 = Male, 1 = Female
 	static const size_t Section = 3;			// uint, ID unique between race, and gender.
 	static const size_t Geoset = 4;				// uint, Defines hairstyle, each number should be unique for that race / gender combo.
 	//static const size_t Bald = 5;				// uint, If this hairstyle bald or not .
@@ -350,20 +350,20 @@ public:
 
 	/// Fields
 	static const size_t ItemDisplayID = 0;	// uint
-	static const size_t Model = 1;			// string
-	static const size_t Model2 = 2;			// string
-	static const size_t Skin = 3;			// string
-	static const size_t Skin2 = 4;			// string
-	static const size_t Icon = 5;			// string
-	static const size_t Texture = 6;			// string
-	static const size_t GloveGeosetFlags = 7;		// uint
-	static const size_t BracerGeosetFlags = 8;		// uint
-	static const size_t RobeGeosetFlags = 9;		// uint
-	static const size_t BootsGeosetFlags = 10;		// uint
-	static const size_t Unknown = 11;		// uint
-	static const size_t ItemGroupSounds = 12;			// uint
-	static const size_t GeosetVisID1 = 13;	// uint
-	static const size_t GeosetVisID2 = 14;	// uint
+	static const size_t Model = 1;			// string, modelleft
+	static const size_t Model2 = 2;			// string, modelright
+	static const size_t Skin = 3;			// string, textureleft
+	static const size_t Skin2 = 4;			// string, textureright
+	//static const size_t Icon = 5;			// string
+	//static const size_t Texture = 6;			// string
+	static const size_t GloveGeosetFlags = 7;		// uint, (0,1,2,3,4,5)
+	static const size_t BracerGeosetFlags = 8;		// uint, (0,1,2,3)
+	static const size_t RobeGeosetFlags = 9;		// uint, (0,1)
+	static const size_t BootsGeosetFlags = 10;		// uint, (0,1,2,4,6)
+	//static const size_t Unknown = 11;		// uint
+	//static const size_t ItemGroupSounds = 12;			// uint
+	//static const size_t GeosetVisID1 = 13;	// uint, HelmetGeosetVisData.dbc
+	//static const size_t GeosetVisID2 = 14;	// uint, HelmetGeosetVisData.dbc
 	static const size_t TexArmUpper = 15;	// string
 	static const size_t TexArmLower = 16;	// string
 	static const size_t TexHands = 17;		// string
@@ -373,7 +373,7 @@ public:
 	static const size_t TexLegLower = 21;	// string
 	static const size_t TexFeet = 22;		// string
 	static const size_t Visuals = 23;		// uint
-	// uint
+	//static const size_t ParticleColor = 24;	// uint
 
 	Record getById(unsigned int id);
 	bool hasId(unsigned int id);

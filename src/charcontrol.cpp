@@ -1093,7 +1093,7 @@ void CharControl::RefreshModel()
 		if (id == 1)
 			model->showGeosets[j] = bald;
 
-		for (int i=1; i<NUM_GEOSETS-1; i++) {
+		for (int i=1; i<NUM_GEOSETS; i++) {
 			int a = i*100, b = (i+1) * 100;
 			if (id>a && id<b) 
 				model->showGeosets[j] = (id == (a + cd.geosets[i]));
@@ -1386,7 +1386,7 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 		
 		// Just a rough check to make sure textures are only being added to where they're suppose to.
 		if (slot == CS_CHEST || slot == CS_SHIRT) {
-			cd.geosets[CG_CHEST] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
+			cd.geosets[CG_WRISTBANDS] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
 
 			tex.addLayer(makeItemTexture(CR_ARM_UPPER, r.getString(ItemDisplayDB::TexArmUpper)), CR_ARM_UPPER, layer);
 			tex.addLayer(makeItemTexture(CR_ARM_LOWER, r.getString(ItemDisplayDB::TexArmLower)), CR_ARM_LOWER, layer);
@@ -1407,7 +1407,7 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 		} else if (slot == CS_BRACERS) {
 			tex.addLayer(makeItemTexture(CR_ARM_LOWER, r.getString(ItemDisplayDB::TexArmLower)), CR_ARM_LOWER, layer);
 		} else if (slot == CS_PANTS) {
-			cd.geosets[CG_PANTS] = 1 + r.getUInt(ItemDisplayDB::BracerGeosetFlags);
+			cd.geosets[CG_KNEEPADS] = 1 + r.getUInt(ItemDisplayDB::BracerGeosetFlags);
 
 			tex.addLayer(makeItemTexture(CR_LEG_UPPER, r.getString(ItemDisplayDB::TexLegUpper)), CR_LEG_UPPER, layer);
 			tex.addLayer(makeItemTexture(CR_LEG_LOWER, r.getString(ItemDisplayDB::TexLegLower)), CR_LEG_LOWER, layer);
@@ -1461,13 +1461,13 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 			cd.geosets[CG_ROBE] = 1 + r.getUInt(ItemDisplayDB::RobeGeosetFlags);
 		if (cd.geosets[CG_ROBE]==2) {
 			cd.geosets[CG_BOOTS] = 0;		// hide the boots
-			//cd.geosets[CG_PANTS] = 0;		// hide the pants
+			//cd.geosets[CG_KNEEPADS] = 0;		// hide the pants
 			cd.geosets[CG_TARBARD] = 0;		// also hide the tabard.
 		}
 
 		// gloves - this is so gloves have preference over shirt sleeves.
 		if (cd.geosets[CG_GLOVES] > 1) 
-			cd.geosets[CG_CHEST] = 0;
+			cd.geosets[CG_WRISTBANDS] = 0;
 
 	} catch (ItemDisplayDB::NotFound) {}
 }
