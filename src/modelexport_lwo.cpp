@@ -2280,7 +2280,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			wxString texPath = texName.BeforeLast(SLASH);
 			if (m->modelType == MT_CHAR){
 				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName.AfterLast(SLASH);
-			}else if ((texName.Find(SLASH) <= 0)&&(texName == _T("Cape"))){
+			}else if (texName.Find(SLASH) <= 0 && texName.EndsWith(_T("Cape"))){
 				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
 				texPath = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 			}else if (texName.Find(SLASH) <= 0){
