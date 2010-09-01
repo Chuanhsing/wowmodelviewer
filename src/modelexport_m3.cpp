@@ -60,6 +60,12 @@ typedef	struct {
 } AnimOffset;
 
 typedef struct {
+	int					timeline;
+	EVNT				data;
+	wxString			name;
+} Anim_Event;
+
+typedef struct {
 	std::vector <int>	timeline;
 	std::vector <float>	data;
 } Anim_Float;
@@ -80,17 +86,25 @@ typedef struct {
 } Anim_Vec4D;
 
 typedef	struct {
-	std::vector <uint32> animid;
-	std::vector <AnimOffset> animoff;
-	std::vector <Anim_Float> animfloat;
-	std::vector <Anim_Vec2D> animvec2d;
-	std::vector <Anim_Vec3D> animvec3d;
-	std::vector <Anim_Vec4D> animvec4d;
-	std::vector <SD>		 animsdfloat;
-	std::vector <SD>		 animsdvec2d;
-	std::vector <SD>		 animsdvec3d;
-	std::vector <SD>		 animsdvec4d;
+	std::vector <uint32>		animid;
+	std::vector <AnimOffset>	animoff;
+	Anim_Event					animevent;
+	std::vector <Anim_Float>	animfloat;
+	std::vector <Anim_Vec2D>	animvec2d;
+	std::vector <Anim_Vec3D>	animvec3d;
+	std::vector <Anim_Vec4D>	animvec4d;
+	SD							animsdevent;
+	std::vector <SD>			animsdfloat;
+	std::vector <SD>			animsdvec2d;
+	std::vector <SD>			animsdvec3d;
+	std::vector <SD>			animsdvec4d;
+	wxString					animname;
 } STCExtra;
+
+typedef	struct {
+	std::vector <LAYR>	layers;
+	wxArrayString		names;
+} MATExtra;
 
 uint32 CreateAnimID(int m3class, int key, int subkey, int idx)
 {
@@ -243,38 +257,45 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 	//ModelTexAnimDef *texanim = (ModelTexAnimDef *)(mpqf.getBuffer() + m->header.ofsTexAnims);
 	//uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
 	ModelParticleEmitterDef *particle = (ModelParticleEmitterDef *)(mpqf.getBuffer() + m->header.ofsParticleEmitters);
+	ModelAttachmentDef *attachments = (ModelAttachmentDef*)(mpqf.getBuffer() + m->header.ofsAttachments);
 
-	std::vector <Vertex32>	Verts;
-	std::vector <uint16>	Faces;
-	std::vector <REGN>		Regns;
-	std::vector <BONE>		Bones;
 	std::vector <SEQS>		Seqss;
 	std::vector <STC>		Stcs;
 	std::vector <STCExtra>	StcExtras;
 	std::vector <STG>		Stgs;
 	std::vector <STS>		Stss;
+	std::vector <BONE>		Bones;
+	wxArrayString			BoneNames;
+	std::vector <Vertex32>	Verts;
+	DIV						Div;
+	std::vector <uint16>	Faces;
+	std::vector <REGN>		Regns;
 	std::vector <BAT>		Bats;
+	MSEC					Msec;
+	std::vector <uint16>	BoneLookup;
+	std::vector <ATT>		Atts;
+	wxArrayString			AttachNames;
+	std::vector <int16>		AttachLoopkup;
 	std::vector <MATM>		Matms;
-
+	std::vector <MAT>		Mats;
+	wxArrayString			MatNames;
+	std::vector <MATExtra>	MatExtras;
 	std::vector <PAR>		Pars;
 	std::vector <IREF>		Irefs;
 
 	std::vector <int>		MeshM2toM3;
 
-	std::vector <uint16>	bLookup;
-
-	std::vector <std::vector <uint32> > M3OpacityAnimid;
-	std::vector <std::vector <uint32> > M2OpacityIdx;
-
 	std::vector <uint32>	logAnimations;
 
-	wxArrayString vAnimations;
-	wxArrayString nameAnimations;
-	int chunk_offset;
+	wxArrayString			vAnimations;
+	wxArrayString			nameAnimations;
+	wxArrayString			AttRefName;
 
 /************************************************************************************/
 /* Prepare Data                                                                     */
 /************************************************************************************/
+
+	wxString modelName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast('.');
 
 	// init mesh, vertex, face, mat
 	int boneidx = 0;
@@ -289,8 +310,8 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 			continue;
 		}
 
-		std::vector<uint16> bLookup2; // local bLookup
-		bLookup2.clear();
+		std::vector<uint16> BoneLookup2; // local BoneLookup
+		BoneLookup2.clear();
 
 		REGN regn;
 		memset(&regn, 0, sizeof(regn));
@@ -305,8 +326,8 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 			{
 				if (verts[trianglelookup[i]].weights[k] != 0) {
 					bool bFound = false;
-					for(uint32 m=0; m<bLookup2.size(); m++) {
-						if (bLookup2[m] == verts[trianglelookup[i]].bones[k])
+					for(uint32 m=0; m<BoneLookup2.size(); m++) {
+						if (BoneLookup2[m] == verts[trianglelookup[i]].bones[k])
 						{
 							bFound = true;
 							vert.weIndice[k] = m;
@@ -315,8 +336,8 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 					}
 					if (bFound == false)
 					{
-						vert.weIndice[k] = bLookup2.size();
-						bLookup2.push_back(verts[trianglelookup[i]].bones[k]);
+						vert.weIndice[k] = BoneLookup2.size();
+						BoneLookup2.push_back(verts[trianglelookup[i]].bones[k]);
 					}
 				}
 			}
@@ -337,13 +358,13 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 			Faces.push_back(face);
 		}
 
-		// push local bLookup to global, and lookup it in boneLookup
-		for(uint32 i=0; i<bLookup2.size(); i++) {
-			bLookup.push_back(bLookup2[i] + ROOT_BONE);
+		// push local BoneLookup to global, and lookup it in boneLookup
+		for(uint32 i=0; i<BoneLookup2.size(); i++) {
+			BoneLookup.push_back(BoneLookup2[i] + ROOT_BONE);
 		}
 
-		regn.boneCount = bLookup2.size();
-		regn.numBone = bLookup2.size();
+		regn.boneCount = BoneLookup2.size();
+		regn.numBone = BoneLookup2.size();
 		regn.numFaces = ops[j].icount;
 		regn.numVert = ops[j].vcount;
 		regn.indBone = boneidx;
@@ -587,8 +608,15 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		memset(&stc, 0, sizeof(stc));
 		STCExtra extra;
 
-		M3OpacityAnimid.push_back(std::vector<uint32> ());
-		M2OpacityIdx.push_back(std::vector<uint32> ());
+		std::vector <uint32> M3OpacityAnimid;
+		std::vector <uint32> M2OpacityIdx;
+
+		M3OpacityAnimid.clear();
+		M2OpacityIdx.clear();
+
+		wxString strName = nameAnimations[i];
+		strName.Append(_T("_full"));
+		extra.animname = strName;
 
 		// animid
 		for (uint32 j=0; j<MATtable.size(); j++)
@@ -603,14 +631,14 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 
 					if (k == MAT_LAYER_EMISSIVE && (MATtable[j].blend == BM_ADDITIVE_ALPHA || MATtable[j].blend == BM_ADDITIVE)) 
 					{
-						M3OpacityAnimid.back().push_back(CreateAnimID(AR_Layer, j, k, 2));
-						M2OpacityIdx.back().push_back(MATtable[j].color);
+						M3OpacityAnimid.push_back(CreateAnimID(AR_Layer, j, k, 2));
+						M2OpacityIdx.push_back(MATtable[j].color);
 					}
 
 					if (k == MAT_LAYER_ALPHA && (MATtable[j].blend == BM_OPAQUE || MATtable[j].blend == BM_ALPHA_BLEND || MATtable[j].blend == BM_ADDITIVE_ALPHA))
 					{
-						M3OpacityAnimid.back().push_back(CreateAnimID(AR_Layer, j, k, 2));
-						M2OpacityIdx.back().push_back(MATtable[j].color);
+						M3OpacityAnimid.push_back(CreateAnimID(AR_Layer, j, k, 2));
+						M2OpacityIdx.push_back(MATtable[j].color);
 					}
 				}
 			}
@@ -653,8 +681,8 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		}
 
 		// mesh opacity id
-		for (uint32 j=0; j<M3OpacityAnimid.back().size(); j++) {
-			extra.animid.push_back(M3OpacityAnimid.back()[j]);
+		for (uint32 j=0; j<M3OpacityAnimid.size(); j++) {
+			extra.animid.push_back(M3OpacityAnimid[j]);
 			animoff.index = fcount++;
 			animoff.type = STC_INDEX_FLOAT;
 			extra.animoff.push_back(animoff);
@@ -676,6 +704,31 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 				}
 			}
 		}
+
+		// EVNT
+		{
+			SD sd;
+			memset(&sd, 0, sizeof(sd));
+			sd.init();
+
+			for(uint32 j=0; j<m->header.nBones; j++) {
+				if (m->bones[j].trans.data[anim_offset].size() > 0) {
+					sd.length = Seqss[i].length;  
+					break;
+				}
+			}
+
+			EVNT evnt;
+			memset(&evnt, 0, sizeof(evnt));
+			evnt.init();
+
+			extra.animevent.data = evnt;
+			extra.animevent.timeline = sd.length;
+			extra.animevent.name = _T("Evt_SeqEnd");
+
+			extra.animsdevent = sd;
+		}
+
 
 		// V2DS
 		for(uint32 j=0; j<M3TexAnimId.size(); j++) {
@@ -777,10 +830,10 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		}
 
 		// Float, 3RDS
-		for (uint32 j=0; j<M3OpacityAnimid.back().size(); j++)
+		for (uint32 j=0; j<M3OpacityAnimid.size(); j++)
 		{
-			if ((m->colors[M2OpacityIdx.back()[j]].opacity.seq == -1 &&  m->colors[M2OpacityIdx.back()[j]].opacity.data[anim_offset].size() > 0) ||
-			    (m->colors[M2OpacityIdx.back()[j]].opacity.seq != -1 &&  m->colors[M2OpacityIdx.back()[j]].opacity.data[0].size() > 0))
+			if ((m->colors[M2OpacityIdx[j]].opacity.seq == -1 &&  m->colors[M2OpacityIdx[j]].opacity.data[anim_offset].size() > 0) ||
+			    (m->colors[M2OpacityIdx[j]].opacity.seq != -1 &&  m->colors[M2OpacityIdx[j]].opacity.data[0].size() > 0))
 			{
 				SD sd;
 				memset(&sd, 0, sizeof(sd));
@@ -788,14 +841,14 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 				Anim_Float af;
 
 				int animidx;
-				if (m->colors[M2OpacityIdx.back()[j]].opacity.seq == -1)
+				if (m->colors[M2OpacityIdx[j]].opacity.seq == -1)
 					animidx = anim_offset;
 				else
 					animidx = 0;
-				int counts = m->colors[M2OpacityIdx.back()[j]].opacity.data[animidx].size();
+				int counts = m->colors[M2OpacityIdx[j]].opacity.data[animidx].size();
 				for (int k=0; k<counts; k++) {
-					af.timeline.push_back(m->colors[M2OpacityIdx.back()[j]].opacity.times[animidx][k]);
-					af.data.push_back(m->colors[M2OpacityIdx.back()[j]].opacity.data[animidx][k]);
+					af.timeline.push_back(m->colors[M2OpacityIdx[j]].opacity.times[animidx][k]);
+					af.data.push_back(m->colors[M2OpacityIdx[j]].opacity.data[animidx][k]);
 				}
 
 				sd.length = Seqss[i].length;
@@ -878,12 +931,25 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		bone.ar1.AnimRef.animid = CreateAnimID(AR_Bone, 0, 0, 6);
 		
 		Bones.push_back(bone);
+
+		BoneNames.push_back(modelName + _T("_Bone_Root"));
 	}
 
 	for(uint32 i=0; i<m->header.nBones; i++) {
 		BONE bone;
 		int  idx = Bones.size();
 		memset(&bone, 0, sizeof(BONE));
+
+		// name
+		wxString strName = modelName + wxString::Format(_T("_Bone%d"), i);
+
+		for(uint32 j=0; j < BONE_MAX; j++) {
+			if (i >= ROOT_BONE && m->keyBoneLookup[j] == i-ROOT_BONE) {
+				strName += _T("_")+Bone_Names[j];
+				break;
+			}
+		}
+
 		bone.init();
 		bone.parent = mb[i].parent + ROOT_BONE;
 		bone.initTrans.AnimRef.animid = CreateAnimID(AR_Bone, idx, 0, 2);
@@ -924,7 +990,25 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		}
 		bone.ar1.AnimRef.animid = CreateAnimID(AR_Bone, idx, 0, 6);
 		Bones.push_back(bone);
+
+		BoneNames.push_back(strName);
 	}
+
+	// nSkinnedBones
+	mdata.nSkinnedBones = nSkinnedBones(m, &mpqf);
+
+	// boundSphere, m->header.boundSphere is too big
+	mdata.boundSphere.min = fixCoord(m->anims[logAnimations[0]].boundSphere.min) * modelExport_M3_SphereScale;
+	mdata.boundSphere.max = fixCoord(m->anims[logAnimations[0]].boundSphere.max) * modelExport_M3_SphereScale;
+	mdata.boundSphere.radius = m->anims[logAnimations[0]].boundSphere.radius * modelExport_M3_SphereScale;
+
+	// init div
+	memset(&Div, 0, sizeof(Div));
+	Div.init();
+
+	// init msec
+	memset(&Msec, 0, sizeof(Msec));
+	Msec.bndSphere.AnimRef.animid = CreateAnimID(AR_MSEC, 0, 0, 1);
 
 	// init particle
 	uint32 partexstart = MATtable.size();
@@ -1097,12 +1181,183 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		}
 	}
 
-	// init MatLu
+	// init attach
+	for(uint32 i=0; i < m->header.nAttachments; i++) {
+		ATT att;
+		memset(&att, 0, sizeof(att));
+		att.init();
+		att.bone = attachments[i].bone + ROOT_BONE;
+		Atts.push_back(att);
+
+		// name
+		wxString strName = _T("Ref_Hardpoint");
+
+		if (attachments[i].id < WXSIZEOF(M3_Attach_Names))
+			strName = wxString(M3_Attach_Names[attachments[i].id], wxConvUTF8);
+
+		AttRefName.push_back(strName);
+
+		int count = 0;
+		for(uint32 j=0; j < AttRefName.size(); j++) {
+			if (AttRefName[j] == strName)
+				count++;
+		}
+
+		if (count > 1)
+			strName += wxString::Format(_T(" %02d"), count - 1);
+
+		AttachNames.push_back(strName);
+	}
+
+	// init attachLu
+	for (uint16 i=0; i < m->header.nAttachments; i++)
+		AttachLoopkup.push_back(-1);
+
+	// init matLu
 	for(uint32 i=0; i<MATtable.size(); i++) {
 		MATM matm;
 		matm.init();
 		matm.matind = i;
 		Matms.push_back(matm);
+	}
+
+	// init mat
+	for(uint32 i=0; i<MATtable.size(); i++) {
+		MAT mat;
+		MATExtra extra;
+		memset(&mat, 0, sizeof(mat));
+		mat.init();
+
+		// name
+		MatNames.push_back(modelName + wxString::Format(_T("_Mat_%02d"), i+1));
+
+		// layers
+		for(uint32 j=0; j<13; j++) {
+			int texid = MATtable[i].texid;
+			wxString texName = m->TextureList[texid].BeforeLast('.').AfterLast(SLASH) + _T(".tga");
+			wxString fulltexName = _T("");
+
+			LAYR layer;
+			memset(&layer, 0, sizeof(layer));
+			layer.init();
+
+			layer.Colour.AnimRef.animid =			CreateAnimID(AR_Layer, i, j, 1);
+			layer.brightness_mult1.AnimRef.animid = CreateAnimID(AR_Layer, i, j, 2);
+			layer.brightness_mult2.AnimRef.animid = CreateAnimID(AR_Layer, i, j, 3);
+			layer.ar1.AnimRef.animid =				CreateAnimID(AR_Layer, i, j, 4);
+			layer.ar2.AnimRef.animid =				CreateAnimID(AR_Layer, i, j, 5);
+			layer.ar3.AnimRef.animid =				CreateAnimID(AR_Layer, i, j, 6);
+			layer.ar4.AnimRef.animid =				CreateAnimID(AR_Layer, i, j, 7);
+			layer.uvAngle.AnimRef.animid =			CreateAnimID(AR_Layer, i, j, 8);
+			layer.uvTiling.AnimRef.animid =			CreateAnimID(AR_Layer, i, j, 9);
+			layer.ar5.AnimRef.animid =				CreateAnimID(AR_Layer, i, j, 10);
+			layer.ar6.AnimRef.animid =				CreateAnimID(AR_Layer, i, j, 11);
+			layer.brightness.AnimRef.animid =		CreateAnimID(AR_Layer, i, j, 12);
+		
+
+			if (modelExport_M3_TexturePath.Len() > 0)
+			{
+				if (modelExport_M3_TexturePath.Last() != '/' && modelExport_M3_TexturePath.Last() != '\\')
+					texName = modelExport_M3_TexturePath + SLASH + texName;
+				else
+					texName = modelExport_M3_TexturePath + texName;
+			}
+
+			if (j == MAT_LAYER_DIFF && (MATtable[i].blend != BM_ADDITIVE_ALPHA && MATtable[i].blend != BM_ADDITIVE)) 
+			{
+				fulltexName = texName;
+
+				if (MATtable[i].animid != -1)
+					SetAnimed(layer.ar4.AnimRef);
+				if (bShowParticle && gameVersion < 40000 && i >= partexstart)
+					layer.flags |= LAYR_FLAGS_SPLIT;
+			}
+
+			if (j == MAT_LAYER_EMISSIVE && (MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_ADDITIVE)) 
+			{
+				fulltexName = texName;
+
+				if (MATtable[i].animid != -1)
+					SetAnimed(layer.ar4.AnimRef);
+				if (MATtable[i].color != -1)
+				{
+					if (m->colors[MATtable[i].color].opacity.sizes != 0)
+						SetAnimed(layer.brightness_mult1.AnimRef);
+				}
+				if (bShowParticle && gameVersion < 40000 && i >= partexstart)
+					layer.flags |= LAYR_FLAGS_SPLIT;
+			}
+
+			if (j == MAT_LAYER_ALPHA && MATtable[i].blend == BM_OPAQUE && MATtable[i].color != -1)
+			{
+				fulltexName = _T("NoTexture");
+				layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
+				SetAnimed(layer.brightness_mult1.AnimRef);
+				if (MATtable[i].eye == 1)
+					layer.brightness_mult1.value = 0;
+			}
+			else if (j == MAT_LAYER_ALPHA && 
+				(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_TRANSPARENT))
+			{
+				fulltexName = texName;
+				layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
+
+				if (MATtable[i].animid != -1)
+					SetAnimed(layer.ar4.AnimRef);
+				if (MATtable[i].color != -1)
+					SetAnimed(layer.brightness_mult1.AnimRef);
+				if (bShowParticle && gameVersion < 40000 && i >= partexstart)
+					layer.flags |= LAYR_FLAGS_SPLIT;
+			}
+			extra.names.push_back(fulltexName);
+			extra.layers.push_back(layer);
+		}
+
+		mat.ar1.AnimRef.animid = CreateAnimID(AR_Mat, i, 0, 1);
+		mat.ar2.AnimRef.animid = CreateAnimID(AR_Mat, i, 0, 2);
+
+		switch(MATtable[i].blend)
+		{
+			case BM_OPAQUE: 
+				mat.blendMode = MAT_BLEND_OPAQUE; 
+				mat.cutoutThresh = 1;
+				break;
+			case BM_TRANSPARENT: 
+				mat.blendMode = MAT_BLEND_OPAQUE; 
+				mat.cutoutThresh = 180;
+				break;
+			case BM_ALPHA_BLEND: 
+				mat.blendMode = MAT_BLEND_ALPHABLEND; 
+				mat.cutoutThresh = 16;
+				break;
+			case BM_ADDITIVE: 
+				mat.blendMode = MAT_BLEND_ADD; 
+				mat.cutoutThresh = 0;
+				break;
+			case BM_ADDITIVE_ALPHA: 
+				mat.blendMode = MAT_BLEND_ALPHAADD; 
+				mat.cutoutThresh = 16;
+				break;
+			case BM_MODULATE: 
+				mat.blendMode = MAT_BLEND_MOD; 
+				mat.cutoutThresh = 0;
+				break;
+			default: 
+				mat.blendMode = MAT_BLEND_OPAQUE;
+				mat.cutoutThresh = 0;
+		}
+
+		if (MATtable[i].flags & RENDERFLAGS_UNLIT)
+			mat.flags |= MAT_FLAG_UNSHADED;
+		if (MATtable[i].flags & RENDERFLAGS_UNFOGGED)
+			mat.flags |= MAT_FLAG_UNFOGGED;
+		if (MATtable[i].flags & RENDERFLAGS_TWOSIDED)
+			mat.flags |= MAT_FLAG_TWOSIDED;
+		if (MATtable[i].flags & RENDERFLAGS_BILLBOARD)
+			mat.flags |= MAT_FLAG_DEPTHPREPASS;
+
+		Mats.push_back(mat);
+		MatExtras.push_back(extra);
 	}
 
 	// init IREF
@@ -1123,24 +1378,18 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 /************************************************************************************/
 
 	// Modelname
-	wxString n = wxString(fn, wxConvUTF8).AfterLast('\\');
-	NameRefEntry(mdata.name, n, f);
+	NameRefEntry(mdata.name, modelName, f);
 
 	// mSEQ
-	for(uint32 i=0; i < Seqss.size(); i++) {
+	for(uint32 i=0; i < Seqss.size(); i++) 
 		NameRefEntry(Seqss[i].name, nameAnimations[i], f);
-	}
 
 	DataRefEntry("SQES", mdata.mSEQS, Seqss.size(), sizeof(SEQS) * Seqss.size(), &Seqss.front(), 1, f);
 
 	// mSTC
 	for(uint32 i=0; i < Stcs.size(); i++) {
-		int anim_offset = logAnimations[i];
-
 		// name
-		wxString strName = nameAnimations[i];
-		strName.Append(_T("_full"));
-		NameRefEntry(Stcs[i].name, strName, f);
+		NameRefEntry(Stcs[i].name, StcExtras[i].animname, f);
 
 		// animid
 		if (StcExtras[i].animid.size() > 0)
@@ -1152,30 +1401,14 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 
 		// Events, VEDS
 		{
-			SD sd;
-			memset(&sd, 0, sizeof(sd));
-			sd.init();
-			int length;
-			for(uint32 j=0; j<m->header.nBones; j++) {
-				if (m->bones[j].trans.data[anim_offset].size() > 0) {
-					length = sd.length = Seqss[i].length;  
-					break;
-				}
-			}
 
-			DataRefEntry("_23I", sd.timeline, 1, sizeof(int32), &length, 0, f);
+			DataRefEntry("_23I", StcExtras[i].animsdevent.timeline, 1, sizeof(int32), &StcExtras[i].animevent.timeline, 0, f);
 
-			EVNT evnt;
-			memset(&evnt, 0, sizeof(evnt));
-			evnt.init();
+			NameRefEntry(StcExtras[i].animevent.data.name, StcExtras[i].animevent.name, f);
 
-			// name
-			strName = _T("Evt_SeqEnd");
-			NameRefEntry(evnt.name, strName, f);
+			DataRefEntry("TNVE", StcExtras[i].animsdevent.data, 1, sizeof(EVNT), &StcExtras[i].animevent.data, 0, f);
 
-			DataRefEntry("TNVE", sd.data, 1, sizeof(EVNT), &evnt, 0, f);
-
-			DataRefEntry("VEDS", Stcs[i].Events, 1, sizeof(SD), &sd, 0, f);
+			DataRefEntry("VEDS", Stcs[i].Events, 1, sizeof(SD), &StcExtras[i].animsdevent, 0, f);
 		}
 
 		// V2DS
@@ -1244,284 +1477,68 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 	DataRefEntry("_STS", mdata.mSTS, Stss.size(), sizeof(STS) * Stss.size(), &Stss.front(), 0, f);
 
 	// mBone
-	for(uint32 i=0; i<Bones.size(); i++) {
-		// name
-		wxString strName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast('.')+_T('_');
-		if (i < ROOT_BONE)
-			strName += _T("Bone_Root");
-		else
-			strName += wxString::Format(_T("Bone%d"), i-ROOT_BONE);
-
-		for(uint32 j=0; j < BONE_MAX; j++) {
-			if (i >= ROOT_BONE && m->keyBoneLookup[j] == i-ROOT_BONE) {
-				strName += _T("_")+Bone_Names[j];
-				break;
-			}
-		}
-		NameRefEntry(Bones[i].name, strName, f);
-	}
+	for(uint32 i = 0; i < Bones.size(); i++) 
+		NameRefEntry(Bones[i].name, BoneNames[i], f);
 
 	if (Bones.size() > 0)
 		DataRefEntry("ENOB", mdata.mBone, Bones.size(), sizeof(BONE) * Bones.size(), &Bones.front(), 1, f);
-
-	// nSkinnedBones
-	mdata.nSkinnedBones = nSkinnedBones(m, &mpqf);
 
 	// mVert
 	DataRefEntry("__8U", mdata.mVert, Verts.size() * sizeof(Vertex32), Verts.size() * sizeof(Vertex32), &Verts.front(), 0, f);
 
 	// mDIV
-	DIV div;
-	memset(&div, 0, sizeof(div));
-	div.init();
-
 	// mDiv.Faces
-	DataRefEntry("_61U", div.faces, Faces.size(), sizeof(uint16) * Faces.size(), &Faces.front(), 0, f);
+	DataRefEntry("_61U", Div.faces, Faces.size(), sizeof(uint16) * Faces.size(), &Faces.front(), 0, f);
 
 	// mDiv.meash
-	DataRefEntry("NGER", div.REGN, Regns.size(), sizeof(REGN) * Regns.size(), &Regns.front(), 3, f);
+	DataRefEntry("NGER", Div.REGN, Regns.size(), sizeof(REGN) * Regns.size(), &Regns.front(), 3, f);
 
 	// mDiv.BAT
 	if (Bats.size() > 0)
-		DataRefEntry("_TAB", div.BAT, Bats.size(), sizeof(BAT) * Bats.size(), &Bats.front(), 1, f);
+		DataRefEntry("_TAB", Div.BAT, Bats.size(), sizeof(BAT) * Bats.size(), &Bats.front(), 1, f);
 
 	// mDiv.MSEC
-	MSEC msec;
-	memset(&msec, 0, sizeof(msec));
-	msec.bndSphere.AnimRef.animid = CreateAnimID(AR_MSEC, 0, 0, 1);
-	DataRefEntry("CESM", div.MSEC, 1, sizeof(MSEC), &msec, 1, f);
+	DataRefEntry("CESM", Div.MSEC, 1, sizeof(MSEC), &Msec, 1, f);
 
-	DataRefEntry("_VID", mdata.mDIV, 1, sizeof(DIV), &div, 2, f);
+	DataRefEntry("_VID", mdata.mDIV, 1, sizeof(DIV), &Div, 2, f);
 
 	// mBoneLU
-	if (bLookup.size() > 0)
-		DataRefEntry("_61U", mdata.mBoneLU, bLookup.size(), sizeof(uint16) * bLookup.size(), &bLookup.front(), 0, f);
-
-	// boundSphere, m->header.boundSphere is too big
-	int anim_offset = logAnimations[0];
-	mdata.boundSphere.min = fixCoord(m->anims[anim_offset].boundSphere.min) * modelExport_M3_SphereScale;
-	mdata.boundSphere.max = fixCoord(m->anims[anim_offset].boundSphere.max) * modelExport_M3_SphereScale;
-	mdata.boundSphere.radius = m->anims[anim_offset].boundSphere.radius * modelExport_M3_SphereScale;
+	if (BoneLookup.size() > 0)
+		DataRefEntry("_61U", mdata.mBoneLU, BoneLookup.size(), sizeof(uint16) * BoneLookup.size(), &BoneLookup.front(), 0, f);
 
 	// mAttach
-	// this makes some read errors in sc2 editor
-	wxArrayString AttRefName;
+	for(uint32 i=0; i<Atts.size(); i++)
+		NameRefEntry(Atts[i].name, AttachNames[i], f);
 
-	if (m->header.nAttachments) {
-		ModelAttachmentDef *attachments = (ModelAttachmentDef*)(mpqf.getBuffer() + m->header.ofsAttachments);
-		mdata.mAttach.nEntries = m->header.nAttachments;
-		mdata.mAttach.ref = reList.size();
-		RefEntry("_TTA", f.Tell(), mdata.mAttach.nEntries, 1);
-		chunk_offset = f.Tell();
-		ATT *atts = new ATT[mdata.mAttach.nEntries];
-		memset(atts, 0, sizeof(ATT)*mdata.mAttach.nEntries);
-		f.Seek(sizeof(ATT)*mdata.mAttach.nEntries, wxFromCurrent);
-		padding(f);
-		for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
-			// name
-			wxString strName = _T("Ref_Hardpoint");
-
-			if (attachments[i].id < WXSIZEOF(M3_Attach_Names))
-				strName = wxString(M3_Attach_Names[attachments[i].id], wxConvUTF8);
-
-			AttRefName.push_back(strName);
-
-			int count = 0;
-			for(uint32 j=0; j < AttRefName.size(); j++) {
-				if (AttRefName[j] == strName)
-					count++;
-			}
-
-			if (count > 1)
-				strName += wxString::Format(_T(" %02d"), count - 1);
-
-			NameRefEntry(atts[i].name, strName, f);
-		}
-		f.Seek(chunk_offset, wxFromStart);
-		for(uint32 i=0; i<mdata.mAttach.nEntries; i++) {
-			atts[i].init();
-			atts[i].bone = attachments[i].bone + ROOT_BONE;
-			f.Write(&atts[i], sizeof(ATT));
-		}
-		wxDELETEA(atts);
-		f.Seek(0, wxFromEnd);
-	}
+	if (Atts.size() > 0)
+		DataRefEntry("_TTA", mdata.mAttach, Atts.size(), sizeof(ATT) * Atts.size(), &Atts.front(), 1, f);
 
 	// mAttachLU
-	if (mdata.mAttach.nEntries) {
-		mdata.mAttachLU.nEntries = mdata.mAttach.nEntries;
-		mdata.mAttachLU.ref = reList.size();
-		RefEntry("_61U", f.Tell(), mdata.mAttachLU.nEntries, 0);
-		for(uint16 i=0; i<mdata.mAttachLU.nEntries; i++) {
-			int16 ii = -1;
-			f.Write(&ii, sizeof(int16));
-		}
-		padding(f);
-	}
+	if (AttachLoopkup.size() > 0)
+		DataRefEntry("_61U", mdata.mAttachLU, AttachLoopkup.size(), sizeof(int16) * AttachLoopkup.size(), &AttachLoopkup.front(), 0, f);
 
 	// mMatLU
 	if (Matms.size() > 0)
 		DataRefEntry("MTAM", mdata.mMatLU, Matms.size(), sizeof(MATM) * Matms.size(), &Matms.front(), 0, f);
 
 	// mMat
-	if (MATtable.size() > 0) {
-		mdata.mMat.nEntries = MATtable.size();
-		mdata.mMat.ref = reList.size();
-		RefEntry("_TAM", f.Tell(), mdata.mMat.nEntries, 0xF);
-		chunk_offset = f.Tell();
-		MAT *mats = new MAT[mdata.mMat.nEntries];
-		memset(mats, 0, sizeof(MAT)*mdata.mMat.nEntries);
-		f.Seek(sizeof(MAT)*mdata.mMat.nEntries, wxFromCurrent);
-		padding(f);
-		for(uint32 i=0; i<mdata.mMat.nEntries; i++) {
+	if (Mats.size() > 0) {
+		for(uint32 i=0; i<Mats.size(); i++) {
 			// name
-			wxString ff = wxString(fn, wxConvUTF8).BeforeLast('.').AfterLast(SLASH);
-			wxString strName = wxString::Format(_T("%sMat_%02d"), ff.c_str(), i+1);
-			NameRefEntry(mats[i].name, strName, f);
+			NameRefEntry(Mats[i].name, MatNames[i], f);
 
 			// layers
-			int chunk_offset2;
 			for(uint32 j=0; j<13; j++) {
-				mats[i].layers[j].nEntries = 1;
-				mats[i].layers[j].ref = reList.size();
-				RefEntry("RYAL", f.Tell(), mats[i].layers[j].nEntries, 0x16);
-				chunk_offset2 = f.Tell();
-				LAYR layer;
-				memset(&layer, 0, sizeof(layer));
-				layer.init();
-
-				layer.Colour.AnimRef.animid =			CreateAnimID(AR_Layer, i, j, 1);
-				layer.brightness_mult1.AnimRef.animid = CreateAnimID(AR_Layer, i, j, 2);
-				layer.brightness_mult2.AnimRef.animid = CreateAnimID(AR_Layer, i, j, 3);
-				layer.ar1.AnimRef.animid =				CreateAnimID(AR_Layer, i, j, 4);
-				layer.ar2.AnimRef.animid =				CreateAnimID(AR_Layer, i, j, 5);
-				layer.ar3.AnimRef.animid =				CreateAnimID(AR_Layer, i, j, 6);
-				layer.ar4.AnimRef.animid =				CreateAnimID(AR_Layer, i, j, 7);
-				layer.uvAngle.AnimRef.animid =			CreateAnimID(AR_Layer, i, j, 8);
-				layer.uvTiling.AnimRef.animid =			CreateAnimID(AR_Layer, i, j, 9);
-				layer.ar5.AnimRef.animid =				CreateAnimID(AR_Layer, i, j, 10);
-				layer.ar6.AnimRef.animid =				CreateAnimID(AR_Layer, i, j, 11);
-				layer.brightness.AnimRef.animid =		CreateAnimID(AR_Layer, i, j, 12);
+				if (MatExtras[i].names[j].Len() > 0)
+					NameRefEntry(MatExtras[i].layers[j].name, MatExtras[i].names[j], f);
 				
-				f.Write(&layer, sizeof(layer));
-				padding(f);
-
-				int texid = MATtable[i].texid;
-				wxString texName = m->TextureList[texid].BeforeLast('.').AfterLast(SLASH) + _T(".tga");
-
-				if (modelExport_M3_TexturePath.Len() > 0)
-				{
-					if (modelExport_M3_TexturePath.Last() != '/' && modelExport_M3_TexturePath.Last() != '\\')
-						texName = modelExport_M3_TexturePath + SLASH + texName;
-					else
-						texName = modelExport_M3_TexturePath + texName;
-				}
-
-				if (j == MAT_LAYER_DIFF && (MATtable[i].blend != BM_ADDITIVE_ALPHA && MATtable[i].blend != BM_ADDITIVE)) 
-				{
-					NameRefEntry(layer.name, texName, f);
-
-					if (MATtable[i].animid != -1)
-						SetAnimed(layer.ar4.AnimRef);
-					if (bShowParticle && gameVersion < 40000 && i >= partexstart)
-						layer.flags |= LAYR_FLAGS_SPLIT;
-				}
-
-				if (j == MAT_LAYER_EMISSIVE && (MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_ADDITIVE)) 
-				{
-					NameRefEntry(layer.name, texName, f);
-
-					if (MATtable[i].animid != -1)
-						SetAnimed(layer.ar4.AnimRef);
-					if (MATtable[i].color != -1)
-					{
-						if (m->colors[MATtable[i].color].opacity.sizes != 0)
-							SetAnimed(layer.brightness_mult1.AnimRef);
-					}
-					if (bShowParticle && gameVersion < 40000 && i >= partexstart)
-						layer.flags |= LAYR_FLAGS_SPLIT;
-				}
-
-				if (j == MAT_LAYER_ALPHA && MATtable[i].blend == BM_OPAQUE && MATtable[i].color != -1)
-				{
-					NameRefEntry(layer.name, _T("NoTexture"), f);
-					layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
-					SetAnimed(layer.brightness_mult1.AnimRef);
-					if (MATtable[i].eye == 1)
-						layer.brightness_mult1.value = 0;
-				}
-				else if (j == MAT_LAYER_ALPHA && 
-					(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_TRANSPARENT))
-				{
-					layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
-					NameRefEntry(layer.name, texName, f);
-
-					if (MATtable[i].animid != -1)
-						SetAnimed(layer.ar4.AnimRef);
-					if (MATtable[i].color != -1)
-						SetAnimed(layer.brightness_mult1.AnimRef);
-					if (bShowParticle && gameVersion < 40000 && i >= partexstart)
-						layer.flags |= LAYR_FLAGS_SPLIT;
-				}
-
-				f.Seek(chunk_offset2, wxFromStart);
-				f.Write(&layer, sizeof(layer));
-				f.Seek(0, wxFromEnd);
+				DataRefEntry("RYAL", Mats[i].layers[j], 1, sizeof(LAYR), &MatExtras[i].layers[j], 0x16, f);
 			}
 		}
-		f.Seek(chunk_offset, wxFromStart);
-		for(uint32 i=0; i<mdata.mMat.nEntries; i++) {
-			mats[i].init();
-
-			mats[i].ar1.AnimRef.animid = CreateAnimID(AR_Mat, i, 0, 1);
-			mats[i].ar2.AnimRef.animid = CreateAnimID(AR_Mat, i, 0, 2);
-
-			switch(MATtable[i].blend)
-			{
-				case BM_OPAQUE: 
-					mats[i].blendMode = MAT_BLEND_OPAQUE; 
-					mats[i].cutoutThresh = 1;
-					break;
-				case BM_TRANSPARENT: 
-					mats[i].blendMode = MAT_BLEND_OPAQUE; 
-					mats[i].cutoutThresh = 180;
-					break;
-				case BM_ALPHA_BLEND: 
-					mats[i].blendMode = MAT_BLEND_ALPHABLEND; 
-					mats[i].cutoutThresh = 16;
-					break;
-				case BM_ADDITIVE: 
-					mats[i].blendMode = MAT_BLEND_ADD; 
-					mats[i].cutoutThresh = 0;
-					break;
-				case BM_ADDITIVE_ALPHA: 
-					mats[i].blendMode = MAT_BLEND_ALPHAADD; 
-					mats[i].cutoutThresh = 16;
-					break;
-				case BM_MODULATE: 
-					mats[i].blendMode = MAT_BLEND_MOD; 
-					mats[i].cutoutThresh = 0;
-					break;
-				default: 
-					mats[i].blendMode = MAT_BLEND_OPAQUE;
-					mats[i].cutoutThresh = 0;
-			}
-
-			if (MATtable[i].flags & RENDERFLAGS_UNLIT)
-				mats[i].flags |= MAT_FLAG_UNSHADED;
-			if (MATtable[i].flags & RENDERFLAGS_UNFOGGED)
-				mats[i].flags |= MAT_FLAG_UNFOGGED;
-			if (MATtable[i].flags & RENDERFLAGS_TWOSIDED)
-				mats[i].flags |= MAT_FLAG_TWOSIDED;
-			if (MATtable[i].flags & RENDERFLAGS_BILLBOARD)
-				mats[i].flags |= MAT_FLAG_DEPTHPREPASS;
-			f.Write(&mats[i], sizeof(MAT));
-		}
-		wxDELETE(mats);
-		f.Seek(0, wxFromEnd);
+		DataRefEntry("_TAM", mdata.mMat, Mats.size(), sizeof(MAT) * Mats.size(), &Mats.front(), 0xF, f);
 	}
 
-	if (bShowParticle && gameVersion < 40000)
+	if (bShowParticle && gameVersion < 40000 && Pars.size() > 0)
 		DataRefEntry("_RAP", mdata.mPar, Pars.size(), sizeof(PAR) * Pars.size(), &Pars.front(), 12, f);
 
 	// mIREF
