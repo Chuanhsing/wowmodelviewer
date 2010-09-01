@@ -121,7 +121,6 @@ struct CharDetails
 	bool showUnderwear, showEars, showHair, showFacialHair, showFeet;
 
 	int equipment[NUM_CHAR_SLOTS];
-	static const size_t NUM_GEOSETS = 16;
 	int geosets[NUM_GEOSETS];
 
 	// save + load equipment

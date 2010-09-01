@@ -306,7 +306,7 @@ void CharControl::UpdateModel(Attachment *a)
 	}
 	cd.maxHairStyle = (int)styles.size();
 #if 1 // for worgen female
-	if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen 
+	if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen 
 		cd.maxHairStyle = 21;
 	}
 #endif // for worgen female
@@ -316,12 +316,12 @@ void CharControl::UpdateModel(Attachment *a)
 	if (cd.maxHairColor==0) cd.maxHairColor = 1;
 	if (cd.maxHairStyle==0) cd.maxHairStyle = 1;
 	if (cd.maxFacialHair==0) cd.maxFacialHair = 1;
-	spins[0]->SetRange(0, cd.maxSkinColor-1);
-	spins[1]->SetRange(0, cd.maxFaceType-1);
-	spins[2]->SetRange(0, cd.maxHairColor-1);
-	spins[3]->SetRange(0, cd.maxHairStyle-1);
-	spins[4]->SetRange(0, cd.maxFacialHair-1);
-	spins[5]->SetRange(0, cd.maxHairColor-1);
+	spins[SPIN_SKIN_COLOR]->SetRange(0, cd.maxSkinColor-1);
+	spins[SPIN_FACE_TYPE]->SetRange(0, cd.maxFaceType-1);
+	spins[SPIN_HAIR_COLOR]->SetRange(0, cd.maxHairColor-1);
+	spins[SPIN_HAIR_STYLE]->SetRange(0, cd.maxHairStyle-1);
+	spins[SPIN_FACIAL_HAIR]->SetRange(0, cd.maxFacialHair-1);
+	spins[SPIN_FACIAL_COLOR]->SetRange(0, cd.maxHairColor-1);
 
 	td.Icon = randint(0, td.maxIcon);
 	td.IconColor = randint(0, td.maxIconColor);
@@ -445,12 +445,12 @@ void CharControl::UpdateNPCModel(Attachment *a, unsigned int id)
 	cd.maxHairColor = 0;
 	cd.maxHairStyle = 0;
 	cd.maxFacialHair = 0;
-	spins[0]->SetRange(0, cd.maxSkinColor-1);
-	spins[1]->SetRange(0, cd.maxFaceType-1);
-	spins[2]->SetRange(0, cd.maxHairColor-1);
-	spins[3]->SetRange(0, cd.maxHairStyle-1);
-	spins[4]->SetRange(0, cd.maxFacialHair-1);
-	spins[5]->SetRange(0, cd.maxHairColor-1);
+	spins[SPIN_SKIN_COLOR]->SetRange(0, cd.maxSkinColor-1);
+	spins[SPIN_FACE_TYPE]->SetRange(0, cd.maxFaceType-1);
+	spins[SPIN_HAIR_COLOR]->SetRange(0, cd.maxHairColor-1);
+	spins[SPIN_HAIR_STYLE]->SetRange(0, cd.maxHairStyle-1);
+	spins[SPIN_FACIAL_HAIR]->SetRange(0, cd.maxFacialHair-1);
+	spins[SPIN_FACIAL_COLOR]->SetRange(0, cd.maxHairColor-1);
 
 	spins[SPIN_SKIN_COLOR]->SetValue(cd.skinColor);
 	spins[SPIN_FACE_TYPE]->SetValue(cd.faceType);
@@ -495,7 +495,7 @@ void CharControl::UpdateNPCModel(Attachment *a, unsigned int id)
 		cd.equipment[CS_TABARD] = npcrec.getUInt(NPCDB::TabardID);
 		cd.equipment[CS_CAPE] = npcrec.getUInt(NPCDB::CapeID);
 		if (cd.equipment[CS_TABARD] != 0) 
-			cd.geosets[12] = 2;
+			cd.geosets[CG_TARBARD] = 2;
 	} catch (...) {
 		wxLogMessage(_T("Exception Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 	}
@@ -731,13 +731,13 @@ void CharControl::RefreshModel()
 	capeTex = 0;
 
 	// Reset geosets
-	for (unsigned int i=0; i<cd.NUM_GEOSETS; i++) 
+	for (unsigned int i=0; i<NUM_GEOSETS; i++) 
 		cd.geosets[i] = 1;
-	cd.geosets[1] = cd.geosets[2] = cd.geosets[3] = 0;
+	cd.geosets[CG_GEOSET100] = cd.geosets[CG_GEOSET200] = cd.geosets[CG_GEOSET300] = 0;
 
 	// show ears, if toggled
 	if (cd.showEars) 
-		cd.geosets[7] = 2;
+		cd.geosets[CG_EARS] = 2;
 
 	CharTexture tex;
 
@@ -767,7 +767,7 @@ void CharControl::RefreshModel()
 		wxLogMessage(_T("Assertion base character Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 	}
 #if 1 // for worgen female
-		if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen
+		if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
 			wxString fn;
 			fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), 0, cd.skinColor);
 			if (MPQFile::getSize(fn.mb_str()) > 0)
@@ -781,7 +781,7 @@ void CharControl::RefreshModel()
 #endif // for worgen female
 
 	// HACK: for goblin males, explicitly load a hair texture
-	if (cd.race == 9 && cd.gender == 0 && gobTex == 0 && gameVersion < 40000) {
+	if (cd.race == GOBLIN && cd.gender == MALE && gobTex == 0 && gameVersion < 40000) {
         gobTex = texturemanager.add(_T("Creature\\Goblin\\Goblin.blp"));	
 	}
 
@@ -790,7 +790,7 @@ void CharControl::RefreshModel()
 	bool showHair = cd.showHair;
 	bool showFacialHair = cd.showFacialHair;
 
-	if (cd.race != 9 || gameVersion >= 40000) { // Goblin chars base texture already contains all this stuff.
+	if (cd.race != GOBLIN || gameVersion >= 40000) { // Goblin chars base texture already contains all this stuff.
 
 		// Display underwear on the model?
 		if (cd.showUnderwear) {
@@ -802,7 +802,7 @@ void CharControl::RefreshModel()
 				wxLogMessage(_T("DBC underwear Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 			}
 #if 1 // for worgen female
-				if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen
+				if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
 					wxString fn;
 					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), 0, cd.skinColor);
 					if (MPQFile::getSize(fn.mb_str()) > 0)
@@ -823,7 +823,7 @@ void CharControl::RefreshModel()
 			wxLogMessage(_T("DBC face Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 		}
 #if 1 // for worgen female
-			if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen
+			if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
 				wxString fn;
 				fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), cd.faceType, cd.skinColor);
 				if (MPQFile::getSize(fn.mb_str()) > 0)
@@ -838,13 +838,13 @@ void CharControl::RefreshModel()
 		try {
 			CharFacialHairDB::Record frec = facialhairdb.getByParams(cd.race, cd.gender, cd.facialHair);
 			if (gameVersion == 40000) {
-				cd.geosets[1] = frec.getUInt(CharFacialHairDB::Geoset100V400);
-				cd.geosets[2] = frec.getUInt(CharFacialHairDB::Geoset200V400);
-				cd.geosets[3] = frec.getUInt(CharFacialHairDB::Geoset300V400);
+				cd.geosets[CG_GEOSET100] = frec.getUInt(CharFacialHairDB::Geoset100V400);
+				cd.geosets[CG_GEOSET200] = frec.getUInt(CharFacialHairDB::Geoset200V400);
+				cd.geosets[CG_GEOSET300] = frec.getUInt(CharFacialHairDB::Geoset300V400);
 			} else {
-				cd.geosets[1] = frec.getUInt(CharFacialHairDB::Geoset100);
-				cd.geosets[2] = frec.getUInt(CharFacialHairDB::Geoset200);
-				cd.geosets[3] = frec.getUInt(CharFacialHairDB::Geoset300);
+				cd.geosets[CG_GEOSET100] = frec.getUInt(CharFacialHairDB::Geoset100);
+				cd.geosets[CG_GEOSET200] = frec.getUInt(CharFacialHairDB::Geoset200);
+				cd.geosets[CG_GEOSET300] = frec.getUInt(CharFacialHairDB::Geoset300);
 			}
 		} catch (CharFacialHairDB::NotFound) {
 			wxLogMessage(_T("DBC facial feature geosets Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
@@ -879,7 +879,7 @@ void CharControl::RefreshModel()
 		}
 	}
 #if 1 // for worgen female
-	if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen 
+	if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen 
 		for(unsigned int i=1; i<=21; i++) {
 			unsigned int section = i - 1;
 			for (size_t j=0; j<model->geosets.size(); j++) {
@@ -941,7 +941,7 @@ void CharControl::RefreshModel()
 		hairTex = 0;
 	}
 #if 1 // for worgen female
-		if (gameVersion >= 40000 && cd.race == 22 && cd.gender == 1) { // female worgen
+		if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
 			wxString fn;
 			fn.Printf(_T("Character\\Worgen\\Hair00_%02d.blp"), cd.hairColor);
 			if (MPQFile::getSize(fn.mb_str()) > 0) {
@@ -965,9 +965,9 @@ void CharControl::RefreshModel()
 			else
 				tmp = race.getString(CharRacesDB::GeoType1);
 			if (tmp.Lower() == _T("normal")) {
-				cd.geosets[1] = 1;
-				cd.geosets[2] = 1;
-				cd.geosets[3] = 1;
+				cd.geosets[CG_GEOSET100] = 1;
+				cd.geosets[CG_GEOSET200] = 1;
+				cd.geosets[CG_GEOSET300] = 1;
 			}
 		} catch (CharRacesDB::NotFound) {
 			wxLogMessage(_T("Assertion FacialHair Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
@@ -1093,7 +1093,7 @@ void CharControl::RefreshModel()
 		if (id == 1)
 			model->showGeosets[j] = bald;
 
-		for (int i=1; i<19; i++) {
+		for (int i=1; i<NUM_GEOSETS-1; i++) {
 			int a = i*100, b = (i+1) * 100;
 			if (id>a && id<b) 
 				model->showGeosets[j] = (id == (a + cd.geosets[i]));
@@ -1128,10 +1128,10 @@ void CharControl::RefreshModel()
 	spins[SPIN_FACIAL_COLOR]->SetValue(cd.facialColor);
 
 	// eyeglow for Scourge
-	if (cd.race == 5 && bKnightEyeGlow) {
-		if (cd.gender == 0 && model->passes.size() > 52 && model->showGeosets[51] == false && model->showGeosets[52] == false)
+	if (cd.race == SCOURGE && bKnightEyeGlow) {
+		if (cd.gender == MALE && model->passes.size() > 52 && model->showGeosets[51] == false && model->showGeosets[52] == false)
 			model->showGeosets[51] = true;
-		else if (cd.gender == 1 && model->passes.size() > 47 && model->showGeosets[45] == false && model->showGeosets[47] == false)
+		else if (cd.gender == FEMALE && model->passes.size() > 47 && model->showGeosets[45] == false && model->showGeosets[47] == false)
 			model->showGeosets[45] = true;
 	}
 }
@@ -1144,13 +1144,13 @@ void CharControl::RefreshNPCModel()
 	capeTex = 0;
 
 	// Reset geosets
-	for (unsigned int i=0; i<cd.NUM_GEOSETS; i++) 
+	for (unsigned int i=0; i<NUM_GEOSETS; i++) 
 		cd.geosets[i] = 1;
-	cd.geosets[1] = cd.geosets[2] = cd.geosets[3] = 0;
+	cd.geosets[CG_GEOSET100] = cd.geosets[CG_GEOSET200] = cd.geosets[CG_GEOSET300] = 0;
 
 	// show ears, if toggled
 	if (cd.showEars) 
-		cd.geosets[7] = 2;
+		cd.geosets[CG_EARS] = 2;
 
 	CharTexture tex;
 
@@ -1233,13 +1233,13 @@ void CharControl::RefreshNPCModel()
 	try {
 		CharFacialHairDB::Record frec = facialhairdb.getByParams(cd.race, cd.gender, cd.facialHair);
 		if (gameVersion == 40000) {
-			cd.geosets[1] = frec.getUInt(CharFacialHairDB::Geoset100);
-			cd.geosets[2] = frec.getUInt(CharFacialHairDB::Geoset200);
-			cd.geosets[3] = frec.getUInt(CharFacialHairDB::Geoset300);
+			cd.geosets[CG_GEOSET100] = frec.getUInt(CharFacialHairDB::Geoset100);
+			cd.geosets[CG_GEOSET200] = frec.getUInt(CharFacialHairDB::Geoset200);
+			cd.geosets[CG_GEOSET300] = frec.getUInt(CharFacialHairDB::Geoset300);
 		} else {
-			cd.geosets[1] = frec.getUInt(CharFacialHairDB::Geoset100V400);
-			cd.geosets[2] = frec.getUInt(CharFacialHairDB::Geoset200V400);
-			cd.geosets[3] = frec.getUInt(CharFacialHairDB::Geoset300V400);
+			cd.geosets[CG_GEOSET100] = frec.getUInt(CharFacialHairDB::Geoset100V400);
+			cd.geosets[CG_GEOSET200] = frec.getUInt(CharFacialHairDB::Geoset200V400);
+			cd.geosets[CG_GEOSET300] = frec.getUInt(CharFacialHairDB::Geoset300V400);
 		}
 
 		// Hide facial fair if it isn't toggled and they don't have tusks, horns, etc.
@@ -1251,9 +1251,9 @@ void CharControl::RefreshNPCModel()
 			else
 				tmp = race.getString(CharRacesDB::GeoType1);
 			if (tmp.Lower() == _T("normal")) {
-				cd.geosets[1] = 1;
-				cd.geosets[2] = 1;
-				cd.geosets[3] = 1;
+				cd.geosets[CG_GEOSET100] = 1;
+				cd.geosets[CG_GEOSET200] = 1;
+				cd.geosets[CG_GEOSET300] = 1;
 			}
 		}
 	} catch (CharFacialHairDB::NotFound) {
@@ -1369,7 +1369,7 @@ void CharControl::RefreshNPCModel()
 
 void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &tex, bool lookup)
 {
-	if (slot==CS_PANTS && cd.geosets[13]==2) 
+	if (slot==CS_PANTS && cd.geosets[CG_ROBE]==2) 
 		return; // if we are wearing a robe, no pants for us! ^_^
 
 	try {
@@ -1386,7 +1386,7 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 		
 		// Just a rough check to make sure textures are only being added to where they're suppose to.
 		if (slot == CS_CHEST || slot == CS_SHIRT) {
-			cd.geosets[8] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
+			cd.geosets[CG_CHEST] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
 
 			tex.addLayer(makeItemTexture(CR_ARM_UPPER, r.getString(ItemDisplayDB::TexArmUpper)), CR_ARM_UPPER, layer);
 			tex.addLayer(makeItemTexture(CR_ARM_LOWER, r.getString(ItemDisplayDB::TexArmLower)), CR_ARM_LOWER, layer);
@@ -1404,26 +1404,26 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 			// Alfred 2009.08.15 add torso_lower for Titan-Forged Waistguard of Triumph
 			tex.addLayer(makeItemTexture(CR_TORSO_LOWER, r.getString(ItemDisplayDB::TexChestLower)), CR_TORSO_LOWER, layer);
 			tex.addLayer(makeItemTexture(CR_LEG_UPPER, r.getString(ItemDisplayDB::TexLegUpper)), CR_LEG_UPPER, layer);
-		} else if (slot == CS_BRACERS)
+		} else if (slot == CS_BRACERS) {
 			tex.addLayer(makeItemTexture(CR_ARM_LOWER, r.getString(ItemDisplayDB::TexArmLower)), CR_ARM_LOWER, layer);
-		else if (slot == CS_PANTS) {
-			cd.geosets[9] = 1 + r.getUInt(ItemDisplayDB::BracerGeosetFlags);
+		} else if (slot == CS_PANTS) {
+			cd.geosets[CG_PANTS] = 1 + r.getUInt(ItemDisplayDB::BracerGeosetFlags);
 
 			tex.addLayer(makeItemTexture(CR_LEG_UPPER, r.getString(ItemDisplayDB::TexLegUpper)), CR_LEG_UPPER, layer);
 			tex.addLayer(makeItemTexture(CR_LEG_LOWER, r.getString(ItemDisplayDB::TexLegLower)), CR_LEG_LOWER, layer);
 		} else if (slot == CS_GLOVES) {
-			cd.geosets[4] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
+			cd.geosets[CG_GLOVES] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
 
 			tex.addLayer(makeItemTexture(CR_HAND, r.getString(ItemDisplayDB::TexHands)), CR_HAND, layer);
 			tex.addLayer(makeItemTexture(CR_ARM_LOWER, r.getString(ItemDisplayDB::TexArmLower)), CR_ARM_LOWER, layer);
 		} else if (slot == CS_BOOTS) { // && cd.showFeet==false) {
-			cd.geosets[5] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
+			cd.geosets[CG_BOOTS] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
 
 			tex.addLayer(makeItemTexture(CR_LEG_LOWER, r.getString(ItemDisplayDB::TexLegLower)), CR_LEG_LOWER, layer);
 			if (!cd.showFeet)
 				tex.addLayer(makeItemTexture(CR_FOOT, r.getString(ItemDisplayDB::TexFeet)), CR_FOOT, layer);
 		} else if (slot==CS_TABARD && td.showCustom) { // Display our customised tabard
-			cd.geosets[12] = 2;
+			cd.geosets[CG_TARBARD] = 2;
 			tex.addLayer(wxString(td.GetBackgroundTex(CR_TORSO_UPPER).c_str(), wxConvUTF8), CR_TORSO_UPPER, layer);
 			tex.addLayer(wxString(td.GetBackgroundTex(CR_TORSO_LOWER).c_str(), wxConvUTF8), CR_TORSO_LOWER, layer);
 			tex.addLayer(wxString(td.GetIconTex(CR_TORSO_UPPER).c_str(), wxConvUTF8), CR_TORSO_UPPER, layer);
@@ -1432,12 +1432,12 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 			tex.addLayer(wxString(td.GetBorderTex(CR_TORSO_LOWER).c_str(), wxConvUTF8), CR_TORSO_LOWER, layer);
 
 		} else if (slot==CS_TABARD) { // if its just a normal tabard then do the usual
-			cd.geosets[12] = 2;
+			cd.geosets[CG_TARBARD] = 2;
 			tex.addLayer(makeItemTexture(CR_TORSO_UPPER, r.getString(ItemDisplayDB::TexChestUpper)), CR_TORSO_UPPER, layer);
 			tex.addLayer(makeItemTexture(CR_TORSO_LOWER, r.getString(ItemDisplayDB::TexChestLower)), CR_TORSO_LOWER, layer);
 		
 		} else if (slot==CS_CAPE) { // capes
-			cd.geosets[15] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
+			cd.geosets[CG_CAPE] = 1 + r.getUInt(ItemDisplayDB::GloveGeosetFlags);
 
 			// load the cape texture
 			wxString tex = r.getString(ItemDisplayDB::Skin);
@@ -1457,17 +1457,17 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 		}
 
 		// robe
-		if (cd.geosets[13]==1) 
-			cd.geosets[13] = 1 + r.getUInt(ItemDisplayDB::RobeGeosetFlags);
-		if (cd.geosets[13]==2) {
-			cd.geosets[5] = 0;		// hide the boots
-			//cd.geosets[9] = 0;		// hide the pants
-			cd.geosets[12] = 0;		// also hide the tabard.
+		if (cd.geosets[CG_ROBE]==1) 
+			cd.geosets[CG_ROBE] = 1 + r.getUInt(ItemDisplayDB::RobeGeosetFlags);
+		if (cd.geosets[CG_ROBE]==2) {
+			cd.geosets[CG_BOOTS] = 0;		// hide the boots
+			//cd.geosets[CG_PANTS] = 0;		// hide the pants
+			cd.geosets[CG_TARBARD] = 0;		// also hide the tabard.
 		}
 
 		// gloves - this is so gloves have preference over shirt sleeves.
-		if (cd.geosets[4] > 1) 
-			cd.geosets[8] = 0;
+		if (cd.geosets[CG_GLOVES] > 1) 
+			cd.geosets[CG_CHEST] = 0;
 
 	} catch (ItemDisplayDB::NotFound) {}
 }

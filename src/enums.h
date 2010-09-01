@@ -433,6 +433,33 @@ enum CharSlots {
 	NUM_CHAR_SLOTS
 };
 
+enum CharGeosets {
+	CG_GEOSET100 = 1,
+	CG_GEOSET200,
+	CG_GEOSET300,
+	CG_GLOVES,
+	CG_BOOTS,
+	CG_EARS = 7,
+	CG_CHEST,
+	CG_PANTS,
+	CG_TARBARD = 12,
+	CG_ROBE,
+	CG_CAPE = 15,
+
+	NUM_GEOSETS = 20
+};
+
+enum Gender {
+	MALE,
+	FEMALE
+};
+
+enum Races {
+	SCOURGE = 5,
+	GOBLIN = 9,
+	WORGEN = 22
+};
+
 // Item type values as referred to by the items.csv list
 enum ItemTypes {
 	IT_ALL = 0,
