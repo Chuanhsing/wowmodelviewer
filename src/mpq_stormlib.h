@@ -51,8 +51,8 @@ class MPQFile
 
 public:
 	MPQFile():eof(false),buffer(0),pointer(0),size(0) {}
-	MPQFile(const char* filename);	// filenames are not case sensitive
-	void openFile(const char* filename);
+	MPQFile(wxString filename);	// filenames are not case sensitive
+	void openFile(wxString filename);
 	~MPQFile();
 	size_t read(void* dest, size_t bytes);
 	size_t getSize();
@@ -63,10 +63,10 @@ public:
 	void seek(int offset);
 	void seekRelative(int offset);
 	void close();
-	void save(const char* filename);
+	void save(wxString filename);
 
-	static bool exists(const char* filename);
-	static int getSize(const char* filename); // Used to do a quick check to see if a file is corrupted
+	static bool exists(wxString filename);
+	static int getSize(wxString filename); // Used to do a quick check to see if a file is corrupted
 	static wxString getArchive(wxString filename);
 };
 

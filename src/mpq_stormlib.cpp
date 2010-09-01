@@ -70,7 +70,7 @@ void MPQArchive::close()
 }
 
 void
-MPQFile::openFile(const char* filename)
+MPQFile::openFile(wxString filename)
 {
 	eof = false;
 	buffer = 0;
@@ -80,9 +80,9 @@ MPQFile::openFile(const char* filename)
 		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
 		wxString fn2 = fn1;
 		wxString fn3 = gamePath;
-		fn1.Append(wxString(filename, wxConvUTF8));
-		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
-		fn3.Append(wxString(filename, wxConvUTF8));
+		fn1.Append(filename);
+		fn2.Append(filename.AfterLast(SLASH));
+		fn3.Append(filename);
 
 		wxString fns[] = { fn1, fn2, fn3 };
 		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
@@ -112,8 +112,8 @@ MPQFile::openFile(const char* filename)
 		}
 	}
 
-	if (bAlternate && !wxString(filename, wxConvUTF8).StartsWith(_T("Alternate"), false)) {
-		wxString alterName = wxString::Format(_T("alternate%c%s"), SLASH, filename);
+	if (bAlternate && !filename.StartsWith(_T("Alternate"), false)) {
+		wxString alterName = _T("alternate")+SLASH+filename;
 
 		for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end(); ++i)
 		{
@@ -149,7 +149,7 @@ MPQFile::openFile(const char* filename)
 
 		HANDLE fh;
 
-		if( !SFileOpenFileEx( mpq_a, filename, 0, &fh ) )
+		if( !SFileOpenFileEx( mpq_a, (char*)filename.c_str(), 0, &fh ) )
 			continue;
 
 		// Found!
@@ -174,7 +174,7 @@ MPQFile::openFile(const char* filename)
 	buffer = 0;
 }
 
-MPQFile::MPQFile(const char* filename):
+MPQFile::MPQFile(wxString filename):
 	eof(false),
 	buffer(0),
 	pointer(0),
@@ -188,15 +188,15 @@ MPQFile::~MPQFile()
 	close();
 }
 
-bool MPQFile::exists(const char* filename)
+bool MPQFile::exists(wxString filename)
 {
 	if( useLocalFiles ) {
 		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
 		wxString fn2 = fn1;
 		wxString fn3 = gamePath;
-		fn1.Append(wxString(filename, wxConvUTF8));
-		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
-		fn3.Append(wxString(filename, wxConvUTF8));
+		fn1.Append(filename);
+		fn2.Append(filename.AfterLast(SLASH));
+		fn3.Append(filename);
 
 		wxString fns[] = { fn1, fn2, fn3 };
 		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
@@ -210,17 +210,17 @@ bool MPQFile::exists(const char* filename)
 	{
 		HANDLE &mpq_a = *i->second;
 
-		if( SFileHasFile( mpq_a, filename ) )
+		if( SFileHasFile( mpq_a, (char *)filename.c_str() ) )
 			return true;
 	}
 
 	return false;
 }
 
-void MPQFile::save(const char* filename)
+void MPQFile::save(wxString filename)
 {
 	wxFile f;
-	f.Open(wxString(filename, wxConvUTF8), wxFile::write);
+	f.Open(filename, wxFile::write);
 	f.Write(buffer, size);
 	f.Close();
 }
@@ -271,15 +271,15 @@ size_t MPQFile::getSize()
 	return size;
 }
 
-int MPQFile::getSize(const char* filename)
+int MPQFile::getSize(wxString filename)
 {
 	if( useLocalFiles ) {
 		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
 		wxString fn2 = fn1;
 		wxString fn3 = gamePath;
-		fn1.Append(wxString(filename, wxConvUTF8));
-		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
-		fn3.Append(wxString(filename, wxConvUTF8));
+		fn1.Append(filename);
+		fn2.Append(filename.AfterLast(SLASH));
+		fn3.Append(filename);
 
 		wxString fns[] = { fn1, fn2, fn3 };
 		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
@@ -296,7 +296,7 @@ int MPQFile::getSize(const char* filename)
 		HANDLE &mpq_a = *i->second;
 		HANDLE fh;
 		
-		if( !SFileOpenFileEx( mpq_a, filename, 0, &fh ) )
+		if( !SFileOpenFileEx( mpq_a, (char *)filename.c_str(), 0, &fh ) )
 			continue;
 
 		DWORD filesize = SFileGetFileSize( fh );
@@ -313,9 +313,9 @@ wxString MPQFile::getArchive(wxString filename)
 		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
 		wxString fn2 = fn1;
 		wxString fn3 = gamePath;
-		fn1.Append(wxString(filename, wxConvUTF8));
-		fn2.Append(wxString(filename, wxConvUTF8).AfterLast(SLASH));
-		fn3.Append(wxString(filename, wxConvUTF8));
+		fn1.Append(filename);
+		fn2.Append(filename.AfterLast(SLASH));
+		fn3.Append(filename);
 
 		wxString fns[] = { fn1, fn2, fn3 };
 		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {

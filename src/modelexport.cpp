@@ -453,7 +453,7 @@ void SaveBaseFile(){
 
 	if (modelfile.IsEmpty())
 		return;
-	MPQFile f(modelfile.mb_str());
+	MPQFile f(modelfile);
 	if (f.isEof()) {
 		wxLogMessage(_T("Error: Could not extract %s\n"), modelfile.c_str());
 		f.close();

@@ -275,7 +275,7 @@ void ModelControl::OnCombo(wxCommandEvent &event)
 	if (id == ID_MODEL_LOD) {
 		int value = event.GetInt();
 
-		MPQFile f((char *)model->name.c_str());
+		MPQFile f(model->name);
 		if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
 			wxLogMessage(_T("ERROR - unable to open MPQFile: [%s]"), model->name.c_str());
 			f.close();
@@ -420,7 +420,7 @@ void ModelOpened::Export(wxString val)
 {
 	if (val == wxEmptyString)
 		return;
-	MPQFile f(val.mb_str());
+	MPQFile f(val);
 	if (f.isEof()) {
 		wxLogMessage(_T("Error: Could not extract %s\n"), val.c_str());
 		f.close();
@@ -553,7 +553,7 @@ void ModelOpened::OnCheck(wxCommandEvent &event)
 
 void ModelOpened::Add(wxString str)
 {
-	MPQFile f(str.mb_str());
+	MPQFile f(str);
 	if (f.isEof() == true)
 		return;
 	f.close();

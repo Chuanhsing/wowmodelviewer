@@ -8,7 +8,7 @@ DBCFile::DBCFile(const wxString &filename) : filename(filename)
 
 bool DBCFile::open()
 {
-	MPQFile f((char *)filename.c_str());
+	MPQFile f(filename);
 	int db_type = 0;
 
 	// Need some error checking, otherwise an unhandled exception error occurs
@@ -16,7 +16,7 @@ bool DBCFile::open()
 	if (f.isEof()) {
 		if (filename.AfterLast('.') == _T("dbc")) {
 			wxString fn = filename.BeforeLast('.') + _T(".db2");
-			f.openFile(fn);
+			f.openFile((char *)fn.c_str());
 			if (f.isEof())
 				return false;
 		} else

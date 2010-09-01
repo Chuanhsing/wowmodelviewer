@@ -297,7 +297,7 @@ void FileControl::Export(wxString val, int select)
 {
 	if (val.IsEmpty())
 		return;
-	MPQFile f(val.mb_str());
+	MPQFile f(val);
 	if (f.isEof()) {
 		wxLogMessage(_T("Error: Could not extract %s\n"), val.c_str());
 		f.close();
@@ -417,7 +417,7 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 	infoMenu.AppendSeparator();
 	wxString archive = MPQFile::getArchive(tdata->fn);
 	infoMenu.Append(ID_FILELIST, archive, archive);
-	wxString size = wxString::Format(_T("Size: %d"), MPQFile::getSize((char *)tdata->fn.c_str()));
+	wxString size = wxString::Format(_T("Size: %d"), MPQFile::getSize(tdata->fn));
 	infoMenu.Append(ID_FILELIST, size, size);
 	infoMenu.Connect(wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&FileControl::OnPopupClick, NULL, this);
 	PopupMenu(&infoMenu);

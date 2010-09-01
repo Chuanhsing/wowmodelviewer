@@ -337,7 +337,7 @@ MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 	}
 */
 
-	MPQFile f((char *)filename.c_str());
+	MPQFile f(filename);
 	ok = !f.isEof();
 	if (!ok) {
 		wxLogMessage(_T("Error: loading %s"),filename.c_str());
@@ -413,7 +413,7 @@ MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 					wxString texshader = texpath;
 					// load the specular texture instead
 					texshader.insert(texshader.length()-4,_T("_s"));
-					if (MPQFile::exists((char *)texshader.c_str()))
+					if (MPQFile::exists(texshader))
 						texpath = texshader;
 				}
 

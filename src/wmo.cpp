@@ -8,7 +8,7 @@ using namespace std;
 WMO::WMO(wxString name): ManagedItem(name)
 {
 	
-	MPQFile f((char *)name.c_str());
+	MPQFile f(name);
 	ok = !f.isEof();
 	if (!ok) {
 		wxLogMessage(_T("Error: Couldn't load WMO %s."), name.c_str());
@@ -692,7 +692,7 @@ void WMOGroup::initDisplayList()
 	wxString fname;
 	fname.Printf(_T("%s_%03d.wmo"), temp.c_str(), num);
 
-	MPQFile gf((char *)fname.c_str());
+	MPQFile gf(fname);
     gf.seek(0x14);
 
 	// read header

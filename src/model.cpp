@@ -313,7 +313,7 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 	modelType = MT_NORMAL;
 	// --
 
-	MPQFile f((char *)tempname.c_str());
+	MPQFile f(tempname);
 	g_modelViewer->modelOpened->Add(tempname);
 	ok = false;
 	if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
@@ -819,7 +819,7 @@ void Model::initAnimated(MPQFile &f)
 		memcpy(anims, f.getBuffer() + header.ofsAnimations, header.nAnimations * sizeof(ModelAnimation));
 		#else
 		ModelAnimationWotLK animsWotLK;
-		char tempname[256];
+		wxString tempname;
 		animfiles = new MPQFile[header.nAnimations];
 		for(size_t i=0; i<header.nAnimations; i++) {
 			memcpy(&animsWotLK, f.getBuffer() + header.ofsAnimations + i*sizeof(ModelAnimationWotLK), sizeof(ModelAnimationWotLK));
@@ -838,10 +838,10 @@ void Model::initAnimated(MPQFile &f)
 			anims[i].NextAnimation = animsWotLK.NextAnimation;
 			anims[i].Index = animsWotLK.Index;
 
-			sprintf(tempname, "%s%04d-%02d.anim", (char *)modelname.BeforeLast(_T('.')).c_str(), anims[i].animID, animsWotLK.subAnimID);
+			tempname = wxString::Format(_T("%s%04d-%02d.anim"), (char *)modelname.BeforeLast(_T('.')).c_str(), anims[i].animID, animsWotLK.subAnimID);
 			if (MPQFile::getSize(tempname) > 0) {
 				animfiles[i].openFile(tempname);
-				g_modelViewer->modelOpened->Add(wxString(tempname, wxConvUTF8));
+				g_modelViewer->modelOpened->Add(tempname);
 			}
 		}
 		#endif
@@ -998,7 +998,7 @@ void Model::setLOD(MPQFile &f, int index)
 	// remove suffix .M2
 	lodname = modelname.BeforeLast(_T('.'));
 	lodname.Append(wxString::Format(_T("%02d.skin"), index)); // Lods: 00, 01, 02, 03
-	MPQFile g((char *)lodname.c_str());
+	MPQFile g(lodname);
 	g_modelViewer->modelOpened->Add(lodname);
 	if (g.isEof()) {
 		wxLogMessage(_T("Error: Unable to load Lods: [%s]"), lodname.c_str());

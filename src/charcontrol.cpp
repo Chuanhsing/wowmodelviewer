@@ -770,10 +770,10 @@ void CharControl::RefreshModel()
 		if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
 			wxString fn;
 			fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), 0, cd.skinColor);
-			if (MPQFile::getSize(fn.mb_str()) > 0)
+			if (MPQFile::getSize(fn) > 0)
 				tex.addLayer(fn, CR_BASE, 0);
 			fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d_Extra.blp"), 0, cd.skinColor);
-			if (MPQFile::getSize(fn.mb_str()) > 0) {
+			if (MPQFile::getSize(fn) > 0) {
 				furTex = texturemanager.add(fn);
 				model->textures[4] = furTex;
 			}
@@ -805,10 +805,10 @@ void CharControl::RefreshModel()
 				if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
 					wxString fn;
 					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), 0, cd.skinColor);
-					if (MPQFile::getSize(fn.mb_str()) > 0)
+					if (MPQFile::getSize(fn) > 0)
 						tex.addLayer(fn, CR_PELVIS_UPPER, 1); // pants
 					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleNakedTorsoSkin%02d_%02d.blp"), 0, cd.skinColor);
-					if (MPQFile::getSize(fn.mb_str()) > 0)
+					if (MPQFile::getSize(fn) > 0)
 						tex.addLayer(fn, CR_TORSO_UPPER, 1); // top
 				}
 #endif // for worgen female
@@ -826,10 +826,10 @@ void CharControl::RefreshModel()
 			if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
 				wxString fn;
 				fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), cd.faceType, cd.skinColor);
-				if (MPQFile::getSize(fn.mb_str()) > 0)
+				if (MPQFile::getSize(fn) > 0)
 					tex.addLayer(fn, CR_FACE_UPPER, 1);
 				fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleFaceLower%02d_%02d.blp"), cd.faceType, cd.skinColor);
-				if (MPQFile::getSize(fn.mb_str()) > 0)
+				if (MPQFile::getSize(fn) > 0)
 					tex.addLayer(fn, CR_FACE_LOWER, 1);
 			}
 #endif // for worgen female
@@ -944,7 +944,7 @@ void CharControl::RefreshModel()
 		if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
 			wxString fn;
 			fn.Printf(_T("Character\\Worgen\\Hair00_%02d.blp"), cd.hairColor);
-			if (MPQFile::getSize(fn.mb_str()) > 0) {
+			if (MPQFile::getSize(fn) > 0) {
 				hairTex = texturemanager.add(fn);
 				model->textures[2] = hairTex;
 			}
@@ -1786,7 +1786,7 @@ wxString CharControl::makeItemTexture(int region, const wxString name)
 		fn += cd.gender ? _T("F") : _T("M");
 		
 	fn += _T(".blp");
-	if (MPQFile::getSize(fn.fn_str()) > 0)  //MPQFile::exists(fn.c_str()) && 
+	if (MPQFile::getSize(fn) > 0)  //MPQFile::exists(fn.c_str()) && 
 		return fn;
 
 	if (fn.Length() < 5)
@@ -1798,7 +1798,7 @@ wxString CharControl::makeItemTexture(int region, const wxString name)
 	else
 		fn[fn.Length()-5] = 'U';
 
-	if (MPQFile::getSize(fn.fn_str()) > 0) //MPQFile::exists(fn.c_str()) && 
+	if (MPQFile::getSize(fn) > 0) //MPQFile::exists(fn.c_str()) && 
 		return fn;
 
 	fn = wxString(regionPaths[region], wxConvUTF8);

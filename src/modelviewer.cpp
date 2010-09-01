@@ -1195,7 +1195,7 @@ void ModelViewer::LoadItem(unsigned int displayID)
 		wxString fn;
 		for(int i=0; i<5; i++) {
 			fn = fns[i]+name;
-			if (MPQFile::getSize(fn.fn_str()) > 0) {
+			if (MPQFile::getSize(fn) > 0) {
 				LoadModel(fn);
 				break;
 			}
@@ -1348,7 +1348,7 @@ bool ModelViewer::InitMPQArchives()
 	}
 
 	// Checks and logs the "TOC" version of the interface files that were loaded
-	MPQFile f("Interface\\FrameXML\\FrameXML.TOC");
+	MPQFile f(_T("Interface\\FrameXML\\FrameXML.TOC"));
 	if (f.isEof()) {
 		f.close();
 		wxLogMessage(_T("Unable to gather TOC data."));
@@ -1393,7 +1393,7 @@ bool ModelViewer::InitMPQArchives()
 	}
 
 	// log for debug
-	const char *component = "component.wow-data.txt";
+	wxString component = _T("component.wow-data.txt");
 	MPQFile f2(component);
 	if (!f2.isEof()) {
 		f2.save(component);
@@ -1410,7 +1410,7 @@ bool ModelViewer::InitMPQArchives()
 			}
 		}
 		
-		wxRemoveFile(wxString(component, wxConvUTF8));
+		wxRemoveFile(component);
 	}
 	return true;
 }
@@ -2323,7 +2323,7 @@ void ModelViewer::ModelInfo()
 		return;
 	}
 
-	MPQFile f((char *)m->modelname.c_str());
+	MPQFile f(m->modelname);
 	if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
 		wxLogMessage(_T("Error: Unable to load model: [%s]"), m->modelname.c_str());
 		// delete this; //?
@@ -2332,7 +2332,7 @@ void ModelViewer::ModelInfo()
 		return;
 	}
 
-	MPQFile g((char *)m->lodname.c_str());
+	MPQFile g(m->lodname);
 	if (g.isEof() || (g.getSize() < sizeof(ModelView))) {
 		wxLogMessage(_T("Error: Unable to load Lod: [%s]"), m->lodname.c_str());
 		// delete this; //?
