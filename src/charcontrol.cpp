@@ -1369,7 +1369,7 @@ void CharControl::RefreshNPCModel()
 
 void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &tex, bool lookup)
 {
-	if (slot==CS_PANTS && cd.geosets[CG_ROBE]==2) 
+	if (slot==CS_PANTS && cd.geosets[CG_TROUSERS]==2) 
 		return; // if we are wearing a robe, no pants for us! ^_^
 
 	try {
@@ -1457,9 +1457,9 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 		}
 
 		// robe
-		if (cd.geosets[CG_ROBE]==1) 
-			cd.geosets[CG_ROBE] = 1 + r.getUInt(ItemDisplayDB::RobeGeosetFlags);
-		if (cd.geosets[CG_ROBE]==2) {
+		if (cd.geosets[CG_TROUSERS]==1) 
+			cd.geosets[CG_TROUSERS] = 1 + r.getUInt(ItemDisplayDB::RobeGeosetFlags);
+		if (cd.geosets[CG_TROUSERS]==2) {
 			cd.geosets[CG_BOOTS] = 0;		// hide the boots
 			//cd.geosets[CG_KNEEPADS] = 0;		// hide the pants
 			cd.geosets[CG_TARBARD] = 0;		// also hide the tabard.

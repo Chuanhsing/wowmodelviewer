@@ -212,14 +212,14 @@ void ModelControl::Update()
 	// enum CharGeosets
 	wxString meshes[NUM_GEOSETS] = {_T("Hairstyles"), _T("Facial1"), _T("Facial2"), _T("Facial3"), _T("Braces"),
 		_T("Boots"), wxEmptyString, _T("Ears"), _T("Wristbands"),  _T("Kneepads"),
-		 _T("Pants"), _T("Pants"), _T("Tarbard"), _T("Trousers"), _T("Robe"),
+		 _T("Pants"), _T("Pants2"), _T("Tarbard"), _T("Trousers"), wxEmptyString,
 		  _T("Cape"), wxEmptyString, _T("Eyeglows"), _T("Belt") };
 	for (unsigned int i=0; i<model->geosets.size(); i++) {
 		int mesh = model->geosets[i].id / 100;
 		if (mesh < WXSIZEOF(meshes) && meshes[mesh] != wxEmptyString)
-			geosetItems.Add(wxString::Format(_T("%i [%s]"), i, meshes[mesh].c_str()), 1);
+			geosetItems.Add(wxString::Format(_T("%i [%s, %i]"), i, meshes[mesh].c_str(), model->geosets[i].id % 100), 1);
 		else
-			geosetItems.Add(wxString::Format(_T("%i [%i]"), i, mesh), 1);
+			geosetItems.Add(wxString::Format(_T("%i [%i, $i]"), i, mesh, model->geosets[i].id % 100), 1);
 	}
 	//geosets->InsertItems(items, 0);
 	clbGeosets->Set(geosetItems, 0);
