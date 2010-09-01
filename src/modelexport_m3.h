@@ -632,6 +632,7 @@ struct DIV
 
 // Size = 14 byte / 0x0E byte
 // Incomplete
+#pragma pack(push,1) 
 struct BAT
 {
     /*0x00*/ uint32 d1;
@@ -645,6 +646,7 @@ struct BAT
 		s2 = -1;
 	}
 };
+#pragma pack(pop) 
 
 //Size = 36 byte / 0x24 byte
 // Incomplete
