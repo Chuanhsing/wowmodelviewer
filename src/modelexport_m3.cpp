@@ -54,6 +54,44 @@ typedef struct {
 	uint16 matmIndex;
 } MeshMap;
 
+typedef	struct {
+	int16 index;
+	int16 type;
+} AnimOffset;
+
+typedef struct {
+	std::vector <int>	timeline;
+	std::vector <float>	data;
+} Anim_Float;
+
+typedef struct {
+	std::vector <int>	timeline;
+	std::vector <Vec2D>	data;
+} Anim_Vec2D;
+
+typedef struct {
+	std::vector <int>	timeline;
+	std::vector <Vec3D>	data;
+} Anim_Vec3D;
+
+typedef struct {
+	std::vector <int>	timeline;
+	std::vector <Vec4D>	data;
+} Anim_Vec4D;
+
+typedef	struct {
+	std::vector <uint32> animid;
+	std::vector <AnimOffset> animoff;
+	std::vector <Anim_Float> animfloat;
+	std::vector <Anim_Vec2D> animvec2d;
+	std::vector <Anim_Vec3D> animvec3d;
+	std::vector <Anim_Vec4D> animvec4d;
+	std::vector <SD>		 animsdfloat;
+	std::vector <SD>		 animsdvec2d;
+	std::vector <SD>		 animsdvec3d;
+	std::vector <SD>		 animsdvec4d;
+} STCExtra;
+
 uint32 CreateAnimID(int m3class, int key, int subkey, int idx)
 {
 	return (m3class & 0xFF) << 24 | (key & 0xFF) << 16 | (subkey & 0xFF) << 8 | (idx & 0xFF);
@@ -61,7 +99,7 @@ uint32 CreateAnimID(int m3class, int key, int subkey, int idx)
 
 void SetAnimed(AnimationReference &anim)
 {
-	anim.flags = 1;
+	anim.flags = INTERPOLATION_LINEAR;
 	anim.animflag = 6;
 }
 
@@ -154,8 +192,8 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 	}
 	LogExportData(_T("M3"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
 
-	MPQFile mpqf((char *)m->modelname.c_str());
-	MPQFile mpqfv((char *)m->lodname.c_str());
+	MPQFile mpqf(m->modelname);
+	MPQFile mpqfv(m->lodname);
 
 	// 1. FileHead
 	RefEntry("43DM", f.Tell(), 1, 0xB);
@@ -195,18 +233,30 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 	//uint16 *boneLookup = (uint16 *)(mpqf.getBuffer() + m->header.ofsBoneLookup);
 	ModelParticleEmitterDef *particle = (ModelParticleEmitterDef *)(mpqf.getBuffer() + m->header.ofsParticleEmitters);
 
-	std::vector<Vertex32>	Verts;
-	std::vector<uint16>		Faces;
-	std::vector<REGN>		Regns;
-	std::vector<BONE>		Bones;
-	std::vector<int>		MeshM2toM3;
+	std::vector <Vertex32>	Verts;
+	std::vector <uint16>	Faces;
+	std::vector <REGN>		Regns;
+	std::vector <BONE>		Bones;
+	std::vector <SEQS>		Seqss;
+	std::vector <STC>		Stcs;
+	std::vector <STCExtra>	StcExtras;
 
-	std::vector<uint32> logAnimations;
+	std::vector <int>		MeshM2toM3;
+
+	std::vector <uint16>	bLookup;
+
+	std::vector <std::vector <uint32> > M3OpacityAnimid;
+	std::vector <std::vector <uint32> > M2OpacityIdx;
+
+	std::vector <uint32>	logAnimations;
+
 	wxArrayString vAnimations;
 	wxArrayString nameAnimations;
 	int chunk_offset;
 
-	std::vector<uint16> bLookup;
+/************************************************************************************/
+/* Prepare Data                                                                     */
+/************************************************************************************/
 
 	// init mesh, vertex, face, mat
 	int boneidx = 0;
@@ -401,8 +451,8 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 			Model *am = static_cast<Model*>(att2->model);
 			if (am)
 			{
-				MPQFile ampqf((char *)am->modelname.c_str());
-				MPQFile ampqfv((char *)am->lodname.c_str());
+				MPQFile ampqf(am->modelname);
+				MPQFile ampqfv(am->lodname);
 
 				ampqf.close();
 				ampqfv.close();
@@ -410,14 +460,12 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		}
 	}
 */
-	// Modelname
-	wxString n = wxString(fn, wxConvUTF8).AfterLast('\\');
-	NameRefEntry(&mdata.name, n, &f);
 
 	// mSEQS
 	if (modelExport_M3_Anims.size() > 0) {
 		logAnimations = modelExport_M3_Anims;
 		for(uint32 i=0; i<m->header.nAnimations; i++) {
+			SEQS seqs;
 			bool bFound = false;
 			uint32 pos;
 			for(pos=0; pos<logAnimations.size(); pos++) {
@@ -442,9 +490,21 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 				strName += wxString::Format(_T(" %02d"), counts);
 
 			nameAnimations.push_back(strName);
+
+			memset(&seqs, 0, sizeof(seqs));
+			seqs.init();
+			seqs.length = m->anims[i].timeEnd;
+			seqs.moveSpeed = m->anims[i].moveSpeed;
+			seqs.frequency = m->anims[i].playSpeed;
+			seqs.boundSphere.min = fixCoord(m->anims[logAnimations[0]].boundSphere.min) * modelExport_M3_SphereScale;
+			seqs.boundSphere.max = fixCoord(m->anims[logAnimations[0]].boundSphere.max) * modelExport_M3_SphereScale;
+			seqs.boundSphere.radius = m->anims[logAnimations[0]].boundSphere.radius * modelExport_M3_SphereScale;
+			Seqss.push_back(seqs);
+
 		}
 	} else {
 		for(uint32 i=0; i<m->header.nAnimations; i++) {
+			SEQS seqs;
 			wxString strName;
 			try {
 				AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
@@ -485,6 +545,16 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 			nameAnimations.push_back(strName);
 
 			logAnimations.push_back(i);
+
+			memset(&seqs, 0, sizeof(seqs));
+			seqs.init();
+			seqs.length = m->anims[i].timeEnd;
+			seqs.moveSpeed = m->anims[i].moveSpeed;
+			seqs.frequency = m->anims[i].playSpeed;
+			seqs.boundSphere.min = fixCoord(m->anims[logAnimations[0]].boundSphere.min) * modelExport_M3_SphereScale;
+			seqs.boundSphere.max = fixCoord(m->anims[logAnimations[0]].boundSphere.max) * modelExport_M3_SphereScale;
+			seqs.boundSphere.radius = m->anims[logAnimations[0]].boundSphere.radius * modelExport_M3_SphereScale;
+			Seqss.push_back(seqs);
 		}
 	}
 
@@ -511,7 +581,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		bone.init();
 		bone.parent = mb[i].parent + ROOT_BONE;
 		bone.initTrans.AnimRef.animid = CreateAnimID(AR_Bone, idx, 0, 2);
-		for (uint32 j=0; j<logAnimations.size(); j++)
+		for (uint32 j=0; j<Seqss.size(); j++)
 		{
 			int anim_offset = logAnimations[j];
 			if (m->bones[i].trans.data[anim_offset].size() > 0)
@@ -526,7 +596,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 			bone.initTrans.value -= mb[bone.parent - ROOT_BONE].pivot ;
 
 		bone.initRot.AnimRef.animid = CreateAnimID(AR_Bone, idx, 0, 3);
-		for (uint32 j=0; j<logAnimations.size(); j++)
+		for (uint32 j=0; j<Seqss.size(); j++)
 		{
 			int anim_offset = logAnimations[j];
 			if (m->bones[i].rot.data[anim_offset].size() > 0)
@@ -537,7 +607,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		}
 
 		bone.initScale.AnimRef.animid = CreateAnimID(AR_Bone, idx, 0, 5);
-		for (uint32 j=0; j<logAnimations.size(); j++)
+		for (uint32 j=0; j<Seqss.size(); j++)
 		{
 			int anim_offset = logAnimations[j];
 			if (m->bones[i].scale.data[anim_offset].size() > 0)
@@ -550,48 +620,31 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		Bones.push_back(bone);
 	}
 
+/************************************************************************************/
+/* Write Data                                                                       */
+/************************************************************************************/
 
+	// Modelname
+	wxString n = wxString(fn, wxConvUTF8).AfterLast('\\');
+	NameRefEntry(&mdata.name, n, &f);
 
+	// mSEQ
+	for(uint32 i=0; i < Seqss.size(); i++) {
+		NameRefEntry(&Seqss[i].name, nameAnimations[i], &f);
+	}
 
-	mdata.mSEQS.nEntries = nameAnimations.size();
+	mdata.mSEQS.nEntries = Seqss.size();
 	mdata.mSEQS.ref = reList.size();
 	RefEntry("SQES", f.Tell(), mdata.mSEQS.nEntries, 1);
-	chunk_offset = f.Tell();
-	SEQS *seqs = new SEQS[mdata.mSEQS.nEntries];
-	memset(seqs, 0, sizeof(SEQS)*mdata.mSEQS.nEntries);
-	f.Seek(sizeof(SEQS)*mdata.mSEQS.nEntries, wxFromCurrent);
+	f.Write(&Seqss.front(), sizeof(SEQS) * mdata.mSEQS.nEntries);
 	padding(&f);
-	for(uint32 i=0; i<mdata.mSEQS.nEntries; i++) {
-		NameRefEntry(&seqs[i].name, nameAnimations[i], &f);
-	}
-	f.Seek(chunk_offset, wxFromStart);
-	for(uint32 i=0; i<mdata.mSEQS.nEntries; i++) {
-		int anim_offset = logAnimations[i];
-		seqs[i].init();
-		seqs[i].length = m->anims[anim_offset].timeEnd;
-		seqs[i].moveSpeed = m->anims[anim_offset].moveSpeed;
-		seqs[i].frequency = m->anims[anim_offset].playSpeed; // ?
-		seqs[i].boundSphere.min = fixCoord(m->anims[logAnimations[0]].boundSphere.min) * modelExport_M3_SphereScale;
-		seqs[i].boundSphere.max = fixCoord(m->anims[logAnimations[0]].boundSphere.max) * modelExport_M3_SphereScale;
-		seqs[i].boundSphere.radius = m->anims[logAnimations[0]].boundSphere.radius * modelExport_M3_SphereScale;
-		f.Write(&seqs[i], sizeof(SEQS));
-	}
-	f.Seek(0, wxFromEnd);
-
-	std::vector <std::vector <uint32> > M3OpacityAnimid;
-	std::vector <std::vector <uint32> > M2OpacityIdx;
 
 	// mSTC
-	mdata.mSTC.nEntries = mdata.mSEQS.nEntries;
-	mdata.mSTC.ref = reList.size();
-	RefEntry("_CTS", f.Tell(), mdata.mSTC.nEntries, 4);
-	chunk_offset = f.Tell();
-	STC *stcs = new STC[mdata.mSTC.nEntries];
-	memset(stcs, 0, sizeof(STC)*mdata.mSTC.nEntries);
-	f.Seek(sizeof(STC)*mdata.mSTC.nEntries, wxFromCurrent);
-	padding(&f);
-	for(uint32 i=0; i<mdata.mSTC.nEntries; i++) {
+	for(uint32 i=0; i < Seqss.size(); i++) {
 		int anim_offset = logAnimations[i];
+		STC stc;
+		memset(&stc, 0, sizeof(stc));
+		STCExtra extra;
 
 		M3OpacityAnimid.push_back(std::vector<uint32> ());
 		M2OpacityIdx.push_back(std::vector<uint32> ());
@@ -599,22 +652,9 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		// name
 		wxString strName = nameAnimations[i];
 		strName.Append(_T("_full"));
-		NameRefEntry(&stcs[i].name, strName, &f);
+		NameRefEntry(&stc.name, strName, &f);
 
 		// animid
-		for(uint32 j=0; j<m->header.nBones; j++) {
-			
-			if (m->bones[j].trans.data[anim_offset].size() > 0) 
-				stcs[i].arVec3D.nEntries++;
-			if (m->bones[j].scale.data[anim_offset].size() > 0)
-				stcs[i].arVec3D.nEntries++;
-			if (m->bones[j].rot.data[anim_offset].size() > 0)
-				stcs[i].arQuat.nEntries++;
-				
-		}
-		stcs[i].arVec2D.nEntries = M3TexAnimId.size();
-
-
 		for (uint32 j=0; j<MATtable.size(); j++)
 		{
 			if (MATtable[j].color < 0)
@@ -629,452 +669,418 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 					{
 						M3OpacityAnimid.back().push_back(CreateAnimID(AR_Layer, j, k, 2));
 						M2OpacityIdx.back().push_back(MATtable[j].color);
-						stcs[i].arFloat.nEntries++;
 					}
 
 					if (k == MAT_LAYER_ALPHA && (MATtable[j].blend == BM_OPAQUE || MATtable[j].blend == BM_ALPHA_BLEND || MATtable[j].blend == BM_ADDITIVE_ALPHA))
 					{
 						M3OpacityAnimid.back().push_back(CreateAnimID(AR_Layer, j, k, 2));
 						M2OpacityIdx.back().push_back(MATtable[j].color);
-						stcs[i].arFloat.nEntries++;
 					}
 				}
 			}
 		}
 
+		int16 v2dcount = 0;
+		int16 v3dcount = 0;
+		int16 v4dcount = 0;
+		int16 fcount = 0;
+		AnimOffset animoff;
+	
+		// bone anim id
+		for(uint32 j=0; j<m->header.nBones; j++) {
+			if (m->bones[j].trans.data[anim_offset].size() > 0) {
+				extra.animid.push_back(CreateAnimID(AR_Bone, j+ROOT_BONE, 0, 2));
+				animoff.index = v3dcount++;
+				animoff.type = STC_INDEX_VEC3D;
+				extra.animoff.push_back(animoff);
+			}
+			if (m->bones[j].scale.data[anim_offset].size() > 0) {
+				extra.animid.push_back(CreateAnimID(AR_Bone, j+ROOT_BONE, 0, 5));
+				animoff.index = v3dcount++;
+				animoff.type = STC_INDEX_VEC3D;
+				extra.animoff.push_back(animoff);
+			}
+			if (m->bones[j].rot.data[anim_offset].size() > 0) {
+				extra.animid.push_back(CreateAnimID(AR_Bone, j+ROOT_BONE, 0, 3));
+				animoff.index = v4dcount++;
+				animoff.type = STC_INDEX_QUAT;
+				extra.animoff.push_back(animoff);
+			}
+		}
+
+		// tex anim id
+		for(uint32 j=0; j<M3TexAnimId.size(); j++) {
+			extra.animid.push_back(M3TexAnimId[j]);
+			animoff.index = v2dcount++;
+			animoff.type = STC_INDEX_VEC2D;
+			extra.animoff.push_back(animoff);
+		}
+
+		// mesh opacity id
+		for (uint32 j=0; j<M3OpacityAnimid.back().size(); j++) {
+			extra.animid.push_back(M3OpacityAnimid.back()[j]);
+			animoff.index = fcount++;
+			animoff.type = STC_INDEX_FLOAT;
+			extra.animoff.push_back(animoff);
+		}
+
+		// particle rate id
 		if (bShowParticle  && gameVersion < 40000)
 		{
 			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
 			{
 				if (particle[j].en.nTimes > 0 && 
-						((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
-						 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
-					stcs[i].arFloat.nEntries++;
+					((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
+					 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
+				{
+					extra.animid.push_back(CreateAnimID(AR_Par, j, 0, 14));
+					animoff.index = fcount++;
+					animoff.type = STC_INDEX_FLOAT;
+					extra.animoff.push_back(animoff);
+				}
 			}
 		}
 
-		stcs[i].animid.nEntries = stcs[i].arVec3D.nEntries + stcs[i].arQuat.nEntries + stcs[i].arVec2D.nEntries + stcs[i].arFloat.nEntries;
-
 		// anim reference id
-		if (stcs[i].animid.nEntries > 0) {
-			stcs[i].animid.ref = reList.size();
-			RefEntry("_23U", f.Tell(), stcs[i].animid.nEntries, 0);
-
-			// bone anim id
-			for(uint32 j=0; j<m->header.nBones; j++) {
-				if (m->bones[j].trans.data[anim_offset].size() > 0) {
-					uint32 p = CreateAnimID(AR_Bone, j+ROOT_BONE, 0, 2);
-					f.Write(&p, sizeof(uint32));
-				}
-				if (m->bones[j].scale.data[anim_offset].size() > 0) {
-					uint32 p = CreateAnimID(AR_Bone, j+ROOT_BONE, 0, 5);
-					f.Write(&p, sizeof(uint32));
-				}
-				if (m->bones[j].rot.data[anim_offset].size() > 0) {
-					uint32 p = CreateAnimID(AR_Bone, j+ROOT_BONE, 0, 3);
-					f.Write(&p, sizeof(uint32));
-				}
-			}
-
-			// tex anim id
-			for(uint32 j=0; j<M3TexAnimId.size(); j++) 
-			{
-				uint32 p = M3TexAnimId[j];
-				f.Write(&p, sizeof(uint32));
-			}
-			
-			// mesh opacity id
-			for (uint32 j=0; j<M3OpacityAnimid.back().size(); j++)
-			{
-				uint32 p = M3OpacityAnimid.back()[j];
-				f.Write(&p, sizeof(uint32));
-			}
-
-			// particle rate id
-			if (bShowParticle  && gameVersion < 40000)
-			{
-				for (uint32 j=0; j<m->header.nParticleEmitters; j++)
-				{
-					if (particle[j].en.nTimes > 0 && 
-						((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
-						 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
-					{
-						uint32 p = CreateAnimID(AR_Par, j, 0, 14);
-						f.Write(&p, sizeof(uint32));
-					}
-				}
-			}
-
+		stc.animid.nEntries = extra.animid.size();
+		if (stc.animid.nEntries > 0)
+		{
+			stc.animid.ref = reList.size();
+			RefEntry("_23U", f.Tell(), stc.animid.nEntries, 0);
+			f.Write(&extra.animid.front(), sizeof(uint32) * stc.animid.nEntries);
 			padding(&f);
 		}
 
 		// animindex
-		stcs[i].animindex.nEntries = stcs[i].animid.nEntries;
-		if (stcs[i].animindex.nEntries > 0){
-			stcs[i].animindex.ref = reList.size();
-			RefEntry("_23U", f.Tell(), stcs[i].animindex.nEntries, 0);
-			int16 tcount = 0;
-			int16 rcount = 0;
-			int16 fcount = 0;
+		stc.animindex.nEntries = extra.animoff.size();
+		if (stc.animindex.nEntries > 0){
+			stc.animindex.ref = reList.size();
+			RefEntry("_23U", f.Tell(), stc.animindex.nEntries, 0);
+			f.Write(&extra.animoff.front(), sizeof(AnimOffset) * stc.animindex.nEntries);
+			padding(&f);
+		}
 
-			// bone anim offset
+		// Events, VEDS
+		{
+			SD sd;
+			memset(&sd, 0, sizeof(sd));
+			sd.init();
 			for(uint32 j=0; j<m->header.nBones; j++) {
 				if (m->bones[j].trans.data[anim_offset].size() > 0) {
-					uint16 p = STC_INDEX_VEC3D;
-					f.Write(&tcount, sizeof(uint16));
-					f.Write(&p, sizeof(uint16));
-					tcount++;
+					sd.length = Seqss[i].length;  
+					break;
 				}
-				if (m->bones[j].scale.data[anim_offset].size() > 0) {
-					uint16 p = STC_INDEX_VEC3D;
-					f.Write(&tcount, sizeof(uint16));
-					f.Write(&p, sizeof(uint16));
-					tcount++;
-				}
-				if (m->bones[j].rot.data[anim_offset].size() > 0) {
-					uint16 p = STC_INDEX_QUAT;
-					f.Write(&rcount, sizeof(uint16));
-					f.Write(&p, sizeof(uint16));
-					rcount++;
-				}
-			}
-			// tex anim offset
-			for(uint16 j=0; j<M3TexAnimId.size(); j++) 
-			{
-				int16 p = STC_INDEX_VEC2D;
-				f.Write(&j, sizeof(uint16));
-				f.Write(&p, sizeof(uint16));
 			}
 
-			// mesh opacity offset
-			for (uint32 j=0; j<M3OpacityAnimid.back().size(); j++)
-			{
-				int16 p = STC_INDEX_FLOAT;
-				f.Write(&fcount, sizeof(uint16));
-				f.Write(&p, sizeof(uint16));
-				fcount++;
+			sd.timeline.nEntries = 1;
+			sd.timeline.ref = reList.size();
+			RefEntry("_23I", f.Tell(), sd.timeline.nEntries, 0);
+			f.Write(&sd.length, sizeof(int32));
+			padding(&f);
+
+			EVNT evnt;
+			memset(&evnt, 0, sizeof(evnt));
+			evnt.init();
+
+			// name
+			strName = _T("Evt_SeqEnd");
+			NameRefEntry(&evnt.name, strName, &f);
+
+			sd.data.nEntries = 1;
+			sd.data.ref = reList.size();
+			RefEntry("TNVE", f.Tell(), sd.data.nEntries, 0);
+			f.Write(&evnt, sizeof(evnt));
+			padding(&f);
+
+			stc.Events.nEntries = 1;
+			stc.Events.ref = reList.size();
+			RefEntry("VEDS", f.Tell(), stc.Events.nEntries, 0);
+			f.Write(&sd, sizeof(sd));
+			padding(&f);
+		}
+
+		// V2DS
+		for(uint32 j=0; j<M3TexAnimId.size(); j++) {
+			SD sd;
+			memset(&sd, 0, sizeof(sd));
+			sd.init();
+			Anim_Vec2D av2d;
+
+			for (uint32 k=0; k < m->texAnims[M2TexAnimId[j]].trans.times[0].size(); k++) {
+				av2d.timeline.push_back(m->texAnims[M2TexAnimId[j]].trans.times[0][k]);
+				Vec2D tran;
+				tran.x = -m->texAnims[M2TexAnimId[j]].trans.data[0][k].x;
+				tran.y = -m->texAnims[M2TexAnimId[j]].trans.data[0][k].y;
+				av2d.data.push_back(tran);
 			}
-			// particle anim offset
-			if (bShowParticle  && gameVersion < 40000)
-			{
-				for (uint32 j=0; j<m->header.nParticleEmitters; j++)
-				{
-					if (particle[j].en.nTimes > 0 && 
-						((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
-						 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
-					{
-						int16 p = STC_INDEX_FLOAT;
-						f.Write(&fcount, sizeof(uint16));
-						f.Write(&p, sizeof(uint16));
-						fcount++;
-					}
-				}
-			}
+
+			sd.length = m->texAnims[M2TexAnimId[j]].trans.times[0][1];
+
+			sd.timeline.nEntries = av2d.timeline.size();
+			sd.timeline.ref = reList.size();
+			RefEntry("_23I", f.Tell(), sd.timeline.nEntries, 0);
+			f.Write(&av2d.timeline.front(), sizeof(int32) * sd.timeline.nEntries);
+			padding(&f);
+
+			sd.data.nEntries = av2d.data.size();
+			sd.data.ref = reList.size();
+			RefEntry("2CEV", f.Tell(), sd.data.nEntries, 0);
+			f.Write(&av2d.data.front(), sizeof(Vec2D) * sd.data.nEntries);
+			padding(&f);
+
+			extra.animsdvec2d.push_back(sd);
+			extra.animvec2d.push_back(av2d);
+		}
+		
+		stc.arVec2D.nEntries = extra.animvec2d.size();
+		if (stc.arVec2D.nEntries > 0) {
+			stc.arVec2D.ref = reList.size();
+			RefEntry("V2DS", f.Tell(), stc.arVec2D.nEntries, 0);
+			f.Write(&extra.animsdvec2d.front(), sizeof(SD) * stc.arVec2D.nEntries);
 			padding(&f);
 		}
 
 
-		SD *sds;
-		int ii;
-		int chunk_offset2;
-
-		// Events, VEDS
-		stcs[i].Events.nEntries = 1;
-		stcs[i].Events.ref = reList.size();
-		RefEntry("VEDS", f.Tell(), stcs[i].Events.nEntries, 0);
-		chunk_offset2 = f.Tell();
-		SD sd;
-		memset(&sd, 0, sizeof(sd));
-		f.Seek(sizeof(sd), wxFromCurrent);
-		for(uint32 j=0; j<m->header.nBones; j++) {
-			if (m->bones[j].trans.data[anim_offset].size() > 0) {
-				sd.length = seqs[i].length;  
-				break;
-			}
-		}
-		sd.timeline.nEntries = 1;
-		sd.timeline.ref = reList.size();
-		sd.init();
-		RefEntry("_23I", f.Tell(), sd.timeline.nEntries, 0);
-		f.Write(&sd.length, sizeof(int32));
-		padding(&f);
-		sd.data.nEntries = 1;
-		sd.data.ref = reList.size();
-		RefEntry("TNVE", f.Tell(), sd.data.nEntries, 0);
-		EVNT evnt;
-		// name
-		strName = _T("Evt_SeqEnd");
-		memset(&evnt, 0, sizeof(evnt));
-		evnt.name.nEntries = strName.Len()+1;
-		evnt.name.ref = reList.size();
-		evnt.init();
-		
-		f.Write(&evnt, sizeof(evnt));
-		padding(&f);
-		RefEntry("RAHC", f.Tell(), evnt.name.nEntries, 0);
-		f.Write(strName.c_str(), strName.Len()+1);
-		padding(&f);
-		f.Seek(chunk_offset2, wxFromStart);
-		f.Write(&sd, sizeof(sd));
-		f.Seek(0, wxFromEnd);
-
-		// V2DS
-		if (stcs[i].arVec2D.nEntries > 0) {
-			stcs[i].arVec2D.ref = reList.size();
-			RefEntry("V2DS", f.Tell(), stcs[i].arVec2D.nEntries, 0);
-			chunk_offset2 = f.Tell();
-			sds = new SD[stcs[i].arVec2D.nEntries];
-			memset(sds, 0, sizeof(SD)*stcs[i].arVec2D.nEntries);
-			f.Seek(sizeof(sd)*stcs[i].arVec2D.nEntries, wxFromCurrent);
-			ii=0;
-			for(uint32 j=0; j<M3TexAnimId.size(); j++) {
-				sds[ii].timeline.nEntries = m->texAnims[M2TexAnimId[j]].trans.times[0].size();
-				sds[ii].timeline.ref = reList.size();
-				RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
-				for (uint32 k=0; k<sds[ii].timeline.nEntries; k++) {
-					f.Write(&m->texAnims[M2TexAnimId[j]].trans.times[0][k], sizeof(int32));
-				}
-				padding(&f);
-				sds[ii].length = m->texAnims[M2TexAnimId[j]].trans.times[0][1];
-				sds[ii].data.nEntries = sds[ii].timeline.nEntries;
-				sds[ii].data.ref = reList.size();
-				RefEntry("2CEV", f.Tell(), sds[ii].data.nEntries, 0);
-				for (uint32 k=0; k<sds[ii].data.nEntries; k++) {
-					Vec3D tran;
-					tran.x = -m->texAnims[M2TexAnimId[j]].trans.data[0][k].x;
-					tran.y = -m->texAnims[M2TexAnimId[j]].trans.data[0][k].y;
-					f.Write(&tran.x, sizeof(float));
-					f.Write(&tran.y, sizeof(float));
-				}
-				padding(&f);
-				ii++;
-			}
-			f.Seek(chunk_offset2, wxFromStart);
-			for(uint32 j=0; j<stcs[i].arVec2D.nEntries; j++) {
-				f.Write(&sds[j], sizeof(sd));
-			}
-			wxDELETEA(sds);
-			f.Seek(0, wxFromEnd);
-		}
-
-
 		// Trans and Scale, V3DS
-		if (stcs[i].arVec3D.nEntries > 0) {
-			stcs[i].arVec3D.ref = reList.size();
-			RefEntry("V3DS", f.Tell(), stcs[i].arVec3D.nEntries, 0);
-			chunk_offset2 = f.Tell();
-			sds = new SD[stcs[i].arVec3D.nEntries];
-			memset(sds, 0, sizeof(SD)*stcs[i].arVec3D.nEntries);
-			f.Seek(sizeof(sd)*stcs[i].arVec3D.nEntries, wxFromCurrent);
-			ii=0;
-			for(uint32 j=0; j<m->header.nBones; j++) {
-				// trans
-				if (m->bones[j].trans.data[anim_offset].size() > 0) {
-					int counts = m->bones[j].trans.data[anim_offset].size();
-					sds[ii].timeline.nEntries = counts;
-					sds[ii].timeline.ref = reList.size();
-					RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
-					for (int k=0; k<counts; k++) {
-						f.Write(&m->bones[j].trans.times[anim_offset][k], sizeof(int32));
-					}
-					padding(&f);
-					sds[ii].length = seqs[i].length; 
-					sds[ii].data.nEntries = counts;
-					sds[ii].data.ref = reList.size();
-					RefEntry("3CEV", f.Tell(), sds[ii].data.nEntries, 0);
+		for(uint32 j=0; j<m->header.nBones; j++) {
+			// trans
+			if (m->bones[j].trans.data[anim_offset].size() > 0) {
+				SD sd;
+				memset(&sd, 0, sizeof(sd));
+				sd.init();
+				Anim_Vec3D av3d;
 
-					for (int k=0; k<counts; k++) {
-						Vec3D tran;
-						if (m->bones[j].parent > -1)
-							tran = m->bones[j].pivot - m->bones[m->bones[j].parent].pivot;
-						else
-							tran = m->bones[j].pivot;
-						tran += m->bones[j].trans.data[anim_offset][k];
-						tran.z *= -1.0f;
-
-						f.Write(&tran.x, sizeof(int32));
-						f.Write(&tran.z, sizeof(int32));
-						f.Write(&tran.y, sizeof(int32));
-					}
-					padding(&f);
-					ii++;
+				int counts = m->bones[j].trans.data[anim_offset].size();
+				for (int k=0; k<counts; k++) {
+					av3d.timeline.push_back(m->bones[j].trans.times[anim_offset][k]);
+					Vec3D tran;
+					if (m->bones[j].parent > -1)
+						tran = m->bones[j].pivot - m->bones[m->bones[j].parent].pivot;
+					else
+						tran = m->bones[j].pivot;
+					tran += m->bones[j].trans.data[anim_offset][k];
+					tran.z *= -1.0f;
+					av3d.data.push_back(Vec3D(tran.x, tran.z, tran.y));
 				}
-				//scale
-				if (m->bones[j].scale.data[anim_offset].size() > 0) {
-					int counts = m->bones[j].scale.data[anim_offset].size();
-					sds[ii].timeline.nEntries = counts;
-					sds[ii].timeline.ref = reList.size();
-					RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
-					for (int k=0; k<counts; k++) {
-						f.Write(&m->bones[j].scale.times[anim_offset][k], sizeof(int32));
-					}
-					padding(&f);
-					sds[ii].length = seqs[i].length;
-					sds[ii].data.nEntries = counts;
-					sds[ii].data.ref = reList.size();
-					RefEntry("3CEV", f.Tell(), sds[ii].data.nEntries, 0);
 
-					for (int k=0; k<counts; k++) {
-						Vec3D scale;
-						scale = m->bones[j].scale.data[anim_offset][k];
-						
+				sd.length = Seqss[i].length; 
 
-						f.Write(&scale.x, sizeof(int32));
-						f.Write(&scale.z, sizeof(int32));
-						f.Write(&scale.y, sizeof(int32));
-					}
-					padding(&f);
-					ii++;
+				sd.timeline.nEntries = counts;
+				sd.timeline.ref = reList.size();
+				RefEntry("_23I", f.Tell(), sd.timeline.nEntries, 0);
+				f.Write(&av3d.timeline.front(), sizeof(int32) * sd.timeline.nEntries);
+				padding(&f);
+
+				sd.data.nEntries = counts;
+				sd.data.ref = reList.size();
+				RefEntry("3CEV", f.Tell(), sd.data.nEntries, 0);
+				f.Write(&av3d.data.front(), sizeof(Vec3D) * sd.data.nEntries);
+				padding(&f);
+
+				extra.animsdvec3d.push_back(sd);
+				extra.animvec3d.push_back(av3d);
+			}
+			//scale
+			if (m->bones[j].scale.data[anim_offset].size() > 0) {
+				SD sd;
+				memset(&sd, 0, sizeof(sd));
+				sd.init();
+				Anim_Vec3D av3d;
+
+				int counts = m->bones[j].scale.data[anim_offset].size();
+				for (int k=0; k<counts; k++) {
+					av3d.timeline.push_back(m->bones[j].scale.times[anim_offset][k]);
+					Vec3D scale;
+					scale.x = m->bones[j].scale.data[anim_offset][k].x;
+					scale.y = m->bones[j].scale.data[anim_offset][k].z;
+					scale.z = m->bones[j].scale.data[anim_offset][k].y;
+					av3d.data.push_back(scale);
 				}
+
+				sd.length = Seqss[i].length;
+
+				sd.timeline.nEntries = counts;
+				sd.timeline.ref = reList.size();
+				RefEntry("_23I", f.Tell(), sd.timeline.nEntries, 0);
+				f.Write(&av3d.timeline.front(), sizeof(int32) * sd.timeline.nEntries);
+				padding(&f);
+
+				sd.data.nEntries = counts;
+				sd.data.ref = reList.size();
+				RefEntry("3CEV", f.Tell(), sd.data.nEntries, 0);
+				f.Write(&av3d.data.front(), sizeof(Vec3D) * sd.data.nEntries);
+				padding(&f);
+
+				extra.animsdvec3d.push_back(sd);
+				extra.animvec3d.push_back(av3d);
 			}
-			f.Seek(chunk_offset2, wxFromStart);
-			for(uint32 j=0; j<stcs[i].arVec3D.nEntries; j++) {
-				f.Write(&sds[j], sizeof(sd));
-			}
-			wxDELETEA(sds);
-			f.Seek(0, wxFromEnd);
 		}
+
+		stc.arVec3D.nEntries = extra.animvec3d.size();
+		if (stc.arVec3D.nEntries > 0) {
+			stc.arVec3D.ref = reList.size();
+			RefEntry("V3DS", f.Tell(), stc.arVec3D.nEntries, 0);
+			f.Write(&extra.animsdvec3d.front(), sizeof(SD) * stc.arVec3D.nEntries);
+			padding(&f);
+		}
+
 
 		// Rot, Q4DS
-		if (stcs[i].arQuat.nEntries > 0) {
-			stcs[i].arQuat.ref = reList.size();
-			RefEntry("Q4DS", f.Tell(), stcs[i].arQuat.nEntries, 0);
-			chunk_offset2 = f.Tell();
-			sds = new SD[stcs[i].arQuat.nEntries];
-			memset(sds, 0, sizeof(SD)*stcs[i].arQuat.nEntries);
-			f.Seek(sizeof(sd)*stcs[i].arQuat.nEntries, wxFromCurrent);
-			ii=0;
-			for(uint32 j=0; j<m->header.nBones; j++) {
-				if (m->bones[j].rot.data[anim_offset].size() > 0) {
-					int counts = m->bones[j].rot.data[anim_offset].size();
-					sds[ii].timeline.nEntries = counts;
-					sds[ii].timeline.ref = reList.size();
-					RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
-					for (int k=0; k<counts; k++) {
-						f.Write(&m->bones[j].rot.times[anim_offset][k], sizeof(int32));
-					}
-					padding(&f);
-					sds[ii].length = seqs[i].length;
-					sds[ii].data.nEntries = counts;
-					sds[ii].data.ref = reList.size();
-					RefEntry("TAUQ", f.Tell(), sds[ii].data.nEntries, 0);
-					for (int k=0; k<counts; k++) {
-						Vec4D rot;
-						rot.x = -m->bones[j].rot.data[anim_offset][k].x;
-						rot.y = m->bones[j].rot.data[anim_offset][k].z;
-						rot.z = -m->bones[j].rot.data[anim_offset][k].y;
-						rot.w = m->bones[j].rot.data[anim_offset][k].w;
+		for(uint32 j=0; j<m->header.nBones; j++) {
+			if (m->bones[j].rot.data[anim_offset].size() > 0) {
+				SD sd;
+				memset(&sd, 0, sizeof(sd));
+				sd.init();
+				Anim_Vec4D av4d;
 
-						f.Write(&rot, sizeof(rot));
-					}
-					padding(&f);
-					ii++;
+				int counts = m->bones[j].rot.data[anim_offset].size();
+				for (int k=0; k<counts; k++) {
+					av4d.timeline.push_back(m->bones[j].rot.times[anim_offset][k]);
+					Vec4D rot;
+					rot.x = -m->bones[j].rot.data[anim_offset][k].x;
+					rot.y = m->bones[j].rot.data[anim_offset][k].z;
+					rot.z = -m->bones[j].rot.data[anim_offset][k].y;
+					rot.w = m->bones[j].rot.data[anim_offset][k].w;
+					av4d.data.push_back(rot);
 				}
+
+				sd.length = Seqss[i].length;
+
+				sd.timeline.nEntries = counts;
+				sd.timeline.ref = reList.size();
+				RefEntry("_23I", f.Tell(), sd.timeline.nEntries, 0);
+				f.Write(&av4d.timeline.front(), sizeof(int32) * sd.timeline.nEntries);
+				padding(&f);
+
+				sd.data.nEntries = counts;
+				sd.data.ref = reList.size();
+				RefEntry("TAUQ", f.Tell(), sd.data.nEntries, 0);
+				f.Write(&av4d.data.front(), sizeof(Vec4D) * sd.data.nEntries);
+				padding(&f);
+
+				extra.animsdvec4d.push_back(sd);
+				extra.animvec4d.push_back(av4d);
 			}
-			f.Seek(chunk_offset2, wxFromStart);
-			for(uint32 j=0; j<stcs[i].arQuat.nEntries; j++) {
-				f.Write(&sds[j], sizeof(sd));
-			}
-			wxDELETEA(sds);
-			f.Seek(0, wxFromEnd);
+		}
+
+		stc.arQuat.nEntries = extra.animvec4d.size();
+		if (stc.arQuat.nEntries > 0) {
+			stc.arQuat.ref = reList.size();
+			RefEntry("Q4DS", f.Tell(), stc.arQuat.nEntries, 0);
+			f.Write(&extra.animsdvec4d.front(), sizeof(SD) * stc.arQuat.nEntries);
+			padding(&f);
 		}
 
 		// Float, 3RDS
-		if (stcs[i].arFloat.nEntries > 0) {
-			stcs[i].arFloat.ref = reList.size();
-			RefEntry("3RDS", f.Tell(), stcs[i].arFloat.nEntries, 0);
-			chunk_offset2 = f.Tell();
-			sds = new SD[stcs[i].arFloat.nEntries];
-			memset(sds, 0, sizeof(SD)*stcs[i].arFloat.nEntries);
-			f.Seek(sizeof(sd)*stcs[i].arFloat.nEntries, wxFromCurrent);
-			ii=0;
-
-			for (uint32 j=0; j<M3OpacityAnimid.back().size(); j++)
+		for (uint32 j=0; j<M3OpacityAnimid.back().size(); j++)
+		{
+			if ((m->colors[M2OpacityIdx.back()[j]].opacity.seq == -1 &&  m->colors[M2OpacityIdx.back()[j]].opacity.data[anim_offset].size() > 0) ||
+			    (m->colors[M2OpacityIdx.back()[j]].opacity.seq != -1 &&  m->colors[M2OpacityIdx.back()[j]].opacity.data[0].size() > 0))
 			{
-				if ((m->colors[M2OpacityIdx.back()[j]].opacity.seq == -1 &&  m->colors[M2OpacityIdx.back()[j]].opacity.data[anim_offset].size() > 0) ||
-				    (m->colors[M2OpacityIdx.back()[j]].opacity.seq != -1 &&  m->colors[M2OpacityIdx.back()[j]].opacity.data[0].size() > 0))
-				{
-					int animidx;
-					if (m->colors[M2OpacityIdx.back()[j]].opacity.seq == -1)
-						animidx = anim_offset;
-					else
-						animidx = 0;
-					int counts = m->colors[M2OpacityIdx.back()[j]].opacity.data[animidx].size();
-					sds[ii].timeline.nEntries = counts;
-					sds[ii].timeline.ref = reList.size();
-					RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
-					for (int k=0; k<counts; k++) {
-						f.Write(&m->colors[M2OpacityIdx.back()[j]].opacity.times[animidx][k], sizeof(int32));
-					}
-					padding(&f);
-					sds[ii].length = seqs[i].length;
-					sds[ii].data.nEntries = counts;
-					sds[ii].data.ref = reList.size();
-					RefEntry("LAER", f.Tell(), sds[ii].data.nEntries, 0);
-					for (int k=0; k<counts; k++) {
-						float opy = m->colors[M2OpacityIdx.back()[j]].opacity.data[animidx][k];
-						f.Write(&opy, sizeof(float));
-					}
-					padding(&f);
-					ii++;
-				}
-			}
+				SD sd;
+				memset(&sd, 0, sizeof(sd));
+				sd.init();
+				Anim_Float af;
 
-			// particle rate anim
-			if (bShowParticle  && gameVersion < 40000)
-			{
-				for (uint32 j=0; j<m->header.nParticleEmitters; j++)
-				{
-					if (particle[j].en.nTimes > 0)
-					{
-						if ((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
-							(m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0))
-						{
-							int animidx;
-							if (m->particleSystems[j].enabled.seq == -1)
-								animidx = anim_offset;
-							else
-								animidx = 0;
-							int counts = m->particleSystems[j].enabled.data[animidx].size();
-							sds[ii].timeline.nEntries = counts;
-							sds[ii].timeline.ref = reList.size();
-							RefEntry("_23I", f.Tell(), sds[ii].timeline.nEntries, 0);
-							for (int k=0; k<counts; k++) {
-								f.Write(&m->particleSystems[j].enabled.times[animidx][k], sizeof(int32));
-							}
-							padding(&f);
-							sds[ii].length = seqs[i].length;
-							sds[ii].data.nEntries = counts;
-							sds[ii].data.ref = reList.size();
-							RefEntry("LAER", f.Tell(), sds[ii].data.nEntries, 0);
-							for (int k=0; k<counts; k++) {
-								float rate;
-								if (m->particleSystems[j].enabled.data[animidx][k] && m->particleSystems[j].rate.data[0].size() > 0)
-									rate = m->particleSystems[i].rate.data[0][0];
-								else
-									rate = 0;	
-								f.Write(&rate, sizeof(float));
-							}
-							padding(&f);
-							ii++;
-						}
-					}
+				int animidx;
+				if (m->colors[M2OpacityIdx.back()[j]].opacity.seq == -1)
+					animidx = anim_offset;
+				else
+					animidx = 0;
+				int counts = m->colors[M2OpacityIdx.back()[j]].opacity.data[animidx].size();
+				for (int k=0; k<counts; k++) {
+					af.timeline.push_back(m->colors[M2OpacityIdx.back()[j]].opacity.times[animidx][k]);
+					af.data.push_back(m->colors[M2OpacityIdx.back()[j]].opacity.data[animidx][k]);
 				}
+
+				sd.length = Seqss[i].length;
+
+				sd.timeline.nEntries = counts;
+				sd.timeline.ref = reList.size();
+				RefEntry("_23I", f.Tell(), sd.timeline.nEntries, 0);
+				f.Write(&af.timeline.front(), sizeof(int32) * sd.timeline.nEntries);
+				padding(&f);
+
+				sd.data.nEntries = counts;
+				sd.data.ref = reList.size();
+				RefEntry("LAER", f.Tell(), sd.data.nEntries, 0);
+				f.Write(&af.data.front(), sizeof(float) * sd.data.nEntries);
+				padding(&f);
+
+				extra.animsdfloat.push_back(sd);
+				extra.animfloat.push_back(af);
 			}
-			f.Seek(chunk_offset2, wxFromStart);
-			for(uint32 j=0; j<stcs[i].arFloat.nEntries; j++) {
-				f.Write(&sds[j], sizeof(sd));
-			}
-			wxDELETEA(sds);
-			f.Seek(0, wxFromEnd);
 		}
+
+		// particle rate anim
+		if (bShowParticle  && gameVersion < 40000)
+		{
+			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+			{
+				if (particle[j].en.nTimes > 0)
+				{
+					if ((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
+						(m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0))
+					{
+						SD sd;
+						memset(&sd, 0, sizeof(sd));
+						sd.init();
+						Anim_Float af;
+
+						int animidx;
+						if (m->particleSystems[j].enabled.seq == -1)
+							animidx = anim_offset;
+						else
+							animidx = 0;
+						int counts = m->particleSystems[j].enabled.data[animidx].size();
+						for (int k=0; k<counts; k++) {
+							af.timeline.push_back(m->particleSystems[j].enabled.times[animidx][k]);
+							float rate;
+							if (m->particleSystems[j].enabled.data[animidx][k] && m->particleSystems[j].rate.data[0].size() > 0)
+								rate = m->particleSystems[i].rate.data[0][0];
+							else
+								rate = 0;	
+							af.data.push_back(rate);
+						}
+
+						sd.length = Seqss[i].length;
+
+						sd.timeline.nEntries = counts;
+						sd.timeline.ref = reList.size();
+						RefEntry("_23I", f.Tell(), sd.timeline.nEntries, 0);
+						f.Write(&af.timeline.front(), sizeof(int32) * sd.timeline.nEntries);
+						padding(&f);
+
+						sd.data.nEntries = counts;
+						sd.data.ref = reList.size();
+						RefEntry("LAER", f.Tell(), sd.data.nEntries, 0);
+						f.Write(&af.data.front(), sizeof(float) * sd.data.nEntries);
+						padding(&f);
+
+						extra.animsdfloat.push_back(sd);
+						extra.animfloat.push_back(af);
+					}
+				}
+			}
+		}
+
+		stc.arFloat.nEntries = extra.animfloat.size();
+		if (stc.arFloat.nEntries > 0) {
+			stc.arFloat.ref = reList.size();
+			RefEntry("3RDS", f.Tell(), stc.arFloat.nEntries, 0);
+			f.Write(&extra.animsdfloat.front(), sizeof(SD) * stc.arFloat.nEntries);
+			padding(&f);
+		}
+
+		Stcs.push_back(stc);
+		StcExtras.push_back(extra);
 	}
-	f.Seek(chunk_offset, wxFromStart);
-	for(uint32 i=0; i<mdata.mSTC.nEntries; i++) {
-		stcs[i].indSEQ[0] = stcs[i].indSEQ[1] = i;
-		f.Write(&stcs[i], sizeof(STC));
-	}
-	f.Seek(0, wxFromEnd);
+
+	mdata.mSTC.nEntries = Seqss.size();
+	mdata.mSTC.ref = reList.size();
+	RefEntry("_CTS", f.Tell(), mdata.mSTC.nEntries, 4);
+	f.Write(&Stcs.front(), sizeof(STC) * mdata.mSTC.nEntries);
+	padding(&f);
 
 	// mSTG
 	mdata.mSTG.nEntries = mdata.mSEQS.nEntries;
@@ -1115,7 +1121,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 	for(uint32 i=0; i<mdata.mSTS.nEntries; i++) {
 		int anim_offset = logAnimations[i];
 
-		stss[i].animid.nEntries = stcs[i].animid.nEntries;
+		stss[i].animid.nEntries = StcExtras[i].animid.size();
 		if (stss[i].animid.nEntries) {
 			stss[i].animid.ref = reList.size();
 			RefEntry("_23U", f.Tell(), stss[i].animid.nEntries, 0);
@@ -1150,7 +1156,9 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 			{
 				for (uint32 j=0; j<m->header.nParticleEmitters; j++)
 				{
-					if (particle[j].en.nTimes > 0)
+					if (particle[j].en.nTimes > 0 && 
+					    ((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
+					     (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
 					{
 						uint32 p = CreateAnimID(AR_Par, j, 0, 14);
 						f.Write(&p, sizeof(uint32));
@@ -1750,10 +1758,8 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		SaveTexture(texName);
 	}
 
-	wxDELETEA(seqs);
-	wxDELETEA(stcs);
-
 	mpqf.close();
 	mpqfv.close();
 	f.Close();
+	reList.clear();
 }
