@@ -723,6 +723,18 @@ const char* regionPaths[NUM_REGIONS] =
 	"Item\\TextureComponents\\FootTexture\\"
 };
 
+void CharControl::UpdateTextureList(wxString texName, int special)
+{
+	for (uint32 i=0; i< model->header.nTextures; i++)
+	{
+		if (model->specialTextures[i] == special)
+		{
+			model->TextureList[i] = texName;
+			break;
+		}
+	}
+}
+
 void CharControl::RefreshModel()
 {
 	hairTex = 0;
@@ -748,28 +760,14 @@ void CharControl::RefreshModel()
 		rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::SkinType, 0, cd.skinColor, cd.useNPC);
 		wxString baseTexName = rec.getString(CharSectionsDB::Tex1);
 		tex.addLayer(baseTexName, CR_BASE, 0);
-		for (uint32 i=0; i< model->header.nTextures; i++)
-		{
-			if (model->specialTextures[i] == TEXTURE_BODY)
-			{
-				model->TextureList[i] = baseTexName;
-				break;
-			}
-		}
-		
+		UpdateTextureList(baseTexName, TEXTURE_BODY);
+
 		// Tauren fur
 		wxString furTexName = rec.getString(CharSectionsDB::Tex2);
 		if (!furTexName.IsEmpty())
 		{
 			furTex = texturemanager.add(furTexName);
-			for (uint32 i=0; i< model->header.nTextures; i++)
-			{
-				if (model->specialTextures[i] == TEXTURE_FUR)
-				{
-					model->TextureList[i] = furTexName;
-					break;
-				}
-			}
+			UpdateTextureList(furTexName, TEXTURE_FUR);
 		}
 
 	} catch (CharSectionsDB::NotFound) {
@@ -779,11 +777,14 @@ void CharControl::RefreshModel()
 	if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
 		wxString fn;
 		fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), 0, cd.skinColor);
-		if (MPQFile::getSize(fn) > 0)
+		if (MPQFile::getSize(fn) > 0) {
 			tex.addLayer(fn, CR_BASE, 0);
+			UpdateTextureList(fn, TEXTURE_BODY);
+		}
 		fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d_Extra.blp"), 0, cd.skinColor);
 		if (MPQFile::getSize(fn) > 0) {
 			furTex = texturemanager.add(fn);
+			UpdateTextureList(fn, TEXTURE_FUR);
 			model->textures[4] = furTex;
 		}
 	}
@@ -879,7 +880,7 @@ void CharControl::RefreshModel()
 			if (id!=0) {
 				for (size_t j=0; j<model->geosets.size(); j++) {
 					if (model->geosets[j].id == id) 
-						model->showGeosets[j] = (cd.hairStyle == section) && showHair;
+						model->showGeosets[j] = ((cd.hairStyle == section) && showHair);
 				}
 
 			} else if (cd.hairStyle==section) {
@@ -893,7 +894,7 @@ void CharControl::RefreshModel()
 			unsigned int section = i - 1;
 			for (size_t j=0; j<model->geosets.size(); j++) {
 				if (model->geosets[j].id == i)
-					model->showGeosets[j] = (cd.hairStyle==section) && showHair;
+					model->showGeosets[j] = ((cd.hairStyle==section) && showHair);
 			}
 		}
 	}
@@ -906,14 +907,7 @@ void CharControl::RefreshModel()
 		if (!hairTexfn.IsEmpty()) 
 		{
 			hairTex = texturemanager.add(hairTexfn);
-			for (uint32 i=0; i< model->header.nTextures; i++)
-			{
-				if (model->specialTextures[i] == TEXTURE_HAIR)
-				{
-					model->TextureList[i] = hairTexfn;
-					break;
-				}
-			}
+			UpdateTextureList(hairTexfn, TEXTURE_HAIR);
 		}
 		else {
 			// oops, looks like we're missing a hair texture. Let's try with hair style #0.
@@ -924,14 +918,7 @@ void CharControl::RefreshModel()
 				if (!hairTexfn.IsEmpty()) 
 				{
 					hairTex = texturemanager.add(hairTexfn);
-					for (uint32 i=0; i< model->header.nTextures; i++)
-					{
-						if (model->specialTextures[i] == TEXTURE_HAIR)
-						{
-							model->TextureList[i] = hairTexfn;
-							break;
-						}
-					}
+					UpdateTextureList(hairTexfn, TEXTURE_HAIR);
 				}
 				else 
 					hairTex = 0;
@@ -1136,12 +1123,19 @@ void CharControl::RefreshModel()
 	spins[SPIN_FACIAL_HAIR]->SetValue(cd.facialHair);
 	spins[SPIN_FACIAL_COLOR]->SetValue(cd.facialColor);
 
-	// eyeglow for Scourge
-	if (cd.race == SCOURGE && bKnightEyeGlow) {
-		if (cd.gender == MALE && model->passes.size() > 52 && model->showGeosets[51] == false && model->showGeosets[52] == false)
-			model->showGeosets[51] = true;
-		else if (cd.gender == FEMALE && model->passes.size() > 47 && model->showGeosets[45] == false && model->showGeosets[47] == false)
-			model->showGeosets[45] = true;
+	// eyeglow
+	for(int i=0; i<model->passes.size(); i++) {
+		ModelRenderPass &p = model->passes[i];
+		wxString texName = model->TextureList[p.tex].AfterLast('\\').Lower();
+		bool isDK = false;
+		if (texName.Find(_T("eyeglow")) == wxNOT_FOUND)
+			continue;
+		if (texName.Find(_T("deathknight")) != wxNOT_FOUND)
+			isDK = true;
+		if (bKnightEyeGlow == isDK) {
+			model->showGeosets[p.geoset] = true;
+			break;
+		}
 	}
 }
 
@@ -1182,8 +1176,11 @@ void CharControl::RefreshNPCModel()
 	try {
 		if (!customSkin.IsEmpty()) {
 			tex.addLayer(customSkin, CR_BASE, 0);
-		} else { 
-			tex.addLayer(rec.getString(CharSectionsDB::Tex1), CR_BASE, 0);
+			UpdateTextureList(customSkin, TEXTURE_BODY);
+		} else {
+			wxString baseTexName = rec.getString(CharSectionsDB::Tex1);
+			tex.addLayer(baseTexName, CR_BASE, 0);
+			UpdateTextureList(baseTexName, TEXTURE_BODY);
 
 			if (cd.showUnderwear) {
 				rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::UnderwearType, 0, cd.skinColor, cd.useNPC);
@@ -1204,8 +1201,10 @@ void CharControl::RefreshNPCModel()
 
 		// Tauren fur
 		wxString furTexName = rec.getString(CharSectionsDB::Tex2);
-		if (!furTexName.IsEmpty())
+		if (!furTexName.IsEmpty()) {
 			furTex = texturemanager.add(furTexName);
+			UpdateTextureList(furTexName, TEXTURE_FUR);
+		}
 
 	} catch (...) {
 		wxLogMessage(_T("Exception base layer Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
@@ -1220,9 +1219,10 @@ void CharControl::RefreshNPCModel()
 		} else {
 			rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::HairType, 1, cd.hairColor, cd.useNPC);
 			hairTexfn = rec.getString(CharSectionsDB::Tex1);
-			if (!hairTexfn.IsEmpty()) 
+			if (!hairTexfn.IsEmpty()) {
 				hairTex = texturemanager.add(hairTexfn);
-			else 
+				UpdateTextureList(hairTexfn, TEXTURE_HAIR);
+			} else 
 				hairTex = 0;
 		}
 
@@ -1358,7 +1358,7 @@ void CharControl::RefreshNPCModel()
 		if (id == 1) 
 			model->showGeosets[j] = bald;
 
-		for (int i=1; i<19; i++) {
+		for (int i=1; i<NUM_GEOSETS; i++) {
 			int a = i*100, b = (i+1) * 100;
 			if (id>a && id<b) 
 				model->showGeosets[j] = (id == (a + cd.geosets[i]));
@@ -1454,14 +1454,7 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 			{
 				wxString texName = AnimControl::makeSkinTexture(_T("Item\\ObjectComponents\\Cape\\"),tex);
 				capeTex = texturemanager.add(texName);
-				for (uint32 i=0; i< model->header.nTextures; i++)
-				{
-					if (model->specialTextures[i] == TEXTURE_CAPE)
-					{
-						model->TextureList[i] = texName;
-						break;
-					}
-				}
+				UpdateTextureList(texName, TEXTURE_CAPE);
 			}
 		}
 

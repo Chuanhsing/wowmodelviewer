@@ -147,6 +147,7 @@ class CharControl: public wxWindow
 	
 
 	void AddEquipment(int slot, int itemnum, int layer, CharTexture &tex, bool lookup = true);
+	void UpdateTextureList(wxString texName, int special);
 
 public:
 	// Item selection stuff

@@ -204,6 +204,7 @@ struct ModelRenderPass {
 	{
 		// This is the old sort order method which I'm pretty sure is wrong - need to try something else.
 		//return !trans;
+		return geoset < m.geoset;
 		if (order<m.order)
 			return true;
 		else if (order>m.order)

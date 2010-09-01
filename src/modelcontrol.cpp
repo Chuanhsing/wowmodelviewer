@@ -315,8 +315,11 @@ void ModelControl::OnList(wxCommandEvent &event)
 	if (!init || !model)
 		return;
 
-	for (unsigned int i=0; i<model->geosets.size(); i++) {
-		model->showGeosets[i] = clbGeosets->IsChecked(i);
+	int id = event.GetId();
+	if (id == ID_MODEL_GEOSETS) {
+		for (unsigned int i=0; i<model->geosets.size(); i++) {
+			model->showGeosets[i] = clbGeosets->IsChecked(i);
+		}
 	}
 }
 
