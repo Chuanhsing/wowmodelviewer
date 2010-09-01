@@ -16,7 +16,7 @@ bool DBCFile::open()
 	if (f.isEof()) {
 		if (filename.AfterLast('.') == _T("dbc")) {
 			wxString fn = filename.BeforeLast('.') + _T(".db2");
-			f.openFile((char *)fn.c_str());
+			f.openFile(fn);
 			if (f.isEof())
 				return false;
 		} else

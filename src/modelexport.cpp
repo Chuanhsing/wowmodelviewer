@@ -381,19 +381,12 @@ void MakeModelFaceForwards(Vec3D &vect){
 
 // Get Proper Texture Names for an M2 File
 wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassNumber){
-	wxString texName = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8).BeforeLast(_T('.'));
-	if (m->modelType == MT_CHAR){
-		texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName.AfterLast(SLASH);
-	}else if ((texName.Find(SLASH) <= 0)&&(texName == _T("Cape"))){
-		texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
-	}else if (texName.Find(SLASH) <= 0){
-		texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName;
-	}else{
-		texName = texName.AfterLast(SLASH);
-	}
+	wxString texName;
+	if (m->TextureList.size() > p.tex)
+		texName = m->TextureList[p.tex].BeforeLast(_T('.')).AfterLast(SLASH);
 
-	if (texName.Length() == 0)
-		texName << wxString(m->modelname.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) << wxString::Format(_T("_Image_%03i"),PassNumber);
+	if (texName.Len() == 0)
+		texName = m->modelname.BeforeLast(_T('.')).AfterLast(SLASH) + wxString::Format(_T("_Image_%03i"),PassNumber);
 
 	return texName;
 }

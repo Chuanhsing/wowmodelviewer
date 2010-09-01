@@ -500,9 +500,8 @@ bool AnimControl::FillSkinSelector(TextureSet &skins)
 		for (TextureSet::iterator it = skins.begin(); it != skins.end(); ++it) {
 			wxString texname = it->tex[0];
 			skinList->Append(texname);
-			texname = g_selModel->name.BeforeLast(SLASH) << _T("\\") << texname << _T(".blp");
+			texname = g_selModel->name.BeforeLast(SLASH) + _T("\\") + texname + _T(".blp");
 			g_selModel->TextureList.push_back(texname);
-			//g_selModel->TextureList.push_back( wxString(texname.c_str()).mb_str() );
 			TextureGroup *grp = new TextureGroup(*it);
 			skinList->SetClientData(num++, grp);
 		}
@@ -718,7 +717,6 @@ void AnimControl::SetSkin(int num)
 					g_selModel->TextureList[j] = skin;
 					break;
 				}
-
 			}
 			g_selModel->replaceTextures[grp->base+i] = texturemanager.add(skin);
 		}

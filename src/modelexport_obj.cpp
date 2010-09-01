@@ -147,7 +147,7 @@ void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init)
 
 		if (p.init(m)) {
 			wxString FilePath = wxString(fn, wxConvUTF8).BeforeLast(SLASH);
-			wxString texName = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8).BeforeLast(_T('.'));
+			wxString texName = m->TextureList[p.tex].BeforeLast(_T('.'));
 			wxString texPath = texName.BeforeLast(SLASH);
 			if (m->modelType == MT_CHAR){
 				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName.AfterLast(SLASH);

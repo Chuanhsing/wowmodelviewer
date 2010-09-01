@@ -1424,21 +1424,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 				padding(&f);
 
 				int texid = MATtable[i].texid;
-				wxString texName;
-
-				if (texdef[texid].type == TEXTURE_BODY)
-				{
-					texName = m->modelname;
-					texName = texName.BeforeLast('.').AfterLast(SLASH);
-					texName += _T("_body"); 
-				}
-				else
-				{
-					texName = m->TextureList[texid];
-					texName = texName.BeforeLast('.').AfterLast(SLASH);
-				}
-
-				texName.Append(_T(".tga"));
+				wxString texName = m->TextureList[texid].BeforeLast('.').AfterLast(SLASH) + _T(".tga");
 
 				if (modelExport_M3_TexturePath.Len() > 0)
 				{
