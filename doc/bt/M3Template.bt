@@ -1259,10 +1259,11 @@ typedef struct
 
 typedef struct
 {
-    uint32 d1[2];
-    Vec3D  scale;
+    Vec3D  startTrans;
+    float  f1;
+    float  f2;
     Vec4D  rot;
-    Vec3D  tran;
+    Vec3D  endTrans;
     uint32 endBone;
     Aref_FLOAT ctrl1;
     Aref_FLOAT ctrl2;
