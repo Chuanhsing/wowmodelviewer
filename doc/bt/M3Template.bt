@@ -1211,12 +1211,12 @@ typedef struct
     Aref_UINT32 ar4;
     Aref_UINT32 ar5;
     Aref_UINT32 ar6;
-    Aref_FLOAT ar7;
+    Aref_FLOAT timeLength;
     Aref_VEC3D ar8;
     float emissionAngle; //determines where ribbon ends
     float ribThickness; //0 - 1.0
     float f1[3];
-    Aref_VEC3D ribScale; //[start, mid, end]
+    Aref_VEC3D ribScale; //[??, start, end]
     Aref_VEC3D ribRotate; //[rotSpread1, rotSpread2, unk]?
     Aref_Colour ar11;
     Aref_Colour ar12;
@@ -1234,7 +1234,8 @@ typedef struct
     uint32 d6;
     float f6;
     Aref_FLOAT ribLength;
-    uint32 d7[4];
+    uint32 d7;
+    Ref         paramerers;
     Aref_UINT32 visible; //animated FLAG, seems to switch ribbon on or off
     ribbonFlags ribFlags; //determined through beta previewer
     uint32 d8[5];
@@ -1255,6 +1256,29 @@ typedef struct
     Aref_FLOAT ar26;
     Aref_UINT32 ar27;
 } RIB_; //Ribbons
+
+typedef struct
+{
+    uint32 d1[2];
+    Vec3D  scale;
+    Vec4D  rot;
+    Vec3D  tran;
+    uint32 endBone;
+    Aref_FLOAT ctrl1;
+    Aref_FLOAT ctrl2;
+    uint32 d2;
+    Aref_UINT32 ar3;
+    Aref_UINT32 ar4;
+    uint32 d3;
+    Aref_UINT32 ar5;
+    Aref_UINT32 ar6;
+    uint32 d4;
+    Aref_UINT32 ar7;
+    Aref_UINT32 ar8;
+    Aref_UINT32 ar9;
+    Aref_UINT32 ar10;
+    float dd[4];
+} SRIB; 
 
 typedef struct
 {
@@ -1417,6 +1441,7 @@ void ReadTag(Tag &t)
                         }
             case "_RAP" :   PAR_ par;    break;
             case "_BIR" :   RIB_ rib;    break;
+            case "BIRS" :   SRIB srib;   break;
             case "_ROF" :   FOR_ mFor;   break;
             case "FERI" :   IREF iref;   break;
             case "SGSS" :   SSGS ssgs;   break;

@@ -709,7 +709,7 @@ typedef struct {
 	AB_Vec3D trans;
     AB_Quat rot;
     AB_Vec3D scale;
-} TEXTUREANIM;
+} TEXTUREANIM <optimize=false>;
 
 
 typedef struct {
@@ -790,7 +790,7 @@ typedef struct {
 	float f2[4];
 	int32 ParticleType;
 	int32 ofsUnknownReferenc;
-} PARTICLEPARAMS;
+} PARTICLEPARAMS <optimize=false>;
 
 typedef struct {
     int32 id;
@@ -836,7 +836,7 @@ typedef struct {
 	AB_UInt32 unk1;
 	AB_UInt32 unk2;
 	int32 unknown; // wotlk
-} RIBBONEMITTER;
+} RIBBONEMITTER <optimize=false>;
 
 typedef struct {
 	int32 id;
