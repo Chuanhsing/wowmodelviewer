@@ -412,11 +412,16 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 
 	bool ret = false;
 
+	if (count == 0) // No entries on .dbc and skins.txt
+		count = skins.size();
+
 	if (!skins.empty())
 		ret = FillSkinSelector(skins);
 
-	int mySkin = randomSkins ? randint(0, (int)count-1) : 0;
-	SetSkin(mySkin);
+	if (ret) { // Don't call SetSkin without a skin
+		int mySkin = randomSkins ? randint(0, (int)count-1) : 0;
+		SetSkin(mySkin);
+	}
 
 	return ret;
 }
@@ -485,8 +490,10 @@ bool AnimControl::UpdateItemModel(Model *m)
 	if (!skins.empty())
 		ret = FillSkinSelector(skins);
 
-	int mySkin = randomSkins ? randint(0, (int)skins.size()-1) : 0;
-	SetSkin(mySkin);
+	if (ret) { // Don't call SetSkin without a skin
+		int mySkin = randomSkins ? randint(0, (int)skins.size()-1) : 0;
+		SetSkin(mySkin);
+	}
 
 	return ret;
 }
