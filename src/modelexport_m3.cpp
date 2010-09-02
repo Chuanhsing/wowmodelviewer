@@ -635,7 +635,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 						M2OpacityIdx.push_back(MATtable[j].color);
 					}
 
-					if (k == MAT_LAYER_ALPHA && (MATtable[j].blend == BM_OPAQUE || MATtable[j].blend == BM_ALPHA_BLEND || MATtable[j].blend == BM_ADDITIVE_ALPHA))
+					if (k == MAT_LAYER_ALPHA && (MATtable[j].blend == BM_TRANSPARENT || MATtable[j].blend == BM_ALPHA_BLEND || MATtable[j].blend == BM_ADDITIVE_ALPHA))
 					{
 						M3OpacityAnimid.push_back(CreateAnimID(AR_Layer, j, k, 2));
 						M2OpacityIdx.push_back(MATtable[j].color);
@@ -1297,7 +1297,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 					layer.brightness_mult1.value = 0;
 			}
 			else if (j == MAT_LAYER_ALPHA && 
-				(MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_TRANSPARENT))
+				( MATtable[i].blend == BM_TRANSPARENT || MATtable[i].blend == BM_ALPHA_BLEND || MATtable[i].blend == BM_ADDITIVE_ALPHA || MATtable[i].blend == BM_TRANSPARENT))
 			{
 				fulltexName = texName;
 				layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
