@@ -173,7 +173,7 @@ void getGamePath()
 	memset(path, 0, sizeof(path));
 
 	wxArrayString sNames;
-	wxString sName = wxEmptyString;
+	gamePath = wxEmptyString;
 
 	// if it failed, look for World of Warcraft install
 	const wxString regpaths[] = {
@@ -199,33 +199,37 @@ void getGamePath()
 			RegCloseKey(key);
 		}
 	}
+
 	if (sNames.size() == 1)
-		sName = sNames[0];
+		gamePath = sNames[0];
 	else if (sNames.size() > 1)
-		sName = wxGetSingleChoice(_T("Please select a Path:"), _T("Path"), sNames);
+		gamePath = wxGetSingleChoice(_T("Please select a Path:"), _T("Path"), sNames);
 
 	// If we found an install then set the game path, otherwise just set to C:\ for now
-	if (sName != wxEmptyString) {
-		gamePath = sName;
-		gamePath.Append(_T("Data\\"));
-	} else {
+	if (gamePath == wxEmptyString) {
 		gamePath = _T("C:\\Program Files\\World of Warcraft\\");
 		if (!wxFileExists(gamePath+_T("Wow.exe"))){
 			gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"), gamePath);
 		}
-		gamePath.Append(_T("Data\\"));
 	}
+	if (gamePath.Last() != SLASH)
+		gamePath.Append(SLASH);
+	gamePath.Append(_T("Data\\"));
 #elif _MAC // Mac OS X
     gamePath = wxT("/Applications/World\\ of\\ Warcraft/");
 	if (!wxFileExists(gamePath+_T("Wow.exe"))){
         gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"), gamePath);
     }
+	if (gamePath.Last() != SLASH)
+		gamePath.Append(SLASH);
 	gamePath.Append(_T("Data/"));
 #else // Linux
 	gamePath = _T(".")+SLASH;
 	if (!wxFileExists(gamePath+_T("Wow.exe"))){
 		gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"), gamePath);
 	}
+	if (gamePath.Last() != SLASH)
+		gamePath.Append(SLASH);
 	gamePath.Append(_T("Data/"));
 #endif
 }
