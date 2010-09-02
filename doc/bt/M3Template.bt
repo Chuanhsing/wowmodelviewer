@@ -946,7 +946,7 @@ typedef struct
     Aref_UINT32 ar1;
     Aref_VEC2D ar2;
     Aref_UINT16 ar3;
-    Aref_VEC2D ar4;
+    Aref_VEC2D uvMap;
     Aref_VEC3D uvAngle; //3dsmaxAngle = value * 50 * -1
     Aref_VEC2D uvTiling;
     Aref_UINT32 ar5;
@@ -1224,8 +1224,8 @@ typedef struct
     float f2; //affects render speed
     uint32 d2;
     float f3;
-    uint32 d3[8];
-    float f4;
+    uint32 d3[5];
+    float f4[4];
     uint32 d4;
     //determined through previewer
     enum <ulong> ribbonType { rtPlanarBillboarded, rtPlanar, rtCylinder, rtStarShaped    } ribType;
@@ -1238,8 +1238,8 @@ typedef struct
     Aref_UINT32 visible; //animated FLAG, seems to switch ribbon on or off
     ribbonFlags ribFlags; //determined through beta previewer
     uint32 d8[5];
-    Aref_UINT32 ar16;
-    Aref_UINT32 ar17;
+    Aref_FLOAT ar16;
+    Aref_FLOAT ar17;
     uint32 d9;
     Aref_UINT32 ar18;
     Aref_UINT32 ar19;

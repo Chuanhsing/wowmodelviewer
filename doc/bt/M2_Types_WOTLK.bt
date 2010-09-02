@@ -1011,8 +1011,25 @@ void readAnimBlock(char type[], int ofsTimes, int nTimes, int ofsKeys, int nKeys
         } else if(type == "QuatS") {
             QuatS keys[nKeys];
         } 
-    } else
-	uint32 key;
+    } else {
+        if(type == "S") {
+            int16 keys;
+        } else if(type == "I") {
+            int32 keys;
+        } else if(type == "US") {
+            uint16 keys;
+        } else if(type == "UI") {
+            uint32 keys;
+        } else if(type == "F") {
+            float keys;
+        } else if(type == "Vec3D") {
+            Vec3D keys;
+        } else if(type == "Quat") {
+            Quat keys;
+        } else if(type == "QuatS") {
+            QuatS keys;
+        } 
+    }
 }
 
 string ShowAnimBlockInfo(AB_HDR &hdr) {  
