@@ -33,9 +33,9 @@ static wxString M3_Attach_Names[] = {
 	_T("Ref_Target"),     //15
 	_T("Ref_Target"), 
 	_T("Ref_Hardpoint"), 
-	_T("Ref_Head"), 
+	_T("Ref_Overhead"), 
 	_T("Ref_Origin"),
-	_T("Ref_Overhead"),   //20
+	_T("Ref_Head"),   //20
 };
 
 static std::vector<ReferenceEntry> reList;
@@ -925,7 +925,10 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		bone.parent = -1;
 		bone.initTrans.AnimRef.animid = CreateAnimID(AR_Bone, 0, 0, 2);
 		bone.initRot.AnimRef.animid = CreateAnimID(AR_Bone, 0, 0, 3);
-		bone.initRot.value = Vec4D(0.0f, 0.0f, -sqrt(0.5f), sqrt(0.5f));
+		if (m->modelname.Lower().Mid(0, 4) == _T("item"))
+			bone.initRot.value = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
+		else
+			bone.initRot.value = Vec4D(0.0f, 0.0f, -sqrt(0.5f), sqrt(0.5f));
 		bone.initScale.AnimRef.animid = CreateAnimID(AR_Bone, 0, 0, 5);
 		bone.initScale.value = Vec3D(1.0f, 1.0f, 1.0f)*modelExport_M3_BoundScale;
 		bone.ar1.AnimRef.animid = CreateAnimID(AR_Bone, 0, 0, 6);
