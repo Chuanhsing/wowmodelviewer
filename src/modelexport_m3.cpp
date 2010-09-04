@@ -145,10 +145,11 @@ void RefEntry(const char *id, uint32 offset, uint32 nEntries, uint32 vers)
 
 void NameRefEntry(Reference &name, wxString strName, wxFFile &f)
 {
-	name.nEntries = strName.Len()+1;
+	strName.Append(_T('\0'));
+	name.nEntries = strName.Len();
 	name.ref = reList.size();
 	RefEntry("RAHC", f.Tell(), name.nEntries, 0);
-	f.Write(strName.c_str(), strName.Len()+1);
+	f.Write(strName.data(), strName.Len());
 	padding(f);
 }
 

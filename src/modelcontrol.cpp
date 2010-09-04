@@ -215,7 +215,7 @@ void ModelControl::Update()
 		 _T("Pants"), _T("Pants2"), _T("Tarbard"), _T("Trousers"), wxEmptyString,
 		  _T("Cape"), wxEmptyString, _T("Eyeglows"), _T("Belt") };
 	for (unsigned int i=0; i<model->geosets.size(); i++) {
-		int mesh = model->geosets[i].id / 100;
+		uint32 mesh = model->geosets[i].id / 100;
 		if (mesh < WXSIZEOF(meshes) && meshes[mesh] != wxEmptyString)
 			geosetItems.Add(wxString::Format(_T("%i [%s, %i]"), i, meshes[mesh].c_str(), model->geosets[i].id % 100), 1);
 		else

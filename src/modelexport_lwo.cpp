@@ -1148,7 +1148,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	// Debug Texture List
 	wxLogMessage(_T("M2 Texture List for %s:"),m->modelname.c_str());
 	for (unsigned short i=0; i<m->TextureList.size(); i++) {
-		wxLogMessage(_T("Texture List[%i] = %s"),i,wxString(m->TextureList[i]));
+		wxLogMessage(_T("Texture List[%i] = %s"),i,m->TextureList[i].c_str());
 	}
 	wxLogMessage(_T("M2 Texture List Complete for %s"),m->modelname.c_str());
 	#endif
@@ -2968,7 +2968,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 	fs.close();
 
 	// Export Doodad Files
-	wxString cWMOName(m->name.c_str(),wxConvUTF8);
+	wxString cWMOName = m->name;
 	if (modelExport_LW_ExportDoodads ==  true){
 		if (modelExport_LW_DoodadsAs == 1){
 			// Copy Model-list into an array
@@ -3003,7 +3003,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 		//texturemanager.clear();
 
 		// Reload our original WMO file.
-		//wxLogMessage("Reloading original WMO file: %s",cWMOName);
+		//wxLogMessage("Reloading original WMO file: %s",cWMOName.c_str());
 
 		// Load the WMO
 
@@ -3730,7 +3730,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn){
 	Layer.BoundingBox1 = m->bounds[0];
 	Layer.BoundingBox2 = m->bounds[1];
 
-	uint32 PolyCounter = 0;
+	//uint32 PolyCounter = 0;
 	uint32 SurfCounter = 0;
 
 	// Mesh & Slot names
@@ -3990,7 +3990,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn){
 	// Process Groups
 	for (int g=0;g<m->nGroups; g++) {
 		WMOGroup *group = &m->groups[g];
-		uint32 GPolyCounter = 0;
+		//uint32 GPolyCounter = 0;
 
 		//wxLogMessage(_T("\nGroup %i Info:\n   Batches: %i\n   Indices: %i\n   Vertices: %i"),g,group->nBatches,group->nIndices,group->nVertices);
 		Object.PartNames.push_back(wxString(group->name.c_str(), wxConvUTF8));
@@ -4009,8 +4009,8 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn){
 
 			// Add Images to Model
 			LWClip ClipImage;
-			wxString Texture = wxString(m->textures[t].c_str(), wxConvUTF8);
-			wxLogMessage(_T("Texture: %s"),Texture);
+			wxString Texture = m->textures[t];
+			wxLogMessage(_T("Texture: %s"),Texture.c_str());
 
 			ClipImage.Filename = Texture.AfterLast(SLASH).BeforeLast('.');
 			ClipImage.Source = Texture.BeforeLast(SLASH);
@@ -4111,7 +4111,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn){
 	}
 
 	if (Layer.HasVectorColors == true){
-		for (int i=0;i<Object.Surfaces.size();i++){
+		for (uint32 i=0;i<Object.Surfaces.size();i++){
 			Object.Surfaces[i].hasVertColors = true;
 		}
 	}
@@ -4239,7 +4239,7 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 	std::vector<uint16> sfix2;
 	std::vector<uint16> check;
 	for (uint16 t=0;t<m->nTextures;t++){
-		wxString tex = wxString(m->textures[t].c_str(), wxConvUTF8).BeforeLast(_T('.'));
+		wxString tex = m->textures[t].BeforeLast(_T('.'));
 		surfarray.push_back((char *)tex.c_str());
 		//sfix.push_back(tex.c_str());
 		sfix2.push_back(t);
