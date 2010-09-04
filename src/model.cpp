@@ -311,6 +311,7 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 	transparency = 0;
 	events = 0;
 	modelType = MT_NORMAL;
+	IndiceToVerts = 0;
 	// --
 
 	MPQFile f(tempname);
@@ -467,6 +468,7 @@ Model::~Model()
 			wxDELETEA(events);
 			wxDELETEA(particleSystems);
 			wxDELETEA(ribbons);
+			//wxDELETEA(IndiceToVerts);
 
 		} else {
 			glDeleteLists(dlist, 1);
@@ -787,22 +789,25 @@ void Model::initCommon(MPQFile &f)
 		// TODO: Add support for selecting the LOD.
 		// int viewLOD = 0; // sets LOD to worst
 		// int viewLOD = header.nViews - 1; // sets LOD to best
-		// Patch 12857 need LOD 1
-		setLOD(f, 1); // Set the default Level of Detail to the best possible. 
+		if (header.nViews > 1) // Patch 12857 need LOD 1
+			setLOD(f, 1);
+		else
+			setLOD(f, 0); // Set the default Level of Detail to the best possible. 
 	}
 
 	// build indice to vert array.
-	IndiceToVerts = new uint32[nIndices]+2;
-	for (size_t i=0;i<nIndices;i++){
-		uint32 a = indices[i];
-		for (uint32 j=0;j<header.nVertices;j++){
-			if (origVertices[a].pos == origVertices[j].pos){
-				IndiceToVerts[i] = j;
-				break;
+	if (nIndices) {
+		IndiceToVerts = new uint32[nIndices]+2;
+		for (size_t i=0;i<nIndices;i++){
+			uint32 a = indices[i];
+			for (uint32 j=0;j<header.nVertices;j++){
+				if (origVertices[a].pos == origVertices[j].pos){
+					IndiceToVerts[i] = j;
+					break;
+				}
 			}
 		}
 	}
-
 	// zomg done
 }
 
@@ -1024,8 +1029,7 @@ void Model::setLOD(MPQFile &f, int index)
 	// Seems to only control the render order.  Which makes this function useless and not needed :(
 #ifdef WotLK
 	// remove suffix .M2
-	lodname = modelname.BeforeLast(_T('.'));
-	lodname.Append(wxString::Format(_T("%02d.skin"), index)); // Lods: 00, 01, 02, 03
+	lodname = modelname.BeforeLast(_T('.')) + wxString::Format(_T("%02d.skin"), index); // Lods: 00, 01, 02, 03
 	MPQFile g(lodname);
 	g_modelViewer->modelOpened->Add(lodname);
 	if (g.isEof()) {
