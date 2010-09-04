@@ -1124,7 +1124,7 @@ void CharControl::RefreshModel()
 	spins[SPIN_FACIAL_COLOR]->SetValue(cd.facialColor);
 
 	// eyeglow
-	for(int i=0; i<model->passes.size(); i++) {
+	for(uint32 i=0; i<model->passes.size(); i++) {
 		ModelRenderPass &p = model->passes[i];
 		wxString texName = model->TextureList[p.tex].AfterLast('\\').Lower();
 		bool isDK = false;

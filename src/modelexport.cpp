@@ -96,7 +96,6 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID = wxEmptyStr
 	// Secure paths for Non-Windows systems
 	#ifndef _WINDOWS
 		outdir.Replace(_T("\\"),_T("/"));
-		filePath.Replace(_T("\\"),_T("/"));
 	#endif
 
 	// Lightwave

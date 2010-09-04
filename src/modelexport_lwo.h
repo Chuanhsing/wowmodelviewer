@@ -303,6 +303,9 @@ struct LWObject {
 		Surfaces = o.Surfaces;
 
 		SourceType = o.SourceType;
+
+		// return LWObject?
+		return o;
 	}
 };
 

@@ -266,7 +266,7 @@ WMO::~WMO()
 		//gLog("Unloading WMO %s\n", name.c_str());
 		delete[] groups;
 
-		for (int i=0; i<textures.size(); i++) {
+		for (uint32 i=0; i<textures.size(); i++) {
             texturemanager.delbyname(textures[i]);
 		}
 
