@@ -728,7 +728,7 @@ enum TextureTypes {
 	TEXTURE_FILENAME=0,			// Texture given in filename
 	TEXTURE_BODY,				// Body + clothes
 	TEXTURE_CAPE,				// Item, Capes ("Item\ObjectComponents\Cape\*.blp")
-	TEXTURE_ITEM=2,
+	TEXTURE_ITEM=TEXTURE_CAPE,
 	TEXTURE_ARMORREFLECT,		// 
 	TEXTURE_HAIR=6,				// Hair, bear
 	TEXTURE_FUR=8,				// Tauren fur
@@ -737,7 +737,10 @@ enum TextureTypes {
 	TEXTURE_GAMEOBJECT1,		// Skin for creatures or gameobjects #1
 	TEXTURE_GAMEOBJECT2,		// Skin for creatures or gameobjects #2
 	TEXTURE_GAMEOBJECT3,		// Skin for creatures or gameobjects #3
-	TEXTURE_INVENTORY_ART2		// Used on inventory art M2s (2): ui-buffon.m2 and forcedbackpackitem.m2 (LUA::Model:ReplaceIconTexture("texture"))
+	TEXTURE_INVENTORY_ART2,		// Used on inventory art M2s (2): ui-buffon.m2 and forcedbackpackitem.m2 (LUA::Model:ReplaceIconTexture("texture"))
+	TEXTURE_15,					// Patch 12857, Unknown
+	TEXTURE_16,					//
+	TEXTURE_17,					//
 };
 
 enum TextureFlags {

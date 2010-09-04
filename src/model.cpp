@@ -652,7 +652,7 @@ void Model::initCommon(MPQFile &f)
 				texname[texdef[i].nameLen] = 0;
 				textures[i] = texturemanager.add(wxString(texname, wxConvUTF8));
 				TextureList.push_back(wxString(texname, wxConvUTF8));
-				wxLogMessage(_T("Info: Added %s to the TextureList."), texname);
+				wxLogMessage(_T("Info: Added %s to the TextureList[%i]."), texname, TextureList.size());
 			} else {
 				// special texture - only on characters and such...
 				textures[i] = 0;
@@ -678,11 +678,17 @@ void Model::initCommon(MPQFile &f)
 						tex += _T("ChangableTexture2.blp");
 					}else if(texdef[i].type == TEXTURE_GAMEOBJECT3){
 						tex += _T("ChangableTexture3.blp");
+					}else if(texdef[i].type == TEXTURE_15){
+						tex += _T("Texture15.blp");
+					}else if(texdef[i].type == TEXTURE_16){
+						tex += _T("Texture16.blp");
+					}else if(texdef[i].type == TEXTURE_17){
+						tex += _T("Texture17.blp");
 					}else{
 						tex += _T("Unknown.blp");
 					}
 					strncpy(texname,(const char*)(tex.c_str()),tex.Len());
-					wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
+					wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. [%i]"), texname, TextureList.size(), texdef[i].type);
 					TextureList.push_back(wxString(texname, wxConvUTF8));
 				}else{
 					if (texdef[i].type == TEXTURE_HAIR){
@@ -701,11 +707,17 @@ void Model::initCommon(MPQFile &f)
 						tex += _T("NChangableTexture2.blp");
 					}else if(texdef[i].type == TEXTURE_GAMEOBJECT3){
 						tex += _T("NChangableTexture3.blp");
+					}else if(texdef[i].type == TEXTURE_15){
+						tex += _T("NTexture15.blp");
+					}else if(texdef[i].type == TEXTURE_16){
+						tex += _T("NTexture16.blp");
+					}else if(texdef[i].type == TEXTURE_17){
+						tex += _T("NTexture17.blp");
 					}else{
 						tex += _T("NUnknown.blp");
 					}
 					strncpy(texname,(const char*)(tex.c_str()),tex.Len());
-					wxLogMessage(_T("Info: Added %s to the TextureList via specialTextures."), texname);
+					wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. [%i]"), texname, TextureList.size(), texdef[i].type);
 					TextureList.push_back(wxString(texname, wxConvUTF8));
 				}
 
@@ -775,7 +787,8 @@ void Model::initCommon(MPQFile &f)
 		// TODO: Add support for selecting the LOD.
 		// int viewLOD = 0; // sets LOD to worst
 		// int viewLOD = header.nViews - 1; // sets LOD to best
-		setLOD(f, 0); // Set the default Level of Detail to the best possible. 
+		// Patch 12857 need LOD 1
+		setLOD(f, 1); // Set the default Level of Detail to the best possible. 
 	}
 
 	// build indice to vert array.

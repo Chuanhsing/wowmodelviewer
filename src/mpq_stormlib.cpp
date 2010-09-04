@@ -26,13 +26,16 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 		return;
 	}
 
-	// do patch
-	for(int j=mpqArchives.GetCount()-1; j>=0; j--) {
-		wxString mpq = mpqArchives[j].AfterLast(SLASH);
-		if (!mpq.StartsWith(_T("wow-update-")))
-			continue;
-		SFileOpenPatchArchive(mpq_a, (char *)mpq.c_str(), "enUS", 0);
-		wxLogMessage(_T("Appending patch %s on %s"), mpq.c_str(), filename.c_str());
+	// do patch, but skip cache\ directory
+	if (!(filename.Lower().Contains("cache") && filename.Lower().Contains("patch"))) {
+		// do patch
+		for(int j=mpqArchives.GetCount()-1; j>=0; j--) {
+			wxString mpq = mpqArchives[j].AfterLast(SLASH);
+			if (!mpq.StartsWith(_T("wow-update-")))
+				continue;
+			SFileOpenPatchArchive(mpq_a, (char *)mpq.c_str(), "enUS", 0);
+			wxLogMessage(_T("Appending patch %s on %s"), mpq.c_str(), filename.c_str());
+		}
 	}
 
 	ok = true;

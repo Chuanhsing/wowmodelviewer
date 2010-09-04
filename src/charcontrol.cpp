@@ -43,6 +43,21 @@ int slotOrderWithRobe[] = {
 	CS_QUIVER
 };
 
+wxString regionPaths[NUM_REGIONS] =
+{
+	wxEmptyString,
+	_T("Item\\TextureComponents\\ArmUpperTexture\\"),
+	_T("Item\\TextureComponents\\ArmLowerTexture\\"),
+	_T("Item\\TextureComponents\\HandTexture\\"),
+	wxEmptyString,
+	wxEmptyString,
+	_T("Item\\TextureComponents\\TorsoUpperTexture\\"),
+	_T("Item\\TextureComponents\\TorsoLowerTexture\\"),
+	_T("Item\\TextureComponents\\LegUpperTexture\\"),
+	_T("Item\\TextureComponents\\LegLowerTexture\\"),
+	_T("Item\\TextureComponents\\FootTexture\\")
+};
+
 IMPLEMENT_CLASS(CharControl, wxWindow)
 
 BEGIN_EVENT_TABLE(CharControl, wxWindow)
@@ -706,22 +721,6 @@ void CharControl::OnButton(wxCommandEvent &event)
 	else
 		RefreshModel();
 }
-
-
-const char* regionPaths[NUM_REGIONS] =
-{
-	"",
-	"Item\\TextureComponents\\ArmUpperTexture\\",
-	"Item\\TextureComponents\\ArmLowerTexture\\",
-	"Item\\TextureComponents\\HandTexture\\",
-	"",
-	"",
-	"Item\\TextureComponents\\TorsoUpperTexture\\",
-	"Item\\TextureComponents\\TorsoLowerTexture\\",
-	"Item\\TextureComponents\\LegUpperTexture\\",
-	"Item\\TextureComponents\\LegLowerTexture\\",
-	"Item\\TextureComponents\\FootTexture\\"
-};
 
 void CharControl::UpdateTextureList(wxString texName, int special)
 {
@@ -1778,7 +1777,7 @@ wxString CharControl::makeItemTexture(int region, const wxString name)
 	wxChar leggings = name[name.Length() - 2];
 	
 	// try prefered version first
-	wxString fn(regionPaths[region], wxConvUTF8);
+	wxString fn = regionPaths[region];
 	fn += name;
 	fn += _T("_");
 
@@ -1803,7 +1802,7 @@ wxString CharControl::makeItemTexture(int region, const wxString name)
 	if (MPQFile::getSize(fn) > 0) //MPQFile::exists(fn.c_str()) && 
 		return fn;
 
-	fn = wxString(regionPaths[region], wxConvUTF8);
+	fn = regionPaths[region];
 	fn += name;	
 	fn += _T(".blp");
 
