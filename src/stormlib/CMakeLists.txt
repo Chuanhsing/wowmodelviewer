@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.6)
 set(SRC_FILES
            src/adpcm/adpcm.cpp
            src/huffman/huff.cpp
+           src/jenkins/lookup3.c
            src/sparse/sparse.cpp
            src/StormLib.h
            src/StormPort.h
@@ -18,6 +19,7 @@ set(SRC_FILES
            src/SFileListFile.cpp
            src/SFileOpenArchive.cpp
            src/SFileOpenFileEx.cpp
+           src/SFilePatchArchives.cpp
            src/SFileReadFile.cpp
            src/SFileVerify.cpp
            src/libtomcrypt/src/hashes/hash_memory.c

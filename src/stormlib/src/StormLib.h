@@ -493,6 +493,7 @@ struct TMPQHash
 
     // The platform the file is used for. 0 indicates the default platform.
     // No other values have been observed.
+    // Note: wPlatform is actually just BYTE, but since it has never been used, we don't care.
     USHORT wPlatform;
 
 #else
@@ -563,21 +564,21 @@ struct TMPQAttributes
     TMPQMD5      * pMd5;                // Array of MD5
 };
 
-// HET and BET block. It's purpose is unknown at the moment
+// Header for HET and BET tables
 struct TMPQXXXBlock
 {
     DWORD dwSignature;                  // 'HET\x1A' or 'BET\x1A'
-    DWORD dwVersion;                    // Seems to be always 1
-    DWORD dwDataSize;                   // Size of the following data
+    DWORD dwVersion;                    // Version. Seems to be always 1
+    DWORD dwDataSize;                   // Size of the contained table
 
-    // Followed by the data (variable length)
+    // Followed by the table data (variable length)
     DWORD Data[1];
 };
 
 // Patch file header
 struct TPatchInfo
 {
-	DWORD dwLength;                     // Length of patch file header, in bytes
+	DWORD dwLength;                     // Length of patch info header, in bytes
 	DWORD dwFlags;                      // Flags. 0x80000000 = MD5 (?)
 	DWORD dwDataSize;                   // Uncompressed size of the patch file
 	BYTE  md5[0x10];                    // MD5 of the entire patch file after decompression
@@ -588,8 +589,9 @@ struct TPatchInfo
 // Header for PTCH files 
 struct TPatchHeader
 {
+    //-- PATCH header -----------------------------------
     DWORD dwSignature;                  // 'PTCH'
-    DWORD dwSizeOfPatchData;            // Size of the entire patch data, not including the 'PTCH' signature itself
+    DWORD dwSizeOfPatchData;            // Size of the entire patch (decompressed)
     DWORD dwSizeBeforePatch;            // Size of the file before patch
     DWORD dwSizeAfterPatch;             // Size of file after patch
     
@@ -602,13 +604,12 @@ struct TPatchHeader
     //-- XFRM block -------------------------------------
     DWORD dwXFRM;                       // 'XFRM'
     DWORD dwXfrmBlockSize;              // Size of the XFRM block, includes XFRM header and patch data
-    DWORD dwBSD0;                       // Type of patch ('BSD0')
-    DWORD dwUnpackedSize;               // Unpacked size of the patch data
+    DWORD dwPatchType;                  // Type of patch ('BSD0' or 'COPY')
 
-    // Followed by 32-bit version of BSDIFF40 patch, compressed by RLE
+    // Followed by the patch data
 };
 
-#define SIZE_OF_XFRM_HEADER  0x10
+#define SIZE_OF_XFRM_HEADER  0x0C
 
 // File node for in-memory listfile
 struct TFileNode
@@ -677,8 +678,8 @@ struct TMPQFile
 
     TMPQFile     * hfPatchFile;         // Pointer to open patch file
     TPatchHeader * pPatchHeader;        // Patch header. Only used if the file is a patch file
-    LPBYTE         pbFileData;          // Loaded file data. Only used if the file is a patch file
-    DWORD          dwPatchedSize;       // Size of loaded patched data
+    LPBYTE         pbFileData;          // Loaded and patched file data. Only used if the file is a patch file
+    DWORD          cbFileData;          // Size of loaded patched data
 
     TPatchInfo   * pPatchInfo;          // Patch info block, preceding the sector table
 	DWORD        * SectorOffsets;       // Position of each file sector, relative to the begin of the file. Only for compressed files.

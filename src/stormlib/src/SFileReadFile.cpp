@@ -534,18 +534,18 @@ static int ReadMpqFilePatchFile(TMPQFile * hf, void * pvBuffer, DWORD dwToRead, 
     {
         // Load the original file and store its content to "pbOldData"
         hf->pbFileData = ALLOCMEM(BYTE, hf->pBlock->dwFSize);
-        hf->dwPatchedSize = hf->pBlock->dwFSize;
+        hf->cbFileData = hf->pBlock->dwFSize;
         if(hf->pbFileData == NULL)
             return ERROR_NOT_ENOUGH_MEMORY;
 
         // Read the file data
         if(hf->pBlock->dwFlags & MPQ_FILE_SINGLE_UNIT)
-            nError = ReadMpqFileSingleUnit(hf, hf->pbFileData, hf->dwPatchedSize, &dwBytesRead);
+            nError = ReadMpqFileSingleUnit(hf, hf->pbFileData, hf->cbFileData, &dwBytesRead);
         else
-            nError = ReadMpqFile(hf, hf->pbFileData, hf->dwPatchedSize, &dwBytesRead);
+            nError = ReadMpqFile(hf, hf->pbFileData, hf->cbFileData, &dwBytesRead);
 
         // Fix error code
-        if(nError == ERROR_SUCCESS && dwBytesRead != hf->dwPatchedSize)
+        if(nError == ERROR_SUCCESS && dwBytesRead != hf->cbFileData)
             nError = ERROR_FILE_CORRUPT;
 
         // Patch the file data
@@ -560,11 +560,11 @@ static int ReadMpqFilePatchFile(TMPQFile * hf, void * pvBuffer, DWORD dwToRead, 
     // If there is something to read, do it
     if(nError == ERROR_SUCCESS)
     {
-        if(hf->dwFilePos < hf->dwPatchedSize)
+        if(hf->dwFilePos < hf->cbFileData)
         {
             // Make sure we don't copy more than file size
-            if((hf->dwFilePos + dwToRead) > hf->dwPatchedSize)
-                dwToRead = hf->dwPatchedSize - hf->dwFilePos;
+            if((hf->dwFilePos + dwToRead) > hf->cbFileData)
+                dwToRead = hf->cbFileData - hf->dwFilePos;
 
             // Copy the appropriate amount of the file data to the caller's buffer
             memcpy(pvBuffer, hf->pbFileData + hf->dwFilePos, dwToRead);

@@ -44,7 +44,7 @@ class BIT_ARRAY
 
     void LoadBits(unsigned int nBitPosition,
                   unsigned int nBitLength,
-                  void * pbBuffer,
+                  void * pvBuffer,
                   int nResultSize);
 
     LPBYTE pbElements;
@@ -59,14 +59,14 @@ class PARSED_HET_DATA
 
     void CalculateMasks(DWORD arg_0);
 
-    DWORD  field_0;
+    DWORD  dwBlockIndexSize;
     DWORD  field_4;
     DWORD  field_8;
-    LPBYTE pTable;
+    LPBYTE pHashValues;
     BIT_ARRAY * pBlockIndexes;
     DWORD field_14;
     DWORD dwTableSize;
-    DWORD dwNumberOfBits;
+    DWORD dwEffectiveHashBits;                  // Effective number of bits in the hash
     LARGE_INTEGER AndMask64;
     LARGE_INTEGER OrMask64;
 };
@@ -78,23 +78,23 @@ class PARSED_BET_DATA
 
     PARSED_BET_DATA(DWORD BetBlockOffsets, DWORD dwOpenFlags);
 
-    vector<int> field_0;
-    DWORD field_18;
-    DWORD field_1C;
-    DWORD field_20;
-    DWORD field_24;
-    DWORD field_28;
-    DWORD field_2C;
-    DWORD field_30;
-    DWORD field_34;
-    DWORD field_38;
-    DWORD field_3C;
-    DWORD field_40;
+    vector<int> FlagsArray;                 // Array of flags for all files available in the MPQ
+    DWORD dwTableEntryBits;                 // Size of one table entry, in bits
+    DWORD dwBitIndex_FilePos;
+    DWORD dwBitIndex_FSize;
+    DWORD dwBitIndex_CSize;
+    DWORD dwBitIndex_FlagIndex;
+    DWORD dwBitIndex_Unknown;
+    DWORD dwFilePosBits;
+    DWORD dwFSizeBits;
+    DWORD dwCSizeBits;
+    DWORD dwFlagsBits;
+    DWORD dwUnknownBits;
     DWORD field_44;
     DWORD field_48;
     DWORD field_4C;
     BIT_ARRAY * field_50;
-    BIT_ARRAY * field_54;
+    BIT_ARRAY * pExtBlockTable;
     DWORD field_58;
     vector<INT64>  field_5C;
     vector<DWORD>  field_74;
@@ -104,15 +104,15 @@ class PARSED_BET_DATA
 
 };
 
-typedef struct _MPQ_FILE_STRUCT_3A
+typedef struct _MPQ_FILE_BLOCK_ENTRY
 {
-    DWORD field_0;
-    DWORD field_4;
-    DWORD field_8;
-    DWORD field_C;
-    DWORD field_10;
-    DWORD field_14;
-    DWORD field_18;
+    DWORD dwFilePosLo;
+    DWORD dwFilePosHi;
+    DWORD dwCSizeLo;
+    DWORD dwCSizeHi;
+    DWORD dwFileSizeLo;
+    DWORD dwFileSizeHi;
+    DWORD dwFlags;
     DWORD result64_lo;
     DWORD result64_hi;
     DWORD result32;
@@ -122,7 +122,7 @@ typedef struct _MPQ_FILE_STRUCT_3A
     DWORD result128_4;
     USHORT field_38;
 
-} MPQ_FILE_STRUCT_3A, *PMPQ_FILE_STRUCT_3A;
+} MPQ_FILE_BLOCK_ENTRY, *PMPQ_FILE_BLOCK_ENTRY;
 
 
 
@@ -183,14 +183,14 @@ void BIT_ARRAY::LoadBits(
 }
 
 
-PARSED_HET_DATA::PARSED_HET_DATA(DWORD arg_0, DWORD dwBitCount)
+PARSED_HET_DATA::PARSED_HET_DATA(DWORD arg_0, DWORD dwEffectiveHashBits)
 {
     LARGE_INTEGER MulResult;
     
-    field_0 = 0;
+    dwBlockIndexSize = 0;
     field_4 = 0;
     field_8 = 0;
-    pTable = NULL;
+    pHashValues = NULL;
     pBlockIndexes = NULL;
     field_14 = arg_0;
 
@@ -200,49 +200,49 @@ PARSED_HET_DATA::PARSED_HET_DATA(DWORD arg_0, DWORD dwBitCount)
     // Calculate number of bits that is needed for arg_0
     while(arg_0 > 0)
     {
-        arg_0 >>= 1;
+        arg_0 /= 2;
         field_8++;
     }
 
-    field_0 = field_8;
-    pTable = ALLOCMEM(BYTE, dwTableSize);
-    CalculateMasks(dwBitCount);
+    dwBlockIndexSize = field_8;
+    pHashValues = ALLOCMEM(BYTE, dwTableSize);
+    CalculateMasks(dwEffectiveHashBits);
 }
 
 void PARSED_HET_DATA::CalculateMasks(DWORD dwBitCount)
 {
-    dwNumberOfBits = dwBitCount;
-    if(dwNumberOfBits == 0x40)
+    dwEffectiveHashBits = dwBitCount;
+    if(dwEffectiveHashBits == 0x40)
     {
         AndMask64.QuadPart = 0;
     }
     else
     {
-        AndMask64.QuadPart = (LONGLONG)1 << dwNumberOfBits;
+        AndMask64.QuadPart = (LONGLONG)1 << dwEffectiveHashBits;
     }
 
     AndMask64.QuadPart--;
-    OrMask64.QuadPart = (LONGLONG)1 << (dwNumberOfBits - 1);
+    OrMask64.QuadPart = (LONGLONG)1 << (dwEffectiveHashBits - 1);
 }
 
 PARSED_BET_DATA::PARSED_BET_DATA(DWORD BetBlockOffsets, DWORD dwOpenFlags)
 {
-    field_18 = 0;
-    field_1C = 0;
-    field_20 = 0;
-    field_24 = 0;
-    field_28 = 0;
-    field_2C = 0;
-    field_30 = 0;
-    field_34 = 0;
-    field_38 = 0;
-    field_3C = 0;
-    field_40 = 0;
+    dwTableEntryBits = 0;
+    dwBitIndex_FilePos = 0;
+    dwBitIndex_FSize = 0;
+    dwBitIndex_CSize = 0;
+    dwBitIndex_FlagIndex = 0;
+    dwBitIndex_Unknown = 0;
+    dwFilePosBits = 0;
+    dwFSizeBits = 0;
+    dwCSizeBits = 0;
+    dwFlagsBits = 0;
+    dwUnknownBits = 0;
     field_44 = 0;
     field_48 = 0;
     field_4C = 0;
     field_50 = NULL;
-    field_54 = NULL;
+    pExtBlockTable = NULL;
     field_58 = BetBlockOffsets;
     dwOpenFlags = dwOpenFlags;
 
@@ -275,12 +275,12 @@ static PARSED_HET_DATA * ParseHetBlock(void * pvHetBlockData, DWORD cbHetBlock)
         pParsedHetData = new PARSED_HET_DATA(HetBlockOffsets[0x01], HetBlockOffsets[0x03]);
         if(pParsedHetData != NULL)
         {
-            memcpy(&pParsedHetData->field_0, &HetBlockOffsets[0x04], 0x0C);
+            memcpy(&pParsedHetData->dwBlockIndexSize, &HetBlockOffsets[0x04], 0x0C);
             
-            memcpy(pParsedHetData->pTable, pbSrcData, HetBlockOffsets[0x02]);
+            memcpy(pParsedHetData->pHashValues, pbSrcData, HetBlockOffsets[0x02]);
             pbSrcData += HetBlockOffsets[0x02];
 
-            pParsedHetData->pBlockIndexes = new BIT_ARRAY(pParsedHetData->field_0 * pParsedHetData->dwTableSize, 0xFF);
+            pParsedHetData->pBlockIndexes = new BIT_ARRAY(pParsedHetData->dwBlockIndexSize * pParsedHetData->dwTableSize, 0xFF);
             memcpy(pParsedHetData->pBlockIndexes->pbElements, pbSrcData, HetBlockOffsets[0x07]);
         }
     }
@@ -305,24 +305,24 @@ static PARSED_BET_DATA * ParseBetBlock(void * pvBetBlockData, DWORD cbBetBlock, 
 
         // Operator new
         pParsedBetData = new PARSED_BET_DATA(BetBlockOffsets[1], dwOpenFlags);
-        memcpy(&pParsedBetData->field_18, &BetBlockOffsets[0x03], 0x2C);
+        memcpy(&pParsedBetData->dwTableEntryBits, &BetBlockOffsets[0x03], 0x2C);
 
-        pParsedBetData->field_0.resize(BetBlockOffsets[0x12]);
+        pParsedBetData->FlagsArray.resize(BetBlockOffsets[0x12]);
         if(BetBlockOffsets[0x12] > 0)
         {
             LPDWORD pdwBetData10 = (LPDWORD)pbSrcData;
 
             for(DWORD i = 0; i < BetBlockOffsets[0x12]; i++)
             {
-                pParsedBetData->field_0[i] = *pdwBetData10++;
+                pParsedBetData->FlagsArray[i] = *pdwBetData10++;
             }
 
             pbSrcData = (LPBYTE)pdwBetData10;
         }
 
-        pParsedBetData->field_54 = new BIT_ARRAY(pParsedBetData->field_18 * pParsedBetData->field_58, 0);
-        LengthInBytes = pParsedBetData->field_54 ? (pParsedBetData->field_54->NumberOfBits + 7) / 8 : 0;
-        memcpy(pParsedBetData->field_54->pbElements, pbSrcData, LengthInBytes);
+        pParsedBetData->pExtBlockTable = new BIT_ARRAY(pParsedBetData->dwTableEntryBits * pParsedBetData->field_58, 0);
+        LengthInBytes = pParsedBetData->pExtBlockTable ? (pParsedBetData->pExtBlockTable->NumberOfBits + 7) / 8 : 0;
+        memcpy(pParsedBetData->pExtBlockTable->pbElements, pbSrcData, LengthInBytes);
         pbSrcData += LengthInBytes;
 
         memcpy(&pParsedBetData->field_44, &BetBlockOffsets[0x0E], 0x0C);
@@ -364,10 +364,10 @@ static void sub_6CAB90(
 */
 
 /*
-static LONGLONG sub_8F8FC0(LONGLONG MaskedHash64, DWORD field_18, DWORD arg_C)
+static LONGLONG sub_8F8FC0(LONGLONG MaskedHash64, DWORD dwTableEntryBits, DWORD arg_C)
 {
     if(arg_C == 0)
-        return MaskedValue64 / field_18;
+        return MaskedValue64 / dwTableEntryBits;
 
 
 }
@@ -399,25 +399,25 @@ static DWORD CalculateExtBlockIndex(
     CurrIndex = StartIndex = (DWORD)(MaskedHash64 % pParsedHetData->dwTableSize);
 
     // Highest 8 bits of the masked name hash is the primary identification value
-    SearchValue_1 = (BYTE)(MaskedHash64 >> (pParsedHetData->dwNumberOfBits - 8));
+    SearchValue_1 = (BYTE)(MaskedHash64 >> (pParsedHetData->dwEffectiveHashBits - 8));
 
     // Remaining lower bits are the secondary identification value
     SearchValue_2 = MaskedHash64 & (AndMask64 >> 0x08);
 
     // Go through hash table until we find a terminator
-    while(pParsedHetData->pTable[CurrIndex] != 0)
+    while(pParsedHetData->pHashValues[CurrIndex] != 0)
     {
         // Did we find match ?
-        if(pParsedHetData->pTable[CurrIndex] == SearchValue_1)
+        if(pParsedHetData->pHashValues[CurrIndex] == SearchValue_1)
         {
             ULONGLONG Result64 = 0;
             DWORD dwExtBlockIndex = 0;
 
             // pBlockIndexes contains array of indexes to the BET table
-            pParsedHetData->pBlockIndexes->LoadBits(pParsedHetData->field_0 * CurrIndex, // BitPosition
-                                               pParsedHetData->field_8,             // BitLength
-                                              &dwExtBlockIndex,                     // Target pointer
-                                               4);
+            pParsedHetData->pBlockIndexes->LoadBits(pParsedHetData->dwBlockIndexSize * CurrIndex, // BitPosition
+                                                    pParsedHetData->field_8,             // BitLength
+                                                   &dwExtBlockIndex,                     // Target pointer
+                                                    4);
 
             // field_50 is a "confirmation" value to the BET table index found
             pParsedBetData->field_50->LoadBits(pParsedBetData->field_44 * dwExtBlockIndex, // BitPosition
@@ -439,67 +439,70 @@ static DWORD CalculateExtBlockIndex(
     return 0xFFFFFFFF;
 }
 
-static bool sub_6D0B60(
+static bool GetFileBlockEntry_BetData(
     PARSED_BET_DATA * pParsedBetData,
     DWORD dwExtBlockIndex,
-    PMPQ_FILE_STRUCT_3A pResult)
+    PMPQ_FILE_BLOCK_ENTRY pBlockEntry)
 {
-    if(pParsedBetData->field_54 == 0)
+    if(pParsedBetData->pExtBlockTable == 0)
         return false;
 
-    memset(pResult, 0, sizeof(MPQ_FILE_STRUCT_3A));
+    memset(pBlockEntry, 0, sizeof(MPQ_FILE_BLOCK_ENTRY));
 
-    pParsedBetData->field_54->LoadBits(pParsedBetData->field_1C + pParsedBetData->field_18 * dwExtBlockIndex,
-                                       pParsedBetData->field_30,
-                                      &pResult->field_0,
-                                       8);
+    pParsedBetData->pExtBlockTable->LoadBits(pParsedBetData->dwTableEntryBits * dwExtBlockIndex + pParsedBetData->dwBitIndex_FilePos,
+                                             pParsedBetData->dwFilePosBits,
+                                            &pBlockEntry->dwFilePosLo,
+                                             8);
 
-    pParsedBetData->field_54->LoadBits(pParsedBetData->field_20 + pParsedBetData->field_18 * dwExtBlockIndex,
-                                       pParsedBetData->field_34,
-                                      &pResult->field_10,
-                                       8);
+    pParsedBetData->pExtBlockTable->LoadBits(pParsedBetData->dwTableEntryBits * dwExtBlockIndex + pParsedBetData->dwBitIndex_FSize,
+                                             pParsedBetData->dwFSizeBits,
+                                            &pBlockEntry->dwFileSizeLo,
+                                             8);
 
-    pParsedBetData->field_54->LoadBits(pParsedBetData->field_24 + pParsedBetData->field_18 * dwExtBlockIndex,
-                                       pParsedBetData->field_38,
-                                      &pResult->field_8,
-                                       8);
+    pParsedBetData->pExtBlockTable->LoadBits(pParsedBetData->dwTableEntryBits * dwExtBlockIndex + pParsedBetData->dwBitIndex_CSize,
+                                             pParsedBetData->dwCSizeBits,
+                                            &pBlockEntry->dwCSizeLo,
+                                             8);
 
-    if(pParsedBetData->field_0.size() == 0)
+    if(pParsedBetData->FlagsArray.size() == 0)
         return false;
 
-    if(pParsedBetData->field_0.size() != 1)
+    if(pParsedBetData->FlagsArray.size() != 1)
     {
-        pParsedBetData->field_54->LoadBits(pParsedBetData->field_24 + pParsedBetData->field_18 * dwExtBlockIndex,
-                                           pParsedBetData->field_3C,
-                                          &pResult->field_18,
-                                           4);
+        DWORD dwFlagIndex = 0;
+
+        // Get the flag index from the array
+        pParsedBetData->pExtBlockTable->LoadBits(pParsedBetData->dwTableEntryBits * dwExtBlockIndex + pParsedBetData->dwBitIndex_FlagIndex,
+                                                 pParsedBetData->dwFlagsBits,
+                                                &dwFlagIndex,
+                                                 4);
         
-        if(pParsedBetData->field_0.size() > pResult->field_18)
+        if(pParsedBetData->FlagsArray.size() < dwFlagIndex)
             return false;
-        pResult->field_18 = pParsedBetData->field_0[pResult->field_18];
+        pBlockEntry->dwFlags = pParsedBetData->FlagsArray[dwFlagIndex];
     }
     else
     {
-        pResult->field_18 = pParsedBetData->field_0[0];
+        pBlockEntry->dwFlags = pParsedBetData->FlagsArray[0];
     }
 
     if(pParsedBetData->dwOpenFlags & 0x200)
     {
         BYTE OneByte = 0;
 
-        pParsedBetData->field_54->LoadBits(pParsedBetData->field_24 + pParsedBetData->field_18 * dwExtBlockIndex,
-                                           pParsedBetData->field_40,
-                                          &OneByte,
-                                           1);
-        pResult->field_38 = (OneByte > 0) ? 1 : 0;
+        pParsedBetData->pExtBlockTable->LoadBits(pParsedBetData->dwTableEntryBits * dwExtBlockIndex + pParsedBetData->dwBitIndex_Unknown,
+                                                 pParsedBetData->dwUnknownBits,
+                                                &OneByte,
+                                                 1);
+        pBlockEntry->field_38 = OneByte ? 1 : 0;
     }
 
     return true;
 }
 
-static void sub_6D1100(TMPQArchive * ha, PARSED_BET_DATA * pParsedBetData, PMPQ_FILE_STRUCT_3A pResult, DWORD dwExtBlockIndex)
+static void GetFileBlockEntry(TMPQArchive * ha, PARSED_BET_DATA * pParsedBetData, PMPQ_FILE_BLOCK_ENTRY pBlockEntry, DWORD dwExtBlockIndex)
 {
-    MPQ_FILE_STRUCT_3A result;    
+    MPQ_FILE_BLOCK_ENTRY BlockEntry;    
 //  LARGE_INTEGER temp_li;
 //  LPBYTE pointer_to_struct_3A;
     BYTE byte_A9E170[] = {0x80, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
@@ -509,51 +512,51 @@ static void sub_6D1100(TMPQArchive * ha, PARSED_BET_DATA * pParsedBetData, PMPQ_
 
     if(pParsedBetData != NULL)
     {
-        sub_6D0B60(pParsedBetData, dwExtBlockIndex, &result);
+        GetFileBlockEntry_BetData(pParsedBetData, dwExtBlockIndex, &BlockEntry);
 
         if(dwOpenFlags & 0x80)
         {
-            result.result32 = pParsedBetData->field_74[dwExtBlockIndex];
+            BlockEntry.result32 = pParsedBetData->field_74[dwExtBlockIndex];
         }
 
         if(dwOpenFlags & 0x40)
         {
             INT128 result128 = pParsedBetData->field_8C[dwExtBlockIndex];
 
-            result.result128_1 = result128.dw1;
-            result.result128_2 = result128.dw2;
-            result.result128_3 = result128.dw3;
-            result.result128_4 = result128.dw4;
+            BlockEntry.result128_1 = result128.dw1;
+            BlockEntry.result128_2 = result128.dw2;
+            BlockEntry.result128_3 = result128.dw3;
+            BlockEntry.result128_4 = result128.dw4;
         }
 
         if(dwOpenFlags & 0x100)
         {         
             INT64 result64 = pParsedBetData->field_5C[dwExtBlockIndex];
 
-            result.result64_hi = (DWORD)(result64 >> 0x20);
-            result.result64_lo = (DWORD)(result64 & 0xFFFFFFFF);
+            BlockEntry.result64_hi = (DWORD)(result64 >> 0x20);
+            BlockEntry.result64_lo = (DWORD)(result64 & 0xFFFFFFFF);
         }
 
         if(dwOpenFlags & 0x1000)
         {
             BYTE BitMask = byte_A9E170[dwExtBlockIndex & 0x07];
 
-            result.field_38 = (pParsedBetData->field_A4[dwExtBlockIndex / 8] & BitMask) ? 0x100 : 0;
+            BlockEntry.field_38 = (pParsedBetData->field_A4[dwExtBlockIndex / 8] & BitMask) ? 0x100 : 0;
         }
 
         // 0x3A bytes !!!
-        memcpy(pResult, &result, sizeof(MPQ_FILE_STRUCT_3A));
+        memcpy(pBlockEntry, &BlockEntry, sizeof(MPQ_FILE_BLOCK_ENTRY));
     }
     else
     {
 /*
-        // pArchive->field_26C is apparently a vector of MPQ_FILE_STRUCT_3A
+        // pArchive->field_26C is apparently a vector of MPQ_FILE_BLOCK_ENTRY
         temp_li.QuadPart = (ULONGLONG)0x8D3DCB09 * (pArchive->field_270 - pArchive->field_26C);
         temp_li.HighPart = (temp_li.HighPart + (pArchive->field_270 - pArchive->field_26C)) >> 0x05;
         eax = (temp_li.HighPart >> 0x05) + temp_li.HighPart;
         assert(dwExtBlockIndex < eax);
 
-        memcpy(pResult, &pArchive->field_26C[dwExtBlockIndex], sizeof(MPQ_FILE_STRUCT_3A));
+        memcpy(pBlockEntry, &pArchive->field_26C[dwExtBlockIndex], sizeof(MPQ_FILE_BLOCK_ENTRY));
 */
     }
 }
@@ -1129,20 +1132,19 @@ bool WINAPI SFileOpenArchive(
             hFind = SFileFindFirstFile((HANDLE)ha, "*", &sf, NULL);
             while(hFind && bResult)
             {
-                MPQ_FILE_STRUCT_3A Result3A;
-                TMPQHash * pHash;
+                MPQ_FILE_BLOCK_ENTRY BlockEntry;
+                TMPQBlock * pBlock;
                 ULARGE_INTEGER FileNameHash;
                 DWORD dwExtBlockIndex;
 
                 FileNameHash.QuadPart = HashStringJenkins(sf.cFileName);
                 dwExtBlockIndex = CalculateExtBlockIndex(pParsedHetData, pParsedBetData, &FileNameHash);
-                pHash = GetHashEntryAny(ha, sf.cFileName);
-//              dwExtBlockIndex = wow_CalculateExtBlockIndex(pParsedHetData, pParsedBetData, &FileNameHash);
-                
                 if(dwExtBlockIndex != 0xFFFFFFFF)
                 {
-                    sub_6D1100(ha, pParsedBetData, &Result3A, dwExtBlockIndex);
+                    GetFileBlockEntry(ha, pParsedBetData, &BlockEntry, dwExtBlockIndex);
                 }
+
+                pBlock = ha->pBlockTable + sf.dwBlockIndex;
 
                 bResult = SFileFindNextFile(hFind, &sf);
             }

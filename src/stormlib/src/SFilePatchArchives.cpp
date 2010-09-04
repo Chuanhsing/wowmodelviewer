@@ -34,6 +34,10 @@ static void Decompress_RLE(LPBYTE pbDecompressed, DWORD cbDecompressed, LPBYTE p
     BYTE RepeatCount; 
     BYTE OneByte;
 
+    // Cut the initial DWORD from the compressed chunk
+    pbCompressed += sizeof(DWORD);
+    cbCompressed -= sizeof(DWORD);
+
     // Pre-fill decompressed buffer with zeros
     memset(pbDecompressed, 0, cbDecompressed);
 
@@ -61,63 +65,82 @@ static void Decompress_RLE(LPBYTE pbDecompressed, DWORD cbDecompressed, LPBYTE p
     }
 }
 
-static int LoadMpqPatchFile(TMPQFile * hf)
+static int LoadMpqPatch_COPY(TMPQFile * hf, TPatchHeader * pPatchHeader)
 {
-    TPatchHeader PatchHeader;
-    LPBYTE pbCompressed = NULL;
-    DWORD cbCompressed = 0;
-    DWORD dwBytesRead;
     int nError = ERROR_SUCCESS;
 
-    // Read the patch header
-    SFileReadFile((HANDLE)hf, &PatchHeader, sizeof(TPatchHeader), &dwBytesRead);
-    if(dwBytesRead != sizeof(TPatchHeader))
-        nError = ERROR_FILE_CORRUPT;
-
-    // Verify the signatures in the patch header
-    if(nError == ERROR_SUCCESS)
-    {
-        // BSWAP the entire header, if needed
-        BSWAP_ARRAY32_UNSIGNED(&PatchHeader, sizeof(DWORD) * 6);
-        BSWAP_ARRAY32_UNSIGNED(&PatchHeader->dwXFRM, sizeof(DWORD) * 4);
-
-        if(PatchHeader.dwSignature != 0x48435450 || PatchHeader.dwXFRM != 0x4d524658 || PatchHeader.dwBSD0 != 0x30445342)
-            nError = ERROR_FILE_CORRUPT;
-    }
-
     // Allocate space for patch header and compressed data
-    if(nError == ERROR_SUCCESS)
-    {
-        cbCompressed = PatchHeader.dwXfrmBlockSize - SIZE_OF_XFRM_HEADER;
-        pbCompressed = ALLOCMEM(BYTE, cbCompressed);
-        hf->pPatchHeader = (TPatchHeader *)ALLOCMEM(BYTE, sizeof(TPatchHeader) + PatchHeader.dwUnpackedSize);
-        if(hf->pPatchHeader == NULL || pbCompressed == NULL)
-            nError = ERROR_NOT_ENOUGH_MEMORY;
-    }
+    hf->pPatchHeader = (TPatchHeader *)ALLOCMEM(BYTE, pPatchHeader->dwSizeOfPatchData);
+    if(hf->pPatchHeader == NULL)
+        nError = ERROR_NOT_ENOUGH_MEMORY;
 
     // Load the patch data and decide if they are compressed or not
     if(nError == ERROR_SUCCESS)
     {
-        // Pre-fill the patch with zeros
-        memset(hf->pPatchHeader, 0, sizeof(TPatchHeader) + PatchHeader.dwUnpackedSize);
+        LPBYTE pbPatchFile = (LPBYTE)hf->pPatchHeader;
 
+        // Copy the patch header itself
+        memcpy(pbPatchFile, pPatchHeader, sizeof(TPatchHeader));
+        pbPatchFile += sizeof(TPatchHeader);
+
+        // Load the rest of the patch
+        if(!SFileReadFile((HANDLE)hf, pbPatchFile, pPatchHeader->dwSizeOfPatchData - sizeof(TPatchHeader)))
+            nError = GetLastError();
+    }
+
+    return nError;
+}
+
+static int LoadMpqPatch_BSD0(TMPQFile * hf, TPatchHeader * pPatchHeader)
+{
+    LPBYTE pbDecompressed = NULL;
+    LPBYTE pbCompressed = NULL;
+    DWORD cbDecompressed = 0;
+    DWORD cbCompressed = 0;
+    DWORD dwBytesRead = 0;
+    int nError = ERROR_SUCCESS;
+
+    // Allocate space for compressed data
+    cbCompressed = pPatchHeader->dwXfrmBlockSize - SIZE_OF_XFRM_HEADER;
+    pbCompressed = ALLOCMEM(BYTE, cbCompressed);
+    if(pbCompressed == NULL)
+        nError = ERROR_SUCCESS;
+
+    // Read the compressed patch data
+    if(nError == ERROR_SUCCESS)
+    {
         // Load the rest of the header
         SFileReadFile((HANDLE)hf, pbCompressed, cbCompressed, &dwBytesRead);
         if(dwBytesRead != cbCompressed)
             nError = ERROR_FILE_CORRUPT;
     }
 
-    // Construct the uncompressed block
+    // Get the uncompressed size of the patch
     if(nError == ERROR_SUCCESS)
     {
-        LPBYTE pbDecompressed = (LPBYTE)(hf->pPatchHeader + 1);
+        cbDecompressed = pPatchHeader->dwSizeOfPatchData - sizeof(TPatchHeader);
+        hf->pPatchHeader = (TPatchHeader *)ALLOCMEM(BYTE, pPatchHeader->dwSizeOfPatchData);
+        if(hf->pPatchHeader == NULL)
+            nError = ERROR_NOT_ENOUGH_MEMORY;
+    }
 
+    // Now decompress the patch data
+    if(nError == ERROR_SUCCESS)
+    {
         // Copy the patch header
-        memcpy(hf->pPatchHeader, &PatchHeader, sizeof(TPatchHeader));
+        memcpy(hf->pPatchHeader, pPatchHeader, sizeof(TPatchHeader));
+        pbDecompressed = (LPBYTE)hf->pPatchHeader + sizeof(TPatchHeader);
 
-        // Decompress or copy the patch data
-        assert(cbCompressed < PatchHeader.dwUnpackedSize);
-        Decompress_RLE(pbDecompressed, PatchHeader.dwUnpackedSize, pbCompressed, cbCompressed);
+        // Uncompress or copy the patch data
+        if(cbCompressed < cbDecompressed)
+        {
+            Decompress_RLE(pbDecompressed, cbDecompressed, pbCompressed, cbCompressed);
+        }
+        else
+        {
+            assert(cbCompressed == cbDecompressed);
+            memcpy(pbDecompressed, pbCompressed, cbCompressed);
+        }
     }
 
     // Free buffers and exit
@@ -126,21 +149,46 @@ static int LoadMpqPatchFile(TMPQFile * hf)
     return nError;
 }
 
-static LPBYTE PatchFileData(
-    LPBYTE pbPatchData,
-    void * pvOldData,
-    DWORD  cbOldData,
-    LPDWORD pcbNewData)
+static int ApplyMpqPatch_COPY(
+    TMPQFile * hf,
+    TPatchHeader * pPatchHeader)
 {
-    PBLIZZARD_BSDIFF40_FILE pBsdiff = (PBLIZZARD_BSDIFF40_FILE)pbPatchData;
+    LPBYTE pbNewFileData;
+    DWORD cbNewFileData;
+
+    // Allocate space for new file data
+    cbNewFileData = pPatchHeader->dwXfrmBlockSize - SIZE_OF_XFRM_HEADER;
+    pbNewFileData = ALLOCMEM(BYTE, cbNewFileData);
+    if(pbNewFileData == NULL)
+        return ERROR_NOT_ENOUGH_MEMORY;
+
+    // Copy the patch data as-is
+    memcpy(pbNewFileData, (LPBYTE)pPatchHeader + sizeof(TPatchHeader), cbNewFileData);
+
+    // Free the old file data
+    FREEMEM(hf->pbFileData);
+
+    // Put the new file data there
+    hf->pbFileData = pbNewFileData;
+    hf->cbFileData = cbNewFileData;
+    return ERROR_SUCCESS;
+}
+
+static int ApplyMpqPatch_BSD0(
+    TMPQFile * hf,
+    TPatchHeader * pPatchHeader)
+{
+    PBLIZZARD_BSDIFF40_FILE pBsdiff;
     LPDWORD pCtrlBlock;
+    LPBYTE pbPatchData = (LPBYTE)pPatchHeader + sizeof(TPatchHeader);
     LPBYTE pDataBlock;
     LPBYTE pExtraBlock;
     LPBYTE pbNewData = NULL;
-    LPBYTE pbOldData = (LPBYTE)pvOldData;
+    LPBYTE pbOldData = (LPBYTE)hf->pbFileData;
     DWORD dwNewOffset = 0;                          // Current position to patch
     DWORD dwOldOffset = 0;                          // Current source position
     DWORD dwNewSize;                                // Patched file size
+    DWORD dwOldSize = hf->cbFileData;               // File size before patch
 
     // Get pointer to the patch header
     // Format of BSDIFF header corresponds to original BSDIFF, which is:
@@ -196,7 +244,7 @@ static LPBYTE PatchFileData(
         // Now combine the patch data with the original file
         for(i = 0; i < dwAddDataLength; i++)
         {
-            if(dwOldOffset < cbOldData)
+            if(dwOldOffset < dwOldSize)
                 pbNewData[dwNewOffset] = pbNewData[dwNewOffset] + pbOldData[dwOldOffset];
 
             dwNewOffset++;
@@ -222,10 +270,111 @@ static LPBYTE PatchFileData(
         pCtrlBlock += 3;
     }
 
-    // Give the new size to the caller
-    if(pcbNewData != NULL)
-        *pcbNewData = dwNewSize;
-    return pbNewData;
+    // Free the old file data
+    FREEMEM(hf->pbFileData);
+
+    // Put the new data to the fil structure
+    hf->pbFileData = pbNewData;
+    hf->cbFileData = dwNewSize;
+    return ERROR_SUCCESS;
+}
+
+
+static int LoadMpqPatch(TMPQFile * hf)
+{
+    TPatchHeader PatchHeader;
+    DWORD dwBytesRead;
+    int nError = ERROR_SUCCESS;
+
+    // Read the patch header
+    SFileReadFile((HANDLE)hf, &PatchHeader, sizeof(TPatchHeader), &dwBytesRead);
+    if(dwBytesRead != sizeof(TPatchHeader))
+        nError = ERROR_FILE_CORRUPT;
+
+    // Verify the signatures in the patch header
+    if(nError == ERROR_SUCCESS)
+    {
+        // BSWAP the entire header, if needed
+        BSWAP_ARRAY32_UNSIGNED(&PatchHeader, sizeof(DWORD) * 6);
+        PatchHeader.dwXFRM          = BSWAP_INT32_UNSIGNED(PatchHeader.dwXFRM);
+        PatchHeader.dwXfrmBlockSize = BSWAP_INT32_UNSIGNED(PatchHeader.dwXfrmBlockSize);
+        PatchHeader.dwPatchType     = BSWAP_INT32_UNSIGNED(PatchHeader.dwPatchType);
+
+        if(PatchHeader.dwSignature != 0x48435450 || PatchHeader.dwMD5 != 0x5f35444d || PatchHeader.dwXFRM != 0x4d524658)
+            nError = ERROR_FILE_CORRUPT;
+    }
+
+    // Read the patch, depending on patch type
+    if(nError == ERROR_SUCCESS)
+    {
+        switch(PatchHeader.dwPatchType)
+        {
+            case 0x59504f43:    // 'COPY'
+                nError = LoadMpqPatch_COPY(hf, &PatchHeader);
+                break;
+
+            case 0x30445342:    // 'BSD0'
+                nError = LoadMpqPatch_BSD0(hf, &PatchHeader);
+                break;
+
+            default:
+                nError = ERROR_FILE_CORRUPT;
+                break;
+        }
+    }
+
+    return nError;
+}
+
+static int ApplyMpqPatch(
+    TMPQFile * hf,
+    TPatchHeader * pPatchHeader)
+{
+    unsigned char md5_digest[MD5_DIGEST_SIZE];
+    hash_state md5_state;
+    int nError = ERROR_SUCCESS;
+
+    // Verify the original file before patching
+    if(pPatchHeader->dwSizeBeforePatch != 0)
+    {
+        md5_init(&md5_state);
+        md5_process(&md5_state, hf->pbFileData, hf->cbFileData);
+        md5_done(&md5_state, md5_digest);
+        if(memcmp(pPatchHeader->md5_before_patch, md5_digest, MD5_DIGEST_SIZE))
+            nError = ERROR_FILE_CORRUPT;
+    }
+
+    // Apply the patch
+    if(nError == ERROR_SUCCESS)
+    {
+        switch(pPatchHeader->dwPatchType)
+        {
+            case 0x59504f43:    // 'COPY'
+                nError = ApplyMpqPatch_COPY(hf, pPatchHeader);
+                break;
+
+            case 0x30445342:    // 'BSD0'
+                nError = ApplyMpqPatch_BSD0(hf, pPatchHeader);
+                break;
+
+            default:
+                nError = ERROR_FILE_CORRUPT;
+                break;
+        }
+    }
+
+    // Verify MD5 after patch
+    if(nError == ERROR_SUCCESS && pPatchHeader->dwSizeAfterPatch != 0)
+    {
+        // Verify the patched file
+        md5_init(&md5_state);
+        md5_process(&md5_state, hf->pbFileData, hf->cbFileData);
+        md5_done(&md5_state, md5_digest);
+        if(memcmp(pPatchHeader->md5_after_patch, md5_digest, MD5_DIGEST_SIZE))
+            nError = ERROR_FILE_CORRUPT;
+    }
+
+    return nError;
 }
 
 //-----------------------------------------------------------------------------
@@ -233,19 +382,8 @@ static LPBYTE PatchFileData(
 
 int PatchFileData(TMPQFile * hf)
 {
-    unsigned char md5_digest[MD5_DIGEST_SIZE];
-    hash_state md5_state;
     TMPQFile * hfBase = hf;
-    LPBYTE pbNewData = NULL;
-    LPBYTE pbOldData = NULL;
-    DWORD cbOldSize = 0;
-    DWORD cbNewSize = 0;
     int nError = ERROR_SUCCESS;
-
-    // Get the original file data
-    cbOldSize = hf->dwPatchedSize;
-    pbOldData = hf->pbFileData;
-    assert(pbOldData != NULL);
 
     // Move to the first patch
     hf = hf->hfPatchFile;
@@ -256,53 +394,20 @@ int PatchFileData(TMPQFile * hf)
         // This must be true
         assert(hf->pBlock->dwFlags & MPQ_FILE_PATCH_FILE);
 
-        // Load the patch data
-        nError = LoadMpqPatchFile(hf);
+        // Make sure that the patch data is loaded
+        nError = LoadMpqPatch(hf);
         if(nError != ERROR_SUCCESS)
             break;
 
-        // Verify the original file before patching
-        md5_init(&md5_state);
-        md5_process(&md5_state, pbOldData, cbOldSize);
-        md5_done(&md5_state, md5_digest);
-        if(memcmp(hf->pPatchHeader->md5_before_patch, md5_digest, MD5_DIGEST_SIZE))
-        {
-            nError = ERROR_FILE_CORRUPT;
+        // Apply the patch
+        nError = ApplyMpqPatch(hfBase, hf->pPatchHeader);
+        if(nError != ERROR_SUCCESS)
             break;
-        }
-
-        // Create block with patched data
-        pbNewData = PatchFileData((LPBYTE)(hf->pPatchHeader + 1), pbOldData, cbOldSize, &cbNewSize);
-        if(pbNewData == NULL)
-        {
-            nError = ERROR_FILE_CORRUPT;
-            break;
-        }
-
-        // Verify the patched file
-        md5_init(&md5_state);
-        md5_process(&md5_state, pbNewData, cbNewSize);
-        md5_done(&md5_state, md5_digest);
-        if(memcmp(hf->pPatchHeader->md5_after_patch, md5_digest, MD5_DIGEST_SIZE))
-        {
-            FREEMEM(pbNewData);
-            nError = ERROR_FILE_CORRUPT;
-            break;
-        }
-
-        // Move old data to new data
-        if(pbOldData != NULL)
-            FREEMEM(pbOldData);
-        pbOldData = pbNewData;
-        cbOldSize = cbNewSize;
 
         // Move to the next patch
         hf = hf->hfPatchFile;
     }
 
-    // Now remember the patched datain the file structure
-    hfBase->pbFileData = pbOldData;
-    hfBase->dwPatchedSize = cbOldSize;
     return nError;
 }
 

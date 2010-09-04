@@ -663,10 +663,11 @@ __TryAgain:
     return nError;
 }
 
+int PatchFileData(TMPQFile * hf);
+
 static int TestArchiveOpenAndClose(const char * szMpqName)
 {
-    const char * szFileName1 = LISTFILE_NAME;
-//  const char * szFileName2 = MAKE_PATH(LISTFILE_NAME);
+    const char * szFileName1 = "pc-game-hdfiles\\WTF\\RunOnce.wtf";
     HANDLE hFile1 = NULL;
     HANDLE hFile2 = NULL;
     HANDLE hMpq = NULL;
@@ -692,10 +693,20 @@ static int TestArchiveOpenAndClose(const char * szMpqName)
     // Dummy read from the file
     if(nError == ERROR_SUCCESS)
 	{
-		DWORD dwBytesRead = 0;
+        DWORD dwBytesRead = 0;
 		BYTE Buffer[0x1000];
+/*
+		TMPQFile * hf = (TMPQFile *)hFile1;
 
-		SFileReadFile(hFile1, Buffer, sizeof(Buffer), &dwBytesRead);
+        hf->pbFileData = ALLOCMEM(BYTE, hf->pBlock->dwFSize);
+        hf->dwPatchedSize = hf->pBlock->dwFSize;
+        SFileReadFile(hFile1, hf->pbFileData, hf->pBlock->dwFSize, &dwBytesRead);
+        SFileSetFilePointer(hFile1, 0, NULL, FILE_BEGIN);
+
+        hf->pBlock->dwFlags |= MPQ_FILE_PATCH_FILE;
+        PatchFileData(hf);
+*/
+        SFileReadFile(hFile1, Buffer, sizeof(Buffer), &dwBytesRead);
 	}
 
     // Verify the MPQ listfile
@@ -1400,7 +1411,6 @@ static int TestOpenPatchedArchive(const char * szMpqName, ...)
         }
         va_end(argList);
     }
-
 /*
     // Now search all files
     if(nError == ERROR_SUCCESS)
@@ -1497,10 +1507,9 @@ int main(void)
 //      nError = TestSectorCompress(MPQ_SECTOR_SIZE);
 
     // Test the archive open and close
-//  if(nError == ERROR_SUCCESS)
-//      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/expansion-locale-frFR.MPQ"));
-//      nError = TestArchiveOpenAndClose(MAKE_PATH("PartialMPQs/interface.MPQ.part"));
-//      nError = TestArchiveOpenAndClose(MAKE_PATH("Starcraft II/Installer Tome 1.MPQE"));
+    if(nError == ERROR_SUCCESS)
+        nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/expansion-locale-frFR.MPQ"));
+//      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/wow-12759-Win-final.MPQ"));
                                                                              
 //  if(nError == ERROR_SUCCESS)
 //      nError = TestFindFiles(MAKE_PATH("Warcraft III/HumanEd.mpq"));
@@ -1538,14 +1547,14 @@ int main(void)
 //                                      0x1001);
 //  }
 
-    if(nError == ERROR_SUCCESS)
-    {
-        nError = TestOpenPatchedArchive(MAKE_PATH("2011 - WoW-Cataclysm/locale-enUS.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12694.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12759.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12803.MPQ"),
-                                        NULL);
-    }
+//  if(nError == ERROR_SUCCESS)
+//  {
+//      nError = TestOpenPatchedArchive(MAKE_PATH("2011 - WoW-Cataclysm/locale-enUS.MPQ"),
+//                                      MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12694.MPQ"),
+//                                      MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12759.MPQ"),
+//                                      MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12803.MPQ"),
+//                                      NULL);
+//  }
 
 
     // Remove the working directory

@@ -12,13 +12,13 @@ Offs   Contains   Meaning
 Offs   Contains   Meaning
 ----   --------   -------
 0000   0000009B   Size of the entire data in HET block. Must be equal to uncompressed size in the header
-0004   00000035   Being multiplied by 0xAAAAAAAB4 (unsigned), then higher DWORD divided by 8 and stored to ParsedHetData->field_18
-0008   00000046   Length, in bytes, of the data statring at offset 0020
-000C   00000040   Number of bits of something
-0010   00000006   Size of one entry, in bits
+0004   00000035   Number of used entries in the hash table (aka number of files in the MPQ)
+0008   00000046   Total number of entries in the hash table
+000C   00000040   Effective size of the hash entry
+0010   00000006   Size of block index, in bits
 0014   00000000   Stored to pParsedData->field_4
 0018   00000006   Stored to pParsedData->field_8
-001C   00000035   Length, in bytes, of the data, starting at offset 0066
+001C   00000035   Length, in bytes, of the block table entry
 
 0020   (46 bytes) 00 90 c9 d2 9c 87 00 c7 00 8d b6 de 87 c3 92 85
                   d1 9f ba d1 00 d0 ad c7 e9 9a f5 e4 f3 fb bc f4

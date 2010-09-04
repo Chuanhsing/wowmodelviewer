@@ -21,6 +21,7 @@ LIBRARY  = libStorm.dylib
 
 OBJS_CPP = src/adpcm/adpcm.obj \
            src/huffman/huff.obj \
+           src/jenkins/lookup3.o \
            src/sparse/sparse.obj \
            src/FileStream.obj \
            src/SCommon.obj \
@@ -34,6 +35,7 @@ OBJS_CPP = src/adpcm/adpcm.obj \
            src/SFileListFile.obj \
            src/SFileOpenArchive.obj \
            src/SFileOpenFileEx.obj \
+           src/SFilePatchArchives.obj \
            src/SFileReadFile.obj \
            src/SFileVerify.obj
 
