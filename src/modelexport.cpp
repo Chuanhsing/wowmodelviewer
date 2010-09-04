@@ -16,7 +16,7 @@ void SaveTexture(wxString fn)
 {
 	// Slash correction, just in case.
 	#ifndef _WINDOWS
-		fn.Replace(wxT("\\"),wxT("/"));
+		fn.Replace(_T("\\"),_T("/"));
 	#endif
 	unsigned char *pixels = NULL;
 
@@ -57,13 +57,15 @@ void SaveTexture(wxString fn)
 // Used to export images that are filenames. For composited images, such as a character's face & body texture, use SaveTexture.
 // ExportID identifies the exporting function. This is used in the path-generating section.
 // Suffixes currently supported: "tga" & "png". Defaults to tga if omitted by exporter.
-void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString suffix = wxString(wxT("tga")))
+void SaveTexture2(wxString file, wxString outdir, wxString ExportID = wxEmptyString, wxString suffix = wxString(_T("tga")))
 {
 	// Check to see if we have all our data...
 	if (file == wxEmptyString)
 		return;
 	if (outdir == wxEmptyString)
 		return;
+
+	//wxLogMessage(_T("Outdir: %s"),outdir);
 
 	wxFileName fn(file);
 	if (fn.GetExt().Lower() != _T("blp"))
@@ -83,38 +85,43 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString su
 	newImage->IncreaseBpp(32);	// set image to 32bit 
 	newImage->CreateFromArray(tempbuf, tex.w, tex.h, 32, (tex.w*4), true);
 
-	wxString fileName = file.AfterLast(SLASH).BeforeLast('.');
-	wxString filePath = file.BeforeLast(SLASH);
+	wxString ImgName = file.AfterLast(SLASH).BeforeLast('.');
+	wxString ImgPath = file.BeforeLast(SLASH);
+	//wxLogMessage(_T("ImgName: %s, ImgPath: %s"),ImgName,ImgPath);
+	//wxLogMessage(_T("Outdir: %s"),outdir);
 
 	// -= Pre-Path Directories =-
 	// Add any directories inbetween the target directory and the preserved directory go here.
 
 	// Secure paths for Non-Windows systems
 	#ifndef _WINDOWS
-		outdir.Replace(wxT("\\"),wxT("/"));
-		filePath.Replace(wxT("\\"),wxT("/"));
+		outdir.Replace(_T("\\"),_T("/"));
+		filePath.Replace(_T("\\"),_T("/"));
 	#endif
 
 	// Lightwave
-	if (ExportID.IsSameAs(wxT("LWO"))){
+	if (ExportID.IsSameAs(_T("LWO"))){
 		if (modelExport_LW_PreserveDir == true){
-			MakeDirs(outdir,wxT("Images"));
-			outdir += SLASH+wxT("Images")+SLASH;
+			MakeDirs(outdir,_T("Images"));
+			wxString a = outdir << SLASH << _T("Images") << SLASH;
+			outdir.Empty();
+			outdir = a;
 		}
 	// Wavefront OBJ
-	}else if (ExportID.IsSameAs(wxT("OBJ"))){
+	}else if (ExportID.IsSameAs(_T("OBJ"))){
 	}
+	//wxLogMessage(_T("LWO Image Outdir: %s"),outdir);
 
 	// Restore WoW's content directories for this image.
 	if (modelExport_PreserveDir == true){
-		MakeDirs(outdir,filePath);
-		outdir += filePath;
-		outdir << SLASH;
+		MakeDirs(outdir,file.BeforeLast(SLASH));
+		outdir << file.BeforeLast(SLASH) << SLASH;
 	}
+	//wxLogMessage(_T("Preserve Outdir: %s"),outdir);
 
 	// Final Filename
-	temp = outdir+fileName+wxT(".")+suffix;
-	wxLogMessage(_T("Exporting Image: %s"),temp.c_str());
+	temp = outdir+ImgName+_T(".")+suffix;
+	//wxLogMessage(_T("Exporting Image: %s"),temp.c_str());
 
 	//wxLogMessage(_T("Info: Exporting texture to %s..."), temp.c_str());
 
@@ -369,10 +376,14 @@ void InitCommon(Attachment *att, bool init, ModelData *&verts, GroupData *&group
 }
 
 // Change a Vec3D so it now faces forwards
-void MakeModelFaceForwards(Vec3D &vect){
+void MakeModelFaceForwards(Vec3D &vect, bool flipX = false){
 	Vec3D Temp;
 
-	Temp.x = 0-vect.z;
+	if (flipX){
+		Temp.x = 0-vect.z;
+	}else{
+		Temp.x = vect.z;
+	}
 	Temp.y = vect.y;
 	Temp.z = 0-vect.x;
 
@@ -456,7 +467,7 @@ void SaveBaseFile(){
 
 	FILE *hFile = NULL;
 	wxString filename;
-	filename = wxFileSelector(wxT("Please select your file to export"), wxGetCwd(), fn.GetName(), fn.GetExt(), fn.GetExt()+_T(" files (.")+fn.GetExt()+_T(")|*.")+fn.GetExt());
+	filename = wxFileSelector(_T("Please select your file to export"), wxGetCwd(), fn.GetName(), fn.GetExt(), fn.GetExt()+_T(" files (.")+fn.GetExt()+_T(")|*.")+fn.GetExt());
 
 	if ( !filename.empty() )
 	{

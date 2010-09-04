@@ -2899,7 +2899,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportWMOtoLWO2(canvas->wmo, dialog.GetPath().fn_str());	
+				ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
 			}
 		}
 #endif

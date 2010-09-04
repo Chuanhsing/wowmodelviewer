@@ -114,7 +114,7 @@ void fixnamen(char *name, uint32 len);
 wxString Vec3DToString(Vec3D vec);
 int wxStringToInt(const wxString& str);
 float round(float input, int limit);
-void MakeDirs(wxString base, wxString paths);
+void MakeDirs(wxString PathBase, wxString ExtPaths);
 unsigned short _SwapTwoBytes (unsigned short w);
 
 void getGamePath();

@@ -137,7 +137,7 @@ struct WMOVB {
 struct WMODoodadSet {
 	char name[0x14]; // set name
 	int start; // index of first doodad instance in this set
-	int size; // number of doodad instances in this set
+	uint32 size; // number of doodad instances in this set
 	int unused; // unused? (always 0)
 };
 
@@ -214,7 +214,7 @@ public:
 	int nLights; // number of lights
 	int nModels; // number of M2 models imported
 	int nDoodads; // number of dedicated files
-	int nDoodadSets; // number of doodad sets
+	uint32 nDoodadSets; // number of doodad sets
 	unsigned int col; // ambient color? RGB
 	int nX; // WMO ID (column 2 in WMOAreaTable.dbc)
 	Vec3D v1; // Bounding box corner 1

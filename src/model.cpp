@@ -578,7 +578,7 @@ void Model::initCommon(MPQFile &f)
 	normals = new Vec3D[header.nVertices];
 
 	// Correct the data from the model, so that its using the Y-Up axis mode.
-	for (size_t i=0; i<header.nVertices; i++) {
+	for (uint32 i=0; i<header.nVertices; i++) {
 		origVertices[i].pos = fixCoordSystem(origVertices[i].pos);
 		origVertices[i].normal = fixCoordSystem(origVertices[i].normal);
 
@@ -776,6 +776,18 @@ void Model::initCommon(MPQFile &f)
 		// int viewLOD = 0; // sets LOD to worst
 		// int viewLOD = header.nViews - 1; // sets LOD to best
 		setLOD(f, 0); // Set the default Level of Detail to the best possible. 
+	}
+
+	// build indice to vert array.
+	IndiceToVerts = new uint32[nIndices]+2;
+	for (size_t i=0;i<nIndices;i++){
+		uint32 a = indices[i];
+		for (uint32 j=0;j<header.nVertices;j++){
+			if (origVertices[a].pos == origVertices[j].pos){
+				IndiceToVerts[i] = j;
+				break;
+			}
+		}
 	}
 
 	// zomg done

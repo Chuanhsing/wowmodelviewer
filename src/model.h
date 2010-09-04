@@ -313,6 +313,7 @@ public:
 public:
 	// Raw Data
 	ModelVertex *origVertices;
+	uint32 *IndiceToVerts;
 
 	Vec3D *vertices, *normals;
 	Vec2D *texCoords;

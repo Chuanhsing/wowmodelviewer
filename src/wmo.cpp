@@ -148,7 +148,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 			// "Set_$DefaultGlobal", and have a horrible mess of abandoned broken things in another 
 			// set called "Set_Abandoned01". The names are only informative.
 			// The doodad set number for every WMO instance is specified in the ADT files.
-			for (int i=0; i<nDoodadSets; i++) {
+			for (uint32 i=0; i<nDoodadSets; i++) {
 				WMODoodadSet dds;
 				f.read(&dds, 32);
 				doodadsets.push_back(dds);
@@ -341,8 +341,8 @@ void WMOGroup::updateModels(bool load)
 		if (wmo->doodadset==-1) {
 			inSet = false;
 		} else {
-			inSet = ( ((dd >= wmo->doodadsets[wmo->doodadset].start) && (dd < (wmo->doodadsets[wmo->doodadset].start+wmo->doodadsets[wmo->doodadset].size)))
-			|| ( wmo->includeDefaultDoodads && (dd >= wmo->doodadsets[0].start) && ((dd < (wmo->doodadsets[0].start+wmo->doodadsets[0].size) )) ) );
+			inSet = ( ((dd >= wmo->doodadsets[wmo->doodadset].start) && (dd < (wmo->doodadsets[wmo->doodadset].start+(int)wmo->doodadsets[wmo->doodadset].size)))
+			|| ( wmo->includeDefaultDoodads && (dd >= wmo->doodadsets[0].start) && ((dd < (wmo->doodadsets[0].start+(int)wmo->doodadsets[0].size) )) ) );
 		}
 
 		if (inSet) {
@@ -1158,8 +1158,8 @@ void WMOGroup::drawDoodads(int doodadset)
 		if (doodadset==-1) {
 			inSet = false;
 		} else {
-			inSet = ( ((dd >= wmo->doodadsets[doodadset].start) && (dd < (wmo->doodadsets[doodadset].start+wmo->doodadsets[doodadset].size))) 
-			|| ( wmo->includeDefaultDoodads && (dd >= wmo->doodadsets[0].start) && ((dd < (wmo->doodadsets[0].start+wmo->doodadsets[0].size) )) ) );
+			inSet = ( ((dd >= wmo->doodadsets[doodadset].start) && (dd < (wmo->doodadsets[doodadset].start+(int)wmo->doodadsets[doodadset].size))) 
+			|| ( wmo->includeDefaultDoodads && (dd >= wmo->doodadsets[0].start) && ((dd < (wmo->doodadsets[0].start+(int)wmo->doodadsets[0].size) )) ) );
 		}
 
 		if (inSet) {

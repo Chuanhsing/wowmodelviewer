@@ -126,7 +126,7 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString su
 Vec3D QuaternionToXYZ(Vec3D Dir, float W);
 void InitCommon(Attachment *att, bool init, ModelData *&verts, GroupData *&groups, unsigned short &numVerts, unsigned short &numGroups, unsigned short &numFaces);
 wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassNumber);
-void MakeModelFaceForwards(Vec3D &vect);
+void MakeModelFaceForwards(Vec3D &vect, bool flipX);
 
 // --== Exporter Functions ==--
 // If your exporter doesn't do WMO or M2 files, include a faux function anyways. Then add a non-working
@@ -142,7 +142,6 @@ void ExportWMOtoLWO(WMO *m, const char *fn);
 void ExportWMOObjectstoLWO(WMO *m, const char *fn);
 void ExportADTtoLWO(MapTile *m, const char *fn);
 void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init);
-void ExportWMOtoLWO2(WMO *m, const char *fn);
 
 // Wavefront Object
 void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init);
