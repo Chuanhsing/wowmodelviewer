@@ -468,7 +468,7 @@ Model::~Model()
 			wxDELETEA(events);
 			wxDELETEA(particleSystems);
 			wxDELETEA(ribbons);
-			//wxDELETEA(IndiceToVerts);
+			wxDELETEA(IndiceToVerts);
 
 		} else {
 			glDeleteLists(dlist, 1);
@@ -789,7 +789,7 @@ void Model::initCommon(MPQFile &f)
 		// TODO: Add support for selecting the LOD.
 		// int viewLOD = 0; // sets LOD to worst
 		// int viewLOD = header.nViews - 1; // sets LOD to best
-		if (header.nViews > 1) // Patch 12857 need LOD 1
+		if (header.nViews > 1 && gameVersion == 40000) // Patch 12857 need LOD 1
 			setLOD(f, 1);
 		else
 			setLOD(f, 0); // Set the default Level of Detail to the best possible. 
@@ -797,11 +797,11 @@ void Model::initCommon(MPQFile &f)
 
 	// build indice to vert array.
 	if (nIndices) {
-		IndiceToVerts = new uint32[nIndices]+2;
+		IndiceToVerts = new uint32[nIndices+2];
 		for (size_t i=0;i<nIndices;i++){
 			uint32 a = indices[i];
 			for (uint32 j=0;j<header.nVertices;j++){
-				if (origVertices[a].pos == origVertices[j].pos){
+				if (a < header.nVertices && origVertices[a].pos == origVertices[j].pos){
 					IndiceToVerts[i] = j;
 					break;
 				}
