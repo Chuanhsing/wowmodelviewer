@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="wowmodelview"
 	ProjectGUID="{DCA0C667-2A7A-4FCE-AD02-466F7A380E0C}"
 	RootNamespace="wowmodelview"
@@ -146,7 +146,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;C:\wxWidgets-2.8.11\include&quot;;&quot;C:\wxWidgets-2.8.11\include\msvc&quot;;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\"
 				PreprocessorDefinitions="WIN32;_WIN32;_WINDOWS;WIN64;_WIN64;_AMD64_;_M_AMD64;__WINDOWS__;__WXMSW__;_DEBUG;__WXDEBUG__;_CRT_SECURE_NO_WARNINGS"
-				MinimalRebuild="false"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="true"
 				RuntimeLibrary="3"

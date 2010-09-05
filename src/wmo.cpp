@@ -939,7 +939,7 @@ void WMOGroup::initDisplayList()
 			// Temp, until we get this fully working.
 			gf.seek(spos);
 			wxLogMessage(_T("Gathering New Vertex Colors..."));
-			VertexColors = new WMOVertColor[nVertices];
+			VertexColors = new WMOVertColor[nVertices+2];
 			memcpy(VertexColors, gf.getPointer(), size);
 			/*
 			for (uint32 x=0;x<nVertices;x++){
