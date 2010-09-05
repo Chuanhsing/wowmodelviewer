@@ -30,11 +30,12 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 	if (!(filename.Lower().Contains("cache") && filename.Lower().Contains("patch"))) {
 		// do patch
 		for(int j=mpqArchives.GetCount()-1; j>=0; j--) {
-			wxString mpq = mpqArchives[j].AfterLast(SLASH);
-			if (!mpq.StartsWith(_T("wow-update-")))
+			if (!mpqArchives[j].AfterLast(SLASH).StartsWith(_T("wow-update-")))
 				continue;
-			SFileOpenPatchArchive(mpq_a, (char *)mpq.c_str(), "enUS", 0);
-			wxLogMessage(_T("Appending patch %s on %s"), mpq.c_str(), filename.c_str());
+			SFileOpenPatchArchive(mpq_a, (char *)mpqArchives[j].c_str(), "base", 0);
+			wxLogMessage(_T("Appending base patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
+			SFileOpenPatchArchive(mpq_a, (char *)mpqArchives[j].c_str(), "enUS", 0);
+			wxLogMessage(_T("Appending enUS patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
 		}
 	}
 
@@ -124,7 +125,7 @@ MPQFile::openFile(wxString filename)
 
 			HANDLE fh;
 
-			if( !SFileOpenFileEx( mpq_a, (char*)alterName.c_str(), 0, &fh ) )
+			if( !SFileOpenFileEx( mpq_a, (char*)alterName.c_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
 				continue;
 
 			// Found!
@@ -152,7 +153,7 @@ MPQFile::openFile(wxString filename)
 
 		HANDLE fh;
 
-		if( !SFileOpenFileEx( mpq_a, (char*)filename.c_str(), 0, &fh ) )
+		if( !SFileOpenFileEx( mpq_a, (char*)filename.c_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
 			continue;
 
 		// Found!
@@ -299,7 +300,7 @@ int MPQFile::getSize(wxString filename)
 		HANDLE &mpq_a = *i->second;
 		HANDLE fh;
 		
-		if( !SFileOpenFileEx( mpq_a, (char *)filename.c_str(), 0, &fh ) )
+		if( !SFileOpenFileEx( mpq_a, (char *)filename.c_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
 			continue;
 
 		DWORD filesize = SFileGetFileSize( fh );
@@ -334,7 +335,7 @@ wxString MPQFile::getArchive(wxString filename)
 		HANDLE &mpq_a = *i->second;
 		HANDLE fh;
 		
-		if( !SFileOpenFileEx( mpq_a, (char *)filename.c_str(), 0, &fh ) )
+		if( !SFileOpenFileEx( mpq_a, (char *)filename.c_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
 			continue;
 
 		return wxString((char *)i->first.c_str(), wxConvUTF8);

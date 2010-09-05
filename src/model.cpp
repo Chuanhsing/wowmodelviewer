@@ -789,10 +789,7 @@ void Model::initCommon(MPQFile &f)
 		// TODO: Add support for selecting the LOD.
 		// int viewLOD = 0; // sets LOD to worst
 		// int viewLOD = header.nViews - 1; // sets LOD to best
-		if (header.nViews > 1 && gameVersion == 40000) // Patch 12857 need LOD 1
-			setLOD(f, 1);
-		else
-			setLOD(f, 0); // Set the default Level of Detail to the best possible. 
+		setLOD(f, 0); // Set the default Level of Detail to the best possible. 
 	}
 
 	// build indice to vert array.
