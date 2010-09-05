@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_07239D76F6223523DFA5F3A1B89D54B6"
+        "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_07573F62A5504C04A8389BBFA760F2F3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -69,8 +75,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4C7CA8A97230E42F41FEC552FFEF23C6"
+        "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4F068D3280C148C0A10E489FBB607086"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4F068D3280C148C0A10E489FBB607086"
+        "OwnerKey" = "8:_F362CC42B02546EF95AD4CA57A810EE6"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -93,6 +111,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_669BDF5685FA582541A18AEA3D99FE76"
+        "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6AE1A7D34912406C902151FE4ACBA156"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -111,6 +135,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_831EE1B868484117E9AD0642BC6B24AC"
+        "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8ED033D9524C4B509D7D24A8B53E164D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -125,6 +155,12 @@
         {
         "MsmKey" = "8:_9715CF33FF5549B4A7639A38AEACB469"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AADD6CE06FA9E284204D797C6AECA826"
+        "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -155,6 +191,12 @@
         {
         "MsmKey" = "8:_E958787F5C7A43BAAF70906E6FC988ED"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F362CC42B02546EF95AD4CA57A810EE6"
+        "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -202,7 +244,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\WMV_Installer_v0701_r268_Win64.msi"
+        "OutputFilename" = "8:Release\\WMV_Installer_v0701_r462_Win64.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -254,6 +296,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_07239D76F6223523DFA5F3A1B89D54B6"
+            {
+            "SourcePath" = "8:AVIFIL32.dll"
+            "TargetName" = "8:AVIFIL32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_296025CC5E4C487297BD0E52D9BB7E38"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_07573F62A5504C04A8389BBFA760F2F3"
             {
             "SourcePath" = "8:..\\..\\..\\bin_support\\Windows\\64bit\\cximagecrt.dll"
@@ -434,6 +496,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4C7CA8A97230E42F41FEC552FFEF23C6"
+            {
+            "SourcePath" = "8:GLU32.dll"
+            "TargetName" = "8:GLU32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_296025CC5E4C487297BD0E52D9BB7E38"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_596BFBAD07484099888F48ED1BB5FA4A"
             {
             "SourcePath" = "8:..\\..\\..\\bin\\enUS\\items.csv"
@@ -492,6 +574,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_669BDF5685FA582541A18AEA3D99FE76"
+            {
+            "SourcePath" = "8:COMDLG32.dll"
+            "TargetName" = "8:COMDLG32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_296025CC5E4C487297BD0E52D9BB7E38"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6AE1A7D34912406C902151FE4ACBA156"
@@ -554,6 +656,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_831EE1B868484117E9AD0642BC6B24AC"
+            {
+            "SourcePath" = "8:MSVFW32.dll"
+            "TargetName" = "8:MSVFW32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_296025CC5E4C487297BD0E52D9BB7E38"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8ED033D9524C4B509D7D24A8B53E164D"
             {
             "SourcePath" = "8:..\\..\\..\\doc\\ChangeLog.txt"
@@ -612,6 +734,26 @@
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AADD6CE06FA9E284204D797C6AECA826"
+            {
+            "SourcePath" = "8:OPENGL32.dll"
+            "TargetName" = "8:OPENGL32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_296025CC5E4C487297BD0E52D9BB7E38"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B5C02808B2B14E7688689E1CD6479498"
@@ -849,14 +991,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:World of Warcraft Model Viewer 64-bit"
-        "ProductCode" = "8:{A1FFE3B1-8D29-4DD3-A761-1F94D60ECEF1}"
-        "PackageCode" = "8:{6443957D-29BC-4ABE-8279-A42CC4005218}"
+        "ProductCode" = "8:{C654BEBD-6E07-447F-B472-1ACF434B0B90}"
+        "PackageCode" = "8:{85D24812-E823-4ABF-9FEB-546E8EAE4531}"
         "UpgradeCode" = "8:{69AA293E-260B-47B1-A596-44671A8B6EDF}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:07.01.268"
+        "ProductVersion" = "8:07.01.462"
         "Manufacturer" = "8:WoWModelViewer.org"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1366,6 +1508,20 @@
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:FALSE"
             "SourcePath" = "8:c:\\program files (x86)\\common files\\merge modules\\microsoft_vc90_crt_x86_x64.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_F362CC42B02546EF95AD4CA57A810EE6"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86_x64.msm"
                 "Properties"
                 {
                 }

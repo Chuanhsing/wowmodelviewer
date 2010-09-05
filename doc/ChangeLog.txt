@@ -1,5 +1,31 @@
 World of Warcraft Model Viewer v0.7.0.1
 
+r462
+ - WMV can now be used while WoW is running!
+ - Various Updates for Cataclysm Beta!
+ - WMOs will now load facing forwards.
+ - Fixed Eyeglow for Death Knights, Undead and Elves, both Blood and Night!
+ - The Clear MPQ button has become the Reset button, which will reset your MPQ list to the default MPQs!
+ - You can now specify a perfered Exporter. This Exporter will be at the top of the list!
+ - Exporter list has been alphabetized.
+ - Added Starcraft II M3 model Exporter.
+ - LWO Exporter:
+  - WMO Exporter replaced with new version! Export WMOs faster and better than the previous exporter!
+  - WMOs Export using Vertices as opposed to Indices. This means less points, and a better, smoother model upon export!
+  - WMOs now export with Vertex colors!
+  - M2s and WMOs will now face forwards when exported, instead of facing to the right.
+ - FBX Exporter:
+  - Fixed a bug with Max dependancy loops.
+ - Dev Work:
+  - Code Cleanup.
+  - M2s now have a IndiceToVert array.
+  - Prebuilt StormLib files have been removed.
+  - StormLib Project file updated to create the .lib files exactly where they need to be.
+  - MakeDirs function will now longer error if the specified directory already exists.
+  - Fixed Saving problem with SaveTexture2.
+  - Fixed WMO IndiceToVert array.
+  - Exporters are now easier to add & setup.
+
 r268
  - You can now Filter your search by file type. (M2, WMO, ADT, etc...)
  - You can now filter your search by MPQ file.
