@@ -231,11 +231,11 @@ ModelViewer::ModelViewer()
 		Update();
 
 		// load our World of Warcraft mpq archives
-		bool initbool = Init();
-		if (initbool == false){
-			wxString info = _T("Fatal Error: WoW Model Viewer does not support your version of WoW.\nPlease update your World of Warcraft client!");
+		wxString initvar = Init();
+		if (initvar != wxEmptyString){
+			wxString info = _T("Fatal Error: ") + initvar;
 			wxLogMessage(info);
-			wxMessageDialog *dial = new wxMessageDialog(NULL, info, wxT("Version Mismatch"), wxOK | wxICON_ERROR);
+			wxMessageDialog *dial = new wxMessageDialog(NULL, info, wxT("Fatal Error"), wxOK | wxICON_ERROR);
 			dial->ShowModal();
 			Close(true);
 			return;
@@ -1338,7 +1338,7 @@ ModelViewer::~ModelViewer()
 	}
 }
 
-bool ModelViewer::InitMPQArchives()
+wxString ModelViewer::InitMPQArchives()
 {
 	wxString path;
 
@@ -1352,7 +1352,7 @@ bool ModelViewer::InitMPQArchives()
 	if (f.isEof()) {
 		f.close();
 		wxLogMessage(_T("Unable to gather TOC data."));
-		return false;
+		return wxString(_T("Could not read data from MPQ files."));
 	}
 	f.seek(51); // offset to "## Interface: "
 	unsigned char toc[6];
@@ -1384,10 +1384,10 @@ bool ModelViewer::InitMPQArchives()
 		langOffset = 0;
 	// else if not our primary supported edition...
 	}else if (strncmp((char*)toc, "30300", 5) != 0){
-		wxString info = _T("Notice: WoW Model Viewer does not support your version of WoW.\nPlease update your World of Warcraft client!");
-		wxLogMessage(info);
+		wxString info = _T("WoW Model Viewer does not support your version of WoW.\nPlease update your World of Warcraft client!");
+		wxLogMessage(_T("Notice: ") + info);
 
-		return false;
+		return info;
 	}else{
 		gameVersion = 30300;
 	}
@@ -1412,10 +1412,10 @@ bool ModelViewer::InitMPQArchives()
 		
 		wxRemoveFile(component);
 	}
-	return true;
+	return wxEmptyString;
 }
 
-bool ModelViewer::Init()
+wxString ModelViewer::Init()
 {
 	/*
 	// Set our display mode	
@@ -1441,21 +1441,20 @@ bool ModelViewer::Init()
 	
 	isChar = false;
 	isModel = false;
-	bool mpqarch = true;
 
 	// Load the games MPQ files into memory
-	mpqarch = InitMPQArchives();
-	wxLogMessage(_T("InitMPQArchives result: %s"),mpqarch ? _T("true") : _T("false"));
+	wxString mpqarch = InitMPQArchives();
+	wxLogMessage(_T("InitMPQArchives result: %s"),mpqarch);
 
-	if (mpqarch == false){
-		return false;
+	if (mpqarch != wxEmptyString){
+		return mpqarch;
 	}
 
 	fileControl->Init(this);
 
 	charControl->Init();
 
-	return true;
+	return wxEmptyString;
 }
 
 // Menu button press events

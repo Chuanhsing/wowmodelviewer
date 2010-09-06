@@ -138,10 +138,10 @@ public:
 	// Initialising related functions
 	void InitMenu();
 	void InitObjects();
-	bool Init();
+	wxString Init();
 	void InitDocking();
 	void InitDatabase();
-	bool InitMPQArchives();
+	wxString InitMPQArchives();
 
 	// Save and load various settings between sessions
 	void LoadSession();
