@@ -95,10 +95,10 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 {
 	int n = 0;
 #if 1 // for worgen female
-	if (gameVersion >= 40000 && race == 22 && gender == 1) { // worgen female
+	if (gameVersion >= 40000 && race == WORGEN && gender == FEMALE) { // worgen female
 		wxString fn;
 		switch(type) { // 0: base, 1: face, 2: facial, 3: hair, 4: underwear
-			case 0: // Character\Worgen\Female\WorgenFemaleSkin00_12.blp
+			case SkinType: // Character\Worgen\Female\WorgenFemaleSkin00_12.blp
 				for(int i=0; i<20; i++) {
 					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), section, i);
 					if (MPQFile::getSize(fn) > 0)
@@ -107,7 +107,7 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 						break;
 				}
 				break;
-			case 1: // Character\Worgen\Female\WorgenFemaleFaceUpper27_09.blp
+			case FaceType: // Character\Worgen\Female\WorgenFemaleFaceUpper27_09.blp
 				for(int i=0; i<30; i++) {
 					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), section, i);
 					if (MPQFile::getSize(fn) > 0)
@@ -116,7 +116,7 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 						break;
 				}
 				break;
-			case 3: // Character\Worgen\Hair00_00.blp
+			case HairType: // Character\Worgen\Hair00_00.blp
 				for(int i=0; i<20; i++) {
 					fn.Printf(_T("Character\\Worgen\\Hair00_%02d.blp"), i);
 					if (MPQFile::getSize(fn) > 0)
@@ -125,7 +125,7 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 						break;
 				}
 				break;
-			case 4: // Character\Worgen\Male\WorgenMaleNakedPelvisSkin00_00.blp
+			case UnderwearType: // Character\Worgen\Male\WorgenMaleNakedPelvisSkin00_00.blp
 				for(int i=0; i<20; i++) {
 					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), section, i);
 					if (MPQFile::getSize(fn) > 0)
@@ -161,10 +161,10 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
 {
 	int n = 0;
 #if 1 // for worgen female
-	if (gameVersion >= 40000 && race == 22 && gender == 1) { // worgen female
+	if (gameVersion >= 40000 && race == WORGEN && gender == FEMALE) { // worgen female
 		wxString fn;
 		switch(type) { // 0: base, 1: face, 2: facial, 3: hair, 4: underwear
-			case 0: // Character\Worgen\Female\WorgenFemaleSkin00_12.blp
+			case SkinType: // Character\Worgen\Female\WorgenFemaleSkin00_12.blp
 				for(int i=0; i<20; i++) {
 					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), i, color);
 					if (MPQFile::getSize(fn) > 0)
@@ -173,7 +173,7 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
 						break;
 				}
 				break;
-			case 1: // Character\Worgen\Female\WorgenFemaleFaceUpper27_09.blp
+			case FaceType: // Character\Worgen\Female\WorgenFemaleFaceUpper27_09.blp
 				for(int i=0; i<30; i++) {
 					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), i, color);
 					if (MPQFile::getSize(fn) > 0)
@@ -182,7 +182,7 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
 						break;
 				}
 				break;
-			case 3: // Character\Worgen\Hair00_00.blp
+			case HairType: // Character\Worgen\Hair00_00.blp
 				for(int i=0; i<20; i++) {
 					fn.Printf(_T("Character\\Worgen\\Hair%02d_%02d.blp"), i, color);
 					if (MPQFile::getSize(fn) > 0)
@@ -191,7 +191,7 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
 						break;
 				}
 				break;
-			case 4: // Character\Worgen\Male\WorgenMaleNakedPelvisSkin00_00.blp
+			case UnderwearType: // Character\Worgen\Male\WorgenMaleNakedPelvisSkin00_00.blp
 				for(int i=0; i<20; i++) {
 					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), i, color);
 					if (MPQFile::getSize(fn) > 0)
@@ -308,7 +308,6 @@ int CharFacialHairDB::getStylesFor(unsigned int race, unsigned int gender)
 
 
 // Classes
-
 CharClassesDB::Record CharClassesDB::getById(unsigned int id)
 {
 	for(Iterator i=begin(); i!=end(); ++i)
@@ -433,6 +432,7 @@ NPCDB::Record NPCDB::getByNPCID(unsigned int id)
 // --------------------------------
 // Item Database Stuff
 // --------------------------------
+/*
 const char* ItemTypeNames[NUM_ITEM_TYPES] = {
 	"All",
 	"Helmets",
@@ -464,6 +464,7 @@ const char* ItemTypeNames[NUM_ITEM_TYPES] = {
 	"Unknown",
 	"Relic"
 };
+*/
 
 // ItemDisplayInfo
 
@@ -665,7 +666,7 @@ ItemDatabase::ItemDatabase()
 void ItemDatabase::open(wxString filename)
 {
 	wxTextFile fin;
-	if (fin.Open(filename)) {
+	if (wxFileExists(filename) && fin.Open(filename)) {
 		wxString line;
 		for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
 			ItemRecord rec((char *)line.c_str());
@@ -677,7 +678,7 @@ void ItemDatabase::open(wxString filename)
 	}
 
 	wxTextFile fin2;;
-	if (fin2.Open(_T("discoveryitems.csv"))) {
+	if (wxFileExists(_T("discoveryitems.csv")) && fin2.Open(_T("discoveryitems.csv"))) {
 		wxString line;
 		for ( line = fin2.GetFirstLine(); !fin2.Eof(); line = fin2.GetNextLine() ) {
 			ItemRecord rec;

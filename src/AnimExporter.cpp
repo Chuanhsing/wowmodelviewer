@@ -309,7 +309,7 @@ void CAnimationExporter::CreateGif()
 		// if (Optimise) {
 
 		// Append PNG extension, save out PNG file with frame number
-		wxString filen = wxString(m_strFilename.fn_str(), wxConvUTF8);
+		wxString filen = m_strFilename;
 		filen << _T("_") << i << _T(".png");
 		newImage->Save(filen.mb_str(), CXIMAGE_FORMAT_PNG);
 		
@@ -335,7 +335,7 @@ void CAnimationExporter::CreateGif()
 	// Open/Create the file that were going to save to
 
 	// Append GIF extension
-	wxString filen = wxString(m_strFilename.fn_str(), wxConvUTF8);;
+	wxString filen = m_strFilename;
 	filen << _T(".gif");
 
 	FILE *hFile = NULL;

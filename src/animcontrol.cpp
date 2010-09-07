@@ -166,10 +166,8 @@ void AnimControl::UpdateModel(Model *m)
 	// Find any textures that exist for the model
 	bool res = false;
 
-	wxString fn(m->name.c_str(), wxConvUTF8);
-	fn.MakeLower();
+	wxString fn = m->name.Lower();
 	if (fn.substr(0,4) != _T("char")) {
-
 		if (fn.substr(0,8) == _T("creature"))
 			res = UpdateCreatureModel(m);
 		else if (fn.substr(0,4) == _T("item"))
@@ -314,14 +312,14 @@ void AnimControl::UpdateWMO(WMO *w, int group)
 
 	// get wmo name or current wmogroup name/descr
 	if (group>=-1 && group<g_selWMO->nGroups) {
-		wxString label = w->name.substr(w->name.find_last_of('\\')+1);
+		wxString label = w->name.AfterLast('\\');
 		if (group>=0) {
 			label += _T(" - ") + g_selWMO->groups[group].name;
 			if (g_selWMO->groups[group].desc.length()) {
 				label += _T(" - ") + g_selWMO->groups[group].desc;
 			}
 		}
-		wmoLabel->SetLabel(wxString(label.c_str(), *wxConvCurrent));
+		wmoLabel->SetLabel(label);
 	} else {
 		wmoLabel->SetLabel(_("This group has been removed from the WMO"));
 	}
@@ -331,14 +329,13 @@ void AnimControl::UpdateWMO(WMO *w, int group)
 wxString sFilterDir;
 bool filterDir(wxString fn)
 {
-	wxString tmp(fn.c_str(), wxConvUTF8);
-	tmp.MakeLower();
+	wxString tmp = fn.Lower();
 	return (tmp.StartsWith(sFilterDir) && tmp.EndsWith(_T("blp")));
 }
 
 bool AnimControl::UpdateCreatureModel(Model *m)
 {
-	wxString fn(m->name.c_str(), wxConvUTF8);
+	wxString fn = m->name;
 
 	// replace .M2 with .MDX
 	fn = fn.BeforeLast(_T('.')).Append(_T(".mdx"));
@@ -404,8 +401,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 		grp.base = TEXTURE_GAMEOBJECT1;
 		grp.count = 1;
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
-			wxString str((*it).displayName.c_str(), wxConvUTF8);
-			grp.tex[0] = str.BeforeLast(_T('.')).AfterLast(SLASH);
+			grp.tex[0] = (*it).displayName.BeforeLast(_T('.')).AfterLast(SLASH);
 			skins.insert(grp);
 		}
 	}
@@ -429,7 +425,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 
 bool AnimControl::UpdateItemModel(Model *m)
 {
-	wxString fn(m->name.c_str(), wxConvUTF8);
+	wxString fn = m->name;
 
 	// change M2 to mdx
 	fn = fn.BeforeLast(_T('.')).Append(_T(".mdx"));
@@ -437,8 +433,7 @@ bool AnimControl::UpdateItemModel(Model *m)
 	// Check to see if its a helmet model, if so cut off the race
 	// and gender specific part of the filename off
 	if (fn.Find(_T("\\head\\")) > wxNOT_FOUND) {
-		fn = fn.BeforeLast('_');
-		fn.Append(_T(".mdx"));
+		fn = fn.BeforeLast('_') + _T(".mdx");
 	}
 
 	// just get the file name, exclude the path.
@@ -472,16 +467,14 @@ bool AnimControl::UpdateItemModel(Model *m)
 
 	// Search the same directory for BLPs
 	std::set<FileTreeItem> filelist;
-	sFilterDir = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(_T('.'));
-	sFilterDir.MakeLower();
+	sFilterDir = m->name.BeforeLast(_T('.')).Lower();
 	getFileLists(filelist, filterDir);
 	if (filelist.begin() != filelist.end()) {
 		TextureGroup grp;
 		grp.base = TEXTURE_ITEM;
 		grp.count = 1;
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
-			wxString str((*it).displayName.c_str(), wxConvUTF8);
-			grp.tex[0] = str.BeforeLast(_T('.')).AfterLast(SLASH);
+			grp.tex[0] = (*it).displayName.BeforeLast(_T('.')).AfterLast(SLASH);
 			skins.insert(grp);
 		}
 	}
@@ -747,7 +740,7 @@ wxString AnimControl::makeSkinTexture(wxString texfn, wxString skin)
 
 int AnimControl::AddSkin(TextureGroup grp)
 {
-	skinList->Append(wxString(_T("Custom"), *wxConvCurrent));
+	skinList->Append(_T("Custom"));
 	int count = skinList->GetCount() - 1;
 	TextureGroup *group = new TextureGroup(grp);
 	skinList->SetClientData(count, group);

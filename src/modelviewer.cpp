@@ -464,8 +464,8 @@ void ModelViewer::InitMenu()
 		effectsMenu->Enable(ID_SPELLS, false);
 		effectsMenu->Append(ID_SHADER_DEATH, _("Death Effect"));
 		effectsMenu->Enable(ID_SHADER_DEATH, false);
-		effectsMenu->Append(ID_TEST, _T("TEST"));
 #endif
+		effectsMenu->Append(ID_TEST, _T("Arrows Test"));
 
 		// Options menu
 		optMenu = new wxMenu;

@@ -30,7 +30,7 @@ void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent
 	int sel=0, ord=0;
 	for (std::vector<ItemRecord>::iterator it = items.items.begin();  it != items.items.end();  ++it) {
 		if (correctType(it->type, slot)) {
-			cc->choices.Add(wxString(it->name, *wxConvCurrent));
+			cc->choices.Add(it->name);
 			cc->numbers.push_back(it->id);
 			if (it->id == current)
 				sel = ord;
@@ -152,7 +152,7 @@ void EnchantsDialog::OnClick(wxCommandEvent &event)
 		}
 		
 		for (std::vector<EnchantsRec>::iterator it=enchants.begin();  it!=enchants.end();  ++it) {
-			if (wxString(it->name.c_str(), wxConvUTF8) == sel) {
+			if (it->name == sel) {
 				int s = slot->GetSelection();
 				s += 10;
 
@@ -248,7 +248,7 @@ void EnchantsDialog::InitEnchants()
 
 	choices.Clear();
 	for (std::vector<EnchantsRec>::iterator it=enchants.begin();  it!=enchants.end();  ++it)
-		choices.Add(wxString(it->name.c_str(), *wxConvCurrent));
+		choices.Add(it->name);
 
 	EnchantsInitiated = true;
 }

@@ -626,8 +626,7 @@ inline void ModelCanvas::CreateTexture(wxString filename, GLuint texture)
 	bgImagePath = filename;
 
 	// Get the file extension and load the file
-	wxString tmp = filename.AfterLast(_T('.'));
-	tmp.MakeLower();
+	wxString tmp = filename.AfterLast(_T('.')).Lower();
 
 	if (tmp == _T("bmp"))
 		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_BMP);

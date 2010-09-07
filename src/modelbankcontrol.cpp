@@ -128,7 +128,7 @@ void ModelBankControl::AddModel()
 
 	ModelBank cd;
 
-	cd.fileName = wxString(g_canvas->model->name.c_str(), wxConvUTF8);
+	cd.fileName = wxString(g_canvas->model->name);
 	cd.name = txtName->GetValue();
 
 	cd.pos = g_canvas->model->pos;
@@ -142,7 +142,7 @@ void ModelBankControl::AddModel()
 
 		for (int i=0; i<grp->count; i++) {
 			if (g_canvas->model->useReplaceTextures[grp->base+i]) {
-				cd.textures.Add(wxString(grp->tex[i].c_str(), wxConvUTF8));
+				cd.textures.Add(grp->tex[i]);
 			}
 		}
 

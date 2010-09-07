@@ -1,6 +1,7 @@
 
 #include "enums.h"
 #include "arrows.h"
+#include "modelexport.h"
 
 IMPLEMENT_CLASS(ArrowControl, wxWindow)
 
@@ -30,7 +31,9 @@ ArrowControl::ArrowControl(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
 		wxLogMessage(_T("ERROR - Failed to create a window for our ArrowControl!"));
 		return;
 	}
-	
+
+	// modelexport.h Attach_Names
+/*
 	const wxString loc[] = {_T("Left wrist"), _T("Right palm"), _T("Left palm"),
 		_T("Right elbow"), _T("Left elbow"), _T("Right shoulder"), _T("Left shoulder"),
 		_T("Right knee"), _T("Left knee"), _T("Unkown"), _T("Unknown"), _T("Head"),  _T("Back"), 
@@ -38,14 +41,16 @@ ArrowControl::ArrowControl(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
 		_T("Ground"), _T("Top of Head"), _T("Left palm"), _T("Right palm"), _T("Unknown"),
 		_T("Unknown"), _T("Unknown"), _T("R-Back"), _T("L-Back"), _T("M-Back"), _T("Belly"),  
 		_T("L-Back"), _T("R-Back"), _T("L-Hip"), _T("R-Hip"), _T("Bust"), _T("Right palm")};
+*/
+	int size = WXSIZEOF(Attach_Names);
 
-	joint = new wxComboBox(this, ID_ARROW_JOINT, wxEmptyString, wxPoint(5,5), wxSize(130,20), WXSIZEOF(loc), loc, wxCB_READONLY);
+	joint = new wxComboBox(this, ID_ARROW_JOINT, wxEmptyString, wxPoint(5,5), wxSize(130,20), WXSIZEOF(Attach_Names), Attach_Names, wxCB_READONLY);
 	const wxString models[] = {_T("arrowacidflight_01.m2"), _T("arrowfireflight_01.m2"), _T("arrowflight_01.m2"), _T("arrowiceflight_01.m2"), _T("arrowmagicflight_01.m2")};
 	model = new wxComboBox(this, ID_ARROW_MODEL,wxEmptyString, wxPoint(5,30), wxSize(130,20), WXSIZEOF(models), models, wxCB_READONLY);
 	//tex = new wxComboBox(this, ID_ARROW_TEXTURE,wxEmptyString, wxPoint(55,5), wxSize(100,20), 0, NULL, wxCB_READONLY);
 	
-	attach = new wxButton(this, ID_ARROW_ATTACH, _("Attach"), wxPoint(10,55), wxSize(45,20));
-	clear = new wxButton(this, ID_ARROW_CLEAR, _("Clear All"), wxPoint(80,55), wxSize(45,20));
+	attach = new wxButton(this, ID_ARROW_ATTACH, _("Attach"), wxPoint(10,55), wxSize(55,20));
+	clear = new wxButton(this, ID_ARROW_CLEAR, _("Clear All"), wxPoint(80,55), wxSize(55,20));
 
 	rot = new wxSlider(this, ID_ARROW_ROTATION, 18,0,36, wxPoint(5, 85), wxSize(130,38), wxSL_HORIZONTAL|wxSL_LABELS );
 	scale = new wxSlider(this, ID_ARROW_SCALE, 5,0,20, wxPoint(5, 125), wxSize(130,38), wxSL_HORIZONTAL|wxSL_LABELS );

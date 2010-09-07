@@ -101,8 +101,7 @@ bool filterSearch(wxString s)
 		return false;
 
 	// filter suffix
-	wxString temp(s.c_str(), wxConvUTF8);
-	temp.MakeLower();
+	wxString temp(s.Lower());
 	if (!filterString.IsEmpty() && !temp.EndsWith(filterString))
 		return false;
 
@@ -183,7 +182,7 @@ void FileControl::Init(ModelViewer* mv)
 				TreeStackItem newItem;
 				newItem.second = str.substr(start, p-start);
 				start = p+1;
-				newItem.first = fileTree->AppendItem(stack[stack.size()-1].first, wxString(newItem.second.c_str(), wxConvUTF8));
+				newItem.first = fileTree->AppendItem(stack[stack.size()-1].first, newItem.second);
 				
 				//if (colour == true) {
                 switch(it->color){
@@ -225,7 +224,7 @@ void FileControl::Init(ModelViewer* mv)
 		// now start was at the character after the last \\, so we append a filename
 		wxString fileName = str.substr(start);
 
-		item = fileTree->AppendItem(stack[stack.size()-1].first, wxString(fileName.c_str(), *wxConvCurrent), -1, -1, new FileTreeData(str));
+		item = fileTree->AppendItem(stack[stack.size()-1].first, fileName, -1, -1, new FileTreeData(str));
         switch(it->color){
             case 0:
                 fileTree->SetItemTextColour(item, *wxBLACK);				// patch.mpq
@@ -359,7 +358,7 @@ void FileControl::ExportPNG(wxString val, wxString suffix)
 void FileControl::OnPopupClick(wxCommandEvent &evt)
 {
 	FileTreeData *data = (FileTreeData*)(static_cast<wxMenu *>(evt.GetEventObject())->GetClientData());
-	wxString val(data->fn.c_str(), wxConvUTF8);
+	wxString val(data->fn);
 
 	int id = evt.GetId();
 	if (id == ID_FILELIST_EXPORT) { 
@@ -403,7 +402,7 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 	infoMenu.SetClientData( data );
 	infoMenu.Append(ID_FILELIST_EXPORT, _T("&Save..."), _T("Save this object"));
 	// TODO: if is music, a Play option
-	wxString temp(tdata->fn.c_str(), wxConvUTF8);
+	wxString temp(tdata->fn);
 	temp.MakeLower();
 #ifdef	PLAY_MUSIC
 	if (temp.EndsWith(_T("wav")) || temp.EndsWith(_T("mp3"))) {
@@ -446,7 +445,7 @@ void FileControl::ClearCanvas()
 		} else{
 			modelviewer->charControl->charAtt = NULL;
 
-			wxString rootfn(data->fn.c_str(), wxConvUTF8);
+			wxString rootfn(data->fn);
 			if (rootfn.Last() != '2' && modelviewer->canvas->model) {
 				modelviewer->canvas->model = NULL;
 			}
@@ -624,7 +623,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 
 		ClearCanvas();
 
-		wxString rootfn(data->fn.c_str(), wxConvUTF8);
+		wxString rootfn(data->fn);
 		if (bAlternate && rootfn.StartsWith(_T("Alternate"), false)) {
 			rootfn = rootfn.Mid(10);
 		}
@@ -643,7 +642,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		ClearCanvas();
 
 		modelviewer->isWMO = true;
-		wxString rootfn(data->fn.c_str(), wxConvUTF8);
+		wxString rootfn(data->fn);
 
 		//canvas->model->modelType = MT_WMO;
 
@@ -678,7 +677,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		ClearCanvas();
 
 		// For Graphics
-		wxString val(data->fn.c_str(), wxConvUTF8);
+		wxString val(data->fn);
 		ExportPNG(val, _T("png"));
 		wxFileName fn(val);
 		wxString temp(wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".png"));
@@ -690,7 +689,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		ClearCanvas();
 
 		modelviewer->isADT = true;
-		wxString rootfn(data->fn.c_str(), wxConvUTF8);
+		wxString rootfn(data->fn);
 		modelviewer->canvas->LoadADT(rootfn);
 
 		UpdateInterface();

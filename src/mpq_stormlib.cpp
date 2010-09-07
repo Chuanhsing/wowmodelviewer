@@ -27,7 +27,7 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 	}
 
 	// do patch, but skip cache\ directory
-	if (!(filename.Lower().Contains("cache") && filename.Lower().Contains("patch"))) {
+	if (!(filename.Lower().Contains(_T("cache")) && filename.Lower().Contains(_T("patch")))) {
 		// do patch
 		for(int j=mpqArchives.GetCount()-1; j>=0; j--) {
 			if (!mpqArchives[j].AfterLast(SLASH).StartsWith(_T("wow-update-")))

@@ -243,8 +243,8 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 		return;
 
 	// replace .MDX with .M2
-	wxString tempname(name.c_str(), wxConvUTF8);
-	tempname = tempname.BeforeLast(_T('.')).Append(_T(".m2"));
+	wxString tempname(name);
+	tempname = tempname.BeforeLast(_T('.')) + _T(".m2");
 
 	// Initiate our model variables.
 	trans = 1.0f;

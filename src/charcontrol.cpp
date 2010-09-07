@@ -58,6 +58,9 @@ wxString regionPaths[NUM_REGIONS] =
 	_T("Item\\TextureComponents\\FootTexture\\")
 };
 
+static wxArrayString creaturemodels;
+static std::vector<bool> ridablelist;
+
 IMPLEMENT_CLASS(CharControl, wxWindow)
 
 BEGIN_EVENT_TABLE(CharControl, wxWindow)
@@ -266,14 +269,14 @@ void CharControl::UpdateModel(Attachment *a)
 	try {
 		// Okay for some reason Blizzard have removed the full racial names
 		// out of the ChrRaces.dbc.  Going to have to hardcode the values.
-		CharRacesDB::Record raceRec = racedb.getByName(wxString(raceName.c_str(), wxConvUTF8));
+		CharRacesDB::Record raceRec = racedb.getByName(raceName);
 		race = raceRec.getUInt(CharRacesDB::RaceID);
-		gender = (genderName.Lower() == _T("female")) ? 1 : 0;
+		gender = (genderName.Lower() == _T("female")) ? FEMALE : MALE;
 	
 	} catch (CharRacesDB::NotFound) {
 		// wtf
 		race = 0;
-		gender = 0;
+		gender = MALE;
 	}
 
 	// Enable the use of NPC skins if its  a goblin.
@@ -424,14 +427,14 @@ void CharControl::UpdateNPCModel(Attachment *a, unsigned int id)
 	int race = 0, gender = 0;
 
 	try {
-		CharRacesDB::Record raceRec = racedb.getByName(wxString(raceName.c_str(), wxConvUTF8));
+		CharRacesDB::Record raceRec = racedb.getByName(raceName);
 		race = raceRec.getUInt(CharRacesDB::RaceID);
 
-		gender = (genderName.Lower() == _T("female")) ? 1 : 0;
+		gender = (genderName.Lower() == _T("female")) ? FEMALE : MALE;
 	} catch (CharRacesDB::NotFound) {
 		// wtf
 		race = 0;
-		gender = 0;
+		gender = MALE;
 	}
 
 	cd.race = race;
@@ -574,13 +577,13 @@ void CharControl::OnCheck(wxCommandEvent &event)
 		unsigned int race, gender;
 
 		try {
-			CharRacesDB::Record raceRec = racedb.getByName(wxString(raceName.c_str(), wxConvUTF8));
+			CharRacesDB::Record raceRec = racedb.getByName(raceName);
 			race = raceRec.getUInt(CharRacesDB::RaceID);
-			gender = (genderName == "female" || genderName == "Female" || genderName == "FEMALE") ? 1 : 0;
+			gender = (genderName == "female" || genderName == "Female" || genderName == "FEMALE") ? FEMALE : MALE;
 		} catch (CharRacesDB::NotFound) {
 			// wtf
 			race = 0;
-			gender = 0;
+			gender = MALE;
 		}
 
 		// If the race is a goblin, then ignore this
@@ -2094,8 +2097,7 @@ void CharControl::selectSet()
 	numbers.clear();
 	choices.Clear();
 	for (std::vector<NumStringPair>::iterator it = items.begin(); it != items.end(); ++it) {
-		//choices.Add(wxString(it->name.c_str(), *wxConvCurrent));
-		choices.Add(wxString(it->name.c_str(), *wxConvCurrent));
+		choices.Add(it->name);
 		numbers.push_back(it->id);
 	}
 
@@ -2131,13 +2133,9 @@ void CharControl::selectStart()
 
 bool filterCreatures(wxString fn)
 {
-	wxString tmp(fn.c_str(), wxConvUTF8);
-	tmp.MakeLower();
+	wxString tmp = fn.Lower();
 	return (tmp.StartsWith(_T("crea")) && tmp.EndsWith(_T("m2")));
 }
-
-wxArrayString creaturemodels;
-std::vector<bool> ridablelist;
 
 // TODO: Add an equivilant working version of this function for Linux / Mac OS X
 void CharControl::selectMount()
@@ -2174,8 +2172,7 @@ void CharControl::selectMount()
 		}
 		
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
-			wxString str((*it).displayName.c_str(), wxConvUTF8);
-			str.MakeLower();
+			wxString str((*it).displayName.Lower());
 			creaturemodels.push_back(str);
 			ridablelist.push_back(knownRidable.Index(str, false)!=wxNOT_FOUND);
 		}
@@ -2186,7 +2183,7 @@ void CharControl::selectMount()
 	cats.push_back(0);
 	
 	for (size_t i=0; i<creaturemodels.size(); i++) {
-		choices.Add(wxString(creaturemodels[i].c_str() + 9, *wxConvCurrent));
+		choices.Add(creaturemodels[i].Mid(9));
 		cats.push_back(ridablelist[i]?0:1);
 	}
 
@@ -2257,12 +2254,7 @@ void CharControl::selectNPC(int type)
 	for (CreatureTypeDB::Iterator it=npctypedb.begin();  it!=npctypedb.end(); ++it) {
 		int type = it->getUInt(CreatureTypeDB::ID);
 
-		// Used to go through the 'string fields' looking for the one with data.
-		// This is a problem when the DBC files are the non-english ones.
-		wxString str;
-		str = CSConv(it->getString(CreatureTypeDB::Name + langOffset));
-
-		catnames.Add(str);
+		catnames.Add(CSConv(it->getString(CreatureTypeDB::Name + langOffset)));
 		typeLookup[type] = (int)catnames.size()-1;
 	}
 
@@ -2358,7 +2350,6 @@ void CharControl::OnUpdateItem(int type, int id)
 			}
 			g_animControl->UpdateModel(model);
 		} else {
-			//wxString fn(creaturemodels[id-1].c_str());
 			Model *m = new Model(creaturemodels[id-1], false);
 			m->isMount = true;
 
@@ -2786,7 +2777,7 @@ const wxString CharControl::selectCharModel()
 		string genderStr = gender ? "Female" : "Male";
 		try {
 			CharRacesDB::Record r = racedb.getById(raceid);
-			wxString path = "Character\\";
+			wxString path = _T("Character\\");
 			path += r.getString(CharRacesDB::Name).mb_str();
 			path += "\\" + genderStr + "\\";
 			path += r.getString(CharRacesDB::Name).mb_str();
