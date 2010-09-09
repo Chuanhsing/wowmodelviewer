@@ -11,6 +11,23 @@ find_package(JPEG REQUIRED)
 find_package(PNG REQUIRED)
 
 set(USE_STORM 1)
+if (APPLE)
+	message(STATUS "Using Mac OS X port")
+	add_definitions(-D_MAC)
+	add_definitions(-D_MAC_INTEL)
+
+	set(CMAKE_OSX_ARCHITECTURES i386)
+	set(MACOSX_BUNDLE_ICON_FILE wmv.icns)
+	set(MACOSX_BUNDLE_INFO_STRING "World of Warcraft ModelViewer")
+	
+	set_source_files_properties("${MACOSX_BUNDLE_ICON_FILE}" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+endif()
+
+if (${CMAKE_SYSTEM_NAME} STREQUAL Linux)
+	message(STATUS "Using Linux port")
+	add_definitions(-D_LINUX)
+	add_definitions(-D_LINUX32)
+endif()
 
 include(${wxWidgets_USE_FILE})
 include(cmake/sources.cmake)
@@ -42,24 +59,10 @@ endif()
 add_library(cximage STATIC ${CXIMAGE_SOURCES})
 
 if (APPLE)
-	message(STATUS "Using Mac OS X port")
-	add_definitions(-D_MAC)
-	add_definitions(-D_MAC_INTEL)
-
-	set(CMAKE_OSX_ARCHITECTURES i386)
-	set(MACOSX_BUNDLE_ICON_FILE wmv.icns)
-	set(MACOSX_BUNDLE_INFO_STRING "World of Warcraft ModelViewer")
-	
-	set_source_files_properties("${MACOSX_BUNDLE_ICON_FILE}" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-	
 	add_executable(wowmodelviewer MACOSX_BUNDLE ${WOWMV_SOURCES} ../bin_support/Icons/${MACOSX_BUNDLE_ICON_FILE})
 endif()
 
 if (${CMAKE_SYSTEM_NAME} STREQUAL Linux)
-	message(STATUS "Using Linux port")
-	add_definitions(-D_LINUX)
-	add_definitions(-D_LINUX32)
-
 	add_executable(wowmodelviewer ${WOWMV_SOURCES})
 endif()
 

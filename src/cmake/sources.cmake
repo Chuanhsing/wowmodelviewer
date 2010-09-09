@@ -9,6 +9,7 @@ endif ()
 set(STORM_SOURCES
     stormlib/src/adpcm/adpcm.cpp
     stormlib/src/huffman/huff.cpp
+    stormlib/src/jenkins/lookup3.c
     stormlib/src/sparse/sparse.cpp
     stormlib/src/FileStream.cpp
     stormlib/src/SCommon.cpp
@@ -207,10 +208,8 @@ set(STORM_SOURCES
     stormlib/src/lzma/C/LzFind.c
     stormlib/src/lzma/C/LzmaDec.c
     stormlib/src/lzma/C/LzmaEnc.c
-    stormlib/src/pklib/crc32.c
     stormlib/src/pklib/explode.c
     stormlib/src/pklib/implode.c
-    stormlib/src/jenkins/lookup3.c
 )
 
 set(MPQ_SOURCES
