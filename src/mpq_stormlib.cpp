@@ -18,11 +18,11 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 	if (filename.AfterLast(SLASH).StartsWith(_T("wow-update-")))
 		return;
 
-	bool result = !!SFileOpenArchive((char *) filename.c_str(), 0, MPQ_OPEN_READ_ONLY, &mpq_a );
-
 	wxLogMessage(_T("Opening %s"), filename.c_str());
-	if(!result) {
-		wxLogMessage(_T("Error opening archive %s"), filename.c_str());
+
+	if (!SFileOpenArchive(filename.fn_str(), 0, MPQ_OPEN_READ_ONLY, &mpq_a )) {
+		int nError = GetLastError();
+		wxLogMessage(_T("Error opening archive %s, error #: 0x%X"), filename.c_str(), nError);
 		return;
 	}
 
@@ -32,9 +32,9 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 		for(int j=mpqArchives.GetCount()-1; j>=0; j--) {
 			if (!mpqArchives[j].AfterLast(SLASH).StartsWith(_T("wow-update-")))
 				continue;
-			SFileOpenPatchArchive(mpq_a, (char *)mpqArchives[j].c_str(), "base", 0);
+			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "base", 0);
 			wxLogMessage(_T("Appending base patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
-			SFileOpenPatchArchive(mpq_a, (char *)mpqArchives[j].c_str(), "enUS", 0);
+			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "enUS", 0);
 			wxLogMessage(_T("Appending enUS patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
 		}
 	}
@@ -125,7 +125,7 @@ MPQFile::openFile(wxString filename)
 
 			HANDLE fh;
 
-			if( !SFileOpenFileEx( mpq_a, (char*)alterName.c_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
+			if( !SFileOpenFileEx( mpq_a, alterName.fn_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
 				continue;
 
 			// Found!
@@ -153,7 +153,7 @@ MPQFile::openFile(wxString filename)
 
 		HANDLE fh;
 
-		if( !SFileOpenFileEx( mpq_a, (char*)filename.c_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
+		if( !SFileOpenFileEx( mpq_a, filename.fn_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
 			continue;
 
 		// Found!
@@ -214,7 +214,7 @@ bool MPQFile::exists(wxString filename)
 	{
 		HANDLE &mpq_a = *i->second;
 
-		if( SFileHasFile( mpq_a, (char *)filename.c_str() ) )
+		if( SFileHasFile( mpq_a, filename.fn_str() ) )
 			return true;
 	}
 
@@ -300,7 +300,7 @@ int MPQFile::getSize(wxString filename)
 		HANDLE &mpq_a = *i->second;
 		HANDLE fh;
 		
-		if( !SFileOpenFileEx( mpq_a, (char *)filename.c_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
+		if( !SFileOpenFileEx( mpq_a, filename.fn_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
 			continue;
 
 		DWORD filesize = SFileGetFileSize( fh );
@@ -335,7 +335,7 @@ wxString MPQFile::getArchive(wxString filename)
 		HANDLE &mpq_a = *i->second;
 		HANDLE fh;
 		
-		if( !SFileOpenFileEx( mpq_a, (char *)filename.c_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
+		if( !SFileOpenFileEx( mpq_a, filename.fn_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
 			continue;
 
 		return wxString((char *)i->first.c_str(), wxConvUTF8);
@@ -375,7 +375,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 			DWORD filesize = SFileGetFileSize( fh );
 			size_t size = filesize;
 
-			wxString temp(i->first.c_str(), wxConvUTF8);
+			wxString temp(i->first);
 			temp.MakeLower();
 			int col = 0; // Black
 

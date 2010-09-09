@@ -218,8 +218,8 @@ void getGamePath()
 		gamePath.Append(SLASH);
 	gamePath.Append(_T("Data\\"));
 #elif _MAC // Mac OS X
-    gamePath = wxT("/Applications/World\\ of\\ Warcraft/");
-	if (!wxFileExists(gamePath+_T("Wow.exe"))){
+    gamePath = wxT("/Applications/World of Warcraft/");
+	if (!wxFileExists(gamePath+_T("Data/common.MPQ")) && !wxFileExists(gamePath+_T("Data/art.MPQ")) ){
         gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"), gamePath);
     }
 	if (gamePath.Last() != SLASH)

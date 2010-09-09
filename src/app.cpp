@@ -419,7 +419,7 @@ void searchMPQs()
 
 	// default archives
 	for (size_t i = 0; i < WXSIZEOF(defaultArchives); i++) {
-		wxLogMessage(_T("Searching for MPQ archive %s..."), defaultArchives[i].c_str());
+		//wxLogMessage(_T("Searching for MPQ archive %s..."), defaultArchives[i].c_str());
 
 		for (size_t j = 0; j < baseMpqs.size(); j++) {
 			wxString baseName = wxFileName(baseMpqs[j]).GetFullName();
@@ -466,6 +466,7 @@ void searchMPQs()
 		if (langID != -1)
 			langID = langID % localeSets;
 	}
+
 }
 
 bool WowModelViewApp::LoadSettings()
