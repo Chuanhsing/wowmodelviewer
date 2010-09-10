@@ -1,12 +1,13 @@
 #ifndef OPENGLHEADERS_H
 #define OPENGLHEADERS_H
 
+// glew
 #ifdef _WINDOWS
 	#include ".\glew\include\GL\glew.h"
 	#include ".\glew\include\GL\wglew.h"
-#elif __WXMAC__
-    #include <GL/glew.h>
-#else
+#elif _MAC
+	#include <GL/glew.h>
+#else // _LINUX
 	#include <GL/glew.h>
 	#include <GL/glxew.h>
 #endif
@@ -16,12 +17,12 @@
 #endif
 
 // opengl
-#ifdef __WXMAC__ //Mac
-#   include <OpenGL/gl.h>
-#	include <OpenGL/glu.h>
-#else
-#	include <GL/gl.h>
-#	include <GL/glu.h>
+#ifdef _MAC
+	#include <OpenGL/gl.h>
+	#include <OpenGL/glu.h>
+#else // _WINDOWS _LINUX
+	#include <GL/gl.h>
+	#include <GL/glu.h>
 #endif
 
 

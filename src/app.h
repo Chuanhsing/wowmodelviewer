@@ -77,7 +77,7 @@
 		// Winsock 2
 		#pragma comment( lib, "ws2_32.lib ") // This lib is required by wxbase28_net lib
 
-	#elif __WXMAC__
+	#elif _MAC
 
 		#pragma comment( lib, "wxmac28d_core.lib" )
 		#pragma comment( lib, "wxmac28d_adv.lib" )

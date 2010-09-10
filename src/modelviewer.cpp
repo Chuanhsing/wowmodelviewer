@@ -2204,10 +2204,8 @@ is (C)2006 Blizzard Entertainment(R). All rights reserved.")));
 	icon.SetWidth(128);
 	info.SetIcon(icon);
 
-#ifndef _MAC
-    // FIXME: Doesn't link on OSX
-    wxAboutBox(info);
-#endif
+	// FIXME: Doesn't link on OSX
+	wxAboutBox(info);
 }
 
 void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)

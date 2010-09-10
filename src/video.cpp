@@ -3,17 +3,12 @@
 #include "mpq.h"
 #include "CxImage/ximage.h"
 
+// wx
 #include <wx/display.h>
+// gl
+#include "OpenGLHeaders.h"
 
-#include "./GL/glew.h"
-
-#ifdef _WINDOWS
-	#include "./GL/wglew.h"
-#elif _MAC // OSX
-    #include <GL/glew.h>
-#else // Linux
-	#include <GL/glxew.h>
-
+#ifdef _LINUX // Linux
 	void (*wglGetProcAddress(const char *function_name))(void)
 	{
 		return glXGetProcAddress((GLubyte*)function_name);
