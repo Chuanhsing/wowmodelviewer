@@ -338,7 +338,7 @@ wxString MPQFile::getArchive(wxString filename)
 		if( !SFileOpenFileEx( mpq_a, filename.fn_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
 			continue;
 
-		return wxString((char *)i->first.c_str(), wxConvUTF8);
+		return i->first;
 	}
 
 	return _T("unknown");

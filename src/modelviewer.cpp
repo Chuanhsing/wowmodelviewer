@@ -1436,7 +1436,7 @@ wxString ModelViewer::Init()
 	wxLogMessage(_T("Initiating Archives...\n"));
 
 	// more detail logging, this is so when someone has a problem and they send their log info
-	wxLogMessage(_T("Game Data Path: %s"), wxString(gamePath.fn_str(), wxConvUTF8).c_str());
+	wxLogMessage(_T("Game Data Path: %s"), gamePath.c_str());
 	wxLogMessage(_T("Use Local Files: %s\n"), useLocalFiles ? _T("true") : _T("false"));
 	
 	isChar = false;
@@ -1444,7 +1444,7 @@ wxString ModelViewer::Init()
 
 	// Load the games MPQ files into memory
 	wxString mpqarch = InitMPQArchives();
-	wxLogMessage(_T("InitMPQArchives result: %s"),mpqarch);
+	wxLogMessage(_T("InitMPQArchives result: %s"), mpqarch.c_str());
 
 	if (mpqarch != wxEmptyString){
 		return mpqarch;
