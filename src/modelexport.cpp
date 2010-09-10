@@ -14,10 +14,7 @@
 // Used to save composite textures, such as a character's face & body.
 void SaveTexture(wxString fn)
 {
-	// Slash correction, just in case.
-	#ifndef _WINDOWS
-		fn.Replace(_T("\\"),_T("/"));
-	#endif
+	fn = fixMPQPath(fn);
 	unsigned char *pixels = NULL;
 
 	GLint width, height;
@@ -93,10 +90,7 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID = wxEmptyStr
 	// -= Pre-Path Directories =-
 	// Add any directories inbetween the target directory and the preserved directory go here.
 
-	// Secure paths for Non-Windows systems
-	#ifndef _WINDOWS
-		outdir.Replace(_T("\\"),_T("/"));
-	#endif
+	outdir = fixMPQPath(outdir);
 
 	// Lightwave
 	if (ExportID.IsSameAs(_T("LWO"))){
@@ -449,10 +443,10 @@ void SaveBaseFile(){
 		return;
 	}
 	FileTreeData *data = (FileTreeData*)g_fileControl->fileTree->GetItemData(g_fileControl->CurrentItem);
-	wxString modelfile(data->fn.c_str(), wxConvUTF8);
+	wxString modelfile(data->fn);
 
 	//modelfile = g_fileControl->fileTree->GetParent()+_T("\\")+g_fileControl->fileTree->GetItemText(g_fileControl->CurrentItem);
-	wxLogMessage(_T("Original Model File Name: %s"),modelfile.c_str());
+	wxLogMessage(_T("Original Model File Name: %s"), modelfile.c_str());
 
 	if (modelfile.IsEmpty())
 		return;
@@ -462,7 +456,7 @@ void SaveBaseFile(){
 		f.close();
 		return;
 	}
-	wxFileName fn(modelfile);
+	wxFileName fn = fixMPQPath(modelfile);
 
 	FILE *hFile = NULL;
 	wxString filename;

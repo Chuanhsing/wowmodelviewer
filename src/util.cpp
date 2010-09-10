@@ -74,6 +74,18 @@ wxString langCSConv[] =
 wxString CSConvStr;
 */
 
+// Slash correction, just in case.
+wxString fixMPQPath(wxString path)
+{
+#ifdef	_WINDOWS
+    return path;
+#else
+    wxString str = path;
+    str.Replace(wxString(MPQ_SLASH), wxString(SLASH));
+    return str;
+#endif
+}
+
 // Convert UTF8 string to local string
 wxString CSConv(wxString str)
 {
@@ -148,8 +160,8 @@ void MakeDirs(wxString PathBase, wxString ExtPaths){
 	unsigned int PathNum = 0;
 	while (ExtPaths.Find(SLASH)>0){
 		Paths[PathNum] = ExtPaths.BeforeFirst(SLASH);
-		wxString rep = Paths[PathNum];
-		ExtPaths.Replace(rep.Append(SLASH),wxT(""),true);
+		wxString rep = Paths[PathNum]+SLASH;
+		ExtPaths.Replace(rep, wxEmptyString, true);
 		//wxLogMessage("\nBuilding Paths: %s\npaths:%s",Paths[PathNum],ExtPaths);
 		PathNum++;
 	}

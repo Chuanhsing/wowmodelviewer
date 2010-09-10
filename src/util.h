@@ -96,7 +96,15 @@ extern long versionID;
 
 extern wxString locales[];
 
+// Slashes for Pathing
+#ifdef _WINDOWS
+	#define SLASH _T('\\')
+#else
+	#define SLASH _T('/')
+#endif
+#define	MPQ_SLASH   _T('\\')
 
+wxString fixMPQPath(wxString path);
 float frand();
 float randfloat(float lower, float upper);
 int randint(int lower, int upper);
@@ -146,13 +154,6 @@ inline T _SwapFourBytes (T w)
 
 	return a;
 }
-
-// Slashes for Pathing
-#ifdef _WINDOWS
-	#define SLASH _T('\\')
-#else
-	#define SLASH _T('/')
-#endif
 
 #endif
 

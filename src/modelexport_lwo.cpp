@@ -4178,9 +4178,7 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 		file.Empty();
 		file << Path1 << SLASH << Path2 << SLASH << Name;
 	}
-#ifndef _WINDOWS
-	file.Replace(_T("\\"),_T("/"));
-#endif
+	file = fixMPQPath(file);
 	wxFFileOutputStream f(file, _T("w+b"));
 
 	if (!f.IsOk()) {

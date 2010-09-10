@@ -429,7 +429,7 @@ void ModelOpened::Export(wxString val)
 		f.close();
 		return;
 	}
-	wxFileName fn(val);
+	wxFileName fn = fixMPQPath(val);
 	FILE *hFile = NULL;
 	if (bPathPreserved) {
 		wxFileName::Mkdir(wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetPath(), 0755, wxPATH_MKDIR_FULL);
@@ -448,7 +448,7 @@ void ModelOpened::ExportPNG(wxString val, wxString suffix)
 {
 	if (val == wxEmptyString)
 		return;
-	wxFileName fn(val);
+	wxFileName fn = fixMPQPath(val);
 	if (fn.GetExt().Lower() != _T("blp"))
 		return;
 	TextureID temptex = texturemanager.add(val);

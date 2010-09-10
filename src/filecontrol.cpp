@@ -302,7 +302,7 @@ void FileControl::Export(wxString val, int select)
 		f.close();
 		return;
 	}
-	wxFileName fn(val);
+	wxFileName fn = fixMPQPath(val);
 
 	FILE *hFile = NULL;
 	wxString filename;
