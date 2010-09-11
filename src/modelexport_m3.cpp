@@ -16,40 +16,40 @@ typedef enum M3_Class {
 
 static wxString M3_Attach_Names[] = {
 	_T("Ref_Hardpoint"),	// 0
-	_T("Ref_Weapon Right"),
-	_T("Ref_Weapon Left"),
+	_T("Ref_Weapon Right"),	// Right Palm
+	_T("Ref_Weapon Left"),	// Left Palm
 	_T("Ref_Hardpoint"),
 	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),	//5
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),	//10
+	_T("Ref_Hardpoint"),	// 5
 	_T("Ref_Hardpoint"),
 	_T("Ref_Hardpoint"),
 	_T("Ref_Hardpoint"),
 	_T("Ref_Hardpoint"),
-	_T("Ref_Target"),		//15
-	_T("Ref_Target"), 
+	_T("Ref_Hardpoint"),	// 10
+	_T("Ref_Hardpoint"),
+	_T("Ref_Hardpoint"),
+	_T("Ref_Hardpoint"),
+	_T("Ref_Hardpoint"),
+	_T("Ref_Target"),		// 15, Front Hit Region
+	_T("Ref_Target"), 		// Rear Hit Region
 	_T("Ref_Hardpoint"), 
-	_T("Ref_Overhead"), 
-	_T("Ref_Origin"),
-	_T("Ref_Head"),			//20
+	_T("Ref_Head"),			// Head Region
+	_T("Ref_Origin"),		// Base
+	_T("Ref_Overhead"),		// 20, Above
 	_T("Ref_Hardpoint"),
 	_T("Ref_Hardpoint"),
 	_T("Ref_Hardpoint"),
 	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),	//25
+	_T("Ref_Hardpoint"),	// 25
 	_T("Ref_Hardpoint"),
 	_T("Ref_Hardpoint"),
 	_T("Ref_Hardpoint"),
 	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),	//30
+	_T("Ref_Hardpoint"),	// 30
 	_T("Ref_Hardpoint"),
 	_T("Ref_Hardpoint"),
 	_T("Ref_Hardpoint"),
-	_T("Ref_Center"),
+	_T("Ref_Center"),		// Spell Impact
 	_T("Ref_Hardpoint"),	// 35
 };
 
