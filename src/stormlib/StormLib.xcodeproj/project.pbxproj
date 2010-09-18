@@ -82,6 +82,8 @@
 		2299D9E11167EFC6005C19BF /* sparse.h in Headers */ = {isa = PBXBuildFile; fileRef = 2299D9DD1167EFC6005C19BF /* sparse.h */; };
 		2299DA4E1167FD16005C19BF /* SFileAddFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2299DA4D1167FD16005C19BF /* SFileAddFile.cpp */; };
 		2299DA4F1167FD16005C19BF /* SFileAddFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2299DA4D1167FD16005C19BF /* SFileAddFile.cpp */; };
+		22AEA122123125D800359B16 /* SFilePatchArchives.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22AEA121123125D800359B16 /* SFilePatchArchives.cpp */; };
+		22AEA123123125D800359B16 /* SFilePatchArchives.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22AEA121123125D800359B16 /* SFilePatchArchives.cpp */; };
 		22C9187D11933FCF0083AC69 /* hash_memory.c in Sources */ = {isa = PBXBuildFile; fileRef = 22C9182B11933FCF0083AC69 /* hash_memory.c */; };
 		22C9187E11933FCF0083AC69 /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 22C9182C11933FCF0083AC69 /* md5.c */; };
 		22C9187F11933FCF0083AC69 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 22C9182D11933FCF0083AC69 /* sha1.c */; };
@@ -480,7 +482,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 225530D31056BAC800FA646A /* StormLib */;
+			remoteGlobalIDString = 225530D31056BAC800FA646A;
 			remoteInfo = StormLib;
 		};
 /* End PBXContainerItemProxy section */
@@ -507,6 +509,7 @@
 		2299D9DC1167EFC6005C19BF /* sparse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sparse.cpp; sourceTree = "<group>"; };
 		2299D9DD1167EFC6005C19BF /* sparse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sparse.h; sourceTree = "<group>"; };
 		2299DA4D1167FD16005C19BF /* SFileAddFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SFileAddFile.cpp; path = src/SFileAddFile.cpp; sourceTree = "<group>"; };
+		22AEA121123125D800359B16 /* SFilePatchArchives.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SFilePatchArchives.cpp; path = src/SFilePatchArchives.cpp; sourceTree = "<group>"; };
 		22C9182B11933FCF0083AC69 /* hash_memory.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hash_memory.c; sourceTree = "<group>"; };
 		22C9182C11933FCF0083AC69 /* md5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = md5.c; sourceTree = "<group>"; };
 		22C9182D11933FCF0083AC69 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha1.c; sourceTree = "<group>"; };
@@ -1154,6 +1157,7 @@
 				32ED00B40D03542A00AB0B4E /* SFileListFile.cpp */,
 				32ED00B10D03542A00AB0B4E /* SFileOpenArchive.cpp */,
 				32ED00B20D03542A00AB0B4E /* SFileOpenFileEx.cpp */,
+				22AEA121123125D800359B16 /* SFilePatchArchives.cpp */,
 				32ED00B30D03542A00AB0B4E /* SFileReadFile.cpp */,
 				22F5A9C41193DFBA00F8B121 /* SFileVerify.cpp */,
 				32ED00B60D03542A00AB0B4E /* StormLib.h */,
@@ -1547,6 +1551,7 @@
 				22C919FF1193400A0083AC69 /* bncore.c in Sources */,
 				22F5A9C51193DFBA00F8B121 /* SFileVerify.cpp in Sources */,
 				228B538511BF7D0D001A58DA /* FileStream.cpp in Sources */,
+				22AEA123123125D800359B16 /* SFilePatchArchives.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1755,6 +1760,7 @@
 				22C91A781193400A0083AC69 /* bncore.c in Sources */,
 				22F5A9C61193DFBA00F8B121 /* SFileVerify.cpp in Sources */,
 				228B538411BF7D0D001A58DA /* FileStream.cpp in Sources */,
+				22AEA122123125D800359B16 /* SFilePatchArchives.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1868,7 +1874,7 @@
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
 				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				PREBINDING = NO;
 				PRODUCT_NAME = StormLib;
 			};
@@ -1880,7 +1886,7 @@
 				EXPORTED_SYMBOLS_FILE = "$(PROJECT_DIR)/stormlib_dll/StormLib.exp";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				PREBINDING = NO;
 				PRODUCT_NAME = StormLib;
 			};

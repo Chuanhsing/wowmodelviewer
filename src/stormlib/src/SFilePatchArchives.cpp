@@ -219,7 +219,7 @@ static int ApplyMpqPatch_BSD0(
     // Allocate new buffer
     pbNewData = ALLOCMEM(BYTE, dwNewSize);
     if(pbNewData == NULL)
-        return NULL;
+        return ERROR_NOT_ENOUGH_MEMORY;
 
     // Now patch the file
     // TODO: Optimization, so it's not that memory consuming
@@ -234,7 +234,7 @@ static int ApplyMpqPatch_BSD0(
         if((dwNewOffset + dwAddDataLength) > dwNewSize)
         {
             FREEMEM(pbNewData);
-            return NULL;
+            return ERROR_FILE_CORRUPT;
         }
 
         // Read the diff string to the target buffer
@@ -255,7 +255,7 @@ static int ApplyMpqPatch_BSD0(
         if((dwNewOffset + dwMovDataLength) > dwNewSize)
         {
             FREEMEM(pbNewData);
-            return NULL;
+            return ERROR_FILE_CORRUPT;
         }
 
         // Copy the data from the extra block in BSDIFF patch

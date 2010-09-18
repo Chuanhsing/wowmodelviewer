@@ -924,7 +924,7 @@ bool WINAPI SFileGetFileName(HANDLE hFile, char * szFileName)
         }
 
         // Create the file name
-        sprintf(hf->szFileName, "File%08u.%s", hf->dwBlockIndex, szExt);
+        sprintf(hf->szFileName, "File%08u.%s", (unsigned int)hf->dwBlockIndex, szExt);
         if(szFileName != hf->szFileName)
             strcpy(szFileName, hf->szFileName);
     }

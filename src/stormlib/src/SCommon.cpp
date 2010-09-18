@@ -912,9 +912,9 @@ __AllocateAndLoadPatchInfo:
         }
 
         // Perform necessary swapping
-        BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwLength);
-        BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwFlags);
-        BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwDataSize);
+        hf->pPatchInfo->dwLength   = BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwLength);
+        hf->pPatchInfo->dwFlags    = BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwFlags);
+        hf->pPatchInfo->dwDataSize = BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwDataSize);
 
         // Verify the size of the patch header
         // If it's not default size, we have to reload them
@@ -1532,6 +1532,24 @@ void ConvertTMPQHeader(void *header)
 
             theHeader->dwHETBlockPosLow = SwapULong(theHeader->dwHETBlockPosLow);
             theHeader->dwHETBlockPosHigh = SwapULong(theHeader->dwHETBlockPosHigh);
+
+            if(theHeader->wFormatVersion >= MPQ_FORMAT_VERSION_4)
+        	{
+                theHeader->dwHashTableSizeLo = SwapULong(theHeader->dwHashTableSizeLo);
+                theHeader->dwHashTableSizeHi = SwapULong(theHeader->dwHashTableSizeHi);
+
+                theHeader->dwBlockTableSizeLo = SwapULong(theHeader->dwBlockTableSizeLo);
+                theHeader->dwBlockTableSizeHi = SwapULong(theHeader->dwBlockTableSizeHi);
+
+                theHeader->dwExtBlockTableSizeLo = SwapULong(theHeader->dwExtBlockTableSizeLo);
+                theHeader->dwExtBlockTableSizeHi = SwapULong(theHeader->dwExtBlockTableSizeHi);
+
+                theHeader->dwHetBlockSizeLo = SwapULong(theHeader->dwHetBlockSizeLo);
+                theHeader->dwHetBlockSizeHi = SwapULong(theHeader->dwHetBlockSizeHi);
+
+                theHeader->dwBetBlockSizeLo = SwapULong(theHeader->dwBetBlockSizeLo);
+                theHeader->dwBetBlockSizeHi = SwapULong(theHeader->dwBetBlockSizeHi);
+            }
         }
 	}
 }

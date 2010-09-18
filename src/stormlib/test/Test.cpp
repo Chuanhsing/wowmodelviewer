@@ -951,7 +951,7 @@ static int TestCreateArchiveFromMemory(const char * szMpqName)
     int i;
  
     // Create an mpq file for testing
-    if(SFileCreateArchiveEx(szMpqName, CREATE_ALWAYS|MPQ_CREATE_ARCHIVE_V2|MPQ_CREATE_ATTRIBUTES, 0x100000, &hMPQ))
+    if(SFileCreateArchive(szMpqName, MPQ_CREATE_ARCHIVE_V2|MPQ_CREATE_ATTRIBUTES, 0x100000, &hMPQ))
     {
         for(i = 0; i < 1000; i++)
         {
@@ -1358,13 +1358,16 @@ static int TestCompareTwoArchives(
 
 static int TestOpenPatchedArchive(const char * szMpqName, ...)
 {
+    TFileStream * pStream;
     HANDLE hFile = NULL;
     HANDLE hMpq = NULL;
     va_list argList;
-    const char * szFileName = "DBFilesClient\\Achievement.dbc";
+//  const char * szFileName = "DBFilesClient\\Achievement.dbc";
+    const char * szFileName = "character\\bloodelf\\female\\bloodelffemale00.skin";
     const char * szExtension;
     const char * szLocale;
     char szPatchPrefix[MPQ_PATCH_PREFIX_LEN];
+    char szLocFileName[MAX_PATH];
     LPBYTE pbFullFile = NULL;
     DWORD dwFileSize;
     int nError = ERROR_SUCCESS;
@@ -1454,20 +1457,26 @@ static int TestOpenPatchedArchive(const char * szMpqName, ...)
                     nError = GetLastError();
                     printf("Failed to read full patched file data \"%s\"\n", szFileName);
                 }
-                        
-                // Now try to read the data partially and compare it with the full file
-                for(int i = 0; i < 100000; i++)
+                
+                if(nError == ERROR_SUCCESS)
                 {
+                    strcpy(szLocFileName, MAKE_PATH("Work//"));
+                    strcat(szLocFileName, GetPlainName(szFileName));
 
-
+                    pStream = FileStream_CreateFile(szLocFileName);
+                    if(pStream != NULL)
+                    {
+                        FileStream_Write(pStream, NULL, pbFullFile, dwFileSize);
+                        FileStream_Close(pStream);
+                    }
                 }
+                
+                delete [] pbFullFile;
             }
         }
     }
 
     // Close handles
-    if(pbFullFile != NULL)
-        delete [] pbFullFile;
     if(hFile != NULL)
         SFileCloseFile(hFile);
     if(hMpq != NULL)
@@ -1508,8 +1517,8 @@ int main(void)
 
     // Test the archive open and close
     if(nError == ERROR_SUCCESS)
-        nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/expansion-locale-frFR.MPQ"));
-//      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/wow-12759-Win-final.MPQ"));
+        nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12857.MPQ"));
+//      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/expansion-locale-frFR.MPQ"));
                                                                              
 //  if(nError == ERROR_SUCCESS)
 //      nError = TestFindFiles(MAKE_PATH("Warcraft III/HumanEd.mpq"));
@@ -1553,6 +1562,7 @@ int main(void)
 //                                      MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12694.MPQ"),
 //                                      MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12759.MPQ"),
 //                                      MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12803.MPQ"),
+//                                      MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12857.MPQ"),
 //                                      NULL);
 //  }
 

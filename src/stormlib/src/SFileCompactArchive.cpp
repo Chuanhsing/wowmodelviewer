@@ -295,9 +295,9 @@ static int CopyMpqFileSectors(
     // If we have to save patch header, do it
     if(nError == ERROR_SUCCESS && hf->pPatchInfo != NULL)
     {
-        BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwLength);
-        BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwFlags);
-        BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwDataSize);
+        hf->pPatchInfo->dwLength   = BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwLength);
+        hf->pPatchInfo->dwFlags    = BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwFlags);
+        hf->pPatchInfo->dwDataSize = BSWAP_INT32_UNSIGNED(hf->pPatchInfo->dwDataSize);
         if(!FileStream_Write(pNewStream, NULL, hf->pPatchInfo, hf->pPatchInfo->dwLength))
             nError = GetLastError();
 
