@@ -3998,7 +3998,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn){
 		Layer.HasVectorColors = group->hascv;
 
 		// Points Batches
-		for (int b=0; b<group->nBatches; b++){
+		for (uint32 b=0; b<group->nBatches; b++){
 			WMOBatch *batch = &group->batches[b];
 			//wxLogMessage(_T("\nBatch %i Info:\n   Indice-Start: %i\n   Indice-Count: %i\n   Vert-Start: %i\n   Vert-End: %i"),b,batch->indexStart,batch->indexCount,batch->vertexStart,batch->vertexEnd);
 			uint32 *Vert2Point = new uint32[group->nVertices];

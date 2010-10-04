@@ -39,7 +39,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 		flipcc(fourcc);
 		fourcc[4] = 0;
 
-		uint32 nextpos = (uint32)f.getPos() + size;
+		size_t nextpos = f.getPos() + size;
 
 		if (!strcmp(fourcc,"MOHD")) {
 			// Header for the map object. 64 bytes.
@@ -250,7 +250,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 			// optional, Convex Volume Planes. Contains blocks of floating-point numbers.
 		}
 
-		f.seek((int)nextpos);
+		f.seek(nextpos);
 	}
 
 	f.close();
@@ -723,7 +723,7 @@ void WMOGroup::initDisplayList()
 		flipcc(fourcc);
 		fourcc[4] = 0;
 
-		uint32 nextpos = (uint32)gf.getPos() + size;
+		size_t nextpos = gf.getPos() + size;
 
 		// why copy stuff when I can just map it from memory ^_^
 
@@ -764,7 +764,7 @@ void WMOGroup::initDisplayList()
 			*/
 
 			// materials per triangle
-			nTriangles = (int)size / 2;
+			nTriangles = (uint32)(size / 2);
 			materials = new (unsigned short[nTriangles]);
 			memcpy(materials, gf.getPointer(), size);
 		}
@@ -772,22 +772,22 @@ void WMOGroup::initDisplayList()
 			/*
 			Vertex indices for triangles. Three 16-bit integers per triangle, that are indices into the vertex list. The numbers specify the 3 vertices for each triangle, their order makes it possible to do backface culling.
 			*/
-			nIndices = (int)size/2;
-			indices = new (unsigned short[nIndices]);
+			nIndices = (uint32)(size / 2);
+			indices = new (uint16[nIndices]);
 			memcpy(indices, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOVT")) {
 			/*
 			Vertices chunk. 3 floats per vertex, the coordinates are in (X,Z,-Y) order. It's likely that WMOs and models (M2s) were created in a coordinate system with the Z axis pointing up and the Y axis into the screen, whereas in OpenGL, the coordinate system used in WoWmapview the Z axis points toward the viewer and the Y axis points up. Hence the juggling around with coordinates.
 			*/
-			nVertices = (int)size / 12;
+			nVertices = (uint32)(size / 12);
 			// let's hope it's padded to 12 bytes, not 16...
-			vertices = new Vec3D[size/12];
+			vertices = new Vec3D[nVertices];
 			memcpy(vertices, gf.getPointer(), size);
 			vmin = Vec3D( 9999999.0f, 9999999.0f, 9999999.0f);
 			vmax = Vec3D(-9999999.0f,-9999999.0f,-9999999.0f);
 			rad = 0;
-			for (uint32 i=0; i<nVertices; i++) {
+			for (size_t i=0; i<nVertices; i++) {
 				Vec3D v(vertices[i].x, vertices[i].z, -vertices[i].y);
 				if (v.x < vmin.x) vmin.x = v.x;
 				if (v.y < vmin.y) vmin.y = v.y;
@@ -801,12 +801,13 @@ void WMOGroup::initDisplayList()
 		}
 		else if (!strcmp(fourcc,"MONR")) {
 			// Normals. 3 floats per vertex normal, in (X,Z,-Y) order.
-			normals = new Vec3D[size/12];
+			uint32 NormSize = (uint32)(size / 12);
+			normals = new Vec3D[(uint32)(size / 12)];
 			memcpy(normals, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOTV")) {	
 			// Texture coordinates, 2 floats per vertex in (X,Y) order. The values range from 0.0 to 1.0. Vertices, normals and texture coordinates are in corresponding order, of course.
-			texcoords = new Vec2D[size/8];
+			texcoords = new Vec2D[(uint32)size/8];
 			memcpy(texcoords, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOLR")) {
@@ -963,7 +964,7 @@ void WMOGroup::initDisplayList()
 
 		// TODO: figure out/use MFOG ?
 
- 		gf.seek((int)nextpos);
+ 		gf.seek((unsigned int)nextpos);
 	}
 
 	// ok, make a display list

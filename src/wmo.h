@@ -45,21 +45,16 @@ class WMOGroup {
 public:
 	Vec3D *vertices, *normals;
 	Vec2D *texcoords;
-	unsigned short *indices;
-	uint32 nTriangles, nVertices, nIndices;
-	unsigned int *cv;
-	unsigned short *materials;
+	uint16 *indices, *materials;
+	uint32 nTriangles, nVertices, nIndices, *cv, nBatches;
 	WMOBatch *batches;
-	int nBatches;
 	WMOVertColor *VertexColors;
 	uint32 *IndiceToVerts;
 
 	Vec3D v1,v2;
 	Vec3D b1,b2;
 	Vec3D vmin, vmax;
-	bool indoor, hascv;
-	bool visible;
-	bool ok;
+	bool indoor, hascv, visible, ok;
 
 	bool outdoorLights;
 	wxString name, desc;

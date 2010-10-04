@@ -291,7 +291,7 @@ class Model: public ManagedItem, public Displayable
 	void initAnimated(MPQFile &f);
 	void initStatic(MPQFile &f);
 
-	void animate(int anim);
+	void animate(unsigned int anim);
 	void calcBones(int anim, int time);
 
 	void lightsOn(GLuint lbase);

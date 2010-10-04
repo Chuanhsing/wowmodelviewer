@@ -29,13 +29,23 @@
 	#pragma comment( lib, "opengl32.lib" )	// OpenGL API
 	#pragma message("     Adding library: glu32.lib" ) 
 	#pragma comment( lib, "glu32.lib" ) // OpenGL Utilities
-	#define GLEW_STATIC
+	#define GLEW_BUILD
 	#ifdef _DEBUG // GLEW lib
-		#pragma message("     Adding library: glew32d.lib" ) 
-		#pragma comment( lib, "glew32d.lib" )
+		#ifdef _WIN64
+			#pragma message("     Adding library: glew64sd.lib" ) 
+			#pragma comment( lib, "glew64d.lib" )
+		#else
+			#pragma message("     Adding library: glew32sd.lib" ) 
+			#pragma comment( lib, "glew32d.lib" )
+		#endif
 	#else
-		#pragma message("     Adding library: glew32.lib" ) 
-		#pragma comment( lib, "glew32.lib" )
+		#ifdef _WIN64
+			#pragma message("     Adding library: glew64s.lib" ) 
+			#pragma comment( lib, "glew64.lib" )
+		#else
+			#pragma message("     Adding library: glew32s.lib" ) 
+			#pragma comment( lib, "glew32.lib" )
+		#endif
 	#endif
 	
 	// FBX Libraries
@@ -91,8 +101,8 @@
 	#pragma comment( lib, "wxregexd.lib" )
 	#pragma comment( lib, "wxbase28d.lib" )
 	#pragma comment( lib, "wxbase28d_net.lib" )
-	#pragma comment( lib, "wxexpatd.lib" )		// Added 0.5.08
-	#pragma comment( lib, "wxbase28d_xml.lib" )	// Added 0.5.08
+	#pragma comment( lib, "wxexpatd.lib" )
+	#pragma comment( lib, "wxbase28d_xml.lib" )
 	
 	#pragma message("     Adding library: cximagecrtd.lib" ) 
 	#pragma comment( lib, "cximagecrtd.lib" )	// cxImage
@@ -116,8 +126,8 @@
 	#pragma comment( lib, "wxregex.lib" )
 	#pragma comment( lib, "wxbase28.lib" )
 	#pragma comment( lib, "wxbase28_net.lib" )
-	#pragma comment( lib, "wxexpat.lib" )		// Added 0.5.08
-	#pragma comment( lib, "wxbase28_xml.lib" )	// Added 0.5.08
+	#pragma comment( lib, "wxexpat.lib" )
+	#pragma comment( lib, "wxbase28_xml.lib" )
 	
 	#pragma message("     Adding library: cximagecrt.lib" ) 
 	#pragma comment( lib, "cximagecrt.lib" )

@@ -13,6 +13,8 @@ float f32;
 uint16 u16;
 unsigned char ub;
 
+// Lightwave Type Numbers
+// These numbers identify object, light and bone types in the Lightwave Program.
 enum LWItemType {
 	LW_ITEMTYPE_OBJECT = 1,
 	LW_ITEMTYPE_LIGHT,
@@ -39,8 +41,8 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 
 // Polygon Chunk
 struct PolyChunk32 {
-	uint16 numVerts;
-	uint32 indice[3];
+	uint16 numVerts;		// The Number of Indices that make up the poly.
+	uint32 indice[3];		// The IDs of the 3 Indices that make up each poly. In reality, this should be indice[MAX_POINTS_PER_POLYGON], but WoW will never go above 3.
 };
 
 // Polygon Normal
@@ -48,7 +50,7 @@ struct PolyNormal {
 	wxString NormalMapName;
 	uint32 indice[3];
 	uint32 polygon;
-	Vec3D direction[3];
+	Vec3D direction[3];		// This is the direction the polygon's normal should point towards.	
 };
 
 // Animation Data
@@ -58,12 +60,14 @@ struct AnimationData {
 	std::vector<Vec3D> Scale;
 	std::vector<uint32> Time;
 
+	// Push keyframe data into the Animation Data structure.
 	void Push(Vec3D position, Vec3D rotation, Vec3D scale, uint32 time){
 		Position.push_back(position);
 		Rotation.push_back(rotation);
 		Scale.push_back(scale);
 		Time.push_back(time);
 	}
+	// Returns the number of keyframes in this animation.
 	uint32 Size(){
 		return (uint32)Time.size();
 	}
@@ -145,7 +149,7 @@ struct LWPoint {
 	Vec3D PointData;
 	Vec2D UVData;
 	std::vector<LWWeight> WeightData;
-	LWVertexColor VertexColors;
+	LWVertexColor VertexColors;		// In reality, this should be a std::vector, but WoW doesn't use more than 1.
 };
 
 // Poly Chunk Data
@@ -169,11 +173,9 @@ struct LWLayer {
 	bool HasVectorColors;			// Is True if the layer has a Vector Color map
 	Vec3D BoundingBox1;				// First Corner of the Layer's Bounding Box
 	Vec3D BoundingBox2;				// Second Corner of the Layer's Bounding Box
-	// Point UV Data
 
 	// Poly Block
 	std::vector<LWPoly> Polys;
-	// Poly UV Data
 
 	LWLayer(){
 		HasVectorColors = false;
@@ -216,12 +218,12 @@ struct LWSurface {
 
 // The Master Structure for each individual LWO file.
 struct LWObject {
-	wxArrayString PartNames;	// List of names for all the Parts;
+	wxArrayString PartNames;			// List of names for all the Parts;
 	std::vector<LWLayer> Layers;		// List of Layers (usually 1) that make up the Geometery.
 	std::vector<LWClip> Images;			// List of all the Unique Images used in the model.
 	std::vector<LWSurface> Surfaces;	// List of the Surfaces used in the model.
 
-	wxString SourceType;			// M2, WMO or ADT
+	wxString SourceType;				// M2, WMO or ADT
 
 	LWObject(){
 		SourceType = wxEmptyString;

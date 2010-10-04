@@ -35,3 +35,6 @@ GL_NV_vertex_buffer_unified_memory
 	void glVertexAttribFormatNV (GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride)
 	void glVertexAttribIFormatNV (GLuint index, GLint size, GLenum type, GLsizei stride)
 	void glVertexFormatNV (GLint size, GLenum type, GLsizei stride)
+	GL_DRAW_INDIRECT_UNIFIED_NV 0x8F40
+	GL_DRAW_INDIRECT_ADDRESS_NV 0x8F41
+	GL_DRAW_INDIRECT_LENGTH_NV  0x8F42

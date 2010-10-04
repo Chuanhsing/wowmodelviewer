@@ -29,7 +29,7 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 	// do patch, but skip cache\ directory
 	if (!(filename.Lower().Contains(_T("cache")) && filename.Lower().Contains(_T("patch")))) {
 		// do patch
-		for(int j=mpqArchives.GetCount()-1; j>=0; j--) {
+		for(int j=(int)mpqArchives.GetCount()-1; j>=0; j--) {
 			if (!mpqArchives[j].AfterLast(SLASH).StartsWith(_T("wow-update-")))
 				continue;
 			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "base", 0);
@@ -89,7 +89,7 @@ MPQFile::openFile(wxString filename)
 		fn3.Append(filename);
 
 		wxString fns[] = { fn1, fn2, fn3 };
-		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
+		for(size_t i=0; i<WXSIZEOF(fns); i++) {
 			wxString fn = fns[i];
 			if (wxFile::Exists(fn)) {
 				// success
@@ -203,7 +203,7 @@ bool MPQFile::exists(wxString filename)
 		fn3.Append(filename);
 
 		wxString fns[] = { fn1, fn2, fn3 };
-		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
+		for(size_t i=0; i<WXSIZEOF(fns); i++) {
 			wxString fn = fns[i];
 			if (wxFile::Exists(fn))
 				return true;
@@ -252,9 +252,24 @@ bool MPQFile::isEof()
     return eof;
 }
 
-void MPQFile::seek(int offset)
-{
+void MPQFile::seek(int offset) {
 	pointer = offset;
+	eof = (pointer >= size);
+}
+
+void MPQFile::seek(unsigned int offset) {
+	pointer = offset;
+	eof = (pointer >= size);
+}
+
+void MPQFile::seek(size_t offset) {
+	pointer = offset;
+	eof = (pointer >= size);
+}
+
+void MPQFile::seekRelative(ssize_t offset)
+{
+	pointer += offset;
 	eof = (pointer >= size);
 }
 
@@ -286,7 +301,7 @@ int MPQFile::getSize(wxString filename)
 		fn3.Append(filename);
 
 		wxString fns[] = { fn1, fn2, fn3 };
-		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
+		for(size_t i=0; i<WXSIZEOF(fns); i++) {
 			wxString fn = fns[i];
 			if (wxFile::Exists(fn)) {
 				wxFile file(fn);
@@ -322,7 +337,7 @@ wxString MPQFile::getArchive(wxString filename)
 		fn3.Append(filename);
 
 		wxString fns[] = { fn1, fn2, fn3 };
-		for(unsigned int i=0; i<WXSIZEOF(fns); i++) {
+		for(size_t i=0; i<WXSIZEOF(fns); i++) {
 			wxString fn = fns[i];
 			if (wxFile::Exists(fn)) {
 				return fn;

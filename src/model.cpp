@@ -1317,7 +1317,7 @@ void Model::calcBones(int anim, int time)
 	}
 }
 
-void Model::animate(int anim)
+void Model::animate(unsigned int anim)
 {
 	int t=0;
 	

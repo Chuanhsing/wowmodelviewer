@@ -94,7 +94,9 @@
 #define KFBX_SAFE_DESTROY_OBJECT(p)	    if(p){ (p)->Destroy(); (p)=NULL; }
 
 #ifdef KARCH_ENV_WIN
-	#define snprintf _snprintf // for stdio.h platform compatibility
+	#ifndef snprintf
+		#define snprintf _snprintf // for stdio.h platform compatibility
+	#endif
 	#ifndef WIN32_LEAN_AND_MEAN
 		#define WIN32_LEAN_AND_MEAN  // Defined to speed up compilation
 	#endif

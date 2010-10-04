@@ -321,7 +321,7 @@ void AnimControl::UpdateWMO(WMO *w, int group)
 		}
 		wmoLabel->SetLabel(label);
 	} else {
-		wmoLabel->SetLabel(_("This group has been removed from the WMO"));
+		wmoLabel->SetLabel(_T("This group has been removed from the WMO"));
 	}
 	wmoLabel->Show(TRUE);
 }
@@ -389,7 +389,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 	}
 #endif
 
-	int count = skins.size();
+	int count = (int)skins.size();
 
 	// Search the same directory for BLPs
 	std::set<FileTreeItem> filelist;
@@ -412,7 +412,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 		ret = FillSkinSelector(skins);
 
 		if (count == 0) // No entries on .dbc and skins.txt
-			count = skins.size();
+			count = (int)skins.size();
 
 		if (ret) { // Don't call SetSkin without a skin
 			int mySkin = randomSkins ? randint(0, (int)count-1) : 0;

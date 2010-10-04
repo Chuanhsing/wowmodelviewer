@@ -19,6 +19,7 @@
 #include <set>
 #include <sstream>
 #include <vector>
+#include <cstddef>
 
 // Standard C++ headers
 #include <stdio.h>
@@ -35,7 +36,7 @@
 using namespace std;
 
 #ifdef _WINDOWS
-	#define snprintf sprintf_s
+	#define snprintf _snprintf
 	typedef unsigned char uint8;
 	typedef char int8;
 	typedef unsigned __int16 uint16;
@@ -118,7 +119,7 @@ bool from_string(T& t, const string& s, ios_base& (*f)(ios_base&))
 
 wxString CSConv(wxString str);
 void fixname(wxString &name);
-void fixnamen(char *name, uint32 len);
+void fixnamen(char *name, size_t len);
 wxString Vec3DToString(Vec3D vec);
 int wxStringToInt(const wxString& str);
 float round(float input, int limit);

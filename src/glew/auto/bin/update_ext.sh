@@ -270,6 +270,29 @@ EOT
   BOOL wglCopyImageSubDataNV (HGLRC hSrcRC, GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, HGLRC hDstRC, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei width, GLsizei height, GLsizei depth)
 EOT
 
+# Filter glProgramParameteri from GL_ARB_separate_shader_objects
+#    grep -v "glProgramParameteri" $1/GL_ARB_separate_shader_objects > tmp
+#    mv tmp $1/GL_ARB_separate_shader_objects
+
+# Filter out EXT functions from GL_ARB_viewport_array
+    grep -v "EXT" $1/GL_ARB_viewport_array > tmp
+    mv tmp $1/GL_ARB_viewport_array
+
+# Additional enumerations for GL_NV_vertex_buffer_unified_memory
+# These are mentioned in GL_ARB_draw_indirect.txt
+
+    cat >> $1/GL_NV_vertex_buffer_unified_memory <<EOT
+	GL_DRAW_INDIRECT_UNIFIED_NV 0x8F40
+	GL_DRAW_INDIRECT_ADDRESS_NV 0x8F41
+	GL_DRAW_INDIRECT_LENGTH_NV  0x8F42
+EOT
+
+# Filter glGetPointerv from GL_ARB_debug_output
+# It's part of OpenGL 1.1, after all
+
+    grep -v "glGetPointerv" $1/GL_ARB_debug_output > tmp
+    mv tmp $1/GL_ARB_debug_output
+
 # clean up
     rm -f $1/*.bak
 

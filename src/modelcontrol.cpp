@@ -199,7 +199,7 @@ void ModelControl::Update()
 		cbLod->Append(_T("2 (Best)"));
 	} else {
 		cbLod->Append(_T("1 (Worst)"));
-		for (unsigned int i=1; i<(model->header.nViews-1); i++) {
+		for (size_t i=1; i<(model->header.nViews-1); i++) {
 			cbLod->Append(wxString::Format(_T("%i"), i+1));
 		}
 		cbLod->Append(wxString::Format(_T("%i (Best)"), model->header.nViews));
@@ -214,8 +214,8 @@ void ModelControl::Update()
 		_T("Boots"), wxEmptyString, _T("Ears"), _T("Wristbands"),  _T("Kneepads"),
 		 _T("Pants"), _T("Pants2"), _T("Tarbard"), _T("Trousers"), wxEmptyString,
 		  _T("Cape"), wxEmptyString, _T("Eyeglows"), _T("Belt") };
-	for (unsigned int i=0; i<model->geosets.size(); i++) {
-		uint32 mesh = model->geosets[i].id / 100;
+	for (size_t i=0; i<model->geosets.size(); i++) {
+		size_t mesh = model->geosets[i].id / 100;
 		if (mesh < WXSIZEOF(meshes) && meshes[mesh] != wxEmptyString)
 			geosetItems.Add(wxString::Format(_T("%i [%s, %i]"), i, meshes[mesh].c_str(), model->geosets[i].id % 100), 1);
 		else
@@ -224,7 +224,7 @@ void ModelControl::Update()
 	//geosets->InsertItems(items, 0);
 	clbGeosets->Set(geosetItems, 0);
 
-	for (unsigned int i=0; i<model->geosets.size(); i++) {
+	for (size_t i=0; i<model->geosets.size(); i++) {
 		clbGeosets->Check(i, model->showGeosets[i]);
 	}
 
@@ -317,7 +317,7 @@ void ModelControl::OnList(wxCommandEvent &event)
 
 	int id = event.GetId();
 	if (id == ID_MODEL_GEOSETS) {
-		for (unsigned int i=0; i<model->geosets.size(); i++) {
+		for (size_t i=0; i<model->geosets.size(); i++) {
 			model->showGeosets[i] = clbGeosets->IsChecked(i);
 		}
 	}
@@ -503,7 +503,7 @@ void ModelOpened::OnButton(wxCommandEvent &event)
 		wxString val = openedList->GetValue();
 		Export(val);
 	} else if (id == ID_MODELOPENED_EXPORTALL) {
-		for (unsigned int i = 0; i < opened_files.GetCount(); i++) {
+		for (size_t i = 0; i < opened_files.GetCount(); i++) {
 			Export(opened_files[i]);
 		}
 	} else if (id == ID_MODELOPENED_VIEW) {
@@ -519,11 +519,11 @@ void ModelOpened::OnButton(wxCommandEvent &event)
 	    sw->Show(true);
 		dialOK = false;
 	} else if (id == ID_MODELOPENED_EXPORTALLPNG) {
-		for (unsigned int i = 0; i < opened_files.GetCount(); i++) {
+		for (size_t i = 0; i < opened_files.GetCount(); i++) {
 			ExportPNG(opened_files[i], _T("png"));
 		}
 	} else if (id == ID_MODELOPENED_EXPORTALLTGA) {
-		for (unsigned int i = 0; i < opened_files.GetCount(); i++) {
+		for (size_t i = 0; i < opened_files.GetCount(); i++) {
 			ExportPNG(opened_files[i], _T("tga"));
 		}
 	}

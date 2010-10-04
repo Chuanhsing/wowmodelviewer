@@ -113,7 +113,7 @@ int randint(int lower, int upper)
 
 void fixname(wxString &name)
 {
-	for (uint32 i=0; i<name.length(); i++) {
+	for (size_t i=0; i<name.length(); i++) {
 		if (i>0 && name[i]>='A' && name[i]<='Z' && isalpha(name[i-1])) {
 			name[i] |= 0x20;
 		} else if ((i==0 || !isalpha(name[i-1])) && name[i]>='a' && name[i]<='z') {
@@ -121,9 +121,9 @@ void fixname(wxString &name)
 		}
 	}
 }
-void fixnamen(char *name, uint32 len)
+void fixnamen(char *name, size_t len)
 {
-	for (uint32 i=0; i<len; i++) {
+	for (size_t i=0; i<len; i++) {
 		if (i>0 && name[i]>='A' && name[i]<='Z' && isalpha(name[i-1])) {
 			name[i] |= 0x20;
 		} else if ((i==0 || !isalpha(name[i-1])) && name[i]>='a' && name[i]<='z') {
@@ -157,7 +157,7 @@ void MakeDirs(wxString PathBase, wxString ExtPaths){
 	wxString NewBase = PathBase;
 	//wxLogMessage("MKDIR Paths\nBasePath: %s\nOthers Paths: %s", PathBase, ExtPaths);
 	wxString Paths[30];
-	unsigned int PathNum = 0;
+	size_t PathNum = 0;
 	while (ExtPaths.Find(SLASH)>0){
 		Paths[PathNum] = ExtPaths.BeforeFirst(SLASH);
 		wxString rep = Paths[PathNum]+SLASH;
@@ -168,7 +168,7 @@ void MakeDirs(wxString PathBase, wxString ExtPaths){
 	Paths[PathNum] = ExtPaths;
 	PathNum++;
 
-	for (unsigned int x=0;x<PathNum;x++){
+	for (size_t x=0;x<PathNum;x++){
 		NewBase = wxString(NewBase << SLASH << Paths[x]);
 		if (wxDirExists(NewBase) == false){
 			//wxLogMessage("Attempting to create the following directory: %s",NewBase);
@@ -201,7 +201,7 @@ void getGamePath()
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\Beta")
 	};
 
-	for (uint32 i=0; i<WXSIZEOF(regpaths); i++) {
+	for (size_t i=0; i<WXSIZEOF(regpaths); i++) {
 		l = RegOpenKeyEx((HKEY)HKEY_LOCAL_MACHINE, regpaths[i], 0, KEY_QUERY_VALUE, &key);
 
 		if (l == ERROR_SUCCESS) {

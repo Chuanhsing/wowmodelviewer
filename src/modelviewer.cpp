@@ -1796,7 +1796,7 @@ void ModelViewer::OnEffects(wxCommandEvent &event)
 		// make sure m is a valid pointer to a model
 		if (m) {
 			// This is an error check to make sure the creature can be equipped.
-			for(unsigned int k=0; k<m->ATT_MAX; k++){
+			for(size_t k=0; k<m->ATT_MAX; k++){
 				if (m->attLookup[k] == ATT_RIGHT_PALM) {
 					SelectCreatureItem(CS_HAND_RIGHT, 0, charControl, canvas);
 					break;
@@ -1812,7 +1812,7 @@ void ModelViewer::OnEffects(wxCommandEvent &event)
 		// make sure m is a valid pointer to a model
 		if (m) {
 			// This is an error check to make sure the creature can be equipped.
-			for(unsigned int k=0; k<m->ATT_MAX; k++){
+			for(size_t k=0; k<m->ATT_MAX; k++){
 				if (m->attLookup[k] == ATT_LEFT_PALM) {
 					SelectCreatureItem(CS_HAND_LEFT, 0, charControl, canvas);
 					break;
@@ -2252,8 +2252,8 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 void ModelViewer::OnCanvasSize(wxCommandEvent &event)
 {
 	int id = event.GetId();
-	unsigned int sizex = 0;
-	unsigned int sizey = 0;
+	uint32 sizex = 0;
+	uint32 sizey = 0;
 	
 	if (id == ID_CANVAS512) {
 		sizex = 512;

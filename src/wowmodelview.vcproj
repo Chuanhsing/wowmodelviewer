@@ -977,6 +977,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\opengl\glxext.h"
+				>
+			</File>
+			<File
 				RelativePath=".\opengl\wglext.h"
 				>
 			</File>

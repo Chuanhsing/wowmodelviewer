@@ -20,7 +20,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\../../lib/$(PlatformName)"
+			OutputDirectory=".\../../../lib/Windows/32bit"
 			IntermediateDirectory=".\static/$(PlatformName)/debug"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -94,7 +94,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory=".\../../lib/$(PlatformName)"
+			OutputDirectory=".\../../../lib/Windows/64bit"
 			IntermediateDirectory=".\static/$(PlatformName)/debug"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -146,7 +146,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/glew32sd.lib"
+				OutputFile="$(OutDir)/glew64sd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -169,8 +169,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug MX|Win32"
-			OutputDirectory=".\../../lib"
-			IntermediateDirectory=".\static/debug-mx"
+			OutputDirectory=".\../../../lib/Windows/32bit"
+			IntermediateDirectory=".\static/$(PlatformName)/debugmx"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -220,7 +220,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../lib/glew32mxsd.lib"
+				OutputFile="$(OutDir)/glew32mxsd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -243,8 +243,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug MX|x64"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory=".\../../../lib/Windows/64bit"
+			IntermediateDirectory=".\static/$(PlatformName)/debugmx"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -295,7 +295,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../lib/glew32mxsd.lib"
+				OutputFile="$(OutDir)/glew64mxsd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -318,7 +318,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\../../lib/$(PlatformName)"
+			OutputDirectory=".\../../../lib/Windows/32bit"
 			IntermediateDirectory=".\static/$(PlatformName)/release"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -393,7 +393,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory=".\../../lib/$(PlatformName)"
+			OutputDirectory=".\../../../lib/Windows/64bit"
 			IntermediateDirectory=".\static/$(PlatformName)/release"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -446,7 +446,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/glew32s.lib"
+				OutputFile="$(OutDir)/glew64s.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -469,8 +469,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release MX|Win32"
-			OutputDirectory=".\../../lib"
-			IntermediateDirectory=".\static/release-mx"
+			OutputDirectory=".\../../../lib/Windows/32bit"
+			IntermediateDirectory=".\static/$(PlatformName)/releasemx"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -521,7 +521,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../lib/glew32mxs.lib"
+				OutputFile="$(OutDir)/glew32mxs.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -544,8 +544,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release MX|x64"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory=".\../../../lib/Windows/64bit"
+			IntermediateDirectory=".\static/$(PlatformName)/releasemx"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -597,7 +597,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../../lib/glew32mxs.lib"
+				OutputFile="$(OutDir)/glew64mxs.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool

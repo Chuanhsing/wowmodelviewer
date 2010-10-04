@@ -153,7 +153,7 @@ void FileControl::Init(ModelViewer* mv)
 		for (i=1; i<stack.size(); i++) {
 			wxString &comp = stack[i].second;
 			bool match = true;
-			for (unsigned int j=0; j<comp.length(); j++) {
+			for (size_t j=0; j<comp.length(); j++) {
 				if (comp[j] != str[p+j]) {
 					match = false;
 					break;
@@ -464,7 +464,7 @@ void FileControl::ClearCanvas()
 #ifdef _DEBUG
 	GLenum err=glGetError();
 	if (err)
-		wxLogMessage(_T("OGL Error: [0x%x] An error occured."), (unsigned int)err);
+		wxLogMessage(_T("OGL Error: [0x%x] An error occured."), (uint32)err);
 	wxLogMessage(_T("Clearing textures from previous model..."));
 #endif
 	// Texture clearing and debugging
@@ -473,7 +473,7 @@ void FileControl::ClearCanvas()
 #ifdef _DEBUG
 	err = glGetError();
 	if (err)
-		wxLogMessage(_T("OpenGL Error: [0x%x] An error occured."), (unsigned int)err);
+		wxLogMessage(_T("OpenGL Error: [0x%x] An error occured."), (uint32)err);
 #endif
 
 	modelviewer->isModel = false;
