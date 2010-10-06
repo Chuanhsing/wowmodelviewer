@@ -12,7 +12,8 @@ set(STORM_SOURCES
     stormlib/src/jenkins/lookup3.c
     stormlib/src/sparse/sparse.cpp
     stormlib/src/FileStream.cpp
-    stormlib/src/SCommon.cpp
+    stormlib/src/SBaseCommon.cpp
+	stormlib/src/SBaseFileTable.cpp
     stormlib/src/SCompression.cpp
     stormlib/src/SFileAddFile.cpp
     stormlib/src/SFileAttributes.cpp
