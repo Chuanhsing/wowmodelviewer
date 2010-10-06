@@ -15,7 +15,7 @@
 
 #define __STORMLIB_SELF__
 #include "StormLib.h"
-#include "SCommon.h"
+#include "StormCommon.h"
 
 //-----------------------------------------------------------------------------
 // Local defines
@@ -62,10 +62,10 @@ typedef struct _PART_FILE_MAP_ENTRY
 
 struct TPartFileStream : public TFileStream
 {
-    LARGE_INTEGER  VirtualSize;             // Virtual size of the file
-    LARGE_INTEGER  VirtualPos;              // Virtual position in the file
-    DWORD          PartCount;               // Number of file parts. Used by partial file stream
-    DWORD          PartSize;                // Size of one part. Used by partial file stream
+    ULONGLONG VirtualSize;                  // Virtual size of the file
+    ULONGLONG VirtualPos;                   // Virtual position in the file
+    DWORD     PartCount;                    // Number of file parts. Used by partial file stream
+    DWORD     PartSize;                     // Size of one part. Used by partial file stream
 
     PART_FILE_MAP_ENTRY PartMap[1];         // File map, variable length
 };
@@ -117,13 +117,13 @@ void ConvertPartHeader(void * partHeader)
 #endif
 
 #ifdef PLATFORM_MAC
-static void ConvertUTCDateTimeToFileTime(const UTCDateTimePtr inTime, TMPQFileTime * pFT)
+static void ConvertUTCDateTimeToFileTime(const UTCDateTimePtr inTime, ULONGLONG * pFT)
 {
 	UInt64 intTime = ((UInt64)inTime->highSeconds << 32) + inTime->lowSeconds;
 	intTime *= 10000000;
 	intTime += 0x0153b281e0fb4000ull;
-	pFT->dwFileTimeHigh = intTime >> 32;
-	pFT->dwFileTimeLow = intTime & 0xFFFFFFFF;
+
+    *pFT = intTime;
 }
 
 static OSErr FSOpenDFCompat(FSRef *ref, char permission, short *refNum)
@@ -151,23 +151,10 @@ static OSErr FSOpenDFCompat(FSRef *ref, char permission, short *refNum)
 #ifdef PLATFORM_LINUX
 // time_t is number of seconds since 1.1.1970, UTC.
 // 1 second = 10000000 (decimal) in FILETIME
-static void ConvertTimeTToFileTime(TMPQFileTime * pFT, time_t crt_time)
+static void ConvertTimeTToFileTime(ULONGLONG * pFileTime, time_t crt_time)
 {
-    LARGE_INTEGER ft;
-    LARGE_INTEGER seconds;
-
     // Set the start to 1.1.1970 00:00:00
-    ft.HighPart = 0x019DB1DE;
-    ft.LowPart = 0xD53E8000;
-
-    // Add number of seconds
-    seconds.QuadPart = 10000000;
-    seconds.QuadPart *= crt_time;
-    ft.QuadPart += seconds.QuadPart;
-
-    // Return the result FILETIME
-    pFT->dwFileTimeHigh = ft.HighPart;
-    pFT->dwFileTimeLow = ft.LowPart;
+    *pFileTime = 0x019DB1DED53E8000ULL + (10000000 * crt_time);
 }
 #endif
 
@@ -414,15 +401,15 @@ static bool RenameFile(const char * szExistingFile, const char * szNewFile)
 
 static bool File_GetPos(
     TFileStream * pStream,                  // Pointer to an open stream
-    LARGE_INTEGER * pByteOffset)            // Pointer to file byte offset
+    ULONGLONG & ByteOffset)                 // Pointer to file byte offset
 {
-    pByteOffset->QuadPart = pStream->RawFilePos.QuadPart;
+    ByteOffset = pStream->RawFilePos;
     return true;
 }
 
 static bool File_Read(
     TFileStream * pStream,                  // Pointer to an open stream
-    LARGE_INTEGER * pByteOffset,            // Pointer to file byte offset. If NULL, it reads from the current position
+    ULONGLONG * pByteOffset,                // Pointer to file byte offset. If NULL, it reads from the current position
     void * pvBuffer,                        // Pointer to data to be read
     DWORD dwBytesToRead)                    // Number of bytes to read from the file
 {
@@ -436,10 +423,13 @@ static bool File_Read(
     {
         // If the byte offset is different from the current file position,
         // we have to update the file position
-        if(pByteOffset->QuadPart != pStream->RawFilePos.QuadPart)
+        if(*pByteOffset != pStream->RawFilePos)
         {
-            SetFilePointer(pStream->hFile, (LONG)pByteOffset->LowPart, (PLONG)&pByteOffset->HighPart, FILE_BEGIN);
-            pStream->RawFilePos.QuadPart = pByteOffset->QuadPart;
+            LONG ByteOffsetHi = (LONG)(*pByteOffset >> 32);
+            LONG ByteOffsetLo = (LONG)(*pByteOffset);
+
+            SetFilePointer(pStream->hFile, ByteOffsetLo, &ByteOffsetHi, FILE_BEGIN);
+            pStream->RawFilePos = *pByteOffset;
         }
 
         // Read the data
@@ -459,10 +449,10 @@ static bool File_Read(
 
         // If the byte offset is different from the current file position,
         // we have to update the file position
-        if(pByteOffset->QuadPart != pStream->RawFilePos.QuadPart)
+        if(*pByteOffset != pStream->RawFilePos)
         {
-            FSSetForkPosition((short)(long)pStream->hFile, fsFromStart, (SInt64)pByteOffset->QuadPart);
-            pStream->RawFilePos.QuadPart = pByteOffset->QuadPart;
+            FSSetForkPosition((short)(long)pStream->hFile, fsFromStart, (SInt64)(*pByteOffset));
+            pStream->RawFilePos = *pByteOffset;
         }
 
         // Read the data
@@ -485,10 +475,10 @@ static bool File_Read(
 
         // If the byte offset is different from the current file position,
         // we have to update the file position
-        if(pByteOffset->QuadPart != pStream->RawFilePos.QuadPart)
+        if(*pByteOffset != pStream->RawFilePos)
         {
-            lseek64((intptr_t)pStream->hFile, (off64_t)pByteOffset->QuadPart, SEEK_SET);
-            pStream->RawFilePos.QuadPart = pByteOffset->QuadPart;
+            lseek64((intptr_t)pStream->hFile, (off64_t)(*pByteOffset), SEEK_SET);
+            pStream->RawFilePos = *pByteOffset;
         }
 
         // Perform the read operation
@@ -508,7 +498,7 @@ static bool File_Read(
 
     // Increment the current file position by number of bytes read
     // If the number of bytes read doesn't match to required amount, return false
-    pStream->RawFilePos.QuadPart = pByteOffset->QuadPart + dwBytesRead;
+    pStream->RawFilePos = *pByteOffset + dwBytesRead;
     if(dwBytesRead != dwBytesToRead)
         SetLastError(ERROR_HANDLE_EOF);
     return (dwBytesRead == dwBytesToRead);
@@ -516,7 +506,7 @@ static bool File_Read(
 
 static bool File_Write(
     TFileStream * pStream,                  // Pointer to an open stream
-    LARGE_INTEGER * pByteOffset,            // Pointer to file byte offset. If NULL, it writes to current position
+    ULONGLONG * pByteOffset,                // Pointer to file byte offset. If NULL, it writes to current position
     const void * pvBuffer,                  // Pointer to data to be written
     DWORD dwBytesToWrite)                   // Number of bytes to write to the file
 {
@@ -530,10 +520,13 @@ static bool File_Write(
     {
         // If the byte offset is different from the current file position,
         // we have to update the file position
-        if(pByteOffset->QuadPart != pStream->RawFilePos.QuadPart)
+        if(*pByteOffset != pStream->RawFilePos)
         {
-            SetFilePointer(pStream->hFile, (LONG)pByteOffset->LowPart, (PLONG)&pByteOffset->HighPart, FILE_BEGIN);
-            pStream->RawFilePos.QuadPart = pByteOffset->QuadPart;
+            LONG ByteOffsetHi = (LONG)(*pByteOffset >> 32);
+            LONG ByteOffsetLo = (LONG)(*pByteOffset);
+
+            SetFilePointer(pStream->hFile, ByteOffsetLo, &ByteOffsetHi, FILE_BEGIN);
+            pStream->RawFilePos = *pByteOffset;
         }
 
         // Read the data
@@ -550,10 +543,10 @@ static bool File_Write(
 
         // If the byte offset is different from the current file position,
         // we have to update the file position
-        if(pByteOffset->QuadPart != pStream->RawFilePos.QuadPart)
+        if(*pByteOffset != pStream->RawFilePos)
         {
-            FSSetForkPosition((short)(long)pStream->hFile, fsFromStart, (SInt64)pByteOffset->QuadPart);
-            pStream->RawFilePos.QuadPart = pByteOffset->QuadPart;
+            FSSetForkPosition((short)(long)pStream->hFile, fsFromStart, (SInt64)(*pByteOffset));
+            pStream->RawFilePos = *pByteOffset;
         }
 
         theErr = FSWriteFork((short)(long)pStream->hFile, fsAtMark, 0, nBytesToWrite, pvBuffer, &nBytesWritten);
@@ -572,10 +565,10 @@ static bool File_Write(
 
         // If the byte offset is different from the current file position,
         // we have to update the file position
-        if(pByteOffset->QuadPart != pStream->RawFilePos.QuadPart)
+        if(*pByteOffset != pStream->RawFilePos)
         {
-            lseek64((intptr_t)pStream->hFile, (off64_t)pByteOffset->QuadPart, SEEK_SET);
-            pStream->RawFilePos.QuadPart = pByteOffset->QuadPart;
+            lseek64((intptr_t)pStream->hFile, (off64_t)(*pByteOffset), SEEK_SET);
+            pStream->RawFilePos = *pByteOffset;
         }
 
         // Perform the read operation
@@ -591,7 +584,7 @@ static bool File_Write(
 #endif
 
     // Increment the current file position by number of bytes read
-    pStream->RawFilePos.QuadPart = pByteOffset->QuadPart + dwBytesWritten;
+    pStream->RawFilePos = *pByteOffset + dwBytesWritten;
     if(dwBytesWritten != dwBytesToWrite)
         SetLastError(ERROR_DISK_FULL);
     return (dwBytesWritten == dwBytesToWrite);
@@ -599,13 +592,17 @@ static bool File_Write(
 
 static bool File_GetSize(
     TFileStream * pStream,                  // Pointer to an open stream
-    LARGE_INTEGER * pFileSize)              // Pointer where to store file size
+    ULONGLONG & FileSize)                   // Pointer where to store file size
 {
 #ifdef PLATFORM_WINDOWS
-    pFileSize->LowPart = GetFileSize(pStream->hFile, (LPDWORD)&pFileSize->HighPart);
-    if(pFileSize->LowPart == INVALID_FILE_SIZE && GetLastError() != ERROR_SUCCESS)
+    DWORD FileSizeHi = 0;
+    DWORD FileSizeLo;
+    
+    FileSizeLo = GetFileSize(pStream->hFile, &FileSizeHi);
+    if(FileSizeLo == INVALID_FILE_SIZE && GetLastError() != ERROR_SUCCESS)
         return false;
 
+    FileSize = MAKE_OFFSET64(FileSizeHi, FileSizeLo);
     return true;
 #endif
 
@@ -620,7 +617,7 @@ static bool File_GetSize(
         return false;
     }
 
-    pFileSize->QuadPart = fileLength;
+    FileSize = (ULONGLONG)fileLength;
     return true;
 #endif
 
@@ -633,22 +630,24 @@ static bool File_GetSize(
         return false;
     }
 
-    pFileSize->QuadPart = fileinfo.st_size;
+    FileSize = (ULONGLONG)fileinfo.st_size;
     return true;
 #endif
 }
 
 static bool File_SetSize(
     TFileStream * pStream,                  // Pointer to an open stream
-    LARGE_INTEGER * pNewSize)               // new size of the file
+    ULONGLONG NewFileSize)                  // new size of the file
 {
 #ifdef PLATFORM_WINDOWS
     {
+        LONG FileSizeHi = (LONG)(NewFileSize >> 32);
+        LONG FileSizeLo = (LONG)(NewFileSize);
         DWORD dwNewPos;
         bool bResult;
 
         // Set the position at the new file size
-        dwNewPos = SetFilePointer(pStream->hFile, pNewSize->LowPart, &pNewSize->HighPart, FILE_BEGIN);
+        dwNewPos = SetFilePointer(pStream->hFile, FileSizeLo, &FileSizeHi, FILE_BEGIN);
         if(dwNewPos == INVALID_SET_FILE_POINTER && GetLastError() != ERROR_SUCCESS)
             return false;
 
@@ -656,10 +655,9 @@ static bool File_SetSize(
         bResult = (bool)SetEndOfFile(pStream->hFile);
 
         // Restore the file position
-        SetFilePointer(pStream->hFile,
-                 (LONG)pStream->RawFilePos.LowPart,
-               (PLONG)&pStream->RawFilePos.HighPart,
-                       FILE_BEGIN);
+        FileSizeHi = (LONG)(pStream->RawFilePos >> 32);
+        FileSizeLo = (LONG)(pStream->RawFilePos);
+        SetFilePointer(pStream->hFile, FileSizeLo, &FileSizeHi, FILE_BEGIN);
         return bResult;
     }
 #endif
@@ -668,7 +666,7 @@ static bool File_SetSize(
     {
         OSErr theErr;
 
-        theErr = FSSetForkSize((short)(long)pStream->hFile, fsFromStart, (SInt64)pNewSize->QuadPart);
+        theErr = FSSetForkSize((short)(long)pStream->hFile, fsFromStart, (SInt64)NewFileSize);
         if(theErr != noErr)
         {
             nLastError = theErr;
@@ -681,7 +679,7 @@ static bool File_SetSize(
 
 #ifdef PLATFORM_LINUX
     {
-        if(ftruncate((intptr_t)pStream->hFile, (off_t)pNewSize->QuadPart) == -1)
+        if(ftruncate((intptr_t)pStream->hFile, (off_t)NewFileSize) == -1)
         {
             nLastError = errno;
             return false;
@@ -697,19 +695,19 @@ static bool File_SetSize(
 
 static bool PartFile_GetPos(
     TPartFileStream * pStream,              // Pointer to an open stream
-    LARGE_INTEGER * pByteOffset)            // Pointer to file byte offset
+    ULONGLONG & ByteOffset)                 // Pointer to file byte offset
 {
-    pByteOffset->QuadPart = pStream->VirtualPos.QuadPart;
+    ByteOffset = pStream->VirtualPos;
     return true;
 }
 
 static bool PartFile_Read(
     TPartFileStream * pStream,              // Pointer to an open stream
-    LARGE_INTEGER * pByteOffset,            // Pointer to file byte offset. If NULL, it reads from the current position
+    ULONGLONG * pByteOffset,                // Pointer to file byte offset. If NULL, it reads from the current position
     void * pvBuffer,                        // Pointer to data to be read
     DWORD dwBytesToRead)                    // Number of bytes to read from the file
 {
-    LARGE_INTEGER RawByteOffset;
+    ULONGLONG RawByteOffset;
     LPBYTE pbBuffer = (LPBYTE)pvBuffer;
     DWORD dwBytesRemaining = dwBytesToRead;
     DWORD dwPartOffset;
@@ -724,7 +722,7 @@ static bool PartFile_Read(
         pByteOffset = &pStream->VirtualPos;
 
     // Check if the file position is not at or beyond end of the file
-    if(pByteOffset->QuadPart >= pStream->VirtualSize.QuadPart)
+    if(*pByteOffset >= pStream->VirtualSize)
     {
         SetLastError(ERROR_HANDLE_EOF);
         return false;
@@ -733,16 +731,16 @@ static bool PartFile_Read(
     // Get the part index where the read offset is
     // Note that the part index should now be within the range,
     // as read requests beyond-EOF are handled by the previous test
-    dwPartIndex = (DWORD)(pByteOffset->QuadPart / pStream->PartSize);
+    dwPartIndex = (DWORD)(*pByteOffset / pStream->PartSize);
     assert(dwPartIndex < pStream->PartCount);
 
     // If the number of bytes remaining goes past
     // the end of the file, cut them
-    if((pByteOffset->QuadPart + dwBytesRemaining) > pStream->VirtualSize.QuadPart)
-        dwBytesRemaining = (DWORD)(pStream->VirtualSize.QuadPart - pByteOffset->QuadPart);
+    if((*pByteOffset + dwBytesRemaining) > pStream->VirtualSize)
+        dwBytesRemaining = (DWORD)(pStream->VirtualSize - *pByteOffset);
 
     // Calculate the offset in the current part
-    dwPartOffset = pByteOffset->LowPart & (pStream->PartSize - 1);
+    dwPartOffset = (DWORD)(*pByteOffset) & (pStream->PartSize - 1);
 
     // Read all data, one part at a time
     while(dwBytesRemaining != 0)
@@ -760,15 +758,14 @@ static bool PartFile_Read(
 
         // If we are in the last part, we have to cut the number of bytes in the last part
         if(dwPartIndex == pStream->PartCount - 1)
-            dwPartSize = pStream->VirtualSize.LowPart & (pStream->PartSize - 1);
+            dwPartSize = (DWORD)pStream->VirtualSize & (pStream->PartSize - 1);
 
         // Get the number of bytes reamining in the current part
         dwBytesInPart = dwPartSize - dwPartOffset;
 
         // Compute the raw file offset of the file part
-        RawByteOffset.HighPart = PartMap->BlockOffsHi;
-        RawByteOffset.LowPart = PartMap->BlockOffsLo;
-        if(RawByteOffset.QuadPart == 0)
+        RawByteOffset = MAKE_OFFSET64(PartMap->BlockOffsHi, PartMap->BlockOffsLo);
+        if(RawByteOffset == 0)
         {
             nFailReason = ERROR_CAN_NOT_COMPLETE;
             bResult = false;
@@ -780,7 +777,7 @@ static bool PartFile_Read(
             dwBytesInPart = dwBytesRemaining;
 
         // Append the offset within the part
-        RawByteOffset.QuadPart += dwPartOffset;
+        RawByteOffset += dwPartOffset;
         if(!File_Read(pStream, &RawByteOffset, pbBuffer, dwBytesInPart))
         {
             nFailReason = ERROR_CAN_NOT_COMPLETE;
@@ -799,7 +796,7 @@ static bool PartFile_Read(
     }
 
     // Move the file position by the number of bytes read
-    pStream->VirtualPos.QuadPart = pByteOffset->QuadPart + dwBytesRead;
+    pStream->VirtualPos = *pByteOffset + dwBytesRead;
     if(dwBytesRead != dwBytesToRead)
         SetLastError(nFailReason);
     return (dwBytesRead == dwBytesToRead);
@@ -807,7 +804,7 @@ static bool PartFile_Read(
 
 static bool PartFile_Write(
     TPartFileStream * pStream,              // Pointer to an open stream
-    LARGE_INTEGER * pByteOffset,            // Pointer to file byte offset. If NULL, it reads from the current position
+    ULONGLONG * pByteOffset,                // Pointer to file byte offset. If NULL, it reads from the current position
     const void * pvBuffer,                  // Pointer to data to be read
     DWORD dwBytesToRead)                    // Number of bytes to read from the file
 {
@@ -823,19 +820,19 @@ static bool PartFile_Write(
 
 static bool PartFile_GetSize(
     TPartFileStream * pStream,              // Pointer to an open stream
-    LARGE_INTEGER * pFileSize)              // Pointer where to store file size
+    ULONGLONG & FileSize)                   // Pointer where to store file size
 {
-    pFileSize->QuadPart = pStream->VirtualSize.QuadPart;
+    FileSize = pStream->VirtualSize;
     return true;
 }
 
 static bool PartFile_SetSize(
     TPartFileStream * pStream,              // Pointer to an open stream
-    LARGE_INTEGER * pNewSize)               // new size of the file
+    ULONGLONG NewSize)                      // new size of the file
 {
     // Keep compiler happy
     pStream = pStream;
-    pNewSize = pNewSize;
+    NewSize = NewSize;
 
     // Not allowed
     return false;
@@ -877,23 +874,23 @@ static DWORD Rol32(DWORD dwValue, DWORD dwRolCount)
     return (dwValue << dwRolCount) | (dwValue >> dwShiftRight);
 }
 
-static void DecryptMpqChunk(
+static void DecryptFileChunk(
     LPDWORD MpqData,
     LPBYTE pbKey,
-    PLARGE_INTEGER pByteOffset,
+    ULONGLONG ByteOffset,
     DWORD dwLength)
 {
-    LARGE_INTEGER ChunkOffset;
+    ULONGLONG ChunkOffset;
     DWORD KeyShuffled[0x10];
     DWORD KeyMirror[0x10];
     DWORD RoundCount = 0x14;
 
     // Prepare the key
-    ChunkOffset.QuadPart = pByteOffset->QuadPart / MPQE_CHUNK_SIZE;
+    ChunkOffset = ByteOffset / MPQE_CHUNK_SIZE;
     memcpy(KeyMirror, pbKey, MPQE_CHUNK_SIZE);
     BSWAP_ARRAY32_UNSIGNED(KeyMirror, MPQE_CHUNK_SIZE);
-    KeyMirror[0x05] = ChunkOffset.HighPart;
-    KeyMirror[0x08] = ChunkOffset.LowPart;
+    KeyMirror[0x05] = (DWORD)(ChunkOffset >> 32);
+    KeyMirror[0x08] = (DWORD)(ChunkOffset);
 
     while(dwLength >= MPQE_CHUNK_SIZE)
     {
@@ -993,7 +990,7 @@ static void DecryptMpqChunk(
 
 static bool DetectFileKey(TEncryptedStream * pStream)
 {
-    LARGE_INTEGER ByteOffset = {{0}};
+    ULONGLONG ByteOffset = 0;
     BYTE EncryptedHeader[MPQE_CHUNK_SIZE];
     BYTE FileHeader[MPQE_CHUNK_SIZE];
 
@@ -1010,7 +1007,7 @@ static bool DetectFileKey(TEncryptedStream * pStream)
 
         // Try to decrypt with the given key 
         memcpy(FileHeader, EncryptedHeader, MPQE_CHUNK_SIZE);
-        DecryptMpqChunk((LPDWORD)FileHeader, pStream->Key, &ByteOffset, MPQE_CHUNK_SIZE);
+        DecryptFileChunk((LPDWORD)FileHeader, pStream->Key, ByteOffset, MPQE_CHUNK_SIZE);
 
         // We check the decrypoted data
         // All known encrypted MPQs have header at the begin of the file,
@@ -1025,13 +1022,13 @@ static bool DetectFileKey(TEncryptedStream * pStream)
 
 static bool EncryptedFile_Read(
     TEncryptedStream * pStream,             // Pointer to an open stream
-    LARGE_INTEGER * pByteOffset,            // Pointer to file byte offset. If NULL, it reads from the current position
+    ULONGLONG * pByteOffset,                // Pointer to file byte offset. If NULL, it reads from the current position
     void * pvBuffer,                        // Pointer to data to be read
     DWORD dwBytesToRead)                    // Number of bytes to read from the file
 {
-    LARGE_INTEGER StartOffset;              // Offset of the first byte to be read from the file
-    LARGE_INTEGER ByteOffset;               // Offset that the caller wants
-    LARGE_INTEGER EndOffset;                // End offset that is to be read from the file
+    ULONGLONG StartOffset;                  // Offset of the first byte to be read from the file
+    ULONGLONG ByteOffset;                   // Offset that the caller wants
+    ULONGLONG EndOffset;                    // End offset that is to be read from the file
     DWORD dwBytesToAllocate;
     DWORD dwBytesToDecrypt;
     DWORD dwOffsetInCache;
@@ -1040,17 +1037,17 @@ static bool EncryptedFile_Read(
 
     // Get the byte offset
     if(pByteOffset != NULL)
-        ByteOffset.QuadPart = pByteOffset->QuadPart;
+        ByteOffset = *pByteOffset;
     else
-        ByteOffset.QuadPart = pStream->RawFilePos.QuadPart;
+        ByteOffset = pStream->RawFilePos;
 
     // Cut it down to MPQE chunk size
-    StartOffset.QuadPart = ByteOffset.QuadPart;
-    StartOffset.LowPart = StartOffset.LowPart & ~(MPQE_CHUNK_SIZE - 1);
-    EndOffset.QuadPart = ByteOffset.QuadPart + dwBytesToRead;
+    StartOffset = ByteOffset;
+    StartOffset = StartOffset & ~(MPQE_CHUNK_SIZE - 1);
+    EndOffset = ByteOffset + dwBytesToRead;
 
     // Calculate number of bytes to decrypt
-    dwBytesToDecrypt = (DWORD)(EndOffset.QuadPart - StartOffset.QuadPart);
+    dwBytesToDecrypt = (DWORD)(EndOffset - StartOffset);
     dwBytesToAllocate = (dwBytesToDecrypt + (MPQE_CHUNK_SIZE - 1)) & ~(MPQE_CHUNK_SIZE - 1);
 
     // Allocate buffers for encrypted and decrypted data
@@ -1058,13 +1055,13 @@ static bool EncryptedFile_Read(
     if(pbMpqData)
     {
         // Get the offset of the desired data in the cache
-        dwOffsetInCache = (DWORD)(ByteOffset.QuadPart - StartOffset.QuadPart);
+        dwOffsetInCache = (DWORD)(ByteOffset - StartOffset);
 
         // Read the file from the stream as-is
         if(File_Read(pStream, &StartOffset, pbMpqData, dwBytesToDecrypt))
         {
             // Decrypt the data
-            DecryptMpqChunk((LPDWORD)pbMpqData, pStream->Key, &StartOffset, dwBytesToAllocate);
+            DecryptFileChunk((LPDWORD)pbMpqData, pStream->Key, StartOffset, dwBytesToAllocate);
 
             // Copy the decrypted data
             memcpy(pvBuffer, pbMpqData + dwOffsetInCache, dwBytesToRead);
@@ -1085,7 +1082,7 @@ static bool EncryptedFile_Read(
 
 static bool EncryptedFile_Write(
     TEncryptedStream * pStream,             // Pointer to an open stream
-    LARGE_INTEGER * pByteOffset,            // Pointer to file byte offset. If NULL, it reads from the current position
+    ULONGLONG * pByteOffset,                // Pointer to file byte offset. If NULL, it reads from the current position
     const void * pvBuffer,                  // Pointer to data to be read
     DWORD dwBytesToRead)                    // Number of bytes to read from the file
 {
@@ -1101,11 +1098,11 @@ static bool EncryptedFile_Write(
 
 static bool EncryptedFile_SetSize(
     TEncryptedStream * pStream,             // Pointer to an open stream
-    LARGE_INTEGER * pNewSize)               // new size of the file
+    ULONGLONG NewSize)                      // new size of the file
 {
     // Keep compiler happy
     pStream = pStream;
-    pNewSize = pNewSize;
+    NewSize = NewSize;
 
     // Not allowed
     return false;
@@ -1223,8 +1220,8 @@ TFileStream * FileStream_OpenFile(
     bool bWriteAccess)                      // false = read-only, true = read+write
 {
     PART_FILE_HEADER PartHdr;
-    LARGE_INTEGER VirtualSize;              // Size of the file stored in part file
-    LARGE_INTEGER ByteOffset = {0};
+    ULONGLONG VirtualSize;             // Size of the file stored in part file
+    ULONGLONG ByteOffset = {0};
     TFileStream * pStream;
     size_t nStructLength;
     DWORD PartCount;
@@ -1247,9 +1244,8 @@ TFileStream * FileStream_OpenFile(
             TPartFileStream * pPartStream;
 
             // Calculate the number of parts in the file
-            VirtualSize.HighPart = PartHdr.FileSizeHi;
-            VirtualSize.LowPart = PartHdr.FileSizeLo;
-            PartCount = (DWORD)((VirtualSize.QuadPart + PartHdr.PartSize - 1) / PartHdr.PartSize);
+            VirtualSize = MAKE_OFFSET64(PartHdr.FileSizeHi, PartHdr.FileSizeLo);
+            PartCount = (DWORD)((VirtualSize + PartHdr.PartSize - 1) / PartHdr.PartSize);
 
             // Calculate the size of the entire structure
             // Note that we decrement number of parts by one,
@@ -1282,9 +1278,8 @@ TFileStream * FileStream_OpenFile(
                 pPartStream->StreamFlags  |= (STREAM_FLAG_READ_ONLY | STREAM_FLAG_PART_FILE);
 
                 // Fill the members of PART file stream
-                pPartStream->VirtualSize.HighPart = PartHdr.FileSizeHi;
-                pPartStream->VirtualSize.LowPart = PartHdr.FileSizeLo;
-                pPartStream->VirtualPos.QuadPart = 0;
+                pPartStream->VirtualSize = ((ULONGLONG)PartHdr.FileSizeHi) + PartHdr.FileSizeLo;
+                pPartStream->VirtualPos = 0;
                 pPartStream->PartCount = PartCount;
                 pPartStream->PartSize = PartHdr.PartSize;
 
@@ -1326,6 +1321,7 @@ TFileStream * FileStream_OpenEncrypted(const char * szFileName)
             // Get the file key
             if(!DetectFileKey(pEncryptedStream))
             {
+                SetLastError(ERROR_UNKNOWN_FILE_KEY);
                 FREEMEM(pEncryptedStream);
                 pEncryptedStream = NULL;
             }
@@ -1342,10 +1338,10 @@ TFileStream * FileStream_OpenEncrypted(const char * szFileName)
 // This function returns the current file position
 bool FileStream_GetPos(
     TFileStream * pStream,
-    LARGE_INTEGER * pByteOffset)
+    ULONGLONG & ByteOffset)
 {
     assert(pStream->StreamGetPos != NULL);
-    return pStream->StreamGetPos(pStream, pByteOffset);
+    return pStream->StreamGetPos(pStream, ByteOffset);
 }
 
 //
@@ -1366,7 +1362,7 @@ bool FileStream_GetPos(
 
 bool FileStream_Read(
     TFileStream * pStream,                  // Pointer to an open stream
-    LARGE_INTEGER * pByteOffset,            // Pointer to file byte offset. If NULL, it reads from the current position
+    ULONGLONG * pByteOffset,                // Pointer to file byte offset. If NULL, it reads from the current position
     void * pvBuffer,                        // Pointer to data to be read
     DWORD dwBytesToRead)                    // Number of bytes to read from the file
 {
@@ -1384,7 +1380,7 @@ bool FileStream_Read(
 
 bool FileStream_Write(
     TFileStream * pStream,                  // Pointer to an open stream
-    LARGE_INTEGER * pByteOffset,            // Pointer to file byte offset. If NULL, it writes to the current position
+    ULONGLONG * pByteOffset,           // Pointer to file byte offset. If NULL, it writes to the current position
     const void * pvBuffer,                  // Pointer to data to be written
     DWORD dwBytesToWrite)                   // Number of bytes to read from the file
 {
@@ -1401,7 +1397,7 @@ bool FileStream_Write(
 
 bool FileStream_GetLastWriteTime(
     TFileStream * pStream,                  // Pointer to an open stream
-    TMPQFileTime * pFT)                     // Pointer where to store file time
+    ULONGLONG * pFileTime)                  // Pointer where to store file time
 {
 #ifdef PLATFORM_WINDOWS
     FILETIME ft;
@@ -1409,8 +1405,7 @@ bool FileStream_GetLastWriteTime(
     if(!GetFileTime(pStream->hFile, NULL, NULL, &ft))
         return false;
 
-    pFT->dwFileTimeHigh = ft.dwHighDateTime;
-    pFT->dwFileTimeLow  = ft.dwLowDateTime;
+    *pFileTime = MAKE_OFFSET64(ft.dwHighDateTime, ft.dwLowDateTime);
     return true;
 #endif
 
@@ -1433,7 +1428,7 @@ bool FileStream_GetLastWriteTime(
         return false;
     }
 
-    ConvertUTCDateTimeToFileTime(&theCatInfo.contentModDate, pFT);
+    ConvertUTCDateTimeToFileTime(&theCatInfo.contentModDate, pFileTime);
     return true;
 #endif
 
@@ -1446,7 +1441,7 @@ bool FileStream_GetLastWriteTime(
         return false;
     }
 
-    ConvertTimeTToFileTime(pFT, file_stats.st_mtime);
+    ConvertTimeTToFileTime(pFileTime, file_stats.st_mtime);
     return true;
 #endif
 }
@@ -1457,10 +1452,10 @@ bool FileStream_GetLastWriteTime(
 
 bool FileStream_GetSize(
     TFileStream * pStream,                  // Pointer to an open stream
-    LARGE_INTEGER * pFileSize)              // Pointer where to store file size
+    ULONGLONG & FileSize)                   // Pointer where to store file size
 {
     assert(pStream->StreamGetSize != NULL);
-    return pStream->StreamGetSize(pStream, pFileSize);
+    return pStream->StreamGetSize(pStream, FileSize);
 }
 
 //
@@ -1469,13 +1464,13 @@ bool FileStream_GetSize(
 
 bool FileStream_SetSize(
     TFileStream * pStream,                  // Pointer to an open stream
-    LARGE_INTEGER * pFileSize)              // Pointer where to store file size
-{
+    ULONGLONG NewFileSize)                  // Pointer where to store file size
+{                                 
     if(pStream->StreamFlags & STREAM_FLAG_READ_ONLY)
         return false;
     assert(pStream->StreamSetSize != NULL);
 
-    return pStream->StreamSetSize(pStream, pFileSize);
+    return pStream->StreamSetSize(pStream, NewFileSize);
 }
 
 //
@@ -1515,7 +1510,7 @@ bool FileStream_MoveFile(
     FileStream_Close(pTempStream);
 
     // The file position has been reset to zero by reopening the file
-    pStream->RawFilePos.QuadPart = 0;
+    pStream->RawFilePos = 0;
     return true;
 }
 
@@ -1546,8 +1541,8 @@ void FileStream_Close(
 /*
 int main(void)
 {
-    LARGE_INTEGER FileSize;
-    LARGE_INTEGER FilePos;
+    ULONGLONG FilePos;
+    ULONGLONG FileSize;
     TMPQFileTime * pFT;
     TFileStream * pTempStream;
     TFileStream * pStream;
@@ -1736,7 +1731,7 @@ int main(void)
         //
 
         // Decrypt the hash table
-//      DecryptMpqTable(pHash, MpqHeader.dwHashTableSize * sizeof(TMPQHash), "(hash table)");
+//      DecryptMpqBlock(pHash, MpqHeader.dwHashTableSize * sizeof(TMPQHash), MPQ_KEY_HASH_TABLE);
 
         //
         // At this point, the hash table should be like this:
@@ -1784,7 +1779,7 @@ int main(void)
         //
 
         // Decrypt the block table
-//      DecryptMpqTable(pBlock, MpqHeader.dwBlockTableSize * sizeof(TMPQBlock), "(block table)");
+//      DecryptMpqBlock(pBlock, MpqHeader.dwBlockTableSize * sizeof(TMPQBlock), MPQ_KEY_BLOCK_TABLE);
 
         //
         // At this point, the block table should be like this:

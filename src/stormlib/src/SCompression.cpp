@@ -15,7 +15,7 @@
 #define __STORMLIB_SELF__
 #define __INCLUDE_COMPRESSION__
 #include "StormLib.h"
-#include "SCommon.h"
+#include "StormCommon.h"
 
 //-----------------------------------------------------------------------------
 // Local structures

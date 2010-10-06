@@ -26,9 +26,8 @@ LFLAGS = -lbz2 -lz
 CFLAGS = -fPIC -D_7ZIP_ST
 CFLAGS += $(OFLAGS) $(DFLAGS)
 
-OBJS = src/adpcm/adpcm.o \
+OBJS =  src/adpcm/adpcm.o \
 	src/huffman/huff.o \
-        src/jenkins/lookup3.o \
 	src/sparse/sparse.o \
 	src/FileStream.o \
 	src/SCommon.o \
@@ -46,7 +45,8 @@ OBJS = src/adpcm/adpcm.o \
 	src/SFileReadFile.o \
 	src/SFileVerify.o
 
-COBJS = src/libtomcrypt/src/hashes/hash_memory.o \
+COBJS = src/jenkins/lookup3.o \
+        src/libtomcrypt/src/hashes/hash_memory.o \
 	src/libtomcrypt/src/hashes/md5.o \
 	src/libtomcrypt/src/hashes/sha1.o\
 	src/libtomcrypt/src/math/ltm_desc.o \

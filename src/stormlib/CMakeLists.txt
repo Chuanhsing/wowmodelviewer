@@ -8,7 +8,8 @@ set(SRC_FILES
            src/StormLib.h
            src/StormPort.h
            src/FileStream.cpp
-           src/SCommon.cpp
+           src/SBaseCommon.cpp
+           src/SBaseFileTable.cpp
            src/SCompression.cpp
            src/SFileAddFile.cpp
            src/SFileAttributes.cpp

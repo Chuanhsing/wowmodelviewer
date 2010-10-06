@@ -11,7 +11,7 @@
 
 #define __STORMLIB_SELF__
 #include "StormLib.h"
-#include "SCommon.h"
+#include "StormCommon.h"
 
 //-----------------------------------------------------------------------------
 // Defines
@@ -19,13 +19,24 @@
 #define DEFAULT_SECTOR_SIZE  3       // Default size of a file sector
 
 //-----------------------------------------------------------------------------
+// Local variables
+
+static const DWORD MpqHeaderSizes[] =
+{
+    MPQ_HEADER_SIZE_V1,
+    MPQ_HEADER_SIZE_V2,
+    MPQ_HEADER_SIZE_V3,
+    MPQ_HEADER_SIZE_V4
+};
+
+//-----------------------------------------------------------------------------
 // Creates a new MPQ archive.
 
 bool WINAPI SFileCreateArchive(const char * szMpqName, DWORD dwFlags, DWORD dwHashTableSize, HANDLE * phMpq)
 {
-    LARGE_INTEGER MpqPos = {0};             // Position of MPQ header in the file
     TFileStream * pStream = NULL;           // File stream
     TMPQArchive * ha = NULL;                // MPQ archive handle
+    ULONGLONG MpqPos = 0;                   // Position of MPQ header in the file
     USHORT wFormatVersion = MPQ_FORMAT_VERSION_1;
     DWORD dwBlockTableSize = 0;             // Initial block table size
     DWORD dwPowerOfTwo;
@@ -70,14 +81,12 @@ bool WINAPI SFileCreateArchive(const char * szMpqName, DWORD dwFlags, DWORD dwHa
     }
 
     // Decide what format to use
-    if(dwFlags & MPQ_CREATE_ARCHIVE_V2)
-        wFormatVersion = MPQ_FORMAT_VERSION_2;
+    wFormatVersion = (USHORT)((dwFlags & MPQ_CREATE_ARCHIVE_VMASK) >> 16);
 
     // Retrieve the file size and round it up to 0x200 bytes
-    FileStream_GetSize(pStream, &MpqPos);
-    MpqPos.QuadPart += 0x1FF;
-    MpqPos.LowPart &= 0xFFFFFE00;
-    if(!FileStream_SetSize(pStream, &MpqPos))
+    FileStream_GetSize(pStream, MpqPos);
+    MpqPos = (MpqPos + 0x1FF) & (ULONGLONG)0xFFFFFFFFFFFFFE00ULL;
+    if(!FileStream_SetSize(pStream, MpqPos))
         nError = GetLastError();
 
     // Create the archive handle
@@ -115,14 +124,19 @@ bool WINAPI SFileCreateArchive(const char * szMpqName, DWORD dwFlags, DWORD dwHa
         ha->UserDataPos     = MpqPos;
         ha->MpqPos          = MpqPos;
         ha->pHeader         = (TMPQHeader *)ha->HeaderData;
-        ha->dwBlockTableMax = STORMLIB_MAX(dwHashTableSize, dwBlockTableSize);
-        ha->pHashTable      = ALLOCMEM(TMPQHash, dwHashTableSize);
-        ha->pBlockTable     = ALLOCMEM(TMPQBlock, ha->dwBlockTableMax);
-        ha->pExtBlockTable  = ALLOCMEM(TMPQBlockEx, ha->dwBlockTableMax);
-        ha->pListFile       = NULL;
+        ha->dwFileTableSize = 0;
+        ha->dwFileTableMax  = dwHashTableSize;
         ha->dwFlags         = 0;
         pStream = NULL;
-        if(!ha->pHashTable || !ha->pBlockTable || !ha->pExtBlockTable)
+
+        // Setup the attributes
+        if(dwFlags & MPQ_CREATE_ATTRIBUTES)
+            ha->dwAttrFlags = MPQ_ATTRIBUTE_CRC32 | MPQ_ATTRIBUTE_FILETIME | MPQ_ATTRIBUTE_MD5;
+
+        // Create hash table and file tablt
+        ha->pHashTable = ALLOCMEM(TMPQHash, dwHashTableSize);
+        ha->pFileTable = ALLOCMEM(TFileEntry, ha->dwFileTableMax);
+        if(!ha->pHashTable || !ha->pFileTable)
             nError = ERROR_NOT_ENOUGH_MEMORY;
     }
 
@@ -130,21 +144,23 @@ bool WINAPI SFileCreateArchive(const char * szMpqName, DWORD dwFlags, DWORD dwHa
     if(nError == ERROR_SUCCESS)
     {
         TMPQHeader * pHeader = ha->pHeader;
-        DWORD dwHeaderSize = (wFormatVersion == MPQ_FORMAT_VERSION_2) ? MPQ_HEADER_SIZE_V2 : MPQ_HEADER_SIZE_V1;
 
+        // Fill the MPQ header
         memset(pHeader, 0, sizeof(ha->HeaderData));
         pHeader->dwID             = ID_MPQ;
-        pHeader->dwHeaderSize     = dwHeaderSize;
+        pHeader->dwHeaderSize     = MpqHeaderSizes[wFormatVersion];
         pHeader->dwArchiveSize    = pHeader->dwHeaderSize + dwHashTableSize * sizeof(TMPQHash);
         pHeader->wFormatVersion   = wFormatVersion;
         pHeader->wSectorSize      = DEFAULT_SECTOR_SIZE; // 0x1000 bytes per sector
+        pHeader->dwHashTablePos   = pHeader->dwHeaderSize;
         pHeader->dwHashTableSize  = dwHashTableSize;
+        pHeader->dwBlockTablePos  = pHeader->dwHashTablePos + dwHashTableSize * sizeof(TMPQHash);
         pHeader->dwBlockTableSize = dwBlockTableSize;
+        ConvertMpqHeaderToFormat4(ha, MpqPos);
 
         // Clear all tables
         memset(ha->pHashTable, 0xFF, sizeof(TMPQHash) * dwHashTableSize);
-        memset(ha->pBlockTable, 0, sizeof(TMPQBlock) * ha->dwBlockTableMax);
-        memset(ha->pExtBlockTable, 0, sizeof(TMPQBlockEx) * ha->dwBlockTableMax);
+        memset(ha->pFileTable, 0x00, sizeof(TFileEntry) * ha->dwFileTableMax);
 
         // Remember if we shall check sector CRCs when reading file
         if(dwFlags & MPQ_OPEN_CHECK_SECTOR_CRC)
@@ -167,14 +183,6 @@ bool WINAPI SFileCreateArchive(const char * szMpqName, DWORD dwFlags, DWORD dwHa
         ha->dwFlags |= MPQ_FLAG_CHANGED;
     }
 
-    // Create the internal listfile
-    if(nError == ERROR_SUCCESS)
-        nError = SListFileCreateListFile(ha);
-
-    // Create the file attributes
-    if(nError == ERROR_SUCCESS && (dwFlags & MPQ_CREATE_ATTRIBUTES))
-        nError = SAttrCreateAttributes(ha, MPQ_ATTRIBUTE_ALL);
-
     // Cleanup : If an error, delete all buffers and return
     if(nError != ERROR_SUCCESS)
     {
@@ -187,76 +195,4 @@ bool WINAPI SFileCreateArchive(const char * szMpqName, DWORD dwFlags, DWORD dwHa
     // Return the values
     *phMpq = (HANDLE)ha;
     return (nError == ERROR_SUCCESS);
-}
-
-//-----------------------------------------------------------------------------
-// Opens or creates a (new) MPQ archive.
-//
-//  szMpqName - Name of the archive to be created.
-//
-//  dwCreationDisposition:
-//
-//   Value              Doesn't exist      Exists, not a MPQ  Exists, it's a MPQ
-//   ----------         -------------      -----------------  ---------------------
-//   MPQ_CREATE_NEW     Creates empty MPQ  Converts to MPQ    Fails
-//   MPQ_CREATE_ALWAYS  Creates empty MPQ  Converts to MPQ    Overwrites the MPQ
-//   MPQ_OPEN_EXISTING  Fails              Fails              Opens the MPQ
-//   MPQ_OPEN_ALWAYS    Creates empty MPQ  Converts to MPQ    Opens the MPQ
-//
-//   The above mentioned values can be combined with the following flags:
-//
-//   MPQ_CREATE_ARCHIVE_V1 - Creates MPQ archive version 1
-//   MPQ_CREATE_ARCHIVE_V2 - Creates MPQ archive version 2
-//   MPQ_CREATE_ATTRIBUTES - Will also add (attributes) file with the CRCs
-//   
-// dwHashTableSize - Size of the hash table (only if creating a new archive).
-//        Must be between 2^4 (= 16) and 2^18 (= 262 144)
-//
-// phMpq - Receives handle to the archive
-//
-
-bool WINAPI SFileCreateArchiveEx(const char * szMpqName, DWORD dwFlags, DWORD dwHashTableSize, HANDLE * phMpq)
-{
-    TMPQArchive * ha;
-    HANDLE hMpq;
-
-    switch(dwFlags & 0x0F)
-    {
-        case MPQ_CREATE_NEW:
-
-            // Create empty MPQ or convert a file to MPQ. Fail if the file already is a MPQ.
-            return SFileCreateArchive(szMpqName, dwFlags, dwHashTableSize, phMpq);
-
-        case MPQ_CREATE_ALWAYS:
-
-            // If the file already exists and it is a MPQ,
-            // we crop the MPQ part from the file and create new MPQ
-            if(SFileOpenArchive(szMpqName, 0, 0, &hMpq))
-            {
-                ha = (TMPQArchive *)hMpq;
-                FileStream_SetSize(ha->pStream, &ha->MpqPos);
-                SFileCloseArchive(hMpq);
-            }
-
-            // Now create new one
-            return SFileCreateArchive(szMpqName, dwFlags | MPQ_CREATE_NO_MPQ_CHECK, dwHashTableSize, phMpq);
-
-        case MPQ_OPEN_EXISTING:
-
-            // Open existing MPQ. Fail if it doesn't exist or if it's not a MPQ.
-            return SFileOpenArchive(szMpqName, 0, dwFlags, phMpq);
-
-        case MPQ_OPEN_ALWAYS:
-
-            // If the file exists and it's an MPQ, open it.
-            // Otherwise, create empty MPQ or create MPQ over a file
-            if(SFileOpenArchive(szMpqName, 0, dwFlags, phMpq))
-                return true;
-
-            // Create new MPQ
-            return SFileCreateArchive(szMpqName, dwFlags, dwHashTableSize, phMpq);
-    }
-
-    SetLastError(ERROR_INVALID_PARAMETER);
-    return false;
 }

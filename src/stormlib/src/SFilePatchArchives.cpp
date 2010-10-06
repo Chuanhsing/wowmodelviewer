@@ -11,7 +11,7 @@
 #define __STORMLIB_SELF__
 #define __INCLUDE_CRYPTOGRAPHY__
 #include "StormLib.h"
-#include "SCommon.h"
+#include "StormCommon.h"
 
 //-----------------------------------------------------------------------------
 // Local structures
@@ -42,7 +42,7 @@ static void Decompress_RLE(LPBYTE pbDecompressed, DWORD cbDecompressed, LPBYTE p
     memset(pbDecompressed, 0, cbDecompressed);
 
     // Unpack
-    while(pbCompressed < pbCompressedEnd)
+    while(pbCompressed < pbCompressedEnd && pbDecompressed < pbDecompressedEnd)
     {
         OneByte = *pbCompressed++;
         
@@ -206,15 +206,15 @@ static int ApplyMpqPatch_BSD0(
     // 0004   4 bytes   Length to copy from the BSDIFF extra block
     // 0008   4 bytes   Size to increment source file offset
     pCtrlBlock = (LPDWORD)pbPatchData;
-    pbPatchData += (size_t)pBsdiff->CtrlBlockSize;
+    pbPatchData += (size_t)BSWAP_INT64_UNSIGNED(pBsdiff->CtrlBlockSize);
 
     // Get the pointer to the data block
     pDataBlock = (LPBYTE)pbPatchData;
-    pbPatchData += (size_t)pBsdiff->DataBlockSize;
+    pbPatchData += (size_t)BSWAP_INT64_UNSIGNED(pBsdiff->DataBlockSize);
 
     // Get the pointer to the extra block
     pExtraBlock = (LPBYTE)pbPatchData;
-    dwNewSize = (DWORD)pBsdiff->NewFileSize;
+    dwNewSize = (DWORD)BSWAP_INT64_UNSIGNED(pBsdiff->NewFileSize);
 
     // Allocate new buffer
     pbNewData = ALLOCMEM(BYTE, dwNewSize);
@@ -222,12 +222,11 @@ static int ApplyMpqPatch_BSD0(
         return ERROR_NOT_ENOUGH_MEMORY;
 
     // Now patch the file
-    // TODO: Optimization, so it's not that memory consuming
     while(dwNewOffset < dwNewSize)
     {
-        DWORD dwAddDataLength = pCtrlBlock[0];
-        DWORD dwMovDataLength = pCtrlBlock[1];
-        DWORD dwOldMoveLength = pCtrlBlock[2];
+        DWORD dwAddDataLength = BSWAP_INT32_UNSIGNED(pCtrlBlock[0]);
+        DWORD dwMovDataLength = BSWAP_INT32_UNSIGNED(pCtrlBlock[1]);
+        DWORD dwOldMoveLength = BSWAP_INT32_UNSIGNED(pCtrlBlock[2]);
         DWORD i;
 
         // Sanity check
@@ -380,6 +379,31 @@ static int ApplyMpqPatch(
 //-----------------------------------------------------------------------------
 // Public functions (StormLib internals)
 
+bool IsPatchData(const void * pvData, DWORD cbData, LPDWORD pdwPatchedFileSize)
+{
+    TPatchHeader * pPatchHeader = (TPatchHeader *)pvData;
+    BLIZZARD_BSDIFF40_FILE DiffFile;
+    DWORD dwPatchType;
+
+    if(cbData >= sizeof(TPatchHeader) + sizeof(BLIZZARD_BSDIFF40_FILE))
+    {
+        dwPatchType = BSWAP_INT32_UNSIGNED(pPatchHeader->dwPatchType);
+        if(dwPatchType == 0x30445342)
+        {
+            // Give the caller the patch file size
+            if(pdwPatchedFileSize != NULL)
+            {
+                Decompress_RLE((LPBYTE)&DiffFile, sizeof(BLIZZARD_BSDIFF40_FILE), (LPBYTE)(pPatchHeader + 1), sizeof(BLIZZARD_BSDIFF40_FILE));
+                DiffFile.NewFileSize = BSWAP_INT64_UNSIGNED(DiffFile.NewFileSize);
+                *pdwPatchedFileSize = (DWORD)DiffFile.NewFileSize;
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 int PatchFileData(TMPQFile * hf)
 {
     TMPQFile * hfBase = hf;
@@ -392,7 +416,7 @@ int PatchFileData(TMPQFile * hf)
     while(hf != NULL)
     {
         // This must be true
-        assert(hf->pBlock->dwFlags & MPQ_FILE_PATCH_FILE);
+        assert(hf->pFileEntry->dwFlags & MPQ_FILE_PATCH_FILE);
 
         // Make sure that the patch data is loaded
         nError = LoadMpqPatch(hf);

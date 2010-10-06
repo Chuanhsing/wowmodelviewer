@@ -559,7 +559,7 @@
 			Name="Header Files"
 			>
 			<File
-				RelativePath=".\src\SCommon.h"
+				RelativePath=".\src\StormCommon.h"
 				>
 			</File>
 			<File
@@ -627,7 +627,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\src\SCommon.cpp"
+				RelativePath=".\src\SBaseCommon.cpp"
 				>
 				<FileConfiguration
 					Name="DebugAD|Win32"
@@ -677,6 +677,10 @@
 						WarningLevel="4"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\src\SBaseFileTable.cpp"
+				>
 			</File>
 			<File
 				RelativePath=".\src\SCompression.cpp"
