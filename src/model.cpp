@@ -944,6 +944,9 @@ void Model::initAnimated(MPQFile &f)
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, nbuf);
 		glBufferDataARB(GL_ARRAY_BUFFER_ARB, vbufsize, normals, GL_STATIC_DRAW_ARB);
 		wxDELETEA(normals);
+		
+		// clean bind
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 	}
 
 	if (animTextures) {
@@ -1375,8 +1378,10 @@ void Model::animate(unsigned int anim)
 				normals[i] = n;
 		}
 
-        if (video.supportVBO) 
+		// clear bind
+        if (video.supportVBO) {
 			glUnmapBufferARB(GL_ARRAY_BUFFER_ARB);
+		}
 	}
 
 	for (size_t i=0; i<header.nLights; i++) {
@@ -1793,6 +1798,11 @@ inline void Model::drawModel()
 	
 	if (showWireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	// clean bind
+	if (video.supportVBO && animated) {
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+	}
 	// done with all render ops
 }
 

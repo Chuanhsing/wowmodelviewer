@@ -194,11 +194,11 @@ void getGamePath()
 		// _WIN64
 		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft"),
 		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\PTR"),
-		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\Beta")
+		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\Beta"),
 		//_WIN32, but for compatible
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft"),
 		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\PTR"),
-		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\Beta")
+		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\Beta"),
 	};
 
 	for (size_t i=0; i<WXSIZEOF(regpaths); i++) {
