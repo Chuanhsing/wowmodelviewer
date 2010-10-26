@@ -32,9 +32,9 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 		for(int j=(int)mpqArchives.GetCount()-1; j>=0; j--) {
 			if (!mpqArchives[j].AfterLast(SLASH).StartsWith(_T("wow-update-")))
 				continue;
-			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "base", 0);
+			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "base", MPQ_OPEN_READ_ONLY);
 			wxLogMessage(_T("Appending base patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
-			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "enUS", 0);
+			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "enUS", MPQ_OPEN_READ_ONLY);
 			wxLogMessage(_T("Appending enUS patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
 		}
 	}

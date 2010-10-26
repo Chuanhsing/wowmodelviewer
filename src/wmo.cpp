@@ -992,7 +992,7 @@ void WMOGroup::initDisplayList()
 
 	IndiceToVerts = new uint32[nIndices]+2;
 
-	for (int b=0; b<nBatches; b++) {
+	for (uint32 b=0; b<nBatches; b++) {
 		WMOBatch *batch = &batches[b];
 		WMOMaterial *mat = &wmo->mat[batch->texture];
 

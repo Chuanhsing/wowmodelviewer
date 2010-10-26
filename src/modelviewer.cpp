@@ -1363,8 +1363,11 @@ wxString ModelViewer::InitMPQArchives()
 	f.read(toc, 5);
 	f.close();
 	wxLogMessage(_T("Loaded Content TOC: v%c.%c%c.%c%c"), toc[0], toc[1], toc[2], toc[3], toc[4]);
+	if (wxString(toc) > wxString(_T("99999"))) {		// The 99999 should be updated if the TOC ever gets that high.
+		return wxString(_T("There was a problem reading the TOC number.\nCould not determine WoW version."));
+	}
 
-	wxString info = _T("Notice: WMV is designed for WoW 3.3.x, but your version is supported.\nYou may experience diminished capacity while working with WoW Model Viewer.\nYou should update your World of Warcraft client soon.");
+	wxString info = _T("WoW Model Viewer is designed to work with the latest version of World of Warcraft.\nYour version is supported, but support will be removed in the near future.\nYou may experience diminished capacity while working with WoW Model Viewer.\nPlease update your World of Warcraft client soon.");
 	// If we support more than 1 TOC version, place the others here.
 	if (strncmp((char*)toc, "30100", 5) == 0){
 		if (gameVersion != 30100){
@@ -1377,22 +1380,21 @@ wxString ModelViewer::InitMPQArchives()
 			wxMessageBox(info,_T("Compatible Version Found."),wxOK);
 			gameVersion = 30200;
 		}
-	}else if (strncmp((char*)toc, "40000", 5) == 0) {
+	}else if (strncmp((char*)toc, "30300", 5) == 0) {
 		wxLogMessage(info);
-		if (gameVersion != 40000){
-			wxString catinfo = _T("Notice: Cataclysm is still under development.\nMissing or incorrect data may not be a WMV issue.");
-			wxMessageBox(catinfo,_T("Cataclysm Detected!"),wxOK);
-			gameVersion = 40000;
+		if (gameVersion != 30300){
+			wxMessageBox(info,_T("Compatible Version Found."),wxOK);
+			gameVersion = 30300;
 		}
 		langOffset = 0;
 	// else if not our primary supported edition...
-	}else if (strncmp((char*)toc, "30300", 5) != 0){
-		wxString info = _T("WoW Model Viewer does not support your version of WoW.\nPlease update your World of Warcraft client!");
+	}else if (strncmp((char*)toc, "40000", 5) != 0){
+		wxString info = _T("WoW Model Viewer does not support your version of World of Warcraft.\nPlease update your World of Warcraft client soon.");
 		wxLogMessage(_T("Notice: ") + info);
 
 		return info;
 	}else{
-		gameVersion = 30300;
+		gameVersion = 40000;
 	}
 
 	// log for debug

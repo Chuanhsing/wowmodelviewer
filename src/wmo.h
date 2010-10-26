@@ -162,17 +162,16 @@ struct WMOFog {
 class WMOModelInstance {
 public:
 	// header
-	Vec3D pos;
-	float w;
-	Vec3D dir;
-	float sc;
+	Vec3D pos;		// Position
+	float w;		// W for Quat Rotation
+	Vec3D dir;		// Direction for Quat Rotation
+	float sc;		// Scale Factor
 	unsigned int d1;
 	
 	Model *model;
 	wxString filename;
 	int id;
 	unsigned int scale;
-	float frot;
 	int light;
 	Vec3D ldir;
 	Vec3D lcol;
@@ -203,12 +202,12 @@ struct WMOHeader {
 class WMO: public ManagedItem, public Displayable {
 public:
 	//WMOHeader header;
-	int nTextures; // number of materials
-	int nGroups; // number of WMO groups
-	int nP; // number of portals
-	int nLights; // number of lights
-	int nModels; // number of M2 models imported
-	int nDoodads; // number of dedicated files
+	uint32 nTextures; // number of materials
+	uint32 nGroups; // number of WMO groups
+	uint32 nP; // number of portals
+	uint32 nLights; // number of lights
+	uint32 nModels; // number of M2 models imported
+	uint32 nDoodads; // number of dedicated files
 	uint32 nDoodadSets; // number of doodad sets
 	unsigned int col; // ambient color? RGB
 	int nX; // WMO ID (column 2 in WMOAreaTable.dbc)

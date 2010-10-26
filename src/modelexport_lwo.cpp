@@ -814,6 +814,12 @@ void ExportLightwaveScene(LWScene SceneData){
 		LWSceneObj Obj = SceneData.Object[nobj];
 		WriteLWSceneObject2(fs,Obj);
 	}
+
+	// Global Light Options
+	if (!SceneData.AmbientIntensity){
+		SceneData.AmbientIntensity = 0.5f;		// Default to 50%
+	}
+	fs << _T("AmbientColor 1 1 1\nAmbientIntensity ") << SceneData.AmbientIntensity << _T("\nDoubleSidedAreaLights 1\nRadiosityType 2\nRadiosityInterpolated 1\nRadiosityTransparency 0\nRadiosityIntensity 1\nRadiosityTolerance 0.2928932\nRadiosityRays 64\nSecondaryBounceRays 16\nRadiosityMinPixelSpacing 4\nRadiosityMaxPixelSpacing 100\nRadiosityMultiplier 1\nRadiosityDirectionalRays 0\nRadiosityUseGradients 0\nRadiosityUseBehindTest 1\nBlurRadiosity 1\nRadiosityFlags 0\nRadiosityCacheModulus 1\nRadiosityCacheFilePath radiosity.cache\nPixelFilterForceMT 0\n\n");
 }
 
 
@@ -3097,7 +3103,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		SIDE	// Is it Double-Sided?
 		NVSK	// Exclude from VStack
 
-		CMNT // Surface Comment, but I don't seem to be able to get it to show up in LW... 2bytes: Size. Simple Text line for this surface. Make sure it doesn't end on an odd byte! VERS must be 931 or 950!
+		CMNT // Surface Comment. 2bytes: Size. Simple Text line for this surface. Make sure it doesn't end on an odd byte! VERS must be 931 or 950!
 		VERS // Version Compatibility mode, including what it's compatible with. 2 bytes (int16, value 4), 4 bytes (int32, value is 850 for LW8.5 Compatability, 931 for LW9.3.1, and 950 for Default)
 
 		BLOK	// First Blok. Bloks hold Surface texture information!
@@ -3167,7 +3173,6 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 	// Other Declares
 	int off_T;
-	//uint16 dimension;
 	uint16 zero = 0;
 
 	// Needed Numbers
@@ -3285,7 +3290,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			cLyr.Name.Append(_T('\0'));
 		uint16 LayerNameSize = (uint16)cLyr.Name.length();
 		uint32 LayerSize = 16+LayerNameSize;
-		if (cLyr.ParentLayer)
+		if ((cLyr.ParentLayer)&&(cLyr.ParentLayer>-1))
 			LayerSize += 2;
 		f.Write("LAYR", 4);
 		u32 = MSB4<uint32>(LayerSize);
@@ -3306,11 +3311,11 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			f.Write(cLyr.Name, LayerNameSize);
 		}
 		// Parent
-		if (cLyr.ParentLayer){
+		if ((cLyr.ParentLayer)&&(cLyr.ParentLayer>-1)){
 			int pLyr = MSB2(cLyr.ParentLayer);
 			f.Write(reinterpret_cast<char *>(&pLyr), 2);
-			fileLen += LayerSize;
 		}
+		fileLen += LayerSize;
 
 		// -------------------------------------------------
 		// Points Chunk
@@ -3713,13 +3718,14 @@ void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init){
 }
 
 // Gathers and returns the Lightwave Object data of a M2 file.
-LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn){
+LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bool announce){
 	LWObject Object;
 	if (!m)
 		return Object;
 
 	Object.SourceType = _T("M2");
-	LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),Object.SourceType);
+	if (announce == true)
+		LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),Object.SourceType);
 
 	// Main Object
 	LWLayer Layer;
@@ -3727,8 +3733,10 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn){
 	Layer.ParentLayer = -1;
 
 	// Bounding Box for the Layer
-	Layer.BoundingBox1 = m->bounds[0];
-	Layer.BoundingBox2 = m->bounds[1];
+	/*if (m->bounds[0]){
+		Layer.BoundingBox1 = m->bounds[0];
+		Layer.BoundingBox2 = m->bounds[1];
+	}*/
 
 	//uint32 PolyCounter = 0;
 	uint32 SurfCounter = 0;
@@ -3834,6 +3842,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn){
 			Object.Images.push_back(ClipImage);
 
 			wxString ExportName = wxString(fn, wxConvUTF8).BeforeLast(SLASH) + SLASH + texName + _T(".tga");
+			//wxLogMessage(_T("PrePath ExportName: %s, fn Path: %s"),ExportName,wxString(fn, wxConvUTF8).BeforeLast(SLASH));
 			if (modelExport_LW_PreserveDir == true){
 				wxString Path, Name;
 
@@ -3859,6 +3868,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn){
 				}
 			}
 			ExportName << _T(".tga");
+			//wxLogMessage(_T("Image ExportName: %s"),ExportName);
 			SaveTexture(ExportName);
 			//SaveTexture2(ClipImage.Filename,ClipImage.Source,wxString(_T("LWO")),wxString(_T("tga")));
 
@@ -4128,27 +4138,51 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn){
 		}elseif (modelExport_LW_DoodadsAs == 2){
 			// Doodads as seperate Layers here.
 			for (uint32 ds=0;ds<m->nDoodadSets;ds++){
-				LWLayer Layer;
-				Layer.Name = wxString(m->doodadsets[ds].name);
-				Layer.ParentLayer = 0;		// Set Parent to main WMO model.
 				wxLogMessage(_T("Processing Doodadset %i: %s"),ds,m->doodadsets[ds].name);
 
 				for (uint32 dd=m->doodadsets[ds].start;dd<(m->doodadsets[ds].start+m->doodadsets[ds].size);dd++){
 					wxLogMessage(_T("Processing Doodad %i: %s"),dd,m->modelis[dd].filename);
 					WMOModelInstance *model = &m->modelis[dd];
-					LWObject Doodad = GatherM2forLWO(NULL,model->model,true,wxString(m->modelis[dd].filename).c_str());
+					LWObject Doodad = GatherM2forLWO(NULL,model->model,true,wxString(fn, wxConvUTF8),false);
+					//wxLogMessage(_T("Finished Gathering Doodad %i with #%i Layers."),dd,Doodad.Layers.size());
 
+					// Move, rotate & scale Doodad
 					for (uint32 i=0;i<Doodad.Layers[0].Points.size();i++){
-						Doodad.Layers[0].Points[i].PointData += model->pos;
+						//Doodad.Layers[0].Points[i].PointData = (Doodad.Layers[0].Points[i].PointData * model->sc) + model->pos;
+						Vec3D AgentSmith = Doodad.Layers[0].Points[i].PointData;
+
+						Matrix Neo;
+						Vec3D Trinity(model->sc,model->sc,model->sc);
+						Quaternion Niobe(model->dir,model->w);
+						Quaternion Morphius = Niobe;
+						// Fix for WoW Coordinates.
+						Morphius.x = Niobe.y;
+						Morphius.y = Niobe.x;
+						Morphius.z = Niobe.z;
+
+						Neo.quaternionRotate(Morphius);
+						Neo.translation(AgentSmith);
+						Neo.scale(Trinity);
+
+						Neo *= Matrix::newTranslation(model->pos);		// Position
+						Neo *= Matrix::newQuatRotate(Morphius);			// Rotation
+						Neo *= Matrix::newScale(Trinity);				// Scale
+
+						Doodad.Layers[0].Points[i].PointData = Neo * AgentSmith;
 					}
 
 					wxLogMessage(_T("Adding Doodad to Layer %i..."),ds+1);
-					Object.Plus(Doodad,ds+1);
+					wxString ddPrefix(_T("Doodad "));
+					ddPrefix << (unsigned int)dd << _T("_");
+					//wxLogMessage(_T("Doodad Prefix: %s"),ddPrefix);
+					Object.Plus(Doodad,ds+1,ddPrefix);
 				}
+				Object.Layers[ds+1].Name = wxString(m->doodadsets[ds].name);
+				Object.Layers[ds+1].ParentLayer = 0;		// Set Parent to main WMO model.
 			}
-		}
-	}  */
-
+	//	}
+	}
+*/
 	return Object;
 }
 

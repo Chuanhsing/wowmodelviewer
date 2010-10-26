@@ -227,8 +227,8 @@ void ExportWMOtoOBJ(WMO *m, wxString file)
 	wxString *texarray = new wxString[m->nTextures+1];
 
 	// Find a Match for mat->tex and place it into the Texture Name Array.
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	for (uint32 i=0; i<m->nGroups; i++) {
+		for (uint32 j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];
@@ -236,7 +236,7 @@ void ExportWMOtoOBJ(WMO *m, wxString file)
 			wxString outname = file;
 
 			bool nomatch = true;
-			for (int t=0;t<=m->nTextures; t++) {
+			for (uint32 t=0;t<=m->nTextures; t++) {
 				if (t == (int)mat->tex) {
 					texarray[mat->tex] = wxString(m->textures[t-1].c_str(), wxConvUTF8);
 					texarray[mat->tex] = texarray[mat->tex].BeforeLast('.');

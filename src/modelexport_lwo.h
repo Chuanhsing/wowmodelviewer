@@ -123,6 +123,7 @@ struct LWScene{
 
 	wxString FileName;
 	wxString FilePath;
+	float AmbientIntensity;
 };
 
 // --== Object Formats ==--
@@ -178,7 +179,9 @@ struct LWLayer {
 	std::vector<LWPoly> Polys;
 
 	LWLayer(){
+		Name = _T("(unnamed)");
 		HasVectorColors = false;
+		ParentLayer = -1;
 	};
 };
 
@@ -229,7 +232,8 @@ struct LWObject {
 		SourceType = wxEmptyString;
 	}
 
-	void Plus(LWObject o, int LayerNum=0){
+	void Plus(LWObject o, int LayerNum=0,wxString PartNamePrefix = _T("")){
+		//wxLogMessage(_T("Running LW Plus Function, Num Layers: %i, into Layer %i."),o.Layers.size(),LayerNum);
 		// Add layers if nessicary...
 		while (Layers.size() < LayerNum+1){
 			LWLayer a;
@@ -243,7 +247,8 @@ struct LWObject {
 
 		// Parts
 		for (size_t i=0;i<o.PartNames.size();i++){
-			PartNames.push_back(o.PartNames[i]);
+			wxString a = PartNamePrefix + o.PartNames[i];
+			PartNames.push_back(a);
 		}
 		// Surfaces
 		for (size_t i=0;i<o.Surfaces.size();i++){
@@ -291,9 +296,9 @@ struct LWObject {
 			for (size_t x=0;x<a.Polys.size();x++){
 				for (uint16 j=0;j<a.Polys[x].PolyData.numVerts;j++){
 					a.Polys[x].PolyData.indice[j] += OldPointNum[LayerNum];
-					a.Polys[x].PartTagID += OldTagNum;
-					a.Polys[x].SurfTagID += OldTagNum;
 				}
+				a.Polys[x].PartTagID += OldTagNum;
+				a.Polys[x].SurfTagID += OldTagNum;
 				Layers[LayerNum].Polys.push_back(a.Polys[x]);
 			}
 		}
@@ -312,7 +317,7 @@ struct LWObject {
 };
 
 // Gather Functions
-LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn);
+LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bool announce = true);
 LWObject GatherWMOforLWO(WMO *m, const char *fn);
 
 
