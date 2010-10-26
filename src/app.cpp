@@ -376,7 +376,11 @@ void searchMPQs()
 				int ver = wxAtoi(mpqArchives[i].BeforeLast('.').AfterLast('-'));
 				int bver = wxAtoi(fullName.BeforeLast('.').AfterLast('-'));
 				if (bver > ver) {
+#if 1 // Use lastest archive only
+					mpqArchives[i] = baseName;
+#else
 					mpqArchives.Insert(baseName, i);
+#endif
 					bFound = true;
 					break;
 				}		
@@ -404,7 +408,11 @@ void searchMPQs()
 				int ver = wxAtoi(mpqArchives[i].BeforeLast('.').AfterLast('-'));
 				int bver = wxAtoi(fullName.BeforeLast('.').AfterLast('-'));
 				if (bver > ver) {
+#if 1 // Use lastest archive only
+					mpqArchives[i] = baseName;
+#else
 					mpqArchives.Insert(baseName, i);
+#endif
 					bFound = true;
 					break;
 				}		

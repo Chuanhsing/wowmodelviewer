@@ -600,11 +600,11 @@ void ModelViewer::InitDatabase()
 	}
 	if (!spellitemenchantmentdb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the SkyBox DB."));
+		wxLogMessage(_T("Error: Could not open the Spell Item Enchanement DB."));
 	}
 	if (!itemvisualsdb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the SkyBox DB."));
+		wxLogMessage(_T("Error: Could not open the Item Visuals DB."));
 	}
 	if (!animdb.open()) {
 		initDB = false;
@@ -1343,8 +1343,11 @@ wxString ModelViewer::InitMPQArchives()
 	wxString path;
 
 	for (size_t i=0; i<mpqArchives.GetCount(); i++) {
-		if (wxFileName::FileExists(mpqArchives[i]))
-			archives.push_back(new MPQArchive(mpqArchives[i]));
+		wxString ar = mpqArchives[i];
+		if (wxFileName::FileExists(ar)) {
+			MPQArchive *mpqa = new MPQArchive(ar);
+			archives.push_back(mpqa);
+		}
 	}
 
 	// Checks and logs the "TOC" version of the interface files that were loaded
