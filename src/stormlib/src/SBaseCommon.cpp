@@ -170,14 +170,21 @@ ULONGLONG HashStringJenkins(const char * szFileName)
 
 void ConvertMpqHeaderToFormat4(
     TMPQArchive * ha,
-    ULONGLONG FileSize)
+    ULONGLONG FileSize,
+    DWORD dwFlags)
 {
     ULONGLONG ByteOffset;
     TMPQHeader * pHeader = ha->pHeader;
     DWORD dwExpectedArchiveSize;
+    USHORT wFormatVersion = pHeader->wFormatVersion;
+
+    // If version 1.0 is forced, then the format version is forced to be 1.0
+    // Reason: Storm.dll in Warcraft III ignores format version value
+    if(dwFlags & MPQ_OPEN_FORCE_MPQ_V1)
+        wFormatVersion = MPQ_FORMAT_VERSION_1;
 
     // Format-specific fixes
-    switch(pHeader->wFormatVersion)
+    switch(wFormatVersion)
     {
         case MPQ_FORMAT_VERSION_1:
 
@@ -276,7 +283,7 @@ void ConvertMpqHeaderToFormat4(
             }
 
             // Compressed size of hash and block table
-            if(pHeader->wFormatVersion >= MPQ_FORMAT_VERSION_2)
+            if(wFormatVersion >= MPQ_FORMAT_VERSION_3)
             {
                 // Compressed size of the hash table
                 pHeader->HashTableSize64 = MAKE_OFFSET64(pHeader->wBlockTablePosHi, pHeader->dwBlockTablePos) - MAKE_OFFSET64(pHeader->wHashTablePosHi, pHeader->dwHashTablePos);

@@ -28,7 +28,7 @@
 // Defines
 
 #ifdef PLATFORM_WINDOWS
-#define WORK_PATH_ROOT "C:\\Multimedia\\MPQs\\"
+#define WORK_PATH_ROOT "E:\\Multimedia\\MPQs\\"
 #endif
 
 #ifdef PLATFORM_LINUX
@@ -677,7 +677,7 @@ static int TestArchiveOpenAndClose(const char * szMpqName)
     if(nError == ERROR_SUCCESS)
     {
         printf("Opening archive %s ...\n", szMpqName);
-        if(!SFileOpenArchive(szMpqName, 0, 0, /* MPQ_OPEN_ENCRYPTED,*/ &hMpq))
+        if(!SFileOpenArchive(szMpqName, 0, MPQ_OPEN_FORCE_MPQ_V1, /* MPQ_OPEN_ENCRYPTED,*/ &hMpq))
             nError = GetLastError();
         ha = (TMPQArchive *)hMpq;
     }
@@ -1395,8 +1395,8 @@ static int TestOpenPatchedArchive(const char * szMpqName, ...)
     HANDLE hFile = NULL;
     HANDLE hMpq = NULL;
     va_list argList;
-    const char * szFileName = "DBFilesClient\\Achievement.dbc";
-//  const char * szFileName = "character\\bloodelf\\female\\bloodelffemale00.skin";
+//  const char * szFileName = "DBFilesClient\\Achievement.dbc";
+    const char * szFileName = "creature/murloc/deathwingbabymurloc.m2";
     const char * szExtension;
     const char * szLocale;
     char szPatchPrefix[MPQ_PATCH_PREFIX_LEN];
@@ -1549,8 +1549,8 @@ int main(void)
 //      nError = TestSectorCompress(MPQ_SECTOR_SIZE);
                                                                                             
     // Test the archive open and close
-//  if(nError == ERROR_SUCCESS)
-//      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12857.MPQ"));
+    if(nError == ERROR_SUCCESS)
+        nError = TestArchiveOpenAndClose(MAKE_PATH("2002 - Warcraft III/siverrpg_1.9_ver.w3x"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/expansion-locale-frFR.MPQ"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("2010 - Starcraft II/Installer Tome 1 enGB.MPQE"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("1997 - Diablo I/single_0.sv"));
@@ -1599,12 +1599,15 @@ int main(void)
 
     if(nError == ERROR_SUCCESS)
     {
-        nError = TestOpenPatchedArchive(MAKE_PATH("2011 - WoW-Cataclysm/locale-enUS.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12694.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12759.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12803.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12857.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm/wow-update-12942.MPQ"),
+        nError = TestOpenPatchedArchive(MAKE_PATH("2011 - WoW-Cataclysm2/locale-enUS.MPQ"),
+                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-12694.MPQ"),
+                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-12759.MPQ"),
+                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-12803.MPQ"),
+                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-12857.MPQ"),
+                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-12942.MPQ"),
+                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-12984.MPQ"),
+                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-13066.MPQ"),
+                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-13117.MPQ"),
                                         NULL);
     }
 

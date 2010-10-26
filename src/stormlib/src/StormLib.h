@@ -145,7 +145,7 @@
 #define MPQ_FLAG_CHANGED         0x00000004 // If set, the MPQ tables have been changed
 #define MPQ_FLAG_PROTECTED       0x00000008 // Set on protected MPQs (like W3M maps)
 #define MPQ_FLAG_CHECK_SECTOR_CRC 0x00000010 // Checking sector CRC when reading files
-#define MPQ_FLAG_NEED_FIX_SIZE   0x00000020 // Used during opening archive
+#define MPQ_FLAG_NEED_FIX_SIZE   0x00000020 // Used during opening the archive
 
 // Return value for SFilGetFileSize and SFileSetFilePointer
 #define SFILE_INVALID_SIZE       0xFFFFFFFF

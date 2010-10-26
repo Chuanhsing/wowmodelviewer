@@ -156,7 +156,7 @@ bool WINAPI SFileCreateArchive(const char * szMpqName, DWORD dwFlags, DWORD dwHa
         pHeader->dwHashTableSize  = dwHashTableSize;
         pHeader->dwBlockTablePos  = pHeader->dwHashTablePos + dwHashTableSize * sizeof(TMPQHash);
         pHeader->dwBlockTableSize = dwBlockTableSize;
-        ConvertMpqHeaderToFormat4(ha, MpqPos);
+        ConvertMpqHeaderToFormat4(ha, MpqPos, 0);
 
         // Clear all tables
         memset(ha->pHashTable, 0xFF, sizeof(TMPQHash) * dwHashTableSize);

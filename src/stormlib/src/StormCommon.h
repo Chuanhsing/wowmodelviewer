@@ -89,7 +89,7 @@ void InitializeMpqCryptography();
 bool IsPseudoFileName(const char * szFileName, LPDWORD pdwFileIndex);
 ULONGLONG HashStringJenkins(const char * szFileName);
 
-void ConvertMpqHeaderToFormat4(TMPQArchive * ha, ULONGLONG FileSize);
+void ConvertMpqHeaderToFormat4(TMPQArchive * ha, ULONGLONG FileSize, DWORD dwFlags);
 
 void  EncryptMpqBlock(void * pvFileBlock, DWORD dwLength, DWORD dwKey);
 void  DecryptMpqBlock(void * pvFileBlock, DWORD dwLength, DWORD dwKey);

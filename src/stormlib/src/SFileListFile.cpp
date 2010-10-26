@@ -349,6 +349,21 @@ int SListFileSaveToMpq(TMPQArchive * ha)
             }
         }
     }
+    else
+    {
+        // Create the listfile in the MPQ
+        dwFileSize = (DWORD)strlen(LISTFILE_NAME) + 2;
+        nError = SFileAddFile_Init(ha, LISTFILE_NAME,
+                                       NULL,
+                                       dwFileSize,
+                                       LANG_NEUTRAL,
+                                       MPQ_FILE_ENCRYPTED | MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING,
+                                      &hf);
+
+        // Just add "(listfile)" there
+        if(nError == ERROR_SUCCESS)
+            WriteListFileLine(hf, LISTFILE_NAME);
+    }
 
     // Finalize the file in the MPQ
     if(hf != NULL)

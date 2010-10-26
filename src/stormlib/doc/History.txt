@@ -2,6 +2,10 @@
   StormLib history
   ================
 
+ Version 8.00
+
+ - Updated support for protected maps from Warcraft III
+
  Version 7.11
  
  - Support for MPQs v 3.0 (WOW-Cataclysm BETA)

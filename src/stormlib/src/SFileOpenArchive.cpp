@@ -222,7 +222,7 @@ bool WINAPI SFileOpenArchive(
 
                 // Now convert the header to version 4
                 BSWAP_TMPQHEADER(ha->pHeader);
-                ConvertMpqHeaderToFormat4(ha, FileSize);
+                ConvertMpqHeaderToFormat4(ha, FileSize, dwFlags);
                 break;
             }
 
