@@ -1343,10 +1343,8 @@ wxString ModelViewer::InitMPQArchives()
 	wxString path;
 
 	for (size_t i=0; i<mpqArchives.GetCount(); i++) {
-		wxString ar = mpqArchives[i];
-		if (wxFileName::FileExists(ar)) {
-			MPQArchive *mpqa = new MPQArchive(ar);
-			archives.push_back(mpqa);
+		if (wxFileName::FileExists(mpqArchives[i])) {
+			archives.push_back(new MPQArchive(mpqArchives[i]));
 		}
 	}
 
@@ -1355,7 +1353,7 @@ wxString ModelViewer::InitMPQArchives()
 	if (f.isEof()) {
 		f.close();
 		wxLogMessage(_T("Unable to gather TOC data."));
-		return wxString(_T("Could not read data from MPQ files."));
+		return _T("Could not read data from MPQ files.");
 	}
 	f.seek(51); // offset to "## Interface: "
 	unsigned char toc[6];
@@ -1363,8 +1361,8 @@ wxString ModelViewer::InitMPQArchives()
 	f.read(toc, 5);
 	f.close();
 	wxLogMessage(_T("Loaded Content TOC: v%c.%c%c.%c%c"), toc[0], toc[1], toc[2], toc[3], toc[4]);
-	if (wxString(toc) > wxString(_T("99999"))) {		// The 99999 should be updated if the TOC ever gets that high.
-		return wxString(_T("There was a problem reading the TOC number.\nCould not determine WoW version."));
+	if (wxString((char *)toc, wxConvUTF8) > _T("99999")) {		// The 99999 should be updated if the TOC ever gets that high.
+		return _T("There was a problem reading the TOC number.\nCould not determine WoW version.");
 	}
 
 	wxString info = _T("WoW Model Viewer is designed to work with the latest version of World of Warcraft.\nYour version is supported, but support will be removed in the near future.\nYou may experience diminished capacity while working with WoW Model Viewer.\nPlease update your World of Warcraft client soon.");
