@@ -1,5 +1,6 @@
 #include "dbcfile.h"
 #include "mpq.h"
+#include "util.h"
 
 DBCFile::DBCFile(const wxString &filename) : filename(filename)
 {
@@ -8,20 +9,17 @@ DBCFile::DBCFile(const wxString &filename) : filename(filename)
 
 bool DBCFile::open()
 {
-	MPQFile f(filename);
 	int db_type = 0;
 
+	if (filename.Lower().EndsWith(_T("item.dbc")) && gameVersion >= 40000) {
+		filename = filename.BeforeLast('.') + _T(".db2");
+	}
+
+	MPQFile f(filename);
 	// Need some error checking, otherwise an unhandled exception error occurs
 	// if people screw with the data path.
-	if (f.isEof()) {
-		if (filename.AfterLast('.') == _T("dbc")) {
-			wxString fn = filename.BeforeLast('.') + _T(".db2");
-			f.openFile(fn);
-			if (f.isEof())
-				return false;
-		} else
-			return false;
-	}
+	if (f.isEof())
+		return false;
 
 	char header[5];
 	unsigned int na,nb,es,ss;
