@@ -339,6 +339,8 @@ void searchMPQs()
 	wxArrayString baseMpqs;
 	wxDir::GetAllFiles(gamePath, &baseMpqs, wxEmptyString, wxDIR_FILES);
 	for (size_t j = 0; j < baseMpqs.size(); j++) {
+		if (baseMpqs[j].Contains(_T("oldworld")))
+			continue;
 		wxString baseName = wxFileName(baseMpqs[j]).GetFullName();
 		wxString cmpName = _T("wow-update-");
 		if (baseName.StartsWith(cmpName) && baseName.AfterLast('.').CmpNoCase(_T("mpq")) == 0) {
@@ -365,6 +367,8 @@ void searchMPQs()
 	wxArrayString baseCacheMpqs;
 	wxDir::GetAllFiles(gamePath+_T("Cache"), &baseCacheMpqs, wxEmptyString, wxDIR_FILES);
 	for (size_t j = 0; j < baseCacheMpqs.size(); j++) {
+		if (baseCacheMpqs[j].Contains(_T("oldworld")))
+			continue;
 		wxString baseName = baseCacheMpqs[j];
 		wxString fullName = wxFileName(baseName).GetFullName();
 		wxString cmpName = _T("patch-base-");
@@ -397,6 +401,8 @@ void searchMPQs()
 	wxArrayString baseCacheLocaleMpqs;
 	wxDir::GetAllFiles(gamePath+_T("Cache")+SLASH+sLocale, &baseCacheLocaleMpqs, wxEmptyString, wxDIR_FILES);
 	for (size_t j = 0; j < baseCacheLocaleMpqs.size(); j++) {
+		if (baseCacheLocaleMpqs[j].Contains(_T("oldworld")))
+			continue;
 		wxString baseName = baseCacheLocaleMpqs[j];
 		wxString fullName = wxFileName(baseName).GetFullName();
 		wxString cmpName = _T("patch-")+sLocale+_T("-");
