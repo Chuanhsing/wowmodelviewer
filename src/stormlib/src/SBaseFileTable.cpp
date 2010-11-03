@@ -557,7 +557,7 @@ static TMPQExtTable * LoadExtTable(
 
         // Decrypt the block
         BSWAP_ARRAY32_UNSIGNED(pExtTable + 1, pExtTable->dwDataSize);
-        DecryptMpqBlock(pExtTable + 1, pExtTable->dwDataSize, dwKey);
+        DecryptMpqBlock(pExtTable + 1, Size - sizeof(TMPQExtTable), dwKey);
         BSWAP_ARRAY32_UNSIGNED(pExtTable + 1, pExtTable->dwDataSize);
 
         // If the table is compressed, decompress it

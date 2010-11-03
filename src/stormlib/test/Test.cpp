@@ -1550,8 +1550,8 @@ int main(void)
                                                                                             
     // Test the archive open and close
     if(nError == ERROR_SUCCESS)
-        nError = TestArchiveOpenAndClose(MAKE_PATH("2002 - Warcraft III/siverrpg_1.9_ver.w3x"));
-//      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/expansion-locale-frFR.MPQ"));
+        nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm2/patch-base-12694.MPQ"));
+//      nError = TestArchiveOpenAndClose(MAKE_PATH("2002 - Warcraft III/siverrpg_1.9_ver.w3x"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("2010 - Starcraft II/Installer Tome 1 enGB.MPQE"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("1997 - Diablo I/single_0.sv"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("2004 - World of Warcraft/SoundCache-enUS.MPQ"));
