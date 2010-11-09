@@ -408,21 +408,26 @@ void LogExportData(wxString FileExtension, wxString Directory, wxString ExportTy
 	// Lightwave Options
 	if (FileExtension == _T("LWO")){
 		wxLogMessage(_T("Preserve Lightwave Directories: %s"),(modelExport_LW_PreserveDir==true?"True":"False"));
-		wxLogMessage(_T("Export Lights: %s"),(modelExport_LW_ExportLights==true?"True":"False"));
 		wxLogMessage(_T("Export Doodads: %s"),(modelExport_LW_ExportDoodads==true?"True":"False"));
+		wxLogMessage(_T("Export Lights: %s"),(modelExport_LW_ExportLights==true?"True":"False"));
+		wxLogMessage(_T("Export Cameras: %s"),(modelExport_LW_ExportCameras==true?"True":"False"));
+		wxLogMessage(_T("Export Bones: %s"),(modelExport_LW_ExportBones==true?"True":"False"));
 		wxString XDDas;
 		switch (modelExport_LW_DoodadsAs) {
 			case 0:
-				XDDas = _T("Nulls");
+				XDDas = _T("All Doodads as Nulls");
 				break;
 			case 1:
-				XDDas = _T("Objects");
+				XDDas = _T("All Doodads as Scene Objects");
 				break;
 			case 2:
-				XDDas = _T("A Single Object");
+				XDDas = _T("Each Doodad Set as a Seperate Layer");
 				break;
 			case 3:
-				XDDas = _T("A Single Object, Per Group");
+				XDDas = _T("All Doodads as a Single Layer");
+				break;
+			case 4:
+				XDDas = _T("Doodads as a Single Layer, Per Group");
 				break;
 		}
 		wxLogMessage(_T("Export Doodads as: %s"),XDDas.c_str());

@@ -231,7 +231,8 @@ struct ModelCamera {
 };
 
 struct ModelLight {
-	int type, parent;
+	int type;		// Light Type. MODELLIGHT_DIRECTIONAL or MODELLIGHT_POINT
+	int parent;		// Bone Parent. -1 if there isn't one.
 	Vec3D pos, tpos, dir, tdir;
 	Animated<Vec3D> diffColor, ambColor;
 	Animated<float> diffIntensity, ambIntensity, AttenStart, AttenEnd;
@@ -280,8 +281,6 @@ class Model: public ManagedItem, public Displayable
 
 	// Non VBO Data
 	GLuint dlist;
-
-	bool animGeometry,animTextures,animBones;
 	bool forceAnim;
 
 	void init(MPQFile &f);
@@ -300,6 +299,8 @@ class Model: public ManagedItem, public Displayable
 	uint16 *boundTris;
 
 public:
+	bool animGeometry,animTextures,animBones;
+
 	TextureAnim		*texAnims;
 	uint32			*globalSequences;
 	ModelColor		*colors;

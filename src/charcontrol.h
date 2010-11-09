@@ -117,6 +117,7 @@ struct CharDetails
 	unsigned int race, gender;
 
 	unsigned int useNPC;
+	unsigned int eyeGlowType;
 
 	bool showUnderwear, showEars, showHair, showFacialHair, showFeet;
 

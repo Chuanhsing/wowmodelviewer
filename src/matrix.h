@@ -156,6 +156,42 @@ public:
 		return o;
 	}
 
+	Quaternion GetQuaternion(){
+		Quaternion q(Vec4D(0,0,0,0));
+
+		float trace = m[0][0] + m[1][1] + m[2][2];
+
+		if (trace > 0){
+			float s = 0.5f / sqrt(trace+1.0f);
+			q.w = 0.25f / s;
+			q.x = (m[2][1] - m[1][2]) * s;
+			q.y = (m[0][2] - m[2][0]) * s;
+			q.z = (m[1][0] - m[0][1]) * s;
+		}else{
+			if ((m[0][0] > m[1][1]) && (m[0][0] > m[2][2])){
+				float s = 2.0f * sqrtf( 1.0f + m[0][0] - m[1][1] - m[2][2]);
+				q.w = (m[2][1] - m[1][2] ) / s;
+				q.x = 0.25f * s;
+				q.y = (m[0][1] + m[1][0] ) / s;
+				q.z = (m[0][2] + m[2][0] ) / s;
+			} else if (m[1][1] > m[2][2]) {
+				float s = 2.0f * sqrtf( 1.0f + m[1][1] - m[0][0] - m[2][2]);
+				q.w = (m[0][2] - m[2][0] ) / s;
+				q.x = (m[0][1] + m[1][0] ) / s;
+				q.y = 0.25f * s;
+				q.z = (m[1][2] + m[2][1] ) / s;
+			} else {
+				float s = 2.0f * sqrtf( 1.0f + m[2][2] - m[0][0] - m[1][1] );
+				q.w = (m[1][0] - m[0][1] ) / s;
+				q.x = (m[0][2] + m[2][0] ) / s;
+				q.y = (m[1][2] + m[2][1] ) / s;
+				q.z = 0.25f * s;
+			}
+		}
+
+		return q;
+	}
+
 	float determinant() const
 	{
 		#define SUB(a,b) (m[2][a]*m[3][b] - m[3][a]*m[2][b])

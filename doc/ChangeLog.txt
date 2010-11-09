@@ -1,5 +1,17 @@
 World of Warcraft Model Viewer v0.7.0.1
 
+r492
+ - Eye Glows are now a Character Option! Choose from None, Default, and Death Knight!
+ - LWO Exporter:
+  - New M2 Exporter now serving as main LWO M2 Exporter.
+  - M2 Exporter now supports Luminous surfaces.
+  - Added Options to disable Camera & Bone exporting.
+ - Dev Work:
+  - 64-bit GLEW libs renamed to glew64.lib.
+  - Increased 64-bit compatibility.
+  - Added Matrix to Quaternion function.
+  - M2's animGeometry, animTextures and animBones boolans are now public.
+
 r487
  - Updated for 4.0.x.
  - Depreciated 3.3.x edition of WoW.
@@ -8,7 +20,7 @@ r487
  - Increased 64-bit compatibility.
  - WMV now has much more useful errors.
  - Increased Mac Compatibility.
- - LWO Exporter
+ - LWO Exporter:
   - Fixed Parent Layer error.
   - Continued worked on new Doodad exporter
 

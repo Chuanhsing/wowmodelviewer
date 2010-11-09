@@ -32,18 +32,18 @@
 	#define GLEW_BUILD
 	#ifdef _DEBUG // GLEW lib
 		#ifdef _WIN64
-			#pragma message("     Adding library: glew64sd.lib" ) 
+			#pragma message("     Adding library: glew64d.lib" ) 
 			#pragma comment( lib, "glew64d.lib" )
 		#else
-			#pragma message("     Adding library: glew32sd.lib" ) 
+			#pragma message("     Adding library: glew32d.lib" ) 
 			#pragma comment( lib, "glew32d.lib" )
 		#endif
 	#else
 		#ifdef _WIN64
-			#pragma message("     Adding library: glew64s.lib" ) 
+			#pragma message("     Adding library: glew64.lib" ) 
 			#pragma comment( lib, "glew64.lib" )
 		#else
-			#pragma message("     Adding library: glew32s.lib" ) 
+			#pragma message("     Adding library: glew32.lib" ) 
 			#pragma comment( lib, "glew32.lib" )
 		#endif
 	#endif

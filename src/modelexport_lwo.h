@@ -12,6 +12,11 @@ uint32 u32;
 float f32;
 uint16 u16;
 unsigned char ub;
+struct LWSurface;
+
+// Writing Functions
+void LW_WriteVX(wxFFileOutputStream &f, uint32 p, uint32 &Size); // Write Lightwave VX Data
+void LW_WriteSurface(wxFFileOutputStream &f, LWSurface Surface, uint32 &fileSize);
 
 // Lightwave Type Numbers
 // These numbers identify object, light and bone types in the Lightwave Program.
@@ -35,12 +40,8 @@ enum LWBoneType {
 	LW_BONETYPE_JOINT,
 };
 
-// Writing Functions
-void LW_WriteVX(wxFFileOutputStream &f, uint32 p, uint32 &Size); // Write Lightwave VX Data
-void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, float reflect, bool cull, bool hasVertColors, uint32 surfID, wxString comment, uint32 &fileSize);
-
 // Polygon Chunk
-struct PolyChunk32 {
+struct PolyChunk {
 	uint16 numVerts;		// The Number of Indices that make up the poly.
 	uint32 indice[3];		// The IDs of the 3 Indices that make up each poly. In reality, this should be indice[MAX_POINTS_PER_POLYGON], but WoW will never go above 3.
 };
@@ -68,8 +69,8 @@ struct AnimationData {
 		Time.push_back(time);
 	}
 	// Returns the number of keyframes in this animation.
-	uint32 Size(){
-		return (uint32)Time.size();
+	size_t Size(){
+		return Time.size();
 	}
 };
 
@@ -79,29 +80,40 @@ struct LWBones{
 	AnimationData AnimData;
 	wxString Name;
 	uint8 BoneType;
-	wxString ParentID;
+	int32 ParentID;
 	uint8 ParentType;
 };
 
 // Scene Object
 struct LWSceneObj{
 	uint32 ObjectID;
+	int32 LayerID;
 	AnimationData AnimData;
 	wxString Name;
 	std::vector<LWBones> Bones;
 	bool isNull;
-	wxString ParentID;
-	uint8 ParentType;
+	int32 ParentID;
+	int8 ParentType;
+
+	LWSceneObj(wxString name, uint32 id, int32 parentID, int8 parentType = LW_ITEMTYPE_OBJECT, bool IsNull = false, int32 layerID = 1){
+		Name = name;
+		ObjectID = id;
+		ParentType = parentType;
+		ParentID = parentID;
+		isNull = IsNull;
+		LayerID = layerID;
+	}
 };
 
 struct LWLight{
 	uint32 LightID;
 	AnimationData AnimData;
 	wxString Name;
-	RGB_Color Color;
+	Vec3D Color;
+	float Intensity;
 	uint8 LightType;
 	float FalloffRadius;
-	wxString ParentID;
+	int32 ParentID;
 	uint8 ParentType;
 };
 
@@ -110,20 +122,36 @@ struct LWCamera{
 	AnimationData AnimData;
 	wxString Name;
 	float FieldOfView;
-	wxString TargetObjectID;
-	wxString ParentID;
+	int32 TargetObjectID;
+	int32 ParentID;
 	uint8 ParentType;
 };
 
 // Master Scene
 struct LWScene{
-	std::vector<LWSceneObj> Object;
-	std::vector<LWLight> Light;
-	std::vector<LWCamera> Camera;
+	std::vector<LWSceneObj> Objects;
+	std::vector<LWLight> Lights;
+	std::vector<LWCamera> Cameras;
 
 	wxString FileName;
 	wxString FilePath;
 	float AmbientIntensity;
+
+	LWScene(wxString file, wxString path, float ambint = 0.5){
+		FileName = file;
+		FilePath = path;
+
+		AmbientIntensity = ambint;
+	}
+
+	~LWScene(){
+		Objects.clear();
+		Lights.clear();
+		Cameras.clear();
+		FileName.Clear();
+		FilePath.Clear();
+		//free(&AmbientIntensity);
+	}
 };
 
 // --== Object Formats ==--
@@ -155,7 +183,7 @@ struct LWPoint {
 
 // Poly Chunk Data
 struct LWPoly {
-	PolyChunk32 PolyData;
+	PolyChunk PolyData;
 	PolyNormal Normals;
 	uint32 PartTagID;
 	uint32 SurfTagID;
@@ -187,9 +215,22 @@ struct LWLayer {
 
 // Clip Data
 struct LWClip {
-	wxString Filename;	// The Path & Filename of the image to be used in Lightwave
-	wxString Source;	// The Source Path & Filename, as used in WoW.
-	uint32 TagID;		// = Number of Parts + Texture number
+	wxString Filename;		// The Path & Filename of the image to be used in Lightwave
+	wxString Source;		// The Source Path & Filename, as used in WoW.
+	uint32 TagID;			// = Number of Parts + Texture number
+};
+
+struct LWSurf_Image {
+	uint32 ID;				// Tag ID for the Image
+	float UVRate_U;			// Rate to move the U with UV Animation
+	float UVRate_V;			// Rate to move the V with UV Animation
+
+	// Contructor
+	LWSurf_Image(uint32 idtag=-1, float UVAnimRate_U=0.0f, float UVAnimRate_V=0.0f){
+		ID = idtag;
+		UVRate_U = UVAnimRate_U;
+		UVRate_V = UVAnimRate_V;
+	}
 };
 
 // Surface Chunk Data
@@ -200,19 +241,34 @@ struct LWSurface {
 	bool isDoubleSided;		// Should it show the same surface on both sides of a poly.
 	bool hasVertColors;
 
+	// Base Attributes
+	Vec3D Surf_Color;			// Surface Color as floats
+	float Surf_Diff;			// Diffusion Amount
+	float Surf_Lum;				// Luminosity Amount
+	float Surf_Spec;			// Specularity Amount
+	float Surf_Reflect;			// Reflection Amount
+	float Surf_Trans;			// Transparancy Amount
+
 	// Images
-	uint32 Image_ColorID;	//Tag ID for the Color Image
-	uint32 Image_SpecID;	//Tag ID for the Specular Image
-	uint32 Image_TransID;	//Tag ID for the Transparancy Image
+	LWSurf_Image Image_Color;	// Color Image data
+	LWSurf_Image Image_Spec;	// Specular Image data
+	LWSurf_Image Image_Trans;	// Transparancy Image data
 
 	// Constructors
-	LWSurface(wxString name, wxString comment, uint32 ColorID, uint32 SpecID=-1, uint32 TransID=-1, bool doublesided = false, bool hasVC = false){
+	LWSurface(wxString name, wxString comment, LWSurf_Image ColorID, LWSurf_Image SpecID, LWSurf_Image TransID, Vec3D SurfColor=Vec3D(0.75,0.75,0.75), float Diffusion=1.0f, float Luminosity = 0.0f, bool doublesided = false, bool hasVC = false){
 		Name = name;
 		Comment = comment;
 
-		Image_ColorID = ColorID;
-		Image_SpecID = SpecID;
-		Image_TransID = TransID;
+		Surf_Color = SurfColor;
+		Surf_Diff = Diffusion;
+		Surf_Lum = Luminosity;
+		Surf_Spec = 0.0f;
+		Surf_Reflect = 0.0f;
+		Surf_Trans = 0.0f;
+
+		Image_Color = ColorID;
+		Image_Spec = SpecID;
+		Image_Trans = TransID;
 
 		isDoubleSided = doublesided;
 		hasVertColors = hasVC;
@@ -252,19 +308,27 @@ struct LWObject {
 		}
 		// Surfaces
 		for (size_t i=0;i<o.Surfaces.size();i++){
-			Surfaces.push_back(o.Surfaces[i]);
+			LWSurface s = o.Surfaces[i];
+			s.Image_Color.ID += OldTagNum;
+			Surfaces.push_back(s);
 		}
 		//Images
 		for (size_t i=0;i<o.Images.size();i++){
 			LWClip a = o.Images[i];
-			a.TagID +=  OldTagNum;
+			a.TagID += OldTagNum;
 			Images.push_back(a);
 		}
 
-		//Layers
+		// Parts Difference
+		uint32 PartDiff = (uint32)PartNames.size() - OldPartNum;
+
+		// --== Layers ==--
 		// Process Old Layers
 		for (size_t i=0;i<Layers.size();i++){
 			OldPointNum.push_back((uint32)Layers[i].Points.size());
+			for (size_t x=0;x<Layers[i].Polys.size();x++){
+				Layers[i].Polys[x].SurfTagID += PartDiff;
+			}
 		}
 		// Proccess New Layers
 		for (size_t i=0;i<o.Layers.size();i++){
@@ -297,7 +361,7 @@ struct LWObject {
 				for (uint16 j=0;j<a.Polys[x].PolyData.numVerts;j++){
 					a.Polys[x].PolyData.indice[j] += OldPointNum[LayerNum];
 				}
-				a.Polys[x].PartTagID += OldTagNum;
+				a.Polys[x].PartTagID += OldPartNum;
 				a.Polys[x].SurfTagID += OldTagNum;
 				Layers[LayerNum].Polys.push_back(a.Polys[x]);
 			}
@@ -314,12 +378,17 @@ struct LWObject {
 		// return LWObject?
 		return o;
 	}
+	~LWObject(){
+		PartNames.Clear();
+		Layers.clear();
+		Images.clear();
+		Surfaces.clear();
+		SourceType.Clear();
+	}
 };
 
 // Gather Functions
-LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bool announce = true);
-LWObject GatherWMOforLWO(WMO *m, const char *fn);
-
-
+LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LWScene &scene, bool announce = true);
+LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene);
 
 #endif

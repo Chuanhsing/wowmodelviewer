@@ -119,7 +119,7 @@ public:
 	bool mBigAlpha;
 	MapChunkHeader header;
 
-	unsigned int areaID;
+	int areaID;
 
 	std::vector<GLuint> wTextures;
 	void initTextures(wxString basename, int first, int last);

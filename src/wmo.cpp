@@ -925,7 +925,7 @@ void WMOGroup::initDisplayList()
 
 		}
 		else if (!strcmp(fourcc,"MOCV")) {
-			size_t spos = (uint32)gf.getPos();
+			size_t spos = gf.getPos();
 			/*
 			Vertex colors, 4 bytes per vertex (BGRA), for WMO groups using indoor lighting.
 			I don't know if this is supposed to work together with, or replace, the lights referenced in MOLR. But it sure is the only way for the ground around the goblin smelting pot to turn red in the Deadmines. (but some corridors are, in turn, too dark - how the hell does lighting work anyway, are there lightmaps hidden somewhere?)

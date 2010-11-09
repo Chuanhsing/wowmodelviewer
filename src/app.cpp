@@ -527,6 +527,9 @@ bool WowModelViewApp::LoadSettings()
 	pConfig->Read(_T("ModelExportLWPreserveDirs"), &modelExport_LW_PreserveDir, true);
 	pConfig->Read(_T("ModelExportLWExportLights"), &modelExport_LW_ExportLights, true);
 	pConfig->Read(_T("ModelExportLWExportDoodads"), &modelExport_LW_ExportDoodads, true);
+	pConfig->Read(_T("ModelExportLWExportCameras"), &modelExport_LW_ExportCameras, true);
+	pConfig->Read(_T("ModelExportLWExportBones"), &modelExport_LW_ExportBones, true);
+
 	pConfig->Read(_T("ModelExportLWDoodadsAs"), &modelExport_LW_DoodadsAs, 0);
 
 	pConfig->Read(_T("ModelExportM3BoundScale"), &tmp, _T("0.5"));
@@ -617,6 +620,9 @@ void WowModelViewApp::SaveSettings()
 	pConfig->Write(_T("ModelExportLWPreserveDirs"), modelExport_LW_PreserveDir);
 	pConfig->Write(_T("ModelExportLWExportLights"), modelExport_LW_ExportLights);
 	pConfig->Write(_T("ModelExportLWExportDoodads"), modelExport_LW_ExportDoodads);
+	pConfig->Write(_T("ModelExportLWExportCameras"), modelExport_LW_ExportCameras);
+	pConfig->Write(_T("ModelExportLWExportBones"), modelExport_LW_ExportBones);
+
 	pConfig->Write(_T("ModelExportLWDoodadsAs"), modelExport_LW_DoodadsAs);
 
 	pConfig->Write(_T("ModelExportM3BoundScale"), wxString::Format(_T("%0.2f"), modelExport_M3_BoundScale));

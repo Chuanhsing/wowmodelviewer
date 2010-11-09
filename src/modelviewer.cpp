@@ -145,6 +145,9 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	EVT_MENU(ID_SHOW_FACIALHAIR, ModelViewer::OnCharToggle)
 	EVT_MENU(ID_SHOW_FEET, ModelViewer::OnCharToggle)
 	EVT_MENU(ID_SHEATHE, ModelViewer::OnCharToggle)
+	EVT_MENU(ID_CHAREYEGLOW_NONE, ModelViewer::OnCharToggle)
+	EVT_MENU(ID_CHAREYEGLOW_DEFAULT, ModelViewer::OnCharToggle)
+	EVT_MENU(ID_CHAREYEGLOW_DEATHKNIGHT, ModelViewer::OnCharToggle)
 
 	EVT_MENU(ID_MOUNT_CHARACTER, ModelViewer::OnMount)
 	EVT_MENU(ID_CHAR_RANDOMISE, ModelViewer::OnSetEquipment)
@@ -192,6 +195,7 @@ ModelViewer::ModelViewer()
 	//wxWidget objects
 	menuBar = NULL;
 	charMenu = NULL;
+	charGlowMenu = NULL;
 	viewMenu = NULL;
 	optMenu = NULL;
 	lightMenu = NULL;
@@ -426,6 +430,14 @@ void ModelViewer::InitMenu()
 		charMenu->Check(ID_SHOW_FEET, false);
 		charMenu->AppendCheckItem(ID_SHEATHE, _("Sheathe Weapons\tCTRL+Z"));
 		charMenu->Check(ID_SHEATHE, false);
+
+		charGlowMenu = new wxMenu;
+		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_NONE, _("None"));
+		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEFAULT, _("Default"));
+		charGlowMenu->Check(ID_CHAREYEGLOW_DEFAULT, true);
+		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEATHKNIGHT, _("Death Knight"));
+		charMenu->Append(ID_CHAREYEGLOW, _("Eye Glow"), charGlowMenu);
+
 		charMenu->AppendSeparator();
 		charMenu->Append(ID_SAVE_EQUIPMENT, _("Save Equipment\tF5"));
 		charMenu->Append(ID_LOAD_EQUIPMENT, _("Load Equipment\tF6"));
@@ -446,6 +458,7 @@ void ModelViewer::InitMenu()
 		charMenu->Enable(ID_SHOW_FACIALHAIR, false);
 		charMenu->Enable(ID_SHOW_FEET, false);
 		charMenu->Enable(ID_SHEATHE, false);
+		charMenu->Enable(ID_CHAREYEGLOW, false);
 		charMenu->Enable(ID_SAVE_EQUIPMENT, false);
 		charMenu->Enable(ID_LOAD_EQUIPMENT, false);
 		charMenu->Enable(ID_CLEAR_EQUIPMENT, false);
@@ -833,7 +846,6 @@ void ModelViewer::LoadSession()
 		pConfig->Read(_T("ShowParticle"), &bShowParticle, true);
 		pConfig->Read(_T("ZeroParticle"), &bZeroParticle, true);
 		pConfig->Read(_T("Alternate"), &bAlternate, true);
-		pConfig->Read(_T("KnightEyeGlow"), &bKnightEyeGlow, true);
 		pConfig->Read(_T("DBackground"), &canvas->drawBackground, false);
 		pConfig->Read(_T("BackgroundImage"), &bgImagePath, wxEmptyString);
 		if (!bgImagePath.IsEmpty()) {
@@ -886,7 +898,6 @@ void ModelViewer::SaveSession()
 		pConfig->Write(_T("ShowParticle"), bShowParticle);
 		pConfig->Write(_T("ZeroParticle"), bZeroParticle);
 		pConfig->Write(_T("Alternate"), bAlternate);
-		pConfig->Write(_T("KnightEyeGlow"), bKnightEyeGlow);
 
 		pConfig->Write(_T("DBackground"), canvas->drawBackground);
 		if (canvas->drawBackground)
@@ -1012,6 +1023,9 @@ void ModelViewer::LoadModel(const wxString fn)
 		charMenu->Check(ID_SHOW_EARS, true);
 		charMenu->Check(ID_SHOW_HAIR, true);
 		charMenu->Check(ID_SHOW_FACIALHAIR, true);
+		charGlowMenu->Check(ID_CHAREYEGLOW_NONE,false);
+		charGlowMenu->Check(ID_CHAREYEGLOW_DEFAULT,true);
+		charGlowMenu->Check(ID_CHAREYEGLOW_DEATHKNIGHT,false);
 
 		charMenu->Enable(ID_SAVE_CHAR, true);
 		charMenu->Enable(ID_SHOW_UNDERWEAR, true);
@@ -1020,6 +1034,7 @@ void ModelViewer::LoadModel(const wxString fn)
 		charMenu->Enable(ID_SHOW_FACIALHAIR, true);
 		charMenu->Enable(ID_SHOW_FEET, true);
 		charMenu->Enable(ID_SHEATHE, true);
+		charMenu->Enable(ID_CHAREYEGLOW, true);
 		charMenu->Enable(ID_SAVE_EQUIPMENT, true);
 		charMenu->Enable(ID_LOAD_EQUIPMENT, true);
 		charMenu->Enable(ID_CLEAR_EQUIPMENT, true);
@@ -1041,6 +1056,7 @@ void ModelViewer::LoadModel(const wxString fn)
 		charMenu->Enable(ID_SHOW_FACIALHAIR, false);
 		charMenu->Enable(ID_SHOW_FEET, false);
 		charMenu->Enable(ID_SHEATHE, false);
+		charMenu->Enable(ID_CHAREYEGLOW, false);
 		charMenu->Enable(ID_SAVE_EQUIPMENT, false);
 		charMenu->Enable(ID_LOAD_EQUIPMENT, false);
 		charMenu->Enable(ID_CLEAR_EQUIPMENT, false);
@@ -1157,6 +1173,10 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 			charMenu->Check(ID_SHOW_EARS, true);
 			charMenu->Check(ID_SHOW_HAIR, true);
 			charMenu->Check(ID_SHOW_FACIALHAIR, true);
+			charMenu->Check(ID_CHAREYEGLOW_NONE, false);
+			charMenu->Check(ID_CHAREYEGLOW_DEFAULT, true);
+			charMenu->Check(ID_CHAREYEGLOW_DEATHKNIGHT, false);
+
 			// ---
 
 			animControl->UpdateModel(canvas->model);
@@ -1207,6 +1227,7 @@ void ModelViewer::LoadItem(unsigned int displayID)
 		charMenu->Enable(ID_SHOW_FACIALHAIR, false);
 		charMenu->Enable(ID_SHOW_FEET, false);
 		charMenu->Enable(ID_SHEATHE, false);
+		charMenu->Enable(ID_CHAREYEGLOW, false);
 		charMenu->Enable(ID_SAVE_EQUIPMENT, false);
 		charMenu->Enable(ID_LOAD_EQUIPMENT, false);
 		charMenu->Enable(ID_CLEAR_EQUIPMENT, false);
@@ -1854,13 +1875,13 @@ void ModelViewer::OnSetEquipment(wxCommandEvent &event)
 
 void ModelViewer::OnCharToggle(wxCommandEvent &event)
 {
-	if (event.GetId() == ID_VIEW_NPC)
+	int ID = event.GetId();
+	if (ID == ID_VIEW_NPC)
 		charControl->selectNPC(UPDATE_NPC);
-	if (event.GetId() == ID_VIEW_ITEM)
+	if (ID == ID_VIEW_ITEM)
 		charControl->selectItem(UPDATE_SINGLE_ITEM, -1, -1);
-	else if (isChar) 
+	else if (isChar)
 		charControl->OnCheck(event);
-	
 }
 
 void ModelViewer::OnMount(wxCommandEvent &event)
@@ -2108,6 +2129,7 @@ void ModelViewer::LoadChar(wxString fn)
 	charMenu->Enable(ID_SHOW_FACIALHAIR, true);
 	charMenu->Enable(ID_SHOW_FEET, true);
 	charMenu->Enable(ID_SHEATHE, true);
+	charMenu->Enable(ID_CHAREYEGLOW, true);
 	charMenu->Enable(ID_SAVE_EQUIPMENT, true);
 	charMenu->Enable(ID_LOAD_EQUIPMENT, true);
 	charMenu->Enable(ID_CLEAR_EQUIPMENT, true);
@@ -2857,7 +2879,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(_T("Info: Exporting M2 model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				// Your M2 export function goes here.
-				ExportM2toLWO(canvas->root,canvas->model,dialog.GetPath().fn_str(),init);
+				ExportM2toLWO2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		// For WMO Models. You don't need to include this if the exporter doesn't support it.
 		} else if (canvas->wmo) {

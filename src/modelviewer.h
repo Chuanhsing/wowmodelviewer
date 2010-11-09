@@ -50,7 +50,7 @@
 
 // defines
 #define APP_TITLE _T("World of Warcraft Model Viewer")
-#define APP_VERSION _T("v0.7.0.1 r487")		// Revision number should match the revision number on GoogleCode.
+#define APP_VERSION _T("v0.7.0.1 r492")		// Revision number should match the revision number on GoogleCode.
 #ifdef _DEBUG
 	#define APP_ISDEBUG _T(" Debug")
 #else
@@ -123,7 +123,7 @@ public:
 
 	//wxWidget objects
 	wxMenuBar *menuBar;
-	wxMenu *fileMenu, *exportMenu, *camMenu, *charMenu, *viewMenu, *optMenu, *lightMenu;
+	wxMenu *fileMenu, *exportMenu, *camMenu, *charMenu, *charGlowMenu, *viewMenu, *optMenu, *lightMenu;
 	
 	// wxAUI - new docking lib (now part of wxWidgets 2.8.0)
 	wxAuiManager interfaceManager;

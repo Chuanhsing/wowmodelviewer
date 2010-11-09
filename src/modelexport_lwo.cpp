@@ -137,7 +137,7 @@ void WriteLWSceneObject2(ofstream &fs, LWSceneObj Object)
 	if (Object.isNull == true){
 		fs << _T("AddNullObject");
 	}else{
-		fs << _T("LoadObjectLayer 1");
+		fs << _T("LoadObjectLayer ") << Object.LayerID;
 	}
 	fs << _T(" 1" << wxString::Format(_T("%07x"),Object.ObjectID) << " " << Object.Name << "\nChangeObject 0\n");
 	/*
@@ -316,9 +316,9 @@ void LW_WriteVX(wxFFileOutputStream &f, uint32 p, uint32 &Size){
 	}
 }
 
-void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, float reflect, bool cull, bool hasVertColors, uint32 surfID, wxString comment, uint32 &fileSize){
+void LW_WriteSurface(wxFFileOutputStream &f, LWSurface Surface, uint32 &fileSize){
 	#ifdef _DEBUG
-		wxLogMessage(_T("LW Write Surface Vars:\nSurfName: %s\nColor: %f/%f/%f\nReflect Value: %f\nCulling: %s\nSurfaceID: %i\nComment: \"%s\""),surfName.c_str(),Color.x,Color.y,Color.z,(reflect*10),(cull?_T("True"):_T("False")),surfID,comment);
+		//wxLogMessage(_T("LW Write Surface Vars:\nSurfName: %s\nColor: %f/%f/%f\nReflect Value: %f\nCulling: %s\nSurfaceID: %i\nComment: \"%s\""),Surface.Name.c_str(),Surface.Surf_Color.x,Surface.Surf_Color.y,Surface.Surf_Color.z,Surface.Surf_Reflect,(Surface.isDoubleSided?_T("True"):_T("False")),Surface.Image_Color,Surface.Comment);
 	#endif
 	int off_T;
 
@@ -328,6 +328,7 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	fileSize += 8;
 
+	wxString surfName = Surface.Name;
 	surfName.Append(_T('\0'));
 	if (fmod((float)surfName.length(), 2.0f) > 0)
 		surfName.Append(_T('\0'));
@@ -346,11 +347,11 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 	f.Write(reinterpret_cast<char *>(&u16), 2);
 
 	// value
-	f32 = MSB4<float>(Color.x);
+	f32 = MSB4<float>(Surface.Surf_Color.x);
 	f.Write(reinterpret_cast<char *>(&f32), 4);
-	f32 = MSB4<float>(Color.y);
+	f32 = MSB4<float>(Surface.Surf_Color.y);
 	f.Write(reinterpret_cast<char *>(&f32), 4);
-	f32 = MSB4<float>(Color.z);
+	f32 = MSB4<float>(Surface.Surf_Color.z);
 	f.Write(reinterpret_cast<char *>(&f32), 4);
 	u16 = 0;
 	f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -362,7 +363,7 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 	u16 = 6; // size
 	u16 = MSB2(u16);
 	f.Write(reinterpret_cast<char *>(&u16), 2);
-	f32 = 0;
+	f32 = Surface.Surf_Lum;
 	f32 = MSB4<float>(f32);
 	f.Write(reinterpret_cast<char *>(&f32), 4);
 	u16 = 0;
@@ -375,7 +376,7 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 	u16 = 6; // size
 	u16 = MSB2(u16);
 	f.Write(reinterpret_cast<char *>(&u16), 2);
-	f32 = 1;
+	f32 = Surface.Surf_Diff;
 	f32 = MSB4<float>(f32);
 	f.Write(reinterpret_cast<char *>(&f32), 4);
 	u16 = 0;
@@ -388,7 +389,7 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 	u16 = 6; // size
 	u16 = MSB2(u16);
 	f.Write(reinterpret_cast<char *>(&u16), 2);
-	f32 = reflect/2;
+	f32 = Surface.Surf_Spec;
 	f32 = MSB4<float>(f32);
 	f.Write(reinterpret_cast<char *>(&f32), 4);
 	u16 = 0;
@@ -401,7 +402,7 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 	u16 = 6; // size
 	u16 = MSB2(u16);
 	f.Write(reinterpret_cast<char *>(&u16), 2);
-	f32 = 0.0f;
+	f32 = Surface.Surf_Reflect;
 	f32 = MSB4<float>(f32);
 	f.Write(reinterpret_cast<char *>(&f32), 4);
 	u16 = 0;
@@ -414,7 +415,7 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 	u16 = 6; // size
 	u16 = MSB2(u16);
 	f.Write(reinterpret_cast<char *>(&u16), 2);
-	f32 = MSB4<float>(reflect);
+	f32 = MSB4<float>(Surface.Surf_Trans);
 	f.Write(reinterpret_cast<char *>(&f32), 4);
 	u16 = 0;
 	f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -435,7 +436,7 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 	f.Write(reinterpret_cast<char *>(&u16), 2);
 	surfaceDefSize += 12;
 
-	if (hasVertColors == true){
+	if (Surface.hasVertColors == true){
 		// VCOL (Vector Colors)
 		f.Write(_T("VCOL"), 4);
 		u16 = MSB2(18); // size
@@ -491,7 +492,7 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 	u16 = MSB2(u16);
 	f.Write(reinterpret_cast<char *>(&u16), 2);
 	u16 = 1;
-	if (cull == false){
+	if (Surface.isDoubleSided == false){
 		u16 = 3;
 	}
 	u16 = MSB2(u16);
@@ -675,7 +676,7 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 	u16 = 2; // size
 	u16 = MSB2(u16);
 	f.Write(reinterpret_cast<char *>(&u16), 2);
-	u16 = surfID;
+	u16 = Surface.Image_Color.ID;
 	u16 = MSB2(u16);
 	f.Write(reinterpret_cast<char *>(&u16), 2);
 	blokSize += 8;
@@ -763,6 +764,7 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 
 	// CMNT
 	f.Write(_T("CMNT"), 4);
+	wxString comment = Surface.Comment;
 	comment.Append(_T('\0'));
 	if (fmod((float)comment.length(), 2.0f) > 0)
 		comment.Append(_T('\0'));
@@ -776,7 +778,7 @@ void LW_WriteSurface(wxFFileOutputStream &f, wxString surfName, Vec4D Color, flo
 	u16 = 4;
 	u16 = MSB2(u16);
 	f.Write(reinterpret_cast<char *>(&u16), 2);
-	f32 = 950;
+	f32 = 950;	// Surface Compatability Number. 950 = Lightwave 9.5
 	f32 = MSB4<int32>(f32);
 	f.Write(reinterpret_cast<char *>(&f32), 4);
 	surfaceDefSize += 10;
@@ -810,8 +812,8 @@ void ExportLightwaveScene(LWScene SceneData){
 	fs << _T("LWSC\n");
 	fs << _T("5\n\n"); // I think this is a version-compatibility number...
 
-	for (uint32 nobj=0;nobj<SceneData.Object.size();nobj++){
-		LWSceneObj Obj = SceneData.Object[nobj];
+	for (uint32 nobj=0;nobj<SceneData.Objects.size();nobj++){
+		LWSceneObj Obj = SceneData.Objects[nobj];
 		WriteLWSceneObject2(fs,Obj);
 	}
 
@@ -1064,6 +1066,7 @@ I've done some research into the LWO2 format. I have a HUGE commented section ab
 I'll update this function once I re-tune the WMO function.
 		-Kjasi
 */
+/*
 void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 {
 	wxString file = wxString(fn, wxConvUTF8);
@@ -1593,7 +1596,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	wxLogMessage(_T("M2 Point Data Written for %s"),m->modelname.c_str());
 #endif
 
-/*
+
 	// --
 	// The bounding box for the layer, just so that readers don't have to scan the PNTS chunk to find the extents.
 	f.Write(_T("BBOX"), 4);
@@ -1613,7 +1616,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.Write(reinterpret_cast<char *>(&vert.y), 4);
 	f.Write(reinterpret_cast<char *>(&vert.z), 4);
 	// ================
-*/
+
 
 	// --
 	uint32 vmapSize = 0;
@@ -1826,6 +1829,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 	f.Write(reinterpret_cast<char *>(&u32), 4);
 	f.SeekO(0, wxFromEnd);
 	*/
+/*
 #ifdef _DEBUG
 	wxLogMessage(_T("M2 Weight data Written for %s"),m->modelname.c_str());
 #endif
@@ -2434,6 +2438,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 						if (texName.Length() == 0)
 							texName << wxString(attM->modelname).AfterLast(SLASH).BeforeLast(_T('.')) << wxString::Format(_T("_Image_%03i"),i);
 */
+/*
 						wxString sTexName = wxEmptyString;
 						if (modelExport_LW_PreserveDir == true){
 							sTexName << _T("Images") << SLASH;
@@ -2645,8 +2650,8 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 			bool cull = true;
 			if (p.cull == false)
 				cull = false;
-			LW_WriteSurface(f,surfName,color,reflect,cull,false,surfaceCounter,cmnt,fileLen);
-
+			LWSurface a(surfName,cmnt,LWSurf_Image(surfaceCounter),LWSurf_Image(),LWSurf_Image(),Vec3D(color.x,color.y,color.z),1,0,cull,false);
+			LW_WriteSurface(f,a,fileLen);
 		}
 	}
 
@@ -2677,7 +2682,8 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 						bool cull = true;
 						if (p.cull == false)
 							cull = false;
-						LW_WriteSurface(f,surfName,color,reflect,cull,false,surfaceCounter,cmnt,fileLen);
+						LWSurface a(surfName,cmnt,LWSurf_Image(surfaceCounter),LWSurf_Image(),LWSurf_Image(),Vec3D(color.x,color.y,color.z),1,0,cull,false);
+						LW_WriteSurface(f,a,fileLen);
 					}
 				}
 			}
@@ -2730,7 +2736,8 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 							if (p.cull == false)
 								cull = false;
 
-							LW_WriteSurface(f,surfName,color,reflect,cull,false,surfaceCounter,cmnt,fileLen);
+							LWSurface a(surfName,cmnt,LWSurf_Image(surfaceCounter),LWSurf_Image(),LWSurf_Image(),Vec3D(color.x,color.y,color.z),1,0,cull,false);
+							LW_WriteSurface(f,a,fileLen);
 						}
 					}
 				}
@@ -2752,6 +2759,7 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init)
 
 	ExportM2toScene(m,fn,init);
 }
+*/
 
 //---------------------------------------------
 // --==WMOs==--
@@ -2764,7 +2772,13 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 	// Should we generate a scene file?
 	// Wll only generate if there are doodads or lights.
 	bool doreturn = false;
-	if (((modelExport_LW_ExportLights == false) || (m->nLights == 0)) && ((modelExport_LW_ExportDoodads == false) || (m->nDoodads == 0))){
+
+	if ((m->nDoodads == 0) && (m->nLights == 0)){
+		wxLogMessage(_T("No Scene Data found. Unable to write scene file."));
+		doreturn = true;
+	}
+	if ((modelExport_LW_ExportLights == false) && (modelExport_LW_ExportDoodads == false)){
+		wxLogMessage(_T("Global variables don't allow for scene generation. Unable to write scene file."));
 		doreturn = true;
 	}
 	if (doreturn == true)
@@ -2852,7 +2866,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 
 	WriteLWSceneObject(fs,objFilename,ObjData,mcount);
 
-	if (modelExport_LW_ExportDoodads ==  true){
+	if ((modelExport_LW_ExportDoodads ==  true)&&(modelExport_LW_DoodadsAs > 1)){
 		// Doodads
 		for (uint32 ds=0;ds<m->nDoodadSets;ds++){			
 			m->showDoodadSet(ds);
@@ -2916,7 +2930,7 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 	// Lights
 	if (modelExport_LW_ExportLights == true){
 		// WMO Lights
-		for (int i=0;i<m->nLights;i++){
+		for (unsigned int i=0;i<m->nLights;i++){
 			WMOLight *light = &m->lights[i];
 
 			Vec3D color;
@@ -2975,46 +2989,40 @@ void ExportWMOObjectstoLWO(WMO *m, const char *fn){
 
 	// Export Doodad Files
 	wxString cWMOName = m->name;
-	if (modelExport_LW_ExportDoodads ==  true){
-		if (modelExport_LW_DoodadsAs == 1){
-			// Copy Model-list into an array
-			wxArrayString modelarray = m->models;
+	if ((modelExport_LW_ExportDoodads ==  true)&&(modelExport_LW_DoodadsAs == 1)){
+		// Copy Model-list into an array
+		wxArrayString modelarray = m->models;
 
-			// Remove the WMO
-			wxDELETE(g_modelViewer->canvas->wmo);
-			g_modelViewer->canvas->wmo = NULL;
-			g_modelViewer->isWMO = false;
-			g_modelViewer->isChar = false;
-			
-			// Export Individual Doodad Models
-			for (unsigned int x=0;x<modelarray.size();x++){
-				g_modelViewer->isModel = true;
-				wxString cModelName(modelarray[x].c_str(),wxConvUTF8);
+		// Remove the WMO
+		wxDELETE(g_modelViewer->canvas->wmo);
+		g_modelViewer->canvas->wmo = NULL;
+		g_modelViewer->isWMO = false;
+		g_modelViewer->isChar = false;
+		
+		// Export Individual Doodad Models
+		for (unsigned int x=0;x<modelarray.size();x++){
+			g_modelViewer->isModel = true;
+			wxString cModelName(modelarray[x].c_str(),wxConvUTF8);
 
-				wxLogMessage(_T("Export: Attempting to export doodad model: %s"),cModelName.c_str());
-				wxString dfile = wxString(fn,wxConvUTF8).BeforeLast(SLASH) << SLASH << cModelName.AfterLast(SLASH);
-				dfile = dfile.BeforeLast(_T('.')) << _T(".lwo");
+			wxLogMessage(_T("Export: Attempting to export doodad model: %s"),cModelName.c_str());
+			wxString dfile = wxString(fn,wxConvUTF8).BeforeLast(SLASH) << SLASH << cModelName.AfterLast(SLASH);
+			dfile = dfile.BeforeLast(_T('.')) << _T(".lwo");
 
-				g_modelViewer->canvas->LoadModel(cModelName);
-				ExportM2toLWO(NULL, g_modelViewer->canvas->model, dfile.fn_str(), true);
+			g_modelViewer->canvas->LoadModel(cModelName);
+			ExportM2toLWO2(NULL, g_modelViewer->canvas->model, dfile.fn_str(), true);
 
-				wxLogMessage(_T("Export: Finished exporting doodad model: %s\n\n"),cModelName.c_str());
+			wxLogMessage(_T("Export: Finished exporting doodad model: %s\n\n"),cModelName.c_str());
 
-				// Delete the loaded model
-				g_modelViewer->canvas->clearAttachments();
-				g_modelViewer->canvas->model = NULL;
-				g_modelViewer->isModel = false;
-			}
+			// Delete the loaded model
+			g_modelViewer->canvas->clearAttachments();
+			g_modelViewer->canvas->model = NULL;
+			g_modelViewer->isModel = false;
 		}
-		//texturemanager.clear();
-
-		// Reload our original WMO file.
-		//wxLogMessage("Reloading original WMO file: %s",cWMOName.c_str());
-
-		// Load the WMO
-
-
 	}
+	//texturemanager.clear();
+
+	// Reload our original WMO file.
+	//wxLogMessage("Reloading original WMO file: %s",cWMOName.c_str());
 }
 
 // -----------------------------------------
@@ -3180,30 +3188,6 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 	// Open Model File
 	wxString file = wxString(filename, wxConvUTF8);
-/*
-	if (modelExport_LW_PreserveDir == true){
-		wxString Path, Name;
-
-		Path << file.BeforeLast(SLASH);
-		Name << file.AfterLast(SLASH);
-
-		MakeDirs(Path,"Objects");
-
-		file.Empty();
-		file << Path << SLASH<<_T("Objects")<<SLASH << Name;
-	}
-	if (modelExport_PreserveDir == true){
-		wxString Path1, Path2, Name;
-		Path1 << file.BeforeLast(SLASH);
-		Name << file.AfterLast(SLASH);
-		Path2 << wxString(filename).BeforeLast(SLASH);
-
-		MakeDirs(Path1,Path2);
-
-		file.Empty();
-		file << Path1 << SLASH << Path2 << SLASH << Name;
-	}
-*/
 	wxFFileOutputStream f(file, _T("w+b"));
 
 	if (!f.IsOk()) {
@@ -3468,7 +3452,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			f.Write("FACE", 4);
 
 			for (unsigned int x=0;x<cLyr.Polys.size();x++){
-				PolyChunk32 PolyData = cLyr.Polys[x].PolyData;
+				PolyChunk PolyData = cLyr.Polys[x].PolyData;
 				uint16 nverts = MSB2(PolyData.numVerts);
 				polySize += 2;
 				f.Write(reinterpret_cast<char *>(&nverts),2);
@@ -3657,7 +3641,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			Vec4D Color = Vec4D(1,1,1,1);
 			float reflect = 0.0f;
 
-			LW_WriteSurface(f,cSurf.Name, Color, reflect, cSurf.isDoubleSided, cSurf.hasVertColors, (uint32)Object.PartNames.size() + x, cSurf.Comment, fileLen);
+			LW_WriteSurface(f, cSurf, fileLen);
 		}
 	}
 
@@ -3677,48 +3661,81 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 // No longer writes data to a LWO file. Instead, it collects the data, and sends it to a seperate function that writes the actual file.
 void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init){
 	wxString filename(fn, wxConvUTF8);
+	wxString scfilename(fn, wxConvUTF8);
 
 	if (modelExport_LW_PreserveDir == true){
 		wxString Path, Name;
 
+		// Object
 		Path << filename.BeforeLast(SLASH);
 		Name << filename.AfterLast(SLASH);
-
 		MakeDirs(Path,_T("Objects"));
-
 		filename.Empty();
 		filename << Path << SLASH << _T("Objects") << SLASH << Name;
+
+		// Scene
+		Path.Empty();
+		Name.Empty();
+		Path << scfilename.BeforeLast(SLASH);
+		Name << scfilename.AfterLast(SLASH);
+		MakeDirs(Path,_T("Scenes"));
+		scfilename.Empty();
+		scfilename << Path << SLASH << _T("Scenes") << SLASH << Name;
 	}
 	if (m->modelType != MT_CHAR){
 		if (modelExport_PreserveDir == true){
 			wxString Path1, Path2, Name;
+
+			// Objects
 			Path1 << filename.BeforeLast(SLASH);
 			Name << filename.AfterLast(SLASH);
 			Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
-
 			MakeDirs(Path1,Path2);
-
 			filename.Empty();
 			filename << Path1 << SLASH << Path2 << SLASH << Name;
+
+			// Scene
+			Path1.Empty();
+			Path2.Empty();
+			Name.Empty();
+			Path1 << scfilename.BeforeLast(SLASH);
+			Name << scfilename.AfterLast(SLASH);
+			Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+			MakeDirs(Path1,Path2);
+			scfilename.Empty();
+			scfilename << Path1 << SLASH << Path2 << SLASH << Name;
 		}
 	}
 
+	// Scene Data
+	LWScene Scene(scfilename.AfterLast(SLASH),scfilename.BeforeLast(SLASH));
+
 	// Object Data
-	LWObject Object = GatherM2forLWO(att,m,init,fn);
+	LWObject Object = GatherM2forLWO(att,m,init,fn,Scene);
 	if (Object.SourceType == wxEmptyString){
 		wxMessageBox(_T("Error gathering information for export."),_T("Export Error"));
 		wxLogMessage(_T("Failure gathering information for export."));
 		return;
 	}
 	wxLogMessage(_T("Sending M2 Data to LWO Writing Function..."));
-	WriteLWObject(filename, Object);
+	if (WriteLWObject(filename, Object) == false){
+		wxString msg = _T("Error Writing the M2 file to a Lightwave Object.");
+		wxMessageBox(msg,_T("Writing Error"));
+		wxLogMessage(msg);
+	}else{
+		wxLogMessage(_T("LWO Object \"%s\" Writing Complete."),filename);
+	}
+	Object.~LWObject();
 
 	// Scene Data
 	// NYI
+
+	// Old Version
+	ExportM2toScene(m,fn,init);
 }
 
 // Gathers and returns the Lightwave Object data of a M2 file.
-LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bool announce){
+LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LWScene &scene, bool announce){
 	LWObject Object;
 	if (!m)
 		return Object;
@@ -3727,10 +3744,22 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bo
 	if (announce == true)
 		LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),Object.SourceType);
 
+	uint32 SurfCounter = 0;
+	int32 cAnim = 0;
+	int32 cFrame = 0;
+	bool vertMsg = false;
+
+	if (m->animated){
+		cAnim = m->currentAnim;
+		cFrame = m->animManager->GetFrame();
+	}
+	wxLogMessage(_T("isAnimated: %s, Current Anim: %i, Current Frame: %i"),(m->animated?_T("true"):_T("false")), cAnim, cFrame);
+
 	// Main Object
 	LWLayer Layer;
 	Layer.Name = wxString(m->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
 	Layer.ParentLayer = -1;
+	std::vector<wxString> surfnamearray;
 
 	// Bounding Box for the Layer
 	/*if (m->bounds[0]){
@@ -3738,12 +3767,9 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bo
 		Layer.BoundingBox2 = m->bounds[1];
 	}*/
 
-	//uint32 PolyCounter = 0;
-	uint32 SurfCounter = 0;
-
 	// Mesh & Slot names
 	wxString meshes[19] = {_T("Hairstyles"), _T("Facial1"), _T("Facial2"), _T("Facial3"), _T("Braces"), _T("Boots"), wxEmptyString, _T("Ears"), _T("Wristbands"),  _T("Kneepads"), _T("Pants"), _T("Pants"), _T("Tarbard"), _T("Trousers"), wxEmptyString, _T("Cape"), wxEmptyString, _T("Eyeglows"), _T("Belt") };
-	//wxString slots[15] = {_T("Helm"), wxEmptyString, _T("Shoulder"), wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, _T("Right Hand Item"), _T("Left Hand Item"), wxEmptyString, wxEmptyString, _T("Quiver") };
+	wxString slots[15] = {_T("Helm"), wxEmptyString, _T("Shoulder"), wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, _T("Right Hand Item"), _T("Left Hand Item"), wxEmptyString, wxEmptyString, _T("Quiver") };
 
 	// Build Part Names
 	// Seperated from the rest of the build for various reasons.
@@ -3753,7 +3779,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bo
 			// Main Model
 			int g = p.geoset;
 			bool isFound = false;
-			wxString partName, matName;
+			wxString partName;
 			
 			// Part Names
 			int mesh = m->geosets[g].id / 100;
@@ -3772,6 +3798,46 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bo
 				Object.PartNames.push_back(partName);
 		}
 	}
+	// Parts for Attached Objects
+	if (att != NULL){
+		if (att->model){
+			wxLogMessage(_T("Att Model found."));
+		}
+		for (uint32 c=0; c<att->children.size(); c++) {
+			Attachment *att2 = att->children[c];
+			for (uint32 j=0; j<att2->children.size(); j++) {
+				Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
+
+				if (mAttChild){
+					wxLogMessage(_T("AttChild Model found."));
+					for (uint32 i=0; i<mAttChild->passes.size(); i++) {
+						ModelRenderPass &p = mAttChild->passes[i];
+
+						if (p.init(mAttChild)) {
+							bool isFound = false;
+							wxString partName;
+
+							int thisslot = att2->children[j]->slot;
+							if (thisslot < 15 && slots[thisslot]!=wxEmptyString){
+								partName = wxString::Format(_T("Child %02i - %s"),j,slots[thisslot].c_str());
+							}else{
+								partName = wxString::Format(_T("Child %02i - Slot %02i"),j,att2->children[j]->slot);
+							}
+
+							for (uint32 x=0;x<Object.PartNames.size();x++){
+								if (Object.PartNames[x] == partName){
+									isFound = true;
+									break;
+								}
+							}
+							if (isFound == false)
+								Object.PartNames.push_back(partName);
+						}
+					}
+				}
+			}
+		}
+	}
 
 	// Process Passes
 	for (unsigned short i=0; i<m->passes.size(); i++) {
@@ -3780,9 +3846,11 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bo
 			// Main Model
 			int g = p.geoset;
 			bool isFound = false;
-			int partID = i;
-			int surfID = i;
+			uint32 partID = i;
+			uint32 surfID = i;
 			uint32 *Vert2Point = new uint32[p.vertexEnd];
+			float Surf_Diff = 1.0f;
+			float Surf_Lum = 0.0f;
 
 			wxString partName, matName;
 			
@@ -3800,15 +3868,23 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bo
 				}
 			}
 
-				// Surface Name
-				matName = m->TextureList[p.tex].AfterLast(SLASH).BeforeLast(_T('.'));
-				if (matName.Len() == 0)
-					matName = wxString::Format(_T("Material_%03i"), p.tex);
+			// Surface Name
+			matName = m->TextureList[p.tex].AfterLast(SLASH).BeforeLast(_T('.'));
+			if (matName.Len() == 0)
+				matName = wxString::Format(_T("Material_%03i"), p.tex);
 
-			for (uint32 x=0;x<Object.Surfaces.size();x++){
+			// If Luminous...
+			if (p.unlit == true) {
+				Surf_Diff = 0.0f;
+				Surf_Lum = 1.0f;
+				// Add Lum, just in case there's a non-luminous surface with the same name.
+				matName = matName + _T("_Lum");
+			}
+
+			for (size_t x=0;x<Object.Surfaces.size();x++){
 				if (Object.Surfaces[x].Name == matName){
 					isFound = true;
-					surfID = x;
+					surfID = (uint32)x;
 					break;
 				}
 			}
@@ -3840,6 +3916,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bo
 			ClipImage.Source = TexturePath;
 			ClipImage.TagID = (uint32)Object.PartNames.size() + SurfCounter;
 			Object.Images.push_back(ClipImage);
+			LWSurf_Image SurfImage_Color(ClipImage.TagID, 0, 0);
 
 			wxString ExportName = wxString(fn, wxConvUTF8).BeforeLast(SLASH) + SLASH + texName + _T(".tga");
 			//wxLogMessage(_T("PrePath ExportName: %s, fn Path: %s"),ExportName,wxString(fn, wxConvUTF8).BeforeLast(SLASH));
@@ -3872,7 +3949,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bo
 			SaveTexture(ExportName);
 			//SaveTexture2(ClipImage.Filename,ClipImage.Source,wxString(_T("LWO")),wxString(_T("tga")));
 
-			LWSurface Surface(matName,wxString(m->TextureList[p.tex].c_str(), wxConvUTF8),ClipImage.TagID,-1,-1,doubesided);
+			LWSurface Surface(matName,wxString(m->TextureList[p.tex].c_str(), wxConvUTF8),SurfImage_Color,LWSurf_Image(),LWSurf_Image(),NULL,Surf_Diff,Surf_Lum,doubesided);
 			Object.Surfaces.push_back(Surface);
 
 			// Points
@@ -3883,11 +3960,21 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bo
 
 				// Points
 				Vec3D vert;
-				if ((init == false)&&(m->vertices)) {
+				if ((m->animated == true) && (init == false) && (m->vertices)) {
+					if (vertMsg == false){
+						wxLogMessage(_T("Using Verticies"));
+						vertMsg = true;
+					}
 					vert = m->vertices[v];
 				} else {
+					if (vertMsg == false){
+						wxLogMessage(_T("Using Original Verticies"));
+						vertMsg = true;
+					}
 					vert = m->origVertices[v].pos;
 				}
+				vert = Vec3D(vert.x,vert.y,-vert.z);	// Fixes X flipped verts
+
 				Point.PointData = vert;
 				Point.UVData = m->origVertices[v].texcoords;	// UV Data
 				// Weight Data NYI
@@ -3902,8 +3989,16 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bo
 				LWPoly Poly;
 				Poly.PolyData.numVerts = 3;
 				for (int x=0;x<3;x++){
+					// Modify to Flip Polys
+					int mod = 0;
+					if (x == 1){
+						mod = 1;
+					}else if (x == 2){
+						mod = -1;
+					}
+
 					// Polygon Indice
-					uint32 a = p.indexStart + k + x;
+					uint32 a = p.indexStart + k + x + mod;
 					uint32 b = m->IndiceToVerts[a];
 					Poly.PolyData.indice[x] = Vert2Point[b];
 
@@ -3924,49 +4019,338 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, bo
 	}
 
 	// --== Attachments ==--
+	if (att != NULL){
+		/* Have yet to find an att->model, so skip it until we do.
+		if (att->model){
+		} */
+		for (uint32 c=0; c<att->children.size(); c++) {
+			Attachment *att2 = att->children[c];
+			for (uint32 j=0; j<att2->children.size(); j++) {
+				Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
+
+				if (mAttChild){
+					int boneID = -1;
+					Model *mParent = NULL;
+
+					wxLogMessage(_T("Attached Child Model: %s"),mAttChild->name);
+
+					if (att2->parent) {
+						mParent = static_cast<Model*>(att2->children[j]->parent->model);
+						if (mParent)
+							boneID = mParent->attLookup[att2->children[j]->id];
+					}
+
+					// Model Movement, Roation & Scale Data
+					Vec3D mPos(0,0,0);
+					Quaternion mRot(Vec4D(0,0,0,0));
+					Vec3D mScale(1,1,1);
+
+					Vec3D Seraph(1,1,1);
+					Quaternion Niobe(Vec4D(0,0,0,0));
+
+					if (boneID>-1) {
+						Bone cbone = mParent->bones[mParent->atts[boneID].bone];
+						Matrix mat = cbone.mat;
+						Matrix rmat = cbone.mrot;
+
+						// InitPose is a reference to the HandsClosed animation (#15), which is the closest to the Initial pose.
+						// By using this animation, we'll get the proper scale for the items when in Init mode.
+						int InitPose = 15;
+
+						if (init == true){
+							mPos = mParent->atts[boneID].pos;
+							mScale = cbone.scale.getValue(InitPose,0);
+							mRot = cbone.rot.getValue(InitPose,0);
+						}else{
+							// Rotations aren't working correctly... Not sure why.
+							rmat.quaternionRotate(cbone.rot.getValue(cAnim,cFrame));
+							mat.scale(cbone.scale.getValue(cAnim,cFrame));
+							mat.translation(cbone.transPivot);
+
+							mPos.x = mat.m[0][3];
+							mPos.y = mat.m[1][3];
+							mPos.z = mat.m[2][3];
+
+							mScale = cbone.scale.getValue(cAnim,cFrame);
+							mRot = rmat.GetQuaternion();
+						}
+						if (mScale.x == 0 && mScale.y == 0 && mScale.z == 0){
+							mScale = Vec3D(1,1,1);
+						}
+					}
+/*
+					wxLogMessage(_T("mRot: X: %f, Y: %f, Z: %f, W: %f"),mRot.x,mRot.y,mRot.z,mRot.w);
+					wxLogMessage(_T("mPos: X: %f, Y: %f, Z: %f"),mPos.x,mPos.y,mPos.z);
+					wxLogMessage(_T("mScale: X: %f, Y: %f, Z: %f"),mScale.x,mScale.y,mScale.z);
+*/
+					for (uint32 i=0; i<mAttChild->passes.size(); i++) {
+						ModelRenderPass &p = mAttChild->passes[i];
+
+						if (p.init(mAttChild)) {
+							bool isFound = false;
+							uint32 partID = i;
+							uint32 surfID = i;
+							uint32 *Vert2Point = new uint32[p.vertexEnd];
+							float Surf_Diff = 1.0f;
+							float Surf_Lum = 0.0f;
+							wxString partName, matName;
+							
+							int thisslot = att2->children[j]->slot;
+
+							// Part Names
+							if (thisslot < 15 && slots[thisslot]!=wxEmptyString){
+								partName = wxString::Format(_T("Child %02i - %s"),j,slots[thisslot].c_str());
+							}else{
+								partName = wxString::Format(_T("Child %02i - Slot %02i"),j,att2->children[j]->slot);
+							}
+							for (uint32 x=0;x<Object.PartNames.size();x++){
+								if (Object.PartNames[x] == partName){
+									partID = x;
+									break;
+								}
+							}
+
+							// Surface Name
+							matName = mAttChild->TextureList[p.tex].AfterLast(SLASH).BeforeLast(_T('.'));
+							if (thisslot < 15 && slots[thisslot]!=wxEmptyString){
+								if (matName == _T("Cape")) {
+									wxString tex = wxString(mAttChild->name.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.'));
+									if (tex.Len() > 0){
+										matName = wxString::Format(_T("%s - %s"),slots[thisslot].c_str(),tex.c_str());
+									}else{
+										matName = wxString::Format(_T("%s - Surface"),slots[thisslot].c_str());
+									}
+								}else if (matName != wxEmptyString){
+									matName = wxString::Format(_T("%s - %s"),slots[thisslot].c_str(),matName.c_str());
+								}else {
+									matName = wxString::Format(_T("%s - Material %02i"),slots[thisslot].c_str(),p.tex);
+								}
+							}
 
 
+							if (matName.Len() == 0)
+								matName = wxString::Format(_T("Child %02i - Material %03i"), j, p.tex);
+
+							// If Luminous...
+							if (p.unlit == true) {
+								Surf_Diff = 0.0f;
+								Surf_Lum = 1.0f;
+								// Add Lum, just in case there's a non-luminous surface with the same name.
+								matName = matName + _T("_Lum");
+							}
+
+							for (size_t x=0;x<Object.Surfaces.size();x++){
+								if (Object.Surfaces[x].Name == matName){
+									isFound = true;
+									surfID = (uint32)x;
+									break;
+								}
+							}
+							bool doubesided = (p.cull?true:false);
+
+							// Add Images to Model
+							LWClip ClipImage;
+							// Image Filename
+							wxString Texture = wxString(mAttChild->TextureList[p.tex].c_str(), wxConvUTF8);
+							wxString TexturePath = Texture.BeforeLast(SLASH);
+							wxString texName = Texture.BeforeLast('.');
+
+							if ((texName.Find(SLASH) <= 0)&&(texName == _T("Cape"))){
+								texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
+								TexturePath = wxString(mAttChild->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+							}else if (texName.Find(SLASH) <= 0){
+								texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName;
+								TexturePath = wxString(mAttChild->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+							}else{
+								texName = texName.AfterLast(SLASH);
+							}
+
+							// Image Data
+							ClipImage.Filename = texName;
+							ClipImage.Source = TexturePath;
+							ClipImage.TagID = (uint32)Object.PartNames.size() + SurfCounter;
+							Object.Images.push_back(ClipImage);
+							LWSurf_Image SurfImage_Color(ClipImage.TagID, 0, 0);
+
+							wxString ExportName = wxString(fn, wxConvUTF8).BeforeLast(SLASH) + SLASH + texName + _T(".tga");
+							if (modelExport_LW_PreserveDir == true){
+								wxString Path, Name;
+
+								Path << wxString(fn, wxConvUTF8).BeforeLast(SLASH);
+								Name << ExportName.AfterLast(SLASH);
+
+								MakeDirs(Path,_T("Images"));
+
+								ExportName.Empty();
+								ExportName << Path << SLASH<<_T("Images")<<SLASH << Name;
+							}
+							if (modelExport_PreserveDir == true){
+								wxString Path1, Path2, Name;
+								Path1 << ExportName.BeforeLast(SLASH);
+								Name << texName.AfterLast(SLASH);
+								Path2 << TexturePath;
+
+								MakeDirs(Path1,Path2);
+
+								ExportName.Empty();
+								ExportName << Path1 << SLASH << Path2 << SLASH << Name;
+							}
+
+							ExportName << _T(".tga");
+							SaveTexture(ExportName);
+
+							LWSurface Surface(matName,wxString(mAttChild->TextureList[p.tex].c_str(), wxConvUTF8),SurfImage_Color,LWSurf_Image(),LWSurf_Image(),NULL,Surf_Diff,Surf_Lum,doubesided);
+							Object.Surfaces.push_back(Surface);
+
+							// Points
+							for (uint32 v=p.vertexStart; v<p.vertexEnd; v++) {
+								// --== Point Data ==--
+								LWPoint Point;
+								uint32 pointnum = (uint32)Layer.Points.size();
+
+								// Points
+								Vec3D vert;
+								if ((init == false)&&(mAttChild->vertices)) {
+									vert = mAttChild->vertices[v];
+								} else {
+									vert = mAttChild->origVertices[v].pos;
+								}
+								Matrix Neo;
+
+								Neo.translation(vert);							// Set Original Position
+								Neo.quaternionRotate(Niobe);					// Set Original Rotation
+								Neo.scale(Seraph);								// Set Original Scale
+
+								Neo *= Matrix::newTranslation(mPos);			// Apply New Position
+								Neo *= Matrix::newQuatRotate(mRot);				// Apply New Rotation
+								Neo *= Matrix::newScale(mScale);				// Apply New Scale
+
+								Vec3D mVert = Neo * vert;
+								mVert = Vec3D(mVert.x,mVert.y,-mVert.z);		// Fixes X flipped verts
+
+								Point.PointData = mVert;
+								Point.UVData = mAttChild->origVertices[v].texcoords;	// UV Data
+								// Weight Data NYI
+
+								Vert2Point[v] = pointnum;
+								Layer.Points.push_back(Point);
+							}
+
+							// Polys
+							for (unsigned int k=0; k<p.indexCount; k+=3) {
+								// --== Polygon Data ==--	
+								LWPoly Poly;
+								Poly.PolyData.numVerts = 3;
+								for (int x=0;x<3;x++){
+									// Modify to Flip Polys
+									int mod = 0;
+									if (x == 1){
+										mod = 1;
+									}else if (x == 2){
+										mod = -1;
+									}
+
+									// Polygon Indice
+									uint32 a = p.indexStart + k + x + mod;
+									uint32 b = mAttChild->IndiceToVerts[a];
+									Poly.PolyData.indice[x] = Vert2Point[b];
+
+									// Normal Indice
+									/*Poly.Normals.indice[x] = Vert2Point[b];
+									Poly.Normals.direction[x].x = mAttChild->normals[b].x;
+									Poly.Normals.direction[x].y = mAttChild->normals[b].z;
+									Poly.Normals.direction[x].z = -mAttChild->normals[b].y;*/
+								}
+								Poly.PartTagID = partID;
+								Poly.SurfTagID = (uint32)Object.PartNames.size() + SurfCounter;
+								//Poly.Normals.polygon = (uint32)Layer.Polys.size();
+								Poly.Normals.NormalMapName = wxEmptyString; //Layer.Name + wxString(_T("_NormalMap"));
+								Layer.Polys.push_back(Poly);
+							}
+							SurfCounter++;
+						}
+					}
+				}
+			}
+		}
+	}
 
 	Object.Layers.push_back(Layer);
 
 	return Object;
+	Object.~LWObject();
 }
 
 void ExportWMOtoLWO(WMO *m, const char *fn){
 	wxString filename(fn, wxConvUTF8);
+	wxString scfilename(fn, wxConvUTF8);
 
 	if (modelExport_LW_PreserveDir == true){
 		wxString Path, Name;
 
+		// Object
 		Path << filename.BeforeLast(SLASH);
 		Name << filename.AfterLast(SLASH);
-
 		MakeDirs(Path,_T("Objects"));
-
 		filename.Empty();
 		filename << Path << SLASH << _T("Objects") << SLASH << Name;
+
+		// Scene
+		Path.Empty();
+		Name.Empty();
+		Path << scfilename.BeforeLast(SLASH);
+		Name << scfilename.AfterLast(SLASH);
+		MakeDirs(Path,_T("Scenes"));
+		filename.Empty();
+		filename << Path << SLASH << _T("Scenes") << SLASH << Name;
 	}
 	if (modelExport_PreserveDir == true){
 		wxString Path1, Path2, Name;
+
+		// Objects
 		Path1 << filename.BeforeLast(SLASH);
 		Name << filename.AfterLast(SLASH);
 		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
-
 		MakeDirs(Path1,Path2);
-
 		filename.Empty();
 		filename << Path1 << SLASH << Path2 << SLASH << Name;
+
+		// Scene
+		Path1.Empty();
+		Path2.Empty();
+		Name.Empty();
+		Path1 << scfilename.BeforeLast(SLASH);
+		Name << scfilename.AfterLast(SLASH);
+		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+		MakeDirs(Path1,Path2);
+		scfilename.Empty();
+		scfilename << Path1 << SLASH << Path2 << SLASH << Name;
 	}
 
+	// Scene Data
+	LWScene Scene(scfilename.AfterLast(SLASH),scfilename.BeforeLast(SLASH));
+
 	// Object Data
-	LWObject Object = GatherWMOforLWO(m,fn);
+	LWObject Object = GatherWMOforLWO(m,fn,Scene);
 	if (Object.SourceType == wxEmptyString){
 		wxMessageBox(_T("Error gathering information for export."),_T("Export Error"));
 		wxLogMessage(_T("Failure gathering information for export."));
 		return;
 	}
+
+	// Write LWO File
 	wxLogMessage(_T("Sending WMO Data to LWO Writing Function..."));
-	WriteLWObject(filename, Object);
+	if (WriteLWObject(filename, Object) == false){
+		wxString msg = _T("Error Writing the WMO file to a Lightwave Object.");
+		wxMessageBox(msg,_T("Writing Error"));
+		wxLogMessage(msg);
+	}else{
+		wxLogMessage(_T("LWO Object Writing Complete."));
+
+		// Write Scene
+	}
+	Object.~LWObject();
+	Scene.~LWScene();
 
 	// Scene Data
 
@@ -3976,7 +4360,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 	}
 }
 
-LWObject GatherWMOforLWO(WMO *m, const char *fn){
+LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 	wxString FileName(fn, wxConvUTF8);
 	LWObject Object;
 
@@ -3998,7 +4382,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn){
 	uint32 SurfCounter = 0;
 
 	// Process Groups
-	for (int g=0;g<m->nGroups; g++) {
+	for (unsigned int g=0;g<m->nGroups; g++) {
 		WMOGroup *group = &m->groups[g];
 		//uint32 GPolyCounter = 0;
 
@@ -4051,7 +4435,9 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn){
 			//LWFilename = LWFilename.BeforeLast('.') + _T(".tga");
 			SaveTexture2(Texture,FileName.BeforeLast(SLASH),_T("LWO"),_T("tga"));
 
-			LWSurface Surface(ClipImage.Filename,Texture,ClipImage.TagID,-1,-1,doubesided,Layer.HasVectorColors);
+			LWSurf_Image SurfColor_Image = LWSurf_Image(ClipImage.TagID,0.0f,0.0f);
+
+			LWSurface Surface(ClipImage.Filename,Texture,SurfColor_Image,LWSurf_Image(),LWSurf_Image(),Vec3D(0.75,0.75,0.75),1,0,doubesided,Layer.HasVectorColors);
 			Object.Surfaces.push_back(Surface);
 
 			// Process Verticies
@@ -4125,67 +4511,309 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn){
 			Object.Surfaces[i].hasVertColors = true;
 		}
 	}
-
 	Object.Layers.push_back(Layer);
-	wxLogMessage(_T("Completed WMO Gathering. Checking Doodads..."));
+	wxLogMessage(_T("Completed WMO Gathering. Building Basic Scene Data..."));
+
+	// Scene Data
+	LWSceneObj scObject(FileName,(uint32)scene.Objects.size(),-1);
+	scene.Objects.push_back(scObject);
+	if ((modelExport_LW_ExportLights == true) && (m->nLights > 0)){
+		for (size_t x=0;x<m->nLights;x++){
+			size_t LightID = scene.Lights.size();
+			LWLight l;
+			WMOLight cl = m->lights[x];
+			Vec3D Lcolor(cl.fcolor.x,cl.fcolor.y, cl.fcolor.z);
+			float Lint = cl.intensity;
+
+			while ((Lcolor.x > 1.0f)||(Lcolor.y > 1.0f)||(Lcolor.z > 1.0f)) {
+				Lcolor.x = Lcolor.x * 0.99;
+				Lcolor.y = Lcolor.y * 0.99;
+				Lcolor.z = Lcolor.z * 0.99;
+				Lint = Lint / 0.99;
+			}
+			
+			l.LightID = (uint32)LightID;
+			l.Color = Lcolor;
+			l.Intensity = Lint;
+			l.AnimData.Push(cl.pos,Vec3D(0,0,0),Vec3D(1,1,1),0);
+			l.FalloffRadius = 2.5f;
+			if (cl.useatten > 0) {
+				l.FalloffRadius = cl.attenEnd;
+			}
+			l.LightType = LW_LIGHTTYPE_POINT;
+			l.ParentType = LW_ITEMTYPE_OBJECT;
+			l.ParentID = 0;		// These lights will always be parented to the WMO object.
+			wxString lNum,liNum;
+			lNum << (unsigned int)LightID;
+			liNum << (unsigned int)m->nLights;
+			while (lNum.Len() < liNum.Len()){
+				lNum = wxString(_T("0")) + lNum;
+			}
+			wxString lName(m->name.AfterLast('\\').BeforeLast('.'));
+			l.Name = lName << _T(" Light ") << (wxChar)LightID;
+
+			scene.Lights.push_back(l);
+		}
+	}
+
+	// Doodads
+	wxLogMessage(_T("Compiled Scene Data. Checking Doodads..."));
 /*
 	Need to get this working with layers before we enable it.
 	For now, use the old method in the main function.	
-
+*/
+	/*
 	if (modelExport_LW_ExportDoodads == true){
-		if (modelExport_LW_DoodadsAs == 0){
-		}elseif (modelExport_LW_DoodadsAs == 1){
-		}elseif (modelExport_LW_DoodadsAs == 2){
-			// Doodads as seperate Layers here.
+		Vec3D Vec3d_0 = Vec3D(0,0,0);
+		Vec3D Vec3d_1 = Vec3D(1,1,1);
+		if (modelExport_LW_DoodadsAs == 0){			// Doodads as Nulls...
+			for (uint32 ds=0;ds<m->nDoodadSets;ds++){
+				size_t ddSetID = scene.Objects.size();
+				LWSceneObj doodadset(m->doodadsets[ds].name,(uint32)ddSetID,0,LW_ITEMTYPE_OBJECT,true);
+				doodadset.AnimData.Push(Vec3d_0,Vec3d_0,Vec3d_1,0);
+				scene.Objects.push_back(doodadset);
+
+				wxLogMessage(_T("Processing Doodadset %i: %s"),ds,m->doodadsets[ds].name);
+				for (uint32 dd=m->doodadsets[ds].start;dd<(m->doodadsets[ds].start+m->doodadsets[ds].size);dd++){
+					WMOModelInstance *ddinstance = &m->modelis[dd];
+					size_t ddID = scene.Objects.size();
+
+					LWSceneObj doodad(ddinstance->filename,(uint32)ddID,(int32)ddSetID,LW_ITEMTYPE_OBJECT,true);
+					Vec3D rot = QuaternionToXYZ(ddinstance->dir,ddinstance->w);
+					rot.x -= (float)(PI/2);
+					Vec3D scale = Vec3D(ddinstance->sc,ddinstance->sc,ddinstance->sc);
+					doodad.AnimData.Push(ddinstance->pos,rot,scale,0);
+
+					scene.Objects.push_back(doodad);
+
+					uint32 ddnLights = ddinstance->model->header.nLights;
+					Model *ddm = ddinstance->model;
+					if ((modelExport_LW_ExportLights == true) && (ddnLights > 0)){
+						for (size_t x=0;x<ddnLights;x++){
+							size_t LightID = scene.Lights.size();
+							LWLight l;
+							ModelLight cl = ddm->lights[x];
+							Vec3D diffColor = cl.diffColor.getValue(0,0);
+							Vec3D Lcolor(diffColor.x, diffColor.y, diffColor.z);
+							float Lint = cl.diffIntensity.getValue(0,0);
+
+							while ((Lcolor.x > 1.0f)||(Lcolor.y > 1.0f)||(Lcolor.z > 1.0f)) {
+								Lcolor.x = Lcolor.x * 0.99;
+								Lcolor.y = Lcolor.y * 0.99;
+								Lcolor.z = Lcolor.z * 0.99;
+								Lint = Lint / 0.99;
+							}
+							
+							l.LightID = (uint32)LightID;
+							l.Color = Lcolor;
+							l.Intensity = Lint;
+							if (cl.type == MODELLIGHT_DIRECTIONAL){
+								l.LightType = LW_LIGHTTYPE_DISTANT;
+							}else{
+								l.LightType = LW_LIGHTTYPE_POINT;
+							}
+							l.AnimData.Push(cl.pos,Vec3D(0,0,0),Vec3D(1,1,1),0);
+
+							l.FalloffRadius = 2.5f;
+							if (cl.UseAttenuation.getValue(0,0) > 0) {
+								l.FalloffRadius = cl.AttenEnd.getValue(0,0);
+							}
+							l.ParentType = LW_ITEMTYPE_OBJECT;
+							l.ParentID = (int32)ddID;
+							wxString lNum,liNum;
+							lNum << (unsigned int)LightID;
+							liNum << (unsigned int)m->nLights;
+							while (lNum.Len() < liNum.Len()){
+								lNum = wxString(_T("0")) + lNum;
+							}
+							wxString lName(m->name.AfterLast('\\').BeforeLast('.'));
+							l.Name = lName << _T(" Light ") << (wxChar)LightID;
+
+							LightID++;
+							scene.Lights.push_back(l);
+						}
+					}
+				}
+			}
+		}else if (modelExport_LW_DoodadsAs == 1){	// Doodads as Scene Objects...
+/*
+			LWObject Doodad = GatherM2forLWO(NULL,ddinstance->model,true,wxString(fn, wxConvUTF8),false);
+			if (Doodad.SourceType == wxEmptyString){
+				wxMessageBox(_T("Error gathering information for export."),_T("Export Error"));
+				wxLogMessage(_T("Failure gathering information for export."));
+				return;
+			}
+			WriteLWObject(filename, Object);
+*/
+	/*
+		}else if (modelExport_LW_DoodadsAs == 2){	// Doodad Sets as Seperate Layers...
 			for (uint32 ds=0;ds<m->nDoodadSets;ds++){
 				wxLogMessage(_T("Processing Doodadset %i: %s"),ds,m->doodadsets[ds].name);
+				bool doodadAdded = false;
 
+				wxLogMessage(_T("Adding %i Doodads to Layer %i..."), m->doodadsets[ds].size, ds+1);
 				for (uint32 dd=m->doodadsets[ds].start;dd<(m->doodadsets[ds].start+m->doodadsets[ds].size);dd++){
-					wxLogMessage(_T("Processing Doodad %i: %s"),dd,m->modelis[dd].filename);
-					WMOModelInstance *model = &m->modelis[dd];
-					LWObject Doodad = GatherM2forLWO(NULL,model->model,true,wxString(fn, wxConvUTF8),false);
+					WMOModelInstance *ddinstance = &m->modelis[dd];
+					wxLogMessage(_T("Processing Doodad %i: %s"),dd,ddinstance->filename);
+
+					wxLogMessage(_T("Doodad Instance is Animated: %s"),(ddinstance->model->animated?_T("true"):_T("false")));
+
+					LWObject Doodad = GatherM2forLWO(NULL,ddinstance->model,true,wxString(fn, wxConvUTF8),scene,false);
+
+					// --== Model Debugger ==--
+					// Exports the model immediately after gathering, to help determine if a problem is with the gathering function or the doodad-placement functions.
+					wxString doodadname = wxString(fn, wxConvUTF8).BeforeLast('.') << _T("_") << ddinstance->filename.AfterLast('\\').BeforeLast('.') << _T(".lwo");
+					if (modelExport_LW_PreserveDir == true){
+						wxString Path, Name;
+
+						Path << doodadname.BeforeLast(SLASH);
+						Name << doodadname.AfterLast(SLASH);
+
+						MakeDirs(Path,_T("Objects"));
+
+						doodadname.Empty();
+						doodadname << Path << SLASH << _T("Objects") << SLASH << Name;
+					}
+					if (modelExport_PreserveDir == true){
+						wxString Path1, Path2, Name;
+						Path1 << doodadname.BeforeLast(SLASH);
+						Name << doodadname.AfterLast(SLASH);
+						Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+
+						MakeDirs(Path1,Path2);
+
+						doodadname.Empty();
+						doodadname << Path1 << SLASH << Path2 << SLASH << Name;
+					}
+					wxLogMessage(_T("Exporting Doodad Test Model: %s"),doodadname);
+					WriteLWObject(doodadname, Doodad);
+					// End Model Debugger
+
+					if (Doodad.SourceType == wxEmptyString){
+						wxLogMessage(_T("Error Gathering Doodad Model."));
+						continue;
+					}
 					//wxLogMessage(_T("Finished Gathering Doodad %i with #%i Layers."),dd,Doodad.Layers.size());
 
 					// Move, rotate & scale Doodad
+					Vec3D TheArchitect = ddinstance->pos;
+					Vec3D Trinity(ddinstance->sc,-(ddinstance->sc),-(ddinstance->sc));
+					Vec3D Seraph(1,1,1);
+					Vec3D Oracle(-(ddinstance->dir.z),ddinstance->dir.x,ddinstance->dir.y);
+					Quaternion Morphius(Oracle,ddinstance->w);
+					Quaternion Niobe(Vec4D(0,0,0,0));
+
 					for (uint32 i=0;i<Doodad.Layers[0].Points.size();i++){
-						//Doodad.Layers[0].Points[i].PointData = (Doodad.Layers[0].Points[i].PointData * model->sc) + model->pos;
 						Vec3D AgentSmith = Doodad.Layers[0].Points[i].PointData;
 
 						Matrix Neo;
-						Vec3D Trinity(model->sc,model->sc,model->sc);
-						Quaternion Niobe(model->dir,model->w);
-						Quaternion Morphius = Niobe;
-						// Fix for WoW Coordinates.
-						Morphius.x = Niobe.y;
-						Morphius.y = Niobe.x;
-						Morphius.z = Niobe.z;
 
-						Neo.quaternionRotate(Morphius);
-						Neo.translation(AgentSmith);
-						Neo.scale(Trinity);
+						Neo.translation(AgentSmith);					// Set Original Position
+						Neo.quaternionRotate(Niobe);					// Set Original Rotation
+						Neo.scale(Seraph);								// Set Original Scale
 
-						Neo *= Matrix::newTranslation(model->pos);		// Position
-						Neo *= Matrix::newQuatRotate(Morphius);			// Rotation
-						Neo *= Matrix::newScale(Trinity);				// Scale
+						Neo *= Matrix::newTranslation(TheArchitect);	// Apply New Position
+						Neo *= Matrix::newQuatRotate(Morphius);			// Apply New Rotation
+						Neo *= Matrix::newScale(Trinity);				// Apply New Scale
 
 						Doodad.Layers[0].Points[i].PointData = Neo * AgentSmith;
 					}
 
-					wxLogMessage(_T("Adding Doodad to Layer %i..."),ds+1);
 					wxString ddPrefix(_T("Doodad "));
-					ddPrefix << (unsigned int)dd << _T("_");
+					wxString ddnum, numdds;
+					ddnum << (unsigned int)dd;
+					numdds << (unsigned int)m->doodadsets[ds].size;
+					while (ddnum.Length() < numdds.Length()) {
+						ddnum = wxString(_T("0")) << ddnum;
+					}					
+					ddPrefix << ddnum << _T("_") << m->modelis[dd].filename.AfterLast('\\').BeforeLast('.') << _T("_");
 					//wxLogMessage(_T("Doodad Prefix: %s"),ddPrefix);
 					Object.Plus(Doodad,ds+1,ddPrefix);
+					doodadAdded = true;
+					Doodad.~LWObject();
+
+					uint32 ddID = (uint32)scene.Objects.size();
+
+					LWSceneObj ddlyr(FileName,ddID,0,LW_ITEMTYPE_OBJECT,false,(ds+2));
+					scene.Objects.push_back(ddlyr);
+
+					uint32 ddnLights = ddinstance->model->header.nLights;
+					Model *ddm = ddinstance->model;
+					if ((modelExport_LW_ExportLights == true) && (ddnLights > 0)){
+						for (size_t x=0;x<ddnLights;x++){
+							size_t LightID = scene.Lights.size();
+							LWLight l;
+							ModelLight cl = ddm->lights[x];
+							Vec3D diffColor = cl.diffColor.getValue(0,0);
+							Vec3D Lcolor(diffColor.x, diffColor.y, diffColor.z);
+							float Lint = cl.diffIntensity.getValue(0,0);
+
+							while ((Lcolor.x > 1.0f)||(Lcolor.y > 1.0f)||(Lcolor.z > 1.0f)) {
+								Lcolor.x = Lcolor.x * 0.99;
+								Lcolor.y = Lcolor.y * 0.99;
+								Lcolor.z = Lcolor.z * 0.99;
+								Lint = Lint / 0.99;
+							}
+
+							l.LightID = (uint32)LightID;
+							l.Color = Lcolor;
+							l.Intensity = Lint;
+							if (cl.type == MODELLIGHT_DIRECTIONAL){
+								l.LightType = LW_LIGHTTYPE_DISTANT;
+							}else{
+								l.LightType = LW_LIGHTTYPE_POINT;
+							}
+							l.AnimData.Push(cl.pos,Vec3D(0,0,0),Vec3D(1,1,1),0);
+
+							l.FalloffRadius = 2.5f;
+							if (cl.UseAttenuation.getValue(0,0) > 0) {
+								l.FalloffRadius = cl.AttenEnd.getValue(0,0);
+							}
+							l.ParentType = LW_ITEMTYPE_OBJECT;
+							l.ParentID = (int32)ddID;
+							wxString lNum,liNum;
+							lNum << (unsigned int)LightID;
+							liNum << (unsigned int)m->nLights;
+							while (lNum.Len() < liNum.Len()){
+								lNum = wxString(_T("0")) + lNum;
+							}
+							wxString lName(m->name.AfterLast('\\').BeforeLast('.'));
+							l.Name = lName << _T(" Light ") << (wxChar)LightID;
+
+							LightID++;
+							scene.Lights.push_back(l);
+						}
+					}
 				}
-				Object.Layers[ds+1].Name = wxString(m->doodadsets[ds].name);
-				Object.Layers[ds+1].ParentLayer = 0;		// Set Parent to main WMO model.
+				if (doodadAdded == true){
+					Object.Layers[ds+1].Name = wxString(m->doodadsets[ds].name);
+					Object.Layers[ds+1].ParentLayer = 0;		// Set Parent to main WMO model.
+				}
 			}
-	//	}
+		}else if (modelExport_LW_DoodadsAs == 3){	// All Doodads as a Single Layer...
+		}else if (modelExport_LW_DoodadsAs == 4){	// Each Group's Doodads as a Single Layer...
+		}
 	}
-*/
+	*/
 	return Object;
+	Object.~LWObject();
 }
 
+bool WriteLWSceneFile(LWScene Scene){
+	if ((Scene.Objects.size() == 0) && (Scene.Lights.size() == 0) && (Scene.Cameras.size() == 0)){
+		wxLogMessage(_T("No Scene Data found. Unable to write scene file."));
+		return false;
+	}
+	if ((modelExport_LW_ExportLights == false) && (modelExport_LW_ExportDoodads == false) && (modelExport_LW_ExportCameras == false) && (modelExport_LW_ExportBones == false)){
+		wxLogMessage(_T("Global variables don't allow for scene generation. Unable to write scene file."));
+		return false;
+	}
+
+
+
+
+	return true;
+}
 
 void ExportADTtoLWO(MapTile *m, const char *fn){
 	wxString file = wxString(fn, wxConvUTF8);

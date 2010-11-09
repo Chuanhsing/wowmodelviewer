@@ -311,7 +311,7 @@ void AnimControl::UpdateWMO(WMO *w, int group)
 	wmoList->Show(TRUE);
 
 	// get wmo name or current wmogroup name/descr
-	if (group>=-1 && group<g_selWMO->nGroups) {
+	if (group>=-1 && group<(int)g_selWMO->nGroups) {
 		wxString label = w->name.AfterLast('\\');
 		if (group>=0) {
 			label += _T(" - ") + g_selWMO->groups[group].name;

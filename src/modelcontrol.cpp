@@ -225,7 +225,7 @@ void ModelControl::Update()
 	clbGeosets->Set(geosetItems, 0);
 
 	for (size_t i=0; i<model->geosets.size(); i++) {
-		clbGeosets->Check(i, model->showGeosets[i]);
+		clbGeosets->Check((unsigned int)i, model->showGeosets[i]);
 	}
 
 	bones->SetValue(model->showBones);
@@ -318,7 +318,7 @@ void ModelControl::OnList(wxCommandEvent &event)
 	int id = event.GetId();
 	if (id == ID_MODEL_GEOSETS) {
 		for (size_t i=0; i<model->geosets.size(); i++) {
-			model->showGeosets[i] = clbGeosets->IsChecked(i);
+			model->showGeosets[i] = clbGeosets->IsChecked((unsigned int)i);
 		}
 	}
 }

@@ -31,7 +31,6 @@ BEGIN_EVENT_TABLE(ModelExportOptions_General, wxWindow)
 	EVT_CHECKBOX(ID_SETTINGS_SHOWPARTICLE, ModelExportOptions_General::OnCheck)
 	EVT_CHECKBOX(ID_SETTINGS_ZEROPARTICLE, ModelExportOptions_General::OnCheck)
 	EVT_CHECKBOX(ID_SETTINGS_LOCALFILES, ModelExportOptions_General::OnCheck)
-	EVT_CHECKBOX(ID_SETTINGS_KNIGHTEYEGLOW, ModelExportOptions_General::OnCheck)
 	*/
 END_EVENT_TABLE()
 
@@ -40,6 +39,8 @@ BEGIN_EVENT_TABLE(ModelExportOptions_Lightwave, wxWindow)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_PRESERVE_DIR, ModelExportOptions_Lightwave::OnCheck)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_EXPORTLIGHTS, ModelExportOptions_Lightwave::OnCheck)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_EXPORTDOODADS, ModelExportOptions_Lightwave::OnCheck)
+	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_EXPORTCAMERAS, ModelExportOptions_Lightwave::OnCheck)
+	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_EXPORTBONES, ModelExportOptions_Lightwave::OnCheck)
 	EVT_COMBOBOX(ID_EXPORTOPTIONS_LW_DOODADSAS, ModelExportOptions_Lightwave::OnComboBox)
 	
 	// EVT_BUTTON(ID_SETTINGS_APPLY, ModelExportOptions_Lightwave::OnButton)
@@ -183,11 +184,13 @@ ModelExportOptions_Lightwave::ModelExportOptions_Lightwave(wxWindow* parent, wxW
 	}
 	wxFlexGridSizer *top = new wxFlexGridSizer(1);
 
-	chkbox[MEO_CHECK_PRESERVE_LWDIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_PRESERVE_DIR, _("Build Content Directories"), wxPoint(5,5), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_PRESERVE_LWDIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_PRESERVE_DIR, _T("Build Content Directories"), wxPoint(5,5), wxDefaultSize, 0);
 
-	chkbox[MEO_CHECK_LW_EXPORTLIGHTS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTLIGHTS, _("Export Lights"), wxPoint(5,35), wxDefaultSize, 0);
-	chkbox[MEO_CHECK_LW_EXPORTDOODADS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTDOODADS, _("Export Doodads"), wxPoint(160,35), wxDefaultSize, 0);
-	top->Add(ddextype = new wxComboBox(this, ID_EXPORTOPTIONS_LW_DOODADSAS, _T("Doodads As"), wxPoint(160,50), wxSize(180, 25), 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
+	chkbox[MEO_CHECK_LW_EXPORTDOODADS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTDOODADS, _T("Export Doodads"), wxPoint(5,35), wxDefaultSize, 0);
+	top->Add(ddextype = new wxComboBox(this, ID_EXPORTOPTIONS_LW_DOODADSAS, _T("Doodads As"), wxPoint(120,32), wxSize(220, 25), 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
+	chkbox[MEO_CHECK_LW_EXPORTLIGHTS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTLIGHTS, _T("Export Lights"), wxPoint(5,55), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_LW_EXPORTCAMERAS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTCAMERAS, _T("Export Cameras"), wxPoint(5,75), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_LW_EXPORTBONES] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTBONES, _T("Export Bones"), wxPoint(5,95), wxDefaultSize, 0);
 }
 
 void ModelExportOptions_Lightwave::Update()
@@ -195,15 +198,17 @@ void ModelExportOptions_Lightwave::Update()
 	chkbox[MEO_CHECK_PRESERVE_LWDIR]->SetValue(modelExport_LW_PreserveDir);
 	chkbox[MEO_CHECK_LW_EXPORTLIGHTS]->SetValue(modelExport_LW_ExportLights);
 	chkbox[MEO_CHECK_LW_EXPORTDOODADS]->SetValue(modelExport_LW_ExportDoodads);
+	chkbox[MEO_CHECK_LW_EXPORTCAMERAS]->SetValue(modelExport_LW_ExportCameras);
+	chkbox[MEO_CHECK_LW_EXPORTBONES]->SetValue(modelExport_LW_ExportBones);
 
 	ddextype->Clear();
 
-	ddextype->Append(wxString(wxT("as Nulls")));
+	ddextype->Append(wxString(_T("All Doodads as Nulls")));
+	ddextype->Append(wxString(_T("All Doodads as Scene Objects")));
+	//ddextype->Append(wxString(_T("Each Doodad Set as a Seperate Layer")));
 	// Uncomment as we're able to do it!
-	ddextype->Append(wxString(wxT("as Objects")));
-	//ddextype->Append(wxString("as a Seperate Layer"));
-	//ddextype->Append(wxString("as a Single Object"));
-	//ddextype->Append(wxString("as a Single Object, Per Group"));
+	//ddextype->Append(wxString("All Doodads as a Single Layer"));
+	//ddextype->Append(wxString("Doodads as a Single Layer, Per Group"));
 	ddextype->SetSelection(modelExport_LW_DoodadsAs);
 	ddextype->Enable(modelExport_LW_ExportDoodads);
 
@@ -226,6 +231,10 @@ void ModelExportOptions_Lightwave::OnCheck(wxCommandEvent &event)
 	}else if (id==ID_EXPORTOPTIONS_LW_EXPORTDOODADS){
 		modelExport_LW_ExportDoodads = event.IsChecked();
 		ddextype->Enable(event.IsChecked());
+	}else if (id==ID_EXPORTOPTIONS_LW_EXPORTCAMERAS){
+		modelExport_LW_ExportCameras = event.IsChecked();
+	}else if (id==ID_EXPORTOPTIONS_LW_EXPORTBONES){
+		modelExport_LW_ExportBones = event.IsChecked();
 	}
 }
 

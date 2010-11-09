@@ -552,18 +552,25 @@ void CharControl::OnSpin(wxSpinEvent &event)
 
 void CharControl::OnCheck(wxCommandEvent &event)
 {
-	if (event.GetId()==ID_SHOW_UNDERWEAR) 
+	int ID = event.GetId();
+	if (ID==ID_SHOW_UNDERWEAR) 
 		cd.showUnderwear = event.IsChecked();
-	else if (event.GetId()==ID_SHOW_HAIR) 
+	else if (ID==ID_SHOW_HAIR) 
 		cd.showHair = event.IsChecked();
-	else if (event.GetId()==ID_SHOW_FACIALHAIR) 
+	else if (ID==ID_SHOW_FACIALHAIR) 
 		cd.showFacialHair = event.IsChecked();
-	else if (event.GetId()==ID_SHOW_EARS) 
+	else if (ID==ID_SHOW_EARS) 
 		cd.showEars = event.IsChecked();
-	else if (event.GetId()==ID_SHEATHE) 
+	else if (ID==ID_SHEATHE) 
 		bSheathe = event.IsChecked();
-	else if (event.GetId()==ID_SHOW_FEET) 
+	else if (ID==ID_SHOW_FEET) 
 		cd.showFeet = event.IsChecked();
+	else if ((ID==ID_CHAREYEGLOW)||(ID==ID_CHAREYEGLOW_NONE))
+		cd.eyeGlowType = 0;
+	else if (ID==ID_CHAREYEGLOW_DEFAULT)
+		cd.eyeGlowType = 1;
+	else if (ID==ID_CHAREYEGLOW_DEATHKNIGHT)
+		cd.eyeGlowType = 2;
 #ifndef	WotLK
 	else if (event.GetId()==ID_USE_NPCSKINS) {		
 		// All this extra checking is to modify the the 'bounds' of the max skins on the spin button.
@@ -1129,14 +1136,27 @@ void CharControl::RefreshModel()
 	for(uint32 i=0; i<model->passes.size(); i++) {
 		ModelRenderPass &p = model->passes[i];
 		wxString texName = model->TextureList[p.tex].AfterLast('\\').Lower();
-		bool isDK = false;
+
 		if (texName.Find(_T("eyeglow")) == wxNOT_FOUND)
 			continue;
-		if (texName.Find(_T("deathknight")) != wxNOT_FOUND)
-			isDK = true;
-		if (bKnightEyeGlow == isDK) {
-			model->showGeosets[p.geoset] = true;
-			break;
+
+		if ((texName.Find(_T("eyeglow")) != wxNOT_FOUND)&&(texName.Find(_T("deathknight")) == wxNOT_FOUND)){
+			if (cd.eyeGlowType == 0){
+				model->showGeosets[p.geoset] = false;
+			}else if (cd.eyeGlowType == 1){
+				model->showGeosets[p.geoset] = true;
+			}else if (cd.eyeGlowType == 2){
+				model->showGeosets[p.geoset] = false;
+			}
+		}
+		if (texName.Find(_T("deathknight")) != wxNOT_FOUND){
+			if (cd.eyeGlowType == 0){
+				model->showGeosets[p.geoset] = false;
+			}else if (cd.eyeGlowType == 1){
+				model->showGeosets[p.geoset] = false;
+			}else if (cd.eyeGlowType == 2){
+				model->showGeosets[p.geoset] = true;
+			}
 		}
 	}
 }

@@ -174,9 +174,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glew32d.lib wxpngd.lib"
+				AdditionalDependencies="glew64d.lib wxpngd.lib"
 				OutputFile="$(OutDir)/wowmodelview.exe"
-				Version="07.01.298"
+				Version="07.01.492"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.11\lib\vc_lib\$(PlatformName)&quot;;.\lib\Windows\64bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
 				IgnoreAllDefaultLibraries="false"
@@ -385,7 +385,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glew32.lib wxpng.lib"
+				AdditionalDependencies="glew64.lib wxpng.lib"
 				ShowProgress="2"
 				OutputFile="$(OutDir)/wowmodelview.exe"
 				Version="07.01.298"
@@ -848,6 +848,10 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+			<File
+				RelativePath="..\bin_support\Splash\Splash_04-Cata.png"
+				>
+			</File>
 			<File
 				RelativePath="..\bin_support\Icons\wmv.ico"
 				>

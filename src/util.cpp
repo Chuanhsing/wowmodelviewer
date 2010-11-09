@@ -24,7 +24,6 @@ int gameVersion = 0;
 bool useLocalFiles = false;
 bool useRandomLooks = true;
 bool bHideHelmet = false;
-bool bKnightEyeGlow = true;
 bool bShowParticle = true;
 bool bZeroParticle = true;
 bool bAlternate = false; // for zhCN alternate.MPQ
@@ -40,6 +39,8 @@ bool modelExport_UseWMVPosRot = false;
 bool modelExport_LW_PreserveDir = true;
 bool modelExport_LW_ExportLights = true;
 bool modelExport_LW_ExportDoodads = true;
+bool modelExport_LW_ExportCameras = true;
+bool modelExport_LW_ExportBones = true;
 int modelExport_LW_DoodadsAs = 0;
 // X3D Options
 bool modelExport_X3D_ExportAnimation = false;
