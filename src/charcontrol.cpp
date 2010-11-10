@@ -738,6 +738,7 @@ void CharControl::UpdateTextureList(wxString texName, int special)
 	{
 		if (model->specialTextures[i] == special)
 		{
+			wxLogMessage(_T("Updating %s to %s"),model->TextureList[i],texName);
 			model->TextureList[i] = texName;
 			break;
 		}
@@ -1141,21 +1142,21 @@ void CharControl::RefreshModel()
 			continue;
 
 		if ((texName.Find(_T("eyeglow")) != wxNOT_FOUND)&&(texName.Find(_T("deathknight")) == wxNOT_FOUND)){
-			if (cd.eyeGlowType == 0){
+			if (cd.eyeGlowType == 0){					// If No EyeGlow
 				model->showGeosets[p.geoset] = false;
-			}else if (cd.eyeGlowType == 1){
+			}else if (cd.eyeGlowType == 2){				// If DK EyeGlow
+				model->showGeosets[p.geoset] = false;
+			}else{										// Default EyeGlow, AKA cd.eyeGlowType == 1
 				model->showGeosets[p.geoset] = true;
-			}else if (cd.eyeGlowType == 2){
-				model->showGeosets[p.geoset] = false;
 			}
 		}
 		if (texName.Find(_T("deathknight")) != wxNOT_FOUND){
-			if (cd.eyeGlowType == 0){
+			if (cd.eyeGlowType == 0){					// If No EyeGlow
 				model->showGeosets[p.geoset] = false;
-			}else if (cd.eyeGlowType == 1){
-				model->showGeosets[p.geoset] = false;
-			}else if (cd.eyeGlowType == 2){
+			}else if (cd.eyeGlowType == 2){				// If DK EyeGlow
 				model->showGeosets[p.geoset] = true;
+			}else{										// Default EyeGlow, AKA cd.eyeGlowType == 1
+				model->showGeosets[p.geoset] = false;
 			}
 		}
 	}
@@ -1621,6 +1622,7 @@ void CharControl::RefreshItem(int slot)
 						if (m->ok) {
 							mp = (path + r.getString(ItemDisplayDB::Skin));
 							mp.append(_T(".blp"));
+							m->TextureList.push_back(mp);
 							tex = texturemanager.add(mp);
 							m->replaceTextures[TEXTURE_CAPE] = tex;
 							
@@ -1638,6 +1640,7 @@ void CharControl::RefreshItem(int slot)
 						if (m->ok) {
 							mp = (path + r.getString(ItemDisplayDB::Skin2));
 							mp.append(_T(".blp"));
+							m->TextureList.push_back(mp);
 							tex = texturemanager.add(mp);
 							m->replaceTextures[TEXTURE_CAPE] = tex;
 

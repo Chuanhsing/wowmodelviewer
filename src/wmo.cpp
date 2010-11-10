@@ -71,7 +71,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 			// materials
 			// Materials used in this map object, 64 bytes per texture (BLP file), nMaterials entries.
 
-			for (int i=0; i<nTextures; i++) {
+			for (size_t i=0; i<nTextures; i++) {
 				WMOMaterial *m = &mat[i];
 				f.read(m, 0x40);
 
@@ -107,13 +107,13 @@ WMO::WMO(wxString name): ManagedItem(name)
 		} else if (!strcmp(fourcc,"MOGI")) {
 			// group info - important information! ^_^
 			// Group information for WMO groups, 32 bytes per group, nGroups entries.
-			for (int i=0; i<nGroups; i++) {
-				groups[i].init(this, f, i, groupnames);
+			for (size_t i=0; i<nGroups; i++) {
+				groups[i].init(this, f, (int)i, groupnames);
 
 			}
 		} else if (!strcmp(fourcc,"MOLT")) {
 			// Lighting information. 48 bytes per light, nLights entries
-			for (int i=0; i<nLights; i++) {
+			for (size_t i=0; i<nLights; i++) {
 				WMOLight l;
 				l.init(f);
 				lights.push_back(l);
@@ -164,7 +164,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 			// But then again, the ADT files have the "correct" order of coordinates. Weird.
 			
 			nModels = (int)size / 0x28;
-			for (int i=0; i<nModels; i++) {
+			for (size_t i=0; i<nModels; i++) {
 				int ofs;
 				f.read(&ofs,4); // Offset to the start of the model's filename in the MODN chunk. 
 				//Model *m = (Model*)gWorld->modelmanager.items[gWorld->modelmanager.get(ddnames + ofs)];
@@ -208,7 +208,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 			// It's fun, you can actually map out the topology of the WMO using this and the MOPR chunk. 
 			// This could be used to speed up the rendering once/if I figure out how.
 			WMOPV p;
-			for (int i=0; i<nP; i++) {
+			for (size_t i=0; i<nP; i++) {
 				f.read(ff,12);
 				p.a = Vec3D(ff[0],ff[2],-ff[1]);
 				f.read(ff,12);
@@ -293,14 +293,14 @@ WMO::~WMO()
 void WMO::loadGroup(int id)
 {
 	if (id==-1) {
-		for (int i=0; i<nGroups; i++) {
+		for (size_t i=0; i<nGroups; i++) {
 			groups[i].initDisplayList();
 			groups[i].visible = true;
 		}
 	}
-	else if (id>=0 && id<nGroups) {
+	else if (id>=0 && (unsigned int)id<nGroups) {
 		groups[id].initDisplayList();
-		for (int i=0; i<nGroups; i++) {
+		for (size_t i=0; i<nGroups; i++) {
 			groups[i].visible = (i==id);
 			if (i!=id) groups[i].cleanup();
 		}
@@ -317,9 +317,9 @@ void WMO::showDoodadSet(int id)
 void WMO::updateModels()
 {
 	// 1. look for visible models that aren't loaded
-	for (int i=0; i<nGroups; i++) if (groups[i].visible) groups[i].updateModels(true);
+	for (size_t i=0; i<nGroups; i++) if (groups[i].visible) groups[i].updateModels(true);
 	// 2. unload unused models
-	for (int i=0; i<nGroups; i++) if (!groups[i].visible) groups[i].updateModels(false);
+	for (size_t i=0; i<nGroups; i++) if (!groups[i].visible) groups[i].updateModels(false);
 }
 
 void WMO::update(int dt)
@@ -366,15 +366,15 @@ void WMO::draw()
 	glTranslatef(-100,0,0);
 	glTranslatef(viewpos.x, viewpos.y, viewpos.z);
 
-	for (int i=0; i<nGroups; i++) {
+	for (size_t i=0; i<nGroups; i++) {
 		groups[i].draw();
 	}
 
-	for (int i=0; i<nGroups; i++) {
+	for (size_t i=0; i<nGroups; i++) {
 		groups[i].drawDoodads(doodadset);
 	}
 
-	for (int i=0; i<nGroups; i++) {
+	for (size_t i=0; i<nGroups; i++) {
 		groups[i].drawLiquid();
 	}
 
@@ -1093,14 +1093,14 @@ void WMOGroup::initLighting(int nLR, short *useLights)
 			lenmin = 999999.0f*999999.0f;
 			lmin = 0;
 			WMOModelInstance &mi = wmo->modelis[ddr[i]];
-			for (int j=0; j<wmo->nLights; j++) {
+			for (size_t j=0; j<wmo->nLights; j++) {
 				WMOLight &l = wmo->lights[j];
 				Vec3D dir = l.pos - mi.pos;
 				float ll = dir.lengthSquared();
 				if (ll < lenmin) {
 					lenmin = ll;
 					dirmin = dir;
-					lmin = j;
+					lmin = (int)j;
 				}
 			}
 			mi.light = lmin;

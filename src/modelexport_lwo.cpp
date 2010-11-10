@@ -4033,6 +4033,10 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 					Model *mParent = NULL;
 
 					wxLogMessage(_T("Attached Child Model: %s"),mAttChild->name);
+					wxLogMessage(_T("Texture List:"));
+					for (size_t x=0;x<mAttChild->TextureList.size();x++){
+						wxLogMessage("Image %i: %s",x,mAttChild->TextureList[x]);
+					}
 
 					if (att2->parent) {
 						mParent = static_cast<Model*>(att2->children[j]->parent->model);
@@ -4155,12 +4159,14 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 							wxString TexturePath = Texture.BeforeLast(SLASH);
 							wxString texName = Texture.BeforeLast('.');
 
+							wxLogMessage("Texture: %s\n\tTexurePath: %s\n\ttexName: %s",Texture,TexturePath,texName);
+
 							if ((texName.Find(SLASH) <= 0)&&(texName == _T("Cape"))){
 								texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
 								TexturePath = wxString(mAttChild->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 							}else if (texName.Find(SLASH) <= 0){
-								texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName;
-								TexturePath = wxString(mAttChild->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+								texName = Texture.AfterLast(SLASH).BeforeLast('.');
+								TexturePath = Texture.BeforeLast(SLASH);
 							}else{
 								texName = texName.AfterLast(SLASH);
 							}
@@ -4172,7 +4178,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 							Object.Images.push_back(ClipImage);
 							LWSurf_Image SurfImage_Color(ClipImage.TagID, 0, 0);
 
-							wxString ExportName = wxString(fn, wxConvUTF8).BeforeLast(SLASH) + SLASH + texName + _T(".tga");
+							wxString ExportName = wxString(fn, wxConvUTF8).BeforeLast(SLASH) + SLASH + texName;
 							if (modelExport_LW_PreserveDir == true){
 								wxString Path, Name;
 
@@ -4195,11 +4201,11 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 								ExportName.Empty();
 								ExportName << Path1 << SLASH << Path2 << SLASH << Name;
 							}
+							ExportName <<  _T(".tga");
 
-							ExportName << _T(".tga");
 							SaveTexture(ExportName);
 
-							LWSurface Surface(matName,wxString(mAttChild->TextureList[p.tex].c_str(), wxConvUTF8),SurfImage_Color,LWSurf_Image(),LWSurf_Image(),NULL,Surf_Diff,Surf_Lum,doubesided);
+							LWSurface Surface(matName,Texture.BeforeLast('.'),SurfImage_Color,LWSurf_Image(),LWSurf_Image(),NULL,Surf_Diff,Surf_Lum,doubesided);
 							Object.Surfaces.push_back(Surface);
 
 							// Points

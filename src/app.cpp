@@ -141,7 +141,7 @@ bool WowModelViewApp::OnInit()
 	// TODO: Improve this feature and expand on it.
 	// Command arguments
 	wxString cmd;
-	for (int i=0; i<argc; i++) {
+	for (size_t i=0; i<argc; i++) {
 		cmd = argv[i];
 
 		if (cmd == _T("-m")) {

@@ -418,6 +418,14 @@ void ModelViewer::InitMenu()
 		charMenu->Append(ID_IMPORT_CHAR, _("Import Armory Character"));
 		charMenu->Append(ID_SAVE_CHAR, _("Save Character\tF7"));
 		charMenu->AppendSeparator();
+
+		charGlowMenu = new wxMenu;
+		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_NONE, _("None"));
+		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEFAULT, _("Default"));
+		charGlowMenu->Check(ID_CHAREYEGLOW_DEFAULT, true);
+		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEATHKNIGHT, _("Death Knight"));
+		charMenu->Append(ID_CHAREYEGLOW, _("Eye Glow"), charGlowMenu);
+
 		charMenu->AppendCheckItem(ID_SHOW_UNDERWEAR, _("Show Underwear"));
 		charMenu->Check(ID_SHOW_UNDERWEAR, true);
 		charMenu->AppendCheckItem(ID_SHOW_EARS, _("Show Ears\tCTRL+E"));
@@ -430,13 +438,6 @@ void ModelViewer::InitMenu()
 		charMenu->Check(ID_SHOW_FEET, false);
 		charMenu->AppendCheckItem(ID_SHEATHE, _("Sheathe Weapons\tCTRL+Z"));
 		charMenu->Check(ID_SHEATHE, false);
-
-		charGlowMenu = new wxMenu;
-		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_NONE, _("None"));
-		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEFAULT, _("Default"));
-		charGlowMenu->Check(ID_CHAREYEGLOW_DEFAULT, true);
-		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEATHKNIGHT, _("Death Knight"));
-		charMenu->Append(ID_CHAREYEGLOW, _("Eye Glow"), charGlowMenu);
 
 		charMenu->AppendSeparator();
 		charMenu->Append(ID_SAVE_EQUIPMENT, _("Save Equipment\tF5"));

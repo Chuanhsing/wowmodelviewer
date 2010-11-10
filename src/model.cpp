@@ -687,7 +687,7 @@ void Model::initCommon(MPQFile &f)
 					}else{
 						tex += _T("Unknown.blp");
 					}
-					wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. [%i]"), tex.c_str(), TextureList.size(), texdef[i].type);
+					wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. Type: %i"), tex.c_str(), TextureList.size(), texdef[i].type);
 					TextureList.push_back(tex);
 				}else{
 					if (texdef[i].type == TEXTURE_HAIR){
@@ -715,7 +715,7 @@ void Model::initCommon(MPQFile &f)
 					}else{
 						tex += _T("NUnknown.blp");
 					}
-					wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. type: %i"), tex.c_str(), TextureList.size(), texdef[i].type);
+					wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. Type: %i"), tex.c_str(), TextureList.size(), texdef[i].type);
 					TextureList.push_back(tex);
 				}
 
