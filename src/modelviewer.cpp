@@ -2861,11 +2861,11 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 	// Set Default filename
 	wxString newfilename;
 	if (canvas->wmo) {
-		newfilename << wxString(canvas->wmo->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
+		newfilename << canvas->wmo->name.AfterLast(MPQ_SLASH).BeforeLast('.');
 	}else if (canvas->model) {
-		newfilename << wxString(canvas->model->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
+		newfilename << canvas->model->name.AfterLast(MPQ_SLASH).BeforeLast('.');
 	}else if (canvas->adt) {
-		newfilename << wxString(canvas->adt->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
+		newfilename << canvas->adt->name.AfterLast(MPQ_SLASH).BeforeLast('.');
 	}
 
 	// Identifies the ID for this export option, and does the nessicary functions.
@@ -3200,7 +3200,7 @@ void ModelViewer::ImportArmoury(wxString strURL)
 					wxString gender = child->GetPropVal(_T("gender"), _T("Male"));
 					//gender = gender.MakeLower();
 
-					wxString strModel = _T("Character\\") + race + _T("\\") + gender + _T("\\") + race + gender + _T(".m2");
+					wxString strModel = _T("Character\\") + race + MPQ_SLASH + gender + MPQ_SLASH + race + gender + _T(".m2");
 
 					LoadModel(strModel);
 

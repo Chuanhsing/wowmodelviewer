@@ -150,7 +150,7 @@ void ModelControl::RefreshModel(Attachment *root)
 			m = static_cast<Model*>((*it)->model);
 			if (m) {
 				tmp = wxString(m->name.c_str(), wxConvUTF8);
-				modelname->Append(tmp.AfterLast('\\'));
+				modelname->Append(tmp.AfterLast(MPQ_SLASH));
 			}
 		}
 

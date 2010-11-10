@@ -30,6 +30,7 @@ enum FilterModes {
 	FILE_FILTER_IMAGE,
 	FILE_FILTER_BLS,
 	FILE_FILTER_DBC,
+	FILE_FILTER_DB2,
 	FILE_FILTER_LUA,
 	FILE_FILTER_XML,
 
@@ -46,9 +47,9 @@ All suffixs in MPQ:
 static wxString content;
 static wxString filterString;
 static wxString filterStrings[] = {_T("m2"), _T("wmo"), _T("adt"), _T("wav"), _T("ogg"), _T("mp3"), 
-	_T("blp"), _T("bls"), _T("dbc"), _T("lua"), _T("xml"), _T("skin")};
+	_T("blp"), _T("bls"), _T("dbc"), _T("db2"), _T("lua"), _T("xml"), _T("skin")};
 static wxString chos[] = {_T("Models (*.m2)"), _T("WMOs (*.wmo)"), _T("ADTs (*.adt)"), _T("WAVs (*.wav)"), _T("OGGs (*.ogg)"), _T("MP3s (*.mp3)"), 
-	_T("Images (*.blp)"), _T("Shaders (*.bls)"), _T("DBCs (*.dbc)"), _T("LUAs (*.lua)"), _T("XMLs (*.xml)"), _T("SKINs (*.skin)")};
+	_T("Images (*.blp)"), _T("Shaders (*.bls)"), _T("DBCs (*.dbc)"), _T("DB2s (*.db2)"), _T("LUAs (*.lua)"), _T("XMLs (*.xml)"), _T("SKINs (*.skin)")};
 static wxString filterArchive;
 static wxArrayString filterArchives;
 

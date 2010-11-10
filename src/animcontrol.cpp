@@ -312,7 +312,7 @@ void AnimControl::UpdateWMO(WMO *w, int group)
 
 	// get wmo name or current wmogroup name/descr
 	if (group>=-1 && group<(int)g_selWMO->nGroups) {
-		wxString label = w->name.AfterLast('\\');
+		wxString label = w->name.AfterLast(MPQ_SLASH);
 		if (group>=0) {
 			label += _T(" - ") + g_selWMO->groups[group].name;
 			if (g_selWMO->groups[group].desc.length()) {
@@ -437,7 +437,7 @@ bool AnimControl::UpdateItemModel(Model *m)
 	}
 
 	// just get the file name, exclude the path.
-	fn = fn.AfterLast('\\');
+	fn = fn.AfterLast(MPQ_SLASH);
 	
 	TextureSet skins;
 
@@ -502,7 +502,7 @@ bool AnimControl::FillSkinSelector(TextureSet &skins)
 		for (TextureSet::iterator it = skins.begin(); it != skins.end(); ++it) {
 			wxString texname = it->tex[0];
 			skinList->Append(texname);
-			texname = g_selModel->name.BeforeLast('\\') + _T("\\") + texname + _T(".blp");
+			texname = g_selModel->name.BeforeLast(MPQ_SLASH) + MPQ_SLASH + texname + _T(".blp");
 			wxLogMessage(_T("Info: Added %s to the TextureList[%i] via FillSkinSelector."), texname.c_str(), g_selModel->TextureList.size());
 			g_selModel->TextureList.push_back(texname);
 			TextureGroup *grp = new TextureGroup(*it);
@@ -731,7 +731,7 @@ void AnimControl::SetSkin(int num)
 wxString AnimControl::makeSkinTexture(wxString texfn, wxString skin)
 {
 	wxString res = texfn;
-	size_t i = res.find_last_of('\\');
+	size_t i = res.find_last_of(MPQ_SLASH);
 	res = res.substr(0,i+1);
 	res.append(skin);
 	res.append(_T(".blp"));
