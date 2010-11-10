@@ -648,13 +648,11 @@ void Model::initCommon(MPQFile &f)
 			2	Texture wrap Y
 			*/
 
-			char texname[256] = "";
 			if (texdef[i].type == TEXTURE_FILENAME) {
-				strncpy(texname, (const char*)f.getBuffer() + texdef[i].nameOfs, texdef[i].nameLen);
-				texname[texdef[i].nameLen] = 0;
-				textures[i] = texturemanager.add(wxString(texname, wxConvUTF8));
-				TextureList.push_back(wxString(texname, wxConvUTF8));
-				wxLogMessage(_T("Info: Added %s to the TextureList[%i]."), texname, TextureList.size());
+				wxString texname((char*)(f.getBuffer()+texdef[i].nameOfs), wxConvUTF8);
+				textures[i] = texturemanager.add(texname);
+				TextureList.push_back(texname);
+				wxLogMessage(_T("Info: Added %s to the TextureList[%i]."), texname.c_str(), TextureList.size());
 			} else {
 				// special texture - only on characters and such...
 				textures[i] = 0;
@@ -689,9 +687,8 @@ void Model::initCommon(MPQFile &f)
 					}else{
 						tex += _T("Unknown.blp");
 					}
-					strncpy(texname,(const char*)(tex.c_str()),tex.Len());
-					wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. [%i]"), texname, TextureList.size(), texdef[i].type);
-					TextureList.push_back(wxString(texname, wxConvUTF8));
+					wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. [%i]"), tex.c_str(), TextureList.size(), texdef[i].type);
+					TextureList.push_back(tex);
 				}else{
 					if (texdef[i].type == TEXTURE_HAIR){
 						tex += _T("NHair.blp");
@@ -718,9 +715,8 @@ void Model::initCommon(MPQFile &f)
 					}else{
 						tex += _T("NUnknown.blp");
 					}
-					strncpy(texname,(const char*)(tex.c_str()),tex.Len());
-					wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. [%i]"), texname, TextureList.size(), texdef[i].type);
-					TextureList.push_back(wxString(texname, wxConvUTF8));
+					wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. type: %i"), tex.c_str(), TextureList.size(), texdef[i].type);
+					TextureList.push_back(tex);
 				}
 
 				if (texdef[i].type < TEXTURE_MAX)
