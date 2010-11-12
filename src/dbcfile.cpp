@@ -45,8 +45,16 @@ bool DBCFile::open()
 	f.read(&es,4); // Size of a record
 	f.read(&ss,4); // String size
 
-	if (db_type == 2)
+	if (db_type == 2) {
 		f.seekRelative(28);
+		// just some buggy check
+		unsigned int check;
+		f.read(&check, 4);
+		if (check == 6) // wrong place
+			f.seekRelative(-20);
+		else // check == 17, right place
+			f.seekRelative(-4);
+	}
 	
 	recordSize = es;
 	recordCount = na;
