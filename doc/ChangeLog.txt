@@ -1,23 +1,30 @@
 World of Warcraft Model Viewer v0.7.0.1
 
-r496
- - Eye Glows are now a Character Option! Choose from None, Default, and Death Knight!
+r498
+ - Eye Glows are now a Character Option! Choose from None, Default, and Death Knight! Character Save files will remember this setting!
  - Updated items.csv & npcs.csv files!
  - OldWorld.MPQ is now ignored. Only the new Cataclysm world is available.
  - Fixed DBC Reading Error
  - Fixed NPC skins problem
  - LWO Exporter:
-  - New M2 Exporter now serving as main LWO M2 Exporter.
+  - Replaced the M2 Exporter with a superior version!
+  - M2 Exporter now uses Verts instead of indices. (Less points!)
   - M2 Exporter now supports Luminous surfaces.
+  - M2 Exporter now supports exporting Lights to the scene file.
+  - M2 Character Exporter will now only export the Body texture as a character-specific image. The rest will export with the proper, reusable names.
+  - M2 Attached Models will now export the proper image names & paths.
   - Added Options to disable Camera & Bone exporting.
+  - Reworked the layout of the Export Options page for better use and flow.
  - Dev Work:
   - 64-bit GLEW libs renamed to glew64.lib.
+  - Attached Models' TextureList will now properly list the used image files.
   - Increased 64-bit compatibility.
   - Added Matrix to Quaternion function.
   - M2's animGeometry, animTextures and animBones boolans are now public.
   - Updated StormLib
   - Fixed langOffset for gameVersion 40000.
-  - remove redundant functions in mpq_stormlib 
+  - Removed redundant functions in mpq_stormlib.
+  - Removed Experimental Lightwave exporter. No longer needed.
 
 
 r487

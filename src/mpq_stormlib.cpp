@@ -252,12 +252,12 @@ bool MPQFile::isEof()
     return eof;
 }
 
-void MPQFile::seek(int offset) {
+void MPQFile::seek(ssize_t offset) {
 	pointer = offset;
 	eof = (pointer >= size);
 }
 
-void MPQFile::seekRelative(int offset)
+void MPQFile::seekRelative(ssize_t offset)
 {
 	pointer += offset;
 	eof = (pointer >= size);

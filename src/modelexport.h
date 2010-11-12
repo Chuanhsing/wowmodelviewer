@@ -133,11 +133,9 @@ void MakeModelFaceForwards(Vec3D &vect, bool flipX);
 void SaveBaseFile();
 
 // Lightwave
-//void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init);
+void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init);
 void ExportWMOtoLWO(WMO *m, const char *fn);
-void ExportWMOObjectstoLWO(WMO *m, const char *fn);
 void ExportADTtoLWO(MapTile *m, const char *fn);
-void ExportM2toLWO2(Attachment *att, Model *m, const char *fn, bool init);
 
 // Wavefront Object
 void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init);

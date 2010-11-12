@@ -60,8 +60,8 @@ public:
 	unsigned char* getBuffer();
 	unsigned char* getPointer();
 	bool isEof();
-	void seek(int offset);
-	void seekRelative(int offset);
+	void seek(ssize_t offset);
+	void seekRelative(ssize_t offset);
 	void close();
 	void save(wxString filename);
 

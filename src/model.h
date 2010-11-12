@@ -231,7 +231,7 @@ struct ModelCamera {
 };
 
 struct ModelLight {
-	int type;		// Light Type. MODELLIGHT_DIRECTIONAL or MODELLIGHT_POINT
+	int type;		// Light Type. MODELLIGHT_DIRECTIONAL = 0 or MODELLIGHT_POINT = 1
 	int parent;		// Bone Parent. -1 if there isn't one.
 	Vec3D pos, tpos, dir, tdir;
 	Animated<Vec3D> diffColor, ambColor;

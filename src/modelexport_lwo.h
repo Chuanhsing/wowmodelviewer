@@ -39,6 +39,10 @@ enum LWBoneType {
 	LW_BONETYPE_BONE = 0,
 	LW_BONETYPE_JOINT,
 };
+enum LWTextureAxisType{
+	LW_TEXTUREAXIS_PLANAR = 0,
+	LW_TEXTUREAXIS_UV,
+};
 
 // Polygon Chunk
 struct PolyChunk {
@@ -222,12 +226,14 @@ struct LWClip {
 
 struct LWSurf_Image {
 	uint32 ID;				// Tag ID for the Image
+	uint16 Axis;			// LWTextureAxisType value
 	float UVRate_U;			// Rate to move the U with UV Animation
 	float UVRate_V;			// Rate to move the V with UV Animation
 
 	// Contructor
-	LWSurf_Image(uint32 idtag=-1, float UVAnimRate_U=0.0f, float UVAnimRate_V=0.0f){
+	LWSurf_Image(uint32 idtag=-1, uint16 axis=LW_TEXTUREAXIS_UV, float UVAnimRate_U=0.0f, float UVAnimRate_V=0.0f){
 		ID = idtag;
+		Axis = axis;
 		UVRate_U = UVAnimRate_U;
 		UVRate_V = UVAnimRate_V;
 	}

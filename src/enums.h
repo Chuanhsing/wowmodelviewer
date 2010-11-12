@@ -27,7 +27,6 @@ enum ObjectID {
 	ID_MODELEXPORT_OPTIONS,
 	ID_MODELEXPORT_BASE,
 	ID_MODELEXPORT_LWO,
-	ID_MODELEXPORT_LWO2,	// Temp, until I finish the new LW exporter...
 	ID_MODELEXPORT_COLLADA,
 	ID_MODELEXPORT_OBJ,
 	ID_MODELEXPORT_MS3D,
@@ -469,6 +468,12 @@ enum Races {
 	SCOURGE = 5,
 	GOBLIN = 9,
 	WORGEN = 22
+};
+
+enum EyeGlowTypes {
+	EGT_NONE = 0,
+	EGT_DEFAULT,
+	EGT_DEATHKNIGHT
 };
 
 // Item type values as referred to by the items.csv list

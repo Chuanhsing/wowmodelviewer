@@ -565,7 +565,7 @@ void CharControl::OnCheck(wxCommandEvent &event)
 		bSheathe = event.IsChecked();
 	else if (ID==ID_SHOW_FEET) 
 		cd.showFeet = event.IsChecked();
-	else if ((ID==ID_CHAREYEGLOW)||(ID==ID_CHAREYEGLOW_NONE))
+	else if (ID==ID_CHAREYEGLOW_NONE)
 		cd.eyeGlowType = 0;
 	else if (ID==ID_CHAREYEGLOW_DEFAULT)
 		cd.eyeGlowType = 1;
@@ -770,7 +770,7 @@ void CharControl::RefreshModel()
 		rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::SkinType, 0, cd.skinColor, cd.useNPC);
 		wxString baseTexName = rec.getString(CharSectionsDB::Tex1);
 		tex.addLayer(baseTexName, CR_BASE, 0);
-		UpdateTextureList(baseTexName, TEXTURE_BODY);
+		//UpdateTextureList(baseTexName, TEXTURE_BODY);
 
 		// Tauren fur
 		wxString furTexName = rec.getString(CharSectionsDB::Tex2);
@@ -789,7 +789,7 @@ void CharControl::RefreshModel()
 		fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), 0, cd.skinColor);
 		if (MPQFile::getSize(fn) > 0) {
 			tex.addLayer(fn, CR_BASE, 0);
-			UpdateTextureList(fn, TEXTURE_BODY);
+			//UpdateTextureList(fn, TEXTURE_BODY);
 		}
 		fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d_Extra.blp"), 0, cd.skinColor);
 		if (MPQFile::getSize(fn) > 0) {
@@ -1133,7 +1133,7 @@ void CharControl::RefreshModel()
 	spins[SPIN_FACIAL_HAIR]->SetValue(cd.facialHair);
 	spins[SPIN_FACIAL_COLOR]->SetValue(cd.facialColor);
 
-	// eyeglow
+	// Eye Glows
 	for(uint32 i=0; i<model->passes.size(); i++) {
 		ModelRenderPass &p = model->passes[i];
 		wxString texName = model->TextureList[p.tex].AfterLast('\\').Lower();
@@ -1141,25 +1141,35 @@ void CharControl::RefreshModel()
 		if (texName.Find(_T("eyeglow")) == wxNOT_FOUND)
 			continue;
 
+		// Regular Eye Glow
 		if ((texName.Find(_T("eyeglow")) != wxNOT_FOUND)&&(texName.Find(_T("deathknight")) == wxNOT_FOUND)){
-			if (cd.eyeGlowType == 0){					// If No EyeGlow
+			if (cd.eyeGlowType == EGT_NONE){					// If No EyeGlow
 				model->showGeosets[p.geoset] = false;
-			}else if (cd.eyeGlowType == 2){				// If DK EyeGlow
+			}else if (cd.eyeGlowType == EGT_DEATHKNIGHT){		// If DK EyeGlow
 				model->showGeosets[p.geoset] = false;
-			}else{										// Default EyeGlow, AKA cd.eyeGlowType == 1
+			}else{												// Default EyeGlow, AKA cd.eyeGlowType == EGT_DEFAULT
 				model->showGeosets[p.geoset] = true;
 			}
 		}
+		// DeathKnight Eye Glow
 		if (texName.Find(_T("deathknight")) != wxNOT_FOUND){
-			if (cd.eyeGlowType == 0){					// If No EyeGlow
+			if (cd.eyeGlowType == EGT_NONE){					// If No EyeGlow
 				model->showGeosets[p.geoset] = false;
-			}else if (cd.eyeGlowType == 2){				// If DK EyeGlow
+			}else if (cd.eyeGlowType == EGT_DEATHKNIGHT){		// If DK EyeGlow
 				model->showGeosets[p.geoset] = true;
-			}else{										// Default EyeGlow, AKA cd.eyeGlowType == 1
+			}else{												// Default EyeGlow, AKA cd.eyeGlowType == EGT_DEFAULT
 				model->showGeosets[p.geoset] = false;
 			}
 		}
 	}
+	// Update Eye Glow Menu
+	unsigned int egt = cd.eyeGlowType;
+	if (egt == EGT_NONE)
+		g_modelViewer->charGlowMenu->Check(ID_CHAREYEGLOW_NONE, true);
+	else if (egt == EGT_DEATHKNIGHT)
+		g_modelViewer->charGlowMenu->Check(ID_CHAREYEGLOW_DEATHKNIGHT, true);
+	else
+		g_modelViewer->charGlowMenu->Check(ID_CHAREYEGLOW_DEFAULT, true);
 }
 
 void CharControl::RefreshNPCModel()
@@ -1203,7 +1213,7 @@ void CharControl::RefreshNPCModel()
 		} else {
 			wxString baseTexName = rec.getString(CharSectionsDB::Tex1);
 			tex.addLayer(baseTexName, CR_BASE, 0);
-			UpdateTextureList(baseTexName, TEXTURE_BODY);
+			//UpdateTextureList(baseTexName, TEXTURE_BODY);
 
 			if (cd.showUnderwear) {
 				rec = chardb.getByParams(cd.race, cd.gender, CharSectionsDB::UnderwearType, 0, cd.skinColor, cd.useNPC);
@@ -1622,8 +1632,13 @@ void CharControl::RefreshItem(int slot)
 						if (m->ok) {
 							mp = (path + r.getString(ItemDisplayDB::Skin));
 							mp.append(_T(".blp"));
-							m->TextureList.push_back(mp);
 							tex = texturemanager.add(mp);
+							for (size_t x=0;x<m->TextureList.size();x++){
+								if (m->TextureList[x] == wxString(_T("Special_2"))){
+									wxLogMessage(_T("Replacing ID1's %s with %s"),m->TextureList[x],mp);
+									m->TextureList[x] = mp;
+								}
+							}
 							m->replaceTextures[TEXTURE_CAPE] = tex;
 							
 							succ = true;
@@ -1640,8 +1655,13 @@ void CharControl::RefreshItem(int slot)
 						if (m->ok) {
 							mp = (path + r.getString(ItemDisplayDB::Skin2));
 							mp.append(_T(".blp"));
-							m->TextureList.push_back(mp);
 							tex = texturemanager.add(mp);
+							for (size_t x=0;x<m->TextureList.size();x++){
+								if (m->TextureList[x] == wxString(_T("Special_2"))){
+									wxLogMessage(_T("Replacing ID2's %s with %s"),m->TextureList[x],mp);
+									m->TextureList[x] = mp;
+								}
+							}
 							m->replaceTextures[TEXTURE_CAPE] = tex;
 
 							succ = true;

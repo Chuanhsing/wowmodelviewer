@@ -660,7 +660,20 @@ void Model::initCommon(MPQFile &f)
 				//if (texdef[i].type < TEXTURE_MAX)specialTextures[texdef[i].type] = (int)i;
 				specialTextures[i] = texdef[i].type;
 
-				wxString tex = modelname.BeforeLast('.').AfterLast(SLASH) + _T("_");
+				
+				wxString tex = _T("Special_");
+				tex << texdef[i].type;
+
+				if (modelType == MT_NORMAL){
+					if (texdef[i].type == TEXTURE_HAIR)
+						tex = "Hair.blp";
+					else if(texdef[i].type == TEXTURE_BODY)
+						tex = "Body.blp";
+					else if(texdef[i].type == TEXTURE_FUR)
+						tex = "Fur.blp";
+				}
+				//wxString tex = modelname.BeforeLast('.').AfterLast(SLASH) + _T("_");
+				/*
 				if (modelType == MT_NORMAL){
 					if (texdef[i].type == TEXTURE_HAIR){
 						tex += _T("Hair.blp");
@@ -687,8 +700,6 @@ void Model::initCommon(MPQFile &f)
 					}else{
 						tex += _T("Unknown.blp");
 					}
-					wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. Type: %i"), tex.c_str(), TextureList.size(), texdef[i].type);
-					TextureList.push_back(tex);
 				}else{
 					if (texdef[i].type == TEXTURE_HAIR){
 						tex += _T("NHair.blp");
@@ -715,9 +726,10 @@ void Model::initCommon(MPQFile &f)
 					}else{
 						tex += _T("NUnknown.blp");
 					}
-					wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. Type: %i"), tex.c_str(), TextureList.size(), texdef[i].type);
-					TextureList.push_back(tex);
 				}
+				*/
+				wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. Type: %i"), tex.c_str(), TextureList.size(), texdef[i].type);
+				TextureList.push_back(tex);
 
 				if (texdef[i].type < TEXTURE_MAX)
 					useReplaceTextures[texdef[i].type] = true;

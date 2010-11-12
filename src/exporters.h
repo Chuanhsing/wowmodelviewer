@@ -32,7 +32,11 @@ const static Exporter_Type Exporter_Types[ExporterTypeCount] = {
 #else
 	Exporter_Type(_T("FBX"),ID_MODELEXPORT_FBX,_T("FBX...")),	// Disabled like Collada until we get it working on non-windows systems.
 #endif
+#ifdef _DEBUG
+	Exporter_Type(_T("Lightwave 3D"),ID_MODELEXPORT_LWO,_T("Lightwave 3D..."),true,true,true),
+#else
 	Exporter_Type(_T("Lightwave 3D"),ID_MODELEXPORT_LWO,_T("Lightwave 3D..."),true,true),
+#endif
 	Exporter_Type(_T("M3"),ID_MODELEXPORT_M3,_T("M3..."),true),
 	Exporter_Type(_T("Milkshake"),ID_MODELEXPORT_MS3D,_T("Milkshape..."),true),
 	Exporter_Type(_T("Ogre XML"),ID_MODELEXPORT_OGRE,_T("Ogre XML..."),true),

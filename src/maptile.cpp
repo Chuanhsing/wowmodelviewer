@@ -149,7 +149,7 @@ struct WaterLayer
 void fprintbu8( FILE* file, uint8 value )
 {
 	bool b[8];
-	unsigned x = 1;
+	unsigned int x = 1;
 	for( unsigned i = 0; i < 8; i++ )
 	{
 		b[i] = value & x;

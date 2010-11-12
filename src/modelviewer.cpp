@@ -39,7 +39,6 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	EVT_MENU(ID_MODELEXPORT_OPTIONS, ModelViewer::OnToggleDock)
 	EVT_MENU(ID_MODELEXPORT_INIT, ModelViewer::OnToggleCommand)
 	EVT_MENU(ID_MODELEXPORT_LWO, ModelViewer::OnExport)
-	EVT_MENU(ID_MODELEXPORT_LWO2, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_OBJ, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_COLLADA, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_MS3D, ModelViewer::OnExport)
@@ -290,33 +289,16 @@ void ModelViewer::InitMenu()
 	exportMenu->AppendSeparator();
 	exportMenu->Append(ID_MODELEXPORT_OPTIONS, _T("Export Options..."));
 	exportMenu->AppendSeparator();
-#ifdef _DEBUG
-	// Debug Only Exporters
-	exportMenu->Append(ID_MODELEXPORT_LWO2, _T("Experimental Lightwave..."));
-	exportMenu->AppendSeparator();
-#endif
 	// Perfered Exporter First
 	if (Perfered_Exporter != -1) {
 		exportMenu->Append(Exporter_Types[Perfered_Exporter].ID, Exporter_Types[Perfered_Exporter].MenuText);
 	}
 	// The Rest
-	for (uint16 x=0;x<10;x++){
+	for (size_t x=0;x<ExporterTypeCount;x++){
 		if (x != Perfered_Exporter) {
 			exportMenu->Append(Exporter_Types[x].ID, Exporter_Types[x].MenuText);
 		}
 	}
-	/*
-	exportMenu->Append(ID_MODELEXPORT_LWO, _("Lightwave..."));
-	exportMenu->Append(ID_MODELEXPORT_OBJ, _("Wavefront OBJ..."));
-	exportMenu->Append(ID_MODELEXPORT_COLLADA, _("Collada..."));
-	exportMenu->Append(ID_MODELEXPORT_MS3D, _("Milkshape..."));
-	exportMenu->Append(ID_MODELEXPORT_3DS, _("3DS..."));
-	exportMenu->Append(ID_MODELEXPORT_X3D, _("X3D..."));
-	exportMenu->Append(ID_MODELEXPORT_XHTML, _("X3D in XHTML..."));
-	exportMenu->Append(ID_MODELEXPORT_OGRE, _("Ogre XML..."));
-	exportMenu->Append(ID_MODELEXPORT_FBX, _("FBX..."));
-	exportMenu->Append(ID_MODELEXPORT_M3, _("M3..."));
-	*/
 
 	// -= Enable/Disable Model Exporters =-
 	// If you don't support WMOs or M2 files yet, you can disable export for that in filecontrol.cpp,
@@ -422,8 +404,19 @@ void ModelViewer::InitMenu()
 		charGlowMenu = new wxMenu;
 		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_NONE, _("None"));
 		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEFAULT, _("Default"));
-		charGlowMenu->Check(ID_CHAREYEGLOW_DEFAULT, true);
 		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEATHKNIGHT, _("Death Knight"));
+		if (charControl->cd.eyeGlowType){
+			unsigned int egt = charControl->cd.eyeGlowType;
+			if (egt == EGT_NONE)
+				charGlowMenu->Check(ID_CHAREYEGLOW_NONE, true);
+			else if (egt == EGT_DEATHKNIGHT)
+				charGlowMenu->Check(ID_CHAREYEGLOW_DEATHKNIGHT, true);
+			else
+				charGlowMenu->Check(ID_CHAREYEGLOW_DEFAULT, true);
+		}else{
+			charControl->cd.eyeGlowType = EGT_DEFAULT;
+			charGlowMenu->Check(ID_CHAREYEGLOW_DEFAULT, true);
+		}
 		charMenu->Append(ID_CHAREYEGLOW, _("Eye Glow"), charGlowMenu);
 
 		charMenu->AppendCheckItem(ID_SHOW_UNDERWEAR, _("Show Underwear"));
@@ -1024,9 +1017,7 @@ void ModelViewer::LoadModel(const wxString fn)
 		charMenu->Check(ID_SHOW_EARS, true);
 		charMenu->Check(ID_SHOW_HAIR, true);
 		charMenu->Check(ID_SHOW_FACIALHAIR, true);
-		charGlowMenu->Check(ID_CHAREYEGLOW_NONE,false);
-		charGlowMenu->Check(ID_CHAREYEGLOW_DEFAULT,true);
-		charGlowMenu->Check(ID_CHAREYEGLOW_DEATHKNIGHT,false);
+		charGlowMenu->Check(ID_CHAREYEGLOW_DEFAULT, true);
 
 		charMenu->Enable(ID_SAVE_CHAR, true);
 		charMenu->Enable(ID_SHOW_UNDERWEAR, true);
@@ -2065,7 +2056,7 @@ void ModelViewer::SaveChar(wxString fn)
 	ofstream f(fn.fn_str(), ios_base::out|ios_base::trunc);
 	f << canvas->model->name << endl;
 	f << charControl->cd.race << " " << charControl->cd.gender << endl;
-	f << charControl->cd.skinColor << " " << charControl->cd.faceType << " " << charControl->cd.hairColor << " " << charControl->cd.hairStyle << " " << charControl->cd.facialHair << " " << charControl->cd.facialColor << endl;
+	f << charControl->cd.skinColor << " " << charControl->cd.faceType << " " << charControl->cd.hairColor << " " << charControl->cd.hairStyle << " " << charControl->cd.facialHair << " " << charControl->cd.facialColor  << " " << charControl->cd.eyeGlowType << endl;
 	for (int i=0; i<NUM_CHAR_SLOTS; i++) {
 		f << charControl->cd.equipment[i] << endl;
 	}
@@ -2104,6 +2095,14 @@ void ModelViewer::LoadChar(wxString fn)
 
 	f >> charControl->cd.race >> charControl->cd.gender; // race and gender
 	f >> charControl->cd.skinColor >> charControl->cd.faceType >> charControl->cd.hairColor >> charControl->cd.hairStyle >> charControl->cd.facialHair >> charControl->cd.facialColor;
+	
+	// If Eyeglow is in char file...
+	if (f.peek() != _T('\n')){
+		f >> charControl->cd.eyeGlowType;
+	}else{
+		// Otherwise, default to this value
+		charControl->cd.eyeGlowType = EGT_DEFAULT;
+	}
 
 	while (!f.eof()) {
 		for (int i=0; i<NUM_CHAR_SLOTS; i++) {
@@ -2880,7 +2879,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(_T("Info: Exporting M2 model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				// Your M2 export function goes here.
-				ExportM2toLWO2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+				ExportM2toLWO(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		// For WMO Models. You don't need to include this if the exporter doesn't support it.
 		} else if (canvas->wmo) {
@@ -2905,27 +2904,6 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 
 	}else if (id == ID_MODELEXPORT_BASE){
 		SaveBaseFile();
-
-#ifdef _DEBUG
-	// Experimental new LWO Exporter!!
-	} else if (id == ID_MODELEXPORT_LWO2) {
-		newfilename << _T(".lwo");
-		if (canvas->model) {
-			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
-
-				ExportM2toLWO2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
-			}
-		} else if (canvas->wmo) {
-			wxFileDialog dialog(this, _T("Export World Model Object..."), wxEmptyString, newfilename, _T("Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
-
-				ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
-			}
-		}
-#endif
 	} else if (id == ID_MODELEXPORT_OBJ) {
 		newfilename << _T(".obj");
 		if (canvas->model) {
