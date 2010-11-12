@@ -849,10 +849,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath="..\bin_support\Splash\Splash_04-Cata.png"
-				>
-			</File>
-			<File
 				RelativePath="..\bin_support\Icons\wmv.ico"
 				>
 			</File>

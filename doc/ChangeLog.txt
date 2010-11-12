@@ -1,6 +1,6 @@
 World of Warcraft Model Viewer v0.7.0.1
 
-r498
+r499
  - Eye Glows are now a Character Option! Choose from None, Default, and Death Knight! Character Save files will remember this setting!
  - Updated items.csv & npcs.csv files!
  - OldWorld.MPQ is now ignored. Only the new Cataclysm world is available.
