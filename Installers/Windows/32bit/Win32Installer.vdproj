@@ -57,6 +57,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6E17D4CDE5D74DB94EB54E6D40A46ACD"
+        "OwnerKey" = "8:_B1CAE128D0724BA58BDB49161CAA3E25"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6E77EDD2D389957EDC6145594F8B5F5D"
+        "OwnerKey" = "8:_B1CAE128D0724BA58BDB49161CAA3E25"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_78EC3B31A6FD48C0B25853E94236CE31"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -99,8 +111,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_A76230A9E3D44E0F90B32550811044B4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_A7EB136AB0214883A95C73810EAA98EA"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AA948F29C115E6736A6E4B44207731ED"
+        "OwnerKey" = "8:_B1CAE128D0724BA58BDB49161CAA3E25"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -117,8 +141,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_BCA81BAA4028477D94CF7F04100C4056"
+        "OwnerKey" = "8:_E4D518E47E3B40FE934C9E242323DE54"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C2D63DE81415494290CFEEF0AD2DE4E2"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CF65CA06685670990CB7DBD7BFF6386F"
+        "OwnerKey" = "8:_B1CAE128D0724BA58BDB49161CAA3E25"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -131,6 +167,18 @@
         {
         "MsmKey" = "8:_E0A04466D5B741B3BB0C522654870ADE"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E318492919C0EF81DFAA058E5A8D8FFB"
+        "OwnerKey" = "8:_B1CAE128D0724BA58BDB49161CAA3E25"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E4D518E47E3B40FE934C9E242323DE54"
+        "OwnerKey" = "8:_B1CAE128D0724BA58BDB49161CAA3E25"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -202,7 +250,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\WMV_Installer_v0701_r499_Win32.msi"
+        "OutputFilename" = "8:Release\\WMV_Installer_v0701_r500_Win32.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -270,7 +318,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
@@ -392,6 +440,46 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6E17D4CDE5D74DB94EB54E6D40A46ACD"
+            {
+            "SourcePath" = "8:COMDLG32.dll"
+            "TargetName" = "8:COMDLG32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_52A2D39C5ABC4C2890526F9834A18EB8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6E77EDD2D389957EDC6145594F8B5F5D"
+            {
+            "SourcePath" = "8:OPENGL32.dll"
+            "TargetName" = "8:OPENGL32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_52A2D39C5ABC4C2890526F9834A18EB8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_78EC3B31A6FD48C0B25853E94236CE31"
@@ -530,6 +618,26 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A76230A9E3D44E0F90B32550811044B4"
+            {
+            "SourcePath" = "8:..\\..\\..\\bin_support\\Splash\\Splash_001.png"
+            "TargetName" = "8:Splash.png"
+            "Tag" = "8:"
+            "Folder" = "8:_52A2D39C5ABC4C2890526F9834A18EB8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
@@ -552,6 +660,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AA948F29C115E6736A6E4B44207731ED"
+            {
+            "SourcePath" = "8:MSVFW32.dll"
+            "TargetName" = "8:MSVFW32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_52A2D39C5ABC4C2890526F9834A18EB8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B637D48CDE634D588F8E18513099D1CF"
@@ -594,6 +722,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CF65CA06685670990CB7DBD7BFF6386F"
+            {
+            "SourcePath" = "8:AVIFIL32.dll"
+            "TargetName" = "8:AVIFIL32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_52A2D39C5ABC4C2890526F9834A18EB8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D6F9F704CFA14227B64486BB239F544A"
             {
             "SourcePath" = "8:..\\..\\..\\src\\po\\zhCN.mo"
@@ -632,6 +780,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E318492919C0EF81DFAA058E5A8D8FFB"
+            {
+            "SourcePath" = "8:GLU32.dll"
+            "TargetName" = "8:GLU32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_52A2D39C5ABC4C2890526F9834A18EB8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ED45CB3B629D4F29B3E00FA7D7150B47"
@@ -717,6 +885,29 @@
         }
         "FileType"
         {
+            "{5EB83D71-FA18-4901-BE56-DE22E13CC478}:_6FD09DD5194047AE84D46C4A9BCEC394"
+            {
+            "Name" = "8:WMV Character File"
+            "Description" = "8:Contains Character information that can be loaded using WoW Model Viewer."
+            "Extensions" = "8:chr"
+            "MIME" = "8:"
+            "Icon" = "8:_B1CAE128D0724BA58BDB49161CAA3E25"
+            "IconIndex" = "3:101"
+                "Command"
+                {
+                "Command" = "8:_B1CAE128D0724BA58BDB49161CAA3E25"
+                }
+                "Verbs"
+                {
+                    "{95C0C507-CBF0-42B8-B119-07219E384A4A}:_CA9132A1DE93412191893768BA322353"
+                    {
+                    "Command" = "8:&Open"
+                    "Verb" = "8:open"
+                    "Arguments" = "8:\"%1\""
+                    "Order" = "3:0"
+                    }
+                }
+            }
         }
         "Folder"
         {
@@ -869,14 +1060,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:World of Warcraft Model Viewer 32-bit"
-        "ProductCode" = "8:{C5EDBB75-BB2F-4755-9996-766970DDE748}"
-        "PackageCode" = "8:{DDD60C1D-56E0-4493-8A5D-B99E7EAB08AF}"
+        "ProductCode" = "8:{29805E39-651D-483D-85DA-A818AE4B1D96}"
+        "PackageCode" = "8:{099E7B7F-B04B-4811-8FFC-B91618F431A1}"
         "UpgradeCode" = "8:{BA7105E6-2189-4CAF-9CB5-28124A1FD428}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:07.01.499"
+        "ProductVersion" = "8:07.01.500"
         "Manufacturer" = "8:WoWModelViewer.org"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1125,7 +1316,7 @@
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:1"
-                            "Value" = "8:#1203"
+                            "Value" = "8:The installer will guide you through the steps required to install World of Warcraft Model Viewer on your computer."
                             "DefaultValue" = "8:#1203"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -1381,12 +1572,40 @@
         }
         "MergeModule"
         {
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_BCA81BAA4028477D94CF7F04100C4056"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:microsoft_vc90_crt_x86.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:TRUE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_E4D518E47E3B40FE934C9E242323DE54"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:TRUE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
         }
         "ProjectOutput"
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B1CAE128D0724BA58BDB49161CAA3E25"
             {
-            "SourcePath" = "8:..\\..\\..\\src\\Release32\\Clean\\wowmodelview.exe"
+            "SourcePath" = "8:..\\..\\..\\src\\Release32\\Clean\\wowmodelview32.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_52A2D39C5ABC4C2890526F9834A18EB8"

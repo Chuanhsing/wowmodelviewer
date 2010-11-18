@@ -1,5 +1,9 @@
 #include "app.h"
+#include "wx/image.h"
+#include "wx/splash.h"
+#include <wx/mstream.h>
 #include "UserSkins.h"
+#include "resource1.h"
 
 /*	THIS IS OUR MAIN "START UP" FILE.
 	App.cpp creates our wxApp class object.
@@ -29,7 +33,21 @@ bool WowModelViewApp::OnInit()
 {
 	frame = NULL;
 	LogFile = NULL;
+	wxSplashScreen* splash = NULL;
 
+	wxImage::AddHandler( new wxPNGHandler);
+
+	wxBitmap bitmap;
+	if (bitmap.LoadFile("Splash.png",wxBITMAP_TYPE_PNG) == false){
+		wxMessageBox(_T("Failed to load Splash Screen.\nPress OK to continue loading WMV."),_T("Failure"));
+		//return false;		// Used while debugging the splash screen.
+	}else{
+		splash = new wxSplashScreen(bitmap,
+			wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
+			6000, NULL, -1, wxDefaultPosition, wxDefaultSize,
+			 wxBORDER_NONE);
+	}
+	wxYield();
 
 	// Error & Logging settings
 #ifndef _DEBUG
@@ -57,13 +75,14 @@ bool WowModelViewApp::OnInit()
 	SetAppName(_T("WoWModelViewer"));
 
 	// Just a little header to start off the log file.
-	wxLogMessage(wxString(_T("Starting:\n") APP_TITLE _T(" ") APP_VERSION _T(" ") APP_PLATFORM APP_ISDEBUG _T("\n\n")));
+	wxLogMessage(wxString(_T("Starting:\n") APP_TITLE _T(" ") APP_VERSION _T(" (") APP_BUILDNAME _T(") ") APP_PLATFORM APP_ISDEBUG _T("\n\n")));
 
 	// set the config file path.
 	cfgPath = userPath+SLASH+wxT("Config.ini");
 
 	bool loadfail = LoadSettings();
 	if (loadfail == true){
+		splash->Show(false);
 		return false;
 	}
 
@@ -95,6 +114,7 @@ bool WowModelViewApp::OnInit()
     
 	if (!frame) {
 		//this->Close();
+		splash->Show(false);
 		return false;
 	}
 	
@@ -136,12 +156,11 @@ bool WowModelViewApp::OnInit()
 			frame->lightControl->UpdateGL();
 	}
 	// --
-	
 
 	// TODO: Improve this feature and expand on it.
 	// Command arguments
 	wxString cmd;
-	for (size_t i=0; i<argc; i++) {
+	for (ssize_t i=0; i<argc; i++) {
 		cmd = argv[i];
 
 		if (cmd == _T("-m")) {
@@ -182,11 +201,13 @@ bool WowModelViewApp::OnInit()
 		}
 	}
 	// -------
-
 	// Load previously saved layout
 	frame->LoadLayout();
 
 	wxLogMessage(_T("WoW Model Viewer successfully loaded!\n----\n"));
+	frame->Show(true);
+	splash->Show(false);
+	splash->~wxSplashScreen();
 	
 	return true;
 }

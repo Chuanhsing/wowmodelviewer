@@ -50,7 +50,20 @@
 
 // defines
 #define APP_TITLE _T("World of Warcraft Model Viewer")
-#define APP_VERSION _T("v0.7.0.1 r499")		// Revision number should match the revision number on GoogleCode.
+#define APP_VERSION _T("v0.7.0.1 r500")		// Revision number should match the revision number on GoogleCode.
+#define APP_BUILDNAME _T("Wascally Wabbit")	// Fun thing for developers to play with. Should change with each release.
+/*
+	--==List of Build Name ideas==--	(Feel free to add!)
+	Bouncing Baracuda
+	Gnome Punter
+	Hoppin Jalapeno
+	Stealthed Rogue
+
+	--== Used Build Names ==--			(So we don't repeat...)
+	Wascally Wabbit
+
+*/
+
 #ifdef _DEBUG
 	#define APP_ISDEBUG _T(" Debug")
 #else

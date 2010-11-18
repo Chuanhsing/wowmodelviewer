@@ -197,6 +197,62 @@ Vec3D QuaternionToXYZ(Vec3D Dir, float W){
 	return XYZ;
 }
 
+void QuaternionToRotationMatrix(const Quaternion& quat, Matrix& rkRot) {
+	float fTx  = ((float)2.0)*quat.y;
+	float fTy  = ((float)2.0)*quat.z;
+	float fTz  = ((float)2.0)*quat.w;
+	float fTwx = fTx*quat.x;
+	float fTwy = fTy*quat.x;
+	float fTwz = fTz*quat.x;
+	float fTxx = fTx*quat.y;
+	float fTxy = fTy*quat.y;
+	float fTxz = fTz*quat.y;
+	float fTyy = fTy*quat.z;
+	float fTyz = fTz*quat.z;
+	float fTzz = fTz*quat.w;
+
+	rkRot.m[0][0] = (float)1.0-(fTyy+fTzz);
+	rkRot.m[0][1] = fTxy-fTwz;
+	rkRot.m[0][2] = fTxz+fTwy;
+	rkRot.m[1][0] = fTxy+fTwz;
+	rkRot.m[1][1] = (float)1.0-(fTxx+fTzz);
+	rkRot.m[1][2] = fTyz-fTwx;
+	rkRot.m[2][0] = fTxz-fTwy;
+	rkRot.m[2][1] = fTyz+fTwx;
+	rkRot.m[2][2] = (float)1.0-(fTxx+fTyy);
+}
+
+void RotationMatrixToEulerAnglesXYZ(const Matrix& rkRot, float& rfXAngle, float& rfYAngle, float& rfZAngle)
+{
+	if (rkRot.m[0][2] < (float)1.0){
+		if (rkRot.m[0][2] > -(float)1.0){
+			// y_angle = asin(r02)
+			// x_angle = atan2(-r12,r22)
+			// z_angle = atan2(-r01,r00)
+			rfYAngle = (float)asin((double)rkRot.m[0][2]);
+			rfXAngle = atan2(-rkRot.m[1][2],rkRot.m[2][2]);
+			rfZAngle = atan2(-rkRot.m[0][1],rkRot.m[0][0]);
+			return ;
+		}else{
+			// y_angle = -pi/2
+			// z_angle - x_angle = atan2(r10,r11)
+			// WARNING.  The solution is not unique.  Choosing z_angle = 0.
+			rfYAngle = (float)(-PIHALF);
+			rfXAngle = -atan2(rkRot.m[1][0],rkRot.m[1][1]);
+			rfZAngle = (float)0.0f;
+			return ;
+		}
+	}else{
+		// y_angle = +pi/2
+		// z_angle + x_angle = atan2(r10,r11)
+		// WARNING.  The solutions is not unique.  Choosing z_angle = 0.
+		rfYAngle = (float)PIHALF;
+		rfXAngle = atan2(rkRot.m[1][0],rkRot.m[1][1]);
+		rfZAngle = (float)0.0f;
+		return ;
+	}
+}
+
 void AddCount(Model *m, unsigned short &numGroups, unsigned short &numVerts)
 {
 	for (size_t i=0; i<m->passes.size(); i++) {

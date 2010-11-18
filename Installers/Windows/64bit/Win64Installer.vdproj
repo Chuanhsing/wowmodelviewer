@@ -88,7 +88,7 @@
         "Entry"
         {
         "MsmKey" = "8:_4F068D3280C148C0A10E489FBB607086"
-        "OwnerKey" = "8:_76F030E0965D4F7C993982A2F5CB8FB9"
+        "OwnerKey" = "8:_9FA5F476D3484F6BA7DBF337B45CBD98"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -135,12 +135,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_76F030E0965D4F7C993982A2F5CB8FB9"
-        "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_831EE1B868484117E9AD0642BC6B24AC"
         "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
         "MsmSig" = "8:_UNDEFINED"
@@ -161,6 +155,12 @@
         {
         "MsmKey" = "8:_9715CF33FF5549B4A7639A38AEACB469"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9FA5F476D3484F6BA7DBF337B45CBD98"
+        "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -196,6 +196,12 @@
         "Entry"
         {
         "MsmKey" = "8:_E958787F5C7A43BAAF70906E6FC988ED"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FE331E9A97A549138BCB048EF2A4D9BC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -244,7 +250,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\WMV_Installer_v0701_r499_Win64.msi"
+        "OutputFilename" = "8:Release\\WMV_Installer_v0701_r500_Win64.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -412,7 +418,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
@@ -656,6 +662,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7FD586A8A186436C8C9533F6551F2459"
+            {
+            "SourcePath" = "8:..\\..\\..\\bin\\userSettings\\Skins.txt"
+            "TargetName" = "8:Skins.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_96416B35809E494CBE4773EFF615C55F"
+            "Condition" = "8:"
+            "Transitive" = "11:TRUE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_831EE1B868484117E9AD0642BC6B24AC"
             {
             "SourcePath" = "8:MSVFW32.dll"
@@ -772,7 +798,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
@@ -836,9 +862,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FE331E9A97A549138BCB048EF2A4D9BC"
+            {
+            "SourcePath" = "8:..\\..\\..\\bin_support\\Splash\\Splash_001.png"
+            "TargetName" = "8:Splash.png"
+            "Tag" = "8:"
+            "Folder" = "8:_296025CC5E4C487297BD0E52D9BB7E38"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
+            "{5EB83D71-FA18-4901-BE56-DE22E13CC478}:_1DF6CEC175614E7CAC96B1A6F3E7D1A3"
+            {
+            "Name" = "8:WMV Character File"
+            "Description" = "8:Contains Character information that can be loaded using WoW Model Viewer."
+            "Extensions" = "8:chr"
+            "MIME" = "8:"
+            "Icon" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
+            "IconIndex" = "3:101"
+                "Command"
+                {
+                "Command" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
+                }
+                "Verbs"
+                {
+                    "{95C0C507-CBF0-42B8-B119-07219E384A4A}:_1CDE8F920EC74BCCB939115973FC5BDB"
+                    {
+                    "Command" = "8:&Open"
+                    "Verb" = "8:open"
+                    "Arguments" = "8:\"%1\""
+                    "Order" = "3:0"
+                    }
+                }
+            }
         }
         "Folder"
         {
@@ -991,14 +1060,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:World of Warcraft Model Viewer 64-bit"
-        "ProductCode" = "8:{D70BE64D-8D9D-4D75-925A-AE82B8C7ECBE}"
-        "PackageCode" = "8:{BC64C3B2-DBBD-48E4-BBFD-D92959AE6722}"
+        "ProductCode" = "8:{5ED208BF-C15D-4BDA-8C75-7EB956F80996}"
+        "PackageCode" = "8:{86C12C53-DDE9-41D8-8AD7-C7C438D7AB79}"
         "UpgradeCode" = "8:{69AA293E-260B-47B1-A596-44671A8B6EDF}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:07.01.499"
+        "ProductVersion" = "8:07.01.500"
         "Manufacturer" = "8:WoWModelViewer.org"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1512,12 +1581,12 @@
                 {
                 }
             "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "Folder" = "8:"
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_76F030E0965D4F7C993982A2F5CB8FB9"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_9FA5F476D3484F6BA7DBF337B45CBD98"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1526,7 +1595,7 @@
                 {
                 }
             "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "Folder" = "8:"
             "Feature" = "8:"
             "IsolateTo" = "8:"
@@ -1536,7 +1605,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C2852B5227D24E80833BD9CEEF0FCDE9"
             {
-            "SourcePath" = "8:..\\..\\..\\src\\Release64\\Clean\\wowmodelview.exe"
+            "SourcePath" = "8:..\\..\\..\\src\\Release64\\Clean\\wowmodelview64.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_296025CC5E4C487297BD0E52D9BB7E38"

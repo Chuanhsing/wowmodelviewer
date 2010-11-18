@@ -213,7 +213,7 @@ ModelViewer::ModelViewer()
 		InitObjects();  // create our canvas, anim control, character control, etc
 
 		// Show our window
-		Show(true);
+		Show(false);
 		// Display the window
 		Centre();
 
@@ -2197,7 +2197,7 @@ Windows 98\\ME\\2000\\XP on 17th December 2006\n\n\
 
 	wxAboutDialogInfo info;
     info.SetName(APP_TITLE);
-    info.SetVersion(APP_VERSION _T(" ") APP_PLATFORM APP_ISDEBUG);
+	info.SetVersion(_T("\n") APP_VERSION _T(" (") APP_BUILDNAME _T(")\n") APP_PLATFORM APP_ISDEBUG _T(" Edition"));
 	info.AddDeveloper(_T("Ufo_Z"));
 	info.AddDeveloper(_T("Darjk"));
 	info.AddDeveloper(_T("Chuanhsing"));

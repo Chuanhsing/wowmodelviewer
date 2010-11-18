@@ -1,7 +1,14 @@
 #ifndef MODELEXPORT_LWO_H
 #define MODELEXPORT_LWO_H
 
+#include <wx/wfstream.h>
+
+#include "globalvars.h"
+#include "modelexport.h"
+#include "modelcanvas.h"
+
 #define MAX_POINTS_PER_POLYGON 1023
+#define FRAMES_PER_SECOND 30
 
 // -----------------------------------------
 // New LW Header Stuff
@@ -14,13 +21,28 @@ uint16 u16;
 unsigned char ub;
 struct LWSurface;
 
-// Writing Functions
-void LW_WriteVX(wxFFileOutputStream &f, uint32 p, uint32 &Size); // Write Lightwave VX Data
-void LW_WriteSurface(wxFFileOutputStream &f, LWSurface Surface, uint32 &fileSize);
+// Counting system for Scene Items
+struct CountSystem{
+	uint32 Value;
 
-// Lightwave Type Numbers
+	void Reset(){
+		Value = 0;
+	}
+	uint32 GetPlus(){
+		return Value;
+		Value++;
+	}
+};
+
+CountSystem LW_ObjCount;
+CountSystem LW_LightCount;
+CountSystem LW_BoneCount;
+CountSystem LW_CamCount;
+
+// --== Lightwave Type Numbers ==--
 // These numbers identify object, light and bone types in the Lightwave Program.
 enum LWItemType {
+	LW_ITEMTYPE_NOPARENT = -1,
 	LW_ITEMTYPE_OBJECT = 1,
 	LW_ITEMTYPE_LIGHT,
 	LW_ITEMTYPE_CAMERA,
@@ -58,34 +80,117 @@ struct PolyNormal {
 	Vec3D direction[3];		// This is the direction the polygon's normal should point towards.	
 };
 
-// Animation Data
-struct AnimationData {
-	std::vector<Vec3D> Position;
-	std::vector<Vec3D> Rotation;
-	std::vector<Vec3D> Scale;
-	std::vector<uint32> Time;
+struct AnimVector{
+	std::vector<float> Value;
+	std::vector<float> Time;
+	std::vector<uint16> Spline;
 
-	// Push keyframe data into the Animation Data structure.
-	void Push(Vec3D position, Vec3D rotation, Vec3D scale, uint32 time){
-		Position.push_back(position);
-		Rotation.push_back(rotation);
-		Scale.push_back(scale);
+	// Push values into the arrays.
+	void Push(float value, float time, uint16 spline = 0){
+		Value.push_back(value);
 		Time.push_back(time);
+		Spline.push_back(spline);
 	}
-	// Returns the number of keyframes in this animation.
+
+	// Get the number of keyframes for this channel.
 	size_t Size(){
 		return Time.size();
+	}
+
+	// Generate, and push the first key.
+	AnimVector() {}
+	AnimVector(float value, float time, uint16 spline = 0){
+		Push(value,time,spline);
+	}
+};
+
+struct AnimVec3D{
+	AnimVector x, y, z;
+
+	AnimVec3D() {}
+	AnimVec3D(AnimVector cx, AnimVector cy, AnimVector cz){
+		x = cx;
+		y = cy;
+		z = cz;
+	}
+};
+
+// Animation Data
+struct AnimationData {
+	AnimVec3D Position;
+	AnimVec3D Rotation;
+	AnimVec3D Scale;
+
+	// Returns the number of keyframes in this animation.
+	size_t Size(){
+		float time = 0.0f;
+
+		// Check Position Timing
+		for (size_t i=0;i<Position.x.Size();i++){
+			if (Position.x.Time[i] > time)
+				time = Position.x.Time[i];
+			if (Position.y.Time[i] > time)
+				time = Position.y.Time[i];
+			if (Position.z.Time[i] > time)
+				time = Position.z.Time[i];
+		}
+		// Check Rotation Timing
+		for (size_t i=0;i<Rotation.x.Size();i++){
+			if (Rotation.x.Time[i] > time)
+				time = Rotation.x.Time[i];
+			if (Rotation.y.Time[i] > time)
+				time = Rotation.y.Time[i];
+			if (Rotation.z.Time[i] > time)
+				time = Rotation.z.Time[i];
+		}
+		// Check Scale Timing
+		for (size_t i=0;i<Scale.x.Size();i++){
+			if (Scale.x.Time[i] > time)
+				time = Scale.x.Time[i];
+			if (Scale.y.Time[i] > time)
+				time = Scale.y.Time[i];
+			if (Scale.z.Time[i] > time)
+				time = Scale.z.Time[i];
+		}
+
+		return time;
+	}
+
+	AnimationData() {}
+	AnimationData(AnimVec3D position, AnimVec3D rotation, AnimVec3D scale){
+		Position = position;
+		Rotation = rotation;
+		Scale = scale;
 	}
 };
 
 // --== Scene Formats ==--
 struct LWBones{
 	uint32 BoneID;
+	Vec3D RestPos;
+	Vec3D RestRot;
 	AnimationData AnimData;
 	wxString Name;
-	uint8 BoneType;
-	int32 ParentID;
-	uint8 ParentType;
+	bool Active;
+	uint16 BoneType;
+	uint32 ParentID;
+	uint16 ParentType;
+	float Length;
+	wxString WeightMap_Name;
+	bool WeightMap_Only;
+	bool WeightMap_Normalize;
+
+	LWBones(uint32 BoneNum){
+		BoneID = BoneNum;
+		BoneType = LW_BONETYPE_JOINT;
+		Active = true;
+		WeightMap_Name = wxEmptyString;
+		WeightMap_Only = true;
+		WeightMap_Normalize = true;
+		Length = 0.25f;
+		RestPos = Vec3D(0,0,0);
+		RestRot = Vec3D(0,0,0);
+	}
 };
 
 // Scene Object
@@ -94,18 +199,20 @@ struct LWSceneObj{
 	int32 LayerID;
 	AnimationData AnimData;
 	wxString Name;
+	wxString ObjectTags;
 	std::vector<LWBones> Bones;
 	bool isNull;
-	int32 ParentID;
-	int8 ParentType;
+	uint32 ParentID;
+	int16 ParentType;	// -1 or LW_ITEMTYPE_NOPARENT for No Parent
 
-	LWSceneObj(wxString name, uint32 id, int32 parentID, int8 parentType = LW_ITEMTYPE_OBJECT, bool IsNull = false, int32 layerID = 1){
+	LWSceneObj(wxString name, uint32 id, int32 parentID, int16 parentType = LW_ITEMTYPE_NOPARENT, bool IsNull = false, int32 layerID = 1){
 		Name = name;
 		ObjectID = id;
 		ParentType = parentType;
 		ParentID = parentID;
 		isNull = IsNull;
 		LayerID = layerID;
+		ObjectTags = wxEmptyString;
 	}
 };
 
@@ -115,10 +222,18 @@ struct LWLight{
 	wxString Name;
 	Vec3D Color;
 	float Intensity;
-	uint8 LightType;
+	uint16 LightType;
 	float FalloffRadius;
-	int32 ParentID;
-	uint8 ParentType;
+	uint32 ParentID;
+	int16 ParentType;
+	bool UseAttenuation;
+
+	LWLight(){
+		Intensity = 1.0f;
+		LightType = LW_LIGHTTYPE_POINT;
+		ParentType = LW_ITEMTYPE_NOPARENT;
+		FalloffRadius = 2.5f;
+	}
 };
 
 struct LWCamera{
@@ -140,10 +255,14 @@ struct LWScene{
 	wxString FileName;
 	wxString FilePath;
 	float AmbientIntensity;
+	float FirstFrame;
+	float LastFrame;
 
-	LWScene(wxString file, wxString path, float ambint = 0.5){
+	LWScene(wxString file, wxString path, float ambint = 0.5, float FrameFirst = 0.0f, float FrameLast = 1.0f){
 		FileName = file;
-		FilePath = path;
+		FilePath = path + SLASH;
+		FirstFrame = FrameFirst;
+		LastFrame = FrameLast;
 
 		AmbientIntensity = ambint;
 	}
@@ -160,9 +279,20 @@ struct LWScene{
 
 // --== Object Formats ==--
 // Weight Data
-struct LWWeight{
-	uint16 WeightID;
+struct LWWeightInfo{
+	uint32 PointID;
 	float Value;
+};
+
+struct LWWeightMap{
+	wxString WeightMapName;
+	std::vector<LWWeightInfo> PData;
+	uint32 BoneID;
+
+	LWWeightMap(wxString MapName=_T("Weight"), uint32 Bone_ID = 0){
+		WeightMapName = MapName;
+		BoneID = Bone_ID;
+	}
 };
 
 // Vertex Color Data
@@ -181,7 +311,6 @@ struct LWVertexColor{
 struct LWPoint {
 	Vec3D PointData;
 	Vec2D UVData;
-	std::vector<LWWeight> WeightData;
 	LWVertexColor VertexColors;		// In reality, this should be a std::vector, but WoW doesn't use more than 1.
 };
 
@@ -198,14 +327,15 @@ struct LWPoly {
 // Layer Data
 struct LWLayer {
 	// Layer Data
-	wxString Name;					// Name of the Layer, Optional
-	int ParentLayer;				// 0-based number of parent layer. -1 or omitted for no parent.
+	wxString Name;						// Name of the Layer, Optional
+	int ParentLayer;					// 0-based number of parent layer. -1 or omitted for no parent.
 
 	// Points Block
-	std::vector<LWPoint>Points;		// Various Point Blocks used by this layer.
-	bool HasVectorColors;			// Is True if the layer has a Vector Color map
-	Vec3D BoundingBox1;				// First Corner of the Layer's Bounding Box
-	Vec3D BoundingBox2;				// Second Corner of the Layer's Bounding Box
+	std::vector<LWPoint>Points;			// Various Point Blocks used by this layer.
+	std::vector<LWWeightMap>Weights;	// Weight Map Data
+	bool HasVectorColors;				// Is True if the layer has a Vector Color map
+	Vec3D BoundingBox1;					// First Corner of the Layer's Bounding Box
+	Vec3D BoundingBox2;					// Second Corner of the Layer's Bounding Box
 
 	// Poly Block
 	std::vector<LWPoly> Polys;
@@ -214,6 +344,8 @@ struct LWLayer {
 		Name = _T("(unnamed)");
 		HasVectorColors = false;
 		ParentLayer = -1;
+		BoundingBox1 = Vec3D();
+		BoundingBox2 = Vec3D();
 	};
 };
 
@@ -297,7 +429,7 @@ struct LWObject {
 	void Plus(LWObject o, int LayerNum=0,wxString PartNamePrefix = _T("")){
 		//wxLogMessage(_T("Running LW Plus Function, Num Layers: %i, into Layer %i."),o.Layers.size(),LayerNum);
 		// Add layers if nessicary...
-		while (Layers.size() < LayerNum+1){
+		while (Layers.size() < (size_t)LayerNum+1){
 			LWLayer a;
 			Layers.push_back(a);
 		}
@@ -393,8 +525,86 @@ struct LWObject {
 	}
 };
 
+// --== Writing Functions ==--
+// VX is Lightwave Shorthand for any Point Number, because Lightwave stores points differently if they're over a certain threshold.
+void LW_WriteVX(wxFFileOutputStream &f, uint32 p, uint32 &Size){
+	if (p <= 0xFF00){
+		uint16 indice = MSB2(p & 0x0000FFFF);
+		f.Write(reinterpret_cast<char *>(&indice),2);
+		Size += 2;
+	}else{
+		uint32 indice = MSB4<uint32>(p + 0xFF000000);
+		f.Write(reinterpret_cast<char *>(&indice), 4);
+		Size += 4;
+	}
+}
+
+// Keyframe Writing Functions
+// Writes a single Key for an envelope.
+void WriteLWSceneEnvKey(ofstream &fs, uint32 Chan, float value, float time, uint16 spline = 0)
+{
+	fs << _T("  Key ");				// Announces the start of a Key
+	fs << value;					// The Key's Value;
+	fs << _T(" " << time);			// Time, in seconds, a float. This can be negative, zero or positive. Keys are listed in the envelope in increasing time order.
+	fs << _T(" " << spline);		// The curve type, an integer: 0 - TCB, 1 - Hermite, 2 - 1D Bezier (obsolete, equivalent to Hermite), 3 - Linear, 4 - Stepped, 5 - 2D Bezier
+	fs << _T(" 0 0 0 0 0 0 \n");	// Curve Data 1-6, all 0s for now.
+}
+
+// Used for writing the keyframes of an animation.
+// Single Keyframe use. Use WriteLWSceneEnvArray for writing animations.
+void WriteLWSceneEnvChannel(ofstream &fs, uint32 ChanNum, float value, float time, uint16 spline = 0)
+{
+	fs << _T("Channel " << ChanNum << "\n");	// Channel Number
+	fs << _T("{ Envelope\n");
+	fs << _T("  1\n");							// Number of Keys in this envelope.
+	WriteLWSceneEnvKey(fs,ChanNum,value,time,spline);
+	fs << _T("  Behaviors 1 1\n");				// Pre/Post Behaviors. Defaults to 1 - Constant.
+	fs << _T("}\n");
+}
+
+// Multiple-frame use.
+void WriteLWSceneEnvArray(ofstream &fs, uint32 ChanNum, AnimVector value)
+{
+	fs << _T("Channel " << ChanNum << "\n");
+	fs << _T("{ Envelope\n");
+	fs << _T("  " << value.Time.size() << "\n");
+	for (uint32 n=0;n<value.Time.size();n++){
+		float time = (value.Time[n]/FRAMES_PER_SECOND)/FRAMES_PER_SECOND;	// Convert from WoW Frame Number into a Per-Ssecond Float
+
+		WriteLWSceneEnvKey(fs,ChanNum,value.Value[n],time,value.Spline[n]);
+	}
+
+	fs << _T("  Behaviors 1 1\n");
+	fs << _T("}\n");
+}
+
+// Writes the "Plugin" information for a scene object, light, camera &/or bones.
+void WriteLWScenePlugin(ofstream &fs, wxString type, uint32 PluginCount, wxString PluginName, wxString Data = wxEmptyString)
+{
+	fs << _T("Plugin " << type << " " << PluginCount << " " << PluginName << "\n" << Data << "EndPlugin\n");
+}
+
+// Write Keyframe Motion Array
+void LW_WriteMotionArray(ofstream &fs,AnimationData AnimData){
+	// Position
+	WriteLWSceneEnvArray(fs,0,AnimData.Position.x);
+	WriteLWSceneEnvArray(fs,1,AnimData.Position.y);
+	WriteLWSceneEnvArray(fs,2,AnimData.Position.z);
+	// Rotation
+	WriteLWSceneEnvArray(fs,3,AnimData.Rotation.x);
+	WriteLWSceneEnvArray(fs,4,AnimData.Rotation.y);
+	WriteLWSceneEnvArray(fs,5,AnimData.Rotation.z);
+	// Scale
+	WriteLWSceneEnvArray(fs,6,AnimData.Scale.x);
+	WriteLWSceneEnvArray(fs,7,AnimData.Scale.y);
+	WriteLWSceneEnvArray(fs,8,AnimData.Scale.z);
+}
+
 // Gather Functions
 LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LWScene &scene, bool announce = true);
 LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene);
+
+AnimVec3D animValue0 = AnimVec3D(AnimVector(0,0),AnimVector(0,0),AnimVector(0,0));
+AnimVec3D animValue1 = AnimVec3D(AnimVector(1,0),AnimVector(1,0),AnimVector(1,0));
 
 #endif

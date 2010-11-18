@@ -1,11 +1,4 @@
-#include <wx/wfstream.h>
-
-#include "globalvars.h"
-#include "modelexport.h"
 #include "modelexport_lwo.h"
-#include "modelcanvas.h"
-
-//#include "CxImage/ximage.h"
 
 //---------------------------------------------
 // --== Master Object Writing Function ==--
@@ -162,7 +155,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 	uint16 zero = 0;
 
 	// Needed Numbers
-	uint16 TagCount = (uint16)Object.PartNames.size() + (uint16)Object.Surfaces.size();
+	size_t TagCount = Object.PartNames.size() + Object.Surfaces.size();
 
 	// Open Model File
 	wxString file = wxString(filename, wxConvUTF8);
@@ -207,24 +200,24 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		fileLen += 8;
 
 		// Parts
-		for (uint32 i=0; i<Object.PartNames.size(); i++){
+		for (size_t i=0; i<Object.PartNames.size(); i++){
 			wxString PartName = Object.PartNames[i];
 
 			PartName.Append(_T('\0'));
-			if (fmod((float)PartName.length(), 2.0f) > 0)
+			if (fmod((float)PartName.Len(), 2.0f) > 0)
 				PartName.Append(_T('\0'));
-			f.Write(PartName.data(), PartName.length());
-			tagsSize += (uint32)PartName.length();
+			f.Write(PartName.data(), PartName.Len());
+			tagsSize += (uint32)PartName.Len();
 		}
 		// Surfaces
-		for (uint32 i=0; i<Object.Surfaces.size(); i++){
+		for (size_t i=0; i<Object.Surfaces.size(); i++){
 			wxString SurfName = Object.Surfaces[i].Name;
 
 			SurfName.Append(_T('\0'));
-			if (fmod((float)SurfName.length(), 2.0f) > 0)
+			if (fmod((float)SurfName.Len(), 2.0f) > 0)
 				SurfName.Append(_T('\0'));
-			f.Write(SurfName.data(), SurfName.length());
-			tagsSize += (uint32)SurfName.length();
+			f.Write(SurfName.data(), SurfName.Len());
+			tagsSize += (uint32)SurfName.Len();
 		}
 
 		// Correct TAGS Length
@@ -243,7 +236,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 	// Point, Poly & Vertex Map data will be nested in
 	// our layers.
 	// -------------------------------------------------
-	for (uint16 l=0;l<(uint16)Object.Layers.size();l++){
+	for (size_t l=0;l<Object.Layers.size();l++){
 		LWLayer cLyr = Object.Layers[l];
 		// Define a Layer & It's data
 		if (cLyr.Name.length() > 0)
@@ -260,7 +253,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		fileLen += 8;
 
 		// Layer Number
-		u16 = MSB2(l);
+		u16 = MSB2((uint16)l);
 		f.Write(reinterpret_cast<char *>(&u16), 2);
 		// Flags
 		f.Write(reinterpret_cast<char *>(&zero), 2);
@@ -360,7 +353,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		f.SeekO(0, wxFromEnd);
 
 		// ===================================================
-		// Vertex Map
+		// Vertex Colors Map
 		// ===================================================
 		if (cLyr.HasVectorColors == true){
 			wxLogMessage(_T("Has Vector Colors"));
@@ -415,6 +408,58 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			f.SeekO(0, wxFromEnd);
 		}
 
+		// ===================================================
+		// Weight Maps
+		// ===================================================
+		if (cLyr.Weights.size() > 0){
+			wxLogMessage(_T("Has Weight Maps"));
+			for (size_t w=0;w<cLyr.Weights.size();w++){
+				f.Write("VMPA", 4);
+				u32 = MSB4<uint32>(8);	// We got 2 Paramaters, * 4 Bytes.
+				f.Write(reinterpret_cast<char *>(&u32), 4);
+				u32 = 4;				// Across Discontinuous Edges UV Sub Type
+				f.Write(reinterpret_cast<char *>(&u32), 4);
+				u32 = MSB4<uint32>(6);	// Default Gray
+				f.Write(reinterpret_cast<char *>(&u32), 4);
+				fileLen += 16;
+
+				uint32 vmapSize = 0;
+				f.Write("VMAP", 4);
+				u32 = MSB4<uint32>(vmapSize);
+				f.Write(reinterpret_cast<char *>(&u32), 4);
+				fileLen += 8;
+				f.Write("WGHT", 4);
+				u16 = MSB2(1);		// Always 1
+				f.Write(reinterpret_cast<char *>(&u16), 2);
+				vmapSize += 6;
+
+				// Weightmap Name, /0 Terminated, evened out.
+				wxString name = cLyr.Weights[w].WeightMapName;
+				name.Append(_T('\0'));
+				if (fmod((float)name.Len(), 2.0f) > 0)
+					name.Append(_T('\0'));
+				f.Write(name, name.Len());
+				vmapSize += (uint32)name.Len();
+
+				for (size_t p=0;p<cLyr.Weights[w].PData.size();p++){
+					// Point number (VX Format)
+					uint32 pID = cLyr.Weights[w].PData[p].PointID;
+					LW_WriteVX(f,pID,vmapSize);
+
+					// Float value of weight map
+					float value = MSB4<float>(cLyr.Weights[w].PData[p].Value);
+					f.Write(reinterpret_cast<char *>(&value), 4);
+					vmapSize += 4;
+				}
+
+				fileLen += vmapSize;
+				off_T = -4-vmapSize;
+				f.SeekO(off_T, wxFromCurrent);
+				u32 = MSB4<uint32>(vmapSize);
+				f.Write(reinterpret_cast<char *>(&u32), 4);
+				f.SeekO(0, wxFromEnd);
+			}
+		}
 
 		// --== Polygons ==--
 		if (cLyr.Polys.size() > 0){
@@ -1114,309 +1159,128 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 // Scene Writing Helper Functions
 //---------------------------------------------
 
-// Writes a single Key for an envelope.
-void WriteLWSceneEnvKey(ofstream &fs, uint32 Chan, float value, float time, uint32 spline = 0)
+// Writes an Object's Bone to the scene file.
+void WriteLWSceneBone(ofstream &fs, LWBones BoneData)
 {
-	fs << _T("  Key ");				// Announces the start of a Key
-	fs << value;					// The Key's Value;
-	fs << _T(" " << time);			// Time, in seconds, a float. This can be negative, zero or positive. Keys are listed in the envelope in increasing time order.
-	fs << _T(" " << spline);		// The curve type, an integer: 0 - TCB, 1 - Hermite, 2 - 1D Bezier (obsolete, equivalent to Hermite), 3 - Linear, 4 - Stepped, 5 - 2D Bezier
-	fs << _T(" 0 0 0 0 0 0 \n");	// Curve Data 1-6, all 0s for now.
-}
-
-// Writes an entire channel with only 1 key.
-// Use WriteLWSceneEnvArray for writing animations.
-void WriteLWSceneEnvChannel(ofstream &fs, uint32 ChanNum, float value, float time, uint32 spline = 0)
-{
-	fs << _T("Channel " << ChanNum << "\n");	// Channel Number
-	fs << _T("{ Envelope\n");
-	fs << _T("  1\n");							// Number of Keys in this envelope.
-	WriteLWSceneEnvKey(fs,ChanNum,value,time,spline);
-	fs << _T("  Behaviors 1 1\n");				// Pre/Post Behaviors. Defaults to 1 - Constant.
-	fs << _T("}\n");
-}
-
-// Used for writing the keyframes of an animation.
-void WriteLWSceneEnvArray(ofstream &fs, uint32 ChanNum, std::vector<float> value, std::vector<float> time, std::vector<uint8> spline)
-{
-	fs << _T("Channel " << ChanNum << "\n");
-	fs << _T("{ Envelope\n");
-	fs << _T("  " << value.size() << "\n");
-	for (uint32 n=0;n<value.size();n++){
-		uint32 thisspline = 0;
-		if (spline[n]) {
-			thisspline = spline[n];
-		}
-		WriteLWSceneEnvKey(fs,ChanNum,value[n],time[n],thisspline);
+	int active = 1;
+	if ((BoneData.Active == false)||(BoneData.WeightMap_Name != BoneData.Name)||(BoneData.WeightMap_Name == wxEmptyString)){	// Add Or if weightmap != bone name when we can get weightmap info.
+		active = 0;
 	}
 
-	fs << _T("  Behaviors 1 1\n");
-	fs << _T("}\n");
-}
-
-// Writes the "Plugin" information for a scene object, light, camera &/or bones.
-void WriteLWScenePlugin(ofstream &fs, wxString type, uint32 PluginCount, wxString PluginName, wxString Data = wxEmptyString)
-{
-	fs << _T("Plugin " << type << " " << PluginCount << " " << PluginName << "\n" << Data << "EndPlugin\n");
-}
-
-// Writes an Object or Null Object to the scene file.
-void WriteLWSceneObject(ofstream &fs, wxString Filename, AnimationData AnimData, uint32 &ItemNumber, int Visibility = 7, bool isNull = false, int32 ParentNum = -1, wxString Label=wxEmptyString)
-{
-	bool isLabeled = false;
-	bool isParented = false;
-	if (!Label.IsEmpty())
-		isLabeled = true;
-	if (ParentNum > -1)
-		isParented = true;
-	if (Visibility > 7)
-		Visibility = 7;
-	if (Visibility < 0)
-		Visibility = 0;
-
-	if (isNull == true){
-		fs << _T("AddNullObject");
-	}else{
-		fs << _T("LoadObjectLayer 1");
+	fs << _T("AddBone 4") << wxString::Format(_T("%03x"),BoneData.BoneID) << _T("0000\nBoneName " << BoneData.Name << "\n");
+	fs << _T("ShowBone 1 -1 0.376471 0.878431 0.941176\nBoneActive " << active << "\n");
+	fs << _T("BoneStrength 1\n");
+	if (BoneData.WeightMap_Name != wxEmptyString){
+		fs << _T("BoneWeightMapName " << BoneData.WeightMap_Name << "\nBoneWeightMapOnly " << (BoneData.WeightMap_Only?1:0) << "\nBoneNormalization " << (BoneData.WeightMap_Normalize?1:0) << "\n");
 	}
-	fs << _T(" 1" << wxString::Format(_T("%07x"),ItemNumber) << " " << Filename << "\nChangeObject 0\n");
-	if (isLabeled)
-		fs << _T("// " << Label << "\n");
-	fs << _T("ShowObject "<<Visibility<<" -1 0.376471 0.878431 0.941176 \nGroup 0\nObjectMotion\nNumChannels 9\n");
-	std::vector<uint8>splines;
-	std::vector<float>Time;
-	std::vector<float>PosX;
-	std::vector<float>PosY;
-	std::vector<float>PosZ;
-	std::vector<float>RotX;
-	std::vector<float>RotY;
-	std::vector<float>RotZ;
-	std::vector<float>ScaX;
-	std::vector<float>ScaY;
-	std::vector<float>ScaZ;
-	for (unsigned int c=0;c<AnimData.Size();c++){
-		splines.push_back(0);
-		Time.push_back(AnimData.Time[c]);
-		PosX.push_back(AnimData.Position[c].x);
-		PosY.push_back(AnimData.Position[c].y);
-		PosZ.push_back(-AnimData.Position[c].z);
-		RotX.push_back(AnimData.Rotation[c].x);
-		RotY.push_back(AnimData.Rotation[c].y);
-		RotZ.push_back(AnimData.Rotation[c].z);
-		ScaX.push_back(AnimData.Scale[c].x);
-		ScaY.push_back(AnimData.Scale[c].y);
-		ScaZ.push_back(AnimData.Scale[c].z);
-	}
-	// Position
-	//WriteLWSceneEnvChannel(fs,1,Pos.y,0);
-	WriteLWSceneEnvArray(fs,0,PosX,Time,splines);
-	WriteLWSceneEnvArray(fs,1,PosY,Time,splines);
-	WriteLWSceneEnvArray(fs,2,PosZ,Time,splines);
-	// Rotation
-	WriteLWSceneEnvArray(fs,3,RotX,Time,splines);
-	WriteLWSceneEnvArray(fs,4,RotY,Time,splines);
-	WriteLWSceneEnvArray(fs,5,RotZ,Time,splines);
-	// Scale
-	WriteLWSceneEnvArray(fs,6,ScaX,Time,splines);
-	WriteLWSceneEnvArray(fs,7,ScaY,Time,splines);
-	WriteLWSceneEnvArray(fs,8,ScaZ,Time,splines);
+	fs << _T("ScaleBoneStrength 1" << "\n");
+	fs << _T("BoneRestPosition "<<BoneData.RestPos.x<<" "<<BoneData.RestPos.y<<" "<<BoneData.RestPos.z<< "\n");
+	fs << _T("BoneRestDirection "<<BoneData.RestRot.x<<" "<<BoneData.RestRot.y<<" "<<BoneData.RestRot.z<< "\n");
+	fs << _T("BoneRestLength "<<BoneData.Length<< "\n");
+	fs << _T("BoneType " << BoneData.BoneType << "\n");
+	fs << _T("BoneMotion\nNumChannels 9\n");
+	
+	LW_WriteMotionArray(fs,BoneData.AnimData);
 
 	fs << _T("PathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
-	if (isParented == true)
-		fs << _T("ParentItem 1" << wxString::Format(_T("%07x"),ParentNum) << "\n");
-	fs << _T("IKInitialState 0\nSubPatchLevel 3 3\nShadowOptions 7\n");
-
-	fs << _T("\n");
-	ItemNumber++;
+	fs << _T("ParentItem " << BoneData.ParentType);
+	if (BoneData.ParentType == LW_ITEMTYPE_BONE){
+		fs << _T(wxString::Format(_T("%03x"),BoneData.ParentID) << "0000");
+	}else{	// Assume LW_ITEMTYPE_OBJECT
+		fs << wxString::Format(_T("%07x"),BoneData.ParentID);
+	}
+	fs << _T("\nIKInitialState 0\n");
 }
 
-void WriteLWSceneObject2(ofstream &fs, LWSceneObj Object)
+// Writes an Object or Null, including Bones, to the scene file.
+void WriteLWSceneObject(ofstream &fs, LWSceneObj Object)
 {
-	/*
-	bool isLabeled = false;
-	bool isParented = false;
-	*/
-
 	if (Object.isNull == true){
 		fs << _T("AddNullObject");
 	}else{
 		fs << _T("LoadObjectLayer ") << Object.LayerID;
 	}
 	fs << _T(" 1" << wxString::Format(_T("%07x"),Object.ObjectID) << " " << Object.Name << "\nChangeObject 0\n");
-	/*
-	if (isLabeled)
-		fs << _T("// " << Label << "\n");
+
+	if (Object.ObjectTags != wxEmptyString)
+		fs << _T("// " << Object.ObjectTags << "\n");
 	fs << _T("ShowObject 7 -1 0.376471 0.878431 0.941176 \nGroup 0\nObjectMotion\nNumChannels 9\n");
-	std::vector<uint8>splines;
-	std::vector<float>Time;
-	std::vector<float>PosX;
-	std::vector<float>PosY;
-	std::vector<float>PosZ;
-	std::vector<float>RotX;
-	std::vector<float>RotY;
-	std::vector<float>RotZ;
-	std::vector<float>ScaX;
-	std::vector<float>ScaY;
-	std::vector<float>ScaZ;
-	for (unsigned int c=0;c<AnimData.Size();c++){
-		splines.push_back(0);
-		Time.push_back(AnimData.Time[c]);
-		PosX.push_back(AnimData.Position[c].x);
-		PosY.push_back(AnimData.Position[c].y);
-		PosZ.push_back(-AnimData.Position[c].z);
-		RotX.push_back(AnimData.Rotation[c].x);
-		RotY.push_back(AnimData.Rotation[c].y);
-		RotZ.push_back(AnimData.Rotation[c].z);
-		ScaX.push_back(AnimData.Scale[c].x);
-		ScaY.push_back(AnimData.Scale[c].y);
-		ScaZ.push_back(AnimData.Scale[c].z);
-	}
-	// Position
-	//WriteLWSceneEnvChannel(fs,1,Pos.y,0);
-	WriteLWSceneEnvArray(fs,0,PosX,Time,splines);
-	WriteLWSceneEnvArray(fs,1,PosY,Time,splines);
-	WriteLWSceneEnvArray(fs,2,PosZ,Time,splines);
-	// Rotation
-	WriteLWSceneEnvArray(fs,3,RotX,Time,splines);
-	WriteLWSceneEnvArray(fs,4,RotY,Time,splines);
-	WriteLWSceneEnvArray(fs,5,RotZ,Time,splines);
-	// Scale
-	WriteLWSceneEnvArray(fs,6,ScaX,Time,splines);
-	WriteLWSceneEnvArray(fs,7,ScaY,Time,splines);
-	WriteLWSceneEnvArray(fs,8,ScaZ,Time,splines);
+
+	LW_WriteMotionArray(fs,Object.AnimData);
 
 	fs << _T("PathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
-	if (isParented == true)
-		fs << _T("ParentItem 1" << wxString::Format(_T("%07x"),ParentNum) << "\n");
-	fs << _T("IKInitialState 0\nSubPatchLevel 3 3\nShadowOptions 7\n");
 
-	fs << _T("\n");
-	ItemNumber++;
-	*/
-}
-
-// Writes an Object's Bone to the scene file.
-void WriteLWSceneBone(ofstream &fs, wxString BoneName, int BoneType, Vec3D Pos, Vec3D Rot, float Length, uint32 BoneNumber, uint32 ParentObject, int32 ParentNum = -1)
-{
-	bool isParented = false;
-	if (ParentNum > -1){
-		isParented = true;
+	if (Object.ParentType > LW_ITEMTYPE_NOPARENT){
+		fs << _T("ParentItem " << Object.ParentType);
+		if (Object.ParentType == LW_ITEMTYPE_BONE){
+			fs << wxString::Format(_T("%03x"),Object.ParentID) << _T("0000");
+		}else{
+			fs << wxString::Format(_T("%07x"),Object.ParentID) << _T("\n");
+		}
+		fs << _T("\n");
 	}
+	fs << _T("IKInitialState 0\nSubPatchLevel 3 3\nShadowOptions 7\n\n");
 
-	fs << _T("AddBone 4") << wxString::Format(_T("%03x"),BoneNumber) << _T("0000\nBoneName " << BoneName << "\n");
-	fs << _T("ShowBone 1 -1 0.376471 0.878431 0.941176\nBoneActive 1" << "\n");
-	fs << _T("BoneStrength 1\nScaleBoneStrength 1" << "\n");
-	fs << _T("BoneRestPosition "<<Pos.x<<" "<<Pos.y<<" "<<Pos.z<< "\n");
-	fs << _T("BoneRestDirection "<<Rot.x<<" "<<Rot.y<<" "<<Rot.z<< "\n");
-	fs << _T("BoneRestLength "<<Length<< "\n");
-	fs << _T("BoneType " << BoneType << "\n");
-	fs << _T("BoneMotion\nNumChannels 9\n");
-	// Position
-	WriteLWSceneEnvChannel(fs,0,Pos.x,0);
-	WriteLWSceneEnvChannel(fs,1,Pos.y,0);
-	WriteLWSceneEnvChannel(fs,2,Pos.z,0);
-	// Rotation
-	WriteLWSceneEnvChannel(fs,3,Rot.x,0);
-	WriteLWSceneEnvChannel(fs,4,Rot.y,0);
-	WriteLWSceneEnvChannel(fs,5,Rot.z,0);
-	// Scale
-	WriteLWSceneEnvChannel(fs,6,1,0);
-	WriteLWSceneEnvChannel(fs,7,1,0);
-	WriteLWSceneEnvChannel(fs,8,1,0);
-
-	fs << _T("PathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
-	if (isParented == true){
-		fs << _T("ParentItem 4" << wxString::Format(_T("%03x"),ParentNum) << "0000\n");
-	}else{
-		fs << _T("ParentItem 1" << wxString::Format(_T("%07x"),ParentObject) << "\n");
+	// Bones
+	if (modelExport_LW_ExportBones == true){
+		if (Object.Bones.size() > 0){
+			fs << _T("BoneFalloffType 5\nFasterBones 0\n");
+			for (size_t x=0;x<Object.Bones.size();x++){
+				WriteLWSceneBone(fs, Object.Bones[x]);
+			}
+		}
 	}
-
-	fs << _T("IKInitialState 0");
-
-	fs << _T("\n");
 }
 
 // Write a Light to the Scene File
-void WriteLWSceneLight(ofstream &fs, uint32 &lcount, Vec3D LPos, uint32 Ltype, Vec3D Lcolor, float Lintensity, bool useAtten, float AttenEnd, float defRange = 2.5, wxString prefix = wxEmptyString, uint32 ParentNum = -1)
+void WriteLWSceneLight(ofstream &fs, LWLight Light) //uint32 &lcount, Vec3D LPos, uint32 Ltype, Vec3D Lcolor, float Lintensity, bool useAtten, float AttenEnd, float defRange = 2.5, wxString prefix = wxEmptyString, uint32 ParentNum = -1)
 {
-	bool isParented = false;
-	if (ParentNum >= 0)
-		isParented = true;
-	if (!prefix.IsEmpty())
-		prefix = _T(" "+prefix);
-	if ((useAtten == true)&&(AttenEnd<=0))
-		useAtten = false;
-
-
-	fs << _T("AddLight 2" << wxString::Format(_T("%07x"),lcount) << "\n");
+	fs << _T("AddLight 2" << wxString::Format(_T("%07x"),Light.LightID) << "\n");
 	//modelname[0] = toupper(modelname[0]);
-	fs << _T("LightName " << prefix << "Light " << lcount+1 << "\n");
-	fs << _T("ShowLight 1 -1 0.941176 0.376471 0.941176\n");	// Last 3 Numbers are Layout Color for the Light.
-	fs << _T("LightMotion\n");
-	fs << _T("NumChannels 9\n");
-	// Position
-	WriteLWSceneEnvChannel(fs,0,LPos.x,0);
-	WriteLWSceneEnvChannel(fs,1,LPos.y,0);
-	WriteLWSceneEnvChannel(fs,2,-LPos.z,0);
-	// Rotation
-	WriteLWSceneEnvChannel(fs,3,0,0);
-	WriteLWSceneEnvChannel(fs,4,0,0);
-	WriteLWSceneEnvChannel(fs,5,0,0);
-	// Scale
-	WriteLWSceneEnvChannel(fs,6,1,0);
-	WriteLWSceneEnvChannel(fs,7,1,0);
-	WriteLWSceneEnvChannel(fs,8,1,0);
+	fs << _T("LightName " << Light.Name << "\nShowLight 1 -1 0.941176 0.376471 0.941176\nLightMotion\nNumChannels 9\n");
+	LW_WriteMotionArray(fs,Light.AnimData);
 
-	if (isParented)
-		fs << _T("ParentItem 1" << wxString::Format(_T("%07x"),ParentNum) << "\n");
+	if (Light.ParentType > LW_ITEMTYPE_NOPARENT){
+		fs << _T("ParentItem " << Light.ParentType);
+		if (Light.ParentType == LW_ITEMTYPE_BONE){
+			fs << wxString::Format(_T("%03x"),Light.ParentID) << _T("0000");
+		}else{
+			fs << wxString::Format(_T("%07x"),Light.ParentID) << _T("\n");
+		}
+		fs << _T("\n");
+	}
 
 	// Light Color Reducer
 	// Some lights have a color channel greater than 255. This reduces all the colors, but increases the intensity, which should keep it looking the way Blizzard intended.
-	while ((Lcolor.x > 1)||(Lcolor.y > 1)||(Lcolor.z > 1)) {
-		Lcolor.x = Lcolor.x * 0.99;
-		Lcolor.y = Lcolor.y * 0.99;
-		Lcolor.z = Lcolor.z * 0.99;
-		Lintensity = Lintensity / 0.99;
+	Vec3D LColor = Light.Color;
+	float LIntensity = Light.Intensity;
+	while ((LColor.x > 1.0f)||(LColor.y > 1.0f)||(LColor.z > 1.0f)) {
+		LColor.x *= 0.99f;
+		LColor.y *= 0.99f;
+		LColor.z *= 0.99f;
+		LIntensity /= 0.99f;
 	}
-
-	fs << _T("LightColor " << Lcolor.x << " " << Lcolor.y << " " << Lcolor.z << "\n");
-	fs << _T("LightIntensity " << Lintensity << "\n");
+	fs << _T("LightColor " << LColor.x << " " << LColor.y << " " << LColor.z << "\nLightIntensity " << LIntensity << "\n");
 
 	// Process Light type & output!
-	switch (Ltype) {
+	switch (Light.LightType) {
 		// Omni Lights
 		case 1:
 		default:
 			// Default to an Omni (Point) light.
-			fs << _T("LightType 1\n");
+			fs << _T("LightType " << LW_LIGHTTYPE_POINT << "\n");
 
-			if (useAtten == true) {
+			if (Light.FalloffRadius > 0.0f) {
 				// Use Inverse Distance for the default Light Falloff Type. Should better simulate WoW Lights, until I can write a WoW light plugin for Lightwave...
-				fs << _T("LightFalloffType 2\nLightRange " << AttenEnd << "\n");
+				fs << _T("LightFalloffType 2\nLightRange " << Light.FalloffRadius << "\n");
 			}else{
 				// Default to these settings, which look pretty close...
-				fs << _T("LightFalloffType 2\nLightRange " << defRange << "\n");
+				fs << _T("LightFalloffType 2\nLightRange 2.5\n");
 			}
 			fs << _T("ShadowType 1\nShadowColor 0 0 0\n");
 			WriteLWScenePlugin(fs,_T("LightHandler"),1,_T("PointLight"));
 	}
 	fs << _T("\n");
-	lcount++;
-}
-
-// Data Writing Functions
-
-// VX is Lightwave Shorthand for any Point Number, because Lightwave stores points differently if they're over a certain threshold.
-void LW_WriteVX(wxFFileOutputStream &f, uint32 p, uint32 &Size){
-	if (p <= 0xFF00){
-		uint16 indice = MSB2(p & 0x0000FFFF);
-		f.Write(reinterpret_cast<char *>(&indice),2);
-		Size += 2;
-	}else{
-		uint32 indice = MSB4<uint32>(p + 0xFF000000);
-		f.Write(reinterpret_cast<char *>(&indice), 4);
-		Size += 4;
-	}
 }
 
 
@@ -1451,13 +1315,44 @@ bool WriteLWScene(LWScene *SceneData){
 	wxLogMessage(_T("Opened %s for writing..."),SceneName.c_str());
 	SceneName = SceneName.AfterLast(SLASH);
 
+	/*
+	Lightwave Scene Data Order:
+	
+	Format Data
+	Render Range Data
+	Objects
+		Bones
+	Global Light Data
+	Lights
+	Cameras
+	GlobalSettings
+	Antialasing Settings
+	Backdrop
+	Fog Data
+	Render Settings
+	View Configuration
+	Options
+	Current Items
+
+	*/
+
 	// File Top
 	fs << _T("LWSC\n");
-	fs << _T("5\n\n"); // I think this is a version-compatibility number...
+	fs << _T("5\n\n"); // This is a version-compatibility number...
+	
+	// Scene Length Data
+	size_t Frame_First = SceneData->FirstFrame;
+	size_t Frame_Last = SceneData->LastFrame;
+	if ((Frame_First == 0)&&(Frame_Last == 1)){
+		Frame_First = 0;
+		Frame_Last = 60;
+	}
+	fs << _T("RenderRangeType 0\nFirstFrame " << Frame_First << "\nLastFrame " << Frame_Last << "\nFrameStep 1\nRenderRangeObject 0\nRenderRangeArbitrary " << Frame_First << "-" << Frame_Last << "\n");
+	fs << _T("PreviewFirstFrame " << Frame_First << "\nPreviewLastFrame " << Frame_Last << "\nPreviewFrameStep 1\nCurrentFrame " << Frame_First << "\nFramesPerSecond 30\nChangeScene 0\n");
 
-	for (uint32 nobj=0;nobj<SceneData->Objects.size();nobj++){
-		LWSceneObj Obj = SceneData->Objects[nobj];
-		WriteLWSceneObject2(fs,Obj);
+	// Objects & Bones
+	for (size_t o=0;o<SceneData->Objects.size();o++){
+		WriteLWSceneObject(fs,SceneData->Objects[o]);
 	}
 
 	// Global Light Options
@@ -1465,6 +1360,18 @@ bool WriteLWScene(LWScene *SceneData){
 		SceneData->AmbientIntensity = 0.5f;		// Default to 50%
 	}
 	fs << _T("AmbientColor 1 1 1\nAmbientIntensity ") << SceneData->AmbientIntensity << _T("\nDoubleSidedAreaLights 1\nRadiosityType 2\nRadiosityInterpolated 1\nRadiosityTransparency 0\nRadiosityIntensity 1\nRadiosityTolerance 0.2928932\nRadiosityRays 64\nSecondaryBounceRays 16\nRadiosityMinPixelSpacing 4\nRadiosityMaxPixelSpacing 100\nRadiosityMultiplier 1\nRadiosityDirectionalRays 0\nRadiosityUseGradients 0\nRadiosityUseBehindTest 1\nBlurRadiosity 1\nRadiosityFlags 0\nRadiosityCacheModulus 1\nRadiosityCacheFilePath radiosity.cache\nPixelFilterForceMT 0\n\n");
+
+	if (modelExport_LW_ExportLights == true){
+		for (size_t l=0;l<SceneData->Lights.size();l++){
+			WriteLWSceneLight(fs,SceneData->Lights[l]);
+		}
+	}
+
+	if (modelExport_LW_ExportCameras == true){
+		for (size_t c=0;c<SceneData->Cameras.size();c++){
+			
+		}
+	}
 
 	// Successfully wrote the scene file!
 	return true;
@@ -1477,6 +1384,7 @@ bool WriteLWScene(LWScene *SceneData){
 
 // Exports a Model to a Lightwave Scene File.
 void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
+	/*
 	// Should we generate a scene file?
 	// Wll only generate if there are bones, lights, or a Camera in the model.
 	bool doreturn = false;
@@ -1580,34 +1488,52 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 	temp = ObjRot.y;
 	ObjRot.y = ObjRot.z;
 	ObjRot.z = temp;
-	ObjData.Push(ObjPos,(ObjRot/(float)RADIAN),OneScale,0);
+	ObjData.Push(ObjPos,(ObjRot/(float)RADIAN),OneScale);
 
-	WriteLWSceneObject(fs,objFilename,ObjData,mcount);
+	//WriteLWSceneObject(fs,objFilename,ObjData,mcount);
 
 	// Export Bones
 	if (modelExport_LW_ExportBones == true){
 		if (m->header.nBones > 0){
 			fs << _T("BoneFalloffType 5\nFasterBones 1\n");
-			for (uint16 x=0;x<m->header.nBones;x++){
+			for (size_t x=0;x<m->header.nBones;x++){
+				LWBones lwBone((uint32)x);
 				Bone *cbone = &m->bones[x];
+				AnimationData a;
+
 				Vec3D Pos = cbone->pivot;
-				if (cbone->parent > -1)
+				if (cbone->parent > -1){
 					Pos -= m->bones[cbone->parent].pivot;
+					lwBone.ParentType = LW_ITEMTYPE_BONE;
+					lwBone.ParentID = cbone->parent;
+				}else{
+					lwBone.Active = false;		// Disable Non-Parented bones.
+					lwBone.ParentType = LW_ITEMTYPE_OBJECT;
+					lwBone.ParentID = ModelID;
+				}
 				if (init == false){
 					Pos = cbone->transPivot;
-					if (cbone->parent > -1)
+					if (cbone->parent > -1){
 						Pos -= m->bones[cbone->parent].transPivot;
+						lwBone.Active = true;
+					}
 				}
 				Pos.z = -Pos.z;
 				MakeModelFaceForwards(Pos,false);
 				wxString bone_name = wxString::Format(_T("Bone_%03i"), x);
 				for (int j=0; j<BONE_MAX; ++j) {
-					if (m->keyBoneLookup[j] == static_cast<int>(x)) {
+					if (m->keyBoneLookup[j] == (uint16)x) {
 						bone_name = Bone_Names[j];
 						break;
 					}
 				}
-				WriteLWSceneBone(fs, bone_name, 1, Pos, Vec3D(0,0,0), 0.25, x, ModelID, cbone->parent);
+
+				a.Push(Pos,Vec3D(),Vec3D(1,1,1));
+				lwBone.RestPos = Pos;
+				lwBone.AnimData = a;
+				lwBone.Name = bone_name;
+
+				WriteLWSceneBone(fs, lwBone);
 			}
 		}
 	}
@@ -1631,7 +1557,7 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 				useAtten = true;
 			}
 
-			WriteLWSceneLight(fs,lcount,l->pos,l->type,color,intense,useAtten,AttenEnd,2.5);
+//			WriteLWSceneLight(fs,lcount,l->pos,l->type,color,intense,useAtten,AttenEnd,2.5);
 		}
 		if (att != NULL){
 			if (att->model){
@@ -1655,7 +1581,7 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 								useAtten = true;
 							}
 
-							WriteLWSceneLight(fs,lcount,l->pos,l->type,color,intense,useAtten,AttenEnd,2.5);
+//							WriteLWSceneLight(fs,lcount,l->pos,l->type,color,intense,useAtten,AttenEnd,2.5);
 						}
 					}
 				}
@@ -1677,15 +1603,15 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 					uint32 ctime = cam->tTarget.times[anim][x]/30;
 					a.x = -a.x;
 					a.z = -a.z;
-					CamData.Push(a,ZeroRot,OneScale,ctime/30);
+					//CamData.Push(a,ZeroRot,OneScale,ctime/30);
 					if (ctime > RangeEnd)
 						RangeEnd = ctime;
 				}
 			}else{
-				CamData.Push(cam->target,ZeroRot,OneScale,0);
+				CamData.Push(cam->target,ZeroRot,OneScale);
 			}
 
-			WriteLWSceneObject(fs,_T("Camera Target"),CamData,mcount,0,true,ModelID);
+			//WriteLWSceneObject(fs,_T("Camera Target"),CamData,mcount,0,true,ModelID);
 
 			fs << _T("AddCamera 30000000\nCameraName Camera\nShowCamera 1 -1 0.125490 0.878431 0.125490\nCameraMotion\nNumChannels 6\n");
 
@@ -1744,12 +1670,14 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 	fs << _T("RenderMode 2\nRayTraceEffects 1\nDepthBufferAA 0\nRenderLines 1\nRayRecursionLimit 16\nRayPrecision 6\nRayCutoff 0.01\nDataOverlayLabel  \nSaveRGB 0\nSaveAlpha 0\n");
 
 	fs.close();
+	*/
 }
 
 // Export a WMO's Objects & Lights to a Scene file.
 void ExportWMOtoScene(WMO *m, const char *fn){
 	// Should we generate a scene file?
 	// Wll only generate if there are doodads or lights.
+	/*
 	bool doreturn = false;
 
 	if ((m->nDoodads == 0) && (m->nLights == 0)){
@@ -1798,13 +1726,13 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 		return;
 	}
 	SceneName = SceneName.AfterLast(SLASH);
-
+*/
 	/*
 		Lightwave Scene files are simple text files. New Lines (\n) are need to add a new variable for the scene to understand.
 		Lightwave files are pretty sturdy. Variables not already in a scene or model file, will usually be generated when opened.
 		As such, we don't need to declare EVERY variable for the scene file, but I'm gonna add what I think is pertinent.
 	*/
-
+/*
 	// File Top
 	fs << _T("LWSC\n");
 	fs << _T("5\n\n"); // I think this is a version-compatibility number...
@@ -1841,9 +1769,9 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 	objFilename += Obj;
 
 	AnimationData ObjData;
-	ObjData.Push(ZeroPos,ZeroRot,OneScale,0);
+//	ObjData.Push(ZeroPos,ZeroRot,OneScale);
 
-	WriteLWSceneObject(fs,objFilename,ObjData,mcount);
+	//WriteLWSceneObject(fs,objFilename,ObjData,mcount);
 
 	if ((modelExport_LW_ExportDoodads ==  true)&&(modelExport_LW_DoodadsAs > 1)){
 		// Doodads
@@ -1856,7 +1784,7 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 
 			AnimationData DDData;
 			DDData.Push(ZeroPos,(ZeroRot+(float)(PI/2)),OneScale,0);
-			WriteLWSceneObject(fs,DDSetName,DDData,mcount,7,true,ModelID);
+			//WriteLWSceneObject(fs,DDSetName,DDData,mcount,7,true,ModelID);
 
 			for (uint32 dd=DDSet->start;dd<(DDSet->start+DDSet->size);dd++){
 				WMOModelInstance *doodad = &m->modelis[dd];
@@ -1888,7 +1816,7 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 				AnimationData DoodadData;
 				DoodadData.Push(Pos,Rot,Vec3D(doodad->sc,doodad->sc,doodad->sc),0);
 
-				WriteLWSceneObject(fs,name,DoodadData,mcount,7,isNull,DDSID,wxString(doodad->filename.c_str(), wxConvUTF8));
+				//WriteLWSceneObject(fs,name,DoodadData,mcount,7,isNull,DDSID,wxString(doodad->filename.c_str(), wxConvUTF8));
 				wxLogMessage(_T("Export: Finished writing the Doodad to the Scene File."));
 
 				// Doodad Lights
@@ -1924,7 +1852,7 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 				useAtten = true;
 			}
 
-			WriteLWSceneLight(fs,lcount,light->pos,light->type,color,intense,useAtten,AttenEnd,2.5);
+//			WriteLWSceneLight(fs,lcount,light->pos,light->type,color,intense,useAtten,AttenEnd,2.5);
 		}
 
 		// Doodad Lights
@@ -1947,7 +1875,7 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 				useAtten = true;
 			}
 			
-			WriteLWSceneLight(fs,lcount,light->pos,light->type,color,intense,useAtten,AttenEnd,5,name,DoodadLightArrayDDID[i]);
+//			WriteLWSceneLight(fs,lcount,light->pos,light->type,color,intense,useAtten,AttenEnd,5,name,DoodadLightArrayDDID[i]);
 		}
 	}
 
@@ -2002,6 +1930,7 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 
 	// Reload our original WMO file.
 	//wxLogMessage("Reloading original WMO file: %s",cWMOName.c_str());
+	*/
 }
 
 
@@ -2014,6 +1943,8 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 	LWObject Object;
 	if (!m)
 		return Object;
+
+	LWSceneObj SceneObj(wxString(fn, wxConvUTF8),LW_ObjCount.GetPlus(),0);
 
 	Object.SourceType = _T("M2");
 	if (announce == true)
@@ -2152,7 +2083,15 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 			matName = m->TextureList[p.tex].AfterLast(SLASH).BeforeLast(_T('.'));
 			if (matName.Len() == 0)
 				matName = wxString::Format(_T("Material_%03i"), p.tex);
+/*
+			if (p.useSpec == true){
+				matName = matName + _T("_Spec");
+			}
 
+			if (p.trans == true){
+				matName = matName + _T("_Trans");
+			}
+*/
 			// If Luminous...
 			if (p.unlit == true) {
 				Surf_Diff = 0.0f;
@@ -2260,6 +2199,46 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 
 				Vert2Point[v] = pointnum;
 				Layer.Points.push_back(Point);
+			}
+
+			// Weight Data
+			for (size_t x=0;x<m->header.nBones;x++){
+				bool useWMap = false;
+				LWWeightMap wMap;
+				Bone *cbone = &m->bones[x];
+
+				// Weight Map Name = Bone Name
+				wxString bone_name = wxString::Format(_T("Bone_%03i"), x);
+				for (int j=0; j<BONE_MAX; ++j) {
+					if (m->keyBoneLookup[j] == (int16)x) {
+						bone_name = Bone_Names[j];
+						break;
+					}
+				}
+
+				wMap.WeightMapName = bone_name;
+				wMap.BoneID = (uint32)x;
+			
+				// Weight Map Point & Value Data
+				for (size_t v=p.vertexStart;v<p.vertexEnd;v++){
+					ModelVertex& vertex = m->origVertices[v];
+
+					for (size_t j=0;j<4;j++){
+						if ((vertex.bones[j] != x)&&((vertex.bones[j] == 0)&&(vertex.weights[j] == 0)))
+							continue;
+
+						// Else...
+						LWWeightInfo a;
+						a.Value = (vertex.weights[j] / 255);
+						a.PointID = (uint32)v;
+						if (a.Value != 0.0f){
+							useWMap = true;
+							wMap.PData.push_back(a);
+						}
+					}
+				}
+				if (useWMap == true)
+					Layer.Weights.push_back(wMap);
 			}
 
 			// Polys
@@ -2542,8 +2521,303 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 			}
 		}
 	}
-
 	Object.Layers.push_back(Layer);
+
+	// --== Scene Data ==--
+	int modelExport_LW_ExportAnim = 0;	// Temp here until I build the interface.
+	bool animExportError = false;
+	// Object Placement
+	AnimationData a(animValue0,animValue0,animValue1);
+	SceneObj.AnimData = a;
+
+	// Bones
+	if (m->header.nBones > 0){
+		for (size_t x=0;x<m->header.nBones;x++){
+			LWBones lwBone((uint32)x);
+			Bone *cbone = &m->bones[x];
+
+			Vec3D Pos = cbone->pivot;	// For Animation & Init Only
+			Vec3D Pos_i = Pos;			// For Non-Init Only Exporting
+			if (cbone->parent > LW_ITEMTYPE_NOPARENT){
+				Pos -= m->bones[cbone->parent].pivot;
+				lwBone.ParentType = LW_ITEMTYPE_BONE;
+				lwBone.ParentID = cbone->parent;
+			}else{
+				lwBone.Active = false;		// Disable Non-Parented bones.
+				lwBone.ParentType = LW_ITEMTYPE_OBJECT;
+				lwBone.ParentID = LW_ObjCount.Value;
+			}
+			Pos_i = Pos;
+			if (init == false){
+				Pos_i = cbone->transPivot;
+				if (cbone->parent > LW_ITEMTYPE_NOPARENT){
+					Pos_i -= m->bones[cbone->parent].transPivot;
+					lwBone.Active = true;
+				}
+				Pos_i.z = -Pos_i.z;
+				MakeModelFaceForwards(Pos_i,false);
+				lwBone.RestPos = Pos_i;
+			}else{
+				Pos.z = -Pos.z;
+				MakeModelFaceForwards(Pos,false);
+				lwBone.RestPos = Pos;
+				lwBone.RestRot = Vec3D();
+			}
+			lwBone.RestRot = Vec3D();
+			AnimVec3D animPos_i = AnimVec3D(AnimVector(Pos_i.x,0),AnimVector(Pos_i.y,0),AnimVector(Pos_i.z,0));
+			AnimVec3D animPos, animRot, animSca;
+			if (modelExport_LW_ExportAnim > 0){
+				// Position
+				AnimVector PosX, PosY, PosZ;
+				for (size_t i=0;i<cbone->trans.data[cAnim].size();i++){
+					uint32 aTime = cbone->trans.times[cAnim][i];
+					float fTime = (float)aTime;
+					Vec3D aPos = cbone->pivot; //cbone->trans.getValue(cAnim,aTime);
+					if (cbone->parent > LW_ITEMTYPE_NOPARENT)
+						aPos -= m->bones[cbone->parent].pivot;
+					//aPos.z = -aPos.z;
+					//MakeModelFaceForwards(aPos,false);
+					if (fTime/FRAMES_PER_SECOND < scene.FirstFrame){
+						scene.FirstFrame = fTime/FRAMES_PER_SECOND;
+					}
+					if (fTime/FRAMES_PER_SECOND > scene.LastFrame){
+						scene.LastFrame = fTime/FRAMES_PER_SECOND;
+					}
+					PosX.Push(aPos.x,fTime,cbone->trans.type);
+					PosY.Push(aPos.y,fTime,cbone->trans.type);
+					PosZ.Push(aPos.z,fTime,cbone->trans.type);
+				}
+				if (PosX.Size() > 0){
+					animPos = AnimVec3D(PosX,PosY,PosZ);
+				}else{
+					animPos = AnimVec3D(AnimVector(Pos.x,0),AnimVector(Pos.y,0),AnimVector(Pos.z,0));
+				}
+
+				// Rotation
+				AnimVector RotX, RotY, RotZ;
+				/*for (size_t i=0;i<cbone->rot.data[cAnim].size();i++){
+					uint32 aTime = cbone->rot.times[cAnim][i];
+					float fTime = (float)aTime;
+					Vec3D HPB;
+					Quaternion q = cbone->rot.getValue(cAnim,aTime);
+					Quaternion tq;
+					tq.x = q.w; tq.y = q.x; tq.z = q.y; tq.w = q.z;
+					Matrix Neo;
+					QuaternionToRotationMatrix(tq, Neo);
+					RotationMatrixToEulerAnglesXYZ(Neo, HPB.x, HPB.y, HPB.z);
+
+					HPB.x = HPB.x * (180.0f / (float)PI);
+					HPB.y = HPB.y * (180.0f / (float)PI);
+					HPB.z = HPB.z * (180.0f / (float)PI);
+
+
+					if (fTime/FRAMES_PER_SECOND < scene.FirstFrame){
+						scene.FirstFrame = fTime/FRAMES_PER_SECOND;
+					}
+					if (fTime/FRAMES_PER_SECOND > scene.LastFrame){
+						scene.LastFrame = fTime/FRAMES_PER_SECOND;
+					}
+					RotX.Push(HPB.x,fTime,cbone->rot.type);
+					RotY.Push(HPB.y,fTime,cbone->rot.type);
+					RotZ.Push(HPB.z,fTime,cbone->rot.type);
+				}
+				if (RotX.Size() > 0){
+					animRot = AnimVec3D(RotX,RotY,RotZ);
+				}else{*/
+					animRot = animValue0;
+			//	}
+
+				// Scale
+				AnimVector ScaX, ScaY, ScaZ;
+				for (size_t i=0;i<cbone->scale.data[cAnim].size();i++){
+					uint32 aTime = cbone->scale.times[cAnim][i];
+					float fTime = (float)aTime;
+
+					Vec3D Sc = cbone->scale.getValue(cAnim,aTime);
+
+					if (fTime/FRAMES_PER_SECOND < scene.FirstFrame){
+						scene.FirstFrame = fTime/FRAMES_PER_SECOND;
+					}
+					if (fTime/FRAMES_PER_SECOND > scene.LastFrame){
+						scene.LastFrame = fTime/FRAMES_PER_SECOND;
+					}
+					ScaX.Push(Sc.x,fTime,cbone->scale.type);
+					ScaY.Push(Sc.y,fTime,cbone->scale.type);
+					ScaZ.Push(Sc.z,fTime,cbone->scale.type);
+				}
+				if (ScaX.Size() > 0){
+					animSca = AnimVec3D(ScaX,ScaY,ScaZ);
+				}else{
+					animSca = animValue1;
+				}
+			}else{
+				animPos = AnimVec3D(AnimVector(Pos.x,0),AnimVector(Pos.y,0),AnimVector(Pos.z,0));
+				animRot = animValue0;
+				animSca = animValue1;
+			}
+
+			if (init == false)
+				lwBone.AnimData = AnimationData(animPos_i,animValue0,animValue1);
+			else if (modelExport_LW_ExportAnim > 0)
+				lwBone.AnimData = AnimationData(animPos,animRot,animSca);
+			else
+				lwBone.AnimData = AnimationData(animPos,animValue0,animValue1);
+
+			wxString bone_name = wxString::Format(_T("Bone_%03i"), x);
+			for (size_t j=0; j<BONE_MAX; ++j) {
+				if (m->keyBoneLookup[j] == (uint16)x) {
+					bone_name = Bone_Names[j];
+					break;
+				}
+			}
+			lwBone.Name = bone_name;
+			for (size_t j=0;j<Object.Layers[0].Weights.size();j++){
+				if (Object.Layers[0].Weights[j].WeightMapName == bone_name){
+					lwBone.WeightMap_Name = bone_name;
+					break;
+				}
+			}
+			
+
+			SceneObj.Bones.push_back(lwBone);
+		}
+	}
+
+	// Lights
+	uint32 nLights = m->header.nLights;
+	for (size_t x=0;x<nLights;x++){
+		ModelLight *l = &m->lights[x];
+		LWLight Light;
+
+		Light.LightID = LW_LightCount.GetPlus();
+		Light.Name = m->name.AfterLast('\\').BeforeLast('.');
+		Light.Name << wxString::Format(_T(" Light %02i"), Light.LightID);
+		if (l->parent > LW_ITEMTYPE_NOPARENT){
+			Light.ParentType = LW_ITEMTYPE_BONE;
+			Light.ParentID = l->parent;
+		}else{
+			Light.ParentType = LW_ITEMTYPE_OBJECT;
+			Light.ParentID = LW_ObjCount.Value;
+		}
+
+		Light.Color = l->diffColor.getValue(0,0);
+		Light.Intensity = l->diffIntensity.getValue(0,0);
+		Light.UseAttenuation = false;
+		Light.FalloffRadius = l->AttenEnd.getValue(0,0);
+
+		AnimVec3D animPos = AnimVec3D(AnimVector(l->pos.x,0),AnimVector(l->pos.y,0),AnimVector(l->pos.z,0));
+		Light.AnimData = AnimationData(animPos,animValue0,animValue1);
+
+		if (l->UseAttenuation.getValue(0,0) > 0){
+			Light.UseAttenuation = true;
+		}
+
+		scene.Lights.push_back(Light);
+	}
+	if (att != NULL){
+		if (att->model){
+			wxLogMessage(_T("Att Model found."));
+		}
+		for (uint32 c=0; c<att->children.size(); c++) {
+			Attachment *att2 = att->children[c];
+			for (uint32 j=0; j<att2->children.size(); j++) {
+				Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
+
+				if (mAttChild){
+					for (size_t x=0;x<mAttChild->header.nLights;x++){
+						ModelLight *l = &mAttChild->lights[x];
+
+						Vec3D color = l->diffColor.getValue(0,0);
+						float intense = l->diffIntensity.getValue(0,0);
+						bool useAtten = false;
+						float AttenEnd = l->AttenEnd.getValue(0,0);
+
+						if (l->UseAttenuation.getValue(0,0) > 0){
+							useAtten = true;
+						}
+
+//							WriteLWSceneLight(fs,lcount,l->pos,l->type,color,intense,useAtten,AttenEnd,2.5);
+					}
+				}
+			}
+		}
+	}
+
+	// Cameras
+	/*
+	if (m->hasCamera == true){
+		ModelCamera *cam = &m->cam;
+		LWCamera C;
+
+		uint32 anim = m->animManager->GetAnim();
+
+
+		uint32 CameraTargetID = mcount;
+		AnimationData CamData;
+		if (cam->tTarget.data[anim].size() > 1){
+			for (unsigned int x=0;x<cam->tTarget.data[anim].size();x++){
+				Vec3D a = cam->target + cam->tTarget.data[anim][x];
+				MakeModelFaceForwards(a,false);
+				uint32 ctime = cam->tTarget.times[anim][x]/30;
+				a.x = -a.x;
+				a.z = -a.z;
+				//CamData.Push(a,ZeroRot,OneScale,ctime/30);
+				if (ctime > RangeEnd)
+					RangeEnd = ctime;
+			}
+		}else{
+			CamData.Push(cam->target,ZeroRot,OneScale);
+		}
+
+		//WriteLWSceneObject(fs,_T("Camera Target"),CamData,mcount,0,true,ModelID);
+
+		fs << _T("AddCamera 30000000\nCameraName Camera\nShowCamera 1 -1 0.125490 0.878431 0.125490\nCameraMotion\nNumChannels 6\n");
+
+		if (cam->tPos.data[anim].size() > 1){
+			std::vector<float> time, PosX, PosY, PosZ, ZeroFloat;
+			std::vector<uint8> splines;
+			// Animations
+			for (unsigned int x=0;x<cam->tPos.data[anim].size();x++){
+				// Position Data
+				Vec3D p_val = cam->pos + cam->tPos.data[anim][x];
+				MakeModelFaceForwards(p_val,true);
+				uint32 ctime = cam->tPos.times[anim][x]/30;
+				float p_Time = ctime/30;
+				if (ctime > RangeEnd)
+					RangeEnd = ctime;
+				splines.push_back(0);
+				ZeroFloat.push_back(0);
+				time.push_back(p_Time);
+				PosX.push_back(p_val.x);
+				PosY.push_back(p_val.y);
+				PosZ.push_back(p_val.z);
+			}
+			WriteLWSceneEnvArray(fs,0,PosX,time,splines);
+			WriteLWSceneEnvArray(fs,0,PosY,time,splines);
+			WriteLWSceneEnvArray(fs,0,PosZ,time,splines);
+			WriteLWSceneEnvArray(fs,0,ZeroFloat,time,splines);
+			WriteLWSceneEnvArray(fs,0,ZeroFloat,time,splines);
+			WriteLWSceneEnvArray(fs,0,ZeroFloat,time,splines);
+		}else{
+			Vec3D vect = cam->pos;
+			MakeModelFaceForwards(vect,false);
+			WriteLWSceneEnvChannel(fs,0,vect.x,0);
+			WriteLWSceneEnvChannel(fs,1,vect.y,0);
+			WriteLWSceneEnvChannel(fs,2,vect.z,0);
+			WriteLWSceneEnvChannel(fs,3,0,0);
+			WriteLWSceneEnvChannel(fs,4,0,0);
+			WriteLWSceneEnvChannel(fs,5,0,0);
+		}
+
+		fs << _T("ParentItem 1" << wxString::Format(_T("%07x"),ModelID) << "\n");
+		fs << _T("IKInitCustomFrame 0\nGoalStrength 1\nIKFKBlending 0\nIKSoftMin 0.25\nIKSoftMax 0.75\nCtrlPosItemBlend 1\nCtrlRotItemBlend 1\nCtrlScaleItemBlend 1\n\n");
+		fs << _T("HController 1\nPController 1\nPathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
+		fs << _T("TargetItem 1"<<wxString::Format(_T("%07x"),CameraTargetID)<<"\n");
+		fs << _T("ZoomFactor "<<(cam->fov*3.6)<<"\nZoomType 2\n");
+		WriteLWScenePlugin(fs,_T("CameraHandler"),1,_T("Perspective"));	// Make the camera a Perspective camera
+	} */
+
+	scene.Objects.push_back(SceneObj);
 
 	return Object;
 	Object.~LWObject();
@@ -2725,7 +2999,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 			l.LightID = (uint32)LightID;
 			l.Color = Lcolor;
 			l.Intensity = Lint;
-			l.AnimData.Push(cl.pos,Vec3D(0,0,0),Vec3D(1,1,1),0);
+//			l.AnimData.Push(cl.pos,Vec3D(0,0,0),Vec3D(1,1,1),0);
 			l.FalloffRadius = 2.5f;
 			if (cl.useatten > 0) {
 				l.FalloffRadius = cl.attenEnd;
@@ -2998,7 +3272,11 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 // Export M2s
 void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init){
 	wxString filename(fn, wxConvUTF8);
-	wxString scfilename(fn, wxConvUTF8);
+	wxString scfilename = wxString(fn, wxConvUTF8).BeforeLast('.').Append(_T(".lws"));
+	LW_ObjCount.Reset();
+	LW_LightCount.Reset();
+	LW_BoneCount.Reset();
+	LW_CamCount.Reset();
 
 	if (modelExport_LW_PreserveDir == true){
 		wxString Path, Name;
@@ -3065,16 +3343,20 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init){
 	Object.~LWObject();
 
 	// Scene Data
-	// NYI
+	WriteLWScene(&Scene);
 
 	// Old Version
-	ExportM2toScene(att,m,fn,init);
+	//ExportM2toScene(att,m,fn,init);
 }
 
 // Export WMOs
 void ExportWMOtoLWO(WMO *m, const char *fn){
 	wxString filename(fn, wxConvUTF8);
-	wxString scfilename(fn, wxConvUTF8);
+	wxString scfilename = wxString(fn, wxConvUTF8).BeforeLast('.').Append(_T(".lws"));
+	LW_ObjCount.Reset();
+	LW_LightCount.Reset();
+	LW_BoneCount.Reset();
+	LW_CamCount.Reset();
 
 	if (modelExport_LW_PreserveDir == true){
 		wxString Path, Name;

@@ -1142,7 +1142,7 @@ void Model::setLOD(MPQFile &f, int index)
 		pass.billboard = (rf.flags & RENDERFLAGS_BILLBOARD) != 0;
 
 		// Use environmental reflection effects?
-		pass.useEnvMap = (texunitlookup[tex[j].texunit] == -1) && pass.billboard && rf.blend>2; //&& rf.blend<5; 
+		pass.useEnvMap = (texunitlookup[tex[j].texunit] == -1) && pass.billboard && rf.blend>2; //&& rf.blend<5;
 
 		// Disable environmental mapping if its been unchecked.
 		if (pass.useEnvMap && !video.useEnvMapping)

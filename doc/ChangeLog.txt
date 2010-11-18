@@ -1,5 +1,20 @@
 World of Warcraft Model Viewer v0.7.0.1
 
+r500
+ - Added Splash Page while program is loading.
+ - Installers will now associate .CHR files with WoW Model Viewer, complete with custom icon!
+ - Added 48x48 size WMV Icon to the Mac Icon file.
+ - Added BuildNames. This name will change every release. Check the About page to find out what your current build name is!
+ - LWO Exporter:
+  - Added preliminary Weightmap Support for M2 models. Attached models not yet effected. *KNOWN BUG* Not all points have weightmaps applied to them.
+  - Wrote New Scene Exporter, which allows for more data to be saved to scenes.
+  - Unparented Bones are now Inactive by default.
+  - Exported Bones now support the weightmaps. Bones without weightmaps are Inactive by default.
+ - Dev Work:
+  - Windows Executables are now named wowmodelview32.exe and wowmodelview64.exe, for the 32 & 64bit versions, respectively.
+  - Moved some functions from the FBX exporter into the main Model Export files.
+
+
 r499
  - Eye Glows are now a Character Option! Choose from None, Default, and Death Knight! Character Save files will remember this setting!
  - Updated items.csv & npcs.csv files!
@@ -25,7 +40,6 @@ r499
   - Fixed langOffset for gameVersion 40000.
   - Removed redundant functions in mpq_stormlib.
   - Removed Experimental Lightwave exporter. No longer needed.
-
 
 r487
  - Updated for 4.0.x.

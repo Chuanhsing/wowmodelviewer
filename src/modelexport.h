@@ -124,6 +124,9 @@ void InitCommon(Attachment *att, bool init, ModelData *&verts, GroupData *&group
 wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassNumber);
 void MakeModelFaceForwards(Vec3D &vect, bool flipX);
 
+void QuaternionToRotationMatrix(const Quaternion& quat, Matrix& rkRot);
+void RotationMatrixToEulerAnglesXYZ(const Matrix& rkRot, float& rfXAngle, float& rfYAngle, float& rfZAngle);
+
 // --== Exporter Functions ==--
 // If your exporter doesn't do WMO or M2 files, include a faux function anyways. Then add a non-working
 // function at the bottom of modelexport.cpp so it has something to look for. The non-working exporter
