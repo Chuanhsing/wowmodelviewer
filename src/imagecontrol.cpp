@@ -20,25 +20,25 @@ ImageControl::ImageControl(wxWindow *parent, wxWindowID id, ModelCanvas *cc)
 	aspect = 0.0f;
 	this->cc = cc;
 
-	if (Create(parent, id, wxDefaultPosition, wxSize(300,150), wxTAB_TRAVERSAL, _T("ImageControlFrame")) == false) {
-		wxLogMessage(_T("Serious Error: Failed to create a window for our ImageControl!"));
+	if (Create(parent, id, wxDefaultPosition, wxSize(300,150), wxTAB_TRAVERSAL, wxT("ImageControlFrame")) == false) {
+		wxLogMessage(wxT("Serious Error: Failed to create a window for our ImageControl!"));
 		return;
 	}
 
-	lbl1 = new wxStaticText(this, wxID_ANY, _T("Filename:"), wxPoint(10,10), wxDefaultSize, wxALIGN_LEFT);
+	lbl1 = new wxStaticText(this, wxID_ANY, wxT("Filename:"), wxPoint(10,10), wxDefaultSize, wxALIGN_LEFT);
 	filename = new wxTextCtrl(this, ID_IMAGE_FILENAME, wxEmptyString, wxPoint(60,5), wxSize(200,20), wxTE_READONLY);
 
-	lbl2 = new wxStaticText(this, wxID_ANY, _T("Canvas Width:"), wxPoint(10,40), wxDefaultSize, wxALIGN_LEFT);
+	lbl2 = new wxStaticText(this, wxID_ANY, wxT("Canvas Width:"), wxPoint(10,40), wxDefaultSize, wxALIGN_LEFT);
 	canvasWidth = new wxTextCtrl(this, ID_IMAGE_CANVASWIDTH, wxEmptyString, wxPoint(90,40), wxSize(40,20), 0);
-	lbl3 = new wxStaticText(this, wxID_ANY, _T("Canvas Height:"), wxPoint(10,65), wxDefaultSize, wxALIGN_LEFT);
+	lbl3 = new wxStaticText(this, wxID_ANY, wxT("Canvas Height:"), wxPoint(10,65), wxDefaultSize, wxALIGN_LEFT);
 	canvasHeight = new wxTextCtrl(this, ID_IMAGE_CANVASHEIGHT, wxEmptyString, wxPoint(90,65), wxSize(40,20), 0);
 	
-	lockAspect = new wxCheckBox(this, ID_IMAGE_LOCKASPECT, _T("Lock Aspect"), wxPoint(140,45), wxDefaultSize);
+	lockAspect = new wxCheckBox(this, ID_IMAGE_LOCKASPECT, wxT("Lock Aspect"), wxPoint(140,45), wxDefaultSize);
 
-	maxsize = new wxStaticText(this, wxID_ANY, _("Max Size: "), wxPoint(140,70), wxDefaultSize, 0);
+	maxsize = new wxStaticText(this, wxID_ANY, wxT("Max Size: "), wxPoint(140,70), wxDefaultSize, 0);
 
-	save = new wxButton(this, ID_IMAGE_SAVE, _("Save"), wxPoint(100,95), wxDefaultSize, 0);
-	cancel = new wxButton(this, ID_IMAGE_CANCEL, _("Cancel"), wxPoint(180,95), wxDefaultSize, 0);
+	save = new wxButton(this, ID_IMAGE_SAVE, wxT("Save"), wxPoint(100,95), wxDefaultSize, 0);
+	cancel = new wxButton(this, ID_IMAGE_CANCEL, wxT("Cancel"), wxPoint(180,95), wxDefaultSize, 0);
 }
 
 
@@ -66,13 +66,13 @@ void ImageControl::OnShow(wxAuiManager *m)
 
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*)&maxSize); 
 
-	maxsize->SetLabel(wxString::Format(_T("Max Size: %i"), maxSize));
+	maxsize->SetLabel(wxString::Format(wxT("Max Size: %i"), maxSize));
 
 	aspect = ((float)screenSize[2] / (float)screenSize[3]);
 
-	wxString tmp = _T("screenshot_");
+	wxString tmp = wxT("screenshot_");
 	tmp << ssCounter;
-	wxFileDialog dialog(this, _("Save screenshot"), wxEmptyString, tmp, _T("Bitmap Images (*.bmp)|*.bmp|TGA Images (*.tga)|*.tga|JPEG Images (*.jpg)|*.jpg|PNG Images (*.png)|*.png"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+	wxFileDialog dialog(this, wxT("Save screenshot"), wxEmptyString, tmp, wxT("Bitmap Images (*.bmp)|*.bmp|TGA Images (*.tga)|*.tga|JPEG Images (*.jpg)|*.jpg|PNG Images (*.png)|*.png"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 	dialog.SetFilterIndex(imgFormat);
 
 	if (dialog.ShowModal()==wxID_OK) {
@@ -133,7 +133,7 @@ void ImageControl::OnText(wxCommandEvent &event)
 		x = value;
 		value = int(value / aspect);
 		y = value;
-		canvasHeight->SetValue(wxString::Format(_T("%i"), value));
+		canvasHeight->SetValue(wxString::Format(wxT("%i"), value));
 	} else if (event.GetId() == ID_IMAGE_CANVASHEIGHT) {
 		tmp = canvasHeight->GetValue();
 		tmp.ToLong(&value);
@@ -141,15 +141,15 @@ void ImageControl::OnText(wxCommandEvent &event)
 		y = value;
 		value = int(value * aspect);
 		x = value;
-		canvasWidth->SetValue(wxString::Format(_T("%i"), value));
+		canvasWidth->SetValue(wxString::Format(wxT("%i"), value));
 	}
 
 	if (x > maxSize) {
 		x = maxSize;
-		canvasWidth->SetValue(wxString::Format(_T("%i"), x));
+		canvasWidth->SetValue(wxString::Format(wxT("%i"), x));
 	}
 	if (y > maxSize) {
 		y = maxSize;
-		canvasHeight->SetValue(wxString::Format(_T("%i"), x));
+		canvasHeight->SetValue(wxString::Format(wxT("%i"), x));
 	}
 }

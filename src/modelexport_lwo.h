@@ -8,7 +8,6 @@
 #include "modelcanvas.h"
 
 #define MAX_POINTS_PER_POLYGON 1023
-#define FRAMES_PER_SECOND 30
 
 // -----------------------------------------
 // New LW Header Stuff
@@ -289,7 +288,7 @@ struct LWWeightMap{
 	std::vector<LWWeightInfo> PData;
 	uint32 BoneID;
 
-	LWWeightMap(wxString MapName=_T("Weight"), uint32 Bone_ID = 0){
+	LWWeightMap(wxString MapName=wxT("Weight"), uint32 Bone_ID = 0){
 		WeightMapName = MapName;
 		BoneID = Bone_ID;
 	}
@@ -341,7 +340,7 @@ struct LWLayer {
 	std::vector<LWPoly> Polys;
 
 	LWLayer(){
-		Name = _T("(unnamed)");
+		Name = wxT("(unnamed)");
 		HasVectorColors = false;
 		ParentLayer = -1;
 		BoundingBox1 = Vec3D();
@@ -426,8 +425,8 @@ struct LWObject {
 		SourceType = wxEmptyString;
 	}
 
-	void Plus(LWObject o, int LayerNum=0,wxString PartNamePrefix = _T("")){
-		//wxLogMessage(_T("Running LW Plus Function, Num Layers: %i, into Layer %i."),o.Layers.size(),LayerNum);
+	void Plus(LWObject o, int LayerNum=0,wxString PartNamePrefix = wxT("")){
+		//wxLogMessage(wxT("Running LW Plus Function, Num Layers: %i, into Layer %i."),o.Layers.size(),LayerNum);
 		// Add layers if nessicary...
 		while (Layers.size() < (size_t)LayerNum+1){
 			LWLayer a;
@@ -543,45 +542,45 @@ void LW_WriteVX(wxFFileOutputStream &f, uint32 p, uint32 &Size){
 // Writes a single Key for an envelope.
 void WriteLWSceneEnvKey(ofstream &fs, uint32 Chan, float value, float time, uint16 spline = 0)
 {
-	fs << _T("  Key ");				// Announces the start of a Key
+	fs << wxT("  Key ");				// Announces the start of a Key
 	fs << value;					// The Key's Value;
-	fs << _T(" " << time);			// Time, in seconds, a float. This can be negative, zero or positive. Keys are listed in the envelope in increasing time order.
-	fs << _T(" " << spline);		// The curve type, an integer: 0 - TCB, 1 - Hermite, 2 - 1D Bezier (obsolete, equivalent to Hermite), 3 - Linear, 4 - Stepped, 5 - 2D Bezier
-	fs << _T(" 0 0 0 0 0 0 \n");	// Curve Data 1-6, all 0s for now.
+	fs << wxT(" " << time);			// Time, in seconds, a float. This can be negative, zero or positive. Keys are listed in the envelope in increasing time order.
+	fs << wxT(" " << spline);		// The curve type, an integer: 0 - TCB, 1 - Hermite, 2 - 1D Bezier (obsolete, equivalent to Hermite), 3 - Linear, 4 - Stepped, 5 - 2D Bezier
+	fs << wxT(" 0 0 0 0 0 0 \n");	// Curve Data 1-6, all 0s for now.
 }
 
 // Used for writing the keyframes of an animation.
 // Single Keyframe use. Use WriteLWSceneEnvArray for writing animations.
 void WriteLWSceneEnvChannel(ofstream &fs, uint32 ChanNum, float value, float time, uint16 spline = 0)
 {
-	fs << _T("Channel " << ChanNum << "\n");	// Channel Number
-	fs << _T("{ Envelope\n");
-	fs << _T("  1\n");							// Number of Keys in this envelope.
+	fs << wxT("Channel " << ChanNum << "\n");	// Channel Number
+	fs << wxT("{ Envelope\n");
+	fs << wxT("  1\n");							// Number of Keys in this envelope.
 	WriteLWSceneEnvKey(fs,ChanNum,value,time,spline);
-	fs << _T("  Behaviors 1 1\n");				// Pre/Post Behaviors. Defaults to 1 - Constant.
-	fs << _T("}\n");
+	fs << wxT("  Behaviors 1 1\n");				// Pre/Post Behaviors. Defaults to 1 - Constant.
+	fs << wxT("}\n");
 }
 
 // Multiple-frame use.
 void WriteLWSceneEnvArray(ofstream &fs, uint32 ChanNum, AnimVector value)
 {
-	fs << _T("Channel " << ChanNum << "\n");
-	fs << _T("{ Envelope\n");
-	fs << _T("  " << value.Time.size() << "\n");
+	fs << wxT("Channel " << ChanNum << "\n");
+	fs << wxT("{ Envelope\n");
+	fs << wxT("  " << value.Time.size() << "\n");
 	for (uint32 n=0;n<value.Time.size();n++){
 		float time = (value.Time[n]/FRAMES_PER_SECOND)/FRAMES_PER_SECOND;	// Convert from WoW Frame Number into a Per-Ssecond Float
 
 		WriteLWSceneEnvKey(fs,ChanNum,value.Value[n],time,value.Spline[n]);
 	}
 
-	fs << _T("  Behaviors 1 1\n");
-	fs << _T("}\n");
+	fs << wxT("  Behaviors 1 1\n");
+	fs << wxT("}\n");
 }
 
 // Writes the "Plugin" information for a scene object, light, camera &/or bones.
 void WriteLWScenePlugin(ofstream &fs, wxString type, uint32 PluginCount, wxString PluginName, wxString Data = wxEmptyString)
 {
-	fs << _T("Plugin " << type << " " << PluginCount << " " << PluginName << "\n" << Data << "EndPlugin\n");
+	fs << wxT("Plugin " << type << " " << PluginCount << " " << PluginName << "\n" << Data << "EndPlugin\n");
 }
 
 // Write Keyframe Motion Array

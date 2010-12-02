@@ -53,13 +53,13 @@ HRESULT CAVIGenerator::InitEngineForWrite(HWND parent)
 	
 	HRESULT hr;
 	
-	wxLogMessage(_T("Info: Initating AVI class object for writing."));
+	wxLogMessage(wxT("Info: Initating AVI class object for writing."));
 
 	// Step 0 : Let's make sure we are running on 1.1 
 	DWORD wVer = HIWORD(VideoForWindowsVersion());
 	if (wVer < 0x010a) {
 		 // oops, we are too old, blow out of here 
-		wxLogMessage(_T("Avi Error: Version of Video for Windows is too old. Come on, join the 21th century!"));
+		wxLogMessage(wxT("Avi Error: Version of Video for Windows is too old. Come on, join the 21th century!"));
 		return S_FALSE;
 	}
 
@@ -74,23 +74,23 @@ HRESULT CAVIGenerator::InitEngineForWrite(HWND parent)
 											// Name your file .avi -> very important
 
 	if (hr != AVIERR_OK) {
-		wxLogMessage(_T("Avi Error: AVI Engine failed to initialize. Check filename %s."), m_sFile);
+		wxLogMessage(wxT("Avi Error: AVI Engine failed to initialize. Check filename %s."), m_sFile);
 		// Check it succeded.
 		switch(hr) {
 		case AVIERR_BADFORMAT: 
-			wxLogMessage(_T("Avi Error: The file couldn't be read, indicating a corrupt file or an unrecognized format."));
+			wxLogMessage(wxT("Avi Error: The file couldn't be read, indicating a corrupt file or an unrecognized format."));
 			break;
 		case AVIERR_MEMORY:		
-			wxLogMessage(_T("Avi Error: The file could not be opened because of insufficient memory.")); 
+			wxLogMessage(wxT("Avi Error: The file could not be opened because of insufficient memory.")); 
 			break;
 		case AVIERR_FILEREAD:
-			wxLogMessage(_T("Avi Error: A disk error occurred while reading the file.")); 
+			wxLogMessage(wxT("Avi Error: A disk error occurred while reading the file.")); 
 			break;
 		case AVIERR_FILEOPEN:		
-			wxLogMessage(_T("Avi Error: A disk error occurred while opening the file."));
+			wxLogMessage(wxT("Avi Error: A disk error occurred while opening the file."));
 			break;
 		case REGDB_E_CLASSNOTREG:		
-			wxLogMessage(_T("Avi Error: According to the registry, the type of file specified in AVIFileOpen does not have a handler to process it"));
+			wxLogMessage(wxT("Avi Error: According to the registry, the type of file specified in AVIFileOpen does not have a handler to process it"));
 			break;
 		}
 
@@ -115,9 +115,9 @@ HRESULT CAVIGenerator::InitEngineForWrite(HWND parent)
 
 	// Check it succeded.
 	if (hr != AVIERR_OK) {
-		wxLogMessage(_T("Avi Error: Stream creation failed. Check Bitmap info."));
+		wxLogMessage(wxT("Avi Error: Stream creation failed. Check Bitmap info."));
 		if (hr==AVIERR_READONLY) {
-			wxLogMessage(_T("Avi Error: Read only file."));
+			wxLogMessage(wxT("Avi Error: Read only file."));
 		}
 		return hr;
 	}
@@ -135,17 +135,17 @@ HRESULT CAVIGenerator::InitEngineForWrite(HWND parent)
 	hr = AVIMakeCompressedStream(&m_pStreamCompressed, m_pStream, &opts, NULL);
 
 	if (hr != AVIERR_OK) {
-		wxLogMessage(_T("Error: AVI Compressed Stream creation failed."));
+		wxLogMessage(wxT("Error: AVI Compressed Stream creation failed."));
 		
 		switch(hr) {
 		case AVIERR_NOCOMPRESSOR:
-			wxLogMessage(_T("Avi Error: A suitable compressor cannot be found."));
+			wxLogMessage(wxT("Avi Error: A suitable compressor cannot be found."));
 			break;
 		case AVIERR_MEMORY:
-			wxLogMessage(_T("Avi Error: There is not enough memory to complete the operation."));
+			wxLogMessage(wxT("Avi Error: There is not enough memory to complete the operation."));
 			break; 
 		case AVIERR_UNSUPPORTED:
-			wxLogMessage(_T("Avi Error: Compression is not supported for this type of data. This error might be returned if you try to compress data that is not audio or video."));
+			wxLogMessage(wxT("Avi Error: Compression is not supported for this type of data. This error might be returned if you try to compress data that is not audio or video."));
 			break;
 		}
 
@@ -156,7 +156,7 @@ HRESULT CAVIGenerator::InitEngineForWrite(HWND parent)
 	// releasing memory allocated by AVISaveOptionFree
 	hr=AVISaveOptionsFree(1,(LPAVICOMPRESSOPTIONS FAR *) &aopts);
 	if (hr!=AVIERR_OK) {
-		wxLogMessage(_T("Avi Error: Problem releasing memory"));
+		wxLogMessage(wxT("Avi Error: Problem releasing memory"));
 		return hr;
 	}
 
@@ -167,7 +167,7 @@ HRESULT CAVIGenerator::InitEngineForWrite(HWND parent)
 							sizeof(m_bih)); // format size
 
 	if (hr != AVIERR_OK) {
-		wxLogMessage(_T("Avi Error: Compressed Stream format setting failed."));
+		wxLogMessage(wxT("Avi Error: Compressed Stream format setting failed."));
 		return hr;
 	}
 
@@ -179,12 +179,12 @@ HRESULT CAVIGenerator::InitEngineForWrite(HWND parent)
 
 void CAVIGenerator::InitEngineForRead()
 {
-	wxLogMessage(_T("Info: Initating AVI class object for reading."));
+	wxLogMessage(wxT("Info: Initating AVI class object for reading."));
 
 	// make sure we are running on 1.1 or newer
 	DWORD wVer = HIWORD(VideoForWindowsVersion());
 	if (wVer < 0x010a) {
-		wxLogMessage(_T("AVI Error: Version of Video for Windows is too old. Come on, join the 21th century!"));
+		wxLogMessage(wxT("AVI Error: Version of Video for Windows is too old. Come on, join the 21th century!"));
 		return;
 	}
 
@@ -194,7 +194,7 @@ void CAVIGenerator::InitEngineForRead()
 	// Opens The AVI Stream
 	if (AVIStreamOpenFromFile(&m_pStream, m_sFile, streamtypeVIDEO, 0, OF_READ, NULL) !=0) {
 		// An Error Occurred Opening The Stream
-		wxLogMessage(_T("AVI Error: Failed To Open The AVI Stream."));
+		wxLogMessage(wxT("AVI Error: Failed To Open The AVI Stream."));
 		ReleaseEngine();
 		return;
 	}
@@ -223,7 +223,7 @@ void CAVIGenerator::InitEngineForRead()
 	m_pGetFrame = AVIStreamGetFrameOpen(m_pStream, NULL);		// Create The PGETFRAME	Using Our Request Mode
 	if (m_pGetFrame == NULL) {
 		// An Error Occurred Opening The Frame
-		wxLogMessage(_T("AVI Error: Failed To Open The AVI Frame."));
+		wxLogMessage(wxT("AVI Error: Failed To Open The AVI Frame."));
 		ReleaseEngine();
 	}
 }

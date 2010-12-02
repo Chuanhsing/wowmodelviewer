@@ -38,7 +38,7 @@ void SaveTexture(wxString fn)
 	if (fn.Last() == 'a') {
 		// starcraft II needs 17 bytes as 8
 		wxFFile f;
-		f.Open(fn, _T("r+b"));
+		f.Open(fn, wxT("r+b"));
 		if (f.IsOpened()) {
 			f.Seek(17, wxFromStart);
 			char c=8;
@@ -54,7 +54,7 @@ void SaveTexture(wxString fn)
 // Used to export images that are filenames. For composited images, such as a character's face & body texture, use SaveTexture.
 // ExportID identifies the exporting function. This is used in the path-generating section.
 // Suffixes currently supported: "tga" & "png". Defaults to tga if omitted by exporter.
-void SaveTexture2(wxString file, wxString outdir, wxString ExportID = wxEmptyString, wxString suffix = wxString(_T("tga")))
+void SaveTexture2(wxString file, wxString outdir, wxString ExportID = wxEmptyString, wxString suffix = wxString(wxT("tga")))
 {
 	// Check to see if we have all our data...
 	if (file == wxEmptyString)
@@ -62,10 +62,10 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID = wxEmptyStr
 	if (outdir == wxEmptyString)
 		return;
 
-	//wxLogMessage(_T("Outdir: %s"),outdir);
+	//wxLogMessage(wxT("Outdir: %s"),outdir);
 
 	wxFileName fn(file);
-	if (fn.GetExt().Lower() != _T("blp"))
+	if (fn.GetExt().Lower() != wxT("blp"))
 		return;
 	TextureID temptex = texturemanager.add(file);
 	Texture &tex = *((Texture*)texturemanager.items[temptex]);
@@ -84,8 +84,8 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID = wxEmptyStr
 
 	wxString ImgName = file.AfterLast(SLASH).BeforeLast('.');
 	wxString ImgPath = file.BeforeLast(SLASH);
-	//wxLogMessage(_T("ImgName: %s, ImgPath: %s"),ImgName,ImgPath);
-	//wxLogMessage(_T("Outdir: %s"),outdir);
+	//wxLogMessage(wxT("ImgName: %s, ImgPath: %s"),ImgName,ImgPath);
+	//wxLogMessage(wxT("Outdir: %s"),outdir);
 
 	// -= Pre-Path Directories =-
 	// Add any directories inbetween the target directory and the preserved directory go here.
@@ -93,33 +93,33 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID = wxEmptyStr
 	outdir = fixMPQPath(outdir);
 
 	// Lightwave
-	if (ExportID.IsSameAs(_T("LWO"))){
+	if (ExportID.IsSameAs(wxT("LWO"))){
 		if (modelExport_LW_PreserveDir == true){
-			MakeDirs(outdir,_T("Images"));
-			wxString a = outdir << SLASH << _T("Images") << SLASH;
+			MakeDirs(outdir,wxT("Images"));
+			wxString a = outdir << SLASH << wxT("Images") << SLASH;
 			outdir.Empty();
 			outdir = a;
 		}
 	// Wavefront OBJ
-	}else if (ExportID.IsSameAs(_T("OBJ"))){
+	}else if (ExportID.IsSameAs(wxT("OBJ"))){
 	}
-	//wxLogMessage(_T("LWO Image Outdir: %s"),outdir);
+	//wxLogMessage(wxT("LWO Image Outdir: %s"),outdir);
 
 	// Restore WoW's content directories for this image.
 	if (modelExport_PreserveDir == true){
 		MakeDirs(outdir,file.BeforeLast(SLASH));
 		outdir << file.BeforeLast(SLASH) << SLASH;
 	}
-	//wxLogMessage(_T("Preserve Outdir: %s"),outdir);
+	//wxLogMessage(wxT("Preserve Outdir: %s"),outdir);
 
 	// Final Filename
-	temp = outdir+ImgName+_T(".")+suffix;
-	//wxLogMessage(_T("Exporting Image: %s"),temp.c_str());
+	temp = outdir+ImgName+wxT(".")+suffix;
+	//wxLogMessage(wxT("Exporting Image: %s"),temp.c_str());
 
-	//wxLogMessage(_T("Info: Exporting texture to %s..."), temp.c_str());
+	//wxLogMessage(wxT("Info: Exporting texture to %s..."), temp.c_str());
 
 	// Save image!
-	if (suffix == _T("tga"))
+	if (suffix == wxT("tga"))
 		newImage->Save(temp.mb_str(), CXIMAGE_FORMAT_TGA);
 	else
 		newImage->Save(temp.mb_str(), CXIMAGE_FORMAT_PNG);
@@ -174,8 +174,8 @@ Vec3D QuaternionToXYZ(Vec3D Dir, float W){
 		wxString ays, cs;
 		ays << angle_y;
 		cs << c;
-		wxMessageBox(_T("Gimbal Lock Occured!\nPlease send the logfile and the name of the\nobject you were outputting to the development\nteam so they can attempt to fix any errors\ncaused by this."),_T("Gimble Lock Warning"));
-		wxLogMessage(_T("Gimbal Lock happened! angle_y=%s, c=%s"), ays.c_str(), cs.c_str());
+		wxMessageBox(wxT("Gimbal Lock Occured!\nPlease send the logfile and the name of the\nobject you were outputting to the development\nteam so they can attempt to fix any errors\ncaused by this."),wxT("Gimble Lock Warning"));
+		wxLogMessage(wxT("Gimbal Lock happened! angle_y=%s, c=%s"), ays.c_str(), cs.c_str());
 
 		angle_x  = 0;
 		tempx = m.m[1][1];
@@ -270,7 +270,7 @@ void AddCount(Model *m, unsigned short &numGroups, unsigned short &numVerts)
 
 void AddVertices(Model *m, Attachment *att, bool init, ModelData *verts, unsigned short &vertIndex, GroupData *groups, unsigned short &grpIndex)
 {
-	wxLogMessage(_T("Adding Verticies from %s..."), m->name.c_str());
+	wxLogMessage(wxT("Adding Verticies from %s..."), m->name.c_str());
 	int boneID = -1;
 	Model *mParent = NULL;
 
@@ -317,7 +317,7 @@ void AddVertices(Model *m, Attachment *att, bool init, ModelData *verts, unsigne
 
 		if (p.init(m)) {
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
-				//wxLogMessage(_T("Processing vertIndex %i, grpIndex %i"),vertIndex,grpIndex);
+				//wxLogMessage(wxT("Processing vertIndex %i, grpIndex %i"),vertIndex,grpIndex);
 				uint16 a = m->indices[b];
 				
 				if ((init == false)&&(m->vertices)) {
@@ -367,7 +367,7 @@ void InitCommon(Attachment *att, bool init, ModelData *&verts, GroupData *&group
 	if (!att)
 		return;
 
-	wxLogMessage(_T("Counting Verticies via InitCommon..."));
+	wxLogMessage(wxT("Counting Verticies via InitCommon..."));
 
 	Model *m = NULL;
 	if (att->model) {
@@ -398,8 +398,8 @@ void InitCommon(Attachment *att, bool init, ModelData *&verts, GroupData *&group
 	//indices = new float[numVerts];
 	groups = new GroupData[numGroups];
 
-	wxLogMessage(_T("Num Verts: %i, Num Faces: %i, Num Groups: %i"), numVerts, numFaces, numGroups);
-	wxLogMessage(_T("Adding Verticies via InitCommon..."));
+	wxLogMessage(wxT("Num Verts: %i, Num Faces: %i, Num Groups: %i"), numVerts, numFaces, numGroups);
+	wxLogMessage(wxT("Adding Verticies via InitCommon..."));
 
 	if (m)
 		AddVertices(m, att, init, verts, vertIndex, groups, grpIndex);
@@ -418,10 +418,10 @@ void InitCommon(Attachment *att, bool init, ModelData *&verts, GroupData *&group
 		}
 	}
 	#ifdef _DEBUG
-		wxLogMessage(_T("Vert[0] BoneID: %i"),verts[0].boneid);
+		wxLogMessage(wxT("Vert[0] BoneID: %i"),verts[0].boneid);
 	#endif
 
-	wxLogMessage(_T("Finished InitCommon Function."));
+	wxLogMessage(wxT("Finished InitCommon Function."));
 }
 
 // Change a Vec3D so it now faces forwards
@@ -443,77 +443,116 @@ void MakeModelFaceForwards(Vec3D &vect, bool flipX = false){
 wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassNumber){
 	wxString texName;
 	if (m->TextureList.size() > p.tex)
-		texName = m->TextureList[p.tex].BeforeLast(_T('.')).AfterLast(SLASH);
+		texName = m->TextureList[p.tex].BeforeLast(wxT('.')).AfterLast(SLASH);
 
 	if (texName.Len() == 0)
-		texName = m->modelname.BeforeLast(_T('.')).AfterLast(SLASH) + wxString::Format(_T("_Image_%03i"),PassNumber);
+		texName = m->modelname.BeforeLast(wxT('.')).AfterLast(SLASH) + wxString::Format(wxT("_Image_%03i"),PassNumber);
 
 	return texName;
 }
 
 // Write out some debug info
-void LogExportData(wxString FileExtension, wxString Directory, wxString ExportType){
-	wxLogMessage(_T("\n\n========================================================================\n   Exporting Model...\n========================================================================\n"));
-	wxLogMessage(_T("Exporting to Directory: %s"),Directory.c_str());
-	wxLogMessage(_T("Exporting File Type: %s"),FileExtension.c_str());
-	wxLogMessage(_T("Original Model File Type: %s"), ExportType.c_str());
-	wxLogMessage(_T("Export Init Mode: %s"),(modelExportInitOnly==true?"True":"False"));
-	wxLogMessage(_T("Preserve Directories: %s"),(modelExport_PreserveDir==true?"True":"False"));
-	wxLogMessage(_T("Use WMV Position & Rotation: %s"),(modelExport_UseWMVPosRot==true?"True":"False"));
+void LogExportData(wxString ExporterExtention, wxString ModelName, wxString Destination){
+	wxLogMessage(wxT("\n\n========================================================================\n   Exporting Model...\n========================================================================\n"));
+	wxLogMessage(wxT("Exporting Model: %s"),ModelName.c_str());
+	wxLogMessage(wxT("Exporting to File: %s"),Destination.c_str());
+	wxLogMessage(wxT("Exporting File Type: %s"),ExporterExtention.c_str());
+	wxLogMessage(wxT("Export Init Mode: %s"),(modelExportInitOnly==true?"True":"False"));
+	wxLogMessage(wxT("Preserve Directories: %s"),(modelExport_PreserveDir==true?"True":"False"));
+	wxLogMessage(wxT("Use WMV Position & Rotation: %s"),(modelExport_UseWMVPosRot==true?"True":"False"));
+
+	// Animation Information
+	if (g_canvas->model){
+		int32 cAnim = 0;
+		int32 cFrame = 0;
+		wxString AnimName;
+
+		if (g_canvas->model->animated){
+			cAnim = g_selModel->currentAnim;
+			cFrame = g_selModel->animManager->GetFrame();
+		}
+
+		try {
+			AnimDB::Record rec = animdb.getByAnimID(g_selModel->anims[cAnim].animID);
+			AnimName = rec.getString(AnimDB::Name);
+		} catch (AnimDB::NotFound) {
+			AnimName = wxT("???");
+		}
+
+		wxLogMessage(wxT("isAnimated: %s, Current Anim: %i (%s), Current Frame: %i"),(g_selModel->animated?wxT("true"):wxT("false")), cAnim, AnimName, cFrame);
+	}
 
 	// Lightwave Options
-	if (FileExtension == _T("LWO")){
-		wxLogMessage(_T("Preserve Lightwave Directories: %s"),(modelExport_LW_PreserveDir==true?"True":"False"));
-		wxLogMessage(_T("Export Doodads: %s"),(modelExport_LW_ExportDoodads==true?"True":"False"));
-		wxLogMessage(_T("Export Lights: %s"),(modelExport_LW_ExportLights==true?"True":"False"));
-		wxLogMessage(_T("Export Cameras: %s"),(modelExport_LW_ExportCameras==true?"True":"False"));
-		wxLogMessage(_T("Export Bones: %s"),(modelExport_LW_ExportBones==true?"True":"False"));
+	if (ExporterExtention == wxT("LWO")){
+		wxLogMessage(wxT("Preserve Lightwave Directories: %s"),(modelExport_LW_PreserveDir==true?"True":"False"));
+		wxLogMessage(wxT("Export Doodads: %s"),(modelExport_LW_ExportDoodads==true?"True":"False"));
+		wxLogMessage(wxT("Export Lights: %s"),(modelExport_LW_ExportLights==true?"True":"False"));
+		wxLogMessage(wxT("Export Cameras: %s"),(modelExport_LW_ExportCameras==true?"True":"False"));
+		wxLogMessage(wxT("Export Bones: %s"),(modelExport_LW_ExportBones==true?"True":"False"));
 		wxString XDDas;
 		switch (modelExport_LW_DoodadsAs) {
 			case 0:
-				XDDas = _T("All Doodads as Nulls");
+				XDDas = wxT("All Doodads as Nulls");
 				break;
 			case 1:
-				XDDas = _T("All Doodads as Scene Objects");
+				XDDas = wxT("All Doodads as Scene Objects");
 				break;
 			case 2:
-				XDDas = _T("Each Doodad Set as a Seperate Layer");
+				XDDas = wxT("Each Doodad Set as a Seperate Layer");
 				break;
 			case 3:
-				XDDas = _T("All Doodads as a Single Layer");
+				XDDas = wxT("All Doodads as a Single Layer");
 				break;
 			case 4:
-				XDDas = _T("Doodads as a Single Layer, Per Group");
+				XDDas = wxT("Doodads as a Single Layer, Per Group");
 				break;
 		}
-		wxLogMessage(_T("Export Doodads as: %s"),XDDas.c_str());
+		wxLogMessage(wxT("Export Doodads as: %s"),XDDas.c_str());
 	// X3D Options
-	}else if (FileExtension == _T("X3D")){
-		wxLogMessage(_T("Export Animation: %s"),(modelExport_X3D_ExportAnimation==true?"True":"False"));
-		wxLogMessage(_T("Center Model: %s"),(modelExport_X3D_CenterModel==true?"True":"False"));
+	}else if (ExporterExtention == wxT("X3D")){
+		wxLogMessage(wxT("Export Animation: %s"),(modelExport_X3D_ExportAnimation==true?"True":"False"));
+		wxLogMessage(wxT("Center Model: %s"),(modelExport_X3D_CenterModel==true?"True":"False"));
+	}else if (ExporterExtention == wxT("M3")){
+		wxLogMessage(wxT("Bound Scale: %f"), modelExport_M3_BoundScale);
+		wxLogMessage(wxT("Sphere Scale: %f"), modelExport_M3_SphereScale);
+		wxLogMessage(wxT("Texture Path: \"%s\""), modelExport_M3_TexturePath);
+		wxLogMessage(wxT("Number Animations to Export: %i"), modelExport_M3_Anims.size());
+		if ((modelExport_M3_Anims.size() > 0)&&(g_canvas->model)){
+			wxLogMessage(wxT("Animation List:\n	Original Name, Exported Name"));
+			for (size_t i=0;i<modelExport_M3_AnimNames.size();i++){
+				wxString strName;
+				try {
+					AnimDB::Record rec = animdb.getByAnimID(g_selModel->anims[modelExport_M3_Anims[i]].animID);
+					strName = rec.getString(AnimDB::Name);
+				} catch (AnimDB::NotFound) {
+					strName = wxT("???");
+				}
+				wxLogMessage(wxT("	%s, %s"), strName, modelExport_M3_AnimNames[i].c_str());
+			}
+		}
 	}
 }
 
 // Disabled Collada Exporters
-void ExportM2toCOLLADA(Attachment *att, Model *m, const char *fn, bool init){}
-void ExportWMOtoCOLLADA(WMO *m, const char *fn){}
+void ExportCOLLADA_M2(Attachment *att, Model *m, const char *fn, bool init){}
+void ExportCOLLADA_WMO(WMO *m, const char *fn){}
 
 void SaveBaseFile(){
 	if (g_fileControl->fileTree->HasChildren(g_fileControl->CurrentItem)){
-		wxLogMessage(_T("File has children. Cancelling Save Fuction..."));
+		wxLogMessage(wxT("File has children. Cancelling Save Fuction..."));
 		return;
 	}
 	FileTreeData *data = (FileTreeData*)g_fileControl->fileTree->GetItemData(g_fileControl->CurrentItem);
 	wxString modelfile(data->fn);
 
-	//modelfile = g_fileControl->fileTree->GetParent()+_T("\\")+g_fileControl->fileTree->GetItemText(g_fileControl->CurrentItem);
-	wxLogMessage(_T("Original Model File Name: %s"), modelfile.c_str());
+	//modelfile = g_fileControl->fileTree->GetParent()+wxT("\\")+g_fileControl->fileTree->GetItemText(g_fileControl->CurrentItem);
+	wxLogMessage(wxT("Original Model File Name: %s"), modelfile.c_str());
 
 	if (modelfile.IsEmpty())
 		return;
 	MPQFile f(modelfile);
 	if (f.isEof()) {
-		wxLogMessage(_T("Error: Could not extract %s\n"), modelfile.c_str());
+		wxLogMessage(wxT("Error: Could not extract %s\n"), modelfile.c_str());
 		f.close();
 		return;
 	}
@@ -521,7 +560,7 @@ void SaveBaseFile(){
 
 	FILE *hFile = NULL;
 	wxString filename;
-	filename = wxFileSelector(_T("Please select your file to export"), wxGetCwd(), fn.GetName(), fn.GetExt(), fn.GetExt()+_T(" files (.")+fn.GetExt()+_T(")|*.")+fn.GetExt());
+	filename = wxFileSelector(wxT("Please select your file to export"), wxGetCwd(), fn.GetName(), fn.GetExt(), fn.GetExt()+wxT(" files (.")+fn.GetExt()+wxT(")|*.")+fn.GetExt());
 
 	if ( !filename.empty() )
 	{

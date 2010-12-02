@@ -11,12 +11,12 @@ WMO::WMO(wxString name): ManagedItem(name)
 	MPQFile f(name);
 	ok = !f.isEof();
 	if (!ok) {
-		wxLogMessage(_T("Error: Couldn't load WMO %s."), name.c_str());
+		wxLogMessage(wxT("Error: Couldn't load WMO %s."), name.c_str());
 		f.close();
 		return;
 	}
 
-	wxLogMessage(_T("Loading WMO %s"), name.c_str());
+	wxLogMessage(wxT("Loading WMO %s"), name.c_str());
 
 	char fourcc[5];
 	uint32 size;
@@ -687,10 +687,10 @@ void WMOGroup::initDisplayList()
 
 	// open group file
 	wxString temp(wmo->name.c_str(), wxConvUTF8);
-	temp = temp.BeforeLast(_T('.'));
+	temp = temp.BeforeLast(wxT('.'));
 	
 	wxString fname;
-	fname.Printf(_T("%s_%03d.wmo"), temp.c_str(), num);
+	fname.Printf(wxT("%s_%03d.wmo"), temp.c_str(), num);
 
 	MPQFile gf(fname);
     gf.seek(0x14);
@@ -935,11 +935,11 @@ void WMOGroup::initDisplayList()
 			//gLog("CV: %d\n", size);
 			hascv = true;
 			cv = (unsigned int*)gf.getPointer();
-			wxLogMessage(_T("Original Vertex Colors Gathered."));
+			wxLogMessage(wxT("Original Vertex Colors Gathered."));
 
 			// Temp, until we get this fully working.
 			gf.seek(spos);
-			wxLogMessage(_T("Gathering New Vertex Colors..."));
+			wxLogMessage(wxT("Gathering New Vertex Colors..."));
 			VertexColors = new WMOVertColor[nVertices+2];
 			memcpy(VertexColors, gf.getPointer(), size);
 			/*
@@ -1003,7 +1003,7 @@ void WMOGroup::initDisplayList()
 			for (uint32 j=batch->vertexStart;j<=batch->vertexEnd;j++){
 				if (vertices[a] == vertices[j]){
 					IndiceToVerts[batch->indexStart + i] = j;
-					//wxLogMessage(_T("Indice %i = Vert %i"),batch->indexStart + i,j);
+					//wxLogMessage(wxT("Indice %i = Vert %i"),batch->indexStart + i,j);
 					break;
 				}
 			}

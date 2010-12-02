@@ -58,7 +58,7 @@ ChoiceDialog::ChoiceDialog(CharControl *dest, int type,
 	wxCArrayString chs(choices);
 	m_listctrl = new wxListView(this, wxID_LISTCTRL, wxDefaultPosition, wxSize(200,200), wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_NO_HEADER); 
 	
-	m_listctrl->InsertColumn(0, _T("Item"), wxLIST_FORMAT_LEFT, 195);
+	m_listctrl->InsertColumn(0, wxT("Item"), wxLIST_FORMAT_LEFT, 195);
 	//m_listctrl->SetColumnWidth(0, wxLIST_AUTOSIZE);
 
 	wxListItem item;
@@ -164,9 +164,9 @@ FilteredChoiceDialog::FilteredChoiceDialog(CharControl *dest, int type, wxWindow
     wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
     m_pattern = new wxTextCtrl(this, ID_FILTER_TEXT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER); // fnmatch: "*" re: ""
     
-    sizer->Add(new wxStaticText(this, -1, _("Filter   ")), 0, wxALIGN_CENTER_VERTICAL);
+    sizer->Add(new wxStaticText(this, -1, wxT("Filter   ")), 0, wxALIGN_CENTER_VERTICAL);
 	sizer->Add(m_pattern, 1, 0);
-    sizer->Add(new wxButton(this, ID_FILTER_CLEAR, _("Clear"), wxDefaultPosition, wxSize(40,-1)), 0, 0);
+    sizer->Add(new wxButton(this, ID_FILTER_CLEAR, wxT("Clear"), wxDefaultPosition, wxSize(40,-1)), 0, 0);
     
     topsizer->Prepend(sizer, 0, wxEXPAND | wxALL, 10);
     topsizer->SetSizeHints( this );
@@ -244,15 +244,15 @@ void FilteredChoiceDialog::DoFilter()
 
 void FilteredChoiceDialog::InitFilter()
 {
-	wxString f = _T("^.*");
+	wxString f = wxT("^.*");
     wxString pattern(m_pattern->GetValue());
 	for (size_t i=0; i<pattern.Length(); i++) {
 		char c = pattern[i];
-		if (c=='?') f.append(_T("."));
-		else if (c=='*') f.append(_T(".*"));
+		if (c=='?') f.append(wxT("."));
+		else if (c=='*') f.append(wxT(".*"));
 		else f.append(1,c);
 	}
-	f.append(_T(".*$"));
+	f.append(wxT(".*$"));
 
 	filter.Compile(f, wxRE_ICASE);
 }
@@ -295,7 +295,7 @@ CategoryChoiceDialog::CategoryChoiceDialog(CharControl *dest, int type,
     topsizer->Prepend(m_catlist, 0, wxEXPAND | wxALL, 10);
 
 	if (helpmsg) {
-		topsizer->Prepend(new wxStaticText(this, -1, _("Double-click to select only one category")), 0, wxEXPAND | wxTOP | wxLEFT, 10);
+		topsizer->Prepend(new wxStaticText(this, -1, wxT("Double-click to select only one category")), 0, wxEXPAND | wxTOP | wxLEFT, 10);
 	}
 
     topsizer->SetSizeHints(this);

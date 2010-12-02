@@ -11,8 +11,8 @@ bool DBCFile::open()
 {
 	int db_type = 0;
 
-	if (filename.Lower().EndsWith(_T("item.dbc")) && gameVersion >= 40000) {
-		filename = filename.BeforeLast('.') + _T(".db2");
+	if (filename.Lower().EndsWith(wxT("item.dbc")) && gameVersion >= 40000) {
+		filename = filename.BeforeLast('.') + wxT(".db2");
 	}
 
 	MPQFile f(filename);
@@ -34,7 +34,7 @@ bool DBCFile::open()
 	if (db_type == 0) {
 		f.close();
 		data = NULL;
-		wxLogMessage(_T("Critical Error: An error occured while trying to read the DBCFile %s."), filename.c_str());
+		wxLogMessage(wxT("Critical Error: An error occured while trying to read the DBCFile %s."), filename.c_str());
 		return false;
 	}
 

@@ -138,8 +138,8 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 	// Check to see if we have any data to generate this file.
 	if ((Object.Layers.size() < 1) || (Object.Layers[0].Points.size() < 1)){
-		wxMessageBox(_T("No Layer Data found.\nUnable to write object file."),_T("Error"));
-		wxLogMessage(_T("Error: No Layer Data. Unable to write object file."));
+		wxMessageBox(wxT("No Layer Data found.\nUnable to write object file."),wxT("Error"));
+		wxLogMessage(wxT("Error: No Layer Data. Unable to write object file."));
 		return false;
 	}
 
@@ -159,11 +159,11 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 	// Open Model File
 	wxString file = wxString(filename, wxConvUTF8);
-	wxFFileOutputStream f(file, _T("w+b"));
+	wxFFileOutputStream f(file, wxT("w+b"));
 
 	if (!f.IsOk()) {
-		wxMessageBox(_T("Unable to open file. Could not export model."),_T("Error"));
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file.c_str());
+		wxMessageBox(wxT("Unable to open file. Could not export model."),wxT("Error"));
+		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export model."), file.c_str());
 		return false;
 	}
 
@@ -203,9 +203,9 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		for (size_t i=0; i<Object.PartNames.size(); i++){
 			wxString PartName = Object.PartNames[i];
 
-			PartName.Append(_T('\0'));
+			PartName.Append(wxT('\0'));
 			if (fmod((float)PartName.Len(), 2.0f) > 0)
-				PartName.Append(_T('\0'));
+				PartName.Append(wxT('\0'));
 			f.Write(PartName.data(), PartName.Len());
 			tagsSize += (uint32)PartName.Len();
 		}
@@ -213,9 +213,9 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		for (size_t i=0; i<Object.Surfaces.size(); i++){
 			wxString SurfName = Object.Surfaces[i].Name;
 
-			SurfName.Append(_T('\0'));
+			SurfName.Append(wxT('\0'));
 			if (fmod((float)SurfName.Len(), 2.0f) > 0)
-				SurfName.Append(_T('\0'));
+				SurfName.Append(wxT('\0'));
 			f.Write(SurfName.data(), SurfName.Len());
 			tagsSize += (uint32)SurfName.Len();
 		}
@@ -240,9 +240,9 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		LWLayer cLyr = Object.Layers[l];
 		// Define a Layer & It's data
 		if (cLyr.Name.length() > 0)
-			cLyr.Name.Append(_T('\0'));
+			cLyr.Name.Append(wxT('\0'));
 		if (fmod((float)cLyr.Name.length(), 2.0f) > 0)
-			cLyr.Name.Append(_T('\0'));
+			cLyr.Name.Append(wxT('\0'));
 		uint16 LayerNameSize = (uint16)cLyr.Name.length();
 		uint32 LayerSize = 16+LayerNameSize;
 		if ((cLyr.ParentLayer)&&(cLyr.ParentLayer>-1))
@@ -331,7 +331,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		f.Write("TXUV", 4);
 		u16 = MSB2(2);
 		f.Write(reinterpret_cast<char *>(&u16), 2);
-		f.Write(_T("Texture"), 7);
+		f.Write(wxT("Texture"), 7);
 		f.Write(reinterpret_cast<char *>(&zero), 1);
 		vmapSize += 14;
 
@@ -356,7 +356,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		// Vertex Colors Map
 		// ===================================================
 		if (cLyr.HasVectorColors == true){
-			wxLogMessage(_T("Has Vector Colors"));
+			wxLogMessage(wxT("Has Vector Colors"));
 
 			f.Write("VMPA", 4);
 			u32 = MSB4<uint32>(8);	// We got 2 Paramaters, * 4 Bytes.
@@ -385,7 +385,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 				gf = (float)(cLyr.Points[i].VertexColors.g/255.0f);
 				bf = (float)(cLyr.Points[i].VertexColors.b/255.0f);
 				af = (float)((255.0f-cLyr.Points[i].VertexColors.a)/255.0f);
-				//wxLogMessage(_T("Point: %i - R:%f(%i), G:%f(%i), B:%f(%i), A:%f(%i)"),i,rf,cLyr.Points[i].VertexColors.r,gf,cLyr.Points[i].VertexColors.g,bf,cLyr.Points[i].VertexColors.b,af,cLyr.Points[i].VertexColors.a);
+				//wxLogMessage(wxT("Point: %i - R:%f(%i), G:%f(%i), B:%f(%i), A:%f(%i)"),i,rf,cLyr.Points[i].VertexColors.r,gf,cLyr.Points[i].VertexColors.g,bf,cLyr.Points[i].VertexColors.b,af,cLyr.Points[i].VertexColors.a);
 
 				LW_WriteVX(f,i,vmapSize);
 
@@ -412,7 +412,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 		// Weight Maps
 		// ===================================================
 		if (cLyr.Weights.size() > 0){
-			wxLogMessage(_T("Has Weight Maps"));
+			wxLogMessage(wxT("Has Weight Maps"));
 			for (size_t w=0;w<cLyr.Weights.size();w++){
 				f.Write("VMPA", 4);
 				u32 = MSB4<uint32>(8);	// We got 2 Paramaters, * 4 Bytes.
@@ -435,9 +435,9 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 				// Weightmap Name, /0 Terminated, evened out.
 				wxString name = cLyr.Weights[w].WeightMapName;
-				name.Append(_T('\0'));
+				name.Append(wxT('\0'));
 				if (fmod((float)name.Len(), 2.0f) > 0)
-					name.Append(_T('\0'));
+					name.Append(wxT('\0'));
 				f.Write(name, name.Len());
 				vmapSize += (uint32)name.Len();
 
@@ -501,12 +501,12 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			// Parts PolyTag
 			// -------------------------------------------------
 			if (Object.PartNames.size() > 0){
-				f.Write(_T("PTAG"), 4);
+				f.Write(wxT("PTAG"), 4);
 				uint32 ptagSize = 4;
 				u32 = MSB4<uint32>(ptagSize);
 				f.Write(reinterpret_cast<char *>(&u32), 4);
 				fileLen += 8;
-				f.Write(_T("PART"), 4);
+				f.Write(wxT("PART"), 4);
 
 				for (unsigned int x=0;x<cLyr.Polys.size();x++){
 					LWPoly Poly = cLyr.Polys[x];
@@ -529,12 +529,12 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			// Surface PolyTag
 			// -------------------------------------------------
 			if (Object.Surfaces.size() > 0){
-				f.Write(_T("PTAG"), 4);
+				f.Write(wxT("PTAG"), 4);
 				uint32 ptagSize = 4;
 				u32 = MSB4<uint32>(ptagSize);
 				f.Write(reinterpret_cast<char *>(&u32), 4);
 				fileLen += 8;
-				f.Write(_T("SURF"), 4);
+				f.Write(wxT("SURF"), 4);
 
 				for (unsigned int x=0;x<cLyr.Polys.size();x++){
 					LWPoly Poly = cLyr.Polys[x];
@@ -580,9 +580,9 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 				f.Write(reinterpret_cast<char *>(&u16), 2);
 				vmadSize += 6;
 				wxString NormMapName = cLyr.Polys[0].Normals.NormalMapName;
-				NormMapName += _T('\0');
+				NormMapName += wxT('\0');
 				if (fmod((float)NormMapName.length(), 2.0f) > 0)
-					NormMapName.Append(_T('\0'));
+					NormMapName.Append(wxT('\0'));
 				f.Write(NormMapName.data(), NormMapName.length());
 				vmadSize += (uint32)NormMapName.length();
 
@@ -630,14 +630,14 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 			wxString ImgName = wxEmptyString;
 			if (modelExport_LW_PreserveDir == true){
-				ImgName += _T("Images/");
+				ImgName += wxT("Images/");
 			}
-			ImgName += wxString(cImg.Source + SLASH + cImg.Filename + wxString(_T(".tga")));
-			ImgName += _T('\0');
-			ImgName.Replace(_T("\\"),_T("/"));
+			ImgName += wxString(cImg.Source + SLASH + cImg.Filename + wxString(wxT(".tga")));
+			ImgName += wxT('\0');
+			ImgName.Replace(wxT("\\"),wxT("/"));
 
 			if (fmod((float)ImgName.length(), 2.0f) > 0)
-					ImgName.Append(_T('\0'));
+					ImgName.Append(wxT('\0'));
 
 			u16 = MSB2((unsigned short)ImgName.length());
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -666,30 +666,30 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 			//LW_WriteSurface(f, cSurf, fileLen);
 			#ifdef _DEBUG
-				//wxLogMessage(_T("LW Write Surface Vars:\nSurfName: %s\nColor: %f/%f/%f\nReflect Value: %f\nCulling: %s\nSurfaceID: %i\nComment: \"%s\""),Surface.Name.c_str(),Surface.Surf_Color.x,Surface.Surf_Color.y,Surface.Surf_Color.z,Surface.Surf_Reflect,(Surface.isDoubleSided?_T("True"):_T("False")),Surface.Image_Color,Surface.Comment);
+				//wxLogMessage(wxT("LW Write Surface Vars:\nSurfName: %s\nColor: %f/%f/%f\nReflect Value: %f\nCulling: %s\nSurfaceID: %i\nComment: \"%s\""),Surface.Name.c_str(),Surface.Surf_Color.x,Surface.Surf_Color.y,Surface.Surf_Color.z,Surface.Surf_Reflect,(Surface.isDoubleSided?wxT("True"):wxT("False")),Surface.Image_Color,Surface.Comment);
 			#endif
 			int off_T;
 
 			uint32 surfaceDefSize = 0;
-			f.Write(_T("SURF"), 4);
+			f.Write(wxT("SURF"), 4);
 			u32 = MSB4<uint32>(surfaceDefSize);
 			f.Write(reinterpret_cast<char *>(&u32), 4);
 			fileLen += 8;
 
 			wxString surfName = cSurf.Name;
-			surfName.Append(_T('\0'));
+			surfName.Append(wxT('\0'));
 			if (fmod((float)surfName.length(), 2.0f) > 0)
-				surfName.Append(_T('\0'));
+				surfName.Append(wxT('\0'));
 
-			surfName.Append(_T('\0')); // ""
-			surfName.Append(_T('\0')); // Evens out the Code.
+			surfName.Append(wxT('\0')); // ""
+			surfName.Append(wxT('\0')); // Evens out the Code.
 			f.Write(surfName.data(), (int)surfName.length());
 
 			surfaceDefSize += (uint32)surfName.length();
 
 			// Surface Attributes
 			// COLOUR, size 4, bytes 2
-			f.Write(_T("COLR"), 4);
+			f.Write(wxT("COLR"), 4);
 			u16 = 14; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -707,7 +707,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			surfaceDefSize += 20;
 
 			// LUMI
-			f.Write(_T("LUMI"), 4);
+			f.Write(wxT("LUMI"), 4);
 			u16 = 6; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -720,7 +720,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			surfaceDefSize += 12;
 
 			// DIFF
-			f.Write(_T("DIFF"), 4);
+			f.Write(wxT("DIFF"), 4);
 			u16 = 6; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -733,7 +733,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			surfaceDefSize += 12;
 
 			// SPEC
-			f.Write(_T("SPEC"), 4);
+			f.Write(wxT("SPEC"), 4);
 			u16 = 6; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -746,7 +746,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			surfaceDefSize += 12;
 
 			// REFL
-			f.Write(_T("REFL"), 4);
+			f.Write(wxT("REFL"), 4);
 			u16 = 6; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -759,7 +759,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			surfaceDefSize += 12;
 
 			// TRAN
-			f.Write(_T("TRAN"), 4);
+			f.Write(wxT("TRAN"), 4);
 			u16 = 6; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -771,7 +771,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			surfaceDefSize += 12;
 
 			// GLOSSINESS
-			f.Write(_T("GLOS"), 4);
+			f.Write(wxT("GLOS"), 4);
 			u16 = 6; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -786,7 +786,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 			if (cSurf.hasVertColors == true){
 				// VCOL (Vector Colors)
-				f.Write(_T("VCOL"), 4);
+				f.Write(wxT("VCOL"), 4);
 				u16 = MSB2(18); // size
 				uint16 zero = 0;
 				f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -795,14 +795,14 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 				f.Write(reinterpret_cast<char *>(&f32), 4);
 				f.Write(reinterpret_cast<char *>(&zero), 2);
 				// RGBA Map Name
-				f.Write(_T("RGBA"), 4);
-				f.Write(_T("Colors"), 6);
+				f.Write(wxT("RGBA"), 4);
+				f.Write(wxT("Colors"), 6);
 				f.Write(reinterpret_cast<char *>(&zero), 2);
 				surfaceDefSize += 24;
 			}
 
 			// SMAN (Smoothing)
-			f.Write(_T("SMAN"), 4);
+			f.Write(wxT("SMAN"), 4);
 			u16 = 4; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -813,7 +813,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			surfaceDefSize += 10;
 
 			// RFOP
-			f.Write(_T("RFOP"), 4);
+			f.Write(wxT("RFOP"), 4);
 			u16 = 2; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -824,7 +824,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			surfaceDefSize += 8;
 
 			// TROP
-			f.Write(_T("TROP"), 4);
+			f.Write(wxT("TROP"), 4);
 			u16 = 2; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -835,7 +835,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			surfaceDefSize += 8;
 
 			// SIDE
-			f.Write(_T("SIDE"), 4);
+			f.Write(wxT("SIDE"), 4);
 			u16 = 2; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -851,12 +851,12 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			// --
 			// BLOK
 			uint16 blokSize = 0;
-			f.Write(_T("BLOK"), 4);
+			f.Write(wxT("BLOK"), 4);
 			f.Write(reinterpret_cast<char *>(&blokSize), 2);
 			surfaceDefSize += 6;
 
 			// IMAP
-			f.Write(_T("IMAP"), 4);
+			f.Write(wxT("IMAP"), 4);
 			u16 = 50-8; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -865,15 +865,15 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 8;
 
 			// CHAN
-			f.Write(_T("CHAN"), 4);
+			f.Write(wxT("CHAN"), 4);
 			u16 = 4; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
-			f.Write(_T("COLR"), 4);
+			f.Write(wxT("COLR"), 4);
 			blokSize += 10;
 
 			// OPAC
-			f.Write(_T("OPAC"), 4);
+			f.Write(wxT("OPAC"), 4);
 			u16 = 8; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -887,7 +887,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 14;
 
 			// ENAB
-			f.Write(_T("ENAB"), 4);
+			f.Write(wxT("ENAB"), 4);
 			u16 = 2; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -897,7 +897,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 8;
 
 			// NEGA
-			f.Write(_T("NEGA"), 4);
+			f.Write(wxT("NEGA"), 4);
 			u16 = 2; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -909,7 +909,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			// AXIS
 			// This is only needed for Planar images. Everything but ADTs uses UV data.
 			if (cSurf.Image_Color.Axis == LW_TEXTUREAXIS_PLANAR){
-				f.Write(_T("AXIS"), 4);
+				f.Write(wxT("AXIS"), 4);
 				u16 = 2; // size
 				u16 = MSB2(u16);
 				f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -919,14 +919,14 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 				blokSize += 8;
 			}
 			// TMAP
-			f.Write(_T("TMAP"), 4);
+			f.Write(wxT("TMAP"), 4);
 			u16 = 98; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 			blokSize += 6;
 
 			// CNTR
-			f.Write(_T("CNTR"), 4);
+			f.Write(wxT("CNTR"), 4);
 			u16 = 14; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -939,7 +939,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 20;
 
 			// SIZE
-			f.Write(_T("SIZE"), 4);
+			f.Write(wxT("SIZE"), 4);
 			u16 = 14; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -953,7 +953,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 20;
 
 			// ROTA
-			f.Write(_T("ROTA"), 4);
+			f.Write(wxT("ROTA"), 4);
 			u16 = 14; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -966,7 +966,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 20;
 
 			// FALL
-			f.Write(_T("FALL"), 4);
+			f.Write(wxT("FALL"), 4);
 			u16 = 16; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -981,7 +981,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 22;
 
 			// OREF
-			f.Write(_T("OREF"), 4);
+			f.Write(wxT("OREF"), 4);
 			u16 = 2; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -990,7 +990,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 8;
 
 			// CSYS
-			f.Write(_T("CSYS"), 4);
+			f.Write(wxT("CSYS"), 4);
 			u16 = 2; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -1001,7 +1001,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			// end TMAP
 
 			// PROJ
-			f.Write(_T("PROJ"), 4);
+			f.Write(wxT("PROJ"), 4);
 			u16 = 2; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -1011,7 +1011,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 8;
 
 			// AXIS
-			f.Write(_T("AXIS"), 4);
+			f.Write(wxT("AXIS"), 4);
 			u16 = 2; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -1021,7 +1021,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 8;
 
 			// IMAG
-			f.Write(_T("IMAG"), 4);
+			f.Write(wxT("IMAG"), 4);
 			u16 = 2; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -1031,7 +1031,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 8;
 
 			// WRAP
-			f.Write(_T("WRAP"), 4);
+			f.Write(wxT("WRAP"), 4);
 			u16 = 4; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -1044,7 +1044,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 10;
 
 			// WRPW
-			f.Write(_T("WRPW"), 4);
+			f.Write(wxT("WRPW"), 4);
 			u16 = 6; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -1057,7 +1057,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 12;
 
 			// WRPH
-			f.Write(_T("WRPH"), 4);
+			f.Write(wxT("WRPH"), 4);
 			u16 = 6; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -1070,17 +1070,17 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 12;
 
 			// VMAP
-			f.Write(_T("VMAP"), 4);
+			f.Write(wxT("VMAP"), 4);
 			u16 = 8; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
-			wxString t = _T("Texture");
-			t.Append(_T('\0'));
+			wxString t = wxT("Texture");
+			t.Append(wxT('\0'));
 			f.Write(t.data(), t.length());
 			blokSize += 14;
 
 			// AAST
-			f.Write(_T("AAST"), 4);
+			f.Write(wxT("AAST"), 4);
 			u16 = 6; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -1093,7 +1093,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			blokSize += 12;
 
 			// PIXB
-			f.Write(_T("PIXB"), 4);
+			f.Write(wxT("PIXB"), 4);
 			u16 = 2; // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -1112,18 +1112,18 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			// ================
 
 			// CMNT
-			f.Write(_T("CMNT"), 4);
+			f.Write(wxT("CMNT"), 4);
 			wxString comment = cSurf.Comment;
-			comment.Append(_T('\0'));
+			comment.Append(wxT('\0'));
 			if (fmod((float)comment.length(), 2.0f) > 0)
-				comment.Append(_T('\0'));
+				comment.Append(wxT('\0'));
 			u16 = (uint16)comment.length(); // size
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 			f.Write(comment.data(), comment.length());
 			surfaceDefSize += 6 + (uint32)comment.length();
 
-			f.Write(_T("VERS"), 4);
+			f.Write(wxT("VERS"), 4);
 			u16 = 4;
 			u16 = MSB2(u16);
 			f.Write(reinterpret_cast<char *>(&u16), 2);
@@ -1167,64 +1167,64 @@ void WriteLWSceneBone(ofstream &fs, LWBones BoneData)
 		active = 0;
 	}
 
-	fs << _T("AddBone 4") << wxString::Format(_T("%03x"),BoneData.BoneID) << _T("0000\nBoneName " << BoneData.Name << "\n");
-	fs << _T("ShowBone 1 -1 0.376471 0.878431 0.941176\nBoneActive " << active << "\n");
-	fs << _T("BoneStrength 1\n");
+	fs << wxT("AddBone 4") << wxString::Format(wxT("%03x"),BoneData.BoneID) << wxT("0000\nBoneName " << BoneData.Name << "\n");
+	fs << wxT("ShowBone 1 -1 0.376471 0.878431 0.941176\nBoneActive " << active << "\n");
+	fs << wxT("BoneStrength 1\n");
 	if (BoneData.WeightMap_Name != wxEmptyString){
-		fs << _T("BoneWeightMapName " << BoneData.WeightMap_Name << "\nBoneWeightMapOnly " << (BoneData.WeightMap_Only?1:0) << "\nBoneNormalization " << (BoneData.WeightMap_Normalize?1:0) << "\n");
+		fs << wxT("BoneWeightMapName " << BoneData.WeightMap_Name << "\nBoneWeightMapOnly " << (BoneData.WeightMap_Only?1:0) << "\nBoneNormalization " << (BoneData.WeightMap_Normalize?1:0) << "\n");
 	}
-	fs << _T("ScaleBoneStrength 1" << "\n");
-	fs << _T("BoneRestPosition "<<BoneData.RestPos.x<<" "<<BoneData.RestPos.y<<" "<<BoneData.RestPos.z<< "\n");
-	fs << _T("BoneRestDirection "<<BoneData.RestRot.x<<" "<<BoneData.RestRot.y<<" "<<BoneData.RestRot.z<< "\n");
-	fs << _T("BoneRestLength "<<BoneData.Length<< "\n");
-	fs << _T("BoneType " << BoneData.BoneType << "\n");
-	fs << _T("BoneMotion\nNumChannels 9\n");
+	fs << wxT("ScaleBoneStrength 1" << "\n");
+	fs << wxT("BoneRestPosition "<<BoneData.RestPos.x<<" "<<BoneData.RestPos.y<<" "<<BoneData.RestPos.z<< "\n");
+	fs << wxT("BoneRestDirection "<<BoneData.RestRot.x<<" "<<BoneData.RestRot.y<<" "<<BoneData.RestRot.z<< "\n");
+	fs << wxT("BoneRestLength "<<BoneData.Length<< "\n");
+	fs << wxT("BoneType " << BoneData.BoneType << "\n");
+	fs << wxT("BoneMotion\nNumChannels 9\n");
 	
 	LW_WriteMotionArray(fs,BoneData.AnimData);
 
-	fs << _T("PathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
-	fs << _T("ParentItem " << BoneData.ParentType);
+	fs << wxT("PathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
+	fs << wxT("ParentItem " << BoneData.ParentType);
 	if (BoneData.ParentType == LW_ITEMTYPE_BONE){
-		fs << _T(wxString::Format(_T("%03x"),BoneData.ParentID) << "0000");
+		fs << wxString::Format(wxT("%03x"),BoneData.ParentID) << wxT("0000");
 	}else{	// Assume LW_ITEMTYPE_OBJECT
-		fs << wxString::Format(_T("%07x"),BoneData.ParentID);
+		fs << wxString::Format(wxT("%07x"),BoneData.ParentID);
 	}
-	fs << _T("\nIKInitialState 0\n");
+	fs << wxT("\nIKInitialState 0\n");
 }
 
 // Writes an Object or Null, including Bones, to the scene file.
 void WriteLWSceneObject(ofstream &fs, LWSceneObj Object)
 {
 	if (Object.isNull == true){
-		fs << _T("AddNullObject");
+		fs << wxT("AddNullObject");
 	}else{
-		fs << _T("LoadObjectLayer ") << Object.LayerID;
+		fs << wxT("LoadObjectLayer ") << Object.LayerID;
 	}
-	fs << _T(" 1" << wxString::Format(_T("%07x"),Object.ObjectID) << " " << Object.Name << "\nChangeObject 0\n");
+	fs << wxT(" 1" << wxString::Format(wxT("%07x"),Object.ObjectID) << " " << Object.Name << "\nChangeObject 0\n");
 
 	if (Object.ObjectTags != wxEmptyString)
-		fs << _T("// " << Object.ObjectTags << "\n");
-	fs << _T("ShowObject 7 -1 0.376471 0.878431 0.941176 \nGroup 0\nObjectMotion\nNumChannels 9\n");
+		fs << wxT("// " << Object.ObjectTags << "\n");
+	fs << wxT("ShowObject 7 -1 0.376471 0.878431 0.941176 \nGroup 0\nObjectMotion\nNumChannels 9\n");
 
 	LW_WriteMotionArray(fs,Object.AnimData);
 
-	fs << _T("PathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
+	fs << wxT("PathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
 
 	if (Object.ParentType > LW_ITEMTYPE_NOPARENT){
-		fs << _T("ParentItem " << Object.ParentType);
+		fs << wxT("ParentItem " << Object.ParentType);
 		if (Object.ParentType == LW_ITEMTYPE_BONE){
-			fs << wxString::Format(_T("%03x"),Object.ParentID) << _T("0000");
+			fs << wxString::Format(wxT("%03x"),Object.ParentID) << wxT("0000");
 		}else{
-			fs << wxString::Format(_T("%07x"),Object.ParentID) << _T("\n");
+			fs << wxString::Format(wxT("%07x"),Object.ParentID) << wxT("\n");
 		}
-		fs << _T("\n");
+		fs << wxT("\n");
 	}
-	fs << _T("IKInitialState 0\nSubPatchLevel 3 3\nShadowOptions 7\n\n");
+	fs << wxT("IKInitialState 0\nSubPatchLevel 3 3\nShadowOptions 7\n\n");
 
 	// Bones
 	if (modelExport_LW_ExportBones == true){
 		if (Object.Bones.size() > 0){
-			fs << _T("BoneFalloffType 5\nFasterBones 0\n");
+			fs << wxT("BoneFalloffType 5\nFasterBones 0\n");
 			for (size_t x=0;x<Object.Bones.size();x++){
 				WriteLWSceneBone(fs, Object.Bones[x]);
 			}
@@ -1235,19 +1235,19 @@ void WriteLWSceneObject(ofstream &fs, LWSceneObj Object)
 // Write a Light to the Scene File
 void WriteLWSceneLight(ofstream &fs, LWLight Light) //uint32 &lcount, Vec3D LPos, uint32 Ltype, Vec3D Lcolor, float Lintensity, bool useAtten, float AttenEnd, float defRange = 2.5, wxString prefix = wxEmptyString, uint32 ParentNum = -1)
 {
-	fs << _T("AddLight 2" << wxString::Format(_T("%07x"),Light.LightID) << "\n");
+	fs << wxT("AddLight 2" << wxString::Format(wxT("%07x"),Light.LightID) << "\n");
 	//modelname[0] = toupper(modelname[0]);
-	fs << _T("LightName " << Light.Name << "\nShowLight 1 -1 0.941176 0.376471 0.941176\nLightMotion\nNumChannels 9\n");
+	fs << wxT("LightName " << Light.Name << "\nShowLight 1 -1 0.941176 0.376471 0.941176\nLightMotion\nNumChannels 9\n");
 	LW_WriteMotionArray(fs,Light.AnimData);
 
 	if (Light.ParentType > LW_ITEMTYPE_NOPARENT){
-		fs << _T("ParentItem " << Light.ParentType);
+		fs << wxT("ParentItem " << Light.ParentType);
 		if (Light.ParentType == LW_ITEMTYPE_BONE){
-			fs << wxString::Format(_T("%03x"),Light.ParentID) << _T("0000");
+			fs << wxString::Format(wxT("%03x"),Light.ParentID) << wxT("0000");
 		}else{
-			fs << wxString::Format(_T("%07x"),Light.ParentID) << _T("\n");
+			fs << wxString::Format(wxT("%07x"),Light.ParentID) << wxT("\n");
 		}
-		fs << _T("\n");
+		fs << wxT("\n");
 	}
 
 	// Light Color Reducer
@@ -1260,7 +1260,7 @@ void WriteLWSceneLight(ofstream &fs, LWLight Light) //uint32 &lcount, Vec3D LPos
 		LColor.z *= 0.99f;
 		LIntensity /= 0.99f;
 	}
-	fs << _T("LightColor " << LColor.x << " " << LColor.y << " " << LColor.z << "\nLightIntensity " << LIntensity << "\n");
+	fs << wxT("LightColor " << LColor.x << " " << LColor.y << " " << LColor.z << "\nLightIntensity " << LIntensity << "\n");
 
 	// Process Light type & output!
 	switch (Light.LightType) {
@@ -1268,19 +1268,19 @@ void WriteLWSceneLight(ofstream &fs, LWLight Light) //uint32 &lcount, Vec3D LPos
 		case 1:
 		default:
 			// Default to an Omni (Point) light.
-			fs << _T("LightType " << LW_LIGHTTYPE_POINT << "\n");
+			fs << wxT("LightType " << LW_LIGHTTYPE_POINT << "\n");
 
 			if (Light.FalloffRadius > 0.0f) {
 				// Use Inverse Distance for the default Light Falloff Type. Should better simulate WoW Lights, until I can write a WoW light plugin for Lightwave...
-				fs << _T("LightFalloffType 2\nLightRange " << Light.FalloffRadius << "\n");
+				fs << wxT("LightFalloffType 2\nLightRange " << Light.FalloffRadius << "\n");
 			}else{
 				// Default to these settings, which look pretty close...
-				fs << _T("LightFalloffType 2\nLightRange 2.5\n");
+				fs << wxT("LightFalloffType 2\nLightRange 2.5\n");
 			}
-			fs << _T("ShadowType 1\nShadowColor 0 0 0\n");
-			WriteLWScenePlugin(fs,_T("LightHandler"),1,_T("PointLight"));
+			fs << wxT("ShadowType 1\nShadowColor 0 0 0\n");
+			WriteLWScenePlugin(fs,wxT("LightHandler"),1,wxT("PointLight"));
 	}
-	fs << _T("\n");
+	fs << wxT("\n");
 }
 
 
@@ -1291,16 +1291,16 @@ void WriteLWSceneLight(ofstream &fs, LWLight Light) //uint32 &lcount, Vec3D LPos
 // Write Lightwave Scene data to a file.
 // Currently incomplete.
 bool WriteLWScene(LWScene *SceneData){
-	wxLogMessage(_T("Export Lightwave Scene Function running."));
+	wxLogMessage(wxT("Export Lightwave Scene Function running."));
 
 	if ((SceneData->Objects.size() == 0) && (SceneData->Lights.size() == 0) && (SceneData->Cameras.size() == 0)){
-		wxLogMessage(_T("No Scene Data found. Unable to write scene file."));
+		wxLogMessage(wxT("No Scene Data found. Unable to write scene file."));
 		return false;
 	}
 	if ((modelExport_LW_ExportLights == false) && (modelExport_LW_ExportDoodads == false) && (modelExport_LW_ExportCameras == false) && (modelExport_LW_ExportBones == false)){
-		wxString errormsg = _T("Global variables don't allow for scene generation. Unable to write scene file.");
+		wxString errormsg = wxT("Global variables don't allow for scene generation. Unable to write scene file.");
 		wxLogMessage(errormsg);
-		wxMessageBox(errormsg,_T("Scene Export Failure"));
+		wxMessageBox(errormsg,wxT("Scene Export Failure"));
 		return false;
 	}
 
@@ -1308,11 +1308,11 @@ bool WriteLWScene(LWScene *SceneData){
 
 	ofstream fs(SceneName.fn_str(), ios_base::out | ios_base::trunc);
 	if (!fs.is_open()) {
-		wxMessageBox(_T("Unable to open the scene file for exporting."),_T("Scene Export Failure"));
-		wxLogMessage(_T("Error: Unable to open file \"%s\". Could not export the scene."), SceneName.c_str());
+		wxMessageBox(wxT("Unable to open the scene file for exporting."),wxT("Scene Export Failure"));
+		wxLogMessage(wxT("Error: Unable to open file \"%s\". Could not export the scene."), SceneName.c_str());
 		return false;
 	}
-	wxLogMessage(_T("Opened %s for writing..."),SceneName.c_str());
+	wxLogMessage(wxT("Opened %s for writing..."),SceneName.c_str());
 	SceneName = SceneName.AfterLast(SLASH);
 
 	/*
@@ -1337,8 +1337,8 @@ bool WriteLWScene(LWScene *SceneData){
 	*/
 
 	// File Top
-	fs << _T("LWSC\n");
-	fs << _T("5\n\n"); // This is a version-compatibility number...
+	fs << wxT("LWSC\n");
+	fs << wxT("5\n\n"); // This is a version-compatibility number...
 	
 	// Scene Length Data
 	size_t Frame_First = SceneData->FirstFrame;
@@ -1347,8 +1347,8 @@ bool WriteLWScene(LWScene *SceneData){
 		Frame_First = 0;
 		Frame_Last = 60;
 	}
-	fs << _T("RenderRangeType 0\nFirstFrame " << Frame_First << "\nLastFrame " << Frame_Last << "\nFrameStep 1\nRenderRangeObject 0\nRenderRangeArbitrary " << Frame_First << "-" << Frame_Last << "\n");
-	fs << _T("PreviewFirstFrame " << Frame_First << "\nPreviewLastFrame " << Frame_Last << "\nPreviewFrameStep 1\nCurrentFrame " << Frame_First << "\nFramesPerSecond 30\nChangeScene 0\n");
+	fs << wxT("RenderRangeType 0\nFirstFrame " << Frame_First << "\nLastFrame " << Frame_Last << "\nFrameStep 1\nRenderRangeObject 0\nRenderRangeArbitrary " << Frame_First << "-" << Frame_Last << "\n");
+	fs << wxT("PreviewFirstFrame " << Frame_First << "\nPreviewLastFrame " << Frame_Last << "\nPreviewFrameStep 1\nCurrentFrame " << Frame_First << "\nFramesPerSecond 30\nChangeScene 0\n");
 
 	// Objects & Bones
 	for (size_t o=0;o<SceneData->Objects.size();o++){
@@ -1359,7 +1359,7 @@ bool WriteLWScene(LWScene *SceneData){
 	if (!SceneData->AmbientIntensity){
 		SceneData->AmbientIntensity = 0.5f;		// Default to 50%
 	}
-	fs << _T("AmbientColor 1 1 1\nAmbientIntensity ") << SceneData->AmbientIntensity << _T("\nDoubleSidedAreaLights 1\nRadiosityType 2\nRadiosityInterpolated 1\nRadiosityTransparency 0\nRadiosityIntensity 1\nRadiosityTolerance 0.2928932\nRadiosityRays 64\nSecondaryBounceRays 16\nRadiosityMinPixelSpacing 4\nRadiosityMaxPixelSpacing 100\nRadiosityMultiplier 1\nRadiosityDirectionalRays 0\nRadiosityUseGradients 0\nRadiosityUseBehindTest 1\nBlurRadiosity 1\nRadiosityFlags 0\nRadiosityCacheModulus 1\nRadiosityCacheFilePath radiosity.cache\nPixelFilterForceMT 0\n\n");
+	fs << wxT("AmbientColor 1 1 1\nAmbientIntensity ") << SceneData->AmbientIntensity << wxT("\nDoubleSidedAreaLights 1\nRadiosityType 2\nRadiosityInterpolated 1\nRadiosityTransparency 0\nRadiosityIntensity 1\nRadiosityTolerance 0.2928932\nRadiosityRays 64\nSecondaryBounceRays 16\nRadiosityMinPixelSpacing 4\nRadiosityMaxPixelSpacing 100\nRadiosityMultiplier 1\nRadiosityDirectionalRays 0\nRadiosityUseGradients 0\nRadiosityUseBehindTest 1\nBlurRadiosity 1\nRadiosityFlags 0\nRadiosityCacheModulus 1\nRadiosityCacheFilePath radiosity.cache\nPixelFilterForceMT 0\n\n");
 
 	if (modelExport_LW_ExportLights == true){
 		for (size_t l=0;l<SceneData->Lights.size();l++){
@@ -1397,14 +1397,14 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 		doreturn = false;
 	}
 	if (doreturn == true){
-		wxLogMessage(_T("M2 Scene Export: Did not find any reason to export a scene. Stopping Scene export."));
+		wxLogMessage(wxT("M2 Scene Export: Did not find any reason to export a scene. Stopping Scene export."));
 		return;
 	}
-	wxLogMessage(_T("M2 Scene Export Values:\n  nLights: %i\n  nBones: %i\n  hasCamera: %s\n  Use WMV Pos/Rot: %s\n  doreturn: %s"),m->header.nLights,m->header.nBones,(m->hasCamera?_T("true"):_T("false")),(modelExport_UseWMVPosRot?_T("true"):_T("false")),(doreturn?_T("true"):_T("false")));
+	wxLogMessage(wxT("M2 Scene Export Values:\n  nLights: %i\n  nBones: %i\n  hasCamera: %s\n  Use WMV Pos/Rot: %s\n  doreturn: %s"),m->header.nLights,m->header.nBones,(m->hasCamera?wxT("true"):wxT("false")),(modelExport_UseWMVPosRot?wxT("true"):wxT("false")),(doreturn?wxT("true"):wxT("false")));
 
 	// Open file
-	wxString SceneName = wxString(fn, wxConvUTF8).BeforeLast(_T('.'));
-	SceneName << _T(".lws");
+	wxString SceneName = wxString(fn, wxConvUTF8).BeforeLast(wxT('.'));
+	SceneName << wxT(".lws");
 
 	if (modelExport_LW_PreserveDir == true){
 		wxString Path, Name;
@@ -1412,10 +1412,10 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 		Path << SceneName.BeforeLast(SLASH);
 		Name << SceneName.AfterLast(SLASH);
 
-		MakeDirs(Path,_T("Scenes"));
+		MakeDirs(Path,wxT("Scenes"));
 
 		SceneName.Empty();
-		SceneName << Path << SLASH << _T("Scenes") << SLASH << Name;
+		SceneName << Path << SLASH << wxT("Scenes") << SLASH << Name;
 	}
 	if (modelExport_PreserveDir == true && m->modelType != MT_CHAR){
 		wxString Path1, Path2, Name;
@@ -1432,16 +1432,16 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 	ofstream fs(SceneName.fn_str(), ios_base::out | ios_base::trunc);
 
 	if (!fs.is_open()) {
-		wxMessageBox(_T("Unable to open the scene file for exporting."),_T("Scene Export Failure"));
-		wxLogMessage(_T("Error: Unable to open file \"%s\". Could not export the scene."), SceneName.c_str());
+		wxMessageBox(wxT("Unable to open the scene file for exporting."),wxT("Scene Export Failure"));
+		wxLogMessage(wxT("Error: Unable to open file \"%s\". Could not export the scene."), SceneName.c_str());
 		return;
 	}
-	wxLogMessage(_T("Opened %s for writing..."),SceneName.c_str());
+	wxLogMessage(wxT("Opened %s for writing..."),SceneName.c_str());
 	SceneName = SceneName.AfterLast(SLASH);
 
 	// File Top
-	fs << _T("LWSC\n");
-	fs << _T("5\n\n"); // I think this is a version-compatibility number...
+	fs << wxT("LWSC\n");
+	fs << wxT("5\n\n"); // I think this is a version-compatibility number...
 
 	uint32 RangeEnd = 0;
 
@@ -1460,12 +1460,12 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 	wxString Obj = wxString(fn, wxConvUTF8).AfterLast(SLASH);
 	wxString objFilename = wxEmptyString;
 	if (modelExport_LW_PreserveDir == true){
-		objFilename << _T("Objects") << SLASH;
+		objFilename << wxT("Objects") << SLASH;
 	}
 	if (modelExport_PreserveDir == true){
 		objFilename += wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 		objFilename << SLASH;
-		objFilename.Replace(_T("\\"),_T("/"));
+		objFilename.Replace(wxT("\\"),wxT("/"));
 	}
 	objFilename += Obj;
 
@@ -1495,7 +1495,7 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 	// Export Bones
 	if (modelExport_LW_ExportBones == true){
 		if (m->header.nBones > 0){
-			fs << _T("BoneFalloffType 5\nFasterBones 1\n");
+			fs << wxT("BoneFalloffType 5\nFasterBones 1\n");
 			for (size_t x=0;x<m->header.nBones;x++){
 				LWBones lwBone((uint32)x);
 				Bone *cbone = &m->bones[x];
@@ -1520,7 +1520,7 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 				}
 				Pos.z = -Pos.z;
 				MakeModelFaceForwards(Pos,false);
-				wxString bone_name = wxString::Format(_T("Bone_%03i"), x);
+				wxString bone_name = wxString::Format(wxT("Bone_%03i"), x);
 				for (int j=0; j<BONE_MAX; ++j) {
 					if (m->keyBoneLookup[j] == (uint16)x) {
 						bone_name = Bone_Names[j];
@@ -1540,7 +1540,7 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 
 	// Lighting Basics
 	// Defaulting to WoW-Like settings
-	fs << _T("AmbientColor 1 1 1\nAmbientIntensity 0.50\nDoubleSidedAreaLights 1\n\n");
+	fs << wxT("AmbientColor 1 1 1\nAmbientIntensity 0.50\nDoubleSidedAreaLights 1\n\n");
 
 	// Lights
 	if (modelExport_LW_ExportLights == true){
@@ -1561,7 +1561,7 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 		}
 		if (att != NULL){
 			if (att->model){
-				wxLogMessage(_T("Att Model found."));
+				wxLogMessage(wxT("Att Model found."));
 			}
 			for (uint32 c=0; c<att->children.size(); c++) {
 				Attachment *att2 = att->children[c];
@@ -1611,9 +1611,9 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 				CamData.Push(cam->target,ZeroRot,OneScale);
 			}
 
-			//WriteLWSceneObject(fs,_T("Camera Target"),CamData,mcount,0,true,ModelID);
+			//WriteLWSceneObject(fs,wxT("Camera Target"),CamData,mcount,0,true,ModelID);
 
-			fs << _T("AddCamera 30000000\nCameraName Camera\nShowCamera 1 -1 0.125490 0.878431 0.125490\nCameraMotion\nNumChannels 6\n");
+			fs << wxT("AddCamera 30000000\nCameraName Camera\nShowCamera 1 -1 0.125490 0.878431 0.125490\nCameraMotion\nNumChannels 6\n");
 
 			if (cam->tPos.data[anim].size() > 1){
 				std::vector<float> time, PosX, PosY, PosZ, ZeroFloat;
@@ -1651,23 +1651,23 @@ void ExportM2toScene(Attachment *att, Model *m, const char *fn, bool init){
 				WriteLWSceneEnvChannel(fs,5,0,0);
 			}
 
-			fs << _T("ParentItem 1" << wxString::Format(_T("%07x"),ModelID) << "\n");
-			fs << _T("IKInitCustomFrame 0\nGoalStrength 1\nIKFKBlending 0\nIKSoftMin 0.25\nIKSoftMax 0.75\nCtrlPosItemBlend 1\nCtrlRotItemBlend 1\nCtrlScaleItemBlend 1\n\n");
-			fs << _T("HController 1\nPController 1\nPathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
-			fs << _T("TargetItem 1"<<wxString::Format(_T("%07x"),CameraTargetID)<<"\n");
-			fs << _T("ZoomFactor "<<(cam->fov*3.6)<<"\nZoomType 2\n");
-			WriteLWScenePlugin(fs,_T("CameraHandler"),1,_T("Perspective"));	// Make the camera a Perspective camera
+			fs << wxT("ParentItem 1" << wxString::Format(wxT("%07x"),ModelID) << "\n");
+			fs << wxT("IKInitCustomFrame 0\nGoalStrength 1\nIKFKBlending 0\nIKSoftMin 0.25\nIKSoftMax 0.75\nCtrlPosItemBlend 1\nCtrlRotItemBlend 1\nCtrlScaleItemBlend 1\n\n");
+			fs << wxT("HController 1\nPController 1\nPathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
+			fs << wxT("TargetItem 1"<<wxString::Format(wxT("%07x"),CameraTargetID)<<"\n");
+			fs << wxT("ZoomFactor "<<(cam->fov*3.6)<<"\nZoomType 2\n");
+			WriteLWScenePlugin(fs,wxT("CameraHandler"),1,wxT("Perspective"));	// Make the camera a Perspective camera
 		}
 	}
 
 	// Scene File Basics
-	fs << _T("RenderRangeType 0\nFirstFrame 1\nLastFrame "<<RangeEnd<<"\n");
-	fs << _T("FrameStep 1\nRenderRangeObject 0\nRenderRangeArbitrary 1-"<<RangeEnd<<"\n");
-	fs << _T("PreviewFirstFrame 0\nPreviewLastFrame "<<RangeEnd<<"\nPreviewFrameStep 1\nCurrentFrame 0\nFramesPerSecond 30\nChangeScene 0\n\n");
+	fs << wxT("RenderRangeType 0\nFirstFrame 1\nLastFrame "<<RangeEnd<<"\n");
+	fs << wxT("FrameStep 1\nRenderRangeObject 0\nRenderRangeArbitrary 1-"<<RangeEnd<<"\n");
+	fs << wxT("PreviewFirstFrame 0\nPreviewLastFrame "<<RangeEnd<<"\nPreviewFrameStep 1\nCurrentFrame 0\nFramesPerSecond 30\nChangeScene 0\n\n");
 
 	// Rendering Options
 	// Raytrace Shadows enabled.
-	fs << _T("RenderMode 2\nRayTraceEffects 1\nDepthBufferAA 0\nRenderLines 1\nRayRecursionLimit 16\nRayPrecision 6\nRayCutoff 0.01\nDataOverlayLabel  \nSaveRGB 0\nSaveAlpha 0\n");
+	fs << wxT("RenderMode 2\nRayTraceEffects 1\nDepthBufferAA 0\nRenderLines 1\nRayRecursionLimit 16\nRayPrecision 6\nRayCutoff 0.01\nDataOverlayLabel  \nSaveRGB 0\nSaveAlpha 0\n");
 
 	fs.close();
 	*/
@@ -1681,19 +1681,19 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 	bool doreturn = false;
 
 	if ((m->nDoodads == 0) && (m->nLights == 0)){
-		wxLogMessage(_T("No Scene Data found. Unable to write scene file."));
+		wxLogMessage(wxT("No Scene Data found. Unable to write scene file."));
 		doreturn = true;
 	}
 	if ((modelExport_LW_ExportLights == false) && (modelExport_LW_ExportDoodads == false)){
-		wxLogMessage(_T("Global variables don't allow for scene generation. Unable to write scene file."));
+		wxLogMessage(wxT("Global variables don't allow for scene generation. Unable to write scene file."));
 		doreturn = true;
 	}
 	if (doreturn == true)
 		return;
 
 	// Open file
-	wxString SceneName = wxString(fn, wxConvUTF8).BeforeLast(_T('.'));
-	SceneName << _T(".lws");
+	wxString SceneName = wxString(fn, wxConvUTF8).BeforeLast(wxT('.'));
+	SceneName << wxT(".lws");
 
 	if (modelExport_LW_PreserveDir == true){
 		wxString Path, Name;
@@ -1701,10 +1701,10 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 		Path << SceneName.BeforeLast(SLASH);
 		Name << SceneName.AfterLast(SLASH);
 
-		MakeDirs(Path,_T("Scenes"));
+		MakeDirs(Path,wxT("Scenes"));
 
 		SceneName.Empty();
-		SceneName << Path << SLASH << _T("Scenes") << SLASH << Name;
+		SceneName << Path << SLASH << wxT("Scenes") << SLASH << Name;
 	}
 	if (modelExport_PreserveDir == true){
 		wxString Path1, Path2, Name;
@@ -1721,8 +1721,8 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 	ofstream fs(SceneName.fn_str(), ios_base::out | ios_base::trunc);
 
 	if (!fs.is_open()) {
-		wxMessageBox(_T("Unable to open the scene file for exporting."),_T("Scene Export Failure"));
-		wxLogMessage(_T("Error: Unable to open file \"%s\". Could not export the scene."), SceneName.c_str());
+		wxMessageBox(wxT("Unable to open the scene file for exporting."),wxT("Scene Export Failure"));
+		wxLogMessage(wxT("Error: Unable to open file \"%s\". Could not export the scene."), SceneName.c_str());
 		return;
 	}
 	SceneName = SceneName.AfterLast(SLASH);
@@ -1734,13 +1734,13 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 	*/
 /*
 	// File Top
-	fs << _T("LWSC\n");
-	fs << _T("5\n\n"); // I think this is a version-compatibility number...
+	fs << wxT("LWSC\n");
+	fs << wxT("5\n\n"); // I think this is a version-compatibility number...
 
 	// Scene File Basics
-	fs << _T("RenderRangeType 0\nFirstFrame 1\nLastFrame 60\n");
-	fs << _T("FrameStep 1\nRenderRangeObject 0\nRenderRangeArbitrary 1-60\n");
-	fs << _T("PreviewFirstFrame 0\nPreviewLastFrame 60\nPreviewFrameStep 1\nCurrentFrame 0\nFramesPerSecond 30\nChangeScene 0\n\n");
+	fs << wxT("RenderRangeType 0\nFirstFrame 1\nLastFrame 60\n");
+	fs << wxT("FrameStep 1\nRenderRangeObject 0\nRenderRangeArbitrary 1-60\n");
+	fs << wxT("PreviewFirstFrame 0\nPreviewLastFrame 60\nPreviewFrameStep 1\nCurrentFrame 0\nFramesPerSecond 30\nChangeScene 0\n\n");
 
 	uint32 mcount = 0; // Model Count
 	uint32 lcount = 0; // Light Count
@@ -1759,12 +1759,12 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 	wxString Obj = wxString(fn, wxConvUTF8).AfterLast(SLASH);
 	wxString objFilename = wxEmptyString;
 	if (modelExport_LW_PreserveDir == true){
-		objFilename << _T("Objects") << SLASH;
+		objFilename << wxT("Objects") << SLASH;
 	}
 	if (modelExport_PreserveDir == true){
 		objFilename += wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 		objFilename << SLASH;
-		objFilename.Replace(_T("\\"),_T("/"));
+		objFilename.Replace(wxT("\\"),wxT("/"));
 	}
 	objFilename += Obj;
 
@@ -1779,7 +1779,7 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 			m->showDoodadSet(ds);
 			WMODoodadSet *DDSet = &m->doodadsets[ds];
 			wxString DDSetName;
-			DDSetName << wxString(m->name.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) << wxString(_T(" DoodadSet ")) << wxString(DDSet->name, wxConvUTF8);
+			DDSetName << wxString(m->name.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(wxT('.')) << wxString(wxT(" DoodadSet ")) << wxString(DDSet->name, wxConvUTF8);
 			int DDSID = mcount;
 
 			AnimationData DDData;
@@ -1788,7 +1788,7 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 
 			for (uint32 dd=DDSet->start;dd<(DDSet->start+DDSet->size);dd++){
 				WMOModelInstance *doodad = &m->modelis[dd];
-				wxString name = wxString(doodad->filename.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.'));
+				wxString name = wxString(doodad->filename.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(wxT('.'));
 				// Position
 				Vec3D Pos = doodad->pos;
 				// Heading, Pitch & Bank.
@@ -1807,22 +1807,22 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 				if (isNull == false){
 					wxString pathdir = wxEmptyString;
 					if (modelExport_LW_PreserveDir == true){
-						pathdir << _T("Objects") << SLASH;
+						pathdir << wxT("Objects") << SLASH;
 					}
-					name = pathdir << wxString(doodad->filename.c_str(), wxConvUTF8).BeforeLast(_T('.')) << _T(".lwo");
-					name.Replace(_T("\\"),_T("/"));
+					name = pathdir << wxString(doodad->filename.c_str(), wxConvUTF8).BeforeLast(wxT('.')) << wxT(".lwo");
+					name.Replace(wxT("\\"),wxT("/"));
 				}
 
 				AnimationData DoodadData;
 				DoodadData.Push(Pos,Rot,Vec3D(doodad->sc,doodad->sc,doodad->sc),0);
 
 				//WriteLWSceneObject(fs,name,DoodadData,mcount,7,isNull,DDSID,wxString(doodad->filename.c_str(), wxConvUTF8));
-				wxLogMessage(_T("Export: Finished writing the Doodad to the Scene File."));
+				wxLogMessage(wxT("Export: Finished writing the Doodad to the Scene File."));
 
 				// Doodad Lights
 				// Apparently, Doodad Lights must be parented to the Doodad for proper placement.
 				if ((doodad->model) && (doodad->model->header.nLights > 0)){
-					wxLogMessage(_T("Export: Doodad Lights found for %s, Number of lights: %i"), doodad->filename.c_str(), doodad->model->header.nLights);
+					wxLogMessage(wxT("Export: Doodad Lights found for %s, Number of lights: %i"), doodad->filename.c_str(), doodad->model->header.nLights);
 					DoodadLightArrayDDID[DDLArrCount] = DDID;
 					DoodadLightArrayID[DDLArrCount] = dd;
 					DDLArrCount++;
@@ -1832,7 +1832,7 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 	}
 
 	// Lighting Basics
-	fs << _T("AmbientColor 1 1 1\nAmbientIntensity 0.25\nDoubleSidedAreaLights 1\n\n");
+	fs << wxT("AmbientColor 1 1 1\nAmbientIntensity 0.25\nDoubleSidedAreaLights 1\n\n");
 
 	// Lights
 	if (modelExport_LW_ExportLights == true){
@@ -1882,15 +1882,15 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 	// Camera data (if we want it) goes here.
 	// Yes, we can export flying cameras to Lightwave!
 	// Just gotta add them back into the listing...
-	fs << _T("AddCamera 30000000\nCameraName Camera\nShowCamera 1 -1 0.125490 0.878431 0.125490\nZoomFactor 2.316845\nZoomType 2\n\n");
-	WriteLWScenePlugin(fs,_T("CameraHandler"),1,_T("Perspective"));	// Make the camera a Perspective camera
+	fs << wxT("AddCamera 30000000\nCameraName Camera\nShowCamera 1 -1 0.125490 0.878431 0.125490\nZoomFactor 2.316845\nZoomType 2\n\n");
+	WriteLWScenePlugin(fs,wxT("CameraHandler"),1,wxT("Perspective"));	// Make the camera a Perspective camera
 
 	// Backdrop Settings
 	// Add this if viewing a skybox, or using one as a background?
 
 	// Rendering Options
 	// Raytrace Shadows enabled.
-	fs << _T("RenderMode 2\nRayTraceEffects 1\nDepthBufferAA 0\nRenderLines 1\nRayRecursionLimit 16\nRayPrecision 6\nRayCutoff 0.01\nDataOverlayLabel  \nSaveRGB 0\nSaveAlpha 0\n");
+	fs << wxT("RenderMode 2\nRayTraceEffects 1\nDepthBufferAA 0\nRenderLines 1\nRayRecursionLimit 16\nRayPrecision 6\nRayCutoff 0.01\nDataOverlayLabel  \nSaveRGB 0\nSaveAlpha 0\n");
 
 	fs.close();
 
@@ -1911,14 +1911,14 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 			g_modelViewer->isModel = true;
 			wxString cModelName(modelarray[x].c_str(),wxConvUTF8);
 
-			wxLogMessage(_T("Export: Attempting to export doodad model: %s"),cModelName.c_str());
+			wxLogMessage(wxT("Export: Attempting to export doodad model: %s"),cModelName.c_str());
 			wxString dfile = wxString(fn,wxConvUTF8).BeforeLast(SLASH) << SLASH << cModelName.AfterLast(SLASH);
-			dfile = dfile.BeforeLast(_T('.')) << _T(".lwo");
+			dfile = dfile.BeforeLast(wxT('.')) << wxT(".lwo");
 
 			g_modelViewer->canvas->LoadModel(cModelName);
-			ExportM2toLWO(NULL, g_modelViewer->canvas->model, dfile.fn_str(), true);
+			ExportLWO_M2(NULL, g_modelViewer->canvas->model, dfile.fn_str(), true);
 
-			wxLogMessage(_T("Export: Finished exporting doodad model: %s\n\n"),cModelName.c_str());
+			wxLogMessage(wxT("Export: Finished exporting doodad model: %s\n\n"),cModelName.c_str());
 
 			// Delete the loaded model
 			g_modelViewer->canvas->clearAttachments();
@@ -1946,9 +1946,9 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 
 	LWSceneObj SceneObj(wxString(fn, wxConvUTF8),LW_ObjCount.GetPlus(),0);
 
-	Object.SourceType = _T("M2");
+	Object.SourceType = wxT("M2");
 	if (announce == true)
-		LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),Object.SourceType);
+		LogExportData(wxT("LWO"),m->modelname,wxString(fn, wxConvUTF8));
 
 	uint32 SurfCounter = 0;
 	int32 cAnim = 0;
@@ -1959,7 +1959,6 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 		cAnim = m->currentAnim;
 		cFrame = m->animManager->GetFrame();
 	}
-	wxLogMessage(_T("isAnimated: %s, Current Anim: %i, Current Frame: %i"),(m->animated?_T("true"):_T("false")), cAnim, cFrame);
 
 	// Main Object
 	LWLayer Layer;
@@ -1973,14 +1972,14 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 		Layer.BoundingBox2 = m->bounds[1];
 	}*/
 
-	wxLogMessage(_T("M2 Texture List:"));
+	wxLogMessage(wxT("M2 Texture List:"));
 	for (size_t x=0;x<m->TextureList.size();x++){
-		wxLogMessage("Image %i: %s",x,m->TextureList[x]);
+		wxLogMessage(wxT("Image %i: %s"),x,m->TextureList[x]);
 	}
 
 	// Mesh & Slot names
-	wxString meshes[19] = {_T("Hairstyles"), _T("Facial1"), _T("Facial2"), _T("Facial3"), _T("Braces"), _T("Boots"), wxEmptyString, _T("Ears"), _T("Wristbands"),  _T("Kneepads"), _T("Pants"), _T("Pants"), _T("Tarbard"), _T("Trousers"), wxEmptyString, _T("Cape"), wxEmptyString, _T("Eyeglows"), _T("Belt") };
-	wxString slots[15] = {_T("Helm"), wxEmptyString, _T("Shoulder"), wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, _T("Right Hand Item"), _T("Left Hand Item"), wxEmptyString, wxEmptyString, _T("Quiver") };
+	wxString meshes[19] = {wxT("Hairstyles"), wxT("Facial1"), wxT("Facial2"), wxT("Facial3"), wxT("Braces"), wxT("Boots"), wxEmptyString, wxT("Ears"), wxT("Wristbands"),  wxT("Kneepads"), wxT("Pants"), wxT("Pants"), wxT("Tarbard"), wxT("Trousers"), wxEmptyString, wxT("Cape"), wxEmptyString, wxT("Eyeglows"), wxT("Belt") };
+	wxString slots[15] = {wxT("Helm"), wxEmptyString, wxT("Shoulder"), wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxT("Right Hand Item"), wxT("Left Hand Item"), wxEmptyString, wxEmptyString, wxT("Quiver") };
 
 	// Build Part Names
 	// Seperated from the rest of the build for various reasons.
@@ -1995,9 +1994,9 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 			// Part Names
 			int mesh = m->geosets[g].id / 100;
 			if (m->modelType == MT_CHAR && mesh < 19 && meshes[mesh] != wxEmptyString){
-				partName = wxString::Format(_T("Geoset %03i - %s"),g,meshes[mesh].c_str());
+				partName = wxString::Format(wxT("Geoset %03i - %s"),g,meshes[mesh].c_str());
 			}else{
-				partName = wxString::Format(_T("Geoset %03i"),g);
+				partName = wxString::Format(wxT("Geoset %03i"),g);
 			}
 			for (uint32 x=0;x<Object.PartNames.size();x++){
 				if (Object.PartNames[x] == partName){
@@ -2012,7 +2011,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 	// Parts for Attached Objects
 	if (att != NULL){
 		if (att->model){
-			wxLogMessage(_T("Att Model found."));
+			wxLogMessage(wxT("Att Model found."));
 		}
 		for (uint32 c=0; c<att->children.size(); c++) {
 			Attachment *att2 = att->children[c];
@@ -2020,7 +2019,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 				Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
 
 				if (mAttChild){
-					wxLogMessage(_T("AttChild Model found."));
+					wxLogMessage(wxT("AttChild Model found."));
 					for (uint32 i=0; i<mAttChild->passes.size(); i++) {
 						ModelRenderPass &p = mAttChild->passes[i];
 
@@ -2030,9 +2029,9 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 
 							int thisslot = att2->children[j]->slot;
 							if (thisslot < 15 && slots[thisslot]!=wxEmptyString){
-								partName = wxString::Format(_T("Child %02i - %s"),j,slots[thisslot].c_str());
+								partName = wxString::Format(wxT("Child %02i - %s"),j,slots[thisslot].c_str());
 							}else{
-								partName = wxString::Format(_T("Child %02i - Slot %02i"),j,att2->children[j]->slot);
+								partName = wxString::Format(wxT("Child %02i - Slot %02i"),j,att2->children[j]->slot);
 							}
 
 							for (uint32 x=0;x<Object.PartNames.size();x++){
@@ -2068,9 +2067,9 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 			// Part Names
 			int mesh = m->geosets[g].id / 100;
 			if (m->modelType == MT_CHAR && mesh < 19 && meshes[mesh] != wxEmptyString){
-				partName = wxString::Format(_T("Geoset %03i - %s"),g,meshes[mesh].c_str());
+				partName = wxString::Format(wxT("Geoset %03i - %s"),g,meshes[mesh].c_str());
 			}else{
-				partName = wxString::Format(_T("Geoset %03i"),g);
+				partName = wxString::Format(wxT("Geoset %03i"),g);
 			}
 			for (uint32 x=0;x<Object.PartNames.size();x++){
 				if (Object.PartNames[x] == partName){
@@ -2080,16 +2079,16 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 			}
 
 			// Surface Name
-			matName = m->TextureList[p.tex].AfterLast(SLASH).BeforeLast(_T('.'));
+			matName = m->TextureList[p.tex].AfterLast(SLASH).BeforeLast(wxT('.'));
 			if (matName.Len() == 0)
-				matName = wxString::Format(_T("Material_%03i"), p.tex);
+				matName = wxString::Format(wxT("Material_%03i"), p.tex);
 /*
 			if (p.useSpec == true){
-				matName = matName + _T("_Spec");
+				matName = matName + wxT("_Spec");
 			}
 
 			if (p.trans == true){
-				matName = matName + _T("_Trans");
+				matName = matName + wxT("_Trans");
 			}
 */
 			// If Luminous...
@@ -2097,7 +2096,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 				Surf_Diff = 0.0f;
 				Surf_Lum = 1.0f;
 				// Add Lum, just in case there's a non-luminous surface with the same name.
-				matName = matName + _T("_Lum");
+				matName = matName + wxT("_Lum");
 			}
 
 			for (size_t x=0;x<Object.Surfaces.size();x++){
@@ -2109,26 +2108,26 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 			}
 
 			bool doubesided = (p.cull?true:false);
-			//wxLogMessage(_T("Doublesided: %s, P.Cull: %s"),(doubesided?_T("true"):_T("false")),(p.cull?_T("true"):_T("false")));
+			//wxLogMessage(wxT("Doublesided: %s, P.Cull: %s"),(doubesided?wxT("true"):wxT("false")),(p.cull?wxT("true"):wxT("false")));
 
 			// Add Images to Model
 			LWClip ClipImage;
 			// Image Filename
 			wxString Texture = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8);
 			wxString TexturePath = Texture.BeforeLast(MPQ_SLASH);
-			wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(_T('.'));
+			wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
 
 			if (m->modelType == MT_CHAR){
-				wxString charname = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_");
+				wxString charname = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(wxT('.')) + wxT("_");
 				if (texName.Find(MPQ_SLASH) != wxNOT_FOUND){
-					texName = charname + Texture.AfterLast(MPQ_SLASH).BeforeLast(_T('.'));
-					TexturePath = _T("");
+					texName = charname + Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
+					TexturePath = wxT("");
 				}
-				if (texName.Find(_T("Body")) != wxNOT_FOUND){
-					texName = charname + _T("Body");
+				if (texName.Find(wxT("Body")) != wxNOT_FOUND){
+					texName = charname + wxT("Body");
 				}
 			}
-			//wxLogMessage(_T("Texture: %s\n\tTexPath: %s\n\ttexName: %s"),Texture,TexturePath,texName);
+			//wxLogMessage(wxT("Texture: %s\n\tTexPath: %s\n\ttexName: %s"),Texture,TexturePath,texName);
 
 			// Image Data
 			ClipImage.Filename = texName;
@@ -2139,17 +2138,17 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 
 			// ExportName = Base Path + Texture name without paths.
 			wxString ExportName = wxString(fn, wxConvUTF8).BeforeLast(SLASH) + SLASH + texName;
-			//wxLogMessage(_T("PrePath ExportName: %s, fn Path: %s"),ExportName,wxString(fn, wxConvUTF8).BeforeLast(SLASH));
+			//wxLogMessage(wxT("PrePath ExportName: %s, fn Path: %s"),ExportName,wxString(fn, wxConvUTF8).BeforeLast(SLASH));
 			if (modelExport_LW_PreserveDir == true){
 				wxString Path, Name;
 
 				Path << wxString(fn, wxConvUTF8).BeforeLast(SLASH);
 				Name << ExportName.AfterLast(SLASH);
 
-				MakeDirs(Path,_T("Images"));
+				MakeDirs(Path,wxT("Images"));
 
 				ExportName.Empty();
-				ExportName << Path << SLASH<<_T("Images")<<SLASH << Name;
+				ExportName << Path << SLASH<<wxT("Images")<<SLASH << Name;
 			}
 			if ((modelExport_PreserveDir == true)&&(TexturePath.Len() > 0)){
 				wxString Path1, Path2, Name;
@@ -2162,10 +2161,10 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 				ExportName.Empty();
 				ExportName << Path1 << SLASH << Path2 << SLASH << Name;
 			}
-			ExportName << _T(".tga");
-			//wxLogMessage(_T("Image ExportName: %s"),ExportName);
+			ExportName << wxT(".tga");
+			//wxLogMessage(wxT("Image ExportName: %s"),ExportName);
 			SaveTexture(ExportName);
-			//SaveTexture2(ClipImage.Filename,ClipImage.Source,wxString(_T("LWO")),wxString(_T("tga")));
+			//SaveTexture2(ClipImage.Filename,ClipImage.Source,wxString(wxT("LWO")),wxString(wxT("tga")));
 
 			LWSurface Surface(matName,wxString(m->TextureList[p.tex].c_str(), wxConvUTF8),SurfImage_Color,LWSurf_Image(),LWSurf_Image(),NULL,Surf_Diff,Surf_Lum,doubesided);
 			Object.Surfaces.push_back(Surface);
@@ -2180,13 +2179,13 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 				Vec3D vert;
 				if ((m->animated == true) && (init == false) && (m->vertices)) {
 					if (vertMsg == false){
-						wxLogMessage(_T("Using Verticies"));
+						wxLogMessage(wxT("Using Verticies"));
 						vertMsg = true;
 					}
 					vert = m->vertices[v];
 				} else {
 					if (vertMsg == false){
-						wxLogMessage(_T("Using Original Verticies"));
+						wxLogMessage(wxT("Using Original Verticies"));
 						vertMsg = true;
 					}
 					vert = m->origVertices[v].pos;
@@ -2208,7 +2207,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 				Bone *cbone = &m->bones[x];
 
 				// Weight Map Name = Bone Name
-				wxString bone_name = wxString::Format(_T("Bone_%03i"), x);
+				wxString bone_name = wxString::Format(wxT("Bone_%03i"), x);
 				for (int j=0; j<BONE_MAX; ++j) {
 					if (m->keyBoneLookup[j] == (int16)x) {
 						bone_name = Bone_Names[j];
@@ -2269,7 +2268,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 				Poly.PartTagID = partID;
 				Poly.SurfTagID = (uint32)Object.PartNames.size() + SurfCounter;
 				//Poly.Normals.polygon = (uint32)Layer.Polys.size();
-				Poly.Normals.NormalMapName = wxEmptyString; //Layer.Name + wxString(_T("_NormalMap"));
+				Poly.Normals.NormalMapName = wxEmptyString; //Layer.Name + wxString(wxT("_NormalMap"));
 				Layer.Polys.push_back(Poly);
 			}
 			SurfCounter++;
@@ -2290,10 +2289,10 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 					int boneID = -1;
 					Model *mParent = NULL;
 
-					wxLogMessage(_T("Attached Child Model: %s"),mAttChild->name);
-					wxLogMessage(_T("Texture List:"));
+					wxLogMessage(wxT("Attached Child Model: %s"),mAttChild->name);
+					wxLogMessage(wxT("Texture List:"));
 					for (size_t x=0;x<mAttChild->TextureList.size();x++){
-						wxLogMessage("Image %i: %s",x,mAttChild->TextureList[x]);
+						wxLogMessage(wxT("Image %i: %s"),x,mAttChild->TextureList[x]);
 					}
 
 					if (att2->parent) {
@@ -2341,9 +2340,9 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 						}
 					}
 /*
-					wxLogMessage(_T("mRot: X: %f, Y: %f, Z: %f, W: %f"),mRot.x,mRot.y,mRot.z,mRot.w);
-					wxLogMessage(_T("mPos: X: %f, Y: %f, Z: %f"),mPos.x,mPos.y,mPos.z);
-					wxLogMessage(_T("mScale: X: %f, Y: %f, Z: %f"),mScale.x,mScale.y,mScale.z);
+					wxLogMessage(wxT("mRot: X: %f, Y: %f, Z: %f, W: %f"),mRot.x,mRot.y,mRot.z,mRot.w);
+					wxLogMessage(wxT("mPos: X: %f, Y: %f, Z: %f"),mPos.x,mPos.y,mPos.z);
+					wxLogMessage(wxT("mScale: X: %f, Y: %f, Z: %f"),mScale.x,mScale.y,mScale.z);
 */
 					for (uint32 i=0; i<mAttChild->passes.size(); i++) {
 						ModelRenderPass &p = mAttChild->passes[i];
@@ -2361,9 +2360,9 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 
 							// Part Names
 							if (thisslot < 15 && slots[thisslot]!=wxEmptyString){
-								partName = wxString::Format(_T("Child %02i - %s"),j,slots[thisslot].c_str());
+								partName = wxString::Format(wxT("Child %02i - %s"),j,slots[thisslot].c_str());
 							}else{
-								partName = wxString::Format(_T("Child %02i - Slot %02i"),j,att2->children[j]->slot);
+								partName = wxString::Format(wxT("Child %02i - Slot %02i"),j,att2->children[j]->slot);
 							}
 							for (uint32 x=0;x<Object.PartNames.size();x++){
 								if (Object.PartNames[x] == partName){
@@ -2373,25 +2372,25 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 							}
 
 							// Surface Name
-							matName = mAttChild->TextureList[p.tex].AfterLast(MPQ_SLASH).BeforeLast(_T('.'));
+							matName = mAttChild->TextureList[p.tex].AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
 							if (thisslot < 15 && slots[thisslot]!=wxEmptyString){
 								if (matName != wxEmptyString){
-									matName = wxString::Format(_T("%s - %s"),slots[thisslot].c_str(),matName.c_str());
+									matName = wxString::Format(wxT("%s - %s"),slots[thisslot].c_str(),matName.c_str());
 								}else {
-									matName = wxString::Format(_T("%s - Material %02i"),slots[thisslot].c_str(),p.tex);
+									matName = wxString::Format(wxT("%s - Material %02i"),slots[thisslot].c_str(),p.tex);
 								}
 							}
 
 
 							if (matName.Len() == 0)
-								matName = wxString::Format(_T("Child %02i - Material %03i"), j, p.tex);
+								matName = wxString::Format(wxT("Child %02i - Material %03i"), j, p.tex);
 
 							// If Luminous...
 							if (p.unlit == true) {
 								Surf_Diff = 0.0f;
 								Surf_Lum = 1.0f;
 								// Add Lum, just in case there's a non-luminous surface with the same name.
-								matName = matName + _T("_Lum");
+								matName = matName + wxT("_Lum");
 							}
 
 							for (size_t x=0;x<Object.Surfaces.size();x++){
@@ -2408,7 +2407,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 							// Image Filename
 							wxString Texture = wxString(mAttChild->TextureList[p.tex].c_str(), wxConvUTF8);
 							wxString TexturePath = Texture.BeforeLast(MPQ_SLASH);
-							wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(_T('.'));
+							wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
 
 							//wxLogMessage("Texture: %s\n\tTexurePath: %s\n\ttexName: %s",Texture,TexturePath,texName);
 
@@ -2426,10 +2425,10 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 								Path << wxString(fn, wxConvUTF8).BeforeLast(SLASH);
 								Name << ExportName.AfterLast(SLASH);
 
-								MakeDirs(Path,_T("Images"));
+								MakeDirs(Path,wxT("Images"));
 
 								ExportName.Empty();
-								ExportName << Path << SLASH<<_T("Images")<<SLASH << Name;
+								ExportName << Path << SLASH<<wxT("Images")<<SLASH << Name;
 							}
 							if (modelExport_PreserveDir == true){
 								wxString Path1, Path2, Name;
@@ -2442,7 +2441,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 								ExportName.Empty();
 								ExportName << Path1 << SLASH << Path2 << SLASH << Name;
 							}
-							ExportName <<  _T(".tga");
+							ExportName <<  wxT(".tga");
 
 							SaveTexture(ExportName);
 
@@ -2511,7 +2510,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 								Poly.PartTagID = partID;
 								Poly.SurfTagID = (uint32)Object.PartNames.size() + SurfCounter;
 								//Poly.Normals.polygon = (uint32)Layer.Polys.size();
-								Poly.Normals.NormalMapName = wxEmptyString; //Layer.Name + wxString(_T("_NormalMap"));
+								Poly.Normals.NormalMapName = wxEmptyString; //Layer.Name + wxString(wxT("_NormalMap"));
 								Layer.Polys.push_back(Poly);
 							}
 							SurfCounter++;
@@ -2663,7 +2662,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 			else
 				lwBone.AnimData = AnimationData(animPos,animValue0,animValue1);
 
-			wxString bone_name = wxString::Format(_T("Bone_%03i"), x);
+			wxString bone_name = wxString::Format(wxT("Bone_%03i"), x);
 			for (size_t j=0; j<BONE_MAX; ++j) {
 				if (m->keyBoneLookup[j] == (uint16)x) {
 					bone_name = Bone_Names[j];
@@ -2691,7 +2690,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 
 		Light.LightID = LW_LightCount.GetPlus();
 		Light.Name = m->name.AfterLast('\\').BeforeLast('.');
-		Light.Name << wxString::Format(_T(" Light %02i"), Light.LightID);
+		Light.Name << wxString::Format(wxT(" Light %02i"), Light.LightID);
 		if (l->parent > LW_ITEMTYPE_NOPARENT){
 			Light.ParentType = LW_ITEMTYPE_BONE;
 			Light.ParentID = l->parent;
@@ -2716,7 +2715,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 	}
 	if (att != NULL){
 		if (att->model){
-			wxLogMessage(_T("Att Model found."));
+			wxLogMessage(wxT("Att Model found."));
 		}
 		for (uint32 c=0; c<att->children.size(); c++) {
 			Attachment *att2 = att->children[c];
@@ -2769,9 +2768,9 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 			CamData.Push(cam->target,ZeroRot,OneScale);
 		}
 
-		//WriteLWSceneObject(fs,_T("Camera Target"),CamData,mcount,0,true,ModelID);
+		//WriteLWSceneObject(fs,wxT("Camera Target"),CamData,mcount,0,true,ModelID);
 
-		fs << _T("AddCamera 30000000\nCameraName Camera\nShowCamera 1 -1 0.125490 0.878431 0.125490\nCameraMotion\nNumChannels 6\n");
+		fs << wxT("AddCamera 30000000\nCameraName Camera\nShowCamera 1 -1 0.125490 0.878431 0.125490\nCameraMotion\nNumChannels 6\n");
 
 		if (cam->tPos.data[anim].size() > 1){
 			std::vector<float> time, PosX, PosY, PosZ, ZeroFloat;
@@ -2809,12 +2808,12 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 			WriteLWSceneEnvChannel(fs,5,0,0);
 		}
 
-		fs << _T("ParentItem 1" << wxString::Format(_T("%07x"),ModelID) << "\n");
-		fs << _T("IKInitCustomFrame 0\nGoalStrength 1\nIKFKBlending 0\nIKSoftMin 0.25\nIKSoftMax 0.75\nCtrlPosItemBlend 1\nCtrlRotItemBlend 1\nCtrlScaleItemBlend 1\n\n");
-		fs << _T("HController 1\nPController 1\nPathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
-		fs << _T("TargetItem 1"<<wxString::Format(_T("%07x"),CameraTargetID)<<"\n");
-		fs << _T("ZoomFactor "<<(cam->fov*3.6)<<"\nZoomType 2\n");
-		WriteLWScenePlugin(fs,_T("CameraHandler"),1,_T("Perspective"));	// Make the camera a Perspective camera
+		fs << wxT("ParentItem 1" << wxString::Format(wxT("%07x"),ModelID) << "\n");
+		fs << wxT("IKInitCustomFrame 0\nGoalStrength 1\nIKFKBlending 0\nIKSoftMin 0.25\nIKSoftMax 0.75\nCtrlPosItemBlend 1\nCtrlRotItemBlend 1\nCtrlScaleItemBlend 1\n\n");
+		fs << wxT("HController 1\nPController 1\nPathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
+		fs << wxT("TargetItem 1"<<wxString::Format(wxT("%07x"),CameraTargetID)<<"\n");
+		fs << wxT("ZoomFactor "<<(cam->fov*3.6)<<"\nZoomType 2\n");
+		WriteLWScenePlugin(fs,wxT("CameraHandler"),1,wxT("Perspective"));	// Make the camera a Perspective camera
 	} */
 
 	scene.Objects.push_back(SceneObj);
@@ -2831,8 +2830,8 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 	if (!m)
 		return Object;
 
-	Object.SourceType = _T("WMO");
-	LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),Object.SourceType);
+	Object.SourceType = wxT("WMO");
+	LogExportData(wxT("LWO"),m->name,wxString(fn, wxConvUTF8));
 
 	// Main Object
 	LWLayer Layer;
@@ -2850,7 +2849,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 		WMOGroup *group = &m->groups[g];
 		//uint32 GPolyCounter = 0;
 
-		//wxLogMessage(_T("\nGroup %i Info:\n   Batches: %i\n   Indices: %i\n   Vertices: %i"),g,group->nBatches,group->nIndices,group->nVertices);
+		//wxLogMessage(wxT("\nGroup %i Info:\n   Batches: %i\n   Indices: %i\n   Vertices: %i"),g,group->nBatches,group->nIndices,group->nVertices);
 		Object.PartNames.push_back(wxString(group->name.c_str(), wxConvUTF8));
 
 		Layer.HasVectorColors = group->hascv;
@@ -2858,7 +2857,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 		// Points Batches
 		for (uint32 b=0; b<group->nBatches; b++){
 			WMOBatch *batch = &group->batches[b];
-			//wxLogMessage(_T("\nBatch %i Info:\n   Indice-Start: %i\n   Indice-Count: %i\n   Vert-Start: %i\n   Vert-End: %i"),b,batch->indexStart,batch->indexCount,batch->vertexStart,batch->vertexEnd);
+			//wxLogMessage(wxT("\nBatch %i Info:\n   Indice-Start: %i\n   Indice-Count: %i\n   Vert-Start: %i\n   Vert-End: %i"),b,batch->indexStart,batch->indexCount,batch->vertexStart,batch->vertexEnd);
 			uint32 *Vert2Point = new uint32[group->nVertices];
 
 			uint32 t = batch->texture;
@@ -2868,7 +2867,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 			// Add Images to Model
 			LWClip ClipImage;
 			wxString Texture = m->textures[t];
-			wxLogMessage(_T("Texture: %s"),Texture.c_str());
+			wxLogMessage(wxT("Texture: %s"),Texture.c_str());
 
 			ClipImage.Filename = Texture.AfterLast(SLASH).BeforeLast('.');
 			ClipImage.Source = Texture.BeforeLast(SLASH);
@@ -2880,24 +2879,24 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 				wxString Path = FileName.BeforeLast(SLASH);
 				wxString Name = Texture.AfterLast(SLASH);
 
-				MakeDirs(Path,_T("Images"));
+				MakeDirs(Path,wxT("Images"));
 
 				LWFilename.Empty();
-				LWFilename <<Path<<SLASH<<_T("Images")<<SLASH<<Name;
+				LWFilename <<Path<<SLASH<<wxT("Images")<<SLASH<<Name;
 			}
 			if (modelExport_PreserveDir == true){
 				wxString Path1(LWFilename.BeforeLast(SLASH));
 				wxString Path2(Texture.BeforeLast(SLASH));
 				wxString Name(LWFilename.AfterLast(SLASH));
-				//wxLogMessage(_T("Path1 (root): %s, Path2(Img Path): %s, Name (Img Name): %s"),Path1,Path2,Name);
+				//wxLogMessage(wxT("Path1 (root): %s, Path2(Img Path): %s, Name (Img Name): %s"),Path1,Path2,Name);
 
 				MakeDirs(Path1,Path2);
 
 				LWFilename.Empty();
 				LWFilename << Path1<<SLASH<<Path2<<SLASH<<Name;
 			}
-			//LWFilename = LWFilename.BeforeLast('.') + _T(".tga");
-			SaveTexture2(Texture,FileName.BeforeLast(SLASH),_T("LWO"),_T("tga"));
+			//LWFilename = LWFilename.BeforeLast('.') + wxT(".tga");
+			SaveTexture2(Texture,FileName.BeforeLast(SLASH),wxT("LWO"),wxT("tga"));
 
 			LWSurf_Image SurfColor_Image = LWSurf_Image(ClipImage.TagID,LW_TEXTUREAXIS_UV,0.0f,0.0f);
 
@@ -2929,7 +2928,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 				Point.VertexColors = LWVertexColor(vc.r,vc.g,vc.b,vc.a);
 
 				Vert2Point[v] = pointnum;
-				//wxLogMessage(_T("Vert %i = Point %i"),v,pointnum);
+				//wxLogMessage(wxT("Vert %i = Point %i"),v,pointnum);
 				Layer.Points.push_back(Point);
 			}
 
@@ -2951,7 +2950,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 					// Polygon Indice
 					uint32 a = batch->indexStart + i + x + mod;
 					uint32 b = group->IndiceToVerts[a];
-					//wxLogMessage(_T("Group: %i, a: %i, b:%i, Final Indice: %i"),g,a,b,Vert2Point[b]);
+					//wxLogMessage(wxT("Group: %i, a: %i, b:%i, Final Indice: %i"),g,a,b,Vert2Point[b]);
 					Poly.PolyData.indice[x] = Vert2Point[b];
 
 					// Normal Indice
@@ -2963,7 +2962,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 				Poly.PartTagID = g;
 				Poly.SurfTagID = m->nGroups + SurfCounter;
 				Poly.Normals.polygon = (uint32)Layer.Polys.size();
-				Poly.Normals.NormalMapName = Layer.Name + wxString(_T("_NormalMap"));
+				Poly.Normals.NormalMapName = Layer.Name + wxString(wxT("_NormalMap"));
 				Layer.Polys.push_back(Poly);
 			}
 			SurfCounter++;
@@ -2976,7 +2975,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 		}
 	}
 	Object.Layers.push_back(Layer);
-	wxLogMessage(_T("Completed WMO Gathering. Building Basic Scene Data..."));
+	wxLogMessage(wxT("Completed WMO Gathering. Building Basic Scene Data..."));
 
 	// Scene Data
 	LWSceneObj scObject(FileName,(uint32)scene.Objects.size(),-1);
@@ -3011,17 +3010,17 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 			lNum << (unsigned int)LightID;
 			liNum << (unsigned int)m->nLights;
 			while (lNum.Len() < liNum.Len()){
-				lNum = wxString(_T("0")) + lNum;
+				lNum = wxString(wxT("0")) + lNum;
 			}
 			wxString lName(m->name.AfterLast('\\').BeforeLast('.'));
-			l.Name = lName << _T(" Light ") << (wxChar)LightID;
+			l.Name = lName << wxT(" Light ") << (wxChar)LightID;
 
 			scene.Lights.push_back(l);
 		}
 	}
 
 	// Doodads
-	wxLogMessage(_T("Compiled Scene Data. Checking Doodads..."));
+	wxLogMessage(wxT("Compiled Scene Data. Checking Doodads..."));
 /*
 	Need to get this working with layers before we enable it.
 	For now, use the old method in the main function.	
@@ -3037,7 +3036,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 				doodadset.AnimData.Push(Vec3d_0,Vec3d_0,Vec3d_1,0);
 				scene.Objects.push_back(doodadset);
 
-				wxLogMessage(_T("Processing Doodadset %i: %s"),ds,m->doodadsets[ds].name);
+				wxLogMessage(wxT("Processing Doodadset %i: %s"),ds,m->doodadsets[ds].name);
 				for (uint32 dd=m->doodadsets[ds].start;dd<(m->doodadsets[ds].start+m->doodadsets[ds].size);dd++){
 					WMOModelInstance *ddinstance = &m->modelis[dd];
 					size_t ddID = scene.Objects.size();
@@ -3088,10 +3087,10 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 							lNum << (unsigned int)LightID;
 							liNum << (unsigned int)m->nLights;
 							while (lNum.Len() < liNum.Len()){
-								lNum = wxString(_T("0")) + lNum;
+								lNum = wxString(wxT("0")) + lNum;
 							}
 							wxString lName(m->name.AfterLast('\\').BeforeLast('.'));
-							l.Name = lName << _T(" Light ") << (wxChar)LightID;
+							l.Name = lName << wxT(" Light ") << (wxChar)LightID;
 
 							LightID++;
 							scene.Lights.push_back(l);
@@ -3103,8 +3102,8 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 /*
 			LWObject Doodad = GatherM2forLWO(NULL,ddinstance->model,true,wxString(fn, wxConvUTF8),false);
 			if (Doodad.SourceType == wxEmptyString){
-				wxMessageBox(_T("Error gathering information for export."),_T("Export Error"));
-				wxLogMessage(_T("Failure gathering information for export."));
+				wxMessageBox(wxT("Error gathering information for export."),wxT("Export Error"));
+				wxLogMessage(wxT("Failure gathering information for export."));
 				return;
 			}
 			WriteLWObject(filename, Object);
@@ -3112,31 +3111,31 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 	/*
 		}else if (modelExport_LW_DoodadsAs == 2){	// Doodad Sets as Seperate Layers...
 			for (uint32 ds=0;ds<m->nDoodadSets;ds++){
-				wxLogMessage(_T("Processing Doodadset %i: %s"),ds,m->doodadsets[ds].name);
+				wxLogMessage(wxT("Processing Doodadset %i: %s"),ds,m->doodadsets[ds].name);
 				bool doodadAdded = false;
 
-				wxLogMessage(_T("Adding %i Doodads to Layer %i..."), m->doodadsets[ds].size, ds+1);
+				wxLogMessage(wxT("Adding %i Doodads to Layer %i..."), m->doodadsets[ds].size, ds+1);
 				for (uint32 dd=m->doodadsets[ds].start;dd<(m->doodadsets[ds].start+m->doodadsets[ds].size);dd++){
 					WMOModelInstance *ddinstance = &m->modelis[dd];
-					wxLogMessage(_T("Processing Doodad %i: %s"),dd,ddinstance->filename);
+					wxLogMessage(wxT("Processing Doodad %i: %s"),dd,ddinstance->filename);
 
-					wxLogMessage(_T("Doodad Instance is Animated: %s"),(ddinstance->model->animated?_T("true"):_T("false")));
+					wxLogMessage(wxT("Doodad Instance is Animated: %s"),(ddinstance->model->animated?wxT("true"):wxT("false")));
 
 					LWObject Doodad = GatherM2forLWO(NULL,ddinstance->model,true,wxString(fn, wxConvUTF8),scene,false);
 
 					// --== Model Debugger ==--
 					// Exports the model immediately after gathering, to help determine if a problem is with the gathering function or the doodad-placement functions.
-					wxString doodadname = wxString(fn, wxConvUTF8).BeforeLast('.') << _T("_") << ddinstance->filename.AfterLast('\\').BeforeLast('.') << _T(".lwo");
+					wxString doodadname = wxString(fn, wxConvUTF8).BeforeLast('.') << wxT("_") << ddinstance->filename.AfterLast('\\').BeforeLast('.') << wxT(".lwo");
 					if (modelExport_LW_PreserveDir == true){
 						wxString Path, Name;
 
 						Path << doodadname.BeforeLast(SLASH);
 						Name << doodadname.AfterLast(SLASH);
 
-						MakeDirs(Path,_T("Objects"));
+						MakeDirs(Path,wxT("Objects"));
 
 						doodadname.Empty();
-						doodadname << Path << SLASH << _T("Objects") << SLASH << Name;
+						doodadname << Path << SLASH << wxT("Objects") << SLASH << Name;
 					}
 					if (modelExport_PreserveDir == true){
 						wxString Path1, Path2, Name;
@@ -3149,15 +3148,15 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 						doodadname.Empty();
 						doodadname << Path1 << SLASH << Path2 << SLASH << Name;
 					}
-					wxLogMessage(_T("Exporting Doodad Test Model: %s"),doodadname);
+					wxLogMessage(wxT("Exporting Doodad Test Model: %s"),doodadname);
 					WriteLWObject(doodadname, Doodad);
 					// End Model Debugger
 
 					if (Doodad.SourceType == wxEmptyString){
-						wxLogMessage(_T("Error Gathering Doodad Model."));
+						wxLogMessage(wxT("Error Gathering Doodad Model."));
 						continue;
 					}
-					//wxLogMessage(_T("Finished Gathering Doodad %i with #%i Layers."),dd,Doodad.Layers.size());
+					//wxLogMessage(wxT("Finished Gathering Doodad %i with #%i Layers."),dd,Doodad.Layers.size());
 
 					// Move, rotate & scale Doodad
 					Vec3D TheArchitect = ddinstance->pos;
@@ -3183,15 +3182,15 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 						Doodad.Layers[0].Points[i].PointData = Neo * AgentSmith;
 					}
 
-					wxString ddPrefix(_T("Doodad "));
+					wxString ddPrefix(wxT("Doodad "));
 					wxString ddnum, numdds;
 					ddnum << (unsigned int)dd;
 					numdds << (unsigned int)m->doodadsets[ds].size;
 					while (ddnum.Length() < numdds.Length()) {
-						ddnum = wxString(_T("0")) << ddnum;
+						ddnum = wxString(wxT("0")) << ddnum;
 					}					
-					ddPrefix << ddnum << _T("_") << m->modelis[dd].filename.AfterLast('\\').BeforeLast('.') << _T("_");
-					//wxLogMessage(_T("Doodad Prefix: %s"),ddPrefix);
+					ddPrefix << ddnum << wxT("_") << m->modelis[dd].filename.AfterLast('\\').BeforeLast('.') << wxT("_");
+					//wxLogMessage(wxT("Doodad Prefix: %s"),ddPrefix);
 					Object.Plus(Doodad,ds+1,ddPrefix);
 					doodadAdded = true;
 					Doodad.~LWObject();
@@ -3239,10 +3238,10 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 							lNum << (unsigned int)LightID;
 							liNum << (unsigned int)m->nLights;
 							while (lNum.Len() < liNum.Len()){
-								lNum = wxString(_T("0")) + lNum;
+								lNum = wxString(wxT("0")) + lNum;
 							}
 							wxString lName(m->name.AfterLast('\\').BeforeLast('.'));
-							l.Name = lName << _T(" Light ") << (wxChar)LightID;
+							l.Name = lName << wxT(" Light ") << (wxChar)LightID;
 
 							LightID++;
 							scene.Lights.push_back(l);
@@ -3270,9 +3269,9 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 //---------------------------------------------
 
 // Export M2s
-void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init){
+void ExportLWO_M2(Attachment *att, Model *m, const char *fn, bool init){
 	wxString filename(fn, wxConvUTF8);
-	wxString scfilename = wxString(fn, wxConvUTF8).BeforeLast('.').Append(_T(".lws"));
+	wxString scfilename = wxString(fn, wxConvUTF8).BeforeLast('.').Append(wxT(".lws"));
 	LW_ObjCount.Reset();
 	LW_LightCount.Reset();
 	LW_BoneCount.Reset();
@@ -3284,18 +3283,18 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init){
 		// Object
 		Path << filename.BeforeLast(SLASH);
 		Name << filename.AfterLast(SLASH);
-		MakeDirs(Path,_T("Objects"));
+		MakeDirs(Path,wxT("Objects"));
 		filename.Empty();
-		filename << Path << SLASH << _T("Objects") << SLASH << Name;
+		filename << Path << SLASH << wxT("Objects") << SLASH << Name;
 
 		// Scene
 		Path.Empty();
 		Name.Empty();
 		Path << scfilename.BeforeLast(SLASH);
 		Name << scfilename.AfterLast(SLASH);
-		MakeDirs(Path,_T("Scenes"));
+		MakeDirs(Path,wxT("Scenes"));
 		scfilename.Empty();
-		scfilename << Path << SLASH << _T("Scenes") << SLASH << Name;
+		scfilename << Path << SLASH << wxT("Scenes") << SLASH << Name;
 	}
 	if (m->modelType != MT_CHAR){
 		if (modelExport_PreserveDir == true){
@@ -3328,17 +3327,17 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init){
 	// Object Data
 	LWObject Object = GatherM2forLWO(att,m,init,fn,Scene);
 	if (Object.SourceType == wxEmptyString){
-		wxMessageBox(_T("Error gathering information for export."),_T("Export Error"));
-		wxLogMessage(_T("Failure gathering information for export."));
+		wxMessageBox(wxT("Error gathering information for export."),wxT("Export Error"));
+		wxLogMessage(wxT("Failure gathering information for export."));
 		return;
 	}
-	wxLogMessage(_T("Sending M2 Data to LWO Writing Function..."));
+	wxLogMessage(wxT("Sending M2 Data to LWO Writing Function..."));
 	if (WriteLWObject(filename, Object) == false){
-		wxString msg = _T("Error Writing the M2 file to a Lightwave Object.");
-		wxMessageBox(msg,_T("Writing Error"));
+		wxString msg = wxT("Error Writing the M2 file to a Lightwave Object.");
+		wxMessageBox(msg,wxT("Writing Error"));
 		wxLogMessage(msg);
 	}else{
-		wxLogMessage(_T("LWO Object \"%s\" Writing Complete."),filename);
+		wxLogMessage(wxT("LWO Object \"%s\" Writing Complete."),filename);
 	}
 	Object.~LWObject();
 
@@ -3350,9 +3349,9 @@ void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init){
 }
 
 // Export WMOs
-void ExportWMOtoLWO(WMO *m, const char *fn){
+void ExportLWO_WMO(WMO *m, const char *fn){
 	wxString filename(fn, wxConvUTF8);
-	wxString scfilename = wxString(fn, wxConvUTF8).BeforeLast('.').Append(_T(".lws"));
+	wxString scfilename = wxString(fn, wxConvUTF8).BeforeLast('.').Append(wxT(".lws"));
 	LW_ObjCount.Reset();
 	LW_LightCount.Reset();
 	LW_BoneCount.Reset();
@@ -3364,18 +3363,18 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 		// Object
 		Path << filename.BeforeLast(SLASH);
 		Name << filename.AfterLast(SLASH);
-		MakeDirs(Path,_T("Objects"));
+		MakeDirs(Path,wxT("Objects"));
 		filename.Empty();
-		filename << Path << SLASH << _T("Objects") << SLASH << Name;
+		filename << Path << SLASH << wxT("Objects") << SLASH << Name;
 
 		// Scene
 		Path.Empty();
 		Name.Empty();
 		Path << scfilename.BeforeLast(SLASH);
 		Name << scfilename.AfterLast(SLASH);
-		MakeDirs(Path,_T("Scenes"));
+		MakeDirs(Path,wxT("Scenes"));
 		filename.Empty();
-		filename << Path << SLASH << _T("Scenes") << SLASH << Name;
+		filename << Path << SLASH << wxT("Scenes") << SLASH << Name;
 	}
 	if (modelExport_PreserveDir == true){
 		wxString Path1, Path2, Name;
@@ -3406,19 +3405,19 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 	// Object Data
 	LWObject Object = GatherWMOforLWO(m,fn,Scene);
 	if (Object.SourceType == wxEmptyString){
-		wxMessageBox(_T("Error gathering information for export."),_T("Export Error"));
-		wxLogMessage(_T("Failure gathering information for export."));
+		wxMessageBox(wxT("Error gathering information for export."),wxT("Export Error"));
+		wxLogMessage(wxT("Failure gathering information for export."));
 		return;
 	}
 
 	// Write LWO File
-	wxLogMessage(_T("Sending WMO Data to LWO Writing Function..."));
+	wxLogMessage(wxT("Sending WMO Data to LWO Writing Function..."));
 	if (WriteLWObject(filename, Object) == false){
-		wxString msg = _T("Error Writing the WMO file to a Lightwave Object.");
-		wxMessageBox(msg,_T("Writing Error"));
+		wxString msg = wxT("Error Writing the WMO file to a Lightwave Object.");
+		wxMessageBox(msg,wxT("Writing Error"));
 		wxLogMessage(msg);
 	}else{
-		wxLogMessage(_T("LWO Object Writing Complete."));
+		wxLogMessage(wxT("LWO Object Writing Complete."));
 
 		// Write Scene
 	}
@@ -3435,7 +3434,7 @@ void ExportWMOtoLWO(WMO *m, const char *fn){
 
 // Old-style ADT Exporter.
 // Not very functional...
-void ExportADTtoLWO(MapTile *m, const char *fn){
+void ExportLWO_ADT(MapTile *m, const char *fn){
 	wxString file = wxString(fn, wxConvUTF8);
 
 	if (modelExport_LW_PreserveDir == true){
@@ -3444,10 +3443,10 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 		Path << file.BeforeLast(SLASH);
 		Name << file.AfterLast(SLASH);
 
-		MakeDirs(Path,_T("Objects"));
+		MakeDirs(Path,wxT("Objects"));
 
 		file.Empty();
-		file << Path << SLASH<<_T("Objects")<<SLASH << Name;
+		file << Path << SLASH<<wxT("Objects")<<SLASH << Name;
 	}
 	if (modelExport_PreserveDir == true){
 		wxString Path1, Path2, Name;
@@ -3461,16 +3460,16 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 		file << Path1 << SLASH << Path2 << SLASH << Name;
 	}
 	file = fixMPQPath(file);
-	wxFFileOutputStream f(file, _T("w+b"));
+	wxFFileOutputStream f(file, wxT("w+b"));
 
 	if (!f.IsOk()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file.c_str());
-		wxMessageDialog(g_modelViewer,_T("Could not open file for exporting."),_T("Exporting Error..."));
+		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export model."), file.c_str());
+		wxMessageDialog(g_modelViewer,wxT("Could not open file for exporting."),wxT("Exporting Error..."));
 		return;
 	}
-	LogExportData(_T("LWO"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("ADT"));
+	LogExportData(wxT("LWO"),m->name,wxString(fn, wxConvUTF8));
 
-	wxLogMessage(_T("Starting Lightwave ADT Model Export Function..."));
+	wxLogMessage(wxT("Starting Lightwave ADT Model Export Function..."));
 	unsigned int fileLen = 0;
 	int off_T;
 
@@ -3519,7 +3518,7 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 	std::vector<uint16> sfix2;
 	std::vector<uint16> check;
 	for (uint16 t=0;t<m->nTextures;t++){
-		wxString tex = m->textures[t].BeforeLast(_T('.'));
+		wxString tex = m->textures[t].BeforeLast(wxT('.'));
 		surfarray.push_back((char *)tex.c_str());
 		//sfix.push_back(tex.c_str());
 		sfix2.push_back(t);
@@ -3530,8 +3529,8 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 		uint16 mod = 0;
 		for (uint16 k=0;k<surfarray.size();k++){
 			if ((t!=k)&&(surfarray[sfix2[t]] == surfarray[sfix2[k]])&&(check[k]==0)){
-				//sfix[t] = wxString(surfarray[t] + wxString::Format(_T("_v%02i"),mod));
-				//sfix[k] = wxString(surfarray[k] + wxString::Format(_T("_v%02i"),mod+1));
+				//sfix[t] = wxString(surfarray[t] + wxString::Format(wxT("_v%02i"),mod));
+				//sfix[k] = wxString(surfarray[k] + wxString::Format(wxT("_v%02i"),mod+1));
 				sfix2[k] = sfix2[t];
 				//sfix2[t] = t-1;
 				mod++;
@@ -3554,14 +3553,14 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 
 
 #ifdef _DEBUG
-	wxLogMessage(_T("Texture List"));
+	wxLogMessage(wxT("Texture List"));
 	for (uint16 x=0;x<m->nTextures;x++){
-		wxLogMessage(_T("[ID:%02i] = %s"),x,m->textures[x].data());
+		wxLogMessage(wxT("[ID:%02i] = %s"),x,m->textures[x].data());
 	}
 
-	wxLogMessage(_T("Surface List"));
+	wxLogMessage(wxT("Surface List"));
 	for (uint16 x=0;x<surfarray.size();x++){
-		wxLogMessage(_T("[ID:%02i] = %s"),x,surfarray[x].c_str());
+		wxLogMessage(wxT("[ID:%02i] = %s"),x,surfarray[x].c_str());
 	}
 #endif
 	*/
@@ -3615,7 +3614,7 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 	}
 
 #ifdef _DEBUG
-	wxLogMessage(_T("ADT Point Count: %i"),point);
+	wxLogMessage(wxT("ADT Point Count: %i"),point);
 #endif
 
 
@@ -3635,5 +3634,5 @@ void ExportADTtoLWO(MapTile *m, const char *fn){
 
 	f.Close();
 
-	wxLogMessage(_T("ADT Export completed."));
+	wxLogMessage(wxT("ADT Export completed."));
 }

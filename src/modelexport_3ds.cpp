@@ -14,7 +14,7 @@
 // http://www.martinreddy.net/gfx/3d/3DS.spec
 // http://www.martinreddy.net/gfx/3d/MLI.spec
 // http://gpwiki.org/index.php/C:Load3DS
-void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
+void Export3DS_M2(Attachment *att, Model *m, const char *fn, bool init)
 {
 	if (!m)
 		return;
@@ -23,10 +23,10 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 	wxFFileOutputStream f(wxString(fn, wxConvUTF8), wxT("w+b"));
 
 	if (!f.IsOk()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
+		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
-	LogExportData(_T("3DS"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
+	LogExportData(wxT("3DS"),m->modelname,wxString(fn, wxConvUTF8));
 
 	unsigned short numVerts = 0;
 	unsigned short numGroups = 0;
@@ -74,8 +74,8 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			// http://www.martinreddy.net/gfx/3d/MLI.spec
 			MAX3DS_CHUNK chunk2_2_1;
 			chunk2_2_1.id = MATNAME; // 0xA000
-			wxString matName = wxString::Format(_T("Material_%i"), i);
-			matName.Append(_T('\0'));
+			wxString matName = wxString::Format(wxT("Material_%i"), i);
+			matName.Append(wxT('\0'));
 			chunk2_2_1.size = sizeof(MAX3DS_CHUNK) + (unsigned int)matName.length();
 			chunk2_2.size = sizeof(MAX3DS_CHUNK) + chunk2_2_1.size;
 			f.Write(&chunk2_2_1, sizeof(MAX3DS_CHUNK)); // MATNAME
@@ -219,7 +219,7 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			wxString mapName = GetM2TextureName(m,fn,p,i);
 			mapName = mapName.AfterLast('\\').BeforeLast('.');
 			mapName << wxT(".tga");
-			mapName.Append(_T('\0'));
+			mapName.Append(wxT('\0'));
 			chunk2_2_6.size = sizeof(MAX3DS_CHUNK) + (unsigned int)mapName.length();
 
 			// save texture to file
@@ -227,7 +227,7 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			texFilename = texFilename.BeforeLast('\\');
 			texFilename += '\\';
 			texFilename += mapName;
-			wxLogMessage(_T("Exporting Image: %s"),texFilename.c_str());
+			wxLogMessage(wxT("Exporting Image: %s"),texFilename.c_str());
 			SaveTexture(texFilename);
 
             // conatins 0xa300, 0xa351
@@ -312,8 +312,8 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			chunk2_4.id = EDIT_OBJECT; // 0x4000
 			
 			// Model name
-			wxString modName = wxString::Format(_T("Geoset_%i"), i);
-			modName.Append(_T('\0'));
+			wxString modName = wxString::Format(wxT("Geoset_%i"), i);
+			modName.Append(wxT('\0'));
 			chunk2_4.size += (unsigned int)modName.length();
 			
 			// OBJ_MESH chunk
@@ -337,8 +337,8 @@ void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init)
 			chunk4_3.size += (sizeof(unsigned short) + numFaces*4*2);
 
 			// Material
-			wxString matName = wxString::Format(_T("Material_%i"), i);
-			matName.Append(_T('\0'));
+			wxString matName = wxString::Format(wxT("Material_%i"), i);
+			matName.Append(wxT('\0'));
 			MAX3DS_CHUNK chunk4_3_1;
 			chunk4_3_1.id = MESH_MATERIAL; // 0x4130
 			chunk4_3_1.size += (unsigned int)matName.length();

@@ -26,7 +26,7 @@ struct TextureGroup {
 	TextureGroup()
 	{
 		for (int i=0; i<num; i++) {
-			tex[i] = _T("");
+			tex[i] = wxT("");
 		}
 	}
 

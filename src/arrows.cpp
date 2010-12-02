@@ -26,31 +26,31 @@ ArrowControl::ArrowControl(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
 	curAtt = NULL;
 	charAtt = att;
 
-	if(Create(parent, id, pos, wxSize(140, 300), 0, _T("ArrowControlFrame")) == false) {
-		wxMessageBox(_T("Failed to create a window for our ArrowControl!"), _T("ERROR"));
-		wxLogMessage(_T("ERROR - Failed to create a window for our ArrowControl!"));
+	if(Create(parent, id, pos, wxSize(140, 300), 0, wxT("ArrowControlFrame")) == false) {
+		wxMessageBox(wxT("Failed to create a window for our ArrowControl!"), wxT("ERROR"));
+		wxLogMessage(wxT("ERROR - Failed to create a window for our ArrowControl!"));
 		return;
 	}
 
 	// modelexport.h Attach_Names
 /*
-	const wxString loc[] = {_T("Left wrist"), _T("Right palm"), _T("Left palm"),
-		_T("Right elbow"), _T("Left elbow"), _T("Right shoulder"), _T("Left shoulder"),
-		_T("Right knee"), _T("Left knee"), _T("Unkown"), _T("Unknown"), _T("Head"),  _T("Back"), 
-		_T("Unknown"), _T("Unknown"), _T("Bust"), _T("Bust"), _T("Face"), _T("Above char"), 
-		_T("Ground"), _T("Top of Head"), _T("Left palm"), _T("Right palm"), _T("Unknown"),
-		_T("Unknown"), _T("Unknown"), _T("R-Back"), _T("L-Back"), _T("M-Back"), _T("Belly"),  
-		_T("L-Back"), _T("R-Back"), _T("L-Hip"), _T("R-Hip"), _T("Bust"), _T("Right palm")};
+	const wxString loc[] = {wxT("Left wrist"), wxT("Right palm"), wxT("Left palm"),
+		wxT("Right elbow"), wxT("Left elbow"), wxT("Right shoulder"), wxT("Left shoulder"),
+		wxT("Right knee"), wxT("Left knee"), wxT("Unkown"), wxT("Unknown"), wxT("Head"),  wxT("Back"), 
+		wxT("Unknown"), wxT("Unknown"), wxT("Bust"), wxT("Bust"), wxT("Face"), wxT("Above char"), 
+		wxT("Ground"), wxT("Top of Head"), wxT("Left palm"), wxT("Right palm"), wxT("Unknown"),
+		wxT("Unknown"), wxT("Unknown"), wxT("R-Back"), wxT("L-Back"), wxT("M-Back"), wxT("Belly"),  
+		wxT("L-Back"), wxT("R-Back"), wxT("L-Hip"), wxT("R-Hip"), wxT("Bust"), wxT("Right palm")};
 */
 	int size = WXSIZEOF(Attach_Names);
 
 	joint = new wxComboBox(this, ID_ARROW_JOINT, wxEmptyString, wxPoint(5,5), wxSize(130,20), WXSIZEOF(Attach_Names), Attach_Names, wxCB_READONLY);
-	const wxString models[] = {_T("arrowacidflight_01.m2"), _T("arrowfireflight_01.m2"), _T("arrowflight_01.m2"), _T("arrowiceflight_01.m2"), _T("arrowmagicflight_01.m2")};
+	const wxString models[] = {wxT("arrowacidflight_01.m2"), wxT("arrowfireflight_01.m2"), wxT("arrowflight_01.m2"), wxT("arrowiceflight_01.m2"), wxT("arrowmagicflight_01.m2")};
 	model = new wxComboBox(this, ID_ARROW_MODEL,wxEmptyString, wxPoint(5,30), wxSize(130,20), WXSIZEOF(models), models, wxCB_READONLY);
 	//tex = new wxComboBox(this, ID_ARROW_TEXTURE,wxEmptyString, wxPoint(55,5), wxSize(100,20), 0, NULL, wxCB_READONLY);
 	
-	attach = new wxButton(this, ID_ARROW_ATTACH, _("Attach"), wxPoint(10,55), wxSize(55,20));
-	clear = new wxButton(this, ID_ARROW_CLEAR, _("Clear All"), wxPoint(80,55), wxSize(55,20));
+	attach = new wxButton(this, ID_ARROW_ATTACH, wxT("Attach"), wxPoint(10,55), wxSize(55,20));
+	clear = new wxButton(this, ID_ARROW_CLEAR, wxT("Clear All"), wxPoint(80,55), wxSize(55,20));
 
 	rot = new wxSlider(this, ID_ARROW_ROTATION, 18,0,36, wxPoint(5, 85), wxSize(130,38), wxSL_HORIZONTAL|wxSL_LABELS );
 	scale = new wxSlider(this, ID_ARROW_SCALE, 5,0,20, wxPoint(5, 125), wxSize(130,38), wxSL_HORIZONTAL|wxSL_LABELS );
@@ -72,9 +72,9 @@ void ArrowControl::OnButton(wxCommandEvent &event)
 	int id = event.GetId();
 
 	if(id == ID_ARROW_ATTACH) {
-		wxString mp = _T("Item\\ObjectComponents\\Ammo\\Arrow_A_01Brown.blp");
+		wxString mp = wxT("Item\\ObjectComponents\\Ammo\\Arrow_A_01Brown.blp");
 		
-		curAtt = charAtt->addChild((_T("Item\\Objectcomponents\\ammo\\") + model->GetStringSelection()).mb_str(), joint->GetSelection(), -1);
+		curAtt = charAtt->addChild((wxT("Item\\Objectcomponents\\ammo\\") + model->GetStringSelection()).mb_str(), joint->GetSelection(), -1);
 		atts.push_back(curAtt);
 		
 		GLuint tex = texturemanager.add(mp);

@@ -43,40 +43,40 @@ ModelControl::ModelControl(wxWindow* parent, wxWindowID id)
 	model = NULL;
 	att = NULL;
 
-	wxLogMessage(_T("Creating Model Control..."));
+	wxLogMessage(wxT("Creating Model Control..."));
 
-	if (Create(parent, id, wxDefaultPosition, wxSize(160,460), 0, _T("ModelControlFrame")) == false) {
-		wxLogMessage(_T("GUI Error: Failed to create a window for our ModelControl!"));
+	if (Create(parent, id, wxDefaultPosition, wxSize(160,460), 0, wxT("ModelControlFrame")) == false) {
+		wxLogMessage(wxT("GUI Error: Failed to create a window for our ModelControl!"));
 		return;
 	}
 
 	try {
 		modelname = new wxComboBox(this, ID_MODEL_NAME, wxEmptyString, wxPoint(5,5), wxSize(150,16), 0, NULL, wxCB_READONLY);
 		
-		lblLod = new wxStaticText(this, wxID_ANY, _("View"), wxPoint(5,25), wxDefaultSize);
-		cbLod = new wxComboBox(this, ID_MODEL_LOD, wxEmptyString, wxPoint(5,40), wxSize(120,16), 0, NULL, wxCB_READONLY, wxDefaultValidator, _T("LOD")); //|wxCB_SORT); //wxPoint(66,10)
+		lblLod = new wxStaticText(this, wxID_ANY, wxT("View"), wxPoint(5,25), wxDefaultSize);
+		cbLod = new wxComboBox(this, ID_MODEL_LOD, wxEmptyString, wxPoint(5,40), wxSize(120,16), 0, NULL, wxCB_READONLY, wxDefaultValidator, wxT("LOD")); //|wxCB_SORT); //wxPoint(66,10)
 		//cbLod->Enable(false);
 
-		lblAlpha = new wxStaticText(this, wxID_ANY, _("Alpha"), wxPoint(5,65), wxDefaultSize);
+		lblAlpha = new wxStaticText(this, wxID_ANY, wxT("Alpha"), wxPoint(5,65), wxDefaultSize);
 		alpha = new wxSlider(this, ID_MODEL_ALPHA, 100, 0, 100, wxPoint(45, 65), wxSize(110, 30), wxSL_HORIZONTAL);
 		
-		lblScale = new wxStaticText(this, wxID_ANY, _("Scale"), wxPoint(5,90), wxDefaultSize);
+		lblScale = new wxStaticText(this, wxID_ANY, wxT("Scale"), wxPoint(5,90), wxDefaultSize);
 		scale = new wxSlider(this, ID_MODEL_SCALE, 100, 10, 300, wxPoint(45, 90), wxSize(110, 30), wxSL_HORIZONTAL);
 
-		bones = new wxCheckBox(this, ID_MODEL_BONES, _("Bones"), wxPoint(5, 115), wxDefaultSize);
-		box = new wxCheckBox(this, ID_MODEL_BOUNDS, _("Bounds"), wxPoint(5, 135), wxDefaultSize);
-		render = new wxCheckBox(this, ID_MODEL_RENDER, _("Render"), wxPoint(5, 155), wxDefaultSize);
-		wireframe = new wxCheckBox(this, ID_MODEL_WIREFRAME, _("Wireframe"), wxPoint(75, 115), wxDefaultSize);
-		texture = new wxCheckBox(this, ID_MODEL_TEXTURE, _("Texture"), wxPoint(75, 135), wxDefaultSize);
-		particles = new wxCheckBox(this, ID_MODEL_PARTICLES, _("Particles"), wxPoint(75, 155), wxDefaultSize);
+		bones = new wxCheckBox(this, ID_MODEL_BONES, wxT("Bones"), wxPoint(5, 115), wxDefaultSize);
+		box = new wxCheckBox(this, ID_MODEL_BOUNDS, wxT("Bounds"), wxPoint(5, 135), wxDefaultSize);
+		render = new wxCheckBox(this, ID_MODEL_RENDER, wxT("Render"), wxPoint(5, 155), wxDefaultSize);
+		wireframe = new wxCheckBox(this, ID_MODEL_WIREFRAME, wxT("Wireframe"), wxPoint(75, 115), wxDefaultSize);
+		texture = new wxCheckBox(this, ID_MODEL_TEXTURE, wxT("Texture"), wxPoint(75, 135), wxDefaultSize);
+		particles = new wxCheckBox(this, ID_MODEL_PARTICLES, wxT("Particles"), wxPoint(75, 155), wxDefaultSize);
 
-		lblGeosets = new wxStaticText(this, wxID_ANY, _("Show Geosets"), wxPoint(5,175), wxDefaultSize);
-		clbGeosets = new wxCheckListBox(this, ID_MODEL_GEOSETS, wxPoint(5, 190), wxSize(150,120), 0, NULL, 0, wxDefaultValidator, _T("GeosetsList"));
+		lblGeosets = new wxStaticText(this, wxID_ANY, wxT("Show Geosets"), wxPoint(5,175), wxDefaultSize);
+		clbGeosets = new wxCheckListBox(this, ID_MODEL_GEOSETS, wxPoint(5, 190), wxSize(150,120), 0, NULL, 0, wxDefaultValidator, wxT("GeosetsList"));
 		
-		lblXYZ = new wxStaticText(this, wxID_ANY, _T("X\nY\nZ"), wxPoint(2,320), wxSize(20,60));
-		txtX = new wxTextCtrl(this, ID_MODEL_X, _T("0.0"), wxPoint(25,320), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
-		txtY = new wxTextCtrl(this, ID_MODEL_Y, _T("0.0"), wxPoint(25,340), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
-		txtZ = new wxTextCtrl(this, ID_MODEL_Z, _T("0.0"), wxPoint(25,360), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		lblXYZ = new wxStaticText(this, wxID_ANY, wxT("X\nY\nZ"), wxPoint(2,320), wxSize(20,60));
+		txtX = new wxTextCtrl(this, ID_MODEL_X, wxT("0.0"), wxPoint(25,320), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		txtY = new wxTextCtrl(this, ID_MODEL_Y, wxT("0.0"), wxPoint(25,340), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		txtZ = new wxTextCtrl(this, ID_MODEL_Z, wxT("0.0"), wxPoint(25,360), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
 
 	} catch(...) {};
 }
@@ -158,7 +158,7 @@ void ModelControl::RefreshModel(Attachment *root)
 			modelname->SetSelection(0);
 
 	} catch( ... ) {
-		wxLogMessage(_T("Error: Problem occured in ModelControl::RefreshModel(Attachment *)"));
+		wxLogMessage(wxT("Error: Problem occured in ModelControl::RefreshModel(Attachment *)"));
 	}
 
 }
@@ -193,16 +193,16 @@ void ModelControl::Update()
 	// Loop through all the views.
 	cbLod->Clear();
 	if (model->header.nViews == 1) {
-		cbLod->Append(_T("1 (Only View)"));
+		cbLod->Append(wxT("1 (Only View)"));
 	} else if (model->header.nViews == 2) {
-		cbLod->Append(_T("1 (Worst)"));
-		cbLod->Append(_T("2 (Best)"));
+		cbLod->Append(wxT("1 (Worst)"));
+		cbLod->Append(wxT("2 (Best)"));
 	} else {
-		cbLod->Append(_T("1 (Worst)"));
+		cbLod->Append(wxT("1 (Worst)"));
 		for (size_t i=1; i<(model->header.nViews-1); i++) {
-			cbLod->Append(wxString::Format(_T("%i"), i+1));
+			cbLod->Append(wxString::Format(wxT("%i"), i+1));
 		}
-		cbLod->Append(wxString::Format(_T("%i (Best)"), model->header.nViews));
+		cbLod->Append(wxString::Format(wxT("%i (Best)"), model->header.nViews));
 	}
 	cbLod->SetSelection(0);
 
@@ -210,16 +210,16 @@ void ModelControl::Update()
 	wxArrayString geosetItems;
 	//geosets->Clear();
 	// enum CharGeosets
-	wxString meshes[NUM_GEOSETS] = {_T("Hairstyles"), _T("Facial1"), _T("Facial2"), _T("Facial3"), _T("Braces"),
-		_T("Boots"), wxEmptyString, _T("Ears"), _T("Wristbands"),  _T("Kneepads"),
-		 _T("Pants"), _T("Pants2"), _T("Tarbard"), _T("Trousers"), wxEmptyString,
-		  _T("Cape"), wxEmptyString, _T("Eyeglows"), _T("Belt") };
+	wxString meshes[NUM_GEOSETS] = {wxT("Hairstyles"), wxT("Facial1"), wxT("Facial2"), wxT("Facial3"), wxT("Braces"),
+		wxT("Boots"), wxEmptyString, wxT("Ears"), wxT("Wristbands"),  wxT("Kneepads"),
+		 wxT("Pants"), wxT("Pants2"), wxT("Tarbard"), wxT("Trousers"), wxEmptyString,
+		  wxT("Cape"), wxEmptyString, wxT("Eyeglows"), wxT("Belt") };
 	for (size_t i=0; i<model->geosets.size(); i++) {
 		size_t mesh = model->geosets[i].id / 100;
 		if (mesh < WXSIZEOF(meshes) && meshes[mesh] != wxEmptyString)
-			geosetItems.Add(wxString::Format(_T("%i [%s, %i]"), i, meshes[mesh].c_str(), model->geosets[i].id % 100), 1);
+			geosetItems.Add(wxString::Format(wxT("%i [%s, %i]"), i, meshes[mesh].c_str(), model->geosets[i].id % 100), 1);
 		else
-			geosetItems.Add(wxString::Format(_T("%i [%i, $i]"), i, mesh, model->geosets[i].id % 100), 1);
+			geosetItems.Add(wxString::Format(wxT("%i [%i, $i]"), i, mesh, model->geosets[i].id % 100), 1);
 	}
 	//geosets->InsertItems(items, 0);
 	clbGeosets->Set(geosetItems, 0);
@@ -238,9 +238,9 @@ void ModelControl::Update()
 	alpha->SetValue(int(model->alpha * 100));
 	scale->SetValue(100);
 
-	txtX->SetValue(wxString::Format(_T("%f"), model->pos.x));
-	txtY->SetValue(wxString::Format(_T("%f"), model->pos.y));
-	txtZ->SetValue(wxString::Format(_T("%f"), model->pos.z));
+	txtX->SetValue(wxString::Format(wxT("%f"), model->pos.x));
+	txtY->SetValue(wxString::Format(wxT("%f"), model->pos.y));
+	txtZ->SetValue(wxString::Format(wxT("%f"), model->pos.z));
 }
 
 void ModelControl::OnCheck(wxCommandEvent &event)
@@ -277,7 +277,7 @@ void ModelControl::OnCombo(wxCommandEvent &event)
 
 		MPQFile f(model->name);
 		if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
-			wxLogMessage(_T("ERROR - unable to open MPQFile: [%s]"), model->name.c_str());
+			wxLogMessage(wxT("ERROR - unable to open MPQFile: [%s]"), model->name.c_str());
 			f.close();
 			return;
 		}
@@ -355,7 +355,7 @@ ScrWindow::ScrWindow(const wxString& title)
 
 	CreateStatusBar();
 	wxString sbarText;
-	sbarText.Printf(_T("%ix%i"), width, height);
+	sbarText.Printf(wxT("%ix%i"), width, height);
 	SetStatusText(sbarText);
 
 	sw->SetScrollbars(10, 10, width/10, height/10);
@@ -389,20 +389,20 @@ END_EVENT_TABLE()
 
 ModelOpened::ModelOpened(wxWindow* parent, wxWindowID id)
 {
-	wxLogMessage(_T("Creating Model Opened..."));
-	if (Create(parent, id, wxDefaultPosition, wxSize(700, 90), 0, _T("ModelOpenedControlFrame")) == false) {
-		wxLogMessage(_T("GUI Error: Failed to create a window for our ModelOpenedControl."));
+	wxLogMessage(wxT("Creating Model Opened..."));
+	if (Create(parent, id, wxDefaultPosition, wxSize(700, 90), 0, wxT("ModelOpenedControlFrame")) == false) {
+		wxLogMessage(wxT("GUI Error: Failed to create a window for our ModelOpenedControl."));
 		return;
 	}
 
-	openedList = new wxComboBox(this, ID_MODELOPENED_COMBOBOX, _("Opened"), wxPoint(10,10), wxSize(500,16), 0, NULL, wxCB_READONLY, wxDefaultValidator, _("Opened")); //|wxCB_SORT); //wxPoint(66,10)
-	btnExport = new wxButton(this, ID_MODELOPENED_EXPORT, _("Export"), wxPoint(10, 40), wxSize(46,20));
-	btnExportAll = new wxButton(this, ID_MODELOPENED_EXPORTALL, _("Export All"), wxPoint(10+46+10, 40), wxSize(66,20));
-	btnView = new wxButton(this, ID_MODELOPENED_VIEW, _("View In PNG"), wxPoint(10+46+10+66+10, 40), wxSize(86,20));
+	openedList = new wxComboBox(this, ID_MODELOPENED_COMBOBOX, wxT("Opened"), wxPoint(10,10), wxSize(500,16), 0, NULL, wxCB_READONLY, wxDefaultValidator, wxT("Opened")); //|wxCB_SORT); //wxPoint(66,10)
+	btnExport = new wxButton(this, ID_MODELOPENED_EXPORT, wxT("Export"), wxPoint(10, 40), wxSize(46,20));
+	btnExportAll = new wxButton(this, ID_MODELOPENED_EXPORTALL, wxT("Export All"), wxPoint(10+46+10, 40), wxSize(66,20));
+	btnView = new wxButton(this, ID_MODELOPENED_VIEW, wxT("View In PNG"), wxPoint(10+46+10+66+10, 40), wxSize(86,20));
 	btnView->Enable(false);
-	btnExportAllPNG = new wxButton(this, ID_MODELOPENED_EXPORTALLPNG, _("Export All To PNG"), wxPoint(10+46+10+66+10+86+10, 40), wxSize(106,20));
-	btnExportAllTGA = new wxButton(this, ID_MODELOPENED_EXPORTALLTGA, _("Export All To TGA"), wxPoint(10+46+10+66+10+86+10+106+10, 40), wxSize(106,20));
-	chkPathPreserved = new wxCheckBox(this, ID_MODELOPENED_PATHPRESERVED, _("Path Preserved"), wxPoint(10+46+10+66+10+86+10+106+10+106+10, 40), wxDefaultSize, 0);
+	btnExportAllPNG = new wxButton(this, ID_MODELOPENED_EXPORTALLPNG, wxT("Export All To PNG"), wxPoint(10+46+10+66+10+86+10, 40), wxSize(106,20));
+	btnExportAllTGA = new wxButton(this, ID_MODELOPENED_EXPORTALLTGA, wxT("Export All To TGA"), wxPoint(10+46+10+66+10+86+10+106+10, 40), wxSize(106,20));
+	chkPathPreserved = new wxCheckBox(this, ID_MODELOPENED_PATHPRESERVED, wxT("Path Preserved"), wxPoint(10+46+10+66+10+86+10+106+10+106+10, 40), wxDefaultSize, 0);
 	chkPathPreserved->SetValue(false);
 	bPathPreserved = false;
 }
@@ -425,7 +425,7 @@ void ModelOpened::Export(wxString val)
 		return;
 	MPQFile f(val);
 	if (f.isEof()) {
-		wxLogMessage(_T("Error: Could not extract %s\n"), val.c_str());
+		wxLogMessage(wxT("Error: Could not extract %s\n"), val.c_str());
 		f.close();
 		return;
 	}
@@ -449,7 +449,7 @@ void ModelOpened::ExportPNG(wxString val, wxString suffix)
 	if (val == wxEmptyString)
 		return;
 	wxFileName fn = fixMPQPath(val);
-	if (fn.GetExt().Lower() != _T("blp"))
+	if (fn.GetExt().Lower() != wxT("blp"))
 		return;
 	TextureID temptex = texturemanager.add(val);
 	Texture &tex = *((Texture*)texturemanager.items[temptex]);
@@ -471,8 +471,8 @@ void ModelOpened::ExportPNG(wxString val, wxString suffix)
 	} else {
 		temp = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".")+suffix;
 	}
-	//wxLogMessage(_T("Info: Exporting texture to %s..."), temp.c_str());
-	if (suffix == _T("tga"))
+	//wxLogMessage(wxT("Info: Exporting texture to %s..."), temp.c_str());
+	if (suffix == wxT("tga"))
 		newImage->Save(temp.mb_str(), CXIMAGE_FORMAT_TGA);
 	else
 		newImage->Save(temp.mb_str(), CXIMAGE_FORMAT_PNG);
@@ -480,10 +480,10 @@ void ModelOpened::ExportPNG(wxString val, wxString suffix)
 	newImage->Destroy();
 	wxDELETE(newImage);
 
-	if (suffix == _T("tga")) {
+	if (suffix == wxT("tga")) {
 		// starcraft II needs 17 bytes as 8
 		wxFFile f;
-		f.Open(temp, _T("r+b"));
+		f.Open(temp, wxT("r+b"));
 		if (f.IsOpened()) {
 			f.Seek(17, wxFromStart);
 			char c=8;
@@ -508,7 +508,7 @@ void ModelOpened::OnButton(wxCommandEvent &event)
 		}
 	} else if (id == ID_MODELOPENED_VIEW) {
 		wxString val = openedList->GetValue();
-		ExportPNG(val, _T("png"));
+		ExportPNG(val, wxT("png"));
 		wxFileName fn(val);
 		wxString temp;
 		if (bPathPreserved)
@@ -520,11 +520,11 @@ void ModelOpened::OnButton(wxCommandEvent &event)
 		dialOK = false;
 	} else if (id == ID_MODELOPENED_EXPORTALLPNG) {
 		for (size_t i = 0; i < opened_files.GetCount(); i++) {
-			ExportPNG(opened_files[i], _T("png"));
+			ExportPNG(opened_files[i], wxT("png"));
 		}
 	} else if (id == ID_MODELOPENED_EXPORTALLTGA) {
 		for (size_t i = 0; i < opened_files.GetCount(); i++) {
-			ExportPNG(opened_files[i], _T("tga"));
+			ExportPNG(opened_files[i], wxT("tga"));
 		}
 	}
 
@@ -539,7 +539,7 @@ void ModelOpened::OnCombo(wxCommandEvent &event)
 	if (id == ID_MODELOPENED_COMBOBOX) {
 		wxString val = openedList->GetValue();
 		wxFileName fn(val);
-		if (fn.GetExt().Lower() == _T("blp"))
+		if (fn.GetExt().Lower() == wxT("blp"))
 			btnView->Enable(true);
 		else
 			btnView->Enable(false);

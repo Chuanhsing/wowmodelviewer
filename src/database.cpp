@@ -41,24 +41,24 @@ AnimDB::Record AnimDB::getByAnimID(unsigned int id)
 		if(i->getUInt(AnimID) == id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 // --
 // CAMCINEMADB.H
 CamCinematicDB::Record CamCinematicDB::getByCamModel(wxString fn)
 {
-	wxLogMessage(_T("Searching for CamModel..."));
+	wxLogMessage(wxT("Searching for CamModel..."));
 	// Brute force search for now
 	for (Iterator i=begin(); i!=end(); ++i)
 	{
-		//wxLogMessage(_T("Iteration %i"),i);
+		//wxLogMessage(wxT("Iteration %i"),i);
 		wxString str(i->getString(CamModel));
-		wxLogMessage(_T("CamModel: %s, VS %s"), str.c_str(), fn.c_str());
+		wxLogMessage(wxT("CamModel: %s, VS %s"), str.c_str(), fn.c_str());
 		if(str.IsSameAs(fn, false) == true)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -73,7 +73,7 @@ CharHairGeosetsDB::Record CharHairGeosetsDB::getByParams(unsigned int race, unsi
 		if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Section)==section)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -100,7 +100,7 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 		switch(type) { // 0: base, 1: face, 2: facial, 3: hair, 4: underwear
 			case SkinType: // Character\Worgen\Female\WorgenFemaleSkin00_12.blp
 				for(int i=0; i<20; i++) {
-					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), section, i);
+					fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), section, i);
 					if (MPQFile::getSize(fn) > 0)
 						n++;
 					else
@@ -109,7 +109,7 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 				break;
 			case FaceType: // Character\Worgen\Female\WorgenFemaleFaceUpper27_09.blp
 				for(int i=0; i<30; i++) {
-					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), section, i);
+					fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), section, i);
 					if (MPQFile::getSize(fn) > 0)
 						n++;
 					else
@@ -118,7 +118,7 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 				break;
 			case HairType: // Character\Worgen\Hair00_00.blp
 				for(int i=0; i<20; i++) {
-					fn.Printf(_T("Character\\Worgen\\Hair00_%02d.blp"), i);
+					fn.Printf(wxT("Character\\Worgen\\Hair00_%02d.blp"), i);
 					if (MPQFile::getSize(fn) > 0)
 						n++;
 					else
@@ -127,7 +127,7 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 				break;
 			case UnderwearType: // Character\Worgen\Male\WorgenMaleNakedPelvisSkin00_00.blp
 				for(int i=0; i<20; i++) {
-					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), section, i);
+					fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), section, i);
 					if (MPQFile::getSize(fn) > 0)
 						n++;
 					else
@@ -166,7 +166,7 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
 		switch(type) { // 0: base, 1: face, 2: facial, 3: hair, 4: underwear
 			case SkinType: // Character\Worgen\Female\WorgenFemaleSkin00_12.blp
 				for(int i=0; i<20; i++) {
-					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), i, color);
+					fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), i, color);
 					if (MPQFile::getSize(fn) > 0)
 						n++;
 					else
@@ -175,7 +175,7 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
 				break;
 			case FaceType: // Character\Worgen\Female\WorgenFemaleFaceUpper27_09.blp
 				for(int i=0; i<30; i++) {
-					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), i, color);
+					fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), i, color);
 					if (MPQFile::getSize(fn) > 0)
 						n++;
 					else
@@ -184,7 +184,7 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
 				break;
 			case HairType: // Character\Worgen\Hair00_00.blp
 				for(int i=0; i<20; i++) {
-					fn.Printf(_T("Character\\Worgen\\Hair%02d_%02d.blp"), i, color);
+					fn.Printf(wxT("Character\\Worgen\\Hair%02d_%02d.blp"), i, color);
 					if (MPQFile::getSize(fn) > 0)
 						n++;
 					else
@@ -193,7 +193,7 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
 				break;
 			case UnderwearType: // Character\Worgen\Male\WorgenMaleNakedPelvisSkin00_00.blp
 				for(int i=0; i<20; i++) {
-					fn.Printf(_T("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), i, color);
+					fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), i, color);
 					if (MPQFile::getSize(fn) > 0)
 						n++;
 					else
@@ -233,7 +233,7 @@ CharSectionsDB::Record CharSectionsDB::getByParams(unsigned int race, unsigned i
 			return (*i);
 		#endif
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d race:%d, gender:%d, type:%d, section:%d, color:%d"), __FILE__, __FUNCTION__, __LINE__, race, gender, type, section, color);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d race:%d, gender:%d, type:%d, section:%d, color:%d"), __FILE__, __FUNCTION__, __LINE__, race, gender, type, section, color);
 	throw NotFound();
 }
 
@@ -249,7 +249,7 @@ CharRacesDB::Record CharRacesDB::getByName(wxString name)
 		if (name.IsSameAs(r, false) == true)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -259,7 +259,7 @@ CharRacesDB::Record CharRacesDB::getById(unsigned int id)
 	{
 		if (i->getUInt(RaceID)==id) return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -281,7 +281,7 @@ CharFacialHairDB::Record CharFacialHairDB::getByParams(unsigned int race, unsign
 				return (*i);
 		}
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -314,7 +314,7 @@ CharClassesDB::Record CharClassesDB::getById(unsigned int id)
 	{
 		if (i->getUInt(ClassID)==id) return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -327,7 +327,7 @@ HelmGeosetDB::Record HelmGeosetDB::getById(unsigned int id)
 		if (i->getUInt(TypeID)==id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 // --
@@ -345,7 +345,7 @@ CreatureModelDB::Record CreatureModelDB::getByFilename(wxString fn)
 		if(str.IsSameAs(fn, false) == true)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -356,7 +356,7 @@ CreatureModelDB::Record CreatureModelDB::getByID(unsigned int id)
 		if (i->getUInt(ModelID)==id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -368,7 +368,7 @@ CreatureSkinDB::Record CreatureSkinDB::getByModelID(unsigned int id)
 		if(i->getUInt(ModelID) == id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -380,7 +380,7 @@ CreatureSkinDB::Record CreatureSkinDB::getBySkinID(unsigned int id)
 		if(i->getUInt(SkinID) == id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -392,7 +392,7 @@ CreatureTypeDB::Record CreatureTypeDB::getByID(unsigned int id)
 		if(i->getUInt(ID) == id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -406,7 +406,7 @@ NPCDB::Record NPCDB::getByFilename(wxString fn)
 			return (*i);
 		}
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -418,7 +418,7 @@ NPCDB::Record NPCDB::getByNPCID(unsigned int id)
 		if(i->getUInt(NPCID) == id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -475,7 +475,7 @@ ItemDisplayDB::Record ItemDisplayDB::getById(unsigned int id)
 		if (i->getUInt(ItemDisplayID)==id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -487,7 +487,7 @@ ItemVisualDB::Record ItemVisualDB::getById(unsigned int id)
 		if (i->getUInt(VisualID)==id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -498,7 +498,7 @@ ItemVisualEffectDB::Record ItemVisualEffectDB::getById(unsigned int id)
 		if (i->getUInt(EffectID)==id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -509,7 +509,7 @@ ItemSetDB::Record ItemSetDB::getById(unsigned int id)
 		if (i->getUInt(SetID)==id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -546,7 +546,7 @@ StartOutfitDB::Record StartOutfitDB::getById(unsigned int id)
 		if (i->getUInt(StartOutfitID)==id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -580,7 +580,7 @@ ItemDB::Record ItemDB::getById(unsigned int id)
 		if (i->getUInt(ID)==id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d id:%d"), __FILE__, __FUNCTION__, __LINE__, id);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d id:%d"), __FILE__, __FUNCTION__, __LINE__, id);
 	throw NotFound();
 */
 }
@@ -611,7 +611,7 @@ ItemDB::Record ItemDB::getByDisplayId(unsigned int id)
 		if (i->getUInt(ItemDisplayInfo)==id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d id:%d"), __FILE__, __FUNCTION__, __LINE__, id);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d id:%d"), __FILE__, __FUNCTION__, __LINE__, id);
 */
 	throw NotFound();
 }
@@ -648,7 +648,7 @@ ItemRecord::ItemRecord(const char* line)
 		for (size_t i=strlen(line)-2; i>1; i--) {
 			if (line[i]==',') {
 				//name = (line + i + 1);
-				name.Printf(_T("%s [%d] [%d]"), wxString(line+i+1, wxConvUTF8).c_str(), id, model);
+				name.Printf(wxT("%s [%d] [%d]"), wxString(line+i+1, wxConvUTF8).c_str(), id, model);
 				break;
 			}
 		}
@@ -659,7 +659,7 @@ ItemRecord::ItemRecord(const char* line)
 // Alfred. prevent null items bug.
 ItemDatabase::ItemDatabase()
 {
-	ItemRecord all(_("---- None ----"), IT_ALL);
+	ItemRecord all(wxT("---- None ----"), IT_ALL);
 	items.push_back(all);
 }
 
@@ -678,7 +678,7 @@ void ItemDatabase::open(wxString filename)
 	}
 
 	wxTextFile fin2;;
-	if (wxFileExists(_T("discoveryitems.csv")) && fin2.Open(_T("discoveryitems.csv"))) {
+	if (wxFileExists(wxT("discoveryitems.csv")) && fin2.Open(wxT("discoveryitems.csv"))) {
 		wxString line;
 		for ( line = fin2.GetFirstLine(); !fin2.Eof(); line = fin2.GetNextLine() ) {
 			ItemRecord rec;
@@ -781,12 +781,12 @@ wxString ItemDatabase::addDiscoveryId(int id, wxString name)
 			default: rec.sheath = 0;
 		}
 		rec.discovery = true;
-		rec.name.Printf(_T("%s [%d] [%d]"), name.c_str(), rec.id, rec.model);
+		rec.name.Printf(wxT("%s [%d] [%d]"), name.c_str(), rec.id, rec.model);
 		if (rec.type > 0) {
 			items.push_back(rec);
 			itemLookup[rec.id] = (int)items.size()-1;
-			//wxLogMessage(_T("Info: Not exist ItemID: %d, %s..."), id, rec.name.c_str());
-			ret.Printf(_T("%d,%d,%d,%d,%d,%d,%d,%s"), rec.id, rec.model, rec.itemclass, rec.subclass,
+			//wxLogMessage(wxT("Info: Not exist ItemID: %d, %s..."), id, rec.name.c_str());
+			ret.Printf(wxT("%d,%d,%d,%d,%d,%d,%d,%s"), rec.id, rec.model, rec.itemclass, rec.subclass,
 				rec.type, rec.sheath, rec.quality, rec.name.c_str());
 		}
 	} catch (ItemDB::NotFound) {}
@@ -805,12 +805,12 @@ wxString ItemDatabase::addDiscoveryDisplayId(int id, wxString name, int type)
 	rec.type = type;
 	rec.sheath = 0;
 	rec.discovery = true;
-	rec.name.Printf(_T("%s [%d]"), name.c_str(), id);
+	rec.name.Printf(wxT("%s [%d]"), name.c_str(), id);
 	if (rec.type > 0) {
 		items.push_back(rec);
 		itemLookup[rec.id] = (int)items.size()-1;
-		//wxLogMessage(_T("Info: Not exist ItemID: %d, %s..."), id, rec.name.c_str());
-		ret.Printf(_T("%d,%d,%d,%d,%d,%d,%d,%s"), rec.id, rec.model, rec.itemclass, rec.subclass,
+		//wxLogMessage(wxT("Info: Not exist ItemID: %d, %s..."), id, rec.name.c_str());
+		ret.Printf(wxT("%d,%d,%d,%d,%d,%d,%d,%s"), rec.id, rec.model, rec.itemclass, rec.subclass,
 			rec.type, rec.sheath, rec.quality, rec.name.c_str());
 	}
 	return ret;
@@ -828,7 +828,7 @@ ItemSubClassDB::Record ItemSubClassDB::getById(int id, int subid)
 				return (*i);
 		}
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 // ============================================================
@@ -854,10 +854,10 @@ wxString NPCDatabase::addDiscoveryId(int id, wxString name)
 	rec.model = id;
 	rec.type = 7;
 	rec.discovery = true;
-	rec.name.Printf(_T("%s [%d]"), name.c_str(), rec.id);
+	rec.name.Printf(wxT("%s [%d]"), name.c_str(), rec.id);
 	if (rec.type > 0) {
 		npcs.push_back(rec);
-		ret.Printf(_T("%d,%d,%d,%s"), rec.id, rec.model, rec.type, rec.name.c_str());
+		ret.Printf(wxT("%d,%d,%d,%s"), rec.id, rec.model, rec.type, rec.name.c_str());
 	}
 	return ret;
 }
@@ -870,7 +870,7 @@ NPCRecord::NPCRecord(const char* line)
 	for (size_t i=strlen(line)-2; i>1; i--) {
 		if (line[i]==',') {
 			//name = (line + i + 1);
-			name.Printf(_T("%s [%d] [%d]"), wxString(line+i+1, wxConvUTF8).c_str(), id, model);
+			name.Printf(wxT("%s [%d] [%d]"), wxString(line+i+1, wxConvUTF8).c_str(), id, model);
 			break;
 		}
 	}
@@ -878,7 +878,7 @@ NPCRecord::NPCRecord(const char* line)
 
 NPCDatabase::NPCDatabase(wxString filename)
 {
-	//ItemRecord all(_("---- None ----"), IT_ALL);
+	//ItemRecord all(wxT("---- None ----"), IT_ALL);
 	//items.push_back(all);
 
 	wxTextFile fin(filename);
@@ -972,7 +972,7 @@ SpellEffectsDB::Record SpellEffectsDB::getByName(const wxString name)
 		if (name.IsSameAs(i->getString(EffectName), false) == true)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 
@@ -983,7 +983,7 @@ SpellEffectsDB::Record SpellEffectsDB::getById(unsigned int id)
 		if (i->getUInt(ID)==id)
 			return (*i);
 	}
-	//wxLogMessage(_T("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
 	throw NotFound();
 }
 // --

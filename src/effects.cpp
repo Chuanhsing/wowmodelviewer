@@ -10,7 +10,7 @@ SpellEffectsDB spelleffectsdb;
 void GetSpellEffects(){
 	for (SpellEffectsDB::Iterator it=spelleffectsdb.begin(); it!=spelleffectsdb.end(); ++it) {
 		wxString temp(it->getString(SpellEffectsDB::EffectName));
-		if (temp.StartsWith(_T("zzOLD")))
+		if (temp.StartsWith(wxT("zzOLD")))
 			spelleffects.Insert(temp, 0);
 	}
 
@@ -90,9 +90,9 @@ void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent
 			cc->cats.push_back(subclasslookup[pair<int,int>(r.itemclass, r.subclass)]);
 		}
 
-		cc->itemDialog = new CategoryChoiceDialog(cc, UPDATE_CREATURE_ITEM, parent, _("Choose an item"), _("Select a Weapon"), cc->choices, cc->cats, cc->catnames, 0);
+		cc->itemDialog = new CategoryChoiceDialog(cc, UPDATE_CREATURE_ITEM, parent, wxT("Choose an item"), wxT("Select a Weapon"), cc->choices, cc->cats, cc->catnames, 0);
 	} else {
-		cc->itemDialog = new FilteredChoiceDialog(cc, UPDATE_CREATURE_ITEM, parent, _("Choose an item"), _("Select a Weapon"), cc->choices, 0);
+		cc->itemDialog = new FilteredChoiceDialog(cc, UPDATE_CREATURE_ITEM, parent, wxT("Choose an item"), wxT("Select a Weapon"), cc->choices, 0);
 	}
 
 	cc->itemDialog->SetSelection(sel);
@@ -128,7 +128,7 @@ EnchantsDialog::EnchantsDialog(wxWindow *parent, CharControl *cc)
 	slot = NULL;
 	effectsListbox = NULL;
 
-	Create(parent, -1, _T("Weapon Enchants"), wxDefaultPosition, wxSize(200,350), wxDEFAULT_DIALOG_STYLE);
+	Create(parent, -1, wxT("Weapon Enchants"), wxDefaultPosition, wxSize(200,350), wxDEFAULT_DIALOG_STYLE);
 	Show(false);
 }
 
@@ -142,7 +142,7 @@ void EnchantsDialog::OnClick(wxCommandEvent &event)
 			return;
 		}
 
-		if (sel==_T("NONE") || sel==_T("None")) {
+		if (sel==wxT("NONE") || sel==wxT("None")) {
 			if (slot->GetSelection() == 0)
 				RHandEnchant = -1;
 			else
@@ -199,15 +199,15 @@ void EnchantsDialog::OnClick(wxCommandEvent &event)
 
 void EnchantsDialog::InitObjects()
 {
-	wxString slots[2] = {_T("Right Hand"), _T("Left Hand")};
+	wxString slots[2] = {wxT("Right Hand"), wxT("Left Hand")};
 
-	slot = new wxRadioBox(this, -1, _T("Apply effects to:"), wxPoint(10,10), wxSize(180, 80), 2, slots, 4, wxRA_SPECIFY_ROWS, wxDefaultValidator, _T("radioBox"));
+	slot = new wxRadioBox(this, -1, wxT("Apply effects to:"), wxPoint(10,10), wxSize(180, 80), 2, slots, 4, wxRA_SPECIFY_ROWS, wxDefaultValidator, wxT("radioBox"));
 
-	text1 = new wxStaticText(this, -1, _T("Enchantments:"), wxPoint(10, 110), wxDefaultSize);
+	text1 = new wxStaticText(this, -1, wxT("Enchantments:"), wxPoint(10, 110), wxDefaultSize);
 	effectsListbox = new wxListBox(this, -1, wxPoint(10,130), wxSize(180,160), choices, wxLB_SINGLE);
 	
-	btnOK = new wxButton(this, ID_ENCHANTSOK, _("OK"), wxPoint(90,295), wxSize(50,22));
-	btnCancel = new wxButton(this, ID_ENCHANTSCANCEL, _("Cancel"), wxPoint(140,295), wxSize(50,22));
+	btnOK = new wxButton(this, ID_ENCHANTSOK, wxT("OK"), wxPoint(90,295), wxSize(50,22));
+	btnCancel = new wxButton(this, ID_ENCHANTSCANCEL, wxT("Cancel"), wxPoint(140,295), wxSize(50,22));
 
 	Initiated = true;
 }
@@ -223,7 +223,7 @@ void EnchantsDialog::InitEnchants()
 	temp.index[2] = 0;
 	temp.index[3] = 0;
 	temp.index[4] = 0;
-	temp.name = _T("None");
+	temp.name = wxT("None");
 	enchants.push_back(temp);
 
 	for (SpellItemEnchantmentDB::Iterator it=spellitemenchantmentdb.begin();  it!=spellitemenchantmentdb.end(); ++it) {

@@ -38,8 +38,8 @@ bool WowModelViewApp::OnInit()
 	wxImage::AddHandler( new wxPNGHandler);
 
 	wxBitmap bitmap;
-	if (bitmap.LoadFile("Splash.png",wxBITMAP_TYPE_PNG) == false){
-		wxMessageBox(_T("Failed to load Splash Screen.\nPress OK to continue loading WMV."),_T("Failure"));
+	if (bitmap.LoadFile(wxT("Splash.png"),wxBITMAP_TYPE_PNG) == false){
+		wxMessageBox(wxT("Failed to load Splash Screen.\nPress OK to continue loading WMV."),wxT("Failure"));
 		//return false;		// Used while debugging the splash screen.
 	}else{
 		splash = new wxSplashScreen(bitmap,
@@ -71,11 +71,11 @@ bool WowModelViewApp::OnInit()
 	}
 
 	// Application Info
-	SetVendorName(_T("WoWModelViewer"));
-	SetAppName(_T("WoWModelViewer"));
+	SetVendorName(wxT("WoWModelViewer"));
+	SetAppName(wxT("WoWModelViewer"));
 
 	// Just a little header to start off the log file.
-	wxLogMessage(wxString(_T("Starting:\n") APP_TITLE _T(" ") APP_VERSION _T(" (") APP_BUILDNAME _T(") ") APP_PLATFORM APP_ISDEBUG _T("\n\n")));
+	wxLogMessage(wxString(wxT("Starting:\n") APP_TITLE wxT(" ") APP_VERSION wxT(" (") APP_BUILDNAME wxT(") ") APP_PLATFORM APP_ISDEBUG wxT("\n\n")));
 
 	// set the config file path.
 	cfgPath = userPath+SLASH+wxT("Config.ini");
@@ -87,24 +87,24 @@ bool WowModelViewApp::OnInit()
 	}
 
 	// Load user skins 
-	gUserSkins.LoadFile(userPath + SLASH + _T("Skins.txt"));
+	gUserSkins.LoadFile(userPath + SLASH + wxT("Skins.txt"));
 	if (!gUserSkins.Loaded())
-		wxLogMessage(_T("Warning: Failed to load user skins"));
+		wxLogMessage(wxT("Warning: Failed to load user skins"));
 
 
 #ifdef _WINDOWS
 	// This chunk of code is all related to locale translation (if a translation is available).
 	// Only use locale for non-english?
-	wxString fn = _T("mo");
-	fn = fn+SLASH+locales[interfaceID]+_T(".mo");
+	wxString fn = wxT("mo");
+	fn = fn+SLASH+locales[interfaceID]+wxT(".mo");
 	if (wxFileExists(fn))
 	{
 		locale.Init(langIds[interfaceID], wxLOCALE_CONV_ENCODING);
 		
-		wxLocale::AddCatalogLookupPathPrefix(_T("mo"));
-		//wxLocale::AddCatalogLookupPathPrefix(_T(".."));
+		wxLocale::AddCatalogLookupPathPrefix(wxT("mo"));
+		//wxLocale::AddCatalogLookupPathPrefix(wxT(".."));
 
-		//locale.AddCatalog(_T("wowmodelview")); // Initialize the catalogs we'll be using
+		//locale.AddCatalog(wxT("wowmodelview")); // Initialize the catalogs we'll be using
 		locale.AddCatalog(locales[interfaceID]);
 	}
 #endif
@@ -123,16 +123,16 @@ bool WowModelViewApp::OnInit()
 	// Set the icon, different source location for the icon under Linux & Mac
 	wxIcon icon;
 #if defined (_WINDOWS)
-	if (icon.LoadFile(_T("mainicon"),wxBITMAP_TYPE_ICO_RESOURCE) == false)
-		wxMessageBox(_T("Failed to load Icon"),_T("Failure"));
+	if (icon.LoadFile(wxT("mainicon"),wxBITMAP_TYPE_ICO_RESOURCE) == false)
+		wxMessageBox(wxT("Failed to load Icon"),wxT("Failure"));
 #elif defined (_LINUX)
 	// This probably needs to be fixed...
-	//if (icon.LoadFile(_T("../bin_support/icon/wmv_xpm")) == false)
-	//	wxMessageBox(_T("Failed to load Icon"),_T("Failure"));
+	//if (icon.LoadFile(wxT("../bin_support/icon/wmv_xpm")) == false)
+	//	wxMessageBox(wxT("Failed to load Icon"),wxT("Failure"));
 #elif defined (_MAC)
 	// Dunno what to do about Macs...
-	//if (icon.LoadFile(_T("../bin_support/icon/wmv.icns")) == false)
-	//	wxMessageBox(_T("Failed to load Icon"),_T("Failure"));
+	//if (icon.LoadFile(wxT("../bin_support/icon/wmv.icns")) == false)
+	//	wxMessageBox(wxT("Failed to load Icon"),wxT("Failure"));
 #endif
 	frame->SetIcon(icon);
 	// --
@@ -163,7 +163,7 @@ bool WowModelViewApp::OnInit()
 	for (ssize_t i=0; i<argc; i++) {
 		cmd = argv[i];
 
-		if (cmd == _T("-m")) {
+		if (cmd == wxT("-m")) {
 			if (i+1 < argc) {
 				i++;
 				wxString fn(argv[i]);
@@ -175,7 +175,7 @@ bool WowModelViewApp::OnInit()
 				// Load the model
 				frame->LoadModel(fn);
 			}
-		} else if (cmd == _T("-mo")) {
+		} else if (cmd == wxT("-mo")) {
 			if (i+1 < argc) {
 				i++;
 				wxString fn(argv[i]);
@@ -190,8 +190,8 @@ bool WowModelViewApp::OnInit()
 				// Output the screenshot
 				fn = fn.AfterLast('\\');
 				fn = fn.BeforeLast('.');
-				fn.Prepend(_T("ss_"));
-				fn.Append(_T(".png"));
+				fn.Prepend(wxT("ss_"));
+				fn.Append(wxT(".png"));
 				frame->canvas->Screenshot(fn);
 			}
 		} else {
@@ -204,7 +204,7 @@ bool WowModelViewApp::OnInit()
 	// Load previously saved layout
 	frame->LoadLayout();
 
-	wxLogMessage(_T("WoW Model Viewer successfully loaded!\n----\n"));
+	wxLogMessage(wxT("WoW Model Viewer successfully loaded!\n----\n"));
 	frame->Show(true);
 	splash->Show(false);
 	splash->~wxSplashScreen();
@@ -264,7 +264,7 @@ void WowModelViewApp::HandleEvent(wxEvtHandler *handler, wxEventFunction func, w
 	} 
 	catch(...) 
 	{ 
-		wxMessageBox(_T("An error occured while handling an application event."), _T("Execption in event handling"), wxOK | wxICON_ERROR); 
+		wxMessageBox(wxT("An error occured while handling an application event."), wxT("Execption in event handling"), wxOK | wxICON_ERROR); 
 		throw; 
 	} 
 }
@@ -272,8 +272,8 @@ void WowModelViewApp::HandleEvent(wxEvtHandler *handler, wxEventFunction func, w
 
 void WowModelViewApp::OnUnhandledException() 
 { 
-    //wxMessageBox(_T("An unhandled exception was caught, the program will now terminate."), _T("Unhandled Exception"), wxOK | wxICON_ERROR); 
-	wxLogFatalError(_T("An unhandled exception error has occured."));
+    //wxMessageBox(wxT("An unhandled exception was caught, the program will now terminate."), wxT("Unhandled Exception"), wxOK | wxICON_ERROR); 
+	wxLogFatalError(wxT("An unhandled exception error has occured."));
 }
 
 namespace {
@@ -287,7 +287,7 @@ namespace {
 			wxString localePath = gamePath;
 
 			localePath.Append(locales[i]);
-			localePath.Append(_T("/"));
+			localePath.Append(wxT("/"));
 			if (wxDir::Exists(localePath)) {
 				wxArrayString localeMpqs;
 				wxDir::GetAllFiles(localePath, &localeMpqs, wxEmptyString, wxDIR_FILES);
@@ -320,22 +320,22 @@ void searchMPQs()
 	const int localeSets = 8;
 	const wxString locales[] = {
 		// sets 0
-		_T("enUS"), _T("koKR"), _T("frFR"), _T("deDE"), 
-		_T("zhCN"), _T("zhTW"), _T("esES"), _T("ruRU"),
+		wxT("enUS"), wxT("koKR"), wxT("frFR"), wxT("deDE"), 
+		wxT("zhCN"), wxT("zhTW"), wxT("esES"), wxT("ruRU"),
 		// sets 1
-		_T("enGB"), wxEmptyString, wxEmptyString, wxEmptyString, 
-		_T("enCN"), _T("enTW"), _T("esMX"), wxEmptyString
+		wxT("enGB"), wxEmptyString, wxEmptyString, wxEmptyString, 
+		wxT("enCN"), wxT("enTW"), wxT("esMX"), wxEmptyString
 		};
 
-	const wxString defaultArchives[] = {_T("patch-9.mpq"),_T("patch-8.mpq"),_T("patch-7.mpq"),_T("patch-6.mpq"),
-		_T("patch-5.mpq"),_T("patch-4.mpq"),_T("patch-3.mpq"),_T("patch-2.mpq"),_T("patch.mpq"),_T("alternate.mpq"),
-		_T("expansion3.mpq"),_T("expansion2.mpq"),_T("expansion1.mpq"),_T("lichking.mpq"),_T("expansion.mpq"),
-		_T("world.mpq"),_T("sound.mpq"),_T("art.mpq"),_T("common-3.mpq"),_T("common-2.mpq"), _T("common.mpq")};
-	const wxString localeArchives[] = {_T("patch-%s-9.mpq"),_T("patch-%s-8.mpq"),_T("patch-%s-7.mpq"),
-		_T("patch-%s-6.mpq"),_T("patch-%s-5.mpq"),_T("patch-%s-4.mpq"),_T("patch-%s-3.mpq"), _T("patch-%s-2.mpq"), 
-		_T("patch-%s.mpq"), _T("expansion3-locale-%s.mpq"), _T("expansion2-locale-%s.mpq"), 
-		_T("expansion1-locale-%s.mpq"), _T("lichking-locale-%s.mpq"), _T("expansion-locale-%s.mpq"), 
-		_T("locale-%s.mpq"), _T("base-%s.mpq")};
+	const wxString defaultArchives[] = {wxT("patch-9.mpq"),wxT("patch-8.mpq"),wxT("patch-7.mpq"),wxT("patch-6.mpq"),
+		wxT("patch-5.mpq"),wxT("patch-4.mpq"),wxT("patch-3.mpq"),wxT("patch-2.mpq"),wxT("patch.mpq"),wxT("alternate.mpq"),
+		wxT("expansion3.mpq"),wxT("expansion2.mpq"),wxT("expansion1.mpq"),wxT("lichking.mpq"),wxT("expansion.mpq"),
+		wxT("world.mpq"),wxT("sound.mpq"),wxT("art.mpq"),wxT("common-3.mpq"),wxT("common-2.mpq"), wxT("common.mpq")};
+	const wxString localeArchives[] = {wxT("patch-%s-9.mpq"),wxT("patch-%s-8.mpq"),wxT("patch-%s-7.mpq"),
+		wxT("patch-%s-6.mpq"),wxT("patch-%s-5.mpq"),wxT("patch-%s-4.mpq"),wxT("patch-%s-3.mpq"), wxT("patch-%s-2.mpq"), 
+		wxT("patch-%s.mpq"), wxT("expansion3-locale-%s.mpq"), wxT("expansion2-locale-%s.mpq"), 
+		wxT("expansion1-locale-%s.mpq"), wxT("lichking-locale-%s.mpq"), wxT("expansion-locale-%s.mpq"), 
+		wxT("locale-%s.mpq"), wxT("base-%s.mpq")};
 
 	// select avaiable locales
 	wxArrayString avaiLocales;
@@ -345,7 +345,7 @@ void searchMPQs()
 		wxString localePath = gamePath;
 
 		localePath.Append(locales[i]);
-		localePath.Append(_T("/"));
+		localePath.Append(wxT("/"));
 		if (wxDir::Exists(localePath)) {
 			avaiLocales.Add(locales[i]);
 		}
@@ -354,17 +354,17 @@ void searchMPQs()
 	if (avaiLocales.size() == 1) // only 1 locale
 		sLocale = avaiLocales[0];
 	else
-		sLocale = wxGetSingleChoice(_T("Please select a Locale:"), _T("Locale"), avaiLocales);
+		sLocale = wxGetSingleChoice(wxT("Please select a Locale:"), wxT("Locale"), avaiLocales);
 
 	// search Partial MPQs
 	wxArrayString baseMpqs;
 	wxDir::GetAllFiles(gamePath, &baseMpqs, wxEmptyString, wxDIR_FILES);
 	for (size_t j = 0; j < baseMpqs.size(); j++) {
-		if (baseMpqs[j].Contains(_T("oldworld")))
+		if (baseMpqs[j].Contains(wxT("oldworld")))
 			continue;
 		wxString baseName = wxFileName(baseMpqs[j]).GetFullName();
-		wxString cmpName = _T("wow-update-");
-		if (baseName.StartsWith(cmpName) && baseName.AfterLast('.').CmpNoCase(_T("mpq")) == 0) {
+		wxString cmpName = wxT("wow-update-");
+		if (baseName.StartsWith(cmpName) && baseName.AfterLast('.').CmpNoCase(wxT("mpq")) == 0) {
 			bool bFound = false;
 			for(size_t i = 0; i<mpqArchives.size(); i++) {
 				if (!mpqArchives[i].AfterLast(SLASH).StartsWith(cmpName))
@@ -380,20 +380,20 @@ void searchMPQs()
 			if (bFound == false)
 				mpqArchives.Add(baseMpqs[j]);
 
-			wxLogMessage(_T("- Found Partial MPQ archive: %s"), baseMpqs[j].c_str());
+			wxLogMessage(wxT("- Found Partial MPQ archive: %s"), baseMpqs[j].c_str());
 		}
 	}
 
 	// search patch-base MPQs
 	wxArrayString baseCacheMpqs;
-	wxDir::GetAllFiles(gamePath+_T("Cache"), &baseCacheMpqs, wxEmptyString, wxDIR_FILES);
+	wxDir::GetAllFiles(gamePath+wxT("Cache"), &baseCacheMpqs, wxEmptyString, wxDIR_FILES);
 	for (size_t j = 0; j < baseCacheMpqs.size(); j++) {
-		if (baseCacheMpqs[j].Contains(_T("oldworld")))
+		if (baseCacheMpqs[j].Contains(wxT("oldworld")))
 			continue;
 		wxString baseName = baseCacheMpqs[j];
 		wxString fullName = wxFileName(baseName).GetFullName();
-		wxString cmpName = _T("patch-base-");
-		if (fullName.StartsWith(cmpName) && fullName.AfterLast('.').CmpNoCase(_T("mpq")) == 0) {
+		wxString cmpName = wxT("patch-base-");
+		if (fullName.StartsWith(cmpName) && fullName.AfterLast('.').CmpNoCase(wxT("mpq")) == 0) {
 			bool bFound = false;
 			for(size_t i = 0; i<mpqArchives.size(); i++) {
 				if (!mpqArchives[i].AfterLast(SLASH).StartsWith(cmpName))
@@ -413,21 +413,21 @@ void searchMPQs()
 			if (bFound == false)
 				mpqArchives.Add(baseName);
 
-			wxLogMessage(_T("- Found Patch Base MPQ archive: %s"), baseName.c_str());
+			wxLogMessage(wxT("- Found Patch Base MPQ archive: %s"), baseName.c_str());
 		}
 	}
 	baseCacheMpqs.Clear();
 
 	// search base cache locale MPQs
 	wxArrayString baseCacheLocaleMpqs;
-	wxDir::GetAllFiles(gamePath+_T("Cache")+SLASH+sLocale, &baseCacheLocaleMpqs, wxEmptyString, wxDIR_FILES);
+	wxDir::GetAllFiles(gamePath+wxT("Cache")+SLASH+sLocale, &baseCacheLocaleMpqs, wxEmptyString, wxDIR_FILES);
 	for (size_t j = 0; j < baseCacheLocaleMpqs.size(); j++) {
-		if (baseCacheLocaleMpqs[j].Contains(_T("oldworld")))
+		if (baseCacheLocaleMpqs[j].Contains(wxT("oldworld")))
 			continue;
 		wxString baseName = baseCacheLocaleMpqs[j];
 		wxString fullName = wxFileName(baseName).GetFullName();
-		wxString cmpName = _T("patch-")+sLocale+_T("-");
-		if (fullName.StartsWith(cmpName) && fullName.AfterLast('.').CmpNoCase(_T("mpq")) == 0) {
+		wxString cmpName = wxT("patch-")+sLocale+wxT("-");
+		if (fullName.StartsWith(cmpName) && fullName.AfterLast('.').CmpNoCase(wxT("mpq")) == 0) {
 			bool bFound = false;
 			for(size_t i = 0; i<mpqArchives.size(); i++) {
 				if (!mpqArchives[i].AfterLast(SLASH).StartsWith(cmpName))
@@ -447,22 +447,22 @@ void searchMPQs()
 			if (bFound == false)
 				mpqArchives.Add(baseName);
 
-			wxLogMessage(_T("- Found Patch Base Locale MPQ archive: %s"), baseName.c_str());
+			wxLogMessage(wxT("- Found Patch Base Locale MPQ archive: %s"), baseName.c_str());
 		}
 	}
 	baseCacheLocaleMpqs.Clear();
 
 	// default archives
 	for (size_t i = 0; i < WXSIZEOF(defaultArchives); i++) {
-		//wxLogMessage(_T("Searching for MPQ archive %s..."), defaultArchives[i].c_str());
+		//wxLogMessage(wxT("Searching for MPQ archive %s..."), defaultArchives[i].c_str());
 
 		for (size_t j = 0; j < baseMpqs.size(); j++) {
 			wxString baseName = wxFileName(baseMpqs[j]).GetFullName();
 			if(baseName.CmpNoCase(defaultArchives[i]) == 0) {
 				mpqArchives.Add(baseMpqs[j]);
 
-				wxLogMessage(_T("- Found MPQ archive: %s"), baseMpqs[j].c_str());
-				if (baseName.CmpNoCase(_T("alternate.mpq")))
+				wxLogMessage(wxT("- Found MPQ archive: %s"), baseMpqs[j].c_str());
+				if (baseName.CmpNoCase(wxT("alternate.mpq")))
 					bAlternate = true;
 			}
 		}
@@ -474,7 +474,7 @@ void searchMPQs()
 			wxString localePath = gamePath;
 
 			localePath.Append(locales[i]);
-			localePath.Append(_T("/"));
+			localePath.Append(wxT("/"));
 			if (wxDir::Exists(localePath)) {
 				wxArrayString localeMpqs;
 				wxDir::GetAllFiles(localePath, &localeMpqs, wxEmptyString, wxDIR_FILES);
@@ -508,63 +508,63 @@ bool WowModelViewApp::LoadSettings()
 {
 	wxString tmp;
 	// Application Config Settings
-	wxFileConfig *pConfig = new wxFileConfig(_T("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
+	wxFileConfig *pConfig = new wxFileConfig(wxT("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
 	
 	// Graphic / Video display settings
-	pConfig->SetPath(_T("/Graphics"));
-	pConfig->Read(_T("FSAA"), &video.curCap.aaSamples, 0);
-	pConfig->Read(_T("AccumulationBuffer"), &video.curCap.accum, 0);
-	pConfig->Read(_T("AlphaBits"), &video.curCap.alpha, 0);
-	pConfig->Read(_T("ColourBits"), &video.curCap.colour, 24);
-	pConfig->Read(_T("DoubleBuffer"), (bool*)&video.curCap.doubleBuffer, 1);	// True
+	pConfig->SetPath(wxT("/Graphics"));
+	pConfig->Read(wxT("FSAA"), &video.curCap.aaSamples, 0);
+	pConfig->Read(wxT("AccumulationBuffer"), &video.curCap.accum, 0);
+	pConfig->Read(wxT("AlphaBits"), &video.curCap.alpha, 0);
+	pConfig->Read(wxT("ColourBits"), &video.curCap.colour, 24);
+	pConfig->Read(wxT("DoubleBuffer"), (bool*)&video.curCap.doubleBuffer, 1);	// True
 #ifdef _WINDOWS
-	pConfig->Read(_T("HWAcceleration"), &video.curCap.hwAcc, WGL_FULL_ACCELERATION_ARB);
+	pConfig->Read(wxT("HWAcceleration"), &video.curCap.hwAcc, WGL_FULL_ACCELERATION_ARB);
 #endif
-	pConfig->Read(_T("SampleBuffer"), (bool*)&video.curCap.sampleBuffer, 0);	// False
-	pConfig->Read(_T("StencilBuffer"), &video.curCap.stencil, 0);
-	pConfig->Read(_T("ZBuffer"), &video.curCap.zBuffer, 16);
+	pConfig->Read(wxT("SampleBuffer"), (bool*)&video.curCap.sampleBuffer, 0);	// False
+	pConfig->Read(wxT("StencilBuffer"), &video.curCap.stencil, 0);
+	pConfig->Read(wxT("ZBuffer"), &video.curCap.zBuffer, 16);
 
 	// Application locale info
-	pConfig->SetPath(_T("/Locale"));
-	pConfig->Read(_T("LanguageID"), &langID, -1);
-	pConfig->Read(_T("InterfaceID"), &interfaceID, -1);
+	pConfig->SetPath(wxT("/Locale"));
+	pConfig->Read(wxT("LanguageID"), &langID, -1);
+	pConfig->Read(wxT("InterfaceID"), &interfaceID, -1);
 
 	// Application settings
-	pConfig->SetPath(_T("/Settings"));
-	pConfig->Read(_T("Path"), &gamePath, wxEmptyString);
-	pConfig->Read(_T("TOCVersion"), &gameVersion, 0);
+	pConfig->SetPath(wxT("/Settings"));
+	pConfig->Read(wxT("Path"), &gamePath, wxEmptyString);
+	pConfig->Read(wxT("TOCVersion"), &gameVersion, 0);
 
-	pConfig->Read(_T("UseLocalFiles"), &useLocalFiles, false);
-	pConfig->Read(_T("SSCounter"), &ssCounter, 100);
-	//pConfig->Read(_T("AntiAlias"), &useAntiAlias, true);
-	//pConfig->Read(_T("DisableHWAcc"), &disableHWAcc, false);
-	pConfig->Read(_T("DefaultFormat"), &imgFormat, 0);
+	pConfig->Read(wxT("UseLocalFiles"), &useLocalFiles, false);
+	pConfig->Read(wxT("SSCounter"), &ssCounter, 100);
+	//pConfig->Read(wxT("AntiAlias"), &useAntiAlias, true);
+	//pConfig->Read(wxT("DisableHWAcc"), &disableHWAcc, false);
+	pConfig->Read(wxT("DefaultFormat"), &imgFormat, 0);
 
-	pConfig->Read(_T("PerferedExporter"), &Perfered_Exporter, -1);
-	pConfig->Read(_T("ModelExportInitOnly"), &modelExportInitOnly, true);
-	pConfig->Read(_T("ModelExportPreserveDirs"), &modelExport_PreserveDir, true);
-	pConfig->Read(_T("ModelExportUseWMVPosRot"), &modelExport_UseWMVPosRot, false);
+	pConfig->Read(wxT("PerferedExporter"), &Perfered_Exporter, -1);
+	pConfig->Read(wxT("ModelExportInitOnly"), &modelExportInitOnly, true);
+	pConfig->Read(wxT("ModelExportPreserveDirs"), &modelExport_PreserveDir, true);
+	pConfig->Read(wxT("ModelExportUseWMVPosRot"), &modelExport_UseWMVPosRot, false);
 
-	pConfig->Read(_T("ModelExportLWPreserveDirs"), &modelExport_LW_PreserveDir, true);
-	pConfig->Read(_T("ModelExportLWExportLights"), &modelExport_LW_ExportLights, true);
-	pConfig->Read(_T("ModelExportLWExportDoodads"), &modelExport_LW_ExportDoodads, true);
-	pConfig->Read(_T("ModelExportLWExportCameras"), &modelExport_LW_ExportCameras, true);
-	pConfig->Read(_T("ModelExportLWExportBones"), &modelExport_LW_ExportBones, true);
+	pConfig->Read(wxT("ModelExportLWPreserveDirs"), &modelExport_LW_PreserveDir, true);
+	pConfig->Read(wxT("ModelExportLWExportLights"), &modelExport_LW_ExportLights, true);
+	pConfig->Read(wxT("ModelExportLWExportDoodads"), &modelExport_LW_ExportDoodads, true);
+	pConfig->Read(wxT("ModelExportLWExportCameras"), &modelExport_LW_ExportCameras, true);
+	pConfig->Read(wxT("ModelExportLWExportBones"), &modelExport_LW_ExportBones, true);
 
-	pConfig->Read(_T("ModelExportLWDoodadsAs"), &modelExport_LW_DoodadsAs, 0);
+	pConfig->Read(wxT("ModelExportLWDoodadsAs"), &modelExport_LW_DoodadsAs, 0);
 
-	pConfig->Read(_T("ModelExportM3BoundScale"), &tmp, _T("0.5"));
+	pConfig->Read(wxT("ModelExportM3BoundScale"), &tmp, wxT("0.5"));
 	modelExport_M3_BoundScale = wxAtof(tmp);
-	pConfig->Read(_T("ModelExportM3SphereScale"), &tmp, _T("0.5"));
+	pConfig->Read(wxT("ModelExportM3SphereScale"), &tmp, wxT("0.5"));
 	modelExport_M3_SphereScale = wxAtof(tmp);
-	pConfig->Read(_T("ModelExportM3TexturePath"), &modelExport_M3_TexturePath, wxEmptyString);
+	pConfig->Read(wxT("ModelExportM3TexturePath"), &modelExport_M3_TexturePath, wxEmptyString);
 
 
 	// Data path and mpq archive stuff
 	wxString archives;
-	pConfig->Read(_T("MPQFiles"), &archives);
+	pConfig->Read(wxT("MPQFiles"), &archives);
 	
-	wxStringTokenizer strToken(archives, _T(";"), wxTOKEN_DEFAULT);
+	wxStringTokenizer strToken(archives, wxT(";"), wxTOKEN_DEFAULT);
 	while (strToken.HasMoreTokens()) {
 		mpqArchives.Add(strToken.GetNextToken());
 	}
@@ -583,7 +583,7 @@ bool WowModelViewApp::LoadSettings()
 
 	// if we can't search any mpqs
 	if (mpqArchives.GetCount()==0) {
-		wxLogMessage(_T("World of Warcraft Data Directory Not Found. Returned GamePath: %s"),gamePath.c_str());
+		wxLogMessage(wxT("World of Warcraft Data Directory Not Found. Returned GamePath: %s"),gamePath.c_str());
 		wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("Fatal Error: Could not find your World of Warcraft Data folder."), wxT("World of Warcraft Not Found"), wxOK | wxICON_ERROR);
 		dial->ShowModal();
 		return true;
@@ -595,7 +595,7 @@ bool WowModelViewApp::LoadSettings()
     if (langID == -1) {
         // the arrays should be in sync
         wxCOMPILE_TIME_ASSERT(WXSIZEOF(langNames) == WXSIZEOF(langIds), LangArraysMismatch);
-        langID = wxGetSingleChoiceIndex(_T("Please select a language:"), _T("Language"), WXSIZEOF(langNames), langNames);
+        langID = wxGetSingleChoiceIndex(wxT("Please select a language:"), wxT("Language"), WXSIZEOF(langNames), langNames);
 
 		SaveSettings();
 	}
@@ -618,46 +618,46 @@ bool WowModelViewApp::LoadSettings()
 void WowModelViewApp::SaveSettings()
 {
 	// Application Config Settings
-	wxFileConfig *pConfig = new wxFileConfig(_T("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
+	wxFileConfig *pConfig = new wxFileConfig(wxT("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
 	
-	pConfig->SetPath(_T("/Locale"));
-	pConfig->Write(_T("LanguageID"), langID);
-	pConfig->Write(_T("InterfaceID"), interfaceID);
+	pConfig->SetPath(wxT("/Locale"));
+	pConfig->Write(wxT("LanguageID"), langID);
+	pConfig->Write(wxT("InterfaceID"), interfaceID);
 
-	pConfig->SetPath(_T("/Settings"));
-	pConfig->Write(_T("Path"), gamePath);
-	pConfig->Write(_T("TOCVersion"), gameVersion);
-	pConfig->Write(_T("UseLocalFiles"), useLocalFiles);
-	pConfig->Write(_T("SSCounter"), ssCounter);
-	//pConfig->Write(_T("AntiAlias"), useAntiAlias);
-	//pConfig->Write(_T("DisableHWAcc"), disableHWAcc);
-	pConfig->Write(_T("DefaultFormat"), imgFormat);
+	pConfig->SetPath(wxT("/Settings"));
+	pConfig->Write(wxT("Path"), gamePath);
+	pConfig->Write(wxT("TOCVersion"), gameVersion);
+	pConfig->Write(wxT("UseLocalFiles"), useLocalFiles);
+	pConfig->Write(wxT("SSCounter"), ssCounter);
+	//pConfig->Write(wxT("AntiAlias"), useAntiAlias);
+	//pConfig->Write(wxT("DisableHWAcc"), disableHWAcc);
+	pConfig->Write(wxT("DefaultFormat"), imgFormat);
 
-	pConfig->Write(_T("PerferedExporter"), Perfered_Exporter);
-	pConfig->Write(_T("ModelExportInitOnly"), modelExportInitOnly);
-	pConfig->Write(_T("ModelExportPreserveDirs"), modelExport_PreserveDir);
-	pConfig->Write(_T("ModelExportUseWMVPosRot"), modelExport_UseWMVPosRot);
+	pConfig->Write(wxT("PerferedExporter"), Perfered_Exporter);
+	pConfig->Write(wxT("ModelExportInitOnly"), modelExportInitOnly);
+	pConfig->Write(wxT("ModelExportPreserveDirs"), modelExport_PreserveDir);
+	pConfig->Write(wxT("ModelExportUseWMVPosRot"), modelExport_UseWMVPosRot);
 
-	pConfig->Write(_T("ModelExportLWPreserveDirs"), modelExport_LW_PreserveDir);
-	pConfig->Write(_T("ModelExportLWExportLights"), modelExport_LW_ExportLights);
-	pConfig->Write(_T("ModelExportLWExportDoodads"), modelExport_LW_ExportDoodads);
-	pConfig->Write(_T("ModelExportLWExportCameras"), modelExport_LW_ExportCameras);
-	pConfig->Write(_T("ModelExportLWExportBones"), modelExport_LW_ExportBones);
+	pConfig->Write(wxT("ModelExportLWPreserveDirs"), modelExport_LW_PreserveDir);
+	pConfig->Write(wxT("ModelExportLWExportLights"), modelExport_LW_ExportLights);
+	pConfig->Write(wxT("ModelExportLWExportDoodads"), modelExport_LW_ExportDoodads);
+	pConfig->Write(wxT("ModelExportLWExportCameras"), modelExport_LW_ExportCameras);
+	pConfig->Write(wxT("ModelExportLWExportBones"), modelExport_LW_ExportBones);
 
-	pConfig->Write(_T("ModelExportLWDoodadsAs"), modelExport_LW_DoodadsAs);
+	pConfig->Write(wxT("ModelExportLWDoodadsAs"), modelExport_LW_DoodadsAs);
 
-	pConfig->Write(_T("ModelExportM3BoundScale"), wxString::Format(_T("%0.2f"), modelExport_M3_BoundScale));
-	pConfig->Write(_T("ModelExportM3SphereScale"), wxString::Format(_T("%0.2f"), modelExport_M3_SphereScale));
-	pConfig->Write(_T("ModelExportM3TexturePath"), modelExport_M3_TexturePath);
+	pConfig->Write(wxT("ModelExportM3BoundScale"), wxString::Format(wxT("%0.2f"), modelExport_M3_BoundScale));
+	pConfig->Write(wxT("ModelExportM3SphereScale"), wxString::Format(wxT("%0.2f"), modelExport_M3_SphereScale));
+	pConfig->Write(wxT("ModelExportM3TexturePath"), modelExport_M3_TexturePath);
 
 	wxString archives;
 
 	for (size_t i=0; i<mpqArchives.GetCount(); i++) {
 		archives.Append(mpqArchives[i]);
-		archives.Append(_T(";"));
+		archives.Append(wxT(";"));
 	}
 
-	pConfig->Write(_T("MPQFiles"), archives);
+	pConfig->Write(wxT("MPQFiles"), archives);
 
 	// Clear our ini file config object
 	wxDELETE( pConfig );

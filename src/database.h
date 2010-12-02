@@ -90,7 +90,7 @@ class ItemDB: public DBCFile
 	std::map<int, int> itemLookup, itemDisplayLookup;
 	bool inited;
 public:
-	ItemDB(): DBCFile(_T("DBFilesClient\\Item.dbc")), inited(false) {}
+	ItemDB(): DBCFile(wxT("DBFilesClient\\Item.dbc")), inited(false) {}
 	~ItemDB() {}
 
 	static const size_t MaxItem = 100000;
@@ -111,7 +111,7 @@ public:
 class SpellItemEnchantmentDB: public DBCFile
 {
 public:
-	SpellItemEnchantmentDB(): DBCFile(_T("DBFilesClient\\SpellItemEnchantment.dbc")) {}
+	SpellItemEnchantmentDB(): DBCFile(wxT("DBFilesClient\\SpellItemEnchantment.dbc")) {}
 	~SpellItemEnchantmentDB() {}
 
 	// Fields
@@ -124,7 +124,7 @@ public:
 class ItemVisualsDB: public DBCFile
 {
 public:
-	ItemVisualsDB(): DBCFile(_T("DBFilesClient\\ItemVisuals.dbc")) {}
+	ItemVisualsDB(): DBCFile(wxT("DBFilesClient\\ItemVisuals.dbc")) {}
 	~ItemVisualsDB() {}
 
 	// Fields
@@ -134,7 +134,7 @@ public:
 class LightSkyBoxDB: public DBCFile
 {
 public:
-	LightSkyBoxDB(): DBCFile(_T("DBFilesClient\\LightSkybox.dbc")) {}
+	LightSkyBoxDB(): DBCFile(wxT("DBFilesClient\\LightSkybox.dbc")) {}
 	~LightSkyBoxDB() {}
 
 	// Fields
@@ -146,7 +146,7 @@ public:
 class AnimDB: public DBCFile
 {
 public:
-	AnimDB(): DBCFile(_T("DBFilesClient\\AnimationData.dbc")) {}
+	AnimDB(): DBCFile(wxT("DBFilesClient\\AnimationData.dbc")) {}
 	~AnimDB() {}
 
 	/// Fields
@@ -167,7 +167,7 @@ public:
 class CharHairGeosetsDB: public DBCFile
 {
 public:
-	CharHairGeosetsDB(): DBCFile(_T("DBFilesClient\\CharHairGeosets.dbc")) {}
+	CharHairGeosetsDB(): DBCFile(wxT("DBFilesClient\\CharHairGeosets.dbc")) {}
 	~CharHairGeosetsDB() {}
 
 	/// Fields
@@ -186,7 +186,7 @@ public:
 class CharSectionsDB: public DBCFile
 {
 public:
-	CharSectionsDB(): DBCFile(_T("DBFilesClient\\CharSections.dbc")) {}
+	CharSectionsDB(): DBCFile(wxT("DBFilesClient\\CharSections.dbc")) {}
 	~CharSectionsDB() {}
 
 	/// Fields
@@ -226,7 +226,7 @@ public:
 class CharRacesDB: public DBCFile
 {
 public:
-	CharRacesDB(): DBCFile(_T("DBFilesClient\\ChrRaces.dbc")) 	{}
+	CharRacesDB(): DBCFile(wxT("DBFilesClient\\ChrRaces.dbc")) 	{}
 
 	~CharRacesDB() {}
 
@@ -266,7 +266,7 @@ public:
 class CharFacialHairDB: public DBCFile
 {
 public:
-	CharFacialHairDB(): DBCFile(_T("DBFilesClient\\CharacterFacialHairStyles.dbc")) {}
+	CharFacialHairDB(): DBCFile(wxT("DBFilesClient\\CharacterFacialHairStyles.dbc")) {}
 	~CharFacialHairDB() {}
 
 	/// Fields
@@ -300,7 +300,7 @@ public:
 class CharClassesDB: public DBCFile
 {
 public:
-	CharClassesDB(): DBCFile(_T("DBFilesClient\\ChrClasses.dbc")) {}
+	CharClassesDB(): DBCFile(wxT("DBFilesClient\\ChrClasses.dbc")) {}
 	~CharClassesDB() {}
 
 	/// Fields
@@ -317,7 +317,7 @@ public:
 class HelmGeosetDB: public DBCFile
 {
 public:
-	HelmGeosetDB(): DBCFile(_T("DBFilesClient\\HelmetGeosetVisData.dbc")) {}
+	HelmGeosetDB(): DBCFile(wxT("DBFilesClient\\HelmetGeosetVisData.dbc")) {}
 	~HelmGeosetDB() {}
 
 	/// Fields
@@ -346,7 +346,7 @@ extern const char* ItemTypeNames[NUM_ITEM_TYPES];
 class ItemDisplayDB: public DBCFile
 {
 public:
-	ItemDisplayDB(): DBCFile(_T("DBFilesClient\\ItemDisplayInfo.dbc")) {}
+	ItemDisplayDB(): DBCFile(wxT("DBFilesClient\\ItemDisplayInfo.dbc")) {}
 	~ItemDisplayDB() {}
 
 	/// Fields
@@ -387,7 +387,7 @@ private:
 class ItemVisualDB: public DBCFile
 {
 public:
-	ItemVisualDB(): DBCFile(_T("DBFilesClient\\ItemVisuals.dbc")) {}
+	ItemVisualDB(): DBCFile(wxT("DBFilesClient\\ItemVisuals.dbc")) {}
 	~ItemVisualDB() {}
 
 	/// Fields
@@ -404,7 +404,7 @@ public:
 class ItemVisualEffectDB: public DBCFile
 {
 public:
-	ItemVisualEffectDB(): DBCFile(_T("DBFilesClient\\ItemVisualEffects.dbc")) {}
+	ItemVisualEffectDB(): DBCFile(wxT("DBFilesClient\\ItemVisualEffects.dbc")) {}
 	~ItemVisualEffectDB() {}
 
 	/// Fields
@@ -420,7 +420,7 @@ class ItemSetDB: public DBCFile
 	std::set<int> avail;
 
 public:
-	ItemSetDB(): DBCFile(_T("DBFilesClient\\ItemSet.dbc")) {}
+	ItemSetDB(): DBCFile(wxT("DBFilesClient\\ItemSet.dbc")) {}
 	~ItemSetDB() {}
 
 	static const size_t NumItems = 10;
@@ -440,7 +440,7 @@ public:
 class StartOutfitDB: public DBCFile
 {
 public:
-	StartOutfitDB(): DBCFile(_T("DBFilesClient\\CharStartOutfit.dbc")) {}
+	StartOutfitDB(): DBCFile(wxT("DBFilesClient\\CharStartOutfit.dbc")) {}
 	~StartOutfitDB() {}
 
 	static const size_t NumItems = 24;
@@ -521,7 +521,7 @@ public:
 class ItemSubClassDB: public DBCFile
 {
 public:
-	ItemSubClassDB(): DBCFile(_T("DBFilesClient\\ItemSubClass.dbc")) {}
+	ItemSubClassDB(): DBCFile(wxT("DBFilesClient\\ItemSubClass.dbc")) {}
 	~ItemSubClassDB() {}
 
 	/// Fields
@@ -584,7 +584,7 @@ public:
 class SpellEffectsDB: public DBCFile
 {
 public:
-	SpellEffectsDB(): DBCFile(_T("DBFilesClient\\SpellVisualEffectName.dbc")) {}
+	SpellEffectsDB(): DBCFile(wxT("DBFilesClient\\SpellVisualEffectName.dbc")) {}
 	~SpellEffectsDB() {}
 
 	/// Fields
@@ -604,7 +604,7 @@ public:
 class CreatureModelDB: public DBCFile
 {
 public:
-	CreatureModelDB(): DBCFile(_T("DBFilesClient\\CreatureModelData.dbc")) {}
+	CreatureModelDB(): DBCFile(wxT("DBFilesClient\\CreatureModelData.dbc")) {}
 	~CreatureModelDB() {}
 
 	/// Fields
@@ -622,7 +622,7 @@ private:
 class CreatureSkinDB: public DBCFile
 {
 public:
-	CreatureSkinDB(): DBCFile(_T("DBFilesClient\\CreatureDisplayInfo.dbc")) {}
+	CreatureSkinDB(): DBCFile(wxT("DBFilesClient\\CreatureDisplayInfo.dbc")) {}
 	~CreatureSkinDB() {}
 
 	/// Fields
@@ -650,7 +650,7 @@ public:
 class CreatureTypeDB: public DBCFile
 {
 public:
-	CreatureTypeDB(): DBCFile(_T("DBFilesClient\\CreatureType.dbc")) {}
+	CreatureTypeDB(): DBCFile(wxT("DBFilesClient\\CreatureType.dbc")) {}
 	~CreatureTypeDB() {}
 	
 	// Fields
@@ -663,7 +663,7 @@ public:
 class NPCDB: public DBCFile
 {
 public:
-	NPCDB(): DBCFile(_T("DBFilesClient\\CreatureDisplayInfoExtra.dbc")) {}
+	NPCDB(): DBCFile(wxT("DBFilesClient\\CreatureDisplayInfoExtra.dbc")) {}
 	~NPCDB() {}
 
 	/// Fields
@@ -697,7 +697,7 @@ public:
 class CamCinematicDB: public DBCFile
 {
 public:
-	CamCinematicDB(): DBCFile(_T("DBFilesClient\\CinematicCamera.dbc")) {}
+	CamCinematicDB(): DBCFile(wxT("DBFilesClient\\CinematicCamera.dbc")) {}
 	~CamCinematicDB() {}
 
 	// WotLK Fields

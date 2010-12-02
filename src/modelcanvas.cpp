@@ -55,10 +55,10 @@ namespace {
 
 ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 #ifndef _WINDOWS
-: wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxCLIP_CHILDREN|wxFULL_REPAINT_ON_RESIZE, _T("ModelCanvas"), attrib, wxNullPalette)
+: wxGLCanvas(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxCLIP_CHILDREN|wxFULL_REPAINT_ON_RESIZE, wxT("ModelCanvas"), attrib, wxNullPalette)
 #endif
 {
-	wxLogMessage(_T("Creating OpenGL Canvas..."));
+	wxLogMessage(wxT("Creating OpenGL Canvas..."));
 
     init = false;
 	initShaders = false;
@@ -106,8 +106,8 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 	
 	//wxNO_BORDER|wxCLIP_CHILDREN|wxFULL_REPAINT_ON_RESIZE
 #ifdef _WINDOWS
-	if(!Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxCLIP_CHILDREN|wxFULL_REPAINT_ON_RESIZE, _T("ModelCanvas"))) {
-		wxLogMessage(_T("Critcal Error: Unable to create a window to handle our OpenGL rendering.\n\tWon't be able to continue."));
+	if(!Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxCLIP_CHILDREN|wxFULL_REPAINT_ON_RESIZE, wxT("ModelCanvas"))) {
+		wxLogMessage(wxT("Critcal Error: Unable to create a window to handle our OpenGL rendering.\n\tWon't be able to continue."));
 		parent->Close();
 		return;
 	} else 
@@ -121,7 +121,7 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 		timer.Start(TIME_STEP);
 
 		// Initiate our default OpenGL settings
-		wxLogMessage(_T("Initiating OpenGL..."));
+		wxLogMessage(wxT("Initiating OpenGL..."));
 #ifdef _WINDOWS
 		wxDisplay *disp = new wxDisplay(0);
 		int bpp = disp->GetCurrentMode().bpp;
@@ -626,15 +626,15 @@ inline void ModelCanvas::CreateTexture(wxString filename, GLuint texture)
 	bgImagePath = filename;
 
 	// Get the file extension and load the file
-	wxString tmp = filename.AfterLast(_T('.')).Lower();
+	wxString tmp = filename.AfterLast(wxT('.')).Lower();
 
-	if (tmp == _T("bmp"))
+	if (tmp == wxT("bmp"))
 		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_BMP);
-	else if (tmp == _T("tga"))
+	else if (tmp == wxT("tga"))
 		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_TGA);
-	else if (tmp == _T("jpg"))
+	else if (tmp == wxT("jpg"))
 		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_JPG);
-	else if (tmp == _T("png"))
+	else if (tmp == wxT("png"))
 		image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_PNG);
 	else 
 		return;
@@ -1857,9 +1857,9 @@ void ModelCanvas::ResetView()
 	model->rot = Vec3D(0,-90.0f,0);
 	model->pos = Vec3D(0, 0, 5.0f);
 
-	bool isSkyBox = (model->name.substr(0,3)==_T("Env"));
+	bool isSkyBox = (model->name.substr(0,3)==wxT("Env"));
 	if (!isSkyBox) {
-		if (model->name.find(_("SkyBox"))<model->name.length())
+		if (model->name.find(wxT("SkyBox"))<model->name.length())
 			isSkyBox = true;
 	}
 
@@ -1879,7 +1879,7 @@ void ModelCanvas::ResetView()
 
 	modelsize = model->rad * 2.0f;
 	
-	if (model->name.substr(0,4)==_T("Item")) 
+	if (model->name.substr(0,4)==wxT("Item")) 
 		model->rot.y = 0; // items look better facing right by default
 }
 
@@ -1922,13 +1922,13 @@ void ModelCanvas::LoadBackground(wxString filename)
 	bgImagePath = filename;
 
 	// Get the file extension and load the file
-	wxString tmp = filename.AfterLast(_T('.'));
+	wxString tmp = filename.AfterLast(wxT('.'));
 	tmp.MakeLower();
 
 	//GLuint texFormat = GL_TEXTURE_RECTANGLE_ARB;
 	GLuint texFormat = GL_TEXTURE_2D;
 
-	if (tmp == _T("avi")) {
+	if (tmp == wxT("avi")) {
 #ifdef _WINDOWS
 		cAvi.SetFileName(filename.c_str());
 		cAvi.InitEngineForRead();
@@ -1947,13 +1947,13 @@ void ModelCanvas::LoadBackground(wxString filename)
 #endif
 	} else {
 
-		if (tmp == _T("bmp"))
+		if (tmp == wxT("bmp"))
 			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_BMP);
-		else if (tmp == _T("tga"))
+		else if (tmp == wxT("tga"))
 			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_TGA);
-		else if (tmp == _T("jpg"))
+		else if (tmp == wxT("jpg"))
 			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_JPG);
-		else if (tmp == _T("png"))
+		else if (tmp == wxT("png"))
 			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_PNG);
 		else 
 			return;
@@ -2182,23 +2182,23 @@ void ModelCanvas::Screenshot(const wxString fn, int x, int y)
 	bool succ = true;
 
 	// Save
-	if (temp.GetExt() == _T("tga")) {
+	if (temp.GetExt() == wxT("tga")) {
 		newImage->Save(fn.fn_str(), CXIMAGE_FORMAT_TGA);
-	} else if (temp.GetExt() == _T("png")) {
+	} else if (temp.GetExt() == wxT("png")) {
 		newImage->Save(fn.fn_str(), CXIMAGE_FORMAT_PNG);
 	//} else if (temp.GetExt() == "jp2") {
 	//	newImage->Save(fn.fn_str(), CXIMAGE_FORMAT_JP2);
-	} else if (temp.GetExt() == _T("jpg")) {
+	} else if (temp.GetExt() == wxT("jpg")) {
 		newImage->SetJpegQuality(100);
 		newImage->SetJpegScale(100);
 		newImage->Save(fn.fn_str(), CXIMAGE_FORMAT_JPG);
-	} else if (temp.GetExt() == _T("bmp")) // Save Bitmap format
+	} else if (temp.GetExt() == wxT("bmp")) // Save Bitmap format
 		newImage->Save(fn.fn_str(), CXIMAGE_FORMAT_BMP);
 	else
 		succ = false;
 
 	if (succ)
-		wxLogMessage(_T("Screenshot saved to: %s"), fn.c_str());
+		wxLogMessage(wxT("Screenshot saved to: %s"), fn.c_str());
 
 	newImage->Destroy();
 	wxDELETE(newImage);

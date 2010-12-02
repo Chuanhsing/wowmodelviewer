@@ -73,7 +73,7 @@ tabbed_ostream &lt(tabbed_ostream &s) {
 using namespace ogreexport;
 
 static bool usesAnimation(Bone &b, size_t animIdx) {
-	return (b.trans.uses(animIdx) || b.rot.uses(animIdx) || b.scale.uses(animIdx));
+	return (b.trans.uses((unsigned int)animIdx) || b.rot.uses((unsigned int)animIdx) || b.scale.uses((unsigned int)animIdx));
 }
 
 static void QuaternionToAxisAngle(const Quaternion q, Vec4D &v) {
@@ -145,15 +145,15 @@ static void WriteMesh(const ExportData &data, wxString filename);
 static void WriteMaterial(const ExportData &data, wxString filename);
 static void WriteSkeleton(const ExportData &data, wxString filename);
 
-void ExportM2toOgreXml(Model *m, const char *fn, bool init) {
+void ExportOgreXML_M2(Model *m, const char *fn, bool init) {
 	assert( m && fn );
 
-	LogExportData(_T("OgreXML"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
+	LogExportData(wxT("OgreXML"),m->modelname,wxString(fn, wxConvUTF8));
 
 	wxString meshName(fn, wxConvUTF8);
-	wxString baseName = (meshName.Right(9).CmpNoCase(_T(".mesh.xml")) == 0) ? (meshName.Left(meshName.Length() - 9)) : meshName;
-	wxString matName = baseName + _T(".material");
-	wxString sktName = baseName + _T(".skeleton.xml");
+	wxString baseName = (meshName.Right(9).CmpNoCase(wxT(".mesh.xml")) == 0) ? (meshName.Left(meshName.Length() - 9)) : meshName;
+	wxString matName = baseName + wxT(".material");
+	wxString sktName = baseName + wxT(".skeleton.xml");
 	wxString name = baseName.AfterLast('\\');
 
 	ExportData data = { m, fn, init, baseName, name };
@@ -165,7 +165,7 @@ void ExportM2toOgreXml(Model *m, const char *fn, bool init) {
 
 void ExportWMOtoOgreXml(WMO *wmo, const char *fn) {
 	assert( wmo && fn);
-	//LogExportData(_T("OgreXML"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("WMO"));
+	//LogExportData(wxT("OgreXML"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),wxT("WMO"));
 }
 
 static void updateTimeline(Timeline &timeline, vector<TimeT> &times, int keyMask) {
@@ -234,7 +234,7 @@ static void WriteMesh(const ExportData &data, wxString filename)
 	}
 	s << lt << "</submeshes>" << endl;
 
-	wxString sktName = data.baseName.AfterLast('\\') + _T(".skeleton");
+	wxString sktName = data.baseName.AfterLast('\\') + wxT(".skeleton");
 	s << "<skeletonlink name=\"" << sktName << "\" />" << endl;
 
 	s << "<boneassignments>" << endl;
@@ -277,9 +277,9 @@ static void WriteMaterial(const ExportData &data, wxString filename)
 			s << "texture_unit" << endl;
 			s << "{" << endl;
 			s << rt;
-			wxString texName = GetM2TextureName(data.model, data.fn, p, n) + _T(".tga");
+			wxString texName = GetM2TextureName(data.model, data.fn, p, (int)n) + wxT(".tga");
 			s << "texture " << texName << " -1" << endl;
-			SaveTexture(data.baseName.BeforeLast('\\') + _T("\\") + texName);
+			SaveTexture(data.baseName.BeforeLast('\\') + wxT("\\") + texName);
 			s << lt << "}" << endl;
 			s << lt << "}" << endl;
 			s << lt << "}" << endl;
@@ -305,7 +305,7 @@ static void WriteSkeleton(const ExportData &data, wxString filename)
 	size_t numBones = data.numBones();
 	for (size_t n = 0; n < numBones; n++) {
 		//Bone &b = data.getBone(n);
-		Vec3D v = data.getBoneParentTrans(n);
+		Vec3D v = data.getBoneParentTrans((int)n);
 		s << "<bone id=\"" << n << "\" name=\"" << n << "\">" << endl;
 		s << rt;
 		s << "<position x=\"" << v.x << "\" y=\"" << v.y << "\" z=\"" << v.z << "\" />" << endl;
@@ -341,7 +341,7 @@ static void WriteSkeleton(const ExportData &data, wxString filename)
 				name = r.getString(AnimDB::Name);
 			}
 			catch (DBCFile::NotFound &) {
-				name = wxString::Format(_T("Unknown_%i"), anim.animID);
+				name = wxString::Format(wxT("Unknown_%i"), anim.animID);
 			}
 			map<wxString, int>::iterator it = animNames.find(name);
 			if (it == animNames.end()) {
@@ -349,7 +349,7 @@ static void WriteSkeleton(const ExportData &data, wxString filename)
 			}
 			else {
 				it->second++;
-				name += wxString::Format(_T("%i"), it->second);
+				name += wxString::Format(wxT("%i"), it->second);
 			}
 			// TODO: if GlobalSequence used, animation.length must be GlobalSequence[bone.seq] time, not animation.length time
 			s << "<animation name=\"" << name << "\" length=\"" << ((anim.timeEnd - anim.timeStart) / 1000.0f) << "\">" << endl;

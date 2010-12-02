@@ -239,12 +239,12 @@ void AnimManager::Clear() {
 
 Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(forceAnim)
 {
-	if (name == _T(""))
+	if (name == wxT(""))
 		return;
 
 	// replace .MDX with .M2
 	wxString tempname(name);
-	tempname = tempname.BeforeLast(_T('.')) + _T(".m2");
+	tempname = tempname.BeforeLast(wxT('.')) + wxT(".m2");
 
 	// Initiate our model variables.
 	trans = 1.0f;
@@ -318,7 +318,7 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 	g_modelViewer->modelOpened->Add(tempname);
 	ok = false;
 	if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
-		wxLogMessage(_T("Error: Unable to load model: [%s]"), tempname.c_str());
+		wxLogMessage(wxT("Error: Unable to load model: [%s]"), tempname.c_str());
 		// delete this; //?
 		f.close();
 		return;
@@ -327,11 +327,11 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 	
 	memcpy(&header, f.getBuffer(), sizeof(ModelHeader));
 
-	wxLogMessage(_T("Loading model: %s, size: %d\n"), tempname.c_str(), f.getSize());
+	wxLogMessage(wxT("Loading model: %s, size: %d\n"), tempname.c_str(), f.getSize());
 
 	// Error check
 	if (header.id[0] != 'M' && header.id[1] != 'D' && header.id[2] != '2' && header.id[3] != '0') {
-		wxLogMessage(_T("Error:\t\tInvalid model!  May be corrupted."));
+		wxLogMessage(wxT("Error:\t\tInvalid model!  May be corrupted."));
 		ok = false;
 		f.close();
 		return;
@@ -343,14 +343,14 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 	modelname = tempname;
 
 	if (header.nameOfs != 304 && header.nameOfs != 320) {
-		wxLogMessage(_T("Error:\t\tInvalid model nameOfs=%d/%d!  May be corrupted."), header.nameOfs, sizeof(ModelHeader));
+		wxLogMessage(wxT("Error:\t\tInvalid model nameOfs=%d/%d!  May be corrupted."), header.nameOfs, sizeof(ModelHeader));
 		//ok = false;
 		//f.close();
 		//return;
 	}
 #else
 	if (header.nameOfs != 336) {
-		wxLogMessage(_T("Error:\t\tInvalid model nameOfs=%d/%d!  May be corrupted."), header.nameOfs, sizeof(ModelHeader));
+		wxLogMessage(wxT("Error:\t\tInvalid model nameOfs=%d/%d!  May be corrupted."), header.nameOfs, sizeof(ModelHeader));
 		//ok = false;
 		//f.close();
 		//return;
@@ -364,18 +364,18 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 	// 4 1 0 0 = WoW 2.0 models
 	// 0 1 0 0 = WoW 1.0 models
 	if (header.version[0] != 4 && header.version[1] != 1 && header.version[2] != 0 && header.version[3] != 0) {
-		wxLogMessage(_T("Error:\t\tModel version is incorrect!\n\t\tMake sure you are loading models from World of Warcraft 2.0.1 or newer client."));
+		wxLogMessage(wxT("Error:\t\tModel version is incorrect!\n\t\tMake sure you are loading models from World of Warcraft 2.0.1 or newer client."));
 		ok = false;
 		f.close();
 
 		if (header.version[0] == 0)
-			wxMessageBox(wxString::Format(_T("An error occured while trying to load the model %s.\nWoW Model Viewer 0.5.x only supports loading WoW 2.0 models\nModels from WoW 1.12 or earlier are not supported"), tempname.c_str()), _T("Error: Unable to load model"), wxICON_ERROR);
+			wxMessageBox(wxString::Format(wxT("An error occured while trying to load the model %s.\nWoW Model Viewer 0.5.x only supports loading WoW 2.0 models\nModels from WoW 1.12 or earlier are not supported"), tempname.c_str()), wxT("Error: Unable to load model"), wxICON_ERROR);
 
 		return;
 	}
 
 	if (f.getSize() < header.ofsParticleEmitters) {
-		wxLogMessage(_T("Error: Unable to load the Model \"%s\", appears to be corrupted."), tempname.c_str());
+		wxLogMessage(wxT("Error: Unable to load the Model \"%s\", appears to be corrupted."), tempname.c_str());
 	}
 	
 	if (header.nGlobalSequences) {
@@ -404,7 +404,7 @@ Model::~Model()
 {
 	if (ok) {
 #ifdef _DEBUG
-		wxLogMessage(_T("Unloading model: %s\n"), name.c_str());
+		wxLogMessage(wxT("Unloading model: %s\n"), name.c_str());
 #endif
 
 		// There is a small memory leak somewhere with the textures.
@@ -619,7 +619,7 @@ void Model::initCommon(MPQFile &f)
 		for (size_t i=0; i<header.nTextures; i++) {
 			// Error check
 			if (i > TEXTURE_MAX-1) {
-				wxLogMessage(_T("Critical Error: Model Texture %d over %d"), header.nTextures, TEXTURE_MAX);
+				wxLogMessage(wxT("Critical Error: Model Texture %d over %d"), header.nTextures, TEXTURE_MAX);
 				break;
 			}
 			/*
@@ -652,7 +652,7 @@ void Model::initCommon(MPQFile &f)
 				wxString texname((char*)(f.getBuffer()+texdef[i].nameOfs), wxConvUTF8);
 				textures[i] = texturemanager.add(texname);
 				TextureList.push_back(texname);
-				wxLogMessage(_T("Info: Added %s to the TextureList[%i]."), texname.c_str(), TextureList.size());
+				wxLogMessage(wxT("Info: Added %s to the TextureList[%i]."), texname.c_str(), TextureList.size());
 			} else {
 				// special texture - only on characters and such...
 				textures[i] = 0;
@@ -661,7 +661,7 @@ void Model::initCommon(MPQFile &f)
 				specialTextures[i] = texdef[i].type;
 
 				
-				wxString tex = _T("Special_");
+				wxString tex = wxT("Special_");
 				tex << texdef[i].type;
 
 				if (modelType == MT_NORMAL){
@@ -672,63 +672,63 @@ void Model::initCommon(MPQFile &f)
 					else if(texdef[i].type == TEXTURE_FUR)
 						tex = "Fur.blp";
 				}
-				//wxString tex = modelname.BeforeLast('.').AfterLast(SLASH) + _T("_");
+				//wxString tex = modelname.BeforeLast('.').AfterLast(SLASH) + wxT("_");
 				/*
 				if (modelType == MT_NORMAL){
 					if (texdef[i].type == TEXTURE_HAIR){
-						tex += _T("Hair.blp");
+						tex += wxT("Hair.blp");
 					}else if(texdef[i].type == TEXTURE_BODY){
-						tex += _T("Body.blp");
+						tex += wxT("Body.blp");
 					}else if(texdef[i].type == TEXTURE_CAPE){
-						tex += _T("Cape.blp");
+						tex += wxT("Cape.blp");
 					}else if(texdef[i].type == TEXTURE_FUR){
-						tex += _T("Fur.blp");
+						tex += wxT("Fur.blp");
 					}else if(texdef[i].type == TEXTURE_ARMORREFLECT){
-						tex += _T("Reflection.blp");
+						tex += wxT("Reflection.blp");
 					}else if(texdef[i].type == TEXTURE_GAMEOBJECT1){
-						tex += _T("ChangableTexture1.blp");
+						tex += wxT("ChangableTexture1.blp");
 					}else if(texdef[i].type == TEXTURE_GAMEOBJECT2){
-						tex += _T("ChangableTexture2.blp");
+						tex += wxT("ChangableTexture2.blp");
 					}else if(texdef[i].type == TEXTURE_GAMEOBJECT3){
-						tex += _T("ChangableTexture3.blp");
+						tex += wxT("ChangableTexture3.blp");
 					}else if(texdef[i].type == TEXTURE_15){
-						tex += _T("Texture15.blp");
+						tex += wxT("Texture15.blp");
 					}else if(texdef[i].type == TEXTURE_16){
-						tex += _T("Texture16.blp");
+						tex += wxT("Texture16.blp");
 					}else if(texdef[i].type == TEXTURE_17){
-						tex += _T("Texture17.blp");
+						tex += wxT("Texture17.blp");
 					}else{
-						tex += _T("Unknown.blp");
+						tex += wxT("Unknown.blp");
 					}
 				}else{
 					if (texdef[i].type == TEXTURE_HAIR){
-						tex += _T("NHair.blp");
+						tex += wxT("NHair.blp");
 					}else if(texdef[i].type == TEXTURE_BODY){
-						tex += _T("NBody.blp");
+						tex += wxT("NBody.blp");
 					}else if(texdef[i].type == TEXTURE_CAPE){
-						tex += _T("NCape.blp");
+						tex += wxT("NCape.blp");
 					}else if(texdef[i].type == TEXTURE_FUR){
-						tex += _T("NFur");
+						tex += wxT("NFur");
 					}else if(texdef[i].type == TEXTURE_ARMORREFLECT){
-						tex += _T("NReflection.blp");
+						tex += wxT("NReflection.blp");
 					}else if(texdef[i].type == TEXTURE_GAMEOBJECT1){
-						tex += _T("NChangableTexture1.blp");
+						tex += wxT("NChangableTexture1.blp");
 					}else if(texdef[i].type == TEXTURE_GAMEOBJECT2){
-						tex += _T("NChangableTexture2.blp");
+						tex += wxT("NChangableTexture2.blp");
 					}else if(texdef[i].type == TEXTURE_GAMEOBJECT3){
-						tex += _T("NChangableTexture3.blp");
+						tex += wxT("NChangableTexture3.blp");
 					}else if(texdef[i].type == TEXTURE_15){
-						tex += _T("NTexture15.blp");
+						tex += wxT("NTexture15.blp");
 					}else if(texdef[i].type == TEXTURE_16){
-						tex += _T("NTexture16.blp");
+						tex += wxT("NTexture16.blp");
 					}else if(texdef[i].type == TEXTURE_17){
-						tex += _T("NTexture17.blp");
+						tex += wxT("NTexture17.blp");
 					}else{
-						tex += _T("NUnknown.blp");
+						tex += wxT("NUnknown.blp");
 					}
 				}
 				*/
-				wxLogMessage(_T("Info: Added %s to the TextureList[%i] via specialTextures. Type: %i"), tex.c_str(), TextureList.size(), texdef[i].type);
+				wxLogMessage(wxT("Info: Added %s to the TextureList[%i] via specialTextures. Type: %i"), tex.c_str(), TextureList.size(), texdef[i].type);
 				TextureList.push_back(tex);
 
 				if (texdef[i].type < TEXTURE_MAX)
@@ -736,7 +736,7 @@ void Model::initCommon(MPQFile &f)
 
 				if (texdef[i].type == TEXTURE_ARMORREFLECT) {
 					// a fix for weapons with type-3 textures.
-					replaceTextures[texdef[i].type] = texturemanager.add(_T("Item\\ObjectComponents\\Weapon\\ArmorReflect4.BLP"));
+					replaceTextures[texdef[i].type] = texturemanager.add(wxT("Item\\ObjectComponents\\Weapon\\ArmorReflect4.BLP"));
 				}
 			}
 		}
@@ -766,7 +766,7 @@ void Model::initCommon(MPQFile &f)
 	if (header.nAttachLookup) {
 		int16 *p = (int16*)(f.getBuffer() + header.ofsAttachLookup);
 		if (header.nAttachLookup > ATT_MAX)
-			wxLogMessage(_T("Critical Error: Model AttachLookup %d over %d"), header.nAttachLookup, ATT_MAX);
+			wxLogMessage(wxT("Critical Error: Model AttachLookup %d over %d"), header.nAttachLookup, ATT_MAX);
 		for (size_t i=0; i<header.nAttachLookup; i++) {
 			if (i>ATT_MAX-1)
 				break;
@@ -876,7 +876,7 @@ void Model::initAnimated(MPQFile &f)
 			anims[i].NextAnimation = animsWotLK.NextAnimation;
 			anims[i].Index = animsWotLK.Index;
 
-			tempname = wxString::Format(_T("%s%04d-%02d.anim"), (char *)modelname.BeforeLast(_T('.')).c_str(), anims[i].animID, animsWotLK.subAnimID);
+			tempname = wxString::Format(wxT("%s%04d-%02d.anim"), (char *)modelname.BeforeLast(wxT('.')).c_str(), anims[i].animID, animsWotLK.subAnimID);
 			if (MPQFile::getSize(tempname) > 0) {
 				animfiles[i].openFile(tempname);
 				g_modelViewer->modelOpened->Add(tempname);
@@ -906,7 +906,7 @@ void Model::initAnimated(MPQFile &f)
 			memcpy(keyBoneLookup, f.getBuffer() + header.ofsKeyBoneLookup, sizeof(int16)*header.nKeyBoneLookup);
 		} else {
 			memcpy(keyBoneLookup, f.getBuffer() + header.ofsKeyBoneLookup, sizeof(int16)*BONE_MAX);
-			wxLogMessage(_T("Error: keyBone number [%d] over [%d]"), header.nKeyBoneLookup, BONE_MAX);
+			wxLogMessage(wxT("Error: keyBone number [%d] over [%d]"), header.nKeyBoneLookup, BONE_MAX);
 		}
 	}
 
@@ -1037,11 +1037,11 @@ void Model::setLOD(MPQFile &f, int index)
 	// Seems to only control the render order.  Which makes this function useless and not needed :(
 #ifdef WotLK
 	// remove suffix .M2
-	lodname = modelname.BeforeLast(_T('.')) + wxString::Format(_T("%02d.skin"), index); // Lods: 00, 01, 02, 03
+	lodname = modelname.BeforeLast(wxT('.')) + wxString::Format(wxT("%02d.skin"), index); // Lods: 00, 01, 02, 03
 	MPQFile g(lodname);
 	g_modelViewer->modelOpened->Add(lodname);
 	if (g.isEof()) {
-		wxLogMessage(_T("Error: Unable to load Lods: [%s]"), lodname.c_str());
+		wxLogMessage(wxT("Error: Unable to load Lods: [%s]"), lodname.c_str());
 		g.close();
 		return;
 	}
@@ -1049,7 +1049,7 @@ void Model::setLOD(MPQFile &f, int index)
 	ModelView *view = (ModelView*)(g.getBuffer());
 
 	if (view->id[0] != 'S' || view->id[1] != 'K' || view->id[2] != 'I' || view->id[3] != 'N') {
-		wxLogMessage(_T("Error: Unable to load Lods: [%s]"), lodname.c_str());
+		wxLogMessage(wxT("Error: Unable to load Lods: [%s]"), lodname.c_str());
 		g.close();
 		return;
 	}
@@ -1360,7 +1360,7 @@ void Model::animate(unsigned int anim)
 			// Something has been changed in the past couple of days that is causing nasty bugs
 			// this is an extra error check to prevent the program from crashing.
 			if (!vertices) {
-				wxLogMessage(_T("Critical Error: void Model::animate(int anim), Vertex Buffer is null"));
+				wxLogMessage(wxT("Critical Error: void Model::animate(int anim), Vertex Buffer is null"));
 				return;
 			}
 		}
@@ -1562,7 +1562,7 @@ bool ModelRenderPass::init(Model *m)
 		
 		break;
 	default:
-		wxLogMessage(_T("[Error] Unknown blendmode: %d\n"), blendmode);
+		wxLogMessage(wxT("[Error] Unknown blendmode: %d\n"), blendmode);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR);
 	}
@@ -1857,23 +1857,23 @@ void ModelCamera::init(MPQFile &f, ModelCameraDef &mcd, uint32 *global, wxString
 
 	Vec3D wopos = Vec3D(0,0,0);
 	float worot = 0.0f;
-	if (modelname.Find(_T("Cameras\\"))>-1) {
+	if (modelname.Find(wxT("Cameras\\"))>-1) {
 		try {
-			wxLogMessage(_T("Trying Camera DB..."));
-			wxString mn = modelname.BeforeLast(_T('.')).Append(_T(".mdx"));
-			wxLogMessage(_T("ModelName: %s"), mn.c_str());
+			wxLogMessage(wxT("Trying Camera DB..."));
+			wxString mn = modelname.BeforeLast(wxT('.')).Append(wxT(".mdx"));
+			wxLogMessage(wxT("ModelName: %s"), mn.c_str());
 			CamCinematicDB::Record r = camcinemadb.getByCamModel(mn.c_str());
-			wxLogMessage(_T("Setting variables.."));
+			wxLogMessage(wxT("Setting variables.."));
 			wopos = fixCoordSystem(Vec3D(r.getFloat(camcinemadb.PosX),r.getFloat(camcinemadb.PosY),r.getFloat(camcinemadb.PosZ)));
 			worot = r.getFloat(camcinemadb.Rot);
 		}
 		catch (CamCinematicDB::NotFound) {
-			wxLogMessage(_T("DBFilesClient/CinematicCamera.dbc not found."));
+			wxLogMessage(wxT("DBFilesClient/CinematicCamera.dbc not found."));
 			wopos = Vec3D(0,0,0);
 			worot = 0.0f;
 		}
-		wxLogMessage(_T("WorldPos: %f, %f, %f"), wopos.x, wopos.y, wopos.z);
-		wxLogMessage(_T("WorldRot: %f"), worot);
+		wxLogMessage(wxT("WorldPos: %f, %f, %f"), wopos.x, wopos.y, wopos.z);
+		wxLogMessage(wxT("WorldRot: %f"), worot);
 	}
 	WorldOffset = fixCoordSystem(wopos);
 	WorldRotation = worot;
@@ -1938,7 +1938,7 @@ void ModelLight::setup(int time, GLuint l)
 		p = Vec4D(tpos, 1.0f);
 	} else {
 		p = Vec4D(tpos, 1.0f);
-		wxLogMessage(_T("Error: Light type %d is unknown."), type);
+		wxLogMessage(wxT("Error: Light type %d is unknown."), type);
 	}
 	//gLog("Light %d (%f,%f,%f) (%f,%f,%f) [%f,%f,%f]\n", l-GL_LIGHT4, ambcol.x, ambcol.y, ambcol.z, diffcol.x, diffcol.y, diffcol.z, p.x, p.y, p.z);
 	glLightfv(l, GL_POSITION, p);

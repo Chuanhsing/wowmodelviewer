@@ -30,7 +30,7 @@ void OldinitShaders()
 {
 	if (initedShaders)
 		return;
-	supportShaders = isExtensionSupported(_T("ARB_vertex_program")) && isExtensionSupported(_T("ARB_fragment_program"));
+	supportShaders = isExtensionSupported(wxT("ARB_vertex_program")) && isExtensionSupported(wxT("ARB_fragment_program"));
 	if (supportShaders) {
 		// init extension stuff
 #ifdef	_WINDOWS
@@ -44,7 +44,7 @@ void OldinitShaders()
 		// init various shaders here
 		OldreloadShaders();
 	}
-	wxLogMessage(_T("Shaders %s\n"), supportShaders?"enabled":"disabled");
+	wxLogMessage(wxT("Shaders %s\n"), supportShaders?"enabled":"disabled");
 	initedShaders = true;
 }
 
@@ -95,7 +95,7 @@ Shader::Shader(GLenum target, const char *program, bool fromFile):target(target)
 	if (glGetError() != 0) {
 		int errpos;
 		glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &errpos);
-		wxLogMessage(_T("Error loading shader: %s\nError position: %d\n"), glGetString(GL_PROGRAM_ERROR_STRING_ARB), errpos);
+		wxLogMessage(wxT("Error loading shader: %s\nError position: %d\n"), glGetString(GL_PROGRAM_ERROR_STRING_ARB), errpos);
 		ok = false;
 	} else ok = true;
 

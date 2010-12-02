@@ -255,8 +255,8 @@ void CreateMaterials(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const 
 			KFbxSurfacePhong* material = KFbxSurfacePhong::Create(sdk_mgr, mtrl_name.Buffer());
 			material->GetAmbientColor().Set(fbxDouble3(0.7, 0.7, 0.7));
 
-			wxString tex_name = GetM2TextureName(m, fn, pass, i) + _T(".tga");
-			wxString tex_fullpath_filename = g_fbx_basename.BeforeLast('\\') + _T("\\") + tex_name;
+			wxString tex_name = GetM2TextureName(m, fn, pass, i) + wxT(".tga");
+			wxString tex_fullpath_filename = g_fbx_basename.BeforeLast('\\') + wxT("\\") + tex_name;
 			SaveTexture(tex_fullpath_filename);
 			KFbxTexture* texture = KFbxTexture::Create(sdk_mgr, tex_name.c_str());
 			texture->SetFileName(tex_fullpath_filename.c_str());
@@ -523,14 +523,14 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 				AnimDB::Record r = animdb.getByAnimID(anim.animID);
 				anim_name = r.getString(AnimDB::Name);
 			} catch (DBCFile::NotFound &) {
-				anim_name = wxString::Format(_T("Unknown_%i"), anim.animID);
+				anim_name = wxString::Format(wxT("Unknown_%i"), anim.animID);
 			}
 			map<wxString, int>::iterator it = anim_names.find(anim_name);
 			if (it == anim_names.end()) {
 				anim_names[anim_name] = 0;
 			} else {
 				it->second++;
-				anim_name += wxString::Format(_T("%i"), it->second);
+				anim_name += wxString::Format(wxT("%i"), it->second);
 			}
 
 			// Animation stack and layer.
@@ -650,12 +650,12 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 }
 
 // FBX
-void ExportM2toFBX(Model* m, const char* fn, bool init) {
+void ExportFBX_M2(Model* m, const char* fn, bool init) {
 	g_fbx_meshname = wxString(fn, wxConvUTF8);
-	g_fbx_basename = (g_fbx_meshname.Right(4).CmpNoCase(_T(".fbx")) == 0) ? (g_fbx_meshname.Left(g_fbx_meshname.Length() - 4)) : g_fbx_meshname;
+	g_fbx_basename = (g_fbx_meshname.Right(4).CmpNoCase(wxT(".fbx")) == 0) ? (g_fbx_meshname.Left(g_fbx_meshname.Length() - 4)) : g_fbx_meshname;
 	g_fbx_name = g_fbx_basename.AfterLast('\\');
 
-	LogExportData(_T("FBX"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
+	LogExportData(wxT("FBX"),m->modelname,wxString(fn, wxConvUTF8));
 
 	KFbxSdkManager* sdk_mgr = 0;
 	KFbxScene* scene = NULL;
@@ -681,14 +681,14 @@ void ExportM2toFBX(Model* m, const char* fn, bool init) {
 
 	// Save the scene.
 	if (SaveScene(sdk_mgr, scene, fn) == false)
-        wxMessageBox(_T("An error occurred while saving the scene..."), _T("Error"));
+        wxMessageBox(wxT("An error occurred while saving the scene..."), wxT("Error"));
 
 	// Destroy all objects created by the FBX SDK.
 	DestroySdkObjects(sdk_mgr);
 }
 
-void ExportWMOtoFBX(WMO* m, const char* fn) {
- //   LogExportData(_T("FBX"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("WMO"));
+void ExportFBX_WMO(WMO* m, const char* fn) {
+ //   LogExportData(wxT("FBX"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),wxT("WMO"));
  //   KFbxSdkManager* sdk_mgr = 0;
  //   KFbxScene* scene = NULL;
 

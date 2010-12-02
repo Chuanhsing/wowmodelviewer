@@ -320,7 +320,7 @@ MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 	viewrot.z = 0;
 
 
-	wxLogMessage(_T("Loading tile %s"),filename.c_str());
+	wxLogMessage(wxT("Loading tile %s"),filename.c_str());
 	initDisplay();
 
 	 // [FLOW] DON'T REMOVE i use this file extraction method to debug the adt format
@@ -340,7 +340,7 @@ MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 	MPQFile f(filename);
 	ok = !f.isEof();
 	if (!ok) {
-		wxLogMessage(_T("Error: loading %s"),filename.c_str());
+		wxLogMessage(wxT("Error: loading %s"),filename.c_str());
 		return;
 	}
 
@@ -391,7 +391,7 @@ MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 					f.seekRelative(8);
 				}
 			} else
-				wxLogMessage(_T("Error: wrong MCIN chunk %d."), size);
+				wxLogMessage(wxT("Error: wrong MCIN chunk %d."), size);
 		}
 		else if (strncmp(fourcc,"MTEX",4)==0) {
 			/*
@@ -412,7 +412,7 @@ MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 				if (video.supportShaders) {
 					wxString texshader = texpath;
 					// load the specular texture instead
-					texshader.insert(texshader.length()-4,_T("_s"));
+					texshader.insert(texshader.length()-4,wxT("_s"));
 					if (MPQFile::exists(texshader))
 						texpath = texshader;
 				}
@@ -693,7 +693,7 @@ MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 					}
 					else if( mh2oi->ofsHeigthAlpha != 0 )
 					{
-						wxLogMessage(_T("Unknown flag combination: %s."), filename.c_str());
+						wxLogMessage(wxT("Unknown flag combination: %s."), filename.c_str());
 					}
 
 					chunks[i/CHUNKS_IN_TILE][i%CHUNKS_IN_TILE].waterLayer.push_back( waterLayer );
@@ -734,7 +734,7 @@ MapTile::MapTile(wxString filename): nWMO(0), nMDX(0), topnode(0,0,16)
 			*/
 		}
 		else {
-			wxLogMessage(_T("No implement tile chunk %s [%d]."), fourcc, size);
+			wxLogMessage(wxT("No implement tile chunk %s [%d]."), fourcc, size);
 		}
 
 		f.seek((int)nextpos);
@@ -761,7 +761,7 @@ MapTile::~MapTile()
 {
 	if (!ok) return;
 
-	wxLogMessage(_T("Unloading tile %d,%d"), x, z);
+	wxLogMessage(wxT("Unloading tile %d,%d"), x, z);
 
 	topnode.cleanup();
 
@@ -978,7 +978,7 @@ void MapChunk::initTextures(wxString basename, int first, int last)
 {
 	wxString buf;
 	for (int i=first; i<=last; i++) {
-		buf = wxString::Format(_T("%s.%d.blp"), (char *)basename.c_str(), i);
+		buf = wxString::Format(wxT("%s.%d.blp"), (char *)basename.c_str(), i);
 		wTextures.push_back(texturemanager.add(buf));
 	}
 }
@@ -1002,7 +1002,7 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 	fcc[4] = 0;
 
 	if (strncmp(fcc, "MCNK", 4)!=0 || size == 0) {
-		wxLogMessage(_T("Error: mcnk main chunk %s [%d]."), fcc, size);
+		wxLogMessage(wxT("Error: mcnk main chunk %s [%d]."), fcc, size);
 		return;
 	}
 
@@ -1034,7 +1034,7 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 	//if (chunkflags & 4)
 	{
 		// river / lakes
-		initTextures(_T("XTextures\\river\\lake_a"), 1, 30); // TODO: rivers etc.?
+		initTextures(wxT("XTextures\\river\\lake_a"), 1, 30); // TODO: rivers etc.?
 	}
 	//else if (chunkflags & 8)
 	/*{
@@ -1137,7 +1137,7 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 		size_t nextpos = f.getPos() + size;
 
 		if (fcc[0] != 'M' || f.getPos() > f.getSize()) {
-			wxLogMessage(_T("Error: mcnk chunk initial error, fcc: %s, size: %d, pos: %d, size: %d."), fcc, size, f.getPos(), f.getSize());
+			wxLogMessage(wxT("Error: mcnk chunk initial error, fcc: %s, size: %d, pos: %d, size: %d."), fcc, size, f.getPos(), f.getSize());
 			break;
 		}
 
@@ -1521,7 +1521,7 @@ void MapChunk::init(MapTile* mt, MPQFile &f, bool bigAlpha)
 			//gLog("No implement mcnk subchunk %s [%d].\n", fcc, size);
 		}
 		else {
-			wxLogMessage(_T("No implement mcnk subchunk %s [%d]."), fcc, size);
+			wxLogMessage(wxT("No implement mcnk subchunk %s [%d]."), fcc, size);
 		}
 		f.seek((int)nextpos);
 	}

@@ -46,10 +46,10 @@ All suffixs in MPQ:
 */
 static wxString content;
 static wxString filterString;
-static wxString filterStrings[] = {_T("m2"), _T("wmo"), _T("adt"), _T("wav"), _T("ogg"), _T("mp3"), 
-	_T("blp"), _T("bls"), _T("dbc"), _T("db2"), _T("lua"), _T("xml"), _T("skin")};
-static wxString chos[] = {_T("Models (*.m2)"), _T("WMOs (*.wmo)"), _T("ADTs (*.adt)"), _T("WAVs (*.wav)"), _T("OGGs (*.ogg)"), _T("MP3s (*.mp3)"), 
-	_T("Images (*.blp)"), _T("Shaders (*.bls)"), _T("DBCs (*.dbc)"), _T("DB2s (*.db2)"), _T("LUAs (*.lua)"), _T("XMLs (*.xml)"), _T("SKINs (*.skin)")};
+static wxString filterStrings[] = {wxT("m2"), wxT("wmo"), wxT("adt"), wxT("wav"), wxT("ogg"), wxT("mp3"), 
+	wxT("blp"), wxT("bls"), wxT("dbc"), wxT("db2"), wxT("lua"), wxT("xml"), wxT("skin")};
+static wxString chos[] = {wxT("Models (*.m2)"), wxT("WMOs (*.wmo)"), wxT("ADTs (*.adt)"), wxT("WAVs (*.wav)"), wxT("OGGs (*.ogg)"), wxT("MP3s (*.mp3)"), 
+	wxT("Images (*.blp)"), wxT("Shaders (*.bls)"), wxT("DBCs (*.dbc)"), wxT("DB2s (*.db2)"), wxT("LUAs (*.lua)"), wxT("XMLs (*.xml)"), wxT("SKINs (*.skin)")};
 static wxString filterArchive;
 static wxArrayString filterArchives;
 
@@ -59,14 +59,14 @@ FileControl::FileControl(wxWindow* parent, wxWindowID id)
 	filterMode = FILE_FILTER_MODEL;
 	filterModeMPQ = 0;
 
-	if (Create(parent, id, wxDefaultPosition, wxSize(170,700), 0, _T("ModelControlFrame")) == false) {
-		wxLogMessage(_T("GUI Error: Failed to create a window for our FileControl!"));
+	if (Create(parent, id, wxDefaultPosition, wxSize(170,700), 0, wxT("ModelControlFrame")) == false) {
+		wxLogMessage(wxT("GUI Error: Failed to create a window for our FileControl!"));
 		return;
 	}
 
 	try {
 		txtContent = new wxTextCtrl(this, ID_FILELIST_CONTENT, wxEmptyString, wxPoint(10, 10), wxSize(110, 20), wxTE_PROCESS_ENTER, wxDefaultValidator);
-		btnSearch = new wxButton(this, ID_FILELIST_SEARCH, _("Clear"), wxPoint(120, 10), wxSize(46,20));
+		btnSearch = new wxButton(this, ID_FILELIST_SEARCH, wxT("Clear"), wxPoint(120, 10), wxSize(46,20));
 		fileTree = new wxTreeCtrl(this, ID_FILELIST, wxPoint(0, 35), wxSize(250,580), wxTR_HIDE_ROOT|wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT|wxTR_FULL_ROW_HIGHLIGHT|wxTR_NO_LINES);
 		choFilter = new wxChoice(this, ID_FILELIST_FILTER, wxPoint(10, 620), wxSize(130, 10), WXSIZEOF(chos), chos);
 		choFilter->SetSelection(filterMode);
@@ -138,9 +138,9 @@ void FileControl::Init(ModelViewer* mv)
 	TreeStackItem root;
 	wxTreeItemId item;
 	fileTree->DeleteAllItems();
-	fileTree->AddRoot(_T("Root"));
+	fileTree->AddRoot(wxT("Root"));
 	root.first = fileTree->GetRootItem();
-	root.second = _T("");
+	root.second = wxT("");
 	stack.push_back(root);
 
 	size_t index=0;
@@ -299,7 +299,7 @@ void FileControl::Export(wxString val, int select)
 		return;
 	MPQFile f(val);
 	if (f.isEof()) {
-		wxLogMessage(_T("Error: Could not extract %s\n"), val.c_str());
+		wxLogMessage(wxT("Error: Could not extract %s\n"), val.c_str());
 		f.close();
 		return;
 	}
@@ -309,7 +309,7 @@ void FileControl::Export(wxString val, int select)
 	wxString filename;
 	if (select == 1)
 		filename = wxFileSelector(wxT("Please select your file to export"), 
-			wxGetCwd(), fn.GetName(), fn.GetExt(), fn.GetExt()+_T(" files (.")+fn.GetExt()+_T(")|*.")+fn.GetExt());
+			wxGetCwd(), fn.GetName(), fn.GetExt(), fn.GetExt()+wxT(" files (.")+fn.GetExt()+wxT(")|*.")+fn.GetExt());
 	else {
 		filename = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetFullName();
 	}
@@ -329,7 +329,7 @@ void FileControl::ExportPNG(wxString val, wxString suffix)
 	if (val.IsEmpty())
 		return;
 	wxFileName fn(val);
-	if (fn.GetExt().Lower() != _T("blp"))
+	if (fn.GetExt().Lower() != wxT("blp"))
 		return;
 	TextureID temptex = texturemanager.add(val);
 	Texture &tex = *((Texture*)texturemanager.items[temptex]);
@@ -346,8 +346,8 @@ void FileControl::ExportPNG(wxString val, wxString suffix)
 	newImage->IncreaseBpp(32);	// set image to 32bit 
 	newImage->CreateFromArray(tempbuf, tex.w, tex.h, 32, (tex.w*4), true);
 	temp = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".")+suffix;
-	//wxLogMessage(_T("Info: Exporting texture to %s..."), temp.c_str());
-	if (suffix == _T("tga"))
+	//wxLogMessage(wxT("Info: Exporting texture to %s..."), temp.c_str());
+	if (suffix == wxT("tga"))
 		newImage->Save(temp.mb_str(), CXIMAGE_FORMAT_TGA);
 	else
 		newImage->Save(temp.mb_str(), CXIMAGE_FORMAT_PNG);
@@ -372,10 +372,10 @@ void FileControl::OnPopupClick(wxCommandEvent &evt)
 		mcPlayer->Stop();
 		mcPlayer->Load(filename);
 		mcPlayer->Play();
-		wxLogMessage(_T("Playing: %s, Vol: %f, State: %d"), filename.c_str(), mcPlayer->GetVolume(), mcPlayer->GetState());
+		wxLogMessage(wxT("Playing: %s, Vol: %f, State: %d"), filename.c_str(), mcPlayer->GetVolume(), mcPlayer->GetState());
 #endif
 	} else if (id == ID_FILELIST_VIEW) {
-		ExportPNG(val, _T("png"));
+		ExportPNG(val, wxT("png"));
 		wxFileName fn(val);
 		wxString temp;
 		temp = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".png");
@@ -401,23 +401,23 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 	// Make a menu to show item Info or export it
 	wxMenu infoMenu;
 	infoMenu.SetClientData( data );
-	infoMenu.Append(ID_FILELIST_EXPORT, _T("&Save..."), _T("Save this object"));
+	infoMenu.Append(ID_FILELIST_EXPORT, wxT("&Save..."), wxT("Save this object"));
 	// TODO: if is music, a Play option
 	wxString temp(tdata->fn);
 	temp.MakeLower();
 #ifdef	PLAY_MUSIC
-	if (temp.EndsWith(_T("wav")) || temp.EndsWith(_T("mp3"))) {
-		infoMenu.Append(ID_FILELIST_PLAY, _T("&Play"), _T("Play this object"));
+	if (temp.EndsWith(wxT("wav")) || temp.EndsWith(wxT("mp3"))) {
+		infoMenu.Append(ID_FILELIST_PLAY, wxT("&Play"), wxT("Play this object"));
 	}
 #endif
 	// if is graphic, a View option
-	if (temp.EndsWith(_T("blp"))) {
-		infoMenu.Append(ID_FILELIST_VIEW, _T("&View"), _T("View this object"));
+	if (temp.EndsWith(wxT("blp"))) {
+		infoMenu.Append(ID_FILELIST_VIEW, wxT("&View"), wxT("View this object"));
 	}
 	infoMenu.AppendSeparator();
 	wxString archive = MPQFile::getArchive(tdata->fn);
 	infoMenu.Append(ID_FILELIST, archive, archive);
-	wxString size = wxString::Format(_T("Size: %d"), MPQFile::getSize(tdata->fn));
+	wxString size = wxString::Format(wxT("Size: %d"), MPQFile::getSize(tdata->fn));
 	infoMenu.Append(ID_FILELIST, size, size);
 	infoMenu.Connect(wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&FileControl::OnPopupClick, NULL, this);
 	PopupMenu(&infoMenu);
@@ -465,8 +465,8 @@ void FileControl::ClearCanvas()
 #ifdef _DEBUG
 	GLenum err=glGetError();
 	if (err)
-		wxLogMessage(_T("OGL Error: [0x%x] An error occured."), (uint32)err);
-	wxLogMessage(_T("Clearing textures from previous model..."));
+		wxLogMessage(wxT("OGL Error: [0x%x] An error occured."), (uint32)err);
+	wxLogMessage(wxT("Clearing textures from previous model..."));
 #endif
 	// Texture clearing and debugging
 	texturemanager.clear();
@@ -474,7 +474,7 @@ void FileControl::ClearCanvas()
 #ifdef _DEBUG
 	err = glGetError();
 	if (err)
-		wxLogMessage(_T("OpenGL Error: [0x%x] An error occured."), (uint32)err);
+		wxLogMessage(wxT("OpenGL Error: [0x%x] An error occured."), (uint32)err);
 #endif
 
 	modelviewer->isModel = false;
@@ -522,13 +522,13 @@ void FileControl::UpdateInterface()
 		for (int x=0;x<ExporterTypeCount;x++){
 			modelviewer->exportMenu->Enable(Exporter_Types[x].ID, Exporter_Types[x].canADT);
 		}
-
+/*
 		// Hard-coded Debug Work-arounds.
 		// Used for Debug Only Support for Exporting
 #ifdef _DEBUG
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, true);
 #endif
-
+*/
 		modelviewer->charMenu->Enable(ID_SAVE_CHAR, false);
 		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, false);
 		modelviewer->charMenu->Enable(ID_SHOW_EARS, false);
@@ -625,7 +625,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		ClearCanvas();
 
 		wxString rootfn(data->fn);
-		if (bAlternate && rootfn.StartsWith(_T("Alternate"), false)) {
+		if (bAlternate && rootfn.StartsWith(wxT("Alternate"), false)) {
 			rootfn = rootfn.Mid(10);
 		}
 
@@ -653,7 +653,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		bool isroot = !((dash=='_') && (num>='0') && (num<='9'));
 		if (!isroot) {
 			rootfn.erase(rootfn.length()-8);
-			rootfn.append(_T(".wmo"));
+			rootfn.append(wxT(".wmo"));
 		}
 
 		modelviewer->canvas->LoadWMO(rootfn);
@@ -679,7 +679,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 
 		// For Graphics
 		wxString val(data->fn);
-		ExportPNG(val, _T("png"));
+		ExportPNG(val, wxT("png"));
 		wxFileName fn(val);
 		wxString temp(wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".png"));
 		modelviewer->canvas->LoadBackground(temp);

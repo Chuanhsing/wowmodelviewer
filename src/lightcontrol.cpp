@@ -46,33 +46,33 @@ END_EVENT_TABLE()
 
 LightControl::LightControl(wxWindow* parent, wxWindowID id)
 {
-	wxLogMessage(_T("Creating Light Control..."));
+	wxLogMessage(wxT("Creating Light Control..."));
 
 	activeLight = 0;
 	lights = NULL;
 	lights = new Light[MAX_LIGHTS];
 	
-	if(Create(parent, id, wxDefaultPosition, wxSize(160,430), 0, _T("LightControlFrame")) == false) {
-		wxLogMessage(_T("GUI Error: Failed to create a window frame for the LightControl!"));
+	if(Create(parent, id, wxDefaultPosition, wxSize(160,430), 0, wxT("LightControlFrame")) == false) {
+		wxLogMessage(wxT("GUI Error: Failed to create a window frame for the LightControl!"));
 		return;
 	}
 
 	wxArrayString choices;
 	for (int i=1; i<=MAX_LIGHTS; i++) {
-		wxString s = _T("Light ");
-		s += wxString::Format(_T("%i"), i);
+		wxString s = wxT("Light ");
+		s += wxString::Format(wxT("%i"), i);
 
 		choices.Add(s);
 	}
 
-	lightSel = new wxComboBox(this, ID_LIGHTSEL, _T("Light 1"), wxPoint(20,10), wxSize(100, 20), choices, wxCB_READONLY);
+	lightSel = new wxComboBox(this, ID_LIGHTSEL, wxT("Light 1"), wxPoint(20,10), wxSize(100, 20), choices, wxCB_READONLY);
 
-	enabled = new wxCheckBox(this, ID_LIGHTENABLED, _("Enabled"), wxPoint(10, 40), wxDefaultSize);
-	relative = new wxCheckBox(this, ID_LIGHTRELATIVE, _("Relative"), wxPoint(70, 40), wxDefaultSize);
+	enabled = new wxCheckBox(this, ID_LIGHTENABLED, wxT("Enabled"), wxPoint(10, 40), wxDefaultSize);
+	relative = new wxCheckBox(this, ID_LIGHTRELATIVE, wxT("Relative"), wxPoint(70, 40), wxDefaultSize);
 	
-	positional = new wxRadioButton(this, ID_LIGHTPOSITIONAL, _("Pos"), wxPoint(4, 60), wxDefaultSize, 0);
-	spot = new wxRadioButton(this, ID_LIGHTSPOT, _("Spot"), wxPoint(45, 60), wxDefaultSize, 0);
-	directional = new wxRadioButton(this, ID_LIGHTDIRECTIONAL, _("Dir"), wxPoint(90, 60), wxDefaultSize, 0);
+	positional = new wxRadioButton(this, ID_LIGHTPOSITIONAL, wxT("Pos"), wxPoint(4, 60), wxDefaultSize, 0);
+	spot = new wxRadioButton(this, ID_LIGHTSPOT, wxT("Spot"), wxPoint(45, 60), wxDefaultSize, 0);
+	directional = new wxRadioButton(this, ID_LIGHTDIRECTIONAL, wxT("Dir"), wxPoint(90, 60), wxDefaultSize, 0);
 	
 	positional->SetValue(false);
 	spot->SetValue(false);
@@ -81,40 +81,40 @@ LightControl::LightControl(wxWindow* parent, wxWindowID id)
 	// wxRadioButton(wxWindow* parent, wxWindowID id, const wxString& label, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, const wxValidator& validator = wxDefaultValidator, const wxString& name = "radioButton")
 
 	// Not needed.  Keep code just in case.
-	//lblCol = new wxStaticText(this, wxID_ANY, _("Colour"), wxPoint(5,60), wxDefaultSize);
+	//lblCol = new wxStaticText(this, wxID_ANY, wxT("Colour"), wxPoint(5,60), wxDefaultSize);
 	//colour = new wxButton(this, ID_LIGHTCOLOUR, "", wxPoint(60, 60), wxSize(60,20));
 
-	lblAmb = new wxStaticText(this, wxID_ANY, _("Ambience"), wxPoint(5,82), wxDefaultSize);
+	lblAmb = new wxStaticText(this, wxID_ANY, wxT("Ambience"), wxPoint(5,82), wxDefaultSize);
 	ambience = new wxButton(this, ID_LIGHTAMBIENCE, wxEmptyString, wxPoint(60, 82), wxSize(60,20));
 
-	lblDiff = new wxStaticText(this, wxID_ANY, _("Diffuse"), wxPoint(5,104), wxDefaultSize);
+	lblDiff = new wxStaticText(this, wxID_ANY, wxT("Diffuse"), wxPoint(5,104), wxDefaultSize);
 	diffuse = new wxButton(this, ID_LIGHTDIFFUSE, wxEmptyString, wxPoint(60, 104), wxSize(60,20));
 
-	lblSpec = new wxStaticText(this, wxID_ANY, _("Specular"), wxPoint(5,126), wxDefaultSize);
+	lblSpec = new wxStaticText(this, wxID_ANY, wxT("Specular"), wxPoint(5,126), wxDefaultSize);
 	specular = new wxButton(this, ID_LIGHTSPECULAR, wxEmptyString, wxPoint(60, 126), wxSize(60,20));
 
 	//position
-	lblPos = new wxStaticText(this, wxID_ANY, _("Position XYZ"), wxPoint(5,155), wxDefaultSize);
-	txtPosX = new wxTextCtrl(this, ID_LIGHTPOSX, _T("0.0"), wxPoint(5,175), wxSize(60,20), wxTE_PROCESS_ENTER);
-	txtPosY = new wxTextCtrl(this, ID_LIGHTPOSY, _T("0.0"), wxPoint(5,195), wxSize(60,20), wxTE_PROCESS_ENTER);
-	txtPosZ = new wxTextCtrl(this, ID_LIGHTPOSZ, _T("0.0"), wxPoint(5,215), wxSize(60,20), wxTE_PROCESS_ENTER);
+	lblPos = new wxStaticText(this, wxID_ANY, wxT("Position XYZ"), wxPoint(5,155), wxDefaultSize);
+	txtPosX = new wxTextCtrl(this, ID_LIGHTPOSX, wxT("0.0"), wxPoint(5,175), wxSize(60,20), wxTE_PROCESS_ENTER);
+	txtPosY = new wxTextCtrl(this, ID_LIGHTPOSY, wxT("0.0"), wxPoint(5,195), wxSize(60,20), wxTE_PROCESS_ENTER);
+	txtPosZ = new wxTextCtrl(this, ID_LIGHTPOSZ, wxT("0.0"), wxPoint(5,215), wxSize(60,20), wxTE_PROCESS_ENTER);
 
 	//position
-	lblTar = new wxStaticText(this, wxID_ANY, _("Target XYZ"), wxPoint(80,155), wxDefaultSize);
-	txtTarX = new wxTextCtrl(this, ID_LIGHTTARX, _T("0.0"), wxPoint(80,175), wxSize(60,20), wxTE_PROCESS_ENTER);
-	txtTarY = new wxTextCtrl(this, ID_LIGHTTARY, _T("0.0"), wxPoint(80,195), wxSize(60,20), wxTE_PROCESS_ENTER);
-	txtTarZ = new wxTextCtrl(this, ID_LIGHTTARZ, _T("0.0"), wxPoint(80,215), wxSize(60,20), wxTE_PROCESS_ENTER);
+	lblTar = new wxStaticText(this, wxID_ANY, wxT("Target XYZ"), wxPoint(80,155), wxDefaultSize);
+	txtTarX = new wxTextCtrl(this, ID_LIGHTTARX, wxT("0.0"), wxPoint(80,175), wxSize(60,20), wxTE_PROCESS_ENTER);
+	txtTarY = new wxTextCtrl(this, ID_LIGHTTARY, wxT("0.0"), wxPoint(80,195), wxSize(60,20), wxTE_PROCESS_ENTER);
+	txtTarZ = new wxTextCtrl(this, ID_LIGHTTARZ, wxT("0.0"), wxPoint(80,215), wxSize(60,20), wxTE_PROCESS_ENTER);
 
-	lblIntensity = new wxStaticText(this, wxID_ANY, _("Light Attenuation:\nConstant / Linear / Quadradic"), wxPoint(5,240), wxDefaultSize);
+	lblIntensity = new wxStaticText(this, wxID_ANY, wxT("Light Attenuation:\nConstant / Linear / Quadradic"), wxPoint(5,240), wxDefaultSize);
 	cintensity = new wxSlider(this, ID_LIGHTCINTENSITY, 0, 0, 100, wxPoint(45, 275), wxSize(100, 30), wxSL_HORIZONTAL|wxSL_LABELS);
 	lintensity = new wxSlider(this, ID_LIGHTLINTENSITY, 0, 0, 100, wxPoint(45, 310), wxSize(100, 30), wxSL_HORIZONTAL|wxSL_LABELS);
 	qintensity = new wxSlider(this, ID_LIGHTQINTENSITY, 0, 0, 100, wxPoint(45, 340), wxSize(100, 30), wxSL_HORIZONTAL|wxSL_LABELS);
 
-	lblAlpha = new wxStaticText(this, wxID_ANY, _("Arc:"), wxPoint(2,375), wxDefaultSize);
+	lblAlpha = new wxStaticText(this, wxID_ANY, wxT("Arc:"), wxPoint(2,375), wxDefaultSize);
 	alpha = new wxSlider(this, ID_LIGHTALPHA, 0, 0, 90, wxPoint(45, 375), wxSize(100, 30), wxSL_HORIZONTAL|wxSL_LABELS);
 	alpha->Enable(false);
 
-	reset = new wxButton(this, ID_LIGHTRESET, _("Reset"), wxPoint(50,405), wxSize(60,20));
+	reset = new wxButton(this, ID_LIGHTRESET, wxT("Reset"), wxPoint(50,405), wxSize(60,20));
 
 	//Init();
 	//Update();
@@ -162,7 +162,7 @@ void LightControl::Init()
 {
 	//glGetLightiv(GL_LIGHT0, GL_MAX_LIGHTS, maxlights);
 	//wxLogMessage("Max Lights Supported: %i", maxlights);
-	wxLogMessage(_T("Max Lights used: %i"), MAX_LIGHTS);
+	wxLogMessage(wxT("Max Lights used: %i"), MAX_LIGHTS);
 
 	if (!lights)
 		return;

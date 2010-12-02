@@ -37,25 +37,25 @@ END_EVENT_TABLE()
 
 Settings_Page1::Settings_Page1(wxWindow* parent, wxWindowID id)
 {
-	if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, _("Settings_Page1")) == false) {
-		wxLogMessage(_T("GUI Error: Settings_Page1"));
+	if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, wxT("Settings_Page1")) == false) {
+		wxLogMessage(wxT("GUI Error: Settings_Page1"));
 		return;
 	}
 
-	chkbox[CHECK_ALTERNATE] = new wxCheckBox(this, ID_SETTINGS_ALTERNATE, _T("Alternate"), wxPoint(5,25), wxDefaultSize, 0);
-	chkbox[CHECK_SHOWPARTICLE] = new wxCheckBox(this, ID_SETTINGS_SHOWPARTICLE, _T("Show Particle"), wxPoint(5,50), wxDefaultSize, 0);
-	chkbox[CHECK_ZEROPARTICLE] = new wxCheckBox(this, ID_SETTINGS_ZEROPARTICLE, _T("Zero Particle"), wxPoint(5,75), wxDefaultSize, 0);
-	chkbox[CHECK_LOCALFILES] = new wxCheckBox(this, ID_SETTINGS_LOCALFILES, _T("Use Local Files"), wxPoint(5,100), wxDefaultSize, 0);
-	chkbox[CHECK_RANDOMSKIN] = new wxCheckBox(this, ID_SETTINGS_RANDOMSKIN, _T("Random Skins"), wxPoint(150,50), wxDefaultSize, 0);
-	chkbox[CHECK_HIDEHELMET] = new wxCheckBox(this, ID_SETTINGS_HIDEHELMET, _T("Hide Helmet"), wxPoint(150,75), wxDefaultSize, 0);
+	chkbox[CHECK_ALTERNATE] = new wxCheckBox(this, ID_SETTINGS_ALTERNATE, wxT("Alternate"), wxPoint(5,25), wxDefaultSize, 0);
+	chkbox[CHECK_SHOWPARTICLE] = new wxCheckBox(this, ID_SETTINGS_SHOWPARTICLE, wxT("Show Particle"), wxPoint(5,50), wxDefaultSize, 0);
+	chkbox[CHECK_ZEROPARTICLE] = new wxCheckBox(this, ID_SETTINGS_ZEROPARTICLE, wxT("Zero Particle"), wxPoint(5,75), wxDefaultSize, 0);
+	chkbox[CHECK_LOCALFILES] = new wxCheckBox(this, ID_SETTINGS_LOCALFILES, wxT("Use Local Files"), wxPoint(5,100), wxDefaultSize, 0);
+	chkbox[CHECK_RANDOMSKIN] = new wxCheckBox(this, ID_SETTINGS_RANDOMSKIN, wxT("Random Skins"), wxPoint(150,50), wxDefaultSize, 0);
+	chkbox[CHECK_HIDEHELMET] = new wxCheckBox(this, ID_SETTINGS_HIDEHELMET, wxT("Hide Helmet"), wxPoint(150,75), wxDefaultSize, 0);
 
-	lbl2 = new wxStaticText(this, wxID_ANY, _T("MPQ Archives order and files to load"), wxPoint(0,140), wxDefaultSize, 0);
+	lbl2 = new wxStaticText(this, wxID_ANY, wxT("MPQ Archives order and files to load"), wxPoint(0,140), wxDefaultSize, 0);
 	mpqList = new wxListBox(this, wxID_ANY, wxPoint(0,160), wxSize(380, 190), mpqArchives, wxLB_SINGLE|wxLB_HSCROLL, wxDefaultValidator);
-	btn1 = new wxButton(this, ID_SETTINGS_UP, _T("Move Up"), wxPoint(5,355), wxSize(70,25), 0);
-	btn2 = new wxButton(this, ID_SETTINGS_DOWN, _T("Move Down"), wxPoint(80,355), wxSize(70,25), 0);
-	btn3 = new wxButton(this, ID_SETTINGS_ADD, _T("Add"), wxPoint(155,355), wxSize(70,25), 0);
-	btn4 = new wxButton(this, ID_SETTINGS_REMOVE, _T("Remove"), wxPoint(230,355), wxSize(70,25), 0);
-	btn5 = new wxButton(this, ID_SETTINGS_CLEAR, _T("Reset"), wxPoint(305,355), wxSize(70,25), 0);
+	btn1 = new wxButton(this, ID_SETTINGS_UP, wxT("Move Up"), wxPoint(5,355), wxSize(70,25), 0);
+	btn2 = new wxButton(this, ID_SETTINGS_DOWN, wxT("Move Down"), wxPoint(80,355), wxSize(70,25), 0);
+	btn3 = new wxButton(this, ID_SETTINGS_ADD, wxT("Add"), wxPoint(155,355), wxSize(70,25), 0);
+	btn4 = new wxButton(this, ID_SETTINGS_REMOVE, wxT("Remove"), wxPoint(230,355), wxSize(70,25), 0);
+	btn5 = new wxButton(this, ID_SETTINGS_CLEAR, wxT("Reset"), wxPoint(305,355), wxSize(70,25), 0);
 }
 
 
@@ -85,7 +85,7 @@ void Settings_Page1::OnButton(wxCommandEvent &event)
 		}
 		
 	} else if (id==ID_SETTINGS_ADD) {
-		wxFileDialog file(this, _T("Choose a MPQ file to add"), wxEmptyString, wxEmptyString, _T("MPQ Archives (*.mpq)|*.mpq"), wxFD_OPEN|wxFD_FILE_MUST_EXIST, wxDefaultPosition);
+		wxFileDialog file(this, wxT("Choose a MPQ file to add"), wxEmptyString, wxEmptyString, wxT("MPQ Archives (*.mpq)|*.mpq"), wxFD_OPEN|wxFD_FILE_MUST_EXIST, wxDefaultPosition);
 
 		if (file.ShowModal()==wxID_OK) {
 			if (wxFile::Exists(file.GetPath())) {
@@ -148,8 +148,8 @@ void Settings_Page1::Update()
 
 Settings_Page2::Settings_Page2(wxWindow* parent, wxWindowID id)
 {
-	if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, _T("Settings_Page2")) == false) {
-		wxLogMessage(_T("GUI Error: Settings_Page2"));
+	if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, wxT("Settings_Page2")) == false) {
+		wxLogMessage(wxT("GUI Error: Settings_Page2"));
 		return;
 	}
 
@@ -157,33 +157,33 @@ Settings_Page2::Settings_Page2(wxWindow* parent, wxWindowID id)
 	top->AddGrowableCol(0);
 	top->SetFlexibleDirection(wxBOTH);
 
-	top->Add(new wxStaticText(this, wxID_ANY, _T("OpenGL Display Mode:"), wxDefaultPosition, wxDefaultSize, 0), 1, wxEXPAND|wxALL, 10);	
-	top->Add(oglMode = new wxComboBox(this, wxID_ANY, _T("Default"), wxDefaultPosition, wxSize(360, 25), 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
+	top->Add(new wxStaticText(this, wxID_ANY, wxT("OpenGL Display Mode:"), wxDefaultPosition, wxDefaultSize, 0), 1, wxEXPAND|wxALL, 10);	
+	top->Add(oglMode = new wxComboBox(this, wxID_ANY, wxT("Default"), wxDefaultPosition, wxSize(360, 25), 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
 	
-	top->Add(new wxStaticText(this, wxID_ANY, _T("Field of View:"), wxDefaultPosition, wxDefaultSize, 0), 1, wxEXPAND|wxALL, 10);	
-	top->Add(txtFov = new wxTextCtrl(this, wxID_ANY, _T("45.000000"), wxDefaultPosition, wxSize(100, 20)), 1, 0, 10);
+	top->Add(new wxStaticText(this, wxID_ANY, wxT("Field of View:"), wxDefaultPosition, wxDefaultSize, 0), 1, wxEXPAND|wxALL, 10);	
+	top->Add(txtFov = new wxTextCtrl(this, wxID_ANY, wxT("45.000000"), wxDefaultPosition, wxSize(100, 20)), 1, 0, 10);
 
 	wxFlexGridSizer *gs = new wxFlexGridSizer(3, 4, 4);
 	
 	#define ADD_CONTROLS(index, id, caption) \
 	gs->Add(chkBox[index] = new wxCheckBox(this, id, caption, wxDefaultPosition, wxDefaultSize, 0), wxSizerFlags(0).Align(wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL));
 	
-	ADD_CONTROLS(CHECK_COMPRESSEDTEX, wxID_ANY, _T("Compressed Textures"))
-	ADD_CONTROLS(CHECK_MULTITEX, wxID_ANY, _T("Multi-Textures"))
-	ADD_CONTROLS(CHECK_VBO, wxID_ANY, _T("Vertex Buffer"))
-	ADD_CONTROLS(CHECK_FBO, wxID_ANY, _T("Frame Buffer"))
-	ADD_CONTROLS(CHECK_PBO, wxID_ANY, _T("Pixel Buffer"))
-	ADD_CONTROLS(CHECK_DRAWRANGEELEMENTS, wxID_ANY, _T("Draw Range Elements"))
-	ADD_CONTROLS(CHECK_ENVMAPPING, wxID_ANY, _T("Environmental Mapping"))
-	ADD_CONTROLS(CHECK_NPOT, wxID_ANY, _T("Non-Power of two"))
-	ADD_CONTROLS(CHECK_PIXELSHADERS, wxID_ANY, _T("Pixel Shaders"))
-	ADD_CONTROLS(CHECK_VERTEXSHADERS, wxID_ANY, _T("Vertex Shaders"))
-	ADD_CONTROLS(CHECK_GLSLSHADERS, wxID_ANY, _T("GLSL Shaders"))
+	ADD_CONTROLS(CHECK_COMPRESSEDTEX, wxID_ANY, wxT("Compressed Textures"))
+	ADD_CONTROLS(CHECK_MULTITEX, wxID_ANY, wxT("Multi-Textures"))
+	ADD_CONTROLS(CHECK_VBO, wxID_ANY, wxT("Vertex Buffer"))
+	ADD_CONTROLS(CHECK_FBO, wxID_ANY, wxT("Frame Buffer"))
+	ADD_CONTROLS(CHECK_PBO, wxID_ANY, wxT("Pixel Buffer"))
+	ADD_CONTROLS(CHECK_DRAWRANGEELEMENTS, wxID_ANY, wxT("Draw Range Elements"))
+	ADD_CONTROLS(CHECK_ENVMAPPING, wxID_ANY, wxT("Environmental Mapping"))
+	ADD_CONTROLS(CHECK_NPOT, wxID_ANY, wxT("Non-Power of two"))
+	ADD_CONTROLS(CHECK_PIXELSHADERS, wxID_ANY, wxT("Pixel Shaders"))
+	ADD_CONTROLS(CHECK_VERTEXSHADERS, wxID_ANY, wxT("Vertex Shaders"))
+	ADD_CONTROLS(CHECK_GLSLSHADERS, wxID_ANY, wxT("GLSL Shaders"))
 	#undef ADD_CONTROLS
 
 	top->Add(gs,wxSizerFlags().Proportion(1).Expand().Border(wxALL, 10));
 
-	top->Add(new wxButton(this, ID_SETTINGS_APPLY, _("Apply Settings"), wxDefaultPosition, wxDefaultSize, 0), wxSizerFlags()/*.Expand()*/.Border(wxALL, 10).Align(wxALIGN_LEFT|wxALIGN_BOTTOM));
+	top->Add(new wxButton(this, ID_SETTINGS_APPLY, wxT("Apply Settings"), wxDefaultPosition, wxDefaultSize, 0), wxSizerFlags()/*.Expand()*/.Border(wxALL, 10).Align(wxALIGN_LEFT|wxALIGN_BOTTOM));
 	
 	top->SetMinSize(350, 350);
 	//top->SetMaxSize(400, 400);
@@ -198,21 +198,21 @@ void Settings_Page2::Update()
 	oglMode->Clear();
 
 	for (size_t i=0; i<video.capsList.size(); i++) {
-		wxString mode = wxString::Format(_T("Colour:%i Depth:%i Alpha:%i "), video.capsList[i].colour, video.capsList[i].zBuffer, video.capsList[i].alpha);
+		wxString mode = wxString::Format(wxT("Colour:%i Depth:%i Alpha:%i "), video.capsList[i].colour, video.capsList[i].zBuffer, video.capsList[i].alpha);
 		
 		if (video.capsList[i].sampleBuffer)
-			mode.Append(wxString::Format(_T("FSAA:%i "), video.capsList[i].aaSamples));
+			mode.Append(wxString::Format(wxT("FSAA:%i "), video.capsList[i].aaSamples));
 		
 		if (video.capsList[i].doubleBuffer)
-			mode.Append(_T("DoubleBuffer "));
+			mode.Append(wxT("DoubleBuffer "));
 
 #ifdef _WINDOWS
 		if (video.capsList[i].hwAcc == WGL_FULL_ACCELERATION_ARB)
-			mode.Append(_T("Hardware mode"));
+			mode.Append(wxT("Hardware mode"));
 		else if (video.capsList[i].hwAcc == WGL_GENERIC_ACCELERATION_ARB)
-			mode.Append(_T("Emulation mode"));
+			mode.Append(wxT("Emulation mode"));
 		else //WGL_NO_ACCELERATION_ARB
-			mode.Append(_T("Software mode"));
+			mode.Append(wxT("Software mode"));
 #endif
 
 		oglMode->Append(mode);
@@ -220,7 +220,7 @@ void Settings_Page2::Update()
 
 	oglMode->SetSelection(video.capIndex);
 
-	txtFov->SetValue(wxString::Format(_T("%f"), video.fov));
+	txtFov->SetValue(wxString::Format(wxT("%f"), video.fov));
 
 	// Toggle all the video options
 	if (video.supportCompression)
@@ -285,8 +285,8 @@ void Settings_Page2::OnButton(wxCommandEvent &event)
 	
 	if (id == ID_SETTINGS_APPLY) {
 		if ((oglMode->GetSelection() != video.capIndex) && video.GetCompatibleWinMode(video.capsList[oglMode->GetSelection()])) {
-			wxLogMessage(_T("Info: Graphics display mode changed.  Requires restart to take effect."));
-			wxMessageBox(_T("Graphics display settings changed.\nWoW Model Viewer requires restarting to take effect."), _T("Settings Changed"), wxICON_INFORMATION);
+			wxLogMessage(wxT("Info: Graphics display mode changed.  Requires restart to take effect."));
+			wxMessageBox(wxT("Graphics display settings changed.\nWoW Model Viewer requires restarting to take effect."), wxT("Settings Changed"), wxICON_INFORMATION);
 		}
 		
 		double fov;
@@ -302,10 +302,10 @@ void Settings_Page2::OnButton(wxCommandEvent &event)
 
 SettingsControl::SettingsControl(wxWindow* parent, wxWindowID id)
 {
-	wxLogMessage(_T("Creating Settings Control..."));
+	wxLogMessage(wxT("Creating Settings Control..."));
 	
-	if (Create(parent, id, wxDefaultPosition, wxSize(405,440), wxDEFAULT_FRAME_STYLE, _T("SettingsControlFrame")) == false) {
-		wxLogMessage(_T("GUI Error: Failed to create the window for our SettingsControl!"));
+	if (Create(parent, id, wxDefaultPosition, wxSize(405,440), wxDEFAULT_FRAME_STYLE, wxT("SettingsControlFrame")) == false) {
+		wxLogMessage(wxT("GUI Error: Failed to create the window for our SettingsControl!"));
 		return;
 	}
 
@@ -315,8 +315,8 @@ SettingsControl::SettingsControl(wxWindow* parent, wxWindowID id)
 	page1 = new Settings_Page1(notebook, ID_SETTINGS_PAGE1);
 	page2 = new Settings_Page2(notebook, ID_SETTINGS_PAGE2);
 
-	notebook->AddPage(page1, _T("Options"), false, -1);
-	notebook->AddPage(page2, _T("Display"), false);
+	notebook->AddPage(page1, wxT("Options"), false, -1);
+	notebook->AddPage(page2, wxT("Display"), false);
 }
 
 

@@ -8,7 +8,7 @@
 //#include "globalvars.h"
 
 
-// All IDs & Vars should follow the naming structure similar to "ExportOptions_(3D Format)_(Option name)"
+// All IDs & Vars should follow the naming structure similar to "ExportOptionswxT(3D Format)wxT(Option name)"
 
 IMPLEMENT_CLASS(ModelExportOptions_Control, wxWindow)
 IMPLEMENT_CLASS(ModelExportOptions_General, wxWindow)
@@ -68,16 +68,16 @@ END_EVENT_TABLE()
 
 ModelExportOptions_General::ModelExportOptions_General(wxWindow* parent, wxWindowID id)
 {
-	if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, _T("ModelExportOptions_General")) == false) {
-		wxLogMessage(_T("GUI Error: ModelExportOptions_General"));
+	if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, wxT("ModelExportOptions_General")) == false) {
+		wxLogMessage(wxT("GUI Error: ModelExportOptions_General"));
 		return;
 	}
 	wxFlexGridSizer *top = new wxFlexGridSizer(1);
 
-	text = new wxStaticText(this, wxID_ANY, _T("Perferred Exporter:"), wxPoint(5,9), wxDefaultSize, 0);
-	top->Add(ddextype = new wxComboBox(this, ID_EXPORTOPTIONS_PERFERED_EXPORTER, _T("Perferred Exporter"), wxPoint(115,5), wxDefaultSize, 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
-	chkbox[MEO_CHECK_PRESERVE_DIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_PRESERVE_DIR, _T("Preserve Directory Structure"), wxPoint(5,30), wxDefaultSize, 0);
-	chkbox[MEO_CHECK_USE_WMV_POSROT] = new wxCheckBox(this, ID_EXPORTOPTIONS_USE_WMV_POSROT, _T("Use Position and Rotation from WMV"), wxPoint(5,50), wxDefaultSize, 0);
+	text = new wxStaticText(this, wxID_ANY, wxT("Perferred Exporter:"), wxPoint(5,9), wxDefaultSize, 0);
+	top->Add(ddextype = new wxComboBox(this, ID_EXPORTOPTIONS_PERFERED_EXPORTER, wxT("Perferred Exporter"), wxPoint(115,5), wxDefaultSize, 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
+	chkbox[MEO_CHECK_PRESERVE_DIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_PRESERVE_DIR, wxT("Preserve Directory Structure"), wxPoint(5,30), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_USE_WMV_POSROT] = new wxCheckBox(this, ID_EXPORTOPTIONS_USE_WMV_POSROT, wxT("Use Position and Rotation from WMV"), wxPoint(5,50), wxDefaultSize, 0);
 }
 
 
@@ -125,10 +125,10 @@ void ModelExportOptions_General::Update()
 
 ModelExportOptions_Control::ModelExportOptions_Control(wxWindow* parent, wxWindowID id)
 {
-	wxLogMessage(_T("Creating Model Export Options Control..."));
+	wxLogMessage(wxT("Creating Model Export Options Control..."));
 	
-	if (Create(parent, id, wxDefaultPosition, wxSize(405,440), wxDEFAULT_FRAME_STYLE, _T("ModelExportOptions_ControlFrame")) == false) {
-		wxLogMessage(_T("GUI Error: Failed to create the window for our ModelExportOptions_Control!"));
+	if (Create(parent, id, wxDefaultPosition, wxSize(405,440), wxDEFAULT_FRAME_STYLE, wxT("ModelExportOptions_ControlFrame")) == false) {
+		wxLogMessage(wxT("GUI Error: Failed to create the window for our ModelExportOptions_Control!"));
 		return;
 	}
 
@@ -139,10 +139,10 @@ ModelExportOptions_Control::ModelExportOptions_Control(wxWindow* parent, wxWindo
     page3 = new ModelExportOptions_X3D(notebook, ID_EXPORTOPTIONS_PAGE_X3D);
 	page4 = new ModelExportOptions_M3(notebook, ID_EXPORTOPTIONS_PAGE_M3);
 
-	notebook->AddPage(page1, _T("General"), false, -1);
-	notebook->AddPage(page2, _T("Lightwave"), false);
-    notebook->AddPage(page3, _T("X3D and XHTML"), false);
-	notebook->AddPage(page4, _T("M3"), false);
+	notebook->AddPage(page1, wxT("General"), false, -1);
+	notebook->AddPage(page2, wxT("Lightwave"), false);
+    notebook->AddPage(page3, wxT("X3D and XHTML"), false);
+	notebook->AddPage(page4, wxT("M3"), false);
 }
 
 ModelExportOptions_Control::~ModelExportOptions_Control()
@@ -178,19 +178,19 @@ void ModelExportOptions_Control::OnClose(wxCloseEvent &event)
 
 ModelExportOptions_Lightwave::ModelExportOptions_Lightwave(wxWindow* parent, wxWindowID id)
 {
-	if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, _T("ModelExportOptions_Lightwave")) == false) {
-		wxLogMessage(_T("GUI Error: ModelExportOptions_Lightwave"));
+	if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, wxT("ModelExportOptions_Lightwave")) == false) {
+		wxLogMessage(wxT("GUI Error: ModelExportOptions_Lightwave"));
 		return;
 	}
 	wxFlexGridSizer *top = new wxFlexGridSizer(1);
 
-	chkbox[MEO_CHECK_PRESERVE_LWDIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_PRESERVE_DIR, _T("Build Content Directories"), wxPoint(5,5), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_PRESERVE_LWDIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_PRESERVE_DIR, wxT("Build Content Directories"), wxPoint(5,5), wxDefaultSize, 0);
 
-	chkbox[MEO_CHECK_LW_EXPORTDOODADS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTDOODADS, _T("Export Doodads"), wxPoint(5,35), wxDefaultSize, 0);
-	top->Add(ddextype = new wxComboBox(this, ID_EXPORTOPTIONS_LW_DOODADSAS, _T("Doodads As"), wxPoint(120,32), wxSize(220, 25), 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
-	chkbox[MEO_CHECK_LW_EXPORTLIGHTS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTLIGHTS, _T("Export Lights"), wxPoint(5,55), wxDefaultSize, 0);
-	chkbox[MEO_CHECK_LW_EXPORTCAMERAS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTCAMERAS, _T("Export Cameras"), wxPoint(5,75), wxDefaultSize, 0);
-	chkbox[MEO_CHECK_LW_EXPORTBONES] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTBONES, _T("Export Bones"), wxPoint(5,95), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_LW_EXPORTDOODADS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTDOODADS, wxT("Export Doodads"), wxPoint(5,35), wxDefaultSize, 0);
+	top->Add(ddextype = new wxComboBox(this, ID_EXPORTOPTIONS_LW_DOODADSAS, wxT("Doodads As"), wxPoint(120,32), wxSize(220, 25), 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
+	chkbox[MEO_CHECK_LW_EXPORTLIGHTS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTLIGHTS, wxT("Export Lights"), wxPoint(5,55), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_LW_EXPORTCAMERAS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTCAMERAS, wxT("Export Cameras"), wxPoint(5,75), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_LW_EXPORTBONES] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTBONES, wxT("Export Bones"), wxPoint(5,95), wxDefaultSize, 0);
 }
 
 void ModelExportOptions_Lightwave::Update()
@@ -203,9 +203,9 @@ void ModelExportOptions_Lightwave::Update()
 
 	ddextype->Clear();
 
-	ddextype->Append(wxString(_T("All Doodads as Nulls")));
-	ddextype->Append(wxString(_T("All Doodads as Scene Objects")));
-	//ddextype->Append(wxString(_T("Each Doodad Set as a Seperate Layer")));
+	ddextype->Append(wxString(wxT("All Doodads as Nulls")));
+	ddextype->Append(wxString(wxT("All Doodads as Scene Objects")));
+	//ddextype->Append(wxString(wxT("Each Doodad Set as a Seperate Layer")));
 	// Uncomment as we're able to do it!
 	//ddextype->Append(wxString("All Doodads as a Single Layer"));
 	//ddextype->Append(wxString("Doodads as a Single Layer, Per Group"));
@@ -253,14 +253,14 @@ void ModelExportOptions_Lightwave::OnComboBox(wxCommandEvent &event)
 
 ModelExportOptions_X3D::ModelExportOptions_X3D(wxWindow* parent, wxWindowID id)
 {
-    if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, _T("ModelExportOptions_X3D")) == false) {
-        wxLogMessage(_T("GUI Error: ModelExportOptions_X3D"));
+    if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, wxT("ModelExportOptions_X3D")) == false) {
+        wxLogMessage(wxT("GUI Error: ModelExportOptions_X3D"));
         return;
     }
     top = new wxFlexGridSizer(1);
 
-    chkbox[MEO_CHECK_EXPORT_ANIMATION] = new wxCheckBox(this, ID_EXPORTOPTIONS_X3D_EXPORT_ANIMATION, _("Export keyframe animation"), wxPoint(5,5), wxDefaultSize, 0);
-    chkbox[MEO_CHECK_CENTER_MODEL] = new wxCheckBox(this, ID_EXPORTOPTIONS_X3D_CENTER_MODEL, _("Add Transform to center model"), wxPoint(160,5), wxDefaultSize, 0);
+    chkbox[MEO_CHECK_EXPORT_ANIMATION] = new wxCheckBox(this, ID_EXPORTOPTIONS_X3D_EXPORT_ANIMATION, wxT("Export keyframe animation"), wxPoint(5,5), wxDefaultSize, 0);
+    chkbox[MEO_CHECK_CENTER_MODEL] = new wxCheckBox(this, ID_EXPORTOPTIONS_X3D_CENTER_MODEL, wxT("Add Transform to center model"), wxPoint(160,5), wxDefaultSize, 0);
     
     // disabled for now
     chkbox[MEO_CHECK_EXPORT_ANIMATION]->Enable(false);
@@ -287,29 +287,29 @@ void ModelExportOptions_X3D::OnCheck(wxCommandEvent &event)
 
 ModelExportOptions_M3::ModelExportOptions_M3(wxWindow* parent, wxWindowID id)
 {
-    if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, _T("ModelExportOptions_M3")) == false) {
-        wxLogMessage(_T("GUI Error: ModelExportOptions_M3"));
+    if (Create(parent, id, wxPoint(0,0), wxSize(400,400), 0, wxT("ModelExportOptions_M3")) == false) {
+        wxLogMessage(wxT("GUI Error: ModelExportOptions_M3"));
         return;
     }
 
-	stBoundScale = new wxStaticText(this, wxID_ANY, _T("Bound Scale"), wxPoint(5, 8));
+	stBoundScale = new wxStaticText(this, wxID_ANY, wxT("Bound Scale"), wxPoint(5, 8));
 	tcBoundScale = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 5));
-	stSphereScale = new wxStaticText(this, wxID_ANY, _T("Sphere Scale"), wxPoint(5, 33));
+	stSphereScale = new wxStaticText(this, wxID_ANY, wxT("Sphere Scale"), wxPoint(5, 33));
 	tcSphereScale = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 30));
-	stTexturePath = new wxStaticText(this, wxID_ANY, _T("Texture Path"), wxPoint(5, 58));
+	stTexturePath = new wxStaticText(this, wxID_ANY, wxT("Texture Path"), wxPoint(5, 58));
 	tcTexturePath = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 55), wxSize(250, 25));
-	clbAnimations = new wxCheckListBox(this, ID_EXPORTOPTIONS_M3_ANIMS, wxPoint(5, 85), wxSize(250,165), 0, NULL, 0, wxDefaultValidator, _T("Animations"));
-	stRename = new wxStaticText(this, wxID_ANY, _T("Rename"), wxPoint(5, 255));
+	clbAnimations = new wxCheckListBox(this, ID_EXPORTOPTIONS_M3_ANIMS, wxPoint(5, 85), wxSize(250,165), 0, NULL, 0, wxDefaultValidator, wxT("Animations"));
+	stRename = new wxStaticText(this, wxID_ANY, wxT("Rename"), wxPoint(5, 255));
 	tcRename = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxPoint(100, 255), wxSize(250, 25));
-	bApply = new wxButton(this, ID_EXPORTOPTIONS_M3_APPLY, _T("Apply"), wxPoint(5, 285));
-	bReset = new wxButton(this, ID_EXPORTOPTIONS_M3_RESET, _T("Reset"), wxPoint(95, 285));
-	bRename = new wxButton(this, ID_EXPORTOPTIONS_M3_RENAME, _T("Rename"), wxPoint(185, 285));
+	bApply = new wxButton(this, ID_EXPORTOPTIONS_M3_APPLY, wxT("Apply"), wxPoint(5, 285));
+	bReset = new wxButton(this, ID_EXPORTOPTIONS_M3_RESET, wxT("Reset"), wxPoint(95, 285));
+	bRename = new wxButton(this, ID_EXPORTOPTIONS_M3_RENAME, wxT("Rename"), wxPoint(185, 285));
 }
 
 void ModelExportOptions_M3::Update()
 {
-	tcBoundScale->SetValue(wxString::Format(_T("%0.2f"), modelExport_M3_BoundScale));
-	tcSphereScale->SetValue(wxString::Format(_T("%0.2f"), modelExport_M3_SphereScale));
+	tcBoundScale->SetValue(wxString::Format(wxT("%0.2f"), modelExport_M3_BoundScale));
+	tcSphereScale->SetValue(wxString::Format(wxT("%0.2f"), modelExport_M3_SphereScale));
 	tcTexturePath->SetValue(modelExport_M3_TexturePath);
 	clbAnimations->Clear();
 	asAnims.Clear();
@@ -322,11 +322,11 @@ void ModelExportOptions_M3::Update()
 				AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
 				strName = rec.getString(AnimDB::Name);
 			} catch (AnimDB::NotFound) {
-				strName = _T("???");
+				strName = wxT("???");
 			}
 			asAnims.push_back(strName);
 
-			strName += wxString::Format(_T(" [%i]"), i);
+			strName += wxString::Format(wxT(" [%i]"), i);
 			clbAnimations->Append(strName);
 
 			// set default actions
@@ -342,7 +342,7 @@ void ModelExportOptions_M3::Update()
 				continue;
 			clbAnimations->Check(j);
 			asAnims[j] = modelExport_M3_AnimNames[i];
-			clbAnimations->SetString(j, clbAnimations->GetString(j)+_T("  :")+asAnims[j]);
+			clbAnimations->SetString(j, clbAnimations->GetString(j)+wxT("  :")+asAnims[j]);
 		}
 	}
 }
@@ -374,7 +374,7 @@ void ModelExportOptions_M3::OnButton(wxCommandEvent &event)
 	} else if (id == ID_EXPORTOPTIONS_M3_RESET) {
 		//modelExport_M3_BoundScale = 0.5f;
 		//modelExport_M3_SphereScale = 0.5f;
-		//modelExport_M3_TexturePath = _T("");
+		//modelExport_M3_TexturePath = wxT("");
 		modelExport_M3_Anims.clear();
 		modelExport_M3_AnimNames.clear();
 		Update();
@@ -383,8 +383,8 @@ void ModelExportOptions_M3::OnButton(wxCommandEvent &event)
 		if (i > -1) {
 			asAnims[i] = tcRename->GetValue();
 			wxString strName = clbAnimations->GetString(i).BeforeFirst(']');
-			strName.Append(_T("]"));
-			clbAnimations->SetString(i, strName+_T("  :")+asAnims[i]);
+			strName.Append(wxT("]"));
+			clbAnimations->SetString(i, strName+wxT("  :")+asAnims[i]);
 		}
 	}
 }

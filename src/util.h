@@ -100,11 +100,11 @@ extern wxString locales[];
 
 // Slashes for Pathing
 #ifdef _WINDOWS
-	#define SLASH _T('\\')
+	#define SLASH wxT('\\')
 #else
-	#define SLASH _T('/')
+	#define SLASH wxT('/')
 #endif
-#define	MPQ_SLASH   _T('\\')
+#define	MPQ_SLASH   wxT('\\')
 
 wxString fixMPQPath(wxString path);
 float frand();

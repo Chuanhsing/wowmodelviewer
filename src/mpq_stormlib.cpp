@@ -15,27 +15,27 @@ static ArchiveSet gOpenArchives;
 MPQArchive::MPQArchive(wxString filename) : ok(false)
 {
 	// skip the PTCH files atrchives
-	if (filename.AfterLast(SLASH).StartsWith(_T("wow-update-")))
+	if (filename.AfterLast(SLASH).StartsWith(wxT("wow-update-")))
 		return;
 
-	wxLogMessage(_T("Opening %s"), filename.c_str());
+	wxLogMessage(wxT("Opening %s"), filename.c_str());
 
 	if (!SFileOpenArchive(filename.fn_str(), 0, MPQ_OPEN_READ_ONLY, &mpq_a )) {
 		int nError = GetLastError();
-		wxLogMessage(_T("Error opening archive %s, error #: 0x%X"), filename.c_str(), nError);
+		wxLogMessage(wxT("Error opening archive %s, error #: 0x%X"), filename.c_str(), nError);
 		return;
 	}
 
 	// do patch, but skip cache\ directory
-	if (!(filename.BeforeLast(SLASH).Lower().Contains(_T("cache")) && filename.AfterLast(SLASH).Lower().StartsWith(_T("patch")))) {
+	if (!(filename.BeforeLast(SLASH).Lower().Contains(wxT("cache")) && filename.AfterLast(SLASH).Lower().StartsWith(wxT("patch")))) {
 		// do patch
 		for(int j=(int)mpqArchives.GetCount()-1; j>=0; j--) {
-			if (!mpqArchives[j].AfterLast(SLASH).StartsWith(_T("wow-update-")))
+			if (!mpqArchives[j].AfterLast(SLASH).StartsWith(wxT("wow-update-")))
 				continue;
 			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "base", MPQ_OPEN_READ_ONLY);
-			wxLogMessage(_T("Appending base patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
+			wxLogMessage(wxT("Appending base patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
 			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "enUS", MPQ_OPEN_READ_ONLY);
-			wxLogMessage(_T("Appending enUS patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
+			wxLogMessage(wxT("Appending enUS patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
 		}
 	}
 
@@ -81,7 +81,7 @@ MPQFile::openFile(wxString filename)
 	pointer = 0;
 	size = 0;
 	if( useLocalFiles ) {
-		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
+		wxString fn1 = wxGetCwd()+SLASH+wxT("Import")+SLASH;
 		wxString fn2 = fn1;
 		wxString fn3 = gamePath;
 		fn1.Append(filename);
@@ -116,8 +116,8 @@ MPQFile::openFile(wxString filename)
 		}
 	}
 
-	if (bAlternate && !filename.StartsWith(_T("Alternate"), false)) {
-		wxString alterName = _T("alternate")+SLASH+filename;
+	if (bAlternate && !filename.StartsWith(wxT("Alternate"), false)) {
+		wxString alterName = wxT("alternate")+SLASH+filename;
 
 		for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end(); ++i)
 		{
@@ -195,7 +195,7 @@ MPQFile::~MPQFile()
 bool MPQFile::exists(wxString filename)
 {
 	if( useLocalFiles ) {
-		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
+		wxString fn1 = wxGetCwd()+SLASH+wxT("Import")+SLASH;
 		wxString fn2 = fn1;
 		wxString fn3 = gamePath;
 		fn1.Append(filename);
@@ -277,7 +277,7 @@ size_t MPQFile::getSize()
 int MPQFile::getSize(wxString filename)
 {
 	if( useLocalFiles ) {
-		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
+		wxString fn1 = wxGetCwd()+SLASH+wxT("Import")+SLASH;
 		wxString fn2 = fn1;
 		wxString fn3 = gamePath;
 		fn1.Append(filename);
@@ -313,7 +313,7 @@ int MPQFile::getSize(wxString filename)
 wxString MPQFile::getArchive(wxString filename)
 {
 	if( useLocalFiles ) {
-		wxString fn1 = wxGetCwd()+SLASH+_T("Import")+SLASH;
+		wxString fn1 = wxGetCwd()+SLASH+wxT("Import")+SLASH;
 		wxString fn2 = fn1;
 		wxString fn3 = gamePath;
 		fn1.Append(filename);
@@ -340,7 +340,7 @@ wxString MPQFile::getArchive(wxString filename)
 		return i->first;
 	}
 
-	return _T("unknown");
+	return wxT("unknown");
 }
 
 size_t MPQFile::getPos()
@@ -378,19 +378,19 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 			temp.MakeLower();
 			int col = 0; // Black
 
-			if (temp.Find(_T("patch.mpq")) > -1)
+			if (temp.Find(wxT("patch.mpq")) > -1)
 				col = 1; // Blue
-			else if (temp.Find(_T("patch-2.mpq")) > -1)
+			else if (temp.Find(wxT("patch-2.mpq")) > -1)
 				col = 2; // Red
-			else if (temp.Find(_T("patch-3.mpq")) > -1)
+			else if (temp.Find(wxT("patch-3.mpq")) > -1)
 				col = 3; // Green
-			else if (temp.Find(_T("expansion.mpq")) > -1)
+			else if (temp.Find(wxT("expansion.mpq")) > -1)
 				col = 4; // Outlands Purple
-			else if (temp.Find(_T("expansion2.mpq")) > -1 || temp.Find(_T("lichking.mpq")) > -1)
+			else if (temp.Find(wxT("expansion2.mpq")) > -1 || temp.Find(wxT("lichking.mpq")) > -1)
 				col = 5; // Frozen Blue
-			else if (temp.Find(_T("expansion3.mpq")) > -1)
+			else if (temp.Find(wxT("expansion3.mpq")) > -1)
 				col = 6; // Destruction Orange
-			else if (temp.Find(_T("patch-4.mpq")) > -1)
+			else if (temp.Find(wxT("patch-4.mpq")) > -1)
 				col = 7; // Cyan
 
 			if (size > 0 ) {

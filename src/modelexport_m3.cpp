@@ -15,42 +15,42 @@ typedef enum M3_Class {
 };
 
 static wxString M3_Attach_Names[] = {
-	_T("Ref_Hardpoint"),	// 0
-	_T("Ref_Weapon Right"),	// Right Palm
-	_T("Ref_Weapon Left"),	// Left Palm
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),	// 5
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),	// 10
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Target"),		// 15, Front Hit Region
-	_T("Ref_Target"), 		// Rear Hit Region
-	_T("Ref_Hardpoint"), 
-	_T("Ref_Head"),			// Head Region
-	_T("Ref_Origin"),		// Base
-	_T("Ref_Overhead"),		// 20, Above
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),	// 25
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),	// 30
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Hardpoint"),
-	_T("Ref_Center"),		// Spell Impact
-	_T("Ref_Hardpoint"),	// 35
+	wxT("Ref_Hardpoint"),	// 0
+	wxT("Ref_Weapon Right"),	// Right Palm
+	wxT("Ref_Weapon Left"),	// Left Palm
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),	// 5
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),	// 10
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Target"),		// 15, Front Hit Region
+	wxT("Ref_Target"), 		// Rear Hit Region
+	wxT("Ref_Hardpoint"), 
+	wxT("Ref_Head"),			// Head Region
+	wxT("Ref_Origin"),		// Base
+	wxT("Ref_Overhead"),		// 20, Above
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),	// 25
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),	// 30
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Hardpoint"),
+	wxT("Ref_Center"),		// Spell Impact
+	wxT("Ref_Hardpoint"),	// 35
 };
 
 static std::vector<ReferenceEntry> reList;
@@ -160,7 +160,7 @@ void RefEntry(const char *id, uint32 offset, uint32 nEntries, uint32 vers)
 
 void NameRefEntry(Reference &name, wxString strName, wxFFile &f)
 {
-	strName.Append(_T('\0'));
+	strName.Append(wxT('\0'));
 	name.nEntries = strName.Len();
 	name.ref = reList.size();
 	RefEntry("RAHC", f.Tell(), name.nEntries, 0);
@@ -219,7 +219,7 @@ uint32 nSkinnedBones(Model *m, MPQFile *mpqf)
 	return nSkinnedBones;
 }
 
-void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
+void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 {
 	if (!m)
 		return;
@@ -228,10 +228,10 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 	reList.clear();
 
 	if (!f.IsOpened()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
+		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
-	LogExportData(_T("M3"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
+	LogExportData(wxT("M3"),m->modelname,wxString(fn, wxConvUTF8));
 
 	MPQFile mpqf(m->modelname);
 	MPQFile mpqfv(m->lodname);
@@ -545,7 +545,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 			}
 			vAnimations.push_back(strName);
 			if (counts > 0)
-				strName += wxString::Format(_T(" %02d"), counts);
+				strName += wxString::Format(wxT(" %02d"), counts);
 
 			nameAnimations.push_back(strName);
 
@@ -568,25 +568,25 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 				AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
 				strName = rec.getString(AnimDB::Name);
 			} catch (AnimDB::NotFound) {
-				strName = _T("???");
+				strName = wxT("???");
 			}
-			if (!strName.StartsWith(_T("Run")) && !strName.StartsWith(_T("Stand")) && 
-					!strName.StartsWith(_T("Attack")) && !strName.StartsWith(_T("Death")))
+			if (!strName.StartsWith(wxT("Run")) && !strName.StartsWith(wxT("Stand")) && 
+					!strName.StartsWith(wxT("Attack")) && !strName.StartsWith(wxT("Death")))
 				continue;
-			if (strName.StartsWith(_T("StandWound")))
+			if (strName.StartsWith(wxT("StandWound")))
 				continue;
 
-			if (strName.StartsWith(_T("Run"))) {
-				strName = _T("Walk");
+			if (strName.StartsWith(wxT("Run"))) {
+				strName = wxT("Walk");
 			}
-			if (strName.StartsWith(_T("Stand"))) {
-				strName = _T("Stand");
+			if (strName.StartsWith(wxT("Stand"))) {
+				strName = wxT("Stand");
 			}
-			if (strName.StartsWith(_T("Attack"))) {
-				strName = _T("Attack");
+			if (strName.StartsWith(wxT("Attack"))) {
+				strName = wxT("Attack");
 			}
-			if (strName.StartsWith(_T("Death"))) {
-				strName = _T("Death");
+			if (strName.StartsWith(wxT("Death"))) {
+				strName = wxT("Death");
 			}
 
 			// make name unique
@@ -598,7 +598,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 			}
 			vAnimations.push_back(strName);
 			if (counts > 0)
-				strName += wxString::Format(_T(" %02d"), counts);
+				strName += wxString::Format(wxT(" %02d"), counts);
 
 			nameAnimations.push_back(strName);
 
@@ -631,7 +631,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		M2OpacityIdx.clear();
 
 		wxString strName = nameAnimations[i];
-		strName.Append(_T("_full"));
+		strName.Append(wxT("_full"));
 		extra.animname = strName;
 
 		// animid
@@ -740,7 +740,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 
 			extra.animevent.data = evnt;
 			extra.animevent.timeline = sd.length;
-			extra.animevent.name = _T("Evt_SeqEnd");
+			extra.animevent.name = wxT("Evt_SeqEnd");
 
 			extra.animsdevent = sd;
 		}
@@ -941,7 +941,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		bone.parent = -1;
 		bone.initTrans.AnimRef.animid = CreateAnimID(AR_Bone, 0, 0, 2);
 		bone.initRot.AnimRef.animid = CreateAnimID(AR_Bone, 0, 0, 3);
-		if (m->modelname.Lower().Mid(0, 4) == _T("item"))
+		if (m->modelname.Lower().Mid(0, 4) == wxT("item"))
 			bone.initRot.value = Vec4D(0.0f, 0.0f, 0.0f, 1.0f);
 		else
 			bone.initRot.value = Vec4D(0.0f, 0.0f, -sqrt(0.5f), sqrt(0.5f));
@@ -951,7 +951,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		
 		Bones.push_back(bone);
 
-		BoneNames.push_back(modelName + _T("_Bone_Root"));
+		BoneNames.push_back(modelName + wxT("_Bone_Root"));
 	}
 
 	for(uint32 i=0; i<m->header.nBones; i++) {
@@ -960,11 +960,11 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		memset(&bone, 0, sizeof(BONE));
 
 		// name
-		wxString strName = modelName + wxString::Format(_T("_Bone%d"), i);
+		wxString strName = modelName + wxString::Format(wxT("_Bone%d"), i);
 
 		for(uint32 j=0; j < BONE_MAX; j++) {
 			if (i >= ROOT_BONE && m->keyBoneLookup[j] == i-ROOT_BONE) {
-				strName += _T("_")+Bone_Names[j];
+				strName += wxT("_")+Bone_Names[j];
 				break;
 			}
 		}
@@ -1209,7 +1209,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		Atts.push_back(att);
 
 		// name
-		wxString strName = _T("Ref_Hardpoint");
+		wxString strName = wxT("Ref_Hardpoint");
 
 		if (attachments[i].id < WXSIZEOF(M3_Attach_Names))
 			strName = wxString(M3_Attach_Names[attachments[i].id], wxConvUTF8);
@@ -1223,7 +1223,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		}
 
 		if (count > 1)
-			strName += wxString::Format(_T(" %02d"), count - 1);
+			strName += wxString::Format(wxT(" %02d"), count - 1);
 
 		AttachNames.push_back(strName);
 	}
@@ -1248,13 +1248,13 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		mat.init();
 
 		// name
-		MatNames.push_back(modelName + wxString::Format(_T("_Mat_%02d"), i+1));
+		MatNames.push_back(modelName + wxString::Format(wxT("_Mat_%02d"), i+1));
 
 		// layers
 		for(uint32 j=0; j<13; j++) {
 			int texid = MATtable[i].texid;
-			wxString texName = m->TextureList[texid].BeforeLast('.').AfterLast(SLASH) + _T(".tga");
-			wxString fulltexName = _T("");
+			wxString texName = m->TextureList[texid].BeforeLast('.').AfterLast(SLASH) + wxT(".tga");
+			wxString fulltexName = wxT("");
 
 			LAYR layer;
 			memset(&layer, 0, sizeof(layer));
@@ -1309,7 +1309,7 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 
 			if (j == MAT_LAYER_ALPHA && MATtable[i].blend == BM_OPAQUE && MATtable[i].color != -1)
 			{
-				fulltexName = _T("NoTexture");
+				fulltexName = wxT("NoTexture");
 				layer.alphaFlags = LAYR_ALPHAFLAGS_ALPHAONLY;
 				SetAnimed(layer.brightness_mult1.AnimRef);
 				if (MATtable[i].eye == 1)
@@ -1597,10 +1597,10 @@ void ExportM2toM3(Attachment *att, Model *m, const char *fn, bool init)
 		}
 
 		texName = texName.BeforeLast('.').AfterLast(SLASH);
-		texName.Append(_T(".tga"));
+		texName.Append(wxT(".tga"));
 		
 		texName = texFilename + SLASH + modelExport_M3_TexturePath + SLASH + texName;
-		//wxLogMessage(_T("Exporting Image: %s"),texName.c_str());
+		//wxLogMessage(wxT("Exporting Image: %s"),texName.c_str());
 		SaveTexture(texName);
 	}
 

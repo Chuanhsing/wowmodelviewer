@@ -67,7 +67,7 @@ public:
 				return;
 
 			#ifdef _DEBUG
-				wxLogMessage(_T("Unloading Texture: %s"), i->name.c_str());
+				wxLogMessage(wxT("Unloading Texture: %s"), i->name.c_str());
 			#endif
 
 			doDelete(id);

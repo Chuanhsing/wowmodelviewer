@@ -25,24 +25,24 @@ const static int ExporterTypeCount = 10;
 
 // This list should be alphabetical.
 const static Exporter_Type Exporter_Types[ExporterTypeCount] = {
-	Exporter_Type(_T("3D Studio Max (3DS)"),ID_MODELEXPORT_3DS,_T("3DS..."),true),
-	Exporter_Type(_T("Collada"),ID_MODELEXPORT_COLLADA,_T("Collada...")),
+	Exporter_Type(wxT("3D Studio Max (3DS)"),ID_MODELEXPORT_3DS,wxT("3DS..."),true),
+	Exporter_Type(wxT("Collada"),ID_MODELEXPORT_COLLADA,wxT("Collada...")),
 #ifdef	_WINDOWS
-	Exporter_Type(_T("FBX"),ID_MODELEXPORT_FBX,_T("FBX..."),true),
+	Exporter_Type(wxT("FBX"),ID_MODELEXPORT_FBX,wxT("FBX..."),true),
 #else
-	Exporter_Type(_T("FBX"),ID_MODELEXPORT_FBX,_T("FBX...")),	// Disabled like Collada until we get it working on non-windows systems.
+	Exporter_Type(wxT("FBX"),ID_MODELEXPORT_FBX,wxT("FBX...")),	// Disabled like Collada until we get it working on non-windows systems.
 #endif
 #ifdef _DEBUG
-	Exporter_Type(_T("Lightwave 3D"),ID_MODELEXPORT_LWO,_T("Lightwave 3D..."),true,true,true),
+	Exporter_Type(wxT("Lightwave 3D"),ID_MODELEXPORT_LWO,wxT("Lightwave 3D..."),true,true,true),
 #else
-	Exporter_Type(_T("Lightwave 3D"),ID_MODELEXPORT_LWO,_T("Lightwave 3D..."),true,true),
+	Exporter_Type(wxT("Lightwave 3D"),ID_MODELEXPORT_LWO,wxT("Lightwave 3D..."),true,true),
 #endif
-	Exporter_Type(_T("M3"),ID_MODELEXPORT_M3,_T("M3..."),true),
-	Exporter_Type(_T("Milkshake"),ID_MODELEXPORT_MS3D,_T("Milkshape..."),true),
-	Exporter_Type(_T("Ogre XML"),ID_MODELEXPORT_OGRE,_T("Ogre XML..."),true),
-	Exporter_Type(_T("Wavefront OBJ"),ID_MODELEXPORT_OBJ,_T("Wavefront OBJ..."),true,true),
-	Exporter_Type(_T("X3D"),ID_MODELEXPORT_X3D,_T("X3D..."),true),
-	Exporter_Type(_T("X3D in XHTML"),ID_MODELEXPORT_XHTML,_T("X3D in XHTML..."),true),
+	Exporter_Type(wxT("M3"),ID_MODELEXPORT_M3,wxT("M3..."),true),
+	Exporter_Type(wxT("Milkshake"),ID_MODELEXPORT_MS3D,wxT("Milkshape..."),true),
+	Exporter_Type(wxT("Ogre XML"),ID_MODELEXPORT_OGRE,wxT("Ogre XML..."),true),
+	Exporter_Type(wxT("Wavefront OBJ"),ID_MODELEXPORT_OBJ,wxT("Wavefront OBJ..."),true,true),
+	Exporter_Type(wxT("X3D"),ID_MODELEXPORT_X3D,wxT("X3D..."),true),
+	Exporter_Type(wxT("X3D in XHTML"),ID_MODELEXPORT_XHTML,wxT("X3D in XHTML..."),true),
 };
 
 

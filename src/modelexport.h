@@ -5,6 +5,7 @@
 #include "modelcanvas.h"
 
 #define RADIAN 57.295779513082320876798154814114
+#define FRAMES_PER_SECOND 30
 
 // Structures
 struct Vertex3f {
@@ -30,93 +31,93 @@ struct GroupData {
 };
 
 static wxString Attach_Names[] = { // enum POSITION_SLOTS
-	_T("Left wrist (shield) / Mount"), // 0
-	_T("Right Palm"), 
-	_T("Left Palm"), 
-	_T("Right Elbow"), 
-	_T("Left Elbow"), 
-	_T("Right Shoulder"), // 5
-	_T("Left Shoulder"), 
-	_T("Right Knee"), 
-	_T("Left Knee"), 
-	_T("Right Hip"),
-	_T("Left Hip"), // 10
-	_T("Helmet"), 
-	_T("Back"), 
-	_T("Right Shoulder Horizontal"), 
-	_T("Left Shoulder Horizontal"), 
-	_T("Front Hit Region"), // 15
-	_T("Rear Hit Region"), 
-	_T("Mouth"), 
-	_T("Head Region"), 
-	_T("Base"),
-	_T("Above"), // 20
-	_T("Pre-Cast 1 L"), 
-	_T("Pre-Cast 1 R"), 
-	_T("Pre-Cast 2 L"), 
-	_T("Pre-Cast 2 R"),
-	_T("Pre-Cast 3"), //25 
-	_T("Upper Back Sheath R"), 
-	_T("Upper Back Sheath L"), 
-	_T("Middle Back Sheath"), 
-	_T("Belly"), 
-	_T("Reverse Back, Up Back L"), //30
-	_T("Right Back"), 
-	_T("Left Hip Sheath"), 
-	_T("Right Hip Sheath"), 
-	_T("Spell Impact"),
-	_T("Right Palm (Unk1)"), //35
-	_T("Right Palm (Unk2)"),
-	_T("Demolishervehicle"),
-	_T("Demolishervehicle2"),
-	_T("Vehicle Seat1"),
-	_T("Vehicle Seat2"), // 40
-	_T("Vehicle Seat3"),
-	_T("Vehicle Seat4"),
+	wxT("Left Wrist (Shield) / Mount"), // 0
+	wxT("Right Palm"), 
+	wxT("Left Palm"), 
+	wxT("Right Elbow"), 
+	wxT("Left Elbow"), 
+	wxT("Right Shoulder"), // 5
+	wxT("Left Shoulder"), 
+	wxT("Right Knee"), 
+	wxT("Left Knee"), 
+	wxT("Right Hip"),
+	wxT("Left Hip"), // 10
+	wxT("Helmet"), 
+	wxT("Back"), 
+	wxT("Right Shoulder Horizontal"), 
+	wxT("Left Shoulder Horizontal"), 
+	wxT("Front Hit Region"), // 15
+	wxT("Rear Hit Region"), 
+	wxT("Mouth"), 
+	wxT("Head Region"), 
+	wxT("Base"),
+	wxT("Above"), // 20
+	wxT("Pre-Cast 1 L"), 
+	wxT("Pre-Cast 1 R"), 
+	wxT("Pre-Cast 2 L"), 
+	wxT("Pre-Cast 2 R"),
+	wxT("Pre-Cast 3"), //25 
+	wxT("Upper Back Sheath R"), 
+	wxT("Upper Back Sheath L"), 
+	wxT("Middle Back Sheath"), 
+	wxT("Belly"), 
+	wxT("Reverse Back, Up Back L"), //30
+	wxT("Right Back"), 
+	wxT("Left Hip Sheath"), 
+	wxT("Right Hip Sheath"), 
+	wxT("Spell Impact"),
+	wxT("Right Palm (Unk1)"), //35
+	wxT("Right Palm (Unk2)"),
+	wxT("Demolishervehicle"),
+	wxT("Demolishervehicle2"),
+	wxT("Vehicle Seat1"),
+	wxT("Vehicle Seat2"), // 40
+	wxT("Vehicle Seat3"),
+	wxT("Vehicle Seat4"),
 };
 
 static wxString Bone_Names[] = { // enum KeyBoneTable
-	_T("ArmL"), // 0
-	_T("ArmR"),
-	_T("ShoulderL"),
-	_T("ShoulderR"),
-	_T("SpineLow"),
-	_T("Waist"), // 5
-	_T("Head"),
-	_T("Jaw"),
-	_T("RFingerIndex"),
-	_T("RFingerMiddle"),
-	_T("RFingerPinky"), // 10
-	_T("RFingerRing"),
-	_T("RThumb"),
-	_T("LFingerIndex"),
-	_T("LFingerMiddle"),
-	_T("LFingerPinky"), // 15
-	_T("LFingerRing"),
-	_T("LThumb"),
-	_T("BTH"),
-	_T("CSR"),
-	_T("CSL"), // 20
-	_T("Breath"),
-	_T("Name"),
-	_T("NameMount"),
-	_T("CHD"),
-	_T("CCH"), // 25
-	_T("Root"),
-	_T("Wheel1"),
-	_T("Wheel2"),
-	_T("Wheel3"),
-	_T("Wheel4"), // 30
-	_T("Wheel5"),
-	_T("Wheel6"),
-	_T("Wheel7"),
-	_T("Wheel8"),
-	_T("")
+	wxT("ArmL"), // 0
+	wxT("ArmR"),
+	wxT("ShoulderL"),
+	wxT("ShoulderR"),
+	wxT("SpineLow"),
+	wxT("Waist"), // 5
+	wxT("Head"),
+	wxT("Jaw"),
+	wxT("RFingerIndex"),
+	wxT("RFingerMiddle"),
+	wxT("RFingerPinky"), // 10
+	wxT("RFingerRing"),
+	wxT("RThumb"),
+	wxT("LFingerIndex"),
+	wxT("LFingerMiddle"),
+	wxT("LFingerPinky"), // 15
+	wxT("LFingerRing"),
+	wxT("LThumb"),
+	wxT("BTH"),
+	wxT("CSR"),
+	wxT("CSL"), // 20
+	wxT("Breath"),
+	wxT("Name"),
+	wxT("NameMount"),
+	wxT("CHD"),
+	wxT("CCH"), // 25
+	wxT("Root"),
+	wxT("Wheel1"),
+	wxT("Wheel2"),
+	wxT("Wheel3"),
+	wxT("Wheel4"), // 30
+	wxT("Wheel5"),
+	wxT("Wheel6"),
+	wxT("Wheel7"),
+	wxT("Wheel8"),
+	wxT("")
 };
 
 
 // Common functions
-void LogExportData(wxString FileExtension, wxString Directory, wxString ExportType);
+void LogExportData(wxString ExporterExtention, wxString ModelName, wxString Destination);
 void SaveTexture(wxString fn);
 void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString suffix);
 Vec3D QuaternionToXYZ(Vec3D Dir, float W);
@@ -128,49 +129,46 @@ void QuaternionToRotationMatrix(const Quaternion& quat, Matrix& rkRot);
 void RotationMatrixToEulerAnglesXYZ(const Matrix& rkRot, float& rfXAngle, float& rfYAngle, float& rfZAngle);
 
 // --== Exporter Functions ==--
-// If your exporter doesn't do WMO or M2 files, include a faux function anyways. Then add a non-working
-// function at the bottom of modelexport.cpp so it has something to look for. The non-working exporter
-// can be disabled in filecontrol.cpp, so it won't ever run.
+// List your exporter functions here. There is no need to include functions for formats you're not exporting from.
+// IE: Don't include a WMO exporter function if you've only written a M2 exporter.
+// Make sure to properly enable/disable your exporter's functions in exporters.h!
 
 // Raw Model File
 void SaveBaseFile();
 
 // Lightwave
-void ExportM2toLWO(Attachment *att, Model *m, const char *fn, bool init);
-void ExportWMOtoLWO(WMO *m, const char *fn);
-void ExportADTtoLWO(MapTile *m, const char *fn);
+void ExportLWO_M2(Attachment *att, Model *m, const char *fn, bool init);
+void ExportLWO_WMO(WMO *m, const char *fn);
+void ExportLWO_ADT(MapTile *m, const char *fn);
 
 // Wavefront Object
-void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init);
-void ExportWMOtoOBJ(WMO *m, wxString fn);
+void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init);
+void ExportOBJ_WMO(WMO *m, wxString fn);
 
 // Milkshape
-void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init);
-void ExportWMOtoMS3D(WMO *m, const char *fn);
+void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init);
 
 // Collada
-void ExportM2toCOLLADA(Attachment *att, Model *m, const char *fn, bool init);
-void ExportWMOtoCOLLADA(WMO *m, const char *fn);
+void ExportCOLLADA_M2(Attachment *att, Model *m, const char *fn, bool init);
+void ExportCOLLADA_WMO(WMO *m, const char *fn);
 
 //3D Studio Max
-void ExportM2to3DS(Attachment *att, Model *m, const char *fn, bool init);
-void ExportWMOto3DS(WMO *m, const char *fn);
+void Export3DS_M2(Attachment *att, Model *m, const char *fn, bool init);
 
-// X3D/XHTML
-void ExportM2toX3D(Model *m, const char *fn, bool init);
-void ExportM2toXHTML(Model *m, const char *fn, bool init);
-void ExportWMOtoX3D(WMO *m, const char *fn);
-void ExportWMOtoXHTML(WMO *m, const char *fn);
+// X3D
+void ExportX3D_M2(Model *m, const char *fn, bool init);
+
+//XHTML
+void ExportXHTML_M2(Model *m, const char *fn, bool init);
 
 // Ogre XML
-void ExportM2toOgreXml(Model *m, const char *fn, bool init);
-void ExportWMOtoOgreXml(WMO *m, const char *fn);
+void ExportOgreXML_M2(Model *m, const char *fn, bool init);
 
 // FBX
-void ExportM2toFBX(Model* m, const char* fn, bool init);
-void ExportWMOtoFBX(WMO* m, const char* fn);
+void ExportFBX_M2(Model* m, const char* fn, bool init);
+void ExportFBX_WMO(WMO* m, const char* fn);
 
 // M3
-void ExportM2toM3(Attachment *att, Model* m, const char* fn, bool init);
+void ExportM3_M2(Attachment *att, Model* m, const char* fn, bool init);
 
 #endif

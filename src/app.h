@@ -153,18 +153,18 @@
 // vars
 const wxString langNames[] =
 {
-	_T("English"),
+	wxT("English"),
 	//#if wxUSE_UNICODE
-		_T("Korean"),
+		wxT("Korean"),
 	//#endif
-	_T("French"),
-	_T("German"),
+	wxT("French"),
+	wxT("German"),
 	//#if wxUSE_UNICODE
-		_T("Chinese (Simplified)"),
-		_T("Chinese (Traditional)"),
+		wxT("Chinese (Simplified)"),
+		wxT("Chinese (Traditional)"),
 	//#endif
-	_T("Spanish"),
-	_T("Russian"),
+	wxT("Spanish"),
+	wxT("Russian"),
 };
 
 static const wxLanguage langIds[] =

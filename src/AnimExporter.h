@@ -62,7 +62,7 @@ public:
 
 	// gif export functions
 	// ------------------------------------------
-	void Init(const wxString fn = _T("temp.gif"));
+	void Init(const wxString fn = wxT("temp.gif"));
 	void CreateGif();
 
 

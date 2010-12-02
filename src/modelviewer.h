@@ -49,57 +49,71 @@
 //#include "CShader.h"
 
 // defines
-#define APP_TITLE _T("World of Warcraft Model Viewer")
-#define APP_VERSION _T("v0.7.0.1 r500")		// Revision number should match the revision number on GoogleCode.
-#define APP_BUILDNAME _T("Wascally Wabbit")	// Fun thing for developers to play with. Should change with each release.
+#define APP_TITLE wxT("World of Warcraft Model Viewer")
+#define APP_VERSION wxT("v0.7.0.1 r502")			// Revision number should match the revision number on GoogleCode.
+#define APP_BUILDNAME wxT("Gnome Punter")		// Fun thing for developers to play with. Should change with each release.
 /*
 	--==List of Build Name ideas==--	(Feel free to add!)
 	Bouncing Baracuda
-	Gnome Punter
 	Hoppin Jalapeno
 	Stealthed Rogue
+	Lost Druid
+	Demented Deathwing
+	Fickle Felguard
+	Killer Krakken
+	Crazy Kaelthas
+	Deadly Lich King
+	Lonely Mastiff
+	Cold Kelthuzad
+	Jiggly Jaina
+	Windrunner's Lament
+	Vashj's Folly
+	Pickled Herring
+	Epic Win
+	Lord Kezzak
 
 	--== Used Build Names ==--			(So we don't repeat...)
 	Wascally Wabbit
+	Gnome Punter
 
 */
 
 #ifdef _DEBUG
-	#define APP_ISDEBUG _T(" Debug")
+	#define APP_ISDEBUG wxT(" Debug")
 #else
-	#define APP_ISDEBUG _T("")
+	#define APP_ISDEBUG wxT("")
 #endif
 
 // This should only be touched when adding a new OS or platform.
 #if defined (_WINDOWS)
 	#if defined (_WIN64)
-		#define APP_PLATFORM _T("Windows 64-bit")
+		#define APP_PLATFORM wxT("Windows 64-bit")
 	#elif defined (_WIN32)
-		#define APP_PLATFORM _T("Windows 32-bit")
+		#define APP_PLATFORM wxT("Windows 32-bit")
 	#else
-		#error _T("Your Windows platform is not defined. Please specify either _WIN64 or _WIN32.")
+		#error wxT("Your Windows platform is not defined. Please specify either _WIN64 or _WIN32.")
 	#endif
 #elif defined (_MAC)
 	#if defined (_MAC_INTEL)
-		#define APP_PLATFORM _T("Macintosh Intel")
+		#define APP_PLATFORM wxT("Macintosh Intel")
 	#elif defined (_MAC_PPC)
-		#define APP_PLATFORM _T("Macintosh PowerPC")
+		#define APP_PLATFORM wxT("Macintosh PowerPC")
 	#else
-		#error _T("Your Macintosh platform is not defined. Please specify either _MAC_INTEL or _MAC_PPC.")
+		#error wxT("Your Macintosh platform is not defined. Please specify either _MAC_INTEL or _MAC_PPC.")
 	#endif
 #elif defined (_LINUX)
 	#if defined (_LINUX64)
-		#define APP_PLATFORM _T("Linux 64-bit")
+		#define APP_PLATFORM wxT("Linux 64-bit")
 	#elif defined (_LINUX32)
-		#define APP_PLATFORM _T("Linux 32-bit")
+		#define APP_PLATFORM wxT("Linux 32-bit")
 	#else
-		#error _T("Your Linux platform is not defined. Please specify either _LINUX64 or _LINUX32.")
+		#error wxT("Your Linux platform is not defined. Please specify either _LINUX64 or _LINUX32.")
 	#endif
 #else
 	#ifdef _DEBUG
-		#error _T("You have not specified a valid Operating System for your Debug configuration.")
+		#error wxT("You have not specified a valid Operating System for your Debug configuration.")
 	#else
-		#error _T("You have not specified a valid Operating System for your Release configuration.")
+		#error wxT("You have not specified a valid Operating System for your Release configuration.")
 	#endif
 #endif
 

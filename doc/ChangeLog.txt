@@ -1,5 +1,16 @@
 World of Warcraft Model Viewer v0.7.0.1
 
+r502
+ - Non-Init exported models will now have the animation's name & frame number in the default name.
+ - Fixed a lot of compatibility issues in reguard to strings.
+ - Adjusted model export logging information to be more useful.
+ - Dev Work:
+  - Renamed all exporters for better function name clarity.
+  - _T() replaced with wxT(). Please use wxT() in the future.
+  - Removed unused exporter functions.
+  - Armory temp.xml will now be deleted in non-debug builds.
+
+
 r500
  - Added Splash Page while program is loading.
  - Installers will now associate .CHR files with WoW Model Viewer, complete with custom icon!
@@ -13,7 +24,6 @@ r500
  - Dev Work:
   - Windows Executables are now named wowmodelview32.exe and wowmodelview64.exe, for the 32 & 64bit versions, respectively.
   - Moved some functions from the FBX exporter into the main Model Export files.
-
 
 r499
  - Eye Glows are now a Character Option! Choose from None, Default, and Death Knight! Character Save files will remember this setting!

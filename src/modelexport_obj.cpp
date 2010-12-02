@@ -7,16 +7,16 @@
 
 //#include "CxImage/ximage.h"
 
-void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init)
+void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 {
 	// Open file
 	ofstream f(fn.fn_str(), ios_base::out | ios_base::trunc);
 
 	if (!f.is_open()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn.c_str());
+		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export model."), fn.c_str());
 		return;
 	}
-	LogExportData(_T("OBJ"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
+	LogExportData(wxT("OBJ"),m->modelname,wxString(fn, wxConvUTF8));
 
 	unsigned short numVerts = 0;
 	unsigned short numGroups = 0;
@@ -30,7 +30,7 @@ void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init)
 	// http://people.sc.fsu.edu/~burkardt/data/mtl/mtl.html
 	wxString matName(fn, wxConvUTF8);
 	matName = matName.BeforeLast('.');
-	matName << _T(".mtl");
+	matName << wxT(".mtl");
 
 	ofstream fm(matName.mb_str(), ios_base::out | ios_base::trunc);
 	matName = matName.AfterLast('\\');
@@ -46,17 +46,17 @@ void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init)
 		if (p.init(m)) {
 			wxString texName = GetM2TextureName(m,(char *)fn.c_str(),p,(int)i);
 
-			fm << _T("newmtl ") << texName << endl;
-			texName << _T(".tga");
+			fm << wxT("newmtl ") << texName << endl;
+			texName << wxT(".tga");
 			fm << "illum 2" << endl;
-			out = wxString::Format(_T("Kd %.06f %.06f %.06f"), p.ocol.x, p.ocol.y, p.ocol.z);
+			out = wxString::Format(wxT("Kd %.06f %.06f %.06f"), p.ocol.x, p.ocol.y, p.ocol.z);
 			fm << out.c_str() << endl;
-			out = wxString::Format(_T("Ka %.06f %.06f %.06f"), 0.7f, 0.7f, 0.7f);
+			out = wxString::Format(wxT("Ka %.06f %.06f %.06f"), 0.7f, 0.7f, 0.7f);
 			fm << out.c_str() << endl;
-			out = wxString::Format(_T("Ks %.06f %.06f %.06f"), p.ecol.x, p.ecol.y, p.ecol.z);
+			out = wxString::Format(wxT("Ks %.06f %.06f %.06f"), p.ecol.x, p.ecol.y, p.ecol.z);
 			fm << out.c_str() << endl;
 			fm << "Ke 0.000000 0.000000 0.000000" << endl;
-			out = wxString::Format(_T("Ns %0.6f"), 0.0f);
+			out = wxString::Format(wxT("Ns %0.6f"), 0.0f);
 			fm << out.c_str() << endl;
 			//fm << "Ka " << 0.7f << " " << 0.7f << " " << 0.7f << endl;
 			//fm << "Kd " << p.ocol.x << " " << p.ocol.y << " " << p.ocol.z << endl;
@@ -69,7 +69,7 @@ void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init)
 			texFilename = texFilename.BeforeLast(SLASH);
 			texFilename += SLASH;
 			texFilename += texName;
-			wxLogMessage(_T("Exporting Image: %s"),texFilename.c_str());
+			wxLogMessage(wxT("Exporting Image: %s"),texFilename.c_str());
 			SaveTexture(texFilename);
 			
 		}
@@ -91,11 +91,11 @@ void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init)
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 				uint16 a = m->indices[b];
 				if (m->vertices == NULL || init == true) {
-					out = wxString::Format(_T("v %.06f %.06f %.06f"), m->origVertices[a].pos.x, m->origVertices[a].pos.y, m->origVertices[a].pos.z);
+					out = wxString::Format(wxT("v %.06f %.06f %.06f"), m->origVertices[a].pos.x, m->origVertices[a].pos.y, m->origVertices[a].pos.z);
 					f << out.c_str() << endl;
 					//f << "v " << m->origVertices[a].pos.x << " " << m->origVertices[a].pos.y << " " << m->origVertices[a].pos.z << endl;
 				} else {
-					out = wxString::Format(_T("v %.06f %.06f %.06f"), m->vertices[a].x, m->vertices[a].y, m->vertices[a].z);
+					out = wxString::Format(wxT("v %.06f %.06f %.06f"), m->vertices[a].x, m->vertices[a].y, m->vertices[a].z);
 					f << out.c_str() << endl;
 					//f << "v " << m->vertices[a].x << " " << m->vertices[a].y << " " << m->vertices[a].z << endl;
 				}
@@ -113,7 +113,7 @@ void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init)
 		if (p.init(m)) {
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 				uint16 a = m->indices[b];
-				out = wxString::Format(_T("vt %.06f %.06f"), m->origVertices[a].texcoords.x, 1-m->origVertices[a].texcoords.y);
+				out = wxString::Format(wxT("vt %.06f %.06f"), m->origVertices[a].texcoords.x, 1-m->origVertices[a].texcoords.y);
 				f << out.c_str() << endl;
 				//f << "vt " << m->origVertices[a].texcoords.x << " " << (1 - m->origVertices[a].texcoords.y) << endl;
 				textures ++;
@@ -129,7 +129,7 @@ void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init)
 		if (p.init(m)) {
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 				uint16 a = m->indices[b];
-				out = wxString::Format(_T("vn %.06f %.06f %.06f"), m->origVertices[a].normal.x, m->origVertices[a].normal.y, m->origVertices[a].normal.z);
+				out = wxString::Format(wxT("vn %.06f %.06f %.06f"), m->origVertices[a].normal.x, m->origVertices[a].normal.y, m->origVertices[a].normal.z);
 				f << out.c_str() << endl;
 				//f << "vn " << m->origVertices[a].normal.x << " " << m->origVertices[a].normal.y << " " << m->origVertices[a].normal.z << endl;
 				normals ++;
@@ -147,22 +147,22 @@ void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init)
 
 		if (p.init(m)) {
 			wxString FilePath = wxString(fn, wxConvUTF8).BeforeLast(SLASH);
-			wxString texName = m->TextureList[p.tex].BeforeLast(_T('.'));
+			wxString texName = m->TextureList[p.tex].BeforeLast(wxT('.'));
 			wxString texPath = texName.BeforeLast(SLASH);
 			if (m->modelType == MT_CHAR){
-				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName.AfterLast(SLASH);
-			}else if ((texName.Find(SLASH) <= 0)&&(texName == _T("Cape"))){
-				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_Replacable");
+				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(wxT('.')) + wxT("_") + texName.AfterLast(SLASH);
+			}else if ((texName.Find(SLASH) <= 0)&&(texName == wxT("Cape"))){
+				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(wxT('.')) + wxT("_Replacable");
 				texPath = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 			}else if (texName.Find(SLASH) <= 0){
-				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) + _T("_") + texName;
+				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(wxT('.')) + wxT("_") + texName;
 				texPath = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
 			}else{
 				texName = texName.AfterLast(SLASH);
 			}
 
 			if (texName.Length() == 0)
-				texName << wxString(m->modelname.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(_T('.')) << wxString::Format(_T("_Image_%03i"),i);
+				texName << wxString(m->modelname.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(wxT('.')) << wxString::Format(wxT("_Image_%03i"),i);
 
 			f << "g Geoset_" << i << endl;
 			f << "usemtl " << texName << endl;
@@ -189,7 +189,7 @@ void ExportM2toOBJ(Attachment *att, Model *m, wxString fn, bool init)
 	f.close();
 }
 
-void ExportWMOtoOBJ(WMO *m, wxString file)
+void ExportOBJ_WMO(WMO *m, wxString file)
 {
 	// Open file
 	if (modelExport_PreserveDir == true){
@@ -207,14 +207,14 @@ void ExportWMOtoOBJ(WMO *m, wxString file)
 	ofstream f(file.fn_str(), ios_base::out | ios_base::trunc);
 
 	if (!f.is_open()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), file.c_str());
+		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export model."), file.c_str());
 		return;
 	}
-	LogExportData(_T("OBJ"),file.BeforeLast(SLASH),_T("WMO"));
+	LogExportData(wxT("OBJ"),m->name,file);
 
 	wxString mtlName = file;
 	mtlName = mtlName.BeforeLast('.');
-	mtlName << _T(".mtl");
+	mtlName << wxT(".mtl");
 
 	ofstream fm(mtlName.fn_str(), ios_base::out | ios_base::trunc);
 	mtlName = mtlName.AfterLast(SLASH);
@@ -246,7 +246,7 @@ void ExportWMOtoOBJ(WMO *m, wxString file)
 			}
 			if (nomatch == true){
 				outname = outname.AfterLast('\\');
-				texarray[mat->tex] = outname << wxString::Format(_T("_Material_%03i"), mat->tex);
+				texarray[mat->tex] = outname << wxString::Format(wxT("_Material_%03i"), mat->tex);
 			}
 		}
 	}
@@ -257,15 +257,15 @@ void ExportWMOtoOBJ(WMO *m, wxString file)
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];
 
-			//wxString matName(wxString::Format(_T("Material_%03i"), mat->tex));
+			//wxString matName(wxString::Format(wxT("Material_%03i"), mat->tex));
 			wxString matName = texarray[mat->tex];
 
 			//wxString texName(fn, wxConvUTF8);
 			wxString texName = texarray[mat->tex];
 			wxString texPath = texName.BeforeLast('\\');
 			texName = texName.AfterLast('\\');
-			//texName << _T("_") << mat->tex << _T(".tga");
-			texName << _T(".tga");
+			//texName << wxT("_") << mat->tex << wxT(".tga");
+			texName << wxT(".tga");
 
 			//fm << "newmtl " << "Material_" << mat->tex+1 << endl;
 			// MilkShape3D cann't read long texname
@@ -299,7 +299,7 @@ void ExportWMOtoOBJ(WMO *m, wxString file)
 
 			// setup texture
 			glBindTexture(GL_TEXTURE_2D, mat->tex);
-			wxLogMessage(_T("Exporting Image: %s"),texFilename.c_str());
+			wxLogMessage(wxT("Exporting Image: %s"),texFilename.c_str());
 			SaveTexture(texFilename);
 		}
 	}

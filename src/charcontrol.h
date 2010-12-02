@@ -194,7 +194,7 @@ public:
 
 	void ClearItemDialog();
 
-	void selectItem(int type, int slot, int current, const wxChar *caption=_T("Item"));
+	void selectItem(int type, int slot, int current, const wxChar *caption=wxT("Item"));
 	void selectSet();
 	void selectStart();
 	void selectMount();

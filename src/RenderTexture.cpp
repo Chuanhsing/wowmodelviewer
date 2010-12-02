@@ -5,47 +5,47 @@ bool CHECK_FRAMEBUFFER_STATUS()
 {
 	GLenum status = 0;
 	status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-	//wxLogMessage(_T("OGL: FBO Status - 0x%X"), status);
+	//wxLogMessage(wxT("OGL: FBO Status - 0x%X"), status);
 
 	switch(status) {
 		case GL_FRAMEBUFFER_COMPLETE_EXT:
-			wxLogMessage(_T("OGL: Framebuffer created."));
+			wxLogMessage(wxT("OGL: Framebuffer created."));
 			return true;
 			break; 
 		case GL_FRAMEBUFFER_UNSUPPORTED_EXT: 
-			wxLogMessage(_T("OGL Error: GL_FRAMEBUFFER_UNSUPPORTED_EXT"));
+			wxLogMessage(wxT("OGL Error: GL_FRAMEBUFFER_UNSUPPORTED_EXT"));
 			/* you gotta choose different formats */ \
 			//assert(0); 
 			break; 
 		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT: 
-			wxLogMessage(_T("OGL Error: INCOMPLETE_ATTACHMENT"));
+			wxLogMessage(wxT("OGL Error: INCOMPLETE_ATTACHMENT"));
 			break; 
 		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT: 
-			wxLogMessage(_T("OGL Error: FRAMEBUFFER_MISSING_ATTACHMENT"));
+			wxLogMessage(wxT("OGL Error: FRAMEBUFFER_MISSING_ATTACHMENT"));
 			break; 
 		case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT: 
-			wxLogMessage(_T("OGL Error: FRAMEBUFFER_DIMENSIONS"));
+			wxLogMessage(wxT("OGL Error: FRAMEBUFFER_DIMENSIONS"));
 			break; 
 /*		case GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT_EXT: 
-			wxLogMessage(_T("OGL Error: INCOMPLETE_DUPLICATE_ATTACHMENT"));
+			wxLogMessage(wxT("OGL Error: INCOMPLETE_DUPLICATE_ATTACHMENT"));
 			break; */
 		case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT: 
-			wxLogMessage(_T("OGL Error: INCOMPLETE_FORMATS"));
+			wxLogMessage(wxT("OGL Error: INCOMPLETE_FORMATS"));
 			break; 
 		case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT: 
-			wxLogMessage(_T("OGL Error: INCOMPLETE_DRAW_BUFFER"));
+			wxLogMessage(wxT("OGL Error: INCOMPLETE_DRAW_BUFFER"));
 			break; 
 		case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT: 
-			wxLogMessage(_T("OGL Error: INCOMPLETE_READ_BUFFER"));
+			wxLogMessage(wxT("OGL Error: INCOMPLETE_READ_BUFFER"));
 			break; 
 		case GL_FRAMEBUFFER_BINDING_EXT: 
-			wxLogMessage(_T("OGL Error: BINDING_EXT"));
+			wxLogMessage(wxT("OGL Error: BINDING_EXT"));
 			break; 
 /*		case GL_FRAMEBUFFER_STATUS_ERROR_EXT: 
-			wxLogMessage(_T("OGL Error: STATUS_ERROR"));
+			wxLogMessage(wxT("OGL Error: STATUS_ERROR"));
 			break; */
 		default: 
-			wxLogMessage(_T("OGL Error: Unknown %d."), status);
+			wxLogMessage(wxT("OGL Error: Unknown %d."), status);
 			/* programming error; will fail on all hardware \*/ 
 			//assert(0); 
 			//continue;
@@ -121,7 +121,7 @@ void RenderTexture::Init(HWND hWnd, int width, int height, bool fboMode)
 		// Reported crash in this section of the code by a user
 		// add exception handling to try and capture it for future versions.
 		try {
-			wxLogMessage(_T("GFX Info: Initialising FrameBufferObject."));
+			wxLogMessage(wxT("GFX Info: Initialising FrameBufferObject."));
 
 			// Generate our buffers and texture
 			glGenFramebuffersEXT(1, &m_frameBuffer );
@@ -151,11 +151,11 @@ void RenderTexture::Init(HWND hWnd, int width, int height, bool fboMode)
 
 			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);	// Unbind the FBO for now
 		} catch (...) {
-			wxLogMessage(_T("FrameBuffer Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
+			wxLogMessage(wxT("FrameBuffer Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 		}
 
 	} else { // Pixel Buffer Mode
-		wxLogMessage(_T("Info: Attempting to create a PixelBuffer."));
+		wxLogMessage(wxT("Info: Attempting to create a PixelBuffer."));
 
 		//-------------------------------------------------------------------------
 		// Create a p-buffer for off-screen rendering.
@@ -185,7 +185,7 @@ void RenderTexture::Init(HWND hWnd, int width, int height, bool fboMode)
 		wglChoosePixelFormatARB(canvas_hDC, (const int*)pf_attr, NULL, 1, &iPixelFormat, &iCount);
 
 		if (iCount == 0){
-			wxLogMessage(_T("OGL Error: [0x%x]\n\twglChoosePixelFormatARB() Failed! PixelBuffer could not find an acceptable pixel format!"), glGetError());
+			wxLogMessage(wxT("OGL Error: [0x%x]\n\twglChoosePixelFormatARB() Failed! PixelBuffer could not find an acceptable pixel format!"), glGetError());
 			return;
 		}
 
@@ -204,21 +204,21 @@ void RenderTexture::Init(HWND hWnd, int width, int height, bool fboMode)
 		// Error check
 		err = glGetError();
 		if (!m_hPBuffer) {
-			wxLogMessage(_T("OGL Error: [0x%x] Could not create the PixelBuffer."), err);
+			wxLogMessage(wxT("OGL Error: [0x%x] Could not create the PixelBuffer."), err);
 			return;
 		} else if (err==GL_NO_ERROR) {
-			wxLogMessage(_T("OGL: Successfully created the PixelBuffer."));
+			wxLogMessage(wxT("OGL: Successfully created the PixelBuffer."));
 		} else if (err==GL_INVALID_ENUM) {
-			wxLogMessage(_T("OGL Error: [0x%x] Invalid Enum during PixelBuffer creation."), err);
+			wxLogMessage(wxT("OGL Error: [0x%x] Invalid Enum during PixelBuffer creation."), err);
 		} else if (err==GL_INVALID_VALUE) {
-			wxLogMessage(_T("OGL Error: [0x%x] Invalid Value during PixelBuffer creation."), err);
+			wxLogMessage(wxT("OGL Error: [0x%x] Invalid Value during PixelBuffer creation."), err);
 		} else if (err==GL_INVALID_OPERATION) {
-			wxLogMessage(_T("OGL Error: [0x%x] Invalid Operation during PixelBuffer creation."), err);
+			wxLogMessage(wxT("OGL Error: [0x%x] Invalid Operation during PixelBuffer creation."), err);
 		} else if (err==GL_OUT_OF_MEMORY) {
-			wxLogMessage(_T("OGL Error: [0x%x] Critical error!  Out-of-Memory during PixelBuffer creation.\nPixelBuffer could not be created."), err);
+			wxLogMessage(wxT("OGL Error: [0x%x] Critical error!  Out-of-Memory during PixelBuffer creation.\nPixelBuffer could not be created."), err);
 			return;
 		} else {
-			wxLogMessage(_T("OpenGL Error: [0x%x] PixelBuffer created, but an unknown error occured."), err);
+			wxLogMessage(wxT("OpenGL Error: [0x%x] PixelBuffer created, but an unknown error occured."), err);
 		}
 
 		m_hDC = wglGetPbufferDCARB( m_hPBuffer );
@@ -229,14 +229,14 @@ void RenderTexture::Init(HWND hWnd, int width, int height, bool fboMode)
 		wglQueryPbufferARB( m_hPBuffer, WGL_PBUFFER_WIDTH_ARB, &w );
 
 		if (h!=nHeight || w!=nWidth) {
-			wxLogMessage(_T("Error: The width and height of the created PixelBuffer don't match the requirements.\n\tImage likely to come out distorted."));
+			wxLogMessage(wxT("Error: The width and height of the created PixelBuffer don't match the requirements.\n\tImage likely to come out distorted."));
 			nHeight = h;
 			nWidth = w;
 		}
 
 		if (!wglShareLists(canvas_hRC, m_hRC)) {
 			err = glGetError();
-			wxLogMessage(_T("OpenGL Error: [0x%x] Call to wglShareLists() failed for our PixelBuffer."), err);
+			wxLogMessage(wxT("OpenGL Error: [0x%x] Call to wglShareLists() failed for our PixelBuffer."), err);
 		}
 
 		// We were successful in creating a p-buffer. We can now make its context 
@@ -244,7 +244,7 @@ void RenderTexture::Init(HWND hWnd, int width, int height, bool fboMode)
 		// attached to a window.
 		if (!wglMakeCurrent(m_hDC, m_hRC)) {
 			err = glGetError();
-			wxLogMessage(_T("OpenGL Error: [0x%x] wglMakeCurrent() Failed! Could not make the PBuffer's context current!"), err);
+			wxLogMessage(wxT("OpenGL Error: [0x%x] wglMakeCurrent() Failed! Could not make the PBuffer's context current!"), err);
 		}
 
 		// Setup OpenGL RenderState
@@ -263,7 +263,7 @@ void RenderTexture::Init(HWND hWnd, int width, int height, bool fboMode)
 		// Now set the current context back to original.
 		if (!wglMakeCurrent(canvas_hDC, canvas_hRC)) {
 			err = glGetError();
-			wxLogMessage(_T("OpenGL Error: [0x%x] wglMakeCurrent() Failed! Could not return the context back to the wxGLCanvas!"), err);
+			wxLogMessage(wxT("OpenGL Error: [0x%x] wglMakeCurrent() Failed! Could not return the context back to the wxGLCanvas!"), err);
 		}
 	}
 }
@@ -274,7 +274,7 @@ void RenderTexture::BindTexture()
 
 	if (!m_FBO) {
 		if(!wglBindTexImageARB(m_hPBuffer, WGL_FRONT_LEFT_ARB )) {
-			wxLogMessage(_T("GFX Error: Could not bind PixelBuffer to render texture!"));
+			wxLogMessage(wxT("GFX Error: Could not bind PixelBuffer to render texture!"));
 		}
 	}
 }
@@ -284,7 +284,7 @@ void RenderTexture::ReleaseTexture()
 {
 	if (!m_FBO) { // If its a pixelbuffer, release the texture
 		if(!wglReleaseTexImageARB(m_hPBuffer, WGL_FRONT_LEFT_ARB)) {
-			wxLogMessage(_T("GFX Error: Could not release Texture from the PixelBuffer!"));
+			wxLogMessage(wxT("GFX Error: Could not release Texture from the PixelBuffer!"));
 		}
 	}
 
@@ -304,12 +304,12 @@ void RenderTexture::BeginRender()
 		wglQueryPbufferARB(m_hPBuffer, WGL_PBUFFER_LOST_ARB, &flag );
 
 		if (flag) {
-			wxLogMessage(_T("OGL Error: The PixelBuffer was lost!"));
+			wxLogMessage(wxT("OGL Error: The PixelBuffer was lost!"));
 			return;
 		}
 
 		if (!wglMakeCurrent(m_hDC, m_hRC))
-			wxLogMessage(_T("OGL Error: Could not make the PixelBuffer's context current."));
+			wxLogMessage(wxT("OGL Error: Could not make the PixelBuffer's context current."));
 	}
 }
 
@@ -323,7 +323,7 @@ void RenderTexture::EndRender()
 
 	} else { //PBuffer
 		if (!wglMakeCurrent(canvas_hDC, canvas_hRC))
-			wxLogMessage(_T("OGL Error: Could not return the context back to the primary window."));
+			wxLogMessage(wxT("OGL Error: Could not return the context back to the primary window."));
 	}
 }
 

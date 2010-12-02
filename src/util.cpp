@@ -48,7 +48,7 @@ bool modelExport_X3D_CenterModel = true;
 // M3 Options
 float modelExport_M3_BoundScale = 0.5f;
 float modelExport_M3_SphereScale = 0.5f;
-wxString modelExport_M3_TexturePath = _T("");
+wxString modelExport_M3_TexturePath = wxT("");
 std::vector<uint32> modelExport_M3_Anims;
 wxArrayString modelExport_M3_AnimNames;
 
@@ -58,17 +58,17 @@ long interfaceID = -1;
 int ssCounter = 100; // ScreenShot Counter
 int imgFormat = 0;
 
-wxString locales[] = {_T("enUS"), _T("koKR"), _T("frFR"), _T("deDE"), _T("zhCN"),  _T("zhTW"),  _T("esES"),  _T("ruRU")};
+wxString locales[] = {wxT("enUS"), wxT("koKR"), wxT("frFR"), wxT("deDE"), wxT("zhCN"),  wxT("zhTW"),  wxT("esES"),  wxT("ruRU")};
 
 /*
 wxString langCSConv[] =
 {
-	_T("iso-8859-1"),
+	wxT("iso-8859-1"),
 	wxEmptyString,
 	wxEmptyString,
 	wxEmptyString,
-	_T("gb2312"),
-	_T("big5"),
+	wxT("gb2312"),
+	wxT("big5"),
 	wxEmptyString,
 	wxEmptyString,
 };
@@ -193,13 +193,13 @@ void getGamePath()
 	// if it failed, look for World of Warcraft install
 	const wxString regpaths[] = {
 		// _WIN64
-		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft"),
-		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\PTR"),
-		_T("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\Beta"),
+		wxT("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft"),
+		wxT("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\PTR"),
+		wxT("SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\World of Warcraft\\Beta"),
 		//_WIN32, but for compatible
-		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft"),
-		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\PTR"),
-		_T("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\Beta"),
+		wxT("SOFTWARE\\Blizzard Entertainment\\World of Warcraft"),
+		wxT("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\PTR"),
+		wxT("SOFTWARE\\Blizzard Entertainment\\World of Warcraft\\Beta"),
 	};
 
 	for (size_t i=0; i<WXSIZEOF(regpaths); i++) {
@@ -207,7 +207,7 @@ void getGamePath()
 
 		if (l == ERROR_SUCCESS) {
 			s = sizeof(path);
-			l = RegQueryValueEx(key, _T("InstallPath"), 0, &t,(LPBYTE)path, &s);
+			l = RegQueryValueEx(key, wxT("InstallPath"), 0, &t,(LPBYTE)path, &s);
 			if (l == ERROR_SUCCESS && wxDir::Exists(path)) {
 				sNames.Add(path);
 			}
@@ -218,33 +218,33 @@ void getGamePath()
 	if (sNames.size() == 1)
 		gamePath = sNames[0];
 	else if (sNames.size() > 1)
-		gamePath = wxGetSingleChoice(_T("Please select a Path:"), _T("Path"), sNames);
+		gamePath = wxGetSingleChoice(wxT("Please select a Path:"), wxT("Path"), sNames);
 
 	// If we found an install then set the game path, otherwise just set to C:\ for now
 	if (gamePath == wxEmptyString) {
-		gamePath = _T("C:\\Program Files\\World of Warcraft\\");
-		if (!wxFileExists(gamePath+_T("Wow.exe"))){
+		gamePath = wxT("C:\\Program Files\\World of Warcraft\\");
+		if (!wxFileExists(gamePath+wxT("Wow.exe"))){
 			gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"), gamePath);
 		}
 	}
 	if (gamePath.Last() != SLASH)
 		gamePath.Append(SLASH);
-	gamePath.Append(_T("Data\\"));
+	gamePath.Append(wxT("Data\\"));
 #elif _MAC // Mac OS X
     gamePath = wxT("/Applications/World of Warcraft/");
-	if (!wxFileExists(gamePath+_T("Data/common.MPQ")) && !wxFileExists(gamePath+_T("Data/art.MPQ")) ){
+	if (!wxFileExists(gamePath+wxT("Data/common.MPQ")) && !wxFileExists(gamePath+wxT("Data/art.MPQ")) ){
         gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"), gamePath);
     }
 	if (gamePath.Last() != SLASH)
 		gamePath.Append(SLASH);
-	gamePath.Append(_T("Data/"));
+	gamePath.Append(wxT("Data/"));
 #else // Linux
-	gamePath = _T(".")+SLASH;
-	if (!wxFileExists(gamePath+_T("Wow.exe"))){
+	gamePath = wxT(".")+SLASH;
+	if (!wxFileExists(gamePath+wxT("Wow.exe"))){
 		gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"), gamePath);
 	}
 	if (gamePath.Last() != SLASH)
 		gamePath.Append(SLASH);
-	gamePath.Append(_T("Data/"));
+	gamePath.Append(wxT("Data/"));
 #endif
 }

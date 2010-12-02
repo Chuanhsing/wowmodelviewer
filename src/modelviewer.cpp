@@ -206,7 +206,7 @@ ModelViewer::ModelViewer()
 
 	//wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU
 	// create our main frame
-	if (Create(NULL, wxID_ANY, wxString(APP_TITLE _T(" ") APP_VERSION _T(" ") APP_PLATFORM APP_ISDEBUG), wxDefaultPosition, wxSize(1024, 768), wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN, _T("ModelViewerFrame"))) {
+	if (Create(NULL, wxID_ANY, wxString(APP_TITLE wxT(" ") APP_VERSION wxT(" ") APP_PLATFORM APP_ISDEBUG), wxDefaultPosition, wxSize(1024, 768), wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN, wxT("ModelViewerFrame"))) {
 		SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
 		SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
@@ -236,7 +236,7 @@ ModelViewer::ModelViewer()
 		// load our World of Warcraft mpq archives
 		wxString initvar = Init();
 		if (initvar != wxEmptyString){
-			wxString info = _T("Fatal Error: ") + initvar;
+			wxString info = wxT("Fatal Error: ") + initvar;
 			wxLogMessage(info);
 			wxMessageDialog *dial = new wxMessageDialog(NULL, info, wxT("Fatal Error"), wxOK | wxICON_ERROR);
 			dial->ShowModal();
@@ -249,45 +249,45 @@ ModelViewer::ModelViewer()
 
 		// Error check
 		if (!initDB) {
-			wxMessageBox(_T("Some DBC files could not be loaded.  These files are vital to being able to render models correctly.\nPlease make sure you are loading the 'Locale-xxxx.MPQ' file.\nFile list has been disabled until you are able to correct this problem."), _("DBC Error"));
+			wxMessageBox(wxT("Some DBC files could not be loaded.  These files are vital to being able to render models correctly.\nPlease make sure you are loading the 'Locale-xxxx.MPQ' file.\nFile list has been disabled until you are able to correct this problem."), wxT("DBC Error"));
 			fileControl->Disable();
 		}
 
 	} else {
-		wxLogMessage(_T("Critical Error: Unable to create the main window for the application."));
+		wxLogMessage(wxT("Critical Error: Unable to create the main window for the application."));
 		Close(true);
 	}
 }
 
 void ModelViewer::InitMenu()
 {
-	wxLogMessage(_T("Initiating File Menu.."));
+	wxLogMessage(wxT("Initiating File Menu.."));
 	
 	// MENU
 	fileMenu = new wxMenu;
-	fileMenu->Append(ID_MODELEXPORT_BASE, _("Save File..."));
+	fileMenu->Append(ID_MODELEXPORT_BASE, wxT("Save File..."));
 	fileMenu->Enable(ID_MODELEXPORT_BASE, false);
-	fileMenu->Append(ID_FILE_SCREENSHOT, _("Save Screenshot\tF12"));
-	fileMenu->Append(ID_FILE_SCREENSHOTCONFIG, _("Save Sized Screenshot\tCTRL+S"));
-	fileMenu->Append(ID_FILE_EXPORTGIF, _("GIF/Sequence Export"));
-	fileMenu->Append(ID_FILE_EXPORTAVI, _("Export AVI"));
+	fileMenu->Append(ID_FILE_SCREENSHOT, wxT("Save Screenshot\tF12"));
+	fileMenu->Append(ID_FILE_SCREENSHOTCONFIG, wxT("Save Sized Screenshot\tCTRL+S"));
+	fileMenu->Append(ID_FILE_EXPORTGIF, wxT("GIF/Sequence Export"));
+	fileMenu->Append(ID_FILE_EXPORTAVI, wxT("Export AVI"));
 	fileMenu->AppendSeparator();
 /*
-	fileMenu->Append(ID_FILE_TEXIMPORT, _("Import Texture"));
+	fileMenu->Append(ID_FILE_TEXIMPORT, wxT("Import Texture"));
 	fileMenu->Enable(ID_FILE_TEXIMPORT, false);
-	fileMenu->Append(ID_FILE_TEXEXPORT, _("Export Texture"));
+	fileMenu->Append(ID_FILE_TEXEXPORT, wxT("Export Texture"));
 	fileMenu->Enable(ID_FILE_TEXEXPORT, false);
 */
-	fileMenu->Append(ID_EXPORT_TEXTURES, _("Export Textures..."));
+	fileMenu->Append(ID_EXPORT_TEXTURES, wxT("Export Textures..."));
 
 	// --== New Model Export Menu! ==--
 	//To add your exporter, simply copy the bottom line below, and change the nessicary information.
 
 	exportMenu = new wxMenu;
-	exportMenu->AppendCheckItem(ID_MODELEXPORT_INIT, _T("Initial Pose Only"));
+	exportMenu->AppendCheckItem(ID_MODELEXPORT_INIT, wxT("Initial Pose Only"));
 	exportMenu->Check(ID_MODELEXPORT_INIT, modelExportInitOnly);
 	exportMenu->AppendSeparator();
-	exportMenu->Append(ID_MODELEXPORT_OPTIONS, _T("Export Options..."));
+	exportMenu->Append(ID_MODELEXPORT_OPTIONS, wxT("Export Options..."));
 	exportMenu->AppendSeparator();
 	// Perfered Exporter First
 	if (Perfered_Exporter != -1) {
@@ -306,44 +306,44 @@ void ModelViewer::InitMenu()
 	exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
 
 	// -= Create Model Export Menu =-
-	fileMenu->Append(ID_FILE_MODELEXPORT_MENU, _("Export Model"), exportMenu);
+	fileMenu->Append(ID_FILE_MODELEXPORT_MENU, wxT("Export Model"), exportMenu);
 	fileMenu->Enable(ID_FILE_MODELEXPORT_MENU, false);
 
 	// --== Continue regular menu ==--
 	fileMenu->AppendSeparator();
-	fileMenu->Append(ID_FILE_DISCOVERY_ITEM, _("Discovery Item"));
-	if (wxFileExists(_T("discoveryitems.csv")))
+	fileMenu->Append(ID_FILE_DISCOVERY_ITEM, wxT("Discovery Item"));
+	if (wxFileExists(wxT("discoveryitems.csv")))
 		fileMenu->Enable(ID_FILE_DISCOVERY_ITEM, false);
-	fileMenu->Append(ID_FILE_DISCOVERY_NPC, _("Discovery NPC"));
+	fileMenu->Append(ID_FILE_DISCOVERY_NPC, wxT("Discovery NPC"));
 	fileMenu->AppendSeparator();
-	fileMenu->Append(ID_FILE_MODEL_INFO, _("Export ModelInfo.xml"));
+	fileMenu->Append(ID_FILE_MODEL_INFO, wxT("Export ModelInfo.xml"));
 
 	fileMenu->AppendSeparator();
-	fileMenu->Append(ID_FILE_RESETLAYOUT, _("Reset Layout"));
+	fileMenu->Append(ID_FILE_RESETLAYOUT, wxT("Reset Layout"));
 	fileMenu->AppendSeparator();
-	fileMenu->Append(ID_FILE_EXIT, _("E&xit\tCTRL+X"));
+	fileMenu->Append(ID_FILE_EXIT, wxT("E&xit\tCTRL+X"));
 
 	viewMenu = new wxMenu;
-	viewMenu->Append(ID_VIEW_NPC, _("View NPC"));
-	viewMenu->Append(ID_VIEW_ITEM, _("View Item"));
+	viewMenu->Append(ID_VIEW_NPC, wxT("View NPC"));
+	viewMenu->Append(ID_VIEW_ITEM, wxT("View Item"));
 	viewMenu->AppendSeparator();
-	viewMenu->Append(ID_SHOW_FILE_LIST, _("Show file list"));
-	viewMenu->Append(ID_SHOW_ANIM, _("Show animaton control"));
-	viewMenu->Append(ID_SHOW_CHAR, _("Show character control"));
-	viewMenu->Append(ID_SHOW_LIGHT, _("Show light control"));
-	viewMenu->Append(ID_SHOW_MODEL, _("Show model control"));
-	viewMenu->Append(ID_SHOW_MODELBANK, _("Show model bank"));
+	viewMenu->Append(ID_SHOW_FILE_LIST, wxT("Show file list"));
+	viewMenu->Append(ID_SHOW_ANIM, wxT("Show animaton control"));
+	viewMenu->Append(ID_SHOW_CHAR, wxT("Show character control"));
+	viewMenu->Append(ID_SHOW_LIGHT, wxT("Show light control"));
+	viewMenu->Append(ID_SHOW_MODEL, wxT("Show model control"));
+	viewMenu->Append(ID_SHOW_MODELBANK, wxT("Show model bank"));
 	viewMenu->AppendSeparator();
 	if (canvas) {
-		viewMenu->Append(ID_BG_COLOR, _("Background Color..."));
-		viewMenu->AppendCheckItem(ID_BACKGROUND, _("Load Background\tCTRL+L"));
+		viewMenu->Append(ID_BG_COLOR, wxT("Background Color..."));
+		viewMenu->AppendCheckItem(ID_BACKGROUND, wxT("Load Background\tCTRL+L"));
 		viewMenu->Check(ID_BACKGROUND, canvas->drawBackground);
-		viewMenu->AppendCheckItem(ID_SKYBOX, _("Skybox"));
+		viewMenu->AppendCheckItem(ID_SKYBOX, wxT("Skybox"));
 		viewMenu->Check(ID_SKYBOX, canvas->drawSky);
-		viewMenu->AppendCheckItem(ID_SHOW_GRID, _("Show Grid"));
+		viewMenu->AppendCheckItem(ID_SHOW_GRID, wxT("Show Grid"));
 		viewMenu->Check(ID_SHOW_GRID, canvas->drawGrid);
 
-		viewMenu->AppendCheckItem(ID_SHOW_MASK, _("Show Mask"));
+		viewMenu->AppendCheckItem(ID_SHOW_MASK, wxT("Show Mask"));
 		viewMenu->Check(ID_SHOW_MASK, false);
 
 		viewMenu->AppendSeparator();
@@ -355,56 +355,56 @@ void ModelViewer::InitMenu()
 		
 		// Camera Menu
 		wxMenu *camMenu = new wxMenu;
-		camMenu->AppendCheckItem(ID_USE_CAMERA, _("Use model camera"));
+		camMenu->AppendCheckItem(ID_USE_CAMERA, wxT("Use model camera"));
 		camMenu->AppendSeparator();
-		camMenu->Append(ID_CAM_FRONT, _("Front"));
-		camMenu->Append(ID_CAM_BACK, _("Back"));
-		camMenu->Append(ID_CAM_SIDE, _("Side"));
-		camMenu->Append(ID_CAM_ISO, _("Perspective"));
+		camMenu->Append(ID_CAM_FRONT, wxT("Front"));
+		camMenu->Append(ID_CAM_BACK, wxT("Back"));
+		camMenu->Append(ID_CAM_SIDE, wxT("Side"));
+		camMenu->Append(ID_CAM_ISO, wxT("Perspective"));
 
-		viewMenu->Append(ID_CAMERA, _("Camera"), camMenu);
+		viewMenu->Append(ID_CAMERA, wxT("Camera"), camMenu);
 		viewMenu->AppendSeparator();
 
 		wxMenu *setSize = new wxMenu;
-		setSize->AppendRadioItem(ID_CANVAS120, _T("120 x 120"));
-		setSize->AppendRadioItem(ID_CANVAS512, _T("512 x 512"));
-		setSize->AppendRadioItem(ID_CANVAS640, _T("640 x 480"));
-		setSize->AppendRadioItem(ID_CANVAS800, _T("800 x 600"));
-		setSize->AppendRadioItem(ID_CANVAS1024, _T("1024 x 768"));
-		setSize->AppendRadioItem(ID_CANVAS1152, _T("1152 x 864"));
-		setSize->AppendRadioItem(ID_CANVAS1280, _T("1280 x 768"));
-		setSize->AppendRadioItem(ID_CANVAS1600, _T("1600 x 1200"));
-		setSize->AppendRadioItem(ID_CANVASW720, _T("1280 x 720"));
-		setSize->AppendRadioItem(ID_CANVASW1080, _T("1920 x 1080"));
-		setSize->AppendRadioItem(ID_CANVASW1200, _T("1920 x 1200"));
+		setSize->AppendRadioItem(ID_CANVAS120, wxT("120 x 120"));
+		setSize->AppendRadioItem(ID_CANVAS512, wxT("512 x 512"));
+		setSize->AppendRadioItem(ID_CANVAS640, wxT("640 x 480"));
+		setSize->AppendRadioItem(ID_CANVAS800, wxT("800 x 600"));
+		setSize->AppendRadioItem(ID_CANVAS1024, wxT("1024 x 768"));
+		setSize->AppendRadioItem(ID_CANVAS1152, wxT("1152 x 864"));
+		setSize->AppendRadioItem(ID_CANVAS1280, wxT("1280 x 768"));
+		setSize->AppendRadioItem(ID_CANVAS1600, wxT("1600 x 1200"));
+		setSize->AppendRadioItem(ID_CANVASW720, wxT("1280 x 720"));
+		setSize->AppendRadioItem(ID_CANVASW1080, wxT("1920 x 1080"));
+		setSize->AppendRadioItem(ID_CANVASW1200, wxT("1920 x 1200"));
 
-		viewMenu->Append(ID_CANVASSIZE, _("Set Canvas Size"), setSize);
+		viewMenu->Append(ID_CANVASSIZE, wxT("Set Canvas Size"), setSize);
 		
-		//lightMenu->Append(ID_LT_COLOR, _("Lighting Color..."));
+		//lightMenu->Append(ID_LT_COLOR, wxT("Lighting Color..."));
 
 		lightMenu = new wxMenu;
-		lightMenu->Append(ID_LT_SAVE, _("Save Lighting"));
-		lightMenu->Append(ID_LT_LOAD, _("Load Lighting"));
+		lightMenu->Append(ID_LT_SAVE, wxT("Save Lighting"));
+		lightMenu->Append(ID_LT_LOAD, wxT("Load Lighting"));
 		lightMenu->AppendSeparator();
-		lightMenu->AppendCheckItem(ID_LT_DIRECTION, _("Render Light Objects"));
+		lightMenu->AppendCheckItem(ID_LT_DIRECTION, wxT("Render Light Objects"));
 		lightMenu->AppendSeparator();
-		lightMenu->AppendCheckItem(ID_LT_TRUE, _("Use true lighting"));
+		lightMenu->AppendCheckItem(ID_LT_TRUE, wxT("Use true lighting"));
 		lightMenu->Check(ID_LT_TRUE, false);
-		lightMenu->AppendRadioItem(ID_LT_DIRECTIONAL, _("Use dynamic light"));
+		lightMenu->AppendRadioItem(ID_LT_DIRECTIONAL, wxT("Use dynamic light"));
 		lightMenu->Check(ID_LT_DIRECTIONAL, true);
-		lightMenu->AppendRadioItem(ID_LT_AMBIENT, _("Use ambient light"));
-		lightMenu->AppendRadioItem(ID_LT_MODEL, _("Model lights only"));
+		lightMenu->AppendRadioItem(ID_LT_AMBIENT, wxT("Use ambient light"));
+		lightMenu->AppendRadioItem(ID_LT_MODEL, wxT("Model lights only"));
 
 		charMenu = new wxMenu;
-		charMenu->Append(ID_LOAD_CHAR, _("Load Character\tF8"));
-		charMenu->Append(ID_IMPORT_CHAR, _("Import Armory Character"));
-		charMenu->Append(ID_SAVE_CHAR, _("Save Character\tF7"));
+		charMenu->Append(ID_LOAD_CHAR, wxT("Load Character\tF8"));
+		charMenu->Append(ID_IMPORT_CHAR, wxT("Import Armory Character"));
+		charMenu->Append(ID_SAVE_CHAR, wxT("Save Character\tF7"));
 		charMenu->AppendSeparator();
 
 		charGlowMenu = new wxMenu;
-		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_NONE, _("None"));
-		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEFAULT, _("Default"));
-		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEATHKNIGHT, _("Death Knight"));
+		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_NONE, wxT("None"));
+		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEFAULT, wxT("Default"));
+		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEATHKNIGHT, wxT("Death Knight"));
 		if (charControl->cd.eyeGlowType){
 			unsigned int egt = charControl->cd.eyeGlowType;
 			if (egt == EGT_NONE)
@@ -417,32 +417,32 @@ void ModelViewer::InitMenu()
 			charControl->cd.eyeGlowType = EGT_DEFAULT;
 			charGlowMenu->Check(ID_CHAREYEGLOW_DEFAULT, true);
 		}
-		charMenu->Append(ID_CHAREYEGLOW, _("Eye Glow"), charGlowMenu);
+		charMenu->Append(ID_CHAREYEGLOW, wxT("Eye Glow"), charGlowMenu);
 
-		charMenu->AppendCheckItem(ID_SHOW_UNDERWEAR, _("Show Underwear"));
+		charMenu->AppendCheckItem(ID_SHOW_UNDERWEAR, wxT("Show Underwear"));
 		charMenu->Check(ID_SHOW_UNDERWEAR, true);
-		charMenu->AppendCheckItem(ID_SHOW_EARS, _("Show Ears\tCTRL+E"));
+		charMenu->AppendCheckItem(ID_SHOW_EARS, wxT("Show Ears\tCTRL+E"));
 		charMenu->Check(ID_SHOW_EARS, true);
-		charMenu->AppendCheckItem(ID_SHOW_HAIR, _("Show Hair\tCTRL+H"));
+		charMenu->AppendCheckItem(ID_SHOW_HAIR, wxT("Show Hair\tCTRL+H"));
 		charMenu->Check(ID_SHOW_HAIR, true);
-		charMenu->AppendCheckItem(ID_SHOW_FACIALHAIR, _("Show Facial Hair\tCTRL+F"));
+		charMenu->AppendCheckItem(ID_SHOW_FACIALHAIR, wxT("Show Facial Hair\tCTRL+F"));
 		charMenu->Check(ID_SHOW_FACIALHAIR, true);
-		charMenu->AppendCheckItem(ID_SHOW_FEET, _("Show Feet"));
+		charMenu->AppendCheckItem(ID_SHOW_FEET, wxT("Show Feet"));
 		charMenu->Check(ID_SHOW_FEET, false);
-		charMenu->AppendCheckItem(ID_SHEATHE, _("Sheathe Weapons\tCTRL+Z"));
+		charMenu->AppendCheckItem(ID_SHEATHE, wxT("Sheathe Weapons\tCTRL+Z"));
 		charMenu->Check(ID_SHEATHE, false);
 
 		charMenu->AppendSeparator();
-		charMenu->Append(ID_SAVE_EQUIPMENT, _("Save Equipment\tF5"));
-		charMenu->Append(ID_LOAD_EQUIPMENT, _("Load Equipment\tF6"));
-		charMenu->Append(ID_CLEAR_EQUIPMENT, _("Clear Equipment\tF9"));
+		charMenu->Append(ID_SAVE_EQUIPMENT, wxT("Save Equipment\tF5"));
+		charMenu->Append(ID_LOAD_EQUIPMENT, wxT("Load Equipment\tF6"));
+		charMenu->Append(ID_CLEAR_EQUIPMENT, wxT("Clear Equipment\tF9"));
 		charMenu->AppendSeparator();
-		charMenu->Append(ID_LOAD_SET, _("Load Item Set"));
-		charMenu->Append(ID_LOAD_START, _("Load Start Outfit"));
-		charMenu->Append(ID_LOAD_NPC_START, _("Load NPC Outfit"));
+		charMenu->Append(ID_LOAD_SET, wxT("Load Item Set"));
+		charMenu->Append(ID_LOAD_START, wxT("Load Start Outfit"));
+		charMenu->Append(ID_LOAD_NPC_START, wxT("Load NPC Outfit"));
 		charMenu->AppendSeparator();
-		charMenu->Append(ID_MOUNT_CHARACTER, _("Mount a character..."));
-		charMenu->Append(ID_CHAR_RANDOMISE, _("Randomise Character\tF10"));
+		charMenu->Append(ID_MOUNT_CHARACTER, wxT("Mount a character..."));
+		charMenu->Append(ID_CHAR_RANDOMISE, wxT("Randomise Character\tF10"));
 
 		// Start out Disabled.
 		charMenu->Enable(ID_SAVE_CHAR, false);
@@ -463,46 +463,46 @@ void ModelViewer::InitMenu()
 		charMenu->Enable(ID_CHAR_RANDOMISE, false);
 
 		wxMenu *effectsMenu = new wxMenu;
-		effectsMenu->Append(ID_ENCHANTS, _("Apply Enchants"));
-		effectsMenu->Append(ID_EQCREATURE_R, _("Creature Right-Hand"));
-		effectsMenu->Append(ID_EQCREATURE_L, _("Creature Left-Hand"));
+		effectsMenu->Append(ID_ENCHANTS, wxT("Apply Enchants"));
+		effectsMenu->Append(ID_EQCREATURE_R, wxT("Creature Right-Hand"));
+		effectsMenu->Append(ID_EQCREATURE_L, wxT("Creature Left-Hand"));
 #ifndef	WotLK
-		effectsMenu->Append(ID_SPELLS, _("Spell Effects"));
+		effectsMenu->Append(ID_SPELLS, wxT("Spell Effects"));
 		effectsMenu->Enable(ID_SPELLS, false);
-		effectsMenu->Append(ID_SHADER_DEATH, _("Death Effect"));
+		effectsMenu->Append(ID_SHADER_DEATH, wxT("Death Effect"));
 		effectsMenu->Enable(ID_SHADER_DEATH, false);
 #endif
-		effectsMenu->Append(ID_TEST, _T("Arrows Test"));
+		effectsMenu->Append(ID_TEST, wxT("Arrows Test"));
 
 		// Options menu
 		optMenu = new wxMenu;
 #ifndef	WotLK
-		optMenu->AppendCheckItem(ID_USE_NPCSKINS, _("Use npc character skins"));
+		optMenu->AppendCheckItem(ID_USE_NPCSKINS, wxT("Use npc character skins"));
 		optMenu->Check(ID_USE_NPCSKINS, false);
 #endif
-		optMenu->AppendCheckItem(ID_DEFAULT_DOODADS, _("Always show default doodads in WMOs"));
+		optMenu->AppendCheckItem(ID_DEFAULT_DOODADS, wxT("Always show default doodads in WMOs"));
 		optMenu->Check(ID_DEFAULT_DOODADS, true);
 		optMenu->AppendSeparator();
-		optMenu->Append(ID_MODELEXPORT_OPTIONS, _("Export Options..."));
-		optMenu->Append(ID_SHOW_SETTINGS, _("Settings..."));
+		optMenu->Append(ID_MODELEXPORT_OPTIONS, wxT("Export Options..."));
+		optMenu->Append(ID_SHOW_SETTINGS, wxT("Settings..."));
 
 
 		wxMenu *aboutMenu = new wxMenu;
-		aboutMenu->Append(ID_LANGUAGE, _("Language"));
-		aboutMenu->Append(ID_HELP, _("Help"));
+		aboutMenu->Append(ID_LANGUAGE, wxT("Language"));
+		aboutMenu->Append(ID_HELP, wxT("Help"));
 		aboutMenu->Enable(ID_HELP, false);
-		aboutMenu->Append(ID_ABOUT, _("About"));
+		aboutMenu->Append(ID_ABOUT, wxT("About"));
 		aboutMenu->AppendSeparator();
-		aboutMenu->Append(ID_CHECKFORUPDATE, _("Check for Update"));
+		aboutMenu->Append(ID_CHECKFORUPDATE, wxT("Check for Update"));
 
 		menuBar = new wxMenuBar();
-		menuBar->Append(fileMenu, _("&File"));
-		menuBar->Append(viewMenu, _("&View"));
-		menuBar->Append(charMenu, _("&Character"));
-		menuBar->Append(lightMenu, _("&Lighting"));
-		menuBar->Append(optMenu, _("&Options"));
-		menuBar->Append(effectsMenu, _("&Effects"));
-		menuBar->Append(aboutMenu, _("&About"));
+		menuBar->Append(fileMenu, wxT("&File"));
+		menuBar->Append(viewMenu, wxT("&View"));
+		menuBar->Append(charMenu, wxT("&Character"));
+		menuBar->Append(lightMenu, wxT("&Lighting"));
+		menuBar->Append(optMenu, wxT("&Options"));
+		menuBar->Append(effectsMenu, wxT("&Effects"));
+		menuBar->Append(aboutMenu, wxT("&About"));
 		SetMenuBar(menuBar);
 	} catch(...) {};
 
@@ -548,7 +548,7 @@ void ModelViewer::InitMenu()
 
 void ModelViewer::InitObjects()
 {
-	wxLogMessage(_T("Initiating Objects..."));
+	wxLogMessage(wxT("Initiating Objects..."));
 
 	fileControl = new FileControl(this, ID_FILELIST_FRAME);
 
@@ -580,100 +580,100 @@ void ModelViewer::InitObjects()
 	
 	enchants = new EnchantsDialog(this, charControl);
 
-	animExporter = new CAnimationExporter(this, wxID_ANY, _T("Animation Exporter"), wxDefaultPosition, wxSize(350, 220), wxCAPTION|wxSTAY_ON_TOP|wxFRAME_NO_TASKBAR);
+	animExporter = new CAnimationExporter(this, wxID_ANY, wxT("Animation Exporter"), wxDefaultPosition, wxSize(350, 220), wxCAPTION|wxSTAY_ON_TOP|wxFRAME_NO_TASKBAR);
 }
 
 void ModelViewer::InitDatabase()
 {
-	wxLogMessage(_T("Initiating Databases..."));
+	wxLogMessage(wxT("Initiating Databases..."));
 	initDB = true;
 
 	if (!itemdb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the Item DB."));
+		wxLogMessage(wxT("Error: Could not open the Item DB."));
 	}
-	wxString filename = locales[langID]+SLASH+_T("items.csv");
+	wxString filename = locales[langID]+SLASH+wxT("items.csv");
 	if (!wxFile::Exists(filename))
-		filename = locales[0]+SLASH+_T("items.csv");
+		filename = locales[0]+SLASH+wxT("items.csv");
 	if (wxFile::Exists(filename)) {
 		items.open(filename);
 	} else {
-		wxLogMessage(_T("Error: Could not find items.csv to load an item list from."));
+		wxLogMessage(wxT("Error: Could not find items.csv to load an item list from."));
 	}
 
 	if (!skyboxdb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the SkyBox DB."));
+		wxLogMessage(wxT("Error: Could not open the SkyBox DB."));
 	}
 	if (!spellitemenchantmentdb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the Spell Item Enchanement DB."));
+		wxLogMessage(wxT("Error: Could not open the Spell Item Enchanement DB."));
 	}
 	if (!itemvisualsdb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the Item Visuals DB."));
+		wxLogMessage(wxT("Error: Could not open the Item Visuals DB."));
 	}
 	if (!animdb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the Animation DB."));
+		wxLogMessage(wxT("Error: Could not open the Animation DB."));
 	}
 	if (!modeldb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the Creatures DB."));
+		wxLogMessage(wxT("Error: Could not open the Creatures DB."));
 	}
 	if (!skindb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the CreatureDisplayInfo DB."));
+		wxLogMessage(wxT("Error: Could not open the CreatureDisplayInfo DB."));
 	}
 	if(!hairdb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the Hair Geoset DB."));
+		wxLogMessage(wxT("Error: Could not open the Hair Geoset DB."));
 	}
 	if(!chardb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the Character DB."));
+		wxLogMessage(wxT("Error: Could not open the Character DB."));
 	}
 	if(!racedb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the Char Races DB."));
+		wxLogMessage(wxT("Error: Could not open the Char Races DB."));
 	}
 	if(!classdb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the Char Classes DB."));
+		wxLogMessage(wxT("Error: Could not open the Char Classes DB."));
 	}
 	if(!facialhairdb.open()) {
 		initDB = false;
-		wxLogMessage(_T("Error: Could not open the Char Facial Hair DB."));
+		wxLogMessage(wxT("Error: Could not open the Char Facial Hair DB."));
 	}
 	if(!visualdb.open())
-		wxLogMessage(_T("Error: Could not open the ItemVisuals DB."));
+		wxLogMessage(wxT("Error: Could not open the ItemVisuals DB."));
 	if(!effectdb.open())
-		wxLogMessage(_T("Error: Could not open the ItemVisualEffects DB."));
+		wxLogMessage(wxT("Error: Could not open the ItemVisualEffects DB."));
 	if(!subclassdb.open())
-		wxLogMessage(_T("Error: Could not open the Item Subclasses DB."));
+		wxLogMessage(wxT("Error: Could not open the Item Subclasses DB."));
 	if(!startdb.open())
-		wxLogMessage(_T("Error: Could not open the Start Outfit Sets DB."));
+		wxLogMessage(wxT("Error: Could not open the Start Outfit Sets DB."));
 	//if(!helmetdb.open()) return false;
 	if(!npcdb.open()) 
-		wxLogMessage(_T("Error: Could not open the Start Outfit NPC DB."));
+		wxLogMessage(wxT("Error: Could not open the Start Outfit NPC DB."));
 	if(!npctypedb.open())
-		wxLogMessage(_T("Error: Could not open the Creature Type DB."));
+		wxLogMessage(wxT("Error: Could not open the Creature Type DB."));
 	if(!camcinemadb.open())
-		wxLogMessage(_T("Error: Could not open the Cinema Camera DB."));
+		wxLogMessage(wxT("Error: Could not open the Cinema Camera DB."));
 
 	if(!itemdisplaydb.open())
-		wxLogMessage(_T("Error: Could not open the ItemDisplayInfo DB."));
+		wxLogMessage(wxT("Error: Could not open the ItemDisplayInfo DB."));
 	else
 		items.cleanup(itemdisplaydb);
 
 	if(!setsdb.open())
-		wxLogMessage(_T("Error: Could not open the Item Sets DB."));
+		wxLogMessage(wxT("Error: Could not open the Item Sets DB."));
 	else
 		setsdb.cleanup(items);
 
-	filename = locales[langID]+SLASH+_T("npcs.csv");
+	filename = locales[langID]+SLASH+wxT("npcs.csv");
 	if(!wxFile::Exists(filename))
-		filename = locales[0]+SLASH+_T("npcs.csv");
+		filename = locales[0]+SLASH+wxT("npcs.csv");
 	if(wxFile::Exists(filename))
 		npcs.open(filename);
 	else {
@@ -681,20 +681,20 @@ void ModelViewer::InitDatabase()
 		if (rec.model > 0) {
 			npcs.npcs.push_back(rec);
 		}		
-		wxLogMessage(_T("Error: Could not find npcs.csv, unable to create NPC list."));
+		wxLogMessage(wxT("Error: Could not find npcs.csv, unable to create NPC list."));
 	}
 
 	if(spelleffectsdb.open())
 		GetSpellEffects();
 	else
-		wxLogMessage(_T("Error: Could not open the SpellVisualEffects DB."));
+		wxLogMessage(wxT("Error: Could not open the SpellVisualEffects DB."));
 
-	wxLogMessage(_T("Finished initiating database files."));
+	wxLogMessage(wxT("Finished initiating database files."));
 }
 
 void ModelViewer::InitDocking()
 {
-	wxLogMessage(_T("Initiating GUI Docking."));
+	wxLogMessage(wxT("Initiating GUI Docking."));
 	
 	// wxAUI stuff
 	//interfaceManager.SetFrame(this); 
@@ -702,56 +702,56 @@ void ModelViewer::InitDocking()
 
 	// OpenGL Canvas
 	interfaceManager.AddPane(canvas, wxAuiPaneInfo().
-				Name(wxT("canvas")).Caption(_("OpenGL Canvas")).
+				Name(wxT("canvas")).Caption(wxT("OpenGL Canvas")).
 				CenterPane());
 	
 	// Tree list control
 	interfaceManager.AddPane(fileControl, wxAuiPaneInfo().
-				Name(wxT("fileControl")).Caption(_("File List")).
+				Name(wxT("fileControl")).Caption(wxT("File List")).
 				BestSize(wxSize(170,700)).Left().Layer(2));
 
 	// Animation frame
     interfaceManager.AddPane(animControl, wxAuiPaneInfo().
-				Name(wxT("animControl")).Caption(_("Animation")).
+				Name(wxT("animControl")).Caption(wxT("Animation")).
 				Bottom().Layer(1));
 
 	// Character frame
 	interfaceManager.AddPane(charControl, wxAuiPaneInfo().
-                Name(wxT("charControl")).Caption(_("Character")).
+                Name(wxT("charControl")).Caption(wxT("Character")).
                 BestSize(wxSize(170,700)).Right().Layer(2).Show(isChar));
 
 	// Lighting control
 	interfaceManager.AddPane(lightControl, wxAuiPaneInfo().
-		Name(wxT("Lighting")).Caption(_("Lighting")).
+		Name(wxT("Lighting")).Caption(wxT("Lighting")).
 		FloatingSize(wxSize(170,430)).Float().Fixed().Show(false).
 		DestroyOnClose(false)); //.FloatingPosition(GetStartPosition())
 
 	// model control
 	interfaceManager.AddPane(modelControl, wxAuiPaneInfo().
-		Name(wxT("Models")).Caption(_("Models")).
+		Name(wxT("Models")).Caption(wxT("Models")).
 		FloatingSize(wxSize(160,460)).Float().Show(false).
 		DestroyOnClose(false));
 
 	// model bank control
 	interfaceManager.AddPane(modelbankControl, wxAuiPaneInfo().
-		Name(_T("ModelBank")).Caption(_("ModelBank")).
+		Name(wxT("ModelBank")).Caption(wxT("ModelBank")).
 		FloatingSize(wxSize(300,320)).Float().Fixed().Show(false).
 		DestroyOnClose(false));
 
 	// model opened
 	interfaceManager.AddPane(modelOpened, wxAuiPaneInfo().
-		Name(wxT("ModelOpened")).Caption(_("ModelOpened")).
+		Name(wxT("ModelOpened")).Caption(wxT("ModelOpened")).
 		FloatingSize(wxSize(700,90)).Float().Fixed().Show(false).
 		DestroyOnClose(false));
 
 	// settings frame
 	interfaceManager.AddPane(settingsControl, wxAuiPaneInfo().
-		Name(wxT("Settings")).Caption(_("Settings")).
+		Name(wxT("Settings")).Caption(wxT("Settings")).
 		FloatingSize(wxSize(400,440)).Float().TopDockable(false).LeftDockable(false).
 		RightDockable(false).BottomDockable(false).Fixed().Show(false));
 
 	interfaceManager.AddPane(exportOptionsControl, wxAuiPaneInfo().
-		Name(wxT("ExportOptions")).Caption(_("Model Export Options")).
+		Name(wxT("ExportOptions")).Caption(wxT("Model Export Options")).
 		FloatingSize(wxSize(400,440)).Float().TopDockable(false).LeftDockable(false).
 		RightDockable(false).BottomDockable(false).Fixed().Show(false));
 
@@ -772,41 +772,41 @@ void ModelViewer::ResetLayout()
 	
 	// OpenGL Canvas
 	interfaceManager.AddPane(canvas, wxAuiPaneInfo().
-				Name(wxT("canvas")).Caption(_("OpenGL Canvas")).
+				Name(wxT("canvas")).Caption(wxT("OpenGL Canvas")).
 				CenterPane());
 	
 	// Tree list control
 	interfaceManager.AddPane(fileControl, wxAuiPaneInfo().
-				Name(wxT("fileControl")).Caption(_("File List")).
+				Name(wxT("fileControl")).Caption(wxT("File List")).
 				BestSize(wxSize(170,700)).Left().Layer(2));
 
 	// Animation frame
     interfaceManager.AddPane(animControl, wxAuiPaneInfo().
-				Name(wxT("animControl")).Caption(_("Animation")).
+				Name(wxT("animControl")).Caption(wxT("Animation")).
 				Bottom().Layer(1));
 
 	// Character frame
 	interfaceManager.AddPane(charControl, wxAuiPaneInfo().
-                Name(wxT("charControl")).Caption(_("Character")).
+                Name(wxT("charControl")).Caption(wxT("Character")).
                 BestSize(wxSize(170,700)).Right().Layer(2).Show(isChar));
 
 	interfaceManager.AddPane(lightControl, wxAuiPaneInfo().
-		Name(wxT("Lighting")).Caption(_("Lighting")).
+		Name(wxT("Lighting")).Caption(wxT("Lighting")).
 		FloatingSize(wxSize(170,430)).Float().Fixed().Show(false).
 		DestroyOnClose(false)); //.FloatingPosition(GetStartPosition())
 
 	interfaceManager.AddPane(modelControl, wxAuiPaneInfo().
-		Name(wxT("Models")).Caption(_("Models")).
+		Name(wxT("Models")).Caption(wxT("Models")).
 		FloatingSize(wxSize(160,460)).Float().Show(false).
 		DestroyOnClose(false));
 
 	interfaceManager.AddPane(settingsControl, wxAuiPaneInfo().
-		Name(wxT("Settings")).Caption(_("Settings")).
+		Name(wxT("Settings")).Caption(wxT("Settings")).
 		FloatingSize(wxSize(400,440)).Float().TopDockable(false).LeftDockable(false).
 		RightDockable(false).BottomDockable(false).Show(false));
 
 	interfaceManager.AddPane(exportOptionsControl, wxAuiPaneInfo().
-		Name(wxT("ExportOptions")).Caption(_("Model Export Options")).
+		Name(wxT("ExportOptions")).Caption(wxT("Model Export Options")).
 		FloatingSize(wxSize(400,440)).Float().TopDockable(false).LeftDockable(false).
 		RightDockable(false).BottomDockable(false).Show(false));
 
@@ -817,31 +817,31 @@ void ModelViewer::ResetLayout()
 
 void ModelViewer::LoadSession()
 {
-	wxLogMessage(_T("Loading Session settings from: %s\n"), cfgPath.c_str());
+	wxLogMessage(wxT("Loading Session settings from: %s\n"), cfgPath.c_str());
 
 	// Application Config Settings
-	wxFileConfig *pConfig = new wxFileConfig(_T("Global"),wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
+	wxFileConfig *pConfig = new wxFileConfig(wxT("Global"),wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
 
 	// Other session settings
 	if (canvas) {
-		pConfig->SetPath(_T("/Session"));
+		pConfig->SetPath(wxT("/Session"));
 		double c;
 		// Background Colour
-		pConfig->Read(_T("bgR"), &c, 71.0/255);
+		pConfig->Read(wxT("bgR"), &c, 71.0/255);
 		canvas->vecBGColor.x = c;
-		pConfig->Read(_T("bgG"), &c, 95.0/255);
+		pConfig->Read(wxT("bgG"), &c, 95.0/255);
 		canvas->vecBGColor.y = c;
-		pConfig->Read(_T("bgB"), &c, 121.0/255);
+		pConfig->Read(wxT("bgB"), &c, 121.0/255);
 		canvas->vecBGColor.z = c;
 		
 		// boolean vars
-		pConfig->Read(_T("RandomLooks"), &useRandomLooks, true);
-		pConfig->Read(_T("HideHelmet"), &bHideHelmet, false);
-		pConfig->Read(_T("ShowParticle"), &bShowParticle, true);
-		pConfig->Read(_T("ZeroParticle"), &bZeroParticle, true);
-		pConfig->Read(_T("Alternate"), &bAlternate, true);
-		pConfig->Read(_T("DBackground"), &canvas->drawBackground, false);
-		pConfig->Read(_T("BackgroundImage"), &bgImagePath, wxEmptyString);
+		pConfig->Read(wxT("RandomLooks"), &useRandomLooks, true);
+		pConfig->Read(wxT("HideHelmet"), &bHideHelmet, false);
+		pConfig->Read(wxT("ShowParticle"), &bShowParticle, true);
+		pConfig->Read(wxT("ZeroParticle"), &bZeroParticle, true);
+		pConfig->Read(wxT("Alternate"), &bAlternate, true);
+		pConfig->Read(wxT("DBackground"), &canvas->drawBackground, false);
+		pConfig->Read(wxT("BackgroundImage"), &bgImagePath, wxEmptyString);
 		if (!bgImagePath.IsEmpty()) {
 			canvas->LoadBackground(bgImagePath);
 			//viewMenu->Check(ID_BACKGROUND, canvas->drawBackground);
@@ -850,7 +850,7 @@ void ModelViewer::LoadSession()
 
 		// model file
 		/*wxString modelfn;
-		pConfig->Read(_T("Model"), &modelfn);
+		pConfig->Read(wxT("Model"), &modelfn);
 		if (modelfn) {
 			LoadModel(modelfn);
 		}*/
@@ -862,46 +862,46 @@ void ModelViewer::LoadSession()
 void ModelViewer::SaveSession()
 {
 	// Application Config Settings
-	wxFileConfig *pConfig = new wxFileConfig(_T("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
+	wxFileConfig *pConfig = new wxFileConfig(wxT("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
 
 
 	// Graphic / Video display settings
-	pConfig->SetPath(_T("/Graphics"));
-	pConfig->Write(_T("FSAA"), video.curCap.aaSamples);
-	pConfig->Write(_T("AccumulationBuffer"), video.curCap.accum);
-	pConfig->Write(_T("AlphaBits"), video.curCap.alpha);
-	pConfig->Write(_T("ColourBits"), video.curCap.colour);
-	pConfig->Write(_T("DoubleBuffer"), video.curCap.doubleBuffer);
-	pConfig->Write(_T("HWAcceleration"), video.curCap.hwAcc);
-	pConfig->Write(_T("SampleBuffer"), video.curCap.sampleBuffer);
-	pConfig->Write(_T("StencilBuffer"), video.curCap.stencil);
-	pConfig->Write(_T("ZBuffer"), video.curCap.zBuffer);
+	pConfig->SetPath(wxT("/Graphics"));
+	pConfig->Write(wxT("FSAA"), video.curCap.aaSamples);
+	pConfig->Write(wxT("AccumulationBuffer"), video.curCap.accum);
+	pConfig->Write(wxT("AlphaBits"), video.curCap.alpha);
+	pConfig->Write(wxT("ColourBits"), video.curCap.colour);
+	pConfig->Write(wxT("DoubleBuffer"), video.curCap.doubleBuffer);
+	pConfig->Write(wxT("HWAcceleration"), video.curCap.hwAcc);
+	pConfig->Write(wxT("SampleBuffer"), video.curCap.sampleBuffer);
+	pConfig->Write(wxT("StencilBuffer"), video.curCap.stencil);
+	pConfig->Write(wxT("ZBuffer"), video.curCap.zBuffer);
 
-	pConfig->SetPath(_T("/Session"));
+	pConfig->SetPath(wxT("/Session"));
 	// Attempt at saving colour values as 3 byte hex - loss of accuracy from float
 	//wxString temp(Vec3DToString(canvas->vecBGColor));
 
 	if (canvas) {
-		pConfig->Write(_T("bgR"), (double)canvas->vecBGColor.x);
-		pConfig->Write(_T("bgG"), (double)canvas->vecBGColor.y);
-		pConfig->Write(_T("bgB"), (double)canvas->vecBGColor.z);
+		pConfig->Write(wxT("bgR"), (double)canvas->vecBGColor.x);
+		pConfig->Write(wxT("bgG"), (double)canvas->vecBGColor.y);
+		pConfig->Write(wxT("bgB"), (double)canvas->vecBGColor.z);
 		
 		// boolean vars
-		pConfig->Write(_T("RandomLooks"), useRandomLooks);
-		pConfig->Write(_T("HideHelmet"), bHideHelmet);
-		pConfig->Write(_T("ShowParticle"), bShowParticle);
-		pConfig->Write(_T("ZeroParticle"), bZeroParticle);
-		pConfig->Write(_T("Alternate"), bAlternate);
+		pConfig->Write(wxT("RandomLooks"), useRandomLooks);
+		pConfig->Write(wxT("HideHelmet"), bHideHelmet);
+		pConfig->Write(wxT("ShowParticle"), bShowParticle);
+		pConfig->Write(wxT("ZeroParticle"), bZeroParticle);
+		pConfig->Write(wxT("Alternate"), bAlternate);
 
-		pConfig->Write(_T("DBackground"), canvas->drawBackground);
+		pConfig->Write(wxT("DBackground"), canvas->drawBackground);
 		if (canvas->drawBackground)
-			pConfig->Write(_T("BackgroundImage"), bgImagePath);
+			pConfig->Write(wxT("BackgroundImage"), bgImagePath);
 		else
-			pConfig->Write(_T("BackgroundImage"), wxEmptyString);
+			pConfig->Write(wxT("BackgroundImage"), wxEmptyString);
 
 		// model file
 		if (canvas->model)
-			pConfig->Write(_T("Model"), wxString(canvas->model->name.c_str(), wxConvUTF8));
+			pConfig->Write(wxT("Model"), wxString(canvas->model->name.c_str(), wxConvUTF8));
 	}
 
 	// character details
@@ -913,18 +913,18 @@ void ModelViewer::SaveSession()
 void ModelViewer::LoadLayout()
 {
 	// Application Config Settings
-	wxFileConfig *pConfig = new wxFileConfig(_T("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
+	wxFileConfig *pConfig = new wxFileConfig(wxT("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
 
 	wxString layout;
 
 	// Get layout data
-	pConfig->SetPath(_T("/Session"));
-	pConfig->Read(_T("Layout"), &layout);
+	pConfig->SetPath(wxT("/Session"));
+	pConfig->Read(wxT("Layout"), &layout);
 
 	// if the layout data exists,  load it.
 	if (!layout.IsNull() && !layout.IsEmpty()) {
 		if (!interfaceManager.LoadPerspective(layout, false))
-			wxLogMessage(_T("Error: Could not load the layout."));
+			wxLogMessage(wxT("Error: Could not load the layout."));
 		else {
 			// No need to display these windows on startup
 			interfaceManager.GetPane(modelControl).Show(false);
@@ -937,7 +937,7 @@ void ModelViewer::LoadLayout()
 
 			interfaceManager.Update();
 
-			wxLogMessage(_T("Info: GUI Layout loaded from previous session."));
+			wxLogMessage(wxT("Info: GUI Layout loaded from previous session."));
 		}
 	}
 
@@ -947,15 +947,15 @@ void ModelViewer::LoadLayout()
 void ModelViewer::SaveLayout()
 {
 	// Application Config Settings
-	wxFileConfig *pConfig = new wxFileConfig(_T("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
+	wxFileConfig *pConfig = new wxFileConfig(wxT("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
 
-	pConfig->SetPath(_T("/Session"));
+	pConfig->SetPath(wxT("/Session"));
 	
 	// Save GUI layout data
 	wxString layout = interfaceManager.SavePerspective();
-	pConfig->Write(_T("Layout"), layout);
+	pConfig->Write(wxT("Layout"), layout);
 
-	wxLogMessage(_T("Info: GUI Layout was saved."));
+	wxLogMessage(wxT("Info: GUI Layout was saved."));
 
 	wxDELETE(pConfig);
 }
@@ -969,7 +969,7 @@ void ModelViewer::LoadModel(const wxString fn)
 	isModel = true;
 
 	// check if this is a character model
-	isChar = (fn.StartsWith(_T("Char"), false) || fn.StartsWith(_T("Alternate\\Char"), false));
+	isChar = (fn.StartsWith(wxT("Char"), false) || fn.StartsWith(wxT("Alternate\\Char"), false));
 
 	Attachment *modelAtt = NULL;
 
@@ -978,7 +978,7 @@ void ModelViewer::LoadModel(const wxString fn)
 
 		// error check
 		if (!modelAtt) {
-			wxLogMessage(_T("Error: Failed to load the model - %s"), fn.c_str());
+			wxLogMessage(wxT("Error: Failed to load the model - %s"), fn.c_str());
 			return;
 		}
 
@@ -989,7 +989,7 @@ void ModelViewer::LoadModel(const wxString fn)
 
 		// error check
 		if (!modelAtt) {
-			wxLogMessage(_T("Error: Failed to load the model - %s"), fn.c_str());
+			wxLogMessage(wxT("Error: Failed to load the model - %s"), fn.c_str());
 			return;
 		}
 
@@ -998,7 +998,7 @@ void ModelViewer::LoadModel(const wxString fn)
 
 	// Error check,  make sure the model was actually loaded and set to canvas->model
 	if (!canvas->model) {
-		wxLogMessage(_T("Error: [ModelViewer::LoadModel()]  Model* Canvas::model is null!"));
+		wxLogMessage(wxT("Error: [ModelViewer::LoadModel()]  Model* Canvas::model is null!"));
 		return;
 	}
 
@@ -1093,7 +1093,7 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 			
 			wxString name(creatureModelRec.getString(CreatureModelDB::Filename));
 			name = name.BeforeLast('.');
-			name.Append(_T(".m2"));
+			name.Append(wxT(".m2"));
 
 			LoadModel(name);
 			canvas->model->modelType = MT_NORMAL;
@@ -1118,31 +1118,31 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 			CharRacesDB::Record rec2 = racedb.getById(rec.getUInt(NPCDB::RaceID));
 			
 			wxString retval = rec.getString(NPCDB::Gender);
-			wxString strModel = _T("Character\\");
+			wxString strModel = wxT("Character\\");
 
 			if (gameVersion == 30100) {
 				if (!retval.IsEmpty()) {
 					strModel.append(rec2.getString(CharRacesDB::NameV310));
-					strModel.append(_T("\\Female\\"));
+					strModel.append(wxT("\\Female\\"));
 					strModel.append(rec2.getString(CharRacesDB::NameV310));
-					strModel.append(_T("Female.m2"));
+					strModel.append(wxT("Female.m2"));
 				} else {
 					strModel.append(rec2.getString(CharRacesDB::NameV310));
-					strModel.append(_T("\\Male\\"));
+					strModel.append(wxT("\\Male\\"));
 					strModel.append(rec2.getString(CharRacesDB::NameV310));
-					strModel.append(_T("Male.m2"));
+					strModel.append(wxT("Male.m2"));
 				}
 			} else {
 				if (!retval.IsEmpty()) {
 					strModel.append(rec2.getString(CharRacesDB::Name));
-					strModel.append(_T("\\Female\\"));
+					strModel.append(wxT("\\Female\\"));
 					strModel.append(rec2.getString(CharRacesDB::Name));
-					strModel.append(_T("Female.m2"));
+					strModel.append(wxT("Female.m2"));
 				} else {
 					strModel.append(rec2.getString(CharRacesDB::Name));
-					strModel.append(_T("\\Male\\"));
+					strModel.append(wxT("\\Male\\"));
 					strModel.append(rec2.getString(CharRacesDB::Name));
-					strModel.append(_T("Male.m2"));
+					strModel.append(wxT("Male.m2"));
 				}
 			}
 			
@@ -1152,7 +1152,7 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 			modelAtt = canvas->LoadCharModel(strModel);
 			canvas->model->modelType = MT_NPC;
 
-			wxString fn(_T("Textures\\Bakednpctextures\\"));
+			wxString fn(wxT("Textures\\Bakednpctextures\\"));
 			fn.Append(rec.getString(NPCDB::Filename));
 			charControl->UpdateNPCModel(modelAtt, displayID);
 			charControl->customSkin = fn;
@@ -1196,14 +1196,14 @@ void ModelViewer::LoadItem(unsigned int displayID)
 		ItemDisplayDB::Record modelRec = itemdisplaydb.getById(displayID);
 		wxString name = modelRec.getString(ItemDisplayDB::Model);
 		name = name.BeforeLast('.');
-		name.Append(_T(".M2"));
-		//wxLogMessage(_T("LoadItem %d %s"), displayID, name.c_str());
+		name.Append(wxT(".M2"));
+		//wxLogMessage(wxT("LoadItem %d %s"), displayID, name.c_str());
 
-		wxString fns[] = { _T("Item\\ObjectComponents\\Head\\"),
-			_T("Item\\ObjectComponents\\Shoulder\\"),
-			_T("Item\\ObjectComponents\\Quiver\\"),
-			_T("Item\\ObjectComponents\\Shield\\"),
-			_T("Item\\ObjectComponents\\Weapon\\") };
+		wxString fns[] = { wxT("Item\\ObjectComponents\\Head\\"),
+			wxT("Item\\ObjectComponents\\Shoulder\\"),
+			wxT("Item\\ObjectComponents\\Quiver\\"),
+			wxT("Item\\ObjectComponents\\Shield\\"),
+			wxT("Item\\ObjectComponents\\Weapon\\") };
 		wxString fn;
 		for(int i=0; i<5; i++) {
 			fn = fns[i]+name;
@@ -1269,7 +1269,7 @@ void ModelViewer::OnSize(wxSizeEvent &event)
 
 ModelViewer::~ModelViewer()
 {
-	wxLogMessage(_T("Shuting down the program...\n"));
+	wxLogMessage(wxT("Shuting down the program...\n"));
 
 	video.render = false;
 
@@ -1362,45 +1362,45 @@ wxString ModelViewer::InitMPQArchives()
 	}
 
 	// Checks and logs the "TOC" version of the interface files that were loaded
-	MPQFile f(_T("Interface\\FrameXML\\FrameXML.TOC"));
+	MPQFile f(wxT("Interface\\FrameXML\\FrameXML.TOC"));
 	if (f.isEof()) {
 		f.close();
-		wxLogMessage(_T("Unable to gather TOC data."));
-		return _T("Could not read data from MPQ files.");
+		wxLogMessage(wxT("Unable to gather TOC data."));
+		return wxT("Could not read data from MPQ files.");
 	}
 	f.seek(51); // offset to "## Interface: "
 	unsigned char toc[6];
 	memset(toc,'\0', 6);
 	f.read(toc, 5);
 	f.close();
-	wxLogMessage(_T("Loaded Content TOC: v%c.%c%c.%c%c"), toc[0], toc[1], toc[2], toc[3], toc[4]);
-	if (wxString((char *)toc, wxConvUTF8) > _T("99999")) {		// The 99999 should be updated if the TOC ever gets that high.
-		return _T("There was a problem reading the TOC number.\nCould not determine WoW version.");
+	wxLogMessage(wxT("Loaded Content TOC: v%c.%c%c.%c%c"), toc[0], toc[1], toc[2], toc[3], toc[4]);
+	if (wxString((char *)toc, wxConvUTF8) > wxT("99999")) {		// The 99999 should be updated if the TOC ever gets that high.
+		return wxT("There was a problem reading the TOC number.\nCould not determine WoW version.");
 	}
 
-	wxString info = _T("WoW Model Viewer is designed to work with the latest version of World of Warcraft.\nYour version is supported, but support will be removed in the near future.\nYou may experience diminished capacity while working with WoW Model Viewer.\nPlease update your World of Warcraft client soon.");
+	wxString info = wxT("WoW Model Viewer is designed to work with the latest version of World of Warcraft.\nYour version is supported, but support will be removed in the near future.\nYou may experience diminished capacity while working with WoW Model Viewer.\nPlease update your World of Warcraft client soon.");
 	// If we support more than 1 TOC version, place the others here.
 	if (strncmp((char*)toc, "30100", 5) == 0){
 		if (gameVersion != 30100){
-			wxMessageBox(info,_T("Compatible Version Found."),wxOK);
+			wxMessageBox(info,wxT("Compatible Version Found."),wxOK);
 			gameVersion = 30100;
 		}
 	}else if (strncmp((char*)toc, "30200", 5) == 0){
 		wxLogMessage(info);
 		if (gameVersion != 30200){
-			wxMessageBox(info,_T("Compatible Version Found."),wxOK);
+			wxMessageBox(info,wxT("Compatible Version Found."),wxOK);
 			gameVersion = 30200;
 		}
 	}else if (strncmp((char*)toc, "30300", 5) == 0) {
 		wxLogMessage(info);
 		if (gameVersion != 30300){
-			wxMessageBox(info,_T("Compatible Version Found."),wxOK);
+			wxMessageBox(info,wxT("Compatible Version Found."),wxOK);
 			gameVersion = 30300;
 		}
 	// else if not our primary supported edition...
 	}else if (strncmp((char*)toc, "40000", 5) != 0){
-		wxString info = _T("WoW Model Viewer does not support your version of World of Warcraft.\nPlease update your World of Warcraft client soon.");
-		wxLogMessage(_T("Notice: ") + info);
+		wxString info = wxT("WoW Model Viewer does not support your version of World of Warcraft.\nPlease update your World of Warcraft client soon.");
+		wxLogMessage(wxT("Notice: ") + info);
 
 		return info;
 	}else{
@@ -1409,19 +1409,19 @@ wxString ModelViewer::InitMPQArchives()
 	}
 
 	// log for debug
-	wxString component = _T("component.wow-data.txt");
+	wxString component = wxT("component.wow-data.txt");
 	MPQFile f2(component);
 	if (!f2.isEof()) {
 		f2.save(component);
 		f2.close();
 		
 		wxXmlDocument xmlDoc;
-		if (xmlDoc.Load(wxString(component, wxConvUTF8), _T("UTF-8"))) {
+		if (xmlDoc.Load(wxString(component, wxConvUTF8), wxT("UTF-8"))) {
 			wxXmlNode *child = xmlDoc.GetRoot()->GetChildren(); // componentinfo->component.version
-			if (child && child->GetName() == _T("component")) {
-				wxString version = child->GetPropVal(_T("version"), _T("0"));
-				if (version != _T("0")) {
-					wxLogMessage(_T("Loaded Content Version: %s"), version.c_str());
+			if (child && child->GetName() == wxT("component")) {
+				wxString version = child->GetPropVal(wxT("version"), wxT("0"));
+				if (version != wxT("0")) {
+					wxLogMessage(wxT("Loaded Content Version: %s"), version.c_str());
 				}
 			}
 		}
@@ -1440,27 +1440,27 @@ wxString ModelViewer::Init()
 		if (!video.render) // Something bad must of happened - find a new working display mode
 			video.GetAvailableMode();
 	} else {
-		wxLogMessage(_T("Error: Failed to find a compatible graphics mode.  Finding first available display mode..."));
+		wxLogMessage(wxT("Error: Failed to find a compatible graphics mode.  Finding first available display mode..."));
 		video.GetAvailableMode(); // Get first available display mode that supports the current desktop colour bitdepth
 	}
 	*/
 	
-	wxLogMessage(_T("Setting OpenGL render state..."));
+	wxLogMessage(wxT("Setting OpenGL render state..."));
 	video.InitGL();
 
 	// Initiate other stuff
-	wxLogMessage(_T("Initiating Archives...\n"));
+	wxLogMessage(wxT("Initiating Archives...\n"));
 
 	// more detail logging, this is so when someone has a problem and they send their log info
-	wxLogMessage(_T("Game Data Path: %s"), gamePath.c_str());
-	wxLogMessage(_T("Use Local Files: %s\n"), useLocalFiles ? _T("true") : _T("false"));
+	wxLogMessage(wxT("Game Data Path: %s"), gamePath.c_str());
+	wxLogMessage(wxT("Use Local Files: %s\n"), useLocalFiles ? wxT("true") : wxT("false"));
 	
 	isChar = false;
 	isModel = false;
 
 	// Load the games MPQ files into memory
 	wxString mpqarch = InitMPQArchives();
-	wxLogMessage(_T("InitMPQArchives result: %s"), mpqarch.c_str());
+	wxLogMessage(wxT("InitMPQArchives result: %s"), mpqarch.c_str());
 
 	if (mpqarch != wxEmptyString){
 		return mpqarch;
@@ -1559,7 +1559,7 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 
 	case ID_SAVE_CHAR:
 		{
-			wxFileDialog saveDialog(this, _("Save character"), wxEmptyString, wxEmptyString, _T("Character files (*.chr)|*.chr"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog saveDialog(this, wxT("Save character"), wxEmptyString, wxEmptyString, wxT("Character files (*.chr)|*.chr"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (saveDialog.ShowModal()==wxID_OK) {
 				SaveChar(saveDialog.GetPath());
 			}
@@ -1567,7 +1567,7 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 		break;
 	case ID_LOAD_CHAR:
 		{
-			wxFileDialog loadDialog(this, _("Load character"), wxEmptyString, wxEmptyString, _T("Character files (*.chr)|*.chr"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+			wxFileDialog loadDialog(this, wxT("Load character"), wxEmptyString, wxEmptyString, wxT("Character files (*.chr)|*.chr"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 			if (loadDialog.ShowModal()==wxID_OK) {
 				for (int i=0; i<NUM_CHAR_SLOTS; i++)
 					charControl->cd.equipment[i] = 0;
@@ -1580,7 +1580,7 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 
 	case ID_IMPORT_CHAR:
 		{
-			wxTextEntryDialog dialog(this, _T("Please paste in the URL to the character you wish to import."), _T("Please enter text"), wxEmptyString, wxOK | wxCANCEL | wxCENTRE, wxDefaultPosition);
+			wxTextEntryDialog dialog(this, wxT("Please paste in the URL to the character you wish to import."), wxT("Please enter text"), wxEmptyString, wxOK | wxCANCEL | wxCENTRE, wxDefaultPosition);
 			if (dialog.ShowModal() == wxID_OK)
 				ImportArmoury(dialog.GetValue());
 		}
@@ -1631,7 +1631,7 @@ void ModelViewer::OnLightMenu(wxCommandEvent &event)
 	switch (id) {
 		case ID_LT_SAVE:
 		{
-			wxFileDialog dialog(this, _("Save Lighting"), wxEmptyString, wxEmptyString, _T("Scene Lighting (*.lit)|*.lit"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Save Lighting"), wxEmptyString, wxEmptyString, wxT("Scene Lighting (*.lit)|*.lit"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			
 			if (dialog.ShowModal()==wxID_OK) {
 				wxString fn = dialog.GetFilename();
@@ -1649,7 +1649,7 @@ void ModelViewer::OnLightMenu(wxCommandEvent &event)
 		} 
 		case ID_LT_LOAD: 
 		{
-			wxFileDialog dialog(this, _("Load Lighting"), wxEmptyString, wxEmptyString, _T("Scene Lighting (*.lit)|*.lit"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+			wxFileDialog dialog(this, wxT("Load Lighting"), wxEmptyString, wxEmptyString, wxT("Scene Lighting (*.lit)|*.lit"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 			
 			if (dialog.ShowModal()==wxID_OK) {
 				wxString fn = dialog.GetFilename();
@@ -1798,7 +1798,7 @@ void ModelViewer::OnEffects(wxCommandEvent &event)
 			enchants->Display();
 
 	} else if (id == ID_SPELLS) {
-		wxSingleChoiceDialog spellsDialog(this, _T("Choose"), _T("Select a Spell Effect"), spelleffects);
+		wxSingleChoiceDialog spellsDialog(this, wxT("Choose"), wxT("Select a Spell Effect"), spelleffects);
 
 		if (spellsDialog.ShowModal() == wxID_OK) {
 			// TODO: Finish adding support for spells.
@@ -1932,9 +1932,9 @@ void ModelViewer::OnSave(wxCommandEvent &event)
 		return;
 
 	if (event.GetId() == ID_FILE_SCREENSHOT) {
-		wxString tmp = _T("screenshot_");
+		wxString tmp = wxT("screenshot_");
 		tmp << ssCounter;
-		wxFileDialog dialog(this, _("Save screenshot"), dir.GetPath(wxPATH_GET_VOLUME), tmp, _T("Bitmap Images (*.bmp)|*.bmp|TGA Images (*.tga)|*.tga|JPEG Images (*.jpg)|*.jpg|PNG Images (*.png)|*.png"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+		wxFileDialog dialog(this, wxT("Save screenshot"), dir.GetPath(wxPATH_GET_VOLUME), tmp, wxT("Bitmap Images (*.bmp)|*.bmp|TGA Images (*.tga)|*.tga|JPEG Images (*.jpg)|*.jpg|PNG Images (*.png)|*.png"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 		dialog.SetFilterIndex(imgFormat);
 
 		if (dialog.ShowModal()==wxID_OK) {
@@ -1956,11 +1956,11 @@ void ModelViewer::OnSave(wxCommandEvent &event)
 			return;
 
 		if (!video.supportFBO && !video.supportPBO) {
-			wxMessageBox(_T("This function is currently disabled for video cards that don't\nsupport the FrameBufferObject or PixelBufferObject OpenGL extensions"), _T("Error"));
+			wxMessageBox(wxT("This function is currently disabled for video cards that don't\nsupport the FrameBufferObject or PixelBufferObject OpenGL extensions"), wxT("Error"));
 			return;
 		}
 		
-		wxFileDialog dialog(this, _T("Save Animation"), dir.GetPath(wxPATH_GET_VOLUME), _T("filename"), _T("Animation"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
+		wxFileDialog dialog(this, wxT("Save Animation"), dir.GetPath(wxPATH_GET_VOLUME), wxT("filename"), wxT("Animation"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
 		
 		if (dialog.ShowModal()==wxID_OK) {
 			// Save the folder location for next time
@@ -1976,11 +1976,11 @@ void ModelViewer::OnSave(wxCommandEvent &event)
 			return;
 
 		if (!video.supportFBO && !video.supportPBO) {
-			wxMessageBox(_T("This function is currently disabled for video cards that don't\nsupport the FrameBufferObject or PixelBufferObject OpenGL extensions"), _T("Error"));
+			wxMessageBox(wxT("This function is currently disabled for video cards that don't\nsupport the FrameBufferObject or PixelBufferObject OpenGL extensions"), wxT("Error"));
 			return;
 		}
 		
-		wxFileDialog dialog(this, _T("Save AVI"), dir.GetPath(wxPATH_GET_VOLUME), _T("animation.avi"), _T("animation (*.avi)|*.avi"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
+		wxFileDialog dialog(this, wxT("Save AVI"), dir.GetPath(wxPATH_GET_VOLUME), wxT("animation.avi"), wxT("animation (*.avi)|*.avi"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
 		
 		if (dialog.ShowModal()==wxID_OK) {
 			animExporter->CreateAvi(dialog.GetPath());
@@ -1991,7 +1991,7 @@ void ModelViewer::OnSave(wxCommandEvent &event)
 			imageControl = new ImageControl(this, ID_IMAGE_FRAME, canvas);
 
 			interfaceManager.AddPane(imageControl, wxAuiPaneInfo().
-				Name(wxT("Screenshot")).Caption(_("Screenshot")).
+				Name(wxT("Screenshot")).Caption(wxT("Screenshot")).
 				FloatingSize(wxSize(295,145)).Float().Fixed().
 				Dockable(false)); //.FloatingPosition(GetStartPosition())
 		}
@@ -2008,7 +2008,7 @@ void ModelViewer::OnBackground(wxCommandEvent &event)
 
 	if (id == ID_BACKGROUND) {
 		if (event.IsChecked()) {
-			wxFileDialog dialog(this, _("Load Background"), dir.GetPath(wxPATH_GET_VOLUME), wxEmptyString, _("Bitmap Images (*.bmp)|*.bmp|TGA Images (*.tga)|*.tga|Jpeg Images (*.jpg)|*.jpg|PNG Images (*.png)|*.png|AVI Video file(*.avi)|*.avi"));
+			wxFileDialog dialog(this, wxT("Load Background"), dir.GetPath(wxPATH_GET_VOLUME), wxEmptyString, wxT("Bitmap Images (*.bmp)|*.bmp|TGA Images (*.tga)|*.tga|Jpeg Images (*.jpg)|*.jpg|PNG Images (*.png)|*.png|AVI Video file(*.avi)|*.avi"));
 			if (dialog.ShowModal() == wxID_OK) {
 				canvas->LoadBackground(dialog.GetPath());
 				dir.SetPath(dialog.GetPath());
@@ -2031,16 +2031,16 @@ void ModelViewer::OnBackground(wxCommandEvent &event)
 			for (LightSkyBoxDB::Iterator it=skyboxdb.begin();  it!=skyboxdb.end(); ++it) {
 				wxString str(it->getString(LightSkyBoxDB::Name));
 				str = str.BeforeLast('.');
-				str.Append(_T(".m2"));
+				str.Append(wxT(".m2"));
 
 				if (skyboxes.Index(str, false) == wxNOT_FOUND)
 					skyboxes.Add(str);
 			}
-			skyboxes.Add(_T("World\\Outland\\PassiveDoodads\\SkyBox\\OutlandSkyBox.m2"));
+			skyboxes.Add(wxT("World\\Outland\\PassiveDoodads\\SkyBox\\OutlandSkyBox.m2"));
 			skyboxes.Sort();
 
 
-			wxSingleChoiceDialog skyDialog(this, _("Choose"), _("Select a Sky Box"), skyboxes);
+			wxSingleChoiceDialog skyDialog(this, wxT("Choose"), wxT("Select a Sky Box"), skyboxes);
 			if (skyDialog.ShowModal() == wxID_OK && skyDialog.GetStringSelection() != wxEmptyString) {
 				canvas->skyModel = new Model(wxString(skyDialog.GetStringSelection()), false);
 				canvas->sky->model = canvas->skyModel;
@@ -2097,7 +2097,7 @@ void ModelViewer::LoadChar(wxString fn)
 	f >> charControl->cd.skinColor >> charControl->cd.faceType >> charControl->cd.hairColor >> charControl->cd.hairStyle >> charControl->cd.facialHair >> charControl->cd.facialColor;
 	
 	// If Eyeglow is in char file...
-	if (f.peek() != _T('\n')){
+	if (f.peek() != wxT('\n')){
 		f >> charControl->cd.eyeGlowType;
 	}else{
 		// Otherwise, default to this value
@@ -2161,23 +2161,23 @@ void ModelViewer::OnLanguage(wxCommandEvent &event)
 		
 		wxString langNames[] =
 		{
-			_T("English"),
-			_T("Korean"),
-			_T("French"),
-			_T("German"),
-			_T("Chinese (Simplified)"),
-			_T("Chinese (Traditional)"),
-			_T("Spanish"),
+			wxT("English"),
+			wxT("Korean"),
+			wxT("French"),
+			wxT("German"),
+			wxT("Chinese (Simplified)"),
+			wxT("Chinese (Traditional)"),
+			wxT("Spanish"),
 		};
 
 		// the arrays should be in sync
 		//wxCOMPILE_TIME_ASSERT(WXSIZEOF(langNames) == WXSIZEOF(langIds), LangArraysMismatch);
 
-		long lng = wxGetSingleChoiceIndex(_("Please select a language:"), _("Language"), WXSIZEOF(langNames), langNames);
+		long lng = wxGetSingleChoiceIndex(wxT("Please select a language:"), wxT("Language"), WXSIZEOF(langNames), langNames);
 
 		if (lng != -1) {
 			interfaceID = lng;
-			wxMessageBox(_T("You will need to reload WoW Model Viewer for changes to take effect."), _T("Language Changed"), wxOK | wxICON_INFORMATION);
+			wxMessageBox(wxT("You will need to reload WoW Model Viewer for changes to take effect."), wxT("Language Changed"), wxOK | wxICON_INFORMATION);
 		}
 	}
 }
@@ -2185,7 +2185,7 @@ void ModelViewer::OnLanguage(wxCommandEvent &event)
 void ModelViewer::OnAbout(wxCommandEvent &event)
 {
 /*
-text = new wxStaticText(this, wxID_ANY, _T("Developers:		UfoZ, Darjk\n\n\
+text = new wxStaticText(this, wxID_ANY, wxT("Developers:		UfoZ, Darjk\n\n\
 Pioneers:		UfoZ,  Linghuye,  nSzAbolcs\n\n\
 Translators:	Culhag (French), Die_Backe (Deutsch)\n\n\
 Developed Using:\n\
@@ -2197,33 +2197,33 @@ Windows 98\\ME\\2000\\XP on 17th December 2006\n\n\
 
 	wxAboutDialogInfo info;
     info.SetName(APP_TITLE);
-	info.SetVersion(_T("\n") APP_VERSION _T(" (") APP_BUILDNAME _T(")\n") APP_PLATFORM APP_ISDEBUG _T(" Edition"));
-	info.AddDeveloper(_T("Ufo_Z"));
-	info.AddDeveloper(_T("Darjk"));
-	info.AddDeveloper(_T("Chuanhsing"));
-	info.AddDeveloper(_T("Kjasi (A.K.A. Sephiroth3D)"));
-	info.AddDeveloper(_T("Tob.Franke"));
-	info.AddTranslator(_T("MadSquirrel (French)"));
-	info.AddTranslator(_T("Tigurius (Deutsch)"));
-	info.AddTranslator(_T("Kurax (Chinese)"));
+	info.SetVersion(wxT("\n") APP_VERSION wxT(" (") APP_BUILDNAME wxT(")\n") APP_PLATFORM APP_ISDEBUG wxT(" Edition"));
+	info.AddDeveloper(wxT("Ufo_Z"));
+	info.AddDeveloper(wxT("Darjk"));
+	info.AddDeveloper(wxT("Chuanhsing"));
+	info.AddDeveloper(wxT("Kjasi (A.K.A. Sephiroth3D)"));
+	info.AddDeveloper(wxT("Tob.Franke"));
+	info.AddTranslator(wxT("MadSquirrel (French)"));
+	info.AddTranslator(wxT("Tigurius (Deutsch)"));
+	info.AddTranslator(wxT("Kurax (Chinese)"));
 
-	info.SetWebSite(_T("http://www.wowmodelviewer.org/"));
+	info.SetWebSite(wxT("http://www.wowmodelviewer.org/"));
     info.SetCopyright(
-wxString(_T("World of Warcraft(R) is a Registered trademark of\n\
+wxString(wxT("World of Warcraft(R) is a Registered trademark of\n\
 Blizzard Entertainment(R). All game assets and content\n\
 is (C)2006 Blizzard Entertainment(R). All rights reserved.")));
 
-	info.SetLicence(_T("WoWmodelview is released under the GNU General Public License."));
+	info.SetLicence(wxT("WoWmodelview is released under the GNU General Public License."));
 
-	info.SetDescription(_T("WoWmodelview is a 3D model viewer for World of Warcraft.\nIt uses the data files included with the game to display\nthe 3D models from the game: creatures, characters, spell\neffects, objects and so forth.\n\nCredits To: Linghuye,  nSzAbolcs,  Sailesh, Terran and Cryect\nfor their contributions either directly or indirectly."));
+	info.SetDescription(wxT("WoWmodelview is a 3D model viewer for World of Warcraft.\nIt uses the data files included with the game to display\nthe 3D models from the game: creatures, characters, spell\neffects, objects and so forth.\n\nCredits To: Linghuye,  nSzAbolcs,  Sailesh, Terran and Cryect\nfor their contributions either directly or indirectly."));
 	//info.SetArtists();
 	//info.SetDocWriters();
 
-	wxIcon icon(_T("mainicon"),wxBITMAP_TYPE_ICO_RESOURCE,128,128);
+	wxIcon icon(wxT("mainicon"),wxBITMAP_TYPE_ICO_RESOURCE,128,128);
 #if defined (_LINUX)
-	//icon.LoadFile(_T("../bin_support/icon/wmv_xpm"));
+	//icon.LoadFile(wxT("../bin_support/icon/wmv_xpm"));
 #elif defined (_MAC)
-	//icon.LoadFile(_T("../bin_support/icon/wmv.icns"));
+	//icon.LoadFile(wxT("../bin_support/icon/wmv.icns"));
 #endif
 	icon.SetHeight(128);
 	icon.SetWidth(128);
@@ -2235,7 +2235,7 @@ is (C)2006 Blizzard Entertainment(R). All rights reserved.")));
 
 void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 {
-	wxURL url(_T("http://wowmodelviewer.googlecode.com/svn/trunk/latest.txt"));
+	wxURL url(wxT("http://wowmodelviewer.googlecode.com/svn/trunk/latest.txt"));
 
 	if(url.GetError() == wxURL_NOERR)   {
 		wxInputStream *stream = url.GetInputStream();
@@ -2254,12 +2254,12 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 #endif
 
 		if (Compare == 0) {
-			wxMessageBox(_T("You have the most up-to-date version."), _T("Update Check"));
+			wxMessageBox(wxT("You have the most up-to-date version."), wxT("Update Check"));
 		} else {
-			wxString msg = _T("The most current version is: ");
+			wxString msg = wxT("The most current version is: ");
 			msg.Append(version);
-			msg.Append(_T("\nWould you like to go to the download page?"));
-			int answer = wxMessageBox(msg, _("Update Check"), wxYES_NO, this);
+			msg.Append(wxT("\nWould you like to go to the download page?"));
+			int answer = wxMessageBox(msg, wxT("Update Check"), wxYES_NO, this);
 			if (answer == wxYES)
 				wxLaunchDefaultBrowser(wxString(downloadURL.ToUTF8(), wxConvUTF8));
 		}
@@ -2270,7 +2270,7 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 
 		delete stream;
 	}else{
-		wxMessageBox(_T("Error retrieving update information.\nPlease try again later."),_T("Update Error"));
+		wxMessageBox(wxT("Error retrieving update information.\nPlease try again later."),wxT("Update Error"));
 	}
 }
 
@@ -2337,17 +2337,17 @@ void ModelViewer::ModelInfo()
 	if (!canvas->model)
 		return;
 	Model *m = canvas->model;
-	wxString fn = _T("ModelInfo.xml");
+	wxString fn = wxT("ModelInfo.xml");
 	ofstream xml(fn.fn_str(), ios_base::out | ios_base::trunc);
 
 	if (!xml.is_open()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn.c_str());
+		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export model."), fn.c_str());
 		return;
 	}
 
 	MPQFile f(m->modelname);
 	if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
-		wxLogMessage(_T("Error: Unable to load model: [%s]"), m->modelname.c_str());
+		wxLogMessage(wxT("Error: Unable to load model: [%s]"), m->modelname.c_str());
 		// delete this; //?
 		xml.close();
 		f.close();
@@ -2356,7 +2356,7 @@ void ModelViewer::ModelInfo()
 
 	MPQFile g(m->lodname);
 	if (g.isEof() || (g.getSize() < sizeof(ModelView))) {
-		wxLogMessage(_T("Error: Unable to load Lod: [%s]"), m->lodname.c_str());
+		wxLogMessage(wxT("Error: Unable to load Lod: [%s]"), m->lodname.c_str());
 		// delete this; //?
 		xml.close();
 		f.close();
@@ -2463,7 +2463,7 @@ void ModelViewer::ModelInfo()
 				AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
 				strName = rec.getString(AnimDB::Name);
 			} catch (AnimDB::NotFound) {
-				strName = _T("???");
+				strName = wxT("???");
 			}
 			xml << "      <animName>"<< strName.c_str() << "</animName>" << endl;
 			xml << "      <length>"<< m->anims[i].timeEnd << "</length>" << endl;
@@ -2772,7 +2772,7 @@ void DiscoveryNPC()
 		if (npcid == 0)
 			continue;
 		if (!npcs.avaiable(id)) {
-			name.Printf(_T("Skin%d"), id);
+			name.Printf(wxT("Skin%d"), id);
 			ret = npcs.addDiscoveryId(id, name);
 		}
 	}
@@ -2799,7 +2799,7 @@ void DiscoveryItem()
 				if (langID == 0)
 					name = it->getString(ItemSetDB::Name);
 				else
-					name.Printf(_T("Set%d"), it->getUInt(ItemSetDB::SetID));
+					name.Printf(wxT("Set%d"), it->getUInt(ItemSetDB::SetID));
 				ret = items.addDiscoveryId(id, name);
 				if (f.is_open() && !ret.IsEmpty())
 					f << ret.mb_str() << endl;
@@ -2810,7 +2810,7 @@ void DiscoveryItem()
 	for (ItemDB::Iterator it = itemdb.begin(); it != itemdb.end(); ++it) {
 		int id = it->getUInt(ItemDB::ID);
 		if (!items.avaiable(id)) {
-			name.Printf(_T("Item%d"), id);
+			name.Printf(wxT("Item%d"), id);
 			ret = items.addDiscoveryId(id, name);
 			if (f.is_open() && !ret.IsEmpty())
 				f << ret.mb_str() << endl;
@@ -2828,7 +2828,7 @@ void DiscoveryItem()
 			} catch (ItemDB::NotFound) {
 				if (!items.avaiable(id+ItemDB::MaxItem)) {
 					int type = slots[i];
-					name.Printf(_T("NPC%d"), it->getUInt(NPCDB::NPCID));
+					name.Printf(wxT("NPC%d"), it->getUInt(NPCDB::NPCID));
 					ret = items.addDiscoveryDisplayId(id, name, type);
 					if (f.is_open() && !ret.IsEmpty())
 						f << ret.mb_str() << endl;
@@ -2838,7 +2838,7 @@ void DiscoveryItem()
 	}
 	// 4. from model dir
 	// 5. from blp dir
-	wxLogMessage(_T("Discovery done."));
+	wxLogMessage(wxT("Discovery done."));
 	if (f.is_open())
 		f.close();
 	items.cleanup(itemdisplaydb);
@@ -2864,6 +2864,21 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 		newfilename << canvas->wmo->name.AfterLast(MPQ_SLASH).BeforeLast('.');
 	}else if (canvas->model) {
 		newfilename << canvas->model->name.AfterLast(MPQ_SLASH).BeforeLast('.');
+		if ((init == false)&&(g_selModel->animated)){
+			g_selModel->animManager->Pause();
+
+			int32 cAnim = g_selModel->currentAnim;
+			int32 cFrame = g_selModel->animManager->GetFrame();
+			wxString AnimName;
+
+			try {
+				AnimDB::Record rec = animdb.getByAnimID(g_selModel->anims[cAnim].animID);
+				AnimName = rec.getString(AnimDB::Name);
+			} catch (AnimDB::NotFound) {
+				AnimName = wxT("Unknown");
+			}
+			newfilename << wxT("_[") << cAnim << wxT("]_") << AnimName << wxT("_") << cFrame;
+		}
 	}else if (canvas->adt) {
 		newfilename << canvas->adt->name.AfterLast(MPQ_SLASH).BeforeLast('.');
 	}
@@ -2871,33 +2886,33 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 	// Identifies the ID for this export option, and does the nessicary functions.
 	if (id == ID_MODELEXPORT_LWO) {
 		// Adds the proper extention to our default filename.
-		newfilename << _T(".lwo");
+		newfilename << wxT(".lwo");
 		// For M2 Models
 		if (canvas->model) {
-			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export Model..."), wxEmptyString, newfilename, wxT("Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting M2 model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting M2 model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				// Your M2 export function goes here.
-				ExportM2toLWO(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+				ExportLWO_M2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		// For WMO Models. You don't need to include this if the exporter doesn't support it.
 		} else if (canvas->wmo) {
-			wxFileDialog dialog(this, _T("Export World Model Object..."), wxEmptyString, newfilename, _T("Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export World Model Object..."), wxEmptyString, newfilename, wxT("Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting WMO model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting WMO model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				// Your WMO export function goes here.
-				ExportWMOtoLWO(canvas->wmo, dialog.GetPath().fn_str());	
+				ExportLWO_WMO(canvas->wmo, dialog.GetPath().fn_str());
 			}
 		// ADT support. Same as WMOs.
 		} else if (canvas->adt) {
-			wxFileDialog dialog(this, _T("Export MapTile..."), wxEmptyString, newfilename, _T("Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export MapTile..."), wxEmptyString, newfilename, wxT("Lightwave (*.lwo)|*.lwo"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting MapTile model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting MapTile model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				// Your ADT export function goes here.
-				ExportADTtoLWO(canvas->adt, dialog.GetPath().fn_str());	
+				ExportLWO_ADT(canvas->adt, dialog.GetPath().fn_str());
 			}
 		}
 	// That's all folks!
@@ -2905,126 +2920,123 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 	}else if (id == ID_MODELEXPORT_BASE){
 		SaveBaseFile();
 	} else if (id == ID_MODELEXPORT_OBJ) {
-		newfilename << _T(".obj");
+		newfilename << wxT(".obj");
 		if (canvas->model) {
-			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("Wavefront (*.obj)|*.obj"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export Model..."), wxEmptyString, newfilename, wxT("Wavefront (*.obj)|*.obj"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportM2toOBJ(canvas->root, canvas->model, dialog.GetPath(), init);
+				ExportOBJ_M2(canvas->root, canvas->model, dialog.GetPath(), init);
 			}
 		} else if (canvas->wmo) {
-			wxFileDialog dialog(this, _T("Export World Model Object..."), wxEmptyString, newfilename, _T("Wavefront (*.obj)|*.obj"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export World Model Object..."), wxEmptyString, newfilename, wxT("Wavefront (*.obj)|*.obj"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportWMOtoOBJ(canvas->wmo, dialog.GetPath());
+				ExportOBJ_WMO(canvas->wmo, dialog.GetPath());
 			}
 		}
 	} else if (id == ID_MODELEXPORT_COLLADA) {
-		newfilename << _T(".dae");
+		newfilename << wxT(".dae");
 		if (canvas->model) {
-			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("Collada (*.dae)|*.dae"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export Model..."), wxEmptyString, newfilename, wxT("Collada (*.dae)|*.dae"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportM2toCOLLADA(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+				ExportCOLLADA_M2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		} else if (canvas->wmo) {
-			wxFileDialog dialog(this, _T("Export World Model Object..."), wxEmptyString, newfilename, _T("Collada (*.dae)|*.dae"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export World Model Object..."), wxEmptyString, newfilename, wxT("Collada (*.dae)|*.dae"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportWMOtoCOLLADA(canvas->wmo, dialog.GetPath().fn_str());	
+				ExportCOLLADA_WMO(canvas->wmo, dialog.GetPath().fn_str());
 			}
 		}
 	} else if (id == ID_MODELEXPORT_MS3D) {
-		newfilename << _T(".ms3d");
+		newfilename << wxT(".ms3d");
 		if (canvas->model) {
-			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("Milkshape 3D (*.ms3d)|*.ms3d"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export Model..."), wxEmptyString, newfilename, wxT("Milkshape 3D (*.ms3d)|*.ms3d"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportM2toMS3D(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+				ExportMS3D_M2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		}
 	} else if (id == ID_MODELEXPORT_3DS) {
-		newfilename << _T(".3ds");
+		newfilename << wxT(".3ds");
 		if (canvas->model) {
-			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("3D Studio Max (*.3ds)|*.3ds"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export Model..."), wxEmptyString, newfilename, wxT("3D Studio Max (*.3ds)|*.3ds"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportM2to3DS(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+				Export3DS_M2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		}
 	} else if (id == ID_MODELEXPORT_X3D) {
-		newfilename << _T(".x3d");
+		newfilename << wxT(".x3d");
 		if (canvas->model) {
-			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("X3D (*.x3d)|*.x3d"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export Model..."), wxEmptyString, newfilename, wxT("X3D (*.x3d)|*.x3d"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportM2toX3D(canvas->model, dialog.GetPath().fn_str(), init);
+				ExportX3D_M2(canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		}
 	} else if (id == ID_MODELEXPORT_XHTML) {
-		newfilename << _T(".xhtml");
+		newfilename << wxT(".xhtml");
 		if (canvas->model) {
-			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("Embedded X3D in XHTML (*.xhtml)|*.xhtml"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export Model..."), wxEmptyString, newfilename, wxT("Embedded X3D in XHTML (*.xhtml)|*.xhtml"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportM2toXHTML(canvas->model, dialog.GetPath().fn_str(), init);
+				ExportXHTML_M2(canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		}
 	} else if (id == ID_MODELEXPORT_OGRE) {
 		// TODO: export to dotScene format, not simple mesh
-		newfilename << _T(".mesh.xml");
+		newfilename << wxT(".mesh.xml");
 		if (canvas->model) {
-			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("Ogre XML (*.mesh.xml)|*.mesh.xml"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export Model..."), wxEmptyString, newfilename, wxT("Ogre XML (*.mesh.xml)|*.mesh.xml"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportM2toOgreXml(canvas->model, dialog.GetPath().fn_str(), init);
-			}
-		} else if (canvas->wmo) {
-			wxFileDialog dialog(this, _T("Export World Model Object..."), wxEmptyString, newfilename, _T("Ogre XML (*.mesh.xml)|*.mesh.xml"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
-
-				ExportWMOtoOgreXml(canvas->wmo, dialog.GetPath().fn_str());
+				ExportOgreXML_M2(canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		}
 	} else if (id == ID_MODELEXPORT_M3) {
-		newfilename << _T(".m3");
+		newfilename << wxT(".m3");
 		if (canvas->model) {
-			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("Starcraft II (*.m3)|*.m3"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export Model..."), wxEmptyString, newfilename, wxT("Starcraft II (*.m3)|*.m3"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 				
-				ExportM2toM3(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+				ExportM3_M2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		}
 #ifdef	_WINDOWS
 	} else if (id == ID_MODELEXPORT_FBX) {
-		newfilename << _T(".fbx");
+		newfilename << wxT(".fbx");
 		if (canvas->model) {
-			wxFileDialog dialog(this, _T("Export Model..."), wxEmptyString, newfilename, _T("FBX (*.fbx)|*.fbx"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export Model..."), wxEmptyString, newfilename, wxT("FBX (*.fbx)|*.fbx"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportM2toFBX(canvas->model, dialog.GetPath().fn_str(), init);
+				ExportFBX_M2(canvas->model, dialog.GetPath().fn_str(), init);
 			}
 		} else if (canvas->wmo) {
-			wxFileDialog dialog(this, _T("Export World Model Object..."), wxEmptyString, newfilename, _T("FBX (*.fbx)|*.fbx"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+			wxFileDialog dialog(this, wxT("Export World Model Object..."), wxEmptyString, newfilename, wxT("FBX (*.fbx)|*.fbx"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(_T("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
-				ExportWMOtoFBX(canvas->wmo, dialog.GetPath().fn_str());
+				ExportFBX_WMO(canvas->wmo, dialog.GetPath().fn_str());
 			}
 		}
 #endif
+	}
+
+	if ((init == false)&&(g_canvas->model)&&(g_selModel->animated)) {
+		g_selModel->animManager->Play();
 	}
 }
 
@@ -3055,7 +3067,7 @@ void ModelViewer::OnTest(wxCommandEvent &event)
 		} else {
 			arrowControl = new ArrowControl(this, wxID_ANY, wxDefaultPosition, charControl->charAtt);
 			/* // wxIFM stuff
-			arrowControlPanel = new wxIFMDefaultChildData(arrowControl, IFM_CHILD_GENERIC, wxDefaultPosition, wxSize(140, 300), true, _("Arrow Control"));
+			arrowControlPanel = new wxIFMDefaultChildData(arrowControl, IFM_CHILD_GENERIC, wxDefaultPosition, wxSize(140, 300), true, wxT("Arrow Control"));
 			arrowControlPanel->m_orientation = IFM_ORIENTATION_FLOAT;
 			interfaceManager->AddChild(arrowControlPanel);
 			interfaceManager->Update(IFM_DEFAULT_RECT,true);
@@ -3064,7 +3076,7 @@ void ModelViewer::OnTest(wxCommandEvent &event)
 			*/
 			// wxAUI
 			interfaceManager.AddPane(arrowControl, wxAuiPaneInfo().
-			Name(wxT("Arrows")).Caption(_("Arrows")).
+			Name(wxT("Arrows")).Caption(wxT("Arrows")).
 			FloatingSize(wxSize(150,300)).Float().Show(true)); //.FloatingPosition(GetStartPosition())
 			interfaceManager.Update();
 		}
@@ -3086,18 +3098,18 @@ void ModelViewer::UpdateControls()
 void ModelViewer::ImportArmoury(wxString strURL)
 {
 	// Format the URL
-	wxString strDomain = strURL.BeforeLast(_T('/')).AfterLast(_T('/')); // "armory.worldofwarcraft.com"
-	wxString strParam = strURL.AfterLast(_T('/'));
-	int pos = strParam.Find(_T("?r="));
+	wxString strDomain = strURL.BeforeLast(wxT('/')).AfterLast(wxT('/')); // "armory.worldofwarcraft.com"
+	wxString strParam = strURL.AfterLast(wxT('/'));
+	int pos = strParam.Find(wxT("?r="));
 	wxString strFile = strParam.Mid(0, pos);
 	strParam = strParam.Mid(pos+3);
-	pos = strParam.Find(_T("&cn=")); // newer version change from 'n=' to 'cn='
+	pos = strParam.Find(wxT("&cn=")); // newer version change from 'n=' to 'cn='
 	wxString strRealm, strChar;
 	if (pos >= 0) {
 		strRealm = strParam.Mid(0, pos);
 		strChar = strParam.Mid(pos+4);
 	} else {
-		pos = strParam.Find(_T("&n="));
+		pos = strParam.Find(wxT("&n="));
 		strRealm = strParam.Mid(0, pos);
 		strChar = strParam.Mid(pos+3);
 	}
@@ -3108,21 +3120,21 @@ void ModelViewer::ImportArmoury(wxString strURL)
 
 	// Build Page file
 	// "/character-sheet.xml?r=%s&n=%s"
-	wxString strPage = _T('/') + strFile;
-	strPage.Append(_T("?r=")).Append(strRealm).Append(_T("&cn=")).Append(strChar);
+	wxString strPage = wxT('/') + strFile;
+	strPage.Append(wxT("?r=")).Append(strRealm).Append(wxT("&cn=")).Append(strChar);
 	//http://armory.wow-europe.com/character-sheet.xml?r=Spinebreaker&cn=Nostrum
 
-	wxLogMessage(_T("Attemping to access WoWArmory Page: %s"), wxString(strDomain + strPage).c_str());
+	wxLogMessage(wxT("Attemping to access WoWArmory Page: %s"), wxString(strDomain + strPage).c_str());
 
 	// Get the page from the armoury website
 	wxHTTP http;
 
 	// set the headers
-	http.SetHeader(_T("User-Agent"), _T("Mozilla/5.0 (Windows;U;Windows NT 5.1;zh-TW;rv:1.8.1.2) Gecko/20070219 Firefox/2.0.0.12")); 
-	http.SetHeader(_T("Accept"), _T("text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"));
-	http.SetHeader(_T("Accept-Language"), _T("en-us,en;q=0.5"));
-	http.SetHeader(_T("Accept-Charset"), _T("ISO-8859-1,utf-8;q=0.7,*;q=0.7"));
-	http.SetHeader(_T("Host"), strDomain);
+	http.SetHeader(wxT("User-Agent"), wxT("Mozilla/5.0 (Windows;U;Windows NT 5.1;zh-TW;rv:1.8.1.2) Gecko/20070219 Firefox/2.0.0.12")); 
+	http.SetHeader(wxT("Accept"), wxT("text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"));
+	http.SetHeader(wxT("Accept-Language"), wxT("en-us,en;q=0.5"));
+	http.SetHeader(wxT("Accept-Charset"), wxT("ISO-8859-1,utf-8;q=0.7,*;q=0.7"));
+	http.SetHeader(wxT("Host"), strDomain);
 
 	if (http.Connect(strDomain))
 	{ 
@@ -3133,12 +3145,12 @@ void ModelViewer::ImportArmoury(wxString strURL)
 
 		// Make sure there was no error retrieving the page
 		if(http.GetError() == wxPROTO_NOERR) {
-			wxFileOutputStream output(_T("temp.xml"));
+			wxFileOutputStream output(wxT("temp.xml"));
             stream->Read(output); 
 			output.Close();
 			
 			wxXmlDocument xmlDoc;
-			if (!xmlDoc.Load(_T("temp.xml"), _T("UTF-8")))
+			if (!xmlDoc.Load(wxT("temp.xml"), wxT("UTF-8")))
 				return;
 			
 			// character-model.xml?r=Realm&cn=CharacterName
@@ -3150,7 +3162,7 @@ void ModelViewer::ImportArmoury(wxString strURL)
 
 			wxXmlNode *child = xmlDoc.GetRoot()->GetChildren(); // page->tabInfo
 			while(child) {
-				if (child->GetName() == _T("characterInfo"))
+				if (child->GetName() == wxT("characterInfo"))
 					break;
 				child = child->GetNext(); // page->characterInfo
 			}
@@ -3162,13 +3174,13 @@ void ModelViewer::ImportArmoury(wxString strURL)
 
 			while (child) {
 
-				if (child->GetName() == _T("character")) { // page->characterInfo->character
+				if (child->GetName() == wxT("character")) { // page->characterInfo->character
 
 					// process text enclosed by <tag1></tag1>
 					//wxString content = child->GetNodeContent();
 
 					// process properties of <tag1>, raceId will better?
-					int raceId = wxAtoi(child->GetPropVal(_T("raceId"), _T("1")));
+					int raceId = wxAtoi(child->GetPropVal(wxT("raceId"), wxT("1")));
 					CharRacesDB::Record racer = racedb.getById(raceId);
 					wxString race;
 					if (gameVersion == 30100)
@@ -3176,26 +3188,26 @@ void ModelViewer::ImportArmoury(wxString strURL)
 					else
 						race = racer.getString(CharRacesDB::Name);
 					//race = race.MakeLower();
-					wxString gender = child->GetPropVal(_T("gender"), _T("Male"));
+					wxString gender = child->GetPropVal(wxT("gender"), wxT("Male"));
 					//gender = gender.MakeLower();
 
-					wxString strModel = _T("Character\\") + race + MPQ_SLASH + gender + MPQ_SLASH + race + gender + _T(".m2");
+					wxString strModel = wxT("Character\\") + race + MPQ_SLASH + gender + MPQ_SLASH + race + gender + wxT(".m2");
 
 					LoadModel(strModel);
 
 					if (!g_canvas->model)
 						return;
 
-				} else if (child->GetName() == _T("characterTab")) { // page->characterInfo->characterTab
+				} else if (child->GetName() == wxT("characterTab")) { // page->characterInfo->characterTab
 					child = child->GetChildren();
 
-				} else if (child->GetName() == _T("items")) { // page->characterInfo->characterTab->items
+				} else if (child->GetName() == wxT("items")) { // page->characterInfo->characterTab->items
 
 					wxXmlNode *itemNode = child->GetChildren();
 					while (itemNode) { // // page->characterInfo->characterTab->items->item
-						if (itemNode->GetName() == _T("item")) {
-							wxString id = itemNode->GetPropVal(_T("id"), _T("0"));
-							wxString slot = itemNode->GetPropVal(_T("slot"), _T("0"));
+						if (itemNode->GetName() == wxT("item")) {
+							wxString id = itemNode->GetPropVal(wxT("id"), wxT("0"));
+							wxString slot = itemNode->GetPropVal(wxT("slot"), wxT("0"));
 							
 							// Item ID
 							long itemID;
@@ -3233,8 +3245,9 @@ void ModelViewer::ImportArmoury(wxString strURL)
 
 				child = child->GetNext();
 			}
-
-			//wxRemoveFile(_T("temp.xml"));
+#ifndef _DEBUG
+			wxRemoveFile(wxT("temp.xml"));
+#endif
 		}
 		delete stream;
 	}

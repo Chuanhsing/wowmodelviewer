@@ -144,10 +144,10 @@ size_t getKFPSExportOptions(Model* m)
 {
     // default value
     size_t maxKeyFrames = getMaxKeyFrames(m);
-    wxString strNumFrames(_T("5"));
-    wxString title = wxString::Format(_T("Number of key frames per second to be used (max. %i):"), maxKeyFrames);
+    wxString strNumFrames(wxT("5"));
+    wxString title = wxString::Format(wxT("Number of key frames per second to be used (max. %i):"), maxKeyFrames);
 
-    wxTextEntryDialog d(NULL, title, _T("Export X3D animation"), strNumFrames);
+    wxTextEntryDialog d(NULL, title, wxT("Export X3D animation"), strNumFrames);
 
     double n;
     bool success;
@@ -251,7 +251,7 @@ void M2toX3DAnim(tabbed_ostream s, Model* m)
 
 void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
 {
-	LogExportData(_T("X3D"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
+	LogExportData(wxT("X3D"),m->modelname,wxString(fn, wxConvUTF8));
     s << "<!-- Exported with WoWModelViewer -->" << std::endl;
 
     s.tab();
@@ -352,13 +352,13 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
             {
                 wxString texName(fn, wxConvUTF8);
                 texName = texName.AfterLast(SLASH).BeforeLast('.');
-                texName << _T("_") << p.tex;
+                texName << wxT("_") << p.tex;
 
                 wxString texFilename(fn, wxConvUTF8);
                 texFilename = texFilename.BeforeLast(SLASH);
                 texFilename += SLASH;
                 texFilename += texName;
-                texFilename += wxString(_T(".png"));
+                texFilename += wxString(wxT(".png"));
                 SaveTexture(texFilename);
 
                 textures[p.tex] = texName;
@@ -465,7 +465,7 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
     s.rtab();
 }
 
-void ExportM2toX3D(Model *m, const char *fn, bool init)
+void ExportX3D_M2(Model *m, const char *fn, bool init)
 {
     ofstream f(fn, ios_base::out | ios_base::trunc);
 
@@ -481,7 +481,7 @@ void ExportM2toX3D(Model *m, const char *fn, bool init)
     f.close();
 }
 
-void ExportM2toXHTML(Model *m, const char *fn, bool init)
+void ExportXHTML_M2(Model *m, const char *fn, bool init)
 {
     ofstream f(fn, ios_base::out | ios_base::trunc);
 

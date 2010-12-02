@@ -104,7 +104,7 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 		break;
 	case MODELPARTICLE_EMITTER_SPLINE: // Spline? (can't be bothered to find one)
 	default:
-		wxLogMessage(_T("[Error] Unknown Emitter: %d\n"), EmitterType);
+		wxLogMessage(wxT("[Error] Unknown Emitter: %d\n"), EmitterType);
 		break;
 	}
 
@@ -286,7 +286,7 @@ void ParticleSystem::draw()
 	case BM_MODULATE:
 	case BM_MODULATEX2:
 	default:
-		wxLogMessage(_T("blend unknown: %d"), blend);
+		wxLogMessage(wxT("blend unknown: %d"), blend);
 	}
 	
 	//glDisable(GL_LIGHTING);

@@ -8,15 +8,15 @@
 //#include "CxImage/ximage.h"
 
 // MilkShape 3D
-void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
+void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init)
 {
 	wxFFileOutputStream f(wxString(fn, wxConvUTF8), wxT("w+b"));
 
 	if (!f.IsOk()) {
-		wxLogMessage(_T("Error: Unable to open file '%s'. Could not export model."), fn);
+		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export model."), fn);
 		return;
 	}
-	LogExportData(_T("MS3D"),wxString(fn, wxConvUTF8).BeforeLast(SLASH),_T("M2"));
+	LogExportData(wxT("MS3D"),m->modelname,wxString(fn, wxConvUTF8));
 	unsigned short numVerts = 0;
 	unsigned short numFaces = 0;
 	unsigned short numGroups = 0;
@@ -24,9 +24,9 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 	GroupData *groups = NULL;
 
 	InitCommon(att, init, verts, groups, numVerts, numGroups, numFaces);
-	//wxLogMessage(_T("Num Verts: %i, Num Faces: %i, Num Groups: %i"), numVerts, numFaces, numGroups);
-	//wxLogMessage(_T("Vert[0] BoneID: %i, Group[0].m.name = %s"),verts[0].boneid, groups[0].m->name);
-	wxLogMessage(_T("Init Common Complete."));
+	//wxLogMessage(wxT("Num Verts: %i, Num Faces: %i, Num Groups: %i"), numVerts, numFaces, numGroups);
+	//wxLogMessage(wxT("Vert[0] BoneID: %i, Group[0].m.name = %s"),verts[0].boneid, groups[0].m->name);
+	wxLogMessage(wxT("Init Common Complete."));
 
 	// Write the header
 	ms3d_header_t header;
@@ -35,10 +35,10 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 
 	// Header
 	f.Write(reinterpret_cast<char *>(&header), sizeof(ms3d_header_t));
-	wxLogMessage(_T("Header Data Written."));
+	wxLogMessage(wxT("Header Data Written."));
 	// Vertex Count
 	f.Write(reinterpret_cast<char *>(&numVerts), sizeof(numVerts));
-	//wxLogMessage(_T("NumVerts: %i"),numVerts);
+	//wxLogMessage(wxT("NumVerts: %i"),numVerts);
 	
 	// Write Vertex data?
 	for (unsigned int i=0; i<numVerts; i++) {
@@ -51,12 +51,12 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 		vert.vertex[2] = verts[i].vertex.z;
 		f.Write(reinterpret_cast<char *>(&vert), sizeof(ms3d_vertex_t));
 	}
-	wxLogMessage(_T("Vertex Data Written."));
+	wxLogMessage(wxT("Vertex Data Written."));
 	// ---------------------------
 
 	// Triangle Count
 	f.Write(reinterpret_cast<char *>(&numFaces), sizeof(numFaces));
-	//wxLogMessage(_T("NumFaces: %i"),numFaces);
+	//wxLogMessage(wxT("NumFaces: %i"),numFaces);
 
 	// Write Triangle Data?
 	for (unsigned int i=0; i<(unsigned int)numVerts; i+=3) {
@@ -77,16 +77,16 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 
 		f.Write(reinterpret_cast<char *>(&tri), sizeof(ms3d_triangle_t));
 	}
-	wxLogMessage(_T("Triangle Data Written."));
+	wxLogMessage(wxT("Triangle Data Written."));
 	// ---------------------------
 
 	// Number of groups
 	f.Write(reinterpret_cast<char *>(&numGroups), sizeof(numGroups));
-	//wxLogMessage(_T("NumGroups: %i"),numGroups);
+	//wxLogMessage(wxT("NumGroups: %i"),numGroups);
 
 	unsigned short indiceCount = 0;
 	for (unsigned short i=0; i<(unsigned int)numGroups; i++) {
-		wxString groupName(wxString::Format(_T("Geoset_%i"), i));
+		wxString groupName(wxString::Format(wxT("Geoset_%i"), i));
 
 		const char flags = 0; // SELECTED
 		f.Write(&flags, sizeof(flags));
@@ -107,13 +107,13 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 		unsigned char gIndex = (char)i;
 		f.Write(reinterpret_cast<char *>(&gIndex), sizeof(gIndex));
 	}
-	wxLogMessage(_T("Group Data Written."));
+	wxLogMessage(wxT("Group Data Written."));
 
 	// Number of materials (pretty much identical to groups, each group has its own material)
 	f.Write(reinterpret_cast<char *>(&numGroups), sizeof(numGroups));
 	
 	for (unsigned short i=0; i<(unsigned int)numGroups; i++) {
-		wxString matName(wxString::Format(_T("Material_%i"), i));
+		wxString matName(wxString::Format(wxT("Material_%i"), i));
 
 		ModelRenderPass p = groups[i].p;
 		if (p.init(groups[i].m)) {
@@ -163,11 +163,11 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 			texFilename = texFilename.BeforeLast('\\');
 			texFilename += '\\';
 			texFilename += texName;
-			wxLogMessage(_T("Exporting Image: %s"),texFilename.c_str());
+			wxLogMessage(wxT("Exporting Image: %s"),texFilename.c_str());
 			SaveTexture(texFilename);
 		}
 	}
-	wxLogMessage(_T("Material Data Written."));
+	wxLogMessage(wxT("Material Data Written."));
 
 #if 0
 	// save some keyframe data
@@ -269,7 +269,7 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 	}
 #endif
 	f.Close();
-	wxLogMessage(_T("Finished Milkshape Export."));
+	wxLogMessage(wxT("Finished Milkshape Export."));
 
 	if (verts){
 		//wxLogMessage("verts found. Deleting...");
@@ -280,5 +280,5 @@ void ExportM2toMS3D(Attachment *att, Model *m, const char *fn, bool init)
 		wxDELETEA(groups);
 	}
 
-	//wxLogMessage(_T("Finished Milkshape Cleanup.\n"));
+	//wxLogMessage(wxT("Finished Milkshape Cleanup.\n"));
 }

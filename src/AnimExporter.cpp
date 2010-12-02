@@ -26,36 +26,36 @@ CAnimationExporter::CAnimationExporter(wxWindow* parent, wxWindowID id, const wx
 	if (!g_canvas)
 		return;	
 
-	if (Create(parent, id, title, pos, size, style|wxTAB_TRAVERSAL, _T("GifExporterFrame")) == false) {
-		wxMessageBox(_T("Failed to create the Gif Exporter window!"), _T("Error"));
-		wxLogMessage(_T("GUI Error: Failed to create the Gif Exporter window!"));
+	if (Create(parent, id, title, pos, size, style|wxTAB_TRAVERSAL, wxT("GifExporterFrame")) == false) {
+		wxMessageBox(wxT("Failed to create the Gif Exporter window!"), wxT("Error"));
+		wxLogMessage(wxT("GUI Error: Failed to create the Gif Exporter window!"));
 		this->Destroy();
 		return;
 	}
 	
 	lblFile = new wxStaticText(this, wxID_ANY, wxEmptyString, wxPoint(10,5), wxSize(320,20));
-	lblCurFrame = new wxStaticText(this, wxID_ANY, _T("Current Frame: 0"), wxPoint(10,25), wxSize(100,20));
+	lblCurFrame = new wxStaticText(this, wxID_ANY, wxT("Current Frame: 0"), wxPoint(10,25), wxSize(100,20));
 	
-	lblTotalFrame = new wxStaticText(this, wxID_ANY, _T("Total Frames:"), wxPoint(10,45), wxDefaultSize);
+	lblTotalFrame = new wxStaticText(this, wxID_ANY, wxT("Total Frames:"), wxPoint(10,45), wxDefaultSize);
 	txtFrames = new wxTextCtrl(this, ID_GIFTOTALFRAME, wxEmptyString, wxPoint(90,45), wxSize(30,18));
 	
-	cbTrans = new wxCheckBox(this, ID_GIFTRANSPARENT, _T("Transparency"), wxPoint(10,65), wxDefaultSize, 0);
-	cbGrey = new wxCheckBox(this, ID_GIFGREYSCALE, _T("Greyscale"), wxPoint(130,65), wxDefaultSize, 0);
-	cbPng = new wxCheckBox(this, ID_PNGSEQ, _T("PNG Sequence"), wxPoint(250,65), wxDefaultSize, 0);
-	cbDither = new wxCheckBox(this, ID_GIFDIFFUSE, _T("Error Diffusion"), wxPoint(10,85), wxDefaultSize, 0);
-	cbShrink = new wxCheckBox(this, ID_GIFSHRINK, _T("Resize"), wxPoint(130,85), wxDefaultSize, 0);
+	cbTrans = new wxCheckBox(this, ID_GIFTRANSPARENT, wxT("Transparency"), wxPoint(10,65), wxDefaultSize, 0);
+	cbGrey = new wxCheckBox(this, ID_GIFGREYSCALE, wxT("Greyscale"), wxPoint(130,65), wxDefaultSize, 0);
+	cbPng = new wxCheckBox(this, ID_PNGSEQ, wxT("PNG Sequence"), wxPoint(250,65), wxDefaultSize, 0);
+	cbDither = new wxCheckBox(this, ID_GIFDIFFUSE, wxT("Error Diffusion"), wxPoint(10,85), wxDefaultSize, 0);
+	cbShrink = new wxCheckBox(this, ID_GIFSHRINK, wxT("Resize"), wxPoint(130,85), wxDefaultSize, 0);
 
-	lblSize = new wxStaticText(this, wxID_ANY, _T("Size Dimensions:"), wxPoint(10,105), wxDefaultSize);
-	txtSizeX = new wxTextCtrl(this, wxID_ANY, _T("0"), wxPoint(100,105), wxSize(40,18));
+	lblSize = new wxStaticText(this, wxID_ANY, wxT("Size Dimensions:"), wxPoint(10,105), wxDefaultSize);
+	txtSizeX = new wxTextCtrl(this, wxID_ANY, wxT("0"), wxPoint(100,105), wxSize(40,18));
 	txtSizeX->Enable(false);
-	txtSizeY = new wxTextCtrl(this, wxID_ANY, _T("0"), wxPoint(150,105), wxSize(40,18));
+	txtSizeY = new wxTextCtrl(this, wxID_ANY, wxT("0"), wxPoint(150,105), wxSize(40,18));
 	txtSizeY->Enable(false);
 
-	lblDelay = new wxStaticText(this, wxID_ANY, _T("Gif Frame Delay: (1-100)"), wxPoint(10,128), wxDefaultSize);
-	txtDelay = new wxTextCtrl(this, wxID_ANY, _T("5"), wxPoint(140,125), wxSize(30,18));
+	lblDelay = new wxStaticText(this, wxID_ANY, wxT("Gif Frame Delay: (1-100)"), wxPoint(10,128), wxDefaultSize);
+	txtDelay = new wxTextCtrl(this, wxID_ANY, wxT("5"), wxPoint(140,125), wxSize(30,18));
 	
-	btnStart = new wxButton(this, ID_GIFSTART, _T("Start"), wxPoint(10,155), wxSize(62,26));
-	btnCancel = new wxButton(this, ID_GIFEXIT, _T("Cancel"), wxPoint(80,155), wxSize(62,26));
+	btnStart = new wxButton(this, ID_GIFSTART, wxT("Start"), wxPoint(10,155), wxSize(62,26));
+	btnCancel = new wxButton(this, ID_GIFEXIT, wxT("Cancel"), wxPoint(80,155), wxSize(62,26));
 }
 
 void CAnimationExporter::Init(const wxString fn)
@@ -96,8 +96,8 @@ void CAnimationExporter::Init(const wxString fn)
 	txtSizeY->Enable(true);
 	txtDelay->Enable(true);
 
-	txtSizeX->SetValue(_T("0"));
-	txtSizeY->SetValue(_T("0"));
+	txtSizeX->SetValue(wxT("0"));
+	txtSizeY->SetValue(wxT("0"));
 	cbShrink->SetValue(false);
 }
 
@@ -112,8 +112,8 @@ CAnimationExporter::~CAnimationExporter()
 void CAnimationExporter::CreateGif()
 {
 	if (!g_canvas || !g_canvas->model || !g_canvas->model->animManager) {
-		wxMessageBox(_T("Unable to create animated GIF!"), _T("Error"));
-		wxLogMessage(_T("Error: Unable to created animated GIF.  A required objects pointer was null!"));
+		wxMessageBox(wxT("Unable to create animated GIF!"), wxT("Error"));
+		wxLogMessage(wxT("Error: Unable to created animated GIF.  A required objects pointer was null!"));
 		Show(false);
 		return;
 	}
@@ -144,8 +144,8 @@ void CAnimationExporter::CreateGif()
 
 	// will crash program - prevent this from happening
 	if (m_iTotalFrames > m_iTotalAnimFrames) {
-		wxMessageBox(_T("Impossible to make a gif with more frames than the model animation.\nClosing gif exporter."), _T("Error"));
-		wxLogMessage(_T("Error: Unable to make a gif with more frames than the model animation."));
+		wxMessageBox(wxT("Impossible to make a gif with more frames than the model animation.\nClosing gif exporter."), wxT("Error"));
+		wxLogMessage(wxT("Error: Unable to make a gif with more frames than the model animation."));
 		this->Show(false);
 		return;
 	}
@@ -176,7 +176,7 @@ void CAnimationExporter::CreateGif()
 		g_canvas->rt = new RenderTexture();
 
 		if (!g_canvas->rt) {
-			wxLogMessage(_T("Error: RenderToTexture object is null!"));
+			wxLogMessage(wxT("Error: RenderToTexture object is null!"));
 			this->Show(false);
 			return;
 		}
@@ -210,7 +210,7 @@ void CAnimationExporter::CreateGif()
 	gifImages = new CxImage*[m_iTotalFrames];
 
 	for(unsigned int i=0; i<m_iTotalFrames && !m_bPng; i++) {
-		lblCurFrame->SetLabel(wxString::Format(_T("Current Frame: %i"), i));
+		lblCurFrame->SetLabel(wxString::Format(wxT("Current Frame: %i"), i));
 
 		this->Refresh();
 		this->Update();
@@ -263,7 +263,7 @@ void CAnimationExporter::CreateGif()
 
 	//PNG Sequence Exporter, use if Checkbox is true
 	for(unsigned int i=0; i<m_iTotalFrames && m_bPng; i++) {
-		lblCurFrame->SetLabel(wxString::Format(_T("Current Frame: %i"), i));
+		lblCurFrame->SetLabel(wxString::Format(wxT("Current Frame: %i"), i));
 
 		this->Refresh();
 		this->Update();
@@ -310,7 +310,7 @@ void CAnimationExporter::CreateGif()
 
 		// Append PNG extension, save out PNG file with frame number
 		wxString filen = m_strFilename;
-		filen << _T("_") << i << _T(".png");
+		filen << wxT("_") << i << wxT(".png");
 		newImage->Save(filen.mb_str(), CXIMAGE_FORMAT_PNG);
 		
 		//gifImages must not be empty
@@ -336,7 +336,7 @@ void CAnimationExporter::CreateGif()
 
 	// Append GIF extension
 	wxString filen = m_strFilename;
-	filen << _T(".gif");
+	filen << wxT(".gif");
 
 	FILE *hFile = NULL;
 #ifdef	_WINDOWS
@@ -379,7 +379,7 @@ void CAnimationExporter::CreateGif()
 		m_pPal = NULL;
 	}
 
-	wxLogMessage(_T("Info: GIF Animation successfully created."));
+	wxLogMessage(wxT("Info: GIF Animation successfully created."));
 
 	g_canvas->model->animManager->SetSpeed(m_fAnimSpeed); // Return the animation speed back to whatever it was previously set as
 	g_canvas->model->animManager->Play();
@@ -432,8 +432,8 @@ void CAnimationExporter::CreateAvi(wxString fn)
 {
 #ifdef _WINDOWS
 	if (!g_canvas || !g_canvas->model || !g_canvas->model->animManager) {
-		wxMessageBox(_T("Unable to create AVI animation!"), _T("Error"));
-		wxLogMessage(_T("Error: Unable to created AVI animation.  A required object pointer was null!"));
+		wxMessageBox(wxT("Unable to create AVI animation!"), wxT("Error"));
+		wxLogMessage(wxT("Error: Unable to created AVI animation.  A required object pointer was null!"));
 		return;
 	}
 
@@ -451,7 +451,7 @@ void CAnimationExporter::CreateAvi(wxString fn)
 		g_canvas->rt = new RenderTexture();
 
 		if (!g_canvas->rt) {
-			wxLogMessage(_T("Error: RenderToTexture object is null!"));
+			wxLogMessage(wxT("Error: RenderToTexture object is null!"));
 			Show(false);
 			return;
 		}
@@ -474,8 +474,8 @@ void CAnimationExporter::CreateAvi(wxString fn)
 
 	// will crash program - prevent this from happening
 	if (m_iTotalFrames > m_iTotalAnimFrames) {
-		wxMessageBox(_T("Impossible to make a gif with more frames than the model animation.\nClosing gif exporter."), _T("Error"));
-		wxLogMessage(_T("Error: Unable to make a gif with more frames than the model animation."));
+		wxMessageBox(wxT("Impossible to make a gif with more frames than the model animation.\nClosing gif exporter."), wxT("Error"));
+		wxLogMessage(wxT("Error: Unable to make a gif with more frames than the model animation."));
 		return;
 	}
 

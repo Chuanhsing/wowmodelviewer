@@ -35,35 +35,35 @@ END_EVENT_TABLE()
 
 AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 {
-	wxLogMessage(_T("Creating Anim Control..."));
+	wxLogMessage(wxT("Creating Anim Control..."));
 
-	if(Create(parent, id, wxDefaultPosition, wxSize(700,120), 0, _T("AnimControlFrame")) == false) {
-		wxMessageBox(_T("Failed to create a window for our AnimControl!"), _T("Error"));
-		wxLogMessage(_T("GUI Error: Failed to create a window for our AnimControl!"));
+	if(Create(parent, id, wxDefaultPosition, wxSize(700,120), 0, wxT("AnimControlFrame")) == false) {
+		wxMessageBox(wxT("Failed to create a window for our AnimControl!"), wxT("Error"));
+		wxLogMessage(wxT("GUI Error: Failed to create a window for our AnimControl!"));
 		return;
 	}
 
-	const wxString strLoops[10] = {_T("0"), _T("1"), _T("2"), _T("3"), _T("4"), _T("5"), _T("6"), _T("7"), _T("8"), _T("9")};
+	const wxString strLoops[10] = {wxT("0"), wxT("1"), wxT("2"), wxT("3"), wxT("4"), wxT("5"), wxT("6"), wxT("7"), wxT("8"), wxT("9")};
 	
-	animCList = new wxComboBox(this, ID_ANIM, _("Animation"), wxPoint(10,10), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Animation")); //|wxCB_SORT); //wxPoint(66,10)
-	animCList2 = new wxComboBox(this, ID_ANIM_SECONDARY, _("Secondary"), wxPoint(10,95), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Secondary")); //|wxCB_SORT); //wxPoint(66,10)
+	animCList = new wxComboBox(this, ID_ANIM, wxT("Animation"), wxPoint(10,10), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, wxT("Animation")); //|wxCB_SORT); //wxPoint(66,10)
+	animCList2 = new wxComboBox(this, ID_ANIM_SECONDARY, wxT("Secondary"), wxPoint(10,95), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, wxT("Secondary")); //|wxCB_SORT); //wxPoint(66,10)
 	animCList2->Enable(false);
 	animCList2->Show(false);
 
 	lockText = new wxTextCtrl(this, ID_ANIM_SECONDARY_TEXT, wxEmptyString, wxPoint(300, 64), wxSize(20, 20), wxTE_PROCESS_ENTER, wxDefaultValidator);
-	lockText->SetValue(wxString::Format(_T("%d"), UPPER_BODY_BONES));
+	lockText->SetValue(wxString::Format(wxT("%d"), UPPER_BODY_BONES));
 	lockText->Enable(false);
 	lockText->Show(false);
 
 	// Our hidden head/mouth related controls
-	animCList3 = new wxComboBox(this, ID_ANIM_MOUTH, _("Mouth"), wxPoint(170,95), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, _("Secondary")); //|wxCB_SORT); //wxPoint(66,10)
+	animCList3 = new wxComboBox(this, ID_ANIM_MOUTH, wxT("Mouth"), wxPoint(170,95), wxSize(150,16), 0, NULL, wxCB_READONLY|wxCB_SORT, wxDefaultValidator, wxT("Secondary")); //|wxCB_SORT); //wxPoint(66,10)
 	animCList3->Enable(false);
 	animCList3->Show(false);
 
-	//btnPauseMouth = new wxButton(this, ID_PAUSE_MOUTH, _("Pause"), wxPoint(160,100), wxSize(45,20));
+	//btnPauseMouth = new wxButton(this, ID_PAUSE_MOUTH, wxT("Pause"), wxPoint(160,100), wxSize(45,20));
 	//btnPauseMouth->Show(false);
 
-	speedMouthLabel = new wxStaticText(this, -1, _("Speed: 1.0x"), wxPoint(340,95), wxDefaultSize);
+	speedMouthLabel = new wxStaticText(this, -1, wxT("Speed: 1.0x"), wxPoint(340,95), wxDefaultSize);
 	speedMouthLabel->Show(false);
 
 	speedMouthSlider = new wxSlider(this, ID_SPEED_MOUTH, 10, 0, 40, wxPoint(415,95), wxSize(100,38), wxSL_AUTOTICKS);
@@ -73,42 +73,42 @@ AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 	// ---
 
 	loopList = new wxComboBox(this, ID_LOOPS, wxT("0"), wxPoint(330, 10), wxSize(40,16), 10, strLoops, wxCB_READONLY, wxDefaultValidator, wxT("Loops")); //|wxCB_SORT); //wxPoint(66,10)
-	btnAdd = new wxButton(this, ID_ADDANIM, _("Add"), wxPoint(380, 10), wxSize(45,20));
+	btnAdd = new wxButton(this, ID_ADDANIM, wxT("Add"), wxPoint(380, 10), wxSize(45,20));
 
-	skinList = new wxComboBox(this, ID_SKIN, _("Skin"), wxPoint(170,10), wxSize(150,16), 0, NULL, wxCB_READONLY);
+	skinList = new wxComboBox(this, ID_SKIN, wxT("Skin"), wxPoint(170,10), wxSize(150,16), 0, NULL, wxCB_READONLY);
 	skinList->Show(FALSE);
 	randomSkins = true;
 	defaultDoodads = true;
 
-	wmoList = new wxComboBox(this, ID_ITEMSET, _("Item set"), wxPoint(220,10), wxSize(128,16), 0, NULL, wxCB_READONLY);
+	wmoList = new wxComboBox(this, ID_ITEMSET, wxT("Item set"), wxPoint(220,10), wxSize(128,16), 0, NULL, wxCB_READONLY);
 	wmoList->Show(FALSE);
 	wmoLabel = new wxStaticText(this, -1, wxEmptyString, wxPoint(10,15), wxSize(192,16));
 	wmoLabel->Show(FALSE);
 
 	speedSlider = new wxSlider(this, ID_SPEED, 10, 1, 40, wxPoint(490,56), wxSize(100,38), wxSL_AUTOTICKS);
 	speedSlider->SetTickFreq(10, 1);
-	speedLabel = new wxStaticText(this, -1, _("Speed: 1.0x"), wxPoint(490,40), wxDefaultSize);
+	speedLabel = new wxStaticText(this, -1, wxT("Speed: 1.0x"), wxPoint(490,40), wxDefaultSize);
 
-	frameLabel = new wxStaticText(this, -1, _("Frame: 0"), wxPoint(330,40), wxDefaultSize);
+	frameLabel = new wxStaticText(this, -1, wxT("Frame: 0"), wxPoint(330,40), wxDefaultSize);
 	frameSlider = new wxSlider(this, ID_FRAME, 1, 1, 10, wxPoint(330,56), wxSize(160,38), wxSL_AUTOTICKS);
 	frameSlider->SetTickFreq(2, 1);
 
-	btnPlay = new wxButton(this, ID_PLAY, _("Play"), wxPoint(10,40), wxSize(45,20));
-	btnPause = new wxButton(this, ID_PAUSE, _("Pause"), wxPoint(62,40), wxSize(45,20));
-	btnStop = new wxButton(this, ID_STOP, _("Stop"), wxPoint(115,40), wxSize(45,20));
+	btnPlay = new wxButton(this, ID_PLAY, wxT("Play"), wxPoint(10,40), wxSize(45,20));
+	btnPause = new wxButton(this, ID_PAUSE, wxT("Pause"), wxPoint(62,40), wxSize(45,20));
+	btnStop = new wxButton(this, ID_STOP, wxT("Stop"), wxPoint(115,40), wxSize(45,20));
 	
-	btnClear = new wxButton(this, ID_CLEARANIM, _("Clear"), wxPoint(10,64), wxSize(45,20));
-	btnPrev = new wxButton(this, ID_PREVANIM, _T("<<"), wxPoint(62,64), wxSize(45,20));
-	btnNext = new wxButton(this, ID_NEXTANIM, _T(">>"), wxPoint(115,64), wxSize(45,20));
+	btnClear = new wxButton(this, ID_CLEARANIM, wxT("Clear"), wxPoint(10,64), wxSize(45,20));
+	btnPrev = new wxButton(this, ID_PREVANIM, wxT("<<"), wxPoint(62,64), wxSize(45,20));
+	btnNext = new wxButton(this, ID_NEXTANIM, wxT(">>"), wxPoint(115,64), wxSize(45,20));
 	
-	lockAnims = new wxCheckBox(this, ID_ANIM_LOCK, _("Lock Animations"), wxPoint(170,64), wxDefaultSize, 0);
+	lockAnims = new wxCheckBox(this, ID_ANIM_LOCK, wxT("Lock Animations"), wxPoint(170,64), wxDefaultSize, 0);
 	bLockAnims = true;
 	lockAnims->SetValue(bLockAnims);
 
-	oldStyle = new wxCheckBox(this, ID_OLDSTYLE, _("Auto Animate"), wxPoint(170,40), wxDefaultSize, 0);
+	oldStyle = new wxCheckBox(this, ID_OLDSTYLE, wxT("Auto Animate"), wxPoint(170,40), wxDefaultSize, 0);
 	bOldStyle = true;
 	oldStyle->SetValue(bOldStyle);
-	nextAnims = new wxCheckBox(this, ID_ANIM_NEXT, _("Next Animations"), wxPoint(430,10), wxDefaultSize, 0);
+	nextAnims = new wxCheckBox(this, ID_ANIM_NEXT, wxT("Next Animations"), wxPoint(430,10), wxDefaultSize, 0);
 	bNextAnims = false;
 	nextAnims->SetValue(bNextAnims);
 
@@ -147,7 +147,7 @@ void AnimControl::UpdateModel(Model *m)
 	}
 	// --
 
-	wxLogMessage(_T("Update model: %s"), m->name.c_str());
+	wxLogMessage(wxT("Update model: %s"), m->name.c_str());
 
 	g_selModel = m;
 
@@ -167,10 +167,10 @@ void AnimControl::UpdateModel(Model *m)
 	bool res = false;
 
 	wxString fn = m->name.Lower();
-	if (fn.substr(0,4) != _T("char")) {
-		if (fn.substr(0,8) == _T("creature"))
+	if (fn.substr(0,4) != wxT("char")) {
+		if (fn.substr(0,8) == wxT("creature"))
 			res = UpdateCreatureModel(m);
-		else if (fn.substr(0,4) == _T("item"))
+		else if (fn.substr(0,4) == wxT("item"))
 			res = UpdateItemModel(m);
 	}
 
@@ -209,14 +209,14 @@ void AnimControl::UpdateModel(Model *m)
 				AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
 				strName = rec.getString(AnimDB::Name);
 			} catch (AnimDB::NotFound) {
-				strName = _T("???");
+				strName = wxT("???");
 			}
 			
 			//strName = name;
 			//if ((useanim==-1) && (strName=="Stand"))
 			//	useanim = i;
 
-			strName += wxString::Format(_T(" [%i]"), i);
+			strName += wxString::Format(wxT(" [%i]"), i);
 
 			if (g_selModel->anims[i].animID == ANIM_STAND && useanim == -1) {
 				strStand = strName;
@@ -297,7 +297,7 @@ void AnimControl::UpdateWMO(WMO *w, int group)
 	if (newwmo) {
 		// build itemset list
 		wmoList->Clear();
-		wmoList->Append(_T("(No doodads)"));
+		wmoList->Append(wxT("(No doodads)"));
 
 		for (size_t i=0; i<g_selWMO->doodadsets.size(); i++) {
 			wmoList->Append(wxString(g_selWMO->doodadsets[i].name, *wxConvCurrent));
@@ -314,14 +314,14 @@ void AnimControl::UpdateWMO(WMO *w, int group)
 	if (group>=-1 && group<(int)g_selWMO->nGroups) {
 		wxString label = w->name.AfterLast(MPQ_SLASH);
 		if (group>=0) {
-			label += _T(" - ") + g_selWMO->groups[group].name;
+			label += wxT(" - ") + g_selWMO->groups[group].name;
 			if (g_selWMO->groups[group].desc.length()) {
-				label += _T(" - ") + g_selWMO->groups[group].desc;
+				label += wxT(" - ") + g_selWMO->groups[group].desc;
 			}
 		}
 		wmoLabel->SetLabel(label);
 	} else {
-		wmoLabel->SetLabel(_T("This group has been removed from the WMO"));
+		wmoLabel->SetLabel(wxT("This group has been removed from the WMO"));
 	}
 	wmoLabel->Show(TRUE);
 }
@@ -330,7 +330,7 @@ wxString sFilterDir;
 bool filterDir(wxString fn)
 {
 	wxString tmp = fn.Lower();
-	return (tmp.StartsWith(sFilterDir) && tmp.EndsWith(_T("blp")));
+	return (tmp.StartsWith(sFilterDir) && tmp.EndsWith(wxT("blp")));
 }
 
 bool AnimControl::UpdateCreatureModel(Model *m)
@@ -338,12 +338,12 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 	wxString fn = m->name;
 
 	// replace .M2 with .MDX
-	fn = fn.BeforeLast(_T('.')).Append(_T(".mdx"));
+	fn = fn.BeforeLast(wxT('.')).Append(wxT(".mdx"));
 
 	TextureSet skins;
 
 	// see if this model has skins
-	wxLogMessage(_T("Searching skins for '%s'"), m->name.c_str());
+	wxLogMessage(wxT("Searching skins for '%s'"), m->name.c_str());
 	try {
 		CreatureModelDB::Record rec = modeldb.getByFilename(fn);
 		// for character models, don't use skins
@@ -351,7 +351,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			//TextureSet skins;
 			unsigned int modelid = rec.getUInt(CreatureModelDB::ModelID);
 
-			wxLogMessage(_T("Found model in CreatureModelDB, id: %u"), modelid);
+			wxLogMessage(wxT("Found model in CreatureModelDB, id: %u"), modelid);
 
 			for (CreatureSkinDB::Iterator it = skindb.begin();  it!=skindb.end();  ++it) {
 				if (it->getUInt(CreatureSkinDB::ModelID) == modelid) {
@@ -378,14 +378,14 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 	wxString lwrName = fn;
 	lwrName.MakeLower();
 	if (gUserSkins.AddUserSkins(lwrName, skins)) 
-		wxLogMessage(_T("Found user skins"));
+		wxLogMessage(wxT("Found user skins"));
 
 #ifdef	DEBUG
-	wxLogMessage(_T("Found %d skins:"), skins.size());
+	wxLogMessage(wxT("Found %d skins:"), skins.size());
 	for (TextureSet::iterator i=skins.begin(); i!=skins.end(); ++i) {
-		wxLogMessage(_T("- * %s"), i->tex[0].c_str());
-		wxLogMessage(_T("  * %s"), i->tex[1].c_str());
-		wxLogMessage(_T("  * %s"), i->tex[2].c_str());
+		wxLogMessage(wxT("- * %s"), i->tex[0].c_str());
+		wxLogMessage(wxT("  * %s"), i->tex[1].c_str());
+		wxLogMessage(wxT("  * %s"), i->tex[2].c_str());
 	}
 #endif
 
@@ -401,7 +401,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 		grp.base = TEXTURE_GAMEOBJECT1;
 		grp.count = 1;
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
-			grp.tex[0] = (*it).displayName.BeforeLast(_T('.')).AfterLast(SLASH);
+			grp.tex[0] = (*it).displayName.BeforeLast(wxT('.')).AfterLast(SLASH);
 			skins.insert(grp);
 		}
 	}
@@ -428,12 +428,12 @@ bool AnimControl::UpdateItemModel(Model *m)
 	wxString fn = m->name;
 
 	// change M2 to mdx
-	fn = fn.BeforeLast(_T('.')).Append(_T(".mdx"));
+	fn = fn.BeforeLast(wxT('.')).Append(wxT(".mdx"));
 
 	// Check to see if its a helmet model, if so cut off the race
 	// and gender specific part of the filename off
-	if (fn.Find(_T("\\head\\")) > wxNOT_FOUND) {
-		fn = fn.BeforeLast('_') + _T(".mdx");
+	if (fn.Find(wxT("\\head\\")) > wxNOT_FOUND) {
+		fn = fn.BeforeLast('_') + wxT(".mdx");
 	}
 
 	// just get the file name, exclude the path.
@@ -467,14 +467,14 @@ bool AnimControl::UpdateItemModel(Model *m)
 
 	// Search the same directory for BLPs
 	std::set<FileTreeItem> filelist;
-	sFilterDir = m->name.BeforeLast(_T('.')).Lower();
+	sFilterDir = m->name.BeforeLast(wxT('.')).Lower();
 	getFileLists(filelist, filterDir);
 	if (filelist.begin() != filelist.end()) {
 		TextureGroup grp;
 		grp.base = TEXTURE_ITEM;
 		grp.count = 1;
 		for (std::set<FileTreeItem>::iterator it = filelist.begin(); it != filelist.end(); ++it) {
-			grp.tex[0] = (*it).displayName.BeforeLast(_T('.')).AfterLast(SLASH);
+			grp.tex[0] = (*it).displayName.BeforeLast(wxT('.')).AfterLast(SLASH);
 			skins.insert(grp);
 		}
 	}
@@ -502,8 +502,8 @@ bool AnimControl::FillSkinSelector(TextureSet &skins)
 		for (TextureSet::iterator it = skins.begin(); it != skins.end(); ++it) {
 			wxString texname = it->tex[0];
 			skinList->Append(texname);
-			texname = g_selModel->name.BeforeLast(MPQ_SLASH) + MPQ_SLASH + texname + _T(".blp");
-			wxLogMessage(_T("Info: Added %s to the TextureList[%i] via FillSkinSelector."), texname.c_str(), g_selModel->TextureList.size());
+			texname = g_selModel->name.BeforeLast(MPQ_SLASH) + MPQ_SLASH + texname + wxT(".blp");
+			wxLogMessage(wxT("Info: Added %s to the TextureList[%i] via FillSkinSelector."), texname.c_str(), g_selModel->TextureList.size());
 			g_selModel->TextureList.push_back(texname);
 			TextureGroup *grp = new TextureGroup(*it);
 			skinList->SetClientData(num++, grp);
@@ -680,7 +680,7 @@ void AnimControl::OnSliderUpdate(wxCommandEvent &event)
 		
 		float speed = speedMouthSlider->GetValue() / 10.0f;
 		g_selModel->animManager->SetMouthSpeed(speed);
-		speedMouthLabel->SetLabel(wxString::Format(_T("Speed: %.1fx"), speed));
+		speedMouthLabel->SetLabel(wxString::Format(wxT("Speed: %.1fx"), speed));
 
 	} else if (event.GetId() == ID_FRAME)
 		SetAnimFrame(frameSlider->GetValue());
@@ -734,13 +734,13 @@ wxString AnimControl::makeSkinTexture(wxString texfn, wxString skin)
 	size_t i = res.find_last_of(MPQ_SLASH);
 	res = res.substr(0,i+1);
 	res.append(skin);
-	res.append(_T(".blp"));
+	res.append(wxT(".blp"));
 	return res;
 }
 
 int AnimControl::AddSkin(TextureGroup grp)
 {
-	skinList->Append(_T("Custom"));
+	skinList->Append(wxT("Custom"));
 	int count = skinList->GetCount() - 1;
 	TextureGroup *group = new TextureGroup(grp);
 	skinList->SetClientData(count, group);
@@ -755,7 +755,7 @@ void AnimControl::SetAnimSpeed(float speed)
 
 	g_selModel->animManager->SetSpeed(speed);
 	
-	speedLabel->SetLabel(wxString::Format(_T("Speed: %.1fx"), speed));
+	speedLabel->SetLabel(wxString::Format(wxT("Speed: %.1fx"), speed));
 }
 
 
@@ -768,7 +768,7 @@ void AnimControl::SetAnimFrame(int frame)
 	
 	int frameNum = (frame - g_selModel->anims[g_selModel->currentAnim].timeStart);
 
-	frameLabel->SetLabel(wxString::Format(_T("Frame: %i"), frameNum));
+	frameLabel->SetLabel(wxString::Format(wxT("Frame: %i"), frameNum));
 	frameSlider->SetValue(frame);
 }
 

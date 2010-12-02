@@ -15,7 +15,7 @@ END_EVENT_TABLE()
 
 ModelBankControl::ModelBankControl(wxWindow* parent, wxWindowID id)
 {
-	wxLogMessage(_T("Creating Model Bank Control..."));
+	wxLogMessage(wxT("Creating Model Bank Control..."));
 
 	txtName = NULL;
 	lblName = NULL;
@@ -24,8 +24,8 @@ ModelBankControl::ModelBankControl(wxWindow* parent, wxWindowID id)
 	btnDisplay = NULL;
 	lstBank = NULL;
 
-	if (Create(parent, id, wxDefaultPosition, wxSize(270,280), 0, _T("ModelBankControlFrame")) == false) {
-		wxLogMessage(_T("GUI Error: Failed to create a window for our ModelBankControl."));
+	if (Create(parent, id, wxDefaultPosition, wxSize(270,280), 0, wxT("ModelBankControlFrame")) == false) {
+		wxLogMessage(wxT("GUI Error: Failed to create a window for our ModelBankControl."));
 		return;
 	}
 
@@ -35,12 +35,12 @@ ModelBankControl::ModelBankControl(wxWindow* parent, wxWindowID id)
 	//wxTextCtrl(wxWindow* parent, wxWindowID id, const wxString& value = "", const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxTextCtrlNameStr)
 	//wxStaticText(wxWindow* parent, wxWindowID id, const wxString& label, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = "staticText")
 	
-	lblName = new wxStaticText(this, wxID_ANY, _("Name:"), wxPoint(5,15), wxDefaultSize, 0);
+	lblName = new wxStaticText(this, wxID_ANY, wxT("Name:"), wxPoint(5,15), wxDefaultSize, 0);
 	txtName = new wxTextCtrl(this, ID_MODELBANK_NAME, wxEmptyString, wxPoint(40,10), wxDefaultSize, 0, wxDefaultValidator);
 
-	btnAdd = new wxButton(this, ID_MODELBANK_ADD, _("Add"), wxPoint(200,10), wxDefaultSize);
-	btnRemove = new wxButton(this, ID_MODELBANK_REMOVE, _("Remove"), wxPoint(200,40), wxDefaultSize);
-	btnDisplay = new wxButton(this, ID_MODELBANK_DISPLAY, _("Display"), wxPoint(200,70), wxDefaultSize);
+	btnAdd = new wxButton(this, ID_MODELBANK_ADD, wxT("Add"), wxPoint(200,10), wxDefaultSize);
+	btnRemove = new wxButton(this, ID_MODELBANK_REMOVE, wxT("Remove"), wxPoint(200,40), wxDefaultSize);
+	btnDisplay = new wxButton(this, ID_MODELBANK_DISPLAY, wxT("Display"), wxPoint(200,70), wxDefaultSize);
 	
 	lstBank = new wxListBox(this, wxID_ANY, wxPoint(5,40), wxSize(190,250), 0, NULL, wxLB_SINGLE|wxLB_ALWAYS_SB);
 
@@ -214,10 +214,10 @@ void ModelBankControl::SaveList()
 	if (bankList.size() == 0)
 		return;
 
-	wxFFileOutputStream file(_T("modelbank.dat"), _T("w+b"));
+	wxFFileOutputStream file(wxT("modelbank.dat"), wxT("w+b"));
 
 	if (!file.IsOk()) {
-		wxLogMessage(_T("Error: Was unable to save the ModelBank data to the HDD."));
+		wxLogMessage(wxT("Error: Was unable to save the ModelBank data to the HDD."));
 		return;
 	}
 
@@ -300,10 +300,10 @@ void ModelBankControl::SaveList()
 
 void ModelBankControl::LoadList()
 {
-	if (!wxFile::Exists(_T("modelbank.dat")))
+	if (!wxFile::Exists(wxT("modelbank.dat")))
 		return;
 
-	wxFFileInputStream file(_T("modelbank.dat"), _T("rb"));
+	wxFFileInputStream file(wxT("modelbank.dat"), wxT("rb"));
 
 	if (!file.IsOk())
 		return;
