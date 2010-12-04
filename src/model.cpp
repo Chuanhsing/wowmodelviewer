@@ -666,11 +666,11 @@ void Model::initCommon(MPQFile &f)
 
 				if (modelType == MT_NORMAL){
 					if (texdef[i].type == TEXTURE_HAIR)
-						tex = "Hair.blp";
+						tex = wxT("Hair.blp");
 					else if(texdef[i].type == TEXTURE_BODY)
-						tex = "Body.blp";
+						tex = wxT("Body.blp");
 					else if(texdef[i].type == TEXTURE_FUR)
-						tex = "Fur.blp";
+						tex = wxT("Fur.blp");
 				}
 				//wxString tex = modelname.BeforeLast('.').AfterLast(SLASH) + wxT("_");
 				/*
