@@ -1,6 +1,9 @@
 #include "modelcanvas.h"
 #include "modelexport.h"
 #include "database.h"
+#include "globalvars.h"
+
+#include <wx/textdlg.h>
 
 #define KFBX_DLLINFO
 #ifdef _O_RDONLY
@@ -508,14 +511,21 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 	skin->SetGeometry(node->GetMesh());
 
 	// Create animation.
+  wxString sel_anim_name;
+#ifdef _DEBUG
+  sel_anim_name = wxT("Stand");
+#endif
+  wxTextEntryDialog sel_anim_dlg(
+    g_modelViewer,
+    wxT("Please input the animation name:\r\n(Keep empty means all animations)"),
+    wxT("Select animation to export"),
+    sel_anim_name,
+    wxOK);
+  sel_anim_dlg.ShowModal();
+  sel_anim_name = sel_anim_dlg.GetValue();
 	map<wxString, int> anim_names;
 	size_t num_of_anims = m->header.nAnimations;
-#ifdef _DEBUG
-	for (size_t i = 0; i < 2; ++i)
-#else
-	for (size_t i = 0; i < num_of_anims; ++i)
-#endif
-	{
+	for (size_t i = 0; i < num_of_anims; ++i) {
 		if (has_anim(m, i)) {
 			ModelAnimation& anim = m->anims[i];
 			wxString anim_name;
@@ -532,6 +542,8 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 				it->second++;
 				anim_name += wxString::Format(wxT("%i"), it->second);
 			}
+      if (!sel_anim_name.IsEmpty() && anim_name != sel_anim_name)
+        continue;
 
 			// Animation stack and layer.
 			KFbxAnimStack* anim_stack = KFbxAnimStack::Create(scene, anim_name.c_str());
