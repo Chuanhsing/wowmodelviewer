@@ -81,17 +81,19 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	EVT_MENU(ID_CAM_BACK, ModelViewer::OnCamMenu)
 	EVT_MENU(ID_CAM_ISO, ModelViewer::OnCamMenu)
 
-	EVT_MENU(ID_CANVAS120, ModelViewer::OnCanvasSize)
-	EVT_MENU(ID_CANVAS512, ModelViewer::OnCanvasSize)
-	EVT_MENU(ID_CANVAS640, ModelViewer::OnCanvasSize)
-	EVT_MENU(ID_CANVAS800, ModelViewer::OnCanvasSize)
-	EVT_MENU(ID_CANVAS1024, ModelViewer::OnCanvasSize)
-	EVT_MENU(ID_CANVAS1152, ModelViewer::OnCanvasSize)
-	EVT_MENU(ID_CANVAS1280, ModelViewer::OnCanvasSize)
-	EVT_MENU(ID_CANVAS1600, ModelViewer::OnCanvasSize)
+	EVT_MENU(ID_CANVASS120, ModelViewer::OnCanvasSize)
+	EVT_MENU(ID_CANVASS512, ModelViewer::OnCanvasSize)
+	EVT_MENU(ID_CANVASS1024, ModelViewer::OnCanvasSize)
+	EVT_MENU(ID_CANVASF480, ModelViewer::OnCanvasSize)
+	EVT_MENU(ID_CANVASF600, ModelViewer::OnCanvasSize)
+	EVT_MENU(ID_CANVASF768, ModelViewer::OnCanvasSize)
+	EVT_MENU(ID_CANVASF864, ModelViewer::OnCanvasSize)
+	EVT_MENU(ID_CANVASF1200, ModelViewer::OnCanvasSize)
+	EVT_MENU(ID_CANVASW480, ModelViewer::OnCanvasSize)
 	EVT_MENU(ID_CANVASW720, ModelViewer::OnCanvasSize)
 	EVT_MENU(ID_CANVASW1080, ModelViewer::OnCanvasSize)
-	EVT_MENU(ID_CANVASW1200, ModelViewer::OnCanvasSize)
+	EVT_MENU(ID_CANVASM768, ModelViewer::OnCanvasSize)
+	EVT_MENU(ID_CANVASM1200, ModelViewer::OnCanvasSize)
 
 	// hidden hotkeys for zooming
 	EVT_MENU(ID_ZOOM_IN, ModelViewer::OnToggleCommand)
@@ -366,17 +368,19 @@ void ModelViewer::InitMenu()
 		viewMenu->AppendSeparator();
 
 		wxMenu *setSize = new wxMenu;
-		setSize->AppendRadioItem(ID_CANVAS120, wxT("120 x 120"));
-		setSize->AppendRadioItem(ID_CANVAS512, wxT("512 x 512"));
-		setSize->AppendRadioItem(ID_CANVAS640, wxT("640 x 480"));
-		setSize->AppendRadioItem(ID_CANVAS800, wxT("800 x 600"));
-		setSize->AppendRadioItem(ID_CANVAS1024, wxT("1024 x 768"));
-		setSize->AppendRadioItem(ID_CANVAS1152, wxT("1152 x 864"));
-		setSize->AppendRadioItem(ID_CANVAS1280, wxT("1280 x 768"));
-		setSize->AppendRadioItem(ID_CANVAS1600, wxT("1600 x 1200"));
-		setSize->AppendRadioItem(ID_CANVASW720, wxT("1280 x 720"));
-		setSize->AppendRadioItem(ID_CANVASW1080, wxT("1920 x 1080"));
-		setSize->AppendRadioItem(ID_CANVASW1200, wxT("1920 x 1200"));
+		setSize->AppendRadioItem(ID_CANVASS120, wxT("(1:1) 120 x 120"),wxT("Square (1:1)"));
+		setSize->AppendRadioItem(ID_CANVASS512, wxT("(1:1) 512 x 512"),wxT("Square (1:1)"));
+		setSize->AppendRadioItem(ID_CANVASS1024, wxT("(1:1) 1024 x 1024"),wxT("Square (1:1)"));
+		setSize->AppendRadioItem(ID_CANVASF480, wxT("(4:3) 640 x 480"),wxT("Fullscreen (4:3)"));
+		setSize->AppendRadioItem(ID_CANVASF600, wxT("(4:3) 800 x 600"),wxT("Fullscreen (4:3)"));
+		setSize->AppendRadioItem(ID_CANVASF768, wxT("(4:3) 1024 x 768"),wxT("Fullscreen (4:3)"));
+		setSize->AppendRadioItem(ID_CANVASF864, wxT("(4:3) 1152 x 864"),wxT("Fullscreen (4:3)"));
+		setSize->AppendRadioItem(ID_CANVASF1200, wxT("(4:3) 1600 x 1200"),wxT("Fullscreen (4:3)"));
+		setSize->AppendRadioItem(ID_CANVASW480, wxT("(16:9) 864 x 480"),wxT("Widescreen (16:9)"));
+		setSize->AppendRadioItem(ID_CANVASW720, wxT("(16:9) 1280 x 720"),wxT("Widescreen (16:9)"));
+		setSize->AppendRadioItem(ID_CANVASW1080, wxT("(16:9) 1920 x 1080"),wxT("Widescreen (16:9)"));
+		setSize->AppendRadioItem(ID_CANVASM768, wxT("(5:3) 1280 x 768"),wxT("Misc (5:3)"));
+		setSize->AppendRadioItem(ID_CANVASM1200, wxT("(8:5) 1920 x 1200"),wxT("Misc (8:5)"));
 
 		viewMenu->Append(ID_CANVASSIZE, wxT("Set Canvas Size"), setSize);
 		
@@ -1460,7 +1464,11 @@ wxString ModelViewer::Init()
 
 	// Load the games MPQ files into memory
 	wxString mpqarch = InitMPQArchives();
-	wxLogMessage(wxT("InitMPQArchives result: %s"), mpqarch.c_str());
+	wxString result = mpqarch;
+	if (mpqarch == wxEmptyString){
+		result = wxT("Successfully Initialized.");
+	}
+	wxLogMessage(wxT("InitMPQArchives result: %s"), result.c_str());
 
 	if (mpqarch != wxEmptyString){
 		return mpqarch;
@@ -2280,37 +2288,43 @@ void ModelViewer::OnCanvasSize(wxCommandEvent &event)
 	uint32 sizex = 0;
 	uint32 sizey = 0;
 	
-	if (id == ID_CANVAS512) {
-		sizex = 512;
-		sizey = 512;
-	} else if (id == ID_CANVAS640) {
-		sizex = 640;
-		sizey = 480;
-	} else if (id == ID_CANVAS800) {
-		sizex = 800;
-		sizey = 600;
-	} else if (id == ID_CANVAS1024) {
-		sizex = 1024;
-		sizey = 768;
-	} else if (id == ID_CANVAS1152) {
-		sizex = 1152;
-		sizey = 864;
-	} else if (id == ID_CANVAS1280) {
-		sizex = 1280;
-		sizey = 768;
-	} else if (id == ID_CANVAS120) {
+	if (id == ID_CANVASS120) {
 		sizex = 120;
 		sizey = 120;
-	} else if (id == ID_CANVAS1600) {
+	} else if (id == ID_CANVASS512) {
+		sizex = 512;
+		sizey = 512;
+	} else if (id == ID_CANVASS1024) {
+		sizex = 1024;
+		sizey = 1024;
+	} else if (id == ID_CANVASF480) {
+		sizex = 640;
+		sizey = 480;
+	} else if (id == ID_CANVASF600) {
+		sizex = 800;
+		sizey = 600;
+	} else if (id == ID_CANVASF768) {
+		sizex = 1024;
+		sizey = 768;
+	} else if (id == ID_CANVASF864) {
+		sizex = 1152;
+		sizey = 864;
+	} else if (id == ID_CANVASF1200) {
 		sizex = 1600;
 		sizey = 1200;
+	} else if (id == ID_CANVASW480) {
+		sizex = 864;
+		sizey = 480;
 	} else if (id == ID_CANVASW720) {
 		sizex = 1280;
 		sizey = 720;
 	} else if (id == ID_CANVASW1080) {
 		sizex = 1920;
 		sizey = 1080;
-	} else if (id == ID_CANVASW1200) {
+	} else if (id == ID_CANVASM768) {
+		sizex = 1280;
+		sizey = 768;
+	} else if (id == ID_CANVASM1200) {
 		sizex = 1900;
 		sizey = 1200;
 	}

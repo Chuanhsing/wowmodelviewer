@@ -2824,14 +2824,36 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 
 // Gather WMO Data
 LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
+	wxString RootDir(fn, wxConvUTF8);
 	wxString FileName(fn, wxConvUTF8);
+
 	LWObject Object;
 
 	if (!m)
 		return Object;
 
+	if (modelExport_LW_PreserveDir == true){
+		wxString Path, Name;
+
+		Path << FileName.BeforeLast(SLASH);
+		Name << FileName.AfterLast(SLASH);
+		MakeDirs(Path,wxT("Objects"));
+		FileName.Empty();
+		FileName << Path << SLASH << wxT("Objects") << SLASH << Name;
+	}
+	if (modelExport_PreserveDir == true){
+		wxString Path1, Path2, Name;
+
+		Path1 << FileName.BeforeLast(SLASH);
+		Name << FileName.AfterLast(SLASH);
+		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+		MakeDirs(Path1,Path2);
+		FileName.Empty();
+		FileName << Path1 << SLASH << Path2 << SLASH << Name;
+	}
+
 	Object.SourceType = wxT("WMO");
-	LogExportData(wxT("LWO"),m->name,wxString(fn, wxConvUTF8));
+	LogExportData(wxT("LWO"),m->name,FileName);
 
 	// Main Object
 	LWLayer Layer;
@@ -2876,7 +2898,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 
 			wxString LWFilename = Texture;
 			if (modelExport_LW_PreserveDir == true){
-				wxString Path = FileName.BeforeLast(SLASH);
+				wxString Path = RootDir.BeforeLast(SLASH);
 				wxString Name = Texture.AfterLast(SLASH);
 
 				MakeDirs(Path,wxT("Images"));
@@ -2896,7 +2918,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 				LWFilename << Path1<<SLASH<<Path2<<SLASH<<Name;
 			}
 			//LWFilename = LWFilename.BeforeLast('.') + wxT(".tga");
-			SaveTexture2(Texture,FileName.BeforeLast(SLASH),wxT("LWO"),wxT("tga"));
+			SaveTexture2(Texture,RootDir.BeforeLast(SLASH),wxT("LWO"),wxT("tga"));
 
 			LWSurf_Image SurfColor_Image = LWSurf_Image(ClipImage.TagID,LW_TEXTUREAXIS_UV,0.0f,0.0f);
 
@@ -2978,7 +3000,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 	wxLogMessage(wxT("Completed WMO Gathering. Building Basic Scene Data..."));
 
 	// Scene Data
-	LWSceneObj scObject(FileName,(uint32)scene.Objects.size(),-1);
+	LWSceneObj scObject(RootDir,(uint32)scene.Objects.size(),-1);
 	scene.Objects.push_back(scObject);
 	if ((modelExport_LW_ExportLights == true) && (m->nLights > 0)){
 		for (size_t x=0;x<m->nLights;x++){
@@ -3100,7 +3122,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 			}
 		}else if (modelExport_LW_DoodadsAs == 1){	// Doodads as Scene Objects...
 /*
-			LWObject Doodad = GatherM2forLWO(NULL,ddinstance->model,true,wxString(fn, wxConvUTF8),false);
+			LWObject Doodad = GatherM2forLWO(NULL,ddinstance->model,true,FileName,false);
 			if (Doodad.SourceType == wxEmptyString){
 				wxMessageBox(wxT("Error gathering information for export."),wxT("Export Error"));
 				wxLogMessage(wxT("Failure gathering information for export."));
@@ -3121,7 +3143,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 
 					wxLogMessage(wxT("Doodad Instance is Animated: %s"),(ddinstance->model->animated?wxT("true"):wxT("false")));
 
-					LWObject Doodad = GatherM2forLWO(NULL,ddinstance->model,true,wxString(fn, wxConvUTF8),scene,false);
+					LWObject Doodad = GatherM2forLWO(NULL,ddinstance->model,true,FileName,scene,false);
 
 					// --== Model Debugger ==--
 					// Exports the model immediately after gathering, to help determine if a problem is with the gathering function or the doodad-placement functions.
@@ -3263,6 +3285,62 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 }
 
 
+
+// Gather ADT Data
+LWObject GatherADTforLWO(MapTile *m, const char *fn, LWScene &scene){
+	wxString FileName(fn, wxConvUTF8);
+	LWObject Object;
+
+	if (!m)
+		return Object;
+
+	if (modelExport_LW_PreserveDir == true){
+		wxString Path, Name;
+
+		Path << FileName.BeforeLast(SLASH);
+		Name << FileName.AfterLast(SLASH);
+		MakeDirs(Path,wxT("Objects"));
+		FileName.Empty();
+		FileName << Path << SLASH << wxT("Objects") << SLASH << Name;
+	}
+	if (modelExport_PreserveDir == true){
+		wxString Path1, Path2, Name;
+
+		Path1 << FileName.BeforeLast(SLASH);
+		Name << FileName.AfterLast(SLASH);
+		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+		MakeDirs(Path1,Path2);
+		FileName.Empty();
+		FileName << Path1 << SLASH << Path2 << SLASH << Name;
+	}
+
+	Object.SourceType = wxT("ADT");
+	LogExportData(wxT("LWO"),m->name,FileName);
+
+	// Main Object
+	LWLayer Layer;
+	Layer.Name = wxString(m->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
+	Layer.ParentLayer = -1;
+
+	// Bounding Box for the Layer
+	//Layer.BoundingBox1 = m->v1;
+	//Layer.BoundingBox2 = m->v2;
+
+	for (int c1=0;c1<16;c1++){
+		for (int c2=0;c2<16;c2++){
+			MapChunk *chunk = &m->chunks[c1][c2];
+			for (int num=0;num<145;num++){
+				LWPoint a;
+				a.PointData = chunk->tv[num];
+				Layer.Points.push_back(a);
+			}
+		}
+	}
+	Object.Layers.push_back(Layer);
+
+	return Object;
+	Object.~LWObject();
+}
 
 //---------------------------------------------
 // --== Global Exporting Functions ==--
@@ -3432,207 +3510,79 @@ void ExportLWO_WMO(WMO *m, const char *fn){
 	}
 }
 
-// Old-style ADT Exporter.
-// Not very functional...
+// ADT Exporter
 void ExportLWO_ADT(MapTile *m, const char *fn){
-	wxString file = wxString(fn, wxConvUTF8);
+	wxString filename(fn, wxConvUTF8);
+	wxString scfilename = wxString(fn, wxConvUTF8).BeforeLast('.').Append(wxT(".lws"));
+	LW_ObjCount.Reset();
+	LW_LightCount.Reset();
+	LW_BoneCount.Reset();
+	LW_CamCount.Reset();
 
 	if (modelExport_LW_PreserveDir == true){
 		wxString Path, Name;
 
-		Path << file.BeforeLast(SLASH);
-		Name << file.AfterLast(SLASH);
-
+		// Object
+		Path << filename.BeforeLast(SLASH);
+		Name << filename.AfterLast(SLASH);
 		MakeDirs(Path,wxT("Objects"));
+		filename.Empty();
+		filename << Path << SLASH << wxT("Objects") << SLASH << Name;
 
-		file.Empty();
-		file << Path << SLASH<<wxT("Objects")<<SLASH << Name;
+		// Scene
+		Path.Empty();
+		Name.Empty();
+		Path << scfilename.BeforeLast(SLASH);
+		Name << scfilename.AfterLast(SLASH);
+		MakeDirs(Path,wxT("Scenes"));
+		filename.Empty();
+		filename << Path << SLASH << wxT("Scenes") << SLASH << Name;
 	}
 	if (modelExport_PreserveDir == true){
 		wxString Path1, Path2, Name;
-		Path1 << file.BeforeLast(SLASH);
-		Name << file.AfterLast(SLASH);
+
+		// Objects
+		Path1 << filename.BeforeLast(SLASH);
+		Name << filename.AfterLast(SLASH);
 		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
-
 		MakeDirs(Path1,Path2);
+		filename.Empty();
+		filename << Path1 << SLASH << Path2 << SLASH << Name;
 
-		file.Empty();
-		file << Path1 << SLASH << Path2 << SLASH << Name;
+		// Scene
+		Path1.Empty();
+		Path2.Empty();
+		Name.Empty();
+		Path1 << scfilename.BeforeLast(SLASH);
+		Name << scfilename.AfterLast(SLASH);
+		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+		MakeDirs(Path1,Path2);
+		scfilename.Empty();
+		scfilename << Path1 << SLASH << Path2 << SLASH << Name;
 	}
-	file = fixMPQPath(file);
-	wxFFileOutputStream f(file, wxT("w+b"));
 
-	if (!f.IsOk()) {
-		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export model."), file.c_str());
-		wxMessageDialog(g_modelViewer,wxT("Could not open file for exporting."),wxT("Exporting Error..."));
+	// Scene Data
+	LWScene Scene(scfilename.AfterLast(SLASH),scfilename.BeforeLast(SLASH));
+
+	// Object Data
+	LWObject Object = GatherADTforLWO(m,fn,Scene);
+	if (Object.SourceType == wxEmptyString){
+		wxMessageBox(wxT("Error gathering information for export."),wxT("Export Error"));
+		wxLogMessage(wxT("Failure gathering information for export."));
 		return;
 	}
-	LogExportData(wxT("LWO"),m->name,wxString(fn, wxConvUTF8));
 
-	wxLogMessage(wxT("Starting Lightwave ADT Model Export Function..."));
-	unsigned int fileLen = 0;
-	int off_T;
+	// Write LWO File
+	wxLogMessage(wxT("Sending ADT Data to LWO Writing Function..."));
+	if (WriteLWObject(filename, Object) == false){
+		wxString msg = wxT("Error Writing the ADT file to a Lightwave Object.");
+		wxMessageBox(msg,wxT("Writing Error"));
+		wxLogMessage(msg);
+	}else{
+		wxLogMessage(wxT("LWO Object Writing Complete."));
 
-	// ===================================================
-	// FORM		// Format Declaration
-	//
-	// Always exempt from the length of the file!
-	// ===================================================
-	f.Write("FORM", 4);
-	f.Write(reinterpret_cast<char *>(&fileLen), 4);
-
-	// ===================================================
-	// LWO2
-	//
-	// Declares this is the Lightwave Object 2 file format.
-	// LWOB is the first format. It doesn't have a lot of the cool stuff LWO2 has...
-	// ===================================================
-	f.Write("LWO2", 4);
-	fileLen += 4;
-
-	// ===================================================
-	// TAGS
-	//
-	// Used for various Strings. Known string types, in order:
-	//		Sketch Color Names
-	//		Part Names
-	//		Surface Names
-	// ===================================================
-	/*
-	f.Write("TAGS", 4);
-	uint32 tagsSize = 0;
-	u32 = 0;
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	fileLen += 8;
-
-	uint32 counter=0;
-	uint32 TagCounter=0;
-	uint16 PartCounter=0;
-	uint16 SurfCounter=0;
-	unsigned int numVerts = 0;
-	unsigned int numGroups = 0;
-
-	// Build Surface Name Database
-	wxArrayString surfarray;
-	wxArrayString sfix;
-	std::vector<uint16> sfix2;
-	std::vector<uint16> check;
-	for (uint16 t=0;t<m->nTextures;t++){
-		wxString tex = m->textures[t].BeforeLast(wxT('.'));
-		surfarray.push_back((char *)tex.c_str());
-		//sfix.push_back(tex.c_str());
-		sfix2.push_back(t);
-		check.push_back(0);
+		// Write Scene
 	}
-	// Rename duplicate names
-	for (uint16 t=0;t<surfarray.size();t++){
-		uint16 mod = 0;
-		for (uint16 k=0;k<surfarray.size();k++){
-			if ((t!=k)&&(surfarray[sfix2[t]] == surfarray[sfix2[k]])&&(check[k]==0)){
-				//sfix[t] = wxString(surfarray[t] + wxString::Format(wxT("_v%02i"),mod));
-				//sfix[k] = wxString(surfarray[k] + wxString::Format(wxT("_v%02i"),mod+1));
-				sfix2[k] = sfix2[t];
-				//sfix2[t] = t-1;
-				mod++;
-				check[k] = 1;
-				*/
-				// This code can erase the extra surface names.
-				// Not used because we don't have a (sucessful) way to convert the deleted name's IDs to the other ID.
-				/*for (int g=t;g>0;g--){
-					if ((sfix2[g] - 1)>-1){
-						sfix2[g] -= 1;
-					}
-				}*/
-				//surfarray.erase(surfarray.begin() + k);//, surfarray.begin() + k+1);
-				//wxLogMessage("Deleting duplicate.");
-				//k++;
-	/*
-			}
-		}
-	}
-
-
-#ifdef _DEBUG
-	wxLogMessage(wxT("Texture List"));
-	for (uint16 x=0;x<m->nTextures;x++){
-		wxLogMessage(wxT("[ID:%02i] = %s"),x,m->textures[x].data());
-	}
-
-	wxLogMessage(wxT("Surface List"));
-	for (uint16 x=0;x<surfarray.size();x++){
-		wxLogMessage(wxT("[ID:%02i] = %s"),x,surfarray[x].c_str());
-	}
-#endif
-	*/
-
-	// ===================================================
-	// LAYR
-	//
-	// Specifies the start of a new layer. Each layer has it's own Point & Poly
-	// chunk, which tells it what data is on what layer. It's probably best
-	// to only have 1 layer for now.
-	// ===================================================
-	f.Write("LAYR", 4);
-	u32 = MSB4<uint32>(18);
-	fileLen += 8;
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	ub = 0;
-	for(int i=0; i<18; i++) {
-		f.Write(reinterpret_cast<char *>(&ub), 1);
-	}
-	fileLen += 18;
-
-	// ===================================================
-	// PNTS Chunk
-	//
-	// Point data
-	// ===================================================
-	uint32 pointsSize = 0;
-	f.Write("PNTS", 4);
-	u32 = MSB4<uint32>(pointsSize);
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	fileLen += 8;
-
-	uint16 point = 0;
-	for (int c1=0;c1<16;c1++){
-		for (int c2=0;c2<16;c2++){
-			for (int num=0;num<145;num++){
-				MapChunk *chunk = &m->chunks[c1][c2];
-				//wxLogMessage("Vert Coords: x:%f, y:%f, z:%f",chunk->tv[num].x,chunk->tv[num].y, chunk->tv[num].z);
-				Vec3D vert;
-				vert.x = MSB4<float>(chunk->tv[num].x);
-				vert.y = MSB4<float>(chunk->tv[num].y); // We don't switch this, because it's already correct.
-				vert.z = MSB4<float>(chunk->tv[num].z);
-				f.Write(reinterpret_cast<char *>(&vert.x), 4);
-				f.Write(reinterpret_cast<char *>(&vert.y), 4);
-				f.Write(reinterpret_cast<char *>(&vert.z), 4);
-				pointsSize += 12;
-
-				point++;
-			}
-		}
-	}
-
-#ifdef _DEBUG
-	wxLogMessage(wxT("ADT Point Count: %i"),point);
-#endif
-
-
-	fileLen += pointsSize;
-	off_T = -4-pointsSize;
-	f.SeekO(off_T, wxFromCurrent);
-	u32 = MSB4<uint32>(pointsSize);
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	f.SeekO(0, wxFromEnd);
-
-	// ===================================================
-
-	f.SeekO(4, wxFromStart);
-	u32 = MSB4<uint32>(fileLen);
-	f.Write(reinterpret_cast<char *>(&u32), 4);
-	f.SeekO(0, wxFromEnd);
-
-	f.Close();
-
-	wxLogMessage(wxT("ADT Export completed."));
+	Object.~LWObject();
+	Scene.~LWScene();
 }

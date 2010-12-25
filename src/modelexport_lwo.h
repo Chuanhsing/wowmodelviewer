@@ -602,6 +602,7 @@ void LW_WriteMotionArray(ofstream &fs,AnimationData AnimData){
 // Gather Functions
 LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LWScene &scene, bool announce = true);
 LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene);
+LWObject GatherADTforLWO(MapTile *m, const char *fn, LWScene &scene);
 
 AnimVec3D animValue0 = AnimVec3D(AnimVector(0,0),AnimVector(0,0),AnimVector(0,0));
 AnimVec3D animValue1 = AnimVec3D(AnimVector(1,0),AnimVector(1,0),AnimVector(1,0));

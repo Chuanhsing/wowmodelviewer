@@ -20,7 +20,7 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 
 	wxLogMessage(wxT("Opening %s"), filename.c_str());
 
-	if (!SFileOpenArchive(filename.fn_str(), 0, MPQ_OPEN_READ_ONLY, &mpq_a )) {
+	if (!SFileOpenArchive(filename.fn_str(), 0, MPQ_OPEN_FORCE_MPQ_V1, &mpq_a )) {
 		int nError = GetLastError();
 		wxLogMessage(wxT("Error opening archive %s, error #: 0x%X"), filename.c_str(), nError);
 		return;
@@ -32,10 +32,10 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 		for(int j=(int)mpqArchives.GetCount()-1; j>=0; j--) {
 			if (!mpqArchives[j].AfterLast(SLASH).StartsWith(wxT("wow-update-")))
 				continue;
-			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "base", MPQ_OPEN_READ_ONLY);
+			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "base", 0);
 			wxLogMessage(wxT("Appending base patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
-			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "enUS", MPQ_OPEN_READ_ONLY);
-			wxLogMessage(wxT("Appending enUS patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
+			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), locales[langID], 0);
+			wxLogMessage(wxT("Appending %s patch %s on %s"), locales[langID], mpqArchives[j].c_str(), filename.c_str());
 		}
 	}
 
