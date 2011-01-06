@@ -81,8 +81,9 @@ bool WowModelViewApp::OnInit()
 	cfgPath = userPath+SLASH+wxT("Config.ini");
 
 	bool loadfail = LoadSettings();
-	if (loadfail == true){
-		splash->Show(false);
+	if (loadfail == true) {
+		if (splash)
+			splash->Show(false);
 		return false;
 	}
 
@@ -114,7 +115,8 @@ bool WowModelViewApp::OnInit()
     
 	if (!frame) {
 		//this->Close();
-		splash->Show(false);
+		if (splash)
+			splash->Show(false);
 		return false;
 	}
 	
@@ -206,8 +208,10 @@ bool WowModelViewApp::OnInit()
 
 	wxLogMessage(wxT("WoW Model Viewer successfully loaded!\n----\n"));
 	frame->Show(true);
-	splash->Show(false);
-	splash->~wxSplashScreen();
+	if (splash) {
+		splash->Show(false);
+		splash->~wxSplashScreen();
+	}
 	
 	return true;
 }
