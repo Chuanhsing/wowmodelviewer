@@ -29218,7 +29218,7 @@
 57847,3,Mok'Morokk's Beat Stick
 57848,2,Mok'Morokk's Grog Bottle
 57849,3,Seamonster Harpoon
-57850,3,Dustwallow Imapler
+57850,3,Dustwallow Impaler
 57851,2,Swamp Gas Gauntlets
 57852,2,Grimtotem Cloak
 57853,2,Proudmoore Cloak
@@ -31846,7 +31846,37 @@
 62102,0,Dirt-Caked Leather Helmet
 62103,0,Pockmarked Hat
 62104,0,Perforated Plate Helmet
+62105,0,Bleached Plate Pants
+62106,0,Bleached Plate Gloves
+62107,0,Singed Belt
+62108,0,Singed Armor
+62109,0,Sodden Cloth Vest
+62110,0,Sodden Cloth Shoulderpads
 62111,0,Singed Shoulderpads
+62112,0,Singed Pants
+62113,0,Singed Gloves
+62114,0,Singed Bracers
+62115,0,Singed Boots
+62116,0,Sodden Cloth Pants
+62117,0,Sodden Cloth Gloves
+62118,0,Sodden Cloth Bracers
+62119,0,Sodden Cloth Boots
+62120,0,Sodden Cloth Belt
+62121,0,Sooty Mail Shoulderpads
+62122,0,Sooty Mail Pants
+62123,0,Sooty Mail Gloves
+62124,0,Sooty Mail Bracers
+62125,0,Sooty Mail Boots
+62126,0,Bleached Plate Chestpiece
+62127,0,Bleached Plate Shoulderpads
+62128,0,Bleached Plate Bracers
+62129,0,Bleached Plate Boots
+62130,0,Bleached Plate Belt
+62131,0,Sooty Mail Belt
+62132,0,Sooty Mail Armor
+62133,0,Sodden Cloth Hat
+62134,0,Bleached Plate Helmet
+62135,0,Singed Leather Helmet
 62136,0,Sooty Mail Circlet
 62139,0,Monster - Trident Cataclysm Naga Orange (Glow)
 62140,2,Dried-Up Bracers
@@ -32468,6 +32498,7 @@
 63485,3,Cowl of Rebellion
 63486,3,Shackles of the Betrayed
 63487,3,Book of the Well Sung Song
+63490,4,Sky Strider Belt
 63491,4,Thunder Wall Belt
 63492,4,Star Chaser Belt
 63493,4,Wind Stalker Belt
@@ -33803,7 +33834,7 @@
 65726,3,Shield of Uncurbed Appetite
 65728,3,Boots of the Hero
 65740,3,Fallen Brotherhood Gauntlets
-65741,3,Robes of the Fallen City
+65741,3,Wrap of the Fallen City
 65742,3,Drape of Neferset Destruction
 65743,3,Helm of Vicious Direction
 65744,3,Nimble Command Shoulderguards
@@ -33857,7 +33888,7 @@
 65832,3,Girdle of the Ancient One
 65833,3,Leggings of Promise
 65834,2,Weaponseeker Bracers
-65835,2,Robes of the Bleak Scarab
+65835,2,Chestguard of the Bleak Scarab
 65836,2,Stolen Neferset Waistguard
 65837,2,Legplates of Heilopolis
 65838,2,Cartouche-Inscribed Spaulders
@@ -34210,6 +34241,7 @@
 66585,2,Somber Bow
 66592,2,Translucent Chainmail
 66607,2,Translucent Edge
+66616,1,Cougar Pelt Wristwraps
 66623,2,Translucent Defender's Armguards
 66629,2,Translucent Healer's Skirt
 66634,2,Translucent Pummeler
@@ -34373,12 +34405,20 @@
 67126,3,Roffle's Ruffly Gloves
 67127,3,Bracers of Caustic Purification
 67131,4,Ritssyn's Ruminous Drape
+67133,4,Dizze's Whirling Robe
+67134,4,Dory's Finery
 67135,4,Morrie's Waywalker Wrap
+67140,4,Drape of Inimitable Fate
 67141,4,Corefire Legplates
-67143,4,Cataclysm World Drop Epic Tank Chest
+67142,4,Zom's Electrostatic Cloak
+67143,4,Icebone Hauberk
 67144,4,Pauldrons of Edward the Odd
 67145,4,Blockade's Lost Shield
+67146,4,Woundsplicer Handwraps
+67147,4,Je'Tze's Sparkling Tiara
+67148,4,Kilt of Trollish Dreams
 67149,4,Heartbound Tome
+67150,4,Arrowsinger Legguards
 67153,3,Mobus's Vile Halberd
 67154,2,Staff of the Unwelcome
 67155,2,Girdle of Service
@@ -34580,3 +34620,9 @@
 68595,2,Art Template Plate Chest - Plate_PVPWarrior_C_01 - Red
 68596,2,Art Template Plate Boot - Plate_PVPWarrior_C_01 - Red
 68597,2,Art Template Plate Belt - Plate_PVPWarrior_C_01 - Red
+68600,4,Uhn'agh Fash the Darkest Betrayal
+68601,4,Scaleslicer
+68608,4,Dragonwreck Throwing Axe
+68609,2,Fine-Toothed Comb
+68611,1,Red Shirt
+68612,2,Scarab Leg Talisman
