@@ -42,7 +42,7 @@ ArrowControl::ArrowControl(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
 		wxT("Unknown"), wxT("Unknown"), wxT("R-Back"), wxT("L-Back"), wxT("M-Back"), wxT("Belly"),  
 		wxT("L-Back"), wxT("R-Back"), wxT("L-Hip"), wxT("R-Hip"), wxT("Bust"), wxT("Right palm")};
 */
-	int size = WXSIZEOF(Attach_Names);
+	//int size = WXSIZEOF(Attach_Names);
 
 	joint = new wxComboBox(this, ID_ARROW_JOINT, wxEmptyString, wxPoint(5,5), wxSize(130,20), WXSIZEOF(Attach_Names), Attach_Names, wxCB_READONLY);
 	const wxString models[] = {wxT("arrowacidflight_01.m2"), wxT("arrowfireflight_01.m2"), wxT("arrowflight_01.m2"), wxT("arrowiceflight_01.m2"), wxT("arrowmagicflight_01.m2")};

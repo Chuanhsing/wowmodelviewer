@@ -123,7 +123,7 @@
 #define ALIGN_2_E
 #else
 #define ALIGN_2_S
-#define ALIGN_2_E __attribute_wxT((aligned(2)))
+#define ALIGN_2_E __attribute__((aligned(2)))
 #endif
 ALIGN_2_S
 struct MAX3DS_CHUNK {

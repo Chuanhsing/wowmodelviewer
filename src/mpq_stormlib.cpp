@@ -34,8 +34,8 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 				continue;
 			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "base", 0);
 			wxLogMessage(wxT("Appending base patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
-			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), locales[langID], 0);
-			wxLogMessage(wxT("Appending %s patch %s on %s"), locales[langID], mpqArchives[j].c_str(), filename.c_str());
+			SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), locales[langID].fn_str(), 0);
+			wxLogMessage(wxT("Appending %s patch %s on %s"), locales[langID].c_str(), mpqArchives[j].c_str(), filename.c_str());
 		}
 	}
 
