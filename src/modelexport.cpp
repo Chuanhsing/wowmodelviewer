@@ -442,7 +442,7 @@ void MakeModelFaceForwards(Vec3D &vect, bool flipX = false){
 // Get Proper Texture Names for an M2 File
 wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassNumber){
 	wxString texName;
-	if (m->TextureList.size() > p.tex)
+	if ((int)m->TextureList.size() > p.tex)
 		texName = m->TextureList[p.tex].BeforeLast(wxT('.')).AfterLast(SLASH);
 
 	if (texName.Len() == 0)
@@ -479,7 +479,7 @@ void LogExportData(wxString ExporterExtention, wxString ModelName, wxString Dest
 			AnimName = wxT("???");
 		}
 
-		wxLogMessage(wxT("isAnimated: %s, Current Anim: %i (%s), Current Frame: %i"),(g_selModel->animated?wxT("true"):wxT("false")), cAnim, AnimName, cFrame);
+		wxLogMessage(wxT("isAnimated: %s, Current Anim: %i (%s), Current Frame: %i"),(g_selModel->animated?"true":"false"), cAnim, AnimName.c_str(), cFrame);
 	}
 
 	// Lightwave Options
@@ -515,7 +515,7 @@ void LogExportData(wxString ExporterExtention, wxString ModelName, wxString Dest
 	}else if (ExporterExtention == wxT("M3")){
 		wxLogMessage(wxT("Bound Scale: %f"), modelExport_M3_BoundScale);
 		wxLogMessage(wxT("Sphere Scale: %f"), modelExport_M3_SphereScale);
-		wxLogMessage(wxT("Texture Path: \"%s\""), modelExport_M3_TexturePath);
+		wxLogMessage(wxT("Texture Path: \"%s\""), modelExport_M3_TexturePath.c_str());
 		wxLogMessage(wxT("Number Animations to Export: %i"), modelExport_M3_Anims.size());
 		if ((modelExport_M3_Anims.size() > 0)&&(g_canvas->model)){
 			wxLogMessage(wxT("Animation List:\n	Original Name, Exported Name"));
@@ -527,7 +527,7 @@ void LogExportData(wxString ExporterExtention, wxString ModelName, wxString Dest
 				} catch (AnimDB::NotFound) {
 					strName = wxT("???");
 				}
-				wxLogMessage(wxT("	%s, %s"), strName, modelExport_M3_AnimNames[i].c_str());
+				wxLogMessage(wxT("	%s, %s"), strName.c_str(), modelExport_M3_AnimNames[i].c_str());
 			}
 		}
 	}

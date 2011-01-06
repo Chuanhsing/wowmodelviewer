@@ -237,7 +237,7 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 
 			bool nomatch = true;
 			for (uint32 t=0;t<=m->nTextures; t++) {
-				if (t == (int)mat->tex) {
+				if (t == mat->tex) {
 					texarray[mat->tex] = wxString(m->textures[t-1].c_str(), wxConvUTF8);
 					texarray[mat->tex] = texarray[mat->tex].BeforeLast('.');
 					nomatch = false;
@@ -251,8 +251,8 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 		}
 	}
 
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	for (uint32 i=0; i<m->nGroups; i++) {
+		for (uint32 j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];
@@ -310,8 +310,8 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 
 	// geometric vertices (v)
 	// v x y z weight
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	for (uint32 i=0; i<m->nGroups; i++) {
+		for (uint32 j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			for(int ii=0;ii<batch->indexCount;ii++)
@@ -325,8 +325,8 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 
 	// texture vertices (vt)
 	// vt horizontal vertical depth
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	for (uint32 i=0; i<m->nGroups; i++) {
+		for (uint32 j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			for(int ii=0;ii<batch->indexCount;ii++)
@@ -340,8 +340,8 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 
 	// vertex normals (vn)
 	// vn x y z
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	for (uint32 i=0; i<m->nGroups; i++) {
+		for (uint32 j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			for(int ii=0;ii<batch->indexCount;ii++)
@@ -356,8 +356,8 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 	// Referencing groups of vertices
 	// f v/vt/vn v/vt/vn v/vt/vn v/vt/vn
 	int counter = 1;
-	for (int i=0; i<m->nGroups; i++) {
-		for (int j=0; j<m->groups[i].nBatches; j++)
+	for (uint32 i=0; i<m->nGroups; i++) {
+		for (uint32 j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];

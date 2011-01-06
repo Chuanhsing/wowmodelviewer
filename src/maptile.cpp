@@ -771,7 +771,7 @@ MapTile::~MapTile()
 		}
 	}
 
-	for (int j=0; j<textures.size(); j++) {
+	for (unsigned int j=0; j<textures.size(); j++) {
 		texturemanager.delbyname(textures[j]);
 	}
 

@@ -5,7 +5,7 @@
 
 #define	ROOT_BONE	(1)
 
-typedef enum M3_Class {
+enum M3_Class {
 	AR_Default,
 	AR_Bone,
 	AR_MSEC,
@@ -963,7 +963,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 		wxString strName = modelName + wxString::Format(wxT("_Bone%d"), i);
 
 		for(uint32 j=0; j < BONE_MAX; j++) {
-			if (i >= ROOT_BONE && m->keyBoneLookup[j] == i-ROOT_BONE) {
+			if (i >= ROOT_BONE && m->keyBoneLookup[j] == (int)(i-ROOT_BONE)) {
 				strName += wxT("_")+Bone_Names[j];
 				break;
 			}

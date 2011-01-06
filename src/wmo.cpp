@@ -301,8 +301,8 @@ void WMO::loadGroup(int id)
 	else if (id>=0 && (unsigned int)id<nGroups) {
 		groups[id].initDisplayList();
 		for (size_t i=0; i<nGroups; i++) {
-			groups[i].visible = (i==id);
-			if (i!=id) groups[i].cleanup();
+			groups[i].visible = ((int)i==id);
+			if ((int)i!=id) groups[i].cleanup();
 		}
 	}
 	updateModels();
@@ -801,7 +801,7 @@ void WMOGroup::initDisplayList()
 		}
 		else if (!strcmp(fourcc,"MONR")) {
 			// Normals. 3 floats per vertex normal, in (X,Z,-Y) order.
-			uint32 NormSize = (uint32)(size / 12);
+			//uint32 NormSize = (uint32)(size / 12);
 			normals = new Vec3D[(uint32)(size / 12)];
 			memcpy(normals, gf.getPointer(), size);
 		}

@@ -296,7 +296,7 @@ void ModelViewer::InitMenu()
 		exportMenu->Append(Exporter_Types[Perfered_Exporter].ID, Exporter_Types[Perfered_Exporter].MenuText);
 	}
 	// The Rest
-	for (size_t x=0;x<ExporterTypeCount;x++){
+	for (int x=0;x<ExporterTypeCount;x++){
 		if (x != Perfered_Exporter) {
 			exportMenu->Append(Exporter_Types[x].ID, Exporter_Types[x].MenuText);
 		}

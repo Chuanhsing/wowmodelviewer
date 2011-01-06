@@ -1885,7 +1885,7 @@ void ModelCanvas::ResetView()
 
 void ModelCanvas::ResetViewWMO(int id)
 {
-	if (!wmo || id>=wmo->nGroups) 
+	if (!wmo || id>=(int)wmo->nGroups) 
 		return;
 
 	wmo->viewrot = Vec3D(-90.0f, 0.0f, 0.0f);

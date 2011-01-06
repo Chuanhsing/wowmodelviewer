@@ -738,7 +738,7 @@ void CharControl::UpdateTextureList(wxString texName, int special)
 	{
 		if (model->specialTextures[i] == special)
 		{
-			wxLogMessage(wxT("Updating %s to %s"),model->TextureList[i],texName);
+			wxLogMessage(wxT("Updating %s to %s"),model->TextureList[i].c_str(),texName.c_str());
 			model->TextureList[i] = texName;
 			break;
 		}
@@ -1635,7 +1635,7 @@ void CharControl::RefreshItem(int slot)
 							tex = texturemanager.add(mp);
 							for (size_t x=0;x<m->TextureList.size();x++){
 								if (m->TextureList[x] == wxString(wxT("Special_2"))){
-									wxLogMessage(wxT("Replacing ID1's %s with %s"),m->TextureList[x],mp);
+									wxLogMessage(wxT("Replacing ID1's %s with %s"),m->TextureList[x].c_str(),mp.c_str());
 									m->TextureList[x] = mp;
 								}
 							}
@@ -1658,7 +1658,7 @@ void CharControl::RefreshItem(int slot)
 							tex = texturemanager.add(mp);
 							for (size_t x=0;x<m->TextureList.size();x++){
 								if (m->TextureList[x] == wxString(wxT("Special_2"))){
-									wxLogMessage(wxT("Replacing ID2's %s with %s"),m->TextureList[x],mp);
+									wxLogMessage(wxT("Replacing ID2's %s with %s"),m->TextureList[x].c_str(),mp.c_str());
 									m->TextureList[x] = mp;
 								}
 							}

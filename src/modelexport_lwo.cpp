@@ -662,7 +662,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 			// Temp Values
 			Vec4D Color = Vec4D(1,1,1,1);
-			float reflect = 0.0f;
+			//float reflect = 0.0f;
 
 			//LW_WriteSurface(f, cSurf, fileLen);
 			#ifdef _DEBUG
@@ -1974,7 +1974,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 
 	wxLogMessage(wxT("M2 Texture List:"));
 	for (size_t x=0;x<m->TextureList.size();x++){
-		wxLogMessage(wxT("Image %i: %s"),x,m->TextureList[x]);
+		wxLogMessage(wxT("Image %i: %s"),x,m->TextureList[x].c_str());
 	}
 
 	// Mesh & Slot names
@@ -2204,7 +2204,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 			for (size_t x=0;x<m->header.nBones;x++){
 				bool useWMap = false;
 				LWWeightMap wMap;
-				Bone *cbone = &m->bones[x];
+				//Bone *cbone = &m->bones[x];
 
 				// Weight Map Name = Bone Name
 				wxString bone_name = wxString::Format(wxT("Bone_%03i"), x);
@@ -2289,10 +2289,10 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 					int boneID = -1;
 					Model *mParent = NULL;
 
-					wxLogMessage(wxT("Attached Child Model: %s"),mAttChild->name);
+					wxLogMessage(wxT("Attached Child Model: %s"),mAttChild->name.c_str());
 					wxLogMessage(wxT("Texture List:"));
 					for (size_t x=0;x<mAttChild->TextureList.size();x++){
-						wxLogMessage(wxT("Image %i: %s"),x,mAttChild->TextureList[x]);
+						wxLogMessage(wxT("Image %i: %s"),x,mAttChild->TextureList[x].c_str());
 					}
 
 					if (att2->parent) {
@@ -2524,7 +2524,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 
 	// --== Scene Data ==--
 	int modelExport_LW_ExportAnim = 0;	// Temp here until I build the interface.
-	bool animExportError = false;
+	//bool animExportError = false;
 	// Object Placement
 	AnimationData a(animValue0,animValue0,animValue1);
 	SceneObj.AnimData = a;
@@ -2727,9 +2727,9 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 						ModelLight *l = &mAttChild->lights[x];
 
 						Vec3D color = l->diffColor.getValue(0,0);
-						float intense = l->diffIntensity.getValue(0,0);
+						//float intense = l->diffIntensity.getValue(0,0);
 						bool useAtten = false;
-						float AttenEnd = l->AttenEnd.getValue(0,0);
+						//float AttenEnd = l->AttenEnd.getValue(0,0);
 
 						if (l->UseAttenuation.getValue(0,0) > 0){
 							useAtten = true;
@@ -2819,7 +2819,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 	scene.Objects.push_back(SceneObj);
 
 	return Object;
-	Object.~LWObject();
+	//Object.~LWObject();
 }
 
 // Gather WMO Data
@@ -3121,7 +3121,6 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 				}
 			}
 		}else if (modelExport_LW_DoodadsAs == 1){	// Doodads as Scene Objects...
-/*
 			LWObject Doodad = GatherM2forLWO(NULL,ddinstance->model,true,FileName,false);
 			if (Doodad.SourceType == wxEmptyString){
 				wxMessageBox(wxT("Error gathering information for export."),wxT("Export Error"));
@@ -3129,8 +3128,6 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 				return;
 			}
 			WriteLWObject(filename, Object);
-*/
-	/*
 		}else if (modelExport_LW_DoodadsAs == 2){	// Doodad Sets as Seperate Layers...
 			for (uint32 ds=0;ds<m->nDoodadSets;ds++){
 				wxLogMessage(wxT("Processing Doodadset %i: %s"),ds,m->doodadsets[ds].name);
@@ -3281,7 +3278,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 	}
 	*/
 	return Object;
-	Object.~LWObject();
+	//Object.~LWObject();
 }
 
 
@@ -3339,7 +3336,7 @@ LWObject GatherADTforLWO(MapTile *m, const char *fn, LWScene &scene){
 	Object.Layers.push_back(Layer);
 
 	return Object;
-	Object.~LWObject();
+	//Object.~LWObject();
 }
 
 //---------------------------------------------
@@ -3415,7 +3412,7 @@ void ExportLWO_M2(Attachment *att, Model *m, const char *fn, bool init){
 		wxMessageBox(msg,wxT("Writing Error"));
 		wxLogMessage(msg);
 	}else{
-		wxLogMessage(wxT("LWO Object \"%s\" Writing Complete."),filename);
+		wxLogMessage(wxT("LWO Object \"%s\" Writing Complete."),filename.c_str());
 	}
 	Object.~LWObject();
 
