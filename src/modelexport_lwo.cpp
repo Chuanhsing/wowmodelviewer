@@ -443,7 +443,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 				for (size_t p=0;p<cLyr.Weights[w].PData.size();p++){
 					// Point number (VX Format)
-					uint32 pID = cLyr.Weights[w].PData[p].PointID;
+					size_t pID = cLyr.Weights[w].PData[p].PointID;
 					LW_WriteVX(f,pID,vmapSize);
 
 					// Float value of weight map
@@ -512,7 +512,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 					LWPoly Poly = cLyr.Polys[x];
 					LW_WriteVX(f,x,ptagSize);
 
-					u16 = MSB2(Poly.PartTagID);
+					u16 = MSB2((uint16)Poly.PartTagID);
 					f.Write(reinterpret_cast<char *>(&u16), 2);
 					ptagSize += 2;
 				}
@@ -540,7 +540,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 					LWPoly Poly = cLyr.Polys[x];
 					LW_WriteVX(f,x,ptagSize);
 
-					u16 = MSB2(Poly.SurfTagID);
+					u16 = MSB2((uint16)Poly.SurfTagID);
 					f.Write(reinterpret_cast<char *>(&u16), 2);
 					ptagSize += 2;
 				}
@@ -623,7 +623,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 			f.Write(reinterpret_cast<char *>(&u32), 4);
 			fileLen += 8;
 
-			u32 = MSB4<uint32>(cImg.TagID);
+			u32 = MSB4<uint32>((uint32)cImg.TagID);
 			f.Write(reinterpret_cast<char *>(&u32), 4);
 			f.Write("STIL", 4);
 			clipSize += 8;
@@ -662,7 +662,6 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 
 			// Temp Values
 			Vec4D Color = Vec4D(1,1,1,1);
-			//float reflect = 0.0f;
 
 			//LW_WriteSurface(f, cSurf, fileLen);
 			#ifdef _DEBUG
@@ -1941,21 +1940,50 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 // Gather M2 Data
 LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LWScene &scene, bool announce){
 	LWObject Object;
-	if (!m)
+	if (!m){
 		return Object;
+		Object.~LWObject();
+	}
 
-	LWSceneObj SceneObj(wxString(fn, wxConvUTF8),LW_ObjCount.GetPlus(),0);
+	wxString filename(fn, wxConvUTF8);
+	wxString scfilename = wxString(fn, wxConvUTF8).BeforeLast('.').Append(wxT(".lws"));
+
+	if (modelExport_LW_PreserveDir == true){
+		wxString Path, Name;
+
+		// Object
+		Path << filename.BeforeLast(SLASH);
+		Name << filename.AfterLast(SLASH);
+		MakeDirs(Path,wxT("Objects"));
+		filename.Empty();
+		filename << Path << SLASH << wxT("Objects") << SLASH << Name;
+	}
+	if (m->modelType != MT_CHAR){
+		if (modelExport_PreserveDir == true){
+			wxString Path1, Path2, Name;
+
+			// Objects
+			Path1 << filename.BeforeLast(SLASH);
+			Name << filename.AfterLast(SLASH);
+			Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+			MakeDirs(Path1,Path2);
+			filename.Empty();
+			filename << Path1 << SLASH << Path2 << SLASH << Name;
+		}
+	}
+
+	LWSceneObj SceneObj(filename,LW_ObjCount.GetPlus(),0);
 
 	Object.SourceType = wxT("M2");
 	if (announce == true)
-		LogExportData(wxT("LWO"),m->modelname,wxString(fn, wxConvUTF8));
+		LogExportData(wxT("LWO"),m->modelname,filename);
 
 	uint32 SurfCounter = 0;
 	int32 cAnim = 0;
-	int32 cFrame = 0;
+	size_t cFrame = 0;
 	bool vertMsg = false;
 
-	if (m->animated){
+	if ((m->animated == true) && (init == false)){
 		cAnim = m->currentAnim;
 		cFrame = m->animManager->GetFrame();
 	}
@@ -2118,7 +2146,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 			wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
 
 			if (m->modelType == MT_CHAR){
-				wxString charname = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(wxT('.')) + wxT("_");
+				wxString charname = filename.AfterLast(SLASH).BeforeLast(wxT('.')) + wxT("_");
 				if (texName.Find(MPQ_SLASH) != wxNOT_FOUND){
 					texName = charname + Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
 					TexturePath = wxT("");
@@ -2324,15 +2352,15 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 							mRot = cbone.rot.getValue(InitPose,0);
 						}else{
 							// Rotations aren't working correctly... Not sure why.
-							rmat.quaternionRotate(cbone.rot.getValue(cAnim,cFrame));
-							mat.scale(cbone.scale.getValue(cAnim,cFrame));
+							rmat.quaternionRotate(cbone.rot.getValue(cAnim,(uint32)cFrame));
+							mat.scale(cbone.scale.getValue(cAnim,(uint32)cFrame));
 							mat.translation(cbone.transPivot);
 
 							mPos.x = mat.m[0][3];
 							mPos.y = mat.m[1][3];
 							mPos.z = mat.m[2][3];
 
-							mScale = cbone.scale.getValue(cAnim,cFrame);
+							mScale = cbone.scale.getValue(cAnim,(uint32)cFrame);
 							mRot = rmat.GetQuaternion();
 						}
 						if (mScale.x == 0 && mScale.y == 0 && mScale.z == 0){
@@ -2544,7 +2572,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 			}else{
 				lwBone.Active = false;		// Disable Non-Parented bones.
 				lwBone.ParentType = LW_ITEMTYPE_OBJECT;
-				lwBone.ParentID = LW_ObjCount.Value;
+				lwBone.ParentID = LW_ObjCount.GetValue();
 			}
 			Pos_i = Pos;
 			if (init == false){
@@ -2696,7 +2724,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 			Light.ParentID = l->parent;
 		}else{
 			Light.ParentType = LW_ITEMTYPE_OBJECT;
-			Light.ParentID = LW_ObjCount.Value;
+			Light.ParentID = LW_ObjCount.GetValue();
 		}
 
 		Light.Color = l->diffColor.getValue(0,0);
@@ -2713,6 +2741,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 
 		scene.Lights.push_back(Light);
 	}
+	/*
 	if (att != NULL){
 		if (att->model){
 			wxLogMessage(wxT("Att Model found."));
@@ -2727,21 +2756,21 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 						ModelLight *l = &mAttChild->lights[x];
 
 						Vec3D color = l->diffColor.getValue(0,0);
-						//float intense = l->diffIntensity.getValue(0,0);
+						float intense = l->diffIntensity.getValue(0,0);
 						bool useAtten = false;
-						//float AttenEnd = l->AttenEnd.getValue(0,0);
+						float AttenEnd = l->AttenEnd.getValue(0,0);
 
 						if (l->UseAttenuation.getValue(0,0) > 0){
 							useAtten = true;
 						}
 
-//							WriteLWSceneLight(fs,lcount,l->pos,l->type,color,intense,useAtten,AttenEnd,2.5);
+						//WriteLWSceneLight(fs,lcount,l->pos,l->type,color,intense,useAtten,AttenEnd,2.5);
 					}
 				}
 			}
 		}
 	}
-
+	*/
 	// Cameras
 	/*
 	if (m->hasCamera == true){
@@ -2819,7 +2848,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LW
 	scene.Objects.push_back(SceneObj);
 
 	return Object;
-	//Object.~LWObject();
+	Object.~LWObject();
 }
 
 // Gather WMO Data
@@ -2829,8 +2858,10 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 
 	LWObject Object;
 
-	if (!m)
+	if (!m){
 		return Object;
+		Object.~LWObject();
+	}
 
 	if (modelExport_LW_PreserveDir == true){
 		wxString Path, Name;
@@ -3278,7 +3309,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 	}
 	*/
 	return Object;
-	//Object.~LWObject();
+	Object.~LWObject();
 }
 
 
@@ -3288,8 +3319,10 @@ LWObject GatherADTforLWO(MapTile *m, const char *fn, LWScene &scene){
 	wxString FileName(fn, wxConvUTF8);
 	LWObject Object;
 
-	if (!m)
+	if (!m){
 		return Object;
+		Object.~LWObject();
+	}
 
 	if (modelExport_LW_PreserveDir == true){
 		wxString Path, Name;
@@ -3336,7 +3369,7 @@ LWObject GatherADTforLWO(MapTile *m, const char *fn, LWScene &scene){
 	Object.Layers.push_back(Layer);
 
 	return Object;
-	//Object.~LWObject();
+	Object.~LWObject();
 }
 
 //---------------------------------------------
@@ -3532,8 +3565,8 @@ void ExportLWO_ADT(MapTile *m, const char *fn){
 		Path << scfilename.BeforeLast(SLASH);
 		Name << scfilename.AfterLast(SLASH);
 		MakeDirs(Path,wxT("Scenes"));
-		filename.Empty();
-		filename << Path << SLASH << wxT("Scenes") << SLASH << Name;
+		scfilename.Empty();
+		scfilename << Path << SLASH << wxT("Scenes") << SLASH << Name;
 	}
 	if (modelExport_PreserveDir == true){
 		wxString Path1, Path2, Name;

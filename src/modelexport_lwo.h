@@ -22,12 +22,16 @@ struct LWSurface;
 
 // Counting system for Scene Items
 struct CountSystem{
-	uint32 Value;
-
+private:
+	size_t Value;
+public:
 	void Reset(){
 		Value = 0;
 	}
-	uint32 GetPlus(){
+	size_t GetValue(){
+		return Value;
+	}
+	size_t GetPlus(){
 		return Value;
 		Value++;
 	}
@@ -68,14 +72,14 @@ enum LWTextureAxisType{
 // Polygon Chunk
 struct PolyChunk {
 	uint16 numVerts;		// The Number of Indices that make up the poly.
-	uint32 indice[3];		// The IDs of the 3 Indices that make up each poly. In reality, this should be indice[MAX_POINTS_PER_POLYGON], but WoW will never go above 3.
+	size_t indice[3];		// The IDs of the 3 Indices that make up each poly. In reality, this should be indice[MAX_POINTS_PER_POLYGON], but WoW will never go above 3.
 };
 
 // Polygon Normal
 struct PolyNormal {
 	wxString NormalMapName;
-	uint32 indice[3];
-	uint32 polygon;
+	size_t indice[3];
+	size_t polygon;
 	Vec3D direction[3];		// This is the direction the polygon's normal should point towards.	
 };
 
@@ -172,7 +176,7 @@ struct LWBones{
 	wxString Name;
 	bool Active;
 	uint16 BoneType;
-	uint32 ParentID;
+	size_t ParentID;
 	uint16 ParentType;
 	float Length;
 	wxString WeightMap_Name;
@@ -194,17 +198,17 @@ struct LWBones{
 
 // Scene Object
 struct LWSceneObj{
-	uint32 ObjectID;
+	size_t ObjectID;
 	int32 LayerID;
 	AnimationData AnimData;
 	wxString Name;
 	wxString ObjectTags;
 	std::vector<LWBones> Bones;
 	bool isNull;
-	uint32 ParentID;
+	size_t ParentID;
 	int16 ParentType;	// -1 or LW_ITEMTYPE_NOPARENT for No Parent
 
-	LWSceneObj(wxString name, uint32 id, int32 parentID, int16 parentType = LW_ITEMTYPE_NOPARENT, bool IsNull = false, int32 layerID = 1){
+	LWSceneObj(wxString name, size_t id, int32 parentID, int16 parentType = LW_ITEMTYPE_NOPARENT, bool IsNull = false, int32 layerID = 1){
 		Name = name;
 		ObjectID = id;
 		ParentType = parentType;
@@ -216,14 +220,14 @@ struct LWSceneObj{
 };
 
 struct LWLight{
-	uint32 LightID;
+	size_t LightID;
 	AnimationData AnimData;
 	wxString Name;
 	Vec3D Color;
 	float Intensity;
 	uint16 LightType;
 	float FalloffRadius;
-	uint32 ParentID;
+	size_t ParentID;
 	int16 ParentType;
 	bool UseAttenuation;
 
@@ -279,16 +283,16 @@ struct LWScene{
 // --== Object Formats ==--
 // Weight Data
 struct LWWeightInfo{
-	uint32 PointID;
+	size_t PointID;
 	float Value;
 };
 
 struct LWWeightMap{
 	wxString WeightMapName;
 	std::vector<LWWeightInfo> PData;
-	uint32 BoneID;
+	size_t BoneID;
 
-	LWWeightMap(wxString MapName=wxT("Weight"), uint32 Bone_ID = 0){
+	LWWeightMap(wxString MapName=wxT("Weight"), size_t Bone_ID = 0){
 		WeightMapName = MapName;
 		BoneID = Bone_ID;
 	}
@@ -317,8 +321,8 @@ struct LWPoint {
 struct LWPoly {
 	PolyChunk PolyData;
 	PolyNormal Normals;
-	uint32 PartTagID;
-	uint32 SurfTagID;
+	size_t PartTagID;
+	size_t SurfTagID;
 };
 
 // -= Lightwave Chunk Structures =-
@@ -352,17 +356,17 @@ struct LWLayer {
 struct LWClip {
 	wxString Filename;		// The Path & Filename of the image to be used in Lightwave
 	wxString Source;		// The Source Path & Filename, as used in WoW.
-	uint32 TagID;			// = Number of Parts + Texture number
+	size_t TagID;			// = Number of Parts + Texture number
 };
 
 struct LWSurf_Image {
-	uint32 ID;				// Tag ID for the Image
+	ssize_t ID;				// Tag ID for the Image
 	uint16 Axis;			// LWTextureAxisType value
 	float UVRate_U;			// Rate to move the U with UV Animation
 	float UVRate_V;			// Rate to move the V with UV Animation
 
 	// Contructor
-	LWSurf_Image(uint32 idtag=-1, uint16 axis=LW_TEXTUREAXIS_UV, float UVAnimRate_U=0.0f, float UVAnimRate_V=0.0f){
+	LWSurf_Image(ssize_t idtag=-1, uint16 axis=LW_TEXTUREAXIS_UV, float UVAnimRate_U=0.0f, float UVAnimRate_V=0.0f){
 		ID = idtag;
 		Axis = axis;
 		UVRate_U = UVAnimRate_U;
@@ -433,10 +437,10 @@ struct LWObject {
 			Layers.push_back(a);
 		}
 
-		uint32 OldPartNum = (uint32)PartNames.size();
-		uint32 OldSurfNum = (uint32)Surfaces.size();
-		uint32 OldTagNum =  OldPartNum + OldSurfNum;
-		std::vector<uint32> OldPointNum;
+		size_t OldPartNum = PartNames.size();
+		size_t OldSurfNum = Surfaces.size();
+		size_t OldTagNum =  OldPartNum + OldSurfNum;
+		std::vector<size_t> OldPointNum;
 
 		// Parts
 		for (size_t i=0;i<o.PartNames.size();i++){
@@ -457,7 +461,7 @@ struct LWObject {
 		}
 
 		// Parts Difference
-		uint32 PartDiff = (uint32)PartNames.size() - OldPartNum;
+		size_t PartDiff = PartNames.size() - OldPartNum;
 
 		// --== Layers ==--
 		// Process Old Layers
@@ -526,13 +530,14 @@ struct LWObject {
 
 // --== Writing Functions ==--
 // VX is Lightwave Shorthand for any Point Number, because Lightwave stores points differently if they're over a certain threshold.
-void LW_WriteVX(wxFFileOutputStream &f, uint32 p, uint32 &Size){
-	if (p <= 0xFF00){
-		uint16 indice = MSB2(p & 0x0000FFFF);
+void LW_WriteVX(wxFFileOutputStream &f, size_t p, uint32 &Size){
+	uint32 q = (uint32)p;
+	if (q <= 0xFF00){
+		uint16 indice = MSB2(q & 0x0000FFFF);
 		f.Write(reinterpret_cast<char *>(&indice),2);
 		Size += 2;
 	}else{
-		uint32 indice = MSB4<uint32>(p + 0xFF000000);
+		uint32 indice = MSB4<uint32>(q + 0xFF000000);
 		f.Write(reinterpret_cast<char *>(&indice), 4);
 		Size += 4;
 	}

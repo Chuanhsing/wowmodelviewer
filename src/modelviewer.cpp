@@ -1370,7 +1370,7 @@ wxString ModelViewer::InitMPQArchives()
 	if (f.isEof()) {
 		f.close();
 		wxLogMessage(wxT("Unable to gather TOC data."));
-		return wxT("Could not read data from MPQ files.");
+		return wxT("Could not read data from MPQ files.\nPlease make sure World of Warcraft is not running.");
 	}
 	f.seek(51); // offset to "## Interface: "
 	unsigned char toc[6];
@@ -2872,6 +2872,11 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 		init = true;
 	}
 
+	// Useful variables
+	bool isPaused = false;
+	int32 cAnim = 0;
+	int32 cFrame = 0;
+
 	// Set Default filename
 	wxString newfilename;
 	if (canvas->wmo) {
@@ -2879,10 +2884,12 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 	}else if (canvas->model) {
 		newfilename << canvas->model->name.AfterLast(MPQ_SLASH).BeforeLast('.');
 		if ((init == false)&&(g_selModel->animated)){
-			g_selModel->animManager->Pause();
+			if (g_selModel->animManager->IsPaused() == true)
+				isPaused = true;
+			g_selModel->animManager->Pause(true);
 
-			int32 cAnim = g_selModel->currentAnim;
-			int32 cFrame = g_selModel->animManager->GetFrame();
+			cAnim = g_selModel->currentAnim;
+			cFrame = g_selModel->animManager->GetFrame();
 			wxString AnimName;
 
 			try {
@@ -3050,7 +3057,9 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 	}
 
 	if ((init == false)&&(g_canvas->model)&&(g_selModel->animated)) {
-		g_selModel->animManager->Play();
+		if (isPaused == false) {
+			g_selModel->animManager->Play();
+		}
 	}
 }
 
