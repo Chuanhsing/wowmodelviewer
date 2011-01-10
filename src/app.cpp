@@ -388,6 +388,32 @@ void searchMPQs()
 		}
 	}
 
+	wxDir::GetAllFiles(gamePath+sLocale, &baseMpqs, wxEmptyString, wxDIR_FILES);
+	for (size_t j = 0; j < baseMpqs.size(); j++) {
+		if (baseMpqs[j].Contains(wxT("oldworld")))
+			continue;
+		wxString baseName = wxFileName(baseMpqs[j]).GetFullName();
+		wxString cmpName = wxT("wow-update-")+sLocale;
+		if (baseName.StartsWith(cmpName) && baseName.AfterLast('.').CmpNoCase(wxT("mpq")) == 0) {
+			bool bFound = false;
+			for(size_t i = 0; i<mpqArchives.size(); i++) {
+				if (!mpqArchives[i].AfterLast(SLASH).StartsWith(cmpName))
+					continue;
+				int ver = wxAtoi(mpqArchives[i].BeforeLast('.').AfterLast('-'));
+				int bver = wxAtoi(baseName.BeforeLast('.').AfterLast('-'));
+				if (bver > ver) {
+					mpqArchives.Insert(baseMpqs[j], i);
+					bFound = true;
+					break;
+				}		
+			}
+			if (bFound == false)
+				mpqArchives.Add(baseMpqs[j]);
+
+			wxLogMessage(wxT("- Found Partial MPQ archive: %s"), baseMpqs[j].c_str());
+		}
+	}
+
 	// search patch-base MPQs
 	wxArrayString baseCacheMpqs;
 	wxDir::GetAllFiles(gamePath+wxT("Cache"), &baseCacheMpqs, wxEmptyString, wxDIR_FILES);
