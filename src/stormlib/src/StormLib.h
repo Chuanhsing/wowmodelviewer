@@ -741,13 +741,23 @@ typedef DWORD (WINAPI * SFILESETFILEPOINTER)(HANDLE, LONG, LONG *, DWORD);
 typedef bool  (WINAPI * SFILEREADFILE)(HANDLE, void *, DWORD, LPDWORD, LPOVERLAPPED);
 
 //-----------------------------------------------------------------------------
+// Functions for manipulation with StormLib global flags
+
+#define SFILE_FLAG_ALLOW_WRITE_SHARE    0x00000001  // When a MPQ is open for write by StorLib,
+                                                    // it is allowed to open it for write with another application.
+
+DWORD  WINAPI SFileGetGlobalFlags();
+DWORD  WINAPI SFileSetGlobalFlags(DWORD dwNewFlags);
+
+LCID   WINAPI SFileGetLocale();
+LCID   WINAPI SFileSetLocale(LCID lcNewLocale);
+
+//-----------------------------------------------------------------------------
 // Functions for archive manipulation
 
 bool   WINAPI SFileOpenArchive(const char * szMpqName, DWORD dwPriority, DWORD dwFlags, HANDLE * phMpq);
 bool   WINAPI SFileCreateArchive(const char * szMpqName, DWORD dwFlags, DWORD dwHashTableSize, HANDLE * phMpq);
 
-LCID   WINAPI SFileSetLocale(LCID lcNewLocale);
-LCID   WINAPI SFileGetLocale();
 bool   WINAPI SFileFlushArchive(HANDLE hMpq);
 bool   WINAPI SFileCloseArchive(HANDLE hMpq);
 

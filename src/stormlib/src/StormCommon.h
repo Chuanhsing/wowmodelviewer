@@ -76,6 +76,7 @@
 //-----------------------------------------------------------------------------
 // StormLib internal global variables
 
+extern DWORD dwGlobalFlags;                 // Global StormLib flags
 extern LCID lcFileLocale;                   // Preferred file locale
 
 //-----------------------------------------------------------------------------

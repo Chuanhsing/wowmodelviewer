@@ -557,7 +557,7 @@ static TMPQExtTable * LoadExtTable(
 
         // Decrypt the block
         BSWAP_ARRAY32_UNSIGNED(pExtTable + 1, pExtTable->dwDataSize);
-        DecryptMpqBlock(pExtTable + 1, pExtTable->dwDataSize, dwKey);
+        DecryptMpqBlock(pExtTable + 1, Size - sizeof(TMPQExtTable), dwKey);
         BSWAP_ARRAY32_UNSIGNED(pExtTable + 1, pExtTable->dwDataSize);
 
         // If the table is compressed, decompress it
@@ -636,6 +636,40 @@ static void CalculateTablePositions(TMPQArchive * ha, bool bNeedHiBlockTable)
     pHeader->ArchiveSize64 = TablePos;
 }
 
+static void FixBlockTableSize(
+    TMPQArchive * ha,
+    TMPQBlock * pBlockTable,
+    ULONGLONG FileSize,
+    DWORD dwClaimedSize)
+{
+    TMPQHeader * pHeader = ha->pHeader;
+    ULONGLONG BlockTableStart;
+    ULONGLONG BlockTableEnd;
+    ULONGLONG FileDataStart;
+
+    // Block table should never exceed any file in the MPQ
+    if(pHeader->HiBlockTablePos64 == 0)
+    {
+        // Calculate claimed block table begin and end
+        BlockTableStart = ha->MpqPos + MAKE_OFFSET64(pHeader->wBlockTablePosHi, pHeader->dwBlockTablePos);
+        BlockTableEnd = BlockTableStart + (pHeader->dwBlockTableSize * sizeof(TMPQBlock));
+
+        for(DWORD i = 0; i < dwClaimedSize; i++)
+        {
+            // If the block table end goes into that file, fix the block table end
+            FileDataStart = ha->MpqPos + pBlockTable[i].dwFilePos;
+            if(BlockTableStart < FileDataStart && BlockTableEnd > FileDataStart)
+            {
+                dwClaimedSize = (DWORD)((FileDataStart - BlockTableStart) / sizeof(TMPQBlock));
+                BlockTableEnd = FileDataStart;
+            }
+        }
+    }
+
+    // Fix the block table size
+    pHeader->BlockTableSize64 = dwClaimedSize * sizeof(TMPQBlock);
+    pHeader->dwBlockTableSize = dwClaimedSize;
+}
 
 int LoadHashTable(TMPQArchive * ha)
 {
@@ -713,7 +747,11 @@ int BuildFileTable(TMPQArchive * ha, ULONGLONG FileSize)
         // but the file was cut and there was only 0x1A0 entries.
         // We will handle this case properly.
         if(dwTableSize == dwCmpSize && (ByteOffset + dwTableSize) > FileSize)
-            dwTableSize = dwCmpSize = (DWORD)(FileSize - ByteOffset);
+        {
+            pHeader->dwBlockTableSize = (DWORD)((FileSize - ByteOffset) / sizeof(TMPQBlock));
+            pHeader->BlockTableSize64 = pHeader->dwBlockTableSize * sizeof(TMPQBlock);
+            dwTableSize = dwCmpSize = pHeader->dwBlockTableSize * sizeof(TMPQBlock);
+        }
 
         //
         // One of the first cracked versions of Diablo had block table unencrypted 
@@ -725,13 +763,27 @@ int BuildFileTable(TMPQArchive * ha, ULONGLONG FileSize)
         nError = LoadMpqTable(ha, ByteOffset, pBlockTable, dwCmpSize, dwTableSize, MPQ_KEY_BLOCK_TABLE);
         if(nError == ERROR_SUCCESS)
         {
+            // Defense against MPQs that that claim block table to be bigger than it really is
+            FixBlockTableSize(ha, pBlockTable, FileSize, pHeader->dwBlockTableSize);
+
             // Merge the block table to the file table
             for(pHash = ha->pHashTable; pHash < pHashEnd; pHash++)
             {
                 if(pHash->dwBlockIndex < pHeader->dwBlockTableSize)
                 {
                     pBlock = pBlockTable + pHash->dwBlockIndex;
-                    if(pBlock->dwFlags & MPQ_FILE_EXISTS)
+
+                    //
+                    // Yet another silly map protector: For each valid file,
+                    // there are 4 items in the hash table, that appears to be valid:
+                    //
+                    //   a6d79af0 e61a0932 001e0000 0000770b <== Fake valid
+                    //   a6d79af0 e61a0932 0000d761 0000dacb <== Fake valid
+                    //   a6d79af0 e61a0932 00000000 0000002f <== Real file entry
+                    //   a6d79af0 e61a0932 00005a4f 000093bc <== Fake valid
+                    // 
+
+                    if(!(pBlock->dwFlags & ~MPQ_FILE_VALID_FLAGS) && (pBlock->dwFlags & MPQ_FILE_EXISTS))
                     {
                         // Get the entry
                         pFileEntry = pFileTable + pHash->dwBlockIndex;
@@ -744,6 +796,16 @@ int BuildFileTable(TMPQArchive * ha, ULONGLONG FileSize)
                         pFileEntry->dwFlags     = pBlock->dwFlags;
                         pFileEntry->lcLocale    = pHash->lcLocale;
                         pFileEntry->wPlatform   = pHash->wPlatform;
+                    }
+                    else
+                    {
+                        // If the hash table entry doesn't point to the valid file item,
+                        // we invalidate the entire hash table entry
+                        pHash->dwName1      = 0xFFFFFFFF;
+                        pHash->dwName2      = 0xFFFFFFFF;
+                        pHash->lcLocale     = 0xFFFF;
+                        pHash->wPlatform    = 0xFFFF;
+                        pHash->dwBlockIndex = HASH_ENTRY_DELETED;
                     }
                 }
             }

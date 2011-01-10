@@ -165,9 +165,14 @@ static HANDLE CreateNewFile(
 
 #ifdef PLATFORM_WINDOWS
     {
+        DWORD dwShareMode = FILE_SHARE_READ;
+
+        if(dwGlobalFlags & SFILE_FLAG_ALLOW_WRITE_SHARE)
+            dwShareMode |= FILE_SHARE_WRITE;
+
         hFile = CreateFile(szFileName,
                            GENERIC_READ | GENERIC_WRITE,
-                           FILE_SHARE_READ,
+                           dwShareMode,
                            NULL,
                            CREATE_ALWAYS,
                            0,
@@ -259,9 +264,14 @@ static HANDLE OpenExistingFile(
 
 #ifdef PLATFORM_WINDOWS
     {
+        DWORD dwShareMode = FILE_SHARE_READ;
+
+        if(dwGlobalFlags & SFILE_FLAG_ALLOW_WRITE_SHARE)
+            dwShareMode |= FILE_SHARE_WRITE;
+
         hFile = CreateFile(szFileName,
                            bWriteAccess ? (GENERIC_READ | GENERIC_WRITE) : GENERIC_READ,
-                           FILE_SHARE_READ,
+                           dwShareMode,
                            NULL,
                            OPEN_EXISTING,
                            0,
@@ -1220,7 +1230,7 @@ TFileStream * FileStream_OpenFile(
     bool bWriteAccess)                      // false = read-only, true = read+write
 {
     PART_FILE_HEADER PartHdr;
-    ULONGLONG VirtualSize;             // Size of the file stored in part file
+    ULONGLONG VirtualSize;                  // Size of the file stored in part file
     ULONGLONG ByteOffset = {0};
     TFileStream * pStream;
     size_t nStructLength;

@@ -667,7 +667,7 @@ __TryAgain:
 
 static int TestArchiveOpenAndClose(const char * szMpqName)
 {
-    const char * szFileName1 = "pc-game-hdfiles\\WTF\\RunOnce.wtf";
+    const char * szFileName1 = "war3map.wpm";
     TMPQArchive * ha;
     HANDLE hFile1 = NULL;
     HANDLE hFile2 = NULL;
@@ -1550,8 +1550,8 @@ int main(void)
                                                                                             
     // Test the archive open and close
     if(nError == ERROR_SUCCESS)
-        nError = TestArchiveOpenAndClose(MAKE_PATH("2002 - Warcraft III/siverrpg_1.9_ver.w3x"));
-//      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/expansion-locale-frFR.MPQ"));
+//      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm2/a_tvse_x_1_2_f.w3x"));
+        nError = TestArchiveOpenAndClose(MAKE_PATH("2002 - Warcraft III/ProtectedMap_HashTable_FakeValid.w3x"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("2010 - Starcraft II/Installer Tome 1 enGB.MPQE"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("1997 - Diablo I/single_0.sv"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("2004 - World of Warcraft/SoundCache-enUS.MPQ"));

@@ -83,6 +83,19 @@ static int VerifyMpqTablePositions(TMPQArchive * ha, ULONGLONG FileSize)
 // SFileGetLocale and SFileSetLocale
 // Set the locale for all newly opened files
 
+DWORD WINAPI SFileGetGlobalFlags()
+{
+    return dwGlobalFlags;
+}
+
+DWORD WINAPI SFileSetGlobalFlags(DWORD dwNewFlags)
+{
+    DWORD dwOldFlags = dwGlobalFlags;
+
+    dwGlobalFlags = dwNewFlags;
+    return dwOldFlags;
+}
+
 LCID WINAPI SFileGetLocale()
 {
     return lcFileLocale;

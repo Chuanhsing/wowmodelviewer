@@ -21,6 +21,7 @@ char StormLibCopyright[] = "StormLib v " STORMLIB_VERSION_STRING " Copyright Lad
 //-----------------------------------------------------------------------------
 // The buffer for decryption engine.
 
+DWORD   dwGlobalFlags = 0;                      // Global flags
 LCID    lcFileLocale = LANG_NEUTRAL;            // File locale
 USHORT  wPlatform = 0;                          // File platform
 
