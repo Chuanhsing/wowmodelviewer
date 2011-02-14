@@ -14,10 +14,6 @@ static ArchiveSet gOpenArchives;
 
 MPQArchive::MPQArchive(wxString filename) : ok(false)
 {
-	// skip the PTCH files atrchives
-	if (filename.AfterLast(SLASH).StartsWith(wxT("wow-update-")))
-		return;
-
 	wxLogMessage(wxT("Opening %s"), filename.c_str());
 
 	if (!SFileOpenArchive(filename.fn_str(), 0, MPQ_OPEN_FORCE_MPQ_V1|MPQ_OPEN_READ_ONLY, &mpq_a )) {
@@ -26,8 +22,11 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 		return;
 	}
 
+	
 	// do patch, but skip cache\ directory
-	if (!(filename.BeforeLast(SLASH).Lower().Contains(wxT("cache")) && filename.AfterLast(SLASH).Lower().StartsWith(wxT("patch")))) {
+	if (!(filename.BeforeLast(SLASH).Lower().Contains(wxT("cache")) && 
+		filename.AfterLast(SLASH).Lower().StartsWith(wxT("patch"))) &&
+		!isPartialMPQ(filename)) { // skip the PTCH files atrchives
 		// do patch
 		for(int j=(int)mpqArchives.GetCount()-1; j>=0; j--) {
 			if (!mpqArchives[j].AfterLast(SLASH).StartsWith(wxT("wow-update-")))
@@ -61,6 +60,13 @@ MPQArchive::~MPQArchive()
 	//gOpenArchives.erase(gOpenArchives.begin(), gOpenArchives.end());
 }
 
+bool MPQArchive::isPartialMPQ(wxString filename)
+{
+	if (filename.AfterLast(SLASH).StartsWith(wxT("wow-update-")))
+		return true;
+	return false;
+}
+
 void MPQArchive::close()
 {
 	if (ok == false)
@@ -76,6 +82,13 @@ void MPQArchive::close()
 		}
 	}
 	
+}
+
+bool MPQFile::isPartialMPQ(wxString filename)
+{
+	if (filename.AfterLast(SLASH).StartsWith(wxT("wow-update-")))
+		return true;
+	return false;
 }
 
 void
@@ -121,6 +134,7 @@ MPQFile::openFile(wxString filename)
 		}
 	}
 
+	// zhCN alternate file mode
 	if (bAlternate && !filename.StartsWith(wxT("Alternate"), false)) {
 		wxString alterName = wxT("alternate")+SLASH+filename;
 
@@ -371,6 +385,9 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 	for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end();++i)
 	{
 		HANDLE &mpq_a = *i->second;
+		bool isPartial = false;
+		if (i->first.AfterLast(SLASH).StartsWith(wxT("wow-update-")))
+			isPartial = true;
 
 		HANDLE fh;
 		if( SFileOpenFileEx( mpq_a, "(listfile)", 0, &fh ) )
@@ -395,7 +412,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 				col = 5; // Frozen Blue
 			else if (temp.Find(wxT("expansion3.mpq")) > -1)
 				col = 6; // Destruction Orange
-			else if (temp.Find(wxT("patch-4.mpq")) > -1)
+			else if (temp.Find(wxT("wow-update-")) > -1)
 				col = 7; // Cyan
 
 			if (size > 0 ) {
@@ -406,16 +423,27 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 				while (p <= end) {
 					unsigned char *q=p;
 					do {
-						if (*q==13) 
+						if (*q=='\r' || *q=='\n') // carriage return or new line
 							break;
 					} while (q++<=end);
 
 					wxString line(reinterpret_cast<char *>(p), wxConvUTF8, q-p);
 					if (line.Length()==0) 
 						break;
-					//p += line.length();
-					p = q + 2;
-					//line.erase(line.length()-2, 2); // delete \r\n
+					p = q;
+					if (*p == '\r')
+						p++;
+					if (*p == '\n')
+						p++;
+					//line = line.Trim(); // delete \r\n
+					if (isPartial) {
+						if (line.Lower().StartsWith(wxT("base\\"))) // strip "base\\"
+							line = line.Mid(5);
+						else if (line.StartsWith(locales[langID])) // strip "enus\\"
+							line = line.Mid(5);
+						else
+							continue;
+					}
 
 					if (filterfunc(wxString(line.mb_str(), wxConvUTF8))) {
 						// This is just to help cleanup Duplicates

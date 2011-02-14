@@ -33,6 +33,7 @@ class MPQArchive
 public:
 	MPQArchive(wxString filename);
 	~MPQArchive();
+	bool isPartialMPQ(wxString filename);
 
 	void close();
 };
@@ -68,6 +69,7 @@ public:
 	static bool exists(wxString filename);
 	static int getSize(wxString filename); // Used to do a quick check to see if a file is corrupted
 	static wxString getArchive(wxString filename);
+	bool isPartialMPQ(wxString filename);
 };
 
 inline void flipcc(char *fcc)
