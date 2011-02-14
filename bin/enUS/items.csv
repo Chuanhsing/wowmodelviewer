@@ -675,7 +675,7 @@
 2072,2,Dwarven Magestaff
 2073,2,Dwarven Hatchet
 2074,2,Solid Shortblade
-2075,2,Priest's Mace
+2075,2,Heavy Mace
 2077,2,Magician Staff
 2078,2,Northern Shortsword
 2079,2,Sergeant's Warhammer
@@ -6508,7 +6508,7 @@
 15503,2,Outrunner's Legguards
 15504,2,Outrunner's Shield
 15505,1,Outrunner's Pauldrons
-15506,2,Grunt's AnkleWraps
+15506,2,Grunt's Ankle Wraps
 15507,2,Grunt's Bracers
 15508,2,Grunt's Cape
 15509,2,Grunt's Handwraps
@@ -24441,7 +24441,7 @@
 48727,4,Khadgar's Leggings 
 48728,4,Khadgar's Robe 
 48729,4,Khadgar's Shoulderpads 
-48730,4,Sunstrider's Gauntlets 
+48730,4,Sunstrider's Gauntlets
 48731,4,Sunstrider's Hood 
 48732,4,Sunstrider's Leggings 
 48733,4,Sunstrider's Robe 
@@ -26675,6 +26675,7 @@
 53046,2,Art Template Leather Shoulder - Leather_Common_B_03 - Black
 53047,2,Art Template Leather Wrist - Leather_Common_B_03 - Black
 53048,1,Doomsday Message
+53057,1,Faded Wizard Hat
 53097,1,Gnomeregan Drape
 53098,0,Monster - Polearm Blood Elf D01 Black
 53100,0,Monster - Staff Argent PVE Alliance 01 Silver
@@ -26859,7 +26860,7 @@
 53440,2,Sea Sister Vest
 53441,2,Serpent-Crusher Gloves
 53442,3,Shield of Azsharan Conquest
-53443,3,Shield of Talendis Point
+53443,3,Shield of Talendris Point
 53445,2,Spongy Vest
 53446,2,Spring Gadget
 53447,2,Standard Issue Airborne Belt
@@ -27455,7 +27456,7 @@
 55026,2,Redsteel Gauntlets
 55027,2,Redsteel Belt
 55028,2,Redsteel Boots
-55029,3,Redsteel Shoulders
+55029,2,Redsteel Shoulders
 55030,2,Redsteel Legguards
 55031,2,Redsteel Helm
 55032,3,Redsteel Breastplate
@@ -27464,7 +27465,7 @@
 55035,2,Stormforged Belt
 55036,2,Stormforged Boots
 55037,3,Stormforged Shoulders
-55038,2,Stormforged Legguards
+55038,3,Stormforged Legguards
 55039,3,Stormforged Helm
 55040,2,Stormforged Breastplate
 55041,2,Hardened Obsidium Shield
@@ -28954,7 +28955,7 @@
 57386,1,Northshire Abbot's Robe
 57387,1,Spymaster's Legs
 57388,1,Stormwind Infantry Belt
-57389,1,Inkeeper's Longstockings
+57389,1,Innkeeper's Longstockings
 57390,1,Goldshire Heavy Jacket
 57391,1,Pikeman Trousers
 57392,1,Willem's Mitts
@@ -29208,7 +29209,7 @@
 57836,2,Encarmine Spaulders
 57837,2,Biting Greataxe
 57838,2,Searing Dagger
-57839,3,Whelp Slaying Axe
+57839,2,Whelp Slaying Axe
 57840,2,Corroded Helmet
 57842,3,Tower of Theramore
 57843,2,Baroque Shield
@@ -29271,7 +29272,7 @@
 57917,3,Belt of the Still Stream
 57918,3,Sash of Musing
 57919,3,Thatch Eave Vines
-57921,3,Incense Infused Cumberbund
+57921,3,Incense Infused Cummerbund
 57922,3,Belt of the Falling Rain
 57923,3,Hermit's Lamp
 57924,3,Apple-Bent Bough
@@ -30257,10 +30258,10 @@
 59351,4,Legwraps of the Greatest Son
 59352,4,Flash Freeze Gauntlets
 59353,4,Leggings of Consuming Flames
-59355,4,Chimaron Armguards
+59355,4,Chimaeron Armguards
 59356,4,Pauldrons of the Apocalypse
 59359,4,Reinforced Bio-Optic Killshades
-59364,4,Overpowered Chicken Splitter
+59364,3,Overpowered Chicken Splitter
 59367,3,Kickback 5000
 59368,2,Gloves of Compassion
 59369,2,Darktail Belt
@@ -30444,7 +30445,7 @@
 59586,2,Gloves of Unfocused Rage
 59587,2,Fractured Belt
 59591,3,Shield of the Barrens
-59592,3,Suppresser's Wand
+59592,3,Suppressor's Wand
 59593,3,Deathgate Shield
 59598,3,Finely-Tuned Throat Needler
 59599,3,Volatile Thunderstick
@@ -31966,7 +31967,7 @@
 62241,3,Manual of the Planes
 62242,3,Runed Dragonscale
 62243,3,Notched Jawbone
-62244,4,Tattooed Eyeball
+62244,3,Tattooed Eyeball
 62245,3,Silver Inlaid Leaf
 62249,0,Monster - Pvealliance Gun
 62252,1,DEM's Armor Test
@@ -32009,7 +32010,7 @@
 62383,4,Wrap of the Great Turtle
 62384,4,Belt of the Ferocious Wolf
 62385,4,Treads of Malorne
-62386,4,Cord of Raven Queen
+62386,4,Cord of the Raven Queen
 62392,4,Relentless Gladiator's Claymore (Silver)
 62400,0,Monster - Crossbow COT Strat (Alliance)
 62404,3,Spaulders of the Endless Plains
@@ -32279,7 +32280,7 @@
 62967,2,Rohan's Mask
 62968,2,Dawnbringer Legguards
 62970,2,Helm of Misplaced Loyalties
-62971,2,Marjahn's Stand
+62971,2,Marjhan's Stand
 62972,2,Infectis Incher Leggings
 62973,2,Infectis Puffer Gloves
 62974,2,Infectis Scuttler Helm
@@ -32744,7 +32745,7 @@
 63804,3,Dragonscorn Mace
 63805,3,Furybound Waistplate
 63806,3,Ale Soaked Grips
-63807,3,Narkall's Leggings
+63807,3,Narkrall's Leggings
 63808,3,Staff of Draconic Pacification
 63809,2,Legplates of Riven Futures
 63810,2,Heartstone Treads
@@ -33179,9 +33180,9 @@
 64905,3,Bilgewater Shroud
 64906,3,Bilgewater Cape
 64907,3,Bilgewater Mantle
-64908,3,Shroud of Orgimmar
-64909,3,Cape of Orgimmar
-64910,3,Mantle of Orgimmar
+64908,3,Shroud of Orgrimmar
+64909,3,Cape of Orgrimmar
+64910,3,Mantle of Orgrimmar
 64911,3,Darkspear Mantle
 64912,3,Darkspear Cape
 64913,3,Darkspear Shroud
@@ -33286,7 +33287,7 @@
 65023,4,Akmin-Kurai Dominion's Shield
 65024,4,Crul'korak the Lightning's Arc
 65027,4,Pauldrons of the Apocalypse
-65028,4,Chimaron Armguards
+65028,4,Chimaeron Armguards
 65030,4,Leggings of Consuming Flames
 65031,4,Flash Freeze Gauntlets
 65032,4,Legwraps of the Greatest Son
@@ -33893,7 +33894,7 @@
 65837,2,Legplates of Heilopolis
 65838,2,Cartouche-Inscribed Spaulders
 65839,2,Sarcophagus Bracers
-65840,2,Knife the Venomous Asp
+65840,2,Knife of the Venomous Asp
 65841,2,Tomb-Curse Chestplate
 65842,2,Treads of the Starry Obelisk
 65843,2,Brainrot Grips
@@ -34397,7 +34398,7 @@
 67117,3,Woundsealer Spaulders
 67119,3,Thousand Bandage Drape
 67120,3,Mace of Apotheosis
-67121,3,Robes of the Loving Ursine
+67121,3,Chestguard of the Caring Ursine
 67122,3,Helm of Holy Visions
 67123,3,Sinman's Helm of Succor
 67124,3,Zulian Swirling Shield
@@ -34405,6 +34406,7 @@
 67126,3,Roffle's Ruffly Gloves
 67127,3,Bracers of Caustic Purification
 67131,4,Ritssyn's Ruminous Drape
+67132,4,Grips of the Failed Immortal
 67133,4,Dizze's Whirling Robe
 67134,4,Dory's Finery
 67135,4,Morrie's Waywalker Wrap
@@ -34497,7 +34499,7 @@
 67238,3,Terborus's Rotating Bands
 67239,3,Xariona's Spectral Claws
 67240,3,Belt of a Thousand Mouths
-67242,3,Tol'Vir Heriditary Girdle
+67242,3,Tol'Vir Hereditary Girdle
 67243,3,Armagedillo's Tail
 67244,3,Sunderfury's Sundries
 67245,3,Tarvus's Poison-Scarred Boots
@@ -34539,7 +34541,7 @@
 67479,4,Vicious Gladiator's Endgame
 67493,3,Monster -  Sword 1H The Warden's Blade
 67497,2,Art Template Cloth Wrist - Cloth_Cataclysm_B_02 - Blue
-67598,0,Monster - Sword Sword Dancer
+67598,1,Monster - Sword Sword Dancer
 67602,3,Elementium Gutslicer
 67604,1,[DND] Horde Guild Banner - Handheld
 67605,3,Forged Elementium Mindcrusher
@@ -34584,6 +34586,7 @@
 68058,0,Monster - Sword 1H Al'Akir
 68100,2,Art Template Cloth Wrist - Robe_RaidPriest_I - Default
 68127,4,Stormwake the Tempest's Reach
+68128,4,Stormwake the Tempest's Reach
 68129,4,Stormwake the Tempest's Reach
 68130,4,Stormwake the Tempest's Reach
 68131,4,Stormwake the Tempest's Reach
@@ -34626,3 +34629,27 @@
 68609,2,Fine-Toothed Comb
 68611,1,Red Shirt
 68612,2,Scarab Leg Talisman
+68724,0,Broken Barn Door
+68730,0,Broken Barn Door
+68739,3,Darkheart Hacker
+68740,3,Darkheart Hacker
+68743,2,Imbued Infantry Cloak
+68744,2,Imbued Pioneer Cloak
+68745,2,Imbued Primal Belt
+68746,2,Imbued Primal Cape
+68747,2,Imbued Disciple's Sash
+68748,2,Imbued Disciple's Cloak
+68749,2,Imbued Disciple's Bracers
+68750,2,Imbued Pioneer Belt
+68751,2,Imbued Pioneer Bracers
+68752,2,Imbued Infantry Belt
+68753,2,Imbued Infantry Bracers
+68754,2,Imbued Disciple's Boots
+68755,2,Imbued Disciple's Gloves
+68756,2,Imbued Simple Cape
+68757,2,Imbued Pioneer Gloves
+68758,2,Imbued Pioneer Boots
+68759,2,Imbued Gypsy Cloak
+68760,2,Imbued Infantry Gauntlets
+68761,2,Imbued Infantry Boots
+68762,2,Imbued Cadet Cloak
