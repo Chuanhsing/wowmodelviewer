@@ -112,7 +112,7 @@ void Settings_Page1::OnButton(wxCommandEvent &event)
 		mpqList->Clear();
 		langID = -1;
 		getGamePath();
-		searchMPQs();
+		searchMPQs(false);
 		mpqList->Set(mpqArchives);
 	}
 }

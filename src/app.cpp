@@ -316,7 +316,7 @@ namespace {
 	}
 }
 
-void searchMPQs()
+void searchMPQs(bool firstTime)
 {
 	if (mpqArchives.GetCount() > 0)
 		return;
@@ -341,23 +341,33 @@ void searchMPQs()
 		wxT("expansion1-locale-%s.mpq"), wxT("lichking-locale-%s.mpq"), wxT("expansion-locale-%s.mpq"), 
 		wxT("locale-%s.mpq"), wxT("base-%s.mpq")};
 
-	// select avaiable locales
+	// select avaiable locales, auto select user config locale
 	wxArrayString avaiLocales;
 	for (size_t i = 0; i < WXSIZEOF(locales); i++) {
 		if (locales[i].IsEmpty())
 			continue;
-		wxString localePath = gamePath;
-
-		localePath.Append(locales[i]);
-		localePath.Append(wxT("/"));
-		if (wxDir::Exists(localePath)) {
+		wxString localePath = gamePath + wxT("Cache") + SLASH + locales[i];
+		if (wxDir::Exists(localePath))
 			avaiLocales.Add(locales[i]);
-		}
 	}
-	if (avaiLocales.size() == 1) // only 1 locale
+	if (firstTime && avaiLocales.size() == 1) // only 1 locale
 		langName = avaiLocales[0];
-	else
-		langName = wxGetSingleChoice(wxT("Please select a Locale:"), wxT("Locale"), avaiLocales);
+	else {
+		// if user never select a locale, show all locales in data directory
+		avaiLocales.Clear();
+		for (size_t i = 0; i < WXSIZEOF(locales); i++) {
+			if (locales[i].IsEmpty())
+				continue;
+			wxString localePath = gamePath + locales[i];
+
+			if (wxDir::Exists(localePath))
+				avaiLocales.Add(locales[i]);
+		}
+		if (avaiLocales.size() == 1) // only 1 locale
+			langName = avaiLocales[0];
+		else
+			langName = wxGetSingleChoice(wxT("Please select a Locale:"), wxT("Locale"), avaiLocales);
+	}
 
 	// search Partial MPQs
 	wxArrayString baseMpqs;
@@ -608,7 +618,7 @@ bool WowModelViewApp::LoadSettings()
 		gamePath.Append(SLASH);
 
 	if (mpqArchives.GetCount()==0) {
-		searchMPQs();
+		searchMPQs(true);
 	}
 
 	// if we can't search any mpqs

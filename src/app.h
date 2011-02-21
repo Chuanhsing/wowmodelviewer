@@ -203,7 +203,7 @@ public:
 	FILE *LogFile;
 };
 
-void searchMPQs();
+void searchMPQs(bool firstTime);
 
 #endif
 

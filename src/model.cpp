@@ -1137,7 +1137,7 @@ void Model::setLOD(MPQFile &f, int index)
 
 		pass.unlit = (rf.flags & RENDERFLAGS_UNLIT) != 0;
 
-		pass.cull = (rf.flags & RENDERFLAGS_TWOSIDED)==0 && rf.blend==0;
+		pass.cull = (rf.flags & RENDERFLAGS_TWOSIDED) == 0;
 
 		pass.billboard = (rf.flags & RENDERFLAGS_BILLBOARD) != 0;
 
@@ -1567,18 +1567,24 @@ bool ModelRenderPass::init(Model *m)
 		glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR);
 	}
 
-	//if (cull)
-	//	glEnable(GL_CULL_FACE);
+	if (cull) {
+		glEnable(GL_CULL_FACE);
+		//glCullFace(GL_BACK);
+	} else {
+		glDisable(GL_CULL_FACE);
+	}
 
 	// Texture wrapping around the geometry
 	if (swrap)
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	if (twrap)
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	// no writing to the depth buffer.
 	if (noZWrite)
 		glDepthMask(GL_FALSE);
+	else
+		glDepthMask(GL_TRUE);
 
 	// Environmental mapping, material, and effects
 	if (useEnvMap) {
@@ -1611,6 +1617,8 @@ bool ModelRenderPass::init(Model *m)
 	// don't use lighting on the surface
 	if (unlit) {
 		glDisable(GL_LIGHTING);
+	} else {
+		glEnable(GL_LIGHTING);
 	}
 
 	if (blendmode<=1 && ocol.w<1.0f)
