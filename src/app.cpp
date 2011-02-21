@@ -37,17 +37,19 @@ bool WowModelViewApp::OnInit()
 
 	wxImage::AddHandler( new wxPNGHandler);
 
-	wxBitmap bitmap;
-	if (bitmap.LoadFile(wxT("Splash.png"),wxBITMAP_TYPE_PNG) == false){
-		wxMessageBox(wxT("Failed to load Splash Screen.\nPress OK to continue loading WMV."),wxT("Failure"));
-		//return false;		// Used while debugging the splash screen.
-	}else{
-		splash = new wxSplashScreen(bitmap,
-			wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
-			6000, NULL, -1, wxDefaultPosition, wxDefaultSize,
-			 wxBORDER_NONE);
+	if (wxFile::Exists(wxT("Splash.png"))) {
+		wxBitmap bitmap;
+		if (bitmap.LoadFile(wxT("Splash.png"),wxBITMAP_TYPE_PNG) == false){
+			wxMessageBox(wxT("Failed to load Splash Screen.\nPress OK to continue loading WMV."),wxT("Failure"));
+			//return false;		// Used while debugging the splash screen.
+		} else {
+			splash = new wxSplashScreen(bitmap,
+				wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
+				6000, NULL, -1, wxDefaultPosition, wxDefaultSize,
+				wxBORDER_NONE);
+		}
+		wxYield();
 	}
-	wxYield();
 
 	// Error & Logging settings
 #ifndef _DEBUG
