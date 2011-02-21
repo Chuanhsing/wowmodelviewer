@@ -34,8 +34,8 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 			if (mpqArchives[j].AfterLast(SLASH).Len() == strlen("wow-update-xxxxx.mpq")) {
 				SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "base", 0);
 				wxLogMessage(wxT("Appending base patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
-				SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), locales[langID].fn_str(), 0);
-				wxLogMessage(wxT("Appending %s patch %s on %s"), locales[langID].c_str(), mpqArchives[j].c_str(), filename.c_str());
+				SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), langName.fn_str(), 0);
+				wxLogMessage(wxT("Appending %s patch %s on %s"), langName.c_str(), mpqArchives[j].c_str(), filename.c_str());
 			} else if (mpqArchives[j].BeforeLast(SLASH) == filename.BeforeLast(SLASH)) {
 				SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "", 0);
 				wxLogMessage(wxT("Appending patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
@@ -439,7 +439,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 					if (isPartial) {
 						if (line.Lower().StartsWith(wxT("base\\"))) // strip "base\\"
 							line = line.Mid(5);
-						else if (line.StartsWith(locales[langID])) // strip "enus\\"
+						else if (line.StartsWith(langName)) // strip "enus\\"
 							line = line.Mid(5);
 						else
 							continue;

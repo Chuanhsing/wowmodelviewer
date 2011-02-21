@@ -354,11 +354,10 @@ void searchMPQs()
 			avaiLocales.Add(locales[i]);
 		}
 	}
-	wxString sLocale;
 	if (avaiLocales.size() == 1) // only 1 locale
-		sLocale = avaiLocales[0];
+		langName = avaiLocales[0];
 	else
-		sLocale = wxGetSingleChoice(wxT("Please select a Locale:"), wxT("Locale"), avaiLocales);
+		langName = wxGetSingleChoice(wxT("Please select a Locale:"), wxT("Locale"), avaiLocales);
 
 	// search Partial MPQs
 	wxArrayString baseMpqs;
@@ -388,12 +387,12 @@ void searchMPQs()
 		}
 	}
 
-	wxDir::GetAllFiles(gamePath+sLocale, &baseMpqs, wxEmptyString, wxDIR_FILES);
+	wxDir::GetAllFiles(gamePath+langName, &baseMpqs, wxEmptyString, wxDIR_FILES);
 	for (size_t j = 0; j < baseMpqs.size(); j++) {
 		if (baseMpqs[j].Contains(wxT("oldworld")))
 			continue;
 		wxString baseName = wxFileName(baseMpqs[j]).GetFullName();
-		wxString cmpName = wxT("wow-update-")+sLocale;
+		wxString cmpName = wxT("wow-update-")+langName;
 		if (baseName.StartsWith(cmpName) && baseName.AfterLast('.').CmpNoCase(wxT("mpq")) == 0) {
 			bool bFound = false;
 			for(size_t i = 0; i<mpqArchives.size(); i++) {
@@ -450,13 +449,13 @@ void searchMPQs()
 
 	// search base cache locale MPQs
 	wxArrayString baseCacheLocaleMpqs;
-	wxDir::GetAllFiles(gamePath+wxT("Cache")+SLASH+sLocale, &baseCacheLocaleMpqs, wxEmptyString, wxDIR_FILES);
+	wxDir::GetAllFiles(gamePath+wxT("Cache")+SLASH+langName, &baseCacheLocaleMpqs, wxEmptyString, wxDIR_FILES);
 	for (size_t j = 0; j < baseCacheLocaleMpqs.size(); j++) {
 		if (baseCacheLocaleMpqs[j].Contains(wxT("oldworld")))
 			continue;
 		wxString baseName = baseCacheLocaleMpqs[j];
 		wxString fullName = wxFileName(baseName).GetFullName();
-		wxString cmpName = wxT("patch-")+sLocale+wxT("-");
+		wxString cmpName = wxT("patch-")+langName+wxT("-");
 		if (fullName.StartsWith(cmpName) && fullName.AfterLast('.').CmpNoCase(wxT("mpq")) == 0) {
 			bool bFound = false;
 			for(size_t i = 0; i<mpqArchives.size(); i++) {
@@ -500,7 +499,7 @@ void searchMPQs()
 
 	// add locale files
 	for (size_t i = 0; i < WXSIZEOF(locales); i++) {
-		if (locales[i] == sLocale) {
+		if (locales[i] == langName) {
 			wxString localePath = gamePath;
 
 			localePath.Append(locales[i]);
@@ -557,6 +556,7 @@ bool WowModelViewApp::LoadSettings()
 	// Application locale info
 	pConfig->SetPath(wxT("/Locale"));
 	pConfig->Read(wxT("LanguageID"), &langID, -1);
+	pConfig->Read(wxT("LanguageName"), &langName, wxEmptyString);
 	pConfig->Read(wxT("InterfaceID"), &interfaceID, -1);
 
 	// Application settings
@@ -652,6 +652,7 @@ void WowModelViewApp::SaveSettings()
 	
 	pConfig->SetPath(wxT("/Locale"));
 	pConfig->Write(wxT("LanguageID"), langID);
+	pConfig->Write(wxT("LanguageName"), langName);
 	pConfig->Write(wxT("InterfaceID"), interfaceID);
 
 	pConfig->SetPath(wxT("/Settings"));

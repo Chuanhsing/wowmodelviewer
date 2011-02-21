@@ -53,6 +53,7 @@ std::vector<uint32> modelExport_M3_Anims;
 wxArrayString modelExport_M3_AnimNames;
 
 long langID = -1;
+wxString langName;
 long langOffset = -1;
 long interfaceID = -1;
 int ssCounter = 100; // ScreenShot Counter

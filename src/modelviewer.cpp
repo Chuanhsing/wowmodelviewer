@@ -596,7 +596,7 @@ void ModelViewer::InitDatabase()
 		initDB = false;
 		wxLogMessage(wxT("Error: Could not open the Item DB."));
 	}
-	wxString filename = locales[langID]+SLASH+wxT("items.csv");
+	wxString filename = langName+SLASH+wxT("items.csv");
 	if (!wxFile::Exists(filename))
 		filename = locales[0]+SLASH+wxT("items.csv");
 	if (wxFile::Exists(filename)) {
@@ -675,7 +675,7 @@ void ModelViewer::InitDatabase()
 	else
 		setsdb.cleanup(items);
 
-	filename = locales[langID]+SLASH+wxT("npcs.csv");
+	filename = langName+SLASH+wxT("npcs.csv");
 	if(!wxFile::Exists(filename))
 		filename = locales[0]+SLASH+wxT("npcs.csv");
 	if(wxFile::Exists(filename))

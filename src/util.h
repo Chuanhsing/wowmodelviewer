@@ -90,6 +90,7 @@ class UserSkins;
 extern UserSkins& gUserSkins;
 
 extern long langID;
+extern wxString langName;
 extern long langOffset;
 extern long interfaceID;
 extern int ssCounter;
