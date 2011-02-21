@@ -10,6 +10,56 @@
 int globalTime = 0;
 extern ModelViewer *g_modelViewer;
 
+void
+glGetAll()
+{
+	wxLogMessage(_T("GL_ALPHA_TEST: %d"), glIsEnabled(GL_ALPHA_TEST));
+	wxLogMessage(_T("GL_BLEND: %d"), glIsEnabled(GL_BLEND));
+	wxLogMessage(_T("GL_COLOR_MATERIAL: %d"), glIsEnabled(GL_COLOR_MATERIAL));
+	wxLogMessage(_T("GL_CULL_FACE: %d"), glIsEnabled(GL_CULL_FACE));
+	wxLogMessage(_T("GL_DEPTH_TEST: %d"), glIsEnabled(GL_DEPTH_TEST));
+	wxLogMessage(_T("GL_LIGHT0: %d"), glIsEnabled(GL_LIGHT0));
+	wxLogMessage(_T("GL_LIGHT1: %d"), glIsEnabled(GL_LIGHT1));
+	wxLogMessage(_T("GL_LIGHT2: %d"), glIsEnabled(GL_LIGHT2));
+	wxLogMessage(_T("GL_LIGHT3: %d"), glIsEnabled(GL_LIGHT3));
+	wxLogMessage(_T("GL_LIGHTING: %d"), glIsEnabled(GL_LIGHTING));
+	wxLogMessage(_T("GL_TEXTURE_2D: %d"), glIsEnabled(GL_TEXTURE_2D));
+	GLint bled;
+	glGetIntegerv(GL_BLEND_SRC, &bled);
+	wxLogMessage(_T("GL_BLEND_SRC: 0x%x"), bled);
+	glGetIntegerv(GL_BLEND_DST, &bled);
+	wxLogMessage(_T("GL_BLEND_DST: 0x%x"), bled);
+	glGetIntegerv(GL_FRONT_FACE, &bled);
+	wxLogMessage(_T("GL_FRONT_FACE: 0x%x"), bled);
+}
+
+void glInitAll()
+{
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
+	glDisable(GL_COLOR_MATERIAL);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
+	glDisable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHT0);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, Vec4D(1.0f, 1.0f, 1.0f, 1.0f));
+        glLightfv(GL_LIGHT0, GL_AMBIENT, Vec4D(1.0f, 1.0f, 1.0f, 1.0f));
+        glLightfv(GL_LIGHT0, GL_SPECULAR, Vec4D(1.0f, 1.0f, 1.0f, 1.0f));
+	glDisable(GL_LIGHT1);
+	glDisable(GL_LIGHT2);
+	glDisable(GL_LIGHT3);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
+	glBlendFunc(GL_ONE, GL_ZERO);
+	glFrontFace(GL_CCW);
+	//glDepthMask(GL_TRUE);
+	glDepthFunc(GL_NEVER);
+}
+
+
+
 AnimManager::AnimManager(ModelAnimation *anim) {
 	AnimIDSecondary = -1;
 	SecondaryCount = UPPER_BODY_BONES;
