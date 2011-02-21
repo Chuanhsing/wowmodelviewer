@@ -1005,6 +1005,7 @@ void ModelCanvas::Render()
 		glClearColor(vecBGColor.x, vecBGColor.y, vecBGColor.z, 0.0f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
+	// (re)set the view
 	InitView();
 
 	// If masking isn't enabled
@@ -1946,21 +1947,21 @@ void ModelCanvas::LoadBackground(wxString filename)
 		drawAVIBackground = true;
 #endif
 	} else {
-
+		unsigned int format;
 		if (tmp == wxT("bmp"))
-			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_BMP);
+			format = CXIMAGE_FORMAT_BMP;
 		else if (tmp == wxT("tga"))
-			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_TGA);
+			format = CXIMAGE_FORMAT_TGA;
 		else if (tmp == wxT("jpg"))
-			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_JPG);
+			format = CXIMAGE_FORMAT_JPG;
 		else if (tmp == wxT("png"))
-			image = new CxImage(filename.mb_str(), CXIMAGE_FORMAT_PNG);
+			format = CXIMAGE_FORMAT_PNG;
 		else 
 			return;
 
+		image = new CxImage(filename.mb_str(), format);
 		if (image == NULL)
 			return;
-		
 
 		long size = image->GetWidth() * image->GetHeight() * 4;
 		image->Encode2RGBA(buffer, size);

@@ -13,24 +13,29 @@ extern ModelViewer *g_modelViewer;
 void
 glGetAll()
 {
-	wxLogMessage(_T("GL_ALPHA_TEST: %d"), glIsEnabled(GL_ALPHA_TEST));
-	wxLogMessage(_T("GL_BLEND: %d"), glIsEnabled(GL_BLEND));
-	wxLogMessage(_T("GL_COLOR_MATERIAL: %d"), glIsEnabled(GL_COLOR_MATERIAL));
-	wxLogMessage(_T("GL_CULL_FACE: %d"), glIsEnabled(GL_CULL_FACE));
-	wxLogMessage(_T("GL_DEPTH_TEST: %d"), glIsEnabled(GL_DEPTH_TEST));
-	wxLogMessage(_T("GL_LIGHT0: %d"), glIsEnabled(GL_LIGHT0));
-	wxLogMessage(_T("GL_LIGHT1: %d"), glIsEnabled(GL_LIGHT1));
-	wxLogMessage(_T("GL_LIGHT2: %d"), glIsEnabled(GL_LIGHT2));
-	wxLogMessage(_T("GL_LIGHT3: %d"), glIsEnabled(GL_LIGHT3));
-	wxLogMessage(_T("GL_LIGHTING: %d"), glIsEnabled(GL_LIGHTING));
-	wxLogMessage(_T("GL_TEXTURE_2D: %d"), glIsEnabled(GL_TEXTURE_2D));
 	GLint bled;
-	glGetIntegerv(GL_BLEND_SRC, &bled);
-	wxLogMessage(_T("GL_BLEND_SRC: 0x%x"), bled);
-	glGetIntegerv(GL_BLEND_DST, &bled);
-	wxLogMessage(_T("GL_BLEND_DST: 0x%x"), bled);
+	wxLogMessage(wxT("glGetAll Information"));
+	wxLogMessage(wxT("GL_ALPHA_TEST: %d"), glIsEnabled(GL_ALPHA_TEST));
+	wxLogMessage(wxT("GL_BLEND: %d"), glIsEnabled(GL_BLEND));
+	wxLogMessage(wxT("GL_CULL_FACE: %d"), glIsEnabled(GL_CULL_FACE));
 	glGetIntegerv(GL_FRONT_FACE, &bled);
-	wxLogMessage(_T("GL_FRONT_FACE: 0x%x"), bled);
+	if (bled == GL_CW)
+	    wxLogMessage(wxT("glFrontFace: GL_CW"));
+	else if (bled == GL_CCW)
+	    wxLogMessage(wxT("glFrontFace: GL_CCW"));
+	wxLogMessage(wxT("GL_DEPTH_TEST: %d"), glIsEnabled(GL_DEPTH_TEST));
+	wxLogMessage(wxT("GL_DEPTH_WRITEMASK: %d"), glIsEnabled(GL_DEPTH_WRITEMASK));
+	wxLogMessage(wxT("GL_COLOR_MATERIAL: %d"), glIsEnabled(GL_COLOR_MATERIAL));
+	wxLogMessage(wxT("GL_LIGHT0: %d"), glIsEnabled(GL_LIGHT0));
+	wxLogMessage(wxT("GL_LIGHT1: %d"), glIsEnabled(GL_LIGHT1));
+	wxLogMessage(wxT("GL_LIGHT2: %d"), glIsEnabled(GL_LIGHT2));
+	wxLogMessage(wxT("GL_LIGHT3: %d"), glIsEnabled(GL_LIGHT3));
+	wxLogMessage(wxT("GL_LIGHTING: %d"), glIsEnabled(GL_LIGHTING));
+	wxLogMessage(wxT("GL_TEXTURE_2D: %d"), glIsEnabled(GL_TEXTURE_2D));
+	glGetIntegerv(GL_BLEND_SRC, &bled);
+	wxLogMessage(wxT("GL_BLEND_SRC: 0x%x"), bled);
+	glGetIntegerv(GL_BLEND_DST, &bled);
+	wxLogMessage(wxT("GL_BLEND_DST: 0x%x"), bled);
 }
 
 void glInitAll()
@@ -39,7 +44,6 @@ void glInitAll()
 	glDisable(GL_BLEND);
 	glDisable(GL_COLOR_MATERIAL);
 	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_DEPTH_TEST);
@@ -1619,7 +1623,6 @@ bool ModelRenderPass::init(Model *m)
 
 	if (cull) {
 		glEnable(GL_CULL_FACE);
-		//glCullFace(GL_BACK);
 	} else {
 		glDisable(GL_CULL_FACE);
 	}
