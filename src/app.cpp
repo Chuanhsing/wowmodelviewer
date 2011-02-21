@@ -322,17 +322,17 @@ void searchMPQs(bool firstTime)
 {
 	if (mpqArchives.GetCount() > 0)
 		return;
-	//enUS(enGB), koKR, frFR, deDE, zhCN, zhTW, esES, ruRU
-	const int localeSets = 8;
 	const wxString locales[] = {
 		// sets 0
 		wxT("enUS"), wxT("koKR"), wxT("frFR"), wxT("deDE"), 
 		wxT("zhCN"), wxT("zhTW"), wxT("esES"), wxT("ruRU"),
+		wxT("jaJP"), wxT("ptBR"),
 		// sets 1
 		wxT("enGB"), wxEmptyString, wxEmptyString, wxEmptyString, 
-		wxT("enCN"), wxT("enTW"), wxT("esMX"), wxEmptyString
+		wxT("enCN"), wxT("enTW"), wxT("esMX"), wxEmptyString,
+		wxEmptyString, wxEmptyString
 		};
-
+	const int localeSets = WXSIZEOF(locales) / 2;
 	const wxString defaultArchives[] = {wxT("patch-9.mpq"),wxT("patch-8.mpq"),wxT("patch-7.mpq"),wxT("patch-6.mpq"),
 		wxT("patch-5.mpq"),wxT("patch-4.mpq"),wxT("patch-3.mpq"),wxT("patch-2.mpq"),wxT("patch.mpq"),wxT("alternate.mpq"),
 		wxT("expansion3.mpq"),wxT("expansion2.mpq"),wxT("expansion1.mpq"),wxT("lichking.mpq"),wxT("expansion.mpq"),
