@@ -18,3 +18,8 @@ cp /sw/lib/libwx_mac_core-2.8.0.dylib wowmodelviewer.app/Contents/MacOS/
 cp /sw/lib/libwx_mac_gl-2.8.0.dylib wowmodelviewer.app/Contents/MacOS/
 mkdir -p wowmodelviewer.app/Contents/Resources/
 cp ../bin_support/Icons/wmv.icns wowmodelviewer.app/Contents/Resources/
+cp ../bin_support/Splash/Splash_001.png wowmodelviewer.app/Contents/MacOS/
+mkdir -p wowmodelviewer.app/Contents/MacOS/userSettings/
+cp ../bin/userSettings/Skins.txt wowmodelviewer.app/Contents/MacOS/userSettings/
+ver=`grep APP_VERSION modelviewer.h | awk -F'"' '{print $2}' | awk '{print $2}'`
+zip -r wowmv-mac10_6-beta_intel32_$ver wowmodelviewer.app
