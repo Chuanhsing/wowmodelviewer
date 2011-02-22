@@ -127,10 +127,10 @@ static bool is_valid_md5(void * pvMd5)
     unsigned char ByteSum = 0;
     int i;
 
-    for(i = 0; i < 0x10; i++)
+    for(i = 0; i < MD5_DIGEST_SIZE; i++)
         ByteSum |= pbMd5[i];
 
-    return (ByteSum != 0) ? true : false;
+    return ByteSum ? true : false;
 }
 
 static bool decode_base64_key(const char * szKeyBase64, rsa_key * key)
@@ -631,6 +631,7 @@ static DWORD VerifyStrongSignature(
 DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags)
 {
     hash_state md5_state;
+    unsigned char * pFileMd5;
     unsigned char md5[MD5_DIGEST_SIZE];
     TFileEntry * pFileEntry;
     TMPQFile * hf;
@@ -658,8 +659,20 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
         md5_init(&md5_state);
         dwCrc32 = crc32(0, Z_NULL, 0);
 
+        // If we have to verify raw data MD5, do it
+        if(dwFlags & SFILE_VERIFY_RAW_MD5)
+        {
+            if(hf->ha->pHeader->dwRawChunkSize != 0)
+            {
+                dwVerifyResult |= VERIFY_FILE_HAS_RAW_MD5;
+                if(SFileVerifyRawData(hMpq, SFILE_VERIFY_FILE, szFileName) != ERROR_SUCCESS)
+                    dwVerifyResult |= VERIFY_FILE_RAW_MD5_ERROR;
+            }
+        }
+
         // Also turn on sector checksum verification
-        hf->bCheckSectorCRCs = true;
+        if(dwFlags & SFILE_VERIFY_SECTOR_CRC)
+            hf->bCheckSectorCRCs = true;
 
         // Go through entire file and update both CRC32 and MD5
         for(;;)
@@ -669,16 +682,16 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
             if(dwBytesRead == 0)
             {
                 if(GetLastError() == ERROR_CHECKSUM_ERROR)
-                    dwVerifyResult |= VERIFY_SECTOR_CHECKSUM_ERROR;
+                    dwVerifyResult |= VERIFY_FILE_SECTOR_CRC_ERROR;
                 break;
             }
 
             // Update CRC32 value
-            if(dwFlags & MPQ_ATTRIBUTE_CRC32)
+            if(dwFlags & SFILE_VERIFY_FILE_CRC)
                 dwCrc32 = crc32(dwCrc32, Buffer, dwBytesRead);
             
             // Update MD5 value
-            if(dwFlags & MPQ_ATTRIBUTE_MD5)
+            if(dwFlags & SFILE_VERIFY_FILE_MD5)
                 md5_process(&md5_state, Buffer, dwBytesRead);
 
             // Decrement the total size
@@ -686,8 +699,11 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
         }
 
         // If the file has sector checksums, indicate it in the flags
-        if((hf->pFileEntry->dwFlags & MPQ_FILE_SECTOR_CRC) && hf->SectorChksums != NULL && hf->SectorChksums[0] != 0)
-            dwVerifyResult |= VERIFY_SECTORS_HAVE_CHECKSUM;
+        if(dwFlags & SFILE_VERIFY_SECTOR_CRC)
+        {
+            if((hf->pFileEntry->dwFlags & MPQ_FILE_SECTOR_CRC) && hf->SectorChksums != NULL && hf->SectorChksums[0] != 0)
+                dwVerifyResult |= VERIFY_FILE_HAS_SECTOR_CRC;
+        }
 
         // Check if the entire file has been read
         // No point in checking CRC32 and MD5 if not
@@ -698,9 +714,9 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
             if(hf->hfPatchFile == NULL)
             {
                 // Check if the CRC32 matches.
-                if(dwFlags & MPQ_ATTRIBUTE_CRC32)
+                if(dwFlags & SFILE_VERIFY_FILE_CRC)
                 {
-                    // Some files may have their CRC zeroed
+                    // Only check the CRC32 if it is valid
                     if(pFileEntry->dwCrc32 != 0)
                     {
                         dwVerifyResult |= VERIFY_FILE_HAS_CHECKSUM;
@@ -710,15 +726,17 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
                 }
 
                 // Check if MD5 matches
-                if(dwFlags & MPQ_ATTRIBUTE_MD5)
+                if(dwFlags & SFILE_VERIFY_FILE_MD5)
                 {
+                    // Patch files have their MD5 saved in the patch info
+                    pFileMd5 = (hf->pPatchInfo != NULL) ? hf->pPatchInfo->md5 : pFileEntry->md5;
                     md5_done(&md5_state, md5);
 
-                    // Some files have the MD5 zeroed. Don't check MD5 in that case
-                    if(is_valid_md5(pFileEntry->md5))
+                    // Only check the MD5 if it is valid
+                    if(is_valid_md5(pFileMd5))
                     {
                         dwVerifyResult |= VERIFY_FILE_HAS_MD5;
-                        if(memcmp(md5, pFileEntry->md5, MD5_DIGEST_SIZE))
+                        if(memcmp(md5, pFileMd5, MD5_DIGEST_SIZE))
                             dwVerifyResult |= VERIFY_FILE_MD5_ERROR;
                     }
                 }
@@ -745,7 +763,7 @@ DWORD WINAPI SFileVerifyFile(HANDLE hMpq, const char * szFileName, DWORD dwFlags
     return dwVerifyResult;
 }
 
-// Verifies raw data of the archive Only works for MPQs version 4.0 or newer
+// Verifies raw data of the archive Only works for MPQs version 4 or newer
 int WINAPI SFileVerifyRawData(HANDLE hMpq, DWORD dwWhatToVerify, const char * szFileName)
 {
     TMPQArchive * ha = (TMPQArchive *)hMpq;
@@ -802,10 +820,10 @@ int WINAPI SFileVerifyRawData(HANDLE hMpq, DWORD dwWhatToVerify, const char * sz
 
         case SFILE_VERIFY_FILE:
 
-            // Verify a file
+            // Verify parameters
             if(szFileName == NULL || *szFileName == 0)
                 return ERROR_INVALID_PARAMETER;
-            
+
             // Get the offset of a file
             pFileEntry = GetFileEntryLocale(ha, szFileName, lcFileLocale);
             if(pFileEntry == NULL)

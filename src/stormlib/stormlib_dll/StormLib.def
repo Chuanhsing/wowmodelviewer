@@ -23,7 +23,7 @@ EXPORTS
     SFileSetCompactCallback
     SFileCompactArchive
     
-    SFileSetHashTableSize    
+    SFileSetMaxFileCount    
     
     SFileGetAttributes
     SFileSetAttributes
