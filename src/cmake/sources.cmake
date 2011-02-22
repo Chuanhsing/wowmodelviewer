@@ -13,6 +13,7 @@ set(STORM_SOURCES
     stormlib/src/sparse/sparse.cpp
     stormlib/src/FileStream.cpp
     stormlib/src/SBaseCommon.cpp
+	stormlib/src/SBaseDumpData.cpp
 	stormlib/src/SBaseFileTable.cpp
     stormlib/src/SCompression.cpp
     stormlib/src/SFileAddFile.cpp
