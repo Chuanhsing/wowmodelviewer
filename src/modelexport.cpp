@@ -34,9 +34,12 @@ void SaveTexture(wxString fn)
 	else
 		newImage->Save(fn.mb_str(), CXIMAGE_FORMAT_TGA);
 
-	newImage->Destroy();
+	//newImage->Destroy();
+	wxDELETE(newImage);
+	wxDELETEA(pixels);
+
+	// tga files, starcraft II needs 17th bytes as 8
 	if (fn.Last() == 'a') {
-		// starcraft II needs 17 bytes as 8
 		wxFFile f;
 		f.Open(fn, wxT("r+b"));
 		if (f.IsOpened()) {
@@ -46,8 +49,6 @@ void SaveTexture(wxString fn)
 			f.Close();
 		}
 	}
-	wxDELETE(newImage);
-	wxDELETEA(pixels);
 }
 
 // SaveTexture2 Function
@@ -126,9 +127,8 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID = wxEmptyStr
 
 	// Clear data we don't need anymore
 	free(tempbuf);
-	newImage->Destroy();
+	//newImage->Destroy();
 	wxDELETE(newImage);
-	
 }
 
 // Limit a value by a min & a max. The Inc controls by how much to reduce for every run.
