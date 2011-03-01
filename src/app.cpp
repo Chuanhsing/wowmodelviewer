@@ -123,6 +123,11 @@ bool WowModelViewApp::OnInit()
 	}
 	
 	SetTopWindow(frame);
+	/*
+	There is a problem with drawing on surfaces that have previously not been showed.
+	The error was 'GLXBadDrawable'.
+	*/
+	frame->Show(true);
 
 	// Set the icon, different source location for the icon under Linux & Mac
 	wxIcon icon;
@@ -209,7 +214,7 @@ bool WowModelViewApp::OnInit()
 	frame->LoadLayout();
 
 	wxLogMessage(wxT("WoW Model Viewer successfully loaded!\n----\n"));
-	frame->Show(true);
+	
 	if (splash) {
 		splash->Show(false);
 		splash->~wxSplashScreen();

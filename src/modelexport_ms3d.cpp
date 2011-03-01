@@ -7,6 +7,35 @@
 
 //#include "CxImage/ximage.h"
 
+Vec3D FixPivot(Model *m, int index, Vec3D v)
+{
+    int parent = m->bones[index].parent;
+
+    if (parent == -1)
+    {
+		return v;
+	}
+    else
+    {
+        return FixPivot(m, parent, v - FixPivot(m, parent, m->bones[parent].pivot));
+    }
+}
+
+//yet another Quaternion to Euler angles function...
+Vec3D QuatToEuler(const Quaternion rot)
+{
+	float sqw = pow(rot.w, 2.0f);
+    float sqx = pow(rot.x, 2.0f);
+    float sqy = pow(rot.y, 2.0f);
+    float sqz = pow(rot.z, 2.0f);
+
+	float rotxrad = atan2f(2.0f * (rot.y * rot.z + rot.x * -rot.w), (-sqx - sqy + sqz + sqw));
+    float rotyrad = asinf(-2.0f * (rot.x * rot.z - rot.y * -rot.w));
+    float rotzrad = atan2f(2.0f * (rot.x * rot.y + rot.z * -rot.w), (sqx - sqy - sqz + sqw));
+
+    return Vec3D(rotxrad, rotyrad, rotzrad);
+}
+
 // MilkShape 3D
 void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init)
 {
@@ -23,7 +52,8 @@ void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init)
 	ModelData *verts = NULL;
 	GroupData *groups = NULL;
 
-	InitCommon(att, init, verts, groups, numVerts, numGroups, numFaces);
+	//we need the initial position anyway
+	InitCommon(att, true, verts, groups, numVerts, numGroups, numFaces);
 	//wxLogMessage(wxT("Num Verts: %i, Num Faces: %i, Num Groups: %i"), numVerts, numFaces, numGroups);
 	//wxLogMessage(wxT("Vert[0] BoneID: %i, Group[0].m.name = %s"),verts[0].boneid, groups[0].m->name);
 	wxLogMessage(wxT("Init Common Complete."));
@@ -169,105 +199,94 @@ void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init)
 	}
 	wxLogMessage(wxT("Material Data Written."));
 
-#if 0
-	// save some keyframe data
-	float fps = 1.0f;
-	float fCurTime = 0.0f;
-	int totalFrames = 0;
+	if (init)
+	{
+		float fps = 1.0f;
+		float fCurTime = 0.0f;
+		int totalFrames = 0;
 
-	f.Write(reinterpret_cast<char *>(&fps), sizeof(fps));
-	f.Write(reinterpret_cast<char *>(&fCurTime), sizeof(fCurTime));
-	f.Write(reinterpret_cast<char *>(&totalFrames), sizeof(totalFrames));
-	
-	
-	// number of joints
-	unsigned short numJoints = 0; //(unsigned short)m->header.nBones;
+		f.Write(reinterpret_cast<char *>(&fps), sizeof(fps));
+		f.Write(reinterpret_cast<char *>(&fCurTime), sizeof(fCurTime));
+		f.Write(reinterpret_cast<char *>(&totalFrames), sizeof(totalFrames));
+		
+		// number of joints
+		unsigned short numJoints = 0;
 
-	f.Write(reinterpret_cast<char *>(&numJoints), sizeof(numJoints));
-#else
-	// TODO
-	// save some keyframe data
-	float fps = 1.0f; //m->anims[m->anim].playSpeed;
-	float fCurTime = 0.0f;
-	int totalFrames = 0; // (m->anims[m->anim].timeEnd - m->anims[m->anim].timeStart);
+		f.Write(reinterpret_cast<char *>(&numJoints), sizeof(numJoints));
+	}
+	else
+	{
+		float fps = 25.0f;
+		float fCurTime = 0.0f;
+		int totalFrames = ceil((m->anims[m->anim].timeEnd - m->anims[m->anim].timeStart) / 1000.0f * fps);
 
-	f.Write(reinterpret_cast<char *>(&fps), sizeof(fps));
-	f.Write(reinterpret_cast<char *>(&fCurTime), sizeof(fCurTime));
-	f.Write(reinterpret_cast<char *>(&totalFrames), sizeof(totalFrames));
-	
-	// number of joints
+		f.Write(reinterpret_cast<char *>(&fps), sizeof(fps));
+		f.Write(reinterpret_cast<char *>(&fCurTime), sizeof(fCurTime));
+		f.Write(reinterpret_cast<char *>(&totalFrames), sizeof(totalFrames));
+		
+		// number of joints
+		unsigned short numJoints = (unsigned short)m->header.nBones;
 
-	unsigned short numJoints = (unsigned short)m->header.nBones;
+		f.Write(reinterpret_cast<char *>(&numJoints), sizeof(numJoints));
 
-	f.Write(reinterpret_cast<char *>(&numJoints), sizeof(numJoints));
+		for (int i=0; i<numJoints; i++)
+		{
+			ms3d_joint_t joint;
 
-	for (int i=0; i<numJoints; i++) {
-		ms3d_joint_t joint;
+			int parent = m->bones[i].parent;
 
-		joint.flags = 0; // SELECTED
-		memset(joint.name, '\0', sizeof(joint.name));
-		snprintf(joint.name, sizeof(joint.name), "Bone_%i_%i", m->anim, i);
-		memset(joint.parentName, '\0', sizeof(joint.parentName));
+			joint.flags = 0; // SELECTED
+			memset(joint.name, '\0', sizeof(joint.name));
+			snprintf(joint.name, sizeof(joint.name), "Bone_%i", i);
+			memset(joint.parentName, '\0', sizeof(joint.parentName));
+			if (parent != -1) snprintf(joint.parentName, sizeof(joint.parentName), "Bone_%i", parent);
 
-		joint.rotation[0] = 0; // m->bones[i].pivot.x;
-		joint.rotation[1] = 0; // m->bones[i].pivot.y;
-		joint.rotation[2] = 0; // m->bones[i].pivot.z;
+			joint.rotation[0] = 0;
+			joint.rotation[1] = 0;
+			joint.rotation[2] = 0;
 
-		joint.position[0] = m->bones[i].transPivot.x;
-		joint.position[1] = m->bones[i].transPivot.y;
-		joint.position[2] = m->bones[i].transPivot.z;
+			Vec3D p = FixPivot(m, i, m->bones[i].pivot);
+			joint.position[0] = p.x;
+			joint.position[1] = p.y;
+			joint.position[2] = p.z;
 
-		int parent = m->bones[i].parent;
-		if (parent > -1) {
-			snprintf(joint.parentName, sizeof(joint.parentName), "Bone_%i_%i", m->anim, parent);
+			joint.numKeyFramesRot = (unsigned short)m->bones[i].rot.data[m->anim].size();
+			joint.numKeyFramesTrans = (unsigned short)m->bones[i].trans.data[m->anim].size();
 
-			joint.position[0] -= m->bones[parent].transPivot.x;
-			joint.position[1] -= m->bones[parent].transPivot.y;
-			joint.position[2] -= m->bones[parent].transPivot.z;
-		}
+			f.Write(reinterpret_cast<char *>(&joint), sizeof(ms3d_joint_t));
 
-		joint.numKeyFramesRot = 0; //(unsigned short)m->bones[i].rot.data[m->anim].size();
-		joint.numKeyFramesTrans = 0; //(unsigned short)m->bones[i].trans.data[m->anim].size();
-
-		f.Write(reinterpret_cast<char *>(&joint), sizeof(ms3d_joint_t));
-
-		if (joint.numKeyFramesRot > 0) {
-			ms3d_keyframe_rot_t *keyFramesRot = new ms3d_keyframe_rot_t[joint.numKeyFramesRot];
-			for (int j=0; j<joint.numKeyFramesRot; j++) {
-				keyFramesRot[j].time = m->bones[i].rot.times[m->anim][j]; // Error, time in seconds;
-				keyFramesRot[j].rotation[0] = m->bones[i].rot.data[m->anim][j].x;
-				keyFramesRot[j].rotation[1] = m->bones[i].rot.data[m->anim][j].y;
-				keyFramesRot[j].rotation[2] = m->bones[i].rot.data[m->anim][j].z;
-			}
-
-			f.Write(reinterpret_cast<char *>(keyFramesRot), sizeof(ms3d_keyframe_rot_t) * joint.numKeyFramesRot);
-			wxDELETEA(keyFramesRot);
-		}
-
-		if (joint.numKeyFramesTrans > 0) {
-			ms3d_keyframe_pos_t *keyFramesTrans = new ms3d_keyframe_pos_t[joint.numKeyFramesTrans];
-			for (unsigned int j=0; j<joint.numKeyFramesTrans; j++) {
-				keyFramesTrans[j].time = m->bones[i].trans.times[m->anim][j]; // Error,time in seconds;;
-				keyFramesTrans[j].position[0] = m->bones[i].trans.data[m->anim][j].x;
-				keyFramesTrans[j].position[1] = m->bones[i].trans.data[m->anim][j].y;
-				keyFramesTrans[j].position[2] = m->bones[i].trans.data[m->anim][j].z;
-				if (parent > -1) {
-					keyFramesTrans[j].position[0] -= m->bones[parent].transPivot.x;
-					keyFramesTrans[j].position[1] -= m->bones[parent].transPivot.y;
-					keyFramesTrans[j].position[2] -= m->bones[parent].transPivot.z;
-					if (m->bones[parent].trans.data[m->anim].size() > j) {
-						keyFramesTrans[j].position[0] -= m->bones[parent].trans.data[m->anim][j].x;
-						keyFramesTrans[j].position[1] -= m->bones[parent].trans.data[m->anim][j].y;
-						keyFramesTrans[j].position[2] -= m->bones[parent].trans.data[m->anim][j].z;
-					}
+			if (joint.numKeyFramesRot > 0)
+			{
+				ms3d_keyframe_rot_t *keyFramesRot = new ms3d_keyframe_rot_t[joint.numKeyFramesRot];
+				for (unsigned int j=0; j<joint.numKeyFramesRot; j++)
+				{
+					keyFramesRot[j].time = m->bones[i].rot.times[m->anim][j] / 1000.0f;
+					Vec3D euler = QuatToEuler(m->bones[i].rot.data[m->anim][j]);
+					keyFramesRot[j].rotation[0] = euler.x;
+					keyFramesRot[j].rotation[1] = euler.y;
+					keyFramesRot[j].rotation[2] = euler.z;
 				}
+
+				f.Write(reinterpret_cast<char *>(keyFramesRot), sizeof(ms3d_keyframe_rot_t) * joint.numKeyFramesRot);
+				wxDELETEA(keyFramesRot);
 			}
 
-			f.Write(reinterpret_cast<char *>(keyFramesTrans), sizeof(ms3d_keyframe_pos_t) * joint.numKeyFramesTrans);
-			wxDELETEA(keyFramesTrans);
+			if (joint.numKeyFramesTrans > 0)
+			{
+				ms3d_keyframe_pos_t *keyFramesTrans = new ms3d_keyframe_pos_t[joint.numKeyFramesTrans];
+				for (unsigned int j=0; j<joint.numKeyFramesTrans; j++)
+				{
+					keyFramesTrans[j].time = m->bones[i].trans.times[m->anim][j] / 1000.0f;
+					keyFramesTrans[j].position[0] = m->bones[i].trans.data[m->anim][j].x;
+					keyFramesTrans[j].position[1] = m->bones[i].trans.data[m->anim][j].y;
+					keyFramesTrans[j].position[2] = m->bones[i].trans.data[m->anim][j].z;
+				}
+
+				f.Write(reinterpret_cast<char *>(keyFramesTrans), sizeof(ms3d_keyframe_pos_t) * joint.numKeyFramesTrans);
+				wxDELETEA(keyFramesTrans);
+			}
 		}
 	}
-#endif
 	f.Close();
 	wxLogMessage(wxT("Finished Milkshape Export."));
 
