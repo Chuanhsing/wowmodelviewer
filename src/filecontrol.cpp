@@ -308,8 +308,7 @@ void FileControl::Export(wxString val, int select)
 	FILE *hFile = NULL;
 	wxString filename;
 	if (select == 1)
-		filename = wxFileSelector(wxT("Please select your file to export"), 
-			wxGetCwd(), fn.GetName(), fn.GetExt(), fn.GetExt()+wxT(" files (.")+fn.GetExt()+wxT(")|*.")+fn.GetExt());
+		filename = wxFileSelector(wxT("Save..."), wxGetCwd(), fn.GetName(), fn.GetExt(), fn.GetExt().Upper()+wxT(" Files (.")+fn.GetExt().Lower()+wxT(")|*.")+fn.GetExt().Lower());
 	else {
 		filename = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetFullName();
 	}
@@ -336,7 +335,12 @@ void FileControl::ExportPNG(wxString val, wxString suffix)
 	if (tex.w == 0 || tex.h == 0)
 		return;
 
-	wxString temp;
+	wxString filename;
+	filename = wxFileSelector(wxT("Save ") + suffix.Upper() + wxT("..."), wxGetCwd(), fn.GetName(), suffix, suffix.Upper()+wxT(" Files (.")+suffix.Lower()+wxT(")|*.")+suffix.Lower());
+
+	if ( filename.empty() ){
+		filename = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".")+suffix.Lower();
+	}
 
 	unsigned char *tempbuf = (unsigned char*)malloc(tex.w*tex.h*4);
 	tex.getPixels(tempbuf, GL_BGRA_EXT);
@@ -345,12 +349,11 @@ void FileControl::ExportPNG(wxString val, wxString suffix)
 	newImage->AlphaCreate();	// Create the alpha layer
 	newImage->IncreaseBpp(32);	// set image to 32bit 
 	newImage->CreateFromArray(tempbuf, tex.w, tex.h, 32, (tex.w*4), true);
-	temp = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".")+suffix;
 	//wxLogMessage(wxT("Info: Exporting texture to %s..."), temp.c_str());
 	if (suffix == wxT("tga"))
-		newImage->Save(temp.mb_str(), CXIMAGE_FORMAT_TGA);
+		newImage->Save(filename.mb_str(), CXIMAGE_FORMAT_TGA);
 	else
-		newImage->Save(temp.mb_str(), CXIMAGE_FORMAT_PNG);
+		newImage->Save(filename.mb_str(), CXIMAGE_FORMAT_PNG);
 	free(tempbuf);
 	newImage->Destroy();
 	wxDELETE(newImage);
@@ -362,7 +365,7 @@ void FileControl::OnPopupClick(wxCommandEvent &evt)
 	wxString val(data->fn);
 
 	int id = evt.GetId();
-	if (id == ID_FILELIST_EXPORT) { 
+	if (id == ID_FILELIST_SAVE) { 
 		Export(val, 1);
 	} else if (id == ID_FILELIST_PLAY) {
 #ifdef	PLAY_MUSIC
@@ -381,6 +384,10 @@ void FileControl::OnPopupClick(wxCommandEvent &evt)
 		temp = wxGetCwd()+SLASH+wxT("Export")+SLASH+fn.GetName()+wxT(".png");
 	    ScrWindow *sw = new ScrWindow(temp);
 	    sw->Show(true);
+	} else if (id == ID_FILELIST_EXPORT_PNG) {
+		ExportPNG(val, wxT("png"));
+	} else if (id == ID_FILELIST_EXPORT_TGA) {
+		ExportPNG(val, wxT("tga"));
 	}
 }
 
@@ -401,7 +408,7 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 	// Make a menu to show item Info or export it
 	wxMenu infoMenu;
 	infoMenu.SetClientData( data );
-	infoMenu.Append(ID_FILELIST_EXPORT, wxT("&Save..."), wxT("Save this object"));
+	infoMenu.Append(ID_FILELIST_SAVE, wxT("&Save..."), wxT("Save this object"));
 	// TODO: if is music, a Play option
 	wxString temp(tdata->fn);
 	temp.MakeLower();
@@ -413,6 +420,8 @@ void FileControl::OnTreeMenu(wxTreeEvent &event)
 	// if is graphic, a View option
 	if (temp.EndsWith(wxT("blp"))) {
 		infoMenu.Append(ID_FILELIST_VIEW, wxT("&View"), wxT("View this object"));
+		infoMenu.Append(ID_FILELIST_EXPORT_PNG, wxT("&Save as PNG..."), wxT("Save image as a PNG"));
+		infoMenu.Append(ID_FILELIST_EXPORT_TGA, wxT("&Save as TGA..."), wxT("Save image as a TGA"));
 	}
 	infoMenu.AppendSeparator();
 	wxString archive = MPQFile::getArchive(tdata->fn);
