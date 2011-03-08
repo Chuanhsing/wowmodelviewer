@@ -18,7 +18,7 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 
 	if (!SFileOpenArchive(filename.fn_str(), 0, MPQ_OPEN_FORCE_MPQ_V1|MPQ_OPEN_READ_ONLY, &mpq_a )) {
 		int nError = GetLastError();
-		wxLogMessage(wxT("Error opening archive %s, error #: 0x%X"), filename.c_str(), nError);
+		wxLogMessage(wxT("Error opening archive %s, error #: 0x%X"), filename.Mid(gamePath.Len()).c_str(), nError);
 		return;
 	}
 
@@ -33,12 +33,11 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 				continue;
 			if (mpqArchives[j].AfterLast(SLASH).Len() == strlen("wow-update-xxxxx.mpq")) {
 				SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "base", 0);
-				wxLogMessage(wxT("Appending base patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
 				SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), langName.fn_str(), 0);
-				wxLogMessage(wxT("Appending %s patch %s on %s"), langName.c_str(), mpqArchives[j].c_str(), filename.c_str());
+				wxLogMessage(wxT("Appending base & %s patch %s on %s"), langName.c_str(), mpqArchives[j].Mid(gamePath.Len()).c_str(), filename.Mid(gamePath.Len()).c_str());
 			} else if (mpqArchives[j].BeforeLast(SLASH) == filename.BeforeLast(SLASH)) {
 				SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "", 0);
-				wxLogMessage(wxT("Appending patch %s on %s"), mpqArchives[j].c_str(), filename.c_str());
+				wxLogMessage(wxT("Appending patch %s on %s"), mpqArchives[j].Mid(gamePath.Len()).c_str(), filename.Mid(gamePath.Len()).c_str());
 			}
 		}
 	}

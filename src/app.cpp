@@ -127,7 +127,9 @@ bool WowModelViewApp::OnInit()
 	There is a problem with drawing on surfaces that have previously not been showed.
 	The error was 'GLXBadDrawable'.
 	*/
+#ifndef	_WINDOWS
 	frame->Show(true);
+#endif
 
 	// Set the icon, different source location for the icon under Linux & Mac
 	wxIcon icon;
@@ -214,10 +216,13 @@ bool WowModelViewApp::OnInit()
 	frame->LoadLayout();
 
 	wxLogMessage(wxT("WoW Model Viewer successfully loaded!\n----\n"));
+#ifdef	_WINDOWS
+	frame->Show(true);
+#endif
 	
 	if (splash) {
-		splash->Show(false);
-		splash->~wxSplashScreen();
+		//splash->Show(false);
+		//splash->~wxSplashScreen();
 	}
 	
 	return true;
@@ -400,7 +405,7 @@ void searchMPQs(bool firstTime)
 			if (bFound == false)
 				mpqArchives.Add(baseMpqs[j]);
 
-			wxLogMessage(wxT("- Found Partial MPQ archive: %s"), baseMpqs[j].c_str());
+			wxLogMessage(wxT("- Found Partial MPQ archive: %s"), baseMpqs[j].Mid(gamePath.Len()).c_str());
 		}
 	}
 
@@ -426,7 +431,7 @@ void searchMPQs(bool firstTime)
 			if (bFound == false)
 				mpqArchives.Add(baseMpqs[j]);
 
-			wxLogMessage(wxT("- Found Partial MPQ archive: %s"), baseMpqs[j].c_str());
+			wxLogMessage(wxT("- Found Partial MPQ archive: %s"), baseMpqs[j].Mid(gamePath.Len()).c_str());
 		}
 	}
 
@@ -459,7 +464,7 @@ void searchMPQs(bool firstTime)
 			if (bFound == false)
 				mpqArchives.Add(baseName);
 
-			wxLogMessage(wxT("- Found Patch Base MPQ archive: %s"), baseName.c_str());
+			wxLogMessage(wxT("- Found Patch Base MPQ archive: %s"), baseName.Mid(gamePath.Len()).c_str());
 		}
 	}
 	baseCacheMpqs.Clear();
@@ -493,7 +498,7 @@ void searchMPQs(bool firstTime)
 			if (bFound == false)
 				mpqArchives.Add(baseName);
 
-			wxLogMessage(wxT("- Found Patch Base Locale MPQ archive: %s"), baseName.c_str());
+			wxLogMessage(wxT("- Found Patch Base Locale MPQ archive: %s"), baseName.Mid(gamePath.Len()).c_str());
 		}
 	}
 	baseCacheLocaleMpqs.Clear();
@@ -507,7 +512,7 @@ void searchMPQs(bool firstTime)
 			if(baseName.CmpNoCase(defaultArchives[i]) == 0) {
 				mpqArchives.Add(baseMpqs[j]);
 
-				wxLogMessage(wxT("- Found MPQ archive: %s"), baseMpqs[j].c_str());
+				wxLogMessage(wxT("- Found MPQ archive: %s"), baseMpqs[j].Mid(gamePath.Len()).c_str());
 				if (baseName.CmpNoCase(wxT("alternate.mpq")))
 					bAlternate = true;
 			}
