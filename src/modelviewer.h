@@ -218,6 +218,7 @@ public:
 	void UpdateControls();
    
 	void ImportArmoury(wxString strURL);
+	void ImportArmouryBattleNet(wxString strURL);
 	void ModelInfo();
 
 	Vec3D DoSetColor(const Vec3D &defColor);

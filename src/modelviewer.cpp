@@ -3,6 +3,7 @@
 #include "globalvars.h"
 #include "mpq.h"
 #include "exporters.h"
+#include <wx/regex.h>
 
 // default colour values
 const static float def_ambience[4] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -1379,35 +1380,38 @@ wxString ModelViewer::InitMPQArchives()
 	f.close();
 	wxLogMessage(wxT("Loaded Content TOC: v%c.%c%c.%c%c"), toc[0], toc[1], toc[2], toc[3], toc[4]);
 	if (wxString((char *)toc, wxConvUTF8) > wxT("99999")) {		// The 99999 should be updated if the TOC ever gets that high.
-		return wxT("There was a problem reading the TOC number.\nCould not determine WoW version.");
+		wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("There was a problem reading the TOC number.\nAre you sure to quit?"), 
+			wxT("Question"), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+		if (wxID_YES == dial->ShowModal())
+			return wxT("There was a problem reading the TOC number.\nCould not determine WoW version.");
 	}
 
 	wxString info = wxT("WoW Model Viewer is designed to work with the latest version of World of Warcraft.\nYour version is supported, but support will be removed in the near future.\nYou may experience diminished capacity while working with WoW Model Viewer.\nPlease update your World of Warcraft client soon.");
 	// If we support more than 1 TOC version, place the others here.
-	if (strncmp((char*)toc, "30100", 5) == 0){
+	if (strncmp((char*)toc, "30100", 5) == 0) {
 		if (gameVersion != 30100){
-			wxMessageBox(info,wxT("Compatible Version Found."),wxOK);
+			wxMessageBox(info,wxT("Compatible Version v3.01.00 Found."),wxOK);
 			gameVersion = 30100;
 		}
-	}else if (strncmp((char*)toc, "30200", 5) == 0){
+	} else if (strncmp((char*)toc, "30200", 5) == 0) {
 		wxLogMessage(info);
 		if (gameVersion != 30200){
-			wxMessageBox(info,wxT("Compatible Version Found."),wxOK);
+			wxMessageBox(info,wxT("Compatible Version v3.02.00 Found."),wxOK);
 			gameVersion = 30200;
 		}
-	}else if (strncmp((char*)toc, "30300", 5) == 0) {
+	} else if (strncmp((char*)toc, "30300", 5) == 0) {
 		wxLogMessage(info);
 		if (gameVersion != 30300){
-			wxMessageBox(info,wxT("Compatible Version Found."),wxOK);
+			wxMessageBox(info,wxT("Compatible Version v3.03.00 Found."),wxOK);
 			gameVersion = 30300;
 		}
 	// else if not our primary supported edition...
-	}else if (strncmp((char*)toc, "40000", 5) != 0){
+	} else if (strncmp((char*)toc, "40000", 5) != 0) {
 		wxString info = wxT("WoW Model Viewer does not support your version of World of Warcraft.\nPlease update your World of Warcraft client soon.");
 		wxLogMessage(wxT("Notice: ") + info);
 
 		return info;
-	}else{
+	} else {
 		gameVersion = 40000;
 		langOffset = 0;
 	}
@@ -3118,9 +3122,110 @@ void ModelViewer::UpdateControls()
 	modelControl->RefreshModel(canvas->root);
 }
 
+void ModelViewer::ImportArmouryBattleNet(wxString strURL)
+{
+	//http://us.battle.net/wow/en/character/nerzhul/tssarlol/simple
+	wxString strDomain = strURL.Mid(7).BeforeFirst('/');
+	wxString strPage = strURL.Mid(7).Mid(strDomain.Len());
+
+	wxLogMessage(wxT("Attemping to access WoWArmory Page: %s"), wxString(strDomain + strPage).c_str());
+
+	// Get the page from the armoury website
+	wxHTTP http;
+
+	// set the headers
+	http.SetHeader(wxT("User-Agent"), wxT("Mozilla/5.0 (Windows;U;Windows NT 5.1;zh-TW;rv:1.8.1.2) Gecko/20070219 Firefox/2.0.0.12")); 
+	http.SetHeader(wxT("Accept"), wxT("text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"));
+	http.SetHeader(wxT("Accept-Language"), wxT("en-us,en;q=0.5"));
+	http.SetHeader(wxT("Accept-Charset"), wxT("ISO-8859-1,utf-8;q=0.7,*;q=0.7"));
+	http.SetHeader(wxT("Host"), strDomain);
+
+	if (http.Connect(strDomain))
+	{ 
+		// Success
+		wxInputStream *stream = http.GetInputStream(strPage); 
+		if (!stream || !stream->IsOk())
+			return;
+
+		// Make sure there was no error retrieving the page
+		if(http.GetError() == wxPROTO_NOERR) {
+			wxString filename(wxT("temp.xml"));
+			wxFileOutputStream output(filename);
+            stream->Read(output); 
+			output.Close();
+
+			wxTextFile fin(filename);
+			if (fin.Open(filename)) {
+				wxString race = wxT("Human");
+				wxString gender = wxT("Male");
+				wxString strModel = wxT("Character\\") + race + MPQ_SLASH + gender + MPQ_SLASH + race + gender + wxT(".m2");
+				LoadModel(strModel);
+				if (!g_canvas->model)
+					return;
+
+				wxRegEx exSlot;
+				wxString patternSlot = wxT("data-type=\"([0-9]+)\"");
+				exSlot.Compile(patternSlot);
+				wxRegEx exItem;
+				wxString patternItem = wxT("data-item=\"i=([0-9]+)");
+				exItem.Compile(patternItem);
+				long slotID = 0;
+
+				wxString line;
+				for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
+					if (exSlot.Matches(line)) {
+						// Manual correction for slot ID values
+						exSlot.GetMatch(line, 1).ToLong(&slotID);
+						switch (slotID) {
+						case IT_HEAD:		slotID = CS_HEAD; break;
+						case IT_NECK:		slotID = CS_NECK; break;
+						case IT_SHOULDER:	slotID = CS_SHOULDER; break;
+						case IT_SHIRT:		slotID = CS_SHIRT; break;
+						case IT_CHEST:
+						case IT_ROBE:		slotID = CS_CHEST; break;
+						case IT_BELT:		slotID = CS_BELT; break;
+						case IT_PANTS:		slotID = CS_PANTS; break;
+						case IT_BOOTS:		slotID = CS_BOOTS; break;
+						case IT_BRACERS:	slotID = CS_BRACERS; break;
+						case IT_GLOVES:		slotID = CS_GLOVES; break;
+						case IT_LEFTHANDED: slotID = CS_HAND_LEFT; break;
+						case IT_RIGHTHANDED: slotID = CS_HAND_RIGHT; break;
+						case IT_CAPE:		slotID = IT_CAPE; break;
+						case IT_TABARD:		slotID = IT_TABARD; break;
+						case IT_QUIVER:		slotID = IT_QUIVER; break;
+						default: slotID = -1;
+						}
+					} else	if (slotID != -1 && exItem.Matches(line)) {
+						// Item ID
+						long itemID;
+						exItem.GetMatch(line, 1).ToLong(&itemID);
+
+						g_charControl->cd.equipment[slotID] = itemID;
+						slotID = -1;
+					}
+				}
+				fin.Close();
+
+				// Update the model
+				g_charControl->RefreshModel();
+				g_charControl->RefreshEquipment();
+			}
+
+#ifndef _DEBUG
+			wxRemoveFile(filename);
+#endif
+		}
+
+		http.Close();
+		delete stream;
+	}
+}
+
 void ModelViewer::ImportArmoury(wxString strURL)
 {
 	// Format the URL
+	if (strURL.Contains(wxT("battle.net")))
+		return ImportArmouryBattleNet(strURL);
 	wxString strDomain = strURL.BeforeLast(wxT('/')).AfterLast(wxT('/')); // "armory.worldofwarcraft.com"
 	wxString strParam = strURL.AfterLast(wxT('/'));
 	int pos = strParam.Find(wxT("?r="));
@@ -3272,6 +3377,7 @@ void ModelViewer::ImportArmoury(wxString strURL)
 			wxRemoveFile(wxT("temp.xml"));
 #endif
 		}
+		http.Close();
 		delete stream;
 	}
 }
