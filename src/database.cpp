@@ -94,7 +94,7 @@ int CharHairGeosetsDB::getGeosetsFor(unsigned int race, unsigned int gender)
 int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigned int type, unsigned int section, unsigned int npc)
 {
 	int n = 0;
-#if 1 // for worgen female
+#if 0 // for worgen female
 	if (gameVersion >= 40000 && race == WORGEN && gender == FEMALE) { // worgen female
 		wxString fn;
 		switch(type) { // 0: base, 1: face, 2: facial, 3: hair, 4: underwear
@@ -160,7 +160,7 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsigned int type, unsigned int color, unsigned int npc)
 {
 	int n = 0;
-#if 1 // for worgen female
+#if 0 // for worgen female
 	if (gameVersion >= 40000 && race == WORGEN && gender == FEMALE) { // worgen female
 		wxString fn;
 		switch(type) { // 0: base, 1: face, 2: facial, 3: hair, 4: underwear

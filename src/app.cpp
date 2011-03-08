@@ -214,9 +214,8 @@ bool WowModelViewApp::OnInit()
 	
 	if (splash) {
 		// splash will auto closed after 6000ms
-		if (splash->GetTimeout() > 0)
-			splash->Show(false);
-		splash->~wxSplashScreen();
+		// splash->Show(false);
+		// splash->~wxSplashScreen();
 	}
 	
 	return true;

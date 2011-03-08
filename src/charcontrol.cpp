@@ -323,7 +323,7 @@ void CharControl::UpdateModel(Attachment *a)
 		}
 	}
 	cd.maxHairStyle = (int)styles.size();
-#if 1 // for worgen female
+#if 0 // for worgen female
 	if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen 
 		cd.maxHairStyle = 21;
 	}
@@ -783,7 +783,7 @@ void CharControl::RefreshModel()
 	} catch (CharSectionsDB::NotFound) {
 		wxLogMessage(wxT("Assertion base character Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 	}
-#if 1 // for worgen female
+#if 0 // for worgen female
 	if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
 		wxString fn;
 		fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), 0, cd.skinColor);
@@ -821,7 +821,7 @@ void CharControl::RefreshModel()
 			} catch (CharSectionsDB::NotFound) {
 				wxLogMessage(wxT("DBC underwear Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 			}
-#if 1 // for worgen female
+#if 0 // for worgen female
 			if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
 				wxString fn;
 				fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), 0, cd.skinColor);
@@ -842,7 +842,7 @@ void CharControl::RefreshModel()
 		} catch (CharSectionsDB::NotFound) {
 			wxLogMessage(wxT("DBC face Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 		}
-#if 1 // for worgen female
+#if 0 // for worgen female
 		if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
 			wxString fn;
 			fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), cd.faceType, cd.skinColor);
@@ -898,7 +898,7 @@ void CharControl::RefreshModel()
 			}
 		}
 	}
-#if 1 // for worgen female
+#if 0 // for worgen female
 	if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen 
 		for(unsigned int i=1; i<=21; i++) {
 			unsigned int section = i - 1;
@@ -946,7 +946,7 @@ void CharControl::RefreshModel()
 		wxLogMessage(wxT("DBC hair Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 		hairTex = 0;
 	}
-#if 1 // for worgen female
+#if 0 // for worgen female
 	if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
 		wxString fn;
 		fn.Printf(wxT("Character\\Worgen\\Hair00_%02d.blp"), cd.hairColor);
