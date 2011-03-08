@@ -3190,9 +3190,9 @@ void ModelViewer::ImportArmouryBattleNet(wxString strURL)
 						case IT_GLOVES:		slotID = CS_GLOVES; break;
 						case IT_LEFTHANDED: slotID = CS_HAND_LEFT; break;
 						case IT_RIGHTHANDED: slotID = CS_HAND_RIGHT; break;
-						case IT_CAPE:		slotID = IT_CAPE; break;
-						case IT_TABARD:		slotID = IT_TABARD; break;
-						case IT_QUIVER:		slotID = IT_QUIVER; break;
+						case IT_CAPE:		slotID = CS_CAPE; break;
+						case IT_TABARD:		slotID = CS_TABARD; break;
+						case IT_QUIVER:		slotID = CS_QUIVER; break;
 						default: slotID = -1;
 						}
 					} else	if (slotID != -1 && exItem.Matches(line)) {
