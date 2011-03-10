@@ -16503,7 +16503,7 @@
 26449,23553,7,Gamel the Cruel
 26450,22199,7,Ariut
 26451,23553,7,Ragnar Drakkarlund
-26452,20216,7,Leviroth
+26452,20216,1,Leviroth
 26455,14695,6,Moonrest Highborne
 26456,22120,7,Winter's Sister
 26457,26858,6,Diseased Drakkari
@@ -23748,7 +23748,7 @@
 38911,31274,7,Xavier the Huntsman
 38912,30512,4,Ferocious Jungle Vine
 38913,31208,7,Twilight Vanquisher
-38914,2234,9,Sandstone Golem
+38914,2234,4,Sandstone Golem
 38915,31212,7,Hyjal Warden
 38916,31214,9,Sandstone Earthen
 38917,29162,2,Alysra
@@ -24671,7 +24671,7 @@
 40957,32209,10,Warsong Stockpile
 40958,32215,7,Tony Two-Tusk
 40959,1045,7,Den Whomper
-40961,32225,10,Kai'ju Gahz'rilla
+40961,32225,1,Kai'ju Gahz'rilla
 40966,32218,7,Selor
 40967,32219,7,Afran
 40968,32220,7,Andoril
@@ -25933,6 +25933,7 @@
 43239,35301,7,Razgar
 43242,11686,10,Lava Fissure
 43244,169,10,Rocketway Event Bunny (CSA)
+43245,37813,7,Zanzil the Outcast
 43247,33286,7,Redridge Citizen
 43248,33288,7,Big Earl
 43249,33290,7,Dumpy
@@ -26508,7 +26509,7 @@
 44251,33755,7,Alma Deering
 44252,33756,7,Karin
 44256,666,1,Greypaw
-44257,35404,1,Gyreworm
+44257,35404,2,Gyreworm
 44258,33760,1,Colossal Gyreworm
 44260,33451,1,Venomfang Crocolisk
 44261,22255,1,Sharptalon Eagle

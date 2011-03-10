@@ -16733,6 +16733,8 @@
 40472,4,悍勇夢行者纏手
 40473,4,悍勇夢行者護盔
 40475,4,永恆防禦盾
+40480,4,Naxxramas 40 Test God Sword
+40481,4,ICECROWN TEST GOD BP
 40488,4,冰尖權杖
 40489,4,奧核巨杖
 40490,3,死靈術腕甲
@@ -16823,6 +16825,7 @@
 40594,4,緊張肩甲
 40602,4,異變長袍
 40643,4,成就者外袍
+40650,4,LK ARENA TEST WARRIOR BRACERS 213
 40668,2,鈷藍三角盾
 40669,3,淬鍛薩鋼腰帶
 40670,3,薩鋼防衛者
@@ -17933,6 +17936,7 @@
 42766,3,異變尖刺足靴
 42767,3,鼓舞脛甲
 42768,3,不屈保衛者長靴
+42776,0,Monster - Gun PvP Alliance
 42785,2,長毛象肌腱繫腰
 42786,2,達斯查爾鋸狀刃
 42787,2,鐵絨束腕
@@ -18211,6 +18215,7 @@
 43617,1,Monster - Staff Dalaran Blue
 43618,1,Monster - Staff Dalaran Green
 43619,1,Monster - Staff Dalaran Red
+43651,5,Crafty's Pole
 43654,3,曙光密典
 43655,3,生存之書
 43656,3,諸王密典
@@ -18550,6 +18555,7 @@
 44217,3,暗月短匕
 44218,3,暗月處決者
 44219,3,暗月法師杖
+44236,0,Monster - Item Harpoon (2H)
 44239,3,標準配發腿甲
 44240,3,標準配發腿鎧
 44241,3,穢邪說服者
@@ -18712,6 +18718,7 @@
 44696,3,巨人的裹趾
 44697,3,華爾琪法衣
 44703,2,暗鯡魚
+44705,0,Monster - Sword - 1H King Varian Wrynn
 44708,3,德碁的超構造體
 44719,3,狂心麥酒
 44731,2,黯黑薔薇花束
@@ -19244,6 +19251,7 @@
 45893,4,世界蛇面罩
 45894,4,不穩定釋放護腿
 45895,4,血淵腰帶
+45899,1,Monster - 1H Sword - Varian's Blade
 45900,0,Monster - Mace Thorim (Ulduar Raid)
 45927,4,返響裹手
 45928,4,雷神護手
@@ -19551,6 +19559,7 @@
 46313,4,悍勇夜歌頭罩
 46320,4,天穹信使披氅
 46321,4,日微披氅
+46331,3,Conqueror's Terrorblade Boots
 46337,1,史塔特的釣魚桿
 46339,4,彌米倫連發槍
 46340,4,極堅手甲
@@ -21188,6 +21197,7 @@
 49446,2,家僕胸甲
 49448,2,尚未腐化手套
 49449,2,扭轉命運馬褲
+49450,2,Defusing Cinch
 49465,4,黯淡血腥撕裂者
 49466,4,霜鑄頭盔
 49467,4,霜鑄巨盔
@@ -21270,8 +21280,11 @@
 49586,1,吉爾尼斯陷捕者外套
 49588,1,吉爾尼斯盜賊束褲
 49623,5,影之哀傷
+49645,0,Monster - Axe 2H Icecrown Raid (Shadow)
+49657,0,Monster - Mace2H Hammer Horde A02 Obsidian
 49666,4,歐瑪的狂烈鬥士巨刃劍
 49682,4,黑騎士的圓柄短劍
+49689,0,Monster - Axe 1H Northrend B03 Black
 49706,4,Monster - Frostmourne (Arthas Only Special)
 49708,0,Monster - Icecrown Citadel - Skybreaker Dreadblade
 49715,3,永遠可愛的玫瑰
@@ -21342,6 +21355,7 @@
 49853,4,學識泰坦鋼連結
 49854,4,破爛羽毛披肩
 49855,4,寇斯艾茲的鎧甲之握
+49873,0,Monster - Axe 1H Horde D03 Gold (Thrown)
 49888,4,暗影之鋒
 49890,4,死亡冰霜長靴
 49891,4,死紋護腿
@@ -21517,6 +21531,7 @@
 50242,4,黑暗巫會護腿
 50243,4,黑暗巫會長袍
 50244,4,黑暗巫會肩墊
+50248,0,Monster - Sword 1H IcecrownRaid D02
 50262,4,魔化冰川矢擊
 50263,4,鹽與火穗帶
 50264,4,咀嚼皮甲腕甲
@@ -21764,6 +21779,7 @@
 50810,4,破膽
 50811,4,潰爛指衛
 50812,4,泰德朗的久棄長靴
+50815,4,Shadowmourne Monster Offhand
 50819,4,棘織披肩
 50820,4,棘織長褲
 50821,4,棘織頭罩
@@ -22567,6 +22583,7 @@
 51994,3,劇變披風
 51997,3,堅實肩甲
 51998,3,巨力肩甲
+52011,0,Monster - Dreadlord's Blade
 52019,2,大寶的綬帶
 52062,0,Monster - Sword 2H Icecrown Citadel - Valanar
 52252,4,光明使者的外袍
@@ -23028,6 +23045,7 @@
 53959,2,Art Template Mail Head  - Mail_Common_b_02 - Green
 53992,2,Art Template Mail Head  - Mail_Common_b_03 - Blue
 54032,2,Art Template Mail Head  - Mail_Common_c_01 - Blue
+54034,2,Art Template Mail Shoulder  - Mail_Common_c_01 - Blue
 54074,2,Art Template Plate Head - Plate_Common_B_01 - Blue
 54292,1,卡亞羅貿易公司管理階層軟靴
 54293,1,坑道蟲外衣
@@ -23047,6 +23065,8 @@
 54307,1,耐火睡衣袖套
 54308,1,含有毒氣的護腕
 54309,1,毒氣浸潤長靴
+54311,2,Art Template Cloth Boots - Cloth_Old_Set_01 - Red
+54322,2,Art Template Cloth Bracers  - Cloth_Old_Set_01 - Blue
 54333,2,Art Template Cloth Chest - Robe_Common_A_03 - Green
 54441,1,黑色燼絲禮袍
 54451,1,上流社會禮帽
@@ -23122,11 +23142,13 @@
 54683,2,暗色皮甲
 54698,2,典禮皮甲纏腰
 54703,2,泥沼探險者長靴
+54705,1,White Wolf Gloves
 54708,2,典禮皮手套
 54721,2,Art Template Leather Hands - Leather_Common_A_03 - Blue
 54724,3,迅影護腕
 54725,3,迅影手套
 54727,2,旅人長靴
+54760,1,Art Template Mail Legs - Mail_Common_A_02 - Blue
 54774,4,Art Template Mail Wrist - Mail_Common_A_03 - Black
 54784,2,光潔鍊甲外套
 54793,2,Art Template Plate Head  - Plate_Common_C_01 - Rust
@@ -23150,6 +23172,7 @@
 54873,2,銅綠護腿
 54874,2,草環束靴
 54876,3,淬硬黑曜石護肩
+54879,0,Monster - Item Bottle - Black (Broken)
 54881,0,Monster - Dagger Kelsey's Tanto
 54885,3,角鷹獸之力
 54886,3,山嶺巨人之力
@@ -24001,6 +24024,7 @@
 56135,3,陰影癒合護腕
 56137,3,虹吸精華法杖
 56170,0,Monster - Gun Cataclysm B01
+56171,0,Monster - Sword 2H Cataclysm B01 Red
 56208,2,Art Template Plate Belt - Plate_Common_B_01 - Green
 56212,2,Art Template Plate Head - Plate_Common_B_01 - Green
 56217,3,焦黑龍鱗護肩
@@ -24127,6 +24151,7 @@
 56434,3,太陽風披風
 56435,3,午日護腿
 56436,3,癒法軟靴
+56438,3,Book of Origination
 56441,3,莫德古德之刃
 56442,3,被詛咒的斯卡汀外衣
 56443,3,蠻錘騎乘頭盔
@@ -24786,6 +24811,7 @@
 57692,3,QA Test Normalized Sword 2h 85
 57693,3,QA Test Normalized Mace 2h 85
 57694,3,QA Test Normalized Bow 85
+57699,3,QA Test Large Range Bow
 57702,3,QA Test Large Range One-Handed Sword
 57703,3,QA Test Large Range Two-Handed Sword
 57704,3,QA Test Large Range One-Handed Mace
@@ -24835,6 +24861,7 @@
 57873,3,賽特胥的頭盔
 57874,3,象形文字外衣
 57875,3,混沌裹腿
+57892,2,Art Template Cloth Armor - Robe_Common_A_02 - White
 57905,2,Art Template Cloth Pants  - Robe_Common_A_02 - Blue
 57913,3,比奇綠色腰帶
 57914,3,山脈束腰
@@ -24902,6 +24929,7 @@
 58161,3,新雪面具
 58162,3,夏日歌曲裹肩
 58163,3,淨化手套
+58172,0,Monster - Gun Cataclysm B02 Blue
 58190,4,浮動織網
 58191,4,隱形的翅膀
 58192,4,灰毛披風
@@ -24930,6 +24958,7 @@
 58248,1,初學者外衣
 58255,1,瓦爾登領主的禮帽
 58300,2,Art Template Mail Belt  - Mail_Common_B_01 - Purple
+58306,2,Art Template Cloth Hand   - Robe_Common_b_01 - Brown
 58368,2,Art Template Leather Belt  - Leather_Common_B_03 - Blue
 58417,2,Art Template Cloth Legs  - Robe_Common_B_03 - Purple
 58446,2,Art Template Plate Belt  - Plate_Common_B_03 - White
@@ -25666,6 +25695,7 @@
 59593,3,死門之盾
 59598,3,精密調校過的穿喉弩針發射器
 59599,3,烈性噪音棒
+59600,1,Phosphora Fedora
 59601,3,潛水艇船員加重足靴
 59603,3,舵手披氅
 59604,3,潛水艇船員加重足靴
@@ -26208,6 +26238,7 @@
 60829,1,地理大師法杖
 60830,1,魔岩法師護杖
 60846,3,QA Combat Test Hunter Gun No Variance
+60890,0,Monster - Sword 2H Twilight's Hammer Red (Executioner)
 60896,2,守夜人外衣
 60897,2,守夜人長靴
 60899,2,詐欺窄衣
@@ -26337,6 +26368,7 @@
 61221,2,Art Template Mail Head   - Mail_Common_c_01 - Yellow
 61226,2,Art Template Plate Boot  - Plate_Common_B_01 - Purple
 61229,2,Art Template Plate Head  - Plate_Common_B_01 - Purple
+61234,2,Art Template Plate Boot  - Plate_Common_B_02 - Blue
 61239,2,Art Template Plate Shoulder  - Plate_Common_B_02 - Blue
 61240,2,Art Template Plate Wrist  - Plate_Common_B_02 - Blue
 61241,2,Art Template Plate Belt  - Plate_Common_B_02 - Brown
@@ -26347,6 +26379,7 @@
 61246,2,Art Template Plate Legs  - Plate_Common_B_02 - Brown
 61247,2,Art Template Plate Shoulder  - Plate_Common_B_02 - Brown
 61248,2,Art Template Plate Wrist  - Plate_Common_B_02 - Brown
+61258,2,Art Template Plate Boot   - Plate_Common_C_01 - Silver
 61261,2,Art Template Plate Head   - Plate_Common_C_01 - Silver
 61269,2,Art Template Plate Head   - Plate_Common_C_01 - Yellow
 61272,2,Art Template Plate Wrist   - Plate_Common_C_01 - Yellow
@@ -27018,6 +27051,7 @@
 62385,4,瑪洛尼足靴
 62386,4,掠鴉女王之索
 62392,4,無情鬥士巨刃劍(銀)
+62400,0,Monster - Crossbow COT Strat (Alliance)
 62404,3,無盡平原肩甲
 62405,3,不知悔改護腿
 62406,3,骨骼熱疫手套
@@ -27090,6 +27124,7 @@
 62712,2,Art Template Leather Shoulder  - Leather_Cataclysm_B_01 - Purple
 62713,2,Art Template Leather Wrist  - Leather_Cataclysm_B_01 - Purple
 62739,1,PRK Test
+62746,2,Art Template Plate Shoulder - Plate_Cataclysm_B_01 - Black
 62757,2,Art Template Cloth Head  - Robe_Common_C_01 - Blue - UNUSED
 62758,2,Art Template Cloth Robe  - Robe_Common_C_01 - Blue - UNUSED
 62797,0,Monster - Polearm Cataclysm C01
@@ -29126,6 +29161,7 @@
 66488,2,灰暗打擊拳套
 66492,2,灰暗星形飛鏢
 66493,2,灰暗投擲小刀
+66499,2,Somber Healer's Handguards
 66518,2,灰暗錐刺弩
 66525,2,灰暗醫者腕甲
 66543,2,灰暗強弓
@@ -29147,8 +29183,10 @@
 66641,3,薇妮卡的護手
 66660,2,怒氣控制之錘
 66665,2,透亮錐刺弩
+66666,2,Translucent Shooter
 66690,2,透亮強弓
 66700,2,透亮防衛者護足
+66706,2,Translucent Leggings
 66708,2,透亮長矛
 66709,2,透亮長戟
 66710,2,透亮法師法杖
@@ -29493,6 +29531,7 @@
 68182,2,Art Template Plate Legs - RaidDeathKnight_I - Blue
 68194,3,奧格弗林特的激勵錘
 68195,3,巴札蘭之刃
+68418,2,Art Template Cloth Chest - Robe_PVPPriest_C_01 - White
 68515,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_01 - Black
 68518,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_01 - Green
 68574,2,Art Template Plate Wrist - Plate_PVPWarrior_C_01 - Blue
@@ -29634,3 +29673,48 @@
 69258,3,ZG Leather Shoulder 3
 69259,3,ZG Leather Shoulder 1
 69260,4,Monster - Item Dagger (Umbral Shiv)
+69554,4,Pauldrons of Nalorakk
+69555,4,Boots of the Ursine
+69556,4,Armbands of the Bear Spirit
+69557,4,Jungle Striders
+69558,4,Spiritshield Mask
+69560,4,Jan'alai's Spaulders
+69562,4,Boots of Bad Mojo
+69568,4,Shadowmender Wristguards
+69569,4,Shadowtooth Trollskin Breastplate
+69570,4,Waistband of Hexes
+69572,4,Hex Lord's Bloody Cloak
+69573,4,Pauldrons of Sacrifice
+69584,4,Recovered Cloak of Frostheim
+69585,4,Wristwraps of Madness
+69586,4,Two-Toed Moccasins
+69587,4,Chestplate of Hubris
+69588,4,Skullcrusher Warboots
+69589,4,Leggings of Dancing Blades
+69590,4,Mojo-Mender's Gloves
+69591,4,Voodoo Hexblade
+69592,4,Reforged Trollbane
+69593,4,Battleplate of the Amani Empire
+69600,4,Belt of Slithering Serpents
+69601,4,Serpentine Leggings
+69603,4,Breastplate of Serenity
+69604,4,Coils of Hate
+69606,4,Hakkari Loa Drape
+69607,4,Touch of Discord
+69608,4,Deathcharged Wristguards
+69609,4,Bloodlord's Protector
+69614,4,Roaring Mask of Bethekk
+69615,4,Zombie Walker Legguards
+69622,4,The Hexxer's Mask
+69627,4,Zulian Ward
+69630,4,Handguards of the Tormented
+69631,4,Zulian Voodoo Stick
+69632,4,Lost Bag of Whammies
+69633,4,Plunderer's Gauntlets
+69634,4,Fasc's Preserved Sandals
+69636,4,Thekal's Claws
+69637,4,Voodoo Hunting Bow
+69638,4,Arlokk's Claws
+69639,4,Renataki's Soul Slicer
+69643,4,Amani Punisher
+69644,4,Felsteel Reaper
