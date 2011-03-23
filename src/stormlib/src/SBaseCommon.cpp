@@ -792,7 +792,8 @@ int LoadMpqTable(
     LPBYTE pbToRead = (LPBYTE)pvTable;
     int nError = ERROR_SUCCESS;
 
-    // Is the table compressed ?
+    // "interface.MPQ.part" in trial version of World of Warcraft
+    // has block table and hash table compressed.
     if(dwCompressedSize < dwRealSize)
     {
         // Allocate temporary buffer for holding compressed data
@@ -1427,16 +1428,19 @@ void FreeMPQArchive(TMPQArchive *& ha)
             FreeMPQArchive(ha->haPatch);
 
         // Free the file names from the file table
-        for(DWORD i = 0; i < ha->dwFileTableSize; i++)
+        if(ha->pFileTable != NULL)
         {
-            if(ha->pFileTable[i].szFileName != NULL)
-                FREEMEM(ha->pFileTable[i].szFileName);
-            ha->pFileTable[i].szFileName = NULL;
+            for(DWORD i = 0; i < ha->dwFileTableSize; i++)
+            {
+                if(ha->pFileTable[i].szFileName != NULL)
+                    FREEMEM(ha->pFileTable[i].szFileName);
+                ha->pFileTable[i].szFileName = NULL;
+            }
+
+            // Then free all buffers allocated in the archive structure
+            FREEMEM(ha->pFileTable);
         }
 
-        // Then free all buffers allocated in the archive structure
-        if(ha->pFileTable != NULL)
-            FREEMEM(ha->pFileTable);
         if(ha->pHashTable != NULL)
             FREEMEM(ha->pHashTable);
         if(ha->pHetTable != NULL)

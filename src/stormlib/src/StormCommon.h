@@ -116,8 +116,7 @@ void FindFreeMpqSpace(TMPQArchive * ha, ULONGLONG * pMpqPos);
 
 // Functions that load the HET abd BET tables
 int  CreateHashTable(TMPQArchive * ha, DWORD dwHashTableSize);
-int  LoadHashTable(TMPQArchive * ha);
-int  LoadHetTable(TMPQArchive * ha);
+int  LoadAnyHashTable(TMPQArchive * ha);
 int  BuildFileTable(TMPQArchive * ha, ULONGLONG FileSize);
 int  SaveMPQTables(TMPQArchive * ha);
 

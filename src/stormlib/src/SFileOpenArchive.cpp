@@ -281,7 +281,7 @@ bool WINAPI SFileOpenArchive(
 
         // Set the default file flags for (listfile) and (attributes)
         ha->dwFileFlags1 =
-        ha->dwFileFlags2 = MPQ_FILE_ENCRYPTED | MPQ_FILE_COMPRESS |  MPQ_FILE_REPLACEEXISTING;
+        ha->dwFileFlags2 = MPQ_FILE_ENCRYPTED | MPQ_FILE_COMPRESS | MPQ_FILE_REPLACEEXISTING;
 
         // Set the size of file sector
         ha->dwSectorSize = (0x200 << ha->pHeader->wSectorSize);
@@ -290,24 +290,11 @@ bool WINAPI SFileOpenArchive(
         nError = VerifyMpqTablePositions(ha, FileSize);
     }
 
-    // Read the hash table.
-    // "interface.MPQ.part" in trial version of World of Warcraft
-    // has compressed block table and hash table.
+    // Read the hash table. Ignore the result, as hash table is no longer required
+    // Read HET table. Ignore the result, as HET table is no longer required
     if(nError == ERROR_SUCCESS)
     {
-        nError = LoadHashTable(ha);
-    }
-
-    // Read HET table, if present
-    if(nError == ERROR_SUCCESS)
-    {
-        nError = LoadHetTable(ha);
-    }
-
-    // If the MPQ has neither hash or block table, we create a default one
-    if(nError == ERROR_SUCCESS && ha->pHashTable == NULL && ha->pHetTable == NULL)
-    {
-        nError = CreateHashTable(ha, HASH_TABLE_SIZE_DEFAULT);
+        nError = LoadAnyHashTable(ha);
     }
 
     // Now, build the file table. It will be built by combining

@@ -1598,12 +1598,12 @@ int main(void)
 //      nError = TestSectorCompress(MPQ_SECTOR_SIZE);
                                                                                             
     // Test the archive open and close
-    if(nError == ERROR_SUCCESS)
-        nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - Wow/art.MPQ"));
+    if(nError == ERROR_SUCCESS)                     
+//      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm2/expansion1.MPQ"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/wow-update-13202.MPQ"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("2002 - Warcraft III/ProtectedMap_HashTable_FakeValid.w3x"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("2010 - Starcraft II/Installer Tome 1 enGB.MPQE"));
-//      nError = TestArchiveOpenAndClose(MAKE_PATH("1997 - Diablo I/single_0.sv"));
+        nError = TestArchiveOpenAndClose(MAKE_PATH("1997 - Diablo I/DIABDAT_orig.MPQ"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("2004 - World of Warcraft/SoundCache-enUS.MPQ"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("DIABDAT_orig.MPQ"));
 
