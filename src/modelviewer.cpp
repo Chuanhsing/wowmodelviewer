@@ -1405,15 +1405,14 @@ wxString ModelViewer::InitMPQArchives()
 			wxMessageBox(info,wxT("Compatible Version v3.03.00 Found."),wxOK);
 			gameVersion = 30300;
 		}
-	// else if not our primary supported edition...
-	} else if (strncmp((char*)toc, "40000", 5) != 0) {
+	} else if (strncmp((char*)toc, "40000", 5) == 0 || strncmp((char*)toc, "40100", 5) == 0) {
+		gameVersion = 40000;
+		langOffset = 0;
+	} else { // else if not our primary supported edition...
 		wxString info = wxT("WoW Model Viewer does not support your version of World of Warcraft.\nPlease update your World of Warcraft client soon.");
 		wxLogMessage(wxT("Notice: ") + info);
 
 		return info;
-	} else {
-		gameVersion = 40000;
-		langOffset = 0;
 	}
 
 	// log for debug
