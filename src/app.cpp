@@ -328,11 +328,11 @@ void searchMPQs(bool firstTime)
 	const wxString locales[] = {
 		// sets 0
 		wxT("enUS"), wxT("koKR"), wxT("frFR"), wxT("deDE"), 
-		wxT("zhCN"), wxT("zhTW"), wxT("esES"), wxT("ruRU"),
+		wxT("zhCN"), wxT("zhTW"), wxT("esES"), wxT("esMX"), wxT("ruRU"),
 		wxT("jaJP"), wxT("ptBR"),
 		// sets 1
 		wxT("enGB"), wxEmptyString, wxEmptyString, wxEmptyString, 
-		wxT("enCN"), wxT("enTW"), wxT("esMX"), wxEmptyString,
+		wxT("enCN"), wxT("enTW"), wxEmptyString, wxEmptyString, wxEmptyString,
 		wxEmptyString, wxEmptyString
 		};
 	const int localeSets = WXSIZEOF(locales) / 2;

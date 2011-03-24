@@ -599,6 +599,8 @@ void ModelViewer::InitDatabase()
 	}
 	wxString filename = langName+SLASH+wxT("items.csv");
 	if (!wxFile::Exists(filename))
+		DownloadLocaleFiles();
+	if (!wxFile::Exists(filename))
 		filename = locales[0]+SLASH+wxT("items.csv");
 	if (wxFile::Exists(filename)) {
 		items.open(filename);
@@ -2176,9 +2178,11 @@ void ModelViewer::OnLanguage(wxCommandEvent &event)
 			wxT("Korean"),
 			wxT("French"),
 			wxT("German"),
-			wxT("Chinese (Simplified)"),
-			wxT("Chinese (Traditional)"),
-			wxT("Spanish"),
+			wxT("Simplified Chinese"),
+			wxT("Traditional Chinese"),
+			wxT("Spanish (EU)"),
+			wxT("Spanish (Latin American)"),
+			wxT("Russian"),
 		};
 
 		// the arrays should be in sync
@@ -2218,7 +2222,7 @@ Windows 98\\ME\\2000\\XP on 17th December 2006\n\n\
 	info.AddTranslator(wxT("Tigurius (Deutsch)"));
 	info.AddTranslator(wxT("Kurax (Chinese)"));
 
-	info.SetWebSite(wxT("http://www.wowmodelviewer.org/"));
+	info.SetWebSite(wxT("http://wowmodelviewer.googlecode.com/"));
     info.SetCopyright(
 wxString(wxT("World of Warcraft(R) is a Registered trademark of\n\
 Blizzard Entertainment(R). All game assets and content\n\
@@ -2244,19 +2248,54 @@ is (C)2006 Blizzard Entertainment(R). All rights reserved.")));
 	wxAboutBox(info);
 }
 
+void ModelViewer::DownloadLocaleFiles()
+{
+	wxString trunk = wxT("http://wowmodelviewer.googlecode.com/svn/trunk/");
+	wxString lang;
+	if (langName == "enGB")
+		lang = wxT("enUS");
+
+	wxString msg = wxT("Would you like to download ") + langName + wxT(" locale files?");
+	if (wxMessageBox(msg, wxT("Update Locale Files"), wxYES_NO) == wxYES) {
+		wxString csvs[] = {wxT("items.csv"), wxT("npcs.csv")};
+		if (!wxDirExists(langName))
+			wxMkdir(langName);
+		for(int i=0; i<WXSIZEOF(csvs); i++) {
+			wxString items_csv = trunk + wxT("bin/") + lang + wxT("/") + csvs[i];
+			wxURL items_url(items_csv);
+			if(items_url.GetError() == wxURL_NOERR) {
+				wxInputStream *stream = items_url.GetInputStream();
+				if (stream) {
+					wxFFileOutputStream f(langName + SLASH + csvs[i], wxT("w+b"));
+					wxString data;
+					char buffer[1024];
+					while(!stream->Eof()) {
+						stream->Read(buffer, sizeof(buffer));
+						f.Write(buffer, stream->LastRead());
+					}
+					delete stream;
+					f.Close();
+				}
+			}
+		}
+	}
+}
+
 void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 {
-	wxURL url(wxT("http://wowmodelviewer.googlecode.com/svn/trunk/latest.txt"));
+	wxString trunk = wxT("http://wowmodelviewer.googlecode.com/svn/trunk/");
+	DownloadLocaleFiles();
 
-	if(url.GetError() == wxURL_NOERR)   {
+	wxURL url(wxT(trunk + "latest.txt"));
+	if(url.GetError() == wxURL_NOERR) {
 		wxInputStream *stream = url.GetInputStream();
 		
 		// here, just for example, I read 1024 bytes. You should read what you need...
 		char buffer[1024];
-		stream->Read(&buffer, 1024);
+		stream->Read(&buffer, sizeof(buffer));
 		
 		// Sort the data
-		wxString data(wxString(buffer, wxConvUTF8));
+		wxString data(buffer, wxConvUTF8);
 		wxString version = data.BeforeFirst(10);
 		wxString downloadURL = data.AfterLast(10);
 		int Compare = (int)version.find(wxString(APP_VERSION));
@@ -2267,11 +2306,8 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 		if (Compare == 0) {
 			wxMessageBox(wxT("You have the most up-to-date version."), wxT("Update Check"));
 		} else {
-			wxString msg = wxT("The most current version is: ");
-			msg.Append(version);
-			msg.Append(wxT("\nWould you like to go to the download page?"));
-			int answer = wxMessageBox(msg, wxT("Update Check"), wxYES_NO, this);
-			if (answer == wxYES)
+			wxString msg = wxT("The most current version is: ") + version + wxT("\nWould you like to go to the download page?");
+			if (wxMessageBox(msg, wxT("Update Check"), wxYES_NO, this) == wxYES)
 				wxLaunchDefaultBrowser(wxString(downloadURL.ToUTF8(), wxConvUTF8));
 		}
 
@@ -2281,7 +2317,7 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 
 		delete stream;
 	}else{
-		wxMessageBox(wxT("Error retrieving update information.\nPlease try again later."),wxT("Update Error"));
+		wxMessageBox(wxT("Error retrieving update information.\nPlease try again later."), wxT("Update Error"));
 	}
 }
 

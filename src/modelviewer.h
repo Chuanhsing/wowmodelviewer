@@ -50,7 +50,7 @@
 
 // defines
 #define APP_TITLE wxT("World of Warcraft Model Viewer")
-#define APP_VERSION wxT("v0.7.0.1 r530")			// Revision number should match the revision number on GoogleCode.
+#define APP_VERSION wxT("v0.7.0.1 r541")			// Revision number should match the revision number on GoogleCode.
 #define APP_BUILDNAME wxT("Gnome Punter")		// Fun thing for developers to play with. Should change with each Main Release. (Not counting DEV WORK editions)
 /*
 	--==List of Build Name ideas==--	(Feel free to add!)
@@ -209,6 +209,7 @@ public:
 	void OnBackground(wxCommandEvent &event);
 	void OnLanguage(wxCommandEvent &event);
 	void OnAbout(wxCommandEvent &event);
+	void ModelViewer::DownloadLocaleFiles();
 	void OnCheckForUpdate(wxCommandEvent &event);
 	void OnCanvasSize(wxCommandEvent &event);
 	void OnTest(wxCommandEvent &event);
