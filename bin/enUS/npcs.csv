@@ -7752,7 +7752,7 @@
 14488,5782,7,Roloch
 14489,9790,6,Scourge Archer
 14490,14528,1,Rippa
-14491,3186,1,Kurmokk
+14491,3188,1,Kurmokk
 14492,7232,7,Verifonix
 14494,14545,6,Eris Havenfire
 14495,169,10,Invisible Trigger One
@@ -23407,6 +23407,7 @@
 37991,30878,7,Ikfirus the Vile
 37992,30879,7,Tortunok
 37993,30880,7,Gerardo the Suave
+37995,20570,10,Raptor Rope Bunny
 37996,30859,7,Ebon Champion
 37997,30882,7,Yili
 37998,30883,7,Talan Moonstrike
@@ -23503,7 +23504,7 @@
 38240,31101,7,Damsel of the North
 38241,6189,1,Squawky
 38242,30960,7,Nekali
-38243,30957,7,Zen'Tabra
+38243,31734,7,Zen'tabra
 38244,30942,7,Legati
 38245,30959,7,Tunari
 38246,30941,7,Soratha
@@ -23534,6 +23535,7 @@
 38295,31016,7,Junior Detective
 38300,4036,7,Spitescale Wavethrasher
 38301,31017,7,Spitescale Siren
+38302,985,7,Manifestation of the Sea Witch
 38305,31045,1,Gorishi Fledgling Colossus
 38306,31019,7,Zar'jira
 38307,31481,4,Gormashh
@@ -23585,8 +23587,11 @@
 38420,24812,6,Vile Abomination
 38421,169,10,Nightmare Cloud
 38422,23258,10,Shock Vortex
+38423,36866,7,Zuni
 38424,29757,9,Emberstone Cannon
 38425,30717,7,Freed Emberstone Villager
+38427,1529,11,Serpent Ward
+38428,30763,11,Healing Stream Totem DCCXLII
 38429,30844,6,Nightmare Portal (Pre-effect)
 38430,30844,6,Nightmare Portal
 38432,31090,7,Megs Dreadshredder
@@ -23599,6 +23604,7 @@
 38448,31674,10,Faceless of the Deep
 38450,29038,10,Faceless of the Deep Void Zone
 38451,26767,10,Ball of Inferno Flame
+38452,20570,10,Sea Witch Channel Bunny
 38453,31094,1,Arcturis
 38454,31095,10,Kinetic Bomb
 38456,31096,10,Frozen Orb
@@ -23632,6 +23638,7 @@
 38535,31113,7,Kelsey Steelspark
 38537,30714,7,High Executor Crenshaw
 38540,31114,1,Captured Riding Bat
+38542,31247,10,Fire of the Seas
 38548,1126,10,Vile Gas Stalker
 38551,31097,7,Alrin the Agile
 38554,30612,10,Dead Taurajo Refugee
@@ -23759,11 +23766,14 @@
 38925,31265,7,Sedrick Calston
 38926,31216,7,Twilight Flamecaller
 38927,31217,7,Mazoga
+38931,36864,7,Zuni
+38932,36865,7,Zuni
 38933,9905,10,Briny Sea Cucumber
 38934,34443,7,Barrow Deeps Watcher
 38936,22903,7,Lieutenant Sanders' Noose
 38937,15397,7,Vile Fin Tadpole
 38938,32906,7,Vision of Garrosh Hellscream
+38939,31220,7,Vision of Thrall
 38940,6077,7,Deviate Crone
 38941,6112,7,Three-Tooth
 38942,30165,4,Merciless Jungle Vine
@@ -23813,6 +23823,7 @@
 39047,4607,4,Agitated Fire Spirit
 39048,20365,6,Sylvanas' Lamenter
 39049,31275,1,Plagued Bruin
+39051,30760,11,Mana Stream Totem
 39055,31306,7,Gavan Grayfeather
 39061,31288,7,Meatface
 39062,31289,7,Darkspear Jailor
@@ -24315,6 +24326,7 @@
 40202,11686,10,Dust Cloud Stalker
 40219,32248,1,Ravenous Thresher
 40220,32210,10,Mysterious Device
+40222,31725,1,Scout Bat
 40223,32070,1,Speckled Sea Turtle
 40226,6892,7,Pratt McGrubben 4.x
 40227,31728,7,Felice
@@ -24731,6 +24743,7 @@
 41048,19754,7,Booby-Trapped Bait
 41050,32310,7,Sira'kess Tide Priestess
 41051,17035,10,Bait Bunny
+41052,23408,9,Remote Observation Bot
 41053,32279,7,Ryan Mills
 41054,32277,7,Ol' Irongoat
 41055,30039,10,Chaos Portal
@@ -29180,13 +29193,21 @@
 49968,36798,7,Lareth Beld
 49995,1141,8,Redridge Rat
 49996,328,8,Mountain Cottontail
+49997,36789,7,Den'chulu
+49998,36861,7,Gusini
 49999,328,8,Grasslands Cottontail
 50000,36944,8,Swamp Moth
+50001,36858,7,Parata
+50002,36806,7,Bomsanchu
 50003,36944,8,Tainted Moth
+50004,36860,7,Jamai
+50006,36857,7,Yeniss
 50007,36950,7,Derithela
 50010,36949,7,Alaressa
+50011,36793,7,Cona
 50012,36947,7,Blood Knight Argaron
 50013,36946,7,Matron Ismara
+50015,36859,7,Munalti
 50016,36945,7,Pathstalker Arpalir
 50017,36951,7,Summoner Durael
 50018,36954,7,Tarlhir
@@ -29348,10 +29369,11 @@
 50479,36583,8,Lizard Hatchling
 50480,37087,7,Isabel Jones
 50481,4268,8,Rock Viper
+50482,37088,7,Marith Lazuria
 50483,37022,7,Brave Tuho
 50485,1141,8,Carrion Rat
 50487,2536,8,Forest Spiderling
-50488,37020,7,Stoneguard Nargol
+50488,37020,7,Stone Guard Nargol
 50490,2177,8,Locust
 50491,6297,8,Mac Frog
 50496,36944,8,Oasis Moth
@@ -29534,6 +29556,7 @@
 51624,1126,10,Vanessa Anchor Bunny JMF
 51632,28435,12,Tiny Flamefly
 51648,35111,7,Tabat
+51649,37527,12,Moonkin Hatchling
 51661,10133,1,Tsul'Kalu
 51662,37613,1,Mahamba
 51663,37615,1,Pogeyan
@@ -29559,7 +29582,9 @@
 52030,37720,7,Liliana Emberfrost
 52031,37721,7,Sarana Damir
 52032,37722,7,Sinzi Sparkscribe
+52033,37723,7,Rogoc
 52034,37724,7,Togar
+52036,37725,7,Galra
 52037,37726,7,Zulna
 52062,11686,10,Zanzil's Toxic Gas
 52063,36323,4,Ahti
@@ -29616,9 +29641,15 @@
 52608,38023,6,Twisted Shadow
 52633,38002,1,Lava Burster
 52638,26466,1,Amani Kidnapper
+52640,37996,7,Rolf Karner
+52641,37997,7,Layna Karner
 52648,38033,1,zzTest Spawn - Aranae Spinner
 52649,38027,4,Millagazor
+52697,26,12,Greedy Kobold
+52809,38047,7,Blax Bottlerocket
 52820,30180,1,Helpful Jungle Monkey
+52831,37712,12,Winterspring Cub
 52925,38086,7,Witch Doctor T'wansi
 52933,38087,7,Blood Guard Hakkuz
 52938,38092,7,Darkspear Siame Quashi
+53006,4590,11,Spirit Link Totem

@@ -18215,7 +18215,7 @@
 43617,1,Monster - Staff Dalaran Blue
 43618,1,Monster - Staff Dalaran Green
 43619,1,Monster - Staff Dalaran Red
-43651,5,Crafty's Pole
+43651,5,卡芙緹的釣竿
 43654,3,曙光密典
 43655,3,生存之書
 43656,3,諸王密典
@@ -19559,7 +19559,7 @@
 46313,4,悍勇夜歌頭罩
 46320,4,天穹信使披氅
 46321,4,日微披氅
-46331,3,Conqueror's Terrorblade Boots
+46331,3,征服者懼刃長靴
 46337,1,史塔特的釣魚桿
 46339,4,彌米倫連發槍
 46340,4,極堅手甲
@@ -21355,7 +21355,7 @@
 49853,4,學識泰坦鋼連結
 49854,4,破爛羽毛披肩
 49855,4,寇斯艾茲的鎧甲之握
-49873,0,Monster - Axe 1H Horde D03 Gold (Thrown)
+49873,0,Monster - Axe 1H Horde D03 Gold (Thrown).
 49888,4,暗影之鋒
 49890,4,死亡冰霜長靴
 49891,4,死紋護腿
@@ -21779,7 +21779,7 @@
 50810,4,破膽
 50811,4,潰爛指衛
 50812,4,泰德朗的久棄長靴
-50815,4,Shadowmourne Monster Offhand
+50815,4,影之哀傷怪物副手
 50819,4,棘織披肩
 50820,4,棘織長褲
 50821,4,棘織頭罩
@@ -23142,7 +23142,7 @@
 54683,2,暗色皮甲
 54698,2,典禮皮甲纏腰
 54703,2,泥沼探險者長靴
-54705,1,White Wolf Gloves
+54705,1,白狼手套
 54708,2,典禮皮手套
 54721,2,Art Template Leather Hands - Leather_Common_A_03 - Blue
 54724,3,迅影護腕
@@ -29678,13 +29678,27 @@
 69556,4,Armbands of the Bear Spirit
 69557,4,Jungle Striders
 69558,4,Spiritshield Mask
+69559,4,Amani'shi Belt
 69560,4,Jan'alai's Spaulders
+69561,4,Hawkscale Waistguard
 69562,4,Boots of Bad Mojo
+69564,4,The Savager's Mask
+69565,4,Breastplate of Primal Fury
+69567,4,Wristwraps of Departed Spirits
 69568,4,Shadowmender Wristguards
 69569,4,Shadowtooth Trollskin Breastplate
 69570,4,Waistband of Hexes
 69572,4,Hex Lord's Bloody Cloak
 69573,4,Pauldrons of Sacrifice
+69574,4,Tusked Shoulderpads
+69575,4,Mace of the Sacrificed
+69576,4,Headdress of Sharpened Vision
+69577,4,Collar of Bones
+69578,4,Hexing Robes
+69579,4,Amani Headdress
+69580,4,Mask of Restless Spirits
+69581,4,Amani Scepter of Rites
+69583,4,Legguards of the Unforgiving
 69584,4,Recovered Cloak of Frostheim
 69585,4,Wristwraps of Madness
 69586,4,Two-Toed Moccasins
@@ -29695,6 +29709,12 @@
 69591,4,Voodoo Hexblade
 69592,4,Reforged Trollbane
 69593,4,Battleplate of the Amani Empire
+69594,4,T'wansi's Handwraps
+69595,4,Fetish Greaves
+69596,4,Voodoo Hunting Bow
+69597,4,Zulian Throwing Axe
+69598,4,Robes of Dissention
+69599,4,Pauldrons of Ambition
 69600,4,Belt of Slithering Serpents
 69601,4,Serpentine Leggings
 69603,4,Breastplate of Serenity
@@ -29703,10 +29723,25 @@
 69607,4,Touch of Discord
 69608,4,Deathcharged Wristguards
 69609,4,Bloodlord's Protector
+69611,4,Sash of Anguish
+69612,4,Claw-Fringe Mantle
+69613,4,Leggings of the Pride
 69614,4,Roaring Mask of Bethekk
 69615,4,Zombie Walker Legguards
+69616,4,Spiritbinder Spaulders
+69617,4,Plumed Medicine Helm
+69618,4,Zulian Slasher
+69619,4,Bone Plate Handguards
+69620,4,Twinblade of the Hakkari
+69621,4,Twinblade of the Hakkari
 69622,4,The Hexxer's Mask
+69623,4,Vestments of the Soulflayer
+69624,4,Legacy of Arlokk
+69625,4,Mandokir's Tribute
+69626,4,Jin'do's Verdict
 69627,4,Zulian Ward
+69628,4,Jeklik's Smasher
+69629,4,Shield of the Blood God
 69630,4,Handguards of the Tormented
 69631,4,Zulian Voodoo Stick
 69632,4,Lost Bag of Whammies
@@ -29716,5 +29751,14 @@
 69637,4,Voodoo Hunting Bow
 69638,4,Arlokk's Claws
 69639,4,Renataki's Soul Slicer
-69643,4,Amani Punisher
-69644,4,Felsteel Reaper
+69640,4,Kilt of Forgotten Rites
+69641,4,Troll Skull Chestplate
+69643,4,阿曼尼懲處錘
+69644,4,魔鋼收割斧
+69764,4,Extinct Turtle Shell
+69766,4,冰霜領主戰爭披風
+69767,4,冰霜領主戰爭罩氅
+69768,4,深冬之寒罩氅
+69769,4,嚴寒之風披風
+69770,4,冰縛披風
+69771,4,艾胡恩的冰霜鐮刀
