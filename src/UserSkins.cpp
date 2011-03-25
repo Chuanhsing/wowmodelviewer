@@ -24,6 +24,7 @@ static bool readline(std::istream& in, std::string& buf, size_t nr, bool skipEmp
 
 void UserSkins::LoadFile(const wxString &filename)
 {
+	// FIXME: ifstream is not compitable with multibyte path name
 	std::ifstream in(filename.fn_str());
 	if (!in.is_open()) {
 		wxLogMessage(wxT("Failed to open '%s' while loading user skins"), filename.c_str());

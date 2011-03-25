@@ -256,6 +256,7 @@ static void WriteMesh(const ExportData &data, wxString filename)
 
 static void WriteMaterial(const ExportData &data, wxString filename) 
 {
+	// FIXME: ofstream is not compitable with multibyte path name
 	ofstream f(filename.fn_str(), ios::trunc);
 	if (!f.good())
 		return;
@@ -292,6 +293,7 @@ static void WriteMaterial(const ExportData &data, wxString filename)
 
 static void WriteSkeleton(const ExportData &data, wxString filename) 
 {
+	// FIXME: ofstream is not compitable with multibyte path name
 	ofstream f(filename.fn_str(), ios::trunc);
 	if (!f.good())
 		return;

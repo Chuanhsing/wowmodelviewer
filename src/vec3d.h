@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <wx/txtstrm.h>
 		   
 #define PI (3.141592653589793238462643383279502884197169399375105820974944592307816)
 #define PIHALF (PI/2.0)
@@ -129,6 +130,12 @@ public:
 	}
 
 	friend std::ostream& operator<<(std::ostream& out, Vec3D& v)
+	{
+		out << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+		return out;
+	}
+
+	friend wxTextOutputStream& operator<<(wxTextOutputStream& out, Vec3D& v)
 	{
 		out << "(" << v.x << ", " << v.y << ", " << v.z << ")";
 		return out;

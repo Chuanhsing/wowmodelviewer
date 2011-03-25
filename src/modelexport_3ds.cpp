@@ -19,7 +19,6 @@ void Export3DS_M2(Attachment *att, Model *m, const char *fn, bool init)
 	if (!m)
 		return;
 
-	//ofstream f(fn, ios::out | ios::binary | ios::trunc);
 	wxFFileOutputStream f(wxString(fn, wxConvUTF8), wxT("w+b"));
 
 	if (!f.IsOk()) {

@@ -1305,6 +1305,7 @@ bool WriteLWScene(LWScene *SceneData){
 
 	wxString SceneName = SceneData->FilePath + SceneData->FileName;
 
+	// FIXME: ofstream is not compitable with multibyte path name
 	ofstream fs(SceneName.fn_str(), ios_base::out | ios_base::trunc);
 	if (!fs.is_open()) {
 		wxMessageBox(wxT("Unable to open the scene file for exporting."),wxT("Scene Export Failure"));

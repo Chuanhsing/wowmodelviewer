@@ -1,4 +1,5 @@
 #include <wx/wfstream.h>
+#include <wx/txtstrm.h>
 #include <math.h>
 
 #include "globalvars.h"
@@ -10,13 +11,15 @@
 void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 {
 	// Open file
-	ofstream f(fn.fn_str(), ios_base::out | ios_base::trunc);
+	wxFFileOutputStream fs (fn);
 
-	if (!f.is_open()) {
+	if (!fs.IsOk()) {
 		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export model."), fn.c_str());
 		return;
 	}
-	LogExportData(wxT("OBJ"),m->modelname,wxString(fn, wxConvUTF8));
+	wxTextOutputStream f (fs);
+
+	LogExportData(wxT("OBJ"), m->modelname, fn);
 
 	unsigned short numVerts = 0;
 	unsigned short numGroups = 0;
@@ -186,7 +189,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 	f << "# " << triangles_total << " triangles total" << endl << endl;
 	
 	// Close file
-	f.close();
+	fs.Close();
 }
 
 void ExportOBJ_WMO(WMO *m, wxString file)

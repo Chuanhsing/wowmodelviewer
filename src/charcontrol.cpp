@@ -6,6 +6,7 @@
 #include "mpq.h"
 #include "globalvars.h"
 #include "CxImage/ximage.h"
+#include <wx/txtstrm.h>
 
 int slotOrder[] = {	
 	CS_SHIRT,
@@ -2699,7 +2700,10 @@ void CharDetails::save(wxString fn, TabardDetails *td)
 {
 	// TODO: save/load as xml?
 	// wx/xml/xml.h says the api will change, do not use etc etc.
-	ofstream f(fn.fn_str(), ios_base::out|ios_base::trunc);
+	wxFFileOutputStream output( fn );
+    wxTextOutputStream f( output );
+	if (!output.IsOk())
+		return;
 	f << race << " " << gender << endl;
 	f << skinColor << " " << faceType << " " << hairColor << " " << hairStyle << " " << facialHair << " " << facialColor << endl;
 	for (int i=0; i<NUM_CHAR_SLOTS; i++) {
@@ -2710,7 +2714,7 @@ void CharDetails::save(wxString fn, TabardDetails *td)
 	if (equipment[CS_TABARD] == 5976) {
 		f << td->Background << " " << td->Border << " " << td->BorderColor << " " << td->Icon << " " << td->IconColor << endl;
 	}
-	f.close();
+	output.Close();
 }
 
 bool CharDetails::load(wxString fn, TabardDetails *td)
@@ -2722,7 +2726,11 @@ bool CharDetails::load(wxString fn, TabardDetails *td)
 	// for (int i=0; i<NUM_CHAR_SLOTS; i++) 
 			// equipment[i] = 0;
 
-	ifstream f(fn.fn_str());
+	wxFFileInputStream input( fn );
+	if (!input.IsOk())
+		return false;
+	wxTextInputStream f( input );
+
 	f >> r >> g;
 
 	if (r==race && g==gender) {
@@ -2742,12 +2750,12 @@ bool CharDetails::load(wxString fn, TabardDetails *td)
 	}
 
 	// 5976 is the ID value for "Guild Tabard"
-	if (equipment[CS_TABARD] == 5976 && !f.eof()) {
+	if (equipment[CS_TABARD] == 5976 && !input.Eof()) {
 		f >> td->Background >> td->Border >> td->BorderColor >> td->Icon >> td->IconColor;
 		td->showCustom = true;
 	}
 
-	f.close();
+	//input.Close();
 	return same;
 }
 

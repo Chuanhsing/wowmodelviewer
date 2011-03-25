@@ -467,6 +467,7 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
 
 void ExportX3D_M2(Model *m, const char *fn, bool init)
 {
+	// FIXME: ofstream is not compitable with multibyte path name
     ofstream f(fn, ios_base::out | ios_base::trunc);
 
     if (f.good())
@@ -483,6 +484,7 @@ void ExportX3D_M2(Model *m, const char *fn, bool init)
 
 void ExportXHTML_M2(Model *m, const char *fn, bool init)
 {
+	// FIXME: ofstream is not compitable with multibyte path name
     ofstream f(fn, ios_base::out | ios_base::trunc);
 
     if (f.good())

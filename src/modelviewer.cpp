@@ -4,6 +4,7 @@
 #include "mpq.h"
 #include "exporters.h"
 #include <wx/regex.h>
+#include <wx/txtstrm.h>
 
 // default colour values
 const static float def_ambience[4] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -1649,6 +1650,7 @@ void ModelViewer::OnLightMenu(wxCommandEvent &event)
 			if (dialog.ShowModal()==wxID_OK) {
 				wxString fn = dialog.GetFilename();
 
+				// FIXME: ofstream is not compitable with multibyte path name
 				ofstream f(fn.fn_str(), ios_base::out|ios_base::trunc);
 				f << lightMenu->IsChecked(ID_LT_DIRECTION) << " " << lightMenu->IsChecked(ID_LT_TRUE) << " " << lightMenu->IsChecked(ID_LT_DIRECTIONAL) << " " << lightMenu->IsChecked(ID_LT_AMBIENT) << " " << lightMenu->IsChecked(ID_LT_MODEL) << endl;
 				for (int i=0; i<MAX_LIGHTS; i++) {
@@ -2066,6 +2068,7 @@ void ModelViewer::OnBackground(wxCommandEvent &event)
 
 void ModelViewer::SaveChar(wxString fn)
 {
+	// FIXME: ofstream is not compitable with multibyte path name
 	ofstream f(fn.fn_str(), ios_base::out|ios_base::trunc);
 	f << canvas->model->name << endl;
 	f << charControl->cd.race << " " << charControl->cd.gender << endl;
@@ -2836,7 +2839,13 @@ void DiscoveryItem()
 {
 	wxString name, ret;
 	items.cleanupDiscovery();
-	ofstream f("discoveryitems.csv", ios_base::out | ios_base::trunc);
+	wxFFileOutputStream fs (wxT("discoveryitems.csv"));
+
+	if (!fs.IsOk()) {
+		wxLogMessage(wxT("Error: Unable to open file 'discoveryitems.csv'. Could not discovery item."));
+	}
+
+    wxTextOutputStream f (fs);
 
 	// 1. from itemsets.dbc
 	for (ItemSetDB::Iterator it = setsdb.begin(); it != setsdb.end(); ++it) {
@@ -2854,7 +2863,7 @@ void DiscoveryItem()
 				else
 					name.Printf(wxT("Set%d"), it->getUInt(ItemSetDB::SetID));
 				ret = items.addDiscoveryId(id, name);
-				if (f.is_open() && !ret.IsEmpty())
+				if (!ret.IsEmpty())
 					f << ret.mb_str() << endl;
 			}
 		}
@@ -2865,7 +2874,7 @@ void DiscoveryItem()
 		if (!items.avaiable(id)) {
 			name.Printf(wxT("Item%d"), id);
 			ret = items.addDiscoveryId(id, name);
-			if (f.is_open() && !ret.IsEmpty())
+			if (!ret.IsEmpty())
 				f << ret.mb_str() << endl;
 		}
 	}
@@ -2883,7 +2892,7 @@ void DiscoveryItem()
 					int type = slots[i];
 					name.Printf(wxT("NPC%d"), it->getUInt(NPCDB::NPCID));
 					ret = items.addDiscoveryDisplayId(id, name, type);
-					if (f.is_open() && !ret.IsEmpty())
+					if (!ret.IsEmpty())
 						f << ret.mb_str() << endl;
 				}
 			}
@@ -2892,8 +2901,7 @@ void DiscoveryItem()
 	// 4. from model dir
 	// 5. from blp dir
 	wxLogMessage(wxT("Discovery done."));
-	if (f.is_open())
-		f.close();
+	fs.Close();
 	items.cleanup(itemdisplaydb);
 }
 
