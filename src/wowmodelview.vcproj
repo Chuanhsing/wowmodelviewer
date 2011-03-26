@@ -179,7 +179,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="glew64d.lib wxpngd.lib"
 				OutputFile="$(OutDir)/wowmodelview64.exe"
-				Version="07.01.530"
+				Version="07.01.544"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;D:\wxWidgets-2.8.11\lib\vc_lib\$(PlatformName)&quot;;.\lib\Windows\64bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
@@ -233,6 +233,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="rmdir /s /q $(OutDir)"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -342,6 +343,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="rmdir /s /q $(OutDir)"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"

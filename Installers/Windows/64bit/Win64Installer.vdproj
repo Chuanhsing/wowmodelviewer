@@ -57,20 +57,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_27BB697F2E8A4B55A7A6078871FE15A8"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_397C3DADFC7240D6875E0B8A5F62EB47"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_3E55543B56C54514BA75FC51F05AEB03"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_40870E185E6B495A9042699ADD7CE74B"
+        "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -88,18 +82,12 @@
         "Entry"
         {
         "MsmKey" = "8:_4F068D3280C148C0A10E489FBB607086"
-        "OwnerKey" = "8:_9FA5F476D3484F6BA7DBF337B45CBD98"
+        "OwnerKey" = "8:_40870E185E6B495A9042699ADD7CE74B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_596BFBAD07484099888F48ED1BB5FA4A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5B4217212A3C4D9AAF5AD238D88490FA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -129,12 +117,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_74A83CD03C85441AB873AC743A627398"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_831EE1B868484117E9AD0642BC6B24AC"
         "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
         "MsmSig" = "8:_UNDEFINED"
@@ -155,12 +137,6 @@
         {
         "MsmKey" = "8:_9715CF33FF5549B4A7639A38AEACB469"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9FA5F476D3484F6BA7DBF337B45CBD98"
-        "OwnerKey" = "8:_C2852B5227D24E80833BD9CEEF0FCDE9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -250,7 +226,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\WMV_Installer_v0701_r500_Win64.msi"
+        "OutputFilename" = "8:Release\\WMV_Installer_v0701_r544_Win64.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -442,46 +418,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_27BB697F2E8A4B55A7A6078871FE15A8"
-            {
-            "SourcePath" = "8:..\\..\\..\\bin\\zhCN\\npcs.csv"
-            "TargetName" = "8:npcs.csv"
-            "Tag" = "8:"
-            "Folder" = "8:_88C3659BC6874BC39D09656A490E993A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_397C3DADFC7240D6875E0B8A5F62EB47"
-            {
-            "SourcePath" = "8:..\\..\\..\\bin\\zhTW\\npcs.csv"
-            "TargetName" = "8:npcs.csv"
-            "Tag" = "8:"
-            "Folder" = "8:_96826D1D2EFA4E39A49C9BFD79E90161"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3E55543B56C54514BA75FC51F05AEB03"
             {
             "SourcePath" = "8:..\\..\\..\\bin_support\\Windows\\64bit\\fbxsdk_20113_amd64.dll"
@@ -528,26 +464,6 @@
             "TargetName" = "8:items.csv"
             "Tag" = "8:"
             "Folder" = "8:_C968804752784313BA0C77FB6DCA47B9"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5B4217212A3C4D9AAF5AD238D88490FA"
-            {
-            "SourcePath" = "8:..\\..\\..\\bin\\zhCN\\items.csv"
-            "TargetName" = "8:items.csv"
-            "Tag" = "8:"
-            "Folder" = "8:_88C3659BC6874BC39D09656A490E993A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -628,26 +544,6 @@
             "TargetName" = "8:ridable.csv"
             "Tag" = "8:"
             "Folder" = "8:_296025CC5E4C487297BD0E52D9BB7E38"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_74A83CD03C85441AB873AC743A627398"
-            {
-            "SourcePath" = "8:..\\..\\..\\bin\\zhTW\\items.csv"
-            "TargetName" = "8:items.csv"
-            "Tag" = "8:"
-            "Folder" = "8:_96826D1D2EFA4E39A49C9BFD79E90161"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -921,17 +817,6 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_88C3659BC6874BC39D09656A490E993A"
-                    {
-                    "Name" = "8:zhCN"
-                    "AlwaysCreate" = "11:TRUE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_D7520DF556A747CCA2D60A1607311B4A"
-                        "Folders"
-                        {
-                        }
-                    }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_96416B35809E494CBE4773EFF615C55F"
                     {
                     "Name" = "8:userSettings"
@@ -939,17 +824,6 @@
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
                     "Property" = "8:_5B730BEF6DAB4563B42208FBD9F36A58"
-                        "Folders"
-                        {
-                        }
-                    }
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_96826D1D2EFA4E39A49C9BFD79E90161"
-                    {
-                    "Name" = "8:zhTW"
-                    "AlwaysCreate" = "11:TRUE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_74E5EDC4037E4D999702A0900FD9257C"
                         "Folders"
                         {
                         }
@@ -1060,14 +934,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:World of Warcraft Model Viewer 64-bit"
-        "ProductCode" = "8:{5ED208BF-C15D-4BDA-8C75-7EB956F80996}"
-        "PackageCode" = "8:{86C12C53-DDE9-41D8-8AD7-C7C438D7AB79}"
+        "ProductCode" = "8:{25058AB9-14B8-47A8-893D-A5C6A3CF53CE}"
+        "PackageCode" = "8:{33A96717-8C75-45BB-9847-96F9607C4D0F}"
         "UpgradeCode" = "8:{69AA293E-260B-47B1-A596-44671A8B6EDF}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:07.01.500"
+        "ProductVersion" = "8:07.01.544"
         "Manufacturer" = "8:WoWModelViewer.org"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1572,11 +1446,11 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_4F068D3280C148C0A10E489FBB607086"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_40870E185E6B495A9042699ADD7CE74B"
             {
             "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:FALSE"
-            "SourcePath" = "8:c:\\program files (x86)\\common files\\merge modules\\microsoft_vc90_crt_x86_x64.msm"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86_x64.msm"
                 "Properties"
                 {
                 }
@@ -1586,11 +1460,11 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_9FA5F476D3484F6BA7DBF337B45CBD98"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_4F068D3280C148C0A10E489FBB607086"
             {
             "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86_x64.msm"
+            "IsDependency" = "11:FALSE"
+            "SourcePath" = "8:c:\\program files (x86)\\common files\\merge modules\\microsoft_vc90_crt_x86_x64.msm"
                 "Properties"
                 {
                 }

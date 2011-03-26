@@ -3185,7 +3185,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 							wxString Path, Name;
 
 							// Object
-							Path << ddfilename.BeforeLast(SLASH);
+							Path << RootDir.BeforeLast(SLASH);
 							Name << ddfilename.AfterLast(SLASH);
 							MakeDirs(Path,wxT("Objects"));
 							ddfilename.Empty();
@@ -3289,11 +3289,14 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 					if (tripped == false){
 						wxString fname = RootDir.BeforeLast(SLASH);
 						fname << SLASH << ddm->modelname.AfterLast(SLASH).BeforeLast(wxT('.')).Append(wxT(".lwo"));
+						// Must gather before paths, else it generates files in the wrong place.
+						LWObject DDObject = GatherM2forLWO(NULL,ddm,true,fname,LWScene(),false);
+
 						if (modelExport_LW_PreserveDir == true){
 							wxString Path, Name;
 
 							// Object
-							Path << fname.BeforeLast(SLASH);
+							Path << RootDir.BeforeLast(SLASH);
 							Name << fname.AfterLast(SLASH);
 							MakeDirs(Path,wxT("Objects"));
 							fname.Empty();
@@ -3311,7 +3314,6 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 							fname << Path1 << SLASH << Path2 << SLASH << Name;
 						}
 
-						LWObject DDObject = GatherM2forLWO(NULL,ddm,true,FileName,LWScene(),false);
 						if (DDObject.SourceType == wxEmptyString){
 							//wxMessageBox(wxT("Error gathering information for export."),wxT("Export Error"));
 							wxLogMessage(wxT("Error gathering Object data for Doodad %s."),ddm->modelname);
@@ -3325,6 +3327,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 			}
 		}else if (modelExport_LW_DoodadsAs == 2){	// Doodad Sets as Seperate Layers...
 #ifdef _DEBUG
+			wxMessageBox(wxT("Functionality for this Doodad Export Type\nhas not yet been implemented."),wxT("NYI"));
 			/*
 			for (uint32 ds=0;ds<m->nDoodadSets;ds++){
 				wxLogMessage(wxT("Processing Doodadset %i: %s"),ds,m->doodadsets[ds].name);
@@ -3337,7 +3340,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 
 					wxLogMessage(wxT("Doodad Instance is Animated: %s"),(ddinstance->model->animated?wxT("true"):wxT("false")));
 
-					LWObject Doodad = GatherM2forLWO(NULL,ddinstance->model,true,FileName,scene,false);
+					LWObject Doodad = GatherM2forLWO(NULL,ddinstance->model,true,FileName,LWScene(),false);
 
 					// --== Model Debugger ==--
 					// Exports the model immediately after gathering, to help determine if a problem is with the gathering function or the doodad-placement functions.

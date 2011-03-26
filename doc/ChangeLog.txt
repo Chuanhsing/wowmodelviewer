@@ -1,17 +1,57 @@
 World of Warcraft Model Viewer v0.7.0.1
 
-r502
+r544 (Gnome Punter)
+ - Updated CSVs!
+ - Added a notice for when Exporting has finished.
+ - WMV will now ask you to close WoW if MPQs can't be read.
  - Non-Init exported models will now have the animation's name & frame number in the default name.
- - Fixed a lot of compatibility issues in reguard to strings.
- - Adjusted model export logging information to be more useful.
+ - Right-Click a BLP file to export it as a PNG or TGA file.
+ - Canvas sizes now list their aspect ratios.
+ - Added a few more canvas sizes.
+ - Fixed Armory Import!
+ - Fixed some bugs for WMO loading.
+ - Fixed a lot of compatibility issues in regards to strings.
+ - You can now update locale CSV files from googlecode via the Check for Update button!
+ - Removed zhTW & zhCN locale CSV files from zips and installers.
+ - LWO Exporter:
+  - Re-Enabled Doodad Null & Scene Object exporting with new system.
+  - Restored Camera Exporting. (Animated Camera exporting not yet 100%...)
+  - Enabled Multiple Camera Exporting.
+  - Increased Log info for debugging.
+  - 64bit compatibility updates
+  - Fixed UVs being offset by 1.0 vertically.
+  - Fixed a bug that would write the object to the scene file instead.
+  - Fixed some parenting Issues.
+  - Fixed some Double-sided surfacing issues. Double-sided surfaces will now have a "_Dbl" suffix.
+  - Fixed a non-Init model bug that would always set the current frame to 0 for the first export.
+  - Initial work on ADT exporter redone for new exporting system.
+ - FBX Exporter:
+  - 2010/12/16 FBX patch by zhing
+ - Milkshape (MS3D) Exporter:
+  - Bone Export Updates
  - Dev Work:
+  - Updated StormLib.
+  - Added 40100 support.
+  - Various 64-bit enhancements.
+  - Various Linux fixes.
+  - Various MacOS fixes.
+  - Fixed a bug regarding non-Init model exporting.
+  - Enabled loading of multiple cameras from a M2 model.
+  - Adjusted model export logging information to be more useful.
+  - Removed hard-coded worgen female code
   - Renamed all exporters for better function name clarity.
   - _T() replaced with wxT(). Please use wxT() in the future.
   - Removed unused exporter functions.
+  - Visual Studio will now deleted the Clean folder before building a Release build, to help avoid contamination of previous builds.
+  - GLXBadDrawable
   - Armory temp.xml will now be deleted in non-debug builds.
+  - Changed from ofstream to wxTextOutputStream to support multibyte path names. (Some exporters still not supported.)
+  - Fixed esMX should be 8th locale and ruRU should be 9th.
+  - Added ptBR and jaJP locale support.
+  - List files in partial mpq.
 
 
-r500
+r500 (Wascally Wabbit)
  - Added Splash Page while program is loading.
  - Installers will now associate .CHR files with WoW Model Viewer, complete with custom icon!
  - Added 48x48 size WMV Icon to the Mac Icon file.

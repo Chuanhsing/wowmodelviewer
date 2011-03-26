@@ -205,7 +205,9 @@ void ModelExportOptions_Lightwave::Update()
 
 	ddextype->Append(wxString(wxT("All Doodads as Nulls")));
 	ddextype->Append(wxString(wxT("All Doodads as Scene Objects")));
-	//ddextype->Append(wxString(wxT("Each Doodad Set as a Seperate Layer")));
+#ifdef _DEBUG
+	ddextype->Append(wxString(wxT("Each Doodad Set as a Seperate Layer")));
+#endif
 	// Uncomment as we're able to do it!
 	//ddextype->Append(wxString("All Doodads as a Single Layer"));
 	//ddextype->Append(wxString("Doodads as a Single Layer, Per Group"));

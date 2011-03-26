@@ -50,7 +50,7 @@
 
 // defines
 #define APP_TITLE wxT("World of Warcraft Model Viewer")
-#define APP_VERSION wxT("v0.7.0.1 r543")			// Revision number should match the revision number on GoogleCode.
+#define APP_VERSION wxT("v0.7.0.1 r544")			// Revision number should match the revision number on GoogleCode.
 #define APP_BUILDNAME wxT("Gnome Punter")		// Fun thing for developers to play with. Should change with each Main Release. (Not counting DEV WORK editions)
 /*
 	--==List of Build Name ideas==--	(Feel free to add!)
