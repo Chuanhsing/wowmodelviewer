@@ -227,6 +227,7 @@ struct ModelCamera {
 	float WorldRotation;
 
 	void init(MPQFile &f, ModelCameraDef &mcd, uint32 *global, wxString modelname);
+	void initv10(MPQFile &f, ModelCameraDefV10 &mcd, uint32 *global, wxString modelname);
 	void setup(int time=0);
 
 	ModelCamera():ok(false) {}
@@ -343,7 +344,7 @@ public:
 	~Model();
 
 	ModelHeader header;
-	ModelCamera cam;
+	std::vector<ModelCamera> cam;
 #ifdef WotLK
 	wxString modelname;
 	wxString lodname;

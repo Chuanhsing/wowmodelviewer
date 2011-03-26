@@ -295,12 +295,12 @@ void ModelViewer::InitMenu()
 	exportMenu->AppendSeparator();
 	// Perfered Exporter First
 	if (Perfered_Exporter != -1) {
-		exportMenu->Append(Exporter_Types[Perfered_Exporter].ID, Exporter_Types[Perfered_Exporter].MenuText);
+		exportMenu->Append((int)Exporter_Types[Perfered_Exporter].ID, Exporter_Types[Perfered_Exporter].MenuText);
 	}
 	// The Rest
-	for (int x=0;x<ExporterTypeCount;x++){
+	for (size_t x=0;x<ExporterTypeCount;x++){
 		if (x != Perfered_Exporter) {
-			exportMenu->Append(Exporter_Types[x].ID, Exporter_Types[x].MenuText);
+			exportMenu->Append((int)Exporter_Types[x].ID, Exporter_Types[x].MenuText);
 		}
 	}
 
@@ -3108,6 +3108,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 			g_selModel->animManager->Play();
 		}
 	}
+	wxMessageBox(wxT("Export Completed."),wxT("Finished Exporting"));
 }
 
 

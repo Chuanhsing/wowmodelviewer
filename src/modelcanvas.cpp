@@ -1090,7 +1090,7 @@ inline void ModelCanvas::RenderModel()
 	// setup the view/projection
 	if (model) {
 		if (useCamera && model->hasCamera) {
-			model->cam.setup();
+			model->cam[0].setup();
 		} else {
 			// TODO: Possibly move this into the Model/Attachment/Displayable::draw() routine?
 			glTranslatef(model->pos.x, model->pos.y, -model->pos.z);
@@ -1615,8 +1615,8 @@ void ModelCanvas::RenderToBuffer()
 	// *************************
 	// setup the view/projection
 	if (model) {
-		if (useCamera && model->hasCamera) {
-			model->cam.setup();
+		if (useCamera >= 0 && model->hasCamera) {
+			model->cam[0].setup();
 		} else {
 			// TODO: Possibly move this into the Model/Attachment/Displayable::draw() routine?
 			glTranslatef(model->pos.x, model->pos.y, -model->pos.z);

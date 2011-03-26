@@ -503,8 +503,8 @@ void FileControl::UpdateInterface()
 		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, true);
 
-		for (int x=0;x<ExporterTypeCount;x++){
-			modelviewer->exportMenu->Enable(Exporter_Types[x].ID, Exporter_Types[x].canM2);
+		for (size_t x=0;x<ExporterTypeCount;x++){
+			modelviewer->exportMenu->Enable((int)Exporter_Types[x].ID, Exporter_Types[x].canM2);
 		}
 
 		// Enable Controls for Characters
@@ -528,16 +528,10 @@ void FileControl::UpdateInterface()
 		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode
 
-		for (int x=0;x<ExporterTypeCount;x++){
-			modelviewer->exportMenu->Enable(Exporter_Types[x].ID, Exporter_Types[x].canADT);
+		for (size_t x=0;x<ExporterTypeCount;x++){
+			modelviewer->exportMenu->Enable((int)Exporter_Types[x].ID, Exporter_Types[x].canADT);
 		}
-/*
-		// Hard-coded Debug Work-arounds.
-		// Used for Debug Only Support for Exporting
-#ifdef _DEBUG
-		modelviewer->exportMenu->Enable(ID_MODELEXPORT_LWO, true);
-#endif
-*/
+
 		modelviewer->charMenu->Enable(ID_SAVE_CHAR, false);
 		modelviewer->charMenu->Enable(ID_SHOW_UNDERWEAR, false);
 		modelviewer->charMenu->Enable(ID_SHOW_EARS, false);
@@ -558,8 +552,8 @@ void FileControl::UpdateInterface()
 		modelviewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU,true);
 		modelviewer->exportMenu->Enable(ID_MODELEXPORT_INIT, false);	// Disable Init Mode
 
-		for (int x=0;x<ExporterTypeCount;x++){
-			modelviewer->exportMenu->Enable(Exporter_Types[x].ID, Exporter_Types[x].canWMO);
+		for (size_t x=0;x<ExporterTypeCount;x++){
+			modelviewer->exportMenu->Enable((int)Exporter_Types[x].ID, Exporter_Types[x].canWMO);
 		}
 
 		modelviewer->charMenu->Enable(ID_SAVE_CHAR, false);

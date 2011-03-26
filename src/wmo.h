@@ -73,7 +73,8 @@ public:
 	void updateModels(bool load);
 };
 
-#define	WMO_MATERIAL_CULL	0x04
+#define	WMO_MATERIAL_CULL	0x04	// Remove the back-facing polygons
+#define WMO_MATERIAL_LUM	0x10	// Bright at Night
 struct WMOMaterial {
 	int flags;
 	int SpecularMode;

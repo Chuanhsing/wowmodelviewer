@@ -10,7 +10,7 @@
 #define MAX_POINTS_PER_POLYGON 1023
 
 // -----------------------------------------
-// New LW Header Stuff
+// Lightwave 3D Header Data
 // -----------------------------------------
 
 int i32;
@@ -28,12 +28,20 @@ public:
 	void Reset(){
 		Value = 0;
 	}
+	void Plus(size_t num = 1){
+		Value += num;
+	}
+	void Minus(size_t num = 1){
+		Value += num;
+	}
 	size_t GetValue(){
 		return Value;
 	}
 	size_t GetPlus(){
-		return Value;
-		Value++;
+		return Value++;
+	}
+	size_t PlusGet(){
+		return ++Value;
 	}
 };
 
@@ -118,13 +126,14 @@ struct AnimVec3D{
 	}
 };
 
+
 // Animation Data
 struct AnimationData {
 	AnimVec3D Position;
 	AnimVec3D Rotation;
 	AnimVec3D Scale;
 
-	// Returns the number of keyframes in this animation.
+	// Returns the last frame number in this animation.
 	size_t Size(){
 		float time = 0.0f;
 
@@ -169,7 +178,7 @@ struct AnimationData {
 
 // --== Scene Formats ==--
 struct LWBones{
-	uint32 BoneID;
+	size_t BoneID;
 	Vec3D RestPos;
 	Vec3D RestRot;
 	AnimationData AnimData;
@@ -183,7 +192,7 @@ struct LWBones{
 	bool WeightMap_Only;
 	bool WeightMap_Normalize;
 
-	LWBones(uint32 BoneNum){
+	LWBones(size_t BoneNum){
 		BoneID = BoneNum;
 		BoneType = LW_BONETYPE_JOINT;
 		Active = true;
@@ -199,7 +208,7 @@ struct LWBones{
 // Scene Object
 struct LWSceneObj{
 	size_t ObjectID;
-	int32 LayerID;
+	ssize_t LayerID;
 	AnimationData AnimData;
 	wxString Name;
 	wxString ObjectTags;
@@ -208,7 +217,7 @@ struct LWSceneObj{
 	size_t ParentID;
 	int16 ParentType;	// -1 or LW_ITEMTYPE_NOPARENT for No Parent
 
-	LWSceneObj(wxString name, size_t id, int32 parentID, int16 parentType = LW_ITEMTYPE_NOPARENT, bool IsNull = false, int32 layerID = 1){
+	LWSceneObj(wxString name, size_t id, ssize_t parentID, int16 parentType = LW_ITEMTYPE_NOPARENT, bool IsNull = false, ssize_t layerID = 1){
 		Name = name;
 		ObjectID = id;
 		ParentType = parentType;
@@ -228,25 +237,32 @@ struct LWLight{
 	uint16 LightType;
 	float FalloffRadius;
 	size_t ParentID;
-	int16 ParentType;
+	int16 ParentType;	// -1 or LW_ITEMTYPE_NOPARENT for No Parent
 	bool UseAttenuation;
 
 	LWLight(){
 		Intensity = 1.0f;
 		LightType = LW_LIGHTTYPE_POINT;
 		ParentType = LW_ITEMTYPE_NOPARENT;
+		ParentID = 0;
 		FalloffRadius = 2.5f;
 	}
 };
 
 struct LWCamera{
-	uint32 CameraID;
+	size_t CameraID;
 	AnimationData AnimData;
 	wxString Name;
 	float FieldOfView;
-	int32 TargetObjectID;
-	int32 ParentID;
-	uint8 ParentType;
+	size_t TargetObjectID;
+	size_t ParentID;
+	int16 ParentType;	// -1 or LW_ITEMTYPE_NOPARENT for No Parent
+	LWCamera(){
+		CameraID = LW_CamCount.GetPlus();
+		ParentType = LW_ITEMTYPE_NOPARENT;
+		ParentID = 0;
+		Name = wxT("Camera");
+	}
 };
 
 // Master Scene
@@ -269,6 +285,12 @@ struct LWScene{
 
 		AmbientIntensity = ambint;
 	}
+	LWScene(){
+		FileName = wxEmptyString;
+		FilePath = wxEmptyString;
+		FirstFrame = 0.0f;
+		LastFrame = 1.0f;
+	}
 
 	~LWScene(){
 		Objects.clear();
@@ -278,6 +300,20 @@ struct LWScene{
 		FilePath.Clear();
 		//free(&AmbientIntensity);
 	}
+
+	LWScene& operator= (const LWScene &v) {
+        Objects = v.Objects;
+		Lights = v.Lights;
+		Cameras = v.Cameras;
+		FileName = v.FileName;
+		FilePath = v.FilePath;
+		AmbientIntensity = v.AmbientIntensity;
+		FirstFrame = v.FirstFrame;
+		LastFrame = v.LastFrame;
+
+		return *this;
+	}
+
 };
 
 // --== Object Formats ==--
@@ -314,7 +350,7 @@ struct LWVertexColor{
 struct LWPoint {
 	Vec3D PointData;
 	Vec2D UVData;
-	LWVertexColor VertexColors;		// In reality, this should be a std::vector, but WoW doesn't use more than 1.
+	LWVertexColor VertexColors;		// In reality, this should be std::vector<LWVertexColor>, but WoW doesn't use more than 1.
 };
 
 // Poly Chunk Data
@@ -545,18 +581,18 @@ void LW_WriteVX(wxFFileOutputStream &f, size_t p, uint32 &Size){
 
 // Keyframe Writing Functions
 // Writes a single Key for an envelope.
-void WriteLWSceneEnvKey(ofstream &fs, uint32 Chan, float value, float time, uint16 spline = 0)
+void WriteLWSceneEnvKey(wxTextOutputStream &fs, uint32 Chan, float value, float time, uint16 spline = 0)
 {
 	fs << wxT("  Key ");				// Announces the start of a Key
 	fs << value;					// The Key's Value;
 	fs << wxT(" " << time);			// Time, in seconds, a float. This can be negative, zero or positive. Keys are listed in the envelope in increasing time order.
 	fs << wxT(" " << spline);		// The curve type, an integer: 0 - TCB, 1 - Hermite, 2 - 1D Bezier (obsolete, equivalent to Hermite), 3 - Linear, 4 - Stepped, 5 - 2D Bezier
-	fs << wxT(" 0 0 0 0 0 0 \n");	// Curve Data 1-6, all 0s for now.
+	fs << wxT(" 0 0 0 0 0 0\n");	// Curve Data 1-6, all 0s for now.
 }
 
 // Used for writing the keyframes of an animation.
 // Single Keyframe use. Use WriteLWSceneEnvArray for writing animations.
-void WriteLWSceneEnvChannel(ofstream &fs, uint32 ChanNum, float value, float time, uint16 spline = 0)
+void WriteLWSceneEnvChannel(wxTextOutputStream &fs, uint32 ChanNum, float value, float time, uint16 spline = 0)
 {
 	fs << wxT("Channel " << ChanNum << "\n");	// Channel Number
 	fs << wxT("{ Envelope\n");
@@ -567,13 +603,13 @@ void WriteLWSceneEnvChannel(ofstream &fs, uint32 ChanNum, float value, float tim
 }
 
 // Multiple-frame use.
-void WriteLWSceneEnvArray(ofstream &fs, uint32 ChanNum, AnimVector value)
+void WriteLWSceneEnvArray(wxTextOutputStream &fs, uint32 ChanNum, AnimVector value)
 {
 	fs << wxT("Channel " << ChanNum << "\n");
 	fs << wxT("{ Envelope\n");
 	fs << wxT("  " << value.Time.size() << "\n");
 	for (uint32 n=0;n<value.Time.size();n++){
-		float time = (value.Time[n]/FRAMES_PER_SECOND)/FRAMES_PER_SECOND;	// Convert from WoW Frame Number into a Per-Ssecond Float
+		float time = (value.Time[n]/FRAMES_PER_SECOND)/FRAMES_PER_SECOND;	// Convert from WoW Frame Number into a Per-Second Float
 
 		WriteLWSceneEnvKey(fs,ChanNum,value.Value[n],time,value.Spline[n]);
 	}
@@ -583,25 +619,36 @@ void WriteLWSceneEnvArray(ofstream &fs, uint32 ChanNum, AnimVector value)
 }
 
 // Writes the "Plugin" information for a scene object, light, camera &/or bones.
-void WriteLWScenePlugin(ofstream &fs, wxString type, uint32 PluginCount, wxString PluginName, wxString Data = wxEmptyString)
+void WriteLWScenePlugin(wxTextOutputStream &fs, wxString type, uint32 PluginCount, wxString PluginName, wxString Data = wxEmptyString)
 {
 	fs << wxT("Plugin " << type << " " << PluginCount << " " << PluginName << "\n" << Data << "EndPlugin\n");
 }
 
 // Write Keyframe Motion Array
-void LW_WriteMotionArray(ofstream &fs,AnimationData AnimData){
+void LW_WriteMotionArray(wxTextOutputStream &fs,AnimationData AnimData, size_t NumChannels){
+	fs << "NumChannels " << NumChannels << "\n";
+
 	// Position
-	WriteLWSceneEnvArray(fs,0,AnimData.Position.x);
-	WriteLWSceneEnvArray(fs,1,AnimData.Position.y);
-	WriteLWSceneEnvArray(fs,2,AnimData.Position.z);
+	if (NumChannels > 0)
+		WriteLWSceneEnvArray(fs,0,AnimData.Position.x);
+	if (NumChannels > 1)
+		WriteLWSceneEnvArray(fs,1,AnimData.Position.y);
+	if (NumChannels > 2)
+		WriteLWSceneEnvArray(fs,2,AnimData.Position.z);
 	// Rotation
-	WriteLWSceneEnvArray(fs,3,AnimData.Rotation.x);
-	WriteLWSceneEnvArray(fs,4,AnimData.Rotation.y);
-	WriteLWSceneEnvArray(fs,5,AnimData.Rotation.z);
+	if (NumChannels > 3)
+		WriteLWSceneEnvArray(fs,3,AnimData.Rotation.x);
+	if (NumChannels > 4)
+		WriteLWSceneEnvArray(fs,4,AnimData.Rotation.y);
+	if (NumChannels > 5)
+		WriteLWSceneEnvArray(fs,5,AnimData.Rotation.z);
 	// Scale
-	WriteLWSceneEnvArray(fs,6,AnimData.Scale.x);
-	WriteLWSceneEnvArray(fs,7,AnimData.Scale.y);
-	WriteLWSceneEnvArray(fs,8,AnimData.Scale.z);
+	if (NumChannels > 6)
+		WriteLWSceneEnvArray(fs,6,AnimData.Scale.x);
+	if (NumChannels > 7)
+		WriteLWSceneEnvArray(fs,7,AnimData.Scale.y);
+	if (NumChannels > 8)
+		WriteLWSceneEnvArray(fs,8,AnimData.Scale.z);
 }
 
 // Gather Functions

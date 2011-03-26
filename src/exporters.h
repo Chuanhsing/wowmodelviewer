@@ -4,13 +4,13 @@
 // Exporter Data
 struct Exporter_Type {
 	wxString Name;
-	uint16 ID;
+	size_t ID;
 	wxString MenuText;
 	bool canM2;
 	bool canWMO;
 	bool canADT;
 
-	Exporter_Type(wxString name, uint16 id, wxString menutext, bool can_m2 = false, bool can_wmo = false, bool can_adt = false){
+	Exporter_Type(wxString name, size_t id, wxString menutext, bool can_m2 = false, bool can_wmo = false, bool can_adt = false){
 		Name = name;
 		ID = id;
 		MenuText = menutext;
@@ -21,9 +21,10 @@ struct Exporter_Type {
 };
 
 // Exporters
-const static int ExporterTypeCount = 10;
+const static size_t ExporterTypeCount = 10;
 
 // This list should be alphabetical.
+// Format: Exporter_Type(Exporter Name, Exporter_ID, Export Menu Text, Exports M2, Exports WMO, Exports ADT),
 const static Exporter_Type Exporter_Types[ExporterTypeCount] = {
 	Exporter_Type(wxT("3D Studio Max (3DS)"),ID_MODELEXPORT_3DS,wxT("3DS..."),true),
 	Exporter_Type(wxT("Collada"),ID_MODELEXPORT_COLLADA,wxT("Collada...")),

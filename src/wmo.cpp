@@ -765,7 +765,7 @@ void WMOGroup::initDisplayList()
 
 			// materials per triangle
 			nTriangles = (uint32)(size / 2);
-			materials = new (unsigned short[nTriangles]);
+			materials = new uint16[nTriangles];
 			memcpy(materials, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOVI")) {
@@ -773,7 +773,7 @@ void WMOGroup::initDisplayList()
 			Vertex indices for triangles. Three 16-bit integers per triangle, that are indices into the vertex list. The numbers specify the 3 vertices for each triangle, their order makes it possible to do backface culling.
 			*/
 			nIndices = (uint32)(size / 2);
-			indices = new (uint16[nIndices]);
+			indices = new uint16[(nIndices & 0x0000FFFF)];
 			memcpy(indices, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOVT")) {
@@ -802,12 +802,12 @@ void WMOGroup::initDisplayList()
 		else if (!strcmp(fourcc,"MONR")) {
 			// Normals. 3 floats per vertex normal, in (X,Z,-Y) order.
 			//uint32 NormSize = (uint32)(size / 12);
-			normals = new Vec3D[(uint32)(size / 12)];
+			normals = new Vec3D[(size / 12)];
 			memcpy(normals, gf.getPointer(), size);
 		}
-		else if (!strcmp(fourcc,"MOTV")) {	
+		else if (!strcmp(fourcc,"MOTV")) {
 			// Texture coordinates, 2 floats per vertex in (X,Y) order. The values range from 0.0 to 1.0. Vertices, normals and texture coordinates are in corresponding order, of course.
-			texcoords = new Vec2D[(uint32)size/8];
+			texcoords = new Vec2D[(size/8)];
 			memcpy(texcoords, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOLR")) {
@@ -854,7 +854,7 @@ void WMOGroup::initDisplayList()
 			The numbers are indices into the doodad instance table (MODD chunk) of the WMO root file. These have to be filtered to the doodad set being used in any given WMO instance.
 			*/
 			if (ddr) delete ddr;
-			nDoodads = (int)size / 2;
+			nDoodads = (int)(size / 2);
 			ddr = new short[nDoodads];
 			gf.read(ddr,size);
 		}
@@ -898,7 +898,7 @@ void WMOGroup::initDisplayList()
 			0x4		Unknown
 
 			*/
-			nBatches = (int)size / 24;
+			nBatches = (uint32)(size/24);
 			batches = new WMOBatch[nBatches];
 			memcpy(batches, gf.getPointer(), size);
 
@@ -940,7 +940,7 @@ void WMOGroup::initDisplayList()
 			// Temp, until we get this fully working.
 			gf.seek(spos);
 			wxLogMessage(wxT("Gathering New Vertex Colors..."));
-			VertexColors = new WMOVertColor[nVertices+2];
+			VertexColors = new WMOVertColor[nVertices];
 			memcpy(VertexColors, gf.getPointer(), size);
 			/*
 			for (uint32 x=0;x<nVertices;x++){
