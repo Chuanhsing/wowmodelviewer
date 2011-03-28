@@ -33,20 +33,14 @@ ArrowControl::ArrowControl(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
 	}
 
 	// modelexport.h Attach_Names
-/*
-	const wxString loc[] = {wxT("Left wrist"), wxT("Right palm"), wxT("Left palm"),
-		wxT("Right elbow"), wxT("Left elbow"), wxT("Right shoulder"), wxT("Left shoulder"),
-		wxT("Right knee"), wxT("Left knee"), wxT("Unkown"), wxT("Unknown"), wxT("Head"),  wxT("Back"), 
-		wxT("Unknown"), wxT("Unknown"), wxT("Bust"), wxT("Bust"), wxT("Face"), wxT("Above char"), 
-		wxT("Ground"), wxT("Top of Head"), wxT("Left palm"), wxT("Right palm"), wxT("Unknown"),
-		wxT("Unknown"), wxT("Unknown"), wxT("R-Back"), wxT("L-Back"), wxT("M-Back"), wxT("Belly"),  
-		wxT("L-Back"), wxT("R-Back"), wxT("L-Hip"), wxT("R-Hip"), wxT("Bust"), wxT("Right palm")};
-*/
-	//int size = WXSIZEOF(Attach_Names);
+	wxArrayString locs;
+	for(int i=0; i<WXSIZEOF(Attach_Names); i++) {
+		locs.Add(wxString::Format("%d ", i) + Attach_Names[i]);
+	}
 
-	joint = new wxComboBox(this, ID_ARROW_JOINT, wxEmptyString, wxPoint(5,5), wxSize(130,20), WXSIZEOF(Attach_Names), Attach_Names, wxCB_READONLY);
+	joint = new wxComboBox(this, ID_ARROW_JOINT, locs[0], wxPoint(5,5), wxSize(130,20), locs, wxCB_READONLY);
 	const wxString models[] = {wxT("arrowacidflight_01.m2"), wxT("arrowfireflight_01.m2"), wxT("arrowflight_01.m2"), wxT("arrowiceflight_01.m2"), wxT("arrowmagicflight_01.m2")};
-	model = new wxComboBox(this, ID_ARROW_MODEL,wxEmptyString, wxPoint(5,30), wxSize(130,20), WXSIZEOF(models), models, wxCB_READONLY);
+	model = new wxComboBox(this, ID_ARROW_MODEL, models[0], wxPoint(5,30), wxSize(130,20), WXSIZEOF(models), models, wxCB_READONLY);
 	//tex = new wxComboBox(this, ID_ARROW_TEXTURE,wxEmptyString, wxPoint(55,5), wxSize(100,20), 0, NULL, wxCB_READONLY);
 	
 	attach = new wxButton(this, ID_ARROW_ATTACH, wxT("Attach"), wxPoint(10,55), wxSize(55,20));

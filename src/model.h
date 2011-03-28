@@ -149,11 +149,8 @@ public:
 	bool calc;
 	Model *model;
 	void calcMatrix(Bone* allbones, int anim, int time, bool rotate=true);
-#ifdef WotLK
-	void init(MPQFile &f, ModelBoneDef &b, uint32 *global, MPQFile *animfiles);
-#else
-	void init(MPQFile &f, ModelBoneDef &b, uint32 *global);
-#endif
+	void initV3(MPQFile &f, ModelBoneDef &b, uint32 *global, MPQFile *animfiles);
+	void initV2(MPQFile &f, ModelBoneDef &b, uint32 *global);
 };
 
 class TextureAnim {

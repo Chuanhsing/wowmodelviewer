@@ -1673,8 +1673,10 @@ inline void Attachment::draw(ModelCanvas *c)
 
 		Model *m = static_cast<Model*>(model);
 		
-		if (!m)
+		if (!m) {
+			glPopMatrix();
 			return;
+		}
 
 		if (c->model) {
 			// no need to scale if its already 100%
@@ -1753,8 +1755,10 @@ inline void Attachment::drawParticles(bool force)
 
 	if (model) {
 		Model *m = static_cast<Model*>(model);
-		if (!m)
+		if (!m) {
+			glPopMatrix();
 			return;
+		}
 		
 		model->reset();
 		setupParticle();

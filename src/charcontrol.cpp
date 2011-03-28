@@ -1118,7 +1118,7 @@ void CharControl::RefreshModel()
 	model->replaceTextures[TEXTURE_GAMEOBJECT1] = gobTex;
 
 	/*
-	for (int i=0; i<40; i++) {
+	for (int i=0; i<ATT_MAX; i++) {
 		model->atts[i].dr = (model->atts[i].id==cd.hairStyle);
 	}
 	*/
@@ -1557,10 +1557,12 @@ void CharControl::RefreshItem(int slot)
 			// their correct positions
 			if (bSheathe && items.getById(itemnum).sheath>0) {	
 				id1 = items.getById(itemnum).sheath;
+
+				// make the weapon cross
 				if (id1==ATT_LEFT_HIP_SHEATH && slot==CS_HAND_LEFT)
 					id1 = ATT_RIGHT_HIP_SHEATH;
 
-				// One-handed Sword 2:7 && items.getById(itemnum).subclass==7
+				// make the weapon cross
 				if (id1==ATT_RIGHT_BACK_SHEATH && slot==CS_HAND_LEFT)
 					id1 = ATT_LEFT_BACK_SHEATH;
 

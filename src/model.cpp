@@ -479,8 +479,6 @@ Model::~Model()
 				if (replaceTextures[i] > 0)
 					texturemanager.del(replaceTextures[i]);
 			}
-
-			
 			
 			wxDELETEA(textures);
 		}
@@ -547,8 +545,8 @@ bool Model::isAnimated(MPQFile &f)
 		for (size_t b=0; b<4; b++) {
 			if (verts[i].weights[b]>0) {
 				ModelBoneDef &bb = bo[verts[i].bones[b]];
-				if (bb.translation.type || bb.rotation.type || bb.scaling.type || (bb.flags&MODELBONE_BILLBOARD)) {
-					if (bb.flags&MODELBONE_BILLBOARD) {
+				if (bb.translation.type || bb.rotation.type || bb.scaling.type || (bb.flags & MODELBONE_BILLBOARD)) {
+					if (bb.flags & MODELBONE_BILLBOARD) {
 						// if we have billboarding, the model will need per-instance animation
 						ind = true;
 					}
@@ -806,7 +804,6 @@ void Model::initCommon(MPQFile &f)
 	*/
 
 	// attachments
-	// debug code here
 	if (header.nAttachments) {
 		ModelAttachmentDef *attachments = (ModelAttachmentDef*)(f.getBuffer() + header.ofsAttachments);
 		for (size_t i=0; i<header.nAttachments; i++) {
@@ -907,36 +904,37 @@ void Model::initAnimated(MPQFile &f)
 	if (header.nAnimations > 0) {
 		anims = new ModelAnimation[header.nAnimations];
 
-		#ifndef WotLK
-		memcpy(anims, f.getBuffer() + header.ofsAnimations, header.nAnimations * sizeof(ModelAnimation));
-		#else
-		ModelAnimationWotLK animsWotLK;
-		wxString tempname;
-		animfiles = new MPQFile[header.nAnimations];
-		for(size_t i=0; i<header.nAnimations; i++) {
-			memcpy(&animsWotLK, f.getBuffer() + header.ofsAnimations + i*sizeof(ModelAnimationWotLK), sizeof(ModelAnimationWotLK));
-			anims[i].animID = animsWotLK.animID;
-			anims[i].timeStart = 0;
-			anims[i].timeEnd = animsWotLK.length;
-			anims[i].moveSpeed = animsWotLK.moveSpeed;
-			anims[i].flags = animsWotLK.flags;
-			anims[i].probability = animsWotLK.probability;
-			anims[i].d1 = animsWotLK.d1;
-			anims[i].d2 = animsWotLK.d2;
-			anims[i].playSpeed = animsWotLK.playSpeed;
-			anims[i].boundSphere.min = animsWotLK.boundSphere.min;
-			anims[i].boundSphere.max = animsWotLK.boundSphere.max;
-			anims[i].boundSphere.radius = animsWotLK.boundSphere.radius;
-			anims[i].NextAnimation = animsWotLK.NextAnimation;
-			anims[i].Index = animsWotLK.Index;
+		if (gameVersion < 30000) {
+			memcpy(anims, f.getBuffer() + header.ofsAnimations, header.nAnimations * sizeof(ModelAnimation));
+		} else {
+			// or load anim files ondemand?
+			ModelAnimationWotLK animsWotLK;
+			wxString tempname;
+			animfiles = new MPQFile[header.nAnimations];
+			for(size_t i=0; i<header.nAnimations; i++) {
+				memcpy(&animsWotLK, f.getBuffer() + header.ofsAnimations + i*sizeof(ModelAnimationWotLK), sizeof(ModelAnimationWotLK));
+				anims[i].animID = animsWotLK.animID;
+				anims[i].timeStart = 0;
+				anims[i].timeEnd = animsWotLK.length;
+				anims[i].moveSpeed = animsWotLK.moveSpeed;
+				anims[i].flags = animsWotLK.flags;
+				anims[i].probability = animsWotLK.probability;
+				anims[i].d1 = animsWotLK.d1;
+				anims[i].d2 = animsWotLK.d2;
+				anims[i].playSpeed = animsWotLK.playSpeed;
+				anims[i].boundSphere.min = animsWotLK.boundSphere.min;
+				anims[i].boundSphere.max = animsWotLK.boundSphere.max;
+				anims[i].boundSphere.radius = animsWotLK.boundSphere.radius;
+				anims[i].NextAnimation = animsWotLK.NextAnimation;
+				anims[i].Index = animsWotLK.Index;
 
-			tempname = wxString::Format(wxT("%s%04d-%02d.anim"), (char *)modelname.BeforeLast(wxT('.')).c_str(), anims[i].animID, animsWotLK.subAnimID);
-			if (MPQFile::getSize(tempname) > 0) {
-				animfiles[i].openFile(tempname);
-				g_modelViewer->modelOpened->Add(tempname);
+				tempname = wxString::Format(wxT("%s%04d-%02d.anim"), (char *)modelname.BeforeLast(wxT('.')).c_str(), anims[i].animID, animsWotLK.subAnimID);
+				if (MPQFile::getSize(tempname) > 0) {
+					animfiles[i].openFile(tempname);
+					g_modelViewer->modelOpened->Add(tempname);
+				}
 			}
 		}
-		#endif
 
 		animManager = new AnimManager(anims);
 	}
@@ -947,12 +945,12 @@ void Model::initAnimated(MPQFile &f)
 		ModelBoneDef *mb = (ModelBoneDef*)(f.getBuffer() + header.ofsBones);
 		for (size_t i=0; i<header.nBones; i++) {
 			//if (i==0) mb[i].rotation.ofsRanges = 1.0f;
-#ifdef WotLK
-			bones[i].model = this;
-			bones[i].init(f, mb[i], globalSequences, animfiles);
-#else
-			bones[i].init(f, mb[i], globalSequences);
-#endif
+			if (gameVersion >= 30000) {
+				bones[i].model = this;
+				bones[i].initV3(f, mb[i], globalSequences, animfiles);
+			} else {
+				bones[i].initV2(f, mb[i], globalSequences);
+			}
 		}
 
 		// Block keyBoneLookup is a lookup table for Key Skeletal Bones, hands, arms, legs, etc.
@@ -964,16 +962,16 @@ void Model::initAnimated(MPQFile &f)
 		}
 	}
 
-#ifdef WotLK
-	// free MPQFile
-	if (header.nAnimations > 0) {
-		for(size_t i=0; i<header.nAnimations; i++) {
-			if(animfiles[i].getSize() > 0)
-				animfiles[i].close();
+	if (gameVersion >= 30000) {
+		// free MPQFile
+		if (header.nAnimations > 0) {
+			for(size_t i=0; i<header.nAnimations; i++) {
+				if(animfiles[i].getSize() > 0)
+					animfiles[i].close();
+			}
+			delete [] animfiles;
 		}
-		delete [] animfiles;
 	}
-#endif
 
 	// Index at ofsAnimations which represents the animation in AnimationData.dbc. -1 if none.
 	if (header.nAnimationLookup > 0) {
@@ -2069,8 +2067,7 @@ void TextureAnim::init(MPQFile &f, ModelTexAnimDef &mta, uint32 *global)
 	scale.init(mta.scale, f, global);
 }
 
-#ifdef WotLK
-void Bone::init(MPQFile &f, ModelBoneDef &b, uint32 *global, MPQFile *animfiles)
+void Bone::initV3(MPQFile &f, ModelBoneDef &b, uint32 *global, MPQFile *animfiles)
 {
 	calc = false;
 
@@ -2088,8 +2085,8 @@ void Bone::init(MPQFile &f, ModelBoneDef &b, uint32 *global, MPQFile *animfiles)
 	rot.fix(fixCoordSystemQuat);
 	scale.fix(fixCoordSystem2);
 }
-#else
-void Bone::init(MPQFile &f, ModelBoneDef &b, uint32 *global)
+
+void Bone::initV2(MPQFile &f, ModelBoneDef &b, uint32 *global)
 {
 	calc = false;
 
@@ -2107,7 +2104,6 @@ void Bone::init(MPQFile &f, ModelBoneDef &b, uint32 *global)
 	rot.fix(fixCoordSystemQuat);
 	scale.fix(fixCoordSystem2);
 }
-#endif
 
 void ModelAttachment::init(MPQFile &f, ModelAttachmentDef &mad, uint32 *global)
 {
