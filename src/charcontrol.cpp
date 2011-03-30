@@ -116,7 +116,7 @@ CharControl::CharControl(wxWindow* parent, wxWindowID id)
 	wxFlexGridSizer *gs = new wxFlexGridSizer(3, 5, 4);
 
 	#define ADD_CONTROLS(type, id, caption) \
-	gs->Add(new wxStaticText(this, wxID_ANY, caption), wxSizerFlags().Align(wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL)); \
+	gs->Add(new wxStaticText(this, wxID_ANY, caption), wxSizerFlags().Align(wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL)); \
 	gs->Add(spins[type] = new wxSpinButton(this, id, wxDefaultPosition, wxSize(30,16), wxSP_HORIZONTAL|wxSP_WRAP), wxSizerFlags(1).Align(wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL)); \
 	gs->Add(spinLabels[type] = new wxStaticText(this, wxID_ANY, wxT("0")), wxSizerFlags(2).Align(wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL));
 
@@ -169,16 +169,17 @@ CharControl::CharControl(wxWindow* parent, wxWindowID id)
 	top->Add(gs2, wxEXPAND);
 
 	// Create our tabard customisation spin buttons
-	wxGridSizer *gs3 = new wxGridSizer(2, 5, 5);
+	wxGridSizer *gs3 = new wxGridSizer(3);
 	#define ADD_CONTROLS(type, id, caption) \
-	gs3->Add(new wxStaticText(this, -1, caption), wxSizerFlags().Align(wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL)); \
-	gs3->Add(tabardSpins[type]=new wxSpinButton(this, id, wxDefaultPosition, wxDefaultSize, wxSP_HORIZONTAL|wxSP_WRAP), wxSizerFlags(1).Align(wxALIGN_CENTER_VERTICAL));
+	gs3->Add(new wxStaticText(this, wxID_ANY, caption), wxSizerFlags().Align(wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL)); \
+	gs3->Add(tabardSpins[type]=new wxSpinButton(this, id, wxDefaultPosition, wxSize(30,16), wxSP_HORIZONTAL|wxSP_WRAP), wxSizerFlags(1).Align(wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL)); \
+	gs3->Add(spinTbLabels[type] = new wxStaticText(this, wxID_ANY, wxT("0")), wxSizerFlags(2).Align(wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL));
 
 	ADD_CONTROLS(SPIN_TABARD_ICON, ID_TABARD_ICON, wxT("Icon"))
 	ADD_CONTROLS(SPIN_TABARD_ICONCOLOR, ID_TABARD_ICONCOLOR, wxT("Icon Color"))
 	ADD_CONTROLS(SPIN_TABARD_BORDER, ID_TABARD_BORDER, wxT("Border"))
 	ADD_CONTROLS(SPIN_TABARD_BORDERCOLOR, ID_TABARD_BORDERCOLOR, wxT("Border Color"))
-	ADD_CONTROLS(SPIN_TABARD_BACKGROUND, ID_TABARD_BACKGROUND, wxT("Background Color"))
+	ADD_CONTROLS(SPIN_TABARD_BACKGROUND, ID_TABARD_BACKGROUND, wxT("BG Color"))
 
 	#undef ADD_CONTROLS
 
@@ -226,11 +227,11 @@ bool CharControl::Init()
 	cd.facialColor = 0; // 2009.07.30 Alfred
 
 	// set max values for custom tabard
-	td.maxBackground = 50;
-	td.maxBorder = 9;
-	td.maxBorderColor = 16;
-	td.maxIcon = 169;
-	td.maxIconColor = 16;
+	td.maxBackground = td.GetMaxBackground();
+	td.maxBorder = td.GetMaxBorder();
+	td.maxBorderColor = td.GetMaxBorderColor(0);
+	td.maxIcon = td.GetMaxIcon();
+	td.maxIconColor = td.GetMaxIconColor(0);
 
 	return true;
 }
@@ -345,7 +346,7 @@ void CharControl::UpdateModel(Attachment *a)
 	td.Icon = randint(0, td.maxIcon);
 	td.IconColor = randint(0, td.maxIconColor);
 	td.Border = randint(0, td.maxBorder);
-	td.BorderColor = 0;
+	td.BorderColor = randint(0, td.maxBorderColor);
 	td.Background = randint(0, td.maxBackground);
 
 	spins[SPIN_SKIN_COLOR]->SetValue(cd.skinColor);
@@ -369,8 +370,10 @@ void CharControl::UpdateModel(Attachment *a)
 
 	for (int i=0; i<NUM_SPIN_BTNS; i++) 
 		spins[i]->Refresh(false);
-	for (int i=0; i<NUM_TABARD_BTNS; i++) 
+	for (int i=0; i<NUM_TABARD_BTNS; i++) {
 		tabardSpins[i]->Refresh(false);
+		spinTbLabels[i]->SetLabel(wxString::Format(wxT("%i / %i"), tabardSpins[i]->GetValue(), tabardSpins[i]->GetMax()));
+	}
 	for (int i=0; i<NUM_SPIN_BTNS; i++)
 		spinLabels[i]->SetLabel(wxString::Format(wxT("%i / %i"), spins[i]->GetValue(), spins[i]->GetMax()));
 
@@ -1468,12 +1471,12 @@ void CharControl::AddEquipment(int slot, int itemnum, int layer, CharTexture &te
 				tex.addLayer(makeItemTexture(CR_FOOT, r.getString(ItemDisplayDB::TexFeet)), CR_FOOT, layer);
 		} else if (slot==CS_TABARD && td.showCustom) { // Display our customised tabard
 			cd.geosets[CG_TARBARD] = 2;
-			tex.addLayer(wxString(td.GetBackgroundTex(CR_TORSO_UPPER).c_str(), wxConvUTF8), CR_TORSO_UPPER, layer);
-			tex.addLayer(wxString(td.GetBackgroundTex(CR_TORSO_LOWER).c_str(), wxConvUTF8), CR_TORSO_LOWER, layer);
-			tex.addLayer(wxString(td.GetIconTex(CR_TORSO_UPPER).c_str(), wxConvUTF8), CR_TORSO_UPPER, layer);
-			tex.addLayer(wxString(td.GetIconTex(CR_TORSO_LOWER).c_str(), wxConvUTF8), CR_TORSO_LOWER, layer);
-			tex.addLayer(wxString(td.GetBorderTex(CR_TORSO_UPPER).c_str(), wxConvUTF8), CR_TORSO_UPPER, layer);
-			tex.addLayer(wxString(td.GetBorderTex(CR_TORSO_LOWER).c_str(), wxConvUTF8), CR_TORSO_LOWER, layer);
+			tex.addLayer(td.GetBackgroundTex(CR_TORSO_UPPER), CR_TORSO_UPPER, layer);
+			tex.addLayer(td.GetBackgroundTex(CR_TORSO_LOWER), CR_TORSO_LOWER, layer);
+			tex.addLayer(td.GetIconTex(CR_TORSO_UPPER), CR_TORSO_UPPER, layer);
+			tex.addLayer(td.GetIconTex(CR_TORSO_LOWER), CR_TORSO_LOWER, layer);
+			tex.addLayer(td.GetBorderTex(CR_TORSO_UPPER), CR_TORSO_UPPER, layer);
+			tex.addLayer(td.GetBorderTex(CR_TORSO_LOWER), CR_TORSO_LOWER, layer);
 
 		} else if (slot==CS_TABARD) { // if its just a normal tabard then do the usual
 			cd.geosets[CG_TARBARD] = 2;
@@ -2344,9 +2347,9 @@ void CharControl::OnUpdateItem(int type, int id)
 		labels[choosingSlot]->SetLabel(CSConv(items.getById(cd.equipment[choosingSlot]).name));
 		labels[choosingSlot]->SetForegroundColour(ItemQualityColour(items.getById(cd.equipment[choosingSlot]).quality));
 
-		// Check if its a 'guild tabard'
+		// Check if its a 'guild tabard [5976]'
 		if (choosingSlot == CS_TABARD) 
-			td.showCustom = (labels[choosingSlot]->GetLabel() == wxT("Guild Tabard"));
+			td.showCustom = labels[choosingSlot]->GetLabel().Contains(wxT("[5976]"));
 
 		break;
 
@@ -2585,6 +2588,7 @@ void CharControl::OnTabardSpin(wxSpinEvent &event)
 		wxLogMessage(wxT("Tabard Error: Model Not Present, or can't use a tabard."));
 		return;
 	}
+	int maxColor;
 
 	switch (event.GetId()) {
 	case ID_TABARD_ICON:
@@ -2598,14 +2602,12 @@ void CharControl::OnTabardSpin(wxSpinEvent &event)
 	case ID_TABARD_BORDER:
 		wxLogMessage(wxT("Tabard Notice: Border Change."));
         td.Border = event.GetPosition();
-		if (td.Border > 5)
-		{
+		maxColor = td.GetMaxBorderColor(td.Border);
+		if (maxColor > td.BorderColor) {
 			td.BorderColor = 0;
-			tabardSpins[SPIN_TABARD_BORDERCOLOR]->SetValue(0);
-			tabardSpins[SPIN_TABARD_BORDERCOLOR]->SetRange(0, 3);
+			tabardSpins[SPIN_TABARD_BORDERCOLOR]->SetValue(td.BorderColor);
 		}
-		else
-			tabardSpins[SPIN_TABARD_BORDERCOLOR]->SetRange(0, 16);
+		tabardSpins[SPIN_TABARD_BORDERCOLOR]->SetRange(0, maxColor);
 		break;
 	case ID_TABARD_BORDERCOLOR:
 		wxLogMessage(wxT("Tabard Notice: Border Color Change."));
@@ -2622,80 +2624,86 @@ void CharControl::OnTabardSpin(wxSpinEvent &event)
 
 wxString TabardDetails::GetBackgroundTex(int slot)
 {
-	ostringstream tmpStream;
-
-	string tmpU = "textures\\GuildEmblems\\Background_";
-	if (Background < 10)
-		tmpU += "0";
-	tmpStream << Background;
-	tmpU += tmpStream.str();
-	tmpU += "_TU_U.blp";
-	
-	wxString tmpL = wxString(tmpU.c_str(), wxConvUTF8);
-	tmpL[37] = 'L';
-
 	if (slot == CR_TORSO_UPPER)
-		return wxString(tmpU.c_str(), wxConvUTF8);
+		return wxString::Format(wxT("Textures\\GuildEmblems\\Background_%02d_TU_U.blp"), Background);
 	else
-		return tmpL;
+		return wxString::Format(wxT("Textures\\GuildEmblems\\Background_%02d_TL_U.blp"), Background);
 }
 
 wxString TabardDetails::GetBorderTex(int slot)
 {
-	ostringstream tmpStream;
-
-	string tmpU = "textures\\GuildEmblems\\Border_";
-
-	if (Border < 10)
-		tmpU += "0";
-	tmpStream << Border << "_";
-	tmpU += tmpStream.str();
-	tmpStream.flush();
-	tmpStream.str("");
-
-	if (BorderColor < 10)
-		tmpU += "0";
-	tmpStream << BorderColor;
-	tmpU += tmpStream.str();
-
-	tmpU += "_TU_U.blp";
-	
-	string tmpL = tmpU;
-	tmpL[36] = 'L';
-
 	if (slot == CR_TORSO_UPPER)
-		return wxString(tmpU.c_str(), wxConvUTF8);
+		return wxString::Format(wxT("Textures\\GuildEmblems\\Border_%02d_%02d_TU_U.blp"), Border, BorderColor);
 	else
-		return wxString(tmpL.c_str(), wxConvUTF8);
+		return wxString::Format(wxT("Textures\\GuildEmblems\\Border_%02d_%02d_TL_U.blp"), Border, BorderColor);
 }
 
 wxString TabardDetails::GetIconTex(int slot)
 {
-	ostringstream tmpStream;
-
-	string tmpU = "textures\\GuildEmblems\\Emblem_";
-
-	if(Icon < 10)
-		tmpU += "0";
-	tmpStream << Icon << "_";
-	tmpU += tmpStream.str();
-	tmpStream.flush();
-	tmpStream.str("");
-
-	if(IconColor < 10)
-		tmpU += "0";
-	tmpStream << IconColor;
-	tmpU += tmpStream.str();
-
-	tmpU += "_TU_U.blp";
-	
-	string tmpL = tmpU;
-	tmpL[tmpU.length() - 7] = 'L';
-
 	if(slot == CR_TORSO_UPPER)
-		return wxString(tmpU.c_str(), wxConvUTF8);
+		return wxString::Format(wxT("Textures\\GuildEmblems\\Emblem_%02d_%02d_TU_U.blp"), Icon, IconColor);
 	else
-		return wxString(tmpL.c_str(), wxConvUTF8);
+		return wxString::Format(wxT("Textures\\GuildEmblems\\Emblem_%02d_%02d_TL_U.blp"), Icon, IconColor);
+}
+
+int TabardDetails::GetMaxBackground()
+{
+	int i = 0;
+	while(1) {
+		i ++;
+		if (!MPQFile::exists(wxString::Format(wxT("Textures\\GuildEmblems\\Background_%02d_TU_U.blp"), i))) {
+			break;
+		}
+	}
+	return i-1;
+}
+
+int TabardDetails::GetMaxIcon()
+{
+	int i = 0;
+	while(1) {
+		i ++;
+		if (!MPQFile::exists(wxString::Format(wxT("Textures\\GuildEmblems\\Emblem_%02d_%02d_TU_U.blp"), i, 0))) {
+			break;
+		}
+	}
+	return i-1;
+}
+
+int TabardDetails::GetMaxIconColor(int icon)
+{
+	int i = 0;
+	while(1) {
+		i ++;
+		if (!MPQFile::exists(wxString::Format(wxT("Textures\\GuildEmblems\\Emblem_%02d_%02d_TU_U.blp"), icon, i))) {
+			break;
+		}
+	}
+	return i-1;
+}
+
+int TabardDetails::GetMaxBorder()
+{
+	int i = 0;
+	while(1) {
+		i ++;
+		if (!MPQFile::exists(wxString::Format(wxT("Textures\\GuildEmblems\\Border_%02d_%02d_TU_U.blp"), i))) {
+			break;
+		}
+	}
+	return i-1;
+}
+
+int TabardDetails::GetMaxBorderColor(int border)
+{
+	int i = 0;
+	while(1) {
+		i ++;
+		if (!MPQFile::exists(wxString::Format(wxT("Textures\\GuildEmblems\\Border_%02d_%02d_TU_U.blp"), border, i))) {
+			break;
+		}
+	}
+	return i-1;
 }
 
 void CharDetails::save(wxString fn, TabardDetails *td)

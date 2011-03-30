@@ -99,6 +99,12 @@ struct TabardDetails
 	wxString GetIconTex(int slot);
 	wxString GetBorderTex(int slot);
 	wxString GetBackgroundTex(int slot);
+
+	int GetMaxIcon();
+	int GetMaxIconColor(int icon);
+	int GetMaxBorder();
+	int GetMaxBorderColor(int border);
+	int GetMaxBackground();
 };
 
 struct CharDetails
@@ -145,7 +151,7 @@ class CharControl: public wxWindow
 	wxSpinButton *tabardSpins[NUM_TABARD_BTNS];
 	wxButton *buttons[NUM_CHAR_SLOTS];
 	wxStaticText *labels[NUM_CHAR_SLOTS];
-	
+	wxStaticText *spinTbLabels[NUM_TABARD_BTNS];
 
 	void AddEquipment(int slot, int itemnum, int layer, CharTexture &tex, bool lookup = true);
 	void UpdateTextureList(wxString texName, int special);
