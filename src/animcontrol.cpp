@@ -338,7 +338,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 	wxString fn = m->name;
 
 	// replace .M2 with .MDX
-	fn = fn.BeforeLast(wxT('.')).Append(wxT(".mdx"));
+	fn = fn.BeforeLast(wxT('.')) + wxT(".mdx");
 
 	TextureSet skins;
 
@@ -428,7 +428,7 @@ bool AnimControl::UpdateItemModel(Model *m)
 	wxString fn = m->name;
 
 	// change M2 to mdx
-	fn = fn.BeforeLast(wxT('.')).Append(wxT(".mdx"));
+	fn = fn.BeforeLast(wxT('.')) + wxT(".mdx");
 
 	// Check to see if its a helmet model, if so cut off the race
 	// and gender specific part of the filename off

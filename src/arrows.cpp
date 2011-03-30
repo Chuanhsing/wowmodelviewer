@@ -34,8 +34,8 @@ ArrowControl::ArrowControl(wxWindow* parent, wxWindowID id, const wxPoint& pos, 
 
 	// modelexport.h Attach_Names
 	wxArrayString locs;
-	for(int i=0; i<WXSIZEOF(Attach_Names); i++) {
-		locs.Add(wxString::Format("%d ", i) + Attach_Names[i]);
+	for(size_t i=0; i<WXSIZEOF(Attach_Names); i++) {
+		locs.Add(wxString::Format(_("%d "), i) + Attach_Names[i]);
 	}
 
 	joint = new wxComboBox(this, ID_ARROW_JOINT, locs[0], wxPoint(5,5), wxSize(130,20), locs, wxCB_READONLY);

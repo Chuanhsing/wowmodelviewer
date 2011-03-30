@@ -585,8 +585,8 @@ void WriteLWSceneEnvKey(wxTextOutputStream &fs, uint32 Chan, float value, float 
 {
 	fs << wxT("  Key ");				// Announces the start of a Key
 	fs << value;					// The Key's Value;
-	fs << wxT(" " << time);			// Time, in seconds, a float. This can be negative, zero or positive. Keys are listed in the envelope in increasing time order.
-	fs << wxT(" " << spline);		// The curve type, an integer: 0 - TCB, 1 - Hermite, 2 - 1D Bezier (obsolete, equivalent to Hermite), 3 - Linear, 4 - Stepped, 5 - 2D Bezier
+	fs << wxT(" ") << time;			// Time, in seconds, a float. This can be negative, zero or positive. Keys are listed in the envelope in increasing time order.
+	fs << wxT(" ") << spline;		// The curve type, an integer: 0 - TCB, 1 - Hermite, 2 - 1D Bezier (obsolete, equivalent to Hermite), 3 - Linear, 4 - Stepped, 5 - 2D Bezier
 	fs << wxT(" 0 0 0 0 0 0\n");	// Curve Data 1-6, all 0s for now.
 }
 
@@ -594,7 +594,7 @@ void WriteLWSceneEnvKey(wxTextOutputStream &fs, uint32 Chan, float value, float 
 // Single Keyframe use. Use WriteLWSceneEnvArray for writing animations.
 void WriteLWSceneEnvChannel(wxTextOutputStream &fs, uint32 ChanNum, float value, float time, uint16 spline = 0)
 {
-	fs << wxT("Channel " << ChanNum << "\n");	// Channel Number
+	fs << wxT("Channel ") << ChanNum << wxT("\n");	// Channel Number
 	fs << wxT("{ Envelope\n");
 	fs << wxT("  1\n");							// Number of Keys in this envelope.
 	WriteLWSceneEnvKey(fs,ChanNum,value,time,spline);
@@ -605,9 +605,9 @@ void WriteLWSceneEnvChannel(wxTextOutputStream &fs, uint32 ChanNum, float value,
 // Multiple-frame use.
 void WriteLWSceneEnvArray(wxTextOutputStream &fs, uint32 ChanNum, AnimVector value)
 {
-	fs << wxT("Channel " << ChanNum << "\n");
+	fs << wxT("Channel ") << ChanNum << wxT("\n");
 	fs << wxT("{ Envelope\n");
-	fs << wxT("  " << value.Time.size() << "\n");
+	fs << wxT("  ") << value.Time.size() << wxT("\n");
 	for (uint32 n=0;n<value.Time.size();n++){
 		float time = (value.Time[n]/FRAMES_PER_SECOND)/FRAMES_PER_SECOND;	// Convert from WoW Frame Number into a Per-Second Float
 
@@ -621,12 +621,12 @@ void WriteLWSceneEnvArray(wxTextOutputStream &fs, uint32 ChanNum, AnimVector val
 // Writes the "Plugin" information for a scene object, light, camera &/or bones.
 void WriteLWScenePlugin(wxTextOutputStream &fs, wxString type, uint32 PluginCount, wxString PluginName, wxString Data = wxEmptyString)
 {
-	fs << wxT("Plugin " << type << " " << PluginCount << " " << PluginName << "\n" << Data << "EndPlugin\n");
+	fs << wxT("Plugin ") << type << wxT(" ") << PluginCount << wxT(" ") << PluginName << wxT("\n") << Data << wxT("EndPlugin\n");
 }
 
 // Write Keyframe Motion Array
 void LW_WriteMotionArray(wxTextOutputStream &fs,AnimationData AnimData, size_t NumChannels){
-	fs << "NumChannels " << NumChannels << "\n";
+	fs << wxT("NumChannels ") << NumChannels << wxT("\n");
 
 	// Position
 	if (NumChannels > 0)
@@ -652,7 +652,7 @@ void LW_WriteMotionArray(wxTextOutputStream &fs,AnimationData AnimData, size_t N
 }
 
 // Gather Functions
-LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LWScene &scene, bool announce = true);
+LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWScene &scene, bool announce = true);
 LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene);
 LWObject GatherADTforLWO(MapTile *m, const char *fn, LWScene &scene);
 

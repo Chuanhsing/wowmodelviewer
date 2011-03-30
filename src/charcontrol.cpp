@@ -2706,15 +2706,15 @@ void CharDetails::save(wxString fn, TabardDetails *td)
     wxTextOutputStream f( output );
 	if (!output.IsOk())
 		return;
-	f << race << " " << gender << endl;
-	f << skinColor << " " << faceType << " " << hairColor << " " << hairStyle << " " << facialHair << " " << facialColor << endl;
+	f << race << wxT(" ") << gender << endl;
+	f << skinColor << wxT(" ") << faceType << wxT(" ") << hairColor << wxT(" ") << hairStyle << wxT(" ") << facialHair << wxT(" ") << facialColor << endl;
 	for (int i=0; i<NUM_CHAR_SLOTS; i++) {
 		f << equipment[i] << endl;
 	}
 
 	// 5976 is the ID value for "Guild Tabard"
 	if (equipment[CS_TABARD] == 5976) {
-		f << td->Background << " " << td->Border << " " << td->BorderColor << " " << td->Icon << " " << td->IconColor << endl;
+		f << td->Background << wxT(" ") << td->Border << wxT(" ") << td->BorderColor << wxT(" ") << td->Icon << wxT(" ") << td->IconColor << endl;
 	}
 	output.Close();
 }

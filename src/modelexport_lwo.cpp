@@ -163,7 +163,7 @@ bool WriteLWObject(wxString filename, LWObject Object) {
 	wxFFileOutputStream f(file, wxT("w+b"));
 
 	if (!f.IsOk()) {
-		wxMessageBox(wxString::Format(wxT("Unable to access Lightwave Object file.\nCould not export model %s."),file.AfterLast(SLASH)),wxT("Error"));
+		wxMessageBox(wxString::Format(wxT("Unable to access Lightwave Object file.\nCould not export model %s."), file.AfterLast(SLASH).c_str()), wxT("Error"));
 		wxLogMessage(wxT("Error: Unable to open Lightwave Object file '%s'. Could not export model."), file.c_str());
 		return false;
 	}
@@ -1167,23 +1167,23 @@ void WriteLWSceneBone(wxTextOutputStream &fs, LWBones BoneData)
 		active = 0;
 	}
 
-	fs << wxT("\nAddBone 4") << wxString::Format(wxT("%03x"),BoneData.BoneID) << wxT("0000\nBoneName " << BoneData.Name << "\n");
-	fs << wxT("ShowBone 1 -1 0.376471 0.878431 0.941176\nBoneActive " << active << "\n");
+	fs << wxT("\nAddBone 4") << wxString::Format(wxT("%03x"), BoneData.BoneID) << wxT("0000\nBoneName ") << BoneData.Name << wxT("\n");
+	fs << wxT("ShowBone 1 -1 0.376471 0.878431 0.941176\nBoneActive ") << active << wxT("\n");
 	fs << wxT("BoneStrength 1\n");
 	if (BoneData.WeightMap_Name != wxEmptyString){
-		fs << wxT("BoneWeightMapName " << BoneData.WeightMap_Name << "\nBoneWeightMapOnly " << (BoneData.WeightMap_Only?1:0) << "\nBoneNormalization " << (BoneData.WeightMap_Normalize?1:0) << "\n");
+		fs << wxT("BoneWeightMapName ") << BoneData.WeightMap_Name << wxT("\nBoneWeightMapOnly ") << (BoneData.WeightMap_Only?1:0) << wxT("\nBoneNormalization ") << (BoneData.WeightMap_Normalize?1:0) << wxT("\n");
 	}
-	fs << wxT("ScaleBoneStrength 1" << "\n");
-	fs << wxT("BoneRestPosition "<<BoneData.RestPos.x<<" "<<BoneData.RestPos.y<<" "<<BoneData.RestPos.z<< "\n");
-	fs << wxT("BoneRestDirection "<<BoneData.RestRot.x<<" "<<BoneData.RestRot.y<<" "<<BoneData.RestRot.z<< "\n");
-	fs << wxT("BoneRestLength "<<BoneData.Length<< "\n");
-	fs << wxT("BoneType " << BoneData.BoneType << "\n");
+	fs << wxT("ScaleBoneStrength 1\n");
+	fs << wxT("BoneRestPosition ")<<BoneData.RestPos.x<<wxT(" ")<<BoneData.RestPos.y<<wxT(" ")<<BoneData.RestPos.z<< wxT("\n");
+	fs << wxT("BoneRestDirection ")<<BoneData.RestRot.x<<wxT(" ")<<BoneData.RestRot.y<<wxT(" ")<<BoneData.RestRot.z<< wxT("\n");
+	fs << wxT("BoneRestLength ")<<BoneData.Length<< wxT("\n");
+	fs << wxT("BoneType ") << BoneData.BoneType << wxT("\n");
 	fs << wxT("BoneMotion\n");
 	
 	LW_WriteMotionArray(fs,BoneData.AnimData,9);
 
 	fs << wxT("PathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
-	fs << wxT("ParentItem " << BoneData.ParentType);
+	fs << wxT("ParentItem ") << BoneData.ParentType;
 	if (BoneData.ParentType == LW_ITEMTYPE_BONE){
 		fs << wxString::Format(wxT("%03x"),BoneData.ParentID) << wxT("0000");
 	}else{	// Assume LW_ITEMTYPE_OBJECT
@@ -1195,16 +1195,16 @@ void WriteLWSceneBone(wxTextOutputStream &fs, LWBones BoneData)
 // Writes an Object or Null, including Bones, to the scene file.
 void WriteLWSceneObject(wxTextOutputStream &fs, LWSceneObj Object)
 {
-	wxLogMessage(wxT("Writing object information for %s..."),Object.Name.AfterLast(SLASH));
+	wxLogMessage(wxT("Writing object information for %s..."), Object.Name.AfterLast(SLASH).c_str());
 	if (Object.isNull == true){
 		fs << wxT("AddNullObject");
 	}else{
 		fs << wxT("LoadObjectLayer ") << Object.LayerID;
 	}
-	fs << wxT(" 1" << wxString::Format(wxT("%07x"),Object.ObjectID) << " " << Object.Name << "\nChangeObject 0\n");
+	fs << wxT(" 1") << wxString::Format(wxT("%07x"),Object.ObjectID) << wxT(" ") << Object.Name << wxT("\nChangeObject 0\n");
 
 	if (Object.ObjectTags != wxEmptyString)
-		fs << wxT("// " << Object.ObjectTags << "\n");
+		fs << wxT("// ") << Object.ObjectTags << wxT("\n");
 	fs << wxT("ShowObject 7 3\nGroup 0\nObjectMotion\n"); // -1 0.376471 0.878431 0.941176
 
 	LW_WriteMotionArray(fs,Object.AnimData,9);
@@ -1212,7 +1212,7 @@ void WriteLWSceneObject(wxTextOutputStream &fs, LWSceneObj Object)
 	fs << wxT("IKInitCustomFrame 0\nGoalStrength 1\nIKFKBlending 0\nIKSoftMin 0.25\nIKSoftMax 0.75\nCtrlPosItemBlend 1\nCtrlRotItemBlend 1\nCtrlScaleItemBlend 1\n\nPathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
 
 	if (Object.ParentType > LW_ITEMTYPE_NOPARENT){
-		fs << wxT("ParentItem " << Object.ParentType);
+		fs << wxT("ParentItem ") << Object.ParentType;
 		if (Object.ParentType == LW_ITEMTYPE_BONE){
 			fs << wxString::Format(wxT("%03x"),Object.ParentID) << wxT("0000");
 		}else{
@@ -1225,26 +1225,26 @@ void WriteLWSceneObject(wxTextOutputStream &fs, LWSceneObj Object)
 	// Bones
 	if (modelExport_LW_ExportBones == true){
 		if (Object.Bones.size() > 0){
-			wxLogMessage(wxT("Writing data for %i %s..."),Object.Bones.size(),(Object.Bones.size()>1?wxT("bones"):wxT("bone")),Object.Name.AfterLast(SLASH));
+			wxLogMessage(wxT("Writing data for %i %s %s..."),Object.Bones.size(),(Object.Bones.size()>1?"bones":"bone"),Object.Name.AfterLast(SLASH).c_str());
 			fs << wxT("BoneFalloffType 5\nFasterBones 0\n");
 			for (size_t x=0;x<Object.Bones.size();x++){
 				WriteLWSceneBone(fs, Object.Bones[x]);
 			}
 		}
-		fs << "\n";
+		fs << wxT("\n");
 	}
 }
 
 // Write a Light to the Scene File
 void WriteLWSceneLight(wxTextOutputStream &fs, LWLight Light) //uint32 &lcount, Vec3D LPos, uint32 Ltype, Vec3D Lcolor, float Lintensity, bool useAtten, float AttenEnd, float defRange = 2.5, wxString prefix = wxEmptyString, uint32 ParentNum = -1)
 {
-	fs << wxT("AddLight 2" << wxString::Format(wxT("%07x"),Light.LightID) << "\n");
+	fs << wxT("AddLight 2") << wxString::Format(wxT("%07x"),Light.LightID) << wxT("\n");
 	//modelname[0] = toupper(modelname[0]);
-	fs << wxT("LightName " << Light.Name << "\nShowLight 1 -1 0.941176 0.376471 0.941176\nLightMotion\n");
+	fs << wxT("LightName ") << Light.Name << wxT("\nShowLight 1 -1 0.941176 0.376471 0.941176\nLightMotion\n");
 	LW_WriteMotionArray(fs,Light.AnimData,9);
 
 	if (Light.ParentType > LW_ITEMTYPE_NOPARENT){
-		fs << wxT("ParentItem " << Light.ParentType);
+		fs << wxT("ParentItem ") << Light.ParentType;
 		if (Light.ParentType == LW_ITEMTYPE_BONE){
 			fs << wxString::Format(wxT("%03x"),Light.ParentID) << wxT("0000");
 		}else{
@@ -1263,7 +1263,7 @@ void WriteLWSceneLight(wxTextOutputStream &fs, LWLight Light) //uint32 &lcount, 
 		LColor.z *= 0.99f;
 		LIntensity /= 0.99f;
 	}
-	fs << wxT("LightColor " << LColor.x << " " << LColor.y << " " << LColor.z << "\nLightIntensity " << LIntensity << "\n");
+	fs << wxT("LightColor ") << LColor.x << wxT(" ") << LColor.y << wxT(" ") << LColor.z << wxT("\nLightIntensity ") << LIntensity << wxT("\n");
 
 	// Process Light type & output!
 	switch (Light.LightType) {
@@ -1271,11 +1271,11 @@ void WriteLWSceneLight(wxTextOutputStream &fs, LWLight Light) //uint32 &lcount, 
 		case 1:
 		default:
 			// Default to an Omni (Point) light.
-			fs << wxT("LightType " << LW_LIGHTTYPE_POINT << "\n");
+			fs << wxT("LightType ") << LW_LIGHTTYPE_POINT << wxT("\n");
 
 			if (Light.FalloffRadius > 0.0f) {
 				// Use Inverse Distance for the default Light Falloff Type. Should better simulate WoW Lights, until I can write a WoW light plugin for Lightwave...
-				fs << wxT("LightFalloffType 2\nLightRange " << Light.FalloffRadius << "\n");
+				fs << wxT("LightFalloffType 2\nLightRange ") << Light.FalloffRadius << wxT("\n");
 			}else{
 				// Default to these settings, which look pretty close...
 				fs << wxT("LightFalloffType 2\nLightRange 2.5\n");
@@ -1354,8 +1354,8 @@ bool WriteLWScene(LWScene *SceneData){
 		Frame_First = 0;
 		Frame_Last = 60;
 	}
-	fs << wxT("RenderRangeType 0\nFirstFrame " << Frame_First << "\nLastFrame " << Frame_Last << "\nFrameStep 1\nRenderRangeObject 0\nRenderRangeArbitrary " << Frame_First << "-" << Frame_Last << "\n");
-	fs << wxT("PreviewFirstFrame " << Frame_First << "\nPreviewLastFrame " << Frame_Last << "\nPreviewFrameStep 1\nCurrentFrame " << Frame_First << "\nFramesPerSecond 30\nChangeScene 0\n\n");
+	fs << wxT("RenderRangeType 0\nFirstFrame ") << Frame_First << wxT("\nLastFrame ") << Frame_Last << wxT("\nFrameStep 1\nRenderRangeObject 0\nRenderRangeArbitrary ") << Frame_First << wxT("-") << Frame_Last << wxT("\n");
+	fs << wxT("PreviewFirstFrame ") << Frame_First << wxT("\nPreviewLastFrame ") << Frame_Last << wxT("\nPreviewFrameStep 1\nCurrentFrame ") << Frame_First << wxT("\nFramesPerSecond 30\nChangeScene 0\n\n");
 
 	// Objects & Bones
 	size_t numObj = SceneData->Objects.size();
@@ -1389,15 +1389,15 @@ bool WriteLWScene(LWScene *SceneData){
 			for (size_t c=0;c<SceneData->Cameras.size();c++){
 				wxLogMessage(wxT("Writing data for Camera %02i..."),c);
 				LWCamera *cam = &SceneData->Cameras[c];
-				fs << wxT("AddCamera 3" << wxString::Format(wxT("%07x"),cam->CameraID) << "\nCameraName Camera\nShowCamera 1 -1 0.125490 0.878431 0.125490\nCameraMotion\n");
+				fs << wxT("AddCamera 3") << wxString::Format(wxT("%07x"),cam->CameraID) << wxT("\nCameraName Camera\nShowCamera 1 -1 0.125490 0.878431 0.125490\nCameraMotion\n");
 				LW_WriteMotionArray(fs, cam->AnimData, 6);
 				if (cam->ParentType > LW_ITEMTYPE_NOPARENT){
-					fs << wxT("ParentItem " << cam->ParentType << wxString::Format(wxT("%07x"),cam->ParentID) << "\n");
+					fs << wxT("ParentItem ") << cam->ParentType << wxString::Format(wxT("%07x"),cam->ParentID) << wxT("\n");
 				}
 				fs << wxT("IKInitCustomFrame 0\nGoalStrength 1\nIKFKBlending 0\nIKSoftMin 0.25\nIKSoftMax 0.75\nCtrlPosItemBlend 1\nCtrlRotItemBlend 1\nCtrlScaleItemBlend 1\n\n");
 				fs << wxT("HController 1\nPController 1\nPathAlignLookAhead 0.033\nPathAlignMaxLookSteps 10\nPathAlignReliableDist 0.001\n");
-				fs << wxT("TargetItem 1"<<wxString::Format(wxT("%07x"),cam->TargetObjectID)<<"\n");
-				fs << wxT("ZoomFactor "<<(cam->FieldOfView*3.6)<<"\nZoomType 1\n");
+				fs << wxT("TargetItem 1")<<wxString::Format(wxT("%07x"),cam->TargetObjectID)<<wxT("\n");
+				fs << wxT("ZoomFactor ")<<(cam->FieldOfView*3.6)<<wxT("\nZoomType 1\n");
 				WriteLWScenePlugin(fs,wxT("CameraHandler"),1,wxT("Perspective"));	// Make the camera a Perspective camera
 				fs << wxT("\n");
 			}
@@ -1976,15 +1976,15 @@ void ExportWMOtoScene(WMO *m, const char *fn){
 //---------------------------------------------
 
 // Gather M2 Data
-LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, const char *fn, LWScene &scene, bool announce){
+LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWScene &scene, bool announce){
 	LWObject Object;
 	if (!m){
 		return Object;
 		Object.~LWObject();
 	}
 
-	wxString filename(fn, wxConvUTF8);
-	wxString scfilename = wxString(fn, wxConvUTF8).BeforeLast('.').Append(wxT(".lws"));
+	wxString filename = fn;
+	wxString scfilename = fn.BeforeLast('.') + wxT(".lws");
 
 	if (modelExport_LW_PreserveDir == true){
 		wxString Path, Name;
@@ -3150,7 +3150,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 			while (lNum.Len() < liNum.Len()){
 				lNum = wxString(wxT("0")) + lNum;
 			}
-			l.Name = wxString::Format(wxT("%s Light %03i"), m->name.AfterLast('\\').BeforeLast('.'), LightID);
+			l.Name = wxString::Format(wxT("%s Light %03i"), m->name.AfterLast('\\').BeforeLast('.').c_str(), LightID);
 
 			scene.Lights.push_back(l);
 		}
@@ -3167,11 +3167,11 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 		if ((modelExport_LW_DoodadsAs == 0)||(modelExport_LW_DoodadsAs == 1)){			// Doodads as Nulls or Scene Objects...
 			for (size_t ds=0;ds<m->nDoodadSets;ds++){
 				size_t ddSetID = LW_ObjCount.GetPlus();
-				LWSceneObj doodadset(m->doodadsets[ds].name,ddSetID,WMOObjID,LW_ITEMTYPE_OBJECT,true);
-				doodadset.AnimData = AnimationData(animValue0,animValue0,animValue1);
+				LWSceneObj doodadset(wxString(m->doodadsets[ds].name, wxConvUTF8), ddSetID, WMOObjID, LW_ITEMTYPE_OBJECT, true);
+				doodadset.AnimData = AnimationData(animValue0, animValue0, animValue1);
 				scene.Objects.push_back(doodadset);
 
-				wxLogMessage(wxT("Processing Doodadset %i: %s"),ds,m->doodadsets[ds].name);
+				wxLogMessage(wxT("Processing Doodadset %i: %s"),ds, m->doodadsets[ds].name);
 				for (size_t dd=m->doodadsets[ds].start;dd<(m->doodadsets[ds].start+m->doodadsets[ds].size);dd++){
 					WMOModelInstance *ddinstance = &m->modelis[dd];
 					size_t ddID = LW_ObjCount.GetPlus();
@@ -3180,7 +3180,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 					bool isNull = true;
 					if (modelExport_LW_DoodadsAs == 1){
 						ddfilename = RootDir.BeforeLast(SLASH);
-						ddfilename << SLASH << ddinstance->filename.AfterLast(SLASH).BeforeLast(wxT('.')).Append(wxT(".lwo"));
+						ddfilename << SLASH << ddinstance->filename.AfterLast(SLASH).BeforeLast(wxT('.')) << wxT(".lwo");
 						if (modelExport_LW_PreserveDir == true){
 							wxString Path, Name;
 
@@ -3288,9 +3288,10 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 					}
 					if (tripped == false){
 						wxString fname = RootDir.BeforeLast(SLASH);
-						fname << SLASH << ddm->modelname.AfterLast(SLASH).BeforeLast(wxT('.')).Append(wxT(".lwo"));
+						fname << SLASH << ddm->modelname.AfterLast(SLASH).BeforeLast(wxT('.')) << wxT(".lwo");
 						// Must gather before paths, else it generates files in the wrong place.
-						LWObject DDObject = GatherM2forLWO(NULL,ddm,true,fname,LWScene(),false);
+						LWScene empty_scene;
+						LWObject DDObject = GatherM2forLWO(NULL,ddm,true,fname,empty_scene,false);
 
 						if (modelExport_LW_PreserveDir == true){
 							wxString Path, Name;
@@ -3316,10 +3317,10 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 
 						if (DDObject.SourceType == wxEmptyString){
 							//wxMessageBox(wxT("Error gathering information for export."),wxT("Export Error"));
-							wxLogMessage(wxT("Error gathering Object data for Doodad %s."),ddm->modelname);
+							wxLogMessage(wxT("Error gathering Object data for Doodad %s."),ddm->modelname.c_str());
 						}
 						if (WriteLWObject(fname, DDObject) == false){
-							wxLogMessage(wxT("Error writing object file for Doodad %s."),ddm->modelname);
+							wxLogMessage(wxT("Error writing object file for Doodad %s."),ddm->modelname.c_str());
 						}
 						used.push_back(ddm->modelname);
 					}
@@ -3550,7 +3551,7 @@ LWObject GatherADTforLWO(MapTile *m, const char *fn, LWScene &scene){
 // Export M2s
 void ExportLWO_M2(Attachment *att, Model *m, const char *fn, bool init){
 	wxString filename(fn, wxConvUTF8);
-	wxString scfilename = wxString(fn, wxConvUTF8).BeforeLast('.').Append(wxT(".lws"));
+	wxString scfilename = wxString(fn, wxConvUTF8).BeforeLast('.') + wxT(".lws");
 	LW_ObjCount.Reset();
 	LW_LightCount.Reset();
 	LW_BoneCount.Reset();
@@ -3604,7 +3605,7 @@ void ExportLWO_M2(Attachment *att, Model *m, const char *fn, bool init){
 	LWScene Scene(scfilename.AfterLast(SLASH),scfilename.BeforeLast(SLASH));
 
 	// Object Data
-	LWObject Object = GatherM2forLWO(att,m,init,fn,Scene);
+	LWObject Object = GatherM2forLWO(att,m,init,wxString(fn, wxConvUTF8),Scene);
 	if (Object.SourceType == wxEmptyString){
 		wxMessageBox(wxT("Error gathering information for export."),wxT("Export Error"));
 		wxLogMessage(wxT("Failure gathering information for export."));
@@ -3630,7 +3631,7 @@ void ExportLWO_M2(Attachment *att, Model *m, const char *fn, bool init){
 // Export WMOs
 void ExportLWO_WMO(WMO *m, const char *fn){
 	wxString filename(fn, wxConvUTF8);
-	wxString scfilename = filename.BeforeLast('.').Append(wxT(".lws"));
+	wxString scfilename = filename.BeforeLast('.') + wxT(".lws");
 	LW_ObjCount.Reset();
 	LW_LightCount.Reset();
 	LW_BoneCount.Reset();
@@ -3679,10 +3680,10 @@ void ExportLWO_WMO(WMO *m, const char *fn){
 	}
 
 	// Scene Data
-	LWScene Scene(scfilename.AfterLast(SLASH),scfilename.BeforeLast(SLASH));
+	LWScene Scene(scfilename.AfterLast(SLASH), scfilename.BeforeLast(SLASH));
 
 	// Object Data
-	LWObject Object = GatherWMOforLWO(m,fn,Scene);
+	LWObject Object = GatherWMOforLWO(m, fn, Scene);
 	if (Object.SourceType == wxEmptyString){
 		wxMessageBox(wxT("Error gathering information for export."),wxT("Export Error"));
 		wxLogMessage(wxT("Failure gathering information for export."));
@@ -3715,7 +3716,7 @@ void ExportLWO_WMO(WMO *m, const char *fn){
 // ADT Exporter
 void ExportLWO_ADT(MapTile *m, const char *fn){
 	wxString filename(fn, wxConvUTF8);
-	wxString scfilename = wxString(fn, wxConvUTF8).BeforeLast('.').Append(wxT(".lws"));
+	wxString scfilename = wxString(fn, wxConvUTF8).BeforeLast('.') + wxT(".lws");
 	LW_ObjCount.Reset();
 	LW_LightCount.Reset();
 	LW_BoneCount.Reset();

@@ -1934,7 +1934,7 @@ void ModelCamera::init(MPQFile &f, ModelCameraDef &mcd, uint32 *global, wxString
 	if (modelname.Find(wxT("Cameras\\"))>-1) {
 		try {
 			wxLogMessage(wxT("Trying Camera DB..."));
-			wxString mn = modelname.BeforeLast(wxT('.')).Append(wxT(".mdx"));
+			wxString mn = modelname.BeforeLast(wxT('.')) + wxT(".mdx");
 			wxLogMessage(wxT("ModelName: %s"), mn.c_str());
 			CamCinematicDB::Record r = camcinemadb.getByCamModel(mn.c_str());
 			wxLogMessage(wxT("Setting variables.."));
@@ -1973,7 +1973,7 @@ void ModelCamera::initv10(MPQFile &f, ModelCameraDefV10 &mcd, uint32 *global, wx
 	if (modelname.Find(wxT("Cameras\\"))>-1) {
 		try {
 			wxLogMessage(wxT("Trying Camera DB..."));
-			wxString mn = modelname.BeforeLast(wxT('.')).Append(wxT(".mdx"));
+			wxString mn = modelname.BeforeLast(wxT('.')) + wxT(".mdx");
 			wxLogMessage(wxT("ModelName: %s"), mn.c_str());
 			CamCinematicDB::Record r = camcinemadb.getByCamModel(mn.c_str());
 			wxLogMessage(wxT("Setting variables.."));

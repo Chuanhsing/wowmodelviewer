@@ -80,8 +80,8 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 
 	fm.close();
 
-	f << "# Wavefront OBJ exported by WoW Model Viewer " << APP_VERSION << endl << endl;
-	f << "mtllib " << matName.mb_str() << endl << endl;
+	f << wxT("# Wavefront OBJ exported by WoW Model Viewer ") << APP_VERSION << endl << endl;
+	f << wxT("mtllib ") << matName << endl << endl;
 
 	// output all the vertice data
 	int vertics = 0;
@@ -106,7 +106,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 			}
 		}
 	}
-	f << "# " << vertics << " vertices" << endl << endl;
+	f << wxT("# ") << vertics << wxT(" vertices") << endl << endl;
 
 	// output all the texture coordinate data
 	int textures = 0;
@@ -123,7 +123,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 			}
 		}
 	}
-	f << "# " << textures << " texture coordinates" << endl << endl;
+	f << wxT("# ") << textures << wxT(" texture coordinates") << endl << endl;
 
 	// output all the vertice normals data
 	int normals = 0;
@@ -139,7 +139,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 			}
 		}
 	}
-	f << "# " << normals << " normals" << endl << endl;
+	f << wxT("# ") << normals << wxT(" normals") << endl << endl;
 
 	int counter=1;
 	// output the indice data
@@ -167,26 +167,26 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 			if (texName.Length() == 0)
 				texName << wxString(m->modelname.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(wxT('.')) << wxString::Format(wxT("_Image_%03i"),i);
 
-			f << "g Geoset_" << i << endl;
-			f << "usemtl " << texName << endl;
-			f << "s 1" << endl;
+			f << wxT("g Geoset_") << i << endl;
+			f << wxT("usemtl ") << texName << endl;
+			f << wxT("s 1") << endl;
 			triangles = 0;
 			for (unsigned int k=0; k<p.indexCount; k+=3) {
-				f << "f ";
-				f << counter << "/" << counter << "/" << counter << " ";
+				f << wxT("f ");
+				f << counter << wxT("/") << counter << wxT("/") << counter << wxT(" ");
 				counter ++;
-				f << counter << "/" << counter << "/" << counter << " ";
+				f << counter << wxT("/") << counter << wxT("/") << counter << wxT(" ");
 				counter ++;
-				f << counter << "/" << counter << "/" << counter << endl;
+				f << counter << wxT("/") << counter << wxT("/") << counter << endl;
 				counter ++;
 				triangles ++;
 			}
-			f << "# " << triangles << " triangles in group" << endl << endl;
+			f << wxT("# ") << triangles << wxT(" triangles in group") << endl << endl;
 			triangles_total += triangles;
 		}
 	}
 
-	f << "# " << triangles_total << " triangles total" << endl << endl;
+	f << wxT("# ") << triangles_total << wxT(" triangles total") << endl << endl;
 	
 	// Close file
 	fs.Close();

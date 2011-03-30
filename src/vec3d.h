@@ -135,12 +135,6 @@ public:
 		return out;
 	}
 
-	friend wxTextOutputStream& operator<<(wxTextOutputStream& out, Vec3D& v)
-	{
-		out << "(" << v.x << ", " << v.y << ", " << v.z << ")";
-		return out;
-	}
-
 	operator float*()
 	{
 		return (float*)this;

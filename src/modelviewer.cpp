@@ -2255,7 +2255,7 @@ void ModelViewer::DownloadLocaleFiles()
 {
 	wxString trunk = wxT("http://wowmodelviewer.googlecode.com/svn/trunk/");
 	wxString lang;
-	if (langName == "enGB")
+	if (langName == wxT("enGB"))
 		lang = wxT("enUS");
 
 	wxString msg = wxT("Would you like to download ") + langName + wxT(" locale files?");
@@ -2289,7 +2289,7 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 	wxString trunk = wxT("http://wowmodelviewer.googlecode.com/svn/trunk/");
 	DownloadLocaleFiles();
 
-	wxURL url(wxT(trunk + "latest.txt"));
+	wxURL url(trunk + wxT("latest.txt"));
 	if(url.GetError() == wxURL_NOERR) {
 		wxInputStream *stream = url.GetInputStream();
 		
@@ -2864,7 +2864,7 @@ void DiscoveryItem()
 					name.Printf(wxT("Set%d"), it->getUInt(ItemSetDB::SetID));
 				ret = items.addDiscoveryId(id, name);
 				if (!ret.IsEmpty())
-					f << ret.mb_str() << endl;
+					f << ret << endl;
 			}
 		}
 	}
@@ -2875,7 +2875,7 @@ void DiscoveryItem()
 			name.Printf(wxT("Item%d"), id);
 			ret = items.addDiscoveryId(id, name);
 			if (!ret.IsEmpty())
-				f << ret.mb_str() << endl;
+				f << ret << endl;
 		}
 	}
 	// 3. from creaturedisplayinfoextra.dbc
@@ -2893,7 +2893,7 @@ void DiscoveryItem()
 					name.Printf(wxT("NPC%d"), it->getUInt(NPCDB::NPCID));
 					ret = items.addDiscoveryDisplayId(id, name, type);
 					if (!ret.IsEmpty())
-						f << ret.mb_str() << endl;
+						f << ret << endl;
 				}
 			}
 		}

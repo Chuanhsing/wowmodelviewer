@@ -209,7 +209,7 @@ public:
 	void OnBackground(wxCommandEvent &event);
 	void OnLanguage(wxCommandEvent &event);
 	void OnAbout(wxCommandEvent &event);
-	void ModelViewer::DownloadLocaleFiles();
+	void DownloadLocaleFiles();
 	void OnCheckForUpdate(wxCommandEvent &event);
 	void OnCanvasSize(wxCommandEvent &event);
 	void OnTest(wxCommandEvent &event);
