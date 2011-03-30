@@ -1615,7 +1615,7 @@ void ModelCanvas::RenderToBuffer()
 	// *************************
 	// setup the view/projection
 	if (model) {
-		if (useCamera >= 0 && model->hasCamera) {
+		if (useCamera && model->hasCamera) {
 			model->cam[0].setup();
 		} else {
 			// TODO: Possibly move this into the Model/Attachment/Displayable::draw() routine?

@@ -3188,8 +3188,10 @@ void ModelViewer::ImportArmouryBattleNet(wxString strURL)
 	{ 
 		// Success
 		wxInputStream *stream = http.GetInputStream(strPage); 
-		if (!stream || !stream->IsOk())
+		if (!stream || !stream->IsOk()) {
+			http.Close();
 			return;
+		}
 
 		// Make sure there was no error retrieving the page
 		if(http.GetError() == wxPROTO_NOERR) {
@@ -3200,13 +3202,6 @@ void ModelViewer::ImportArmouryBattleNet(wxString strURL)
 
 			wxTextFile fin(filename);
 			if (fin.Open(filename)) {
-				wxString race = wxT("Human");
-				wxString gender = wxT("Male");
-				wxString strModel = wxT("Character\\") + race + MPQ_SLASH + gender + MPQ_SLASH + race + gender + wxT(".m2");
-				LoadModel(strModel);
-				if (!g_canvas->model)
-					return;
-
 				wxRegEx exSlot;
 				wxString patternSlot = wxT("data-type=\"([0-9]+)\"");
 				exSlot.Compile(patternSlot);
@@ -3214,6 +3209,10 @@ void ModelViewer::ImportArmouryBattleNet(wxString strURL)
 				wxString patternItem = wxT("data-item=\"i=([0-9]+)");
 				exItem.Compile(patternItem);
 				long slotID = 0;
+
+				wxRegEx exRace;
+				wxString patternRace = wxT("character/summary/backgrounds/race/([0-9]+)");
+				exRace.Compile(patternRace);
 
 				wxString line;
 				for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
@@ -3239,13 +3238,27 @@ void ModelViewer::ImportArmouryBattleNet(wxString strURL)
 						case IT_QUIVER:		slotID = CS_QUIVER; break;
 						default: slotID = -1;
 						}
-					} else	if (slotID != -1 && exItem.Matches(line)) {
+					} else if (slotID != -1 && exItem.Matches(line)) {
 						// Item ID
 						long itemID;
 						exItem.GetMatch(line, 1).ToLong(&itemID);
 
 						g_charControl->cd.equipment[slotID] = itemID;
 						slotID = -1;
+					} else if (exRace.Matches(line)) {
+						long raceId;
+						exRace.GetMatch(line, 1).ToLong(&raceId);
+						CharRacesDB::Record racer = racedb.getById(raceId);
+						wxString race;
+						if (gameVersion == 30100)
+							race = racer.getString(CharRacesDB::NameV310);
+						else
+							race = racer.getString(CharRacesDB::Name);
+						wxString gender = wxT("Male");
+						wxString strModel = wxT("Character\\") + race + MPQ_SLASH + gender + MPQ_SLASH + race + gender + wxT(".m2");
+						LoadModel(strModel);
+						if (!g_canvas->model)
+							return;
 					}
 				}
 				fin.Close();

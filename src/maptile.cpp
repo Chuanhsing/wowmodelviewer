@@ -152,7 +152,7 @@ void fprintbu8( FILE* file, uint8 value )
 	unsigned int x = 1;
 	for( unsigned i = 0; i < 8; i++ )
 	{
-		b[i] = value & x;
+		b[i] = (value & x) ? true : false;
 		x <<= 1;
 	}
 

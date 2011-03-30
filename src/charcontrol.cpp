@@ -714,6 +714,9 @@ void CharControl::OnButton(wxCommandEvent &event)
 
 	} else if (event.GetId()==ID_LOAD_NPC_START) {
 		// TODO: a "Load NPC Outfit..." option to the character menu. It's now possible to equip a character with the exact NPC's gear (without weapons).		
+		if (!wxFileExists(wxT("discoveryitems.csv"))) {
+			wxMessageBox(wxT("You should run 'Item Discovery' once before Load NPC Outfit"), wxT("Info"));
+		}
 		selectNPC(UPDATE_NPC_START);
 	} else if (event.GetId()==ID_MOUNT) {
 		selectMount();
@@ -1982,8 +1985,8 @@ bool correctType(int type, int slot)
 	// Slight correction.  Type 21 = Lefthand weapon, Type 22 = Righthand weapon
 	//case CS_HAND_RIGHT:	return (type == IT_1HANDED || type == IT_GUN || type == IT_THROWN || type == IT_2HANDED || type == IT_CLAW || type == IT_DAGGER);
 	//case CS_HAND_LEFT:	return (type == IT_1HANDED || type == IT_BOW || type == IT_SHIELD || type == IT_2HANDED || type == IT_CLAW || type == IT_DAGGER || type == IT_OFFHAND);
-	case CS_HAND_RIGHT:	return (type == IT_LEFTHANDED || type == IT_GUN || type == IT_THROWN || type == IT_2HANDED || type == IT_DAGGER);
-	case CS_HAND_LEFT:	return (type == IT_RIGHTHANDED || type == IT_BOW || type == IT_SHIELD || type == IT_2HANDED || type == IT_DAGGER || type == IT_OFFHAND);
+	case CS_HAND_RIGHT:	return (type == IT_RIGHTHANDED || type == IT_GUN || type == IT_THROWN || type == IT_2HANDED || type == IT_DAGGER);
+	case CS_HAND_LEFT:	return (type == IT_LEFTHANDED || type == IT_BOW || type == IT_SHIELD || type == IT_2HANDED || type == IT_DAGGER || type == IT_OFFHAND);
 	case CS_CAPE:		return (type == IT_CAPE);
 	case CS_TABARD:		return (type == IT_TABARD);
 	case CS_QUIVER:		return (type == IT_QUIVER);
