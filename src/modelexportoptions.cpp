@@ -113,7 +113,7 @@ void ModelExportOptions_General::Update()
 {
 	ddextype->Clear();
 	ddextype->Append(wxString(wxT("None")));
-	for (int x=0;x<ExporterTypeCount;x++){
+	for (size_t x=0;x<ExporterTypeCount;x++){
 		ddextype->Append(Exporter_Types[x].Name);
 	}
 	ddextype->SetSelection(Perfered_Exporter+1);

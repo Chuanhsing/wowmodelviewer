@@ -586,7 +586,7 @@ void CharControl::OnCheck(wxCommandEvent &event)
 		try {
 			CharRacesDB::Record raceRec = racedb.getByName(raceName);
 			race = raceRec.getUInt(CharRacesDB::RaceID);
-			gender = (genderName == "female" || genderName == "Female" || genderName == "FEMALE") ? GENDER_FEMALE : GENDER_MALE;
+			gender = genderName.CmpNoCase(wxT("female")) == 0 ? GENDER_FEMALE : GENDER_MALE;
 		} catch (CharRacesDB::NotFound) {
 			// wtf
 			race = 0;

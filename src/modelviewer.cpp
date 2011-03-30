@@ -2261,7 +2261,7 @@ void ModelViewer::DownloadLocaleFiles()
 		wxString csvs[] = {wxT("items.csv"), wxT("npcs.csv")};
 		if (!wxDirExists(langName))
 			wxMkdir(langName);
-		for(int i=0; i<WXSIZEOF(csvs); i++) {
+		for(size_t i=0; i<WXSIZEOF(csvs); i++) {
 			wxString items_csv = trunk + wxT("bin/") + lang + wxT("/") + csvs[i];
 			wxURL items_url(items_csv);
 			if(items_url.GetError() == wxURL_NOERR) {
