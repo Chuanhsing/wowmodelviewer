@@ -95,7 +95,7 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 {
 	int n = 0;
 #if 0 // for worgen female
-	if (gameVersion >= 40000 && race == WORGEN && gender == FEMALE) { // worgen female
+	if (gameVersion >= 40000 && race == RACE_WORGEN && gender == GENDER_FEMALE) { // worgen female
 		wxString fn;
 		switch(type) { // 0: base, 1: face, 2: facial, 3: hair, 4: underwear
 			case SkinType: // Character\Worgen\Female\WorgenFemaleSkin00_12.blp
@@ -143,15 +143,15 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
 		// don't allow NPC skins ;(
-		#ifndef WotLK
-		if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Section)==section && i->getUInt(IsNPC)==npc) {
-			n++;
+		if (gameVersion < 30000) {
+			if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Section)==section && i->getUInt(IsNPC)==npc) {
+				n++;
+			}
+		} else {
+			if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Section)==section) {
+				n++;
+			}
 		}
-		#else
-		if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Section)==section) {
-			n++;
-		}
-		#endif
 	}
 
     return n;
@@ -161,7 +161,7 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
 {
 	int n = 0;
 #if 0 // for worgen female
-	if (gameVersion >= 40000 && race == WORGEN && gender == FEMALE) { // worgen female
+	if (gameVersion >= 40000 && race == RACE_WORGEN && gender == GENDER_FEMALE) { // worgen female
 		wxString fn;
 		switch(type) { // 0: base, 1: face, 2: facial, 3: hair, 4: underwear
 			case SkinType: // Character\Worgen\Female\WorgenFemaleSkin00_12.blp
@@ -208,15 +208,15 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
 #endif // for worgen female
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
-		#ifndef WotLK
-		if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Color)==color && i->getUInt(IsNPC)==npc) {
-			n++;
+		if (gameVersion < 30000) {
+			if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Color)==color && i->getUInt(IsNPC)==npc) {
+				n++;
+			}
+		} else {
+			if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Color)==color) {
+				n++;
+			}
 		}
-		#else
-		if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Color)==color) {
-			n++;
-		}
-		#endif
 	}
     return n;
 }
@@ -225,13 +225,13 @@ CharSectionsDB::Record CharSectionsDB::getByParams(unsigned int race, unsigned i
 {
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
-		#ifndef WotLK
-		if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Section)==section && i->getUInt(Color)==color && i->getUInt(IsNPC)==npc)
-			return (*i);
-		#else
-		if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Section)==section && i->getUInt(Color)==color)
-			return (*i);
-		#endif
+		if (gameVersion < 30000) {
+			if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Section)==section && i->getUInt(Color)==color && i->getUInt(IsNPC)==npc)
+				return (*i);
+		} else {
+			if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Section)==section && i->getUInt(Color)==color)
+				return (*i);
+		}
 	}
 	//wxLogMessage(wxT("NotFound: %s:%s#%d race:%d, gender:%d, type:%d, section:%d, color:%d"), __FILE__, __FUNCTION__, __LINE__, race, gender, type, section, color);
 	throw NotFound();
@@ -638,11 +638,11 @@ ItemRecord::ItemRecord(const char* line)
 		subclass = r.getInt(ItemDB::Subclass);
 		type = r.getInt(ItemDB::InventorySlot);
 		switch(r.getInt(ItemDB::Sheath)) {
-			case 1: sheath = ATT_RIGHT_BACK_SHEATH; break;
-			case 2: sheath = ATT_LEFT_BACK; break;
-			case 3: sheath = ATT_LEFT_HIP_SHEATH; break;
-			case 4: sheath = ATT_MIDDLE_BACK_SHEATH; break;
-			default: sheath = 0;
+			case SHEATHETYPE_MAINHAND: sheath = ATT_LEFT_BACK_SHEATH; break;
+			case SHEATHETYPE_LARGEWEAPON: sheath = ATT_LEFT_BACK; break;
+			case SHEATHETYPE_HIPWEAPON: sheath = ATT_LEFT_HIP_SHEATH; break;
+			case SHEATHETYPE_SHIELD: sheath = ATT_MIDDLE_BACK_SHEATH; break;
+			default: sheath = SHEATHETYPE_NONE;
 		}
 		discovery = false;
 		for (size_t i=strlen(line)-2; i>1; i--) {
@@ -774,11 +774,11 @@ wxString ItemDatabase::addDiscoveryId(int id, wxString name)
 		rec.subclass = r.getInt(ItemDB::Subclass);
 		rec.type = r.getInt(ItemDB::InventorySlot);
 		switch(r.getInt(ItemDB::Sheath)) {
-			case 1: rec.sheath = ATT_RIGHT_BACK_SHEATH; break;
-			case 2: rec.sheath = ATT_LEFT_BACK; break;
-			case 3: rec.sheath = ATT_LEFT_HIP_SHEATH; break;
-			case 4: rec.sheath = ATT_MIDDLE_BACK_SHEATH; break;
-			default: rec.sheath = 0;
+			case SHEATHETYPE_MAINHAND: rec.sheath = ATT_LEFT_BACK_SHEATH; break;
+			case SHEATHETYPE_LARGEWEAPON: rec.sheath = ATT_LEFT_BACK; break;
+			case SHEATHETYPE_HIPWEAPON: rec.sheath = ATT_LEFT_HIP_SHEATH; break;
+			case SHEATHETYPE_SHIELD: rec.sheath = ATT_MIDDLE_BACK_SHEATH; break;
+			default: rec.sheath = SHEATHETYPE_NONE;
 		}
 		rec.discovery = true;
 		rec.name.Printf(wxT("%s [%d] [%d]"), name.c_str(), rec.id, rec.model);

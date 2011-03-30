@@ -272,12 +272,12 @@ void CharControl::UpdateModel(Attachment *a)
 		// out of the ChrRaces.dbc.  Going to have to hardcode the values.
 		CharRacesDB::Record raceRec = racedb.getByName(raceName);
 		race = raceRec.getUInt(CharRacesDB::RaceID);
-		gender = (genderName.Lower() == wxT("female")) ? FEMALE : MALE;
+		gender = (genderName.Lower() == wxT("female")) ? GENDER_FEMALE : GENDER_MALE;
 	
 	} catch (CharRacesDB::NotFound) {
 		// wtf
 		race = 0;
-		gender = MALE;
+		gender = GENDER_MALE;
 	}
 
 	// Enable the use of NPC skins if its  a goblin.
@@ -286,7 +286,7 @@ void CharControl::UpdateModel(Attachment *a)
 	else
 		cd.useNPC=0;
 
-	if (race==6 || race==8 || race==11 || race==13 || race==14) // If its a troll/tauren/dranei/naga/broken, show the feet (dont wear boots)
+	if (race==RACE_TAUREN || race==RACE_TROLL || race==RACE_DRAENEI || race==RACE_NAGA || race==RACE_BROKEN) // If its a troll/tauren/dranei/naga/broken, show the feet (dont wear boots)
 		cd.showFeet = true;
 	else
 		cd.showFeet = false;
@@ -303,13 +303,13 @@ void CharControl::UpdateModel(Attachment *a)
 	cd.maxFacialHair = facialhairdb.getStylesFor(race, gender);
 	cd.maxFacialColor = cd.maxHairColor;
 
-#ifndef	WotLK
-	// Re-set the menu
-	if (cd.useNPC)
-		g_modelViewer->optMenu->Check(ID_USE_NPCSKINS, 1);
-	else
-		g_modelViewer->optMenu->Check(ID_USE_NPCSKINS, 0);
-#endif
+	if (gameVersion < 30000) {
+		// Re-set the menu
+		if (cd.useNPC)
+			g_modelViewer->optMenu->Check(ID_USE_NPCSKINS, 1);
+		else
+			g_modelViewer->optMenu->Check(ID_USE_NPCSKINS, 0);
+	}
 
 	g_modelViewer->charMenu->Check(ID_SHOW_FEET, 0);
 	// ----
@@ -325,7 +325,7 @@ void CharControl::UpdateModel(Attachment *a)
 	}
 	cd.maxHairStyle = (int)styles.size();
 #if 0 // for worgen female
-	if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen 
+	if (gameVersion >= 40000 && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen 
 		cd.maxHairStyle = 21;
 	}
 #endif // for worgen female
@@ -431,11 +431,11 @@ void CharControl::UpdateNPCModel(Attachment *a, unsigned int id)
 		CharRacesDB::Record raceRec = racedb.getByName(raceName);
 		race = raceRec.getUInt(CharRacesDB::RaceID);
 
-		gender = (genderName.Lower() == wxT("female")) ? FEMALE : MALE;
+		gender = (genderName.Lower() == wxT("female")) ? GENDER_FEMALE : GENDER_MALE;
 	} catch (CharRacesDB::NotFound) {
 		// wtf
 		race = 0;
-		gender = MALE;
+		gender = GENDER_MALE;
 	}
 
 	cd.race = race;
@@ -572,7 +572,6 @@ void CharControl::OnCheck(wxCommandEvent &event)
 		cd.eyeGlowType = 1;
 	else if (ID==ID_CHAREYEGLOW_DEATHKNIGHT)
 		cd.eyeGlowType = 2;
-#ifndef	WotLK
 	else if (event.GetId()==ID_USE_NPCSKINS) {		
 		// All this extra checking is to modify the the 'bounds' of the max skins on the spin button.
 		size_t p1 = model->name.find_first_of('\\', 0);
@@ -587,11 +586,11 @@ void CharControl::OnCheck(wxCommandEvent &event)
 		try {
 			CharRacesDB::Record raceRec = racedb.getByName(raceName);
 			race = raceRec.getUInt(CharRacesDB::RaceID);
-			gender = (genderName == "female" || genderName == "Female" || genderName == "FEMALE") ? FEMALE : MALE;
+			gender = (genderName == "female" || genderName == "Female" || genderName == "FEMALE") ? GENDER_FEMALE : GENDER_MALE;
 		} catch (CharRacesDB::NotFound) {
 			// wtf
 			race = 0;
-			gender = MALE;
+			gender = GENDER_MALE;
 		}
 
 		// If the race is a goblin, then ignore this
@@ -614,7 +613,6 @@ void CharControl::OnCheck(wxCommandEvent &event)
 			spins[0]->SetRange(0, cd.maxSkinColor-1);
 		}
 	}
-#endif
 
 	//  Update controls associated
 	RefreshEquipment();
@@ -788,7 +786,7 @@ void CharControl::RefreshModel()
 		wxLogMessage(wxT("Assertion base character Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 	}
 #if 0 // for worgen female
-	if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
+	if (gameVersion >= 40000 && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen
 		wxString fn;
 		fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), 0, cd.skinColor);
 		if (MPQFile::getSize(fn) > 0) {
@@ -805,7 +803,7 @@ void CharControl::RefreshModel()
 #endif // for worgen female
 
 	// HACK: for goblin males, explicitly load a hair texture
-	if (cd.race == GOBLIN && cd.gender == MALE && gobTex == 0 && gameVersion < 40000) {
+	if (cd.race == RACE_GOBLIN && cd.gender == GENDER_MALE && gobTex == 0 && gameVersion < 40000) {
         gobTex = texturemanager.add(wxT("Creature\\Goblin\\Goblin.blp"));	
 	}
 
@@ -814,7 +812,7 @@ void CharControl::RefreshModel()
 	bool showHair = cd.showHair;
 	bool showFacialHair = cd.showFacialHair;
 
-	if (cd.race != GOBLIN || gameVersion >= 40000) { // Goblin chars base texture already contains all this stuff.
+	if (cd.race != RACE_GOBLIN || gameVersion >= 40000) { // Goblin chars base texture already contains all this stuff.
 
 		// Display underwear on the model?
 		if (cd.showUnderwear) {
@@ -826,7 +824,7 @@ void CharControl::RefreshModel()
 				wxLogMessage(wxT("DBC underwear Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 			}
 #if 0 // for worgen female
-			if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
+			if (gameVersion >= 40000 && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen
 				wxString fn;
 				fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), 0, cd.skinColor);
 				if (MPQFile::getSize(fn) > 0)
@@ -847,7 +845,7 @@ void CharControl::RefreshModel()
 			wxLogMessage(wxT("DBC face Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 		}
 #if 0 // for worgen female
-		if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
+		if (gameVersion >= 40000 && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen
 			wxString fn;
 			fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), cd.faceType, cd.skinColor);
 			if (MPQFile::getSize(fn) > 0)
@@ -903,7 +901,7 @@ void CharControl::RefreshModel()
 		}
 	}
 #if 0 // for worgen female
-	if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen 
+	if (gameVersion >= 40000 && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen 
 		for(unsigned int i=1; i<=21; i++) {
 			unsigned int section = i - 1;
 			for (size_t j=0; j<model->geosets.size(); j++) {
@@ -951,7 +949,7 @@ void CharControl::RefreshModel()
 		hairTex = 0;
 	}
 #if 0 // for worgen female
-	if (gameVersion >= 40000 && cd.race == WORGEN && cd.gender == FEMALE) { // female worgen
+	if (gameVersion >= 40000 && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen
 		wxString fn;
 		fn.Printf(wxT("Character\\Worgen\\Hair00_%02d.blp"), cd.hairColor);
 		if (MPQFile::getSize(fn) > 0) {
@@ -1558,20 +1556,19 @@ void CharControl::RefreshItem(int slot)
 
 			// If we're sheathing our weapons, relocate the items to
 			// their correct positions
-			if (bSheathe && items.getById(itemnum).sheath>0) {	
+			if (bSheathe && items.getById(itemnum).sheath>SHEATHETYPE_NONE) {	
 				id1 = items.getById(itemnum).sheath;
 
-				// make the weapon cross
-				if (id1==ATT_LEFT_HIP_SHEATH && slot==CS_HAND_LEFT)
-					id1 = ATT_RIGHT_HIP_SHEATH;
-
-				// make the weapon cross
-				if (id1==ATT_RIGHT_BACK_SHEATH && slot==CS_HAND_LEFT)
-					id1 = ATT_LEFT_BACK_SHEATH;
-
-				if (slot==CS_HAND_LEFT)
+				if (slot == CS_HAND_LEFT) {
+					// make the weapon cross
+					if (id1 == ATT_LEFT_BACK_SHEATH)
+						id1 = ATT_RIGHT_BACK_SHEATH;
+					if (id1 == ATT_LEFT_BACK)
+						id1 = ATT_RIGHT_BACK;
+					if (id1 == ATT_LEFT_HIP_SHEATH)
+						id1 = ATT_RIGHT_HIP_SHEATH;
 					model->charModelDetails.closeLHand = false;
-				if (slot==CS_HAND_RIGHT)
+				} else
 					model->charModelDetails.closeRHand = false;
 
 				/* in itemcache.wdb & item.dbc
@@ -1678,7 +1675,7 @@ void CharControl::RefreshItem(int slot)
 
 			if (succ) {
 				// Manual position correction of items equipped on the back, staves, 2h weapons, quivers, etc.
-				//if (id1 > 25 && id1 < 32)
+				//if (id1 >= ATT_RIGHT_BACK_SHEATH && id1 <= ATT_RIGHT_BACK)
 				//	att->pos = Vec3D(0.0f, 0.0f, 0.06f);
 
 				// okay, see if we have any glowy effects

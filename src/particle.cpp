@@ -4,7 +4,6 @@
 
 #define MAX_PARTICLES 10000
 
-#ifndef WotLK
 Vec4D fromARGB(uint32 color)
 {
 	const float a = ((color & 0xFF000000) >> 24) / 255.0f;
@@ -13,7 +12,6 @@ Vec4D fromARGB(uint32 color)
 	const float b = ((color & 0x000000FF)      ) / 255.0f;
     return Vec4D(r,g,b,a);
 }
-#endif
 
 template<class T>
 T lifeRamp(float life, float mid, const T &a, const T &b, const T &c)
@@ -38,25 +36,23 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 	deacceleration.init (mta.Gravity2, f, globals);
 	enabled.init (mta.en, f, globals);
 
-#ifdef WotLK
-	Vec3D colors2[3];
-	memcpy(colors2, f.getBuffer()+mta.p.colors.ofsKeys, sizeof(Vec3D)*3);
-#endif
-	for (size_t i=0; i<3; i++) {
-#ifndef WotLK
-		colors[i] = fromARGB(mta.p.colors[i]);
-		sizes[i] = mta.p.sizes[i] * mta.p.scales[i];
-#else
-		float opacity = *(short*)(f.getBuffer()+mta.p.opacity.ofsKeys+i*2);
-		colors[i] = Vec4D(colors2[i].x/255.0f, colors2[i].y/255.0f, colors2[i].z/255.0f, opacity/32767.0f);
-		sizes[i] = (*(float*)(f.getBuffer()+mta.p.sizes.ofsKeys+i*sizeof(Vec2D)))*mta.p.scales[i];
-#endif
+	if (gameVersion >= 30000) {
+		Vec3D colors2[3];
+		memcpy(colors2, f.getBuffer()+mta.p.colors.ofsKeys, sizeof(Vec3D)*3);
+		for (size_t i=0; i<3; i++) {
+			float opacity = *(short*)(f.getBuffer()+mta.p.opacity.ofsKeys+i*2);
+			colors[i] = Vec4D(colors2[i].x/255.0f, colors2[i].y/255.0f, colors2[i].z/255.0f, opacity/32767.0f);
+			sizes[i] = (*(float*)(f.getBuffer()+mta.p.sizes.ofsKeys+i*sizeof(Vec2D)))*mta.p.scales[i];		
+		}
+		mid = 0.5; // mid can't be 0 or 1, TODO, Alfred
+	} else {
+		for (size_t i=0; i<3; i++) {
+			// colors[i] = fromARGB(mta.p.colors[i]);
+			// sizes[i] = mta.p.sizes[i] * mta.p.scales[i];
+		}
+		// mid = mta.p.mid;
 	}
-#ifndef WotLK
-	mid = mta.p.mid;
-#else
-	mid = 0.5; // mid can't be 0 or 1, TODO, Alfred
-#endif
+		
 	slowdown = mta.p.slowdown;
 	rotation = mta.p.rotation;
 	pos = fixCoordSystem(mta.pos);

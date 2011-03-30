@@ -149,9 +149,7 @@ enum ObjectID {
 	ID_SHADER_DEATH,
 	ID_TEST,
 
-#ifndef	WotLK
 	ID_USE_NPCSKINS,
-#endif
 	ID_DEFAULT_DOODADS,
 	ID_USE_ANTIALIAS,
 	ID_USE_ENVMAP,
@@ -470,17 +468,6 @@ enum CharGeosets {
 	NUM_GEOSETS
 };
 
-enum Gender {
-	MALE,
-	FEMALE
-};
-
-enum Races {
-	SCOURGE = 5,
-	GOBLIN = 9,
-	WORGEN = 22
-};
-
 enum EyeGlowTypes {
 	EGT_NONE = 0,
 	EGT_DEFAULT,
@@ -605,6 +592,7 @@ enum WOW_LOCALE {
 	zhCN,
 	zhTW,
 	esES,
+	exMX,
 	ruRU,
 
 	NUM_LOCALES = 16
@@ -777,6 +765,77 @@ enum ModelLightTypes {
 };
 
 #define	UPPER_BODY_BONES	5
+
+enum Gender
+{
+    GENDER_MALE                        = 0,
+    GENDER_FEMALE                      = 1,
+    GENDER_NONE                        = 2
+};
+
+// Race value is index in ChrRaces.dbc
+enum Races
+{
+    RACE_HUMAN              = 1,
+    RACE_ORC                = 2,
+    RACE_DWARF              = 3,
+    RACE_NIGHTELF           = 4,
+    RACE_UNDEAD             = 5,
+    RACE_TAUREN             = 6,
+    RACE_GNOME              = 7,
+    RACE_TROLL              = 8,
+    RACE_GOBLIN             = 9,
+    RACE_BLOODELF           = 10,
+    RACE_DRAENEI            = 11,
+    RACE_FEL_ORC            = 12,
+    RACE_NAGA               = 13,
+    RACE_BROKEN             = 14,
+    RACE_SKELETON           = 15,
+    RACE_VRYKUL             = 16,
+    RACE_TUSKARR            = 17,
+    RACE_FOREST_TROLL       = 18,
+    RACE_TAUNKA             = 19,
+    RACE_NORTHREND_SKELETON = 20,
+    RACE_ICE_TROLL          = 21,
+	RACE_WORGEN             = 22
+};
+
+// Class value is index in ChrClasses.dbc
+enum Classes
+{
+    CLASS_WARRIOR       = 1,
+    CLASS_PALADIN       = 2,
+    CLASS_HUNTER        = 3,
+    CLASS_ROGUE         = 4,
+    CLASS_PRIEST        = 5,
+    CLASS_DEATH_KNIGHT  = 6,
+    CLASS_SHAMAN        = 7,
+    CLASS_MAGE          = 8,
+    CLASS_WARLOCK       = 9,
+    // CLASS_UNK2       = 10,unused
+    CLASS_DRUID         = 11,
+};
+
+enum ItemQualities
+{
+    ITEM_QUALITY_POOR                  = 0,                 //GREY
+    ITEM_QUALITY_NORMAL                = 1,                 //WHITE
+    ITEM_QUALITY_UNCOMMON              = 2,                 //GREEN
+    ITEM_QUALITY_RARE                  = 3,                 //BLUE
+    ITEM_QUALITY_EPIC                  = 4,                 //PURPLE
+    ITEM_QUALITY_LEGENDARY             = 5,                 //ORANGE
+    ITEM_QUALITY_ARTIFACT              = 6,                 //LIGHT YELLOW
+    ITEM_QUALITY_HEIRLOOM              = 7
+};
+
+enum SheathTypes
+{
+    SHEATHETYPE_NONE                   = 0,
+    SHEATHETYPE_MAINHAND               = 1,
+    SHEATHETYPE_LARGEWEAPON            = 2,
+    SHEATHETYPE_HIPWEAPON              = 3,
+    SHEATHETYPE_SHIELD                 = 4
+};
 
 #endif
 

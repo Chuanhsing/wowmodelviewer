@@ -205,7 +205,7 @@ public:
 	static const size_t Tex1 = 4;		// string
 	static const size_t Tex2 = 5;		// string
 	static const size_t Tex3 = 6;		// string
-	//static const size_t Flags = 7;		// uint, IsNPC = 0x1 ?, IsDeathKnight?
+	static const size_t IsNPC = 7;		// Flags, uint, IsNPC = 0x1 ?, IsDeathKnight?
 	static const size_t Section = 8;	// uint
 	static const size_t Color = 9;		// uint
 	#endif

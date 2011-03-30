@@ -179,9 +179,8 @@ void AnimManager::Next() {
 	//g_selModel->currentAnim = animList[PlayIndex].AnimID;
 	
 	Frame = anims[animList[PlayIndex].AnimID].timeStart;
-#ifdef WotLK
-	TotalFrames = GetFrameCount();
-#endif
+	if (gameVersion >= 30000)
+		TotalFrames = GetFrameCount();
 }
 
 void AnimManager::Prev() {
@@ -199,9 +198,8 @@ void AnimManager::Prev() {
 	}
 
 	Frame = anims[animList[PlayIndex].AnimID].timeEnd;
-#ifdef WotLK
-	TotalFrames = GetFrameCount();
-#endif
+	if (gameVersion >= 30000)
+		TotalFrames = GetFrameCount();
 }
 
 int AnimManager::Tick(int time) {
@@ -393,23 +391,23 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 
 	animated = isAnimated(f) || forceAnim;  // isAnimated will set animGeometry and animTextures
 
-#ifdef WotLK
-	modelname = tempname;
+	if (gameVersion >= 30000) {
+		modelname = tempname;
 
-	if (header.nameOfs != 304 && header.nameOfs != 320) {
-		wxLogMessage(wxT("Error:\t\tInvalid model nameOfs=%d/%d!  May be corrupted."), header.nameOfs, sizeof(ModelHeader));
-		//ok = false;
-		//f.close();
-		//return;
+		if (header.nameOfs != 304 && header.nameOfs != 320) {
+			wxLogMessage(wxT("Error:\t\tInvalid model nameOfs=%d/%d!  May be corrupted."), header.nameOfs, sizeof(ModelHeader));
+			//ok = false;
+			//f.close();
+			//return;
+		}
+	} else {
+		if (header.nameOfs != 336) {
+			wxLogMessage(wxT("Error:\t\tInvalid model nameOfs=%d/%d!  May be corrupted."), header.nameOfs, sizeof(ModelHeader));
+			//ok = false;
+			//f.close();
+			//return;
+		}
 	}
-#else
-	if (header.nameOfs != 336) {
-		wxLogMessage(wxT("Error:\t\tInvalid model nameOfs=%d/%d!  May be corrupted."), header.nameOfs, sizeof(ModelHeader));
-		//ok = false;
-		//f.close();
-		//return;
-	}
-#endif
 
 	// Error check
 	// 0x10 1 0 0 = WoW 4.0.0.12319 models
@@ -1499,17 +1497,17 @@ bool ModelRenderPass::init(Model *m)
 
 	// emissive colors
 	if (color!=-1 && m->colors && m->colors[color].color.uses(0)) {
-#ifdef WotLK /* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
-		Vec3D c = m->colors[color].color.getValue(0,m->animtime);
-		if (m->colors[color].opacity.uses(m->anim)) {
-			float o = m->colors[color].opacity.getValue(m->anim,m->animtime);
-			ocol.w = o;
+		Vec3D c;
+		if (gameVersion >= 30000) {
+			/* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
+			c = m->colors[color].color.getValue(0,m->animtime);
+			if (m->colors[color].opacity.uses(m->anim)) {
+				ocol.w = m->colors[color].opacity.getValue(m->anim,m->animtime);
+			}
+		} else {
+			c = m->colors[color].color.getValue(m->anim,m->animtime);
+			ocol.w = m->colors[color].opacity.getValue(m->anim,m->animtime);
 		}
-#else
-		Vec3D c = m->colors[color].color.getValue(m->anim,m->animtime);
-		float o = m->colors[color].opacity.getValue(m->anim,m->animtime);
-		ocol.w = o;
-#endif
 
 		if (unlit) {
 			ocol.x = c.x; ocol.y = c.y; ocol.z = c.z;
@@ -1523,12 +1521,12 @@ bool ModelRenderPass::init(Model *m)
 
 	// opacity
 	if (opacity!=-1) {
-#ifdef WotLK /* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
-		if (m->transparency && m->transparency[opacity].trans.uses(0))
-			ocol.w *= m->transparency[opacity].trans.getValue(0, m->animtime);
-#else
-		ocol.w *= m->transparency[opacity].trans.getValue(m->anim, m->animtime);
-#endif
+		if (gameVersion >= 30000) {
+			/* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
+			if (m->transparency && m->transparency[opacity].trans.uses(0))
+				ocol.w *= m->transparency[opacity].trans.getValue(0, m->animtime);
+		} else
+			ocol.w *= m->transparency[opacity].trans.getValue(m->anim, m->animtime);
 	}
 
 	// exit and return false before affecting the opengl render state
