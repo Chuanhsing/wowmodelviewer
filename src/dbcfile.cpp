@@ -1,6 +1,7 @@
 #include "dbcfile.h"
 #include "mpq.h"
 #include "util.h"
+#include "enums.h"
 
 DBCFile::DBCFile(const wxString &filename) : filename(filename)
 {
