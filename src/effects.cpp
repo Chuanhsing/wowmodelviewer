@@ -49,25 +49,25 @@ void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent
 	map<pair<int,int>, int> subclasslookup;
 	for (ItemSubClassDB::Iterator it=subclassdb.begin(); it != subclassdb.end(); ++it) {
 		int cl;
-		if (gameVersion == 40000)
+		if (gameVersion >= VERSION_CATACLYSM)
 			cl = it->getInt(ItemSubClassDB::ClassIDV400);
 		else
 			cl = it->getInt(ItemSubClassDB::ClassID);
 		int scl;
-		if (gameVersion == 40000)
+		if (gameVersion >= VERSION_CATACLYSM)
 			scl = it->getInt(ItemSubClassDB::SubClassIDV400);
 		else
 			scl = it->getInt(ItemSubClassDB::SubClassID);
 		// only add the subclass if it was found in the itemlist
 		if (cl>0 && subclassesFound.find(pair<int,int>(cl, scl)) != subclassesFound.end()) {
 			wxString str;
-			if (gameVersion == 40000)
+			if (gameVersion >= VERSION_CATACLYSM)
 				str = CSConv(it->getString(ItemSubClassDB::NameV400 + langOffset));
 			else
 				str = CSConv(it->getString(ItemSubClassDB::Name + langOffset));
 
 			int hands;
-			if (gameVersion == 40000)
+			if (gameVersion >= VERSION_CATACLYSM)
 				hands = it->getInt(ItemSubClassDB::HandsV400);
 			else
 				hands = it->getInt(ItemSubClassDB::Hands);
@@ -228,7 +228,7 @@ void EnchantsDialog::InitEnchants()
 
 	for (SpellItemEnchantmentDB::Iterator it=spellitemenchantmentdb.begin();  it!=spellitemenchantmentdb.end(); ++it) {
 		int visualid;
-		if (gameVersion == 40000)
+		if (gameVersion >= VERSION_CATACLYSM)
 			visualid = it->getInt(SpellItemEnchantmentDB::VisualIDV400);
 		else
 			visualid = it->getInt(SpellItemEnchantmentDB::VisualID);

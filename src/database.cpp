@@ -95,7 +95,7 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 {
 	int n = 0;
 #if 0 // for worgen female
-	if (gameVersion >= 40000 && race == RACE_WORGEN && gender == GENDER_FEMALE) { // worgen female
+	if (gameVersion >= VERSION_CATACLYSM && race == RACE_WORGEN && gender == GENDER_FEMALE) { // worgen female
 		wxString fn;
 		switch(type) { // 0: base, 1: face, 2: facial, 3: hair, 4: underwear
 			case SkinType: // Character\Worgen\Female\WorgenFemaleSkin00_12.blp
@@ -143,7 +143,7 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
 		// don't allow NPC skins ;(
-		if (gameVersion < 30000) {
+		if (gameVersion < VERSION_WOTLK) {
 			if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Section)==section && i->getUInt(IsNPC)==npc) {
 				n++;
 			}
@@ -161,7 +161,7 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
 {
 	int n = 0;
 #if 0 // for worgen female
-	if (gameVersion >= 40000 && race == RACE_WORGEN && gender == GENDER_FEMALE) { // worgen female
+	if (gameVersion >= VERSION_CATACLYSM && race == RACE_WORGEN && gender == GENDER_FEMALE) { // worgen female
 		wxString fn;
 		switch(type) { // 0: base, 1: face, 2: facial, 3: hair, 4: underwear
 			case SkinType: // Character\Worgen\Female\WorgenFemaleSkin00_12.blp
@@ -208,7 +208,7 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
 #endif // for worgen female
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
-		if (gameVersion < 30000) {
+		if (gameVersion < VERSION_WOTLK) {
 			if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Color)==color && i->getUInt(IsNPC)==npc) {
 				n++;
 			}
@@ -225,7 +225,7 @@ CharSectionsDB::Record CharSectionsDB::getByParams(unsigned int race, unsigned i
 {
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
-		if (gameVersion < 30000) {
+		if (gameVersion < VERSION_WOTLK) {
 			if (i->getUInt(Race)==race && i->getUInt(Gender)==gender && i->getUInt(Type)==type && i->getUInt(Section)==section && i->getUInt(Color)==color && i->getUInt(IsNPC)==npc)
 				return (*i);
 		} else {
@@ -268,7 +268,7 @@ CharRacesDB::Record CharRacesDB::getById(unsigned int id)
 
 CharFacialHairDB::Record CharFacialHairDB::getByParams(unsigned int race, unsigned int gender, unsigned int style)
 {
-	if (gameVersion == 40000) {
+	if (gameVersion >= VERSION_CATACLYSM) {
 		for(Iterator i=begin(); i!=end(); ++i)
 		{
 			if (i->getUInt(RaceV400)==race && i->getUInt(GenderV400)==gender && i->getUInt(StyleV400)==style)
@@ -288,7 +288,7 @@ CharFacialHairDB::Record CharFacialHairDB::getByParams(unsigned int race, unsign
 int CharFacialHairDB::getStylesFor(unsigned int race, unsigned int gender)
 {
 	int n = 0;
-	if (gameVersion == 40000) {
+	if (gameVersion >= VERSION_CATACLYSM) {
 		for(Iterator i=begin(); i!=end(); ++i)
 		{
 			if (i->getUInt(RaceV400)==race && i->getUInt(GenderV400)==gender) {
@@ -518,7 +518,7 @@ void ItemSetDB::cleanup(ItemDatabase &p_itemdb)
 	for(Iterator i=begin(); i!=end(); ++i) {
 		for (unsigned int j=0; j<NumItems; j++) {
 			int id;
-			if (gameVersion == 40000)
+			if (gameVersion >= VERSION_CATACLYSM)
 				id = i->getUInt(ItemIDBaseV400+j);
 			else
 				id = i->getUInt(ItemIDBase+j);
@@ -820,7 +820,7 @@ ItemSubClassDB::Record ItemSubClassDB::getById(int id, int subid)
 {
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
-		if (gameVersion == 40000) {
+		if (gameVersion >= VERSION_CATACLYSM) {
 			if (i->getInt(ClassIDV400)==id && i->getInt(SubClassIDV400)==subid)
 				return (*i);
 		} else {

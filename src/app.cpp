@@ -651,8 +651,8 @@ bool WowModelViewApp::LoadSettings()
 
 	// initial langOffset
 	if (langOffset == -1) {
-		// gameVersion 40000 remove all other language strings
-		if (gameVersion == 40000)
+		// gameVersion VERSION_CATACLYSM remove all other language strings
+		if (gameVersion >= VERSION_CATACLYSM)
 			langOffset = 0;
 		else
 			langOffset = langID;

@@ -470,7 +470,7 @@ void ModelViewer::InitMenu()
 		effectsMenu->Append(ID_ENCHANTS, wxT("Apply Enchants"));
 		effectsMenu->Append(ID_EQCREATURE_R, wxT("Creature Right-Hand"));
 		effectsMenu->Append(ID_EQCREATURE_L, wxT("Creature Left-Hand"));
-		if (gameVersion < 30000) {
+		if (gameVersion < VERSION_WOTLK) {
 			effectsMenu->Append(ID_SPELLS, wxT("Spell Effects"));
 			effectsMenu->Enable(ID_SPELLS, false);
 			effectsMenu->Append(ID_SHADER_DEATH, wxT("Death Effect"));
@@ -480,7 +480,7 @@ void ModelViewer::InitMenu()
 
 		// Options menu
 		optMenu = new wxMenu;
-		if (gameVersion < 30000) {
+		if (gameVersion < VERSION_WOTLK) {
 			optMenu->AppendCheckItem(ID_USE_NPCSKINS, wxT("Use npc character skins"));
 			optMenu->Check(ID_USE_NPCSKINS, false);
 		}
@@ -1407,7 +1407,7 @@ wxString ModelViewer::InitMPQArchives()
 			gameVersion = 30300;
 		}
 	} else if (strncmp((char*)toc, "40000", 5) == 0 || strncmp((char*)toc, "40100", 5) == 0) {
-		gameVersion = 40000;
+		gameVersion = VERSION_CATACLYSM;
 		langOffset = 0;
 	} else { // else if not our primary supported edition...
 		wxString info = wxT("WoW Model Viewer does not support your version of World of Warcraft.\nPlease update your World of Warcraft client soon.");
@@ -2849,7 +2849,7 @@ void DiscoveryItem()
 	for (ItemSetDB::Iterator it = setsdb.begin(); it != setsdb.end(); ++it) {
 		for(size_t i=0; i<ItemSetDB::NumItems; i++) {
 			int id;
-			if (gameVersion == 40000)
+			if (gameVersion >= VERSION_CATACLYSM)
 				id = it->getUInt(ItemSetDB::ItemIDBaseV400+i);
 			else
 				id = it->getUInt(ItemSetDB::ItemIDBase+i);

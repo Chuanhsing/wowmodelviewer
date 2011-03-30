@@ -399,7 +399,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 	std::vector<MATmap> MATtable;
 	for (uint32 i=0; i<view->nTex; i++)
 	{
-		if ((gameVersion < 40000 && tex[i].texunit < m->header.nTexUnitLookup && texunitlookup[tex[i].texunit] == 0) || gameVersion >= 40000) // cataclysm lost this table
+		if ((gameVersion < VERSION_CATACLYSM && tex[i].texunit < m->header.nTexUnitLookup && texunitlookup[tex[i].texunit] == 0) || gameVersion >= VERSION_CATACLYSM) // cataclysm lost this table
 		{	
 			int idx = -1;
 
@@ -705,7 +705,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 		}
 
 		// particle rate id
-		if (bShowParticle  && gameVersion < 40000)
+		if (bShowParticle && gameVersion < VERSION_CATACLYSM)
 		{
 			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
 			{
@@ -875,7 +875,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 		}
 
 		// particle rate anim
-		if (bShowParticle  && gameVersion < 40000)
+		if (bShowParticle && gameVersion < VERSION_CATACLYSM)
 		{
 			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
 			{
@@ -1032,7 +1032,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 	// init particle
 	uint32 partexstart = MATtable.size();
 	std::vector <int32> M3ParticleMap;
-	if (bShowParticle && gameVersion < 40000)
+	if (bShowParticle && gameVersion < VERSION_CATACLYSM)
 	{
 		// prepare particle texture
 		for (uint32 i=0; i < m->header.nParticleEmitters; i++)
@@ -1288,7 +1288,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 
 				if (MATtable[i].animid != -1)
 					SetAnimed(layer.ar4.AnimRef);
-				if (bShowParticle && gameVersion < 40000 && i >= partexstart)
+				if (bShowParticle && gameVersion < VERSION_CATACLYSM && i >= partexstart)
 					layer.flags |= LAYR_FLAGS_SPLIT;
 			}
 
@@ -1303,7 +1303,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 					if (m->colors[MATtable[i].color].opacity.sizes != 0)
 						SetAnimed(layer.brightness_mult1.AnimRef);
 				}
-				if (bShowParticle && gameVersion < 40000 && i >= partexstart)
+				if (bShowParticle && gameVersion < VERSION_CATACLYSM && i >= partexstart)
 					layer.flags |= LAYR_FLAGS_SPLIT;
 			}
 
@@ -1325,7 +1325,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 					SetAnimed(layer.ar4.AnimRef);
 				if (MATtable[i].color != -1)
 					SetAnimed(layer.brightness_mult1.AnimRef);
-				if (bShowParticle && gameVersion < 40000 && i >= partexstart)
+				if (bShowParticle && gameVersion < VERSION_CATACLYSM && i >= partexstart)
 					layer.flags |= LAYR_FLAGS_SPLIT;
 			}
 			extra.names.push_back(fulltexName);
@@ -1557,7 +1557,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 		DataRefEntry("_TAM", mdata.mMat, Mats.size(), sizeof(MAT) * Mats.size(), &Mats.front(), 0xF, f);
 	}
 
-	if (bShowParticle && gameVersion < 40000 && Pars.size() > 0)
+	if (bShowParticle && gameVersion < VERSION_CATACLYSM && Pars.size() > 0)
 		DataRefEntry("_RAP", mdata.mPar, Pars.size(), sizeof(PAR) * Pars.size(), &Pars.front(), 12, f);
 
 	// mIREF

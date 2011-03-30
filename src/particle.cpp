@@ -36,7 +36,7 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 	deacceleration.init (mta.Gravity2, f, globals);
 	enabled.init (mta.en, f, globals);
 
-	if (gameVersion >= 30000) {
+	if (gameVersion >= VERSION_WOTLK) {
 		Vec3D colors2[3];
 		memcpy(colors2, f.getBuffer()+mta.p.colors.ofsKeys, sizeof(Vec3D)*3);
 		for (size_t i=0; i<3; i++) {

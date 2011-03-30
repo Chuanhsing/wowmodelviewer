@@ -179,7 +179,7 @@ void AnimManager::Next() {
 	//g_selModel->currentAnim = animList[PlayIndex].AnimID;
 	
 	Frame = anims[animList[PlayIndex].AnimID].timeStart;
-	if (gameVersion >= 30000)
+	if (gameVersion >= VERSION_WOTLK)
 		TotalFrames = GetFrameCount();
 }
 
@@ -198,7 +198,7 @@ void AnimManager::Prev() {
 	}
 
 	Frame = anims[animList[PlayIndex].AnimID].timeEnd;
-	if (gameVersion >= 30000)
+	if (gameVersion >= VERSION_WOTLK)
 		TotalFrames = GetFrameCount();
 }
 
@@ -391,7 +391,7 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 
 	animated = isAnimated(f) || forceAnim;  // isAnimated will set animGeometry and animTextures
 
-	if (gameVersion >= 30000) {
+	if (gameVersion >= VERSION_WOTLK) {
 		modelname = tempname;
 
 		if (header.nameOfs != 304 && header.nameOfs != 320) {
@@ -902,7 +902,7 @@ void Model::initAnimated(MPQFile &f)
 	if (header.nAnimations > 0) {
 		anims = new ModelAnimation[header.nAnimations];
 
-		if (gameVersion < 30000) {
+		if (gameVersion < VERSION_WOTLK) {
 			memcpy(anims, f.getBuffer() + header.ofsAnimations, header.nAnimations * sizeof(ModelAnimation));
 		} else {
 			// or load anim files ondemand?
@@ -960,7 +960,7 @@ void Model::initAnimated(MPQFile &f)
 		}
 	}
 
-	if (gameVersion >= 30000) {
+	if (gameVersion >= VERSION_WOTLK) {
 		// free MPQFile
 		if (header.nAnimations > 0) {
 			for(size_t i=0; i<header.nAnimations; i++) {
@@ -1521,7 +1521,7 @@ bool ModelRenderPass::init(Model *m)
 
 	// opacity
 	if (opacity!=-1) {
-		if (gameVersion >= 30000) {
+		if (gameVersion >= VERSION_WOTLK) {
 			/* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
 			if (m->transparency && m->transparency[opacity].trans.uses(0))
 				ocol.w *= m->transparency[opacity].trans.getValue(0, m->animtime);

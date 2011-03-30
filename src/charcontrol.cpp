@@ -281,7 +281,7 @@ void CharControl::UpdateModel(Attachment *a)
 	}
 
 	// Enable the use of NPC skins if its  a goblin.
-	if (race == 9 && gameVersion < 40000)
+	if (race == RACE_GOBLIN && gameVersion < VERSION_CATACLYSM)
 		cd.useNPC=1;
 	else
 		cd.useNPC=0;
@@ -303,7 +303,7 @@ void CharControl::UpdateModel(Attachment *a)
 	cd.maxFacialHair = facialhairdb.getStylesFor(race, gender);
 	cd.maxFacialColor = cd.maxHairColor;
 
-	if (gameVersion < 30000) {
+	if (gameVersion < VERSION_WOTLK) {
 		// Re-set the menu
 		if (cd.useNPC)
 			g_modelViewer->optMenu->Check(ID_USE_NPCSKINS, 1);
@@ -325,7 +325,7 @@ void CharControl::UpdateModel(Attachment *a)
 	}
 	cd.maxHairStyle = (int)styles.size();
 #if 0 // for worgen female
-	if (gameVersion >= 40000 && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen 
+	if (gameVersion >= VERSION_CATACLYSM && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen 
 		cd.maxHairStyle = 21;
 	}
 #endif // for worgen female
@@ -442,7 +442,7 @@ void CharControl::UpdateNPCModel(Attachment *a, unsigned int id)
 	cd.gender = gender;
 
 	// Enable the use of NPC skins if its a goblin.
-	if (race == 9 && gameVersion < 40000)
+	if (race == RACE_GOBLIN && gameVersion < VERSION_CATACLYSM)
 		cd.useNPC=1;
 	else
 		cd.useNPC=0;
@@ -594,7 +594,7 @@ void CharControl::OnCheck(wxCommandEvent &event)
 		}
 
 		// If the race is a goblin, then ignore this
-		if (race == 9 && gameVersion < 40000) {
+		if (race == RACE_GOBLIN && gameVersion < VERSION_CATACLYSM) {
 			g_modelViewer->optMenu->Check(ID_USE_NPCSKINS, true);
 			return;
 		}
@@ -786,7 +786,7 @@ void CharControl::RefreshModel()
 		wxLogMessage(wxT("Assertion base character Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 	}
 #if 0 // for worgen female
-	if (gameVersion >= 40000 && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen
+	if (gameVersion >= VERSION_CATACLYSM && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen
 		wxString fn;
 		fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleSkin%02d_%02d.blp"), 0, cd.skinColor);
 		if (MPQFile::getSize(fn) > 0) {
@@ -803,7 +803,7 @@ void CharControl::RefreshModel()
 #endif // for worgen female
 
 	// HACK: for goblin males, explicitly load a hair texture
-	if (cd.race == RACE_GOBLIN && cd.gender == GENDER_MALE && gobTex == 0 && gameVersion < 40000) {
+	if (cd.race == RACE_GOBLIN && cd.gender == GENDER_MALE && gobTex == 0 && gameVersion < VERSION_CATACLYSM) {
         gobTex = texturemanager.add(wxT("Creature\\Goblin\\Goblin.blp"));	
 	}
 
@@ -812,7 +812,7 @@ void CharControl::RefreshModel()
 	bool showHair = cd.showHair;
 	bool showFacialHair = cd.showFacialHair;
 
-	if (cd.race != RACE_GOBLIN || gameVersion >= 40000) { // Goblin chars base texture already contains all this stuff.
+	if (cd.race != RACE_GOBLIN || gameVersion >= VERSION_CATACLYSM) { // Goblin chars base texture already contains all this stuff.
 
 		// Display underwear on the model?
 		if (cd.showUnderwear) {
@@ -824,7 +824,7 @@ void CharControl::RefreshModel()
 				wxLogMessage(wxT("DBC underwear Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 			}
 #if 0 // for worgen female
-			if (gameVersion >= 40000 && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen
+			if (gameVersion >= VERSION_CATACLYSM && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen
 				wxString fn;
 				fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleNakedPelvisSkin%02d_%02d.blp"), 0, cd.skinColor);
 				if (MPQFile::getSize(fn) > 0)
@@ -845,7 +845,7 @@ void CharControl::RefreshModel()
 			wxLogMessage(wxT("DBC face Error: %s : line #%i : %s"), __FILE__, __LINE__, __FUNCTION__);
 		}
 #if 0 // for worgen female
-		if (gameVersion >= 40000 && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen
+		if (gameVersion >= VERSION_CATACLYSM && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen
 			wxString fn;
 			fn.Printf(wxT("Character\\Worgen\\Female\\WorgenFemaleFaceUpper%02d_%02d.blp"), cd.faceType, cd.skinColor);
 			if (MPQFile::getSize(fn) > 0)
@@ -859,7 +859,7 @@ void CharControl::RefreshModel()
 		// facial feature geosets
 		try {
 			CharFacialHairDB::Record frec = facialhairdb.getByParams(cd.race, cd.gender, cd.facialHair);
-			if (gameVersion == 40000) {
+			if (gameVersion >= VERSION_CATACLYSM) {
 				cd.geosets[CG_GEOSET100] = frec.getUInt(CharFacialHairDB::Geoset100V400);
 				cd.geosets[CG_GEOSET200] = frec.getUInt(CharFacialHairDB::Geoset200V400);
 				cd.geosets[CG_GEOSET300] = frec.getUInt(CharFacialHairDB::Geoset300V400);
@@ -901,7 +901,7 @@ void CharControl::RefreshModel()
 		}
 	}
 #if 0 // for worgen female
-	if (gameVersion >= 40000 && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen 
+	if (gameVersion >= VERSION_CATACLYSM && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen 
 		for(unsigned int i=1; i<=21; i++) {
 			unsigned int section = i - 1;
 			for (size_t j=0; j<model->geosets.size(); j++) {
@@ -949,7 +949,7 @@ void CharControl::RefreshModel()
 		hairTex = 0;
 	}
 #if 0 // for worgen female
-	if (gameVersion >= 40000 && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen
+	if (gameVersion >= VERSION_CATACLYSM && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen
 		wxString fn;
 		fn.Printf(wxT("Character\\Worgen\\Hair00_%02d.blp"), cd.hairColor);
 		if (MPQFile::getSize(fn) > 0) {
@@ -968,7 +968,7 @@ void CharControl::RefreshModel()
 		try {
 			CharRacesDB::Record race = racedb.getById(cd.race);
 			wxString tmp;
-			if (gameVersion == 40000)
+			if (gameVersion >= VERSION_CATACLYSM)
 				tmp = race.getString(CharRacesDB::GeoType1V400);
 			else
 				tmp = race.getString(CharRacesDB::GeoType1);
@@ -1276,7 +1276,7 @@ void CharControl::RefreshNPCModel()
 	// facial hair geosets
 	try {
 		CharFacialHairDB::Record frec = facialhairdb.getByParams(cd.race, cd.gender, cd.facialHair);
-		if (gameVersion == 40000) {
+		if (gameVersion < VERSION_CATACLYSM) {
 			cd.geosets[CG_GEOSET100] = frec.getUInt(CharFacialHairDB::Geoset100);
 			cd.geosets[CG_GEOSET200] = frec.getUInt(CharFacialHairDB::Geoset200);
 			cd.geosets[CG_GEOSET300] = frec.getUInt(CharFacialHairDB::Geoset300);
@@ -1290,7 +1290,7 @@ void CharControl::RefreshNPCModel()
 		if (showFacialHair == false) {		
 			CharRacesDB::Record race = racedb.getById(cd.race);
 			wxString tmp;
-			if (gameVersion == 40000)
+			if (gameVersion >= VERSION_CATACLYSM)
 				tmp = race.getString(CharRacesDB::GeoType1V400);
 			else
 				tmp = race.getString(CharRacesDB::GeoType1);
@@ -2048,12 +2048,12 @@ void CharControl::selectItem(int type, int slot, int current, const wxChar *capt
 	std::map<std::pair<int,int>, int> subclasslookup;
 	for (ItemSubClassDB::Iterator it=subclassdb.begin(); it != subclassdb.end(); ++it) {
 		int cl;
-		if (gameVersion == 40000)
+		if (gameVersion >= VERSION_CATACLYSM)
 			cl = it->getInt(ItemSubClassDB::ClassIDV400);
 		else
 			cl = it->getInt(ItemSubClassDB::ClassID);
 		int scl;
-		if (gameVersion == 40000)
+		if (gameVersion >= VERSION_CATACLYSM)
 			scl = it->getInt(ItemSubClassDB::SubClassIDV400);
 		else
 			scl = it->getInt(ItemSubClassDB::SubClassID);
@@ -2062,13 +2062,13 @@ void CharControl::selectItem(int type, int slot, int current, const wxChar *capt
 			
 			// Used to go through the 'string fields' looking for the one with data.
 			wxString str;
-			if (gameVersion == 40000)
+			if (gameVersion >= VERSION_CATACLYSM)
 				str = CSConv(it->getString(ItemSubClassDB::NameV400 + langOffset));
 			else
 				str = CSConv(it->getString(ItemSubClassDB::Name + langOffset));
 
 			int hands;
-			if (gameVersion == 40000)
+			if (gameVersion >= VERSION_CATACLYSM)
 				hands = it->getInt(ItemSubClassDB::HandsV400);
 			else
 				hands = it->getInt(ItemSubClassDB::Hands);
@@ -2163,7 +2163,7 @@ void CharControl::selectStart()
 		if ((it->getByte(StartOutfitDB::Race) == cd.race) && (it->getByte(StartOutfitDB::Gender) == cd.gender)) {
 			try {
 				CharClassesDB::Record r = classdb.getById(it->getByte(StartOutfitDB::Class));
-				if (gameVersion == 40000)
+				if (gameVersion >= VERSION_CATACLYSM)
 					choices.Add(CSConv(r.getString(CharClassesDB::NameV400 + langOffset)));
 				else
 					choices.Add(CSConv(r.getString(CharClassesDB::Name + langOffset)));
@@ -2767,7 +2767,7 @@ void CharDetails::loadSet(ItemSetDB &sets, ItemDatabase &items, int setid)
 		ItemSetDB::Record rec = sets.getById(setid);
 		for (size_t i=0; i<ItemSetDB::NumItems; i++) {
 			int id;
-			if (gameVersion == 40000)
+			if (gameVersion >= VERSION_CATACLYSM)
 				id = rec.getInt(ItemSetDB::ItemIDBaseV400 + i);
 			else
 				id = rec.getInt(ItemSetDB::ItemIDBase + i);

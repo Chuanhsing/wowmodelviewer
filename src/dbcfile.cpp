@@ -11,7 +11,7 @@ bool DBCFile::open()
 {
 	int db_type = 0;
 
-	if (filename.Lower().EndsWith(wxT("item.dbc")) && gameVersion >= 40000) {
+	if (filename.Lower().EndsWith(wxT("item.dbc")) && gameVersion >= VERSION_CATACLYSM) {
 		filename = filename.BeforeLast('.') + wxT(".db2");
 	}
 

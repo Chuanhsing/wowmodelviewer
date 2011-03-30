@@ -584,6 +584,7 @@ enum {
 	NUM_TABARD_BTNS
 };
 
+/*
 enum WOW_LOCALE {
 	enUS = 0,
 	koKR,
@@ -592,11 +593,12 @@ enum WOW_LOCALE {
 	zhCN,
 	zhTW,
 	esES,
-	exMX,
+	esMX,
 	ruRU,
 
 	NUM_LOCALES = 16
 };
+*/
 
 // copied from the .mdl docs? this might be completely wrong
 /*
@@ -800,6 +802,7 @@ enum Races
 	RACE_WORGEN             = 22
 };
 
+/*
 // Class value is index in ChrClasses.dbc
 enum Classes
 {
@@ -827,6 +830,7 @@ enum ItemQualities
     ITEM_QUALITY_ARTIFACT              = 6,                 //LIGHT YELLOW
     ITEM_QUALITY_HEIRLOOM              = 7
 };
+*/
 
 enum SheathTypes
 {
@@ -835,6 +839,12 @@ enum SheathTypes
     SHEATHETYPE_LARGEWEAPON            = 2,
     SHEATHETYPE_HIPWEAPON              = 3,
     SHEATHETYPE_SHIELD                 = 4
+};
+
+enum Version
+{
+	VERSION_WOTLK = 30000,
+	VERSION_CATACLYSM = 40000
 };
 
 #endif
