@@ -14218,14 +14218,14 @@
 35933,2,Grand heaume Cornes-de-bélier
 35934,2,Croquenots écrase-goule
 35938,2,Drapé de munificence
-35955,2,Ceinture de Comté-lointaine
-35956,2,Souliers de Comté-lointaine
-35957,2,Robe de Comté-lointaine
-35958,2,Gants de Comté-lointaine
-35959,2,Chaperon de Comté-lointaine
-35960,2,Pantalon de Comté-lointaine
-35961,2,Protège-épaules de Comté-lointaine
-35962,2,Crispins de Comté-lointaine
+35955,2,Ceinture de Comté-Lointaine
+35956,2,Souliers de Comté-Lointaine
+35957,2,Robe de Comté-Lointaine
+35958,2,Gants de Comté-Lointaine
+35959,2,Chaperon de Comté-Lointaine
+35960,2,Pantalon de Comté-Lointaine
+35961,2,Protège-épaules de Comté-Lointaine
+35962,2,Crispins de Comté-Lointaine
 35963,2,Echarpe de Spore-sang
 35964,2,Sandales de Spore-sang
 35965,2,Robe de Spore-sang
@@ -29642,19 +29642,41 @@
 69105,1,Visuel de masque de morte-vivante
 69106,1,Visuel de masque de mort-vivant
 69209,3,Tabard de guilde illustre
-69210,4,Tabard de guilde renommé
+69210,4,Tabard de guilde renommée
 69255,3,ZG Plate Helm 3
 69256,3,ZG Plate Helm 2
 69257,3,ZG Plate Helm 1
 69258,3,ZG Leather Shoulder 3
 69259,3,ZG Leather Shoulder 1
-69260,4,[Monster] - Item Dagger (Umbral Shiv)
-69643,4,Punisseur amani
-69644,4,Faucheuse en gangracier
+69260,0,[Monster] - Item Dagger (Umbral Shiv)
+69643,0,[Monster] - Amani Punisher (Zandalari Archon)
+69644,0,[Monster] - Felsteel Reaper (alt color)
 69764,4,Carapace de tortue disparue
-69766,4,The Frost Lord's War Cloak
-69767,4,The Frost Lord's Battle Shroud
-69768,4,Shroud of Winter's Chill
-69769,4,Cloak of the Frigid Winds
-69770,4,Icebound Cloak
-69771,4,Frostscythe of Lord Ahune
+69766,4,La cape de guerre du seigneur du Givre
+69767,4,Le voile de combat du seigneur du Givre
+69768,4,Voile du froid hivernal
+69769,4,Cape des vents algides
+69770,4,Cape cerclée de glace
+69771,4,Faux de givre du seigneur Ahune
+69814,7,Arme héritage de test de bug
+69831,4,Drapé de mistral
+69833,4,Cape de pergélisol
+69834,4,Cape d’explosion de nuage
+69835,4,Drapé planétaire
+69842,4,Ceinturon de souvenirs renforcé de Garr
+69843,4,Hallebarde dégoulinante de Mobus
+69844,4,Bec vitré de Julak-Dram
+69864,1,Tarnished Crown
+69865,1,Gem Studded Bracelets
+69876,4,Xariona's Spectral Gauntlets
+69877,4,Belt of a Thousand Gaping Mouths
+69878,4,Permafrost Cape
+69879,4,Cloudburst Cloak
+69881,4,Planetary Drape
+69884,4,Mistral Drape
+69887,7,Burnished Helm of Might
+69888,7,Burnished Legplates of Might
+69889,7,Burnished Breastplate of Might
+69890,7,Burnished Pauldrons of Might
+69892,7,Ripped Sandstorm Cloak
+69893,7,Bloodsoaked Skullforge Reaver

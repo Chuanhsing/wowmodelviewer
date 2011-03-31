@@ -1626,7 +1626,7 @@
 2346,3765,7,Dun Garok Priest
 2347,1149,1,Wild Gryphon
 2348,8014,1,Elder Moss Creeper
-2349,6808,1,Giant Moss Creeper
+2349,520,1,Domesticated Creeper
 2350,1989,1,Forest Moss Creeper
 2351,806,1,Gray Bear
 2352,3688,7,Innkeeper Anderson
@@ -5075,7 +5075,7 @@
 7429,12815,5,Frostmaul Preserver
 7430,9958,1,Frostsaber Cub
 7431,37545,1,Frostsaber
-7432,11445,1,Frostsaber Stalker
+7432,38005,1,Frostsaber Stalker
 7433,11444,1,Frostsaber Huntress
 7434,9954,1,Frostsaber Pride Watcher
 7435,6761,2,Cobalt Wyrmkin
@@ -6270,7 +6270,7 @@
 10580,4631,6,Fetid Zombie
 10581,9913,1,Young Arikara
 10582,10209,8,Dog
-10583,1233,7,Gryfe
+10583,37716,7,Gryfe
 10584,11583,7,Urok Doomhowl
 10596,9929,1,Mother Smolderweb
 10598,9997,12,Smolderweb Hatchling
@@ -7556,7 +7556,7 @@
 14188,14234,7,Dirk Swindle
 14221,2582,7,Gravis Slipknot
 14222,1933,1,Araga
-14223,5026,1,Cranky Benj
+14223,21240,1,Cranky Benj
 14224,6889,9,7:XT
 14225,2879,3,Prince Kellen
 14226,14255,3,Kaskk
@@ -9786,7 +9786,7 @@
 17246,16947,7,"Cookie" McWeaksauce
 17247,89,7,Alliance Logger
 17248,20367,10,Demon Chains
-17249,16941,7,Landro Longshot
+17249,37595,7,Landro Longshot
 17250,6298,1,Jia
 17251,16723,1,Blackbeak
 17252,14255,3,Felguard
@@ -15004,7 +15004,6 @@
 24526,1126,10,Invisible Stalker (Floating) (5.00)
 24527,22507,7,Bok Dropcertain
 24528,22510,7,Brune Grayblade
-24529,22512,7,Voodoo Servant
 24530,19705,1,Amani Elder Lynx
 24531,22514,7,Gavin Ward
 24532,22515,7,Sabetta Ward
@@ -16717,7 +16716,7 @@
 26727,24312,7,Mage Hunter Ascendant
 26728,24316,7,Mage Hunter Initiate
 26729,24320,7,Steward
-26730,24906,3,Mage Slayer
+26730,24906,1,Mage Slayer
 26731,24066,7,Grand Magus Telestra
 26733,24022,7,Banthok Icemist
 26734,14886,2,Azure Enforcer
@@ -18021,7 +18020,7 @@
 28396,27841,7,Captured Champion
 28397,25936,7,Footman Hordum
 28398,25935,7,Crusader Brune
-28399,24874,1,Zeptek the Destroyer
+28399,24874,2,Zeptek the Destroyer
 28401,28008,10,Har'koa
 28402,27253,7,Claw of Har'koa
 28403,27453,7,Har'koan Subduer
@@ -18354,7 +18353,7 @@
 28844,27253,7,Drakkari Skullcrusher
 28845,25000,7,Scarlet Ghoul
 28846,25731,7,Scarlet Ghost
-28847,19600,1,Siltslither Eel
+28847,31774,1,Siltslither Eel
 28848,27076,7,Prophet of Har'koa
 28850,3127,7,Scarlet Land Cannon
 28851,27270,1,Enraged Mammoth
@@ -26387,6 +26386,7 @@
 44027,33629,7,Ardan Softmoon
 44028,4629,6,Silent Shade
 44029,26916,6,Clattering Coldwraith
+44030,33630,7,Draelan
 44034,33632,7,Franklin Brinklestein
 44035,18823,5,Fungal Monstrosity
 44036,33633,7,Skymaster Brightdawn
@@ -26479,7 +26479,7 @@
 44196,33708,7,Pop Sodaslam
 44197,371,7,"Commander" Nazrim
 44198,543,7,Foreman Sharpsneer
-44199,34997,10,Ring of Frost
+44199,38203,10,Ring of Frost
 44200,33715,7,Scout Dorli
 44201,1126,10,Water Bomb
 44202,33716,7,Finkle Einhorn
@@ -28466,6 +28466,7 @@
 48039,37280,7,Commander Stevens
 48040,32113,7,Pygmy Oaf
 48041,32096,7,Pygmy Scout
+48042,36039,4,Sapling Protector
 48043,32094,7,Pygmy Thief
 48046,35958,7,Ella Forgehammer
 48053,35961,7,Bahrum Forgehammer
@@ -28612,7 +28613,7 @@
 48322,36110,10,Chet the Slime-Breeder
 48325,237,1,Farson Horse
 48331,32445,7,Panicking Worker
-48333,7207,7,Foreman Pikwik
+48333,37375,7,Foreman Pikwik
 48334,31882,4,Dust Devil
 48338,36119,7,Mine Bunny
 48339,36871,7,Elessa Starbreeze
@@ -29598,6 +29599,7 @@
 52191,37803,7,High Priest Venoxis
 52197,11686,10,Pool of Acrid Tears
 52224,31630,10,Jungle Serpent
+52226,37814,12,Panther Cub
 52234,37820,7,Bwemba
 52288,11686,10,Venomous Effusion
 52302,1126,10,Venomous Effusion Stalker

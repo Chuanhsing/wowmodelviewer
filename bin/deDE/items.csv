@@ -8547,7 +8547,7 @@
 23324,1,Mantelung des Sonnenwendfests
 23344,1,Hose des Spähers
 23345,1,Hemd des Spähers
-23346,1,Kampferprobter Claymore
+23346,1,Kampferprobtes Claymore
 23347,1,Verwitterte Armbrust
 23348,1,Stiefel des Spähers
 23350,1,Kampferprobte Hose
@@ -27311,7 +27311,7 @@
 63153,2,Ziegenlederstiefel
 63154,2,Kettenrüstung aus Luntenbrand
 63156,2,Verlockende Gamaschen
-63157,2,Lethrlorarmbänder
+63157,2,Lethlorarmbänder
 63158,2,Stiefel der Lieferung
 63159,2,Brustplatte des Päckchenträgers
 63160,2,Stiefel der Nötigung
@@ -29677,13 +29677,35 @@
 69209,3,Erhabener Gildenwappenrock
 69210,4,Wohlbekannter Gildenwappenrock
 69255,3,ZG Plate Helm 3
-69260,4,Monster - Item Dagger (Umbral Shiv)
-69643,4,Bestrafer der Amani
-69644,4,Teufelsstahlschneide
+69260,0,Monster - Item Dagger (Umbral Shiv)
+69643,0,Monster - Amani Punisher (Zandalari Archon)
+69644,0,Monster - Felsteel Reaper (alt color)
 69764,4,Panzer einer ausgestorbenen Schildkröte
-69766,4,The Frost Lord's War Cloak
-69767,4,The Frost Lord's Battle Shroud
-69768,4,Shroud of Winter's Chill
-69769,4,Cloak of the Frigid Winds
-69770,4,Icebound Cloak
-69771,4,Frostscythe of Lord Ahune
+69766,4,Der Kriegsumhang des Frostfürsten
+69767,4,Das Kriegstuch des Frostfürsten
+69768,4,Tuch der Winterkälte
+69769,4,Umhang der eisigen Winde
+69770,4,Eingefrorener Umhang
+69771,4,Fürst Ahunes Frostsichel
+69814,7,Bug Test Heirloom Weapon
+69831,4,Mistraltuch
+69833,4,Permafrostumhang
+69834,4,Wolkenbruchumhang
+69835,4,Planteares Tuch
+69842,4,Garrs verstärkter Gurt der Erinnerungen
+69843,4,Mobus' tropfende Hellebarde
+69844,4,Glasiger Schnabel von Julak-Doom
+69864,1,Tarnished Crown
+69865,1,Gem Studded Bracelets
+69876,4,Xariona's Spectral Gauntlets
+69877,4,Belt of a Thousand Gaping Mouths
+69878,4,Permafrost Cape
+69879,4,Cloudburst Cloak
+69881,4,Planetary Drape
+69884,4,Mistral Drape
+69887,7,Burnished Helm of Might
+69888,7,Burnished Legplates of Might
+69889,7,Burnished Breastplate of Might
+69890,7,Burnished Pauldrons of Might
+69892,7,Ripped Sandstorm Cloak
+69893,7,Bloodsoaked Skullforge Reaver

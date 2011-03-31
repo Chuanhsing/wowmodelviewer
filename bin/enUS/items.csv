@@ -34699,7 +34699,11 @@
 69257,3,ZG Plate Helm 1
 69258,3,ZG Leather Shoulder 3
 69259,3,ZG Leather Shoulder 1
-69260,4,Monster - Item Dagger (Umbral Shiv)
+69260,0,Monster - Item Dagger (Umbral Shiv)
+69549,4,Wristguards of the Predator
+69550,4,Leggings of Ancient Magics
+69551,4,Feathers of Akil'zon
+69552,4,Bracers of Hidden Purpose
 69554,4,Pauldrons of Nalorakk
 69555,4,Boots of the Ursine
 69556,4,Armbands of the Bear Spirit
@@ -34725,6 +34729,7 @@
 69579,4,Amani Headdress
 69580,4,Mask of Restless Spirits
 69581,4,Amani Scepter of Rites
+69582,4,Skullpiercer Pauldrons
 69583,4,Legguards of the Unforgiving
 69584,4,Recovered Cloak of Frostheim
 69585,4,Wristwraps of Madness
@@ -34761,7 +34766,7 @@
 69619,4,Bone Plate Handguards
 69620,4,Twinblade of the Hakkari
 69621,4,Twinblade of the Hakkari
-69622,4,The Hexxer's Mask
+69622,4,The Hexxer's Headdress
 69623,4,Vestments of the Soulflayer
 69624,4,Legacy of Arlokk
 69625,4,Mandokir's Tribute
@@ -34775,13 +34780,13 @@
 69633,4,Plunderer's Gauntlets
 69634,4,Fasc's Preserved Boots
 69636,4,Thekal's Claws
-69637,4,Voodoo Hunting Bow
+69637,4,Gurubashi Destroyer
 69638,4,Arlokk's Claws
 69639,4,Renataki's Soul Slicer
 69640,4,Kilt of Forgotten Rites
 69641,4,Troll Skull Chestplate
-69643,4,Amani Punisher
-69644,4,Felsteel Reaper
+69643,0,Monster - Amani Punisher (Zandalari Archon)
+69644,0,Monster - Felsteel Reaper (alt color)
 69764,4,Extinct Turtle Shell
 69766,4,The Frost Lord's War Cloak
 69767,4,The Frost Lord's Battle Shroud
@@ -34789,3 +34794,32 @@
 69769,4,Cloak of the Frigid Winds
 69770,4,Icebound Cloak
 69771,4,Frostscythe of Lord Ahune
+69796,4,Spiritcaller Cloak
+69797,4,Charmbinder Grips
+69798,4,Knotted Handwraps
+69800,4,Spiritguard Drape
+69801,4,Amani Armguards
+69803,4,Gurubashi Punisher
+69814,7,Bug Test Heirloom Weapon
+69819,1,Vrykul Drinking Horn Helm
+69831,4,Mistral Drape
+69833,4,Permafrost Cape
+69834,4,Cloudburst Cloak
+69835,4,Planetary Drape
+69842,4,Garr's Reinforced Girdle of Memories
+69843,4,Mobus's Dripping Halberd
+69844,4,Vitreous Beak of Julak-Doom
+69864,1,Tarnished Crown
+69865,1,Gem Studded Bracelets
+69876,4,Xariona's Spectral Gauntlets
+69877,4,Belt of a Thousand Gaping Mouths
+69878,4,Permafrost Cape
+69879,4,Cloudburst Cloak
+69881,4,Planetary Drape
+69884,4,Mistral Drape
+69887,7,Burnished Helm of Might
+69888,7,Burnished Legplates of Might
+69889,7,Burnished Breastplate of Might
+69890,7,Burnished Pauldrons of Might
+69892,7,Ripped Sandstorm Cloak
+69893,7,Bloodsoaked Skullforge Reaver
