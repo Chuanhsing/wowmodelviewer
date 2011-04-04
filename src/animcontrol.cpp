@@ -117,8 +117,8 @@ AnimControl::AnimControl(wxWindow* parent, wxWindowID id)
 AnimControl::~AnimControl()
 {
 	// Free the memory the was allocated (fixed: memory leak)
-	for (unsigned int i=0; i<skinList->GetCount(); i++) {
-		TextureGroup *grp = (TextureGroup *)skinList->GetClientData(i);
+	for (size_t i=0; i<skinList->GetCount(); i++) {
+		TextureGroup *grp = (TextureGroup *)skinList->GetClientData((unsigned int)i);
 		wxDELETE(grp);
 	}
 
@@ -140,8 +140,8 @@ void AnimControl::UpdateModel(Model *m)
 	
 	// Clear skin/texture data from previous model - if there is any.
 	if (g_selModel) {
-		for (unsigned int i=0; i<skinList->GetCount(); i++) {
-			TextureGroup *grp = (TextureGroup *)skinList->GetClientData(i);
+		for (size_t i=0; i<skinList->GetCount(); i++) {
+			TextureGroup *grp = (TextureGroup *)skinList->GetClientData((unsigned int)i);
 			wxDELETE(grp);
 		}
 	}
@@ -161,7 +161,7 @@ void AnimControl::UpdateModel(Model *m)
 
 	skinList->Clear();
 
-	int useanim = -1;
+	ssize_t useanim = -1;
 
 	// Find any textures that exist for the model
 	bool res = false;
@@ -204,7 +204,7 @@ void AnimControl::UpdateModel(Model *m)
 		wxString strName;
 		wxString strStand;
 		int selectAnim = 0;
-		for (unsigned int i=0; i<m->header.nAnimations; i++) {			
+		for (size_t i=0; i<m->header.nAnimations; i++) {			
 			try {
 				AnimDB::Record rec = animdb.getByAnimID(m->anims[i].animID);
 				strName = rec.getString(AnimDB::Name);
@@ -357,7 +357,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 				if (it->getUInt(CreatureSkinDB::ModelID) == modelid) {
 					TextureGroup grp;
 					int count = 0;
-					for (int i=0; i<TextureGroup::num; i++) {
+					for (size_t i=0; i<TextureGroup::num; i++) {
 						wxString skin(it->getString(CreatureSkinDB::Skin + i));
 						if (skin != wxEmptyString) {
 							grp.tex[i] = skin;
@@ -709,13 +709,13 @@ void AnimControl::OnLoop(wxCommandEvent &event)
 void AnimControl::SetSkin(int num)
 {
 	TextureGroup *grp = (TextureGroup*) skinList->GetClientData(num);
-	for (int i=0; i<grp->count; i++) {
-		int base = grp->base + i;
+	for (size_t i=0; i<grp->count; i++) {
+		size_t base = grp->base + i;
 		if (g_selModel->useReplaceTextures[base]) {
 			texturemanager.del(g_selModel->replaceTextures[base]);
 			wxString skin = makeSkinTexture(g_selModel->name, grp->tex[i]);
 			// refresh TextureList for further use
-			for (int j=0; j<TEXTURE_MAX; j++) {
+			for (ssize_t j=0; j<TEXTURE_MAX; j++) {
 				if (base == g_selModel->specialTextures[j]) {
 					g_selModel->TextureList[j] = skin;
 					break;
@@ -758,17 +758,15 @@ void AnimControl::SetAnimSpeed(float speed)
 	speedLabel->SetLabel(wxString::Format(wxT("Speed: %.1fx"), speed));
 }
 
-
-void AnimControl::SetAnimFrame(int frame)
+void AnimControl::SetAnimFrame(size_t frame)
 {
 	if (!g_selModel || !g_selModel->animManager)
 		return;
 
-	g_selModel->animManager->SetFrame((unsigned int) frame);
+	g_selModel->animManager->SetFrame(frame);
 	
-	int frameNum = (frame - g_selModel->anims[g_selModel->currentAnim].timeStart);
+	size_t frameNum = (frame - g_selModel->anims[g_selModel->currentAnim].timeStart);
 
 	frameLabel->SetLabel(wxString::Format(wxT("Frame: %i"), frameNum));
-	frameSlider->SetValue(frame);
+	frameSlider->SetValue((int)frame);
 }
-

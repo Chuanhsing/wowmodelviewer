@@ -169,7 +169,7 @@ bool WowModelViewApp::OnInit()
 	// TODO: Improve this feature and expand on it.
 	// Command arguments
 	wxString cmd;
-	for (ssize_t i=0; i<argc; i++) {
+	for (size_t i=0; i<argc; i++) {
 		cmd = argv[i];
 
 		if (cmd == wxT("-m")) {
@@ -589,8 +589,10 @@ bool WowModelViewApp::LoadSettings()
 	pConfig->Read(wxT("ModelExportInitOnly"), &modelExportInitOnly, true);
 	pConfig->Read(wxT("ModelExportPreserveDirs"), &modelExport_PreserveDir, true);
 	pConfig->Read(wxT("ModelExportUseWMVPosRot"), &modelExport_UseWMVPosRot, false);
+	pConfig->Read(wxT("ModelExportScaleToRealWorld"), &modelExport_ScaleToRealWorld, false);
 
 	pConfig->Read(wxT("ModelExportLWPreserveDirs"), &modelExport_LW_PreserveDir, true);
+	pConfig->Read(wxT("ModelExportLWAlwaysWriteSceneFile"), &modelExport_LW_AlwaysWriteSceneFile, false);
 	pConfig->Read(wxT("ModelExportLWExportLights"), &modelExport_LW_ExportLights, true);
 	pConfig->Read(wxT("ModelExportLWExportDoodads"), &modelExport_LW_ExportDoodads, true);
 	pConfig->Read(wxT("ModelExportLWExportCameras"), &modelExport_LW_ExportCameras, true);
@@ -683,8 +685,10 @@ void WowModelViewApp::SaveSettings()
 	pConfig->Write(wxT("ModelExportInitOnly"), modelExportInitOnly);
 	pConfig->Write(wxT("ModelExportPreserveDirs"), modelExport_PreserveDir);
 	pConfig->Write(wxT("ModelExportUseWMVPosRot"), modelExport_UseWMVPosRot);
+	pConfig->Write(wxT("ModelExportScaleToRealWorld"), modelExport_ScaleToRealWorld);
 
 	pConfig->Write(wxT("ModelExportLWPreserveDirs"), modelExport_LW_PreserveDir);
+	pConfig->Write(wxT("ModelExportLWAlwaysWriteSceneFile"), modelExport_LW_AlwaysWriteSceneFile);
 	pConfig->Write(wxT("ModelExportLWExportLights"), modelExport_LW_ExportLights);
 	pConfig->Write(wxT("ModelExportLWExportDoodads"), modelExport_LW_ExportDoodads);
 	pConfig->Write(wxT("ModelExportLWExportCameras"), modelExport_LW_ExportCameras);

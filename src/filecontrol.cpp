@@ -125,6 +125,7 @@ void FileControl::Init(ModelViewer* mv)
 	if (modelviewer == NULL)
 		modelviewer = mv;
 
+	wxLogMessage("Initializing File Controls...");
 	// Gets the list of files that meet the filter criteria
 	// and puts them into an array to be processed into out file tree
 	content = txtContent->GetValue().MakeLower().Trim();

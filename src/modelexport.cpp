@@ -28,7 +28,6 @@ void SaveTexture(wxString fn)
 	CxImage *newImage = new CxImage(0);
 	newImage->CreateFromArray(pixels, width, height, 32, (width*4), true);
 
-
 	if (fn.Last() == 'g')
 		newImage->Save(fn.mb_str(), CXIMAGE_FORMAT_PNG);
 	else
@@ -425,22 +424,22 @@ void InitCommon(Attachment *att, bool init, ModelData *&verts, GroupData *&group
 }
 
 // Change a Vec3D so it now faces forwards
-void MakeModelFaceForwards(Vec3D &vect, bool flipX = false){
+void MakeModelFaceForwards(Vec3D &vect, bool flipZ = false){
 	Vec3D Temp;
 
-	if (flipX){
-		Temp.x = 0-vect.z;
-	}else{
-		Temp.x = vect.z;
-	}
+	Temp.x = 0-vect.z;
 	Temp.y = vect.y;
-	Temp.z = 0-vect.x;
+	Temp.z = vect.x;
+	if (flipZ==true){
+		Temp.z = -Temp.z;
+		Temp.x = -Temp.x;
+	}
 
 	vect = Temp;
 }
 
 // Get Proper Texture Names for an M2 File
-wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassNumber){
+wxString GetM2TextureName(Model *m, ModelRenderPass p, size_t PassNumber){
 	wxString texName;
 	if ((int)m->TextureList.size() > p.tex)
 		texName = m->TextureList[p.tex].BeforeLast(wxT('.')).AfterLast(SLASH);
@@ -459,12 +458,13 @@ void LogExportData(wxString ExporterExtention, wxString ModelName, wxString Dest
 	wxLogMessage(wxT("Exporting File Type: %s"),ExporterExtention.c_str());
 	wxLogMessage(wxT("Export Init Mode: %s"),(modelExportInitOnly==true?"True":"False"));
 	wxLogMessage(wxT("Preserve Directories: %s"),(modelExport_PreserveDir==true?"True":"False"));
+	wxLogMessage(wxT("Scale to Real World: %s"),(modelExport_ScaleToRealWorld==true?"True":"False"));
 	wxLogMessage(wxT("Use WMV Position & Rotation: %s"),(modelExport_UseWMVPosRot==true?"True":"False"));
 
 	// Animation Information
 	if (g_canvas->model){
-		int32 cAnim = 0;
-		int32 cFrame = 0;
+		size_t cAnim = 0;
+		size_t cFrame = 0;
 		wxString AnimName;
 
 		if (g_canvas->model->animated){
@@ -485,6 +485,7 @@ void LogExportData(wxString ExporterExtention, wxString ModelName, wxString Dest
 	// Lightwave Options
 	if (ExporterExtention == wxT("LWO")){
 		wxLogMessage(wxT("Preserve Lightwave Directories: %s"),(modelExport_LW_PreserveDir==true?"True":"False"));
+		wxLogMessage(wxT("Always Write Scene File: %s"),(modelExport_LW_AlwaysWriteSceneFile==true?"True":"False"));
 		wxLogMessage(wxT("Export Doodads: %s"),(modelExport_LW_ExportDoodads==true?"True":"False"));
 		wxLogMessage(wxT("Export Lights: %s"),(modelExport_LW_ExportLights==true?"True":"False"));
 		wxLogMessage(wxT("Export Cameras: %s"),(modelExport_LW_ExportCameras==true?"True":"False"));

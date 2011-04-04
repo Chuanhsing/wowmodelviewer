@@ -49,7 +49,7 @@ public:
 	uint32 nTriangles, nVertices, nIndices, *cv, nBatches;
 	WMOBatch *batches;
 	WMOVertColor *VertexColors;
-	uint32 *IndiceToVerts;
+	size_t *IndiceToVerts;
 
 	Vec3D v1,v2;
 	Vec3D b1,b2;

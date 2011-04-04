@@ -91,7 +91,7 @@ int CharHairGeosetsDB::getGeosetsFor(unsigned int race, unsigned int gender)
 
 // Sections
 
-int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigned int type, unsigned int section, unsigned int npc)
+int CharSectionsDB::getColorsFor(size_t race, size_t gender, size_t type, size_t section, size_t npc)
 {
 	int n = 0;
 #if 0 // for worgen female
@@ -157,7 +157,7 @@ int CharSectionsDB::getColorsFor(unsigned int race, unsigned int gender, unsigne
     return n;
 }
 
-int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsigned int type, unsigned int color, unsigned int npc)
+int CharSectionsDB::getSectionsFor(size_t race, size_t gender, size_t type, size_t color, size_t npc)
 {
 	int n = 0;
 #if 0 // for worgen female
@@ -221,7 +221,7 @@ int CharSectionsDB::getSectionsFor(unsigned int race, unsigned int gender, unsig
     return n;
 }
 
-CharSectionsDB::Record CharSectionsDB::getByParams(unsigned int race, unsigned int gender, unsigned int type, unsigned int section, unsigned int color, unsigned int npc)
+CharSectionsDB::Record CharSectionsDB::getByParams(size_t race, size_t gender, size_t type, size_t section, size_t color, size_t npc)
 {
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
@@ -410,12 +410,12 @@ NPCDB::Record NPCDB::getByFilename(wxString fn)
 	throw NotFound();
 }
 
-NPCDB::Record NPCDB::getByNPCID(unsigned int id)
+NPCDB::Record NPCDB::getByNPCID(size_t id)
 {
 	/// Brute force search for now
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
-		if(i->getUInt(NPCID) == id)
+		if(i->getUInt(NPCID) == (unsigned int)id)
 			return (*i);
 	}
 	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
@@ -516,7 +516,7 @@ ItemSetDB::Record ItemSetDB::getById(unsigned int id)
 void ItemSetDB::cleanup(ItemDatabase &p_itemdb)
 {
 	for(Iterator i=begin(); i!=end(); ++i) {
-		for (unsigned int j=0; j<NumItems; j++) {
+		for (size_t j=0; j<NumItems; j++) {
 			int id;
 			if (gameVersion >= VERSION_CATACLYSM)
 				id = i->getUInt(ItemIDBaseV400+j);
@@ -699,10 +699,10 @@ void ItemDatabase::cleanup(ItemDisplayDB &l_itemdisplaydb)
 	for (ItemDisplayDB::Iterator it = l_itemdisplaydb.begin(); it != l_itemdisplaydb.end(); ++it) {
 		itemset.insert(it->getUInt(ItemDisplayDB::ItemDisplayID));
 	}
-	for (unsigned int i=0; i<items.size(); ) {
+	for (size_t i=0; i<items.size(); ) {
 		bool keepItem = (items[i].type==0) || (itemset.find(items[i].model)!=itemset.end());
 		if (keepItem) {
-			itemLookup[items[i].id] = i;
+			itemLookup[items[i].id] = (int)i;
 			i++;
 		}
 		else items.erase(items.begin() + i);
@@ -711,7 +711,7 @@ void ItemDatabase::cleanup(ItemDisplayDB &l_itemdisplaydb)
 
 void ItemDatabase::cleanupDiscovery()
 {
-	for (unsigned int i=0; i<items.size(); ) {
+	for (size_t i=0; i<items.size(); ) {
 		if (items[i].discovery)
 			items.erase(items.begin() + i);
 		else

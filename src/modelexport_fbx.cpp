@@ -250,7 +250,7 @@ void CreateMaterials(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const 
 			KString mtrl_name = g_fbx_name.c_str();
 			mtrl_name.Append("_", 1);
 			char tmp[32];
-			itoa(i, tmp, 10);
+			itoa((int)i, tmp, 10);
 			mtrl_name.Append(tmp, strlen(tmp));
 
 			// Create material.
@@ -258,7 +258,7 @@ void CreateMaterials(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const 
 			KFbxSurfacePhong* material = KFbxSurfacePhong::Create(sdk_mgr, mtrl_name.Buffer());
 			material->GetAmbientColor().Set(fbxDouble3(0.7, 0.7, 0.7));
 
-			wxString tex_name = GetM2TextureName(m, fn, pass, i) + wxT(".tga");
+			wxString tex_name = GetM2TextureName(m, pass, i) + wxT(".tga");
 			wxString tex_fullpath_filename = g_fbx_basename.BeforeLast('\\') + wxT("\\") + tex_name;
 			SaveTexture(tex_fullpath_filename);
 			KFbxTexture* texture = KFbxTexture::Create(sdk_mgr, tex_name.c_str());
@@ -291,7 +291,7 @@ void CreateMesh(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const char*
 	// Create mesh.
 	size_t num_of_vertices = m->header.nVertices;
 	KFbxMesh* mesh = KFbxMesh::Create(sdk_mgr, "");
-	mesh->InitControlPoints(num_of_vertices);
+	mesh->InitControlPoints((int)num_of_vertices);
 	KFbxVector4* vertices = mesh->GetControlPoints();
 
 	// Set the normals on Layer 0.
@@ -337,7 +337,7 @@ void CreateMesh(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const char*
 			KString mtrl_name = g_fbx_name.c_str();
 			mtrl_name.Append("_", 1);
 			char tmp[32];
-			itoa(i, tmp, 10);
+			itoa((int)i, tmp, 10);
 			mtrl_name.Append(tmp, strlen(tmp));
 			KFbxSurfaceMaterial* material = scene->GetMaterial(mtrl_name.Buffer());
 			node->AddMaterial(material);
@@ -377,7 +377,7 @@ bool has_anim(Model* m, size_t anim_index) {
 	}
 	return false;
 }
-typedef uint32			TimeT;
+typedef size_t			TimeT;
 typedef map<TimeT, int>	Timeline;
 
 static const int KEY_TRANSLATE	= 1;
@@ -504,7 +504,7 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 		for (size_t j = 0; j < 4; j++) {
 			if ((vertex.bones[j] == 0) && (vertex.weights[j] == 0))
 				continue;
-			bone_clusters[vertex.bones[j]]->AddControlPointIndex(i, static_cast<double>(vertex.weights[j]) / 255.0);
+			bone_clusters[vertex.bones[j]]->AddControlPointIndex((int)i, static_cast<double>(vertex.weights[j]) / 255.0);
 		}
 	}
 

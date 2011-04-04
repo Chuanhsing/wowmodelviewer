@@ -1068,9 +1068,9 @@ inline void ModelCanvas::RenderModel()
 
 	// Dynamic
 	} else if (lightType == LIGHT_DYNAMIC) {
-		for (int i=0; i<MAX_LIGHTS; i++) {
+		for (size_t i=0; i<MAX_LIGHTS; i++) {
 			if (g_modelViewer->lightControl->lights[i].enabled && !g_modelViewer->lightControl->lights[i].relative) {
-				glLightfv(GL_LIGHT0 + i, GL_POSITION, g_modelViewer->lightControl->lights[i].pos);
+				glLightfv(GL_LIGHT0 + (GLenum)i, GL_POSITION, g_modelViewer->lightControl->lights[i].pos);
 
 				// Draw our 'light cone' to represent the light.
 				if (drawLightDir)
@@ -1108,9 +1108,9 @@ inline void ModelCanvas::RenderModel()
 	if (model && (lightType==LIGHT_DYNAMIC)) { // Else, for all our models, we use the new "lighting control", IF we're not using model only lighting		
 		// loop through the g_modelViewer->lightControl->lights of our lighting system checking to see if they are turned on
 		// and if so to apply their settings.
-		for (int i=0; i<MAX_LIGHTS; i++) {
+		for (size_t i=0; i<MAX_LIGHTS; i++) {
 			if (g_modelViewer->lightControl->lights[i].enabled && g_modelViewer->lightControl->lights[i].relative) {
-				glLightfv(GL_LIGHT0 + i, GL_POSITION, g_modelViewer->lightControl->lights[i].pos);
+				glLightfv(GL_LIGHT0 + (GLenum)i, GL_POSITION, g_modelViewer->lightControl->lights[i].pos);
 				
 				// Draw our 'light cone' to represent the light.
 				if (drawLightDir)
@@ -1350,8 +1350,8 @@ inline void ModelCanvas::RenderWMO()
 	// Lighting
 	Vec4D la;
 	// From what I can tell, WoW OpenGL only uses 4 g_modelViewer->lightControl->lights
-	for (int i=0; i<4; i++) {
-		GLuint light = GL_LIGHT0 + i;
+	for (size_t i=0; i<4; i++) {
+		GLuint light = GL_LIGHT0 + (GLuint)i;
 		glLightf(light, GL_CONSTANT_ATTENUATION, 0.0f);
 		glLightf(light, GL_LINEAR_ATTENUATION, 0.7f);
 		glLightf(light, GL_QUADRATIC_ATTENUATION, 0.03f);
@@ -1402,8 +1402,8 @@ inline void ModelCanvas::RenderADT()
 	// Lighting
 	Vec4D la;
 	// From what I can tell, WoW OpenGL only uses 4 g_modelViewer->lightControl->lights
-	for (int i=0; i<4; i++) {
-		GLuint light = GL_LIGHT0 + i;
+	for (size_t i=0; i<4; i++) {
+		GLuint light = GL_LIGHT0 + (GLuint)i;
 		glLightf(light, GL_CONSTANT_ATTENUATION, 0.0f);
 		glLightf(light, GL_LINEAR_ATTENUATION, 0.7f);
 		glLightf(light, GL_QUADRATIC_ATTENUATION, 0.03f);
@@ -1468,8 +1468,8 @@ inline void ModelCanvas::RenderWMOToBuffer()
 	// Lighting
 	Vec4D la;
 	// From what I can tell, WoW OpenGL only uses 4 g_modelViewer->lightControl->lights
-	for (int i=0; i<4; i++) {
-		GLuint light = GL_LIGHT0 + i;
+	for (size_t i=0; i<4; i++) {
+		GLuint light = GL_LIGHT0 + (GLuint)i;
 		glLightf(light, GL_CONSTANT_ATTENUATION, 0.0f);
 		glLightf(light, GL_LINEAR_ATTENUATION, 0.7f);
 		glLightf(light, GL_QUADRATIC_ATTENUATION, 0.03f);
@@ -1597,7 +1597,7 @@ void ModelCanvas::RenderToBuffer()
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, la);
 
 	} else if (lightType==LT_DIRECTIONAL) {
-		for (int i=0; i<MAX_LIGHTS; i++) {
+		for (size_t i=0; i<MAX_LIGHTS; i++) {
 			if (g_modelViewer->lightControl->lights[i].enabled && !g_modelViewer->lightControl->lights[i].relative) {
 				lightID = GL_LIGHT0 + i;
 
@@ -1634,7 +1634,7 @@ void ModelCanvas::RenderToBuffer()
 	if (model && (lightType==LT_DIRECTIONAL)) { // Else, for all our models, we use the new "lighting control", IF we're not using model only lighting		
 		// loop through the g_modelViewer->lightControl->lights of our lighting system checking to see if they are turned on
 		// and if so to apply their settings.
-		for (int i=0; i<MAX_LIGHTS; i++) {
+		for (size_t i=0; i<MAX_LIGHTS; i++) {
 			if (g_modelViewer->lightControl->lights[i].enabled && g_modelViewer->lightControl->lights[i].relative) {
 				lightID = GL_LIGHT0 + i;
 
@@ -1811,7 +1811,7 @@ void ModelCanvas::OnTimer(wxTimerEvent& event)
 
 void ModelCanvas::tick()
 {
-	int ddt = 0;
+	size_t ddt = 0;
 
 	// Time stuff
 	//time = float();

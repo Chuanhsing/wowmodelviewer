@@ -25,7 +25,7 @@ struct TextureGroup {
 	wxString tex[num];
 	TextureGroup()
 	{
-		for (int i=0; i<num; i++) {
+		for (size_t i=0; i<num; i++) {
 			tex[i] = wxT("");
 		}
 	}
@@ -33,7 +33,7 @@ struct TextureGroup {
 	// default copy constr
 	TextureGroup(const TextureGroup &grp)
 	{
-		for (int i=0; i<num; i++) {
+		for (size_t i=0; i<num; i++) {
 			tex[i] = grp.tex[i];
 		}
 		base = grp.base;
@@ -41,7 +41,7 @@ struct TextureGroup {
 	}
 	const bool operator<(const TextureGroup &grp) const
 	{
-		for (int i=0; i<num; i++) {
+		for (size_t i=0; i<num; i++) {
 			if (tex[i]<grp.tex[i]) return true;
 			if (tex[i]>grp.tex[i]) return false;
 		}
@@ -90,7 +90,7 @@ public:
 	int AddSkin(TextureGroup grp);
 	void SetSkin(int num);
 	void SetAnimSpeed(float speed);
-	void SetAnimFrame(int frame);
+	void SetAnimFrame(size_t frame);
 
 	static wxString makeSkinTexture(wxString texfn, wxString skin);
 

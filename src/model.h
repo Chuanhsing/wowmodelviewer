@@ -39,7 +39,7 @@ Vec3D fixCoordSystem(Vec3D v);
 // but hopefully over time I can remove and re-write it so this is the core.
 struct AnimInfo {
 	short Loops;
-	unsigned int AnimID;
+	size_t AnimID;
 };
 
 class AnimManager {
@@ -50,21 +50,21 @@ class AnimManager {
 
 	AnimInfo animList[4];
 
-	unsigned int Frame;		// Frame number we're upto in the current animation
-	unsigned int TotalFrames;
+	size_t Frame;		// Frame number we're upto in the current animation
+	size_t TotalFrames;
 
-	int AnimIDSecondary;
-	unsigned int FrameSecondary;
+	ssize_t AnimIDSecondary;
+	size_t FrameSecondary;
 	size_t SecondaryCount;
 
-	int AnimIDMouth;
-	unsigned int FrameMouth;
+	ssize_t AnimIDMouth;
+	size_t FrameMouth;
 	
 	short Count;			// Total index of animations
 	short PlayIndex;		// Current animation index we're upto
 	short CurLoop;			// Current loop that we're upto.
 
-	int TimeDiff;			// Difference in time between each frame
+	ssize_t TimeDiff;			// Difference in time between each frame
 
 	float Speed;			// The speed of which to multiply the time given for Tick();
 	float mouthSpeed;
@@ -82,8 +82,8 @@ public:
 		FrameSecondary = anims[id].timeStart;
 	}
 	void ClearSecondary() { AnimIDSecondary = -1; }
-	int GetSecondaryID() { return AnimIDSecondary; }
-	unsigned int GetSecondaryFrame() { return FrameSecondary; }
+	ssize_t GetSecondaryID() { return AnimIDSecondary; }
+	size_t GetSecondaryFrame() { return FrameSecondary; }
 	void SetSecondaryCount(int count) {	SecondaryCount = count; }
 	size_t GetSecondaryCount() { return SecondaryCount; }
 
@@ -93,8 +93,8 @@ public:
 		FrameMouth = anims[id].timeStart;
 	}
 	void ClearMouth() { AnimIDMouth = -1; }
-	int GetMouthID() { return AnimIDMouth; }
-	unsigned int GetMouthFrame() { return FrameMouth; }
+	ssize_t GetMouthID() { return AnimIDMouth; }
+	size_t GetMouthFrame() { return FrameMouth; }
 	void SetMouthSpeed(float speed) {
 		mouthSpeed = speed;
 	}
@@ -108,9 +108,9 @@ public:
 
 	int Tick(int time);
 
-	unsigned int GetFrameCount();
-	unsigned int GetFrame() {return Frame;}
-	void SetFrame(unsigned int f);
+	size_t GetFrameCount();
+	size_t GetFrame() {return Frame;}
+	void SetFrame(size_t f);
 	void SetSpeed(float speed) {Speed = speed;}
 	float GetSpeed() {return Speed;}
 	
@@ -124,10 +124,10 @@ public:
 	bool IsParticlePaused() { return !AnimParticles; }
 	void AnimateParticles() { AnimParticles = true; }
 
-	unsigned int GetAnim() { return animList[PlayIndex].AnimID; }
+	size_t GetAnim() { return animList[PlayIndex].AnimID; }
 
-	int GetTimeDiff();
-	void SetTimeDiff(int i);
+	ssize_t GetTimeDiff();
+	void SetTimeDiff(ssize_t i);
 };
 
 class Bone {
@@ -148,7 +148,7 @@ public:
 
 	bool calc;
 	Model *model;
-	void calcMatrix(Bone* allbones, int anim, int time, bool rotate=true);
+	void calcMatrix(Bone* allbones, ssize_t anim, size_t time, bool rotate=true);
 	void initV3(MPQFile &f, ModelBoneDef &b, uint32 *global, MPQFile *animfiles);
 	void initV2(MPQFile &f, ModelBoneDef &b, uint32 *global);
 };
@@ -159,9 +159,9 @@ public:
 
 	Vec3D tval, rval, sval;
 
-	void calc(int anim, int time);
+	void calc(ssize_t anim, size_t time);
 	void init(MPQFile &f, ModelTexAnimDef &mta, uint32 *global);
-	void setup(int anim);
+	void setup(ssize_t anim);
 };
 
 struct ModelColor {
@@ -225,21 +225,21 @@ struct ModelCamera {
 
 	void init(MPQFile &f, ModelCameraDef &mcd, uint32 *global, wxString modelname);
 	void initv10(MPQFile &f, ModelCameraDefV10 &mcd, uint32 *global, wxString modelname);
-	void setup(int time=0);
+	void setup(size_t time=0);
 
 	ModelCamera():ok(false) {}
 };
 
 struct ModelLight {
-	int type;		// Light Type. MODELLIGHT_DIRECTIONAL = 0 or MODELLIGHT_POINT = 1
-	int parent;		// Bone Parent. -1 if there isn't one.
+	ssize_t type;		// Light Type. MODELLIGHT_DIRECTIONAL = 0 or MODELLIGHT_POINT = 1
+	ssize_t parent;		// Bone Parent. -1 if there isn't one.
 	Vec3D pos, tpos, dir, tdir;
 	Animated<Vec3D> diffColor, ambColor;
 	Animated<float> diffIntensity, ambIntensity, AttenStart, AttenEnd;
 	Animated<int> UseAttenuation;
 
 	void init(MPQFile &f, ModelLightDef &mld, uint32 *global);
-	void setup(int time, GLuint l);
+	void setup(size_t time, GLuint l);
 };
 
 
@@ -290,8 +290,8 @@ class Model: public ManagedItem, public Displayable
 	void initAnimated(MPQFile &f);
 	void initStatic(MPQFile &f);
 
-	void animate(unsigned int anim);
-	void calcBones(int anim, int time);
+	void animate(ssize_t anim);
+	void calcBones(ssize_t anim, size_t time);
 
 	void lightsOn(GLuint lbase);
 	void lightsOff(GLuint lbase);
@@ -314,7 +314,7 @@ public:
 public:
 	// Raw Data
 	ModelVertex *origVertices;
-	uint32 *IndiceToVerts;
+	size_t *IndiceToVerts;
 
 	Vec3D *vertices, *normals;
 	Vec2D *texCoords;
@@ -375,9 +375,9 @@ public:
 	Bone *bones;
 	MPQFile *animfiles;
 
-	int currentAnim;
+	size_t currentAnim;
 	bool animcalc;
-	int anim, animtime;
+	size_t anim, animtime;
 
 	void reset() { 
 		animcalc = false; 

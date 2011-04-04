@@ -608,7 +608,7 @@ void WriteLWSceneEnvArray(wxTextOutputStream &fs, uint32 ChanNum, AnimVector val
 	fs << wxT("Channel ") << ChanNum << wxT("\n");
 	fs << wxT("{ Envelope\n");
 	fs << wxT("  ") << value.Time.size() << wxT("\n");
-	for (uint32 n=0;n<value.Time.size();n++){
+	for (size_t n=0;n<value.Time.size();n++){
 		float time = (value.Time[n]/FRAMES_PER_SECOND)/FRAMES_PER_SECOND;	// Convert from WoW Frame Number into a Per-Second Float
 
 		WriteLWSceneEnvKey(fs,ChanNum,value.Value[n],time,value.Spline[n]);
@@ -658,5 +658,6 @@ LWObject GatherADTforLWO(MapTile *m, const char *fn, LWScene &scene);
 
 AnimVec3D animValue0 = AnimVec3D(AnimVector(0,0),AnimVector(0,0),AnimVector(0,0));
 AnimVec3D animValue1 = AnimVec3D(AnimVector(1,0),AnimVector(1,0),AnimVector(1,0));
+AnimVec3D animValue1_Scaled = AnimVec3D(AnimVector(REALWORLD_SCALE,0),AnimVector(REALWORLD_SCALE,0),AnimVector(REALWORLD_SCALE,0));
 
 #endif

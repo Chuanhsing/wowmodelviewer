@@ -10,8 +10,6 @@
 #include "vec3d.h"
 #include "quaternion.h"
 
-
-
 // interpolation functions
 template<class T>
 inline T interpolate(const float r, const T &v1, const T &v2)
@@ -60,8 +58,8 @@ inline Quaternion interpolate<Quaternion>(const float r, const Quaternion &v1, c
 typedef std::pair<size_t, size_t> AnimRange;
 
 // global time for global sequences
-extern int globalTime;
-extern int globalFrame;
+extern size_t globalTime;
+extern size_t globalFrame;
 
 enum Interpolations {
 	INTERPOLATION_NONE,
@@ -128,25 +126,25 @@ public:
 #ifndef WotLK
 	bool used;
 	std::vector<AnimRange> ranges;
-	std::vector<unsigned int> times;
+	std::vector<size_t> times;
 	std::vector<T> data;
 	// for nonlinear interpolations:
 	std::vector<T> in, out;
 #else
-	std::vector<unsigned int> times[MAX_ANIMATED];
+	std::vector<size_t> times[MAX_ANIMATED];
 	std::vector<T> data[MAX_ANIMATED];
 	// for nonlinear interpolations:
 	std::vector<T> in[MAX_ANIMATED], out[MAX_ANIMATED];
 	size_t sizes; // for fix function
 #endif
-	bool uses(unsigned int anim)
+	bool uses(size_t anim)
 	{
 		if (seq>-1)
 			anim = 0;
-		return (data[anim].size() > 0);
+		return ((data[anim].size()) > 0);
 	}
 
-	T getValue(unsigned int anim, unsigned int time)
+	T getValue(size_t anim, size_t time)
 	{
 #ifdef WotLK
 		// obtain a time value and a data range
@@ -164,7 +162,7 @@ public:
 			size_t t1, t2;
 			size_t pos=0;
 			float r;
-			unsigned int max_time = times[anim][times[anim].size()-1];
+			size_t max_time = times[anim][times[anim].size()-1];
 			//if (max_time > 0)
 			//	time %= max_time; // I think this might not be necessary?
 			if (time > max_time) {
@@ -391,13 +389,6 @@ public:
 				return;
 			//assert(gs);
 		}
-
-#ifndef	WotLK
-		// Old method
-		//used = (type != INTERPOLATION_NONE) || (seq != -1);
-		// New method suggested by Cryect
-		used = (b.nKeys > 0);
-#endif
 
 		// times
 		if (b.nTimes != b.nKeys)

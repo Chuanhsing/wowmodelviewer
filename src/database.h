@@ -217,9 +217,9 @@ public:
 	static const size_t HairType = 3;
 	static const size_t UnderwearType = 4;
 
-	Record getByParams(unsigned int race, unsigned int gender, unsigned int type, unsigned int section, unsigned int color, unsigned int npc);
-	int getColorsFor(unsigned int race, unsigned int gender, unsigned int type, unsigned int section, unsigned int npc);
-	int getSectionsFor(unsigned int race, unsigned int gender, unsigned int type, unsigned int color, unsigned int npc);
+	Record getByParams(size_t race, size_t gender, size_t type, size_t section, size_t color, size_t npc);
+	int getColorsFor(size_t race, size_t gender, size_t type, size_t section, size_t npc);
+	int getSectionsFor(size_t race, size_t gender, size_t type, size_t color, size_t npc);
 };
 
 
@@ -690,7 +690,7 @@ public:
 	static const size_t Filename = 20;		// string. an index offset to the filename.
 
 	Record getByFilename(wxString fn);
-	Record getByNPCID(unsigned int id);
+	Record getByNPCID(size_t id);
 
 };
 

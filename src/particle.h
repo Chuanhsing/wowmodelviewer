@@ -15,7 +15,7 @@ struct Particle {
 	Vec3D	corners[4];
 	//Vec3D tpos;
 	float size, life, maxlife;
-	unsigned int tile;
+	size_t tile;
 	Vec4D color;
 };
 
@@ -26,19 +26,19 @@ protected:
 	ParticleSystem *sys;
 public:
 	ParticleEmitter(ParticleSystem *sys): sys(sys) {}
-	virtual Particle newParticle(int anim, int time, float w, float l, float spd, float var, float spr, float spr2) = 0;
+	virtual Particle newParticle(size_t anim, size_t time, float w, float l, float spd, float var, float spr, float spr2) = 0;
 };
 
 class PlaneParticleEmitter: public ParticleEmitter {
 public:
 	PlaneParticleEmitter(ParticleSystem *sys): ParticleEmitter(sys) {}
-	Particle newParticle(int anim, int time, float w, float l, float spd, float var, float spr, float spr2);
+	Particle newParticle(size_t anim, size_t time, float w, float l, float spd, float var, float spr, float spr2);
 };
 
 class SphereParticleEmitter: public ParticleEmitter {
 public:
 	SphereParticleEmitter(ParticleSystem *sys): ParticleEmitter(sys) {}
-	Particle newParticle(int anim, int time, float w, float l, float spd, float var, float spr, float spr2);
+	Particle newParticle(size_t anim, size_t time, float w, float l, float spd, float var, float spr, float spr2);
 };
 
 struct TexCoordSet {
@@ -52,7 +52,7 @@ class ParticleSystem {
 	ParticleEmitter *emitter;
 	ParticleList particles;
 	int blend, order, ParticleType;
-	int manim, mtime;
+	size_t manim, mtime;
 	int rows, cols;
 	std::vector<TexCoordSet> tiles;
 	void initTile(Vec2D *tc, int num);
@@ -99,7 +99,7 @@ public:
 	void init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *globals);
 	void update(float dt);
 
-	void setup(int anim, int time);
+	void setup(size_t anim, size_t time);
 	void draw();
 
 	friend class PlaneParticleEmitter;
@@ -150,7 +150,7 @@ class RibbonEmitter {
 
 	Vec3D pos;
 
-	int manim, mtime;
+	size_t manim, mtime;
 	float length, seglen;
 	int numsegs;
 	
@@ -166,7 +166,7 @@ public:
 	Model *model;
 
 	void init(MPQFile &f, ModelRibbonEmitterDef &mta, uint32 *globals);
-	void setup(int anim, int time);
+	void setup(size_t anim, size_t time);
 	void draw();
 };
 

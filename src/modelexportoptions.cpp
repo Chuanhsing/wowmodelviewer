@@ -20,6 +20,7 @@ BEGIN_EVENT_TABLE(ModelExportOptions_General, wxWindow)
 	EVT_COMBOBOX(ID_EXPORTOPTIONS_PERFERED_EXPORTER,ModelExportOptions_General::OnComboBox)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_PRESERVE_DIR, ModelExportOptions_General::OnCheck)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_USE_WMV_POSROT, ModelExportOptions_General::OnCheck)
+	EVT_CHECKBOX(ID_EXPORTOPTIONS_SCALE_TO_REALWORLD, ModelExportOptions_General::OnCheck)
 	/*
 	EVT_BUTTON(ID_SETTINGS_UP, ModelExportOptions_General::OnButton)
 	EVT_BUTTON(ID_SETTINGS_DOWN, ModelExportOptions_General::OnButton)
@@ -37,6 +38,7 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(ModelExportOptions_Lightwave, wxWindow)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_PRESERVE_DIR, ModelExportOptions_Lightwave::OnCheck)
+	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_ALWAYSWRITESCENEFILE, ModelExportOptions_Lightwave::OnCheck)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_EXPORTLIGHTS, ModelExportOptions_Lightwave::OnCheck)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_EXPORTDOODADS, ModelExportOptions_Lightwave::OnCheck)
 	EVT_CHECKBOX(ID_EXPORTOPTIONS_LW_EXPORTCAMERAS, ModelExportOptions_Lightwave::OnCheck)
@@ -77,7 +79,9 @@ ModelExportOptions_General::ModelExportOptions_General(wxWindow* parent, wxWindo
 	text = new wxStaticText(this, wxID_ANY, wxT("Perferred Exporter:"), wxPoint(5,9), wxDefaultSize, 0);
 	top->Add(ddextype = new wxComboBox(this, ID_EXPORTOPTIONS_PERFERED_EXPORTER, wxT("Perferred Exporter"), wxPoint(115,5), wxDefaultSize, 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
 	chkbox[MEO_CHECK_PRESERVE_DIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_PRESERVE_DIR, wxT("Preserve Directory Structure"), wxPoint(5,30), wxDefaultSize, 0);
-	chkbox[MEO_CHECK_USE_WMV_POSROT] = new wxCheckBox(this, ID_EXPORTOPTIONS_USE_WMV_POSROT, wxT("Use Position and Rotation from WMV"), wxPoint(5,50), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_SCALE_TO_REALWORLD] = new wxCheckBox(this, ID_EXPORTOPTIONS_SCALE_TO_REALWORLD, wxT("Scale to Real World dimensions"), wxPoint(5,50), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_USE_WMV_POSROT] = new wxCheckBox(this, ID_EXPORTOPTIONS_USE_WMV_POSROT, wxT("Use Position and Rotation from WMV (M2 Only)"), wxPoint(5,70), wxDefaultSize, 0);
+	
 }
 
 
@@ -94,6 +98,8 @@ void ModelExportOptions_General::OnCheck(wxCommandEvent &event)
 		modelExport_PreserveDir = event.IsChecked();
 	}else if (id==ID_EXPORTOPTIONS_USE_WMV_POSROT){
 		modelExport_UseWMVPosRot = event.IsChecked();
+	}else if (id==ID_EXPORTOPTIONS_SCALE_TO_REALWORLD){
+		modelExport_ScaleToRealWorld = event.IsChecked();
 	}
 }
 
@@ -121,6 +127,7 @@ void ModelExportOptions_General::Update()
 	//Perfered_Exporter
 	chkbox[MEO_CHECK_PRESERVE_DIR]->SetValue(modelExport_PreserveDir);
 	chkbox[MEO_CHECK_USE_WMV_POSROT]->SetValue(modelExport_UseWMVPosRot);
+	chkbox[MEO_CHECK_SCALE_TO_REALWORLD]->SetValue(modelExport_ScaleToRealWorld);
 }
 
 ModelExportOptions_Control::ModelExportOptions_Control(wxWindow* parent, wxWindowID id)
@@ -185,6 +192,7 @@ ModelExportOptions_Lightwave::ModelExportOptions_Lightwave(wxWindow* parent, wxW
 	wxFlexGridSizer *top = new wxFlexGridSizer(1);
 
 	chkbox[MEO_CHECK_PRESERVE_LWDIR] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_PRESERVE_DIR, wxT("Build Content Directories"), wxPoint(5,5), wxDefaultSize, 0);
+	chkbox[MEO_CHECK_LW_ALWAYSWRITESCENEFILE] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_ALWAYSWRITESCENEFILE, wxT("Always Write Scene File"), wxPoint(180,5), wxDefaultSize, 0);
 
 	chkbox[MEO_CHECK_LW_EXPORTDOODADS] = new wxCheckBox(this, ID_EXPORTOPTIONS_LW_EXPORTDOODADS, wxT("Export Doodads"), wxPoint(5,35), wxDefaultSize, 0);
 	top->Add(ddextype = new wxComboBox(this, ID_EXPORTOPTIONS_LW_DOODADSAS, wxT("Doodads As"), wxPoint(120,32), wxSize(220, 25), 0, 0, wxCB_READONLY), 1, wxEXPAND, 10);
@@ -196,6 +204,7 @@ ModelExportOptions_Lightwave::ModelExportOptions_Lightwave(wxWindow* parent, wxW
 void ModelExportOptions_Lightwave::Update()
 {
 	chkbox[MEO_CHECK_PRESERVE_LWDIR]->SetValue(modelExport_LW_PreserveDir);
+	chkbox[MEO_CHECK_LW_ALWAYSWRITESCENEFILE]->SetValue(modelExport_LW_AlwaysWriteSceneFile);
 	chkbox[MEO_CHECK_LW_EXPORTLIGHTS]->SetValue(modelExport_LW_ExportLights);
 	chkbox[MEO_CHECK_LW_EXPORTDOODADS]->SetValue(modelExport_LW_ExportDoodads);
 	chkbox[MEO_CHECK_LW_EXPORTCAMERAS]->SetValue(modelExport_LW_ExportCameras);
@@ -228,6 +237,8 @@ void ModelExportOptions_Lightwave::OnCheck(wxCommandEvent &event)
 
 	if (id==ID_EXPORTOPTIONS_LW_PRESERVE_DIR){
 		modelExport_LW_PreserveDir = event.IsChecked();
+	}else if (id==ID_EXPORTOPTIONS_LW_ALWAYSWRITESCENEFILE){
+		modelExport_LW_AlwaysWriteSceneFile = event.IsChecked();
 	}else if (id==ID_EXPORTOPTIONS_LW_EXPORTLIGHTS){
 		modelExport_LW_ExportLights = event.IsChecked();
 	}else if (id==ID_EXPORTOPTIONS_LW_EXPORTDOODADS){

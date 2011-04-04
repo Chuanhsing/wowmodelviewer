@@ -71,7 +71,7 @@ void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init)
 	//wxLogMessage(wxT("NumVerts: %i"),numVerts);
 	
 	// Write Vertex data?
-	for (unsigned int i=0; i<numVerts; i++) {
+	for (size_t i=0; i<numVerts; i++) {
 		ms3d_vertex_t vert;
 		vert.boneId = verts[i].boneid;
 		vert.flags = 0; //SELECTED;
@@ -89,14 +89,14 @@ void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init)
 	//wxLogMessage(wxT("NumFaces: %i"),numFaces);
 
 	// Write Triangle Data?
-	for (unsigned int i=0; i<(unsigned int)numVerts; i+=3) {
+	for (size_t i=0; i<(unsigned int)numVerts; i+=3) {
 		ms3d_triangle_t tri;
 		tri.flags = 0; //SELECTED;
 		tri.groupIndex = (unsigned char)verts[i].groupIndex;
 		tri.smoothingGroup = 1; // 1 - 32
 
-		for (int j=0; j<3; j++) {
-			tri.vertexIndices[j] = i+j;
+		for (ssize_t j=0; j<3; j++) {
+			tri.vertexIndices[j] = (word)i+j;
 			tri.s[j] = verts[i+j].tu;
 			tri.t[j] = verts[i+j].tv;
 			
@@ -128,7 +128,7 @@ void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init)
 		unsigned short faceCount = groups[i].p.indexCount / 3;
 		f.Write(reinterpret_cast<char *>(&faceCount), sizeof(faceCount));
 		
-		for (int k=0; k<faceCount; k++) {
+		for (ssize_t k=0; k<faceCount; k++) {
 			//triIndices[k] = indiceCount;
 			f.Write(reinterpret_cast<char *>(&indiceCount), sizeof(indiceCount));
 			indiceCount++;
@@ -183,7 +183,7 @@ void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init)
 			else 
 				bindtex = groups[i].m->replaceTextures[groups[i].m->specialTextures[p.tex]];
 */
-			wxString texName = GetM2TextureName(m,fn,p,i);
+			wxString texName = GetM2TextureName(m,p,i);
 			texName << wxT(".tga");
 			strncpy(mat.texture, texName.mb_str(), sizeof(mat.texture));
 
@@ -229,7 +229,7 @@ void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init)
 
 		f.Write(reinterpret_cast<char *>(&numJoints), sizeof(numJoints));
 
-		for (int i=0; i<numJoints; i++)
+		for (size_t i=0; i<numJoints; i++)
 		{
 			ms3d_joint_t joint;
 
@@ -258,7 +258,7 @@ void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init)
 			if (joint.numKeyFramesRot > 0)
 			{
 				ms3d_keyframe_rot_t *keyFramesRot = new ms3d_keyframe_rot_t[joint.numKeyFramesRot];
-				for (unsigned int j=0; j<joint.numKeyFramesRot; j++)
+				for (size_t j=0; j<joint.numKeyFramesRot; j++)
 				{
 					keyFramesRot[j].time = m->bones[i].rot.times[m->anim][j] / 1000.0f;
 					Vec3D euler = QuatToEuler(m->bones[i].rot.data[m->anim][j]);
@@ -274,7 +274,7 @@ void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init)
 			if (joint.numKeyFramesTrans > 0)
 			{
 				ms3d_keyframe_pos_t *keyFramesTrans = new ms3d_keyframe_pos_t[joint.numKeyFramesTrans];
-				for (unsigned int j=0; j<joint.numKeyFramesTrans; j++)
+				for (size_t j=0; j<joint.numKeyFramesTrans; j++)
 				{
 					keyFramesTrans[j].time = m->bones[i].trans.times[m->anim][j] / 1000.0f;
 					keyFramesTrans[j].position[0] = m->bones[i].trans.data[m->anim][j].x;

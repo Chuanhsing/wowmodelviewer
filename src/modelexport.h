@@ -4,8 +4,22 @@
 #include "model.h"
 #include "modelcanvas.h"
 
+// Various definitions
 #define RADIAN 57.295779513082320876798154814114
 #define FRAMES_PER_SECOND 30
+
+// This number is used to scale items to their "real world" height. 0.9 seems to be perfect.
+#define REALWORLD_SCALE 0.9f
+
+// Exporter Error Codes
+enum ExportErrorCodes {
+	EXPORT_OKAY = 0,
+	EXPORT_ERROR_NO_DATA,
+	EXPORT_ERROR_NO_OVERWRITE,
+	EXPORT_ERROR_FILE_ACCESS,
+	EXPORT_ERROR_SETTINGS_WRONG,
+	EXPORT_ERROR_BAD_FILENAME,
+};
 
 // Structures
 struct Vertex3f {
@@ -29,6 +43,10 @@ struct GroupData {
 	ModelRenderPass p;
 	Model *m;
 };
+
+// Mesh & Slot names
+static wxString meshes[19] = {wxT("Hairstyles"), wxT("Facial1"), wxT("Facial2"), wxT("Facial3"), wxT("Braces"), wxT("Boots"), wxEmptyString, wxT("Ears"), wxT("Wristbands"),  wxT("Kneepads"), wxT("Pants"), wxT("Pants"), wxT("Tarbard"), wxT("Trousers"), wxEmptyString, wxT("Cape"), wxEmptyString, wxT("Eyeglows"), wxT("Belt") };
+static wxString slots[15] = {wxT("Helm"), wxEmptyString, wxT("Shoulder"), wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString, wxT("Right Hand Item"), wxT("Left Hand Item"), wxEmptyString, wxEmptyString, wxT("Quiver") };
 
 static wxString Attach_Names[] = { // enum POSITION_SLOTS
 	wxT("Left Wrist (Shield) / Mount"), // 0
@@ -122,8 +140,8 @@ void SaveTexture(wxString fn);
 void SaveTexture2(wxString file, wxString outdir, wxString ExportID, wxString suffix);
 Vec3D QuaternionToXYZ(Vec3D Dir, float W);
 void InitCommon(Attachment *att, bool init, ModelData *&verts, GroupData *&groups, unsigned short &numVerts, unsigned short &numGroups, unsigned short &numFaces);
-wxString GetM2TextureName(Model *m, const char *fn, ModelRenderPass p, int PassNumber);
-void MakeModelFaceForwards(Vec3D &vect, bool flipX);
+wxString GetM2TextureName(Model *m, ModelRenderPass p, size_t PassNumber);
+void MakeModelFaceForwards(Vec3D &vect, bool flipZ);
 
 void QuaternionToRotationMatrix(const Quaternion& quat, Matrix& rkRot);
 void RotationMatrixToEulerAnglesXYZ(const Matrix& rkRot, float& rfXAngle, float& rfYAngle, float& rfZAngle);
@@ -137,9 +155,9 @@ void RotationMatrixToEulerAnglesXYZ(const Matrix& rkRot, float& rfXAngle, float&
 void SaveBaseFile();
 
 // Lightwave
-void ExportLWO_M2(Attachment *att, Model *m, const char *fn, bool init);
-void ExportLWO_WMO(WMO *m, const char *fn);
-void ExportLWO_ADT(MapTile *m, const char *fn);
+size_t ExportLWO_M2(Attachment *att, Model *m, const char *fn, bool init);
+size_t ExportLWO_WMO(WMO *m, const char *fn);
+size_t ExportLWO_ADT(MapTile *m, const char *fn);
 
 // Wavefront Object
 void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init);

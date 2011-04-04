@@ -18,7 +18,7 @@ void GetSpellEffects(){
 }
 
 // 10 for rhand, 11 for lhand)
-void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent)
+void SelectCreatureItem(ssize_t slot, ssize_t current, CharControl *cc, wxWindow *parent)
 {
 	cc->ClearItemDialog();
 	cc->numbers.clear();
@@ -29,7 +29,7 @@ void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent
 
 	int sel=0, ord=0;
 	for (std::vector<ItemRecord>::iterator it = items.items.begin();  it != items.items.end();  ++it) {
-		if (correctType(it->type, slot)) {
+		if (correctType((size_t)it->type, slot)) {
 			cc->choices.Add(it->name);
 			cc->numbers.push_back(it->id);
 			if (it->id == current)
@@ -178,7 +178,7 @@ void EnchantsDialog::OnClick(wxCommandEvent &event)
 						if (!m)
 							return;
 
-						for (int k=0; k<5; k++) {
+						for (ssize_t k=0; k<5; k++) {
 							if ((it->index[k] > 0) && (m->attLookup[k]>=0)) {
 								ItemVisualEffectDB::Record rec = effectdb.getById(it->index[k]);
 								att->addChild(rec.getString(ItemVisualEffectDB::Model).mb_str(), k, -1);

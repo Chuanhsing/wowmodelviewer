@@ -17,7 +17,7 @@ extern wxArrayString spelleffects;
 extern SpellEffectsDB spelleffectsdb;
 
 void GetSpellEffects();
-void SelectCreatureItem(int slot, int current, CharControl *cc, wxWindow *parent);
+void SelectCreatureItem(ssize_t slot, ssize_t current, CharControl *cc, wxWindow *parent);
 
 struct NumStringPair {
 	int id;

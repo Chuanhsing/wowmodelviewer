@@ -7,7 +7,7 @@
 #include <algorithm>
 #include "util.h"
 
-int globalTime = 0;
+size_t globalTime = 0;
 extern ModelViewer *g_modelViewer;
 
 void
@@ -241,7 +241,7 @@ int AnimManager::Tick(int time) {
 	return 0;
 }
 
-unsigned int AnimManager::GetFrameCount() {
+size_t AnimManager::GetFrameCount() {
 	return (anims[animList[PlayIndex].AnimID].timeEnd - anims[animList[PlayIndex].AnimID].timeStart);
 }
 
@@ -249,33 +249,33 @@ unsigned int AnimManager::GetFrameCount() {
 void AnimManager::NextFrame()
 {
 	//AnimateParticles();
-	int id = animList[PlayIndex].AnimID;
-	Frame += int((anims[id].timeEnd - anims[id].timeStart) / 60);
-	TimeDiff = int((anims[id].timeEnd - anims[id].timeStart) / 60);
+	ssize_t id = animList[PlayIndex].AnimID;
+	Frame += ((anims[id].timeEnd - anims[id].timeStart) / 60);
+	TimeDiff = ((anims[id].timeEnd - anims[id].timeStart) / 60);
 }
 
 void AnimManager::PrevFrame()
 {
 	//AnimateParticles();
-	int id = animList[PlayIndex].AnimID;
-	Frame -= int((anims[id].timeEnd - anims[id].timeStart) / 60);
-	TimeDiff = int((anims[id].timeEnd - anims[id].timeStart) / 60) * -1;
+	ssize_t id = animList[PlayIndex].AnimID;
+	Frame -= ((anims[id].timeEnd - anims[id].timeStart) / 60);
+	TimeDiff = ((anims[id].timeEnd - anims[id].timeStart) / 60) * -1;
 }
 
-void AnimManager::SetFrame(unsigned int f)
+void AnimManager::SetFrame(size_t f)
 {
 	//TimeDiff = f - Frame;
 	Frame = f;
 }
 
-int AnimManager::GetTimeDiff()
+ssize_t AnimManager::GetTimeDiff()
 {
-	int t = TimeDiff;
+	ssize_t t = TimeDiff;
 	TimeDiff = 0;
 	return t;
 }
 
-void AnimManager::SetTimeDiff(int i)
+void AnimManager::SetTimeDiff(ssize_t i)
 {
 	TimeDiff = i;
 }
@@ -304,16 +304,16 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 	pos = Vec3D(0.0f, 0.0f, 0.0f);
 	rot = Vec3D(0.0f, 0.0f, 0.0f);
 
-	for (int i=0; i<TEXTURE_MAX; i++) {
+	for (size_t i=0; i<TEXTURE_MAX; i++) {
 		specialTextures[i] = -1;
 		replaceTextures[i] = 0;
 		useReplaceTextures[i] = false;
 	}
 
-	for (unsigned int i=0; i<ATT_MAX; i++) 
+	for (size_t i=0; i<ATT_MAX; i++) 
 		attLookup[i] = -1;
 
-	for (int i=0; i<BONE_MAX; i++) 
+	for (size_t i=0; i<BONE_MAX; i++) 
 		keyBoneLookup[i] = -1;
 
 
@@ -630,7 +630,7 @@ void Model::initCommon(MPQFile &f)
 	normals = new Vec3D[header.nVertices];
 
 	// Correct the data from the model, so that its using the Y-Up axis mode.
-	for (uint32 i=0; i<header.nVertices; i++) {
+	for (size_t i=0; i<header.nVertices; i++) {
 		origVertices[i].pos = fixCoordSystem(origVertices[i].pos);
 		origVertices[i].normal = fixCoordSystem(origVertices[i].normal);
 
@@ -851,10 +851,10 @@ void Model::initCommon(MPQFile &f)
 
 	// build indice to vert array.
 	if (nIndices) {
-		IndiceToVerts = new uint32[nIndices+2];
+		IndiceToVerts = new size_t[nIndices+2];
 		for (size_t i=0;i<nIndices;i++){
-			uint32 a = indices[i];
-			for (uint32 j=0;j<header.nVertices;j++){
+			size_t a = indices[i];
+			for (size_t j=0;j<header.nVertices;j++){
 				if (a < header.nVertices && origVertices[a].pos == origVertices[j].pos){
 					IndiceToVerts[i] = j;
 					break;
@@ -1244,7 +1244,7 @@ void Model::setLOD(MPQFile &f, int index)
 	std::sort(passes.begin(), passes.end());
 }
 
-void Model::calcBones(int anim, int time)
+void Model::calcBones(ssize_t anim, size_t time)
 {
 	// Reset all bones to 'false' which means they haven't been animated yet.
 	for (size_t i=0; i<header.nBones; i++) {
@@ -1256,7 +1256,7 @@ void Model::calcBones(int anim, int time)
 
 		// Animate the "core" rotations and transformations for the rest of the model to adopt into their transformations
 		if (keyBoneLookup[BONE_ROOT] > -1)	{
-			for (int i=0; i<=keyBoneLookup[BONE_ROOT]; i++) {
+			for (size_t i=0; i<=keyBoneLookup[BONE_ROOT]; i++) {
 				bones[i].calcMatrix(bones, anim, time);
 			}
 		}
@@ -1264,7 +1264,7 @@ void Model::calcBones(int anim, int time)
 		// Find the close hands animation id
 		int closeFistID = 0;
 		/*
-		for (unsigned int i=0; i<header.nAnimations; i++) {
+		for (size_t i=0; i<header.nAnimations; i++) {
 			if (anims[i].animID==15) {  // closed fist
 				closeFistID = i;
 				break;
@@ -1277,7 +1277,7 @@ void Model::calcBones(int anim, int time)
 
 		// Animate key skeletal bones except the fingers which we do later.
 		// -----
-		int a, t;
+		size_t a, t;
 
 		// if we have a "secondary animation" selected,  animate upper body using that.
 		if (animManager->GetSecondaryID() > -1) {
@@ -1322,7 +1322,7 @@ void Model::calcBones(int anim, int time)
 			t = time;
 		}
 
-		for (unsigned int i=0; i<5; i++) {
+		for (size_t i=0; i<5; i++) {
 			if (keyBoneLookup[BONE_RFINGER1 + i] > -1) 
 				bones[keyBoneLookup[BONE_RFINGER1 + i]].calcMatrix(bones, a, t);
 		}
@@ -1335,12 +1335,12 @@ void Model::calcBones(int anim, int time)
 			t = time;
 		}
 
-		for (unsigned int i=0; i<5; i++) {
+		for (size_t i=0; i<5; i++) {
 			if (keyBoneLookup[BONE_LFINGER1 + i] > -1)
 				bones[keyBoneLookup[BONE_LFINGER1 + i]].calcMatrix(bones, a, t);
 		}
 	} else {
-		for (int i=0; i<keyBoneLookup[BONE_ROOT]; i++) {
+		for (ssize_t i=0; i<keyBoneLookup[BONE_ROOT]; i++) {
 			bones[i].calcMatrix(bones, anim, time);
 		}
 
@@ -1349,7 +1349,7 @@ void Model::calcBones(int anim, int time)
 
 		// Animate key skeletal bones except the fingers which we do later.
 		// -----
-		int a, t;
+		size_t a, t;
 
 		// if we have a "secondary animation" selected,  animate upper body using that.
 		if (animManager->GetSecondaryID() > -1) {
@@ -1392,9 +1392,9 @@ void Model::calcBones(int anim, int time)
 	}
 }
 
-void Model::animate(unsigned int anim)
+void Model::animate(ssize_t anim)
 {
-	int t=0;
+	size_t t=0;
 	
 	ModelAnimation &a = anims[anim];
 	int tmax = (a.timeEnd-a.timeStart);
@@ -1885,7 +1885,7 @@ inline void Model::drawModel()
 	// done with all render ops
 }
 
-void TextureAnim::calc(int anim, int time)
+void TextureAnim::calc(ssize_t anim, size_t time)
 {
 	if (trans.uses(anim)) {
 		tval = trans.getValue(anim, time);
@@ -1898,7 +1898,7 @@ void TextureAnim::calc(int anim, int time)
 	}
 }
 
-void TextureAnim::setup(int anim)
+void TextureAnim::setup(ssize_t anim)
 {
 	glLoadIdentity();
 	if (trans.uses(anim)) {
@@ -1990,7 +1990,7 @@ void ModelCamera::initv10(MPQFile &f, ModelCameraDefV10 &mcd, uint32 *global, wx
 	WorldRotation = worot;
 }
 
-void ModelCamera::setup(int time)
+void ModelCamera::setup(size_t time)
 {
 	if (!ok) return;
 
@@ -2036,7 +2036,7 @@ void ModelLight::init(MPQFile &f, ModelLightDef &mld, uint32 *global)
 	UseAttenuation.init(mld.useAttenuation, f, global);
 }
 
-void ModelLight::setup(int time, GLuint l)
+void ModelLight::setup(size_t time, GLuint l)
 {
 	Vec4D ambcol(ambColor.getValue(0, time) * ambIntensity.getValue(0, time), 1.0f);
 	Vec4D diffcol(diffColor.getValue(0, time) * diffIntensity.getValue(0, time), 1.0f);
@@ -2126,7 +2126,7 @@ void ModelAttachment::setupParticle()
 	glTranslatef(pos.x, pos.y, pos.z);
 }
 
-void Bone::calcMatrix(Bone *allbones, int anim, int time, bool rotate)
+void Bone::calcMatrix(Bone *allbones, ssize_t anim, size_t time, bool rotate)
 {
 	if (calc)
 		return;
@@ -2220,15 +2220,15 @@ inline void Model::draw()
 void Model::lightsOn(GLuint lbase)
 {
 	// setup lights
-	for (unsigned int i=0, l=lbase; i<header.nLights; i++) 
-		lights[i].setup(animtime, l++);
+	for (size_t i=0, l=lbase; i<header.nLights; i++) 
+		lights[i].setup(animtime, (GLuint)l++);
 }
 
 // These aren't really needed in the model viewer.. only wowmapviewer
 void Model::lightsOff(GLuint lbase)
 {
-	for (unsigned int i=0, l=lbase; i<header.nLights; i++) 
-		glDisable(l++);
+	for (size_t i=0, l=lbase; i<header.nLights; i++) 
+		glDisable((GLenum)l++);
 }
 
 // Updates our particles within models.

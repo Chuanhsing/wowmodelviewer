@@ -134,7 +134,7 @@ struct ExportData {
 
 };
 
-typedef uint32			TimeT;
+typedef size_t			TimeT;
 typedef map<TimeT, int>	Timeline;
 
 static const int KEY_TRANSLATE	= 1;
@@ -278,7 +278,7 @@ static void WriteMaterial(const ExportData &data, wxString filename)
 			s << "texture_unit" << endl;
 			s << "{" << endl;
 			s << rt;
-			wxString texName = GetM2TextureName(data.model, data.fn, p, (int)n) + wxT(".tga");
+			wxString texName = GetM2TextureName(data.model, p, (int)n) + wxT(".tga");
 			s << "texture " << texName << " -1" << endl;
 			SaveTexture(data.baseName.BeforeLast('\\') + wxT("\\") + texName);
 			s << lt << "}" << endl;

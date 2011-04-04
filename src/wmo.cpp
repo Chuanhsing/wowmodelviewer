@@ -89,7 +89,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 				// material logging
 				gLog("Material %d:\t%d\t%d\t%d\t%X\t%d\t%X\t%d\t%f\t%f",
 					i, m->flags, m->d1, m->transparent, m->col1, m->d3, m->col2, m->d4, m->f1, m->f2);
-				for (int j=0; j<5; j++) gLog("\t%d", m->dx[j]);
+				for (size_t j=0; j<5; j++) gLog("\t%d", m->dx[j]);
 				gLog("\t - %s\n", texpath.c_str());
 				*/
 
@@ -148,7 +148,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 			// "Set_$DefaultGlobal", and have a horrible mess of abandoned broken things in another 
 			// set called "Set_Abandoned01". The names are only informative.
 			// The doodad set number for every WMO instance is specified in the ADT files.
-			for (uint32 i=0; i<nDoodadSets; i++) {
+			for (size_t i=0; i<nDoodadSets; i++) {
 				WMODoodadSet dds;
 				f.read(&dds, 32);
 				doodadsets.push_back(dds);
@@ -225,7 +225,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 			// I think this might specify the two WMO groups that a portal connects.
 			int nn = (int)size / 8;
 			WMOPR *pr = (WMOPR*)f.getPointer();
-			for (int i=0; i<nn; i++) {
+			for (size_t i=0; i<nn; i++) {
 				prs.push_back(*pr++);
 			}
 		}
@@ -240,7 +240,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 		else if (!strcmp(fourcc,"MFOG")) {
 			// Fog information. Made up of blocks of 48 bytes.
 			int nfogs = (int)size / 0x30;
-			for (int i=0; i<nfogs; i++) {
+			for (size_t i=0; i<nfogs; i++) {
 				WMOFog fog;
 				fog.init(f);
 				fogs.push_back(fog);
@@ -256,7 +256,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 	f.close();
 	delete[] texbuf;
 
-	//for (int i=0; i<nGroups; i++) groups[i].initDisplayList();
+	//for (size_t i=0; i<nGroups; i++) groups[i].initDisplayList();
 
 }
 
@@ -266,7 +266,7 @@ WMO::~WMO()
 		//gLog("Unloading WMO %s\n", name.c_str());
 		delete[] groups;
 
-		for (uint32 i=0; i<textures.size(); i++) {
+		for (size_t i=0; i<textures.size(); i++) {
             texturemanager.delbyname(textures[i]);
 		}
 
@@ -333,7 +333,7 @@ void WMOGroup::updateModels(bool load)
 	if (!ddr || !ok || nDoodads==0) 
 		return;
 
-	for (int i=0; i<nDoodads; i++) {
+	for (size_t i=0; i<nDoodads; i++) {
 		short dd = ddr[i];
 
 		bool inSet;
@@ -384,7 +384,7 @@ void WMO::draw()
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_TEXTURE_2D);
 	glBegin(GL_TRIANGLES);
-	for (int i=0; i<nLights; i++) {
+	for (size_t i=0; i<nLights; i++) {
 		glColor4fv(lights[i].fcolor);
 		glVertex3fv(lights[i].pos);
 		glVertex3fv(lights[i].pos + Vec3D(-0.5f,1,0));
@@ -401,7 +401,7 @@ void WMO::draw()
 	// draw fog positions..?
 	glDisable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
-	for (uint32 i=0; i<fogs.size(); i++) {
+	for (size_t i=0; i<fogs.size(); i++) {
 		WMOFog &fog = fogs[i];
 		glColor4f(1,1,1,1);
 		glBegin(GL_LINE_LOOP);
@@ -420,7 +420,7 @@ void WMO::draw()
 	// draw group boundingboxes
 	glDisable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
-	for (int i=0; i<nGroups; i++) {
+	for (size_t i=0; i<nGroups; i++) {
 		WMOGroup &g = groups[i];
 		float fc[2] = {1,0};
 		glColor4f(fc[i%2],fc[(i/2)%2],fc[(i/3)%2],1);
@@ -440,7 +440,7 @@ void WMO::draw()
 	}
 	// draw portal relations
 	glBegin(GL_LINES);
-	for (uint32 i=0; i<prs.size(); i++) {
+	for (size_t i=0; i<prs.size(); i++) {
 		WMOPR &pr = prs[i];
 		WMOPV &pv = pvs[pr.portal];
 		if (pr.dir>0) glColor4f(1,0,0,1);
@@ -490,7 +490,7 @@ void WMO::drawPortals()
 	/*
 	// not used ;)
 	glBegin(GL_QUADS);
-	for (int i=0; i<nP; i++) {
+	for (size_t i=0; i<nP; i++) {
 		glVertex3fv(pvs[i].d);
 		glVertex3fv(pvs[i].c);
 		glVertex3fv(pvs[i].b);
@@ -907,10 +907,10 @@ void WMOGroup::initDisplayList()
 			gLog("\nWMO group #%d - %s\nVertices: %d\nTriangles: %d\nIndices: %d\nBatches: %d\n",
 				this->num, this->name.c_str(), nVertices, nTriangles, nTriangles*3, nBatches);
 			WMOBatch *ba = batches;
-			for (int i=0; i<nBatches; i++) {
+			for (size_t i=0; i<nBatches; i++) {
 				gLog("Batch %d:\t", i);
 
-				for (int j=0; j<12; j++) {
+				for (size_t j=0; j<12; j++) {
 					if ((j%4)==0 && j!=0) gLog("| ");
 					gLog("%d\t", ba[i].bytes[j]);
 				}
@@ -943,7 +943,7 @@ void WMOGroup::initDisplayList()
 			VertexColors = new WMOVertColor[nVertices];
 			memcpy(VertexColors, gf.getPointer(), size);
 			/*
-			for (uint32 x=0;x<nVertices;x++){
+			for (size_t x=0;x<nVertices;x++){
 				WMOVertColor vc;
 				gf.read(&vc,4);
 				//wxLogMessage("Vertex Colors Gathered. R:%03i, G:%03i, B:%03i, A:%03i",vc.r,vc.g,vc.b,vc.a);
@@ -990,17 +990,17 @@ void WMOGroup::initDisplayList()
 
 	// assume that texturing is on, for unit 1
 
-	IndiceToVerts = new uint32[nIndices]+2;
+	IndiceToVerts = new size_t[nIndices]+2;
 
-	for (uint32 b=0; b<nBatches; b++) {
+	for (size_t b=0; b<nBatches; b++) {
 		WMOBatch *batch = &batches[b];
 		WMOMaterial *mat = &wmo->mat[batch->texture];
 
 		// build indice to vert array.
 		//wxLogMessage("Indice to Vert Conversion Array for Batch %i:",b);
-		for (uint32 i=0;i<=batch->indexCount;i++){
-			uint32 a = indices[batch->indexStart + i];
-			for (uint32 j=batch->vertexStart;j<=batch->vertexEnd;j++){
+		for (size_t i=0;i<=batch->indexCount;i++){
+			size_t a = indices[batch->indexStart + i];
+			for (size_t j=batch->vertexStart;j<=batch->vertexEnd;j++){
 				if (vertices[a] == vertices[j]){
 					IndiceToVerts[batch->indexStart + i] = j;
 					//wxLogMessage(wxT("Indice %i = Vert %i"),batch->indexStart + i,j);
@@ -1044,7 +1044,7 @@ void WMOGroup::initDisplayList()
 
 		// render
 		glBegin(GL_TRIANGLES);
-		for (int t=0, i=batch->indexStart; t<batch->indexCount; t++,i++) {
+		for (size_t t=0, i=batch->indexStart; t<batch->indexCount; t++,i++) {
 			int a = indices[i];
 			if (indoor && hascv) {
 	            setGLColor(cv[a]);
@@ -1089,7 +1089,7 @@ void WMOGroup::initLighting(int nLR, short *useLights)
 		float lenmin;
 		int lmin;
 
-		for (int i=0; i<nDoodads; i++) {
+		for (size_t i=0; i<nDoodads; i++) {
 			lenmin = 999999.0f*999999.0f;
 			lmin = 0;
 			WMOModelInstance &mi = wmo->modelis[ddr[i]];
@@ -1152,7 +1152,7 @@ void WMOGroup::drawDoodads(int doodadset)
 
 	// draw doodads
 	glColor4f(1,1,1,1);
-	for (int i=0; i<nDoodads; i++) {
+	for (size_t i=0; i<nDoodads; i++) {
 		short dd = ddr[i];
 		
 		bool inSet;

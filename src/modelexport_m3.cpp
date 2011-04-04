@@ -161,8 +161,8 @@ void RefEntry(const char *id, uint32 offset, uint32 nEntries, uint32 vers)
 void NameRefEntry(Reference &name, wxString strName, wxFFile &f)
 {
 	strName.Append(wxT('\0'));
-	name.nEntries = strName.Len();
-	name.ref = reList.size();
+	name.nEntries = (uint32)strName.Len();
+	name.ref = (uint32)reList.size();
 	RefEntry("RAHC", f.Tell(), name.nEntries, 0);
 	f.Write(strName.data(), strName.Len());
 	padding(f);
@@ -173,7 +173,7 @@ void DataRefEntry(const char *id, Reference &data, int count, int size, void *bu
 	data.nEntries = count;
 	if (count <= 0)
 		return;
-	data.ref = reList.size();
+	data.ref = (uint32)reList.size();
 	RefEntry(id, f.Tell(), data.nEntries, ver);
 	f.Write(buff, size);
 	padding(f);
@@ -243,7 +243,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 	memset(&fHead, 0, sizeof(fHead));
 	strcpy(fHead.id, "43DM");
 	fHead.mref.nEntries = 1;
-	fHead.mref.ref = reList.size();
+	fHead.mref.ref = (uint32)reList.size();
 	memset(&fHead.padding, 0xAA, sizeof(fHead.padding));
 	f.Seek(sizeof(fHead), wxFromCurrent);
 
@@ -338,7 +338,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 			memset(&vert, 0, sizeof(vert));
 			vert.pos = fixCoord(verts[trianglelookup[i]].pos); 
 			memcpy(vert.weBone, verts[trianglelookup[i]].weights, 4);
-			for (uint32 k=0; k<4; k++)
+			for (size_t k=0; k<4; k++)
 			{
 				if (verts[trianglelookup[i]].weights[k] != 0) {
 					bool bFound = false;
@@ -352,7 +352,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 					}
 					if (bFound == false)
 					{
-						vert.weIndice[k] = BoneLookup2.size();
+						vert.weIndice[k] = (unsigned char)BoneLookup2.size();
 						BoneLookup2.push_back(verts[trianglelookup[i]].bones[k]);
 					}
 				}
@@ -379,15 +379,15 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 			BoneLookup.push_back(BoneLookup2[i] + ROOT_BONE);
 		}
 
-		regn.boneCount = BoneLookup2.size();
-		regn.numBone = BoneLookup2.size();
+		regn.boneCount = (uint16)BoneLookup2.size();
+		regn.numBone = (uint16)BoneLookup2.size();
 		regn.numFaces = ops[j].icount;
 		regn.numVert = ops[j].vcount;
 		regn.indBone = boneidx;
 		regn.indFaces = faceidx;
 		regn.indVert = vertidx;
 
-		MeshM2toM3.push_back(Regns.size());
+		MeshM2toM3.push_back((const int)Regns.size());
 		Regns.push_back(regn);
 
 		boneidx += regn.numBone;
@@ -397,7 +397,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 
 	//prepare BAT and MeshtoMat Table
 	std::vector<MATmap> MATtable;
-	for (uint32 i=0; i<view->nTex; i++)
+	for (size_t i=0; i<view->nTex; i++)
 	{
 		if ((gameVersion < VERSION_CATACLYSM && tex[i].texunit < m->header.nTexUnitLookup && texunitlookup[tex[i].texunit] == 0) || gameVersion >= VERSION_CATACLYSM) // cataclysm lost this table
 		{	
@@ -429,7 +429,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 						bm.eye = 1;
 					else
 						bm.eye = 0;
-					idx = MATtable.size();
+					idx = (int)MATtable.size();
 					MATtable.push_back(bm);
 					
 					BAT bat;
@@ -503,7 +503,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 /*
 	if (att->children.size() > 0)
 	{
-		for (uint32 i = 0; i < att->children[0]->children.size(); i++)
+		for (size_t i = 0; i < att->children[0]->children.size(); i++)
 		{
 			Attachment *att2 = att->children[0]->children[i];
 			Model *am = static_cast<Model*>(att2->model);
@@ -635,7 +635,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 		extra.animname = strName;
 
 		// animid
-		for (uint32 j=0; j<MATtable.size(); j++)
+		for (size_t j=0; j<MATtable.size(); j++)
 		{
 			if (MATtable[j].color < 0)
 				continue;
@@ -647,13 +647,13 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 
 					if (k == MAT_LAYER_EMISSIVE && (MATtable[j].blend == BM_ADDITIVE_ALPHA || MATtable[j].blend == BM_ADDITIVE)) 
 					{
-						M3OpacityAnimid.push_back(CreateAnimID(AR_Layer, j, k, 2));
+						M3OpacityAnimid.push_back(CreateAnimID(AR_Layer, (int)j, (int)k, 2));
 						M2OpacityIdx.push_back(MATtable[j].color);
 					}
 
 					if (k == MAT_LAYER_ALPHA && (MATtable[j].blend == BM_TRANSPARENT || MATtable[j].blend == BM_ALPHA_BLEND || MATtable[j].blend == BM_ADDITIVE_ALPHA))
 					{
-						M3OpacityAnimid.push_back(CreateAnimID(AR_Layer, j, k, 2));
+						M3OpacityAnimid.push_back(CreateAnimID(AR_Layer, (int)j, (int)k, 2));
 						M2OpacityIdx.push_back(MATtable[j].color);
 					}
 				}
@@ -697,7 +697,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 		}
 
 		// mesh opacity id
-		for (uint32 j=0; j<M3OpacityAnimid.size(); j++) {
+		for (size_t j=0; j<M3OpacityAnimid.size(); j++) {
 			extra.animid.push_back(M3OpacityAnimid[j]);
 			animoff.index = fcount++;
 			animoff.type = STC_INDEX_FLOAT;
@@ -707,13 +707,13 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 		// particle rate id
 		if (bShowParticle && gameVersion < VERSION_CATACLYSM)
 		{
-			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+			for (size_t j=0; j<m->header.nParticleEmitters; j++)
 			{
 				if (particle[j].en.nTimes > 0 && 
 					((m->particleSystems[j].enabled.seq == -1 &&  m->particleSystems[j].enabled.data[anim_offset].size() > 0) ||
 					 (m->particleSystems[j].enabled.seq != -1 &&  m->particleSystems[j].enabled.data[0].size() > 0)))
 				{
-					extra.animid.push_back(CreateAnimID(AR_Par, j, 0, 14));
+					extra.animid.push_back(CreateAnimID(AR_Par, (int)j, 0, 14));
 					animoff.index = fcount++;
 					animoff.type = STC_INDEX_FLOAT;
 					extra.animoff.push_back(animoff);
@@ -753,8 +753,8 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 			sd.init();
 			Anim_Vec2D av2d;
 
-			int counts = m->texAnims[M2TexAnimId[j]].trans.times[0].size();
-			for (int k=0; k < counts; k++) {
+			int counts = (int)m->texAnims[M2TexAnimId[j]].trans.times[0].size();
+			for (ssize_t k=0; k < counts; k++) {
 				av2d.timeline.push_back(m->texAnims[M2TexAnimId[j]].trans.times[0][k]);
 				Vec2D tran;
 				tran.x = -m->texAnims[M2TexAnimId[j]].trans.data[0][k].x;
@@ -778,7 +778,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 				Anim_Vec3D av3d;
 
 				int counts = m->bones[j].trans.data[anim_offset].size();
-				for (int k=0; k<counts; k++) {
+				for (ssize_t k=0; k<counts; k++) {
 					av3d.timeline.push_back(m->bones[j].trans.times[anim_offset][k]);
 					Vec3D tran;
 					if (m->bones[j].parent > -1)
@@ -803,7 +803,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 				Anim_Vec3D av3d;
 
 				int counts = m->bones[j].scale.data[anim_offset].size();
-				for (int k=0; k<counts; k++) {
+				for (ssize_t k=0; k<counts; k++) {
 					av3d.timeline.push_back(m->bones[j].scale.times[anim_offset][k]);
 					Vec3D scale;
 					scale.x = m->bones[j].scale.data[anim_offset][k].x;
@@ -828,7 +828,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 				Anim_Vec4D av4d;
 
 				int counts = m->bones[j].rot.data[anim_offset].size();
-				for (int k=0; k<counts; k++) {
+				for (ssize_t k=0; k<counts; k++) {
 					av4d.timeline.push_back(m->bones[j].rot.times[anim_offset][k]);
 					Vec4D rot;
 					rot.x = -m->bones[j].rot.data[anim_offset][k].x;
@@ -846,7 +846,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 		}
 
 		// Float, 3RDS
-		for (uint32 j=0; j<M3OpacityAnimid.size(); j++)
+		for (size_t j=0; j<M3OpacityAnimid.size(); j++)
 		{
 			if ((m->colors[M2OpacityIdx[j]].opacity.seq == -1 &&  m->colors[M2OpacityIdx[j]].opacity.data[anim_offset].size() > 0) ||
 			    (m->colors[M2OpacityIdx[j]].opacity.seq != -1 &&  m->colors[M2OpacityIdx[j]].opacity.data[0].size() > 0))
@@ -862,7 +862,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 				else
 					animidx = 0;
 				int counts = m->colors[M2OpacityIdx[j]].opacity.data[animidx].size();
-				for (int k=0; k<counts; k++) {
+				for (ssize_t k=0; k<counts; k++) {
 					af.timeline.push_back(m->colors[M2OpacityIdx[j]].opacity.times[animidx][k]);
 					af.data.push_back(m->colors[M2OpacityIdx[j]].opacity.data[animidx][k]);
 				}
@@ -877,7 +877,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 		// particle rate anim
 		if (bShowParticle && gameVersion < VERSION_CATACLYSM)
 		{
-			for (uint32 j=0; j<m->header.nParticleEmitters; j++)
+			for (size_t j=0; j<m->header.nParticleEmitters; j++)
 			{
 				if (particle[j].en.nTimes > 0)
 				{
@@ -895,7 +895,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 						else
 							animidx = 0;
 						int counts = m->particleSystems[j].enabled.data[animidx].size();
-						for (int k=0; k<counts; k++) {
+						for (ssize_t k=0; k<counts; k++) {
 							af.timeline.push_back(m->particleSystems[j].enabled.times[animidx][k]);
 							float rate;
 							if (m->particleSystems[j].enabled.data[animidx][k] && m->particleSystems[j].rate.data[0].size() > 0)
@@ -972,7 +972,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 		bone.init();
 		bone.parent = mb[i].parent + ROOT_BONE;
 		bone.initTrans.AnimRef.animid = CreateAnimID(AR_Bone, idx, 0, 2);
-		for (uint32 j=0; j<Seqss.size(); j++)
+		for (size_t j=0; j<Seqss.size(); j++)
 		{
 			int anim_offset = logAnimations[j];
 			if (m->bones[i].trans.data[anim_offset].size() > 0)
@@ -987,7 +987,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 			bone.initTrans.value -= mb[bone.parent - ROOT_BONE].pivot ;
 
 		bone.initRot.AnimRef.animid = CreateAnimID(AR_Bone, idx, 0, 3);
-		for (uint32 j=0; j<Seqss.size(); j++)
+		for (size_t j=0; j<Seqss.size(); j++)
 		{
 			int anim_offset = logAnimations[j];
 			if (m->bones[i].rot.data[anim_offset].size() > 0)
@@ -998,7 +998,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 		}
 
 		bone.initScale.AnimRef.animid = CreateAnimID(AR_Bone, idx, 0, 5);
-		for (uint32 j=0; j<Seqss.size(); j++)
+		for (size_t j=0; j<Seqss.size(); j++)
 		{
 			int anim_offset = logAnimations[j];
 			if (m->bones[i].scale.data[anim_offset].size() > 0)
@@ -1035,12 +1035,12 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 	if (bShowParticle && gameVersion < VERSION_CATACLYSM)
 	{
 		// prepare particle texture
-		for (uint32 i=0; i < m->header.nParticleEmitters; i++)
+		for (size_t i=0; i < m->header.nParticleEmitters; i++)
 		{
 			int textureidx = -1;
 			if (particle[i].texture >= 0)
 			{
-				for (uint32 j = partexstart; j < MATtable.size(); j++)
+				for (size_t j = partexstart; j < MATtable.size(); j++)
 				{
 					if (MATtable[j].texid == particle[i].texture)
 					{
@@ -1565,7 +1565,7 @@ void ExportM3_M2(Attachment *att, Model *m, const char *fn, bool init)
 		DataRefEntry("FERI", mdata.mIREF, Irefs.size(), sizeof(IREF) * Irefs.size(), &Irefs.front(), 0, f);
 
 	// 4. ReferenceEntry
-	fHead.nRefs = reList.size();
+	fHead.nRefs = (uint32)reList.size();
 	fHead.ofsRefs = f.Tell();
 	f.Write(&reList.front(), sizeof(ReferenceEntry) * fHead.nRefs);
 

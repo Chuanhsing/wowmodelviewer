@@ -26,8 +26,8 @@
 class ChoiceDialog;
 class ModelViewer;
 
-bool slotHasModel(int i);
-bool correctType(int type, int slot);
+bool slotHasModel(size_t i);
+bool correctType(ssize_t type, ssize_t slot);
 
 struct CharRegionCoords {
 	int xpos, ypos, xsize, ysize;
@@ -109,21 +109,14 @@ struct TabardDetails
 
 struct CharDetails
 {
-	unsigned int skinColor;
-	unsigned int faceType;
-	unsigned int hairColor;
-	unsigned int hairStyle;
-	unsigned int facialHair;
+	size_t skinColor, faceType, hairColor, hairStyle, facialHair;
+	size_t facialColor, maxFacialColor;
+	size_t maxHairStyle, maxHairColor, maxSkinColor, maxFaceType, maxFacialHair;
 
-	unsigned int facialColor;
-	unsigned int maxFacialColor;
+	size_t race, gender;
 
-	unsigned int maxHairStyle, maxHairColor, maxSkinColor, maxFaceType, maxFacialHair;
-
-	unsigned int race, gender;
-
-	unsigned int useNPC;
-	unsigned int eyeGlowType;
+	size_t useNPC;
+	size_t eyeGlowType;
 
 	bool showUnderwear, showEars, showHair, showFacialHair, showFeet;
 
@@ -153,13 +146,13 @@ class CharControl: public wxWindow
 	wxStaticText *labels[NUM_CHAR_SLOTS];
 	wxStaticText *spinTbLabels[NUM_TABARD_BTNS];
 
-	void AddEquipment(int slot, int itemnum, int layer, CharTexture &tex, bool lookup = true);
+	void AddEquipment(ssize_t slot, ssize_t itemnum, ssize_t layer, CharTexture &tex, bool lookup = true);
 	void UpdateTextureList(wxString texName, int special);
 
 public:
 	// Item selection stuff
 	ChoiceDialog *itemDialog;
-	int choosingSlot;
+	ssize_t choosingSlot;
 	std::vector<int> numbers, cats;
 	wxArrayString choices, catnames;
 
@@ -169,12 +162,12 @@ public:
 	bool Init();
 	//void UpdateModel(Model *m);
 	void UpdateModel(Attachment *a);
-	void UpdateNPCModel(Attachment *a, unsigned int id);
+	void UpdateNPCModel(Attachment *a, size_t id);
 	
 	void RefreshModel();
 	void RefreshNPCModel();
-	void RefreshItem(int slot);
-	void RefreshCreatureItem(int slot);
+	void RefreshItem(ssize_t slot);
+	void RefreshCreatureItem(ssize_t slot);
 	void RefreshEquipment();
 	inline void RandomiseChar();
 
@@ -200,11 +193,11 @@ public:
 
 	void ClearItemDialog();
 
-	void selectItem(int type, int slot, int current, const wxChar *caption=wxT("Item"));
+	void selectItem(ssize_t type, ssize_t slot, ssize_t current, const wxChar *caption=wxT("Item"));
 	void selectSet();
 	void selectStart();
 	void selectMount();
-	void selectNPC(int type);
+	void selectNPC(ssize_t type);
 
 	const wxString selectCharModel();
 };

@@ -28,7 +28,7 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 		filename.AfterLast(SLASH).Lower().StartsWith(wxT("patch"))) &&
 		!isPartialMPQ(filename)) { // skip the PTCH files atrchives
 		// do patch
-		for(int j=(int)mpqArchives.GetCount()-1; j>=0; j--) {
+		for(ssize_t j=mpqArchives.GetCount()-1; j>=0; j--) {
 			if (!mpqArchives[j].AfterLast(SLASH).StartsWith(wxT("wow-update-")))
 				continue;
 			if (mpqArchives[j].AfterLast(SLASH).Len() == strlen("wow-update-xxxxx.mpq")) {
@@ -471,4 +471,3 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 		}
 	}
 }
-

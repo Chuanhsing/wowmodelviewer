@@ -54,10 +54,10 @@ void UserSkins::LoadFile(const wxString &filename)
 		if (numGroups > SET_WARN_COUNT) 
 			wxLogMessage(wxT("Warning - UserSkins: very large number of groups (%d) specified in line %d"), numGroups, lineNr);
 		
-		for (int g=0; g < numGroups; ++g) {
+		for (size_t g=0; g < numGroups; ++g) {
 			TextureGroup grp;
 			int count = 0;
-			for (int i=0; i < TextureGroup::num; ++i) {
+			for (size_t i=0; i < TextureGroup::num; ++i) {
 				if (!readline(in, line, lineNr)) {
 					wxLogMessage(wxT("Error - UserSkins: unexpected EOF at line %d"), lineNr);
 					return;

@@ -120,7 +120,7 @@ Vec3D calcCenteringTransform(Model* m, bool init)
 // find the biggest "times" keyframe array to determine the maximum number of keyframes that can be saved
 size_t getMaxKeyFrames(Model* m)
 {
-    unsigned int anim = m->animManager->GetAnim();
+    size_t anim = m->animManager->GetAnim();
     size_t numKeyFrames = 0;
 
     // figure out a reasonable number of keyframes
@@ -201,7 +201,7 @@ void M2toX3DAnim(tabbed_ostream s, Model* m)
     // save state
     bool showModel = m->showModel;
     m->showModel = false;
-    unsigned int currentFrame = m->animManager->GetFrame();
+    size_t currentFrame = m->animManager->GetFrame();
 
     for (size_t i=0; i<m->passes.size(); i++) 
     {
@@ -219,7 +219,7 @@ void M2toX3DAnim(tabbed_ostream s, Model* m)
 
             for (size_t frame = 0; frame <= numKeyFrames; ++frame)
             {
-                m->animManager->SetFrame((unsigned int)((stepSize*frame) % numTotalFrames));
+                m->animManager->SetFrame(((stepSize*frame) % numTotalFrames));
 
                 // calculate frame
                 m->draw();
@@ -380,7 +380,7 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
             // write normals
             counter = 0;
             s << "coordIndex='" << std::endl;
-            for (unsigned int k=0; k<p.indexCount; k+=3)
+            for (size_t k=0; k<p.indexCount; k+=3)
             {
                 s << counter+1 << " " << counter+2 << " " << counter+0 << " -1 ";
                 counter += 3;

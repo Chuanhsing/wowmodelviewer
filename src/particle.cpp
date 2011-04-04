@@ -1,7 +1,6 @@
 #include "particle.h"
 #include "util.h"
 
-
 #define MAX_PARTICLES 10000
 
 Vec4D fromARGB(uint32 color)
@@ -107,7 +106,7 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 	tofs = frand();
 
 	// init tiles, slice the texture
-	for (int i=0; i<rows*cols; i++) {
+	for (size_t i=0; i<rows*cols; i++) {
 		TexCoordSet tc;
 		initTile(tc.tc, i);
 		tiles.push_back(tc);
@@ -132,7 +131,7 @@ void ParticleSystem::initTile(Vec2D *tc, int num)
 	otc[3].x = a.x;
 	otc[3].y = b.y;
 
-	for (int i=0; i<4; i++) {
+	for (size_t i=0; i<4; i++) {
 		tc[(i+4-order) & 3] = otc[i];
 	}
 }
@@ -140,7 +139,7 @@ void ParticleSystem::initTile(Vec2D *tc, int num)
 
 void ParticleSystem::update(float dt)
 {
-	int l_manim = manim;
+	size_t l_manim = manim;
 	if (bZeroParticle)
 		l_manim = 0;
 	float grav = gravity.getValue(l_manim, mtime);
@@ -180,7 +179,7 @@ void ParticleSystem::update(float dt)
 
 			//rem = 0;
 			if (en) {
-				for (unsigned int i=0; i<tospawn; i++) {
+				for (size_t i=0; i<tospawn; i++) {
 					Particle p = emitter->newParticle(manim, mtime, w, l, spd, var, spr, spr2);
 					// sanity check:
 					if (particles.size() < MAX_PARTICLES) // No need to check this every loop iteration. Already checked above.
@@ -215,7 +214,7 @@ void ParticleSystem::update(float dt)
 	}
 }
 
-void ParticleSystem::setup(int anim, int time)
+void ParticleSystem::setup(size_t anim, size_t time)
 {
 	manim = anim;
 	mtime = time;
@@ -498,7 +497,7 @@ void CalcSpreadMatrix(float Spread1,float Spread2, float w, float l)
 			SpreadMat.m[i][j]*=Size;
 }
 
-Particle PlaneParticleEmitter::newParticle(int anim, int time, float w, float l, float spd, float var, float spr, float spr2)
+Particle PlaneParticleEmitter::newParticle(size_t anim, size_t time, float w, float l, float spd, float var, float spr, float spr2)
 {
 	// Model Flags - *shrug* gotta write this down somewhere.
 	// 0x1 =
@@ -598,7 +597,7 @@ Particle PlaneParticleEmitter::newParticle(int anim, int time, float w, float l,
 	}
 
 	p.life = 0;
-	int l_anim = anim;
+	size_t l_anim = anim;
 	if (bZeroParticle)
 		l_anim = 0;
 	p.maxlife = sys->lifespan.getValue(l_anim, time);
@@ -611,7 +610,7 @@ Particle PlaneParticleEmitter::newParticle(int anim, int time, float w, float l,
 	return p;
 }
 
-Particle SphereParticleEmitter::newParticle(int anim, int time, float w, float l, float spd, float var, float spr, float spr2)
+Particle SphereParticleEmitter::newParticle(size_t anim, size_t time, float w, float l, float spd, float var, float spr, float spr2)
 {
     Particle p;
 	Vec3D dir;
@@ -708,7 +707,7 @@ Particle SphereParticleEmitter::newParticle(int anim, int time, float w, float l
 	p.down = Vec3D(0,-1.0f,0);
 
 	p.life = 0;
-	int l_anim = anim;
+	size_t l_anim = anim;
 	if (bZeroParticle)
 		l_anim = 0;
 	p.maxlife = sys->lifespan.getValue(l_anim, time);
@@ -752,7 +751,7 @@ void RibbonEmitter::init(MPQFile &f, ModelRibbonEmitterDef &mta, uint32 *globals
 	segs.push_back(rs);
 }
 
-void RibbonEmitter::setup(int anim, int time)
+void RibbonEmitter::setup(size_t anim, size_t time)
 {
 	Vec3D ntpos = parent->mat * pos;
 	Vec3D ntup = parent->mat * (pos + Vec3D(0,0,1));

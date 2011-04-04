@@ -34,9 +34,11 @@ int Perfered_Exporter = -1; // Defaults to None
 bool modelExportInitOnly = true;
 bool modelExport_PreserveDir = true;
 bool modelExport_UseWMVPosRot = false;
+bool modelExport_ScaleToRealWorld = false;
 
 // Lightwave Options
 bool modelExport_LW_PreserveDir = true;
+bool modelExport_LW_AlwaysWriteSceneFile = false;
 bool modelExport_LW_ExportLights = true;
 bool modelExport_LW_ExportDoodads = true;
 bool modelExport_LW_ExportCameras = true;

@@ -410,7 +410,7 @@ void ModelViewer::InitMenu()
 		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEFAULT, wxT("Default"));
 		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEATHKNIGHT, wxT("Death Knight"));
 		if (charControl->cd.eyeGlowType){
-			unsigned int egt = charControl->cd.eyeGlowType;
+			size_t egt = charControl->cd.eyeGlowType;
 			if (egt == EGT_NONE)
 				charGlowMenu->Check(ID_CHAREYEGLOW_NONE, true);
 			else if (egt == EGT_DEATHKNIGHT)
@@ -1106,7 +1106,7 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 
 			TextureGroup grp;
 			int count = 0;
-			for (int i=0; i<TextureGroup::num; i++) {
+			for (size_t i=0; i<TextureGroup::num; i++) {
 				wxString skin(modelRec.getString(CreatureSkinDB::Skin + i));
 				
 				grp.tex[i] = skin;
@@ -1480,7 +1480,9 @@ wxString ModelViewer::Init()
 
 	fileControl->Init(this);
 
-	charControl->Init();
+	if (charControl->Init() == false){
+		return wxT("Error Initializing the Character Controls.");
+	};
 
 	return wxEmptyString;
 }
@@ -1581,7 +1583,8 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 		{
 			wxFileDialog loadDialog(this, wxT("Load character"), wxEmptyString, wxEmptyString, wxT("Character files (*.chr)|*.chr"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 			if (loadDialog.ShowModal()==wxID_OK) {
-				for (int i=0; i<NUM_CHAR_SLOTS; i++)
+				wxLogMessage(wxT("\nLoading character from a save file: %s\n"),loadDialog.GetPath());
+				for (size_t i=0; i<NUM_CHAR_SLOTS; i++)
 					charControl->cd.equipment[i] = 0;
 				
 				LoadChar(loadDialog.GetPath());
@@ -1593,8 +1596,10 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 	case ID_IMPORT_CHAR:
 		{
 			wxTextEntryDialog dialog(this, wxT("Please paste in the URL to the character you wish to import."), wxT("Please enter text"), wxEmptyString, wxOK | wxCANCEL | wxCENTRE, wxDefaultPosition);
-			if (dialog.ShowModal() == wxID_OK)
+			if (dialog.ShowModal() == wxID_OK){
+				wxLogMessage(wxT("\nImporting character from the Armory: %s\n"),dialog.GetValue());
 				ImportArmoury(dialog.GetValue());
+			}
 		}
 		break;
 
@@ -1651,7 +1656,7 @@ void ModelViewer::OnLightMenu(wxCommandEvent &event)
 				// FIXME: ofstream is not compitable with multibyte path name
 				ofstream f(fn.fn_str(), ios_base::out|ios_base::trunc);
 				f << lightMenu->IsChecked(ID_LT_DIRECTION) << " " << lightMenu->IsChecked(ID_LT_TRUE) << " " << lightMenu->IsChecked(ID_LT_DIRECTIONAL) << " " << lightMenu->IsChecked(ID_LT_AMBIENT) << " " << lightMenu->IsChecked(ID_LT_MODEL) << endl;
-				for (int i=0; i<MAX_LIGHTS; i++) {
+				for (size_t i=0; i<MAX_LIGHTS; i++) {
 					f << lightControl->lights[i].ambience.x << " " << lightControl->lights[i].ambience.y << " " << lightControl->lights[i].ambience.z << " " << lightControl->lights[i].arc << " " << lightControl->lights[i].constant_int << " " << lightControl->lights[i].diffuse.x << " " << lightControl->lights[i].diffuse.y << " " << lightControl->lights[i].diffuse.z << " " << lightControl->lights[i].enabled << " " << lightControl->lights[i].linear_int << " " << lightControl->lights[i].pos.x << " " << lightControl->lights[i].pos.y << " " << lightControl->lights[i].pos.z << " " << lightControl->lights[i].quadradic_int << " " << lightControl->lights[i].relative << " " << lightControl->lights[i].specular.x << " " << lightControl->lights[i].specular.y << " " << lightControl->lights[i].specular.z << " " << lightControl->lights[i].target.x << " " << lightControl->lights[i].target.y << " " << lightControl->lights[i].target.z << " " << lightControl->lights[i].type << endl;
 				}
 				f.close();
@@ -1679,7 +1684,7 @@ void ModelViewer::OnLightMenu(wxCommandEvent &event)
 				lightMenu->Check(ID_LT_AMBIENT, lightAmb);
 				lightMenu->Check(ID_LT_MODEL, lightModel);
 
-				for (int i=0; i<MAX_LIGHTS; i++) {
+				for (size_t i=0; i<MAX_LIGHTS; i++) {
 					f >> lightControl->lights[i].ambience.x >> lightControl->lights[i].ambience.y >> lightControl->lights[i].ambience.z >> lightControl->lights[i].arc >> lightControl->lights[i].constant_int >> lightControl->lights[i].diffuse.x >> lightControl->lights[i].diffuse.y >> lightControl->lights[i].diffuse.z >> lightControl->lights[i].enabled >> lightControl->lights[i].linear_int >> lightControl->lights[i].pos.x >> lightControl->lights[i].pos.y >> lightControl->lights[i].pos.z >> lightControl->lights[i].quadradic_int >> lightControl->lights[i].relative >> lightControl->lights[i].specular.x >> lightControl->lights[i].specular.y >> lightControl->lights[i].specular.z >> lightControl->lights[i].target.x >> lightControl->lights[i].target.y >> lightControl->lights[i].target.z >> lightControl->lights[i].type;
 				}
 				f.close();
@@ -2071,7 +2076,7 @@ void ModelViewer::SaveChar(wxString fn)
 	f << canvas->model->name << endl;
 	f << charControl->cd.race << " " << charControl->cd.gender << endl;
 	f << charControl->cd.skinColor << " " << charControl->cd.faceType << " " << charControl->cd.hairColor << " " << charControl->cd.hairStyle << " " << charControl->cd.facialHair << " " << charControl->cd.facialColor  << " " << charControl->cd.eyeGlowType << endl;
-	for (int i=0; i<NUM_CHAR_SLOTS; i++) {
+	for (size_t i=0; i<NUM_CHAR_SLOTS; i++) {
 		f << charControl->cd.equipment[i] << endl;
 	}
 
@@ -2119,7 +2124,7 @@ void ModelViewer::LoadChar(wxString fn)
 	}
 
 	while (!f.eof()) {
-		for (int i=0; i<NUM_CHAR_SLOTS; i++) {
+		for (size_t i=0; i<NUM_CHAR_SLOTS; i++) {
 			f >> charControl->cd.equipment[i];
 		}
 		break;
@@ -2917,10 +2922,12 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 		init = true;
 	}
 
+	size_t returncode = EXPORT_OKAY;
+
 	// Useful variables
 	bool isPaused = false;
-	int32 cAnim = 0;
-	int32 cFrame = 0;
+	size_t cAnim = 0;
+	size_t cFrame = 0;
 
 	// Set Default filename
 	wxString newfilename;
@@ -2960,7 +2967,9 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting M2 model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				// Your M2 export function goes here.
-				ExportLWO_M2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+				returncode = ExportLWO_M2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		// For WMO Models. You don't need to include this if the exporter doesn't support it.
 		} else if (canvas->wmo) {
@@ -2969,7 +2978,9 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting WMO model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				// Your WMO export function goes here.
-				ExportLWO_WMO(canvas->wmo, dialog.GetPath().fn_str());
+				returncode = ExportLWO_WMO(canvas->wmo, dialog.GetPath().fn_str());
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		// ADT support. Same as WMOs.
 		} else if (canvas->adt) {
@@ -2978,7 +2989,9 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting MapTile model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				// Your ADT export function goes here.
-				ExportLWO_ADT(canvas->adt, dialog.GetPath().fn_str());
+				returncode = ExportLWO_ADT(canvas->adt, dialog.GetPath().fn_str());
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		}
 	// That's all folks!
@@ -2993,6 +3006,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportOBJ_M2(canvas->root, canvas->model, dialog.GetPath(), init);
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		} else if (canvas->wmo) {
 			wxFileDialog dialog(this, wxT("Export World Model Object..."), wxEmptyString, newfilename, wxT("Wavefront (*.obj)|*.obj"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
@@ -3000,6 +3015,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportOBJ_WMO(canvas->wmo, dialog.GetPath());
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		}
 	} else if (id == ID_MODELEXPORT_COLLADA) {
@@ -3010,6 +3027,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportCOLLADA_M2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		} else if (canvas->wmo) {
 			wxFileDialog dialog(this, wxT("Export World Model Object..."), wxEmptyString, newfilename, wxT("Collada (*.dae)|*.dae"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
@@ -3017,6 +3036,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportCOLLADA_WMO(canvas->wmo, dialog.GetPath().fn_str());
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		}
 	} else if (id == ID_MODELEXPORT_MS3D) {
@@ -3027,6 +3048,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportMS3D_M2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		}
 	} else if (id == ID_MODELEXPORT_3DS) {
@@ -3037,6 +3060,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				Export3DS_M2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		}
 	} else if (id == ID_MODELEXPORT_X3D) {
@@ -3047,6 +3072,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportX3D_M2(canvas->model, dialog.GetPath().fn_str(), init);
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		}
 	} else if (id == ID_MODELEXPORT_XHTML) {
@@ -3057,6 +3084,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportXHTML_M2(canvas->model, dialog.GetPath().fn_str(), init);
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		}
 	} else if (id == ID_MODELEXPORT_OGRE) {
@@ -3068,6 +3097,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportOgreXML_M2(canvas->model, dialog.GetPath().fn_str(), init);
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		}
 	} else if (id == ID_MODELEXPORT_M3) {
@@ -3078,6 +3109,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 				
 				ExportM3_M2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		}
 #ifdef	_WINDOWS
@@ -3089,6 +3122,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportFBX_M2(canvas->model, dialog.GetPath().fn_str(), init);
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		} else if (canvas->wmo) {
 			wxFileDialog dialog(this, wxT("Export World Model Object..."), wxEmptyString, newfilename, wxT("FBX (*.fbx)|*.fbx"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
@@ -3096,6 +3131,8 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportFBX_WMO(canvas->wmo, dialog.GetPath().fn_str());
+			}else{
+				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
 		}
 #endif
@@ -3106,7 +3143,10 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 			g_selModel->animManager->Play();
 		}
 	}
-	wxMessageBox(wxT("Export Completed."),wxT("Finished Exporting"));
+	// Only show if we've successfully completed a model export.
+	if (returncode == EXPORT_OKAY){
+		wxMessageBox(wxT("Export Completed."),wxT("Finished Exporting"));
+	}
 }
 
 

@@ -11,10 +11,23 @@
 void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 {
 	// Open file
-	wxFFileOutputStream fs (fn);
+	wxString filename(fn, wxConvUTF8);
+	if (m->modelType != MT_CHAR){
+		if (modelExport_PreserveDir == true){
+			wxString Path1, Path2, Name;
+
+			Path1 << filename.BeforeLast(SLASH);
+			Name << filename.AfterLast(SLASH);
+			Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+			MakeDirs(Path1,Path2);
+			filename.Empty();
+			filename << Path1 << SLASH << Path2 << SLASH << Name;
+		}
+	}
+	wxFFileOutputStream fs (filename);
 
 	if (!fs.IsOk()) {
-		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export model."), fn.c_str());
+		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export model."), filename.c_str());
 		return;
 	}
 	wxTextOutputStream f (fs);
@@ -27,16 +40,29 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 	ModelData *verts = NULL;
 	GroupData *groups = NULL;
 
-	InitCommon(att, init, verts, groups, numVerts, numGroups, numFaces);
+	ssize_t cAnim = 0;
+	size_t cFrame = 0;
+	if ((m->animated == true) && (init == false)){
+		cAnim = m->currentAnim;
+		cFrame = m->animManager->GetFrame();
+	}
+
+	//InitCommon(att, init, verts, groups, numVerts, numGroups, numFaces);
 	wxString out;
 
 	// http://people.sc.fsu.edu/~burkardt/data/mtl/mtl.html
-	wxString matName(fn, wxConvUTF8);
+	wxString matName(filename, wxConvUTF8);
 	matName = matName.BeforeLast('.');
 	matName << wxT(".mtl");
 
-	ofstream fm(matName.mb_str(), ios_base::out | ios_base::trunc);
+	wxFFileOutputStream ms (matName);
+	if (!ms.IsOk()) {
+		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export materials."), matName.c_str());
+		return;
+	}
+	wxTextOutputStream fm (ms);
 	matName = matName.AfterLast('\\');
+
 
 	fm << "#" << endl;
 	fm << "# " << matName.mb_str() << endl;
@@ -47,14 +73,54 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 		ModelRenderPass &p = m->passes[i];
 			
 		if (p.init(m)) {
-			wxString texName = GetM2TextureName(m,(char *)fn.c_str(),p,(int)i);
+			wxString Texture = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8);
+			wxString TexturePath = Texture.BeforeLast(MPQ_SLASH);
+			wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
+			if (m->modelType == MT_CHAR){
+				wxString charname = filename.AfterLast(SLASH).BeforeLast(wxT('.')) + wxT("_");
+				if (texName.Find(MPQ_SLASH) != wxNOT_FOUND){
+					texName = charname + Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
+					TexturePath = wxT("");
+				}
+				if (texName.Find(wxT("Body")) != wxNOT_FOUND){
+					texName = charname + wxT("Body");
+				}
+			}
+			wxString ExportName = wxString(fn, wxConvUTF8).BeforeLast(SLASH) + SLASH + texName;
+			if (modelExport_PreserveDir == true){
+				wxString Path1, Path2, Name;
+				Path1 << ExportName.BeforeLast(SLASH);
+				Name << texName.AfterLast(SLASH);
+				Path2 << TexturePath;
 
-			fm << wxT("newmtl ") << texName << endl;
-			texName << wxT(".tga");
+				MakeDirs(Path1,Path2);
+
+				ExportName.Empty();
+				ExportName << Path1 << SLASH << Path2 << SLASH << Name;
+			}
+			ExportName << wxT(".tga");
+			float amb = 0.25f;
+			Vec4D diff = p.ocol;
+
+			wxString material = texName;
+
+			if (p.unlit == true) {
+				// Add Lum, just in case there's a non-luminous surface with the same name.
+				material = material + wxT("_Lum");
+				amb = 1.0f;
+				diff = Vec4D(0,0,0,0);
+			}
+
+			// If Doublesided
+			if ((p.cull?true:false) == false) {
+				material = material + wxT("_Dbl");
+			}
+
+			fm << wxT("newmtl ") << material << endl;
 			fm << "illum 2" << endl;
-			out = wxString::Format(wxT("Kd %.06f %.06f %.06f"), p.ocol.x, p.ocol.y, p.ocol.z);
+			out = wxString::Format(wxT("Kd %.06f %.06f %.06f"), diff.x, diff.y, diff.z);
 			fm << out.c_str() << endl;
-			out = wxString::Format(wxT("Ka %.06f %.06f %.06f"), 0.7f, 0.7f, 0.7f);
+			out = wxString::Format(wxT("Ka %.06f %.06f %.06f"), amb, amb, amb);
 			fm << out.c_str() << endl;
 			out = wxString::Format(wxT("Ks %.06f %.06f %.06f"), p.ecol.x, p.ecol.y, p.ecol.z);
 			fm << out.c_str() << endl;
@@ -65,24 +131,90 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 			//fm << "Kd " << p.ocol.x << " " << p.ocol.y << " " << p.ocol.z << endl;
 			//fm << "Ks " << p.ecol.x << " " << p.ecol.y << " " << p.ecol.z << endl;
 			//fm << "Ns " << p.ocol.w << endl;
-			fm << "map_Kd " << texName.c_str() << endl << endl;
+			fm << wxT("map_Kd ") << TexturePath;
+			if (TexturePath.Len() > 0)
+				fm << SLASH;
+			fm << texName << wxT(".tga") << endl << endl;
 
-			
-			wxString texFilename(fn, wxConvUTF8);
-			texFilename = texFilename.BeforeLast(SLASH);
-			texFilename += SLASH;
-			texFilename += texName;
-			wxLogMessage(wxT("Exporting Image: %s"),texFilename.c_str());
-			SaveTexture(texFilename);
-			
+			wxLogMessage(wxT("Exporting Image: %s"),ExportName.c_str());
+			SaveTexture(ExportName);
 		}
 	}
 
-	fm.close();
+	// Materials for Attached Objects
+	if (att != NULL){
+		if (att->model){
+			wxLogMessage(wxT("Att Model found."));
+		}
+		for (size_t c=0; c<att->children.size(); c++) {
+			Attachment *att2 = att->children[c];
+			for (size_t j=0; j<att2->children.size(); j++) {
+				Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
+
+				if (mAttChild){
+					wxLogMessage(wxT("AttChild Model found."));
+					for (size_t i=0; i<mAttChild->passes.size(); i++) {
+						ModelRenderPass &p = mAttChild->passes[i];
+
+						if (p.init(mAttChild)) {
+							wxString Texture = wxString(mAttChild->TextureList[p.tex].c_str(), wxConvUTF8);
+							wxString TexturePath = Texture.BeforeLast(MPQ_SLASH);
+							wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
+							wxString ExportName = wxString(fn, wxConvUTF8).BeforeLast(SLASH) + SLASH + texName;
+							if (modelExport_PreserveDir == true){
+								wxString Path1, Path2, Name;
+								Path1 << ExportName.BeforeLast(SLASH);
+								Name << texName.AfterLast(SLASH);
+								Path2 << TexturePath;
+
+								MakeDirs(Path1,Path2);
+
+								ExportName.Empty();
+								ExportName << Path1 << SLASH << Path2 << SLASH << Name;
+							}
+							ExportName << wxT(".tga");
+
+							wxString material = texName;
+
+							if (p.unlit == true) {
+								// Add Lum, just in case there's a non-luminous surface with the same name.
+								material = material + wxT("_Lum");
+							}
+
+							// If Doublesided
+							if ((p.cull?true:false) == false) {
+								material = material + wxT("_Dbl");
+							}
+
+							fm << wxT("newmtl ") << material << endl;
+							texName << wxT(".tga");
+							fm << "illum 2" << endl;
+							out = wxString::Format(wxT("Kd %.06f %.06f %.06f"), p.ocol.x, p.ocol.y, p.ocol.z);
+							fm << out.c_str() << endl;
+							out = wxString::Format(wxT("Ka %.06f %.06f %.06f"), 0.7f, 0.7f, 0.7f);
+							fm << out.c_str() << endl;
+							out = wxString::Format(wxT("Ks %.06f %.06f %.06f"), p.ecol.x, p.ecol.y, p.ecol.z);
+							fm << out.c_str() << endl;
+							fm << "Ke 0.000000 0.000000 0.000000" << endl;
+							out = wxString::Format(wxT("Ns %0.6f"), 0.0f);
+							fm << out.c_str() << endl;
+							fm << wxT("map_Kd ") << TexturePath << SLASH << texName << wxT(".tga") << endl << endl;
+
+							wxLogMessage(wxT("Exporting Image: %s"),ExportName.c_str());
+							SaveTexture(ExportName);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ms.Close();
 
 	f << wxT("# Wavefront OBJ exported by WoW Model Viewer ") << APP_VERSION << endl << endl;
 	f << wxT("mtllib ") << matName << endl << endl;
 
+	bool vertMsg = false;
 	// output all the vertice data
 	int vertics = 0;
 	for (size_t i=0; i<m->passes.size(); i++) {
@@ -93,16 +225,119 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 				uint16 a = m->indices[b];
-				if (m->vertices == NULL || init == true) {
-					out = wxString::Format(wxT("v %.06f %.06f %.06f"), m->origVertices[a].pos.x, m->origVertices[a].pos.y, m->origVertices[a].pos.z);
-					f << out.c_str() << endl;
-					//f << "v " << m->origVertices[a].pos.x << " " << m->origVertices[a].pos.y << " " << m->origVertices[a].pos.z << endl;
+				Vec3D vert;
+				if ((m->animated == true) && (init == false) && (m->vertices)) {
+					if (vertMsg == false){
+						wxLogMessage(wxT("Using Verticies"));
+						vertMsg = true;
+					}
+					vert = m->vertices[a];
 				} else {
-					out = wxString::Format(wxT("v %.06f %.06f %.06f"), m->vertices[a].x, m->vertices[a].y, m->vertices[a].z);
-					f << out.c_str() << endl;
-					//f << "v " << m->vertices[a].x << " " << m->vertices[a].y << " " << m->vertices[a].z << endl;
+					if (vertMsg == false){
+						wxLogMessage(wxT("Using Original Verticies"));
+						vertMsg = true;
+					}
+					vert = m->origVertices[a].pos;
 				}
+				MakeModelFaceForwards(vert,false);
+				vert *= (modelExport_ScaleToRealWorld == true?REALWORLD_SCALE:1.0);
+				out = wxString::Format(wxT("v %.06f %.06f %.06f"), vert.x, vert.y, vert.z);
+				f << out.c_str() << endl;
+
 				vertics ++;
+			}
+		}
+	}
+
+	// Verticies for Attached Objects
+	if (att != NULL){
+		for (size_t c=0; c<att->children.size(); c++) {
+			Attachment *att2 = att->children[c];
+			for (size_t j=0; j<att2->children.size(); j++) {
+				Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
+
+				if (mAttChild){
+					int boneID = -1;
+					Model *mParent = NULL;
+
+					if (att2->parent) {
+						mParent = static_cast<Model*>(att2->children[j]->parent->model);
+						if (mParent)
+							boneID = mParent->attLookup[att2->children[j]->id];
+					}
+
+					Vec3D mPos(0,0,0);
+					Quaternion mRot(Vec4D(0,0,0,0));
+					Vec3D mScale(1,1,1);
+
+					Vec3D Seraph(1,1,1);
+					Quaternion Niobe(Vec4D(0,0,0,0));
+
+					if (boneID>-1) {
+						Bone cbone = mParent->bones[mParent->atts[boneID].bone];
+						Matrix mat = cbone.mat;
+						Matrix rmat = cbone.mrot;
+
+						// InitPose is a reference to the HandsClosed animation (#15), which is the closest to the Initial pose.
+						// By using this animation, we'll get the proper scale for the items when in Init mode.
+						int InitPose = 15;
+
+						if (init == true){
+							mPos = mParent->atts[boneID].pos;
+							mScale = cbone.scale.getValue((size_t)ANIMATION_HANDSCLOSED,0);
+							mRot = cbone.rot.getValue((size_t)ANIMATION_HANDSCLOSED,0);
+						}else{
+							// Rotations aren't working correctly... Not sure why.
+							rmat.quaternionRotate(cbone.rot.getValue(cAnim,cFrame));
+							mat.scale(cbone.scale.getValue(cAnim,cFrame));
+							mat.translation(cbone.transPivot);
+
+							mPos.x = mat.m[0][3];
+							mPos.y = mat.m[1][3];
+							mPos.z = mat.m[2][3];
+
+							mScale = cbone.scale.getValue(cAnim,(uint32)cFrame);
+							mRot = rmat.GetQuaternion();
+						}
+						if (mScale.x == 0 && mScale.y == 0 && mScale.z == 0){
+							mScale = Vec3D(1,1,1);
+						}
+					}
+
+					for (size_t i=0; i<mAttChild->passes.size(); i++) {
+						ModelRenderPass &p = mAttChild->passes[i];
+
+						if (p.init(mAttChild)) {
+							for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
+								uint16 a = mAttChild->indices[b];
+								// Points
+								Vec3D vert;
+								if ((init == false)&&(mAttChild->vertices)) {
+									vert = mAttChild->vertices[a];
+								} else {
+									vert = mAttChild->origVertices[a].pos;
+								}
+								Matrix Neo;
+
+								Neo.translation(vert);							// Set Original Position
+								Neo.quaternionRotate(Niobe);					// Set Original Rotation
+								Neo.scale(Seraph);								// Set Original Scale
+
+								Neo *= Matrix::newTranslation(mPos);			// Apply New Position
+								Neo *= Matrix::newQuatRotate(mRot);				// Apply New Rotation
+								Neo *= Matrix::newScale(mScale);				// Apply New Scale
+
+								Vec3D mVert = Neo * vert;
+								MakeModelFaceForwards(mVert,false);
+
+								mVert *= (modelExport_ScaleToRealWorld == true?REALWORLD_SCALE:1.0);
+								out = wxString::Format(wxT("v %.06f %.06f %.06f"), mVert.x, mVert.y, mVert.z);
+								f << out.c_str() << endl;
+								vertics++;
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -116,10 +351,36 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 		if (p.init(m)) {
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 				uint16 a = m->indices[b];
-				out = wxString::Format(wxT("vt %.06f %.06f"), m->origVertices[a].texcoords.x, 1-m->origVertices[a].texcoords.y);
+				Vec2D tc =  m->origVertices[a].texcoords;
+				out = wxString::Format(wxT("vt %.06f %.06f"), tc.x, 1-tc.y);
 				f << out.c_str() << endl;
 				//f << "vt " << m->origVertices[a].texcoords.x << " " << (1 - m->origVertices[a].texcoords.y) << endl;
 				textures ++;
+			}
+		}
+	}
+	// UVs for Attached Objects
+	if (att != NULL){
+		for (size_t c=0; c<att->children.size(); c++) {
+			Attachment *att2 = att->children[c];
+			for (size_t j=0; j<att2->children.size(); j++) {
+				Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
+
+				if (mAttChild){
+					for (size_t i=0; i<mAttChild->passes.size(); i++) {
+						ModelRenderPass &p = mAttChild->passes[i];
+
+						if (p.init(mAttChild)) {
+							for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
+								uint16 a = mAttChild->indices[b];
+								Vec2D tc =  mAttChild->origVertices[a].texcoords;
+								out = wxString::Format(wxT("vt %.06f %.06f"), tc.x, 1-tc.y);
+								f << out.c_str() << endl;
+								textures ++;
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -132,46 +393,95 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 		if (p.init(m)) {
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 				uint16 a = m->indices[b];
-				out = wxString::Format(wxT("vn %.06f %.06f %.06f"), m->origVertices[a].normal.x, m->origVertices[a].normal.y, m->origVertices[a].normal.z);
+				Vec3D n = m->origVertices[a].normal;
+				out = wxString::Format(wxT("vn %.06f %.06f %.06f"), n.x, n.y, n.z);
 				f << out.c_str() << endl;
 				//f << "vn " << m->origVertices[a].normal.x << " " << m->origVertices[a].normal.y << " " << m->origVertices[a].normal.z << endl;
 				normals ++;
 			}
 		}
 	}
+	// Normal data for Attached Objects
+	if (att != NULL){
+		for (size_t c=0; c<att->children.size(); c++) {
+			Attachment *att2 = att->children[c];
+			for (size_t j=0; j<att2->children.size(); j++) {
+				Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
+
+				if (mAttChild){
+					for (size_t i=0; i<mAttChild->passes.size(); i++) {
+						ModelRenderPass &p = mAttChild->passes[i];
+
+						if (p.init(mAttChild)) {
+							for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
+								uint16 a = mAttChild->indices[b];
+								Vec3D n = mAttChild->origVertices[a].normal;
+								out = wxString::Format(wxT("vn %.06f %.06f %.06f"), n.x, n.y, n.z);
+								f << out.c_str() << endl;
+								//f << "vn " << m->origVertices[a].normal.x << " " << m->origVertices[a].normal.y << " " << m->origVertices[a].normal.z << endl;
+								normals ++;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	f << wxT("# ") << normals << wxT(" normals") << endl << endl;
 
 	int counter=1;
-	// output the indice data
-	int triangles = 0;
+	uint32 pointnum = 0;
+	// Polygon Data
 	int triangles_total = 0;
 	for (size_t i=0; i<m->passes.size(); i++) {
 		ModelRenderPass &p = m->passes[i];
 
 		if (p.init(m)) {
-			wxString FilePath = wxString(fn, wxConvUTF8).BeforeLast(SLASH);
-			wxString texName = m->TextureList[p.tex].BeforeLast(wxT('.'));
-			wxString texPath = texName.BeforeLast(SLASH);
-			if (m->modelType == MT_CHAR){
-				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(wxT('.')) + wxT("_") + texName.AfterLast(SLASH);
-			}else if ((texName.Find(SLASH) <= 0)&&(texName == wxT("Cape"))){
-				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(wxT('.')) + wxT("_Replacable");
-				texPath = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
-			}else if (texName.Find(SLASH) <= 0){
-				texName = wxString(fn, wxConvUTF8).AfterLast(SLASH).BeforeLast(wxT('.')) + wxT("_") + texName;
-				texPath = wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
-			}else{
-				texName = texName.AfterLast(SLASH);
+			// Build Vert2Point DB
+			size_t *Vert2Point = new size_t[p.vertexEnd];
+			for (size_t v=p.vertexStart; v<p.vertexEnd; v++, pointnum++) {
+				Vert2Point[v] = pointnum;
 			}
 
-			if (texName.Length() == 0)
-				texName << wxString(m->modelname.c_str(), wxConvUTF8).AfterLast(SLASH).BeforeLast(wxT('.')) << wxString::Format(wxT("_Image_%03i"),i);
+			wxString Texture = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8);
+			wxString TexturePath = Texture.BeforeLast(MPQ_SLASH);
+			wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
+			if (m->modelType == MT_CHAR){
+				wxString charname = filename.AfterLast(SLASH).BeforeLast(wxT('.')) + wxT("_");
+				if (texName.Find(MPQ_SLASH) != wxNOT_FOUND){
+					texName = charname + Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
+					TexturePath = wxT("");
+				}
+				if (texName.Find(wxT("Body")) != wxNOT_FOUND){
+					texName = charname + wxT("Body");
+				}
+			}
 
-			f << wxT("g Geoset_") << i << endl;
+			if (p.unlit == true) {
+				texName = texName + wxT("_Lum");
+			}
+			if ((p.cull?true:false) == false) {
+				texName = texName + wxT("_Dbl");
+			}
+
+			int g = p.geoset;
+			wxString partName;
+			
+			// Part Names
+			int mesh = m->geosets[g].id / 100;
+			if (m->modelType == MT_CHAR && mesh < 19 && meshes[mesh] != wxEmptyString){
+				wxString msh = meshes[mesh];
+				msh.Replace(wxT(" "),wxT("_"),true);
+				partName = wxString::Format(wxT("Geoset_%03i-%s"),g,msh);
+			}else{
+				partName = wxString::Format(wxT("Geoset_%03i"),g);
+			}
+
+			f << wxT("g ") << partName << endl;
 			f << wxT("usemtl ") << texName << endl;
 			f << wxT("s 1") << endl;
-			triangles = 0;
-			for (unsigned int k=0; k<p.indexCount; k+=3) {
+			int triangles = 0;
+			for (size_t k=0; k<p.indexCount; k+=3) {
 				f << wxT("f ");
 				f << counter << wxT("/") << counter << wxT("/") << counter << wxT(" ");
 				counter ++;
@@ -185,7 +495,55 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 			triangles_total += triangles;
 		}
 	}
+	// Polygon Data for Attached Objects
+	if (att != NULL){
+		for (size_t c=0; c<att->children.size(); c++) {
+			Attachment *att2 = att->children[c];
+			for (size_t j=0; j<att2->children.size(); j++) {
+				Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
 
+				if (mAttChild){
+					for (size_t i=0; i<mAttChild->passes.size(); i++) {
+						ModelRenderPass &p = mAttChild->passes[i];
+
+						if (p.init(mAttChild)) {
+							wxString Texture = wxString(mAttChild->TextureList[p.tex].c_str(), wxConvUTF8);
+							wxString TexturePath = Texture.BeforeLast(MPQ_SLASH);
+							wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
+
+							wxString partName;
+
+							int thisslot = att2->children[j]->slot;
+							if (thisslot < 15 && slots[thisslot]!=wxEmptyString){
+								wxString slt = slots[thisslot];
+								slt.Replace(wxT(" "),wxT("_"),true);
+								partName = wxString::Format(wxT("Child_%02i-%s"),j,slt);
+							}else{
+								partName = wxString::Format(wxT("Child_%02i-Slot_%02i"),j,att2->children[j]->slot);
+							}
+
+							f << wxT("g ") << partName << endl;
+							f << wxT("usemtl ") << texName << endl;
+							f << wxT("s 1") << endl;
+							int triangles = 0;
+							for (size_t k=0; k<p.indexCount; k+=3) {
+								f << wxT("f ");
+								f << counter << wxT("/") << counter << wxT("/") << counter << wxT(" ");
+								counter ++;
+								f << counter << wxT("/") << counter << wxT("/") << counter << wxT(" ");
+								counter ++;
+								f << counter << wxT("/") << counter << wxT("/") << counter << endl;
+								counter ++;
+								triangles ++;
+							}
+							f << wxT("# ") << triangles << wxT(" triangles in group") << endl << endl;
+							triangles_total += triangles;
+						}
+					}
+				}
+			}
+		}
+	}
 	f << wxT("# ") << triangles_total << wxT(" triangles total") << endl << endl;
 	
 	// Close file
@@ -230,8 +588,8 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 	wxString *texarray = new wxString[m->nTextures+1];
 
 	// Find a Match for mat->tex and place it into the Texture Name Array.
-	for (uint32 i=0; i<m->nGroups; i++) {
-		for (uint32 j=0; j<m->groups[i].nBatches; j++)
+	for (size_t i=0; i<m->nGroups; i++) {
+		for (size_t j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];
@@ -239,7 +597,7 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 			wxString outname = file;
 
 			bool nomatch = true;
-			for (uint32 t=0;t<=m->nTextures; t++) {
+			for (size_t t=0;t<=m->nTextures; t++) {
 				if (t == mat->tex) {
 					texarray[mat->tex] = wxString(m->textures[t-1].c_str(), wxConvUTF8);
 					texarray[mat->tex] = texarray[mat->tex].BeforeLast('.');
@@ -254,8 +612,8 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 		}
 	}
 
-	for (uint32 i=0; i<m->nGroups; i++) {
-		for (uint32 j=0; j<m->groups[i].nBatches; j++)
+	for (size_t i=0; i<m->nGroups; i++) {
+		for (size_t j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];
@@ -313,14 +671,16 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 
 	// geometric vertices (v)
 	// v x y z weight
-	for (uint32 i=0; i<m->nGroups; i++) {
-		for (uint32 j=0; j<m->groups[i].nBatches; j++)
+	for (size_t i=0; i<m->nGroups; i++) {
+		for (size_t j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			for(int ii=0;ii<batch->indexCount;ii++)
 			{
 				int a = m->groups[i].indices[batch->indexStart + ii];
-				f << "v " << m->groups[i].vertices[a].x << " " << m->groups[i].vertices[a].z << " " << -m->groups[i].vertices[a].y << endl;
+				Vec3D p = m->groups[i].vertices[a];
+				p *= (modelExport_ScaleToRealWorld == true?REALWORLD_SCALE:1.0);
+				f << "v " << p.x << " " << p.z << " " << -p.y << endl;
 			}
 		}
 	}
@@ -328,8 +688,8 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 
 	// texture vertices (vt)
 	// vt horizontal vertical depth
-	for (uint32 i=0; i<m->nGroups; i++) {
-		for (uint32 j=0; j<m->groups[i].nBatches; j++)
+	for (size_t i=0; i<m->nGroups; i++) {
+		for (size_t j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			for(int ii=0;ii<batch->indexCount;ii++)
@@ -343,8 +703,8 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 
 	// vertex normals (vn)
 	// vn x y z
-	for (uint32 i=0; i<m->nGroups; i++) {
-		for (uint32 j=0; j<m->groups[i].nBatches; j++)
+	for (size_t i=0; i<m->nGroups; i++) {
+		for (size_t j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			for(int ii=0;ii<batch->indexCount;ii++)
@@ -359,8 +719,8 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 	// Referencing groups of vertices
 	// f v/vt/vn v/vt/vn v/vt/vn v/vt/vn
 	int counter = 1;
-	for (uint32 i=0; i<m->nGroups; i++) {
-		for (uint32 j=0; j<m->groups[i].nBatches; j++)
+	for (size_t i=0; i<m->nGroups; i++) {
+		for (size_t j=0; j<m->groups[i].nBatches; j++)
 		{
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];
@@ -374,7 +734,7 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 				f << "usemtl " << texarray[mat->tex] << endl;
 			else
 				f << "usemtl " << texarray[mat->tex].AfterLast('\\') << endl;
-			for (unsigned int k=0; k<batch->indexCount; k+=3) {
+			for (size_t k=0; k<batch->indexCount; k+=3) {
 				f << "f ";
 				f << counter << "/" << counter << "/" << counter << " ";
 				f << (counter+1) << "/" << (counter+1) << "/" << (counter+1) << " ";

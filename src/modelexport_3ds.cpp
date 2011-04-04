@@ -215,7 +215,7 @@ void Export3DS_M2(Attachment *att, Model *m, const char *fn, bool init)
 
 			MAX3DS_CHUNK chunk2_2_6;
 			chunk2_2_6.id = MATMAPFILE; // 0xA300
-			wxString mapName = GetM2TextureName(m,fn,p,i);
+			wxString mapName = GetM2TextureName(m,p,i);
 			mapName = mapName.AfterLast('\\').BeforeLast('.');
 			mapName << wxT(".tga");
 			mapName.Append(wxT('\0'));

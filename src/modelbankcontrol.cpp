@@ -100,7 +100,7 @@ void ModelBankControl::LoadModel()
 		g_charControl->cd.showFeet = cd.showFeet;
 		g_charControl->cd.showHair = cd.showHair;
 
-		for (int i=0; i<NUM_CHAR_SLOTS; i++)
+		for (size_t i=0; i<NUM_CHAR_SLOTS; i++)
 			g_charControl->cd.equipment[i] = cd.equipment[i];
 
 		g_charControl->RefreshModel();
@@ -110,7 +110,7 @@ void ModelBankControl::LoadModel()
 		TextureGroup grp;
 		grp.count = (int)cd.textures.Count();
 		grp.base = TEXTURE_GAMEOBJECT1;
-		for (int i=0; i<grp.count; i++) 
+		for (size_t i=0; i<grp.count; i++) 
 			grp.tex[i] = cd.textures[i];
 
 		int val = g_animControl->AddSkin(grp);
@@ -140,7 +140,7 @@ void ModelBankControl::AddModel()
 		int val = g_animControl->skinList->GetSelection();
 		TextureGroup *grp = (TextureGroup*) g_animControl->skinList->GetClientData(val);
 
-		for (int i=0; i<grp->count; i++) {
+		for (size_t i=0; i<grp->count; i++) {
 			if (g_canvas->model->useReplaceTextures[grp->base+i]) {
 				cd.textures.Add(grp->tex[i]);
 			}
@@ -148,7 +148,7 @@ void ModelBankControl::AddModel()
 
 	} else if (cd.modelType == MT_CHAR) {
 
-		for (int i=0; i<NUM_CHAR_SLOTS; i++)
+		for (size_t i=0; i<NUM_CHAR_SLOTS; i++)
 			cd.equipment[i] = g_charControl->cd.equipment[i];
 
 		cd.faceType = g_charControl->cd.faceType;
@@ -253,7 +253,7 @@ void ModelBankControl::SaveList()
 				iVal = (int)bankList[i].textures.Count();
 				file.Write(&iVal, sizeof(int));
 
-				for (unsigned int j=0; j<bankList[i].textures.Count(); j++) {
+				for (size_t j=0; j<bankList[i].textures.Count(); j++) {
 					val = bankList[i].textures[j].size();
 					file.Write(&val, sizeof(val));
 					file.Write(bankList[i].textures[j].c_str(), val);
@@ -287,7 +287,7 @@ void ModelBankControl::SaveList()
 				file.Write(&bankList[i].showFacialHair, sizeof(bool));
 				file.Write(&bankList[i].showFeet, sizeof(bool));
 
-				for (int j=0; j<NUM_CHAR_SLOTS; j++) {
+				for (ssize_t j=0; j<NUM_CHAR_SLOTS; j++) {
 					iVal = bankList[i].equipment[j];
 					file.Write(&iVal, sizeof(int));
 				}
@@ -358,7 +358,7 @@ void ModelBankControl::LoadList()
 			int texCount = 0;
 			file.Read(&texCount, sizeof(int));
 
-			for (int j=0; j<texCount; j++) {
+			for (ssize_t j=0; j<texCount; j++) {
 				// filename
 				file.Read(&val, sizeof(size_t));
 				file.Read(textures, val);
@@ -393,7 +393,7 @@ void ModelBankControl::LoadList()
 			file.Read(&cd.showFacialHair, sizeof(bool));
 			file.Read(&cd.showFeet, sizeof(bool));
 
-			for (int j=0; j<NUM_CHAR_SLOTS; j++) {
+			for (ssize_t j=0; j<NUM_CHAR_SLOTS; j++) {
 				file.Read(&cd.equipment[j], sizeof(unsigned int));
 			}
 		}

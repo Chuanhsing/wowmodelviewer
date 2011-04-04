@@ -113,8 +113,8 @@ void Liquid::initGeometry(MPQFile &f)
 	Vec3D *verts = new Vec3D[(xtiles+1)*(ytiles+1)];
 	float *col = new float[(xtiles+1)*(ytiles+1)];
 
-	for (int j=0; j<ytiles+1; j++) {
-		for (int i=0; i<xtiles+1; i++) {
+	for (ssize_t j=0; j<ytiles+1; j++) {
+		for (size_t i=0; i<xtiles+1; i++) {
 			size_t p = j*(xtiles+1)+i;
 			float h = map[p].h;
 			if (h > 100000) h = pos.y;
@@ -130,8 +130,8 @@ void Liquid::initGeometry(MPQFile &f)
 	glNormal3f(0, 1, 0);
 	glBegin(GL_QUADS);
 	// draw tiles
-	for (int j=0; j<ytiles; j++) {
-		for (int i=0; i<xtiles; i++) {
+	for (ssize_t j=0; j<ytiles; j++) {
+		for (size_t i=0; i<xtiles; i++) {
 			unsigned char f = flags[j*xtiles+i];
 			if ((f&8)==0) {
 				tmpflag = f;
@@ -164,8 +164,8 @@ void Liquid::initGeometry(MPQFile &f)
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);
 	glBegin(GL_TRIANGLES);
-	for (int j=0; j<ytiles+1; j++) {
-		for (int i=0; i<xtiles+1; i++) {
+	for (ssize_t j=0; j<ytiles+1; j++) {
+		for (size_t i=0; i<xtiles+1; i++) {
 			size_t p = j*(xtiles+1)+i;
 			Vec3D v = verts[p];
 			//short s = *( (short*) (f.getPointer() + p*8) );
@@ -216,9 +216,9 @@ void Liquid::initGeometry(MPQFile &f)
 	// LOGGING: debug info
 	std::string slq;
 	char buf[32];
-	for (int j=0; j<ytiles+1; j++) {
+	for (ssize_t j=0; j<ytiles+1; j++) {
 		slq = "";
-		for (int i=0; i<xtiles+1; i++) {
+		for (size_t i=0; i<xtiles+1; i++) {
 			//short ival[2];
 			unsigned int ival;
 			float fval;
@@ -230,7 +230,7 @@ void Liquid::initGeometry(MPQFile &f)
 		gLog("%s\n", slq.c_str());
 	}
 	slq = "";
-	for (int i=0; i<ytiles*xtiles; i++) {
+	for (size_t i=0; i<ytiles*xtiles; i++) {
 		unsigned char bval;
 		f.read(&bval,1);
 		if (bval==15) {
@@ -304,7 +304,7 @@ void Liquid::draw()
 void Liquid::initTextures(wxString basename, int first, int last)
 {
 	wxString buf;
-	for (int i=first; i<=last; i++) {
+	for (ssize_t i=first; i<=last; i++) {
 		buf = wxString::Format(wxT("%s.%d.blp"), basename.c_str(), i);
 		int tex = texturemanager.add(buf);
 		textures.push_back(tex);

@@ -99,7 +99,7 @@ void RenderTexture::Init(HWND hWnd, int width, int height, bool fboMode)
 		int curMax=0;
 
 		// Make sure its square and a power-of-two
-		for (int i=5; !end; i++) {
+		for (size_t i=5; !end; i++) {
 			int iSize = powf(2,(float)i);
 			if (iSize < texSize) {
 				curMax = iSize;

@@ -80,9 +80,9 @@ void CAnimationExporter::Init(const wxString fn)
 
 	lblFile->SetLabel(fn);
 
-	int i = (m_iTotalAnimFrames / 50);
+	size_t i = (m_iTotalAnimFrames / 50);
 	txtFrames->SetLabel(wxEmptyString);
-	*txtFrames << i;
+	*txtFrames << (int)i;
 
 	btnStart->Enable(true);
 	btnCancel->Enable(true);
@@ -219,8 +219,8 @@ void CAnimationExporter::CreateGif()
 
 		g_canvas->RenderToBuffer();
 
-		glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGRA_EXT, GL_UNSIGNED_BYTE, buffer);
-		newImage->CreateFromArray(buffer, m_iWidth, m_iHeight, 32, (m_iWidth*4), false);
+		glReadPixels(0, 0, (GLsizei)m_iWidth, (GLsizei)m_iHeight, GL_BGRA_EXT, GL_UNSIGNED_BYTE, buffer);
+		newImage->CreateFromArray(buffer, (DWORD)m_iWidth, (DWORD)m_iHeight, 32, (DWORD)(m_iWidth*4), false);
 
 		// not needed due to the code just below, which fixes the issue with particles
 		//g_canvas->model->animManager->SetTimeDiff(m_iTimeStep);
@@ -238,7 +238,7 @@ void CAnimationExporter::CreateGif()
 		#endif //_WINDOWS
 
 		if(m_bShrink && m_iNewWidth!=m_iWidth && m_iNewHeight!=m_iHeight)
-			newImage->Resample(m_iNewWidth, m_iNewHeight, 2);
+			newImage->Resample((long)m_iNewWidth, (long)m_iNewHeight, 2);
 
 		// if (Optimise) {
 		if (!m_pPal) {
@@ -254,7 +254,7 @@ void CAnimationExporter::CreateGif()
 		if(m_bTransparent)
 			newImage->SetTransIndex(newImage->GetPixelIndex(0,0));
 
-		newImage->SetFrameDelay(m_iDelay);
+		newImage->SetFrameDelay((DWORD)m_iDelay);
 		
 		gifImages[i] = newImage;
 		
@@ -274,9 +274,9 @@ void CAnimationExporter::CreateGif()
 		g_canvas->RenderToBuffer();
 		wxString stat;
 
-		glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGRA_EXT, GL_UNSIGNED_BYTE, buffer);
+		glReadPixels(0, 0, (GLsizei)m_iWidth, (GLsizei)m_iHeight, GL_BGRA_EXT, GL_UNSIGNED_BYTE, buffer);
 
-		newImage->CreateFromArray(buffer, m_iWidth, m_iHeight, 32, (m_iWidth*4), false);
+		newImage->CreateFromArray(buffer, (DWORD)m_iWidth, (DWORD)m_iHeight, 32, (DWORD)(m_iWidth*4), false);
 
 		/*
 		 *Because Alpha Channel textures are a bit messed up in the OpenGL renders,
@@ -353,12 +353,12 @@ void CAnimationExporter::CreateGif()
 	else
 		multiImage.SetDisposalMethod(0);
 	
-	multiImage.SetFrameDelay(m_iDelay);
+	multiImage.SetFrameDelay((DWORD)m_iDelay);
 	multiImage.SetCodecOption(2); // LZW
 	multiImage.SetLoops(0);		// Set the animation to loop indefinately.
 
 	// Create/Compose the animated gif
-	multiImage.Encode(hFile, gifImages, m_iTotalFrames, false);
+	multiImage.Encode(hFile, gifImages, (int)m_iTotalFrames, false);
 
 	// ALL DONE, START THE CLEAN UP
 	// --------------------------------------------------------
@@ -479,14 +479,14 @@ void CAnimationExporter::CreateAvi(wxString fn)
 		return;
 	}
 
-	const int timeStep = (m_iTotalAnimFrames / m_iTotalFrames);
-	const int bufSize = m_iWidth*m_iHeight*3;	// (width*height*bytesPerPixel - only 3 for RGB, no alpha)	
+	const ssize_t timeStep = (m_iTotalAnimFrames / m_iTotalFrames);
+	const ssize_t bufSize = m_iWidth*m_iHeight*3;	// (width*height*bytesPerPixel - only 3 for RGB, no alpha)	
 
 	CAVIGenerator AviGen;
 
 	BITMAPINFOHEADER bmHeader;
-	bmHeader.biWidth = m_iWidth;
-	bmHeader.biHeight = m_iHeight;
+	bmHeader.biWidth = (LONG)m_iWidth;
+	bmHeader.biHeight = (LONG)m_iHeight;
 	bmHeader.biSize = sizeof(BITMAPINFOHEADER);
 	bmHeader.biPlanes = 1;
 	bmHeader.biBitCount = 24;
@@ -515,7 +515,7 @@ void CAnimationExporter::CreateAvi(wxString fn)
 	// Iterate through the frames saving the image to a buffer then writing it to the AVI
 	for(unsigned int i=0; i<m_iTotalFrames; i++) {
 		g_canvas->RenderToBuffer();
-		glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGR_EXT, GL_UNSIGNED_BYTE, buffer);
+		glReadPixels(0, 0, (GLsizei)m_iWidth, (GLsizei)m_iHeight, GL_BGR_EXT, GL_UNSIGNED_BYTE, buffer);
 		AviGen.AddFrame(buffer);
 
 		// not needed due to the code just below

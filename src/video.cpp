@@ -899,7 +899,7 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 			unsigned char *buf = new unsigned char[sizes[0]];
 
 			// do every mipmap level
-			for (int i=0; i<mipmax; i++) {
+			for (size_t i=0; i<mipmax; i++) {
 				if (w==0) w = 1;
 				if (h==0) h = 1;
 				if (offsets[i] && sizes[i]) {
@@ -909,10 +909,10 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 					int size = ((w+3)/4) * ((h+3)/4) * blocksize;
 
 					if (video.supportCompression) {
-						glCompressedTexImage2DARB(GL_TEXTURE_2D, i, format, w, h, 0, size, buf);
+						glCompressedTexImage2DARB(GL_TEXTURE_2D, (GLint)i, format, w, h, 0, size, buf);
 					} else {
 						decompressDXTC(format, w, h, size, buf, ucbuf);					
-						glTexImage2D(GL_TEXTURE_2D, i, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, ucbuf);
+						glTexImage2D(GL_TEXTURE_2D, (GLint)i, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, ucbuf);
 					}
 					
 				} else break;
@@ -950,7 +950,7 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 
 			tex->compressed = false;
 
-			for (int i=0; i<mipmax; i++) {
+			for (size_t i=0; i<mipmax; i++) {
 				if (w==0) w = 1;
 				if (h==0) h = 1;
 				if (offsets[i] && sizes[i]) {
@@ -963,8 +963,8 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 					p = buf2;
 					c = buf;
 					a = buf + w*h;
-					for (int y=0; y<h; y++) {
-						for (int x=0; x<w; x++) {
+					for (size_t y=0; y<h; y++) {
+						for (size_t x=0; x<w; x++) {
 							unsigned int k = pal[*c++];
 
 							k = ((k&0x00FF0000)>>16) | ((k&0x0000FF00)) | ((k& 0x000000FF)<<16);
@@ -993,7 +993,7 @@ void TextureManager::LoadBLP(GLuint id, Texture *tex)
 						}
 					}
 
-					glTexImage2D(GL_TEXTURE_2D, i, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf2);
+					glTexImage2D(GL_TEXTURE_2D, (GLint)i, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf2);
 					
 				} else break;
 
@@ -1100,10 +1100,10 @@ void decompressDXTC(GLint format, int w, int h, size_t size, unsigned char *src,
 				color[3].b = 0;
 			}
 
-			for (int j=0; j<bsy; j++) {
+			for (ssize_t j=0; j<bsy; j++) {
 				unsigned int index = *src++;
 				unsigned char* dd = dest + (w*(y+j)+x)*4;
-				for (int i=0; i<bsx; i++) {
+				for (size_t i=0; i<bsx; i++) {
 					*dd++ = color[index & 0x03].b;
 					*dd++ = color[index & 0x03].g;
 					*dd++ = color[index & 0x03].r;

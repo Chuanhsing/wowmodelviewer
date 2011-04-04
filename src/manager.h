@@ -111,9 +111,9 @@ public:
 		}
 		*/
 
-		for (int i=0; i<50; i++) {
-			if(items.find(i) != items.end()) {
-				del(i);
+		for (size_t i=0; i<50; i++) {
+			if(items.find((const unsigned int)i) != items.end()) {
+				del((GLuint)i);
 			}
 		}
 		

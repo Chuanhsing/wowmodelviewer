@@ -58,7 +58,7 @@ LightControl::LightControl(wxWindow* parent, wxWindowID id)
 	}
 
 	wxArrayString choices;
-	for (int i=1; i<=MAX_LIGHTS; i++) {
+	for (ssize_t i=1; i<=MAX_LIGHTS; i++) {
 		wxString s = wxT("Light ");
 		s += wxString::Format(wxT("%i"), i);
 
@@ -168,7 +168,7 @@ void LightControl::Init()
 		return;
 
 	// Set default values.
-	for (int i=0; i<MAX_LIGHTS; i++) {
+	for (size_t i=0; i<MAX_LIGHTS; i++) {
 		lights[i].ambience = def_ambience;
 		lights[i].diffuse = def_diffuse;
 		lights[i].specular = def_specular;
@@ -560,8 +560,8 @@ void LightControl::UpdateGL()
 {
 	float tar[3] = {0.0f, -1.0f, 0.0f};
 	// Update the lighting
-	for (int i=0; i<MAX_LIGHTS; i++) {
-		GLuint lightID = GL_LIGHT0 + i;
+	for (size_t i=0; i<MAX_LIGHTS; i++) {
+		GLuint lightID = GL_LIGHT0 + (GLuint)i;
 
 		if (lights[i].enabled)
 			glEnable(lightID);

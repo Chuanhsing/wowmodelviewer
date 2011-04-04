@@ -27,21 +27,21 @@ class CAnimationExporter : public wxFrame
     DECLARE_EVENT_TABLE()
 
 private:
-	unsigned int m_iTotalAnimFrames;		// Total frames of the model animation
-	unsigned int m_iTotalFrames;			// Total frames of the animated gif
-	unsigned int m_iWidth, m_iHeight;		// Width and Height of the source image
-	unsigned long m_iNewWidth, m_iNewHeight;// New width and height of the output image
-	unsigned long m_iDelay;					// Delay between frames
+	size_t m_iTotalAnimFrames;			// Total frames of the model animation
+	size_t m_iTotalFrames;				// Total frames of the animated gif
+	size_t m_iWidth, m_iHeight;			// Width and Height of the source image
+	size_t m_iNewWidth, m_iNewHeight;	// New width and height of the output image
+	size_t m_iDelay;					// Delay between frames
 
 	bool m_bTransparent, m_bDiffuse, m_bShrink, m_bGreyscale, m_bPng;	// Various options and toggles settings
 
-	unsigned long m_iSize;		// Size of our data buffer to hold the pixel data
+	size_t m_iSize;						// Size of our data buffer to hold the pixel data
 
-	float m_fAnimSpeed;			// Animation Speed
-	int m_iTimeStep;			// frame difference between each frame
+	float m_fAnimSpeed;					// Animation Speed
+	ssize_t m_iTimeStep;				// frame difference between each frame
 	RGBQUAD *m_pPal;
 
-	wxString m_strFilename;		// Filename to save our animated gif into.
+	wxString m_strFilename;				// Filename to save our animated gif into.
 
 	//GUI objects
 	wxStaticText *lblCurFrame, *lblFile, *lblTotalFrame, *lblSize, *lblDelay;

@@ -62,9 +62,9 @@ ChoiceDialog::ChoiceDialog(CharControl *dest, int type,
 	//m_listctrl->SetColumnWidth(0, wxLIST_AUTOSIZE);
 
 	wxListItem item;
-	for (unsigned int i = 0; i < chs.GetCount(); i++) {
+	for (size_t i = 0; i < chs.GetCount(); i++) {
 		item.SetText(choices[i]);
-		item.SetId(i);
+		item.SetId((long)i);
 /*
 		if (item.GetText() == "Death Knight")
 			item.SetTextColour(wxColour(196, 30, 59));
@@ -319,8 +319,8 @@ void CategoryChoiceDialog::OnCheck(wxCommandEvent &e)
 
 void CategoryChoiceDialog::OnCheckDoubleClick(wxCommandEvent &e)
 {
-	for (int i=0; i<numcats; i++) {
-		Check(i, i==e.GetInt());
+	for (size_t i=0; i<numcats; i++) {
+		Check((int)i, i==e.GetInt());
 	}
 	DoFilter();
 }

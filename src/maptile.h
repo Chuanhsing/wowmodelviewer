@@ -224,12 +224,12 @@ const int stripsize = 8*18 + 7*2;
 template <class V>
 void stripify(V *in, V *out)
 {
-	for (int row=0; row<8; row++) {
+	for (ssize_t row=0; row<8; row++) {
 		V *thisrow = &in[indexMapBuf(0,row*2)];
 		V *nextrow = &in[indexMapBuf(0,(row+1)*2)];
 
 		if (row>0) *out++ = thisrow[0];
-		for (int col=0; col<9; col++) {
+		for (ssize_t col=0; col<9; col++) {
 			*out++ = thisrow[col];
 			*out++ = nextrow[col];
 		}
@@ -242,13 +242,13 @@ void stripify(V *in, V *out)
 template <class V>
 void stripify2(V *in, V *out)
 {
-	for (int row=0; row<8; row++) { 
+	for (ssize_t row=0; row<8; row++) { 
 		V *thisrow = &in[indexMapBuf(0,row*2)];
 		V *nextrow = &in[indexMapBuf(0,row*2+1)];
 		V *overrow = &in[indexMapBuf(0,(row+1)*2)];
 
 		if (row>0) *out++ = thisrow[0];// jump end
-		for (int col=0; col<8; col++) {
+		for (ssize_t col=0; col<8; col++) {
 			*out++ = thisrow[col];
 			*out++ = nextrow[col];
 		}
@@ -257,7 +257,7 @@ void stripify2(V *in, V *out)
 		*out++ = overrow[8];// jump start
 		*out++ = thisrow[0];// jump end
 		*out++ = thisrow[0];
-		for (int col=0; col<8; col++) {
+		for (ssize_t col=0; col<8; col++) {
 			*out++ = overrow[col];
 			*out++ = nextrow[col];
 		}
