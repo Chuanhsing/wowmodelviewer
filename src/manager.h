@@ -18,6 +18,8 @@
 #include <string>
 #include <map>
 
+#include "OpenGLHeaders.h"
+
 // base class for manager objects
 
 class ManagedItem {

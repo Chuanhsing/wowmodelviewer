@@ -48,7 +48,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 	}
 
 	//InitCommon(att, init, verts, groups, numVerts, numGroups, numFaces);
-	wxString out;
+	//wxString out;
 
 	// http://people.sc.fsu.edu/~burkardt/data/mtl/mtl.html
 	wxString matName(filename, wxConvUTF8);
@@ -64,10 +64,10 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 	matName = matName.AfterLast('\\');
 
 
-	fm << "#" << endl;
-	fm << "# " << matName.mb_str() << endl;
-	fm << "#" << endl;
-	fm <<  endl;
+	fm << wxT("#") << endl;
+	fm << wxT("# ") << matName << endl;
+	fm << wxT("#") << endl;
+	fm << endl;
 
 	for (size_t i=0; i<m->passes.size(); i++) {
 		ModelRenderPass &p = m->passes[i];
@@ -117,16 +117,12 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 			}
 
 			fm << wxT("newmtl ") << material << endl;
-			fm << "illum 2" << endl;
-			out = wxString::Format(wxT("Kd %.06f %.06f %.06f"), diff.x, diff.y, diff.z);
-			fm << out.c_str() << endl;
-			out = wxString::Format(wxT("Ka %.06f %.06f %.06f"), amb, amb, amb);
-			fm << out.c_str() << endl;
-			out = wxString::Format(wxT("Ks %.06f %.06f %.06f"), p.ecol.x, p.ecol.y, p.ecol.z);
-			fm << out.c_str() << endl;
-			fm << "Ke 0.000000 0.000000 0.000000" << endl;
-			out = wxString::Format(wxT("Ns %0.6f"), 0.0f);
-			fm << out.c_str() << endl;
+			fm << wxT("illum 2") << endl;
+			fm << wxString::Format(wxT("Kd %.06f %.06f %.06f"), diff.x, diff.y, diff.z) << endl;
+			fm << wxString::Format(wxT("Ka %.06f %.06f %.06f"), amb, amb, amb) << endl;
+			fm << wxString::Format(wxT("Ks %.06f %.06f %.06f"), p.ecol.x, p.ecol.y, p.ecol.z) << endl;
+			fm << wxT("Ke 0.000000 0.000000 0.000000") << endl;
+			fm << wxString::Format(wxT("Ns %0.6f"), 0.0f) << endl;
 			//fm << "Ka " << 0.7f << " " << 0.7f << " " << 0.7f << endl;
 			//fm << "Kd " << p.ocol.x << " " << p.ocol.y << " " << p.ocol.z << endl;
 			//fm << "Ks " << p.ecol.x << " " << p.ecol.y << " " << p.ecol.z << endl;
@@ -136,7 +132,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 				fm << SLASH;
 			fm << texName << wxT(".tga") << endl << endl;
 
-			wxLogMessage(wxT("Exporting Image: %s"),ExportName.c_str());
+			wxLogMessage(wxT("Exporting Image: %s"), ExportName.c_str());
 			SaveTexture(ExportName);
 		}
 	}
@@ -188,16 +184,12 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 
 							fm << wxT("newmtl ") << material << endl;
 							texName << wxT(".tga");
-							fm << "illum 2" << endl;
-							out = wxString::Format(wxT("Kd %.06f %.06f %.06f"), p.ocol.x, p.ocol.y, p.ocol.z);
-							fm << out.c_str() << endl;
-							out = wxString::Format(wxT("Ka %.06f %.06f %.06f"), 0.7f, 0.7f, 0.7f);
-							fm << out.c_str() << endl;
-							out = wxString::Format(wxT("Ks %.06f %.06f %.06f"), p.ecol.x, p.ecol.y, p.ecol.z);
-							fm << out.c_str() << endl;
-							fm << "Ke 0.000000 0.000000 0.000000" << endl;
-							out = wxString::Format(wxT("Ns %0.6f"), 0.0f);
-							fm << out.c_str() << endl;
+							fm << wxT("illum 2") << endl;
+							fm << wxString::Format(wxT("Kd %.06f %.06f %.06f"), p.ocol.x, p.ocol.y, p.ocol.z) << endl;
+							fm << wxString::Format(wxT("Ka %.06f %.06f %.06f"), 0.7f, 0.7f, 0.7f) << endl;
+							fm << wxString::Format(wxT("Ks %.06f %.06f %.06f"), p.ecol.x, p.ecol.y, p.ecol.z) << endl;
+							fm << wxT("Ke 0.000000 0.000000 0.000000") << endl;
+							fm << wxString::Format(wxT("Ns %0.6f"), 0.0f) << endl;
 							fm << wxT("map_Kd ") << TexturePath << SLASH << texName << wxT(".tga") << endl << endl;
 
 							wxLogMessage(wxT("Exporting Image: %s"),ExportName.c_str());
@@ -241,8 +233,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 				}
 				MakeModelFaceForwards(vert,false);
 				vert *= (modelExport_ScaleToRealWorld == true?REALWORLD_SCALE:1.0);
-				out = wxString::Format(wxT("v %.06f %.06f %.06f"), vert.x, vert.y, vert.z);
-				f << out.c_str() << endl;
+				f << wxString::Format(wxT("v %.06f %.06f %.06f"), vert.x, vert.y, vert.z) << endl;
 
 				vertics ++;
 			}
@@ -331,8 +322,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 								MakeModelFaceForwards(mVert,false);
 
 								mVert *= (modelExport_ScaleToRealWorld == true?REALWORLD_SCALE:1.0);
-								out = wxString::Format(wxT("v %.06f %.06f %.06f"), mVert.x, mVert.y, mVert.z);
-								f << out.c_str() << endl;
+								f << wxString::Format(wxT("v %.06f %.06f %.06f"), mVert.x, mVert.y, mVert.z) << endl;
 								vertics++;
 							}
 						}
@@ -352,8 +342,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 				uint16 a = m->indices[b];
 				Vec2D tc =  m->origVertices[a].texcoords;
-				out = wxString::Format(wxT("vt %.06f %.06f"), tc.x, 1-tc.y);
-				f << out.c_str() << endl;
+				f << wxString::Format(wxT("vt %.06f %.06f"), tc.x, 1-tc.y) << endl;
 				//f << "vt " << m->origVertices[a].texcoords.x << " " << (1 - m->origVertices[a].texcoords.y) << endl;
 				textures ++;
 			}
@@ -374,8 +363,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 							for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 								uint16 a = mAttChild->indices[b];
 								Vec2D tc =  mAttChild->origVertices[a].texcoords;
-								out = wxString::Format(wxT("vt %.06f %.06f"), tc.x, 1-tc.y);
-								f << out.c_str() << endl;
+								f << wxString::Format(wxT("vt %.06f %.06f"), tc.x, 1-tc.y) << endl;
 								textures ++;
 							}
 						}
@@ -394,8 +382,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 			for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 				uint16 a = m->indices[b];
 				Vec3D n = m->origVertices[a].normal;
-				out = wxString::Format(wxT("vn %.06f %.06f %.06f"), n.x, n.y, n.z);
-				f << out.c_str() << endl;
+				f << wxString::Format(wxT("vn %.06f %.06f %.06f"), n.x, n.y, n.z) << endl;
 				//f << "vn " << m->origVertices[a].normal.x << " " << m->origVertices[a].normal.y << " " << m->origVertices[a].normal.z << endl;
 				normals ++;
 			}
@@ -416,8 +403,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 							for (size_t k=0, b=p.indexStart; k<p.indexCount; k++,b++) {
 								uint16 a = mAttChild->indices[b];
 								Vec3D n = mAttChild->origVertices[a].normal;
-								out = wxString::Format(wxT("vn %.06f %.06f %.06f"), n.x, n.y, n.z);
-								f << out.c_str() << endl;
+								f << wxString::Format(wxT("vn %.06f %.06f %.06f"), n.x, n.y, n.z) << endl;
 								//f << "vn " << m->origVertices[a].normal.x << " " << m->origVertices[a].normal.y << " " << m->origVertices[a].normal.z << endl;
 								normals ++;
 							}
