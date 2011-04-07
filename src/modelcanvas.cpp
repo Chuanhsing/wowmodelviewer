@@ -12,10 +12,13 @@ static const float defaultMatrix[] = {1.000000,0.000000,0.000000,0.000000,0.0000
 static const float piover180 = 0.0174532925f;
 static const float rad2deg = 57.295779513f;
 
+#ifdef	_WINDOWS
 IMPLEMENT_CLASS(ModelCanvas, wxWindow)
 BEGIN_EVENT_TABLE(ModelCanvas, wxWindow)
-//IMPLEMENT_CLASS(ModelCanvas, wxGLCanvas)
-//BEGIN_EVENT_TABLE(ModelCanvas, wxGLCanvas)
+#else
+IMPLEMENT_CLASS(ModelCanvas, wxGLCanvas)
+BEGIN_EVENT_TABLE(ModelCanvas, wxGLCanvas)
+#endif
 	EVT_SIZE(ModelCanvas::OnSize)
 	EVT_PAINT(ModelCanvas::OnPaint)
 	EVT_ERASE_BACKGROUND(ModelCanvas::OnEraseBackground)
@@ -133,6 +136,8 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 		wxDisplay *disp = new wxDisplay(0);
 		int bpp = disp->GetCurrentMode().bpp;
 		video.SetHandle((HWND)this->GetHandle(), bpp);
+#else
+		video.render = true;
 #endif
 	}
 	
@@ -190,7 +195,7 @@ void ModelCanvas::InitView()
 #if 0
 	SetCurrent(); // 2009.07.02 Alfred cause crash
 #endif
-	
+
 	// update projection
 	//SetupProjection();
 	video.ResizeGLScene(w, h);
@@ -2260,7 +2265,6 @@ void ModelCanvas::SetCurrent()
 	video.SetCurrent();
 #else
 	wxGLCanvas::SetCurrent();
-	video.render = true;
 #endif
 }
 
