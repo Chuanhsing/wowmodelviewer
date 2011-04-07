@@ -1227,7 +1227,7 @@ void WriteLWSceneObject(wxTextOutputStream &fs, LWSceneObj Object)
 	if (Object.isNull == true){
 		fs << wxT("AddNullObject");
 	}else{
-		fs << wxT("LoadObjectLayer ") << Object.LayerID;
+		fs << wxT("LoadObjectLayer ") << (int)Object.LayerID;
 	}
 	fs << wxT(" 1") << wxString::Format(wxT("%07x"),Object.ObjectID) << wxT(" ") << Object.Name << wxT("\nChangeObject 0\n");
 
@@ -1382,8 +1382,8 @@ size_t WriteLWScene(LWScene *SceneData){
 		Frame_First = 0;
 		Frame_Last = 60;
 	}
-	fs << wxT("RenderRangeType 0\nFirstFrame ") << Frame_First << wxT("\nLastFrame ") << Frame_Last << wxT("\nFrameStep 1\nRenderRangeObject 0\nRenderRangeArbitrary ") << Frame_First << wxT("-") << Frame_Last << wxT("\n");
-	fs << wxT("PreviewFirstFrame ") << Frame_First << wxT("\nPreviewLastFrame ") << Frame_Last << wxT("\nPreviewFrameStep 1\nCurrentFrame ") << Frame_First << wxT("\nFramesPerSecond 30\nChangeScene 0\n\n");
+	fs << wxT("RenderRangeType 0\nFirstFrame ") << (int)Frame_First << wxT("\nLastFrame ") << (int)Frame_Last << wxT("\nFrameStep 1\nRenderRangeObject 0\nRenderRangeArbitrary ") << (int)Frame_First << wxT("-") << (int)Frame_Last << wxT("\n");
+	fs << wxT("PreviewFirstFrame ") << (int)Frame_First << wxT("\nPreviewLastFrame ") << (int)Frame_Last << wxT("\nPreviewFrameStep 1\nCurrentFrame ") << (int)Frame_First << wxT("\nFramesPerSecond 30\nChangeScene 0\n\n");
 
 	// Objects & Bones
 	size_t numObj = SceneData->Objects.size();

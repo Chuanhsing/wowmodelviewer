@@ -2,7 +2,9 @@
 #define SHADERS_H
 
 #include "video.h"
+#if defined _WINDOWS
 #include "GL\glew.h"
+#endif
 
 // Shut up MSVC compiler "inconsistent dll linkage" warning
 #ifdef _WINDOWS

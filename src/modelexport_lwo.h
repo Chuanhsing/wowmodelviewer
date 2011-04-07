@@ -607,7 +607,7 @@ void WriteLWSceneEnvArray(wxTextOutputStream &fs, uint32 ChanNum, AnimVector val
 {
 	fs << wxT("Channel ") << ChanNum << wxT("\n");
 	fs << wxT("{ Envelope\n");
-	fs << wxT("  ") << value.Time.size() << wxT("\n");
+	fs << wxT("  ") << (int)value.Time.size() << wxT("\n");
 	for (size_t n=0;n<value.Time.size();n++){
 		float time = (value.Time[n]/FRAMES_PER_SECOND)/FRAMES_PER_SECOND;	// Convert from WoW Frame Number into a Per-Second Float
 
@@ -626,7 +626,7 @@ void WriteLWScenePlugin(wxTextOutputStream &fs, wxString type, uint32 PluginCoun
 
 // Write Keyframe Motion Array
 void LW_WriteMotionArray(wxTextOutputStream &fs,AnimationData AnimData, size_t NumChannels){
-	fs << wxT("NumChannels ") << NumChannels << wxT("\n");
+	fs << wxT("NumChannels ") << (int)NumChannels << wxT("\n");
 
 	// Position
 	if (NumChannels > 0)

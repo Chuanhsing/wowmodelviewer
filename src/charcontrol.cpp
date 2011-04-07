@@ -2714,8 +2714,8 @@ void CharDetails::save(wxString fn, TabardDetails *td)
     wxTextOutputStream f( output );
 	if (!output.IsOk())
 		return;
-	f << race << wxT(" ") << gender << endl;
-	f << skinColor << wxT(" ") << faceType << wxT(" ") << hairColor << wxT(" ") << hairStyle << wxT(" ") << facialHair << wxT(" ") << facialColor << endl;
+	f << (int)race << wxT(" ") << (int)gender << endl;
+	f << (int)skinColor << wxT(" ") << (int)faceType << wxT(" ") << (int)hairColor << wxT(" ") << (int)hairStyle << wxT(" ") << (int)facialHair << wxT(" ") << (int)facialColor << endl;
 	for (ssize_t i=0; i<NUM_CHAR_SLOTS; i++) {
 		f << equipment[i] << endl;
 	}
@@ -2744,7 +2744,9 @@ bool CharDetails::load(wxString fn, TabardDetails *td)
 	f >> r >> g;
 
 	if (r==race && g==gender) {
-		f >> skinColor >> faceType >> hairColor >> hairStyle >> facialHair >> facialColor;
+#if defined _WINDOWS
+		f >> (int)skinColor >> (int)faceType >> (int)hairColor >> (int)hairStyle >> (int)facialHair >> (int)facialColor;
+#endif
 		same = true;
 	} else {
 		int dummy;

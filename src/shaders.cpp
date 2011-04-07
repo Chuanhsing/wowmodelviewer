@@ -30,12 +30,15 @@ void OldinitShaders()
 		glGenProgramsARB = (PFNGLGENPROGRAMSARBPROC) wglGetProcAddress("glGenProgramsARB");
 		glProgramLocalParameter4fARB = (PFNGLPROGRAMLOCALPARAMETER4FARBPROC) wglGetProcAddress("glProgramLocalParameter4fARB");
 #endif
-#if defined (_MAC) || defined (_LINUX)
+#if defined (_LINUX)
 		glProgramStringARB = (PFNGLPROGRAMSTRINGARBPROC) glXGetProcAddress((GLubyte*) "glProgramStringARB");
 		glBindProgramARB = (PFNGLBINDPROGRAMARBPROC) glXGetProcAddress((GLubyte*) "glBindProgramARB");
 		glDeleteProgramsARB = (PFNGLDELETEPROGRAMSARBPROC) glXGetProcAddress((GLubyte*) "glDeleteProgramsARB");
 		glGenProgramsARB = (PFNGLGENPROGRAMSARBPROC) glXGetProcAddress((GLubyte*) "glGenProgramsARB");
 		glProgramLocalParameter4fARB = (PFNGLPROGRAMLOCALPARAMETER4FARBPROC) glXGetProcAddress((GLubyte*) "glProgramLocalParameter4fARB");
+#endif
+#if defined (_MAC)
+// Under Mac OS X, if an extension name is listed in the OpenGL extension string at runtime, applications can use the extension entry points without having to obtain entry-point addresses.
 #endif
 		// init various shaders here
 		OldreloadShaders();
