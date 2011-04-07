@@ -265,7 +265,7 @@ void FileControl::Init(ModelViewer* mv)
 	// bg recolor
 	wxTreeItemId h;
 	size_t i = 0;
-	for(h=fileTree->GetFirstVisibleItem();h;h=fileTree->GetNextVisible(h)) {
+	for(h=fileTree->GetFirstVisibleItem();h.IsOk();h=fileTree->GetNextVisible(h)) {
 		if (i++%2==1)
 			fileTree->SetItemBackgroundColour(h, wxColour(237,243,254));
 		else
@@ -710,7 +710,7 @@ void FileControl::OnTreeCollapsedOrExpanded(wxTreeEvent &event)
 {
 	wxTreeItemId h;
 	size_t i = 0;
-	for(h=fileTree->GetFirstVisibleItem();h;h=fileTree->GetNextVisible(h)) {
+	for(h=fileTree->GetFirstVisibleItem();h.IsOk();h=fileTree->GetNextVisible(h)) {
 		if (!fileTree->IsVisible(h))
 			break;
 		if (i++%2==1)
