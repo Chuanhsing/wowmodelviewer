@@ -1671,6 +1671,7 @@ void ModelViewer::OnLightMenu(wxCommandEvent &event)
 			
 			if (dialog.ShowModal()==wxID_OK) {
 				wxString fn = dialog.GetFilename();
+				// FIXME: ifstream is not compitable with multibyte path name
 				ifstream f(fn.fn_str());
 				
 				bool lightObj, lightTrue, lightDir, lightAmb, lightModel;
@@ -2092,6 +2093,7 @@ void ModelViewer::SaveChar(wxString fn)
 void ModelViewer::LoadChar(wxString fn)
 {
 	std::string modelname;
+	// FIXME: ifstream is not compitable with multibyte path name
 	ifstream f(fn.fn_str());
 	
 	f >> modelname; // model name
@@ -2397,6 +2399,7 @@ void ModelViewer::ModelInfo()
 		return;
 	Model *m = canvas->model;
 	wxString fn = wxT("ModelInfo.xml");
+	// FIXME: ofstream is not compitable with multibyte path name
 	ofstream xml(fn.fn_str(), ios_base::out | ios_base::trunc);
 
 	if (!xml.is_open()) {

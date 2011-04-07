@@ -189,6 +189,7 @@ void write(ofstream &f, const T &t) {
 
 static void WriteMesh(const ExportData &data, wxString filename) 
 {
+	// FIXME: ofstream is not compitable with multibyte path name
 	ofstream f(filename.fn_str(), ios::trunc);
 	if (!f.good())
 		return;

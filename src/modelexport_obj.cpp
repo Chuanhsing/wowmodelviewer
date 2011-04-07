@@ -551,6 +551,7 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 		file << Path1 << SLASH << Path2 << SLASH << Name;
 	}
 
+	// FIXME: ofstream is not compitable with multibyte path name
 	ofstream f(file.fn_str(), ios_base::out | ios_base::trunc);
 
 	if (!f.is_open()) {
@@ -563,6 +564,7 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 	mtlName = mtlName.BeforeLast('.');
 	mtlName << wxT(".mtl");
 
+	// FIXME: ofstream is not compitable with multibyte path name
 	ofstream fm(mtlName.fn_str(), ios_base::out | ios_base::trunc);
 	mtlName = mtlName.AfterLast(SLASH);
 

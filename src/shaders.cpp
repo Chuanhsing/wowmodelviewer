@@ -1,28 +1,17 @@
 #include "shaders.h"
 #include <string>
-//#include "wowmapview.h"
 
 bool supportShaders = false;
 static bool initedShaders = false;
-
-/*
-Commented out as it currently breaks the compile with the new Glew 1.5.4
-
-PFNGLPROGRAMSTRINGARBPROC glProgramStringARB = NULL;
-PFNGLBINDPROGRAMARBPROC glBindProgramARB = NULL;
-PFNGLDELETEPROGRAMSARBPROC glDeleteProgramsARB = NULL;
-PFNGLGENPROGRAMSARBPROC glGenProgramsARB = NULL;
-PFNGLPROGRAMLOCALPARAMETER4FARBPROC glProgramLocalParameter4fARB;
-*/
 
 ShaderPair *terrainShaders[4]={0,0,0,0}, *wmoShader=0, *waterShaders[1]={0};
 
 // TODO
 bool isExtensionSupported(wxString s)
 {
-	bool ret;
+	bool ret = false;
 	ret = glewIsSupported((char *)s.c_str()) == GL_TRUE ? true : false;
-	
+
 	return ret;
 }
 
@@ -33,13 +22,20 @@ void OldinitShaders()
 	supportShaders = isExtensionSupported(wxT("ARB_vertex_program")) && isExtensionSupported(wxT("ARB_fragment_program"));
 	if (supportShaders) {
 		// init extension stuff
-#ifdef	_WINDOWS
+#if defined (_WINDOWS)
 		//glARB = () wglGetProcAddress("");
 		glProgramStringARB = (PFNGLPROGRAMSTRINGARBPROC) wglGetProcAddress("glProgramStringARB");
 		glBindProgramARB = (PFNGLBINDPROGRAMARBPROC) wglGetProcAddress("glBindProgramARB");
 		glDeleteProgramsARB = (PFNGLDELETEPROGRAMSARBPROC) wglGetProcAddress("glDeleteProgramsARB");
 		glGenProgramsARB = (PFNGLGENPROGRAMSARBPROC) wglGetProcAddress("glGenProgramsARB");
 		glProgramLocalParameter4fARB = (PFNGLPROGRAMLOCALPARAMETER4FARBPROC) wglGetProcAddress("glProgramLocalParameter4fARB");
+#endif
+#if defined (_MAC) || defined (_LINUX)
+		glProgramStringARB = (PFNGLPROGRAMSTRINGARBPROC) glXGetProcAddress((GLubyte*) "glProgramStringARB");
+		glBindProgramARB = (PFNGLBINDPROGRAMARBPROC) glXGetProcAddress((GLubyte*) "glBindProgramARB");
+		glDeleteProgramsARB = (PFNGLDELETEPROGRAMSARBPROC) glXGetProcAddress((GLubyte*) "glDeleteProgramsARB");
+		glGenProgramsARB = (PFNGLGENPROGRAMSARBPROC) glXGetProcAddress((GLubyte*) "glGenProgramsARB");
+		glProgramLocalParameter4fARB = (PFNGLPROGRAMLOCALPARAMETER4FARBPROC) glXGetProcAddress((GLubyte*) "glProgramLocalParameter4fARB");
 #endif
 		// init various shaders here
 		OldreloadShaders();

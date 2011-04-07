@@ -2650,60 +2650,60 @@ int TabardDetails::GetMaxBackground()
 {
 	int i = 0;
 	while(1) {
-		i ++;
 		if (!MPQFile::exists(wxString::Format(wxT("Textures\\GuildEmblems\\Background_%02d_TU_U.blp"), i))) {
 			break;
 		}
+		i ++;
 	}
-	return i-1;
+	return i;
 }
 
 int TabardDetails::GetMaxIcon()
 {
 	int i = 0;
 	while(1) {
-		i ++;
 		if (!MPQFile::exists(wxString::Format(wxT("Textures\\GuildEmblems\\Emblem_%02d_%02d_TU_U.blp"), i, 0))) {
 			break;
 		}
+		i ++;
 	}
-	return i-1;
+	return i;
 }
 
 int TabardDetails::GetMaxIconColor(int icon)
 {
 	int i = 0;
 	while(1) {
-		i ++;
 		if (!MPQFile::exists(wxString::Format(wxT("Textures\\GuildEmblems\\Emblem_%02d_%02d_TU_U.blp"), icon, i))) {
 			break;
 		}
+		i ++;
 	}
-	return i-1;
+	return i;
 }
 
 int TabardDetails::GetMaxBorder()
 {
 	int i = 0;
 	while(1) {
-		i ++;
 		if (!MPQFile::exists(wxString::Format(wxT("Textures\\GuildEmblems\\Border_%02d_%02d_TU_U.blp"), i))) {
 			break;
 		}
+		i ++;
 	}
-	return i-1;
+	return i;
 }
 
 int TabardDetails::GetMaxBorderColor(int border)
 {
 	int i = 0;
 	while(1) {
-		i ++;
 		if (!MPQFile::exists(wxString::Format(wxT("Textures\\GuildEmblems\\Border_%02d_%02d_TU_U.blp"), border, i))) {
 			break;
 		}
+		i ++;
 	}
-	return i-1;
+	return i;
 }
 
 void CharDetails::save(wxString fn, TabardDetails *td)

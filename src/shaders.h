@@ -2,6 +2,12 @@
 #define SHADERS_H
 
 #include "video.h"
+#include "GL\glew.h"
+
+// Shut up MSVC compiler "inconsistent dll linkage" warning
+#ifdef _WINDOWS
+#  pragma warning (disable : 4273)
+#endif
 
 extern bool supportShaders;
 
