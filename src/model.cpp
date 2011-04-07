@@ -943,7 +943,7 @@ void Model::initAnimated(MPQFile &f)
 		ModelBoneDef *mb = (ModelBoneDef*)(f.getBuffer() + header.ofsBones);
 		for (size_t i=0; i<header.nBones; i++) {
 			//if (i==0) mb[i].rotation.ofsRanges = 1.0f;
-			if (gameVersion >= 30000) {
+			if (gameVersion >= VERSION_WOTLK) {
 				bones[i].model = this;
 				bones[i].initV3(f, mb[i], globalSequences, animfiles);
 			} else {
@@ -1498,7 +1498,7 @@ bool ModelRenderPass::init(Model *m)
 	// emissive colors
 	if (color!=-1 && m->colors && m->colors[color].color.uses(0)) {
 		Vec3D c;
-		if (gameVersion >= 30000) {
+		if (gameVersion >= VERSION_WOTLK) {
 			/* Alfred 2008.10.02 buggy opacity make model invisable, TODO */
 			c = m->colors[color].color.getValue(0,m->animtime);
 			if (m->colors[color].opacity.uses(m->anim)) {

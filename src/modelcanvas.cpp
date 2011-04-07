@@ -77,10 +77,17 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 	gifExporter = 0;
 #ifdef _WINDOWS
 	rt = 0;				// RenderToTexture class
+/*
+	for(int i=0; i<2; i++) {
+		rtt = 0;
+	}
+*/
 #endif
 	curAtt = 0;			// Current Attachment
 	root = 0;
 	sky = 0;
+	modelsize = 0;
+	fogTex = 0;
 
 	/*
 	blurShader = NULL;

@@ -201,10 +201,14 @@ ModelViewer::ModelViewer()
 	optMenu = NULL;
 	lightMenu = NULL;
 	exportMenu = NULL;
+	fileMenu = NULL;
+	camMenu = NULL;
 
 	isModel = false;
 	isWMO = false;
 	isChar = false;
+	isADT = false;
+	initDB = false;
 
 	//wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU
 	// create our main frame

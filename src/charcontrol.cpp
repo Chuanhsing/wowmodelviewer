@@ -2745,7 +2745,7 @@ bool CharDetails::load(wxString fn, TabardDetails *td)
 
 	if (r==race && g==gender) {
 #if defined _WINDOWS
-		f >> (int)skinColor >> (int)faceType >> (int)hairColor >> (int)hairStyle >> (int)facialHair >> (int)facialColor;
+		f >> skinColor >> faceType >> hairColor >> hairStyle >> facialHair >> facialColor;
 #endif
 		same = true;
 	} else {

@@ -141,7 +141,7 @@ public:
 
 #ifdef _WINDOWS
 	RenderTexture *rt;
-	RenderTexture *rtt[2];
+	//RenderTexture *rtt[2];
 #endif
 	//GLuint texShadowMap;
 
