@@ -6,6 +6,8 @@
 3115,6815,7,Harpyie der Staubschwingen
 3122,1960,1,Blutkrallenschwanzpeitscher
 3126,2487,1,Gepanzerter Skorpid
+4127,2710,1,Fleischreißerhyäne
+4953,1986,8,Mokassin
 5709,7806,2,Eranikus' Schemen
 5951,1560,8,Hase
 5996,6719,7,Minenarbeiter von Nethergarde
@@ -52,10 +54,12 @@
 27356,24583,7,Nekrolyt der Brennenden Tiefen
 27360,9786,6,Glimmendes Skelett
 29028,25839,7,Prophet von Akali
+29726,26452,12,Herr Fröstelich
 32255,27776,6,Konvertierter Held
 37160,30549,7,Turmwächter
 37706,30722,7,Ödnisgrunzer
 39452,1035,1,Schaudermagenzähneknirscher
+39679,31546,7,Corla Botin des Zwielichts
 39698,31710,2,Karsh Stahlbieger
 39958,25113,1,Großfaust
 41650,19874,10,Netherscheusal
@@ -71,3 +75,22 @@
 44486,33108,6,Unheiliges Korpuskel
 44857,34190,7,Verwundeter Kundschafter
 44937,3019,9,Trainingsattrappe
+51866,32726,4,Brodelnder Wasserelementar
+52148,37789,7,Jin'do der Götterbrecher
+52165,18315,4,Schlickbestie
+52224,33990,1,Dschungelschlange
+52383,37866,1,Nemesis
+52392,37868,7,Meisterkoch der Gurubashi
+52399,13031,7,Galenges
+52405,37871,7,Mor'Lek der Zerleger
+52414,37877,1,Tor-Tun
+52418,15288,1,Gahz'rankas verlorener Nachwuchs
+52422,37880,7,Kaulema der Beweger
+52438,37904,3,Mortaxx
+52440,22353,7,Gub
+52442,37906,1,Blütenflügelschwarmkönigin
+52504,1070,4,Verkohlter Soldat
+52552,8269,5,Geschmolzenes Ungetüm
+52633,38002,1,Lavabohrer
+52648,38033,1,zzTest Spawn - Aranae Spinner
+52649,38027,4,Millagazor

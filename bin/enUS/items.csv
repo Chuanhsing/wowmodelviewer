@@ -22220,7 +22220,7 @@
 44785,1,Pilgrim's Dress
 44788,1,Pilgrim's Boots
 44800,1,Spring Robes
-44802,1,Egg Basket
+44802,1,Borrowed Egg Basket
 44803,1,Spring Circlet
 44821,1,Monster - Mace2H Northrend C03 Blue (Frozen Rune)
 44845,4,Test Mace of Unending Life
@@ -26364,7 +26364,7 @@
 52359,0,Monster - Item Potion Purple Offhand
 52485,3,Jeweler's Ruby Monocle
 52486,3,Jeweler's Sapphire Monocle
-52487,3,Jeweler's Emerald Monocle
+52487,3,Jeweler's Amber Monocle
 52488,3,Jeweler's Sapphire Monocle
 52489,1,Rhinestone Sunglasses
 52492,2,Carnelian Spikes
@@ -28126,7 +28126,7 @@
 55952,2,Gloves of Nurture
 55953,2,Shoulderguards of Protection
 55956,2,Blubber-Stained Grips
-55957,2,Cured Orcascale Paulders
+55957,2,Cured Orcascale Spaulders
 55959,2,Coven Battleaxe
 55960,2,Carapace Robes
 55961,2,Ghost Walker Treads
@@ -31412,7 +31412,7 @@
 61482,2,Rippling Ooze Chestguard
 61483,2,Quicksilver Crossbow
 61484,2,Midnight Service Treads
-61485,2,Box-Frame Paulders
+61485,2,Box-Frame Spaulders
 61486,2,Breathpipe
 61487,2,Rough Stone Carapace
 61488,2,Bondbreaker Gauntlets
@@ -34823,3 +34823,5 @@
 69890,7,Burnished Pauldrons of Might
 69892,7,Ripped Sandstorm Cloak
 69893,7,Bloodsoaked Skullforge Reaver
+69916,4,Trollbane (Daakara)
+70080,4,Reforged Heartless

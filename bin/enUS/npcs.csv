@@ -1898,8 +1898,8 @@
 2643,28244,7,Vilebranch Berserker
 2644,28247,7,Vilebranch Hideskinner
 2645,28250,7,Vilebranch Shadow Hunter
-2646,28245,10,Vilebranch Blood Drinker
-2647,28253,10,Vilebranch Soul Eater
+2646,28245,7,Vilebranch Blood Drinker
+2647,28253,7,Vilebranch Soul Eater
 2648,28240,7,Vilebranch Aman'zasi Guard
 2649,28230,7,Witherbark Scalper
 2650,28238,7,Witherbark Zealot
@@ -6705,7 +6705,7 @@
 11516,6825,7,Timbermaw Warder
 11517,32731,7,Oggleflint
 11518,11429,7,Jergosh the Invoker
-11519,2007,7,Bazzalan
+11519,2007,3,Bazzalan
 11520,7970,7,Taragaman the Hungerer
 11521,10283,1,Kodo Apparition
 11536,35529,7,Quartermaster Miranda Breechlock
@@ -21481,6 +21481,7 @@
 34244,29132,7,Jean Pierre Poulain
 34246,29133,10,Azeroth
 34248,29141,7,Shatterspear Mystic
+34249,29138,7,Sentinel Huntress
 34251,1996,7,Vear Darksnout
 34252,29145,7,Dubin Clay
 34258,29149,7,Halga Bloodeye
@@ -21648,15 +21649,19 @@
 34501,16480,10,Thrower Bunny
 34503,4745,7,Razormane Pillager
 34504,8649,7,Grol'dom Grunt
+34506,20570,10,Guiding Mist
 34509,29242,7,Ralton
 34510,29244,7,Broyk
 34511,30055,7,Forsaken Invader
 34512,29246,7,Stikwad
 34513,29245,7,Togrik
 34514,4745,7,Hogtied Razormane
+34517,8149,4,Ally of Nature
 34518,29247,7,Thagg
 34521,14383,10,Bough of Corruption
+34522,8575,3,Corrupted Servant
 34523,4745,7,Captured Razormane
+34524,1015,3,Corrupted Minion
 34525,23456,3,Corrupted Gnarlpine
 34526,29249,0,Aponi Brightmane
 34527,328,10,Dave's Industrial Light and Magic Bunny (Small)
@@ -21727,6 +21732,7 @@
 34638,29319,7,Shoe
 34640,1105,1,Barrens Vulture
 34641,1126,10,Invisible Stalker (Walk 5 Run 14)
+34642,20570,10,Army of Corruption Controller
 34644,29392,7,Edward Winslow
 34645,29394,7,Elizabeth Barker Winslow
 34647,704,1,Barrens Boar
@@ -26522,7 +26528,7 @@
 44251,33755,7,Alma Deering
 44252,33756,7,Karin
 44256,666,1,Greypaw
-44257,35404,2,Gyreworm
+44257,35404,4,Gyreworm
 44258,33760,1,Colossal Gyreworm
 44260,33451,1,Venomfang Crocolisk
 44261,22255,1,Sharptalon Eagle
@@ -27590,10 +27596,10 @@
 46267,34986,7,Rescued Survivor
 46268,34987,7,Survivor
 46269,34991,7,Mother Matterly
-46270,35976,7,Debilitated Aetharon
+46270,35976,4,Debilitated Aetharon
 46271,34992,7,Provisioner Elda
-46272,35643,7,Debilitated Edemantus
-46273,35979,7,Debilitated Apexar
+46272,35643,4,Debilitated Edemantus
+46273,35979,4,Debilitated Apexar
 46274,34994,7,Gaffer Coilspring
 46276,34995,7,Caimas the Pit Master
 46278,34996,1,Gorebite
@@ -27867,7 +27873,7 @@
 46831,35304,7,Firebeard Militia
 46837,35308,10,Drowned Wildhammer Smith
 46838,35313,4,Subjugated Firestarter
-46839,35316,7,Servias Windterror
+46839,35316,4,Servias Windterror
 46840,35317,1,Marshtide Steed
 46841,35330,7,Marshtide Cleric
 46848,11686,10,"Water of Life" Speech Controller Bunny
@@ -29378,6 +29384,7 @@
 50490,2177,8,Locust
 50491,6297,8,Mac Frog
 50496,36944,8,Oasis Moth
+50504,33224,7,Belysra Starbreeze
 50508,37046,7,Carrie Eileen Steen
 50509,37048,7,Jenn Stravaganza
 50510,37047,7,Rachel DeSimone
@@ -29598,7 +29605,7 @@
 52165,18315,4,Sludge Beast
 52191,37803,7,High Priest Venoxis
 52197,11686,10,Pool of Acrid Tears
-52224,31630,10,Jungle Serpent
+52224,33990,1,Jungle Serpent
 52226,37814,12,Panther Cub
 52234,37820,7,Bwemba
 52288,11686,10,Venomous Effusion

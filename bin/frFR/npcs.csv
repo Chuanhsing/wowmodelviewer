@@ -3,6 +3,7 @@
 684,633,1,Panthère ombregueule
 1176,10912,7,Rat des tunnels fourrageur
 1177,139,7,Rat des tunnels géomètre
+1420,901,8,Crapaud
 1501,10973,6,Zombie décérébré
 1502,829,6,Goule déshéritée
 1817,4124,1,Loup malade
@@ -12,6 +13,10 @@
 1985,6807,1,Sanglier des chardons
 2032,11448,1,Sabre-de-nuit galeux
 3084,2141,7,Gardien des Hauts
+3099,381,1,Sanglier tacheté redoutable
+3115,6815,7,Harpie Terrevent
+3122,1960,1,Fouette-queue griffesang
+3126,2487,1,Scorpide blindé
 3296,4259,7,Grunt d’Orgrimmar
 3573,4587,11,Totem Fontaine de mana
 4311,4515,7,Holgar Hache-foudre
@@ -21,6 +26,7 @@
 4711,11264,7,Naga ondulame
 4712,11266,7,Sorcière ondulame
 4714,11253,7,Myrmidon ondulame
+4953,1986,8,Mocassin d'eau
 5873,4588,11,Totem de peau de pierre
 5950,4589,11,Totem Langue de feu
 5951,1560,8,Lièvre
@@ -47,11 +53,13 @@
 15298,15406,4,Ame en peine arcanique contaminée
 15447,4590,11,Totem de courroux de l'air
 17252,14255,3,Gangregarde
+18377,17719,1,Coursier du vent rouge rapide
 18838,8610,3,Seigneur de la nuit Malphas
 19191,18371,3,Arazzius le Cruel
 19668,19110,10,Ombrefiel
 20912,19943,10,Messager Cieuriss
 22419,5990,10,Mite des bois
+23408,21473,6,Seigneur corbeau
 24697,10927,3,Sœur du tourment
 24934,22750,10,En-cas-Matic IV
 24935,22750,10,Vend-O-Tron D-Luxe
@@ -82,6 +90,7 @@
 36613,32385,7,Gobeur
 36849,30353,7,Gardien du savoir de Talrendis
 38038,31350,10,Cible Tiki
+39452,1035,1,Grincedent Gueule-d'effroi
 40168,11714,7,Dryade corrompue
 40463,31208,7,Subjugateur du Crépuscule
 40583,31948,7,Intercepteur des mers du Sud
