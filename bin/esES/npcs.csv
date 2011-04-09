@@ -2,6 +2,7 @@
 417,850,3,Manáfago
 510,525,4,Elemental de agua
 1040,2023,4,Trepador del pantano
+1420,901,8,Sapo
 1863,4162,3,Súcubo
 1986,709,1,Araña Tejemadera
 1994,759,1,Githyiss la Vil
@@ -11,12 +12,17 @@
 2630,4588,11,Tótem Nexo Terrestre
 2748,5988,5,Archaedas
 3084,2141,7,Vigía de la Cima
+3099,381,1,Jabalí jaspeado temible
+3115,6815,7,Arpía Viento Seco
+3122,1960,1,Colazote Garrasangre
+3126,2487,1,Escórpido acorazado
 3296,4259,7,Bruto de Orgrimmar
 3573,4587,11,Tótem Fuente de maná
 3579,4588,11,Tótem Garra de piedra
 3887,37288,6,Barón Filargenta
 4278,37287,6,Comandante Vallefont
 4311,4515,7,Holgar Hachatormenta
+4953,1986,8,Mocasín
 5677,10923,3,Súcubo invocado
 5709,7806,2,Sombra de Eranikus
 5854,10801,9,Gólem de guerra pesado
@@ -92,6 +98,7 @@
 16772,18213,7,Devastador Mascahuesos
 16810,18215,7,Partedorsales Mascahuesos
 17252,14255,3,Guardia vil
+18377,17719,1,Jinete del viento rojo presto
 18852,19121,7,Ingeniero de distorsión
 18857,19125,7,Maestra de distorsión Furia del Sol
 19668,19110,10,Maligno de las Sombras
@@ -99,6 +106,7 @@
 21046,20017,7,Tosco Peña'mok
 21047,20019,7,Chamán Peña'mok
 22917,21135,3,Illidan Tempestira
+23408,21473,6,Lord Cuervo
 23755,3833,7,Pirata del bloqueo
 24934,22750,10,Aperitivi-mática IV
 24935,22750,10,Vendo-trón Deluxe
@@ -130,6 +138,7 @@
 37692,30290,7,Infantería Renegada
 37922,30829,7,Asaltante de la Desolación
 39446,31488,7,Lycanthoth
+39452,1035,1,Rechinador Fauzatroz
 39665,33147,7,Machacahuesos Rom'ogg
 39679,31546,7,Corla Heraldo del Crepúsculo
 39698,31710,2,Karsh Doblacero

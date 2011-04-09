@@ -29642,6 +29642,8 @@
 69104,1,Troll Male Mask Visual
 69105,1,Undead Female Mask Visual
 69106,1,Undead Male Mask Visual
+69107,1,Worgen Female Mask Visual
+69108,1,Worgen Male Mask Visual
 69147,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Red
 69152,2,Art Template Plate Shoulder - Plate_PVPWarrior_C_02 - Black
 69153,2,Art Template Plate Legs - Plate_PVPWarrior_C_02 - Black
@@ -29682,6 +29684,91 @@
 69258,3,ZG Leather Shoulder 3
 69259,3,ZG Leather Shoulder 1
 69260,4,Monster - Item Dagger (Umbral Shiv)
+69549,4,Guardamuñecas del depredador
+69550,4,Leotardos de magias antiguas
+69551,4,Plumas de Akil'zon
+69552,4,Brazales de propósito oscuro
+69554,4,Espaldares de Nalorakk
+69555,4,Botas del osuno
+69556,4,Bandas del espíritu de oso
+69557,4,Zancos de la selva
+69558,4,Máscara de escudo de espíritu
+69559,4,Brazales Amani'shi
+69560,4,Bufas de Jan'alai
+69561,4,Guardarrenes lance de halcón
+69562,4,Botas de mojo malo
+69564,4,Máscara del salvaje
+69565,4,Coraza de furia primigenia
+69567,4,Cubremuñecas de espíritus difuntos
+69568,4,Guardamuñecas de ensalmador de las Sombras
+69569,4,Coraza de piel de trol diente oscuro
+69570,4,Pretina de las maldiciones
+69572,4,Capa ensangrentada del señor aojador
+69573,4,Espaldares de sacrificio
+69574,4,Hombreras con colmillos
+69575,4,Maza de los sacrificados
+69576,4,Ornato de visión agudizada
+69577,4,Collar de huesos
+69578,4,Togas embrujadoras
+69579,4,Ornato Amani
+69580,4,Máscara de los espíritus inquietos
+69581,4,Cetro Amani de ritos
+69582,4,Espaldares Perforacráneos
+69583,4,Leotardos de los inclementes
+69584,4,Capa de Frostheim recuperada
+69585,4,Cubremuñecas de la locura
+69586,4,Botas para dos dedos
+69587,4,Coselete de soberbia
+69588,4,Botas de guerra Trituracráneos
+69589,4,Leotardos de hojas danzantes
+69590,4,Guantes de artesano del mojo
+69591,4,Hoja maleficio vudú
+69592,4,Aterratrols reforjada
+69593,4,Placa de batalla del Imperio Amani
+69594,4,Manijas de T'wansi
+69595,4,Grebas fetiche
+69596,4,Arco de caza vudú
+69597,4,Hacha arrojadiza Zulian
+69598,4,Togas de disención
+69599,4,Espaldares de ambición
+69600,4,Cinturón de las Serpientes escurridizas
+69601,4,Leotardos serpentinos
+69603,4,Coraza de serenidad
+69604,4,Espirales de odio
+69606,4,Mantón loa Hakkari
+69607,4,Toque de discordia
+69608,4,Guardamuñecas con carga letal
+69609,4,Protector del señor sangriento
+69611,4,Fajín de angustia
+69612,4,Manto con flecos de garras
+69613,4,Leotardos de la manada
+69614,4,Máscara rugidora de Bethekk
+69615,4,Musleras de caminante zombi
+69616,4,Espaldares de vinculador de espíritus
+69617,4,Yelmo de medicina con plumas
+69618,4,Mutilador Zulian
+69619,4,Manoplas de placa ósea
+69620,4,Doble filo de los Hakkari
+69621,4,Doble filo de los Hakkari
+69622,4,Ornato del Aojador
+69623,4,Vestimentas del cazador de almas
+69624,4,Legado de Arlokk
+69625,4,Tributo de Mandokir
+69626,4,Veredicto de Jin'do
+69627,4,Resguardo Zulian
+69628,4,Quebrantador de Jeklik
+69629,4,Escudo del Dios de la Sangre
+69630,4,Manoplas del atormentado
+69631,4,Vara de vudú Zulian
+69632,4,Bolsa de mal agüero perdida
+69633,4,Guanteletes de desvalijador
+69634,4,Botas de Fasc conservadas
+69636,4,Garras de Thekal
+69637,4,Destructor Gurubashi
+69638,4,Garras de Arlokk
+69639,4,Rebanalmas de Renataki
+69640,4,Falda de ritos olvidados
+69641,4,Peto de cráneo trol
 69643,4,Castigador Amani
 69644,4,Segadora de acero vil
 69764,4,Caparazón de tortuga extinta
@@ -29691,3 +29778,11 @@
 69769,4,Cloak of the Frigid Winds
 69770,4,Icebound Cloak
 69771,4,Frostscythe of Lord Ahune
+69796,4,Capa de clamaespíritus
+69797,4,Mandiletes de Vinculatalismanes
+69798,4,Manijas con nudos
+69800,4,Mando de guardaespíritus
+69801,4,Guardabrazos Amani
+69803,4,Castigador Gurubashi
+69819,1,Cuerno de beber del jefe vrykul
+70080,4,Reforged Heartless
