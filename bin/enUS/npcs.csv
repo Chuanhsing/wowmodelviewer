@@ -696,7 +696,7 @@
 1116,726,7,Rockjaw Ambusher
 1117,6530,7,Rockjaw Bonesnapper
 1118,723,7,Rockjaw Backbreaker
-1119,830,7,Hammerspine
+1119,11165,7,Hammerspine
 1120,27500,7,Frostmane Troll
 1121,27498,7,Frostmane Snowstrider
 1122,27490,7,Frostmane Hideskinner
@@ -3147,7 +3147,7 @@
 4129,2711,1,Hecklefang Snarler
 4130,11144,10,[Deprecated for 4.x]Silithid Searcher
 4131,11143,10,[Deprecated for 4.x]Silithid Invader
-4132,11099,1,Silithid Ravager
+4132,37583,1,Krkk'kx
 4133,11097,10,[Deprecated for 4.x]Silithid Hive Drone
 4138,2205,7,Jeen'ra Nightrunner
 4139,2491,1,Scorpid Terror
@@ -4590,7 +4590,7 @@
 6226,6890,9,Mechano-Flamewalker
 6227,6891,9,Mechano-Frostwalker
 6228,6669,7,Dark Iron Ambassador
-6229,6774,9,Crowd Pummeler 9-60
+6229,36560,9,Crowd Pummeler 9-60
 6230,6774,9,Peacekeeper Security Suit
 6231,7288,9,Techbot
 6232,7288,9,Arcane Nullifier X-21
@@ -7748,8 +7748,8 @@
 14484,14533,6,Injured Peasant
 14485,14537,6,Plagued Peasant
 14486,9786,6,Scourge Footsoldier
-14487,5286,7,Gluggle
-14488,5782,7,Roloch
+14487,22530,7,Gluggle
+14488,37382,7,Roloch
 14489,9790,6,Scourge Archer
 14490,14528,1,Rippa
 14491,3188,1,Kurmokk
@@ -11211,7 +11211,7 @@
 19064,18496,7,Leatei
 19065,18499,7,Inessera
 19067,18505,10,Fel Cannon: Hate
-19068,17971,7,Garadar Riding Wolf
+19068,17971,7,Garadar Wolf Rider
 19070,18510,4,Holo-Imp
 19071,18512,7,Telaari Elekk Rider
 19073,18515,1,Nibblet
@@ -22017,7 +22017,7 @@
 35022,29530,7,Orgo Ribcrusher
 35023,29531,7,Terrance Matterly
 35024,29532,7,Dracien Flanning
-35025,29533,0,Lynette Bracer
+35025,29533,7,Lynette Bracer
 35026,29534,7,Marsa Keybrand
 35027,29535,0,Erutor
 35028,29536,0,Memory of VanCleef
@@ -24411,6 +24411,7 @@
 40403,19695,1,Spinescale Matriarch
 40405,31834,7,Kieupid
 40406,31882,4,Tumultuous Earthstorm
+40408,31835,7,Water Traveler
 40409,20195,7,Gromm'ko
 40412,1337,1,Butcher
 40413,31833,7,Alenjon Sunblade
@@ -24456,7 +24457,7 @@
 40500,31171,10,Heap of Core Hound Innards
 40503,23767,10,Quicksand
 40505,31757,10,Steamwheedle Rescue Balloon
-40511,27823,9,Balloon Throwing Station
+40511,37126,9,Balloon Throwing Station
 40512,30244,7,Brute Squad
 40527,1938,1,Duneshore Crab
 40528,31331,7,Steamwheedle Bughunter
@@ -24530,7 +24531,7 @@
 40660,31966,7,Twilight Lancer
 40661,31431,7,Drowned Crewman
 40662,31972,7,Steamwheedle Victim
-40663,31160,9,Race Boat
+40663,31160,9,River Boat
 40664,31975,7,Recovering Soldier
 40665,31973,7,Southsea Scoundrel
 40666,32055,1,Duneclaw Broodling
@@ -24557,8 +24558,8 @@
 40728,33618,1,Whale Shark
 40729,32020,7,Captain Taylor
 40730,32020,7,Stormwind Seal
-40743,27101,9,Frost Cannon
-40745,27101,9,Fire Cannon
+40743,35902,9,Frost Cannon
+40745,35902,9,Fire Cannon
 40747,32008,7,Selia Sunglow
 40754,16910,10,Tanaris Broom
 40755,15329,7,Emissary of Flame
@@ -24850,7 +24851,9 @@
 41188,20570,10,Mortar Target
 41189,20570,10,Mortar Caster
 41190,5433,7,Crazzle Sprysprocket
+41191,1132,3,Shadowsworn Obstructor
 41192,16480,10,The Pewter Prophet
+41193,32416,7,Loramus' Body
 41194,11686,10,Omega Stance
 41195,137,6,Cannibal Ghoul (Cosmetic)
 41200,22903,10,Generic Bunny - PRK
@@ -24899,7 +24902,9 @@
 41260,14347,1,Brisket
 41261,32367,2,Sethria
 41264,11686,10,Aqua Bomb
+41265,37233,7,Salt-Flop
 41266,32237,10,Goblin Hot Air Balloon
+41267,32372,3,Spirit of Grol
 41269,32386,7,Alliance Portal-Sentry
 41270,32569,2,Onyxia
 41272,32378,7,Dark Iron Smouldermage
@@ -24915,12 +24920,14 @@
 41284,32391,7,Battok the Berserker
 41286,25605,7,Lyanath
 41289,34958,1,Crashed Seahorse
+41290,10950,3,Defiled Felhound
 41291,32394,7,Krom'gar Assassin
+41292,26348,3,Loramus the Defiled
 41293,12209,1,Harbor Shredfin
 41294,16480,10,Watery Vision
 41295,9573,1,Ocean Crawler
 41298,32392,7,Slamp Wobblecog
-41299,32393,10,Oil Drilling Rig
+41299,32393,9,Oil Drilling Rig
 41309,16480,10,Erunak Vision Area Trigger Bunny
 41311,32399,7,Master Assassin Kel'istra
 41314,169,10,Support Clamp Trigger 01
@@ -24947,10 +24954,12 @@
 41350,32422,7,Ton Windbow
 41351,32423,7,Grimtotem Bodyguard
 41353,16480,10,Hatefury Channeler Bunny (fountain)
+41354,32424,7,Neptool
 41355,16480,10,Hatefury Channeler Bunny (brazier)
 41356,16480,10,Hatefury Channeler Bunny (chalice)
 41357,3619,7,Rockpool Murloc
 41358,15393,7,Rockpool Tadpole
+41359,22903,10,Bloodwash Crate Spawner
 41360,32430,7,Krom'gar Marauder
 41361,32426,7,Northwatch Infantry
 41362,37201,7,Bloodwash Crate
@@ -24984,7 +24993,7 @@
 41398,31247,10,Ultrasafe Personnel Launcher
 41400,787,1,Highland Razormaw
 41401,676,1,Highland Scytheclaw
-41402,32335,7,Abandoned Bloodwash Crate
+41402,37201,7,Abandoned Bloodwash Crate
 41404,31533,7,Bloodwash Gambler
 41405,5029,7,Bloodwash Idolater
 41406,32477,10,Aessina
@@ -25014,6 +25023,7 @@
 41449,1070,4,Rampant Fire Elemental
 41451,25772,7,Kvaldir Sandterror
 41453,37158,10,Smouldering Ooze
+41454,32335,7,Abandoned Bloodwash Crate
 41455,35382,7,Overseer Idra'kess
 41456,32472,7,Lady Sira'kess
 41457,32242,7,Executioner Verathress
@@ -25399,6 +25409,7 @@
 42248,32746,6,Drowned Gilnean Sailor
 42249,32749,6,Drowned Gilnean Settler
 42251,32743,1,Neptulon
+42252,32744,6,Drowned Gilnean Spirit
 42253,32745,6,Drowned Gilnean Spirit
 42256,1985,7,Marshal McCree
 42259,184,7,Dead Thief
@@ -25701,8 +25712,12 @@
 42818,33066,7,Azsh'ir Warrior
 42823,33118,7,Twilight Priestess
 42824,33176,2,Twilight Pyremaw
+42825,11167,7,Gurubashi Worker
+42834,31750,7,Gurubashi Behemoth
 42836,33085,7,Bilgewater Mechanic
+42838,649,1,Gurubashi Raptor
 42839,33087,9,Razlo Crushcog
+42840,29806,1,Captured Lashtail Hatchling
 42844,1126,10,Invisible Stalker (Cataclysm Boss Ignore Combat)
 42845,33863,1,Rock Borer
 42846,37312,7,Azsh'ir Depthseeker
@@ -27162,6 +27177,7 @@
 45395,34434,7,Faceless Soulclaimer
 45396,328,10,Dave's Industrial Light and Magic Bunny (Medium)(Sessile)(Large AOI)
 45398,27195,7,Grizlak
+45399,10664,9,Optimo
 45400,33315,10,Fiona's Caravan
 45401,5286,7,Whitefin
 45402,18723,1,Nix
@@ -27572,6 +27588,7 @@
 46203,34959,7,Twilight Vindicator
 46204,31510,7,Corrupted Elementalist
 46205,34966,7,Citadel Veteran
+46206,34971,10,Tony's Treasure
 46207,11686,10,Tornado
 46208,20570,10,Clean Cannon X-2
 46230,34976,7,S.A.F.E. Technician
@@ -28177,6 +28194,7 @@
 47423,1126,10,"Freezing the Pipes" Bunny 1
 47424,1126,10,"Freezing the Pipes" Bunny 2
 47425,1126,10,"Freezing the Pipes" Bunny 3
+47426,1126,10,"Freezing the Pipes" Bunny 4
 47427,1147,1,Grisly Gryphon Guts
 47428,37262,7,Hellscream's Sentry
 47431,35616,7,Valn
@@ -29568,6 +29586,7 @@
 51661,10133,1,Tsul'Kalu
 51662,37613,1,Mahamba
 51663,37615,1,Pogeyan
+51664,37597,7,Andalar Shadevale
 51671,1534,1,Rabid Hyena
 51672,34909,4,Sweeping Winds
 51673,37603,1,Venomscale Spitter

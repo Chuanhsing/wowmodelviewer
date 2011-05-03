@@ -7274,7 +7274,7 @@
 19888,3,Abrazo de Señor Supremo
 19889,3,Leotardos empapados de sangre
 19890,4,Brujo de Jin'do
-19891,4,Bolsa de hachazos de Jin'do
+19891,4,Bolsa de mal agüero de Jin'do
 19892,3,Botas de animista
 19894,3,Guanteletes empapados de sangre
 19895,3,Falda tintada de sangre
@@ -9263,14 +9263,14 @@
 24963,2,Quijotes de Khan'aish
 24964,2,Cubrehombros de Khan'aish
 24965,2,Brazales de Khan'aish
-24966,2,Faja de garraguarda
-24967,2,Grebas de garraguarda
-24968,2,Armadura de garraguarda
-24969,2,Guantes de garraguarda
-24970,2,Casco de garraguarda
-24971,2,Quijotes de garraguarda
-24972,2,Cubrehombros de garraguarda
-24973,2,Brazales de garraguarda
+24966,2,Faja de guardagarra
+24967,2,Grebas de guardagarra
+24968,2,Armadura de guardagarra
+24969,2,Guantes de guardagarra
+24970,2,Casco de guardagarra
+24971,2,Quijotes de guardagarra
+24972,2,Cubrehombros de guardagarra
+24973,2,Brazales de guardagarra
 24974,2,Faja de atracador
 24975,2,Grebas de saqueador
 24976,2,Armadura de saqueador
@@ -10221,7 +10221,7 @@
 27804,3,Manteo de tiburón diablo
 27806,3,Guanteletes brazacor
 27813,3,Botas del coloso
-27814,3,Hoja gemela de maestría
+27814,3,Hojas gemelas de maestría
 27815,3,Tótem de los vientos astrales
 27816,3,Espaldares de la ira mental
 27817,3,Arco largo de descarga estelar
@@ -15762,7 +15762,7 @@
 38268,0,Una mano extra
 38276,1,Sombrero con ala de haliscan
 38277,1,Chaqueta de haliscan
-38278,1,Bombachos de haliscan
+38278,1,Pantalones de jaliscan
 38282,4,Hoja de dos manos insulsa
 38285,1,Pretina de comerciante de almas
 38286,1,Espaldares de comerciante de almas
@@ -18732,7 +18732,7 @@
 44686,3,Manijas de terror etéreo
 44687,3,Pelambre de Loque'Nahak
 44691,3,Collera de Aotona
-44692,1,Toga de enfermera de Dalaran
+44692,1,Vestido de enfermera de Dalaran
 44693,1,Gasa para heridas
 44694,1,Gasa empapada de antiséptico
 44695,3,Visera corroída
@@ -18759,7 +18759,7 @@
 44785,1,Vestido de peregrino
 44788,1,Botas de peregrino
 44800,1,Togas primaverales
-44802,1,Cesta de huevos
+44802,1,Cesta de huevos prestada
 44803,1,Diadema primaveral
 44891,4,Botas de dominancia forjadas por los titanes
 44892,4,Botas de salvación forjadas por los titanes
@@ -22609,7 +22609,7 @@
 52252,4,Tabardo del Iluminado
 52485,3,Monóculo rubí de joyero
 52486,3,Monóculo zafiro de joyero
-52487,3,Monóculo esmeralda de joyero
+52487,3,Monóculo de ámbar de joyero
 52488,3,Monóculo zafiro de joyero
 52489,1,Gafas de sol con bisutería
 52492,2,Puntas de cornalina
@@ -23004,7 +23004,7 @@
 53494,4,Faja de Oblación
 53496,4,Barricada de la Princesa de la Tierra
 53497,4,Embozo de muerte de Zaetar
-53498,4,Toga de novia de la Tierra
+53498,4,Vestido de novia de la Tierra
 53500,4,Placa tectónica
 53504,4,Botines de Despiertallamas
 53505,4,Piel de salamandra
@@ -23174,7 +23174,7 @@
 54793,2,Art Template Plate Head  - Plate_Common_C_01 - Rust
 54801,4,Capa forrada de hielo
 54802,4,Capa de guerra del Señor de la Escarcha
-54803,4,Esbozo de batalla del Señor de la Escarcha
+54803,4,Embozo de batalla del Señor de la Escarcha
 54804,4,Embozo del frío invierno
 54805,4,Capa de los gélidos vientos
 54806,4,Guadaña de Escarcha de Lord Ahune
@@ -24454,7 +24454,7 @@
 57095,2,Art Template Plate Wrist  - Plate_Common_B_01 - Red
 57098,2,Art Template Cloth Robe - Robe_Common_A_03 - Green
 57100,0,Art Template Mail Belt - Mail_Common_A_03 - Black
-57110,1,Toga de enfermero goblin
+57110,1,Vestido de enfermero goblin
 57115,2,Gorro de enfermero goblin
 57116,2,Gorro de enfermero goblin 2
 57139,1,Ballesta de nocturácnida
@@ -26195,7 +26195,7 @@
 60687,2,Cinturón de los hijos
 60688,2,Criterio de Parker
 60689,2,Cinturón de los problemas sin solución
-60690,2,Botas de caca
+60690,2,Botas dañadas
 60691,2,Botines desafortunados
 60692,2,Guantes del que se gana el pan
 60693,2,Leotardos ventilados
@@ -27096,7 +27096,7 @@
 62439,3,Cinturón de Mirada Estelar
 62441,3,Togas de Orsis
 62445,3,Fajín de profecía
-62446,3,Cinturón de arena movedizas
+62446,3,Cinturón de arenas movedizas
 62448,4,Faja del Rey Sol
 62449,4,Brazales de guardia de arena
 62450,4,Sandalias de caminante del desierto
@@ -27600,7 +27600,7 @@
 63677,3,Espaldares de Las Mil Agujas
 63678,3,Yelmo de Las Mil Agujas
 63679,4,Ashkandi restituida Espada magna de la Hermandad
-63680,4,Martillo Crepusular
+63680,4,Martillo Crepuscular
 63701,3,Botines de terror
 63702,3,Trituradores de Coulton
 63703,3,Mejores leotardos de Garona
@@ -27715,7 +27715,7 @@
 63824,2,Espaldares de choque de orco
 63825,2,Cinturón de sueños sangrientos
 63826,2,Brazales de recogetrofeos
-63827,3,Placa de batalla de trituracielos
+63827,3,Placa de batalla Trituracielos
 63828,3,Musleras de asalto aéreo
 63829,3,Caperuza de soldado de choque
 63830,3,Baliza de ataque aéreo
@@ -28288,7 +28288,7 @@
 65084,4,Coselete de fuente de voltaje
 65085,4,Espirales inductoras de electrones
 65086,4,Cinturón de energía del jumbotrón
-65090,4,Martillo Crepusular
+65090,4,Martillo Crepuscular
 65091,4,Hoja de la hora bruja
 65092,4,Guardarrenes de odio
 65093,4,Yelmo de autoridad tétrica
@@ -29683,7 +29683,7 @@
 69257,3,ZG Plate Helm 1
 69258,3,ZG Leather Shoulder 3
 69259,3,ZG Leather Shoulder 1
-69260,4,Monster - Item Dagger (Umbral Shiv)
+69260,0,Monster - Item Dagger (Umbral Shiv)
 69549,4,Guardamuñecas del depredador
 69550,4,Leotardos de magias antiguas
 69551,4,Plumas de Akil'zon
@@ -29769,20 +29769,43 @@
 69639,4,Rebanalmas de Renataki
 69640,4,Falda de ritos olvidados
 69641,4,Peto de cráneo trol
-69643,4,Castigador Amani
-69644,4,Segadora de acero vil
+69643,0,Monster - Amani Punisher (Zandalari Archon)
+69644,0,Monster - Felsteel Reaper (alt color)
 69764,4,Caparazón de tortuga extinta
-69766,4,The Frost Lord's War Cloak
-69767,4,The Frost Lord's Battle Shroud
-69768,4,Shroud of Winter's Chill
-69769,4,Cloak of the Frigid Winds
-69770,4,Icebound Cloak
-69771,4,Frostscythe of Lord Ahune
+69766,4,Capa de guerra del Señor de la Escarcha
+69767,4,Embozo de batalla del Señor de la Escarcha
+69768,4,Embozo del frío invierno
+69769,4,Capa de los gélidos vientos
+69770,4,Capa forrada de hielo
+69771,4,Guadaña de Escarcha de Lord Ahune
 69796,4,Capa de clamaespíritus
 69797,4,Mandiletes de Vinculatalismanes
 69798,4,Manijas con nudos
 69800,4,Mando de guardaespíritus
 69801,4,Guardabrazos Amani
 69803,4,Castigador Gurubashi
+69814,7,Bug Test Heirloom Weapon
 69819,1,Cuerno de beber del jefe vrykul
+69831,4,Mantón de mistral
+69833,4,Manteo de escarcha permanente
+69834,4,Capa Ráfaga de nubes
+69835,4,Mantón de planetario
+69842,4,Faja de recuerdos de Garr reforzada
+69843,4,Alabarda ensangrentada de Mobus
+69844,4,Pico vítreo de Julak Fatalidad
+69864,1,Corona deslustrada
+69865,1,Pulseras con incrustaciones de gemas
+69876,4,Guanteletes espectrales de Xariona
+69877,4,Cinturón de los mil boquiabiertos
+69878,4,Manteo de escarcha permanente
+69879,4,Capa Ráfaga de nubes
+69881,4,Mantón de planetario
+69884,4,Mantón de mistral
+69887,7,Yelmo de poderío bruñido
+69888,7,Quijotes de poderío bruñidos
+69889,7,Coraza de poderío bruñida
+69890,7,Espaldares de poderío bruñidos
+69892,7,Capa Tormenta de Arena rasgada
+69893,7,Espetadora Forjacráneos empapada de sangre
+69916,4,Aterratrols (Daakara)
 70080,4,Reforged Heartless
