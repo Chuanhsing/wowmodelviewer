@@ -1,3 +1,4 @@
+17,0,馬汀烈怒
 25,1,破損的短劍
 35,1,彎曲法杖
 36,1,用舊的釘錘
@@ -5,41 +6,89 @@
 38,1,新兵襯衣
 39,1,新兵束褲
 40,1,新兵的靴子
+41,1,OLDRecruit's Belt
 42,1,OLDSquire's Belt
 43,1,侍從的靴子
 44,1,侍從束褲
 45,1,侍從襯衣
+46,1,OLDFootpad's Belt
 47,1,盜賊輕鞋
 48,1,盜賊束褲
 49,1,盜賊襯衣
+50,1,OLDInitiate's Belt
 51,1,見習牧師長靴
 52,1,見習牧師束褲
 53,1,見習牧師襯衣
+54,1,OLDNovice's Belt
 55,1,學徒的靴子
 56,1,學徒長袍
 57,1,侍僧長袍
+58,1,OLDAcolyte's Belt
 59,1,侍僧輕鞋
 60,1,夾層外套
 61,1,矮人皮甲束褲
+77,1,Deprecated Outfitter Cloth Armor
 79,1,矮人布質馬褲
 80,1,柔軟的毛邊輕鞋
 85,1,骯髒的皮外衣
+86,1,Deprecated Old Belt
+87,1,Deprecated Old Boots
+88,0,Deprecated Old Pants
+89,1,OLDThick Trapper's Shirt
+90,1,OLDDwarven Initiate's Belt
 91,0,OLDDwarven Initiate's Pants
+92,1,OLDDwarven Initiate's Boots
+93,1,OLDDwarven Initiate's Shirt
+94,1,Deprecated Dwarven Novice's Belt
+95,1,Deprecated Dwarven Novice's Boots
+97,0,Deprecated Dwarven Novice's Robe
+98,1,Deprecated Dwarven Squire's Belt
+99,1,Deprecated Dwarven Squire's Boots
 100,0,Deprecated Dwarven Squire's Pants
+101,1,Deprecated Dwarven Squire's Shirt
+102,1,Deprecated Dwarven Recruit's Belt
+103,1,Deprecated Dwarven Recruit's Boots
+104,0,Deprecated Sturdy Brown Pants
+105,1,Deprecated Dwarven Recruit's Shirt
+113,0,Deprecated Dwarven Apprentice Pants
+114,1,Deprecated Dwarven Apprentice Boots
+115,1,Deprecated Dwarven Apprentice Belt
 119,1,Deprecated Rogue's Vest
 120,1,刺客束褲
 121,1,刺客長靴
+122,1,OLDThug Belt
+123,1,Deprecated Orc Apprentice Shirt
+124,0,Deprecated Orc Apprentice Pants
+125,1,Deprecated Orc Apprentice Boots
+126,1,Deprecated Orc Apprentice Belt
 127,1,陷捕者襯衣
 128,0,Deprecated Tauren Trapper's Pants
 129,1,粗厚陷捕者的靴子
+130,1,Deprecated Tauren Trapper's Belt
+131,1,Deprecated Orc Acolyte's Belt
+132,1,Deprecated Orc Acolyte's Boots
+133,1,Deprecated Orc Acolyte's Shirt
+134,1,Deprecated Stiff Leather Shirt
+135,0,Deprecated Stiff Leather Pants
+136,1,Deprecated Old Leather Boots
+137,1,OLDNeophyte's Belt
+138,1,Deprecated War Harness
 139,1,打鬥者束褲
 140,1,打鬥者的靴子
+141,1,OLDBrawler's Belt
 143,0,Monster - Shield Stormwind Guard
+146,1,OLDRugged Trapper's Belt
 147,1,粗厚陷捕者束褲
 148,1,粗厚陷捕者襯衣
+149,1,Deprecated Tauren Apprentice Belt
+150,0,Deprecated Tauren Apprentice Pants
+151,1,Deprecated Tauren Apprentice Shirt
+152,1,OLDPrimitive Leather Belt
 153,1,粗糙的褶裙
 154,1,粗糙的披肩
+155,1,Deprecated Tauren Recruit's Belt
 156,0,Deprecated Tauren Recruit's Pants
+157,1,Deprecated Tauren Recruit's Shirt
 192,0,馬汀的破法杖
 193,1,破布外衣
 194,1,破布束褲
@@ -65,6 +114,8 @@
 719,1,馴兔手套
 720,3,打鬥手套
 727,2,凹槽短劍
+746,1,Lord Brandon's Tabard (Test)
+751,0,Deprecated Wolf Femur
 753,2,龍喉短劍
 754,3,復仇短劍
 756,2,黑鐵鎬
@@ -75,6 +126,7 @@
 776,3,仇殺
 778,1,狗頭人的鎬頭
 781,1,豺狼人石錘
+788,1,Test Fire Sword
 789,2,牢固的鬥錘
 790,2,森林戰斧
 791,3,灰燼法杖
@@ -134,9 +186,15 @@
 892,2,豺狼人法師手套
 897,2,瘋狼護腕
 899,2,毒蜘蛛的牙齒
+905,1,Brown Leather Shoulderpads (Test)
+906,1,Tan Leather Shoulderpads (Test)
+907,1,Black Mail Shoulderpads of might (Test)
+908,1,Plate Shoulderpad (Test)
+909,1,Silver Mail Shoulderpads (Test)
 911,2,鐵樹木棍
 913,2,巨魔巨劍
 914,2,巨魔鍊甲護甲
+917,0,Deprecated Shadow Leather Armor
 920,2,邪惡釘錘
 922,1,達西安鐮刀
 923,1,長劍
@@ -152,6 +210,8 @@
 940,4,洞察長袍
 943,4,典獄官法杖
 944,4,元素法杖
+945,1,暗影劍
+948,1,自然之劍
 964,1,Deprecated Red Linen Shirt
 983,2,紅色亞麻束帶
 997,1,烈火劍擊
@@ -159,28 +219,38 @@
 1009,2,緊湊戰錘
 1010,1,瘤木短杖
 1011,1,鋒利戰斧
+1018,1,Chows Blade of DOOM! (Test)
 1020,1,Leather Helmet D (Test)
 1021,1,Leather Helmet A (test)
+1022,1,Mail Helmet D (test)
+1023,1,Mail Helmet C (test)
 1024,1,Plate Helmet D2 (test)
 1025,1,Plate Helmet D1 (Test)
 1026,1,Plate Helmet D3 (test)
 1027,1,Mail Helmet A (Test)
 1028,0,Deprecated Dented Skullcap
+1046,1,Deprecated Light Blunderbuss
+1047,1,Deprecated Heavy Blunderbuss
+1117,0,Monster - Item Fishing Pole
 1121,3,山貓之足
 1131,2,懲罰圖騰
 1154,1,人民軍腰帶
 1155,3,夢遊者魔棒
+1157,0,Deprecated Militia Handaxe
 1158,2,結實的鐵棍
 1159,1,民兵長棍
 1161,1,民兵短劍
 1162,1,Pirates Patch (Test)
+1163,1,Dwarven Explorer's Monocle (Test)
 1166,1,凹陷的圓盾
 1167,1,小輕盾
 1168,4,骨火
 1169,4,黑顱
+1170,1,Deprecated Brown Leather Vest
 1171,2,精心縫製的長袍
 1172,2,葛瑞森的火炬
 1173,1,飽經風霜的靴子
+1174,1,Deprecated Light Soldier Boots
 1182,1,黃銅飾釘護腕
 1183,2,橡皮腕甲
 1190,2,監督者披風
@@ -206,14 +276,19 @@
 1219,2,赤脊山砍刀
 1220,2,豺狼人戰斧
 1254,1,次級火焰石 (DEPRECATED)
+1259,0,JYoo test item
 1263,4,碎靈
 1264,2,碎頭者
 1265,3,蠍刺劍
+1266,0,Deprecated Orcslayer
 1270,2,精美的狼皮披風
+1272,0,Deprecated Fine Spun Mantle
 1273,2,森林鍊甲
 1275,2,軍官鍊甲外衣
 1276,2,淬火圓盾
+1279,0,Deprecated Soft Leather Hood
 1280,2,寬大的兜帽
+1281,1,Deprecated Quiver (TEST)
 1282,2,火花金屬頭巾
 1287,2,巨型狼蛛牙
 1292,3,屠夫的斬斧
@@ -227,10 +302,14 @@
 1304,2,馬術手套
 1306,2,狼鬃腕甲
 1310,2,鐵匠長褲
+1311,0,Deprecated Oslow's Wood Cutter
+1312,0,Deprecated Oslow's Hammer
+1313,0,Deprecated Oslow's Ice Pick
 1314,2,食屍鬼的手指
 1317,2,硬根法杖
 1318,3,黑夜掠刃
 1351,2,指骨護腕
+1354,1,Deprecated Homespun Shawl
 1355,2,鹿皮斗篷
 1359,1,獅紋手套
 1360,2,暴風城鍊甲手套
@@ -241,23 +320,29 @@
 1368,0,粗糙的皮手套
 1369,0,粗糙的皮帶
 1370,0,粗糙的皮護腕
+1371,0,Deprecated Ragged Leather Shoulderpads
 1372,0,粗糙的皮質披風
 1374,0,磨損的輕鞋
 1376,0,磨損的披風
 1377,0,磨損的手套
 1378,0,磨損的束褲
+1379,0,Deprecated Frayed Shoulderpads
 1380,0,磨損的長袍
 1382,1,石質釘錘
 1383,1,石質輕斧
 1384,1,鈍刃
+1385,0,Deprecated Farmer's Maul
 1386,1,棘木戰斧
 1387,2,食屍鬼之牙
 1388,1,歪斜法杖
 1389,1,狗頭人的木槌
 1391,2,河爪秘法杖
+1392,0,Deprecated Wristguards of the Fen Warden
 1394,2,流木棒
 1395,1,學徒束褲
 1396,1,侍僧束褲
+1397,0,Deprecated Orc Acolyte's Pants
+1398,0,Deprecated Dwarven Novice's Pants
 1405,2,泡沫法杖
 1406,2,珍珠鑲嵌長矛
 1411,0,枯木法杖
@@ -273,12 +358,15 @@
 1421,0,舊皮披風
 1422,0,舊皮手套
 1423,0,舊皮束褲
+1424,0,Deprecated Worn Leather Shoulderpads
 1425,0,舊皮外衣
 1427,0,碎料輕鞋
 1429,0,碎料披風
 1430,0,碎料手套
 1431,0,碎料束褲
+1432,0,Deprecated Patchwork Cloth Shoulderpads
 1433,0,碎料護甲
+1435,0,Deprecated Bridge Worker's Yoke
 1436,2,戍邊長褲
 1438,1,戰士之盾
 1440,2,豺狼人碎骨錘
@@ -317,6 +405,7 @@
 1505,0,扭曲披風
 1506,0,皺皮手套
 1507,0,皺皮束褲
+1508,0,Deprecated Patched Leather Shoulderpads
 1509,0,皺皮外衣
 1510,0,重錘
 1511,0,平民劍
@@ -328,7 +417,9 @@
 1521,2,笨重的巨魔斧
 1522,2,獵頭長矛
 1523,2,巨型石棒
+1535,0,Deprecated Bloodscalp Vest
 1539,2,古科羅克法杖
+1545,0,Deprecated Mantle of the Seas
 1547,2,信仰之盾
 1557,2,深海圓盾
 1560,2,藍鰓便鞋
@@ -349,10 +440,12 @@
 1678,3,黑色巨魔蹬靴
 1679,2,考爾格釘錘
 1680,2,剁頭斧
+1684,0,Deprecated Totemic Headpiece
 1715,3,拋光護甲
 1716,3,祭祀長袍
 1717,3,雙鏈外套
 1718,3,石化蜥蜴皮褲
+1719,1,Deprecated Flint Troll Axe
 1720,3,糾結木杖
 1721,3,密銀戰錘
 1722,3,刺石巨錘
@@ -365,6 +458,7 @@
 1733,0,舊鎖甲披風
 1734,0,用舊的鎖甲手套
 1735,0,用舊的鎖甲束褲
+1736,0,Deprecated Worn Mail Shoulderpads
 1737,0,用舊的鎖甲外衣
 1738,0,束皮鎖甲腰帶
 1739,0,束皮鎖甲長靴
@@ -467,6 +561,22 @@
 1852,1,鱗甲護腕
 1853,1,鱗甲腰帶
 1893,3,礦工的報復
+1895,0,Monster - Sword Short Rusty
+1896,0,Monster - Sword Short Basic
+1897,0,Monster - Sword Scimitar Basic
+1899,0,Monster - Sword Long Basic
+1900,0,Monster - Thieves Blade
+1901,0,Monster - Mace Basic Stone Hammer
+1902,0,Monster - Mace Basic Wooden Hammer
+1903,0,Monster - Mace Basic Metal Hammer
+1904,0,Monster - Axe Stone Basic
+1905,0,Monster - Axe Metal Basic
+1906,0,Monster - Torch
+1907,0,Monster - Staff Basic
+1908,0,Monster - Staff Crooked
+1909,0,Monster - Axe Large Basic
+1910,0,Monster - Item Pick
+1911,0,Monster - Tool Wrench Small
 1913,1,鑲釘棒
 1917,2,寶石匕首
 1925,3,迪菲亞細劍
@@ -484,11 +594,16 @@
 1943,3,哥布林鎖甲護腿
 1944,3,鐵匠手套
 1945,3,木工手套
+1948,0,Deprecated Large Broom
 1951,3,黑水彎劍
 1955,2,龍喉鍊甲長靴
+1957,0,Monster - Shield Small Wooden
 1958,3,石化脛骨
 1959,3,冷鐵鎬
+1960,0,Deprecated Ironforge Chain Pauldrons
+1961,0,Monster - Shield Buckler Wooden
 1965,1,白狼手套
+1969,0,Deprecated Stormwind Guard Belt
 1974,3,刺靈護腕
 1975,3,派森的巨劍
 1976,3,熔渣戰錘
@@ -496,6 +611,9 @@
 1979,4,亡者之牆
 1981,4,冰鍊上衣
 1982,4,黑夜刀刃
+1983,0,Monster - Sword2H Basic
+1984,0,Monster - Shield Kite Metal
+1985,0,Monster - Shield Large Wooden
 1986,2,裂膽劍
 1988,2,主將護手
 1990,2,碎石槌
@@ -504,7 +622,10 @@
 1994,2,黑爪掠刃
 1997,2,毛氈長袍
 1998,2,血頂食人妖法杖
+1999,0,Deprecated Torn Leather Harness
 2000,2,阿契厄斯
+2002,1,Deprecated Jordan's Quiver
+2003,1,Deprecated Big Quiver
 2011,3,波紋軍刀
 2013,2,墓穴法杖
 2014,2,黑色金屬巨劍
@@ -514,6 +635,7 @@
 2018,2,骷髏長劍
 2020,2,空牙之刃
 2021,2,綠殼盾
+2023,0,Monster - Spear Rusty
 2024,1,普通長劍
 2025,1,鉤斧
 2026,1,巨型石錘
@@ -527,15 +649,21 @@
 2035,2,夜空之劍
 2036,3,陳舊的礦工手套
 2037,3,掘地工的靴子
+2038,0,Deprecated Cougar Head Cap
 2040,3,食人妖保衛者
 2041,3,西部荒野外套
 2042,3,西部荒野法杖
 2044,3,棄靈新月斧
+2045,0,Deprecated Cowl of Forlorn Spirits
 2046,2,藍鰓反曲刀
 2047,1,安威瑪手斧
 2048,1,安威瑪之錘
+2051,0,Monster - Shield Small Wooden Damaged
+2052,0,Monster - Shield Small Metal Damaged
+2053,0,Monster - Shield Buckler Metal Damaged
 2054,1,穴居怪的手斧
 2055,1,小木錘
+2056,0,天鵝絨之錘
 2057,1,缺口的迪菲亞短劍
 2058,2,卡松的大槌
 2059,3,哨衛披風
@@ -552,6 +680,7 @@
 2078,2,北地短劍
 2079,2,軍官戰錘
 2080,2,丘陵斧
+2081,0,怪物 - 火杖副手
 2084,2,黑鐵重劍
 2087,2,海蟹的硬殼
 2088,2,海蟹腿
@@ -561,6 +690,8 @@
 2099,4,矮人手持火砲
 2100,4,精確校準過的火槍
 2105,1,刺客襯衣
+2106,0,Deprecated Worn Pants
+2107,0,Deprecated Travel-worn Boots
 2108,1,霜鬃皮外衣
 2109,1,霜鬃鍊甲外衣
 2110,1,輕便法師袍
@@ -593,6 +724,7 @@
 2144,1,硝化護腕
 2145,1,硝化手套
 2146,1,硝化束褲
+2147,0,Monster - Sword Falchion
 2148,1,拋光鱗甲腰帶
 2149,1,拋光鱗甲長靴
 2150,1,拋光鱗甲護腕
@@ -610,15 +742,34 @@
 2167,3,工頭手套
 2168,3,屍體連身鞋
 2169,3,蜂鳴之刃
+2170,0,Deprecated Shield of the Spider Princess
 2172,1,鄉村腰帶
 2173,1,老舊皮帶
 2175,2,影皮戰鬥斧
+2176,0,Monster - Staff Ornate Priest Staff
+2177,0,Monster - Staff Ornate Mage Staff
+2178,0,Monster - Sword Long Ornate
+2179,0,Monster - Sword Scimitar Badass
+2180,0,Monster - Sword Short Ornate
+2181,0,Monster - Sword2H Baron Rivendare
+2182,0,Monster - Mace Ornate Metal Hammer
+2183,0,Monster - Axe Metal Badass
+2184,0,Monster - Dagger Basic
 2186,1,旅行腰帶
+2189,6,Tigole's Boomstick (TEST)
 2194,3,鑽石戰錘
 2195,1,安威瑪匕首
+2196,0,Monster - Item Mutton
+2197,0,Monster - Item Bread
+2198,0,Monster - Item Potion Blue
+2199,0,Monster - Item Vial Purple
+2200,0,Monster - Item Potion Green
+2201,0,Monster - Item Vial Black
+2202,0,Monster - Item Mutton with Bite
 2203,2,利爪隊長的砍斧
 2204,2,利爪隊長的烤肉釘
 2205,3,暮色之劍
+2206,0,Deprecated Fine Pointed Dagger
 2207,1,雙刃彎刀
 2208,1,三角短劍
 2209,1,波刃劍
@@ -655,6 +806,7 @@
 2245,4,納爾維之盔
 2249,2,民兵圓盾
 2254,2,碎冰戰錘
+2255,0,Deprecated Thick Leather Gloves
 2256,3,骷髏棒
 2257,1,霜鬃法杖
 2258,1,霜鬃短劍
@@ -822,7 +974,7 @@
 2529,1,茲偉雙手劍
 2530,1,普通短斧
 2531,1,巨斧
-2532,1,晨星
+2532,1,釘頭錘
 2533,1,戰槌
 2534,1,圓柄短劍
 2535,1,戰爭法杖
@@ -830,6 +982,12 @@
 2546,1,皇家霜鬃束腰
 2547,1,馴豬手套
 2549,3,陰影法杖
+2550,0,Monster - Bow Short
+2551,0,Monster - Crossbow
+2552,0,Monster - Gun
+2557,0,Monster - Mace2H Ornate Metal Hammer
+2558,0,Monster - Mace Good Wooden Hammer
+2559,0,Monster - Staff Ornate Warlock Staff
 2562,1,海棠花束
 2564,3,幽魂熊爪
 2565,3,熔火魔棒
@@ -840,6 +998,8 @@
 2570,1,亞麻披風
 2571,1,藤蔓包裹
 2572,2,紅色亞麻長袍
+2573,0,Deprecated Forest Silk Gloves
+2574,0,Deprecated Trogg Vest
 2575,1,紅色亞麻襯衣
 2576,1,白色亞麻襯衣
 2577,1,藍色亞麻襯衣
@@ -872,6 +1032,7 @@
 2644,0,寬鬆鍊甲披風
 2645,0,寬鬆鍊甲手套
 2646,0,寬鬆鍊甲束褲
+2647,0,Deprecated Loose Chain Shoulderpads
 2648,0,寬鬆鍊甲外衣
 2649,0,劣質鍊甲腰帶
 2650,0,劣質鍊甲長靴
@@ -879,13 +1040,27 @@
 2652,0,劣質鍊甲披風
 2653,0,劣質鍊甲手套
 2654,0,劣質鍊甲束褲
+2655,0,Deprecated Flimsy Chain Shoulderpads
 2656,0,劣質鍊甲外衣
 2664,2,紡織者之牙
 2690,1,鐵鎖腰帶
 2691,1,旅行之靴
 2694,2,移民者護腿
+2695,0,Monster - Mace Spiked Club
+2703,0,Monster - Item Tankard Wooden
+2704,0,Monster - Item Tankard Dirty
 2705,0,Monster - Item Tankard Metal
-2715,0,"Monster - Item Lantern - Round"
+2706,0,Monster - Item Flower - Red
+2707,0,Monster - Item Flower - Yellow
+2708,0,Monster - Item Bouquet - White & Purple
+2709,0,Monster - Item Flower - Rose
+2710,0,Monster - Item Bouquet - Roses
+2711,0,Monster - Dagger Badass
+2714,0,Monster - Item Lantern - Square
+2715,0,Monster - Item Lantern - Round
+2716,0,Monster - Item Bottle - Green
+2717,0,Monster - Item Bottle - Black
+2718,0,Monster - Item Glass - Clear
 2721,3,神聖綸巾
 2754,1,黯淡的重劍
 2763,0,漁夫小刀
@@ -908,6 +1083,12 @@
 2805,2,雪人毛皮披風
 2807,3,斷頭斧
 2808,1,烈焰火炬
+2809,0,Monster - Mace Spiked Basic
+2810,0,Monster - Mace Standard Serpent
+2811,1,Deprecated Lightforge Staff
+2812,1,Deprecated Lightforge Dagger
+2813,0,Monster - Mace Standard Basic
+2814,1,Deprecated Lightforge Hammer
 2815,3,曲刃撕裂者
 2816,3,亡語者權杖
 2817,1,硬質皮外套
@@ -918,6 +1099,7 @@
 2823,2,莫格羅什開罐器
 2824,4,颶風
 2825,4,灼熱弓
+2827,0,Monster - Cleaver
 2844,1,銅質釘錘
 2845,1,銅斧
 2847,1,銅質短劍
@@ -939,6 +1121,7 @@
 2877,3,戰鬥巨刃劍
 2878,3,芒刺骨斧
 2879,3,雙極節杖
+2884,0,Monster - Dynamite Lit
 2898,1,巡山人護軀
 2899,2,雪怪項圈
 2900,1,石質圓盾
@@ -1002,8 +1185,11 @@
 2990,2,光潔鍊甲護腿
 2991,2,光潔鍊甲長靴
 2992,2,光潔鍊甲手套
+2993,0,Deprecated Inscribed Leather Helm
+2994,0,Deprecated Seer's Monocle
 2995,0,Deprecated Burnished Chain Coif
 3000,2,雌蜘蛛的外殼
+3007,0,Deprecated Dark Iron Pauldrons
 3008,1,雪怪披風
 3011,2,羽飾頭飾
 3018,2,魯伯斯的皮
@@ -1016,23 +1202,34 @@
 3025,1,BKP 42「偏激者」
 3026,1,強化弓
 3027,1,重型彎弓
+3028,1,長弓
 3036,2,沉重的短弓
 3037,2,柳木彎弓
 3039,2,灰木短弓
 3040,2,獵人裝填火槍
 3041,2,「法師之眼」大口徑火槍
 3042,2,BKP「麻雀」短槍
+3044,0,OLDMonster - Mace Standard Basic Offhand
 3045,2,亮鱗長靴
 3046,0,Deprecated Glinting Scale Crown
 3047,2,亮鱗手套
 3048,2,亮鱗腿甲
 3049,2,亮鱗胸甲
+3050,0,Deprecated Winter Mail Leggings
+3051,0,Deprecated Winter Mail Gloves
 3052,0,Deprecated Winter Mail Coif
 3053,2,亨伯特的護軀
+3054,0,Deprecated Winter Mail Boots
 3055,2,森林皮甲護軀
 3056,2,森林皮束褲
 3057,2,森林皮靴
 3058,2,森林皮手套
+3059,0,Deprecated Forest Leather Helm
+3060,0,Deprecated Deepwood Boots
+3061,0,Deprecated Deepwood Breastplate
+3062,0,Deprecated Deepwood Gloves
+3063,0,Deprecated Deepwood Helm
+3064,0,Deprecated Deepwood Pants
 3065,2,陽炎長靴
 3066,2,陽炎手套
 3067,2,陽炎束褲
@@ -1045,15 +1242,21 @@
 3074,2,煙塵手套
 3075,4,烈焰之眼
 3076,2,煙塵之靴
+3077,0,Deprecated Stonecloth Cowl
 3078,3,納迦穿心者
 3079,2,斯考恩的步槍
 3103,2,寒脊之錘
+3145,1,Off Hand Test Dagger
+3147,1,Deprecated Tattered Shirt
 3148,0,Work Shirt
+3149,1,Deprecated Ripped Vest
+3150,0,Deprecated Tattered Pants
 3151,1,坦克駕駛員軍用外衣
 3152,1,駕駛手套
 3153,1,油漬披風
 3154,2,塞爾薩瑪戰斧
 3158,1,褐色毛護腕
+3159,0,Deprecated Crusader's Mantle
 3160,2,鐵板圓盾
 3161,2,守衛者長袍
 3166,2,鐵心鍊甲
@@ -1088,17 +1291,28 @@
 3212,2,亮鱗護腕
 3213,1,精兵護腕
 3214,1,戰士護腕
+3215,0,Deprecated Winter Mail Bracers
 3216,1,保暖冬衣
 3217,2,工頭腰帶
+3219,0,Deprecated Mantle of Nobility
+3221,0,Deprecated Sage Mantle
 3222,3,邪惡匕首
 3223,2,霜鬃權杖
 3224,1,銀線護腕
 3225,1,染血的小刀
+3226,0,Deprecated Watchman Pauldrons
 3227,2,夜行法杖
 3228,3,彎曲腕輪
 3229,2,蛛絲束帶
 3230,3,黑狼護腕
 3231,2,殺手肩鎧
+3232,0,Deprecated Drake-scale Leggings
+3242,0,OLDMonster - Chest Plate Silver
+3243,0,OLDMonster - Legs Plate Silver
+3244,0,OLDMonster - Feet Plate Silver
+3245,0,OLDMonster - Hands Plate Silver
+3246,0,OLDMonster - Shoulder Plate Silver
+3247,0,OLDMonster - Waist Plate Silver
 3260,1,血色十字軍新兵長袍
 3261,1,蛛網披風
 3262,1,腐朽的木錘
@@ -1107,12 +1321,14 @@
 3268,1,亡靈匕首
 3269,1,亡靈木槌
 3270,1,麻布外衣
+3271,1,Deprecated Flax Mantle
 3272,1,殭屍皮護腿
 3273,1,粗厚鎖甲外衣
 3274,1,麻布靴
 3275,1,麻布手套
 3276,1,亡靈守衛圓盾
 3277,1,執行官法杖
+3278,0,Aura Proc Damage Sword
 3279,1,軍用鍊甲長靴
 3280,1,軍用鍊甲護腕
 3281,1,軍用鍊甲手套
@@ -1152,12 +1368,14 @@
 3323,1,鬼魅護腕
 3324,2,鬼魅披肩
 3325,1,邪鰭戰鬥斧
+3326,0,Monster - Mace2H Basic Stone Hammer
 3327,1,邪鰭神諭法杖
 3328,1,蛛網長袍
 3329,1,釘刺木板
 3330,2,達高爾的鍊衫
 3331,1,麥拉其的斗篷
 3332,1,派瑞恩的長靴
+3333,1,Deprecated Scarlet Captain's Pauldrons
 3334,1,農夫的鐵鏟
 3335,1,農夫的掃帚
 3336,2,切肉匕首
@@ -1165,9 +1383,18 @@
 3342,1,桑德斯船長的襯衣
 3344,2,桑德斯船長的束帶
 3345,2,絲質巫師帽
+3346,0,Monster - Item Shovel
+3350,0,Monster - Item Bone
+3351,0,Monster - Item Rolling Pin
 3360,1,縫合怪的大腿骨
+3361,0,Monster - Mace Spiked Heavy
+3362,0,Monster - Item Broom
 3363,0,磨損的腰帶
+3364,0,Monster - Sword Rapier
 3365,0,磨損的護腕
+3366,0,Monster - Sword2H Katana
+3367,0,Monster - Item Pitchfork
+3368,0,Monster - Item Harpoon
 3370,0,碎料腰帶
 3373,0,碎料護腕
 3374,0,棉布腰帶
@@ -1197,7 +1424,10 @@
 3429,2,衛士腰帶
 3430,2,狙擊步槍
 3431,2,骨釘皮甲
+3432,0,Monster - Glaive - 1 Blade Basic
+3433,0,Monster - Spear Badass
 3435,1,殭屍皮護腕
+3436,1,Deprecated Quilted Mantle
 3437,1,扣環腰帶
 3439,1,殭屍皮靴
 3440,2,碎骨錘
@@ -1216,6 +1446,7 @@
 3455,1,亡靈哨兵短劍
 3457,2,踐踏長褲
 3458,2,粗厚鎖甲手套
+3459,0,Deprecated Weathered Shoulderpads
 3461,2,判決者長袍
 3462,2,鷹爪之擊
 3469,1,銅質鍊甲長靴
@@ -1237,10 +1468,37 @@
 3491,2,青銅重錘
 3492,2,巨型鐵錘
 3493,2,迅猛龍終結者
+3494,0,Monster - Claw
 3511,2,人民軍披風
+3522,1,黑色夜精靈胸甲
+3523,1,Unused Black Night Elf Pants
+3524,1,Unused Black Night Elf Boots
+3525,1,Unused Black Night Elf Bracers
+3526,1,黑色夜精靈手套
+3527,1,White Night Elf Breastplate
+3528,1,Red Leather C03 Breastplate
+3529,1,黑色夜精靈頭盔
+3532,1,Unused Red Leather C03 Pants
+3533,1,Red Leather C03 Boots
+3534,1,Unused Red Leather C03 Gloves
+3535,1,Red Leather C03 Bracers
 3536,1,Demon Hunter Blindfold
+3537,1,黑色毛皮D02型胸甲
+3538,1,Gray Leather D02 Breastplate
+3539,1,Unused Black Leather D02 Pants
+3540,1,Unused Gray Leather D02 Pants
+3541,1,黑色毛皮D02型靴子
+3542,1,灰色毛皮D02型長靴
+3543,1,Unused Black Leather D02 Gloves
+3544,1,Unused Gray Leather D02 Gloves
+3545,1,黑色毛皮D02型護腕
+3546,1,灰色毛皮D02型護腕
+3547,1,白色毛皮D03 型胸甲
+3548,1,Unused White Leather D03 Pants
+3549,1,Unused White Leather D03 Gloves
 3555,2,所羅門長袍
 3556,2,恐怖法師帽
+3557,1,Unused Tabard of Chow
 3558,2,沼地守衛者長袍
 3559,2,守夜人護手
 3560,2,榮耀披肩
@@ -1283,6 +1541,7 @@
 3643,1,縛法者護腕
 3644,1,蠻族布質護腕
 3645,2,先知腕輪
+3646,0,Deprecated Stonecloth Bracers
 3647,2,陽炎護腕
 3648,1,戰士圓盾
 3649,1,部族圓盾
@@ -1294,6 +1553,13 @@
 3655,2,光潔盾牌
 3656,2,亮鱗盾牌
 3661,1,手工法杖
+3687,6,Deprecated Unholy Avenger
+3694,0,Monster - Item Vial Black Offhand
+3695,0,Monster - Item Vial Purple Offhand
+3696,0,Monster - Item Vial Yellow
+3697,0,Monster - Item Potion Blue Offhand
+3698,0,Monster - Item Potion Green Offhand
+3699,0,Monster - Item Potion Red
 3719,2,山地披風
 3732,1,罩頭風帽
 3733,2,獸人作戰鍊甲
@@ -1311,6 +1577,8 @@
 3753,2,牧羊人束腰
 3754,2,牧羊人手套
 3755,2,剖魚刀
+3756,0,Monster - Item Bottle - Black Offhand
+3757,0,Monster - Item Bottle - Green Offhand
 3758,2,十字軍腰帶
 3759,2,隱居先知手套
 3761,2,骷髏之盾
@@ -1377,13 +1645,23 @@
 3854,2,霜虎之刃
 3855,2,巨型鐵斧
 3856,2,暗影月牙斧
+3865,1,Test Offhand Weapon
+3883,1,Deprecated Thick Cloth Hat
+3884,1,Deprecated Cured Leather Cap
+3885,1,Deprecated Scalemail Cap
+3886,1,Deprecated Padded Cloth Hat
+3887,1,Deprecated Cuirboulli Cap
+3888,1,Deprecated Polished Scale Cap
 3889,1,赤色的帽子
 3890,1,釘甲帽
 3891,1,加強鍊甲頭盔
 3892,1,鑲邊帽
 3893,1,強化皮軟帽
 3894,1,綴鱗布甲頭盔
+3895,5,TEST Legendary
 3902,3,貴族法杖
+3933,3,Deprecated Moon Glaive
+3934,3,Deprecated Warden Blade
 3935,1,斯莫特的彎劍
 3936,0,針織腰帶
 3937,0,針織長靴
@@ -1558,8 +1836,12 @@
 4138,2,黑水外套
 4139,2,叢林行者便鞋
 4140,2,棕櫚披肩
-4191,1,Feathered Leggings
+4190,1,羽毛盔甲
+4191,1,Unused Feathered Leggings
+4192,1,Unused Feathered Gauntlets
 4193,1,Deprecated Feathered Helm
+4194,1,毛皮護帶
+4195,1,毛皮長靴
 4196,3,毛皮披肩
 4197,3,碧晶肩墊
 4237,1,手工皮帶
@@ -1635,6 +1917,7 @@
 4437,2,導魔法杖
 4438,3,拳王護腕
 4439,2,粗木棒
+4442,0,Deprecated Dark Mantle
 4443,2,恐怖肩鎧
 4444,2,黑色甲殼盾
 4445,2,切肉者
@@ -1683,32 +1966,41 @@
 4643,2,十字軍斗篷
 4652,2,薩爾巴克之盾
 4653,2,鐵踵之靴
+4657,1,Deprecated Warrior's Pauldrons
 4658,1,戰士披風
 4659,1,戰士束腰
 4660,3,漫步靴
 4661,2,陽炎披肩
 4662,1,旅者披風
 4663,1,旅者腰帶
+4664,1,Deprecated Burnt Leather Shoulderpads
 4665,1,褐色皮披風
 4666,1,褐色皮帶
+4667,1,Deprecated Battle Chain Pauldrons
 4668,1,軍用鍊甲披風
 4669,1,軍用鍊甲束腰
+4670,1,Deprecated Ancestral Mantle
 4671,1,先祖披風
 4672,1,先祖腰帶
+4673,1,Deprecated Tribal Mantle
 4674,1,部族披風
 4675,1,部族腰帶
 4676,3,骷髏護手
 4677,1,精兵披風
 4678,1,精兵束腰
+4679,0,Deprecated Brackwater Pauldrons
 4680,1,水草披風
 4681,1,水草束腰
+4682,0,Deprecated Magister's Mantle
 4683,1,縛法者披風
 4684,1,縛法者腰帶
+4685,0,Deprecated Runic Cloth Shoulderpads
 4686,1,蠻族布質披風
 4687,1,蠻族布質腰帶
 4688,0,Deprecated Hunting Spaulders
 4689,1,狩獵披風
 4690,1,狩獵腰帶
+4691,0,Deprecated Ceremonial Leather Mantle
 4692,1,典禮披風
 4693,1,典禮皮帶
 4694,1,光潔鍊甲肩鎧
@@ -1743,7 +2035,9 @@
 4725,2,主將肩鎧
 4726,2,主將披風
 4727,2,主將束腰
+4728,1,圖恩護肩
 4729,2,極光披肩
+4730,0,Deprecated Prospector's Pick
 4731,2,雕紋肩冑
 4732,2,雕紋披風
 4733,2,黑爐肩鎧
@@ -1756,13 +2050,19 @@
 4744,2,秘法符文護腕
 4745,2,騎兵護腕
 4746,2,末日預言者長袍
+4750,1,OLDWinterhoof Cleansing Totem
+4760,1,OLDThunderhorn Cleansing Totem
+4761,0,Deprecated Pearled Chain Pants
+4762,1,OLDWildmane Cleansing Totem
 4763,2,黑木彎弓
+4764,0,Deprecated Avenger Shoulders
 4765,2,琺瑯寬劍
 4766,2,野獸之刃
 4767,2,銅布手套
 4768,2,專家手套
 4771,2,收割披風
 4772,1,保暖披風
+4773,0,Deprecated Blessed Bracers
 4774,0,Deprecated Heavy Bracers
 4777,2,鐵木槌
 4778,2,重型尖刺釘錘
@@ -1783,6 +2083,9 @@
 4799,2,上古披風
 4800,2,粗鍊束褲
 4810,2,石板肩墊
+4811,0,Deprecated Studded Shoulders
+4812,0,Deprecated Crimson Shoulders
+4815,0,Deprecated Heavy Brass Shoulder
 4816,2,軍團士兵護腿
 4817,2,受祝福的巨刃劍
 4818,2,劊子手之劍
@@ -1804,14 +2107,24 @@
 4837,2,意志魄力
 4838,2,能量寶珠
 4840,2,長刺刀
+4853,1,TEST QUEST HELM
 4854,1,惡魔之傷
+4855,0,Unused Cloth Shoulder A01 Gray
+4856,0,Unused Cloth Shoulder A02 Yellow
+4857,0,Unused Cloth Shoulder B01 Silver
+4858,0,Unused Cloth Shoulder B02 Black
 4861,2,羽毛外套
+4899,0,Test Crossbow
+4900,0,Test Spear
+4901,0,Test Polearm
+4902,1,Deprecated Apprentice Wand
 4906,1,雨靴
 4907,1,林地外套
 4908,1,遊牧護腕
 4909,2,科多獸皮護腿
 4910,1,彩色鍊甲手套
 4911,1,厚樹皮圓盾
+4912,0,Test Wand JChow
 4913,1,彩色鍊甲腰帶
 4914,1,磨損的皮手套
 4915,1,軟毛靴
@@ -1829,6 +2142,7 @@
 4931,1,桃木短弓
 4932,1,切翼之刃
 4933,1,老戰士披風
+4934,1,Deprecated Heavy Cord Shoulderpads
 4935,1,金屬束腰
 4936,1,踏泥長靴
 4937,1,帶電圓盾
@@ -1836,13 +2150,17 @@
 4939,2,穩固的重劍
 4940,1,朦朧之握
 4942,1,虎皮長靴
+4943,1,Torka's Egg Cracker [UNUSED]
 4944,1,手工披風
 4946,1,輕便長靴
 4947,2,鋸齒匕首
 4948,2,刺釘之錘
 4949,2,獸人斬斧
+4950,1,Deprecated Orc Protector
 4951,1,尖叫者的腰帶
 4954,1,遊牧腰帶
+4955,1,Deprecated Nomadic Shoulderpads
+4956,1,Test Totem
 4958,1,日炎披風
 4961,1,守夢法杖
 4962,1,雙層手套
@@ -1866,14 +2184,22 @@
 4982,0,被撕裂的勘察員腰帶
 4983,2,碎石之錘
 4984,2,末日顱骨
+4985,0,Test Proc Wand
 4987,2,矮人隊長之劍
 4989,2,龍法師長袍
 4990,2,焦灼手環
+4991,0,Monster - Sword2H Broadsword
+4993,0,Monster - Item Skull
+4994,0,Monster - Item Gizmo
+4996,0,Test Item 1
 5016,2,工匠長褲
 5028,2,薩克拉希斯領主的權杖
 5040,1,暗影獵手的小刀
+5053,0,Deprecated Plain Brown Robe
 5069,2,火焰魔杖
 5071,2,暗影魔杖
+5090,1,Deprecated Torn Shirt
+5091,1,test Eric Shirt
 5092,1,燒焦的剃鬃魔杖
 5093,1,剃鬃背刺匕首
 5094,1,剃鬃大盾
@@ -1910,6 +2236,8 @@
 5214,2,黃昏魔杖
 5215,2,灰燼魔杖
 5216,2,陰影魔杖
+5230,1,Deprecated Bloodstone
+5231,1,消退的強效血石
 5235,1,鍊金師護腕
 5236,1,易燃魔杖
 5238,1,漆木魔杖
@@ -1931,14 +2259,46 @@
 5255,2,野豬人輕斧
 5256,2,考沃克之錘
 5257,3,黑邊斗篷
+5258,0,Monster - Bow Black
 5259,0,烈焰之箭
+5260,0,Monster - Bow Brown
+5261,0,Monster - Bow Gray
+5262,0,Monster - Bow Dark Brown
 5267,3,血色波刃劍
 5274,2,玫瑰披肩
 5275,2,束腰
+5276,0,Monster - Staff 3 Piece Taped Staff
+5277,0,Monster - Staff Metal /w Spike Crystal
+5278,0,Monster - Dagger Bowie Knife
 5279,2,鷹身人剝皮刀
+5280,0,Monster - Dagger Gold Blade
+5281,0,Monster - Dagger Broad/Flat Blade
+5282,0,Monster - Dagger Fang Hook Curve
+5283,0,Monster - Dagger Ornate Spikey Base
+5284,0,Monster - Dagger Jeweled Hilt
+5285,0,Monster - Dagger Curvey Blue Hilt
+5286,0,Monster - Axe One-Handed Double Axe
+5287,0,Monster - Axe 2H Large Double Bladed
+5288,0,Monster - Axe 2H Rev. Bearded Single Bladed
+5289,0,Monster - Axe 2H Single Bladed /w Pick
+5291,0,Monster - Mace Jeweled Club
+5292,0,Monster - Mace2H Basic Wooden Hammer
+5293,0,Monster - Mace2H Wood Handle Spiked Head
+5294,1,Deprecated Hands of the New Moon
+5295,1,Deprecated Hands of the Crescent Moon
+5296,1,Deprecated Hands of the Quarter Moon
+5297,1,Deprecated Hands of the Gibbous Moon
+5298,1,Deprecated Hands of the Full Moon
 5299,2,月夜手套
+5300,0,Monster - Mace2H Wood Handle Large Spiked Head
+5301,0,Monster - Mace2H Huge Wooden Maul
 5302,2,鈷藍圓盾
+5303,0,Monster - Staff Wooden Handle Rounded Head
+5304,0,Monster - Staff Large Metal Shaft
+5305,0,Monster - Sword Broadsword Silver Hilt
 5306,2,雙足飛龍法杖
+5307,0,Deprecated Skipper's Hat
+5308,0,Deprecated Deckhand Gloves
 5309,2,私掠者火槍
 5310,2,水手褲
 5311,2,扣帶長靴
@@ -1969,6 +2329,7 @@
 5355,2,獸王束腰
 5356,2,烙印魔棒
 5357,2,山谷守護者
+5358,0,Deprecated Whisperwind Headdress
 5387,2,附魔月巡虎披風
 5392,1,棘木匕首
 5393,1,棘木法杖
@@ -1978,6 +2339,8 @@
 5399,1,追蹤之靴
 5404,3,堅硬的護肩
 5405,1,布織披氅
+5408,1,Deprecated Minor Bloodstone
+5409,1,Deprecated Lesser Bloodstone
 5410,1,OLDCeremonial Club
 5411,1,冬蹄之井淨化圖騰
 5419,1,野獸護腕
@@ -1990,15 +2353,31 @@
 5444,3,礦工斗篷
 5458,2,泥木腰帶
 5459,2,防衛者之斧
+5491,0,Monster - Mace2H Large Metal
+5495,0,Monster - Mace2H Large Metal (1H Special)
+5502,0,Monster - Sword2H Broadsword (1H Special)
 5514,1,法力瑪瑙
 5516,0,魚龍的尖牙
 5522,1,法術石(DEPRECATED)
+5532,0,Monster - Hot Iron Poker
 5540,2,珍珠握柄匕首
 5541,2,彩虹之錘
 5542,2,珍珠扣飾披風
+5545,0,Fast Test Polearm
+5546,0,Fast Test Crossbow
+5548,0,Fast Test Bow
 5549,0,Fast Test Dagger
 5550,0,Fast Test Gun
+5551,0,Fast Test 1H Axe
+5552,0,Fast Test 2H Axe
+5553,0,Fast Test 1H Mace
+5554,0,Fast Test 2H Mace
 5555,0,Fast Test 1H Sword
+5556,0,Fast Test 2H Sword
+5557,0,Fast Test Spear
+5558,0,Fast Test Staff
+5560,0,Fast Test Wand
+5561,0,Fast Test Generic
 5579,1,民兵戰錘
 5580,1,民兵之錘
 5581,1,光滑的步行杖
@@ -2011,9 +2390,14 @@
 5593,2,峭壁圓盾
 5595,2,灌木之錘
 5596,2,灰木弓
+5597,0,Monster - Glaive - 2 Blade Red
+5598,0,Monster - Glaive - 3 Blade
+5599,0,Monster - Glaive - 4 Blade
+5600,0,Monster - Claw - Bear
 5604,2,精靈魔杖
 5605,1,園藝小刀
 5606,1,園藝手套
+5607,1,玄武岩護肩遺物
 5608,2,生命風帽
 5609,2,堅定繫腰
 5610,2,荒原披風
@@ -2034,6 +2418,9 @@
 5739,2,野人背心
 5742,2,寶鑽匕首
 5744,2,蒼白剝皮者
+5745,0,Monster - Trident Wood Handle
+5746,0,Monster - Trident Copper
+5747,0,Monster - Trident Ornate
 5748,2,半人馬長弓
 5749,2,鐮斧
 5750,2,大酋長束腰
@@ -2065,12 +2452,16 @@
 5820,2,精靈披肩
 5821,2,亡靈哨兵長靴
 5822,2,樹種護手
+5856,0,Monster - Throwing Axe
+5870,0,Monster - Throwing Spear
 5936,1,獸皮腰帶
 5939,1,縫紉手套
 5940,1,白骨圓盾
 5941,1,黃銅鱗甲束褲
 5943,3,地獄護腕
 5944,2,人民軍護脛
+5953,1,TEST SWORD
+5954,1,TEST SWORD 2
 5956,1,鐵匠之錘
 5957,1,手工皮外衣
 5958,2,優質皮褲
@@ -2087,6 +2478,7 @@
 5971,2,羽飾斗篷
 5975,2,鞭笞腰帶
 5976,1,公會外袍
+6036,0,Rogue Test Dagger
 6040,2,金鱗護腕
 6058,1,被燻黑的皮腰帶
 6059,1,遊牧外衣
@@ -2100,6 +2492,7 @@
 6084,2,暴風城守衛護腿
 6085,2,步卒外套
 6087,3,西部荒野重腿甲
+6088,0,Monster - Torch Ranged
 6092,2,黑色幼龍長靴
 6093,2,獸人粉碎者
 6094,2,破甲之斧
@@ -2163,10 +2556,19 @@
 6219,1,扳手
 6220,3,隕石裂片
 6223,2,夜色鎮紋章盾
+6224,0,Monster - Sword2H Black Metal Hilt
 6225,0,Monster - Item Fish - Blue
 6226,3,鮮血外衣
 6227,0,Monster - Item Fish - Green
+6228,0,Monster - Item Fish - Orange
+6229,0,Monster - Item Fish - Purple
+6230,0,Monster - Wand Basic
+6231,0,Monster - Wand Jeweled - Green
 6232,0,Monster - Item Flowers  - Bouquet Roses
+6233,0,Monster - Item Flowers  - Bouquet Wildflowers
+6234,0,Monster - Item Flower - Long Blue
+6235,0,Monster - Item Flower - Rose (Black)
+6236,0,Monster - Item Flower - Rose (White)
 6238,2,棕色亞麻長袍
 6239,2,紅色亞麻外衣
 6240,2,藍色亞麻外衣
@@ -2832,7 +3234,7 @@
 7960,3,真銀勇士劍
 7961,3,魅影之刃
 7963,2,鋼質胸甲
-7996,1,幸運漁帽
+7996,1,好運漁帽
 7997,0,紅色迪菲亞面罩
 8006,3,迅擊匕首
 8071,2,燒灼手杖
@@ -4150,6 +4552,7 @@
 12295,2,人民軍護腿
 12296,2,人民軍之星
 12299,1,網格手套
+12348,0,Monster - Axe Horde Badass Copper 01 (Special1H)
 12405,2,瑟銀護甲
 12406,2,瑟銀腰帶
 12408,2,瑟銀護腕
@@ -4169,6 +4572,8 @@
 12427,2,帝國鎧甲頭盔
 12428,2,帝國鎧甲護肩
 12429,2,帝國鎧甲護腿
+12442,1,Charm Pouch (DND)
+12443,1,Knucklebone Pouch (DND)
 12446,1,安威瑪火槍
 12447,1,棘木弓
 12448,1,輕型獵槍
@@ -4260,6 +4665,7 @@
 12782,3,腐蝕
 12783,3,尋心者
 12784,3,奧金收割斧
+12787,0,Monster - Mace Horde Bone Claw Hammer
 12790,3,奧金勇士劍
 12791,3,酒吧兇器
 12792,2,火山戰錘
@@ -4270,6 +4676,7 @@
 12797,3,冰霜守衛
 12798,3,殲滅者
 12802,3,黑暗之矛
+12860,0,Monster - Item Book - Blue Offhand
 12866,2,翡翠護腕
 12895,4,炫彩巨龍胸甲
 12903,4,炫彩挑戰者腿甲
@@ -4280,6 +4687,7 @@
 12936,3,戰育護臂
 12939,3,雷德的部族守護者
 12940,3,雷德的神聖控訴者
+12943,0,Monster - Staff 3 Piece Taped Staff Red
 12945,4,炫彩挑戰者腿鎧
 12952,3,蓋斯的頭骨
 12953,3,龍眼頭巾
@@ -4305,6 +4713,7 @@
 12988,3,星光外套
 12989,3,石像鬼之牙
 12990,3,剃刀之鋒
+12991,0,Monster - Dagger Curvey Green Blade
 12992,3,灼熱之刃
 12994,3,索比亞的護手
 12997,3,紅鬚紋章盾
@@ -4484,6 +4893,7 @@
 13286,3,刺靈之矛
 13314,4,奧蘭納的擁抱
 13315,2,希望的證明
+13316,0,Monster - Sword2H Claymore Silver Yellow Glow
 13340,3,黑爵士的斗篷
 13344,3,龍玉護手
 13346,3,尊貴長袍
@@ -4940,6 +5350,7 @@
 14379,2,血紅長褲
 14380,2,血紅長袍
 14390,1,堅耐腰帶
+14392,1,堅耐之杖
 14397,2,彈力披肩
 14398,2,彈力外套
 14399,2,彈力長靴
@@ -5057,7 +5468,7 @@
 14583,2,妖鬼手套
 14584,2,妖鬼之帽
 14585,2,妖鬼護腿
-14586,0,"Monster - Mace2H Fist of Omokk"
+14586,0,Monster - Mace2H Fist of Omokk
 14587,2,妖鬼披肩
 14588,2,鷹眼之索
 14589,2,鷹眼輕鞋
@@ -5264,6 +5675,7 @@
 14867,2,領軍護腿
 14868,2,領軍護肩
 14869,2,領軍護腕
+14891,1,Test Glaive I
 14895,2,鹽石外套
 14896,2,鹽石脛甲
 14897,2,鹽石護手
@@ -6669,6 +7081,7 @@
 17778,3,山艾束腰
 17779,3,巨石肩鎧
 17780,4,無盡黑暗之刃
+17802,5,雷霆之怒，逐風者的祝福之刃DEPRECATED
 17922,2,獅皮護甲
 17943,3,岩石之拳
 18002,1,森林蘑菇
@@ -7128,7 +7541,7 @@
 19407,4,黑焰手套
 19430,4,純淨思想罩氅
 19433,4,灰燼護腿
-19435,4,精華收集者
+19435,4,精華收集器
 19436,4,飛龍披風
 19437,4,純淨思想之靴
 19438,4,林格的暴風雪長靴
@@ -7278,6 +7691,7 @@
 19919,3,血染護脛
 19921,3,祖利安劈斧
 19922,3,婭爾羅的咒毒手杖
+19924,0,Monster - Dagger Fang Hook Curve Dark
 19927,4,瑪爾里之觸
 19928,3,萬靈肩甲
 19929,3,淡血手套
@@ -7465,6 +7879,7 @@
 20266,3,保安官護腿
 20295,3,藍龍鱗片護腿
 20296,3,綠色龍鱗護手
+20329,4,90 史詩冰霜護腿
 20368,3,穩固彎弓
 20369,3,藍銅拳甲
 20380,4,夢幻龍鱗胸甲
@@ -7788,6 +8203,8 @@
 21415,4,魔法秘密披氅
 21416,4,禁斷邪語波刃劍
 21418,4,禁斷邪語罩氅
+21441,5,WoWScape's Nectar Of Focused Incantations
+21442,1,AHNQIRAJ TEST ITEM D PLATE BOOTS
 21452,4,廢墟法杖
 21453,4,侯魯薩斯披肩
 21454,4,符刻岩石護肩
@@ -8854,6 +9271,7 @@
 24555,4,鬥士懼紋護腿
 24556,4,鬥士懼紋手套
 24557,4,鬥士戰爭法杖
+24561,4,130 Test Caster Belt
 24567,4,130 Test Caster Cloak
 24575,2,異域者束腰
 24576,0,寬鬆螺紋腰帶
@@ -9990,12 +10408,22 @@
 26173,2,59 TEST Green Rogue Legs
 26174,2,59 TEST Green Rogue Shoulder
 26175,2,59 TEST Green Rogue Wrist
+26180,2,60 TEST Green Rogue Head
+26235,2,67 TEST Green Rogue Hand
 26324,2,64 TEST Green Hunter Head
+26368,2,70 TEST Green Hunter Belt
+26372,2,70 TEST Green Hunter Head
+26464,2,68 TEST Green Warrior Belt
+26465,2,68 TEST Green Warrior Boot
 26513,2,68 TEST Green Cloth Cloak
+26548,2,61 TEST Green Shield
 26569,2,68 TEST Green Off Hand
 26655,2,70 TEST Green Staff
+26738,2,69 TEST Green Crossbow
 26765,2,68 TEST Green Wand
 26779,2,68 TEST Green Spell Dagger
+26792,2,67 TEST Green Healer Mace
+26843,2,62 TEST Green Druid Wrist
 27002,3,Spojka Black Shirt
 27007,3,Spojka Rich Purple Shirt
 27196,2,65 TEST Green Druid/Warrior Cloak
@@ -10294,6 +10722,7 @@
 27947,3,衝擊圖騰
 27948,3,失落長褲
 27949,3,狂熱聖契
+27965,4,TEST 130 Epic Paladin DPS Chest
 27977,3,勇猛腿鎧
 27980,3,泰洛克黑夜之錘
 27981,3,塞司克神諭者披風
@@ -10308,6 +10737,7 @@
 27993,3,心靈之火頭盔
 27994,3,三大恐懼披肩
 27995,3,鍍陽護肩
+28023,0,Monster - Throwing Axe (Poison)
 28026,2,癲狂的塞納里奧披風
 28028,2,月擊手環
 28029,3,金藤裹帶
@@ -10570,6 +11000,7 @@
 28483,4,王者胸甲
 28484,4,諸王壁壘
 28485,4,遠古諸王壁壘
+28489,0,Monster - Work Wrench Ethereal (Red Glow)
 28491,3,風行裹足
 28492,3,鷹爪的靴子
 28493,3,懼鷹短護脛
@@ -10872,6 +11303,7 @@
 28873,3,高階督軍龍革腿甲
 28874,3,高階督軍龍革肩甲
 28875,3,高階督軍龍革外套
+28905,0,Monster - Claw Badass
 28917,3,高階督軍磨骨槌
 28918,3,高階督軍斬首者
 28919,3,高階督軍大槌
@@ -11177,6 +11609,8 @@
 29391,2,跳動匕首
 29399,2,虛無召喚者節杖
 29400,2,深淵罩衣
+29410,0,Monster - Mace2H Warhammer Ebony - White Flame
+29419,0,Monster - Glaive - 3 Blade Purple - Ethereal Ethereum (Red Glow)
 29456,3,以太族的禮物
 29457,3,虛空裂刺
 29458,4,復仇者聖禦盾
@@ -11245,6 +11679,7 @@
 29616,4,督軍綴甲面甲
 29617,4,督軍綴甲肩鎧
 29645,0,Monster - Sword2H Draenei A02 Rusty
+29712,0,Monster - Axe Draenei C01 Ice
 29771,2,肯瑞瓦旅行者腰帶
 29772,2,肯瑞瓦斥候腰帶
 29773,2,戰鬥法師的盔帽
@@ -12078,6 +12513,7 @@
 31256,2,銀月護甲
 31263,2,銀月外套
 31264,2,銀月長袍
+31266,1,(動作體態)牛頭人獵人長柄武器
 31268,2,憎惡斬斧
 31269,2,食屍鬼之錘
 31270,2,女妖魔棒
@@ -12801,6 +13237,7 @@
 32606,4,光明先驅者束腰
 32608,4,掠取者護手
 32609,4,神聖光芒之靴
+32615,0,Monster - Black Temple - Sword 1H - Shadowmoon Soldier
 32633,0,Monster - Glavie Illidan - Black Temple (Left Hand)
 32645,4,結晶十字弩
 32647,4,鑲殼護腕
@@ -12867,6 +13304,7 @@
 32832,3,斥候的飛刀
 32837,5,埃辛諾斯戰刃
 32838,5,埃辛諾斯戰刃
+32841,0,Monster - Dagger Fang of Vashj
 32854,4,公正力量之錘
 32865,2,馴龍者手套
 32866,2,卓越者之靴
@@ -13411,6 +13849,7 @@
 34147,4,白銀護杖
 34148,4,純淨白銀護杖
 34149,4,光之杖
+34158,1,隊伍A外袍
 34164,4,龍鱗鑲嵌長刃
 34165,4,卡雷苟斯之牙
 34167,4,神聖狂熱腿鎧
@@ -13594,6 +14033,8 @@
 34573,4,雷霆之心戰馭足靴
 34574,4,暴風雨長靴
 34575,4,殺戮者長靴
+34589,0,Monster - Shield Shattered Sun D01 Red
+34590,0,Monster - Shield Shattered Sun D01 Yellow
 34591,0,Monster - Shield Shattered Sun D01 White
 34601,4,永恆痛楚重肩甲
 34602,4,永歌腕輪
@@ -13634,6 +14075,7 @@
 34676,4,曦鑄防衛者
 34683,1,夏日便鞋
 34685,1,夏日法衣
+34694,0,Monster - Sword2H Horde PvP (Green)
 34697,3,狂怒之火束腕
 34698,3,巡林者的護腕
 34699,3,日鑄斬斧
@@ -13647,6 +14089,7 @@
 34716,1,銀鏈扣
 34718,1,黑色皮輕鞋
 34783,3,夜之擊
+34784,0,Monster - Item Fishing Pole (Tuskarr)
 34788,3,聖暮披肩
 34789,3,殺戮護腕
 34790,3,高階女祭司戰鬥釘錘
@@ -13667,6 +14110,7 @@
 34829,1,華麗酒杯
 34847,4,殲滅者環視鏡
 34859,1,鋒利片魚刀
+34880,0,Monster - Sword 1H Outland Raid D02
 34891,4,先驅者之刃
 34892,4,連擊之弩
 34893,4,法尼爾的蠻橫右拳
@@ -13999,7 +14443,7 @@
 35478,3,野蠻鎧甲頭盔
 35494,4,深冬之寒罩氅
 35495,4,冰霜領主戰爭披風
-35496,4,冰縛披風
+35496,4,冰錮披風
 35497,4,嚴寒之風披風
 35514,4,艾胡恩的冰霜鐮刀
 35570,3,凱雷希斯塑能之刃
@@ -14942,7 +15386,7 @@
 36878,2,苦痛糾結長法杖
 36879,2,士兵尖刺釘錘
 36880,2,兇惡法刃
-36881,2,醫護兵流星錘
+36881,2,醫護兵釘頭錘
 36882,2,戰歌長弓
 36883,2,戰鬥員巨劍
 36884,2,越風頭罩
@@ -15339,6 +15783,7 @@
 37573,2,平原巡者塑像
 37574,2,狂烈打擊聖契
 37575,2,凍原圖騰
+37579,0,Monster - Mace1H Prince Arthas
 37587,3,依米亞醫師長袍
 37590,3,凋光手環
 37592,3,孵育瘟疫盔帽
@@ -15877,6 +16322,7 @@
 38668,3,瘟疫使者束腰
 38669,3,紋刻薩鋼腿鎧
 38670,3,殺戮護脛
+38683,3,Obsolete黑騎兵符印(OLD)
 38691,7,先祖巨刃劍
 38707,3,符文魂刃
 38710,2,尋路者護腕
@@ -16375,6 +16821,8 @@
 39733,4,徽記尊重手套
 39734,4,贖罪護脛
 39735,4,虛假尊貴腰帶
+39743,0,Monster - Staff Northrend Runed (Iron)
+39754,0,Monster - Sword Northrend Iron Dwarf
 39756,4,歧見外套
 39757,4,崇拜塑像
 39758,4,顎骨
@@ -18035,7 +18483,7 @@
 42895,2,綴鱗蟄猛巨蟲保衛者
 42896,2,華爾基倫追蹤者護胸
 42940,0,Monster - Mace Zul'aman 1H - D02 Blue
-42943,7,染血奧金收割斧
+42943,7,染血的奧金收割斧
 42944,7,平衡的尋心者
 42945,7,尊崇的雷德神聖控訴者
 42946,7,魅惑的上古骨弓
@@ -18043,7 +18491,7 @@
 42948,7,虔誠的光環石錘
 42949,7,拋光的勇氣肩甲
 42950,7,勇士赫洛德的護肩
-42951,7,奧秘的元素肩鎧
+42951,7,神秘的元素肩鎧
 42952,7,染污的迅影肩甲
 42984,7,精心打理的鐵羽護肩
 42985,7,破爛的鬼霧披肩
@@ -18738,7 +19186,7 @@
 44785,1,旅人裙裝
 44788,1,旅人長靴
 44800,1,春日長袍
-44802,1,蛋籃
+44802,1,借來的蛋籃
 44803,1,春日頭環
 44891,4,泰坦鍛鑄支配長靴
 44892,4,泰坦鍛鑄拯救長靴
@@ -18770,7 +19218,7 @@
 44964,1,歐瑪的家族珠寶
 45037,4,史詩紫色襯衣
 45052,2,粗鱗護腿
-45061,0,泡沫之劍
+45061,0,海綿劍
 45067,1,蛋籃
 45073,1,春日鮮花
 45074,4,預言者巨刃劍
@@ -18829,10 +19277,10 @@
 45173,3,QA Test Normalized One-Hander
 45174,3,QA Test Normalized Two-Hander
 45175,3,QA Test Normalized Ranged Weapon
-45176,0,泡沫之劍
-45177,0,泡沫之劍
-45178,0,泡沫之劍
-45179,0,泡沫之劍
+45176,0,海綿劍
+45177,0,海綿劍
+45178,0,海綿劍
+45179,0,海綿劍
 45181,3,永生之樹裹布
 45182,3,破碎驕傲護手
 45183,3,光榮之靈足靴
@@ -20838,7 +21286,7 @@
 48674,4,勝利戰鬥員披風
 48675,4,不移守護者披風
 48677,7,勇士的亡賈胸甲
-48683,7,奧秘的元素外衣
+48683,7,神秘的元素外衣
 48685,7,拋光的勇氣胸甲
 48687,7,精心打理的鐵羽胸甲
 48689,7,染污的迅影外套
@@ -21197,7 +21645,7 @@
 49446,2,家僕胸甲
 49448,2,尚未腐化手套
 49449,2,扭轉命運馬褲
-49450,2,Defusing Cinch
+49450,2,拆卸繫腰
 49465,4,黯淡血腥撕裂者
 49466,4,霜鑄頭盔
 49467,4,霜鑄巨盔
@@ -21314,7 +21762,7 @@
 49807,4,克瑞克的甲蟲背刺匕首
 49808,4,彎金腰帶
 49809,4,地底苔蘚腕甲
-49810,4,粗糙僵屍皮腰帶
+49810,4,粗糙殭屍皮腰帶
 49811,4,黑色龍皮馬褲
 49813,4,霜禍步槍
 49816,4,天譴領主的嚴寒胸鎧
@@ -22589,7 +23037,7 @@
 52252,4,光明使者的外袍
 52485,3,珠寶匠的紅寶石單邊鏡片
 52486,3,珠寶匠的藍寶石單邊鏡片
-52487,3,珠寶匠的翡翠單邊鏡片
+52487,3,珠寶匠的琥珀單邊鏡片
 52488,3,珠寶匠的藍寶石單邊鏡片
 52489,1,萊茵石太陽眼鏡
 52492,2,紅玉髓尖刺
@@ -22965,7 +23413,7 @@
 53440,2,海女外衣
 53441,2,毒蛇粉碎者手套
 53442,3,艾薩拉征服之盾
-53443,3,塔倫迪斯哨塔盾牌
+53443,3,塔倫迪斯營地盾牌
 53445,2,多孔外衣
 53446,2,彈簧機件
 53447,2,標準配發空降腰帶
@@ -24151,7 +24599,7 @@
 56434,3,太陽風披風
 56435,3,午日護腿
 56436,3,癒法軟靴
-56438,3,Book of Origination
+56438,3,起源之書
 56441,3,莫德古德之刃
 56442,3,被詛咒的斯卡汀外衣
 56443,3,蠻錘騎乘頭盔
@@ -24876,7 +25324,7 @@
 57924,3,蘋樹曲枝
 57925,3,迷霧之盾
 57926,3,四灰塔之盾
-57927,3,割喉匕
+57927,3,割喉匕首
 57928,3,風切
 57929,3,曦炎之刃
 57945,2,Art Template Leather Hands  - Leather_Common_A_02 - Purple
@@ -24914,7 +25362,7 @@
 58133,3,藤蔓面具
 58134,3,夜之擁抱
 58138,3,黏指
-58139,3,疏忽健忘長袍
+58139,3,疏忽健忘護胸
 58140,3,晚花護腿
 58150,3,星團
 58151,3,灰暗披巾
@@ -25695,7 +26143,7 @@
 59593,3,死門之盾
 59598,3,精密調校過的穿喉弩針發射器
 59599,3,烈性噪音棒
-59600,1,Phosphora Fedora
+59600,1,磷光軟呢帽
 59601,3,潛水艇船員加重足靴
 59603,3,舵手披氅
 59604,3,潛水艇船員加重足靴
@@ -26824,10 +27272,10 @@
 61918,4,QA PVP Test Warrior DPS Set Legs
 61919,4,QA PVP Test Warrior DPS Set Shoulders
 61929,1,壞掉的眼鏡
-61931,7,拋光勇氣頭盔
+61931,7,拋光的勇氣頭盔
 61935,7,黯淡的狂暴者頭盔
-61936,7,神秘元素頭巾
-61937,7,沾污迅影軟帽
+61936,7,神秘的元素頭巾
+61937,7,染污的迅影軟帽
 61942,7,精心打理的部族作戰羽盔
 61945,3,ObsoleteQA Combat Test Healer Totem
 61948,3,ObsoleteQA Combat Test Tank Libram
@@ -26838,16 +27286,16 @@
 61958,7,破爛的鬼霧面具
 61967,0,Monster - Rifle Outland Raid D03
 61969,0,Monster - Polearm (Rifle Outland Raid D03)
-62023,7,拋光勇氣腿鎧
+62023,7,拋光的勇氣腿鎧
 62024,7,黯淡的毀滅護腿
-62025,7,神秘元素褶裙
-62026,7,沾污迅影束褲
+62025,7,神秘的元素褶裙
+62026,7,染污的迅影束褲
 62027,7,精心打理的野性之皮護腿
 62029,7,破爛的鬼霧護腿
 62032,3,Monster - Mace Wildhammer Stormhammer (Lightning)
 62038,7,磨損的石膚石像鬼斗篷
 62039,7,黑爵士的傳承斗篷
-62040,7,上古血月披風
+62040,7,古老的血月披風
 62058,1,輻射繃帶
 62059,1,磨損的地精束褲
 62060,1,輻射地精長靴
@@ -27086,14 +27534,14 @@
 62456,3,不眠之夜匕首
 62457,3,獵食切割斧
 62458,3,陰險法杖
-62459,3,幻光晨星錘
+62459,3,幻光釘頭錘
 62460,3,天空穿刺者
 62473,3,無懼之刃
 62474,3,陰影尾隨長矛
 62475,3,不眠之夜匕首
 62476,3,獵食切割斧
 62477,3,陰險法杖
-62478,3,幻光晨星錘
+62478,3,幻光釘頭錘
 62479,3,天空穿刺者
 62504,0,Monster - Polearm (Rifle Outland Raid D03 - No CD)
 62623,2,Art Template Cloth Boot  - Cataclysm_B_01 - Purple
@@ -27430,7 +27878,7 @@
 63485,3,叛亂風帽
 63486,3,背叛鐐銬
 63487,3,優美歌曲之書
-63490,4,Sky Strider Belt
+63490,4,逐天者腰帶
 63491,4,雷霆之壁腰帶
 63492,4,追星者腰帶
 63493,4,風巡者腰帶
@@ -27581,7 +28029,7 @@
 63677,3,千針石林肩鎧
 63678,3,千針石林頭盔
 63679,4,阿什坎迪，重現的兄弟會之劍
-63680,4,暮光之錘
+63680,4,暮光神錘
 63701,3,恐懼足靴
 63702,3,庫爾頓的粉碎手套
 63703,3,迦羅娜最棒的護腿
@@ -28269,7 +28717,7 @@
 65084,4,電源護胸
 65085,4,電子感應線圈
 65086,4,魔像充電站能量腰帶
-65090,4,暮光之錘
+65090,4,暮光神錘
 65091,4,巫魅時刻之刃
 65092,4,仇恨護腰
 65093,4,異法管轄頭盔
@@ -28542,7 +28990,7 @@
 65466,3,偉大獵人之弓
 65467,3,皇家巫師法杖
 65468,3,秘法之路法杖
-65469,3,秩序晨星錘
+65469,3,秩序釘頭錘
 65470,3,秩序戰爭釘錘
 65471,3,秩序巨釘錘
 65472,3,日行者釘錘
@@ -29161,7 +29609,7 @@
 66488,2,灰暗打擊拳套
 66492,2,灰暗星形飛鏢
 66493,2,灰暗投擲小刀
-66499,2,Somber Healer's Handguards
+66499,2,灰暗醫者手甲
 66518,2,灰暗錐刺弩
 66525,2,灰暗醫者腕甲
 66543,2,灰暗強弓
@@ -29183,10 +29631,10 @@
 66641,3,薇妮卡的護手
 66660,2,怒氣控制之錘
 66665,2,透亮錐刺弩
-66666,2,Translucent Shooter
+66666,2,透亮槍械
 66690,2,透亮強弓
 66700,2,透亮防衛者護足
-66706,2,Translucent Leggings
+66706,2,透亮護腿
 66708,2,透亮長矛
 66709,2,透亮長戟
 66710,2,透亮法師法杖
@@ -29520,7 +29968,7 @@
 68058,0,Monster - Sword 1H Al'Akir
 68100,2,Art Template Cloth Wrist - Robe_RaidPriest_I - Default
 68127,4,風暴甦醒，暴風雨之境
-68128,4,Stormwake the Tempest's Reach
+68128,4,風暴甦醒，暴風雨之境
 68129,4,風暴甦醒，暴風雨之境
 68130,4,風暴甦醒，暴風雨之境
 68131,4,風暴甦醒，暴風雨之境
@@ -29588,43 +30036,43 @@
 68760,2,灌魔步兵護手
 68761,2,灌魔步兵長靴
 68762,2,灌魔軍校披風
-68814,3,Monster - Zulian Slicer
+68814,0,Monster - Zulian Slicer
 68818,0,Monster - Zin'rokh
-68834,4,Monster - Zanzil's Voodoo Stick
-68838,2,Monster - Orsis Polearm (1H)
+68834,0,Monster - Zanzil's Voodoo Stick
+68838,0,Monster - Orsis Polearm (1H)
 68999,3,Art Template - ZG Leather
-69009,1,Vrykul Female Mask Visual
-69010,1,Vrykul Male Mask Visual
-69011,1,Naga Female Mask Visual
-69012,1,Naga Male Mask Visual
-69013,1,Ogre Female Mask Visual
-69014,1,Ogre Male Mask Visual
-69015,1,Murloc Female Mask Visual
-69016,1,Murloc Male Mask Visual
-69030,1,Blood Elf Female Mask Visual
-69033,1,Blood Elf Male Mask Visual
-69036,1,Draenei Female Mask Visual
-69037,1,Draenei Male Mask Visual
-69038,1,Dwarf Female Mask Visual
-69039,1,Dwarf Male Mask Visual
-69041,1,Gnome Female Mask Visual
-69042,1,Gnome Male Mask Visual
-69043,1,Goblin Female Mask Visual
-69044,1,Goblin Male Mask Visual
-69045,1,Human Female Mask Visual
-69055,1,Human Male Mask Visual
-69058,1,Night Elf Female Mask Visual
-69059,1,Night Elf Male Mask Visual
-69096,1,Orc Female Mask Visual
-69097,1,Orc Male Mask Visual
-69099,1,Tauren Female Mask Visual
-69100,1,Tauren Male Mask Visual
-69102,1,Troll Female Mask Visual
-69104,1,Troll Male Mask Visual
-69105,1,Undead Female Mask Visual
-69106,1,Undead Male Mask Visual
-69107,1,Worgen Female Mask Visual
-69108,1,Worgen Male Mask Visual
+69009,1,女性維庫面具視覺效果
+69010,1,男性維庫面具視覺效果
+69011,1,女性納迦面具視覺效果
+69012,1,男性納迦面具視覺效果
+69013,1,女性巨魔面具視覺效果
+69014,1,男性巨魔面具視覺效果
+69015,1,女性魚人面具視覺效果
+69016,1,男性魚人面具視覺效果
+69030,1,女性血精靈面具視覺效果
+69033,1,男性血精靈面具視覺效果
+69036,1,女性德萊尼面具視覺效果
+69037,1,男性德萊尼面具視覺效果
+69038,1,女性矮人面具視覺效果
+69039,1,男性矮人面具視覺效果
+69041,1,女性地精面具視覺效果
+69042,1,男性地精面具視覺效果
+69043,1,女性哥布林面具視覺效果
+69044,1,男性哥布林面具視覺效果
+69045,1,女性人類面具視覺效果
+69055,1,男性人類面具視覺效果
+69058,1,女性夜精靈面具視覺效果
+69059,1,男性夜精靈面具視覺效果
+69096,1,女性獸人面具視覺效果
+69097,1,男性獸人面具視覺效果
+69099,1,女性牛頭人面具視覺效果
+69100,1,男性牛頭人面具視覺效果
+69102,1,女性食人妖面具視覺效果
+69104,1,男性食人妖面具視覺效果
+69105,1,女性不死族面具視覺效果
+69106,1,男性不死族面具視覺效果
+69107,1,女性狼人面具視覺效果
+69108,1,男性狼人面具視覺效果
 69147,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Red
 69152,2,Art Template Plate Shoulder - Plate_PVPWarrior_C_02 - Black
 69153,2,Art Template Plate Legs - Plate_PVPWarrior_C_02 - Black
@@ -29657,8 +30105,8 @@
 69181,2,Art Template Plate Chest - Plate_PVPWarrior_C_02 - Red
 69182,2,Art Template Plate Boot - Plate_PVPWarrior_C_02 - Red
 69183,2,Art Template Plate Belt - Plate_PVPWarrior_C_02 - Red
-69209,3,Illustrious Guild Tabard
-69210,4,Renowned Guild Tabard
+69209,3,輝煌公會外袍
+69210,4,知名公會外袍
 69216,3,Wild Rider's Gloves
 69217,2,Test Pilot Britches
 69218,2,Sludge Fen Cloak
@@ -29672,128 +30120,129 @@
 69257,3,ZG Plate Helm 1
 69258,3,ZG Leather Shoulder 3
 69259,3,ZG Leather Shoulder 1
-69260,4,Monster - Item Dagger (Umbral Shiv)
-69549,4,Wristguards of the Predator
-69550,4,Leggings of Ancient Magics
-69551,4,Feathers of Akil'zon
-69552,4,Bracers of Hidden Purpose
-69554,4,Pauldrons of Nalorakk
-69555,4,Boots of the Ursine
-69556,4,Armbands of the Bear Spirit
-69557,4,Jungle Striders
-69558,4,Spiritshield Mask
-69559,4,Amani'shi Belt
-69560,4,Jan'alai's Spaulders
-69561,4,Hawkscale Waistguard
-69562,4,Boots of Bad Mojo
-69564,4,The Savager's Mask
-69565,4,Breastplate of Primal Fury
-69567,4,Wristwraps of Departed Spirits
-69568,4,Shadowmender Wristguards
-69569,4,Shadowtooth Trollskin Breastplate
-69570,4,Waistband of Hexes
-69572,4,Hex Lord's Bloody Cloak
-69573,4,Pauldrons of Sacrifice
-69574,4,Tusked Shoulderpads
-69575,4,Mace of the Sacrificed
-69576,4,Headdress of Sharpened Vision
-69577,4,Collar of Bones
-69578,4,Hexing Robes
-69579,4,Amani Headdress
-69580,4,Mask of Restless Spirits
-69581,4,Amani Scepter of Rites
-69582,4,Skullpiercer Pauldrons
-69583,4,Legguards of the Unforgiving
-69584,4,Recovered Cloak of Frostheim
-69585,4,Wristwraps of Madness
-69586,4,Two-Toed Moccasins
-69587,4,Chestplate of Hubris
-69588,4,Skullcrusher Warboots
-69589,4,Leggings of Dancing Blades
-69590,4,Mojo-Mender's Gloves
-69591,4,Voodoo Hexblade
-69592,4,Reforged Trollbane
-69593,4,Battleplate of the Amani Empire
-69594,4,T'wansi's Handwraps
-69595,4,Fetish Greaves
-69596,4,Voodoo Hunting Bow
-69597,4,Zulian Throwing Axe
-69598,4,Robes of Dissention
-69599,4,Pauldrons of Ambition
-69600,4,Belt of Slithering Serpents
-69601,4,Serpentine Leggings
-69603,4,Breastplate of Serenity
-69604,4,Coils of Hate
-69606,4,Hakkari Loa Drape
-69607,4,Touch of Discord
-69608,4,Deathcharged Wristguards
-69609,4,Bloodlord's Protector
-69611,4,Sash of Anguish
-69612,4,Claw-Fringe Mantle
-69613,4,Leggings of the Pride
-69614,4,Roaring Mask of Bethekk
-69615,4,Zombie Walker Legguards
-69616,4,Spiritbinder Spaulders
-69617,4,Plumed Medicine Helm
-69618,4,Zulian Slasher
-69619,4,Bone Plate Handguards
-69620,4,Twinblade of the Hakkari
-69621,4,Twinblade of the Hakkari
-69622,4,The Hexxer's Mask
-69623,4,Vestments of the Soulflayer
-69624,4,Legacy of Arlokk
-69625,4,Mandokir's Tribute
-69626,4,Jin'do's Verdict
-69627,4,Zulian Ward
-69628,4,Jeklik's Smasher
-69629,4,Shield of the Blood God
-69630,4,Handguards of the Tormented
-69631,4,Zulian Voodoo Stick
-69632,4,Lost Bag of Whammies
-69633,4,Plunderer's Gauntlets
-69634,4,Fasc's Preserved Sandals
-69636,4,Thekal's Claws
-69637,4,Voodoo Hunting Bow
-69638,4,Arlokk's Claws
-69639,4,Renataki's Soul Slicer
-69640,4,Kilt of Forgotten Rites
-69641,4,Troll Skull Chestplate
-69643,4,阿曼尼懲處錘
-69644,4,魔鋼收割斧
-69764,4,Extinct Turtle Shell
-69766,4,冰霜領主戰爭披風
-69767,4,冰霜領主戰爭罩氅
+69260,0,Monster - Item Dagger (Umbral Shiv)
+69549,4,捕獵者腕甲
+69550,4,上古魔法護腿
+69551,4,阿奇爾森之羽
+69552,4,隱匿意圖護腕
+69554,4,納羅拉克肩鎧
+69555,4,熊型長靴
+69556,4,熊靈臂環
+69557,4,叢林行者護腿
+69558,4,魂盾面具
+69559,4,阿曼尼希護腕
+69560,4,賈納雷的肩甲
+69561,4,鷹殼護腰
+69562,4,腐敗魔精長靴
+69564,4,兇蠻面具
+69565,4,原初烈怒胸甲
+69567,4,過往亡魂裹腕
+69568,4,影癒者腕甲
+69569,4,影牙食人妖皮胸甲
+69570,4,妖術腰環
+69572,4,妖術領主的血紅披風
+69573,4,獻祭肩鎧
+69574,4,獠牙肩墊
+69575,4,獻祭之錘
+69576,4,敏銳幻視頭飾
+69577,4,骸骨項圈
+69578,4,妖術長袍
+69579,4,阿曼尼頭飾
+69580,4,騷動靈魂面具
+69581,4,阿曼尼祭儀權杖
+69582,4,刺顱肩鎧
+69583,4,難恕腿甲
+69584,4,復原的霜居披風
+69585,4,狂亂裹腕
+69586,4,兩趾長靴
+69587,4,狂妄胸鎧
+69588,4,碎顱戰靴
+69589,4,刃舞護腿
+69590,4,魔精修補者的手套
+69591,4,巫毒妖術刃
+69592,4,重鑄的食人妖剋星
+69593,4,阿曼尼帝國戰甲
+69594,4,塔灣西的裹手
+69595,4,神像護脛
+69596,4,巫毒獵弓
+69597,4,祖利安擲斧
+69598,4,異議長袍
+69599,4,雄心肩鎧
+69600,4,滑蛇腰帶
+69601,4,盤蛇護腿
+69603,4,安祥胸甲
+69604,4,恨意纏腕
+69606,4,哈卡萊羅亞披氅
+69607,4,絮亂之觸
+69608,4,死亡充能腕甲
+69609,4,血領主保衛者
+69611,4,苦痛束帶
+69612,4,爪飾披肩
+69613,4,傲氣護腿
+69614,4,比塞克的虎嘯面具
+69615,4,殭屍行者腿甲
+69616,4,縛靈者肩甲
+69617,4,羽飾符咒頭盔
+69618,4,祖利安斬刃
+69619,4,骨板手甲
+69620,4,哈卡萊雙刃劍
+69621,4,哈卡萊雙刃劍
+69622,4,妖術師面具
+69623,4,奪魂者法衣
+69624,4,阿洛克的遺產
+69625,4,曼多基爾的貢品
+69626,4,金度的裁決
+69627,4,祖利安結界盾牌
+69628,4,耶克里克的碎擊錘
+69629,4,血神之盾
+69630,4,磨難手甲
+69631,4,祖利安巫毒手杖
+69632,4,失落的厄運袋
+69633,4,盜掠者護手
+69634,4,法斯柯的加工長靴
+69636,4,塞卡爾之爪
+69637,4,古拉巴什毀滅者
+69638,4,阿洛克拳爪
+69639,4,雷納塔基的靈魂分割刃
+69640,4,被遺忘祭儀褶裙
+69641,4,食人妖頭顱胸鎧
+69643,0,Monster - Amani Punisher (Zandalari Archon)
+69644,0,Monster - Felsteel Reaper (alt color)
+69764,4,絕種龜殼
+69766,4,冰霜領主的戰爭披風
+69767,4,冰霜領主的戰爭罩氅
 69768,4,深冬之寒罩氅
 69769,4,嚴寒之風披風
-69770,4,冰縛披風
+69770,4,冰錮披風
 69771,4,艾胡恩的冰霜鐮刀
-69796,4,Spiritcaller Cloak
-69797,4,Charmbinder Grips
-69798,4,Knotted Handwraps
-69800,4,Spiritguard Drape
-69801,4,Amani Armguards
-69803,4,Gurubashi Punisher
+69796,4,招魂師披風
+69797,4,縛咒之握
+69798,4,浮雕裹手
+69800,4,魂衛披氅
+69801,4,阿曼尼臂甲
+69803,4,古拉巴什懲處錘
 69814,7,Bug Test Heirloom Weapon
-69819,1,Vrykul Drinking Horn Helm
-69831,4,Mistral Drape
-69833,4,Permafrost Cape
-69834,4,Cloudburst Cloak
-69835,4,Planetary Drape
-69842,4,Garr's Reinforced Girdle of Memories
-69843,4,Mobus's Dripping Halberd
-69844,4,Vitreous Beak of Julak-Doom
-69864,1,Tarnished Crown
-69865,1,Gem Studded Bracelets
-69876,4,Xariona's Spectral Gauntlets
-69877,4,Belt of a Thousand Gaping Mouths
-69878,4,Permafrost Cape
-69879,4,Cloudburst Cloak
-69881,4,Planetary Drape
-69884,4,Mistral Drape
-69887,7,Burnished Helm of Might
-69888,7,Burnished Legplates of Might
-69889,7,Burnished Breastplate of Might
-69890,7,Burnished Pauldrons of Might
-69892,7,Ripped Sandstorm Cloak
-69893,7,Bloodsoaked Skullforge Reaver
-69916,4,Trollbane (Daakara)
+69819,1,維酷角杯盔
+69831,4,凜風披氅
+69833,4,永凍斗篷
+69834,4,雲爆披風
+69835,4,行星披氅
+69842,4,加爾的強化記憶束腰
+69843,4,莫比斯的滴血長戟
+69844,4,透明的毀滅祖拉克之喙
+69864,1,黯淡的皇冠
+69865,1,寶石手鐲
+69876,4,克薩瑞歐納的鬼靈護手
+69877,4,瞠目結舌腰帶
+69878,4,永凍斗篷
+69879,4,雲爆披風
+69881,4,行星披氅
+69884,4,凜風披氅
+69887,7,光潔的力量頭盔
+69888,7,光潔的力量腿鎧
+69889,7,光潔的力量胸甲
+69890,7,光潔的力量肩鎧
+69892,7,撕裂沙塵披風
+69893,7,浸血的斬骨掠刃
+69916,4,托爾貝恩(達卡拉)
+70080,4,重鑄的冷酷無心
