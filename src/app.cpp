@@ -325,6 +325,13 @@ void searchMPQs(bool firstTime)
 {
 	if (mpqArchives.GetCount() > 0)
 		return;
+
+	bool bSearchCache = false;
+	wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("Do you want to search Cache dir?"),
+		wxT("Question"), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+	if (wxID_YES == dial->ShowModal())
+		bSearchCache = true;
+
 	const wxString locales[] = {
 		// sets 0
 		wxT("enUS"), wxT("koKR"), wxT("frFR"), wxT("deDE"), 
@@ -432,6 +439,8 @@ void searchMPQs(bool firstTime)
 	wxArrayString baseCacheMpqs;
 	wxDir::GetAllFiles(gamePath+wxT("Cache"), &baseCacheMpqs, wxEmptyString, wxDIR_FILES);
 	for (size_t j = 0; j < baseCacheMpqs.size(); j++) {
+		if (bSearchCache == false)
+			continue;
 		if (baseCacheMpqs[j].Contains(wxT("oldworld")))
 			continue;
 		wxString baseName = baseCacheMpqs[j];
@@ -466,6 +475,8 @@ void searchMPQs(bool firstTime)
 	wxArrayString baseCacheLocaleMpqs;
 	wxDir::GetAllFiles(gamePath+wxT("Cache")+SLASH+langName, &baseCacheLocaleMpqs, wxEmptyString, wxDIR_FILES);
 	for (size_t j = 0; j < baseCacheLocaleMpqs.size(); j++) {
+		if (bSearchCache == false)
+			continue;
 		if (baseCacheLocaleMpqs[j].Contains(wxT("oldworld")))
 			continue;
 		wxString baseName = baseCacheLocaleMpqs[j];
