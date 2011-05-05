@@ -26112,7 +26112,7 @@
 60529,4,Triumphale Armschienen des boshaften Gladiators
 60533,4,Meditationstaillenschutz des boshaften Gladiators
 60534,4,Meditationsabatons des boshaften Gladiators
-60535,4,Meditationsarmbänder des boshaften Gladiators
+60535,4,Meditationsarmbinden des boshaften Gladiators
 60536,4,Grausamkeitstaillenschutz des boshaften Gladiators
 60537,4,Vorherrschaftssabatons des boshaften Gladiators
 60538,4,Vorherrschaftshandgelenkschützer des boshaften Gladiators
@@ -29789,6 +29789,9 @@
 69842,4,Garrs verstärkter Gurt der Erinnerungen
 69843,4,Mobus' tropfende Hellebarde
 69844,4,Glasiger Schnabel von Julak-Doom
+69857,0,Monster - Caster Legendary Stage 3
+69858,0,Monster - Caster Legendary Stage 1
+69859,0,Monster - Caster Legendary Stage 2
 69864,1,Stumpfe Krone
 69865,1,Edelsteinbesetzte Armreife
 69876,4,Xarionas Spektralstulpen
@@ -29803,5 +29806,664 @@
 69890,7,Brünierte Schulterstücke der Macht
 69892,7,Zerfetzter Sandsturmumhang
 69893,7,Blutgetränkter Häscher der Schädelesse
+69897,4,Teststab
 69916,4,Trollbann (Daakara)
+69936,4,Fäuste des Furors
+69937,4,Ewige Elementiumhandschützer
+69938,4,Stulpen der heiligen Flamme
+69939,4,Drachenfeuerhandschuhe
+69941,4,Handschuhe der gnadenlosen Flammen
+69942,4,Klauen des Bösen
+69943,4,Himmlische Handschuhe des Mondes
+69944,4,Griffe der veränderten Realität
+69945,4,Don Tayos Infernofäustlinge
+69946,4,Kriegsstiefel der mächtigen Fürsten
+69947,4,Gespiegelte Stiefel
+69948,4,Funkengeschmiedete Elementiumstiefel
+69949,4,Irdene Schuppensabatons
+69950,4,Fußwickel des unterdrückten Feuers
+69951,4,Treter des Kunsthandwerks
+69952,4,Ätherische Pfadgänger
+69953,4,Endlose Traumwandler
+69954,4,Stiefel der schwarzen Flamme
+70004,3,Blutrünstige Pyriumbrustplatte
+70005,3,Blutrünstige Pyriumstiefel
+70006,3,Blutrünstige Pyriumstulpen
+70007,3,Blutrünstiger Pyriumhelm
+70008,3,Blutrünstige Pyriumbeinschützer
+70009,3,Blutrünstige Pyriumschultern
+70010,3,Blutrünstiger Pyriumgürtel
+70011,3,Blutrünstige Pyriumarmschienen
+70012,3,Blutrünstige Pyriumzierbrustplatte
+70013,3,Blutrünstige Pyriumzierstiefel
+70014,3,Blutrünstige Pyriumzierstulpen
+70015,3,Blutrünstiger Pyriumzierhelm
+70016,3,Blutrünstige Pyriumzierbeinschützer
+70017,3,Blutrünstige Pyriumzierschultern
+70018,3,Blutrünstiger Pyriumziergürtel
+70019,3,Blutrünstige Pyriumzierarmschienen
+70020,3,Blutrünstiger Ledergürtel
+70021,3,Blutrünstige Lederstiefel
+70022,3,Blutrünstige Lederarmschienen
+70023,3,Blutrünstige Lederbrustplatte
+70024,3,Blutrünstige Lederhandschuhe
+70025,3,Blutrünstiger Lederhelm
+70026,3,Blutrünstige Lederbeine
+70027,3,Blutrünstige Lederschultern
+70028,3,Blutrünstiger Wyrmbalggürtel
+70029,3,Blutrünstige Wyrmbalgstiefel
+70030,3,Blutrünstige Wyrmbalgarmschienen
+70031,3,Blutrünstige Wyrmbalgbrustplatte
+70032,3,Blutrünstige Wyrmbalghandschuhe
+70033,3,Blutrünstiger Wyrmbalghelm
+70034,3,Blutrünstige Wyrmbalgbeine
+70035,3,Blutrünstige Wyrmbalgschultern
+70036,3,Blutrünstiger Drachenschuppengürtel
+70037,3,Blutrünstige Drachenschuppenstiefel
+70038,3,Blutrünstige Drachenschuppenarmschienen
+70039,3,Blutrünstige Drachenschuppenbrustplatte
+70040,3,Blutrünstige Drachenschuppenhandschuhe
+70041,3,Blutrünstiger Drachenschuppenhelm
+70042,3,Blutrünstige Drachenschuppenbeine
+70043,3,Blutrünstige Drachenschuppenschultern
+70044,3,Blutrünstiger Schmorschuppengürtel
+70045,3,Blutrünstige Schmorschuppenstiefel
+70046,3,Blutrünstige Schmorschuppenarmschienen
+70047,3,Blutrünstige Schmorschuppenbrustplatte
+70048,3,Blutrünstige Schmorschuppenhandschuhe
+70049,3,Blutrünstiger Schmorschuppenhelm
+70050,3,Blutrünstige Schmorschuppenbeine
+70051,3,Blutrünstige Schmorschuppenschultern
+70052,3,Blutrünstiger Feuerzwirngürtel
+70053,3,Blutrünstige Feuerzwirnstiefel
+70054,3,Blutrünstige Feuerzwirnarmschienen
+70055,3,Blutrünstige Feuerzwirngugel
+70056,3,Blutrünstige Feuerzwirnhandschuhe
+70057,3,Blutrünstige Feuerzwirnhose
+70058,3,Blutrünstige Feuerzwirnrobe
+70059,3,Blutrünstige Feuerzwirnschultern
+70060,3,Blutrünstige Feuerseidenrobe
+70061,3,Blutrünstige Feuerseidenstiefel
+70062,3,Blutrünstiger Feuerseidengürtel
+70063,3,Blutrünstige Feuerseidenarmschienen
+70064,3,Blutrünstige Feuerseidenschultern
+70065,3,Blutrünstige Feuerseidenhandschuhe
+70066,3,Blutrünstige Feuerseidenhose
+70067,3,Blutrünstige Feuerseidengugel
+70068,3,Blutrünstiger Fellumhang
+70069,3,Blutrünstiger Balgumhang
+70070,3,Blutrünstiges Feuerseidencape
+70077,3,Blutrünstiger Glücksbringer des Triumphes
+70078,3,Blutrünstiger Augapfel der Vorherrschaft
+70079,3,Blutrünstiger Kieferknochen der Eroberung
 70080,4,Reforged Heartless
+70088,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Blue
+70097,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Green
+70155,4,Gehirnsplitter
+70156,4,Meisterhafte Elementiumzauberklinge
+70157,4,Lichtgeschmiedeter Elementiumhammer
+70158,4,Skalpschneide mit Elementiumschneide
+70159,3,Mylunes Ruf
+70162,4,Pyriumzauberschutz
+70163,4,Unzerstörbarer Wächter
+70164,4,Meisterhafte Elementiumtodesklinge
+70165,4,Ernter des Hexenjägers
+70178,4,Großschwert des ruchlosen Gladiators
+70179,4,Stab des ruchlosen Gladiators
+70180,4,Energiestab des ruchlosen Gladiators
+70181,4,Kampfstab des ruchlosen Gladiators
+70182,4,Pike des ruchlosen Gladiators
+70183,4,Knochenschinder des ruchlosen Gladiators
+70184,4,Enthaupter des ruchlosen Gladiators
+70185,4,Hammer des ruchlosen Gladiators
+70186,4,Rechte Reißklinge des ruchlosen Gladiators
+70187,4,Rechter Zerfetzer des ruchlosen Gladiators
+70188,4,Zauberklinge des ruchlosen Gladiators
+70189,4,Linke Reißklinge des ruchlosen Gladiators
+70190,4,Linker Zerfetzer des ruchlosen Gladiators
+70191,4,Messer des ruchlosen Gladiators
+70192,4,Langbogen des ruchlosen Gladiators
+70193,4,Schwere Armbrust des ruchlosen Gladiators
+70194,4,Gewehr des ruchlosen Gladiators
+70195,4,Lichterfüllter Baton des ruchlosen Gladiators
+70196,4,Dunkles Schicksal des ruchlosen Gladiators
+70197,4,Kriegsbeil des ruchlosen Gladiators
+70198,4,Kriegsschneide des ruchlosen Gladiators
+70199,4,Schnellklinge des ruchlosen Gladiators
+70200,4,Schnitzler des ruchlosen Gladiators
+70201,4,Knochenknacker des ruchlosen Gladiators
+70202,4,Verprügler des ruchlosen Gladiators
+70203,4,Zorn des ruchlosen Gladiators
+70204,4,Zerhacker des ruchlosen Gladiators
+70205,4,Spaltbeil des ruchlosen Gladiators
+70206,4,Wehr des ruchlosen Gladiators
+70207,4,Barriere des ruchlosen Gladiators
+70208,4,Schildwall des ruchlosen Gladiators
+70209,4,Begnadigung des ruchlosen Gladiators
+70210,4,Endspiel des ruchlosen Gladiators
+70211,4,Spaltbeil des ruchlosen Gladiators
+70212,4,Zerhacker des ruchlosen Gladiators
+70213,4,Enthaupter des ruchlosen Gladiators
+70214,4,Zorn des ruchlosen Gladiators
+70215,4,Messer des ruchlosen Gladiators
+70216,4,Zauberklinge des ruchlosen Gladiators
+70217,4,Rechter Zerfetzer des ruchlosen Gladiators
+70218,4,Linker Zerfetzer des ruchlosen Gladiators
+70219,4,Linke Reißklinge des ruchlosen Gladiators
+70220,4,Rechte Reißklinge des ruchlosen Gladiators
+70221,4,Verprügler des ruchlosen Gladiators
+70222,4,Knochenknacker des ruchlosen Gladiators
+70223,4,Hammer des ruchlosen Gladiators
+70224,4,Knochenschinder des ruchlosen Gladiators
+70225,4,Pike des ruchlosen Gladiators
+70226,4,Kampfstab des ruchlosen Gladiators
+70227,4,Energiestab des ruchlosen Gladiators
+70228,4,Stab des ruchlosen Gladiators
+70229,4,Schnitzler des ruchlosen Gladiators
+70230,4,Schnellklinge des ruchlosen Gladiators
+70231,4,Großschwert des ruchlosen Gladiators
+70232,4,Kriegsschneide des ruchlosen Gladiators
+70233,4,Kriegsbeil des ruchlosen Gladiators
+70234,4,Dunkles Schicksal des ruchlosen Gladiators
+70235,4,Lichterfüllter Baton des ruchlosen Gladiators
+70236,4,Langbogen des ruchlosen Gladiators
+70237,4,Gewehr des ruchlosen Gladiators
+70238,4,Schwere Armbrust des ruchlosen Gladiators
+70239,4,Endspiel des ruchlosen Gladiators
+70240,4,Begnadigung des ruchlosen Gladiators
+70241,4,Schildwall des ruchlosen Gladiators
+70242,4,Barriere des ruchlosen Gladiators
+70243,4,Wehr des ruchlosen Gladiators
+70244,4,Schreckensplattenbrustharnisch des ruchlosen Gladiators
+70245,4,Schreckensplattenstulpen des ruchlosen Gladiators
+70246,4,Schreckensplattenhelm des ruchlosen Gladiators
+70247,4,Schreckensplattenbeinschützer des ruchlosen Gladiators
+70248,4,Schreckensplattenschultern des ruchlosen Gladiators
+70249,4,Schuppenharnisch des ruchlosen Gladiators
+70250,4,Schuppenstulpen des ruchlosen Gladiators
+70251,4,Schuppenhelm des ruchlosen Gladiators
+70252,4,Schuppenbeinschützer des ruchlosen Gladiators
+70253,4,Schuppenschultern des ruchlosen Gladiators
+70254,4,Plattenbrustharnisch des ruchlosen Gladiators
+70255,4,Plattenstulpen des ruchlosen Gladiators
+70256,4,Plattenhelm des ruchlosen Gladiators
+70257,4,Plattenbeinschützer des ruchlosen Gladiators
+70258,4,Plattenschultern des ruchlosen Gladiators
+70259,4,Kettenrüstung des ruchlosen Gladiators
+70260,4,Kettenstulpen des ruchlosen Gladiators
+70261,4,Kettenhelm des ruchlosen Gladiators
+70262,4,Kettengamaschen des ruchlosen Gladiators
+70263,4,Kettenschiftung des ruchlosen Gladiators
+70264,4,Ringpanzerrüstung des ruchlosen Gladiators
+70265,4,Ringpanzerstulpen des ruchlosen Gladiators
+70266,4,Ringpanzerhelm des ruchlosen Gladiators
+70267,4,Ringpanzergamaschen des ruchlosen Gladiators
+70268,4,Ringpanzerschiftung des ruchlosen Gladiators
+70269,4,Gekettelte Rüstung des ruchlosen Gladiators
+70270,4,Gekettelte Stulpen des ruchlosen Gladiators
+70271,4,Gekettelter Helm des ruchlosen Gladiators
+70272,4,Gekettelte Gamaschen des ruchlosen Gladiators
+70273,4,Gekettelte Schiftung des ruchlosen Gladiators
+70274,4,Panzerrüstung des ruchlosen Gladiators
+70275,4,Panzerstulpen des ruchlosen Gladiators
+70276,4,Panzerhelm des ruchlosen Gladiators
+70277,4,Panzergamaschen des ruchlosen Gladiators
+70278,4,Panzerschiftung des ruchlosen Gladiators
+70279,4,Drachenlederhandschuhe des ruchlosen Gladiators
+70280,4,Drachenlederhelm des ruchlosen Gladiators
+70281,4,Drachenlederbeinschützer des ruchlosen Gladiators
+70282,4,Drachenlederroben des ruchlosen Gladiators
+70283,4,Drachenlederschiftung des ruchlosen Gladiators
+70284,4,Kodobalghandschuhe des ruchlosen Gladiators
+70285,4,Kodobalghelm des ruchlosen Gladiators
+70286,4,Kodobalgbeinschützer des ruchlosen Gladiators
+70287,4,Kodobalgroben des ruchlosen Gladiators
+70288,4,Kodobalgschiftung des ruchlosen Gladiators
+70289,4,Wyrmbalghandschuhe des ruchlosen Gladiators
+70290,4,Wyrmbalghelm des ruchlosen Gladiators
+70291,4,Wyrmbalgbeinschützer des ruchlosen Gladiators
+70292,4,Wyrmbalgroben des ruchlosen Gladiators
+70293,4,Wyrmbalgschiftung des ruchlosen Gladiators
+70294,4,Ledertunika des ruchlosen Gladiators
+70295,4,Lederhandschuhe des ruchlosen Gladiators
+70296,4,Lederhelm des ruchlosen Gladiators
+70297,4,Lederbeinschützer des ruchlosen Gladiators
+70298,4,Lederschiftung des ruchlosen Gladiators
+70299,4,Seidene Handschützer des ruchlosen Gladiators
+70300,4,Seidene Gugel des ruchlosen Gladiators
+70301,4,Seidene Hose des ruchlosen Gladiators
+70302,4,Seidene Robe des ruchlosen Gladiators
+70303,4,Seidene Amicia des ruchlosen Gladiators
+70304,4,Mondstoffhandschuhe des ruchlosen Gladiators
+70305,4,Mondstoffhelm des ruchlosen Gladiators
+70306,4,Mondstoffgamaschen des ruchlosen Gladiators
+70307,4,Mondstoffrobe des ruchlosen Gladiators
+70308,4,Mondstoffmantelung des ruchlosen Gladiators
+70309,4,Satinhandschuhe des ruchlosen Gladiators
+70310,4,Satinkapuze des ruchlosen Gladiators
+70311,4,Satingamaschen des ruchlosen Gladiators
+70312,4,Satinrobe des ruchlosen Gladiators
+70313,4,Satinmantelung des ruchlosen Gladiators
+70314,4,Teufelsgewebte Handschützer des ruchlosen Gladiators
+70315,4,Teufelsgewebte Gugel des ruchlosen Gladiators
+70316,4,Teufelsgewebte Hose des ruchlosen Gladiators
+70317,4,Teufelsgewebte Gewandung des ruchlosen Gladiators
+70318,4,Teufelsgewebte Amicia des ruchlosen Gladiators
+70319,4,Grausamkeitsschnallengürtel des ruchlosen Gladiators
+70320,4,Grausamkeitsgurt des ruchlosen Gladiators
+70321,4,Grausamkeitskriegsstiefel des ruchlosen Gladiators
+70322,4,Eiferarmplatten des ruchlosen Gladiators
+70323,4,Eiferkriegsstiefel des ruchlosen Gladiators
+70324,4,Eiferschienbeinschützer des ruchlosen Gladiators
+70325,4,Schlagkraftarmschienen des ruchlosen Gladiators
+70326,4,Schlagkraftgurt des ruchlosen Gladiators
+70327,4,Kompetenzarmplatten des ruchlosen Gladiators
+70328,4,Meditationstaillenschutz des ruchlosen Gladiators
+70329,4,Meditationsabatons des ruchlosen Gladiators
+70330,4,Meditationsarmbinden des ruchlosen Gladiators
+70331,4,Grausamkeitstaillenschutz des ruchlosen Gladiators
+70332,4,Meditationsschnallengürtel des ruchlosen Gladiators
+70333,4,Meditationsschienbeinschützer des ruchlosen Gladiators
+70334,4,Meditationsarmschienen des ruchlosen Gladiators
+70335,4,Grausamkeitssabatons des ruchlosen Gladiators
+70336,4,Grausamkeitstaillenschutz des ruchlosen Gladiators
+70337,4,Eifersabatons des ruchlosen Gladiators
+70338,4,Eiferhandgelenksschützer des ruchlosen Gladiators
+70339,4,Präzisionstaillenschutz des ruchlosen Gladiators
+70340,4,Präzisionshandgelenksschützer des ruchlosen Gladiators
+70341,4,Eifersabatons des ruchlosen Gladiators
+70342,4,Schlagkraftarmbinden des ruchlosen Gladiators
+70343,4,Meditationsgürtel des ruchlosen Gladiators
+70344,4,Meditationsfußschützer des ruchlosen Gladiators
+70345,4,Meditationsbindungen des ruchlosen Gladiators
+70346,4,Grausamkeitsgürtel des ruchlosen Gladiators
+70347,4,Grausamkeitsgürtelbund des ruchlosen Gladiators
+70348,4,Grausamkeitsstiefel des ruchlosen Gladiators
+70349,4,Präzisionsgürtelbund des ruchlosen Gladiators
+70350,4,Präzisionsarmwickel des ruchlosen Gladiators
+70351,4,Eiferstiefel des ruchlosen Gladiators
+70352,4,Eiferarmwickel des ruchlosen Gladiators
+70353,4,Zieratbrustschutz des ruchlosen Gladiators
+70354,4,Zierathandschuhe des ruchlosen Gladiators
+70355,4,Zieratkopfbedeckung des ruchlosen Gladiators
+70356,4,Zieratbeinplatten des ruchlosen Gladiators
+70357,4,Zieratschiftung des ruchlosen Gladiators
+70358,4,Eiferfußschützer des ruchlosen Gladiators
+70359,4,Schlagkraftbindungen des ruchlosen Gladiators
+70360,4,Grausamkeitskordel des ruchlosen Gladiators
+70361,4,Grausamkeitstreter des ruchlosen Gladiators
+70362,4,Präzisionskordel des ruchlosen Gladiators
+70363,4,Präzisionsmanschetten des ruchlosen Gladiators
+70364,4,Eifertreter des ruchlosen Gladiators
+70365,4,Schlagkraftmanschetten des ruchlosen Gladiators
+70366,4,Meditationsmanschetten des ruchlosen Gladiators
+70367,4,Meditationstreter des ruchlosen Gladiators
+70368,4,Meditationskordel des ruchlosen Gladiators
+70383,4,Eiferumhang des ruchlosen Gladiators
+70384,4,Schlagkraftumhang des ruchlosen Gladiators
+70385,4,Schlagkraftcape des ruchlosen Gladiators
+70386,4,Grausamkeitscape des ruchlosen Gladiators
+70387,4,Diffusionstuch des ruchlosen Gladiators
+70388,4,Schlagkrafttuch des ruchlosen Gladiators
+70389,4,Meditationstuch des ruchlosen Gladiators
+70405,4,Vorherrschaftsrelikt des ruchlosen Gladiators
+70406,4,Erretterrelikt des ruchlosen Gladiators
+70407,4,Triumphales Relikt des ruchlosen Gladiators
+70408,4,Eroberungsrelikt des ruchlosen Gladiators
+70415,4,Zieratschiftung des ruchlosen Gladiators
+70416,4,Zieratbeinplatten des ruchlosen Gladiators
+70417,4,Zieratkopfbedeckung des ruchlosen Gladiators
+70418,4,Zierathandschuhe des ruchlosen Gladiators
+70419,4,Zieratbrustschutz des ruchlosen Gladiators
+70420,4,Panzerschiftung des ruchlosen Gladiators
+70421,4,Panzergamaschen des ruchlosen Gladiators
+70422,4,Panzerhelm des ruchlosen Gladiators
+70423,4,Panzerstulpen des ruchlosen Gladiators
+70424,4,Panzerrüstung des ruchlosen Gladiators
+70425,4,Teufelsgewebte Amicia des ruchlosen Gladiators
+70426,4,Teufelsgewebte Gewandung des ruchlosen Gladiators
+70427,4,Teufelsgewebte Hose des ruchlosen Gladiators
+70428,4,Wyrmbalghelm des ruchlosen Gladiators
+70429,4,Wyrmbalghandschuhe des ruchlosen Gladiators
+70430,4,Kodobalgschiftung des ruchlosen Gladiators
+70431,4,Kodobalgroben des ruchlosen Gladiators
+70432,4,Kodobalgbeinschützer des ruchlosen Gladiators
+70433,4,Ringpanzerrüstung des ruchlosen Gladiators
+70434,4,Kettenschiftung des ruchlosen Gladiators
+70435,4,Kettengamaschen des ruchlosen Gladiators
+70436,4,Kodobalghelm des ruchlosen Gladiators
+70437,4,Kodobalghandschuhe des ruchlosen Gladiators
+70438,4,Drachenlederschiftung des ruchlosen Gladiators
+70439,4,Drachenlederroben des ruchlosen Gladiators
+70440,4,Kettenhelm des ruchlosen Gladiators
+70441,4,Kettenstulpen des ruchlosen Gladiators
+70442,4,Lederschiftung des ruchlosen Gladiators
+70443,4,Lederbeinschützer des ruchlosen Gladiators
+70444,4,Lederhelm des ruchlosen Gladiators
+70445,4,Lederhandschuhe des ruchlosen Gladiators
+70446,4,Ledertunika des ruchlosen Gladiators
+70447,4,Wyrmbalgschiftung des ruchlosen Gladiators
+70448,4,Wyrmbalgroben des ruchlosen Gladiators
+70449,4,Wyrmbalgbeinschützer des ruchlosen Gladiators
+70450,4,Mondstoffrobe des ruchlosen Gladiators
+70451,4,Mondstoffgamaschen des ruchlosen Gladiators
+70452,4,Mondstoffhelm des ruchlosen Gladiators
+70453,4,Mondstoffhandschuhe des ruchlosen Gladiators
+70454,4,Seidene Amicia des ruchlosen Gladiators
+70455,4,Seidene Robe des ruchlosen Gladiators
+70456,4,Gekettelte Schiftung des ruchlosen Gladiators
+70457,4,Gekettelte Gamaschen des ruchlosen Gladiators
+70458,4,Gekettelter Helm des ruchlosen Gladiators
+70459,4,Gekettelte Stulpen des ruchlosen Gladiators
+70460,4,Gekettelte Rüstung des ruchlosen Gladiators
+70461,4,Seidene Hose des ruchlosen Gladiators
+70462,4,Seidene Gugel des ruchlosen Gladiators
+70463,4,Seidene Handschützer des ruchlosen Gladiators
+70464,4,Ringpanzerschiftung des ruchlosen Gladiators
+70465,4,Ringpanzergamaschen des ruchlosen Gladiators
+70466,4,Ringpanzerhelm des ruchlosen Gladiators
+70467,4,Ringpanzerstulpen des ruchlosen Gladiators
+70468,4,Teufelsgewebte Gugel des ruchlosen Gladiators
+70469,4,Teufelsgewebte Handschützer des ruchlosen Gladiators
+70470,4,Satinmantelung des ruchlosen Gladiators
+70471,4,Satinrobe des ruchlosen Gladiators
+70472,4,Satingamaschen des ruchlosen Gladiators
+70473,4,Satinkapuze des ruchlosen Gladiators
+70474,4,Satinhandschuhe des ruchlosen Gladiators
+70475,4,Mondstoffmantelung des ruchlosen Gladiators
+70476,4,Kettenrüstung des ruchlosen Gladiators
+70477,4,Plattenschultern des ruchlosen Gladiators
+70478,4,Plattenbeinschützer des ruchlosen Gladiators
+70479,4,Plattenhelm des ruchlosen Gladiators
+70480,4,Plattenstulpen des ruchlosen Gladiators
+70481,4,Plattenbrustharnisch des ruchlosen Gladiators
+70482,4,Schuppenschultern des ruchlosen Gladiators
+70483,4,Schuppenbeinschützer des ruchlosen Gladiators
+70484,4,Drachenlederbeinschützer des ruchlosen Gladiators
+70485,4,Drachenlederhelm des ruchlosen Gladiators
+70486,4,Drachenlederhandschuhe des ruchlosen Gladiators
+70487,4,Schuppenhelm des ruchlosen Gladiators
+70488,4,Schuppenstulpen des ruchlosen Gladiators
+70489,4,Schuppenharnisch des ruchlosen Gladiators
+70490,4,Schreckensplattenschultern des ruchlosen Gladiators
+70491,4,Schreckensplattenbeinschützer des ruchlosen Gladiators
+70492,4,Schreckensplattenhelm des ruchlosen Gladiators
+70493,4,Schreckensplattenstulpen des ruchlosen Gladiators
+70494,4,Schreckensplattenbrustharnisch des ruchlosen Gladiators
+70495,4,Grausamkeitstreter des ruchlosen Gladiators
+70496,4,Eifertreter des ruchlosen Gladiators
+70497,4,Meditationstreter des ruchlosen Gladiators
+70498,4,Meditationsfußschützer des ruchlosen Gladiators
+70499,4,Eiferfußschützer des ruchlosen Gladiators
+70500,4,Grausamkeitssabatons des ruchlosen Gladiators
+70501,4,Eifersabatons des ruchlosen Gladiators
+70502,4,Eiferschienbeinschützer des ruchlosen Gladiators
+70503,4,Meditationsschienbeinschützer des ruchlosen Gladiators
+70504,4,Grausamkeitskriegsstiefel des ruchlosen Gladiators
+70505,4,Eiferkriegsstiefel des ruchlosen Gladiators
+70506,4,Grausamkeitsstiefel des ruchlosen Gladiators
+70507,4,Eiferstiefel des ruchlosen Gladiators
+70508,4,Eifersabatons des ruchlosen Gladiators
+70509,4,Meditationsabatons des ruchlosen Gladiators
+70511,4,Meditationsarmbinden des boshaften Gladiators
+70512,4,Schlagkraftarmbinden des boshaften Gladiators
+70513,4,Eiferarmplatten des boshaften Gladiators
+70514,4,Kompetenzarmplatten des boshaften Gladiators
+70515,4,Präzisionsarmwickel des boshaften Gladiators
+70516,4,Eiferarmwickel des boshaften Gladiators
+70523,4,Grausamkeitsgürtel des boshaften Gladiators
+70524,4,Meditationsgürtel des boshaften Gladiators
+70525,4,Meditationsbindungen des boshaften Gladiators
+70526,4,Schlagkraftbindungen des boshaften Gladiators
+70527,4,Eiferstiefel des boshaften Gladiators
+70528,4,Grausamkeitsstiefel des boshaften Gladiators
+70529,4,Meditationsarmschienen des boshaften Gladiators
+70530,4,Schlagkraftarmschienen des boshaften Gladiators
+70531,4,Grausamkeitscape des boshaften Gladiators
+70532,4,Schlagkraftcape des boshaften Gladiators
+70533,4,Kettenrüstung des boshaften Gladiators
+70534,4,Kettenstulpen des boshaften Gladiators
+70535,4,Kettenhelm des boshaften Gladiators
+70536,4,Kettengamaschen des boshaften Gladiators
+70537,4,Kettenschiftung des boshaften Gladiators
+70540,4,Grausamkeitsschnallengürtel des boshaften Gladiators
+70541,4,Meditationsschnallengürtel des boshaften Gladiators
+70542,4,Eiferumhang des boshaften Gladiators
+70543,4,Schlagkraftumhang des boshaften Gladiators
+70544,4,Präzisionskordel des boshaften Gladiators
+70545,4,Grausamkeitskordel des boshaften Gladiators
+70546,4,Meditationskordel des boshaften Gladiators
+70547,4,Präzisionsmanschetten des boshaften Gladiators
+70548,4,Meditationsmanschetten des boshaften Gladiators
+70549,4,Schlagkraftmanschetten des boshaften Gladiators
+70550,4,Drachenlederhandschuhe des boshaften Gladiators
+70551,4,Drachenlederhelm des boshaften Gladiators
+70552,4,Drachenlederbeinschützer des boshaften Gladiators
+70553,4,Drachenlederroben des boshaften Gladiators
+70554,4,Drachenlederschiftung des boshaften Gladiators
+70555,4,Diffusionstuch des boshaften Gladiators
+70556,4,Meditationstuch des boshaften Gladiators
+70557,4,Schlagkrafttuch des boshaften Gladiators
+70558,4,Schreckensplattenbrustharnisch des boshaften Gladiators
+70559,4,Schreckensplattenstulpen des boshaften Gladiators
+70560,4,Schreckensplattenhelm des boshaften Gladiators
+70561,4,Schreckensplattenbeinschützer des boshaften Gladiators
+70562,4,Schreckensplattenschultern des boshaften Gladiators
+70566,4,Teufelsgewebte Amicia des boshaften Gladiators
+70567,4,Teufelsgewebte Gugel des boshaften Gladiators
+70568,4,Teufelsgewebte Handschützer des boshaften Gladiators
+70569,4,Teufelsgewebte Gewandung des boshaften Gladiators
+70570,4,Teufelsgewebte Hose des boshaften Gladiators
+70571,4,Eiferfußschützer des boshaften Gladiators
+70572,4,Meditationsfußschützer des boshaften Gladiators
+70573,4,Grausamkeitsgurt des boshaften Gladiators
+70574,4,Schlagkraftgurt des boshaften Gladiators
+70575,4,Eiferschienbeinschützer des boshaften Gladiators
+70576,4,Meditationsschienbeinschützer des boshaften Gladiators
+70580,4,Kodolederhandschuhe des boshaften Gladiators
+70581,4,Kodobalghelm des boshaften Gladiators
+70582,4,Kodobalgbeinschützer des boshaften Gladiators
+70583,4,Kodobalgroben des boshaften Gladiators
+70584,4,Kodobalgschiftung des boshaften Gladiators
+70585,4,Lederhandschuhe des boshaften Gladiators
+70586,4,Lederhelm des boshaften Gladiators
+70587,4,Lederbeinschützer des boshaften Gladiators
+70588,4,Lederschiftung des boshaften Gladiators
+70589,4,Ledertunika des boshaften Gladiators
+70590,4,Gekettelte Rüstung des boshaften Gladiators
+70591,4,Gekettelte Stulpen des boshaften Gladiators
+70592,4,Gekettelter Helm des boshaften Gladiators
+70593,4,Gekettelte Gamaschen des boshaften Gladiators
+70594,4,Gekettelte Schiftung des boshaften Gladiators
+70595,4,Präzisionstaillenschutz des boshaften Gladiators
+70596,4,Grausamkeitstaillenschutz des boshaften Gladiators
+70597,4,Panzerrüstung des boshaften Gladiators
+70598,4,Panzerstulpen des boshaften Gladiators
+70599,4,Panzerhelm des boshaften Gladiators
+70600,4,Panzergamaschen des boshaften Gladiators
+70601,4,Panzerschiftung des boshaften Gladiators
+70608,4,Mondstoffhandschuhe des boshaften Gladiators
+70609,4,Mondstoffhelm des boshaften Gladiators
+70610,4,Mondstoffgamaschen des boshaften Gladiators
+70611,4,Mondstoffmantelung des boshaften Gladiators
+70612,4,Mondstoffrobe des boshaften Gladiators
+70615,4,Zieratbrustschutz des boshaften Gladiators
+70616,4,Zierathandschuhe des boshaften Gladiators
+70617,4,Zieratkopfbedeckung des boshaften Gladiators
+70618,4,Zieratbeinplatten des boshaften Gladiators
+70619,4,Zieratschiftung des boshaften Gladiators
+70623,4,Plattenbrustharnisch des boshaften Gladiators
+70624,4,Plattenstulpen des boshaften Gladiators
+70625,4,Plattenhelm des boshaften Gladiators
+70626,4,Plattenbeinschützer des boshaften Gladiators
+70627,4,Plattenschultern des boshaften Gladiators
+70628,4,Eroberungsrelikt des boshaften Gladiators
+70629,4,Vorherrschaftsrelikt des boshaften Gladiators
+70630,4,Erretterrelikt des boshaften Gladiators
+70631,4,Triumphales Relikt des boshaften Gladiators
+70632,4,Ringpanzerrüstung des boshaften Gladiators
+70633,4,Ringpanzerstulpen des boshaften Gladiators
+70634,4,Ringpanzerhelm des boshaften Gladiators
+70635,4,Ringpanzergamaschen des boshaften Gladiators
+70636,4,Ringpanzerschiftung des boshaften Gladiators
+70639,4,Eifersabatons des boshaften Gladiators
+70640,4,Eifersabatons des boshaften Gladiators
+70641,4,Grausamkeitssabatons des boshaften Gladiators
+70642,4,Meditationsabatons des boshaften Gladiators
+70643,4,Satinhandschuhe des boshaften Gladiators
+70644,4,Satinkapuze des boshaften Gladiators
+70645,4,Satingamaschen des boshaften Gladiators
+70646,4,Satinmantelung des boshaften Gladiators
+70647,4,Satinrobe des boshaften Gladiators
+70648,4,Schuppenharnisch des boshaften Gladiators
+70649,4,Schuppenstulpen des boshaften Gladiators
+70650,4,Schuppenhelm des boshaften Gladiators
+70651,4,Schuppenbeinschützer des boshaften Gladiators
+70652,4,Schuppenschultern des boshaften Gladiators
+70655,4,Seidene Amicia des boshaften Gladiators
+70656,4,Seidene Gugel des boshaften Gladiators
+70657,4,Seidene Handschützer des boshaften Gladiators
+70658,4,Seidene Robe des boshaften Gladiators
+70659,4,Seidene Hose des boshaften Gladiators
+70660,4,Eifertreter des boshaften Gladiators
+70661,4,Grausamkeitstreter des boshaften Gladiators
+70662,4,Meditationstreter des boshaften Gladiators
+70663,4,Präzisionsgürtelbund des boshaften Gladiators
+70664,4,Grausamkeitsgürtelbund des boshaften Gladiators
+70665,4,Grausamkeitstaillenschutz des boshaften Gladiators
+70666,4,Meditationstaillenschutz des boshaften Gladiators
+70667,4,Eiferkriegsstiefel des boshaften Gladiators
+70668,4,Grausamkeitskriegsstiefel des boshaften Gladiators
+70669,4,Präzisionshandgelenksschützer des boshaften Gladiators
+70670,4,Eiferhandgelenksschützer des boshaften Gladiators
+70671,4,Wyrmbalghandschuhe des boshaften Gladiators
+70672,4,Wyrmbalghelm des boshaften Gladiators
+70673,4,Wyrmbalgbeinschützer des boshaften Gladiators
+70674,4,Wyrmbalgroben des boshaften Gladiators
+70675,4,Wyrmbalgschiftung des boshaften Gladiators
+70723,4,Sulfuras die erloschene Hand
+70733,4,Phoenixfeather Shiv
+70734,4,Nestheart Greathelm
+70735,4,Flickering Wristbands
+70736,4,Fireflight Leggings
+70737,4,Spaulders of Recurring Flame
+70739,4,Flightflame Legplates
+70792,2,Art Template Cloth Belt - Robe_RaidMage_J - Arcane
+70793,2,Art Template Cloth Boot - Robe_RaidMage_J - Arcane
+70794,2,Art Template Cloth Chest - Robe_RaidMage_J - Arcane
+70795,2,Art Template Cloth Hand - Robe_RaidMage_J - Arcane
+70796,2,Art Template Cloth Head - Robe_RaidMage_J - Arcane
+70797,2,Art Template Cloth Legs - Robe_RaidMage_J - Arcane
+70798,2,Art Template Cloth Robe - Robe_RaidMage_J - Arcane
+70799,2,Art Template Cloth Shoulder - Robe_RaidMage_J - Arcane
+70800,2,Art Template Cloth Wrist - Robe_RaidMage_J - Arcane
+70801,2,Art Template Cloth Belt - Robe_RaidMage_J - Frost
+70802,2,Art Template Cloth Boot - Robe_RaidMage_J - Frost
+70803,2,Art Template Cloth Chest - Robe_RaidMage_J - Frost
+70804,2,Art Template Cloth Hand - Robe_RaidMage_J - Frost
+70805,2,Art Template Cloth Head - Robe_RaidMage_J - Frost
+70806,2,Art Template Cloth Legs - Robe_RaidMage_J - Frost
+70807,2,Art Template Cloth Robe - Robe_RaidMage_J - Frost
+70808,2,Art Template Cloth Shoulder - Robe_RaidMage_J - Frost
+70809,2,Art Template Cloth Wrist - Robe_RaidMage_J - Frost
+70810,2,Art Template Cloth Belt - Robe_RaidMage_J - Fire
+70811,2,Art Template Cloth Boot - Robe_RaidMage_J - Fire
+70812,2,Art Template Cloth Chest - Robe_RaidMage_J - Fire
+70813,2,Art Template Cloth Hand - Robe_RaidMage_J - Fire
+70814,2,Art Template Cloth Head - Robe_RaidMage_J - Fire
+70815,2,Art Template Cloth Legs - Robe_RaidMage_J - Fire
+70816,2,Art Template Cloth Robe - Robe_RaidMage_J - Fire
+70817,2,Art Template Cloth Shoulder - Robe_RaidMage_J - Fire
+70818,2,Art Template Cloth Wrist - Robe_RaidMage_J - Fire
+70863,2,Art Template Cloth Wrist - Robe_RaidPriest_J - Blue
+70872,2,Art Template Cloth Wrist - Robe_RaidPriest_J - Green
+70881,2,Art Template Cloth Wrist - Robe_RaidPriest_J - Orange
+70884,2,Art Template Plate Wrist - RaidWarrior_J - Default
+70885,2,Art Template Plate Shoulder - RaidWarrior_J - Default
+70886,2,Art Template Plate Legs - RaidWarrior_J - Default
+70887,2,Art Template Plate Head - RaidWarrior_J - Default
+70888,2,Art Template Plate Hand - RaidWarrior_J - Default
+70889,2,Art Template Plate Chest - RaidWarrior_J - Default
+70890,2,Art Template Plate Boot - RaidWarrior_J - Default
+70891,2,Art Template Plate Belt - RaidWarrior_J - Default
+70892,2,Art Template Plate Belt - RaidWarrior_J - Gray
+70893,2,Art Template Plate Boot - RaidWarrior_J - Gray
+70894,2,Art Template Plate Chest - RaidWarrior_J - Gray
+70895,2,Art Template Plate Hand - RaidWarrior_J - Gray
+70896,2,Art Template Plate Head - RaidWarrior_J - Gray
+70897,2,Art Template Plate Legs - RaidWarrior_J - Gray
+70898,2,Art Template Plate Shoulder - RaidWarrior_J - Gray
+70899,2,Art Template Plate Wrist - RaidWarrior_J - Gray
+70900,2,Art Template Plate Belt - RaidWarrior_J - Red
+70901,2,Art Template Plate Boot - RaidWarrior_J - Red
+70902,2,Art Template Plate Chest - RaidWarrior_J - Red
+70903,2,Art Template Plate Hand - RaidWarrior_J - Red
+70904,2,Art Template Plate Head - RaidWarrior_J - Red
+70905,2,Art Template Plate Legs - RaidWarrior_J - Red
+70906,2,Art Template Plate Shoulder - RaidWarrior_J - Red
+70907,2,Art Template Plate Wrist - RaidWarrior_J - Red
+70912,4,Giantflame Stompers
+70913,4,Shannox's Rusted Legplates
+70914,4,Flamescarred Carapace
+70915,4,Bulwark of the Gatekeeper
+70916,4,Helm of the Demon King
+70917,4,Flickering Handguards
+70920,4,Bracers of the Fiery Path
+70921,4,Spaulders of Pure Flame
+70922,4,Mandible of Beth'tilac
+70923,2,[ph] Holiday Garb
+70930,4,Durable Flamewrath Cloak
+70933,4,Girdle of the Indomitable Flame
+70937,4,Bracers of Regal Force
+70939,4,Deathclutch Figurine
+70941,4,Shoulderguards of the Molten Giant
+70942,4,Legguards of the Molten Giant
+70943,4,Handguards of the Molten Giant
+70944,4,Faceguard of the Molten Giant
+70945,4,Chestguard of the Molten Giant
+70946,4,Immolation Shoulderguards
+70947,4,Immolation Legguards
+70948,4,Immolation Faceguard
+70949,4,Immolation Handguards
+70950,4,Immolation Chestguard
+70951,4,Elementium Dragon Shoulderguards
+70952,4,Elementium Dragon Legguards
+70953,4,Elementium Dragon Handguards
+70954,4,Elementium Dragon Faceguard
+70955,4,Elementium Dragon Chestguard
+70985,4,Craterflame Spaulders
+70986,4,Egg-Clutch Gauntlets
+70987,4,Phoenix-Down Treads
+70988,4,Clutch of the Firemother
+70989,4,Leggings of Airy Flame
+70990,4,Lightwing Cloak
+70991,4,Crossbow of Erupting Fury
+70992,4,Dreadfire Drape
+70993,4,Fireskin Gauntlets
+71003,4,Vision of the Flaming Skull
+71004,4,Earthcrack Bracers
+71005,4,Flaming Core Chestguard
+71006,4,Volcanospike
+71007,4,Grips of the Raging Giant
+71009,4,Cauterizing Wristbands
+71010,4,Incendic Robes
+71011,4,Vision of the Flickering Flame
+71013,4,Spike of the Dread Hunter
+71014,4,Headreaper Greataxe
+71018,4,Scalp of the Bandit Prince
+71020,4,True-Arrow Grips
+71021,4,Uncrushable Belt of Fury
+71022,4,Flamewrought Abilene Shell
+71023,4,Emberskip Sandals
+71025,4,Flickering Shoulderpads
+71026,4,Bracers of the Dread Hunter
+71027,4,Treads of Implicit Obedience
+71028,4,Legplates of Absolute Control
+71029,4,Arachnaflame Treads
+71030,4,Seared Chitin Shoulders
+71031,4,Spiderheart Leggings
+71038,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Int Spirit Shield
+71039,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Int Versatile Staff
+71040,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Leather Int Spirit Helm
+71041,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Cloth Int Versatile Robe
+71042,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Mail Int Spirit Legs

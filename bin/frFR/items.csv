@@ -29760,6 +29760,9 @@
 69842,4,Ceinturon de souvenirs renforcé de Garr
 69843,4,Hallebarde dégoulinante de Mobus
 69844,4,Bec vitré de Julak-Dram
+69857,0,[Monster] - Caster Legendary Stage 3
+69858,0,[Monster] - Caster Legendary Stage 1
+69859,0,[Monster] - Caster Legendary Stage 2
 69864,1,Couronne ternie
 69865,1,Bracelets émaillées de gemmes
 69876,4,Gantelets spectraux de Xariona
@@ -29774,5 +29777,664 @@
 69890,7,Espauliers de puissance brunis
 69892,7,Cape de tempête de sable abîmée
 69893,7,Déchireuse de Stratholme imprégnée de sang
+69897,4,Bâton de test
 69916,4,Trollemort
+69936,4,Poings de fureur
+69937,4,Garde-mains en élémentium éternels
+69938,4,Gantelets de la flamme sacrée
+69939,4,Gants de feu draconique
+69941,4,Gants de la flamme impitoyable
+69942,4,Etreintes du mal
+69943,4,Gants célestes de la Lune
+69944,4,Poignes de réalité altérée
+69945,4,Mitaines infernales de don Tayo
+69946,4,Bottes de guerre de seigneurs puissants
+69947,4,Bottes miroitantes
+69948,4,Bottes de forge-braise en élémentium
+69949,4,Solerets terrestres en écailles
+69950,4,Bottillons du feu éteint
+69951,4,Bottines de l’art
+69952,4,Grolles éthériennes
+69953,4,Brodequins de rêves infinis
+69954,4,Bottes de la flamme noire
+70004,3,Cuirasse en pyrium assoiffé de sang
+70005,3,Bottes en pyrium assoiffé de sang
+70006,3,Gantelets en pyrium assoiffé de sang
+70007,3,Heaume en pyrium assoiffé de sang
+70008,3,Garde-jambes en pyrium assoiffé de sang
+70009,3,Epaulières en pyrium assoiffé de sang
+70010,3,Ceinture en pyrium assoiffé de sang
+70011,3,Brassards en pyrium assoiffé de sang
+70012,3,Cuirasse ornée en pyrium assoiffé de sang
+70013,3,Bottes ornées en pyrium assoiffé de sang
+70014,3,Gantelets ornés en pyrium assoiffé de sang
+70015,3,Heaume orné en pyrium assoiffé de sang
+70016,3,Garde-jambes ornés en pyrium assoiffé de sang
+70017,3,Epaulières ornées en pyrium assoiffé de sang
+70018,3,Ceinture ornée en pyrium assoiffé de sang
+70019,3,Brassards ornés en pyrium assoiffé de sang
+70020,3,Ceinture en cuir assoiffé de sang
+70021,3,Bottes en cuir assoiffé de sang
+70022,3,Brassards en cuir assoiffé de sang
+70023,3,Pansière en cuir assoiffé de sang
+70024,3,Gants en cuir assoiffé de sang
+70025,3,Heaume en cuir assoiffé de sang
+70026,3,Jambières en cuir assoiffé de sang
+70027,3,Epaulières en cuir assoiffé de sang
+70028,3,Ceinture en peau de wyrm assoiffée de sang
+70029,3,Bottes en peau de wyrm assoiffée de sang
+70030,3,Brassards en peau de wyrm assoiffée de sang
+70031,3,Pansière en peau de wyrm assoiffée de sang
+70032,3,Gants en peau de wyrm assoiffée de sang
+70033,3,Heaume en peau de wyrm assoiffée de sang
+70034,3,Jambières en peau de wyrm assoiffée de sang
+70035,3,Epaulières en peau de wyrm assoiffée de sang
+70036,3,Ceinture en écailles de dragon assoiffées de sang
+70037,3,Bottes en écailles de dragon assoiffées de sang
+70038,3,Brassards en écailles de dragon assoiffées de sang
+70039,3,Pansière en écailles de dragon assoiffées de sang
+70040,3,Gants en écailles de dragon assoiffées de sang
+70041,3,Heaume en écailles de dragon assoiffées de sang
+70042,3,Jambières en écailles de dragon assoiffées de sang
+70043,3,Epaulières en écailles de dragon assoiffées de sang
+70044,3,Ceinture en calcinécailles assoiffées de sang
+70045,3,Bottes en calcinécailles assoiffées de sang
+70046,3,Brassards en calcinécailles assoiffées de sang
+70047,3,Pansière en calcinécailles assoiffées de sang
+70048,3,Gants en calcinécailles assoiffées de sang
+70049,3,Heaume en calcinécailles assoiffées de sang
+70050,3,Jambières en calcinécailles assoiffées de sang
+70051,3,Epaulières en calcinécailles assoiffées de sang
+70052,3,Ceinture en tisse-feu assoiffé de sang
+70053,3,Bottes en tisse-feu assoiffé de sang
+70054,3,Brassards en tisse-feu assoiffé de sang
+70055,3,Capuche en tisse-feu assoiffé de sang
+70056,3,Gants en tisse-feu assoiffé de sang
+70057,3,Pantalon en tisse-feu assoiffé de sang
+70058,3,Robe en tisse-feu assoiffé de sang
+70059,3,Epaulières en tisse-feu assoiffé de sang
+70060,3,Robe en braise-feu assoiffée de sang
+70061,3,Bottes en braise-feu assoiffée de sang
+70062,3,Ceinture en braise-feu assoiffée de sang
+70063,3,Brassards en braise-feu assoiffée de sang
+70064,3,Epaulières en braise-feu assoiffée de sang
+70065,3,Gants en braise-feu assoiffée de sang
+70066,3,Pantalon en braise-feu assoiffée de sang
+70067,3,Capuche en braise-feu assoiffée de sang
+70068,3,Cape en fourrure assoiffée de sang
+70069,3,Cape en peau assoiffée de sang
+70070,3,Cape en braise-feu assoiffée de sang
+70077,3,Charme de triomphe assoiffé de sang
+70078,3,Globe oculaire de domination assoiffée de sang
+70079,3,Mâchoire de conquête assoiffée de sang
 70080,4,Reforged Heartless
+70088,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Blue
+70097,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Green
+70155,4,Brise-cervelle
+70156,4,Sorcelame en élémentium ouvragé
+70157,4,Marteau en élémentium de Sancteforge
+70158,4,Scalpeur à tranchant d’élémentium
+70159,3,Appel de Mylune
+70162,4,Sorcegarde en pyrium
+70163,4,Gardien incassable
+70164,4,Lame-de-mort en élémentium ouvragé
+70165,4,Moissonneur du chasseur de sorcière
+70178,4,Estramaçon du gladiateur sans pitié
+70179,4,Bâton du gladiateur sans pitié
+70180,4,Bâton d’énergie du gladiateur sans pitié
+70181,4,Bâton d’armes du gladiateur sans pitié
+70182,4,Pique du gladiateur sans pitié
+70183,4,Broyeur d’os du gladiateur sans pitié
+70184,4,Décapiteur du gladiateur sans pitié
+70185,4,Martelet du gladiateur sans pitié
+70186,4,Déchiqueteuse droite du gladiateur sans pitié
+70187,4,Eventreur droit du gladiateur sans pitié
+70188,4,Sorcelame du gladiateur sans pitié
+70189,4,Etripeur gauche du gladiateur sans pitié
+70190,4,Eventreur gauche du gladiateur sans pitié
+70191,4,Coutelas du gladiateur sans pitié
+70192,4,Arc long du gladiateur sans pitié
+70193,4,Arbalète lourde du gladiateur sans pitié
+70194,4,Carabine du gladiateur sans pitié
+70195,4,Férule de lumière du gladiateur sans pitié
+70196,4,Pointe de défaite du gladiateur sans pitié
+70197,4,Hachette du gladiateur sans pitié
+70198,4,Trancheguerre du gladiateur sans pitié
+70199,4,Prestelame du gladiateur sans pitié
+70200,4,Tranchoir du gladiateur sans pitié
+70201,4,Casseur d’os du gladiateur sans pitié
+70202,4,Roueur du gladiateur sans pitié
+70203,4,Perforeuse du gladiateur sans pitié
+70204,4,Trancheuse du gladiateur sans pitié
+70205,4,Fendoir du gladiateur sans pitié
+70206,4,Redoute du gladiateur sans pitié
+70207,4,Barrière du gladiateur sans pitié
+70208,4,Grand pavois du gladiateur sans pitié
+70209,4,Sursis du gladiateur sans pitié
+70210,4,Poing final du gladiateur sans pitié
+70211,4,Fendoir du gladiateur sans pitié
+70212,4,Trancheuse du gladiateur sans pitié
+70213,4,Décapiteur du gladiateur sans pitié
+70214,4,Perforeuse du gladiateur sans pitié
+70215,4,Coutelas du gladiateur sans pitié
+70216,4,Sorcelame du gladiateur sans pitié
+70217,4,Eventreur droit du gladiateur sans pitié
+70218,4,Eventreur gauche du gladiateur sans pitié
+70219,4,Etripeur gauche du gladiateur sans pitié
+70220,4,Déchiqueteuse droite du gladiateur sans pitié
+70221,4,Roueur du gladiateur sans pitié
+70222,4,Casseur d’os du gladiateur sans pitié
+70223,4,Martelet du gladiateur sans pitié
+70224,4,Broyeur d’os du gladiateur sans pitié
+70225,4,Pique du gladiateur sans pitié
+70226,4,Bâton d’armes du gladiateur sans pitié
+70227,4,Bâton d’énergie du gladiateur sans pitié
+70228,4,Bâton du gladiateur sans pitié
+70229,4,Tranchoir du gladiateur sans pitié
+70230,4,Prestelame du gladiateur sans pitié
+70231,4,Estramaçon du gladiateur sans pitié
+70232,4,Trancheguerre du gladiateur sans pitié
+70233,4,Hachette du gladiateur sans pitié
+70234,4,Pointe de défaite du gladiateur sans pitié
+70235,4,Férule de lumière du gladiateur sans pitié
+70236,4,Arc long du gladiateur sans pitié
+70237,4,Carabine du gladiateur sans pitié
+70238,4,Arbalète lourde du gladiateur sans pitié
+70239,4,Poing final du gladiateur sans pitié
+70240,4,Sursis du gladiateur sans pitié
+70241,4,Grand pavois du gladiateur sans pitié
+70242,4,Barrière du gladiateur sans pitié
+70243,4,Redoute du gladiateur sans pitié
+70244,4,Plastron du gladiateur sans pitié en plaques d’effroi
+70245,4,Gantelets du gladiateur sans pitié en anneaux
+70246,4,Heaume du gladiateur sans pitié en plaques d’effroi
+70247,4,Garde-jambes du gladiateur sans pitié en plaques d’effroi
+70248,4,Epaulières du gladiateur sans pitié en plaques d’effroi
+70249,4,Plastron du gladiateur sans pitié en écailles
+70250,4,Gantelets du gladiateur sans pitié en écailles
+70251,4,Heaume du gladiateur sans pitié en écailles
+70252,4,Garde-jambes du gladiateur sans pitié en écailles
+70253,4,Epaulières du gladiateur sans pitié en écailles
+70254,4,Plastron du gladiateur sans pitié en plaques
+70255,4,Gantelets du gladiateur sans pitié en plaques
+70256,4,Heaume du gladiateur sans pitié en plaques
+70257,4,Garde-jambes du gladiateur sans pitié en plaques
+70258,4,Epaulières du gladiateur sans pitié en plaques
+70259,4,Cotte d’anneaux du gladiateur sans pitié
+70260,4,Gantelets du gladiateur sans pitié en anneaux
+70261,4,Heaume du gladiateur sans pitié en anneaux
+70262,4,Jambières du gladiateur sans pitié en anneaux
+70263,4,Spallières du gladiateur sans pitié en anneaux
+70264,4,Armure du gladiateur sans pitié en mailles annelées
+70265,4,Gantelets du gladiateur sans pitié en mailles annelées
+70266,4,Heaume du gladiateur sans pitié en mailles annelées
+70267,4,Jambières du gladiateur sans pitié en mailles annelées
+70268,4,Spallières du gladiateur sans pitié en mailles annelées
+70269,4,Armure rivetée du gladiateur sans pitié
+70270,4,Gantelets rivetés du gladiateur sans pitié
+70271,4,Heaume riveté du gladiateur sans pitié
+70272,4,Jambières rivetées du gladiateur sans pitié
+70273,4,Spallières rivetées du gladiateur sans pitié
+70274,4,Cotte de mailles du gladiateur sans pitié
+70275,4,Gantelets du gladiateur sans pitié en mailles
+70276,4,Heaume du gladiateur sans pitié en mailles
+70277,4,Jambières du gladiateur sans pitié en mailles
+70278,4,Spallières du gladiateur sans pitié en mailles
+70279,4,Gants du gladiateur sans pitié en peau de dragon
+70280,4,Heaume du gladiateur sans pitié en peau de dragon
+70281,4,Garde-jambes du gladiateur sans pitié en peau de dragon
+70282,4,Robe du gladiateur sans pitié en peau de dragon
+70283,4,Spallières du gladiateur sans pitié en peau de dragon
+70284,4,Gants du gladiateur sans pitié en cuir de kodo
+70285,4,Heaume du gladiateur sans pitié en cuir de kodo
+70286,4,Garde-jambes du gladiateur sans pitié en cuir de kodo
+70287,4,Robe du gladiateur sans pitié en cuir de kodo
+70288,4,Spallières du gladiateur sans pitié en cuir de kodo
+70289,4,Gants du gladiateur sans pitié en peau de wyrm
+70290,4,Heaume du gladiateur sans pitié en peau de wyrm
+70291,4,Garde-jambes du gladiateur sans pitié en peau de wyrm
+70292,4,Robe du gladiateur sans pitié en peau de wyrm
+70293,4,Spallières du gladiateur sans pitié en peau de wyrm
+70294,4,Tunique du gladiateur sans pitié en cuir
+70295,4,Gants du gladiateur sans pitié en cuir
+70296,4,Heaume du gladiateur sans pitié en cuir
+70297,4,Garde-jambes du gladiateur sans pitié en cuir
+70298,4,Spallières du gladiateur sans pitié en cuir
+70299,4,Garde-mains du gladiateur sans pitié en soie
+70300,4,Capuche du gladiateur sans pitié en soie
+70301,4,Chausses du gladiateur sans pitié en soie
+70302,4,Robe du gladiateur sans pitié en soie
+70303,4,Amict du gladiateur sans pitié en soie
+70304,4,Gants du gladiateur sans pitié en étoffe lunaire
+70305,4,Heaume du gladiateur sans pitié en étoffe lunaire
+70306,4,Jambières du gladiateur sans pitié en étoffe lunaire
+70307,4,Robe du gladiateur sans pitié en étoffe lunaire
+70308,4,Mantelet du gladiateur sans pitié en étoffe lunaire
+70309,4,Gants du gladiateur sans pitié en satin
+70310,4,Chaperon du gladiateur sans pitié en satin
+70311,4,Jambières du gladiateur sans pitié en satin
+70312,4,Robe du gladiateur sans pitié en satin
+70313,4,Mantelet du gladiateur sans pitié en satin
+70314,4,Garde-mains du gladiateur sans pitié en tisse-gangrène
+70315,4,Capuche du gladiateur sans pitié en tisse-gangrène
+70316,4,Chausses du gladiateur sans pitié en tisse-gangrène
+70317,4,Grande tenue du gladiateur sans pitié en tisse-gangrène
+70318,4,Amict du gladiateur sans pitié en tisse-gangrène
+70319,4,Fermoir de cruauté du gladiateur sans pitié
+70320,4,Ceinturon de cruauté du gladiateur sans pitié
+70321,4,Bottes de guerre de cruauté du gladiateur sans pitié
+70322,4,Plaques de bras d’empressement du gladiateur sans pitié
+70323,4,Bottes de guerre d’empressement du gladiateur sans pitié
+70324,4,Grèves d’empressement du gladiateur sans pitié
+70325,4,Brassards de prouesse du gladiateur sans pitié
+70326,4,Ceinturon de prouesse du gladiateur sans pitié
+70327,4,Plaques de bras d’expertise du gladiateur sans pitié
+70328,4,Sangle de méditation du gladiateur sans pitié
+70329,4,Solerets de méditation du gladiateur sans pitié
+70330,4,Garde-poignets de méditation du gladiateur sans pitié
+70331,4,Sangle de cruauté du gladiateur sans pitié
+70332,4,Fermoir de méditation du gladiateur sans pitié
+70333,4,Grèves de méditation du gladiateur sans pitié
+70334,4,Brassards de méditation du gladiateur sans pitié
+70335,4,Solerets de cruauté du gladiateur sans pitié
+70336,4,Liens de cruauté du gladiateur sans pitié
+70337,4,Solerets d’empressement du gladiateur sans pitié
+70338,4,Garde-poignets d’empressement du gladiateur sans pitié
+70339,4,Liens de précision du gladiateur sans pitié
+70340,4,Garde-poignets de précision du gladiateur sans pitié
+70341,4,Solerets d’empressement du gladiateur sans pitié
+70342,4,Garde-poignets de prouesse du gladiateur sans pitié
+70343,4,Ceinture de méditation du gladiateur sans pitié
+70344,4,Protège-tibias de méditation du gladiateur sans pitié
+70345,4,Manchettes de méditation du gladiateur sans pitié
+70346,4,Ceinture de cruauté du gladiateur sans pitié
+70347,4,Baudrier de cruauté du gladiateur sans pitié
+70348,4,Bottes de cruauté du gladiateur sans pitié
+70349,4,Baudrier de précision du gladiateur sans pitié
+70350,4,Couvre-bras de précision du gladiateur sans pitié
+70351,4,Bottes d’empressement du gladiateur sans pitié
+70352,4,Couvre-bras d’empressement du gladiateur sans pitié
+70353,4,Corselet ornementé du gladiateur sans pitié
+70354,4,Gants ornementés du gladiateur sans pitié
+70355,4,Bassinet ornementé du gladiateur sans pitié
+70356,4,Cuissards ornementés du gladiateur sans pitié
+70357,4,Spallières ornementées du gladiateur sans pitié
+70358,4,Protège-tibias d’empressement du gladiateur sans pitié
+70359,4,Manchettes de prouesse du gladiateur sans pitié
+70360,4,Corde de cruauté du gladiateur sans pitié
+70361,4,Bottines de cruauté du gladiateur sans pitié
+70362,4,Corde de précision du gladiateur sans pitié
+70363,4,Crispins de précision du gladiateur sans pitié
+70364,4,Bottines d’empressement du gladiateur sans pitié
+70365,4,Crispins de prouesse du gladiateur sans pitié
+70366,4,Crispins de méditation du gladiateur sans pitié
+70367,4,Bottines de méditation du gladiateur sans pitié
+70368,4,Corde de méditation du gladiateur sans pitié
+70383,4,Cape d’empressement du gladiateur sans pitié
+70384,4,Cape de la prouesse du gladiateur sans pitié
+70385,4,Cape de prouesse du gladiateur sans pitié
+70386,4,Cape de cruauté du gladiateur sans pitié
+70387,4,Drapé de diffusion du gladiateur sans pitié
+70388,4,Drapé de prouesse du gladiateur sans pitié
+70389,4,Drapé de méditation du gladiateur sans pitié
+70405,4,Relique de domination du gladiateur sans pitié
+70406,4,Relique de salut du gladiateur sans pitié
+70407,4,Relique de triomphe du gladiateur sans pitié
+70408,4,Relique de conquête du gladiateur sans pitié
+70415,4,Spallières ornementées du gladiateur sans pitié
+70416,4,Cuissards ornementés du gladiateur sans pitié
+70417,4,Bassinet ornementé du gladiateur sans pitié
+70418,4,Gants ornementés du gladiateur sans pitié
+70419,4,Corselet ornementé du gladiateur sans pitié
+70420,4,Spallières du gladiateur sans pitié en mailles
+70421,4,Jambières du gladiateur sans pitié en mailles
+70422,4,Heaume du gladiateur sans pitié en mailles
+70423,4,Gantelets du gladiateur sans pitié en mailles
+70424,4,Cotte de mailles du gladiateur sans pitié
+70425,4,Amict du gladiateur sans pitié en tisse-gangrène
+70426,4,Grande tenue du gladiateur sans pitié en tisse-gangrène
+70427,4,Chausses du gladiateur sans pitié en tisse-gangrène
+70428,4,Heaume du gladiateur sans pitié en peau de wyrm
+70429,4,Gants du gladiateur sans pitié en peau de wyrm
+70430,4,Spallières du gladiateur sans pitié en cuir de kodo
+70431,4,Robe du gladiateur sans pitié en cuir de kodo
+70432,4,Garde-jambes du gladiateur sans pitié en cuir de kodo
+70433,4,Armure du gladiateur sans pitié en mailles annelées
+70434,4,Spallières du gladiateur sans pitié en anneaux
+70435,4,Jambières du gladiateur sans pitié en anneaux
+70436,4,Heaume du gladiateur sans pitié en cuir de kodo
+70437,4,Gants du gladiateur sans pitié en cuir de kodo
+70438,4,Spallières du gladiateur sans pitié en peau de dragon
+70439,4,Robe du gladiateur sans pitié en peau de dragon
+70440,4,Heaume du gladiateur sans pitié en anneaux
+70441,4,Gantelets du gladiateur sans pitié en anneaux
+70442,4,Spallières du gladiateur sans pitié en cuir
+70443,4,Garde-jambes du gladiateur sans pitié en cuir
+70444,4,Heaume du gladiateur sans pitié en cuir
+70445,4,Gants du gladiateur sans pitié en cuir
+70446,4,Tunique du gladiateur sans pitié en cuir
+70447,4,Spallières du gladiateur sans pitié en peau de wyrm
+70448,4,Robe du gladiateur sans pitié en peau de wyrm
+70449,4,Garde-jambes du gladiateur sans pitié en peau de wyrm
+70450,4,Robe du gladiateur sans pitié en étoffe lunaire
+70451,4,Jambières du gladiateur sans pitié en étoffe lunaire
+70452,4,Heaume du gladiateur sans pitié en étoffe lunaire
+70453,4,Gants du gladiateur sans pitié en étoffe lunaire
+70454,4,Amict du gladiateur sans pitié en soie
+70455,4,Robe du gladiateur sans pitié en soie
+70456,4,Spallières rivetées du gladiateur sans pitié
+70457,4,Jambières rivetées du gladiateur sans pitié
+70458,4,Heaume riveté du gladiateur sans pitié
+70459,4,Gantelets rivetés du gladiateur sans pitié
+70460,4,Armure rivetée du gladiateur sans pitié
+70461,4,Chausses du gladiateur sans pitié en soie
+70462,4,Capuche du gladiateur sans pitié en soie
+70463,4,Garde-mains du gladiateur sans pitié en soie
+70464,4,Spallières du gladiateur sans pitié en mailles annelées
+70465,4,Jambières du gladiateur sans pitié en mailles annelées
+70466,4,Heaume du gladiateur sans pitié en mailles annelées
+70467,4,Gantelets du gladiateur sans pitié en mailles annelées
+70468,4,Capuche du gladiateur sans pitié en tisse-gangrène
+70469,4,Garde-mains du gladiateur sans pitié en tisse-gangrène
+70470,4,Mantelet du gladiateur sans pitié en satin
+70471,4,Robe du gladiateur sans pitié en satin
+70472,4,Jambières du gladiateur sans pitié en satin
+70473,4,Chaperon du gladiateur sans pitié en satin
+70474,4,Gants du gladiateur sans pitié en satin
+70475,4,Mantelet du gladiateur sans pitié en étoffe lunaire
+70476,4,Cotte d’anneaux du gladiateur sans pitié
+70477,4,Epaulières du gladiateur sans pitié en plaques
+70478,4,Garde-jambes du gladiateur sans pitié en plaques
+70479,4,Heaume du gladiateur sans pitié en plaques
+70480,4,Gantelets du gladiateur sans pitié en plaques
+70481,4,Plastron du gladiateur sans pitié en plaques
+70482,4,Epaulières du gladiateur sans pitié en écailles
+70483,4,Garde-jambes du gladiateur sans pitié en écailles
+70484,4,Garde-jambes du gladiateur sans pitié en peau de dragon
+70485,4,Heaume du gladiateur sans pitié en peau de dragon
+70486,4,Gants du gladiateur sans pitié en peau de dragon
+70487,4,Heaume du gladiateur sans pitié en écailles
+70488,4,Gantelets du gladiateur sans pitié en écailles
+70489,4,Plastron du gladiateur sans pitié en écailles
+70490,4,Epaulières du gladiateur sans pitié en plaques d’effroi
+70491,4,Garde-jambes du gladiateur sans pitié en plaques d’effroi
+70492,4,Heaume du gladiateur sans pitié en plaques d’effroi
+70493,4,Gantelets  du gladiateur sans pitié en plaques d’effroi
+70494,4,Plastron du gladiateur sans pitié en plaques d’effroi
+70495,4,Bottines de cruauté du gladiateur sans pitié
+70496,4,Bottines d’empressement du gladiateur sans pitié
+70497,4,Bottines de méditation du gladiateur sans pitié
+70498,4,Protège-tibias de méditation du gladiateur sans pitié
+70499,4,Protège-tibias d’empressement du gladiateur sans pitié
+70500,4,Solerets de cruauté du gladiateur sans pitié
+70501,4,Solerets d’empressement du gladiateur sans pitié
+70502,4,Grèves d’empressement du gladiateur sans pitié
+70503,4,Grèves de méditation du gladiateur sans pitié
+70504,4,Bottes de guerre de cruauté du gladiateur sans pitié
+70505,4,Bottes de guerre d’empressement du gladiateur sans pitié
+70506,4,Bottes de cruauté du gladiateur sans pitié
+70507,4,Bottes d’empressement du gladiateur sans pitié
+70508,4,Solerets d’empressement du gladiateur sans pitié
+70509,4,Solerets de méditation du gladiateur sans pitié
+70511,4,Garde-poignets de méditation du gladiateur vicieux
+70512,4,Garde-poignets de prouesse du gladiateur vicieux
+70513,4,Plaques de bras d'empressement du gladiateur vicieux
+70514,4,Plaques de bras d'expertise du gladiateur vicieux
+70515,4,Couvre-bras de précision du gladiateur vicieux
+70516,4,Couvre-bras d'empressement du gladiateur vicieux
+70523,4,Ceinture de cruauté du gladiateur vicieux
+70524,4,Ceinture de méditation du gladiateur vicieux
+70525,4,Manchettes de méditation du gladiateur vicieux
+70526,4,Manchettes de prouesse du gladiateur vicieux
+70527,4,Bottes d'empressement du gladiateur vicieux
+70528,4,Bottes de cruauté du gladiateur vicieux
+70529,4,Brassards de méditation du gladiateur vicieux
+70530,4,Brassards de prouesse du gladiateur vicieux
+70531,4,Cape de cruauté du gladiateur vicieux
+70532,4,Cape de prouesse du gladiateur vicieux
+70533,4,Cotte d'anneaux du gladiateur vicieux
+70534,4,Gantelets en anneaux du gladiateur vicieux
+70535,4,Heaume en anneaux du gladiateur vicieux
+70536,4,Jambières en anneaux du gladiateur vicieux
+70537,4,Spallières en anneaux du gladiateur vicieux
+70540,4,Fermoir de cruauté du gladiateur vicieux
+70541,4,Fermoir de méditation du gladiateur vicieux
+70542,4,Cape d'empressement du gladiateur vicieux
+70543,4,Cape de prouesse du gladiateur vicieux
+70544,4,Corde de précision du gladiateur vicieux
+70545,4,Corde de cruauté du gladiateur vicieux
+70546,4,Corde de méditation du gladiateur vicieux
+70547,4,Crispins de précision du gladiateur vicieux
+70548,4,Crispins de méditation du gladiateur vicieux
+70549,4,Crispins de prouesse du gladiateur vicieux
+70550,4,Gants en peau de dragon du gladiateur vicieux
+70551,4,Heaume en peau de dragon du gladiateur vicieux
+70552,4,Garde-jambes en peau de dragon du gladiateur vicieux
+70553,4,Robe en peau de dragon du gladiateur vicieux
+70554,4,Spallières en peau de dragon du gladiateur vicieux
+70555,4,Drapé de diffusion du gladiateur vicieux
+70556,4,Drapé de méditation du gladiateur vicieux
+70557,4,Drapé de prouesse du gladiateur vicieux
+70558,4,Plastron du gladiateur vicieux en plaques d'effroi
+70559,4,Gantelets du gladiateur vicieux en plaques d'effroi
+70560,4,Heaume du gladiateur vicieux en plaques d'effroi
+70561,4,Garde-jambes du gladiateur vicieux en plaques d'effroi
+70562,4,Epaulières du gladiateur vicieux en plaques d'effroi
+70566,4,Amict du gladiateur vicieux en tisse-gangrène
+70567,4,Capuche du gladiateur vicieux en tisse-gangrène
+70568,4,Garde-mains du gladiateur vicieux en tisse-gangrène
+70569,4,Grande tenue du gladiateur vicieux en tisse-gangrène
+70570,4,Chausses du gladiateur vicieux en tisse-gangrène
+70571,4,Protège-tibias d'empressement du gladiateur vicieux
+70572,4,Protège-tibias de méditation du gladiateur vicieux
+70573,4,Ceinturon de cruauté du gladiateur vicieux
+70574,4,Ceinturon de prouesse du gladiateur vicieux
+70575,4,Grèves d'empressement du gladiateur vicieux
+70576,4,Grèves de méditation du gladiateur vicieux
+70580,4,Gants en peau de kodo du gladiateur vicieux
+70581,4,Heaume en peau de kodo du gladiateur vicieux
+70582,4,Garde-jambes en peau de kodo du gladiateur vicieux
+70583,4,Robe en peau de kodo du gladiateur vicieux
+70584,4,Spallières en peau de kodo du gladiateur vicieux
+70585,4,Gants en cuir du gladiateur vicieux
+70586,4,Heaume en cuir du gladiateur vicieux
+70587,4,Garde-jambes en cuir du gladiateur vicieux
+70588,4,Spallières en cuir du gladiateur vicieux
+70589,4,Tunique en cuir du gladiateur vicieux
+70590,4,Armure rivetée du gladiateur vicieux
+70591,4,Gantelets rivetés du gladiateur vicieux
+70592,4,Heaume riveté du gladiateur vicieux
+70593,4,Jambières rivetées du gladiateur vicieux
+70594,4,Spallières rivetées du gladiateur vicieux
+70595,4,Liens de précision du gladiateur vicieux
+70596,4,Liens de cruauté du gladiateur vicieux
+70597,4,Armure de maille du gladiateur vicieux
+70598,4,Gantelets de maille du gladiateur vicieux
+70599,4,Heaume de maille du gladiateur vicieux
+70600,4,Jambières de maille du gladiateur vicieux
+70601,4,Spallières de maille du gladiateur vicieux
+70608,4,Gants du gladiateur vicieux en étoffe lunaire
+70609,4,Heaume du gladiateur vicieux en étoffe lunaire
+70610,4,Jambières du gladiateur vicieux en étoffe lunaire
+70611,4,Mantelet du gladiateur vicieux en étoffe lunaire
+70612,4,Robe du gladiateur vicieux en étoffe lunaire
+70615,4,Corselet ornementé du gladiateur vicieux
+70616,4,Gants ornementés du gladiateur vicieux
+70617,4,Bassinet ornementé du gladiateur vicieux
+70618,4,Cuissards ornementés du gladiateur vicieux
+70619,4,Spallières ornementées du gladiateur vicieux
+70623,4,Plastron du gladiateur vicieux en plaques
+70624,4,Gantelets du gladiateur vicieux en plaques
+70625,4,Heaume du gladiateur vicieux en plaques
+70626,4,Garde-jambes du gladiateur vicieux en plaques
+70627,4,Epaulières du gladiateur vicieux en plaques
+70628,4,Relique de conquête du gladiateur vicieux
+70629,4,Relique de domination du gladiateur vicieux
+70630,4,Relique de salut du gladiateur vicieux
+70631,4,Relique de triomphe du gladiateur vicieux
+70632,4,Armure du gladiateur vicieux en mailles annelées
+70633,4,Gantelets du gladiateur vicieux en mailles annelées
+70634,4,Heaume du gladiateur vicieux en mailles annelées
+70635,4,Jambières du gladiateur vicieux en mailles annelées
+70636,4,Spallières du gladiateur vicieux en mailles annelées
+70639,4,Solerets d'empressement du gladiateur vicieux
+70640,4,Solerets d'empressement du gladiateur vicieux
+70641,4,Solerets de cruauté du gladiateur vicieux
+70642,4,Solerets de méditation du gladiateur vicieux
+70643,4,Gants du gladiateur vicieux en satin
+70644,4,Chaperon du gladiateur vicieux en satin
+70645,4,Jambières du gladiateur vicieux en satin
+70646,4,Mantelet du gladiateur vicieux en satin
+70647,4,Robe du gladiateur vicieux en satin
+70648,4,Plastron du gladiateur vicieux en écailles
+70649,4,Gantelets du gladiateur vicieux en écailles
+70650,4,Heaume du gladiateur vicieux en écailles
+70651,4,Garde-jambes du gladiateur vicieux en écailles
+70652,4,Epaulières du gladiateur vicieux en écailles
+70655,4,Amict du gladiateur vicieux en soie
+70656,4,Capuche du gladiateur vicieux en soie
+70657,4,Garde-mains du gladiateur vicieux en soie
+70658,4,Robe du gladiateur vicieux en soie
+70659,4,Chausses du gladiateur vicieux en soie
+70660,4,Bottines d'empressement du gladiateur vicieux
+70661,4,Bottines de cruauté du gladiateur vicieux
+70662,4,Bottines de méditation du gladiateur vicieux
+70663,4,Baudrier de précision du gladiateur vicieux
+70664,4,Baudrier de cruauté du gladiateur vicieux
+70665,4,Sangle de cruauté du gladiateur vicieux
+70666,4,Sangle de méditation du gladiateur vicieux
+70667,4,Bottes de guerre d'empressement du gladiateur vicieux
+70668,4,Bottes de guerre de cruauté du gladiateur vicieux
+70669,4,Garde-poignets de précision du gladiateur vicieux
+70670,4,Garde-poignets d'empressement du gladiateur vicieux
+70671,4,Gants du gladiateur vicieux en peau de wyrm
+70672,4,Heaume du gladiateur vicieux en peau de wyrm
+70673,4,Garde-jambes du gladiateur vicieux en peau de wyrm
+70674,4,Robe du gladiateur vicieux en peau de wyrm
+70675,4,Spallières du gladiateur vicieux en peau de wyrm
+70723,4,Sulfuras la Main éteinte
+70733,4,Phoenixfeather Shiv
+70734,4,Nestheart Greathelm
+70735,4,Flickering Wristbands
+70736,4,Fireflight Leggings
+70737,4,Spaulders of Recurring Flame
+70739,4,Flightflame Legplates
+70792,2,[Art] Template Cloth Belt - Robe_RaidMage_J - Arcane
+70793,2,[Art] Template Cloth Boot - Robe_RaidMage_J - Arcane
+70794,2,[Art] Template Cloth Chest - Robe_RaidMage_J - Arcane
+70795,2,[Art] Template Cloth Hand - Robe_RaidMage_J - Arcane
+70796,2,[Art] Template Cloth Head - Robe_RaidMage_J - Arcane
+70797,2,[Art] Template Cloth Legs - Robe_RaidMage_J - Arcane
+70798,2,[Art] Template Cloth Robe - Robe_RaidMage_J - Arcane
+70799,2,[Art] Template Cloth Shoulder - Robe_RaidMage_J - Arcane
+70800,2,[Art] Template Cloth Wrist - Robe_RaidMage_J - Arcane
+70801,2,[Art] Template Cloth Belt - Robe_RaidMage_J - Frost
+70802,2,[Art] Template Cloth Boot - Robe_RaidMage_J - Frost
+70803,2,[Art] Template Cloth Chest - Robe_RaidMage_J - Frost
+70804,2,[Art] Template Cloth Hand - Robe_RaidMage_J - Frost
+70805,2,[Art] Template Cloth Head - Robe_RaidMage_J - Frost
+70806,2,[Art] Template Cloth Legs - Robe_RaidMage_J - Frost
+70807,2,[Art] Template Cloth Robe - Robe_RaidMage_J - Frost
+70808,2,[Art] Template Cloth Shoulder - Robe_RaidMage_J - Frost
+70809,2,[Art] Template Cloth Wrist - Robe_RaidMage_J - Frost
+70810,2,[Art] Template Cloth Belt - Robe_RaidMage_J - Fire
+70811,2,[Art] Template Cloth Boot - Robe_RaidMage_J - Fire
+70812,2,[Art] Template Cloth Chest - Robe_RaidMage_J - Fire
+70813,2,[Art] Template Cloth Hand - Robe_RaidMage_J - Fire
+70814,2,[Art] Template Cloth Head - Robe_RaidMage_J - Fire
+70815,2,[Art] Template Cloth Legs - Robe_RaidMage_J - Fire
+70816,2,[Art] Template Cloth Robe - Robe_RaidMage_J - Fire
+70817,2,[Art] Template Cloth Shoulder - Robe_RaidMage_J - Fire
+70818,2,[Art] Template Cloth Wrist - Robe_RaidMage_J - Fire
+70863,2,[Art] Template Cloth Wrist - Robe_RaidPriest_J - Blue
+70872,2,[Art] Template Cloth Wrist - Robe_RaidPriest_J - Green
+70881,2,[Art] Template Cloth Wrist - Robe_RaidPriest_J - Orange
+70884,2,[Art] Template Plate Wrist - RaidWarrior_J - Default
+70885,2,[Art] Template Plate Shoulder - RaidWarrior_J - Default
+70886,2,[Art] Template Plate Legs - RaidWarrior_J - Default
+70887,2,[Art] Template Plate Head - RaidWarrior_J - Default
+70888,2,[Art] Template Plate Hand - RaidWarrior_J - Default
+70889,2,[Art] Template Plate Chest - RaidWarrior_J - Default
+70890,2,[Art] Template Plate Boot - RaidWarrior_J - Default
+70891,2,[Art] Template Plate Belt - RaidWarrior_J - Default
+70892,2,[Art] Template Plate Belt - RaidWarrior_J - Gray
+70893,2,[Art] Template Plate Boot - RaidWarrior_J - Gray
+70894,2,[Art] Template Plate Chest - RaidWarrior_J - Gray
+70895,2,[Art] Template Plate Hand - RaidWarrior_J - Gray
+70896,2,[Art] Template Plate Head - RaidWarrior_J - Gray
+70897,2,[Art] Template Plate Legs - RaidWarrior_J - Gray
+70898,2,[Art] Template Plate Shoulder - RaidWarrior_J - Gray
+70899,2,[Art] Template Plate Wrist - RaidWarrior_J - Gray
+70900,2,[Art] Template Plate Belt - RaidWarrior_J - Red
+70901,2,[Art] Template Plate Boot - RaidWarrior_J - Red
+70902,2,[Art] Template Plate Chest - RaidWarrior_J - Red
+70903,2,[Art] Template Plate Hand - RaidWarrior_J - Red
+70904,2,[Art] Template Plate Head - RaidWarrior_J - Red
+70905,2,[Art] Template Plate Legs - RaidWarrior_J - Red
+70906,2,[Art] Template Plate Shoulder - RaidWarrior_J - Red
+70907,2,[Art] Template Plate Wrist - RaidWarrior_J - Red
+70912,4,Giantflame Stompers
+70913,4,Shannox's Rusted Legplates
+70914,4,Flamescarred Carapace
+70915,4,Bulwark of the Gatekeeper
+70916,4,Helm of the Demon King
+70917,4,Flickering Handguards
+70920,4,Bracers of the Fiery Path
+70921,4,Spaulders of Pure Flame
+70922,4,Mandible of Beth'tilac
+70923,2,[PH] Atours de fête
+70930,4,Durable Flamewrath Cloak
+70933,4,Girdle of the Indomitable Flame
+70937,4,Bracers of Regal Force
+70939,4,Deathclutch Figurine
+70941,4,Shoulderguards of the Molten Giant
+70942,4,Legguards of the Molten Giant
+70943,4,Handguards of the Molten Giant
+70944,4,Faceguard of the Molten Giant
+70945,4,Chestguard of the Molten Giant
+70946,4,Immolation Shoulderguards
+70947,4,Immolation Legguards
+70948,4,Immolation Faceguard
+70949,4,Immolation Handguards
+70950,4,Immolation Chestguard
+70951,4,Elementium Dragon Shoulderguards
+70952,4,Elementium Dragon Legguards
+70953,4,Elementium Dragon Handguards
+70954,4,Elementium Dragon Faceguard
+70955,4,Elementium Dragon Chestguard
+70985,4,Craterflame Spaulders
+70986,4,Egg-Clutch Gauntlets
+70987,4,Phoenix-Down Treads
+70988,4,Clutch of the Firemother
+70989,4,Leggings of Airy Flame
+70990,4,Lightwing Cloak
+70991,4,Crossbow of Erupting Fury
+70992,4,Dreadfire Drape
+70993,4,Fireskin Gauntlets
+71003,4,Vision of the Flaming Skull
+71004,4,Earthcrack Bracers
+71005,4,Flaming Core Chestguard
+71006,4,Volcanospike
+71007,4,Grips of the Raging Giant
+71009,4,Cauterizing Wristbands
+71010,4,Incendic Robes
+71011,4,Vision of the Flickering Flame
+71013,4,Spike of the Dread Hunter
+71014,4,Headreaper Greataxe
+71018,4,Scalp of the Bandit Prince
+71020,4,True-Arrow Grips
+71021,4,Uncrushable Belt of Fury
+71022,4,Flamewrought Abilene Shell
+71023,4,Emberskip Sandals
+71025,4,Flickering Shoulderpads
+71026,4,Bracers of the Dread Hunter
+71027,4,Treads of Implicit Obedience
+71028,4,Legplates of Absolute Control
+71029,4,Arachnaflame Treads
+71030,4,Seared Chitin Shoulders
+71031,4,Spiderheart Leggings
+71038,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Int Spirit Shield
+71039,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Int Versatile Staff
+71040,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Leather Int Spirit Helm
+71041,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Cloth Int Versatile Robe
+71042,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Mail Int Spirit Legs

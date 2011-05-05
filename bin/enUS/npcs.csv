@@ -28,7 +28,7 @@
 97,10791,7,Riverpaw Runt
 98,376,7,Riverpaw Taskmaster
 99,3320,7,Morgaine the Sly
-100,175,7,Gruff Swiftbite
+100,603,7,Gruff Swiftbite
 103,2073,7,Garrick Padfoot
 106,179,1,Kodo Beast
 113,503,1,Stonetusk Boar
@@ -5073,10 +5073,10 @@
 7427,6208,7,Taim Ragetotem
 7428,6209,5,Frostmaul Giant
 7429,12815,5,Frostmaul Preserver
-7430,9958,1,Frostsaber Cub
+7430,9958,1,Young Frostsaber
 7431,37545,1,Frostsaber
 7432,38005,1,Frostsaber Stalker
-7433,11444,1,Frostsaber Huntress
+7433,38004,1,Frostsaber Huntress
 7434,9954,1,Frostsaber Pride Watcher
 7435,6761,2,Cobalt Wyrmkin
 7436,6760,2,Cobalt Scalebane
@@ -7756,7 +7756,7 @@
 14492,7232,7,Verifonix
 14494,14545,6,Eris Havenfire
 14495,169,10,Invisible Trigger One
-14496,252,7,Stormwind Orphan
+14496,221,7,Stormwind Orphan
 14497,8632,7,Shellene
 14498,3850,7,Tosamina
 14499,14589,7,Horde Orphan
@@ -8947,7 +8947,7 @@
 16224,16072,7,Rathis Tomber
 16225,14546,1,Pack Mule
 16226,16082,7,Guard Didier
-16227,1233,7,Bragok
+16227,37716,7,Bragok
 16228,16093,7,Argent Dawn Infantry
 16229,16077,7,Injured Argent Dawn Infantry
 16230,16151,10,Cultist Engineer
@@ -9484,7 +9484,7 @@
 16841,16386,7,Watch Commander Relthorn Netherwane
 16842,16387,7,Honor Hold Defender
 16843,16391,7,Honor Hold Cavalryman
-16844,16395,10,Crust Burster
+16844,16395,1,Crust Burster
 16845,16396,7,Gorkan Bloodfist
 16846,16401,7,Mag'har Grunt
 16847,16402,7,Debilitated Mag'har Grunt
@@ -9495,7 +9495,7 @@
 16854,14272,4,Eldinarcus
 16855,16406,7,Tregla
 16856,16409,7,Caretaker Dilandrus
-16857,16395,10,Marauding Crust Burster
+16857,16395,1,Marauding Crust Burster
 16858,16411,7,Grelag
 16859,17546,0,Dragonhawk Hatchling
 16860,16682,7,Jilanne
@@ -10906,7 +10906,7 @@
 18704,18086,7,Taela Everstride
 18705,18087,7,Mawg Grimshot
 18706,17408,1,Bonechewer Riding Wolf
-18707,18094,1,Torgos
+18707,37578,1,Torgos
 18708,18839,4,Murmur
 18712,18095,7,Advisor Faila
 18713,18096,7,Lieutenant Gravelhammer
@@ -12002,7 +12002,7 @@
 20139,19463,7,Sunfury Conjurer
 20140,19459,7,Sunfury Centurion
 20141,19293,3,Hound of Culuthas
-20142,19373,2,Steward of Time
+20142,38371,2,Steward of Time
 20143,19329,10,Void Spawner - Quest - Warp Rifts
 20145,16634,3,Unstable Voidwalker
 20148,16269,3,Dead Doomguard
@@ -21566,7 +21566,7 @@
 34383,29204,7,Catrina
 34385,12234,7,Horoo the Flamekeeper
 34386,23317,0,High-Oracle Soo-roo
-34387,25379,0,Elder Kekek
+34387,25379,7,Elder Kekek
 34388,29177,6,Tranquil Wildkin Spirit
 34389,1126,10,ELM General Purpose Bunny (Normal & Phase I)
 34392,29206,7,Orseus
@@ -21640,7 +21640,7 @@
 34484,29236,0,Cheerful Draenei Spirit
 34485,32710,7,Avatar of Soggoth
 34489,15369,0,Winterfin Playmate
-34490,25394,0,Snowfall Glade Playmate
+34490,25394,7,Snowfall Glade Playmate
 34496,29267,6,Eydis Darkbane
 34497,29240,6,Fjola Lightbane
 34498,4762,7,Darkscale Assassin
@@ -21668,7 +21668,7 @@
 34528,29250,0,Tahu Sagewind
 34530,29239,3,Ancient Teldrassil Protector
 34531,25173,0,Roo
-34532,25384,0,Kekek
+34532,25384,12,Kekek
 34543,29254,1,Fez
 34544,29253,7,Tortusk
 34545,1253,7,Razormane Frenzy
@@ -29581,6 +29581,7 @@
 51613,30576,7,Crown Technician
 51624,1126,10,Vanessa Anchor Bunny JMF
 51632,28435,12,Tiny Flamefly
+51635,38135,12,Scooter the Snail
 51648,35111,7,Tabat
 51649,37527,12,Moonkin Hatchling
 51661,10133,1,Tsul'Kalu
@@ -29593,8 +29594,13 @@
 51674,11143,1,Sand-Husk Scarab
 51675,32812,1,Oasis Crocolisk
 51676,7409,1,Marsh Serpent
+51677,37712,12,Winterspring Cub
+51681,37712,1,Frostsaber Cub
+51711,20570,10,Snow-Covered Burrow
 51712,37743,1,Ferndweller Wasp
 51713,18351,1,Longstrider Gazelle
+51721,37633,8,Hunted Hare
+51749,37650,10,Wintersaber Cat Toy
 51866,32726,4,Seething Water Elemental
 51938,31174,12,Crithto
 51997,37705,7,Stephanie Krutsick
@@ -29622,14 +29628,22 @@
 52151,37816,7,Bloodlord Mandokir
 52155,37788,7,High Priest Venoxis
 52165,18315,4,Sludge Beast
+52188,25870,9,Rental Chopper
+52190,37802,7,Twilber Torquewrench
 52191,37803,7,High Priest Venoxis
 52197,11686,10,Pool of Acrid Tears
 52224,33990,1,Jungle Serpent
 52226,37814,12,Panther Cub
 52234,37820,7,Bwemba
+52268,37817,7,Riha
+52273,20570,10,Raging Chasm Vortex
+52277,37818,7,Droha
+52278,37819,7,Linsa
 52288,11686,10,Venomous Effusion
+52292,37822,7,Droha
 52302,1126,10,Venomous Effusion Stalker
 52311,37803,7,Venomguard Destroyer
+52321,37836,7,Honor Guard Dunstad
 52322,37837,7,Witch Doctor Qu'in
 52323,37838,7,Chosen of Hethiss
 52331,30121,4,Mutated Overgrowth
@@ -29652,12 +29666,16 @@
 52399,13031,7,Galenges
 52402,26756,1,Venomtooth
 52405,37871,7,Mor'Lek the Dismantler
+52412,20570,10,Cone of Cold Shop Circle
 52413,32813,1,Zulian Gnasher
 52414,37877,1,Tor-Tun
 52417,15101,1,Shredtooth Frenzy
 52418,15288,1,Lost Offspring of Gahz'ranka
 52419,169,10,Tiki Torch
+52420,37878,7,Bazzil Frostweaver
+52421,37879,7,Hans Coldhearth
 52422,37880,7,Kaulema the Mover
+52423,37881,7,Apprentice Mage
 52438,37904,3,Mortaxx
 52440,22353,7,Gub
 52441,30180,1,Curious Jungle Monkey
@@ -29676,8 +29694,16 @@
 52697,26,12,Greedy Kobold
 52809,38047,7,Blax Bottlerocket
 52820,30180,1,Helpful Jungle Monkey
-52831,37712,12,Winterspring Cub
+52830,38055,7,Michelle De Rum
+52894,38065,12,Lashtail Hatchling
 52925,38086,7,Witch Doctor T'wansi
 52933,38087,7,Blood Guard Hakkuz
 52938,38092,7,Darkspear Siame Quashi
 53006,4590,11,Spirit Link Totem
+53048,38134,12,Legs
+53153,12310,4,Ice Elemental
+53225,38229,12,Pterrordax Hatchling
+53232,38232,12,Voodoo Figurine
+53522,38377,1,Baby Octopus
+53626,38421,7,Stormwind Orphan
+53641,38422,7,Allison Potts
