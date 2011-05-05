@@ -385,7 +385,11 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 	{
 		HANDLE &mpq_a = *i->second;
 		bool isPartial = false;
-		if (i->first.AfterLast(SLASH).StartsWith(wxT("wow-update-")))
+		if (i->first.AfterLast(SLASH).StartsWith(wxT("wow-update-base")))
+			isPartial = false;
+		else if (i->first.AfterLast(SLASH).StartsWith(wxT("wow-update-")+langName))
+			isPartial = false;
+		else if (i->first.AfterLast(SLASH).StartsWith(wxT("wow-update-")))
 			isPartial = true;
 
 		HANDLE fh;
