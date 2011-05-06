@@ -14,7 +14,7 @@ static ArchiveSet gOpenArchives;
 
 MPQArchive::MPQArchive(wxString filename) : ok(false)
 {
-	wxLogMessage(wxT("Opening %s"), filename.Mid(gamePath.Len()).c_str());
+	wxLogMessage(wxT("Opening %s %s"), filename.Mid(gamePath.Len()).c_str(), isPartialMPQ(filename) ? "(Partial)" : "");
 
 	if (!SFileOpenArchive(filename.fn_str(), 0, MPQ_OPEN_FORCE_MPQ_V1|MPQ_OPEN_READ_ONLY, &mpq_a )) {
 		int nError = GetLastError();
@@ -35,7 +35,7 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 				SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "base", 0);
 				SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), langName.fn_str(), 0);
 				wxLogMessage(wxT("Appending base & %s patch %s"), langName.c_str(), mpqArchives[j].Mid(gamePath.Len()).c_str());
-			} else if (mpqArchives[j].BeforeLast(SLASH) == filename.BeforeLast(SLASH)) {
+			} else if (mpqArchives[j].BeforeLast(SLASH) == filename.BeforeLast(SLASH)) { // same directory only
 				SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "", 0);
 				wxLogMessage(wxT("Appending patch %s"), mpqArchives[j].Mid(gamePath.Len()).c_str());
 			}

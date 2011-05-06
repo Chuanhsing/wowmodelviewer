@@ -392,9 +392,10 @@ void searchMPQs(bool firstTime)
 		if (baseName.StartsWith(cmpName) && baseName.AfterLast('.').CmpNoCase(wxT("mpq")) == 0) {
 			bool bFound = false;
 			for(size_t i = 0; i<mpqArchives.size(); i++) {
-				if (!mpqArchives[i].AfterLast(SLASH).StartsWith(cmpName))
+				wxString archiveName = wxFileName(mpqArchives[i]).GetFullName();
+				if (!archiveName.AfterLast(SLASH).StartsWith(cmpName))
 					continue;
-				int ver = wxAtoi(mpqArchives[i].BeforeLast('.').AfterLast('-'));
+				int ver = wxAtoi(archiveName.BeforeLast('.').AfterLast('-'));
 				int bver = wxAtoi(baseName.BeforeLast('.').AfterLast('-'));
 				if (bver > ver) {
 					mpqArchives.Insert(baseMpqs[j], i);
@@ -409,6 +410,7 @@ void searchMPQs(bool firstTime)
 		}
 	}
 
+	// search Partial MPQs inside langName directory
 	wxDir::GetAllFiles(gamePath+langName, &baseMpqs, wxEmptyString, wxDIR_FILES);
 	for (size_t j = 0; j < baseMpqs.size(); j++) {
 		if (baseMpqs[j].Contains(wxT("oldworld")))
@@ -418,9 +420,10 @@ void searchMPQs(bool firstTime)
 		if (baseName.StartsWith(cmpName) && baseName.AfterLast('.').CmpNoCase(wxT("mpq")) == 0) {
 			bool bFound = false;
 			for(size_t i = 0; i<mpqArchives.size(); i++) {
-				if (!mpqArchives[i].AfterLast(SLASH).StartsWith(cmpName))
+				wxString archiveName = wxFileName(mpqArchives[i]).GetFullName();
+				if (!archiveName.StartsWith(wxT("wow-update-"))) // compare to all wow-update-
 					continue;
-				int ver = wxAtoi(mpqArchives[i].BeforeLast('.').AfterLast('-'));
+				int ver = wxAtoi(archiveName.BeforeLast('.').AfterLast('-'));
 				int bver = wxAtoi(baseName.BeforeLast('.').AfterLast('-'));
 				if (bver > ver) {
 					mpqArchives.Insert(baseMpqs[j], i);
