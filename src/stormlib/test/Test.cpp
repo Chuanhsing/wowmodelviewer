@@ -1034,7 +1034,7 @@ static int TestCreateArchiveFromMemory(const char * szMpqName)
             sprintf(szFileName, "File%03u.bin", i);
             printf("Adding file %s\r", szFileName);
 
-            if(SFileCreateFile(hMPQ, szFileName, NULL, FILE_SIZE, NULL, MPQ_FILE_COMPRESS, &hFile))
+            if(SFileCreateFile(hMPQ, szFileName, 0, FILE_SIZE, 0, MPQ_FILE_COMPRESS, &hFile))
             {
                 SFileWriteFile(hFile, data, FILE_SIZE, MPQ_COMPRESSION_ZLIB);
                 SFileFinishFile(hFile);
@@ -1108,7 +1108,7 @@ static int TestFileReadAndWrite(
 
     if(nError == ERROR_SUCCESS)
     {
-        if(!SFileCreateFile(hMpq, szFileName, NULL, dwFileSize, 0, MPQ_FILE_REPLACEEXISTING, &hFile))
+        if(!SFileCreateFile(hMpq, szFileName, 0, dwFileSize, 0, MPQ_FILE_REPLACEEXISTING, &hFile))
         {
             nError = GetLastError();
             printf("Failed to create %s in the archive (%u).\n", szFileName, nError);
@@ -1441,8 +1441,7 @@ static int TestOpenPatchedArchive(const char * szMpqName, ...)
     HANDLE hFile = NULL;
     HANDLE hMpq = NULL;
     va_list argList;
-//  const char * szFileName = "DBFilesClient\\Achievement.dbc";
-    const char * szFileName = "ruRU/DBFilesClient/Spell.dbc";
+    const char * szFileName = "DBFilesClient\\Achievement.dbc";
     const char * szExtension;
     const char * szLocale;
     char szLocFileName[MAX_PATH];
@@ -1473,13 +1472,13 @@ static int TestOpenPatchedArchive(const char * szMpqName, ...)
         }
         va_end(argList);
     }
-
+/*
     // Now search all files
     if(nError == ERROR_SUCCESS)
     {
         SFILE_FIND_DATA sf;
         HANDLE hFind;
-        BOOL bResult = TRUE;
+        bool bResult = true;
 
         hFind = SFileFindFirstFile(hMpq, "*", &sf, NULL);
         while(hFind && bResult)
@@ -1489,12 +1488,12 @@ static int TestOpenPatchedArchive(const char * szMpqName, ...)
         }
     }
 
-    // Now try to open patched version of "Achievement.dbc"
+    // Now try to open patched version of a file
     if(nError == ERROR_SUCCESS)
     {
         SFileExtractFile(hMpq, szFileName, "E:\\Spell.dbc");
     }
-
+*/
     // Now try to open patched version of "Achievement.dbc"
     if(nError == ERROR_SUCCESS)
     {
@@ -1581,9 +1580,9 @@ int main(void)
 //      nError = TestSectorCompress(MPQ_SECTOR_SIZE);
                                                                                             
     // Test the archive open and close
-//  if(nError == ERROR_SUCCESS)                     
-//      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm2/expansion1.MPQ"));
-//      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW-Cataclysm/wow-update-13202.MPQ"));
+    if(nError == ERROR_SUCCESS)                     
+        nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW BETA/wow-update-enGB-14002.MPQ"));
+//      nError = TestArchiveOpenAndClose(MAKE_PATH("2011 - WoW BETA/wow-update-13202.MPQ"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("2002 - Warcraft III/ProtectedMap_HashTable_FakeValid.w3x"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("2010 - Starcraft II/Installer Tome 1 enGB.MPQE"));
 //      nError = TestArchiveOpenAndClose(MAKE_PATH("1997 - Diablo I/DIABDAT_orig.MPQ"));
@@ -1642,18 +1641,24 @@ int main(void)
 
     if(nError == ERROR_SUCCESS)
     {
-        nError = TestOpenPatchedArchive(MAKE_PATH("2011 - WoW-Cataclysm2/art.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-13164.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-13205.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-13287.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-13329.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-base-13417.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-base-13449.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-base-13482.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-base-13529.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-base-13561.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-base-13596.MPQ"),
-                                        MAKE_PATH("2011 - WoW-Cataclysm2/wow-update-base-13682.MPQ"),
+        nError = TestOpenPatchedArchive(MAKE_PATH("2011 - WoW BETA/locale-enGB.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13417.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13449.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13482.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13529.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13561.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13596.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13682.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13698.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13707.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13726.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13750.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13793.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13812.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13850.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13875.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-13914.MPQ"),
+                                        MAKE_PATH("2011 - WoW BETA/wow-update-enGB-14002.MPQ"),
                                         NULL);
     }
 
