@@ -292,7 +292,7 @@
 1455,2,검은바위 용사의 도끼
 1457,2,잿빛가죽 철퇴
 1458,2,잿빛가죽 마울
-1459,2,잿빛가죽 돌도끼
+1459,2,잿빛가죽 무두도끼
 1460,2,잿빛가죽 양손검
 1461,2,암살자의 전투 도끼
 1465,2,호랑이잡이 나이프
@@ -8794,7 +8794,7 @@
 24353,2,아르거스의 대리인 석궁
 24354,2,아르거스의 대리인 지팡이
 24356,3,거친황야 비수
-24357,3,살아 있는 번개 조끼
+24357,3,살아있는 번개 조끼
 24359,3,왕권 통치의 다리보호구
 24360,3,추적자 허리띠
 24361,3,마법불꽃 장검
@@ -11433,7 +11433,7 @@
 30070,3,바람으로 벼려낸 다리보호구
 30071,3,대지로 벼려낸 검
 30072,3,하늘로 벼려낸 도끼
-30073,3,잿불로 벼려낸 망치
+30073,3,작은 잿불로 벼려낸 망치
 30074,3,대지로 벼려낸 강화 가슴보호갑
 30075,4,옹이진 고대 가슴보호구
 30076,3,폭풍으로 벼려낸 흉갑
@@ -12142,7 +12142,7 @@
 31332,4,점멸의 일격
 31333,4,밤의 감시자
 31334,4,자연 격노의 지팡이
-31335,4,활발한 성장의 바지
+31335,4,Kilt of Living Growth
 31336,4,마법의 검
 31340,4,외팔이 에드워드의 결의
 31341,2,고룡교단 신도 망토
@@ -12988,7 +12988,7 @@
 33242,2,랩터가죽 다리보호대
 33243,2,척후병의 머리덮개
 33244,2,방랑자의 머리덮개
-33245,2,그림스비의 번쩍이는 요대
+33245,2,그림스비의 휘황찬란한 요대
 33247,3,빠른 바람 어깨덮개
 33248,2,가문의 어깨보호대
 33249,2,척후병의 장화
@@ -15486,7 +15486,7 @@
 37774,3,흩어지는 물의 다리보호구
 37775,3,부러진 산양뿔 투구
 37776,3,정밀한 타격의 팔보호구
-37777,3,이글거리는 열기의 팔보호구
+37777,3,지글거리는 열기의 팔보호구
 37778,3,정확한 비행의 요대
 37779,3,닉소드의 사슬타작꾼 어깨덮개
 37780,3,대머리수리뼈 가슴보호대
@@ -15644,7 +15644,7 @@
 38045,2,아눕아르 허물 투구
 38046,2,고룡불길 장갑
 38047,2,유령의 정수 허리띠
-38048,2,이글거리는 껍질의 가슴보호갑
+38048,2,지글거리는 껍질의 가슴보호갑
 38049,2,고룡 추격자의 허리보호대
 38051,2,별의 쉼터 발보호대
 38052,2,가죽 치유사 어깨보호구
@@ -16890,6 +16890,7 @@
 40722,4,백금 세공 망토
 40723,4,구미호의 변신
 40724,4,케아앵무 날개 망토
+40727,3,노움 중력 우물
 40733,4,파수대 여사냥꾼 손목띠
 40734,4,달라란 흉벽 팔보호구
 40735,4,자르트슨의 정글 완갑
@@ -23006,7 +23007,7 @@
 53497,4,재타르의 죽음쓰개
 53498,4,대지 신부의 드레스
 53500,4,지각구조 가슴판금
-53504,4,불꽃꼬리 발보호대
+53504,4,불꽃꼬리의 발보호대
 53505,4,불도마뱀 비늘갑옷
 53506,4,도발의 바람 망토
 53507,4,성난모래 덧신
@@ -26203,7 +26204,7 @@
 60695,2,불면의 망토
 60696,2,교훈의 방패
 60697,2,무차별 마법봉
-60698,2,반복되는 습격의 허리띠
+60698,2,거듭되는 습격의 허리띠
 60699,2,집행관 장갑
 60700,2,솔로몬의 망치
 60701,2,지렛대 팔보호구
@@ -29788,20 +29789,20 @@
 69819,1,브리쿨 뿔잔 투구
 69831,4,광풍 외투
 69833,4,영구 결빙 단망토
-69834,4,돌발구름 망토
+69834,4,소나기구름 망토
 69835,4,행성 외투
 69842,4,추억이 담긴 가르의 강화 요대
 69843,4,모부스의 흠뻑 젖은 미늘창
 69844,4,줄락둠의 유리질 부리
-69857,0,Monster - Caster Legendary Stage 3
-69858,0,Monster - Caster Legendary Stage 1
-69859,0,Monster - Caster Legendary Stage 2
+69857,0,몬스터 - Caster Legendary Stage 3
+69858,0,몬스터 - Caster Legendary Stage 1
+69859,0,몬스터 - Caster Legendary Stage 2
 69864,1,빛바랜 왕관
 69865,1,보석 박힌 팔찌
 69876,4,자리오나의 유령 건틀릿
 69877,4,집어삼키는 천 개의 입 허리띠
 69878,4,영구 결빙 단망토
-69879,4,돌발구름 망토
+69879,4,소나기구름 망토
 69881,4,행성 외투
 69884,4,광풍 외투
 69887,7,빛나는 투지의 투구
@@ -29810,7 +29811,7 @@
 69890,7,빛나는 투지의 견갑
 69892,7,찢어진 모래폭풍 망토
 69893,7,피에 젖은 해골제련 약탈검
-69897,4,시험용 지팡이
+69897,4,판드랄의 불타오르는 뾰족지팡이
 69916,4,트롤베인 (다카라)
 69936,4,격노의 철권
 69937,4,영원한 엘레멘티움 손보호대
@@ -29819,13 +29820,13 @@
 69941,4,용서 없는 불꽃의 장갑
 69942,4,악의 손아귀
 69943,4,달의 천상 장갑
-69944,4,뒤틀린 현실의 손장갑
+69944,4,변모한 현실의 손장갑
 69945,4,돈 타요의 지옥불 벙어리장갑
 69946,4,강력한 군주의 전쟁장화
 69947,4,거울 같은 장화
-69948,4,Emberforged Elementium Boots
+69948,4,잿불로 벼려낸 엘레멘티움 장화
 69949,4,대지의 미늘 발덮개
-69950,4,Footwraps of Quenched Fire
+69950,4,사그라든 불의 발등싸개
 69951,4,술책의 발보호대
 69952,4,에테리얼 발소리
 69953,4,끝없는 꿈의 걸음장화
@@ -29841,517 +29842,517 @@
 70012,3,피에 굶주린 화려한 황철 가슴보호갑
 70013,3,피에 굶주린 화려한 황철 장화
 70014,3,피에 굶주린 화려한 황철 건틀릿
-70015,3,Bloodthirsty Ornate Pyrium Helm
-70016,3,Bloodthirsty Ornate Pyrium Legguards
-70017,3,Bloodthirsty Ornate Pyrium Shoulders
-70018,3,Bloodthirsty Ornate Pyrium Belt
-70019,3,Bloodthirsty Ornate Pyrium Bracers
-70020,3,Bloodthirsty Leather Belt
-70021,3,Bloodthirsty Leather Boots
-70022,3,Bloodthirsty Leather Bracers
-70023,3,Bloodthirsty Leather Chest
-70024,3,Bloodthirsty Leather Gloves
-70025,3,Bloodthirsty Leather Helm
-70026,3,Bloodthirsty Leather Legs
-70027,3,Bloodthirsty Leather Shoulders
-70028,3,Bloodthirsty Wyrmhide Belt
-70029,3,Bloodthirsty Wyrmhide Boots
-70030,3,Bloodthirsty Wyrmhide Bracers
-70031,3,Bloodthirsty Wyrmhide Chest
-70032,3,Bloodthirsty Wyrmhide Gloves
-70033,3,Bloodthirsty Wyrmhide Helm
-70034,3,Bloodthirsty Wyrmhide Legs
-70035,3,Bloodthirsty Wyrmhide Shoulders
-70036,3,Bloodthirsty Dragonscale Belt
-70037,3,Bloodthirsty Dragonscale Boots
-70038,3,Bloodthirsty Dragonscale Bracers
-70039,3,Bloodthirsty Dragonscale Chest
-70040,3,Bloodthirsty Dragonscale Gloves
-70041,3,Bloodthirsty Dragonscale Helm
-70042,3,Bloodthirsty Dragonscale Legs
-70043,3,Bloodthirsty Dragonscale Shoulders
-70044,3,Bloodthirsty Charscale Belt
-70045,3,Bloodthirsty Charscale Boots
-70046,3,Bloodthirsty Charscale Bracers
-70047,3,Bloodthirsty Charscale Chest
-70048,3,Bloodthirsty Charscale Gloves
-70049,3,Bloodthirsty Charscale Helm
-70050,3,Bloodthirsty Charscale Legs
-70051,3,Bloodthirsty Charscale Shoulders
-70052,3,Bloodthirsty Fireweave Belt
-70053,3,Bloodthirsty Fireweave Boots
-70054,3,Bloodthirsty Fireweave Bracers
-70055,3,Bloodthirsty Fireweave Cowl
-70056,3,Bloodthirsty Fireweave Gloves
-70057,3,Bloodthirsty Fireweave Pants
-70058,3,Bloodthirsty Fireweave Robe
-70059,3,Bloodthirsty Fireweave Shoulders
-70060,3,Bloodthirsty Embersilk Robe
-70061,3,Bloodthirsty Embersilk Boots
-70062,3,Bloodthirsty Embersilk Belt
-70063,3,Bloodthirsty Embersilk Bracers
-70064,3,Bloodthirsty Embersilk Shoulders
-70065,3,Bloodthirsty Embersilk Gloves
-70066,3,Bloodthirsty Embersilk Pants
-70067,3,Bloodthirsty Embersilk Cowl
-70068,3,Bloodthirsty Fur Cloak
-70069,3,Bloodthirsty Hide Cloak
-70070,3,Bloodthirsty Embersilk Cape
-70077,3,Bloodthirsty Charm of Triumph
-70078,3,Bloodthirsty Eyeball of Dominance
-70079,3,Bloodthirsty Jawbone of Conquest
+70015,3,피에 굶주린 화려한 황철 투구
+70016,3,피에 굶주린 화려한 황철 다리보호대
+70017,3,피에 굶주린 화려한 황철 어깨보호구
+70018,3,피에 굶주린 화려한 황철 허리띠
+70019,3,피에 굶주린 화려한 황철 팔보호구
+70020,3,피에 굶주린 가죽 허리띠
+70021,3,피에 굶주린 가죽 장화
+70022,3,피에 굶주린 가죽 팔보호구
+70023,3,피에 굶주린 가죽 가슴보호구
+70024,3,피에 굶주린 가죽 장갑
+70025,3,피에 굶주린 가죽 투구
+70026,3,피에 굶주린 가죽 다리보호구
+70027,3,피에 굶주린 가죽 어깨보호구
+70028,3,피에 굶주린 고룡가죽 허리띠
+70029,3,피에 굶주린 고룡가죽 장화
+70030,3,피에 굶주린 고룡가죽 팔보호구
+70031,3,피에 굶주린 고룡가죽 가슴보호구
+70032,3,피에 굶주린 고룡가죽 장갑
+70033,3,피에 굶주린 고룡가죽 투구
+70034,3,피에 굶주린 고룡가죽 다리방어구
+70035,3,피에 굶주린 고룡가죽 어깨보호구
+70036,3,피에 굶주린 용비늘 허리띠
+70037,3,피에 굶주린 용비늘 장화
+70038,3,피에 굶주린 용비늘 팔보호구
+70039,3,피에 굶주린 용비늘 가슴보호구
+70040,3,피에 굶주린 용비늘 장갑
+70041,3,피에 굶주린 용비늘 투구
+70042,3,피에 굶주린 용비늘 다리보호구
+70043,3,피에 굶주린 용비늘 어깨보호구
+70044,3,피에 굶주린 비늘 허리띠
+70045,3,피에 굶주린 비늘 장화
+70046,3,피에 굶주린 비늘 팔보호구
+70047,3,피에 굶주린 비늘 가슴보호구
+70048,3,피에 굶주린 비늘 장갑
+70049,3,피에 굶주린 비늘 투구
+70050,3,피에 굶주린 비늘 다리보호구
+70051,3,피에 굶주린 비늘 어깨보호구
+70052,3,피에 굶주린 불매듭 허리띠
+70053,3,피에 굶주린 불매듭 장화
+70054,3,피에 굶주린 불매듭 팔보호구
+70055,3,피에 굶주린 불매듭 수도두건
+70056,3,피에 굶주린 불매듭 장갑
+70057,3,피에 굶주린 불매듭 바지
+70058,3,피에 굶주린 불매듭 로브
+70059,3,피에 굶주린 불매듭 어깨보호구
+70060,3,피에 굶주린 잿불비단 로브
+70061,3,피에 굶주린 잿불비단 장화
+70062,3,피에 굶주린 잿불비단 허리띠
+70063,3,피에 굶주린 잿불비단 팔보호구
+70064,3,피에 굶주린 잿불비단 어깨보호구
+70065,3,피에 굶주린 잿불비단 장갑
+70066,3,피에 굶주린 잿불비단 바지
+70067,3,피에 굶주린 잿불비단 수도두건
+70068,3,피에 굶주린 모피 망토
+70069,3,피에 굶주린 통가죽 망토
+70070,3,피에 굶주린 잿불비단 단망토
+70077,3,피에 굶주린 승전의 부적
+70078,3,피에 굶주린 지배의 눈알
+70079,3,피에 굶주린 정복의 턱뼈
 70080,4,Reforged Heartless
 70088,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Blue
 70097,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Green
-70155,4,Brainsplinter
-70156,4,Masterwork Elementium Spellblade
-70157,4,Lightforged Elementium Hammer
-70158,4,Elementium-Edged Scalper
-70159,3,Mylune's Call
-70162,4,Pyrium Spellward
-70163,4,Unbreakable Guardian
-70164,4,Masterwork Elementium Deathblade
-70165,4,Witch-Hunter's Harvester
-70178,4,Ruthless Gladiator's Greatsword
-70179,4,Ruthless Gladiator's Staff
-70180,4,Ruthless Gladiator's Energy Staff
-70181,4,Ruthless Gladiator's Battle Staff
-70182,4,Ruthless Gladiator's Pike
-70183,4,Ruthless Gladiator's Bonegrinder
-70184,4,Ruthless Gladiator's Decapitator
-70185,4,Ruthless Gladiator's Gavel
-70186,4,Ruthless Gladiator's Right Render
-70187,4,Ruthless Gladiator's Right Ripper
-70188,4,Ruthless Gladiator's Spellblade
-70189,4,Ruthless Gladiator's Left Render
-70190,4,Ruthless Gladiator's Left Ripper
-70191,4,Ruthless Gladiator's Shiv
-70192,4,Ruthless Gladiator's Longbow
-70193,4,Ruthless Gladiator's Heavy Crossbow
-70194,4,Ruthless Gladiator's Rifle
-70195,4,Ruthless Gladiator's Baton of Light
-70196,4,Ruthless Gladiator's Touch of Defeat
-70197,4,Ruthless Gladiator's Hatchet
-70198,4,Ruthless Gladiator's War Edge
-70199,4,Ruthless Gladiator's Quickblade
-70200,4,Ruthless Gladiator's Slicer
-70201,4,Ruthless Gladiator's Bonecracker
-70202,4,Ruthless Gladiator's Pummeler
-70203,4,Ruthless Gladiator's Shanker
-70204,4,Ruthless Gladiator's Hacker
-70205,4,Ruthless Gladiator's Cleaver
-70206,4,Ruthless Gladiator's Redoubt
-70207,4,Ruthless Gladiator's Barrier
-70208,4,Ruthless Gladiator's Shield Wall
-70209,4,Ruthless Gladiator's Reprieve
-70210,4,Ruthless Gladiator's Endgame
-70211,4,Ruthless Gladiator's Cleaver
-70212,4,Ruthless Gladiator's Hacker
-70213,4,Ruthless Gladiator's Decapitator
-70214,4,Ruthless Gladiator's Shanker
-70215,4,Ruthless Gladiator's Shiv
-70216,4,Ruthless Gladiator's Spellblade
-70217,4,Ruthless Gladiator's Right Ripper
-70218,4,Ruthless Gladiator's Left Ripper
-70219,4,Ruthless Gladiator's Left Render
-70220,4,Ruthless Gladiator's Right Render
-70221,4,Ruthless Gladiator's Pummeler
-70222,4,Ruthless Gladiator's Bonecracker
-70223,4,Ruthless Gladiator's Gavel
-70224,4,Ruthless Gladiator's Bonegrinder
-70225,4,Ruthless Gladiator's Pike
-70226,4,Ruthless Gladiator's Battle Staff
-70227,4,Ruthless Gladiator's Energy Staff
-70228,4,Ruthless Gladiator's Staff
-70229,4,Ruthless Gladiator's Slicer
-70230,4,Ruthless Gladiator's Quickblade
-70231,4,Ruthless Gladiator's Greatsword
-70232,4,Ruthless Gladiator's War Edge
-70233,4,Ruthless Gladiator's Hatchet
-70234,4,Ruthless Gladiator's Touch of Defeat
-70235,4,Ruthless Gladiator's Baton of Light
-70236,4,Ruthless Gladiator's Longbow
-70237,4,Ruthless Gladiator's Rifle
-70238,4,Ruthless Gladiator's Heavy Crossbow
-70239,4,Ruthless Gladiator's Endgame
-70240,4,Ruthless Gladiator's Reprieve
-70241,4,Ruthless Gladiator's Shield Wall
-70242,4,Ruthless Gladiator's Barrier
-70243,4,Ruthless Gladiator's Redoubt
-70244,4,Ruthless Gladiator's Dreadplate Chestpiece
-70245,4,Ruthless Gladiator's Dreadplate Gauntlets
-70246,4,Ruthless Gladiator's Dreadplate Helm
-70247,4,Ruthless Gladiator's Dreadplate Legguards
-70248,4,Ruthless Gladiator's Dreadplate Shoulders
-70249,4,Ruthless Gladiator's Scaled Chestpiece
-70250,4,Ruthless Gladiator's Scaled Gauntlets
-70251,4,Ruthless Gladiator's Scaled Helm
-70252,4,Ruthless Gladiator's Scaled Legguards
-70253,4,Ruthless Gladiator's Scaled Shoulders
-70254,4,Ruthless Gladiator's Plate Chestpiece
-70255,4,Ruthless Gladiator's Plate Gauntlets
-70256,4,Ruthless Gladiator's Plate Helm
-70257,4,Ruthless Gladiator's Plate Legguards
-70258,4,Ruthless Gladiator's Plate Shoulders
-70259,4,Ruthless Gladiator's Chain Armor
-70260,4,Ruthless Gladiator's Chain Gauntlets
-70261,4,Ruthless Gladiator's Chain Helm
-70262,4,Ruthless Gladiator's Chain Leggings
-70263,4,Ruthless Gladiator's Chain Spaulders
-70264,4,Ruthless Gladiator's Ringmail Armor
-70265,4,Ruthless Gladiator's Ringmail Gauntlets
-70266,4,Ruthless Gladiator's Ringmail Helm
-70267,4,Ruthless Gladiator's Ringmail Leggings
-70268,4,Ruthless Gladiator's Ringmail Spaulders
-70269,4,Ruthless Gladiator's Linked Armor
-70270,4,Ruthless Gladiator's Linked Gauntlets
-70271,4,Ruthless Gladiator's Linked Helm
-70272,4,Ruthless Gladiator's Linked Leggings
-70273,4,Ruthless Gladiator's Linked Spaulders
-70274,4,Ruthless Gladiator's Mail Armor
-70275,4,Ruthless Gladiator's Mail Gauntlets
-70276,4,Ruthless Gladiator's Mail Helm
-70277,4,Ruthless Gladiator's Mail Leggings
-70278,4,Ruthless Gladiator's Mail Spaulders
-70279,4,Ruthless Gladiator's Dragonhide Gloves
-70280,4,Ruthless Gladiator's Dragonhide Helm
-70281,4,Ruthless Gladiator's Dragonhide Legguards
-70282,4,Ruthless Gladiator's Dragonhide Robes
-70283,4,Ruthless Gladiator's Dragonhide Spaulders
-70284,4,Ruthless Gladiator's Kodohide Gloves
-70285,4,Ruthless Gladiator's Kodohide Helm
-70286,4,Ruthless Gladiator's Kodohide Legguards
-70287,4,Ruthless Gladiator's Kodohide Robes
-70288,4,Ruthless Gladiator's Kodohide Spaulders
-70289,4,Ruthless Gladiator's Wyrmhide Gloves
-70290,4,Ruthless Gladiator's Wyrmhide Helm
-70291,4,Ruthless Gladiator's Wyrmhide Legguards
-70292,4,Ruthless Gladiator's Wyrmhide Robes
-70293,4,Ruthless Gladiator's Wyrmhide Spaulders
-70294,4,Ruthless Gladiator's Leather Tunic
-70295,4,Ruthless Gladiator's Leather Gloves
-70296,4,Ruthless Gladiator's Leather Helm
-70297,4,Ruthless Gladiator's Leather Legguards
-70298,4,Ruthless Gladiator's Leather Spaulders
-70299,4,Ruthless Gladiator's Silk Handguards
-70300,4,Ruthless Gladiator's Silk Cowl
-70301,4,Ruthless Gladiator's Silk Trousers
-70302,4,Ruthless Gladiator's Silk Robe
-70303,4,Ruthless Gladiator's Silk Amice
-70304,4,Ruthless Gladiator's Mooncloth Gloves
-70305,4,Ruthless Gladiator's Mooncloth Helm
-70306,4,Ruthless Gladiator's Mooncloth Leggings
-70307,4,Ruthless Gladiator's Mooncloth Robe
-70308,4,Ruthless Gladiator's Mooncloth Mantle
-70309,4,Ruthless Gladiator's Satin Gloves
-70310,4,Ruthless Gladiator's Satin Hood
-70311,4,Ruthless Gladiator's Satin Leggings
-70312,4,Ruthless Gladiator's Satin Robe
-70313,4,Ruthless Gladiator's Satin Mantle
-70314,4,Ruthless Gladiator's Felweave Handguards
-70315,4,Ruthless Gladiator's Felweave Cowl
-70316,4,Ruthless Gladiator's Felweave Trousers
-70317,4,Ruthless Gladiator's Felweave Raiment
-70318,4,Ruthless Gladiator's Felweave Amice
-70319,4,Ruthless Gladiator's Clasp of Cruelty
-70320,4,Ruthless Gladiator's Girdle of Cruelty
-70321,4,Ruthless Gladiator's Warboots of Cruelty
-70322,4,Ruthless Gladiator's Armplates of Alacrity
-70323,4,Ruthless Gladiator's Warboots of Alacrity
-70324,4,Ruthless Gladiator's Greaves of Alacrity
-70325,4,Ruthless Gladiator's Bracers of Prowess
-70326,4,Ruthless Gladiator's Girdle of Prowess
-70327,4,Ruthless Gladiator's Armplates of Proficiency
-70328,4,Ruthless Gladiator's Waistguard of Meditation
-70329,4,Ruthless Gladiator's Sabatons of Meditation
-70330,4,Ruthless Gladiator's Armbands of Meditation
-70331,4,Ruthless Gladiator's Waistguard of Cruelty
-70332,4,Ruthless Gladiator's Clasp of Meditation
-70333,4,Ruthless Gladiator's Greaves of Meditation
-70334,4,Ruthless Gladiator's Bracers of Meditation
-70335,4,Ruthless Gladiator's Sabatons of Cruelty
-70336,4,Ruthless Gladiator's Links of Cruelty
-70337,4,Ruthless Gladiator's Sabatons of Alacrity
-70338,4,Ruthless Gladiator's Wristguards of Alacrity
-70339,4,Ruthless Gladiator's Links of Accuracy
-70340,4,Ruthless Gladiator's Wristguards of Accuracy
-70341,4,Ruthless Gladiator's Sabatons of Alacrity
-70342,4,Ruthless Gladiator's Armbands of Prowess
-70343,4,Ruthless Gladiator's Belt of Meditation
-70344,4,Ruthless Gladiator's Footguards of Meditation
-70345,4,Ruthless Gladiator's Bindings of Meditation
-70346,4,Ruthless Gladiator's Belt of Cruelty
-70347,4,Ruthless Gladiator's Waistband of Cruelty
-70348,4,Ruthless Gladiator's Boots of Cruelty
-70349,4,Ruthless Gladiator's Waistband of Accuracy
-70350,4,Ruthless Gladiator's Armwraps of Accuracy
-70351,4,Ruthless Gladiator's Boots of Alacrity
-70352,4,Ruthless Gladiator's Armwraps of Alacrity
-70353,4,Ruthless Gladiator's Ornamented Chestguard
-70354,4,Ruthless Gladiator's Ornamented Gloves
-70355,4,Ruthless Gladiator's Ornamented Headcover
-70356,4,Ruthless Gladiator's Ornamented Legplates
-70357,4,Ruthless Gladiator's Ornamented Spaulders
-70358,4,Ruthless Gladiator's Footguards of Alacrity
-70359,4,Ruthless Gladiator's Bindings of Prowess
-70360,4,Ruthless Gladiator's Cord of Cruelty
-70361,4,Ruthless Gladiator's Treads of Cruelty
-70362,4,Ruthless Gladiator's Cord of Accuracy
-70363,4,Ruthless Gladiator's Cuffs of Accuracy
-70364,4,Ruthless Gladiator's Treads of Alacrity
-70365,4,Ruthless Gladiator's Cuffs of Prowess
-70366,4,Ruthless Gladiator's Cuffs of Meditation
-70367,4,Ruthless Gladiator's Treads of Meditation
-70368,4,Ruthless Gladiator's Cord of Meditation
-70383,4,Ruthless Gladiator's Cloak of Alacrity
-70384,4,Ruthless Gladiator's Cloak of Prowess
-70385,4,Ruthless Gladiator's Cape of Prowess
-70386,4,Ruthless Gladiator's Cape of Cruelty
-70387,4,Ruthless Gladiator's Drape of Diffusion
-70388,4,Ruthless Gladiator's Drape of Prowess
-70389,4,Ruthless Gladiator's Drape of Meditation
-70405,4,Ruthless Gladiator's Relic of Dominance
-70406,4,Ruthless Gladiator's Relic of Salvation
-70407,4,Ruthless Gladiator's Relic of Triumph
-70408,4,Ruthless Gladiator's Relic of Conquest
-70415,4,Ruthless Gladiator's Ornamented Spaulders
-70416,4,Ruthless Gladiator's Ornamented Legplates
-70417,4,Ruthless Gladiator's Ornamented Headcover
-70418,4,Ruthless Gladiator's Ornamented Gloves
-70419,4,Ruthless Gladiator's Ornamented Chestguard
-70420,4,Ruthless Gladiator's Mail Spaulders
-70421,4,Ruthless Gladiator's Mail Leggings
-70422,4,Ruthless Gladiator's Mail Helm
-70423,4,Ruthless Gladiator's Mail Gauntlets
-70424,4,Ruthless Gladiator's Mail Armor
-70425,4,Ruthless Gladiator's Felweave Amice
-70426,4,Ruthless Gladiator's Felweave Raiment
-70427,4,Ruthless Gladiator's Felweave Trousers
-70428,4,Ruthless Gladiator's Wyrmhide Helm
-70429,4,Ruthless Gladiator's Wyrmhide Gloves
-70430,4,Ruthless Gladiator's Kodohide Spaulders
-70431,4,Ruthless Gladiator's Kodohide Robes
-70432,4,Ruthless Gladiator's Kodohide Legguards
-70433,4,Ruthless Gladiator's Ringmail Armor
-70434,4,Ruthless Gladiator's Chain Spaulders
-70435,4,Ruthless Gladiator's Chain Leggings
-70436,4,Ruthless Gladiator's Kodohide Helm
-70437,4,Ruthless Gladiator's Kodohide Gloves
-70438,4,Ruthless Gladiator's Dragonhide Spaulders
-70439,4,Ruthless Gladiator's Dragonhide Robes
-70440,4,Ruthless Gladiator's Chain Helm
-70441,4,Ruthless Gladiator's Chain Gauntlets
-70442,4,Ruthless Gladiator's Leather Spaulders
-70443,4,Ruthless Gladiator's Leather Legguards
-70444,4,Ruthless Gladiator's Leather Helm
-70445,4,Ruthless Gladiator's Leather Gloves
-70446,4,Ruthless Gladiator's Leather Tunic
-70447,4,Ruthless Gladiator's Wyrmhide Spaulders
-70448,4,Ruthless Gladiator's Wyrmhide Robes
-70449,4,Ruthless Gladiator's Wyrmhide Legguards
-70450,4,Ruthless Gladiator's Mooncloth Robe
-70451,4,Ruthless Gladiator's Mooncloth Leggings
-70452,4,Ruthless Gladiator's Mooncloth Helm
-70453,4,Ruthless Gladiator's Mooncloth Gloves
-70454,4,Ruthless Gladiator's Silk Amice
-70455,4,Ruthless Gladiator's Silk Robe
-70456,4,Ruthless Gladiator's Linked Spaulders
-70457,4,Ruthless Gladiator's Linked Leggings
-70458,4,Ruthless Gladiator's Linked Helm
-70459,4,Ruthless Gladiator's Linked Gauntlets
-70460,4,Ruthless Gladiator's Linked Armor
-70461,4,Ruthless Gladiator's Silk Trousers
-70462,4,Ruthless Gladiator's Silk Cowl
-70463,4,Ruthless Gladiator's Silk Handguards
-70464,4,Ruthless Gladiator's Ringmail Spaulders
-70465,4,Ruthless Gladiator's Ringmail Leggings
-70466,4,Ruthless Gladiator's Ringmail Helm
-70467,4,Ruthless Gladiator's Ringmail Gauntlets
-70468,4,Ruthless Gladiator's Felweave Cowl
-70469,4,Ruthless Gladiator's Felweave Handguards
-70470,4,Ruthless Gladiator's Satin Mantle
-70471,4,Ruthless Gladiator's Satin Robe
-70472,4,Ruthless Gladiator's Satin Leggings
-70473,4,Ruthless Gladiator's Satin Hood
-70474,4,Ruthless Gladiator's Satin Gloves
-70475,4,Ruthless Gladiator's Mooncloth Mantle
-70476,4,Ruthless Gladiator's Chain Armor
-70477,4,Ruthless Gladiator's Plate Shoulders
-70478,4,Ruthless Gladiator's Plate Legguards
-70479,4,Ruthless Gladiator's Plate Helm
-70480,4,Ruthless Gladiator's Plate Gauntlets
-70481,4,Ruthless Gladiator's Plate Chestpiece
-70482,4,Ruthless Gladiator's Scaled Shoulders
-70483,4,Ruthless Gladiator's Scaled Legguards
-70484,4,Ruthless Gladiator's Dragonhide Legguards
-70485,4,Ruthless Gladiator's Dragonhide Helm
-70486,4,Ruthless Gladiator's Dragonhide Gloves
-70487,4,Ruthless Gladiator's Scaled Helm
-70488,4,Ruthless Gladiator's Scaled Gauntlets
-70489,4,Ruthless Gladiator's Scaled Chestpiece
-70490,4,Ruthless Gladiator's Dreadplate Shoulders
-70491,4,Ruthless Gladiator's Dreadplate Legguards
-70492,4,Ruthless Gladiator's Dreadplate Helm
-70493,4,Ruthless Gladiator's Dreadplate Gauntlets
-70494,4,Ruthless Gladiator's Dreadplate Chestpiece
-70495,4,Ruthless Gladiator's Treads of Cruelty
-70496,4,Ruthless Gladiator's Treads of Alacrity
-70497,4,Ruthless Gladiator's Treads of Meditation
-70498,4,Ruthless Gladiator's Footguards of Meditation
-70499,4,Ruthless Gladiator's Footguards of Alacrity
-70500,4,Ruthless Gladiator's Sabatons of Cruelty
-70501,4,Ruthless Gladiator's Sabatons of Alacrity
-70502,4,Ruthless Gladiator's Greaves of Alacrity
-70503,4,Ruthless Gladiator's Greaves of Meditation
-70504,4,Ruthless Gladiator's Warboots of Cruelty
-70505,4,Ruthless Gladiator's Warboots of Alacrity
-70506,4,Ruthless Gladiator's Boots of Cruelty
-70507,4,Ruthless Gladiator's Boots of Alacrity
-70508,4,Ruthless Gladiator's Sabatons of Alacrity
-70509,4,Ruthless Gladiator's Sabatons of Meditation
-70511,4,Vicious Gladiator's Armbands of Meditation
-70512,4,Vicious Gladiator's Armbands of Prowess
-70513,4,Vicious Gladiator's Armplates of Alacrity
-70514,4,Vicious Gladiator's Armplates of Proficiency
-70515,4,Vicious Gladiator's Armwraps of Accuracy
-70516,4,Vicious Gladiator's Armwraps of Alacrity
-70523,4,Vicious Gladiator's Belt of Cruelty
-70524,4,Vicious Gladiator's Belt of Meditation
-70525,4,Vicious Gladiator's Bindings of Meditation
-70526,4,Vicious Gladiator's Bindings of Prowess
-70527,4,Vicious Gladiator's Boots of Alacrity
-70528,4,Vicious Gladiator's Boots of Cruelty
-70529,4,Vicious Gladiator's Bracers of Meditation
-70530,4,Vicious Gladiator's Bracers of Prowess
-70531,4,Vicious Gladiator's Cape of Cruelty
-70532,4,Vicious Gladiator's Cape of Prowess
-70533,4,Vicious Gladiator's Chain Armor
-70534,4,Vicious Gladiator's Chain Gauntlets
-70535,4,Vicious Gladiator's Chain Helm
-70536,4,Vicious Gladiator's Chain Leggings
-70537,4,Vicious Gladiator's Chain Spaulders
-70540,4,Vicious Gladiator's Clasp of Cruelty
-70541,4,Vicious Gladiator's Clasp of Meditation
-70542,4,Vicious Gladiator's Cloak of Alacrity
-70543,4,Vicious Gladiator's Cloak of Prowess
-70544,4,Vicious Gladiator's Cord of Accuracy
-70545,4,Vicious Gladiator's Cord of Cruelty
-70546,4,Vicious Gladiator's Cord of Meditation
-70547,4,Vicious Gladiator's Cuffs of Accuracy
-70548,4,Vicious Gladiator's Cuffs of Meditation
-70549,4,Vicious Gladiator's Cuffs of Prowess
-70550,4,Vicious Gladiator's Dragonhide Gloves
-70551,4,Vicious Gladiator's Dragonhide Helm
-70552,4,Vicious Gladiator's Dragonhide Legguards
-70553,4,Vicious Gladiator's Dragonhide Robes
-70554,4,Vicious Gladiator's Dragonhide Spaulders
-70555,4,Vicious Gladiator's Drape of Diffusion
-70556,4,Vicious Gladiator's Drape of Meditation
-70557,4,Vicious Gladiator's Drape of Prowess
-70558,4,Vicious Gladiator's Dreadplate Chestpiece
-70559,4,Vicious Gladiator's Dreadplate Gauntlets
-70560,4,Vicious Gladiator's Dreadplate Helm
-70561,4,Vicious Gladiator's Dreadplate Legguards
-70562,4,Vicious Gladiator's Dreadplate Shoulders
-70566,4,Vicious Gladiator's Felweave Amice
-70567,4,Vicious Gladiator's Felweave Cowl
-70568,4,Vicious Gladiator's Felweave Handguards
-70569,4,Vicious Gladiator's Felweave Raiment
-70570,4,Vicious Gladiator's Felweave Trousers
-70571,4,Vicious Gladiator's Footguards of Alacrity
-70572,4,Vicious Gladiator's Footguards of Meditation
-70573,4,Vicious Gladiator's Girdle of Cruelty
-70574,4,Vicious Gladiator's Girdle of Prowess
-70575,4,Vicious Gladiator's Greaves of Alacrity
-70576,4,Vicious Gladiator's Greaves of Meditation
-70580,4,Vicious Gladiator's Kodohide Gloves
-70581,4,Vicious Gladiator's Kodohide Helm
-70582,4,Vicious Gladiator's Kodohide Legguards
-70583,4,Vicious Gladiator's Kodohide Robes
-70584,4,Vicious Gladiator's Kodohide Spaulders
-70585,4,Vicious Gladiator's Leather Gloves
-70586,4,Vicious Gladiator's Leather Helm
-70587,4,Vicious Gladiator's Leather Legguards
-70588,4,Vicious Gladiator's Leather Spaulders
-70589,4,Vicious Gladiator's Leather Tunic
-70590,4,Vicious Gladiator's Linked Armor
-70591,4,Vicious Gladiator's Linked Gauntlets
-70592,4,Vicious Gladiator's Linked Helm
-70593,4,Vicious Gladiator's Linked Leggings
-70594,4,Vicious Gladiator's Linked Spaulders
-70595,4,Vicious Gladiator's Links of Accuracy
-70596,4,Vicious Gladiator's Links of Cruelty
-70597,4,Vicious Gladiator's Mail Armor
-70598,4,Vicious Gladiator's Mail Gauntlets
-70599,4,Vicious Gladiator's Mail Helm
-70600,4,Vicious Gladiator's Mail Leggings
-70601,4,Vicious Gladiator's Mail Spaulders
-70608,4,Vicious Gladiator's Mooncloth Gloves
-70609,4,Vicious Gladiator's Mooncloth Helm
-70610,4,Vicious Gladiator's Mooncloth Leggings
-70611,4,Vicious Gladiator's Mooncloth Mantle
-70612,4,Vicious Gladiator's Mooncloth Robe
-70615,4,Vicious Gladiator's Ornamented Chestguard
-70616,4,Vicious Gladiator's Ornamented Gloves
-70617,4,Vicious Gladiator's Ornamented Headcover
-70618,4,Vicious Gladiator's Ornamented Legplates
-70619,4,Vicious Gladiator's Ornamented Spaulders
-70623,4,Vicious Gladiator's Plate Chestpiece
-70624,4,Vicious Gladiator's Plate Gauntlets
-70625,4,Vicious Gladiator's Plate Helm
-70626,4,Vicious Gladiator's Plate Legguards
-70627,4,Vicious Gladiator's Plate Shoulders
-70628,4,Vicious Gladiator's Relic of Conquest
-70629,4,Vicious Gladiator's Relic of Dominance
-70630,4,Vicious Gladiator's Relic of Salvation
-70631,4,Vicious Gladiator's Relic of Triumph
-70632,4,Vicious Gladiator's Ringmail Armor
-70633,4,Vicious Gladiator's Ringmail Gauntlets
-70634,4,Vicious Gladiator's Ringmail Helm
-70635,4,Vicious Gladiator's Ringmail Leggings
-70636,4,Vicious Gladiator's Ringmail Spaulders
-70639,4,Vicious Gladiator's Sabatons of Alacrity
-70640,4,Vicious Gladiator's Sabatons of Alacrity
-70641,4,Vicious Gladiator's Sabatons of Cruelty
-70642,4,Vicious Gladiator's Sabatons of Meditation
-70643,4,Vicious Gladiator's Satin Gloves
-70644,4,Vicious Gladiator's Satin Hood
-70645,4,Vicious Gladiator's Satin Leggings
-70646,4,Vicious Gladiator's Satin Mantle
-70647,4,Vicious Gladiator's Satin Robe
-70648,4,Vicious Gladiator's Scaled Chestpiece
-70649,4,Vicious Gladiator's Scaled Gauntlets
-70650,4,Vicious Gladiator's Scaled Helm
-70651,4,Vicious Gladiator's Scaled Legguards
-70652,4,Vicious Gladiator's Scaled Shoulders
-70655,4,Vicious Gladiator's Silk Amice
-70656,4,Vicious Gladiator's Silk Cowl
-70657,4,Vicious Gladiator's Silk Handguards
-70658,4,Vicious Gladiator's Silk Robe
-70659,4,Vicious Gladiator's Silk Trousers
-70660,4,Vicious Gladiator's Treads of Alacrity
-70661,4,Vicious Gladiator's Treads of Cruelty
-70662,4,Vicious Gladiator's Treads of Meditation
-70663,4,Vicious Gladiator's Waistband of Accuracy
-70664,4,Vicious Gladiator's Waistband of Cruelty
-70665,4,Vicious Gladiator's Waistguard of Cruelty
-70666,4,Vicious Gladiator's Waistguard of Meditation
-70667,4,Vicious Gladiator's Warboots of Alacrity
-70668,4,Vicious Gladiator's Warboots of Cruelty
-70669,4,Vicious Gladiator's Wristguards of Accuracy
-70670,4,Vicious Gladiator's Wristguards of Alacrity
-70671,4,Vicious Gladiator's Wyrmhide Gloves
-70672,4,Vicious Gladiator's Wyrmhide Helm
-70673,4,Vicious Gladiator's Wyrmhide Legguards
-70674,4,Vicious Gladiator's Wyrmhide Robes
-70675,4,Vicious Gladiator's Wyrmhide Spaulders
-70723,4,Sulfuras The Extinguished Hand
-70733,4,Phoenixfeather Shiv
-70734,4,Nestheart Greathelm
-70735,4,Flickering Wristbands
-70736,4,Fireflight Leggings
-70737,4,Spaulders of Recurring Flame
-70739,4,Flightflame Legplates
+70155,4,두뇌분열기
+70156,4,명인 엘레멘티움 마법검
+70157,4,빛으로 벼려낸 엘레멘티움 망치
+70158,4,엘레멘티움 날의 무두도끼
+70159,3,마일룬의 피리
+70162,4,황철 주문수호검
+70163,4,깨지지 않는 수호자
+70164,4,명인 엘레멘티움 죽음칼날
+70165,4,마녀 사냥꾼의 수확기
+70178,4,무정한 검투사의 대검
+70179,4,무정한 검투사의 지팡이
+70180,4,무정한 검투사의 원기 지팡이
+70181,4,무정한 검투사의 전투 지팡이
+70182,4,무정한 검투사의 창
+70183,4,무정한 검투사의 해골망치
+70184,4,무정한 검투사의 참수도끼
+70185,4,무정한 검투사의 망치
+70186,4,무정한 검투사의 오른손 분쇄기
+70187,4,무정한 검투사의 오른갈퀴
+70188,4,무정한 검투사의 마법검
+70189,4,무정한 검투사의 왼손 분쇄기
+70190,4,무정한 검투사의 왼갈퀴
+70191,4,무정한 검투사의 비수
+70192,4,무정한 검투사의 장궁
+70193,4,무정한 검투사의 강화석궁
+70194,4,무정한 검투사의 소총
+70195,4,무정한 검투사의 빛의 지휘봉
+70196,4,무정한 검투사의 타도의 손길
+70197,4,무정한 검투사의 손도끼
+70198,4,무정한 검투사의 투척용 서슬도끼
+70199,4,무정한 검투사의 쾌검
+70200,4,무정한 검투사의 절단검
+70201,4,무정한 검투사의 뼈파쇄기
+70202,4,무정한 검투사의 뾰족철퇴
+70203,4,무정한 검투사의 단도
+70204,4,무정한 검투사의 톱날도끼
+70205,4,무정한 검투사의 가로날도끼
+70206,4,무정한 검투사의 보루 방패
+70207,4,무정한 검투사의 방벽 방패
+70208,4,무정한 검투사의 철벽 방패
+70209,4,무정한 검투사의 구원서
+70210,4,무정한 검투사의 병법서
+70211,4,무정한 검투사의 가로날도끼
+70212,4,무정한 검투사의 톱날도끼
+70213,4,무정한 검투사의 참수도끼
+70214,4,무정한 검투사의 단도
+70215,4,무정한 검투사의 비수
+70216,4,무정한 검투사의 마법검
+70217,4,무정한 검투사의 오른갈퀴
+70218,4,무정한 검투사의 왼갈퀴
+70219,4,무정한 검투사의 왼손 분쇄기
+70220,4,무정한 검투사의 오른손 분쇄기
+70221,4,무정한 검투사의 뾰족철퇴
+70222,4,무정한 검투사의 뼈파쇄기
+70223,4,무정한 검투사의 망치
+70224,4,무정한 검투사의 해골망치
+70225,4,무정한 검투사의 창
+70226,4,무정한 검투사의 전투 지팡이
+70227,4,무정한 검투사의 원기 지팡이
+70228,4,무정한 검투사의 지팡이
+70229,4,무정한 검투사의 절단검
+70230,4,무정한 검투사의 쾌검
+70231,4,무정한 검투사의 대검
+70232,4,무정한 검투사의 투척용 도끼
+70233,4,무정한 검투사의 손도끼
+70234,4,무정한 검투사의 타도의 손길
+70235,4,무정한 검투사의 빛의 지휘봉
+70236,4,무정한 검투사의 장궁
+70237,4,무정한 검투사의 소총
+70238,4,무정한 검투사의 강화석궁
+70239,4,무정한 검투사의 병법서
+70240,4,무정한 검투사의 병법서
+70241,4,무정한 검투사의 철벽 방패
+70242,4,무정한 검투사의 방벽 방패
+70243,4,무정한 검투사의 보루 방패
+70244,4,무정한 검투사의 공포판금 가슴보호대
+70245,4,무정한 검투사의 공포판금 건틀릿
+70246,4,무정한 검투사의 공포판금 투구
+70247,4,무정한 검투사의 공포판금 다리보호대
+70248,4,무정한 검투사의 공포판금 어깨보호구
+70249,4,무정한 검투사의 미늘 가슴보호대
+70250,4,무정한 검투사의 미늘 건틀릿
+70251,4,무정한 검투사의 미늘 투구
+70252,4,무정한 검투사의 미늘 다리보호대
+70253,4,무정한 검투사의 미늘 어깨보호구
+70254,4,무정한 검투사의 판금 가슴보호대
+70255,4,무정한 검투사의 판금 건틀릿
+70256,4,무정한 검투사의 판금 투구
+70257,4,무정한 검투사의 판금 다리보호대
+70258,4,무정한 검투사의 판금 어깨보호구
+70259,4,무정한 검투사의 사슬 갑옷
+70260,4,무정한 검투사의 사슬 건틀릿
+70261,4,무정한 검투사의 사슬 투구
+70262,4,무정한 검투사의 사슬 다리보호구
+70263,4,무정한 검투사의 사슬 어깨덮개
+70264,4,무정한 검투사의 고리사슬 갑옷
+70265,4,무정한 검투사의 고리사슬 건틀릿
+70266,4,무정한 검투사의 고리사슬 투구
+70267,4,무정한 검투사의 고리사슬 다리보호구
+70268,4,무정한 검투사의 고리사슬 어깨덮개
+70269,4,무정한 검투사의 사슬매듭 갑옷
+70270,4,무정한 검투사의 사슬매듭 건틀릿
+70271,4,무정한 검투사의 사슬매듭 투구
+70272,4,무정한 검투사의 사슬매듭 다리보호구
+70273,4,무정한 검투사의 사슬매듭 어깨덮개
+70274,4,무정한 검투사의 쇠사슬 갑옷
+70275,4,무정한 검투사의 쇠사슬 건틀릿
+70276,4,무정한 검투사의 쇠사슬 투구
+70277,4,무정한 검투사의 쇠사슬 다리보호구
+70278,4,무정한 검투사의 쇠사슬 어깨덮개
+70279,4,무정한 검투사의 용가죽 장갑
+70280,4,무정한 검투사의 용가죽 투구
+70281,4,무정한 검투사의 용가죽 다리보호대
+70282,4,무정한 검투사의 용가죽 로브
+70283,4,무정한 검투사의 용가죽 어깨덮개
+70284,4,무정한 검투사의 코도가죽 장갑
+70285,4,무정한 검투사의 코도가죽 투구
+70286,4,무정한 검투사의 코도가죽 다리보호대
+70287,4,무정한 검투사의 코도가죽 로브
+70288,4,무정한 검투사의 코도가죽 어깨덮개
+70289,4,무정한 검투사의 고룡가죽 장갑
+70290,4,무정한 검투사의 고룡가죽 투구
+70291,4,무정한 검투사의 고룡가죽 다리보호대
+70292,4,무정한 검투사의 고룡가죽 로브
+70293,4,무정한 검투사의 고룡가죽 어깨덮개
+70294,4,무정한 검투사의 가죽 튜닉
+70295,4,무정한 검투사의 가죽 장갑
+70296,4,무정한 검투사의 가죽 투구
+70297,4,무정한 검투사의 가죽 다리보호대
+70298,4,무정한 검투사의 가죽 어깨덮개
+70299,4,무정한 검투사의 비단 손보호대
+70300,4,무정한 검투사의 비단 수도두건
+70301,4,무정한 검투사의 비단 바지
+70302,4,무정한 검투사의 비단 로브
+70303,4,무정한 검투사의 비단 아미스
+70304,4,무정한 검투사의 달빛매듭 장갑
+70305,4,무정한 검투사의 달빛매듭 투구
+70306,4,무정한 검투사의 달빛매듭 다리보호구
+70307,4,무정한 검투사의 달빛매듭 로브
+70308,4,무정한 검투사의 달빛매듭 덧옷
+70309,4,무정한 검투사의 명주 장갑
+70310,4,무정한 검투사의 명주 두건
+70311,4,무정한 검투사의 명주 다리보호구
+70312,4,무정한 검투사의 명주 로브
+70313,4,무정한 검투사의 명주 어깨덧옷
+70314,4,무정한 검투사의 지옥매듭 손보호대
+70315,4,무정한 검투사의 지옥매듭 수도두건
+70316,4,무정한 검투사의 지옥매듭 바지
+70317,4,무정한 검투사의 지옥매듭 예복
+70318,4,무정한 검투사의 지옥매듭 아미스
+70319,4,무정한 검투사의 잔혹 죔쇠띠
+70320,4,무정한 검투사의 잔혹 요대
+70321,4,무정한 검투사의 잔혹 전쟁장화
+70322,4,무정한 검투사의 날렵함 판금소매
+70323,4,무정한 검투사의 날렵함 전쟁장화
+70324,4,무정한 검투사의 날렵함 경갑
+70325,4,무정한 검투사의 용감 팔보호구
+70326,4,무정한 검투사의 용감 요대
+70327,4,무정한 검투사의 숙달 판금소매
+70328,4,무정한 검투사의 명상 허리보호대
+70329,4,무정한 검투사의 명상 발덮개
+70330,4,무정한 검투사의 명상 완장
+70331,4,무정한 검투사의 잔혹 허리보호대
+70332,4,무정한 검투사의 명상 죔쇠띠
+70333,4,무정한 검투사의 명상 경갑
+70334,4,무정한 검투사의 명상 팔보호구
+70335,4,무정한 검투사의 잔혹 발덮개
+70336,4,무정한 검투사의 잔혹 고리띠
+70337,4,무정한 검투사의 날렵함 발덮개
+70338,4,무정한 검투사의 날렵함 손목보호구
+70339,4,무정한 검투사의 적중 고리띠
+70340,4,무정한 검투사의 적중 손목보호구
+70341,4,무정한 검투사의 날렵함 발덮개
+70342,4,무정한 검투사의 용감 완장
+70343,4,무정한 검투사의 명상 허리띠
+70344,4,무정한 검투사의 명상 발등덮개
+70345,4,무정한 검투사의 명상 손목띠
+70346,4,무정한 검투사의 잔혹 허리띠
+70347,4,무정한 검투사의 잔혹 허리보호띠
+70348,4,무정한 검투사의 잔혹 전쟁장화
+70349,4,무정한 검투사의 적중 허리보호띠
+70350,4,무정한 검투사의 적중 팔보호대
+70351,4,무정한 검투사의 날렵함 전쟁장화
+70352,4,무정한 검투사의 날렵함 팔보호대
+70353,4,무정한 검투사의 문장 가슴보호대
+70354,4,무정한 검투사의 문장 장갑
+70355,4,무정한 검투사의 문장 면갑
+70356,4,무정한 검투사의 문장 다리갑옷
+70357,4,무정한 검투사의 문장 어깨덮개
+70358,4,무정한 검투사의 날렵함 발등덮개
+70359,4,무정한 검투사의 용감 손목띠
+70360,4,무정한 검투사의 잔혹 장식끈
+70361,4,무정한 검투사의 잔혹 발보호대
+70362,4,무정한 검투사의 적중 장식끈
+70363,4,무정한 검투사의 적중 소매장식
+70364,4,무정한 검투사의 날렵함 발보호대
+70365,4,무정한 검투사의 용감 소매장식
+70366,4,무정한 검투사의 명상 소매장식
+70367,4,무정한 검투사의 명상 발보호대
+70368,4,무정한 검투사의 명상 장식끈
+70383,4,무정한 검투사의 날렵함 망토
+70384,4,무정한 검투사의 용감 망토
+70385,4,무정한 검투사의 용감 단망토
+70386,4,무정한 검투사의 잔혹 단망토
+70387,4,무정한 검투사의 발산 외투
+70388,4,무정한 검투사의 용감 외투
+70389,4,무정한 검투사의 명상 외투
+70405,4,무정한 검투사의 지배 성물
+70406,4,무정한 검투사의 구조 성물
+70407,4,무정한 검투사의 승전 성물
+70408,4,무정한 검투사의 정복 성물
+70415,4,무정한 검투사의 문장 어깨덮개
+70416,4,무정한 검투사의 문장 다리갑옷
+70417,4,무정한 검투사의 문장 면갑
+70418,4,무정한 검투사의 문장 장갑
+70419,4,무정한 검투사의 문장 가슴보호대
+70420,4,무정한 검투사의 쇠사슬 어깨덮개
+70421,4,무정한 검투사의 쇠사슬 다리보호구
+70422,4,무정한 검투사의 쇠사슬 투구
+70423,4,무정한 검투사의 쇠사슬 건틀릿
+70424,4,무정한 검투사의 쇠사슬 갑옷
+70425,4,무정한 검투사의 지옥매듭 아미스
+70426,4,무정한 검투사의 지옥매듭 의복
+70427,4,무정한 검투사의 지옥매듭 바지
+70428,4,무정한 검투사의 고룡가죽 투구
+70429,4,무정한 검투사의 고룡가죽 장갑
+70430,4,무정한 검투사의 코도가죽 어깨덮개
+70431,4,무정한 검투사의 코도가죽 로브
+70432,4,무정한 검투사의 코도가죽 다리보호대
+70433,4,무정한 검투사의 고리사슬 갑옷
+70434,4,무정한 검투사의 사슬 어깨덮개
+70435,4,무정한 검투사의 사슬 다리보호구
+70436,4,무정한 검투사의 코도가죽 투구
+70437,4,무정한 검투사의 코도가죽 장갑
+70438,4,무정한 검투사의 용가죽 어깨덮개
+70439,4,무정한 검투사의 용가죽 로브
+70440,4,무정한 검투사의 사슬 투구
+70441,4,무정한 검투사의 사슬 건틀릿
+70442,4,무정한 검투사의 가죽 어깨덮개
+70443,4,무정한 검투사의 가죽 다리보호대
+70444,4,무정한 검투사의 가죽 투구
+70445,4,무정한 검투사의 가죽 장갑
+70446,4,무정한 검투사의 가죽 튜닉
+70447,4,무정한 검투사의 고룡가죽 어깨덮개
+70448,4,무정한 검투사의 고룡가죽 로브
+70449,4,무정한 검투사의 고룡가죽 다리보호대
+70450,4,무정한 검투사의 달빛매듭 로브
+70451,4,무정한 검투사의 달빛매듭 다리보호구
+70452,4,무정한 검투사의 달빛매듭 투구
+70453,4,무정한 검투사의 달빛매듭 장갑
+70454,4,무정한 검투사의 비단 아미스
+70455,4,무정한 검투사의 비단 로브
+70456,4,무정한 검투사의 사슬매듭 어깨덮개
+70457,4,무정한 검투사의 사슬매듭 다리보호구
+70458,4,무정한 검투사의 사슬매듭 투구
+70459,4,무정한 검투사의 사슬매듭 건틀릿
+70460,4,무정한 검투사의 사슬매듭 갑옷
+70461,4,무정한 검투사의 비단 바지
+70462,4,무정한 검투사의 비단 수도두건
+70463,4,무정한 검투사의 비단 손보호대
+70464,4,무정한 검투사의 고리사슬 어깨덮개
+70465,4,무정한 검투사의 고리사슬 다리보호구
+70466,4,무정한 검투사의 고리사슬 투구
+70467,4,무정한 검투사의 고리사슬 건틀릿
+70468,4,무정한 검투사의 지옥매듭 수도두건
+70469,4,무정한 검투사의 지옥매듭 손보호대
+70470,4,무정한 검투사의 명주 어깨덧옷
+70471,4,무정한 검투사의 명주 로브
+70472,4,무정한 검투사의 명주 다리보호구
+70473,4,무정한 검투사의 명주 두건
+70474,4,무정한 검투사의 명주 장갑
+70475,4,무정한 검투사의 달빛매듭 어깨덧옷
+70476,4,무정한 검투사의 사슬 갑옷
+70477,4,무정한 검투사의 판금 어깨보호구
+70478,4,무정한 검투사의 판금 다리보호대
+70479,4,무정한 검투사의 판금 투구
+70480,4,무정한 검투사의 판금 건틀릿
+70481,4,무정한 검투사의 판금 가슴보호구
+70482,4,무정한 검투사의 미늘 어깨보호구
+70483,4,무정한 검투사의 미늘 다리보호대
+70484,4,무정한 검투사의 용가죽 다리보호대
+70485,4,무정한 검투사의 용가죽 투구
+70486,4,무정한 검투사의 용가죽 장갑
+70487,4,무정한 검투사의 미늘 투구
+70488,4,무정한 검투사의 미늘 건틀릿
+70489,4,무정한 검투사의 미늘 가슴보호구
+70490,4,무정한 검투사의 공포판금 어깨보호구
+70491,4,무정한 검투사의 공포판금 다리보호대
+70492,4,무정한 검투사의 공포판금 투구
+70493,4,무정한 검투사의 공포판금 건틀릿
+70494,4,무정한 검투사의 공포판금 가슴보호구
+70495,4,무정한 검투사의 잔혹 발보호대
+70496,4,무정한 검투사의 날렵함 발보호대
+70497,4,무정한 검투사의 명상 발보호대
+70498,4,무정한 검투사의 명상 발등덮개
+70499,4,무정한 검투사의 날렵함 발등덮개
+70500,4,무정한 검투사의 잔혹 발덮개
+70501,4,무정한 검투사의 날렵함 발덮개
+70502,4,무정한 검투사의 날렵함 경갑
+70503,4,무정한 검투사의 명상 경갑
+70504,4,무정한 검투사의 잔혹 전쟁장화
+70505,4,무정한 검투사의 날렵함 전쟁장화
+70506,4,무정한 검투사의 잔혹 장화
+70507,4,무정한 검투사의 날렵함 장화
+70508,4,무정한 검투사의 날렵함 발덮개
+70509,4,무정한 검투사의 명상 발덮개
+70511,4,흉포한 검투사의 명상 완장
+70512,4,흉포한 검투사의 용감 완장
+70513,4,흉포한 검투사의 날렵함 판금소매
+70514,4,흉포한 검투사의 숙달 판금소매
+70515,4,흉포한 검투사의 적중 팔보호대
+70516,4,흉포한 검투사의 날렵함 팔보호대
+70523,4,흉포한 검투사의 잔혹 허리띠
+70524,4,흉포한 검투사의 명상 허리띠
+70525,4,흉포한 검투사의 명상 손목띠
+70526,4,흉포한 검투사의 용감 손목띠
+70527,4,흉포한 검투사의 날렵함 장화
+70528,4,흉포한 검투사의 잔혹 장화
+70529,4,흉포한 검투사의 명상 팔보호구
+70530,4,흉포한 검투사의 용감 팔보호구
+70531,4,흉포한 검투사의 잔혹 단망토
+70532,4,흉포한 검투사의 용감 단망토
+70533,4,흉포한 검투사의 사슬 갑옷
+70534,4,흉포한 검투사의 사슬 건틀릿
+70535,4,흉포한 검투사의 사슬 투구
+70536,4,흉포한 검투사의 사슬 다리보호구
+70537,4,흉포한 검투사의 사슬 어깨덮개
+70540,4,흉포한 검투사의 잔혹 죔쇠띠
+70541,4,흉포한 검투사의 명상 죔쇠띠
+70542,4,흉포한 검투사의 날렵함 망토
+70543,4,흉포한 검투사의 용감 망토
+70544,4,흉포한 검투사의 적중 장식끈
+70545,4,흉포한 검투사의 잔혹 장식끈
+70546,4,흉포한 검투사의 명상 장식끈
+70547,4,흉포한 검투사의 적중 소매장식
+70548,4,흉포한 검투사의 명상 소매장식
+70549,4,흉포한 검투사의 용감 소매장식
+70550,4,흉포한 검투사의 용가죽 장갑
+70551,4,흉포한 검투사의 용가죽 투구
+70552,4,흉포한 검투사의 용가죽 다리보호대
+70553,4,흉포한 검투사의 용가죽 로브
+70554,4,흉포한 검투사의 용가죽 어깨덮개
+70555,4,흉포한 검투사의 발산 외투
+70556,4,흉포한 검투사의 명상 외투
+70557,4,흉포한 검투사의 용감 외투
+70558,4,흉포한 검투사의 공포판금 가슴보호구
+70559,4,흉포한 검투사의 공포판금 건틀릿
+70560,4,흉포한 검투사의 공포판금 투구
+70561,4,흉포한 검투사의 공포판금 다리보호대
+70562,4,흉포한 검투사의 공포판금 어깨보호구
+70566,4,흉포한 검투사의 지옥매듭 아미스
+70567,4,흉포한 검투사의 지옥매듭 수도두건
+70568,4,흉포한 검투사의 지옥매듭 손보호대
+70569,4,흉포한 검투사의 지옥매듭 의복
+70570,4,흉포한 검투사의 지옥매듭 바지
+70571,4,흉포한 검투사의 날렵함 발등덮개
+70572,4,흉포한 검투사의 명상 발등덮개
+70573,4,흉포한 검투사의 잔혹 요대
+70574,4,흉포한 검투사의 용감 요대
+70575,4,흉포한 검투사의 날렵함 경갑
+70576,4,흉포한 검투사의 명상 경갑
+70580,4,흉포한 검투사의 코도가죽 장갑
+70581,4,흉포한 검투사의 코도가죽 투구
+70582,4,흉포한 검투사의 코도가죽 다리보호대
+70583,4,흉포한 검투사의 코도가죽 로브
+70584,4,흉포한 검투사의 코도가죽 어깨덮개
+70585,4,흉포한 검투사의 가죽 장갑
+70586,4,흉포한 검투사의 가죽 투구
+70587,4,흉포한 검투사의 가죽 다리보호대
+70588,4,흉포한 검투사의 가죽 어깨덮개
+70589,4,흉포한 검투사의 가죽 튜닉
+70590,4,흉포한 검투사의 사슬매듭 갑옷
+70591,4,흉포한 검투사의 사슬매듭 건틀릿
+70592,4,흉포한 검투사의 사슬매듭 투구
+70593,4,흉포한 검투사의 사슬매듭 다리보호구
+70594,4,흉포한 검투사의 사슬매듭 어깨덮개
+70595,4,흉포한 검투사의 적중 고리띠
+70596,4,흉포한 검투사의 잔혹 고리띠
+70597,4,흉포한 검투사의 쇠사슬 갑옷
+70598,4,흉포한 검투사의 쇠사슬 건틀릿
+70599,4,흉포한 검투사의 쇠사슬 투구
+70600,4,흉포한 검투사의 쇠사슬 다리보호구
+70601,4,흉포한 검투사의 쇠사슬 어깨덮개
+70608,4,흉포한 검투사의 달빛매듭 장갑
+70609,4,흉포한 검투사의 달빛매듭 투구
+70610,4,흉포한 검투사의 달빛매듭 다리보호구
+70611,4,흉포한 검투사의 달빛매듭 어깨덧옷
+70612,4,흉포한 검투사의 달빛매듭 로브
+70615,4,흉포한 검투사의 문장 가슴보호대
+70616,4,흉포한 검투사의 문장 장갑
+70617,4,흉포한 검투사의 문장 면갑
+70618,4,흉포한 검투사의 문장 다리갑옷
+70619,4,흉포한 검투사의 문장 어깨덮개
+70623,4,흉포한 검투사의 판금 가슴보호구
+70624,4,흉포한 검투사의 판금 건틀릿
+70625,4,흉포한 검투사의 판금 투구
+70626,4,흉포한 검투사의 판금 다리보호대
+70627,4,흉포한 검투사의 판금 어깨보호구
+70628,4,흉포한 검투사의 정복 성물
+70629,4,흉포한 검투사의 지배 성물
+70630,4,흉포한 검투사의 구조 성물
+70631,4,흉포한 검투사의 승전 성물
+70632,4,흉포한 검투사의 고리사슬 갑옷
+70633,4,흉포한 검투사의 고리사슬 건틀릿
+70634,4,흉포한 검투사의 고리사슬 투구
+70635,4,흉포한 검투사의 고리사슬 다리보호구
+70636,4,흉포한 검투사의 고리사슬 어깨덮개
+70639,4,흉포한 검투사의 날렵함 발덮개
+70640,4,흉포한 검투사의 날렵함 발덮개
+70641,4,흉포한 검투사의 잔혹 발덮개
+70642,4,흉포한 검투사의 명상 발덮개
+70643,4,흉포한 검투사의 명주 장갑
+70644,4,흉포한 검투사의 명주 두건
+70645,4,흉포한 검투사의 명주 다리보호구
+70646,4,흉포한 검투사의 명주 어깨덧옷
+70647,4,흉포한 검투사의 명주 로브
+70648,4,흉포한 검투사의 미늘 가슴보호구
+70649,4,흉포한 검투사의 미늘 건틀릿
+70650,4,흉포한 검투사의 미늘 투구
+70651,4,흉포한 검투사의 미늘 다리보호대
+70652,4,흉포한 검투사의 미늘 어깨보호구
+70655,4,흉포한 검투사의 비단 아미스
+70656,4,흉포한 검투사의 비단 수도두건
+70657,4,흉포한 검투사의 비단 손보호대
+70658,4,흉포한 검투사의 비단 로브
+70659,4,흉포한 검투사의 비단 바지
+70660,4,흉포한 검투사의 날렵함 발보호대
+70661,4,흉포한 검투사의 잔혹 발보호대
+70662,4,흉포한 검투사의 명상 발보호대
+70663,4,흉포한 검투사의 적중 허리보호띠
+70664,4,흉포한 검투사의 잔혹 허리보호띠
+70665,4,흉포한 검투사의 잔혹 허리보호대
+70666,4,흉포한 검투사의 명상 허리보호대
+70667,4,흉포한 검투사의 날렵함 전쟁장화
+70668,4,흉포한 검투사의 잔혹 전쟁장화
+70669,4,흉포한 검투사의 적중 손목보호구
+70670,4,흉포한 검투사의 날렵함 손목보호구
+70671,4,흉포한 검투사의 고룡가죽 장갑
+70672,4,흉포한 검투사의 고룡가죽 투구
+70673,4,흉포한 검투사의 고룡가죽 다리보호대
+70674,4,흉포한 검투사의 고룡가죽 로브
+70675,4,흉포한 검투사의 고룡가죽 어깨덮개
+70723,4,설퍼라스 - 꺼져버린 손
+70733,4,알리스라의 비수
+70734,4,둥지심장 철갑투구
+70735,4,명멸하는 손목띠
+70736,4,화염비행 다리보호구
+70737,4,거듭되는 불꽃의 어깨덮개
+70739,4,비행불꽃 다리갑옷
 70792,2,Art Template Cloth Belt - Robe_RaidMage_J - Arcane
 70793,2,Art Template Cloth Boot - Robe_RaidMage_J - Arcane
 70794,2,Art Template Cloth Chest - Robe_RaidMage_J - Arcane
@@ -30406,68 +30407,440 @@
 70905,2,Art Template Plate Legs - RaidWarrior_J - Red
 70906,2,Art Template Plate Shoulder - RaidWarrior_J - Red
 70907,2,Art Template Plate Wrist - RaidWarrior_J - Red
-70912,4,Giantflame Stompers
-70913,4,Shannox's Rusted Legplates
-70914,4,Flamescarred Carapace
-70915,4,Bulwark of the Gatekeeper
-70916,4,Helm of the Demon King
-70917,4,Flickering Handguards
-70920,4,Bracers of the Fiery Path
-70921,4,Spaulders of Pure Flame
-70922,4,Mandible of Beth'tilac
-70923,2,[ph] Holiday Garb
-70930,4,Durable Flamewrath Cloak
-70933,4,Girdle of the Indomitable Flame
-70937,4,Bracers of Regal Force
-70939,4,Deathclutch Figurine
-70941,4,Shoulderguards of the Molten Giant
-70942,4,Legguards of the Molten Giant
-70943,4,Handguards of the Molten Giant
-70944,4,Faceguard of the Molten Giant
-70945,4,Chestguard of the Molten Giant
-70946,4,Immolation Shoulderguards
-70947,4,Immolation Legguards
-70948,4,Immolation Faceguard
-70949,4,Immolation Handguards
-70950,4,Immolation Chestguard
-70951,4,Elementium Dragon Shoulderguards
-70952,4,Elementium Dragon Legguards
-70953,4,Elementium Dragon Handguards
-70954,4,Elementium Dragon Faceguard
-70955,4,Elementium Dragon Chestguard
-70985,4,Craterflame Spaulders
-70986,4,Egg-Clutch Gauntlets
-70987,4,Phoenix-Down Treads
-70988,4,Clutch of the Firemother
-70989,4,Leggings of Airy Flame
-70990,4,Lightwing Cloak
-70991,4,Crossbow of Erupting Fury
-70992,4,Dreadfire Drape
-70993,4,Fireskin Gauntlets
-71003,4,Vision of the Flaming Skull
-71004,4,Earthcrack Bracers
-71005,4,Flaming Core Chestguard
-71006,4,Volcanospike
-71007,4,Grips of the Raging Giant
-71009,4,Cauterizing Wristbands
-71010,4,Incendic Robes
-71011,4,Vision of the Flickering Flame
-71013,4,Spike of the Dread Hunter
-71014,4,Headreaper Greataxe
-71018,4,Scalp of the Bandit Prince
-71020,4,True-Arrow Grips
-71021,4,Uncrushable Belt of Fury
-71022,4,Flamewrought Abilene Shell
-71023,4,Emberskip Sandals
-71025,4,Flickering Shoulderpads
-71026,4,Bracers of the Dread Hunter
-71027,4,Treads of Implicit Obedience
-71028,4,Legplates of Absolute Control
-71029,4,Arachnaflame Treads
-71030,4,Seared Chitin Shoulders
-71031,4,Spiderheart Leggings
-71038,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Int Spirit Shield
-71039,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Int Versatile Staff
-71040,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Leather Int Spirit Helm
-71041,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Cloth Int Versatile Robe
-71042,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Mail Int Spirit Legs
+70912,4,금이 간 흑요석 디딤장화
+70913,4,광적인 헌신의 다리갑옷
+70914,4,불꽃흉터 껍질갑옷
+70915,4,고문의 파편
+70916,4,타오르는 영광의 투구
+70917,4,명멸하는 손보호대
+70920,4,불타는 길의 팔보호구
+70921,4,불타는 길의 어깨덮개
+70922,4,베스틸락의 아래턱
+70923,2,휘황찬란한 겨울맞이 스웨터
+70930,4,내구력 불꽃격노 망토
+70933,4,꺼지지 않는 불꽃의 요대
+70937,4,제왕의 권능 팔보호구
+70939,4,죽음손아귀 조각상
+70941,4,용암거인의 어깨보호대
+70942,4,용암거인의 다리보호대
+70943,4,용암거인의 손보호대
+70944,4,용암거인의 면갑
+70945,4,용암거인의 가슴보호구
+70946,4,제물의 어깨보호대
+70947,4,제물의 다리보호대
+70948,4,제물의 면갑
+70949,4,제물의 손보호대
+70950,4,제물의 가슴보호구
+70951,4,엘레멘티움 죽음판금 어깨보호대
+70952,4,엘레멘티움 죽음판금 다리보호대
+70953,4,엘레멘티움 죽음판금 손보호대
+70954,4,엘레멘티움 죽음판금 면갑
+70955,4,엘레멘티움 죽음판금 가슴보호구
+70985,4,분화구불꽃 어깨덮개
+70986,4,알잡이 건틀릿
+70987,4,불사조의 꼬리 발보호대
+70988,4,화염모신의 손아귀
+70989,4,대기불꽃의 다리보호구
+70990,4,빛날개 망토
+70991,4,분출하는 격노의 석궁
+70992,4,공포불 외투
+70993,4,화염가죽 건틀릿
+71003,4,불타오르는 해골의 환영
+71004,4,대지균열 팔보호구
+71005,4,불타오르는 핵 가슴보호대
+71006,4,화산쐐기
+71007,4,분노한 거인의 손장갑
+71009,4,마비의 손목띠
+71010,4,발연 로브
+71011,4,가물거리는 불꽃의 환영
+71013,4,탐식의 광란
+71014,4,해골강탈자 거대도끼
+71018,4,산적 왕자의 사후 징표
+71020,4,연기 분해의 장갑
+71021,4,박살 나지 않는 분노의 허리띠
+71022,4,불꽃세공 전복 껍질
+71023,4,잿불화덕 덧신
+71025,4,명멸하는 어깨덧대
+71026,4,공포 사냥꾼의 팔보호구
+71027,4,맹종의 발보호대
+71028,4,절대적인 통제의 다리갑옷
+71029,4,거미밟개
+71030,4,이글거리는 껍질의 어깨보호구
+71031,4,잿그물거미 다리보호구
+71038,4,붉은 과부의 수호 방패
+71039,4,화장불 장작개비
+71040,4,분명한 위협의 수도두건
+71041,4,거미매듭 로브
+71042,4,흉각 불꽃 킬트
+71043,4,수많은 눈의 어깨덮개
+71044,4,잿비단 손장갑
+71045,4,암흑 불사조 튜닉
+71046,4,암흑 불사조 장갑
+71047,4,암흑 불사조 보호모
+71048,4,암흑 불사조 다리보호대
+71049,4,암흑 불사조 어깨덮개
+71050,4,불꽃꼬리의 장갑
+71051,4,불꽃꼬리의 머리보호구
+71052,4,불꽃꼬리의 다리보호대
+71053,4,불꽃꼬리의 어깨덮개
+71054,4,불꽃꼬리의 튜닉
+71058,4,엘레멘티움 죽음판금 흉갑
+71059,4,엘레멘티움 죽음판금 건틀릿
+71060,4,엘레멘티움 죽음판금 보호모
+71061,4,엘레멘티움 죽음판금 다리갑옷
+71062,4,엘레멘티움 죽음판금 견갑
+71063,4,제물의 전투판금 흉갑
+71064,4,제물의 건틀릿
+71065,4,제물의 보호모
+71066,4,제물의 다리갑옷
+71067,4,제물의 견갑
+71068,4,용암거인의 전투판금 흉갑
+71069,4,용암거인의 건틀릿
+71070,4,용암거인의 보호모
+71071,4,용암거인의 다리갑옷
+71072,4,용암거인의 견갑
+71077,4,굉장한 위력의 타공기
+71084,4,Branch of Nordrassil
+71085,4,Runestaff of Nordrassil
+71086,5,Dragonwrath Tarecgosa's Rest
+71090,5,Legendary Shadoweave Shirt
+71091,4,제물의 가슴보호갑
+71092,4,제물의 장갑
+71093,4,제물의 머리보호구
+71094,4,제물의 경갑
+71095,4,제물의 어깨덧옷
+71097,4,흑요석 푸르름매듭 손장갑
+71098,4,흑요석 푸르름매듭 머리쓰개
+71099,4,흑요석 푸르름매듭 다리보호대
+71100,4,흑요석 푸르름매듭 의복
+71101,4,흑요석 푸르름매듭 어깨덮개
+71102,4,흑요석 푸르름매듭 손등싸개
+71103,4,흑요석 푸르름매듭 투구
+71104,4,흑요석 푸르름매듭 바지
+71105,4,흑요석 푸르름매듭 로브
+71106,4,흑요석 푸르름매듭 어깨덧옷
+71107,4,흑요석 푸르름매듭 장갑
+71108,4,흑요석 푸르름매듭 머리덮개
+71109,4,흑요석 푸르름매듭 다리보호구
+71110,4,흑요석 푸르름매듭 예복
+71111,4,흑요석 푸르름매듭 어깨싸개
+71130,4,불꽃결속사 팔보호구
+71131,4,불꽃결속의 요대
+71142,2,시험용 아이템
+71145,0,몬스터 - Caster Legendary Stage 0
+71146,4,굳은심장 유물
+71147,4,파멸불꽃 우상
+71148,4,영혼불꽃 약병
+71149,4,화염 결속사 성물
+71150,4,불사조 깃털 마법봉
+71151,4,빛나는 잿불 마법봉
+71152,4,새벽별 도끼 파편
+71154,4,거인절단기
+71218,4,빗나가는 별
+71227,4,칼날 달린 불꽃격노 망토
+71228,4,매끈매끈한 불꽃격노 망토
+71229,4,샘솟는 불꽃격노 망토
+71230,4,출렁이는 불꽃격노 망토
+71249,4,화염흉터 장식띠
+71250,4,불타오르는 잿불의 허리끈
+71253,4,이글거리는 쇄편 요대
+71254,4,불타오르는 거점 요새의 요대
+71255,4,불화살 허리띠
+71258,4,잿불눈 허리띠
+71260,4,탄압된 진실의 팔보호구
+71261,4,거대형상 팔보호구
+71262,4,그을림해골 손목띠
+71263,4,잿빛 안개의 팔보호구
+71264,4,갈래 번개의 팔보호구
+71265,4,잿불화염 팔보호구
+71266,4,화염혼 손목보호구
+71271,4,정화하는 불꽃의 손등싸개
+71272,4,정화하는 불꽃의 수도두건
+71273,4,정화하는 불꽃의 바지
+71274,4,정화하는 불꽃의 로브
+71275,4,정화하는 불꽃의 어깨덧옷
+71276,4,정화하는 불꽃의 장갑
+71277,4,정화하는 불꽃의 두건
+71278,4,정화하는 불꽃의 다리보호구
+71279,4,정화하는 불꽃의 예복
+71280,4,정화하는 불꽃의 어깨싸개
+71281,4,재앙거미의 손등싸개
+71282,4,재앙거미의 두건
+71283,4,재앙거미의 다리보호구
+71284,4,재앙거미의 로브
+71285,4,재앙거미의 어깨덧옷
+71286,4,불꽃매 장갑
+71287,4,불꽃매 두건
+71288,4,불꽃매 다리보호구
+71289,4,불꽃매 로브
+71290,4,불꽃매 어깨덧옷
+71291,4,분출하는 화산의 갑옷
+71292,4,분출하는 화산의 장갑
+71293,4,분출하는 화산의 머리쓰개
+71294,4,분출하는 화산의 킬트
+71295,4,분출하는 화산의 어깨싸개
+71296,4,분출하는 화산의 튜닉
+71297,4,분출하는 화산의 손등싸개
+71298,4,분출하는 화산의 면갑
+71299,4,분출하는 화산의 바지
+71300,4,분출하는 화산의 어깨덧옷
+71301,4,분출하는 화산의 흉갑
+71302,4,분출하는 화산의 손장갑
+71303,4,분출하는 화산의 투구
+71304,4,분출하는 화산의 다리보호대
+71305,4,분출하는 화산의 어깨덮개
+71312,4,관문파괴자
+71313,4,불타오르는 전갈의 덧신
+71314,4,악마 군주의 날개
+71323,4,으스스한 결속의 고서
+71325,4,저주받은 기사의 사악한 사브르
+71326,4,저주받은 기사의 끔찍한 보호모
+71331,4,다이어브루의 피묻은 술병
+71332,4,엄청난 공포의 술잔
+71340,4,문지기의 은총
+71341,4,작열하는 날개 팔보호구
+71342,4,불꽃의 투구모자
+71343,4,닫힌 문의 어깨덧옷
+71344,4,아른거리는 환영의 껍질갑옷
+71345,4,잊혀진 관문의 어깨덧대
+71346,4,빈틈없는 정밀함의 손장갑
+71347,4,불타오르는 전갈의 독침
+71349,4,불표범 다리보호구
+71350,4,분계의 손목싸개
+71351,4,참회하는 자의 발보호대
+71352,4,설퍼라스 - 꺼져버린 손
+71353,4,Arathar the Eye of Flame
+71355,4,불의 군주 망치
+71356,4,불꽃의 왕관
+71357,4,불꽃의 요대
+71358,4,불꽃매 장갑
+71359,4,첼리의 소독한 비수
+71360,4,붉은 고통의 뾰족지팡이
+71361,4,증오의 삼지장창
+71362,4,검은가로날 도끼
+71365,4,말라 빠진 사슬손목띠
+71366,4,Lava Bolt Crossbow
+71388,4,매끈매끈한 불꽃격노 망토
+71389,4,출렁이는 불꽃격노 망토
+71390,4,샘솟는 불꽃격노 망토
+71391,4,칼날 달린 불꽃격노 망토
+71392,4,내구력 불꽃격노 망토
+71393,4,잿불눈 허리띠
+71394,4,불꽃결속의 요대
+71395,4,화염흉터 장식띠
+71396,4,불화살 허리띠
+71397,4,불타오르는 거점 요새의 요대
+71398,4,이글거리는 쇄편 요대
+71399,4,불타오르는 잿불의 허리끈
+71400,4,꺼지지 않는 불꽃의 요대
+71402,4,잿그물거미 다리보호구
+71403,4,이글거리는 껍질의 어깨보호구
+71404,4,거미밟개
+71405,4,불꽃흉터 껍질갑옷
+71406,4,베스틸락의 아래턱
+71407,4,거미매듭 로브
+71408,4,붉은 과부의 수호 방패
+71409,4,화장불 장작개비
+71410,4,상처치유 손장갑
+71411,4,분명한 위협의 수도두건
+71412,4,흉각 불꽃 킬트
+71413,4,수많은 눈의 어깨덮개
+71414,4,분출하는 격노의 석궁
+71415,4,공포불 외투
+71416,4,불타오르는 해골의 환영
+71417,4,불타오르는 핵 가슴보호대
+71418,4,대지균열 팔보호구
+71419,4,화염가죽 건틀릿
+71420,4,금이 간 흑요석 디딤장화
+71421,4,가물거리는 불꽃의 환영
+71422,4,화산쐐기
+71424,4,발연 로브
+71425,4,마비의 손목띠
+71426,4,분노한 거인의 손장갑
+71427,4,알리스라의 비수
+71428,4,명멸하는 손목띠
+71429,4,화염비행 다리보호구
+71430,4,둥지심장 철갑투구
+71431,4,비행불꽃 다리갑옷
+71432,4,거듭되는 불꽃의 어깨덮개
+71434,4,빛날개 망토
+71435,4,대기불꽃의 다리보호구
+71436,4,불사조의 꼬리 발보호대
+71437,4,알잡이 건틀릿
+71438,4,분화구불꽃 어깨덮개
+71439,4,화염모신의 손아귀
+71440,4,연기 분해의 장갑
+71441,4,탐식의 광란
+71442,4,산적 왕자의 사후 징표
+71443,4,박살 나지 않는 분노의 허리띠
+71444,4,광적인 헌신의 다리갑옷
+71445,4,해골강탈자 거대도끼
+71447,4,잿불화덕 덧신
+71448,4,불꽃세공 전복 껍질
+71450,4,명멸하는 어깨덧대
+71451,4,맹종의 발보호대
+71452,4,공포 사냥꾼의 팔보호구
+71453,4,절대적인 통제의 다리갑옷
+71454,4,관문파괴자
+71455,4,악마 군주의 날개
+71456,4,잊혀진 관문의 어깨덧대
+71458,4,명멸하는 손보호대
+71459,4,타오르는 영광의 투구
+71460,4,고문의 파편
+71461,4,닫힌 문의 어깨덧옷
+71462,4,으스스한 결속의 고서
+71463,4,작열하는 날개 팔보호구
+71464,4,문지기의 은총
+71465,4,불꽃의 투구모자
+71466,4,판드랄의 불타오르는 뾰족지팡이
+71467,4,불타오르는 전갈의 덧신
+71468,4,빈틈없는 정밀함의 손장갑
+71469,4,아른거리는 환영의 껍질갑옷
+71470,4,불타는 길의 팔보호구
+71471,4,분계의 손목싸개
+71473,4,불타오르는 전갈의 독침
+71474,4,불표범 다리보호구
+71475,4,참회하는 자의 발보호대
+71476,4,엘레멘티움 죽음판금 흉갑
+71477,4,엘레멘티움 죽음판금 건틀릿
+71478,4,엘레멘티움 죽음판금 보호모
+71479,4,엘레멘티움 죽음판금 다리갑옷
+71480,4,엘레멘티움 죽음판금 견갑
+71481,4,엘레멘티움 죽음판금 가슴보호구
+71482,4,엘레멘티움 죽음판금 손보호대
+71483,4,엘레멘티움 죽음판금 면갑
+71484,4,엘레멘티움 죽음판금 다리보호대
+71485,4,엘레멘티움 죽음판금 어깨보호대
+71486,4,흑요석 푸르름매듭 의복
+71487,4,흑요석 푸르름매듭 손장갑
+71488,4,흑요석 푸르름매듭 머리쓰개
+71489,4,흑요석 푸르름매듭 다리보호대
+71490,4,흑요석 푸르름매듭 어깨덮개
+71491,4,흑요석 푸르름매듭 손등싸개
+71492,4,흑요석 푸르름매듭 투구
+71493,4,흑요석 푸르름매듭 바지
+71494,4,흑요석 푸르름매듭 로브
+71495,4,흑요석 푸르름매듭 어깨덧옷
+71496,4,흑요석 푸르름매듭 장갑
+71497,4,흑요석 푸르름매듭 머리덮개
+71498,4,흑요석 푸르름매듭 다리보호구
+71499,4,흑요석 푸르름매듭 예복
+71500,4,흑요석 푸르름매듭 어깨싸개
+71501,4,불꽃꼬리의 튜닉
+71502,4,불꽃꼬리의 장갑
+71503,4,불꽃꼬리의 머리보호구
+71504,4,불꽃꼬리의 다리보호대
+71505,4,불꽃꼬리의 어깨덮개
+71507,4,불꽃매 장갑
+71508,4,불꽃매 두건
+71509,4,불꽃매 다리보호구
+71510,4,불꽃매 로브
+71511,4,불꽃매 어깨덧옷
+71512,4,제물의 전투판금 흉갑
+71513,4,제물의 건틀릿
+71514,4,제물의 보호모
+71515,4,제물의 다리갑옷
+71516,4,제물의 견갑
+71517,4,제물의 가슴보호갑
+71518,4,제물의 장갑
+71519,4,제물의 머리보호구
+71520,4,제물의 경갑
+71521,4,제물의 어깨덧옷
+71522,4,제물의 가슴보호구
+71523,4,제물의 손보호대
+71524,4,제물의 면갑
+71525,4,제물의 다리보호대
+71526,4,제물의 어깨보호대
+71527,4,정화하는 불꽃의 손등싸개
+71528,4,정화하는 불꽃의 수도두건
+71529,4,정화하는 불꽃의 바지
+71530,4,정화하는 불꽃의 로브
+71531,4,정화하는 불꽃의 어깨덧옷
+71532,4,정화하는 불꽃의 장갑
+71533,4,정화하는 불꽃의 두건
+71534,4,정화하는 불꽃의 다리보호구
+71535,4,정화하는 불꽃의 예복
+71536,4,정화하는 불꽃의 어깨싸개
+71537,4,암흑 불사조 튜닉
+71538,4,암흑 불사조 장갑
+71539,4,암흑 불사조 보호모
+71540,4,암흑 불사조 다리보호대
+71541,4,암흑 불사조 어깨덮개
+71542,4,분출하는 화산의 튜닉
+71543,4,분출하는 화산의 손등싸개
+71544,4,분출하는 화산의 면갑
+71545,4,분출하는 화산의 바지
+71546,4,분출하는 화산의 어깨덧옷
+71547,4,분출하는 화산의 흉갑
+71548,4,분출하는 화산의 손장갑
+71549,4,분출하는 화산의 투구
+71550,4,분출하는 화산의 다리보호대
+71551,4,분출하는 화산의 어깨덮개
+71552,4,분출하는 화산의 갑옷
+71553,4,분출하는 화산의 장갑
+71554,4,분출하는 화산의 머리쓰개
+71555,4,분출하는 화산의 킬트
+71556,4,분출하는 화산의 어깨싸개
+71557,4,증오의 삼지장창
+71558,4,Lava Bolt Crossbow
+71559,4,붉은 고통의 뾰족지팡이
+71560,4,첼리의 소독한 비수
+71561,4,Hide-Bound Chains
+71562,4,검은가로날 도끼
+71567,4,굳은심장 유물
+71568,4,새벽별 도끼 파편
+71569,4,불꽃결속사 팔보호구
+71570,4,갈래 번개의 팔보호구
+71571,4,잿불화염 팔보호구
+71572,4,화염혼 손목보호구
+71575,4,빛나는 잿불 마법봉
+71577,4,화염 결속사 성물
+71579,4,불사조 깃털 마법봉
+71580,4,영혼불꽃 약병
+71581,4,그을림해골 손목띠
+71582,4,잿빛 안개의 팔보호구
+71583,4,탄압된 진실의 팔보호구
+71584,4,거대형상 팔보호구
+71585,4,제왕의 권능 팔보호구
+71587,4,파멸불꽃 우상
+71590,4,죽음손아귀 조각상
+71592,4,빗나가는 별
+71593,4,거인절단기
+71594,4,재앙거미의 손등싸개
+71595,4,재앙거미의 두건
+71596,4,재앙거미의 다리보호구
+71597,4,재앙거미의 로브
+71598,4,재앙거미의 어깨덧옷
+71599,4,용암거인의 보호모
+71600,4,용암거인의 전투판금 흉갑
+71601,4,용암거인의 건틀릿
+71602,4,용암거인의 다리갑옷
+71603,4,용암거인의 견갑
+71604,4,용암거인의 가슴보호구
+71605,4,용암거인의 손보호대
+71606,4,용암거인의 면갑
+71607,4,용암거인의 다리보호대
+71608,4,용암거인의 어깨보호대
+71611,4,Arathar the Eye of Flame
+71612,4,순수한 불꽃의 어깨덮개
+71613,4,불꽃의 요대
+71614,4,불꽃매 장갑
+71615,4,불의 정령 망치
+71616,4,불꽃의 왕관
+71640,4,Riplimb's Lost Collar
+71641,4,Riplimb's Lost Collar
+71713,4,Stave Icecrown Raid D02 Green
+71774,4,Smoldering Censer of Purity
+71775,4,Smoldering Censer of Purity
+71776,4,Eye of Purification
+71777,4,Eye of Purification
+71778,4,Avool's Incendiary Shanker
+71779,4,Avool's Incendiary Shanker
+71780,4,Zoid's Firelit Greatsword
+71781,4,Zoid's Firelit Greatsword
+71782,4,Shatterskull Bonecrusher
+71783,4,Shatterskull Bonecrusher
+71784,4,Firethorn Mindslicer
+71785,4,Firethorn Mindslicer
+71786,4,Entrail Disgorger
+71787,4,Entrail Disgorger

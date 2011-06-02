@@ -4554,7 +4554,7 @@
 13505,4,Lame runique du baron Vaillefendre
 13524,3,Crâne des ombres ardentes
 13525,3,Doigts du sombre lien
-13526,3,Ceinturon marqué par le feu
+13526,3,Ceinturon marqué par les flammes
 13527,3,Grèves de marche-lave
 13528,3,Brassards du vide crépusculaire
 13529,3,Carcasse de Nerub'enkan
@@ -8102,7 +8102,7 @@
 22272,3,Etreinte de la forêt
 22273,3,Chaperon de Lunombre
 22274,3,Fourrure grisonnante
-22275,3,Bottes Mousse-de-feu
+22275,3,Bottes mousse-de-feu
 22276,1,Robe rouge ravissante
 22277,1,Habit de soirée rouge
 22278,1,Robe bleue ravissante
@@ -10028,7 +10028,7 @@
 27414,3,Masque de bête mok'nathal
 27415,3,Masque facial de sombregarde
 27417,3,Espauliers aile-de-corbeau
-27418,3,Kilt d'ombre Foudreguerre
+27418,3,Kilt d'ombre foudreguerre
 27420,3,Bottes de guerre de cérémonie d'Uther
 27423,3,Cape d'impulsivité
 27424,3,Hache-venin amani
@@ -12142,7 +12142,7 @@
 31332,4,Frappe-éclair
 31333,4,Le guetteur de nuit
 31334,4,Bâton de la fureur naturelle
-31335,4,Pantalon de la croissance vivante
+31335,4,Kilt of Living Growth
 31336,4,Lame de sorcellerie
 31340,4,Volonté d'Edward l'Etrange
 31341,2,Cape de sectateur du Ver
@@ -16890,6 +16890,7 @@
 40722,4,Cape maillée en platine
 40723,4,Déguisement de kumiho
 40724,4,Cape des plumes de kea
+40727,3,Puits de gravité gnome
 40733,4,Protège-poignets de la chasseresse sentinelle
 40734,4,Brassards des parapets de Dalaran
 40735,4,Protège-bras de la jungle de Zartson
@@ -21407,7 +21408,7 @@
 49978,4,Ceinture d'âmefroide broyeuse
 49979,4,Garde-mains de répit de l'hiver
 49980,4,Espauliers de pics d'os rouillés
-49981,4,Fal'inrush défenseur de Quel'thalas
+49981,4,Fal'inrush défenseur de Quel'Thalas
 49982,4,Percecœur
 49983,4,Croquenots imprégnés de sang en saronite
 49984,0,[Monster] - Sword2H Ebon Blade (Green)
@@ -21743,7 +21744,7 @@
 50730,4,Glorenzelg haute-lame de la Main d'argent
 50731,4,Archus grand bâton d'Antonidas
 50732,4,Coup-de-sang la lame d'agonie de Kel'Thuzad
-50733,4,Fal'inrush défenseur de Quel'thalas
+50733,4,Fal'inrush défenseur de Quel'Thalas
 50734,4,Sceptre royal de Terenas II
 50735,4,Ordalie devoir du général des Forestiers
 50736,4,Chute-des-cieux kriss des mille mensonges
@@ -23197,9 +23198,9 @@
 54886,3,Puissance du géant des montagnes
 54887,3,Puissance du dragon féerique
 54888,3,Puissance du tréant
-54891,2,Art Template Leather Legs - Leather_Worgen_B_01 - Green
-54898,2,Art Template Leather Boot - Leather_Common_B_03 - Red
-54899,2,Art Template Leather Chest - Leather_Common_B_03 - Red
+54891,2,[Art] Template Leather Legs - Leather_Worgen_B_01 - Green
+54898,2,[Art] Template Leather Boot - Leather_Common_B_03 - Red
+54899,2,[Art] Template Leather Chest - Leather_Common_B_03 - Red
 54909,2,Bâton de Volevent
 54910,2,Voile émeraude
 54911,2,Garde-épaules de dragonnet vert
@@ -23324,7 +23325,7 @@
 55052,3,Exécuteur d'obsidium
 55058,4,Haubert d'élémentium durci
 55059,4,Ceinturon d'élémentium durci
-55060,4,Armure de plates mortelle en élémentium
+55060,4,Armure de plates mortelles en élémentium
 55061,4,Ceinturon de souffrance en élémentium
 55062,4,Corselet léger en élémentium
 55063,4,Ceinture légère en élémentium
@@ -24371,7 +24372,7 @@
 56841,2,Manieurs de demi vérités
 56842,2,Camail abandonné de Mazoga
 56843,2,Espauliers de Martelume
-56844,2,Masse de la vallée des ossements
+56844,2,Masse de la vallée des Ossements
 56845,2,Tunique de parlesang
 56846,2,Espauliers de l'assoiffé de sang
 56848,2,Bottes de Volterouille
@@ -24976,21 +24977,21 @@
 58247,1,Gilet de trappeur
 58248,1,Gilet d'initié
 58255,1,Haut-de-forme du seigneur Walden
-58300,2,[Art Template] Mail Belt  - Mail_Common_B_01 - Purple
+58300,2,[Art] Template Mail Belt  - Mail_Common_B_01 - Purple
 58306,2,[Art] Template Cloth Hand   - Robe_Common_b_01 - Brown
 58368,2,[Art] Template Leather Belt  - Leather_Common_B_03 - Blue
 58417,2,[Art] Template Cloth Legs  - Robe_Common_B_03 - Purple
-58446,2,[Art Template] Plate Belt  - Plate_Common_B_03 - White
-58447,2,[Art Template] Plate Boot  - Plate_Common_B_03 - White
-58448,2,[Art Template] Plate Chest  - Plate_Common_B_03 - White
-58449,2,[Art Template] Plate Hand  - Plate_Common_B_03 - White
-58450,2,[Art Template] Plate Head  - Plate_Common_B_03 - White
-58451,2,[Art Template] Plate Legs  - Plate_Common_B_03 - White
-58452,2,[Art Template] Plate Shoulder  - Plate_Common_B_03 - White
-58453,2,[Art Template] Plate Wrist  - Plate_Common_B_03 - White
-58465,2,[Art Template] Mail Hand  - Mail_Common_b_02 - Red
-58466,2,[Art Template] Mail Head  - Mail_Common_b_02 - Red
-58467,2,[Art Template] Mail Legs  - Mail_Common_b_02 - Red
+58446,2,[Art] Template Plate Belt  - Plate_Common_B_03 - White
+58447,2,[Art] Template Plate Boot  - Plate_Common_B_03 - White
+58448,2,[Art] Template Plate Chest  - Plate_Common_B_03 - White
+58449,2,[Art] Template Plate Hand  - Plate_Common_B_03 - White
+58450,2,[Art] Template Plate Head  - Plate_Common_B_03 - White
+58451,2,[Art] Template Plate Legs  - Plate_Common_B_03 - White
+58452,2,[Art] Template Plate Shoulder  - Plate_Common_B_03 - White
+58453,2,[Art] Template Plate Wrist  - Plate_Common_B_03 - White
+58465,2,[Art] Template Mail Hand  - Mail_Common_b_02 - Red
+58466,2,[Art] Template Mail Head  - Mail_Common_b_02 - Red
+58467,2,[Art] Template Mail Legs  - Mail_Common_b_02 - Red
 58481,4,Bottes des mers périlleuses
 58482,4,Bottines de joie fugace
 58484,4,Sandales violettes pâlissantes
@@ -27115,35 +27116,35 @@
 62478,3,Etoile du matin chatoyante
 62479,3,Perce-ciel
 62504,0,[Monster] - Polearm (Rifle Outland Raid D03 - No CD)
-62623,2,Art Template Cloth Boot  - Cataclysm_B_01 - Purple
-62628,2,Art Template Cloth Robe  - Cataclysm_B_01 - Purple
-62631,2,Art Template Cloth Belt  - Cataclysm_B_01 - Red
-62632,2,Art Template Cloth Boot  - Cataclysm_B_01 - Red
-62633,2,Art Template Cloth Chest  - Cataclysm_B_01 - Red
-62634,2,Art Template Cloth Hand  - Cataclysm_B_01 - Red
-62635,2,Art Template Cloth Head  - Cataclysm_B_01 - Red
-62636,2,Art Template Cloth Legs  - Cataclysm_B_01 - Red
-62637,2,Art Template Cloth Robe  - Cataclysm_B_01 - Red
-62638,2,Art Template Cloth Shoulder  - Cataclysm_B_01 - Red
-62639,2,Art Template Cloth Wrist  - Cataclysm_B_01 - Red
-62697,2,Art Template Leather Belt   - Leather_Cataclysm_B_01 - Brown
-62698,2,Art Template Leather Boot   - Leather_Cataclysm_B_01 - Brown
-62699,2,Art Template Leather Chest   - Leather_Cataclysm_B_01 - Brown
-62700,2,Art Template Leather Hand   - Leather_Cataclysm_B_01 - Brown
-62701,2,Art Template Leather Head   - Leather_Cataclysm_B_01 - Brown
-62702,2,Art Template Leather Legs   - Leather_Cataclysm_B_01 - Brown
-62703,2,Art Template Leather Shoulder   - Leather_Cataclysm_B_01 - Brown
-62704,2,Art Template Leather Wrist   - Leather_Cataclysm_B_01 - Brown
-62706,2,Art Template Leather Belt  - Leather_Cataclysm_B_01 - Purple
-62707,2,Art Template Leather Boot  - Leather_Cataclysm_B_01 - Purple
-62708,2,Art Template Leather Chest  - Leather_Cataclysm_B_01 - Purple
-62709,2,Art Template Leather Hand  - Leather_Cataclysm_B_01 - Purple
-62710,2,Art Template Leather Head  - Leather_Cataclysm_B_01 - Purple
-62711,2,Art Template Leather Legs  - Leather_Cataclysm_B_01 - Purple
-62712,2,Art Template Leather Shoulder  - Leather_Cataclysm_B_01 - Purple
-62713,2,Art Template Leather Wrist  - Leather_Cataclysm_B_01 - Purple
+62623,2,[Art] Template Cloth Boot  - Cataclysm_B_01 - Purple
+62628,2,[Art] Template Cloth Robe  - Cataclysm_B_01 - Purple
+62631,2,[Art] Template Cloth Belt  - Cataclysm_B_01 - Red
+62632,2,[Art] Template Cloth Boot  - Cataclysm_B_01 - Red
+62633,2,[Art] Template Cloth Chest  - Cataclysm_B_01 - Red
+62634,2,[Art] Template Cloth Hand  - Cataclysm_B_01 - Red
+62635,2,[Art] Template Cloth Head  - Cataclysm_B_01 - Red
+62636,2,[Art] Template Cloth Legs  - Cataclysm_B_01 - Red
+62637,2,[Art] Template Cloth Robe  - Cataclysm_B_01 - Red
+62638,2,[Art] Template Cloth Shoulder  - Cataclysm_B_01 - Red
+62639,2,[Art] Template Cloth Wrist  - Cataclysm_B_01 - Red
+62697,2,[Art] Template Leather Belt   - Leather_Cataclysm_B_01 - Brown
+62698,2,[Art] Template Leather Boot   - Leather_Cataclysm_B_01 - Brown
+62699,2,[Art] Template Leather Chest   - Leather_Cataclysm_B_01 - Brown
+62700,2,[Art] Template Leather Hand   - Leather_Cataclysm_B_01 - Brown
+62701,2,[Art] Template Leather Head   - Leather_Cataclysm_B_01 - Brown
+62702,2,[Art] Template Leather Legs   - Leather_Cataclysm_B_01 - Brown
+62703,2,[Art] Template Leather Shoulder   - Leather_Cataclysm_B_01 - Brown
+62704,2,[Art] Template Leather Wrist   - Leather_Cataclysm_B_01 - Brown
+62706,2,[Art] Template Leather Belt  - Leather_Cataclysm_B_01 - Purple
+62707,2,[Art] Template Leather Boot  - Leather_Cataclysm_B_01 - Purple
+62708,2,[Art] Template Leather Chest  - Leather_Cataclysm_B_01 - Purple
+62709,2,[Art] Template Leather Hand  - Leather_Cataclysm_B_01 - Purple
+62710,2,[Art] Template Leather Head  - Leather_Cataclysm_B_01 - Purple
+62711,2,[Art] Template Leather Legs  - Leather_Cataclysm_B_01 - Purple
+62712,2,[Art] Template Leather Shoulder  - Leather_Cataclysm_B_01 - Purple
+62713,2,[Art] Template Leather Wrist  - Leather_Cataclysm_B_01 - Purple
 62739,1,[PRK Test]
-62746,2,[Art Template] Plate Shoulder - Plate_Cataclysm_B_01 - Black
+62746,2,[Art] Template Plate Shoulder - Plate_Cataclysm_B_01 - Black
 62757,2,[Art] Template Cloth Head  - Robe_Common_C_01 - Blue - UNUSED
 62758,2,[Art] Template Cloth Robe  - Robe_Common_C_01 - Blue - UNUSED
 62797,0,[Monster] - Polearm Cataclysm C01
@@ -27292,15 +27293,15 @@
 63020,3,Ceinture de la gente dame
 63021,3,Gants de Fin du voyage
 63052,4,[Monster] - Staff - Ulduar Raid D04 Green
-63061,2,[Art Template] Plate Wrist  - Plate_Cataclysm_B_01 - Blue
-63062,2,[Art Template] Plate Belt  - Plate_Cataclysm_B_01 - Silver
-63063,2,[Art Template] Plate Boot  - Plate_Cataclysm_B_01 - Silver
-63064,2,[Art Template] Plate Chest  - Plate_Cataclysm_B_01 - Silver
-63065,2,[Art Template] Plate Hand  - Plate_Cataclysm_B_01 - Silver
-63066,2,[Art Template] Plate Head  - Plate_Cataclysm_B_01 - Silver
-63067,2,[Art Template] Plate Legs  - Plate_Cataclysm_B_01 - Silver
-63068,2,[Art Template] Plate Shoulder  - Plate_Cataclysm_B_01 - Silver
-63069,2,[Art Template] Plate Wrist  - Plate_Cataclysm_B_01 - Silver
+63061,2,[Art] Template Plate Wrist  - Plate_Cataclysm_B_01 - Blue
+63062,2,[Art] Template Plate Belt  - Plate_Cataclysm_B_01 - Silver
+63063,2,[Art] Template Plate Boot  - Plate_Cataclysm_B_01 - Silver
+63064,2,[Art] Template Plate Chest  - Plate_Cataclysm_B_01 - Silver
+63065,2,[Art] Template Plate Hand  - Plate_Cataclysm_B_01 - Silver
+63066,2,[Art] Template Plate Head  - Plate_Cataclysm_B_01 - Silver
+63067,2,[Art] Template Plate Legs  - Plate_Cataclysm_B_01 - Silver
+63068,2,[Art] Template Plate Shoulder  - Plate_Cataclysm_B_01 - Silver
+63069,2,[Art] Template Plate Wrist  - Plate_Cataclysm_B_01 - Silver
 63093,4,Epaulières du Marteau du crépuscule
 63094,4,Robe du Marteau du crépuscule
 63095,4,Capuche du Marteau du crépuscule
@@ -29498,28 +29499,28 @@
 67602,3,Tranche-gorge en élémentium
 67604,1,[DND] Horde Guild Banner - Handheld
 67605,3,Ecrase-cervelle en élémentium forgé
-67613,2,[Art Template] Plate Shoulder - Plate_DungeonPlate_03 - Paladin
-67621,2,[Art Template] Plate Shoulder - Plate_DungeonPlate_03 - Death Knight
-67650,2,[Art Template] Leather Hand - DungeonLeather_C_03 - Rogue
-67658,2,[Art Template] Leather Hand - DungeonLeather_C_03 - Druid
-67663,2,[Art Template] Cloth Belt - Robe_DungeonRobe_C_03 - Warlock
-67784,2,[Art Template] Plate Wrist - RaidWarrior_I - Green
-67785,2,[Art Template] Plate Shoulder - RaidWarrior_I - Green
-67786,2,[Art Template] Plate Legs - RaidWarrior_I - Green
-67787,2,[Art Template] Plate Head - RaidWarrior_I - Green
-67788,2,[Art Template] Plate Hand - RaidWarrior_I - Green
-67789,2,[Art Template] Plate Chest - RaidWarrior_I - Green
-67790,2,[Art Template] Plate Boot - RaidWarrior_I - Green
-67791,2,[Art Template] Plate Belt - RaidWarrior_I - Green
-67920,2,[Art Template] Plate Wrist - Plate_PVPWarrior_C_01 - Black
-67921,2,[Art Template] Plate Shoulder - Plate_PVPWarrior_C_01 - Black
-67922,2,[Art Template] Plate Legs - Plate_PVPWarrior_C_01 - Black
-67923,2,[Art Template] Plate Head - Plate_PVPWarrior_C_01 - Black
-67924,2,[Art Template] Plate Hand - Plate_PVPWarrior_C_01 - Black
-67925,2,[Art Template] Plate Chest - Plate_PVPWarrior_C_01 - Black
-67926,2,[Art Template] Plate Boot - Plate_PVPWarrior_C_01 - Black
-67927,2,[Art Template] Plate Belt - Plate_PVPWarrior_C_01 - Black
-68002,2,[Art Template] Cloth Shoulder - Robe_PVPWarlock_C_01 - Red
+67613,2,[Art] Template Plate Shoulder - Plate_DungeonPlate_03 - Paladin
+67621,2,[Art] Template Plate Shoulder - Plate_DungeonPlate_03 - Death Knight
+67650,2,[Art] Template Leather Hand - DungeonLeather_C_03 - Rogue
+67658,2,[Art] Template Leather Hand - DungeonLeather_C_03 - Druid
+67663,2,[Art] Template Cloth Belt - Robe_DungeonRobe_C_03 - Warlock
+67784,2,[Art] Template Plate Wrist - RaidWarrior_I - Green
+67785,2,[Art] Template Plate Shoulder - RaidWarrior_I - Green
+67786,2,[Art] Template Plate Legs - RaidWarrior_I - Green
+67787,2,[Art] Template Plate Head - RaidWarrior_I - Green
+67788,2,[Art] Template Plate Hand - RaidWarrior_I - Green
+67789,2,[Art] Template Plate Chest - RaidWarrior_I - Green
+67790,2,[Art] Template Plate Boot - RaidWarrior_I - Green
+67791,2,[Art] Template Plate Belt - RaidWarrior_I - Green
+67920,2,[Art] Template Plate Wrist - Plate_PVPWarrior_C_01 - Black
+67921,2,[Art] Template Plate Shoulder - Plate_PVPWarrior_C_01 - Black
+67922,2,[Art] Template Plate Legs - Plate_PVPWarrior_C_01 - Black
+67923,2,[Art] Template Plate Head - Plate_PVPWarrior_C_01 - Black
+67924,2,[Art] Template Plate Hand - Plate_PVPWarrior_C_01 - Black
+67925,2,[Art] Template Plate Chest - Plate_PVPWarrior_C_01 - Black
+67926,2,[Art] Template Plate Boot - Plate_PVPWarrior_C_01 - Black
+67927,2,[Art] Template Plate Belt - Plate_PVPWarrior_C_01 - Black
+68002,2,[Art] Template Cloth Shoulder - Robe_PVPWarlock_C_01 - Red
 68005,0,[Monster] - Staff Cataclysm B01 (Holy Glow)
 68012,2,Chope de Gug
 68013,1,[Monster] - Mace1H Firemaul of Destruction
@@ -29537,7 +29538,7 @@
 68052,3,Cape de Kargath
 68053,3,Cuirasse de Thaurissan
 68058,0,[Monster] - Sword 1H Al'Akir
-68100,2,[Art Template] Cloth Wrist - Robe_RaidPriest_I - Default
+68100,2,[Art] Template Cloth Wrist - Robe_RaidPriest_I - Default
 68127,4,Lève-tempête les confins de la Tourmente
 68128,4,Lève-tempête les confins de la Tourmente
 68129,4,Lève-tempête les confins de la Tourmente
@@ -29547,36 +29548,36 @@
 68161,4,Décapiteur de Krol
 68162,4,Ouvre-échine
 68163,4,La Lame du Crépuscule
-68182,2,[Art Template] Plate Legs - RaidDeathKnight_I - Blue
+68182,2,[Art] Template Plate Legs - RaidDeathKnight_I - Blue
 68194,3,Motivateur de Lorgnesilex
 68195,3,Lame de Bazzalan
-68418,2,[Art Template Cloth Chest - Robe_PVPPriest_C_01 - White
-68515,2,[Art Template Cloth Shoulder - Robe_PVPWarlock_C_01 - Black
-68518,2,[Art Template Cloth Shoulder - Robe_PVPWarlock_C_01 - Green
-68574,2,[Art Template Plate Wrist - Plate_PVPWarrior_C_01 - Blue
-68575,2,[Art Template Plate Shoulder - Plate_PVPWarrior_C_01 - Blue
-68576,2,[Art Template Plate Legs - Plate_PVPWarrior_C_01 - Blue
-68577,2,[Art Template Plate Head - Plate_PVPWarrior_C_01 - Blue
-68578,2,[Art Template Plate Hand - Plate_PVPWarrior_C_01 - Blue
-68579,2,[Art Template Plate Chest - Plate_PVPWarrior_C_01 - Blue
-68580,2,[Art Template Plate Boot - Plate_PVPWarrior_C_01 - Blue
-68581,2,[Art Template Plate Belt - Plate_PVPWarrior_C_01 - Blue
-68582,2,[Art Template Plate Belt - Plate_PVPWarrior_C_01 - Green
-68583,2,[Art Template Plate Boot - Plate_PVPWarrior_C_01 - Green
-68584,2,[Art Template Plate Chest - Plate_PVPWarrior_C_01 - Green
-68585,2,[Art Template Plate Hand - Plate_PVPWarrior_C_01 - Green
-68586,2,[Art Template Plate Head - Plate_PVPWarrior_C_01 - Green
-68587,2,[Art Template Plate Legs - Plate_PVPWarrior_C_01 - Green
-68588,2,[Art Template Plate Shoulder - Plate_PVPWarrior_C_01 - Green
-68589,2,[Art Template Plate Wrist - Plate_PVPWarrior_C_01 - Green
-68590,2,[Art Template Plate Wrist - Plate_PVPWarrior_C_01 - Red
-68591,2,[Art Template Plate Shoulder - Plate_PVPWarrior_C_01 - Red
-68592,2,[Art Template Plate Legs - Plate_PVPWarrior_C_01 - Red
-68593,2,[Art Template Plate Head - Plate_PVPWarrior_C_01 - Red
-68594,2,[Art Template Plate Hand - Plate_PVPWarrior_C_01 - Red
-68595,2,[Art Template Plate Chest - Plate_PVPWarrior_C_01 - Red
-68596,2,[Art Template Plate Boot - Plate_PVPWarrior_C_01 - Red
-68597,2,[Art Template Plate Belt - Plate_PVPWarrior_C_01 - Red
+68418,2,[Art] Template Cloth Chest - Robe_PVPPriest_C_01 - White
+68515,2,[Art] Template Cloth Shoulder - Robe_PVPWarlock_C_01 - Black
+68518,2,[Art] Template Cloth Shoulder - Robe_PVPWarlock_C_01 - Green
+68574,2,[Art] Template Plate Wrist - Plate_PVPWarrior_C_01 - Blue
+68575,2,[Art] Template Plate Shoulder - Plate_PVPWarrior_C_01 - Blue
+68576,2,[Art] Template Plate Legs - Plate_PVPWarrior_C_01 - Blue
+68577,2,[Art] Template Plate Head - Plate_PVPWarrior_C_01 - Blue
+68578,2,[Art] Template Plate Hand - Plate_PVPWarrior_C_01 - Blue
+68579,2,[Art] Template Plate Chest - Plate_PVPWarrior_C_01 - Blue
+68580,2,[Art] Template Plate Boot - Plate_PVPWarrior_C_01 - Blue
+68581,2,[Art] Template Plate Belt - Plate_PVPWarrior_C_01 - Blue
+68582,2,[Art] Template Plate Belt - Plate_PVPWarrior_C_01 - Green
+68583,2,[Art] Template Plate Boot - Plate_PVPWarrior_C_01 - Green
+68584,2,[Art] Template Plate Chest - Plate_PVPWarrior_C_01 - Green
+68585,2,[Art] Template Plate Hand - Plate_PVPWarrior_C_01 - Green
+68586,2,[Art] Template Plate Head - Plate_PVPWarrior_C_01 - Green
+68587,2,[Art] Template Plate Legs - Plate_PVPWarrior_C_01 - Green
+68588,2,[Art] Template Plate Shoulder - Plate_PVPWarrior_C_01 - Green
+68589,2,[Art] Template Plate Wrist - Plate_PVPWarrior_C_01 - Green
+68590,2,[Art] Template Plate Wrist - Plate_PVPWarrior_C_01 - Red
+68591,2,[Art] Template Plate Shoulder - Plate_PVPWarrior_C_01 - Red
+68592,2,[Art] Template Plate Legs - Plate_PVPWarrior_C_01 - Red
+68593,2,[Art] Template Plate Head - Plate_PVPWarrior_C_01 - Red
+68594,2,[Art] Template Plate Hand - Plate_PVPWarrior_C_01 - Red
+68595,2,[Art] Template Plate Chest - Plate_PVPWarrior_C_01 - Red
+68596,2,[Art] Template Plate Boot - Plate_PVPWarrior_C_01 - Red
+68597,2,[Art] Template Plate Belt - Plate_PVPWarrior_C_01 - Red
 68600,4,Uhn'agh Fash la plus sombre trahison
 68601,4,Tranche-écailles
 68608,4,Hache de jet dévaste-dragon
@@ -29611,6 +29612,7 @@
 68818,0,[Monster] - Zin'rokh
 68834,0,[Monster] - Zanzil's Voodoo Stick
 68838,0,[Monster] - Orsis Polearm (1H)
+68999,3,[Art] Template - ZG Leather
 69009,1,Visuel de masque de vrykule
 69010,1,Visuel de masque de vrykul
 69011,1,Visuel de masque de naga (F)
@@ -29643,6 +29645,38 @@
 69106,1,Visuel de masque de mort-vivant
 69107,1,Worgen Female Mask Visual
 69108,1,Worgen Male Mask Visual
+69147,2,[Art] Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Red
+69152,2,[Art] Template Plate Shoulder - Plate_PVPWarrior_C_02 - Black
+69153,2,[Art] Template Plate Legs - Plate_PVPWarrior_C_02 - Black
+69154,2,[Art] Template Plate Head - Plate_PVPWarrior_C_02 - Black
+69155,2,[Art] Template Plate Hand - Plate_PVPWarrior_C_02 - Black
+69156,2,[Art] Template Plate Chest - Plate_PVPWarrior_C_02 - Black
+69157,2,[Art] Template Plate Boot - Plate_PVPWarrior_C_02 - Black
+69158,2,[Art] Template Plate Belt - Plate_PVPWarrior_C_02 - Black
+69159,2,[Art] Template Plate Wrist - Plate_PVPWarrior_C_02 - Blue
+69160,2,[Art] Template Plate Shoulder - Plate_PVPWarrior_C_02 - Blue
+69161,2,[Art] Template Plate Legs - Plate_PVPWarrior_C_02 - Blue
+69162,2,[Art] Template Plate Head - Plate_PVPWarrior_C_02 - Blue
+69163,2,[Art] Template Plate Hand - Plate_PVPWarrior_C_02 - Blue
+69164,2,[Art] Template Plate Chest - Plate_PVPWarrior_C_02 - Blue
+69165,2,[Art] Template Plate Boot - Plate_PVPWarrior_C_02 - Blue
+69166,2,[Art] Template Plate Belt - Plate_PVPWarrior_C_02 - Blue
+69168,2,[Art] Template Plate Wrist - Plate_PVPWarrior_C_02 - Green
+69169,2,[Art] Template Plate Shoulder - Plate_PVPWarrior_C_02 - Green
+69170,2,[Art] Template Plate Legs - Plate_PVPWarrior_C_02 - Green
+69171,2,[Art] Template Plate Head - Plate_PVPWarrior_C_02 - Green
+69172,2,[Art] Template Plate Hand - Plate_PVPWarrior_C_02 - Green
+69173,2,[Art] Template Plate Chest - Plate_PVPWarrior_C_02 - Green
+69174,2,[Art] Template Plate Boot - Plate_PVPWarrior_C_02 - Green
+69175,2,[Art] Template Plate Belt - Plate_PVPWarrior_C_02 - Green
+69176,2,[Art] Template Plate Wrist - Plate_PVPWarrior_C_02 - Red
+69177,2,[Art] Template Plate Shoulder - Plate_PVPWarrior_C_02 - Red
+69178,2,[Art] Template Plate Legs - Plate_PVPWarrior_C_02 - Red
+69179,2,[Art] Template Plate Head - Plate_PVPWarrior_C_02 - Red
+69180,2,[Art] Template Plate Hand - Plate_PVPWarrior_C_02 - Red
+69181,2,[Art] Template Plate Chest - Plate_PVPWarrior_C_02 - Red
+69182,2,[Art] Template Plate Boot - Plate_PVPWarrior_C_02 - Red
+69183,2,[Art] Template Plate Belt - Plate_PVPWarrior_C_02 - Red
 69209,3,Tabard de guilde illustre
 69210,4,Tabard de guilde renommée
 69255,3,ZG Plate Helm 3
@@ -29764,7 +29798,7 @@
 69858,0,[Monster] - Caster Legendary Stage 1
 69859,0,[Monster] - Caster Legendary Stage 2
 69864,1,Couronne ternie
-69865,1,Bracelets émaillées de gemmes
+69865,1,Bracelets émaillés de gemmes
 69876,4,Gantelets spectraux de Xariona
 69877,4,Ceinture d’un millier de bouches béantes
 69878,4,Cape de pergélisol
@@ -29777,7 +29811,7 @@
 69890,7,Espauliers de puissance brunis
 69892,7,Cape de tempête de sable abîmée
 69893,7,Déchireuse de Stratholme imprégnée de sang
-69897,4,Bâton de test
+69897,4,Cime enflammée de Fandral
 69916,4,Trollemort
 69936,4,Poings de fureur
 69937,4,Garde-mains en élémentium éternels
@@ -29853,23 +29887,23 @@
 70057,3,Pantalon en tisse-feu assoiffé de sang
 70058,3,Robe en tisse-feu assoiffé de sang
 70059,3,Epaulières en tisse-feu assoiffé de sang
-70060,3,Robe en braise-feu assoiffée de sang
-70061,3,Bottes en braise-feu assoiffée de sang
-70062,3,Ceinture en braise-feu assoiffée de sang
-70063,3,Brassards en braise-feu assoiffée de sang
-70064,3,Epaulières en braise-feu assoiffée de sang
-70065,3,Gants en braise-feu assoiffée de sang
-70066,3,Pantalon en braise-feu assoiffée de sang
-70067,3,Capuche en braise-feu assoiffée de sang
+70060,3,Robe en braise-soie assoiffée de sang
+70061,3,Bottes en braise-soie assoiffée de sang
+70062,3,Ceinture en braise-soie assoiffée de sang
+70063,3,Brassards en braise-soie assoiffée de sang
+70064,3,Epaulières en braise-soie assoiffée de sang
+70065,3,Gants en braise-soie assoiffée de sang
+70066,3,Pantalon en braise-soie assoiffée de sang
+70067,3,Capuche en braise-soie assoiffée de sang
 70068,3,Cape en fourrure assoiffée de sang
 70069,3,Cape en peau assoiffée de sang
-70070,3,Cape en braise-feu assoiffée de sang
+70070,3,Cape en braise-soie assoiffée de sang
 70077,3,Charme de triomphe assoiffé de sang
 70078,3,Globe oculaire de domination assoiffée de sang
 70079,3,Mâchoire de conquête assoiffée de sang
 70080,4,Reforged Heartless
-70088,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Blue
-70097,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Green
+70088,2,[Art] Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Blue
+70097,2,[Art] Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Green
 70155,4,Brise-cervelle
 70156,4,Sorcelame en élémentium ouvragé
 70157,4,Marteau en élémentium de Sancteforge
@@ -29878,7 +29912,7 @@
 70162,4,Sorcegarde en pyrium
 70163,4,Gardien incassable
 70164,4,Lame-de-mort en élémentium ouvragé
-70165,4,Moissonneur du chasseur de sorcière
+70165,4,Moissonneur du chasseur de sorcières
 70178,4,Estramaçon du gladiateur sans pitié
 70179,4,Bâton du gladiateur sans pitié
 70180,4,Bâton d’énergie du gladiateur sans pitié
@@ -30313,12 +30347,12 @@
 70674,4,Robe du gladiateur vicieux en peau de wyrm
 70675,4,Spallières du gladiateur vicieux en peau de wyrm
 70723,4,Sulfuras la Main éteinte
-70733,4,Phoenixfeather Shiv
-70734,4,Nestheart Greathelm
-70735,4,Flickering Wristbands
-70736,4,Fireflight Leggings
-70737,4,Spaulders of Recurring Flame
-70739,4,Flightflame Legplates
+70733,4,Rasoir d’Alysra
+70734,4,Grand heaume cœur-du-nid
+70735,4,Protège-poignets aux flammes vacillantes
+70736,4,Jambières du vol de feu
+70737,4,Spallières de la flamme récurrente
+70739,4,Cuissards aux flammes vacillantes
 70792,2,[Art] Template Cloth Belt - Robe_RaidMage_J - Arcane
 70793,2,[Art] Template Cloth Boot - Robe_RaidMage_J - Arcane
 70794,2,[Art] Template Cloth Chest - Robe_RaidMage_J - Arcane
@@ -30373,68 +30407,440 @@
 70905,2,[Art] Template Plate Legs - RaidWarrior_J - Red
 70906,2,[Art] Template Plate Shoulder - RaidWarrior_J - Red
 70907,2,[Art] Template Plate Wrist - RaidWarrior_J - Red
-70912,4,Giantflame Stompers
-70913,4,Shannox's Rusted Legplates
-70914,4,Flamescarred Carapace
-70915,4,Bulwark of the Gatekeeper
-70916,4,Helm of the Demon King
-70917,4,Flickering Handguards
-70920,4,Bracers of the Fiery Path
-70921,4,Spaulders of Pure Flame
-70922,4,Mandible of Beth'tilac
-70923,2,[PH] Atours de fête
-70930,4,Durable Flamewrath Cloak
-70933,4,Girdle of the Indomitable Flame
-70937,4,Bracers of Regal Force
-70939,4,Deathclutch Figurine
-70941,4,Shoulderguards of the Molten Giant
-70942,4,Legguards of the Molten Giant
-70943,4,Handguards of the Molten Giant
-70944,4,Faceguard of the Molten Giant
-70945,4,Chestguard of the Molten Giant
-70946,4,Immolation Shoulderguards
-70947,4,Immolation Legguards
-70948,4,Immolation Faceguard
-70949,4,Immolation Handguards
-70950,4,Immolation Chestguard
-70951,4,Elementium Dragon Shoulderguards
-70952,4,Elementium Dragon Legguards
-70953,4,Elementium Dragon Handguards
-70954,4,Elementium Dragon Faceguard
-70955,4,Elementium Dragon Chestguard
-70985,4,Craterflame Spaulders
-70986,4,Egg-Clutch Gauntlets
-70987,4,Phoenix-Down Treads
-70988,4,Clutch of the Firemother
-70989,4,Leggings of Airy Flame
-70990,4,Lightwing Cloak
-70991,4,Crossbow of Erupting Fury
-70992,4,Dreadfire Drape
-70993,4,Fireskin Gauntlets
-71003,4,Vision of the Flaming Skull
-71004,4,Earthcrack Bracers
-71005,4,Flaming Core Chestguard
-71006,4,Volcanospike
-71007,4,Grips of the Raging Giant
-71009,4,Cauterizing Wristbands
-71010,4,Incendic Robes
-71011,4,Vision of the Flickering Flame
-71013,4,Spike of the Dread Hunter
-71014,4,Headreaper Greataxe
-71018,4,Scalp of the Bandit Prince
-71020,4,True-Arrow Grips
-71021,4,Uncrushable Belt of Fury
-71022,4,Flamewrought Abilene Shell
-71023,4,Emberskip Sandals
-71025,4,Flickering Shoulderpads
-71026,4,Bracers of the Dread Hunter
-71027,4,Treads of Implicit Obedience
-71028,4,Legplates of Absolute Control
-71029,4,Arachnaflame Treads
-71030,4,Seared Chitin Shoulders
-71031,4,Spiderheart Leggings
-71038,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Int Spirit Shield
-71039,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Int Versatile Staff
-71040,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Leather Int Spirit Helm
-71041,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Cloth Int Versatile Robe
-71042,4,x3 Raid - 4.2 - Firelands - Boss 1 Loot 2 - Mail Int Spirit Legs
+70912,4,Croquenots d’obsidienne craquelés
+70913,4,Cuissards de dévotion frénétique
+70914,4,Carapace marquée par les flammes
+70915,4,Eclat de tourment
+70916,4,Heaume de gloire flamboyante
+70917,4,Garde-mains aux flammes vacillantes
+70920,4,Brassards de la voie embrasée
+70921,4,Spallières de la flamme pure
+70922,4,Mandibule de Beth'tilac
+70923,2,Pull bariolé du Voile d’hiver
+70930,4,Cape durable du courroux des flammes
+70933,4,Ceinturon de la flamme indomptable
+70937,4,Brassards de la force régalienne
+70939,4,Figurine de l’étreinte de la mort
+70941,4,Garde-épaules du géant de lave
+70942,4,Garde-jambes du géant de lave
+70943,4,Garde-mains du géant de lave
+70944,4,Ventaille du géant de lave
+70945,4,Corselet du géant de lave
+70946,4,Garde-épaules de l’immolation
+70947,4,Garde-jambes de l’immolation
+70948,4,Ventaille de l’immolation
+70949,4,Garde-mains de l’immolation
+70950,4,Corselet de l’immolation
+70951,4,Garde-épaules de plates mortelles en élémentium
+70952,4,Garde-jambes de plates mortelles en élémentium
+70953,4,Garde-mains de plates mortelles en élémentium
+70954,4,Ventaille de plates mortelles en élémentium
+70955,4,Corselet de plates mortelles en élémentium
+70985,4,Spallières des flammes du cratère
+70986,4,Gantelets de la couvée
+70987,4,Bottines à duvet de phénix
+70988,4,Etreinte de la mère du feu
+70989,4,Jambières de la flamme aérienne
+70990,4,Cape de l’aile légère
+70991,4,Arbalète de la fureur éruptive
+70992,4,Drapé du feu d’effroi
+70993,4,Gantelets de la peau de feu
+71003,4,Vision du crâne enflammé
+71004,4,Brasssards de la fissure terrestre
+71005,4,Corselet au coeur enflammé
+71006,4,Pointe du volcan
+71007,4,Poignes du géant enragé
+71009,4,Protège-poignets de cautérisation
+71010,4,Robe incendique
+71011,4,Vision de la flamme vacillante
+71013,4,Frénésie affamée
+71014,4,Bardiche du faucheur de crâne
+71018,4,Scalp du prince bandit
+71020,4,Gants de fumée dissolvante
+71021,4,Ceinture infroissable de la fureur
+71022,4,Coquille d’ormeau en flammes forgées
+71023,4,Sandales des braises bondissantes
+71025,4,Protège-épaules aux flammes vacillantes
+71026,4,Brassards du chasseur redouté
+71027,4,Bottines de l’obéissance implicite
+71028,4,Cuissards du contrôle absolu
+71029,4,Ecrase-araignées
+71030,4,Epaulières calcinées en chitine
+71031,4,Jambières braisetoile
+71038,4,Bouclier de la veuve rouge
+71039,4,Bûcher funéraire
+71040,4,Capuche de la menace cliquetante
+71041,4,Robe tissée par les araignées
+71042,4,Kilt de la flamme thoracique
+71043,4,Spallières des yeux multiples
+71044,4,Gants de cendre-soie
+71045,4,Tunique du phénix sombre
+71046,4,Gants du phénix sombre
+71047,4,Casque du phénix sombre
+71048,4,Garde-jambes du phénix sombre
+71049,4,Spallières du phénix sombre
+71050,4,Gants d’attise-flammes
+71051,4,Protège-front d’attise-flammes
+71052,4,Garde-jambes d’attise-flammes
+71053,4,Spallières d’attise-flammes
+71054,4,Tunique d’attise-flammes
+71058,4,Cuirasse  de plates mortelles en élémentium
+71059,4,Gantelets de plates mortelles en élémentium
+71060,4,Casque de plates mortelles en élémentium
+71061,4,Grèves de plates mortelles en élémentium
+71062,4,Espauliers de plates mortelles en élémentium
+71063,4,Harnois de bataille de l’immolation
+71064,4,Gantelets de l’immolation
+71065,4,Casque de l’immolation
+71066,4,Cuissards de l’immolation
+71067,4,Espauliers de l’immolation
+71068,4,Harnois de bataille du géant de lave
+71069,4,Gantelets du géant de lave
+71070,4,Casque du géant de lave
+71071,4,Cuissards du géant de lave
+71072,4,Espauliers du géant de lave
+71077,4,Perforeuse à impact extrême
+71084,4,Branch of Nordrassil
+71085,4,Runestaff of Nordrassil
+71086,5,Dragonwrath Tarecgosa's Rest
+71090,5,Chemise légendaire en tisse-ombre
+71091,4,Cuirasse de l’immolation
+71092,4,Gants de l’immolation
+71093,4,Protège-front de l’immolation
+71094,4,Grèves de l’immolation
+71095,4,Mantelet de l’immolation
+71097,4,Poignes tisse-feuillage en obsidienne
+71098,4,Chapel tisse-feuillage en obsidienne
+71099,4,Garde-jambes tisse-feuillage en obsidienne
+71100,4,Grande tenue tisse-feuillage en obsidienne
+71101,4,Spallières tisse-feuillage en obsidienne
+71102,4,Protège-mains tisse-feuillage en obsidienne
+71103,4,Heaume tisse-feuillage en obsidienne
+71104,4,Jambards tisse-feuillage en obsidienne
+71105,4,Robe tisse-feuillage en obsidienne
+71106,4,Mantelet tisse-feuillage en obsidienne
+71107,4,Gants tisse-feuillage en obsidienne
+71108,4,Couvre-chef tisse-feuillage en obsidienne
+71109,4,Jambières tisse-feuillage en obsidienne
+71110,4,Habit tisse-feuillage en obsidienne
+71111,4,Drape-épaules tisse-feuillage en obsidienne
+71130,4,Brassards de lieur de flamme
+71131,4,Ceinturon lieur-de-flamme
+71142,2,[Test Item]
+71145,0,[Monster] - Caster Legendary Stage 0
+71146,4,Relique du cœur endurci
+71147,4,Fétiche de la flamme funeste
+71148,4,Fiole d’âmeflamme
+71149,4,Relique lieuse-de-feu
+71150,4,Baguette plume-de-phénix
+71151,4,Baguette de la braise rougeoyante
+71152,4,Eclat d’étoile du matin
+71154,4,Trancheuse de géant
+71218,4,Etoile de déviation
+71227,4,Cape du courroux des flammes à lames
+71228,4,Cape du courroux des flammes brillante
+71229,4,Cape du courroux des flammes flottante
+71230,4,Cape du courroux des flammes ondoyante
+71249,4,Echarpe de la marque du feu
+71250,4,Cordelière de la braise flamboyante
+71253,4,Ceinturon de la tranche incendiaire
+71254,4,Ceinturon du débarquement enflammé
+71255,4,Ceinture de la flèche de feu
+71258,4,Ceinture œil-de-braise
+71260,4,Brassards des vérités impérieuses
+71261,4,Brassards gigantiformes
+71262,4,Manchettes brûlecrâne
+71263,4,Brassards de la cendre brumeuse
+71264,4,Brassards de l’éclair fourchu
+71265,4,Brassards de braise-flammes
+71266,4,Garde-poignets d’âmefeu
+71271,4,Protège-mains de la flamme purificatrice
+71272,4,Capuche de la flamme purificatrice
+71273,4,Jambards de la flamme purificatrice
+71274,4,Robe de la flamme purificatrice
+71275,4,Mantelet de la flamme purificatrice
+71276,4,Gants de la flamme purificatrice
+71277,4,Chaperon de la flamme purificatrice
+71278,4,Jambières de la flamme purificatrice
+71279,4,Habit de la flamme purificatrice
+71280,4,Drape-épaules de la flamme purificatrice
+71281,4,Protège-mains de l’araignée torve
+71282,4,Chaperon de l’araignée torve
+71283,4,Jambières de l’araignée torve
+71284,4,Robe de l’araignée torve
+71285,4,Mantelet de l’araignée torve
+71286,4,Gants faucon-de-feu
+71287,4,Chaperon faucon-de-feu
+71288,4,Jambières faucon-de-feu
+71289,4,Robe faucon-de-feu
+71290,4,Mantelet faucon-de-feu
+71291,4,Haubert de l’éruption volcanique
+71292,4,Gants de l’éruption volcanique
+71293,4,Chapel de l’éruption volcanique
+71294,4,Kilt de l’éruption volcanique
+71295,4,Drape-épaules de l’éruption volcanique
+71296,4,Tunique de l’éruption volcanique
+71297,4,Protège-mains de l’éruption volcanique
+71298,4,Ventaille de l’éruption volcanique
+71299,4,Jambards de l’éruption volcanique
+71300,4,Mantelet de l’éruption volcanique
+71301,4,Cuirasse de l’éruption volcanique
+71302,4,Poignes de l’éruption volcanique
+71303,4,Casque de l’éruption volcanique
+71304,4,Garde-jambes de l’éruption volcanique
+71305,4,Spallières de l’éruption volcanique
+71312,4,Enfonce-porte
+71313,4,Sandales du scorpion enflammé
+71314,4,Aile du seigneur démon
+71323,4,Tome de lien sinistre
+71325,4,Le sabre sinistre du cavalier
+71326,4,Le casque calamiteux du cavalier
+71331,4,Tesson sanglant de Navrebière
+71332,4,Terrible pinte de terreur
+71340,4,Etreinte du gardien de la porte
+71341,4,Brassards de l'aile rougeoyante
+71342,4,Casque de flammes
+71343,4,Mantelet des portes fermées
+71344,4,Carapace de visions mouvantes
+71345,4,Protège-épaules de la porte oubliée
+71346,4,Poignes de précision infaillible
+71347,4,Aiguillon du scorpion enflammé
+71349,4,Jambières de félin des flammes
+71350,4,Bandelettes de démarcation
+71351,4,Bottines du pénitent
+71352,4,Sulfuras la Main éteinte
+71353,4,Arathar the Eye of Flame
+71355,4,Marteau du seigneur du Feu
+71356,4,Couronne des flammes
+71357,4,Ceinturon des flammes
+71358,4,Gants faucon-de-feu
+71359,4,Scalpel stérile de Chelley
+71360,4,Cime de la douleur écarlate
+71361,4,Corsèque de haine
+71362,4,Couperet noirfendre
+71365,4,Chaînes liées de peau
+71366,4,Lava Bolt Crossbow
+71388,4,Cape du courroux des flammes brillante
+71389,4,Cape du courroux des flammes ondoyante
+71390,4,Cape du courroux des flammes flottante
+71391,4,Cape du courroux des flammes à lames
+71392,4,Cape durable du courroux des flammes
+71393,4,Ceinture œil-de-braise
+71394,4,Ceinturon lieur-de-flamme
+71395,4,Echarpe de la marque du feu
+71396,4,Ceinture de la flèche de feu
+71397,4,Ceinturon du débarquement enflammé
+71398,4,Ceinturon de la tranche incendiaire
+71399,4,Cordelière de la braise flamboyante
+71400,4,Ceinturon de la flamme indomptable
+71402,4,Jambières braisetoile
+71403,4,Epaulières calcinées en chitine
+71404,4,Ecrase-araignées
+71405,4,Carapace marquée par les flammes
+71406,4,Mandibule de Beth'tilac
+71407,4,Robe tissée par les araignées
+71408,4,Bouclier de la veuve rouge
+71409,4,Bûcher funéraire
+71410,4,Gants de cendre-soie
+71411,4,Capuche de la menace cliquetante
+71412,4,Kilt de la flamme thoracique
+71413,4,Spallières des yeux multiples
+71414,4,Arbalète de la fureur éruptive
+71415,4,Drapé du feu d’effroi
+71416,4,Vision du crâne enflammé
+71417,4,Corselet au coeur enflammé
+71418,4,Brasssards de la fissure terrestre
+71419,4,Gantelets de la peau de feu
+71420,4,Croquenots d’obsidienne craquelés
+71421,4,Vision de la flamme vacillante
+71422,4,Pointe du volcan
+71424,4,Robe incendique
+71425,4,Protège-poignets de cautérisation
+71426,4,Poignes du géant enragé
+71427,4,Rasoir d’Alysra
+71428,4,Protège-poignets aux flammes vacillantes
+71429,4,Jambières du vol de feu
+71430,4,Grand heaume cœur-du-nid
+71431,4,Cuissards aux flammes vacillantes
+71432,4,Spallières de la flamme récurrente
+71434,4,Cape de l’aile légère
+71435,4,Jambières de la flamme aérienne
+71436,4,Bottines à duvet de phénix
+71437,4,Gantelets de la couvée
+71438,4,Spallières des flammes du cratère
+71439,4,Etreinte de la mère du feu
+71440,4,Gants de fumée dissolvante
+71441,4,Frénésie affamée
+71442,4,Scalp du prince bandit
+71443,4,Ceinture infroissable de la fureur
+71444,4,Cuissards de dévotion frénétique
+71445,4,Bardiche du faucheur de crâne
+71447,4,Sandales des braises bondissantes
+71448,4,Coquille d’ormeau en flammes forgées
+71450,4,Protège-épaules aux flammes vacillantes
+71451,4,Bottines de l’obéissance implicite
+71452,4,Brassards du chasseur redouté
+71453,4,Cuissards du contrôle absolu
+71454,4,Enfonce-porte
+71455,4,Aile du seigneur démon
+71456,4,Protège-épaules de la porte oubliée
+71458,4,Garde-mains aux flammes vacillantes
+71459,4,Heaume de gloire flamboyante
+71460,4,Eclat de tourment
+71461,4,Mantelet des portes fermées
+71462,4,Tome de lien sinistre
+71463,4,Brassards de l'aile rougeoyante
+71464,4,Etreinte du gardien de la porte
+71465,4,Casque de flammes
+71466,4,Cime enflammée de Fandral
+71467,4,Sandales du scorpion enflammé
+71468,4,Poignes de précision infaillible
+71469,4,Carapace de visions mouvantes
+71470,4,Brassards de la voie embrasée
+71471,4,Bandelettes de démarcation
+71473,4,Aiguillon du scorpion enflammé
+71474,4,Jambières de félin des flammes
+71475,4,Bottines du pénitent
+71476,4,Cuirasse  de plates mortelles en élémentium
+71477,4,Gantelets de plates mortelles en élémentium
+71478,4,Casque de plates mortelles en élémentium
+71479,4,Grèves de plates mortelles en élémentium
+71480,4,Espauliers de plates mortelles en élémentium
+71481,4,Corselet de plates mortelles en élémentium
+71482,4,Garde-mains de plates mortelles en élémentium
+71483,4,Ventaille de plates mortelles en élémentium
+71484,4,Garde-jambes de plates mortelles en élémentium
+71485,4,Garde-épaules de plates mortelles en élémentium
+71486,4,Grande tenue tisse-feuillage en obsidienne
+71487,4,Poignes tisse-feuillage en obsidienne
+71488,4,Chapel tisse-feuillage en obsidienne
+71489,4,Garde-jambes tisse-feuillage en obsidienne
+71490,4,Spallières tisse-feuillage en obsidienne
+71491,4,Protège-mains tisse-feuillage en obsidienne
+71492,4,Heaume tisse-feuillage en obsidienne
+71493,4,Jambards tisse-feuillage en obsidienne
+71494,4,Robe tisse-feuillage en obsidienne
+71495,4,Mantelet tisse-feuillage en obsidienne
+71496,4,Gants tisse-feuillage en obsidienne
+71497,4,Couvre-chef tisse-feuillage en obsidienne
+71498,4,Jambières tisse-feuillage en obsidienne
+71499,4,Habit tisse-feuillage en obsidienne
+71500,4,Drape-épaules tisse-feuillage en obsidienne
+71501,4,Tunique d’attise-flammes
+71502,4,Gants d’attise-flammes
+71503,4,Protège-front d’attise-flammes
+71504,4,Garde-jambes d’attise-flammes
+71505,4,Spallières d’attise-flammes
+71507,4,Gants faucon-de-feu
+71508,4,Chaperon faucon-de-feu
+71509,4,Jambières faucon-de-feu
+71510,4,Robe faucon-de-feu
+71511,4,Mantelet faucon-de-feu
+71512,4,Harnois de bataille de l’immolation
+71513,4,Gantelets de l’immolation
+71514,4,Casque de l’immolation
+71515,4,Cuissards de l’immolation
+71516,4,Espauliers de l’immolation
+71517,4,Cuirasse de l’immolation
+71518,4,Gants de l’immolation
+71519,4,Protège-front de l’immolation
+71520,4,Grèves de l’immolation
+71521,4,Mantelet de l’immolation
+71522,4,Corselet de l’immolation
+71523,4,Garde-mains de l’immolation
+71524,4,Ventaille de l’immolation
+71525,4,Garde-jambes de l’immolation
+71526,4,Garde-épaules de l’immolation
+71527,4,Protège-mains de la flamme purificatrice
+71528,4,Capuche de la flamme purificatrice
+71529,4,Jambards de la flamme purificatrice
+71530,4,Robe de la flamme purificatrice
+71531,4,Mantelet de la flamme purificatrice
+71532,4,Gants de la flamme purificatrice
+71533,4,Chaperon de la flamme purificatrice
+71534,4,Jambières de la flamme purificatrice
+71535,4,Habit de la flamme purificatrice
+71536,4,Drape-épaules de la flamme purificatrice
+71537,4,Tunique du phénix sombre
+71538,4,Gants du phénix sombre
+71539,4,Casque du phénix sombre
+71540,4,Garde-jambes du phénix sombre
+71541,4,Spallières du phénix sombre
+71542,4,Tunique de l’éruption volcanique
+71543,4,Protège-mains de l’éruption volcanique
+71544,4,Ventaille de l’éruption volcanique
+71545,4,Jambards de l’éruption volcanique
+71546,4,Mantelet de l’éruption volcanique
+71547,4,Cuirasse de l’éruption volcanique
+71548,4,Poignes de l’éruption volcanique
+71549,4,Casque de l’éruption volcanique
+71550,4,Garde-jambes de l’éruption volcanique
+71551,4,Spallières de l’éruption volcanique
+71552,4,Haubert de l’éruption volcanique
+71553,4,Gants de l’éruption volcanique
+71554,4,Chapel de l’éruption volcanique
+71555,4,Kilt de l’éruption volcanique
+71556,4,Drape-épaules de l’éruption volcanique
+71557,4,Corsèque de haine
+71558,4,Lava Bolt Crossbow
+71559,4,Cime de la douleur écarlate
+71560,4,Scalpel stérile de Chelley
+71561,4,Chaînes liées de peau
+71562,4,Couperet noirfendre
+71567,4,Relique du cœur endurci
+71568,4,Eclat d’étoile du matin
+71569,4,Brassards de lieur de flamme
+71570,4,Brassards de l’éclair fourchu
+71571,4,Brassards de braise-flammes
+71572,4,Garde-poignets d’âmefeu
+71575,4,Baguette de la braise rougeoyante
+71577,4,Relique lieuse-de-feu
+71579,4,Baguette plume-de-phénix
+71580,4,Fiole d’âmeflamme
+71581,4,Manchettes brûlecrâne
+71582,4,Brassards de la cendre brumeuse
+71583,4,Brassards des vérités impérieuses
+71584,4,Brassards gigantiformes
+71585,4,Brassards de la force régalienne
+71587,4,Fétiche de la flamme funeste
+71590,4,Figurine de l’étreinte de la mort
+71592,4,Etoile de déviation
+71593,4,Trancheuse de géant
+71594,4,Protège-mains de l’araignée torve
+71595,4,Chaperon de l’araignée torve
+71596,4,Jambières de l’araignée torve
+71597,4,Robe de l’araignée torve
+71598,4,Mantelet de l’araignée torve
+71599,4,Casque du géant de lave
+71600,4,Harnois de bataille du géant de lave
+71601,4,Gantelets du géant de lave
+71602,4,Cuissards du géant de lave
+71603,4,Espauliers du géant de lave
+71604,4,Corselet du géant de lave
+71605,4,Garde-mains du géant de lave
+71606,4,Ventaille du géant de lave
+71607,4,Garde-jambes du géant de lave
+71608,4,Garde-épaules du géant de lave
+71611,4,Arathar the Eye of Flame
+71612,4,Spallières de la flamme pure
+71613,4,Ceinturon des flammes
+71614,4,Gants faucon-de-feu
+71615,4,Marteau du seigneur du Feu
+71616,4,Couronne des flammes
+71640,4,Riplimb's Lost Collar
+71641,4,Riplimb's Lost Collar
+71713,4,Stave Icecrown Raid D02 Green
+71774,4,Smoldering Censer of Purity
+71775,4,Smoldering Censer of Purity
+71776,4,Eye of Purification
+71777,4,Eye of Purification
+71778,4,Avool's Incendiary Shanker
+71779,4,Avool's Incendiary Shanker
+71780,4,Zoid's Firelit Greatsword
+71781,4,Zoid's Firelit Greatsword
+71782,4,Shatterskull Bonecrusher
+71783,4,Shatterskull Bonecrusher
+71784,4,Firethorn Mindslicer
+71785,4,Firethorn Mindslicer
+71786,4,Entrail Disgorger
+71787,4,Entrail Disgorger

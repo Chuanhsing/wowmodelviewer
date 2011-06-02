@@ -1954,7 +1954,7 @@
 5275,2,Faja de vínculo
 5279,2,Desollador de arpía
 5283,0,Monstruo: daga básica con pinchos ornamentada
-5299,2,Guantes de la Luna
+5299,2,Guantes de la luna
 5302,2,Rodela de cobalto
 5306,2,Bastón de jinete del viento
 5309,2,Mosquete de Soldado
@@ -3515,7 +3515,7 @@
 10040,1,Vestido de boda blanco
 10041,3,Diadema de tejido onírico
 10042,2,Toga de paño cenizo
-10043,2,Leotardos piadosos
+10043,2,Ataduras piadosas
 10044,2,Botas de paño cenizo
 10045,1,Pantalones de lino sencillos
 10046,1,Botas de lino sencillas
@@ -4141,7 +4141,7 @@
 12110,3,Mantón de lanzalluvias
 12111,3,Guanteletes de placas de lava
 12112,3,Brazales de demonio de cripta
-12113,3,Manteo nacido del sol
+12113,3,Manteo nacido del Sol
 12114,3,Guantes Ocaso
 12115,3,Garra de adepto
 12185,2,Sombrero de almirante Velasangre
@@ -4452,7 +4452,7 @@
 13142,3,Faja de Brigam
 13144,3,Cinturón de serenidad
 13145,3,Cinturón de ogro enigma
-13146,3,Escopeta de conchas
+13146,3,Escopeta lanza caparazones
 13148,3,Congeladora
 13161,3,Bastón de refugio
 13162,3,Garras de reiver
@@ -4554,7 +4554,7 @@
 13505,4,Hojarruna del Barón Osahendido
 13524,3,Cráneo de las Sombras ardientes
 13525,3,Dedos de Presotenebra
-13526,3,Faja con marcas de llamas
+13526,3,Faja marcada por las llamas
 13527,3,Grebas de Corredor de lava
 13528,3,Brazales del vacío Crepusculares
 13529,3,Coraza de Nerub'enkan
@@ -6754,7 +6754,7 @@
 18369,3,Manijas de Gordok
 18372,3,Hoja de la Luna nueva
 18373,3,Peto de Tranquilidad
-18374,3,Sobrehombros con marcas de llamas
+18374,3,Sobrehombros marcado por las llamas
 18375,3,Brazales del Eclipse
 18376,3,Maza gastada
 18377,3,Guantes rápidos
@@ -7274,7 +7274,7 @@
 19888,3,Abrazo de Señor Supremo
 19889,3,Leotardos empapados de sangre
 19890,4,Brujo de Jin'do
-19891,4,Bolsa de hachazos de Jin'do
+19891,4,Bolsa de mal agüero de Jin'do
 19892,3,Botas de animista
 19894,3,Guanteletes empapados de sangre
 19895,3,Falda tintada de sangre
@@ -9132,7 +9132,7 @@
 24832,2,Coraza de caminante-nexo
 24833,2,Guantes de caminante-nexo
 24834,2,Casco de caminante-nexo
-24835,2,Leotardos de caminante-nexo
+24835,2,Ataduras de caminante-nexo
 24836,2,Manto de caminante-nexo
 24837,2,Brazal de caminante-nexo
 24838,2,Pretina iralerón
@@ -9263,14 +9263,14 @@
 24963,2,Quijotes de Khan'aish
 24964,2,Cubrehombros de Khan'aish
 24965,2,Brazales de Khan'aish
-24966,2,Faja de garraguarda
-24967,2,Grebas de garraguarda
-24968,2,Armadura de garraguarda
-24969,2,Guantes de garraguarda
-24970,2,Casco de garraguarda
-24971,2,Quijotes de garraguarda
-24972,2,Cubrehombros de garraguarda
-24973,2,Brazales de garraguarda
+24966,2,Faja de guardagarra
+24967,2,Grebas de guardagarra
+24968,2,Armadura de guardagarra
+24969,2,Guantes de guardagarra
+24970,2,Casco de guardagarra
+24971,2,Quijotes de guardagarra
+24972,2,Cubrehombros de guardagarra
+24973,2,Brazales de guardagarra
 24974,2,Faja de atracador
 24975,2,Grebas de saqueador
 24976,2,Armadura de saqueador
@@ -10221,7 +10221,7 @@
 27804,3,Manteo de tiburón diablo
 27806,3,Guanteletes brazacor
 27813,3,Botas del coloso
-27814,3,Hoja gemela de maestría
+27814,3,Hojas gemelas de maestría
 27815,3,Tótem de los vientos astrales
 27816,3,Espaldares de la ira mental
 27817,3,Arco largo de descarga estelar
@@ -10499,7 +10499,7 @@
 28342,3,Toga infundida de distorsión
 28344,3,Espaldares de furia de vermis
 28345,3,Espina de disidente de distorsión
-28346,4,Final de Gladiador
+28346,4,Fin de juego de Gladiador
 28347,3,Leotardos de escamas de distorsión
 28348,3,Capucha de Claro de la Luna
 28349,3,Yelmo de Furiamarea
@@ -12142,7 +12142,7 @@
 31332,4,Golpe de traslación
 31333,4,El velador de la noche
 31334,4,Bastón de furia natural
-31335,4,Pantalones de crecimiento vivo
+31335,4,Kilt of Living Growth
 31336,4,Hoja de hechicería
 31340,4,Voluntad de Edward el Raro
 31341,2,Capa de devoto del Culto Vermis
@@ -13508,9 +13508,9 @@
 34355,4,Gafas con grabados de relámpagos
 34356,4,Gafas de golpe seguro v3.0
 34357,4,Gafas de korio duro
-34364,4,Toga de Fuego Solar
+34364,4,Toga de fuego solar
 34365,4,Toga de Luz eterna
-34366,4,Manijas de Fuego Solar
+34366,4,Manijas de fuego solar
 34367,4,Manos de Luz eterna
 34369,4,Caparazón de sol y sombra
 34370,4,Guantes de anochecer inmortal
@@ -13522,8 +13522,8 @@
 34376,4,Guantes de escamas caladas de sol
 34377,4,Placa de batalla de korio duro
 34378,4,Puños de batalla de korio duro
-34379,4,Coraza bendecida por el sol
-34380,4,Guanteletes bendecidos por el sol
+34379,4,Coraza bendecida por el Sol
+34380,4,Guanteletes bendecidos por el Sol
 34381,4,Quijotes de fuerza vil
 34382,4,Musleras de enjuiciador
 34383,4,Falda de reconstrucción espiritual
@@ -13717,7 +13717,7 @@
 34922,4,Grebas de pacificación
 34923,4,Guardarrenes de reparación
 34924,4,Vestido de maravilla espiritual
-34925,4,Leotardos sobrenaturales adornados
+34925,4,Ataduras sobrenaturales adornadas
 34926,4,Zapatillas de remiendo debido
 34927,4,Guerrera de la hora oscura
 34928,4,Calzas de criado de Arúspices
@@ -14195,7 +14195,7 @@
 35902,2,Bufas paragolpes
 35903,2,Mandiletes de ónice
 35905,2,Guerrera de sarmientos
-35909,2,Zancos de Fuego Solar
+35909,2,Zancos de fuego solar
 35910,2,Brazales tierra de pizarra
 35912,2,Capa crujiente
 35913,2,Leotardos de tejido gholam
@@ -15573,7 +15573,7 @@
 37942,2,Zapatos de iniciado del Kirin Tor
 37943,2,Cogulla de iniciado del Kirin Tor
 37944,2,Togas del sumo sacerdote Forith
-37945,2,Leotardos de jormungar finos
+37945,2,Ataduras de jormungar finas
 37947,2,Banda calientarrenes milagrosa
 37948,2,Hombreras refractivas
 37949,2,Capa de saboteador
@@ -15762,7 +15762,7 @@
 38268,0,Una mano extra
 38276,1,Sombrero con ala de haliscan
 38277,1,Chaqueta de haliscan
-38278,1,Bombachos de haliscan
+38278,1,Pantalones de jaliscan
 38282,4,Hoja de dos manos insulsa
 38285,1,Pretina de comerciante de almas
 38286,1,Espaldares de comerciante de almas
@@ -16053,7 +16053,7 @@
 39177,3,Pantalones de viento purificado
 39178,3,Grebas de disolución santificada
 39179,3,Mandiletes de vínculo de tierra cargados
-39180,3,Manoplas del gladiador sanguino
+39180,3,Manoplas del Gladiador sanguino
 39181,3,Mandiletes de poder torrencial
 39182,3,Manoplas de poderío crédulo
 39183,3,Guanteletes de hebilla fulgentes
@@ -16149,7 +16149,7 @@
 39345,4,Faja del fantasma ascendido
 39346,2,Caperuza reforzada con quitina
 39347,2,Guantes de tormenta resonante
-39348,2,Leotardos de vigía viejos
+39348,2,Ataduras de vigía viejas
 39363,2,Atadura de cuerpos purificados
 39364,2,Caperuza del defensor de titanes
 39365,2,Vestiduras de guardián de vida
@@ -16245,7 +16245,7 @@
 39468,4,El callejero
 39471,2,Revientatripas de Aldur'thar
 39473,4,Contorsión
-39478,3,Capa de juego más mortífero
+39478,3,Capa de la presa más mortífera
 39479,2,Capa de Esperanza renovada
 39486,3,Pistola trofeo de Hemet
 39487,3,Arco corto de Matadragones
@@ -16414,7 +16414,7 @@
 39768,4,Capucha del fallecido
 39769,4,Destripadora de arcanita
 39770,2,Caperuza de veritas
-39771,2,Leotardos sitiados
+39771,2,Ataduras sitiadas
 39772,2,Cubremuñecas de vinculasangre
 39773,2,Hombreras de veritas
 39775,2,Zapatos de veritas
@@ -16890,6 +16890,7 @@
 40722,4,Capa de malla de platino
 40723,4,Disfraz del Kumiho
 40724,4,Capa de plumas de Kea
+40727,3,Contenedor de gravedad gnómico
 40733,4,Braciles de la cazadora centinela
 40734,4,Brazales de parapetos de Dalaran
 40735,4,Avambrazos de la selva de Zartson
@@ -17328,7 +17329,7 @@
 41554,3,Toga de tejido del alba negro
 41555,3,Cubremuñecas de tejido del alba negro
 41591,4,Manteo reforzado de Sargento
-41592,4,Determinación del gladiador
+41592,4,Determinación del Gladiador
 41607,3,Capa de la Luna
 41608,3,Capa de espíritus congelados
 41609,4,Capa de fuego fatuo
@@ -18732,7 +18733,7 @@
 44686,3,Manijas de terror etéreo
 44687,3,Pelambre de Loque'Nahak
 44691,3,Collera de Aotona
-44692,1,Toga de enfermera de Dalaran
+44692,1,Vestido de enfermera de Dalaran
 44693,1,Gasa para heridas
 44694,1,Gasa empapada de antiséptico
 44695,3,Visera corroída
@@ -18759,7 +18760,7 @@
 44785,1,Vestido de peregrino
 44788,1,Botas de peregrino
 44800,1,Togas primaverales
-44802,1,Cesta de huevos
+44802,1,Cesta de huevos prestada
 44803,1,Diadema primaveral
 44891,4,Botas de dominancia forjadas por los titanes
 44892,4,Botas de salvación forjadas por los titanes
@@ -18886,7 +18887,7 @@
 45233,4,Filo Runatormenta
 45234,4,Éxtasis
 45237,4,Vestimentas de la semilla floreciente de Phaelia
-45238,4,Leotardos de sobrecarga
+45238,4,Ataduras de sobrecarga
 45239,4,Guantes de creador de runas
 45240,4,Vestiduras del Consejo de Hierro
 45241,4,Cinturón de ira colosal
@@ -19922,7 +19923,7 @@
 47511,4,Grebas de placas de providencia
 47513,4,Deflector de Orgrim
 47514,4,Hombreras de placas de áurea regia
-47515,4,Aniquilación
+47515,4,Exterminación
 47516,4,Desgarracarne
 47517,4,Hoja del pacto cumplido
 47518,4,Mortalis
@@ -21318,7 +21319,7 @@
 49788,4,Mandiletes de sudores fríos
 49789,4,Escalofrío del corazón
 49790,4,Lanceta hierve sangre
-49791,4,Corselete del relicario perdido
+49791,4,Coselete del relicario perdido
 49792,4,Manteo trepador detestable
 49793,4,Torre del cadáver mohoso
 49794,4,Quijotes de granito helados
@@ -22609,7 +22610,7 @@
 52252,4,Tabardo del Iluminado
 52485,3,Monóculo rubí de joyero
 52486,3,Monóculo zafiro de joyero
-52487,3,Monóculo esmeralda de joyero
+52487,3,Monóculo de ámbar de joyero
 52488,3,Monóculo zafiro de joyero
 52489,1,Gafas de sol con bisutería
 52492,2,Puntas de cornalina
@@ -23004,9 +23005,9 @@
 53494,4,Faja de Oblación
 53496,4,Barricada de la Princesa de la Tierra
 53497,4,Embozo de muerte de Zaetar
-53498,4,Toga de novia de la Tierra
+53498,4,Vestido de novia de la Tierra
 53500,4,Placa tectónica
-53504,4,Botines de Despiertallamas
+53504,4,Botines de despiertallamas
 53505,4,Piel de salamandra
 53506,4,Capa de vientos falsos
 53507,4,Sandalias Furiarena
@@ -23174,7 +23175,7 @@
 54793,2,Art Template Plate Head  - Plate_Common_C_01 - Rust
 54801,4,Capa forrada de hielo
 54802,4,Capa de guerra del Señor de la Escarcha
-54803,4,Esbozo de batalla del Señor de la Escarcha
+54803,4,Embozo de batalla del Señor de la Escarcha
 54804,4,Embozo del frío invierno
 54805,4,Capa de los gélidos vientos
 54806,4,Guadaña de Escarcha de Lord Ahune
@@ -24019,7 +24020,7 @@
 56097,3,Liberador de almas
 56098,3,Cordón de haz rojo
 56099,3,Dedos de luz
-56101,3,Golpe del sol
+56101,3,Golpe del Sol
 56104,3,Musleras de mediodía
 56105,3,Zapatillas Hekatic
 56107,3,Capa de viento solar
@@ -24165,7 +24166,7 @@
 56426,3,Baluarte del montículo primordial
 56428,3,Dedos de luz
 56429,3,Cordón de haz rojo
-56430,3,Golpe del sol
+56430,3,Golpe del Sol
 56433,3,Hoja del sol ardiente
 56434,3,Capa de viento solar
 56435,3,Musleras de mediodía
@@ -24454,7 +24455,7 @@
 57095,2,Art Template Plate Wrist  - Plate_Common_B_01 - Red
 57098,2,Art Template Cloth Robe - Robe_Common_A_03 - Green
 57100,0,Art Template Mail Belt - Mail_Common_A_03 - Black
-57110,1,Toga de enfermero goblin
+57110,1,Vestido de enfermero goblin
 57115,2,Gorro de enfermero goblin
 57116,2,Gorro de enfermero goblin 2
 57139,1,Ballesta de nocturácnida
@@ -24488,7 +24489,7 @@
 57170,2,Bastón de Lilian
 57171,2,Coraza del ejecutor
 57198,1,Guantes de nube rojos
-57199,1,Brazal blanqueado por el sol
+57199,1,Brazal blanqueado por el Sol
 57200,1,Calzas Clamaespinas
 57201,1,Togas del sol
 57202,1,Pechera de jabaguerrero con cicatrices
@@ -24911,7 +24912,7 @@
 58101,3,Peto del férreo
 58102,3,Grebas de esplendor
 58103,3,Yelmo del orgulloso
-58104,3,Espaldares quemados por el sol
+58104,3,Espaldares quemados por el Sol
 58105,3,Manoplas de aturdimiento
 58106,3,Coselete de olas danzantes
 58107,3,Musleras del discreto
@@ -25522,12 +25523,12 @@
 59350,4,Botines de creación impecable
 59351,4,Ataduras del buen hijo
 59352,4,Guanteletes de Congelación apresurada
-59353,4,Leotardos de llamas devoradoras
+59353,4,Leotardos de llamas acuciantes
 59355,4,Guardabrazos de Chimaeron
 59356,4,Espaldares del Apocalipsis
 59359,4,Matasombras bio-óptico reforzado
 59364,3,Machacapollos derrotado
-59367,3,Relajador 5000
+59367,3,Culatazo 5000
 59368,2,Guantes de compasión
 59369,2,Cinturón Colaoscura
 59370,2,Botas de caza viejas de Enohar
@@ -26019,7 +26020,7 @@
 60414,4,Guanteletes escamados de Gladiador sañoso
 60415,4,Yelmo escamado de Gladiador sañoso
 60416,4,Musleras escamadas de Gladiador sañoso
-60417,4,Sobrehombros escamados de Gladiador sañosos
+60417,4,Sobrehombros escamados de Gladiador sañoso
 60418,4,Pechera de placas de Gladiador sañoso
 60419,4,Guanteletes de placas de Gladiador sañoso
 60420,4,Yelmo de placas de Gladiador sañoso
@@ -26195,7 +26196,7 @@
 60687,2,Cinturón de los hijos
 60688,2,Criterio de Parker
 60689,2,Cinturón de los problemas sin solución
-60690,2,Botas de caca
+60690,2,Botas dañadas
 60691,2,Botines desafortunados
 60692,2,Guantes del que se gana el pan
 60693,2,Leotardos ventilados
@@ -26270,7 +26271,7 @@
 60908,2,Bombachos de mirada estelar
 60909,2,Manijas de astrónomo
 60911,2,Mechero de archivista
-60912,2,Garras re riscoleño
+60912,2,Garras de riscoleño
 60913,2,Capa de bibliotecario
 60914,2,Varita de exorcista
 60915,2,Cinturón de Daltry
@@ -27096,7 +27097,7 @@
 62439,3,Cinturón de Mirada Estelar
 62441,3,Togas de Orsis
 62445,3,Fajín de profecía
-62446,3,Cinturón de arena movedizas
+62446,3,Cinturón de arenas movedizas
 62448,4,Faja del Rey Sol
 62449,4,Brazales de guardia de arena
 62450,4,Sandalias de caminante del desierto
@@ -27600,7 +27601,7 @@
 63677,3,Espaldares de Las Mil Agujas
 63678,3,Yelmo de Las Mil Agujas
 63679,4,Ashkandi restituida Espada magna de la Hermandad
-63680,4,Martillo Crepusular
+63680,4,Martillo Crepuscular
 63701,3,Botines de terror
 63702,3,Trituradores de Coulton
 63703,3,Mejores leotardos de Garona
@@ -27715,7 +27716,7 @@
 63824,2,Espaldares de choque de orco
 63825,2,Cinturón de sueños sangrientos
 63826,2,Brazales de recogetrofeos
-63827,3,Placa de batalla de trituracielos
+63827,3,Placa de batalla Trituracielos
 63828,3,Musleras de asalto aéreo
 63829,3,Caperuza de soldado de choque
 63830,3,Baliza de ataque aéreo
@@ -27839,10 +27840,10 @@
 64524,2,Escudo de Cincelada
 64525,2,Capa de señor del magma
 64526,2,Guantes de estilo pobre
-64527,2,Brazales de combate de gladiadores
+64527,2,Brazales de combate de Gladiadores
 64529,2,Capa de señor del magma
 64530,2,Guantes de estilo pobre
-64531,2,Brazales de combate de gladiadores
+64531,2,Brazales de combate de Gladiadores
 64534,2,Daga de Kubit
 64535,2,Cinturón de preparación
 64536,2,Guanteletes de finalización
@@ -28238,7 +28239,7 @@
 65024,4,Crul'korak el Arco del Trueno
 65027,4,Espaldares del Apocalipsis
 65028,4,Guardabrazos de Chimaeron
-65030,4,Leotardos de llamas devoradoras
+65030,4,Leotardos de llamas acuciantes
 65031,4,Guanteletes de Congelación apresurada
 65032,4,Ataduras del buen hijo
 65033,4,Botines de creación impecable
@@ -28288,7 +28289,7 @@
 65084,4,Coselete de fuente de voltaje
 65085,4,Espirales inductoras de electrones
 65086,4,Cinturón de energía del jumbotrón
-65090,4,Martillo Crepusular
+65090,4,Martillo Crepuscular
 65091,4,Hoja de la hora bruja
 65092,4,Guardarrenes de odio
 65093,4,Yelmo de autoridad tétrica
@@ -28657,7 +28658,7 @@
 65582,4,Yelmo de placas de Gladiador sañoso
 65583,4,Guanteletes de placas de Gladiador sañoso
 65584,4,Pechera de placas de Gladiador sañoso
-65585,4,Sobrehombros escamados de Gladiador sañosos
+65585,4,Sobrehombros escamados de Gladiador sañoso
 65586,4,Musleras escamadas de Gladiador sañoso
 65587,4,Musleras de pellejo de dragón de Gladiador sañoso
 65588,4,Yelmo de pellejo de dragón de Gladiador sañoso
@@ -29681,13 +29682,1067 @@
 69257,3,ZG Plate Helm 1
 69258,3,ZG Leather Shoulder 3
 69259,3,ZG Leather Shoulder 1
-69260,4,Monster - Item Dagger (Umbral Shiv)
-69643,4,Castigador Amani
-69644,4,Segadora de acero vil
+69260,0,Monster - Item Dagger (Umbral Shiv)
+69643,0,Monster - Amani Punisher (Zandalari Archon)
+69644,0,Monster - Felsteel Reaper (alt color)
 69764,4,Caparazón de tortuga extinta
-69766,4,The Frost Lord's War Cloak
-69767,4,The Frost Lord's Battle Shroud
-69768,4,Shroud of Winter's Chill
-69769,4,Cloak of the Frigid Winds
-69770,4,Icebound Cloak
-69771,4,Frostscythe of Lord Ahune
+69766,4,Capa de guerra del Señor de la Escarcha
+69767,4,Embozo de batalla del Señor de la Escarcha
+69768,4,Embozo del frío invierno
+69769,4,Capa de los gélidos vientos
+69770,4,Capa forrada de hielo
+69771,4,Guadaña de Escarcha de Lord Ahune
+69814,7,Bug Test Heirloom Weapon
+69831,4,Mantón de mistral
+69833,4,Manteo de escarcha permanente
+69834,4,Capa Ráfaga de nubes
+69835,4,Mantón de planetario
+69842,4,Faja de recuerdos de Garr reforzada
+69843,4,Alabarda ensangrentada de Mobus
+69844,4,Pico vítreo de Julak Fatalidad
+69857,0,Monster - Caster Legendary Stage 3
+69858,0,Monster - Caster Legendary Stage 1
+69859,0,Monster - Caster Legendary Stage 2
+69864,1,Corona deslustrada
+69865,1,Pulseras con incrustaciones de gemas
+69876,4,Guanteletes espectrales de Xariona
+69877,4,Cinturón de los mil boquiabiertos
+69878,4,Manteo de escarcha permanente
+69879,4,Capa Ráfaga de nubes
+69881,4,Mantón de planetario
+69884,4,Mantón de mistral
+69887,7,Yelmo de poderío bruñido
+69888,7,Quijotes de poderío bruñidos
+69889,7,Coraza de poderío bruñida
+69890,7,Espaldares de poderío bruñidos
+69892,7,Capa Tormenta de Arena rasgada
+69893,7,Espetadora Forjacráneos empapada de sangre
+69897,4,Aguja llameante de Fandral
+69916,4,Aterratrols (Daakara)
+69936,4,Puños de furia
+69937,4,Manoplas de elementium eternas
+69938,4,Guanteletes de llamas sagrados
+69939,4,Guantes de fuego de dragón
+69941,4,Guantes de llamas despiadadas
+69942,4,Garras del mal
+69943,4,Guantes de la luna celestiales
+69944,4,Mandiletes de realidad alterada
+69945,4,Mitones infernales de Don Tayo
+69946,4,Botas de guerra de señores poderosos
+69947,4,Botas reflejadas
+69948,4,Botas de elementium ascuaforjadas
+69949,4,Escarpes de escamas terráneos
+69950,4,Borceguíes de fuego sofocado
+69951,4,Botines del oficio
+69952,4,Pisadas etéreas
+69953,4,Botos del sueño sin fin
+69954,4,Botas de la llama negra
+70004,3,Coraza de pirium sanguinolento
+70005,3,Botas de pirium sanguinolento
+70006,3,Guanteletes de pirium sanguinolento
+70007,3,Yelmo de pirium sanguinolento
+70008,3,Musleras de pirium sanguinolento
+70009,3,Sobrehombros de pirium sanguinolento
+70010,3,Cinturón de pirium sanguinolento
+70011,3,Brazales de pirium sanguinolento
+70012,3,Coraza de pirium ornamentado sanguinolento
+70013,3,Botas de pirium ornamentado sanguinolento
+70014,3,Guanteletes de pirium ornamentado sanguinolento
+70015,3,Yelmo de pirium ornamentado sanguinolento
+70016,3,Musleras de pirium ornamentado sanguinolento
+70017,3,Sobrehombros de pirium ornamentado sanguinolento
+70018,3,Cinturón de pirium ornamentado sanguinolento
+70019,3,Brazales de pirium ornamentado sanguinolento
+70020,3,Cinturón de cuero sanguinolento
+70021,3,Botas de cuero sanguinolento
+70022,3,Brazales de cuero sanguinolento
+70023,3,Pechera de cuero sanguinolento
+70024,3,Guantes de cuero sanguinolento
+70025,3,Yelmo de cuero sanguinolento
+70026,3,Pantalones de cuero sanguinolento
+70027,3,Sobrehombros de cuero sanguinolento
+70028,3,Cinturón de pellejo de vermis sanguinolento
+70029,3,Botas de pellejo de vermis sanguinolento
+70030,3,Brazales de pellejo de vermis sanguinolento
+70031,3,Pechera de pellejo de vermis sanguinolento
+70032,3,Guantes de pellejo de vermis sanguinolento
+70033,3,Yelmo de pellejo de vermis sanguinolento
+70034,3,Pantalones de pellejo de vermis sanguinolento
+70035,3,Sobrehombros de pellejo de vermis sanguinolento
+70036,3,Cinturón de dragontina sanguinolenta
+70037,3,Botas de dragontina sanguinolenta
+70038,3,Brazales de dragontina sanguinolenta
+70039,3,Pechera de dragontina sanguinolenta
+70040,3,Guantes de dragontina sanguinolenta
+70041,3,Yelmo de dragontina sanguinolenta
+70042,3,Pantalones de dragontina sanguinolenta
+70043,3,Sobrehombros de dragontina sanguinolenta
+70044,3,Cinturón de carboescamas sanguinolentas
+70045,3,Botas de carboescamas sanguinolentas
+70046,3,Brazales de carboescamas sanguinolentas
+70047,3,Pechera de carboescamas sanguinolentas
+70048,3,Guantes de carboescamas sanguinolentas
+70049,3,Yelmo de carboescamas sanguinolentas
+70050,3,Pantalones de carboescamas sanguinolentas
+70051,3,Sobrehombros de carboescamas sanguinolentas
+70052,3,Cinturón de tejido de fuego sanguinolento
+70053,3,Botas de tejido de fuego sanguinolento
+70054,3,Brazales de tejido de fuego sanguinolento
+70055,3,Capucha de tejido de fuego sanguinolento
+70056,3,Guantes de tejido de fuego sanguinolento
+70057,3,Pantalones de tejido de fuego sanguinolento
+70058,3,Toga de tejido de fuego sanguinolento
+70059,3,Sobrehombros de tejido de fuego sanguinolento
+70060,3,Toga de seda de ascuas sanguinolenta
+70061,3,Botas de seda de ascuas sanguinolenta
+70062,3,Cinturón de seda de ascuas sanguinolenta
+70063,3,Brazales de seda de ascuas sanguinolenta
+70064,3,Sobrehombros de seda de ascuas sanguinolenta
+70065,3,Guantes de seda de ascuas sanguinolenta
+70066,3,Pantalones de seda de ascuas sanguinolenta
+70067,3,Capucha de seda de ascuas sanguinolenta
+70068,3,Capa de pelaje sanguinolento
+70069,3,Capa de pellejo sanguinolento
+70070,3,Manteo de seda de ascuas sanguinolenta
+70077,3,Talismán de triunfo sanguinolento
+70078,3,Globo ocular de dominancia sanguinolento
+70079,3,Mandíbula de conquista sanguinolenta
+70088,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Blue
+70097,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Green
+70155,4,Tajasesos
+70156,4,Hoja de hechizo de elementium de obra maestra
+70157,4,Martillo de elementium forjado con luz
+70158,4,Trasquiladora con filo de elementium
+70159,3,Llamada de Mylune
+70162,4,Resguardo contra hechizos de pirium
+70163,4,Guardiana irrompible
+70164,4,Hojamuerte de elementium de obra maestra
+70165,4,Cosechador del cazador de brujas
+70178,4,Espada magna de Gladiador implacable
+70179,4,Bastón de Gladiador implacable
+70180,4,Bastón de energía de Gladiador implacable
+70181,4,Bastón de batalla de Gladiador implacable
+70182,4,Pica de Gladiador implacable
+70183,4,Crujehuesos de Gladiador implacable
+70184,4,Decapitadora de Gladiador implacable
+70185,4,Mazo de Gladiador implacable
+70186,4,Desgarradora derecha de Gladiador implacable
+70187,4,Destripadora derecha de Gladiador implacable
+70188,4,Hoja de hechizo de Gladiador implacable
+70189,4,Desgarradora izquierda de Gladiador implacable
+70190,4,Destripadora izquierda de Gladiador implacable
+70191,4,Chafarote de Gladiador implacable
+70192,4,Arco largo de Gladiador implacable
+70193,4,Ballesta pesada de Gladiador implacable
+70194,4,Rifle de Gladiador implacable
+70195,4,Bordón de Luz de Gladiador implacable
+70196,4,Toque de derrota de Gladiador implacable
+70197,4,Hachuela de Gladiador implacable
+70198,4,Filo de guerra de Gladiador implacable
+70199,4,Hoja rauda de Gladiador implacable
+70200,4,Cercenadora de Gladiador implacable
+70201,4,Partehuesos de Gladiador implacable
+70202,4,Moledora de Gladiador implacable
+70203,4,Faca de Gladiador implacable
+70204,4,Rebanadora de Gladiador implacable
+70205,4,Cuchilla de Gladiador implacable
+70206,4,Reducto de Gladiador implacable
+70207,4,Barrera de Gladiador implacable
+70208,4,Escudo muro de Gladiador implacable
+70209,4,Indultode de Gladiador implacable
+70210,4,Fin de juego de Gladiador implacable
+70211,4,Cuchilla de Gladiador implacable
+70212,4,Rebanadora de Gladiador implacable
+70213,4,Decapitadora de Gladiador implacable
+70214,4,Faca de Gladiador implacable
+70215,4,Chafarote de Gladiador implacable
+70216,4,Hoja de hechizo de Gladiador implacable
+70217,4,Destripadora derecha de Gladiador implacable
+70218,4,Destripadora izquierda de Gladiador implacable
+70219,4,Desgarradora izquierda de Gladiador implacable
+70220,4,Desgarradora derecha de Gladiador implacable
+70221,4,Moledora de Gladiador implacable
+70222,4,Partehuesos de Gladiador implacable
+70223,4,Mazo de Gladiador implacable
+70224,4,Crujehuesos de Gladiador implacable
+70225,4,Pica de Gladiador implacable
+70226,4,Bastón de batalla de Gladiador implacable
+70227,4,Bastón de energía de Gladiador implacable
+70228,4,Bastón de Gladiador implacable
+70229,4,Cercenadora de Gladiador implacable
+70230,4,Hoja rauda de Gladiador implacable
+70231,4,Espada magna de Gladiador implacable
+70232,4,Filo de guerra de Gladiador implacable
+70233,4,Hachuela de Gladiador implacable
+70234,4,Toque de derrota de Gladiador implacable
+70235,4,Bordón de Luz de Gladiador implacable
+70236,4,Arco largo de Gladiador implacable
+70237,4,Rifle de Gladiador implacable
+70238,4,Ballesta pesada de Gladiador implacable
+70239,4,Fin de juego de Gladiador implacable
+70240,4,Indulto de Gladiador implacable
+70241,4,Escudo muro de Gladiador implacable
+70242,4,Barrera de Gladiador implacable
+70243,4,Reducto de Gladiador implacable
+70244,4,Pechera de placas de tinieblas de Gladiador implacable
+70245,4,Guanteletes de placas de tinieblas de Gladiador implacable
+70246,4,Yelmo de placas de tinieblas de Gladiador implacable
+70247,4,Musleras de placas de tinieblas de Gladiador implacable
+70248,4,Sobrehombros de placas de tinieblas de Gladiador implacable
+70249,4,Pechera escamada de Gladiador implacable
+70250,4,Guanteletes escamados de Gladiador implacable
+70251,4,Yelmo escamado de Gladiador implacable
+70252,4,Musleras escamadas de Gladiador implacable
+70253,4,Sobrehombros escamados de Gladiador implacable
+70254,4,Pechera de placas de Gladiador implacable
+70255,4,Guanteletes de placas de Gladiador implacable
+70256,4,Yelmo de placas de Gladiador implacable
+70257,4,Musleras de placas de Gladiador implacable
+70258,4,Sobrehombros de placas de Gladiador implacable
+70259,4,Armadura de anillas de Gladiador implacable
+70260,4,Guanteletes de anillas de Gladiador implacable
+70261,4,Yelmo de anillas de Gladiador implacable
+70262,4,Leotardos de anillas de Gladiador implacable
+70263,4,Bufas de anillas de Gladiador implacable
+70264,4,Armadura de cota guarnecida de Gladiador implacable
+70265,4,Guanteletes de cota guarnecida de Gladiador implacable
+70266,4,Yelmo de cota guarnecida de Gladiador implacable
+70267,4,Leotardos de cota guarnecida de Gladiador implacable
+70268,4,Bufas de cota guarnecida de Gladiador implacable
+70269,4,Armadura eslabonada de Gladiador implacable
+70270,4,Guanteletes eslabonados de Gladiador implacable
+70271,4,Yelmo eslabonado de Gladiador implacable
+70272,4,Leotardos eslabonados de Gladiador implacable
+70273,4,Bufas eslabonadas de Gladiador implacable
+70274,4,Armadura de malla de Gladiador implacable
+70275,4,Guanteletes de malla de Gladiador implacable
+70276,4,Yelmo de malla de Gladiador implacable
+70277,4,Leotardos de malla de Gladiador implacable
+70278,4,Bufas de malla de Gladiador implacable
+70279,4,Guantes de pellejo de dragón de Gladiador implacable
+70280,4,Yelmo de pellejo de dragón de Gladiador implacable
+70281,4,Musleras de pellejo de dragón de Gladiador implacable
+70282,4,Togas de pellejo de dragón de Gladiador implacable
+70283,4,Bufas de pellejo de dragón de Gladiador implacable
+70284,4,Guantes de pellejo de kodo de Gladiador implacable
+70285,4,Yelmo de pellejo de kodo de Gladiador implacable
+70286,4,Musleras de pellejo de kodo de Gladiador implacable
+70287,4,Togas de pellejo de kodo de Gladiador implacable
+70288,4,Bufas de pellejo de kodo de Gladiador implacable
+70289,4,Guantes de pellejo de vermis de Gladiador implacable
+70290,4,Yelmo de pellejo de vermis de Gladiador implacable
+70291,4,Musleras de pellejo de vermis de Gladiador implacable
+70292,4,Togas de pellejo de vermis de Gladiador implacable
+70293,4,Bufas de pellejo de vermis de Gladiador implacable
+70294,4,Túnica de cuero de Gladiador implacable
+70295,4,Guantes de cuero de Gladiador implacable
+70296,4,Yelmo de cuero de Gladiador implacable
+70297,4,Musleras de cuero de Gladiador implacable
+70298,4,Bufas de cuero de Gladiador implacable
+70299,4,Manoplas de seda de Gladiador implacable
+70300,4,Capucha de seda de Gladiador implacable
+70301,4,Calzas de seda de Gladiador implacable
+70302,4,Toga de seda de Gladiador implacable
+70303,4,Amito de seda de Gladiador implacable
+70304,4,Guantes de tela lunar de Gladiador implacable
+70305,4,Yelmo de tela lunar de Gladiador implacable
+70306,4,Leotardos de tela lunar de Gladiador implacable
+70307,4,Togas de tela lunar de Gladiador implacable
+70308,4,Manto de tela lunar de Gladiador implacable
+70309,4,Guantes de satén de Gladiador implacable
+70310,4,Caperuza de satén de Gladiador implacable
+70311,4,Leotardos de satén de Gladiador implacable
+70312,4,Toga de satén de Gladiador implacable
+70313,4,Manto de satén de Gladiador implacable
+70314,4,Manoplas de tejido vil de Gladiador implacable
+70315,4,Capucha de tejido vil de Gladiador implacable
+70316,4,Calzas de tejido vil de Gladiador implacable
+70317,4,Vestiduras de tejido vil de Gladiador implacable
+70318,4,Amito de tejido vil de Gladiador implacable
+70319,4,Cinto de crueldad de Gladiador implacable
+70320,4,Faja de crueldad de Gladiador implacable
+70321,4,Botas de guerra de crueldad de Gladiador implacable
+70322,4,Avambrazos de prontitud de Gladiador implacable
+70323,4,Botas de guerra de prontitud de Gladiador implacable
+70324,4,Grebas de prontitud de Gladiador implacable
+70325,4,Brazales de destreza de Gladiador implacable
+70326,4,Faja de destreza de Gladiador implacable
+70327,4,Avambrazos de competencia de Gladiador implacable
+70328,4,Guardarrenes de meditación de Gladiador implacable
+70329,4,Escarpes de meditación de Gladiador implacable
+70330,4,Guardamuñecas de meditación de Gladiador implacable
+70331,4,Guardarrenes de crueldad de Gladiador implacable
+70332,4,Cinto de meditación de Gladiador implacable
+70333,4,Grebas de meditación de Gladiador implacable
+70334,4,Brazales de meditación de Gladiador implacable
+70335,4,Escarpes de crueldad de Gladiador implacable
+70336,4,Ligas de crueldad de Gladiador implacable
+70337,4,Escarpes de prontitud de Gladiador implacable
+70338,4,Guardamuñecas de prontitud de Gladiador implacable
+70339,4,Ligas de precisión de Gladiador implacable
+70340,4,Guardamuñecas de precisión de Gladiador implacable
+70341,4,Escarpes de prontitud de Gladiador implacable
+70342,4,Guardamuñecas de destreza de Gladiador implacable
+70343,4,Cinturón de meditación de Gladiador implacable
+70344,4,Guardapiés de meditación de Gladiador implacable
+70345,4,Ataduras de meditación de Gladiador implacable
+70346,4,Cinturón de crueldad de Gladiador implacable
+70347,4,Pretina de crueldad de Gladiador implacable
+70348,4,Botas de crueldad de Gladiador implacable
+70349,4,Pretina de precisión de Gladiador implacable
+70350,4,Brazaletes de precisión de Gladiador implacable
+70351,4,Botas de prontitud de Gladiador implacable
+70352,4,Brazaletes de prontitud de Gladiador implacable
+70353,4,Coselete ornamentado de Gladiador implacable
+70354,4,Guantes ornamentados de Gladiador implacable
+70355,4,Cimera ornamentada de Gladiador implacable
+70356,4,Quijotes ornamentados de Gladiador implacable
+70357,4,Bufas ornamentadas de Gladiador implacable
+70358,4,Guardapiés de prontitud de Gladiador implacable
+70359,4,Ataduras de destreza de Gladiador implacable
+70360,4,Cordón de crueldad de Gladiador implacable
+70361,4,Botines de crueldad de Gladiador implacable
+70362,4,Cordón de precisión de Gladiador implacable
+70363,4,Esposas de precisión de Gladiador implacable
+70364,4,Botines de prontitud de Gladiador implacable
+70365,4,Esposas de destreza de Gladiador implacable
+70366,4,Esposas de meditación de Gladiador implacable
+70367,4,Botines de meditación de Gladiador implacable
+70368,4,Cordón de meditación de Gladiador implacable
+70383,4,Capa de prontitud de Gladiador implacable
+70384,4,Capa de destreza de Gladiador implacable
+70385,4,Manteo de destreza de Gladiador implacable
+70386,4,Manteo de crueldad de Gladiador implacable
+70387,4,Mantón de difusión de Gladiador implacable
+70388,4,Mantón de destreza de Gladiador implacable
+70389,4,Mantón de meditación de Gladiador implacable
+70405,4,Reliquia de dominancia de Gladiador implacable
+70406,4,Reliquia de salvación de Gladiador implacable
+70407,4,Reliquia de triunfo de Gladiador implacable
+70408,4,Reliquia de conquista de Gladiador implacable
+70415,4,Bufas ornamentadas de Gladiador implacable
+70416,4,Quijotes ornamentados de Gladiador implacable
+70417,4,Cimera ornamentada de Gladiador implacable
+70418,4,Guantes ornamentados de Gladiador implacable
+70419,4,Coselete ornamentado de Gladiador implacable
+70420,4,Bufas de malla de Gladiador implacable
+70421,4,Leotardos de malla de Gladiador implacable
+70422,4,Yelmo de malla de Gladiador implacable
+70423,4,Guanteletes de malla de Gladiador implacable
+70424,4,Armadura de malla de Gladiador implacable
+70425,4,Amito de tejido vil de Gladiador implacable
+70426,4,Vestiduras de tejido vil de Gladiador implacable
+70427,4,Calzas de tejido vil de Gladiador implacable
+70428,4,Yelmo de pellejo de vermis de Gladiador implacable
+70429,4,Guantes de pellejo de vermis de Gladiador implacable
+70430,4,Bufas de pellejo de kodo de Gladiador implacable
+70431,4,Togas de pellejo de kodo de Gladiador implacable
+70432,4,Musleras de pellejo de kodo de Gladiador implacable
+70433,4,Armadura de cota guarnecida de Gladiador implacable
+70434,4,Bufas de anillas de Gladiador implacable
+70435,4,Leotardos de anillas de Gladiador implacable
+70436,4,Yelmo de pellejo de kodo de Gladiador implacable
+70437,4,Guantes de pellejo de kodo de Gladiador implacable
+70438,4,Bufas de pellejo de dragón de Gladiador implacable
+70439,4,Togas de pellejo de dragón de Gladiador implacable
+70440,4,Yelmo de anillas de Gladiador implacable
+70441,4,Guanteletes de anillas de Gladiador implacable
+70442,4,Bufas de cuero de Gladiador implacable
+70443,4,Musleras de cuero de Gladiador implacable
+70444,4,Yelmo de cuero de Gladiador implacable
+70445,4,Guantes de cuero de Gladiador implacable
+70446,4,Túnica de cuero de Gladiador implacable
+70447,4,Bufas de pellejo de vermis de Gladiador implacable
+70448,4,Togas de pellejo de vermis de Gladiador implacable
+70449,4,Musleras de pellejo de vermis de Gladiador implacable
+70450,4,Togas de tela lunar de Gladiador implacable
+70451,4,Leotardos de tela lunar de Gladiador implacable
+70452,4,Yelmo de tela lunar de Gladiador implacable
+70453,4,Guantes de tela lunar de Gladiador implacable
+70454,4,Amito de seda de Gladiador implacable
+70455,4,Toga de seda de Gladiador implacable
+70456,4,Bufas eslabonadas de Gladiador implacable
+70457,4,Leotardos eslabonados de Gladiador implacable
+70458,4,Yelmo eslabonado de Gladiador implacable
+70459,4,Guanteletes eslabonados de Gladiador implacable
+70460,4,Armadura eslabonada de Gladiador implacable
+70461,4,Calzas de seda de Gladiador implacable
+70462,4,Capucha de seda de Gladiador implacable
+70463,4,Manoplas de seda de Gladiador implacable
+70464,4,Bufas de cota guarnecida de Gladiador implacable
+70465,4,Leotardos de cota guarnecida de Gladiador implacable
+70466,4,Yelmo de cota guarnecida de Gladiador implacable
+70467,4,Guanteletes de cota guarnecida de Gladiador implacable
+70468,4,Capucha de tejido vil de Gladiador implacable
+70469,4,Manoplas de tejido vil de Gladiador implacable
+70470,4,Manto de satén de Gladiador implacable
+70471,4,Toga de satén de Gladiador implacable
+70472,4,Leotardos de satén de Gladiador implacable
+70473,4,Caperuza de satén de Gladiador implacable
+70474,4,Guantes de satén de Gladiador implacable
+70475,4,Manto de tela lunar de Gladiador implacable
+70476,4,Armadura de anillas de Gladiador implacable
+70477,4,Sobrehombros de placas de Gladiador implacable
+70478,4,Musleras de placas de Gladiador implacable
+70479,4,Yelmo de placas de Gladiador implacable
+70480,4,Guanteletes de placas de Gladiador implacable
+70481,4,Pechera de placas de Gladiador implacable
+70482,4,Sobrehombros escamados de Gladiador implacable
+70483,4,Musleras escamadas de Gladiador implacable
+70484,4,Musleras de pellejo de dragón de Gladiador implacable
+70485,4,Yelmo de pellejo de dragón de Gladiador implacable
+70486,4,Guantes de pellejo de dragón de Gladiador implacable
+70487,4,Yelmo escamado de Gladiador implacable
+70488,4,Guanteletes escamados de Gladiador implacable
+70489,4,Pechera escamada de Gladiador implacable
+70490,4,Sobrehombros de placas de tinieblas de Gladiador implacable
+70491,4,Musleras de placas de tinieblas de Gladiador implacable
+70492,4,Yelmo de placas de tinieblas de Gladiador implacable
+70493,4,Guanteletes de placas de tinieblas de Gladiador implacable
+70494,4,Pechera de placas de tinieblas de Gladiador implacable
+70495,4,Botines de crueldad de Gladiador implacable
+70496,4,Botines de prontitud de Gladiador implacable
+70497,4,Botines de meditación de Gladiador implacable
+70498,4,Guardapiés de meditación de Gladiador implacable
+70499,4,Guardapiés de prontitud de Gladiador implacable
+70500,4,Escarpes de crueldad de Gladiador implacable
+70501,4,Escarpes de prontitud de Gladiador implacable
+70502,4,Grebas de prontitud de Gladiador implacable
+70503,4,Grebas de meditación de Gladiador implacable
+70504,4,Botas de guerra de crueldad de Gladiador implacable
+70505,4,Botas de guerra de prontitud de Gladiador implacable
+70506,4,Botas de crueldad de Gladiador implacable
+70507,4,Botas de prontitud de Gladiador implacable
+70508,4,Escarpes de prontitud de Gladiador implacable
+70509,4,Escarpes de meditación de Gladiador implacable
+70511,4,Guardamuñecas de meditación de Gladiador sañoso
+70512,4,Guardamuñecas de destreza de Gladiador sañoso
+70513,4,Avambrazos de prontitud de Gladiador sañoso
+70514,4,Avambrazos de competencia de Gladiador sañoso
+70515,4,Brazaletes de precisión de Gladiador sañoso
+70516,4,Brazaletes de prontitud de Gladiador sañoso
+70523,4,Cinturón de crueldad de Gladiador sañoso
+70524,4,Cinturón de meditación de Gladiador sañoso
+70525,4,Ataduras de meditación de Gladiador sañoso
+70526,4,Ataduras de destreza de Gladiador sañoso
+70527,4,Botas de prontitud de Gladiador sañoso
+70528,4,Botas de crueldad de Gladiador sañoso
+70529,4,Brazales de meditación de Gladiador sañoso
+70530,4,Brazales de destreza de Gladiador sañoso
+70531,4,Manteo de crueldad de Gladiador sañoso
+70532,4,Manteo de destreza de Gladiador sañoso
+70533,4,Armadura de anillas de Gladiador sañoso
+70534,4,Guanteletes de anillas de Gladiador sañoso
+70535,4,Yelmo de anillas de Gladiador sañoso
+70536,4,Leotardos de anillas de Gladiador sañoso
+70537,4,Bufas de anillas de Gladiador sañoso
+70540,4,Cinto de crueldad de Gladiador sañoso
+70541,4,Cinto de meditación de Gladiador sañoso
+70542,4,Capa de prontitud de Gladiador sañoso
+70543,4,Capa de destreza de Gladiador sañoso
+70544,4,Cordón de precisión de Gladiador sañoso
+70545,4,Cordón de crueldad de Gladiador sañoso
+70546,4,Cordón de meditación de Gladiador sañoso
+70547,4,Esposas de precisión de Gladiador sañoso
+70548,4,Esposas de meditación de Gladiador sañoso
+70549,4,Esposas de destreza de Gladiador sañoso
+70550,4,Guantes de pellejo de dragón de Gladiador sañoso
+70551,4,Yelmo de pellejo de dragón de Gladiador sañoso
+70552,4,Musleras de pellejo de dragón de Gladiador sañoso
+70553,4,Togas de pellejo de dragón de Gladiador sañoso
+70554,4,Bufas de pellejo de dragón de Gladiador sañoso
+70555,4,Mantón de difusión de Gladiador sañoso
+70556,4,Mantón de meditación de Gladiador sañoso
+70557,4,Mantón de destreza de Gladiador sañoso
+70558,4,Pechera de placas de tinieblas de Gladiador sañoso
+70559,4,Guanteletes de placas de tinieblas de Gladiador sañoso
+70560,4,Yelmo de placas de tinieblas de Gladiador sañoso
+70561,4,Musleras de placas de tinieblas de Gladiador sañoso
+70562,4,Sobrehombros de placas de tinieblas de Gladiador sañoso
+70566,4,Amito de tejido vil de Gladiador sañoso
+70567,4,Capucha de tejido vil de Gladiador sañoso
+70568,4,Manoplas de tejido vil de Gladiador sañoso
+70569,4,Vestiduras de tejido vil de Gladiador sañoso
+70570,4,Calzas de tejido vil de Gladiador sañoso
+70571,4,Guardapiés de prontitud de Gladiador sañoso
+70572,4,Guardapiés de meditación de Gladiador sañoso
+70573,4,Faja de crueldad de Gladiador sañoso
+70574,4,Faja de destreza de Gladiador sañoso
+70575,4,Grebas de prontitud de Gladiador sañoso
+70576,4,Grebas de meditación de Gladiador sañoso
+70580,4,Guantes de pellejo de kodo de Gladiador sañoso
+70581,4,Yelmo de pellejo de kodo de Gladiador sañoso
+70582,4,Musleras de pellejo de kodo de Gladiador sañoso
+70583,4,Togas de pellejo de kodo de Gladiador sañoso
+70584,4,Bufas de pellejo de kodo de Gladiador sañoso
+70585,4,Guantes de cuero de Gladiador sañoso
+70586,4,Yelmo de cuero de Gladiador sañoso
+70587,4,Musleras de cuero de Gladiador sañoso
+70588,4,Bufas de cuero de Gladiador sañoso
+70589,4,Guerrera de cuero de Gladiador sañoso
+70590,4,Armadura eslabonada de Gladiador sañoso
+70591,4,Guanteletes eslabonados de Gladiador sañoso
+70592,4,Yelmo eslabonado de Gladiador sañoso
+70593,4,Leotardos eslabonados de Gladiador sañoso
+70594,4,Bufas eslabonadas de Gladiador sañoso
+70595,4,Ligas de precisión de Gladiador sañoso
+70596,4,Ligas de crueldad de Gladiador sañoso
+70597,4,Armadura de malla de Gladiador sañoso
+70598,4,Guanteletes de malla de Gladiador sañoso
+70599,4,Yelmo de malla de Gladiador sañoso
+70600,4,Leotardos de malla de Gladiador sañoso
+70601,4,Bufas de malla de Gladiador sañoso
+70608,4,Guantes de tela lunar de Gladiador sañoso
+70609,4,Yelmo de tela lunar de Gladiador sañoso
+70610,4,Leotardos de tela lunar de Gladiador sañoso
+70611,4,Manto de tela lunar de Gladiador sañoso
+70612,4,Toga de tela lunar de Gladiador sañoso
+70615,4,Coselete ornamentado de Gladiador sañoso
+70616,4,Guantes ornamentados de Gladiador sañoso
+70617,4,Cimera ornamentada de Gladiador sañoso
+70618,4,Quijotes ornamentados de Gladiador sañoso
+70619,4,Bufas ornamentadas de Gladiador sañoso
+70623,4,Pechera de placas de Gladiador sañoso
+70624,4,Guanteletes de placas de Gladiador sañoso
+70625,4,Yelmo de placas de Gladiador sañoso
+70626,4,Musleras de placas de Gladiador sañoso
+70627,4,Sobrehombros de placas de Gladiador sañoso
+70628,4,Reliquia de conquista de Gladiador sañoso
+70629,4,Reliquia de dominancia de Gladiador sañoso
+70630,4,Reliquia de salvación de Gladiador sañoso
+70631,4,Reliquia de triunfo de Gladiador sañoso
+70632,4,Armadura de cota guarnecida de Gladiador sañoso
+70633,4,Guanteletes de cota guarnecida de Gladiador sañoso
+70634,4,Yelmo de cota guarnecida de Gladiador sañoso
+70635,4,Leotardos de cota guarnecida de Gladiador sañoso
+70636,4,Bufas de cota guarnecida de Gladiador sañoso
+70639,4,Escarpes de prontitud de Gladiador sañoso
+70640,4,Escarpes de prontitud de Gladiador sañoso
+70641,4,Escarpes de crueldad de Gladiador sañoso
+70642,4,Escarpes de meditación de Gladiador sañoso
+70643,4,Guantes de satén de Gladiador sañoso
+70644,4,Caperuza de satén de Gladiador sañoso
+70645,4,Leotardos de satén de Gladiador sañoso
+70646,4,Manto de satén de Gladiador sañoso
+70647,4,Toga de satén de Gladiador sañoso
+70648,4,Pechera escamada de Gladiador sañoso
+70649,4,Guanteletes escamados de Gladiador sañoso
+70650,4,Yelmo escamado de Gladiador sañoso
+70651,4,Musleras escamadas de Gladiador sañoso
+70652,4,Sobrehombros escamados de Gladiador sañoso
+70655,4,Amito de seda de Gladiador sañoso
+70656,4,Capucha de seda de Gladiador sañoso
+70657,4,Manoplas de seda de Gladiador sañoso
+70658,4,Toga de seda de Gladiador sañoso
+70659,4,Calzas de seda de Gladiador sañoso
+70660,4,Botines de prontitud de Gladiador sañoso
+70661,4,Botines de crueldad de Gladiador sañoso
+70662,4,Botines de meditación de Gladiador sañoso
+70663,4,Pretina de precisión de Gladiador sañoso
+70664,4,Pretina de crueldad de Gladiador sañoso
+70665,4,Guardarrenes de crueldad de Gladiador sañoso
+70666,4,Guardarrenes de meditación de Gladiador sañoso
+70667,4,Botas de guerra de prontitud de Gladiador sañoso
+70668,4,Botas de guerra de crueldad de Gladiador sañoso
+70669,4,Guardamuñecas de precisión de Gladiador sañoso
+70670,4,Guardamuñecas de prontitud de Gladiador sañoso
+70671,4,Guantes de pellejo de vermis de Gladiador sañoso
+70672,4,Yelmo de pellejo de vermis de Gladiador sañoso
+70673,4,Musleras de pellejo de vermis de Gladiador sañoso
+70674,4,Togas de pellejo de vermis de Gladiador sañoso
+70675,4,Bufas de pellejo de vermis de Gladiador sañoso
+70723,4,Sulfuras la Mano extinta
+70733,4,Cuchilla de Alysra
+70734,4,Gran yelmo madriguera
+70735,4,Braciles chisporroteantes
+70736,4,Leotardos desertafuego
+70737,4,Bufas de llama recurrente
+70739,4,Quijotes espantallamas
+70792,2,Art Template Cloth Belt - Robe_RaidMage_J - Arcane
+70793,2,Art Template Cloth Boot - Robe_RaidMage_J - Arcane
+70794,2,Art Template Cloth Chest - Robe_RaidMage_J - Arcane
+70795,2,Art Template Cloth Hand - Robe_RaidMage_J - Arcane
+70796,2,Art Template Cloth Head - Robe_RaidMage_J - Arcane
+70797,2,Art Template Cloth Legs - Robe_RaidMage_J - Arcane
+70798,2,Art Template Cloth Robe - Robe_RaidMage_J - Arcane
+70799,2,Art Template Cloth Shoulder - Robe_RaidMage_J - Arcane
+70800,2,Art Template Cloth Wrist - Robe_RaidMage_J - Arcane
+70801,2,Art Template Cloth Belt - Robe_RaidMage_J - Frost
+70802,2,Art Template Cloth Boot - Robe_RaidMage_J - Frost
+70803,2,Art Template Cloth Chest - Robe_RaidMage_J - Frost
+70804,2,Art Template Cloth Hand - Robe_RaidMage_J - Frost
+70805,2,Art Template Cloth Head - Robe_RaidMage_J - Frost
+70806,2,Art Template Cloth Legs - Robe_RaidMage_J - Frost
+70807,2,Art Template Cloth Robe - Robe_RaidMage_J - Frost
+70808,2,Art Template Cloth Shoulder - Robe_RaidMage_J - Frost
+70809,2,Art Template Cloth Wrist - Robe_RaidMage_J - Frost
+70810,2,Art Template Cloth Belt - Robe_RaidMage_J - Fire
+70811,2,Art Template Cloth Boot - Robe_RaidMage_J - Fire
+70812,2,Art Template Cloth Chest - Robe_RaidMage_J - Fire
+70813,2,Art Template Cloth Hand - Robe_RaidMage_J - Fire
+70814,2,Art Template Cloth Head - Robe_RaidMage_J - Fire
+70815,2,Art Template Cloth Legs - Robe_RaidMage_J - Fire
+70816,2,Art Template Cloth Robe - Robe_RaidMage_J - Fire
+70817,2,Art Template Cloth Shoulder - Robe_RaidMage_J - Fire
+70818,2,Art Template Cloth Wrist - Robe_RaidMage_J - Fire
+70863,2,Art Template Cloth Wrist - Robe_RaidPriest_J - Blue
+70872,2,Art Template Cloth Wrist - Robe_RaidPriest_J - Green
+70881,2,Art Template Cloth Wrist - Robe_RaidPriest_J - Orange
+70884,2,Art Template Plate Wrist - RaidWarrior_J - Default
+70885,2,Art Template Plate Shoulder - RaidWarrior_J - Default
+70886,2,Art Template Plate Legs - RaidWarrior_J - Default
+70887,2,Art Template Plate Head - RaidWarrior_J - Default
+70888,2,Art Template Plate Hand - RaidWarrior_J - Default
+70889,2,Art Template Plate Chest - RaidWarrior_J - Default
+70890,2,Art Template Plate Boot - RaidWarrior_J - Default
+70891,2,Art Template Plate Belt - RaidWarrior_J - Default
+70892,2,Art Template Plate Belt - RaidWarrior_J - Gray
+70893,2,Art Template Plate Boot - RaidWarrior_J - Gray
+70894,2,Art Template Plate Chest - RaidWarrior_J - Gray
+70895,2,Art Template Plate Hand - RaidWarrior_J - Gray
+70896,2,Art Template Plate Head - RaidWarrior_J - Gray
+70897,2,Art Template Plate Legs - RaidWarrior_J - Gray
+70898,2,Art Template Plate Shoulder - RaidWarrior_J - Gray
+70899,2,Art Template Plate Wrist - RaidWarrior_J - Gray
+70900,2,Art Template Plate Belt - RaidWarrior_J - Red
+70901,2,Art Template Plate Boot - RaidWarrior_J - Red
+70902,2,Art Template Plate Chest - RaidWarrior_J - Red
+70903,2,Art Template Plate Hand - RaidWarrior_J - Red
+70904,2,Art Template Plate Head - RaidWarrior_J - Red
+70905,2,Art Template Plate Legs - RaidWarrior_J - Red
+70906,2,Art Template Plate Shoulder - RaidWarrior_J - Red
+70907,2,Art Template Plate Wrist - RaidWarrior_J - Red
+70912,4,Apisonadoras de obsidiana rajada
+70913,4,Quijotes de devoción demente
+70914,4,Caparazón marcado por las llamas
+70915,4,Fragmento de tormento
+70916,4,Yelmo de gloria llameante
+70917,4,Manoplas chisporroteantes
+70920,4,Brazales del sendero ígneo
+70921,4,Bufas de llama pura
+70922,4,Mandíbula de Beth'tilac
+70923,2,Jersey chillón del Festival de Invierno
+70930,4,Capa de pirocólera durable
+70933,4,Faja de llama indómita
+70937,4,Brazales de fuerza majestuosa
+70939,4,Figurilla de garra mortal
+70941,4,Guardahombros del gigante fundido
+70942,4,Leotardos del gigante fundido
+70943,4,Manoplas del gigante fundido
+70944,4,Visera del gigante fundido
+70945,4,Coselete del gigante fundido
+70946,4,Guardahombros de inmolación
+70947,4,Musleras de inmolación
+70948,4,Visera de inmolación
+70949,4,Manoplas de inmolación
+70950,4,Coselete de inmolación
+70951,4,Guardahombros de placamuerte de elementium
+70952,4,Musleras de placamuerte de elementium
+70953,4,Manoplas de placamuerte de elementium
+70954,4,Visera de placamuerte de elementium
+70955,4,Coselete de placamuerte de elementium
+70985,4,Bufas del cráter en llamas
+70986,4,Guanteletes de la nidada
+70987,4,Botines de fénix derribado
+70988,4,Garra de la madre de fuego
+70989,4,Leotardos de llama etérea
+70990,4,Capa Ala de Luz
+70991,4,Arbalesta de furia en erupción
+70992,4,Mantón de fuego aterrador
+70993,4,Guanteletes piel de fuego
+71003,4,Visión de la calavera flameante
+71004,4,Brazales hiendetierra
+71005,4,Coselete de núcleo llameante
+71006,4,Puntavolcán
+71007,4,Mandiletes del gigante enfurecido
+71009,4,Braciles cauterizadores
+71010,4,Togas incendiarias
+71011,4,Visión de la llama chisporroteante
+71013,4,Frenesí hambriento
+71014,4,Gran hacha del Robacráneos
+71018,4,Cabellera del príncipe bandido
+71020,4,Guantes de humo desvanecido
+71021,4,Cinturón de furia acerado
+71022,4,Concha de abulón de Forjallamas
+71023,4,Sandalias eludeascuas
+71025,4,Guardahombros chisporroteantes
+71026,4,Brazales del cazador aterrador
+71027,4,Botines de obediencia implícita
+71028,4,Quijotes de control absoluto
+71029,4,Apisonadoras de arañas
+71030,4,Sobrehombros de quitina chamuscada
+71031,4,Leotardos Telaceniza
+71038,4,Resguardo de la Viuda Roja
+71039,4,Pira funeraria
+71040,4,Capucha de la amenaza apremiante
+71041,4,Togas tejidas por arañas
+71042,4,Falda de llama torácica
+71043,4,Brazales de los ojos colectores
+71044,4,Guantes de seda ceniza
+71045,4,Guerrera de fénix oscuro
+71046,4,Guantes de fénix oscuro
+71047,4,Yelmo de fénix oscuro
+71048,4,Musleras de fénix oscuro
+71049,4,Bufas de fénix oscuro
+71050,4,Guantes de despiertallamas
+71051,4,Protegecabezas de despiertallamas
+71052,4,Musleras de despiertallamas
+71053,4,Bufas de despiertallamas
+71054,4,Túnica de despiertallamas
+71058,4,Placa de batalla de placamuerte de elementium
+71059,4,Guanteletes de placamuerte de elementium
+71060,4,Yelmo de placamuerte de elementium
+71061,4,Quijotes de placamuerte de elementium
+71062,4,Espaldares de placamuerte de elementium
+71063,4,Placa de batalla de inmolación
+71064,4,Guanteletes de inmolación
+71065,4,Yelmo de inmolación
+71066,4,Quijotes de inmolación
+71067,4,Espaldares de inmolación
+71068,4,Placa de batalla del gigante fundido
+71069,4,Guanteletes del gigante fundido
+71070,4,Yelmo del gigante fundido
+71071,4,Quijotes del gigante fundido
+71072,4,Espaldares del gigante fundido
+71077,4,Perforadora de impacto extremo
+71090,5,Camisa de tejido de sombra legendaria
+71091,4,Coraza de inmolación
+71092,4,Guantes de inmolación
+71093,4,Protegecabezas de inmolación
+71094,4,Grebas de inmolación
+71095,4,Manto de inmolación
+71097,4,Mandiletes de enramada obsidiana
+71098,4,Celada de enramada obsidiana
+71099,4,Musleras de enramada obsidiana
+71100,4,Vestiduras de enramada obsidiana
+71101,4,Bufas de enramada obsidiana
+71102,4,Manijas de enramada obsidiana
+71103,4,Yelmo de enramada obsidiana
+71104,4,Ataduras de enramada obsidiana
+71105,4,Togas de enramada obsidiana
+71106,4,Manto de enramada obsidiana
+71107,4,Guantes de enramada obsidiana
+71108,4,Casquete de enramada obsidiana
+71109,4,Leotardos de enramada obsidiana
+71110,4,Vestimentas de enramada obsidiana
+71111,4,Jinetas de enramada obsidiana
+71130,4,Brazales de vinculador de llamas
+71131,4,Faja vinculadora de llamas
+71142,2,Test Item
+71145,0,Monster - Caster Legendary Stage 0
+71146,4,Reliquia corazóncruel
+71147,4,Fetiche de llama maldita
+71148,4,Vial de llama de almas
+71149,4,Reliquia de vinculador de fuego
+71150,4,Varita de pluma de fénix
+71151,4,Varita de ascua resplandeciente
+71152,4,Fragmento de estrella de la mañana
+71154,4,Cercenagigantes
+71218,4,Estrella deflectora
+71227,4,Capa de pirocólera de hojas
+71228,4,Capa de pirocólera impoluta
+71229,4,Capa de pirocólera suelta
+71230,4,Capa de pirocólera tensada
+71249,4,Fajín cicatriz de fuego
+71250,4,Cincho de la brasa llameante
+71253,4,Faja de tajo abrasador
+71254,4,Faja de la ciudadela llameante
+71255,4,Cinturón flecha de fuego
+71258,4,Cinturón de ojo de ascuas
+71260,4,Brazales de verdades imperiosas
+71261,4,Brazales ciclópeos
+71262,4,Ataduras quemacráneos
+71263,4,Brazales de ceniza neblinosa
+71264,4,Brazales de relámpago bifurcado
+71265,4,Brazales de llama de ascuas
+71266,4,Guardamuñecas de alma de fuego
+71271,4,Manijas de la llama purificadora
+71272,4,Capucha de la llama purificadora
+71273,4,Ataduras de la llama purificadora
+71274,4,Togas de la llama purificadora
+71275,4,Manto de la llama purificadora
+71276,4,Guantes de la llama purificadora
+71277,4,Caperuza de la llama purificadora
+71278,4,Leotardos de la llama purificadora
+71279,4,Vestimentas de la llama purificadora
+71280,4,Jinetas de la llama purificadora
+71281,4,Manijas de araña corpulenta
+71282,4,Caperuza de araña corpulenta
+71283,4,Leotardos de araña corpulenta
+71284,4,Togas de araña corpulenta
+71285,4,Manto de araña corpulenta
+71286,4,Guantes de halcón de fuego
+71287,4,Caperuza de halcón de fuego
+71288,4,Leotardos de halcón de fuego
+71289,4,Togas de halcón de fuego
+71290,4,Manto de halcón de fuego
+71291,4,Camisote volcánico en erupción
+71292,4,Guantes volcánicos en erupción
+71293,4,Celada volcánica en erupción
+71294,4,Falda volcánica en erupción
+71295,4,Jinetas volcánicas en erupción
+71296,4,Túnica volcánica en erupción
+71297,4,Manijas volcánicas en erupción
+71298,4,Visera volcánica en erupción
+71299,4,Ataduras volcánicas en erupción
+71300,4,Manto volcánico en erupción
+71301,4,Loriga volcánica en erupción
+71302,4,Mandiletes volcánicos en erupción
+71303,4,Casco volcánico en erupción
+71304,4,Musleras volcánicas en erupción
+71305,4,Bufas volcánicas en erupción
+71312,4,Rompepuertas
+71313,4,Sandalias del escorpión llameante
+71314,4,Ala de Señor demoníaco
+71323,4,Escrito sobre el Vínculo lúgubre
+71325,4,Sable siniestro de El Jinete
+71326,4,Casco espantoso de El Jinete
+71331,4,Faca de cerveza temible ensangrentada
+71332,4,Pichel del terror tremendo
+71340,4,El abrazo del Guardián de la Puerta
+71341,4,Brazales de alas resplandecientes
+71342,4,Borgoñota de llama
+71343,4,Manto de puertas cerradas
+71344,4,Caparazón de visiones cambiantes
+71345,4,Hombreras de la puerta olvidada
+71346,4,Mandiletes de precisión infalible
+71347,4,Aguijón del escorpión llameante
+71349,4,Leotardos de felino de fuego
+71350,4,Cubremuñecas de demarcación
+71351,4,Botines del penitente
+71352,4,Sulfuras la Mano extinta
+71353,4,Arathar the Eye of Flame
+71355,4,Martillo del Señor del Fuego
+71356,4,Corona de llamas
+71357,4,Faja de llamas
+71358,4,Guantes de halcón de fuego
+71359,4,Escalpelo esterilizado de Chelley
+71360,4,Aguja de dolor escarlata
+71361,4,Corcesca de odio
+71362,4,Taladora tajonegro
+71365,4,Cadenas ineludibles
+71366,4,Lava Bolt Crossbow
+71388,4,Capa de pirocólera impoluta
+71389,4,Capa de pirocólera tensada
+71390,4,Capa de pirocólera suelta
+71391,4,Capa de pirocólera de hojas
+71392,4,Capa de pirocólera durable
+71393,4,Cinturón de ojo de ascuas
+71394,4,Faja vinculadora de llamas
+71395,4,Fajín cicatriz de fuego
+71396,4,Cinturón flecha de fuego
+71397,4,Faja de la ciudadela llameante
+71398,4,Faja de tajo abrasador
+71399,4,Cincho de la brasa llameante
+71400,4,Faja de llama indómita
+71402,4,Leotardos Telaceniza
+71403,4,Sobrehombros de quitina chamuscada
+71404,4,Apisonadoras de arañas
+71405,4,Caparazón marcado por las llamas
+71406,4,Mandíbula de Beth'tilac
+71407,4,Togas tejidas por arañas
+71408,4,Resguardo de la Viuda Roja
+71409,4,Pira funeraria
+71410,4,Guantes de seda ceniza
+71411,4,Capucha de la amenaza apremiante
+71412,4,Falda de llama torácica
+71413,4,Brazales de los ojos colectores
+71414,4,Arbalesta de furia en erupción
+71415,4,Mantón de fuego aterrador
+71416,4,Visión de la calavera flameante
+71417,4,Coselete de núcleo llameante
+71418,4,Brazales hiendetierra
+71419,4,Guanteletes piel de fuego
+71420,4,Apisonadoras de obsidiana rajada
+71421,4,Visión de la llama chisporroteante
+71422,4,Puntavolcán
+71424,4,Togas incendiarias
+71425,4,Braciles cauterizadores
+71426,4,Mandiletes del gigante enfurecido
+71427,4,Cuchilla de Alysra
+71428,4,Braciles chisporroteantes
+71429,4,Leotardos desertafuego
+71430,4,Gran yelmo madriguera
+71431,4,Quijotes espantallamas
+71432,4,Bufas de llama recurrente
+71434,4,Capa Ala de Luz
+71435,4,Leotardos de llama etérea
+71436,4,Botines de fénix derribado
+71437,4,Guanteletes de la nidada
+71438,4,Bufas del cráter en llamas
+71439,4,Garra de la madre de fuego
+71440,4,Guantes de humo desvanecido
+71441,4,Frenesí hambriento
+71442,4,Cabellera del príncipe bandido
+71443,4,Cinturón de furia acerado
+71444,4,Quijotes de devoción demente
+71445,4,Gran hacha del Robacráneos
+71447,4,Sandalias eludeascuas
+71448,4,Concha de abulón de Forjallamas
+71450,4,Guardahombros chisporroteantes
+71451,4,Botines de obediencia implícita
+71452,4,Brazales del cazador aterrador
+71453,4,Quijotes de control absoluto
+71454,4,Rompepuertas
+71455,4,Ala de Señor demoníaco
+71456,4,Hombreras de la puerta olvidada
+71458,4,Manoplas chisporroteantes
+71459,4,Yelmo de gloria llameante
+71460,4,Fragmento de tormento
+71461,4,Manto de puertas cerradas
+71462,4,Escrito sobre el Vínculo lúgubre
+71463,4,Brazales de alas resplandecientes
+71464,4,El abrazo del Guardián de la Puerta
+71465,4,Borgoñota de llama
+71466,4,Aguja llameante de Fandral
+71467,4,Sandalias del escorpión llameante
+71468,4,Mandiletes de precisión infalible
+71469,4,Caparazón de visiones cambiantes
+71470,4,Brazales del sendero ígneo
+71471,4,Cubremuñecas de demarcación
+71473,4,Aguijón del escorpión llameante
+71474,4,Leotardos de felino de fuego
+71475,4,Botines del penitente
+71476,4,Placa de batalla de placamuerte de elementium
+71477,4,Guanteletes de placamuerte de elementium
+71478,4,Yelmo de placamuerte de elementium
+71479,4,Quijotes de placamuerte de elementium
+71480,4,Espaldares de placamuerte de elementium
+71481,4,Coselete de placamuerte de elementium
+71482,4,Manoplas de placamuerte de elementium
+71483,4,Visera de placamuerte de elementium
+71484,4,Musleras de placamuerte de elementium
+71485,4,Guardahombros de placamuerte de elementium
+71486,4,Vestiduras de enramada obsidiana
+71487,4,Mandiletes de enramada obsidiana
+71488,4,Celada de enramada obsidiana
+71489,4,Musleras de enramada obsidiana
+71490,4,Bufas de enramada obsidiana
+71491,4,Manijas de enramada obsidiana
+71492,4,Yelmo de enramada obsidiana
+71493,4,Ataduras de enramada obsidiana
+71494,4,Togas de enramada obsidiana
+71495,4,Manto de enramada obsidiana
+71496,4,Guantes de enramada obsidiana
+71497,4,Casquete de enramada obsidiana
+71498,4,Leotardos de enramada obsidiana
+71499,4,Vestimentas de enramada obsidiana
+71500,4,Jinetas de enramada obsidiana
+71501,4,Túnica de despiertallamas
+71502,4,Guantes de despiertallamas
+71503,4,Protegecabezas de despiertallamas
+71504,4,Musleras de despiertallamas
+71505,4,Bufas de despiertallamas
+71507,4,Guantes de halcón de fuego
+71508,4,Caperuza de halcón de fuego
+71509,4,Leotardos de halcón de fuego
+71510,4,Togas de halcón de fuego
+71511,4,Manto de halcón de fuego
+71512,4,Placa de batalla de inmolación
+71513,4,Guanteletes de inmolación
+71514,4,Yelmo de inmolación
+71515,4,Quijotes de inmolación
+71516,4,Espaldares de inmolación
+71517,4,Coraza de inmolación
+71518,4,Guantes de inmolación
+71519,4,Protegecabezas de inmolación
+71520,4,Grebas de inmolación
+71521,4,Manto de inmolación
+71522,4,Coselete de inmolación
+71523,4,Manoplas de inmolación
+71524,4,Visera de inmolación
+71525,4,Musleras de inmolación
+71526,4,Guardahombros de inmolación
+71527,4,Manijas de la llama purificadora
+71528,4,Capucha de la llama purificadora
+71529,4,Ataduras de la llama purificadora
+71530,4,Togas de la llama purificadora
+71531,4,Manto de la llama purificadora
+71532,4,Guantes de la llama purificadora
+71533,4,Caperuza de la llama purificadora
+71534,4,Leotardos de la llama purificadora
+71535,4,Vestimentas de la llama purificadora
+71536,4,Jinetas de la llama purificadora
+71537,4,Jubón de fénix oscuro
+71538,4,Guantes de fénix oscuro
+71539,4,Yelmo de fénix oscuro
+71540,4,Musleras de fénix oscuro
+71541,4,Bufas de fénix oscuro
+71542,4,Túnica volcánica en erupción
+71543,4,Manijas volcánicas en erupción
+71544,4,Visera volcánica en erupción
+71545,4,Ataduras volcánicas en erupción
+71546,4,Manto volcánico en erupción
+71547,4,Loriga volcánica en erupción
+71548,4,Mandiletes volcánicos en erupción
+71549,4,Casco volcánico en erupción
+71550,4,Musleras volcánicas en erupción
+71551,4,Bufas volcánicas en erupción
+71552,4,Camisote volcánico en erupción
+71553,4,Guantes volcánicos en erupción
+71554,4,Celada volcánica en erupción
+71555,4,Falda volcánica en erupción
+71556,4,Jinetas volcánicas en erupción
+71557,4,Corcesca de odio
+71558,4,Lava Bolt Crossbow
+71559,4,Aguja de dolor escarlata
+71560,4,Escalpelo esterilizado de Chelley
+71561,4,Cadenas ineludibles
+71562,4,Taladora tajonegro
+71567,4,Reliquia corazóncruel
+71568,4,Fragmento de estrella de la mañana
+71569,4,Brazales de vinculador de llamas
+71570,4,Brazales de relámpago bifurcado
+71571,4,Brazales de llama de ascuas
+71572,4,Guardamuñecas de alma de fuego
+71575,4,Varita de ascua resplandeciente
+71577,4,Reliquia de vinculador de fuego
+71579,4,Varita de pluma de fénix
+71580,4,Sortija de llama de almas
+71581,4,Ataduras quemacráneos
+71582,4,Brazales de ceniza neblinosa
+71583,4,Brazales de verdades imperiosas
+71584,4,Brazales ciclópeos
+71585,4,Brazales de fuerza majestuosa
+71587,4,Fetiche de llama maldita
+71590,4,Figurilla de garra mortal
+71592,4,Estrella deflectora
+71593,4,Cercenagigantes
+71594,4,Manijas de araña corpulenta
+71595,4,Caperuza de araña corpulenta
+71596,4,Leotardos de araña corpulenta
+71597,4,Togas de araña corpulenta
+71598,4,Manto de araña corpulenta
+71599,4,Yelmo del gigante fundido
+71600,4,Placa de batalla del gigante fundido
+71601,4,Guanteletes del gigante fundido
+71602,4,Quijotes del gigante fundido
+71603,4,Espaldares del gigante fundido
+71604,4,Coselete del gigante fundido
+71605,4,Manoplas del gigante fundido
+71606,4,Visera del gigante fundido
+71607,4,Leotardos del gigante fundido
+71608,4,Guardahombros del gigante fundido
+71611,4,Arathar the Eye of Flame
+71612,4,Bufas de llama pura
+71613,4,Faja de llamas
+71614,4,Guantes de halcón de fuego
+71615,4,Martillo del Señor del Fuego
+71616,4,Corona de llamas
+71640,4,Riplimb's Lost Collar
+71641,4,Riplimb's Lost Collar
+71713,4,Stave Icecrown Raid D02 Green
+71774,4,Smoldering Censer of Purity
+71775,4,Smoldering Censer of Purity
+71776,4,Eye of Purification
+71777,4,Eye of Purification
+71778,4,Avool's Incendiary Shanker
+71779,4,Avool's Incendiary Shanker
+71780,4,Zoid's Firelit Greatsword
+71781,4,Zoid's Firelit Greatsword
+71782,4,Shatterskull Bonecrusher
+71783,4,Shatterskull Bonecrusher
+71784,4,Firethorn Mindslicer
+71785,4,Firethorn Mindslicer
+71786,4,Entrail Disgorger
+71787,4,Entrail Disgorger
