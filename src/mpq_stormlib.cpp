@@ -16,7 +16,7 @@ static ArchiveSet gOpenArchives;
 MPQArchive::MPQArchive(wxString filename) : ok(false)
 {
 	wxLogMessage(wxT("Opening %s %s"), filename.Mid(gamePath.Len()).c_str(), isPartialMPQ(filename) ? "(Partial)" : "");
-	g_modelViewer->SetStatusText(wxT("Initiating "+filename+wxT(" Archive")), 0);
+	g_modelViewer->SetStatusText(wxT("Initiating "+filename+wxT(" Archive")));
 
 	if (!SFileOpenArchive(filename.fn_str(), 0, MPQ_OPEN_FORCE_MPQ_V1|MPQ_OPEN_READ_ONLY, &mpq_a )) {
 		int nError = GetLastError();

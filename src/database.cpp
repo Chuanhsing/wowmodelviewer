@@ -1,6 +1,7 @@
 
 #include "database.h"
 #include "mpq.h"
+#include "globalvars.h"
 
 ItemDatabase		items;
 // dbs
@@ -680,6 +681,7 @@ void ItemDatabase::open(wxString filename)
 	wxTextFile fin2;;
 	if (wxFileExists(wxT("discoveryitems.csv")) && fin2.Open(wxT("discoveryitems.csv"))) {
 		wxString line;
+		g_modelViewer->SetStatusText(wxT("Initialing discoveryitems.csv Database..."));
 		for ( line = fin2.GetFirstLine(); !fin2.Eof(); line = fin2.GetNextLine() ) {
 			ItemRecord rec;
 			rec.getLine((char *)line.c_str());
@@ -688,6 +690,7 @@ void ItemDatabase::open(wxString filename)
 			}
 		}
 		fin2.Close();
+		g_modelViewer->fileMenu->Enable(ID_FILE_DISCOVERY_ITEM, false);
 	}
 
 	sort(items.begin(), items.end());

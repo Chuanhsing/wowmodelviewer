@@ -2014,6 +2014,8 @@ void CharControl::ClearItemDialog()
 
 void CharControl::selectItem(ssize_t type, ssize_t slot, ssize_t current, const wxChar *caption)
 {
+	if (items.items.size() == 0 || subclassdb.size() == 0)
+		return;
 	ClearItemDialog();
 
 	numbers.clear();
@@ -2130,6 +2132,8 @@ struct NumStringPair {
 
 void CharControl::selectSet()
 {
+	if (setsdb.size() == 0)
+		return;
 	ClearItemDialog();
 
 	std::vector<NumStringPair> items;
@@ -2165,6 +2169,8 @@ void CharControl::selectSet()
 
 void CharControl::selectStart()
 {
+	if (startdb.size() == 0)
+		return;
 	ClearItemDialog();
 
 	numbers.clear();
@@ -2260,6 +2266,8 @@ void CharControl::selectMount()
 
 void CharControl::selectNPC(ssize_t type)
 {
+	if (npcs.npcs.size() == 0 || npctypedb.size() == 0)
+		return;
 	ClearItemDialog();
 
 	numbers.clear();

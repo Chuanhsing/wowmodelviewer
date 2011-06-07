@@ -368,6 +368,7 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 
 	MPQFile f(tempname);
 	g_modelViewer->modelOpened->Add(tempname);
+	g_modelViewer->SetStatusText(tempname);
 	ok = false;
 	if (f.isEof() || (f.getSize() < sizeof(ModelHeader))) {
 		wxLogMessage(wxT("Error: Unable to load model: [%s]"), tempname.c_str());

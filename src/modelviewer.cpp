@@ -257,10 +257,10 @@ ModelViewer::ModelViewer()
 		*/
 		
 		wxLogMessage(wxT("Setting OpenGL render state..."));
-		SetStatusText(wxT("Setting OpenGL render state..."), 0);
+		SetStatusText(wxT("Setting OpenGL render state..."));
 		video.InitGL();
 
-		SetStatusText(wxEmptyString, 0);
+		SetStatusText(wxEmptyString);
 	} else {
 		wxLogMessage(wxT("Critical Error: Unable to create the main window for the application."));
 		Close(true);
@@ -271,12 +271,20 @@ void ModelViewer::InitMenu()
 {
 	wxLogMessage(wxT("Initiating File Menu.."));
 
-	CreateStatusBar(1);
-	SetStatusText(wxT("Initiating File Menu.."), 0);
+	CreateStatusBar(3);
+	int widths[] = {-1, 100, 50};
+	SetStatusWidths(3, widths);
+	SetStatusText(wxT("Initiating File Menu.."));
 
 	// MENU
 	fileMenu = new wxMenu;
-	fileMenu->Append(ID_LOAD_WOW, wxT("Load WoW"));
+	fileMenu->Append(ID_LOAD_WOW, wxT("Load World of Warcraft"));
+	/*
+	wxMenu *gameMenu = new wxMenu;
+	gameMenu->Append(ID_LOAD_WOW, wxT("World of Warcraft"));
+	fileMenu->Append(ID_CAMERA, wxT("Load Game"), gameMenu);
+	*/
+	fileMenu->AppendSeparator();
 	fileMenu->Append(ID_MODELEXPORT_BASE, wxT("Save File..."));
 	fileMenu->Enable(ID_MODELEXPORT_BASE, false);
 	fileMenu->Append(ID_FILE_SCREENSHOT, wxT("Save Screenshot\tF12"));
@@ -324,8 +332,6 @@ void ModelViewer::InitMenu()
 	// --== Continue regular menu ==--
 	fileMenu->AppendSeparator();
 	fileMenu->Append(ID_FILE_DISCOVERY_ITEM, wxT("Discovery Item"));
-	if (wxFileExists(wxT("discoveryitems.csv")))
-		fileMenu->Enable(ID_FILE_DISCOVERY_ITEM, false);
 	fileMenu->Append(ID_FILE_DISCOVERY_NPC, wxT("Discovery NPC"));
 	fileMenu->AppendSeparator();
 	fileMenu->Append(ID_FILE_MODEL_INFO, wxT("Export ModelInfo.xml"));
@@ -600,7 +606,7 @@ void ModelViewer::InitObjects()
 void ModelViewer::InitDatabase()
 {
 	wxLogMessage(wxT("Initiating Databases..."));
-	SetStatusText(wxT("Initiating Databases..."), 0);
+	SetStatusText(wxT("Initiating Databases..."));
 	initDB = true;
 
 	if (!itemdb.open()) {
@@ -608,7 +614,7 @@ void ModelViewer::InitDatabase()
 		wxLogMessage(wxT("Error: Could not open the Item DB."));
 	}
 
-	SetStatusText(wxT("Initiating items.csv Databases..."), 0);
+	SetStatusText(wxT("Initiating items.csv Databases..."));
 	wxString filename = langName+SLASH+wxT("items.csv");
 	if (!wxFile::Exists(filename))
 		DownloadLocaleFiles();
@@ -707,7 +713,7 @@ void ModelViewer::InitDatabase()
 	else
 		setsdb.cleanup(items);
 
-	SetStatusText(wxT("Initiating npcs.csv Databases..."), 0);
+	SetStatusText(wxT("Initiating npcs.csv Databases..."));
 	filename = langName+SLASH+wxT("npcs.csv");
 	if(!wxFile::Exists(filename))
 		filename = locales[0]+SLASH+wxT("npcs.csv");
@@ -727,7 +733,7 @@ void ModelViewer::InitDatabase()
 		wxLogMessage(wxT("Error: Could not open the SpellVisualEffects DB."));
 
 	wxLogMessage(wxT("Finished initiating database files."));
-	SetStatusText(wxT("Finished initiating database files."), 0);
+	SetStatusText(wxT("Finished initiating database files."));
 }
 
 void ModelViewer::InitDocking()
@@ -1405,6 +1411,7 @@ wxString ModelViewer::InitMPQArchives()
 	if (f.isEof()) {
 		f.close();
 		wxLogMessage(wxT("Unable to gather TOC data."));
+		SetStatusText(wxT("Unable to gather TOC data."));
 		return wxT("Could not read data from MPQ files.\nPlease make sure World of Warcraft is not running.");
 	}
 	f.seek(51); // offset to "## Interface: "
@@ -1412,6 +1419,7 @@ wxString ModelViewer::InitMPQArchives()
 	memset(toc,'\0', 6);
 	f.read(toc, 5);
 	f.close();
+	SetStatusText(wxString((char *)toc, wxConvUTF8), 1);
 	wxLogMessage(wxT("Loaded Content TOC: v%c.%c%c.%c%c"), toc[0], toc[1], toc[2], toc[3], toc[4]);
 	if (wxString((char *)toc, wxConvUTF8) > wxT("99999")) {		// The 99999 should be updated if the TOC ever gets that high.
 		wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("There was a problem reading the TOC number.\nAre you sure to quit?"), 
@@ -1424,19 +1432,19 @@ wxString ModelViewer::InitMPQArchives()
 	// If we support more than 1 TOC version, place the others here.
 	if (strncmp((char*)toc, "30100", 5) == 0) {
 		if (gameVersion != 30100){
-			wxMessageBox(info,wxT("Compatible Version v3.01.00 Found."),wxOK);
+			wxMessageBox(info, wxT("Compatible Version v3.01.00 Found."),wxOK);
 			gameVersion = 30100;
 		}
 	} else if (strncmp((char*)toc, "30200", 5) == 0) {
 		wxLogMessage(info);
 		if (gameVersion != 30200){
-			wxMessageBox(info,wxT("Compatible Version v3.02.00 Found."),wxOK);
+			wxMessageBox(info, wxT("Compatible Version v3.02.00 Found."),wxOK);
 			gameVersion = 30200;
 		}
 	} else if (strncmp((char*)toc, "30300", 5) == 0) {
 		wxLogMessage(info);
 		if (gameVersion != 30300){
-			wxMessageBox(info,wxT("Compatible Version v3.03.00 Found."),wxOK);
+			wxMessageBox(info, wxT("Compatible Version v3.03.00 Found."),wxOK);
 			gameVersion = 30300;
 		}
 	} else if (strncmp((char*)toc, "40000", 5) == 0 || strncmp((char*)toc, "40100", 5) == 0 || strncmp((char*)toc, "40200", 5) == 0) {
@@ -1445,6 +1453,7 @@ wxString ModelViewer::InitMPQArchives()
 	} else { // else if not our primary supported edition...
 		wxString info = wxT("WoW Model Viewer does not support your version of World of Warcraft.\nPlease update your World of Warcraft client soon.");
 		wxLogMessage(wxT("Notice: ") + info);
+		SetStatusText(wxT("WoW Model Viewer does not support your version of World of Warcraft."));
 
 		return info;
 	}
@@ -1463,6 +1472,7 @@ wxString ModelViewer::InitMPQArchives()
 				wxString version = child->GetPropVal(wxT("version"), wxT("0"));
 				if (version != wxT("0")) {
 					wxLogMessage(wxT("Loaded Content Version: %s"), version.c_str());
+					SetStatusText(wxString((char *)toc, wxConvUTF8)+wxT(".")+version, 1);
 				}
 			}
 		}
@@ -1476,7 +1486,7 @@ wxString ModelViewer::Init()
 {
 	// Initiate other stuff
 	wxLogMessage(wxT("Initiating Archives..."));
-	SetStatusText(wxT("Initiating Archives..."), 0);
+	SetStatusText(wxT("Initiating Archives..."));
 
 	// more detail logging, this is so when someone has a problem and they send their log info
 	wxLogMessage(wxT("Game Data Path: %s"), gamePath.c_str());
@@ -1488,16 +1498,16 @@ wxString ModelViewer::Init()
 	// Load the games MPQ files into memory
 	wxString mpqarch = InitMPQArchives();
 	wxString result = mpqarch;
-	if (mpqarch == wxEmptyString){
+	if (mpqarch.IsEmpty()){
 		result = wxT("Successfully Initialized.");
 	}
 	wxLogMessage(wxT("InitMPQArchives result: %s"), result.c_str());
 
-	if (mpqarch != wxEmptyString){
+	if (!mpqarch.IsEmpty()){
 		return mpqarch;
 	}
 
-	SetStatusText(wxT("Initiating File Control..."), 0);
+	SetStatusText(wxT("Initiating File Control..."));
 	fileControl->Init(this);
 
 	if (charControl->Init() == false){
@@ -1967,6 +1977,8 @@ void ModelViewer::LoadWoW()
 			langOffset = langID;
 	}
 
+	SetStatusText(langName, 2);
+
 	// load our World of Warcraft mpq archives
 	wxString initvar = Init();
 	if (initvar != wxEmptyString){
@@ -1990,9 +2002,9 @@ void ModelViewer::LoadWoW()
 	if (!initDB) {
 		wxMessageBox(wxT("Some DBC files could not be loaded.  These files are vital to being able to render models correctly.\nPlease make sure you are loading the 'Locale-xxxx.MPQ' file.\nFile list has been disabled until you are able to correct this problem."), wxT("DBC Error"));
 		fileControl->Disable();
-		SetStatusText(wxT("Some DBC files could not be loaded."), 0);
+		SetStatusText(wxT("Some DBC files could not be loaded."));
 	} else {
-		SetStatusText(wxT("Initial WoW Done."), 0);
+		SetStatusText(wxT("Initial WoW Done."));
 		fileMenu->Enable(ID_LOAD_WOW, false);
 	}
 }
@@ -2939,6 +2951,8 @@ void ModelViewer::ModelInfo()
 
 void DiscoveryNPC()
 {
+	if (skindb.size() == 0)
+		return;
 	wxString name, ret;
 	// 1. from creaturedisplayinfo.dbc
 	for (CreatureSkinDB::Iterator it = skindb.begin(); it != skindb.end(); ++it) {
@@ -2952,16 +2966,23 @@ void DiscoveryNPC()
 		}
 	}
 	// 2. from creaturedisplayinfoextra.dbc
+	wxLogMessage(wxT("Discovery npc done."));
+	g_modelViewer->SetStatusText(wxT("Discovery npc done."));
+
+	g_modelViewer->fileMenu->Enable(ID_FILE_DISCOVERY_NPC, false);
 }
 
 void DiscoveryItem()
 {
+	if (setsdb.size() == 0)
+		return;
 	wxString name, ret;
 	items.cleanupDiscovery();
 	wxFFileOutputStream fs (wxT("discoveryitems.csv"));
 
 	if (!fs.IsOk()) {
 		wxLogMessage(wxT("Error: Unable to open file 'discoveryitems.csv'. Could not discovery item."));
+		return;
 	}
 
     wxTextOutputStream f (fs);
@@ -3019,9 +3040,11 @@ void DiscoveryItem()
 	}
 	// 4. from model dir
 	// 5. from blp dir
-	wxLogMessage(wxT("Discovery done."));
+	wxLogMessage(wxT("Discovery item done."));
+	g_modelViewer->SetStatusText(wxT("Discovery item done."));
 	fs.Close();
 	items.cleanup(itemdisplaydb);
+	g_modelViewer->fileMenu->Enable(ID_FILE_DISCOVERY_ITEM, false);
 }
 
 void ModelViewer::OnExport(wxCommandEvent &event)

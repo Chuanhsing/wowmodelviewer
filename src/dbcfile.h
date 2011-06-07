@@ -125,9 +125,10 @@ public:
 	/// Get begin iterator over records
 	Iterator end();
 	/// Trivial
-	size_t getRecordCount() const { return recordCount;}
+	size_t getRecordCount() const { return recordCount; }
 	size_t getFieldCount() const { return fieldCount; }
 	wxString getFilename() { return filename; }
+	size_t size() const { return recordCount; }
 
 private:
 	wxString filename;

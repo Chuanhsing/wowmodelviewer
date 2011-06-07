@@ -7,6 +7,11 @@
 DBCFile::DBCFile(const wxString &filename) : filename(filename)
 {
 	data = NULL;
+	stringTable = NULL;
+	recordSize = 0;
+	recordCount = 0;
+	fieldCount = 0;
+	stringSize = 0;
 }
 
 bool DBCFile::open()
@@ -17,7 +22,7 @@ bool DBCFile::open()
 		filename = filename.BeforeLast('.') + wxT(".db2");
 	}
 
-	g_modelViewer->SetStatusText(wxT("Initiating ")+filename+wxT(" Database..."), 0);
+	g_modelViewer->SetStatusText(wxT("Initiating ")+filename+wxT(" Database..."));
 	MPQFile f(filename);
 	// Need some error checking, otherwise an unhandled exception error occurs
 	// if people screw with the data path.
@@ -81,18 +86,18 @@ DBCFile::~DBCFile()
 
 DBCFile::Record DBCFile::getRecord(size_t id)
 {
-	assert(data);
+	//assert(data);
 	return Record(*this, data + id*recordSize);
 }
 
 DBCFile::Iterator DBCFile::begin()
 {
-	assert(data);
+	//assert(data);
 	return Iterator(*this, data);
 }
 DBCFile::Iterator DBCFile::end()
 {
-	assert(data);
+	//assert(data);
 	return Iterator(*this, stringTable);
 }
 
