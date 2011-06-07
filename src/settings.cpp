@@ -144,6 +144,8 @@ void Settings_Page1::Update()
 	chkbox[CHECK_SHOWPARTICLE]->SetValue(bShowParticle);
 	chkbox[CHECK_ZEROPARTICLE]->SetValue(bZeroParticle);
 	chkbox[CHECK_ALTERNATE]->SetValue(bAlternate);
+
+	mpqList->Set(mpqArchives);
 }
 
 Settings_Page2::Settings_Page2(wxWindow* parent, wxWindowID id)
