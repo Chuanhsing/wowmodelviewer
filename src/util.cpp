@@ -57,7 +57,7 @@ wxArrayString modelExport_M3_AnimNames;
 long langID = -1;
 wxString langName;
 long langOffset = -1;
-long interfaceID = -1;
+long interfaceID = 0;
 int ssCounter = 100; // ScreenShot Counter
 int imgFormat = 0;
 
@@ -230,7 +230,7 @@ void getGamePath()
 			gamePath = wxDirSelector(wxT("Please select your World of Warcraft folder:"), gamePath);
 		}
 	}
-	if (gamePath.Last() != SLASH)
+	if (gamePath != wxEmptyString && gamePath.Last() != SLASH)
 		gamePath.Append(SLASH);
 	gamePath.Append(wxT("Data\\"));
 #elif _MAC // Mac OS X

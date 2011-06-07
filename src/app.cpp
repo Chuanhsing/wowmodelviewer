@@ -1,6 +1,6 @@
 #include "app.h"
-#include "wx/image.h"
-#include "wx/splash.h"
+#include <wx/image.h>
+#include <wx/splash.h>
 #include <wx/mstream.h>
 #include "UserSkins.h"
 #include "resource1.h"
@@ -92,8 +92,9 @@ bool WowModelViewApp::OnInit()
 #ifdef _WINDOWS
 	// This chunk of code is all related to locale translation (if a translation is available).
 	// Only use locale for non-english?
-	wxString fn = wxT("mo");
-	fn = fn+SLASH+locales[interfaceID]+wxT(".mo");
+	wxString fn = wxT("mo")+SLASH+locales[0]+wxT(".mo");
+	if (interfaceID >= 0)
+		fn = wxT("mo")+SLASH+locales[interfaceID]+wxT(".mo");
 	if (wxFileExists(fn))
 	{
 		locale.Init(langIds[interfaceID], wxLOCALE_CONV_ENCODING);
@@ -369,7 +370,9 @@ void searchMPQs(bool firstTime)
 			if (wxDir::Exists(localePath))
 				avaiLocales.Add(locales[i]);
 		}
-		if (avaiLocales.size() == 1) // only 1 locale
+		if (avaiLocales.size() == 0) // failed to find locale
+			return;
+		else if (avaiLocales.size() == 1) // only 1 locale
 			langName = avaiLocales[0];
 		else
 			langName = wxGetSingleChoice(wxT("Please select a Locale:"), wxT("Locale"), avaiLocales);
@@ -580,7 +583,7 @@ bool WowModelViewApp::LoadSettings()
 	pConfig->SetPath(wxT("/Locale"));
 	pConfig->Read(wxT("LanguageID"), &langID, -1);
 	pConfig->Read(wxT("LanguageName"), &langName, wxEmptyString);
-	pConfig->Read(wxT("InterfaceID"), &interfaceID, -1);
+	pConfig->Read(wxT("InterfaceID"), &interfaceID, 0);
 
 	// Application settings
 	pConfig->SetPath(wxT("/Settings"));
@@ -615,58 +618,6 @@ bool WowModelViewApp::LoadSettings()
 	pConfig->Read(wxT("ModelExportM3TexturePath"), &modelExport_M3_TexturePath, wxEmptyString);
 
 
-	// Data path and mpq archive stuff
-	wxString archives;
-	pConfig->Read(wxT("MPQFiles"), &archives);
-	
-	wxStringTokenizer strToken(archives, wxT(";"), wxTOKEN_DEFAULT);
-	while (strToken.HasMoreTokens()) {
-		mpqArchives.Add(strToken.GetNextToken());
-	}
-
-	if (gamePath.IsEmpty() || !wxDirExists(gamePath)) {
-		getGamePath();
-		mpqArchives.Clear();
-	}
-
-	if (gamePath.Last() != SLASH)
-		gamePath.Append(SLASH);
-
-	if (mpqArchives.GetCount()==0) {
-		searchMPQs(true);
-	}
-
-	// if we can't search any mpqs
-	if (mpqArchives.GetCount()==0) {
-		wxLogMessage(wxT("World of Warcraft Data Directory Not Found. Returned GamePath: %s"),gamePath.c_str());
-		wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("Fatal Error: Could not find your World of Warcraft Data folder."), wxT("World of Warcraft Not Found"), wxOK | wxICON_ERROR);
-		dial->ShowModal();
-		return true;
-	}
-
-	// Clear our ini file config object
-	wxDELETE( pConfig );
-
-    if (langID == -1) {
-        // the arrays should be in sync
-        wxCOMPILE_TIME_ASSERT(WXSIZEOF(langNames) == WXSIZEOF(langIds), LangArraysMismatch);
-        langID = wxGetSingleChoiceIndex(wxT("Please select a language:"), wxT("Language"), WXSIZEOF(langNames), langNames);
-
-		SaveSettings();
-	}
-
-	// initial interfaceID as langID
-	if (interfaceID == -1)
-		interfaceID = langID;
-
-	// initial langOffset
-	if (langOffset == -1) {
-		// gameVersion VERSION_CATACLYSM remove all other language strings
-		if (gameVersion >= VERSION_CATACLYSM)
-			langOffset = 0;
-		else
-			langOffset = langID;
-	}
 	return false;
 }
 

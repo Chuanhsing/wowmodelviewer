@@ -1,6 +1,7 @@
 
 #include <wx/regex.h>
 #include <wx/txtstrm.h>
+#include <wx/tokenzr.h>
 
 #include "modelviewer.h"
 #include "globalvars.h"
@@ -8,6 +9,7 @@
 #include "exporters.h"
 #include "UserSkins.h"
 #include "util.h"
+#include "app.h"
 
 // default colour values
 const static float def_ambience[4] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -1911,6 +1913,60 @@ void ModelViewer::OnGameToggle(wxCommandEvent &event)
 
 void ModelViewer::LoadWoW()
 {
+	wxFileConfig *pConfig = new wxFileConfig(wxT("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
+	pConfig->SetPath(wxT("/Settings"));
+
+	// Data path and mpq archive stuff
+	wxString archives;
+	pConfig->Read(wxT("MPQFiles"), &archives);
+	
+	wxStringTokenizer strToken(archives, wxT(";"), wxTOKEN_DEFAULT);
+	while (strToken.HasMoreTokens()) {
+		mpqArchives.Add(strToken.GetNextToken());
+	}
+
+	// Clear our ini file config object
+	wxDELETE( pConfig );
+
+	if (gamePath.IsEmpty() || !wxDirExists(gamePath)) {
+		getGamePath();
+		mpqArchives.Clear();
+	}
+
+	if (gamePath != wxEmptyString && gamePath.Last() != SLASH)
+		gamePath.Append(SLASH);
+
+	if (mpqArchives.GetCount()==0) {
+		searchMPQs(true);
+	}
+
+	// if we can't search any mpqs
+	if (mpqArchives.GetCount()==0) {
+		wxLogMessage(wxT("World of Warcraft Data Directory Not Found. Returned GamePath: %s"), gamePath.c_str());
+		wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("Fatal Error: Could not find your World of Warcraft Data folder."), wxT("World of Warcraft Not Found"), wxOK | wxICON_ERROR);
+		dial->ShowModal();
+		return;
+	}
+
+    if (langID == -1 && WXSIZEOF(langNames) > 0) {
+        // the arrays should be in sync
+        wxCOMPILE_TIME_ASSERT(WXSIZEOF(langNames) == WXSIZEOF(langIds), LangArraysMismatch);
+        langID = wxGetSingleChoiceIndex(wxT("Please select a language:"), wxT("Language"), WXSIZEOF(langNames), langNames);
+	}
+
+	// initial interfaceID as langID
+	if (interfaceID == 0 && langID >= 0)
+		interfaceID = langID;
+
+	// initial langOffset
+	if (langOffset == -1) {
+		// gameVersion VERSION_CATACLYSM remove all other language strings
+		if (gameVersion >= VERSION_CATACLYSM)
+			langOffset = 0;
+		else
+			langOffset = langID;
+	}
+
 	// load our World of Warcraft mpq archives
 	wxString initvar = Init();
 	if (initvar != wxEmptyString){
