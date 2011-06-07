@@ -1,10 +1,13 @@
 
+#include <wx/regex.h>
+#include <wx/txtstrm.h>
+
 #include "modelviewer.h"
 #include "globalvars.h"
 #include "mpq.h"
 #include "exporters.h"
-#include <wx/regex.h>
-#include <wx/txtstrm.h>
+#include "UserSkins.h"
+#include "util.h"
 
 // default colour values
 const static float def_ambience[4] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -20,6 +23,7 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	//EVT_SIZE(ModelViewer::OnSize)
 
 	// File menu
+	EVT_MENU(ID_LOAD_WOW, ModelViewer::OnGameToggle)
 	EVT_MENU(ID_VIEW_NPC, ModelViewer::OnCharToggle)
 	EVT_MENU(ID_VIEW_ITEM, ModelViewer::OnCharToggle)
 	EVT_MENU(ID_FILE_SCREENSHOT, ModelViewer::OnSave)
@@ -174,7 +178,6 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 
 END_EVENT_TABLE()
 
-
 ModelViewer::ModelViewer()
 {
 	// our main class objects
@@ -239,26 +242,23 @@ ModelViewer::ModelViewer()
 		Refresh();
 		Update();
 
-		// load our World of Warcraft mpq archives
-		wxString initvar = Init();
-		if (initvar != wxEmptyString){
-			wxString info = wxT("Fatal Error: ") + initvar;
-			wxLogMessage(info);
-			wxMessageDialog *dial = new wxMessageDialog(NULL, info, wxT("Fatal Error"), wxOK | wxICON_ERROR);
-			dial->ShowModal();
-			Close(true);
-			return;
+		/*
+		// Set our display mode	
+		//if (video.GetCompatibleWinMode(video.curCap)) {
+			video.SetMode();
+			if (!video.render) // Something bad must of happened - find a new working display mode
+				video.GetAvailableMode();
+		} else {
+			wxLogMessage(wxT("Error: Failed to find a compatible graphics mode.  Finding first available display mode..."));
+			video.GetAvailableMode(); // Get first available display mode that supports the current desktop colour bitdepth
 		}
+		*/
+		
+		wxLogMessage(wxT("Setting OpenGL render state..."));
+		SetStatusText(wxT("Setting OpenGL render state..."), 0);
+		video.InitGL();
 
-		InitDatabase();
-		// --
-
-		// Error check
-		if (!initDB) {
-			wxMessageBox(wxT("Some DBC files could not be loaded.  These files are vital to being able to render models correctly.\nPlease make sure you are loading the 'Locale-xxxx.MPQ' file.\nFile list has been disabled until you are able to correct this problem."), wxT("DBC Error"));
-			fileControl->Disable();
-		}
-
+		SetStatusText(wxEmptyString, 0);
 	} else {
 		wxLogMessage(wxT("Critical Error: Unable to create the main window for the application."));
 		Close(true);
@@ -268,9 +268,13 @@ ModelViewer::ModelViewer()
 void ModelViewer::InitMenu()
 {
 	wxLogMessage(wxT("Initiating File Menu.."));
-	
+
+	CreateStatusBar(1);
+	SetStatusText(wxT("Initiating File Menu.."), 0);
+
 	// MENU
 	fileMenu = new wxMenu;
+	fileMenu->Append(ID_LOAD_WOW, wxT("Load WoW"));
 	fileMenu->Append(ID_MODELEXPORT_BASE, wxT("Save File..."));
 	fileMenu->Enable(ID_MODELEXPORT_BASE, false);
 	fileMenu->Append(ID_FILE_SCREENSHOT, wxT("Save Screenshot\tF12"));
@@ -594,12 +598,15 @@ void ModelViewer::InitObjects()
 void ModelViewer::InitDatabase()
 {
 	wxLogMessage(wxT("Initiating Databases..."));
+	SetStatusText(wxT("Initiating Databases..."), 0);
 	initDB = true;
 
 	if (!itemdb.open()) {
 		initDB = false;
 		wxLogMessage(wxT("Error: Could not open the Item DB."));
 	}
+
+	SetStatusText(wxT("Initiating items.csv Databases..."), 0);
 	wxString filename = langName+SLASH+wxT("items.csv");
 	if (!wxFile::Exists(filename))
 		DownloadLocaleFiles();
@@ -615,59 +622,76 @@ void ModelViewer::InitDatabase()
 		initDB = false;
 		wxLogMessage(wxT("Error: Could not open the SkyBox DB."));
 	}
+
 	if (!spellitemenchantmentdb.open()) {
 		initDB = false;
 		wxLogMessage(wxT("Error: Could not open the Spell Item Enchanement DB."));
 	}
+
 	if (!itemvisualsdb.open()) {
 		initDB = false;
 		wxLogMessage(wxT("Error: Could not open the Item Visuals DB."));
 	}
+
 	if (!animdb.open()) {
 		initDB = false;
 		wxLogMessage(wxT("Error: Could not open the Animation DB."));
 	}
+
 	if (!modeldb.open()) {
 		initDB = false;
 		wxLogMessage(wxT("Error: Could not open the Creatures DB."));
 	}
+
 	if (!skindb.open()) {
 		initDB = false;
 		wxLogMessage(wxT("Error: Could not open the CreatureDisplayInfo DB."));
 	}
+
 	if(!hairdb.open()) {
 		initDB = false;
 		wxLogMessage(wxT("Error: Could not open the Hair Geoset DB."));
 	}
+
 	if(!chardb.open()) {
 		initDB = false;
 		wxLogMessage(wxT("Error: Could not open the Character DB."));
 	}
+
 	if(!racedb.open()) {
 		initDB = false;
 		wxLogMessage(wxT("Error: Could not open the Char Races DB."));
 	}
+
 	if(!classdb.open()) {
 		initDB = false;
 		wxLogMessage(wxT("Error: Could not open the Char Classes DB."));
 	}
+
 	if(!facialhairdb.open()) {
 		initDB = false;
 		wxLogMessage(wxT("Error: Could not open the Char Facial Hair DB."));
 	}
+
 	if(!visualdb.open())
 		wxLogMessage(wxT("Error: Could not open the ItemVisuals DB."));
+
 	if(!effectdb.open())
 		wxLogMessage(wxT("Error: Could not open the ItemVisualEffects DB."));
+
 	if(!subclassdb.open())
 		wxLogMessage(wxT("Error: Could not open the Item Subclasses DB."));
+
 	if(!startdb.open())
 		wxLogMessage(wxT("Error: Could not open the Start Outfit Sets DB."));
 	//if(!helmetdb.open()) return false;
+
 	if(!npcdb.open()) 
 		wxLogMessage(wxT("Error: Could not open the Start Outfit NPC DB."));
+
 	if(!npctypedb.open())
 		wxLogMessage(wxT("Error: Could not open the Creature Type DB."));
+
 	if(!camcinemadb.open())
 		wxLogMessage(wxT("Error: Could not open the Cinema Camera DB."));
 
@@ -681,12 +705,13 @@ void ModelViewer::InitDatabase()
 	else
 		setsdb.cleanup(items);
 
+	SetStatusText(wxT("Initiating npcs.csv Databases..."), 0);
 	filename = langName+SLASH+wxT("npcs.csv");
 	if(!wxFile::Exists(filename))
 		filename = locales[0]+SLASH+wxT("npcs.csv");
-	if(wxFile::Exists(filename))
+	if(wxFile::Exists(filename)) {
 		npcs.open(filename);
-	else {
+	} else {
 		NPCRecord rec("26499,24949,7,Arthas");
 		if (rec.model > 0) {
 			npcs.npcs.push_back(rec);
@@ -700,6 +725,7 @@ void ModelViewer::InitDatabase()
 		wxLogMessage(wxT("Error: Could not open the SpellVisualEffects DB."));
 
 	wxLogMessage(wxT("Finished initiating database files."));
+	SetStatusText(wxT("Finished initiating database files."), 0);
 }
 
 void ModelViewer::InitDocking()
@@ -1365,6 +1391,7 @@ wxString ModelViewer::InitMPQArchives()
 {
 	wxString path;
 
+	archives.clear();
 	for (size_t i=0; i<mpqArchives.GetCount(); i++) {
 		if (wxFileName::FileExists(mpqArchives[i])) {
 			archives.push_back(new MPQArchive(mpqArchives[i]));
@@ -1445,23 +1472,9 @@ wxString ModelViewer::InitMPQArchives()
 
 wxString ModelViewer::Init()
 {
-	/*
-	// Set our display mode	
-	//if (video.GetCompatibleWinMode(video.curCap)) {
-		video.SetMode();
-		if (!video.render) // Something bad must of happened - find a new working display mode
-			video.GetAvailableMode();
-	} else {
-		wxLogMessage(wxT("Error: Failed to find a compatible graphics mode.  Finding first available display mode..."));
-		video.GetAvailableMode(); // Get first available display mode that supports the current desktop colour bitdepth
-	}
-	*/
-	
-	wxLogMessage(wxT("Setting OpenGL render state..."));
-	video.InitGL();
-
 	// Initiate other stuff
-	wxLogMessage(wxT("Initiating Archives...\n"));
+	wxLogMessage(wxT("Initiating Archives..."));
+	SetStatusText(wxT("Initiating Archives..."), 0);
 
 	// more detail logging, this is so when someone has a problem and they send their log info
 	wxLogMessage(wxT("Game Data Path: %s"), gamePath.c_str());
@@ -1482,6 +1495,7 @@ wxString ModelViewer::Init()
 		return mpqarch;
 	}
 
+	SetStatusText(wxT("Initiating File Control..."), 0);
 	fileControl->Init(this);
 
 	if (charControl->Init() == false){
@@ -1886,6 +1900,45 @@ void ModelViewer::OnSetEquipment(wxCommandEvent &event)
 		charControl->OnButton(event);
 
 	UpdateControls();
+}
+
+void ModelViewer::OnGameToggle(wxCommandEvent &event)
+{
+	int ID = event.GetId();
+	if (ID == ID_LOAD_WOW)
+		LoadWoW();
+}
+
+void ModelViewer::LoadWoW()
+{
+	// load our World of Warcraft mpq archives
+	wxString initvar = Init();
+	if (initvar != wxEmptyString){
+		wxString info = wxT("Fatal Error: ") + initvar;
+		wxLogMessage(info);
+		wxMessageDialog *dial = new wxMessageDialog(NULL, info, wxT("Fatal Error"), wxOK | wxICON_ERROR);
+		dial->ShowModal();
+		//Close(true);
+		return;
+	}
+
+	// Load user skins 
+	wxString userPath = wxT("userSettings");
+	gUserSkins.LoadFile(userPath + SLASH + wxT("Skins.txt"));
+	if (!gUserSkins.Loaded())
+		wxLogMessage(wxT("Warning: Failed to load user skins"));
+
+	InitDatabase();
+
+	// Error check
+	if (!initDB) {
+		wxMessageBox(wxT("Some DBC files could not be loaded.  These files are vital to being able to render models correctly.\nPlease make sure you are loading the 'Locale-xxxx.MPQ' file.\nFile list has been disabled until you are able to correct this problem."), wxT("DBC Error"));
+		fileControl->Disable();
+		SetStatusText(wxT("Some DBC files could not be loaded."), 0);
+	} else {
+		SetStatusText(wxT("Initial WoW Done."), 0);
+		fileMenu->Enable(ID_LOAD_WOW, false);
+	}
 }
 
 void ModelViewer::OnCharToggle(wxCommandEvent &event)

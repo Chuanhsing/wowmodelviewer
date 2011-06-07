@@ -89,12 +89,6 @@ bool WowModelViewApp::OnInit()
 		return false;
 	}
 
-	// Load user skins 
-	gUserSkins.LoadFile(userPath + SLASH + wxT("Skins.txt"));
-	if (!gUserSkins.Loaded())
-		wxLogMessage(wxT("Warning: Failed to load user skins"));
-
-
 #ifdef _WINDOWS
 	// This chunk of code is all related to locale translation (if a translation is available).
 	// Only use locale for non-english?

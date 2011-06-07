@@ -2,6 +2,7 @@
 #include "mpq.h"
 #include "util.h"
 #include "enums.h"
+#include "globalvars.h"
 
 DBCFile::DBCFile(const wxString &filename) : filename(filename)
 {
@@ -16,6 +17,7 @@ bool DBCFile::open()
 		filename = filename.BeforeLast('.') + wxT(".db2");
 	}
 
+	g_modelViewer->SetStatusText(wxT("Initiating ")+filename+wxT(" Database..."), 0);
 	MPQFile f(filename);
 	// Need some error checking, otherwise an unhandled exception error occurs
 	// if people screw with the data path.

@@ -292,6 +292,14 @@ void CharControl::UpdateModel(Attachment *a)
 	else
 		cd.showFeet = false;
 
+	// hardcoded
+	if (0 && race == RACE_WORGEN) {
+		model->showGeosets[3] = false;
+		model->showGeosets[4] = false;
+		model->showGeosets[72] = false;
+		model->showGeosets[81] = false;
+	}
+
 	// get max values
 	cd.maxSkinColor = chardb.getColorsFor(race, gender, CharSectionsDB::SkinType, 0, cd.useNPC);
 	if (cd.maxSkinColor==0 && cd.useNPC==1) {

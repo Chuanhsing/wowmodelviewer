@@ -127,6 +127,7 @@ public:
 	/// Trivial
 	size_t getRecordCount() const { return recordCount;}
 	size_t getFieldCount() const { return fieldCount; }
+	wxString getFilename() { return filename; }
 
 private:
 	wxString filename;

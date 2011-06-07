@@ -50,7 +50,7 @@
 
 // defines
 #define APP_TITLE wxT("World of Warcraft Model Viewer")
-#define APP_VERSION wxT("v0.7.0.1 r575")			// Revision number should match the revision number on GoogleCode.
+#define APP_VERSION wxT("v0.7.0.1 r578")			// Revision number should match the revision number on GoogleCode.
 #define APP_BUILDNAME wxT("Fickle Felguard")		// Fun thing for developers to play with. Should change with each Main Release. (Not counting DEV WORK editions)
 /*
 	--==List of Build Name ideas==--	(Feel free to add!)
@@ -223,6 +223,9 @@ public:
 	void ModelInfo();
 
 	Vec3D DoSetColor(const Vec3D &defColor);
+
+	void OnGameToggle(wxCommandEvent &event);
+	void LoadWoW();
 };
 
 #endif
