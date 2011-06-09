@@ -23,50 +23,92 @@
 	#endif
 #endif
 
-// Link to our libs.
+// Link to our Windows libs.
 #ifdef _WINDOWS
 	#pragma message("     Adding library: opengl32.lib" ) 
 	#pragma comment( lib, "opengl32.lib" )	// OpenGL API
 	#pragma message("     Adding library: glu32.lib" ) 
 	#pragma comment( lib, "glu32.lib" ) // OpenGL Utilities
 	#define GLEW_BUILD
-	#ifdef _DEBUG // GLEW lib
-		#ifdef _WIN64
-			#pragma message("     Adding library: glew64d.lib" ) 
-			#pragma comment( lib, "glew64d.lib" )
-		#else
-			#pragma message("     Adding library: glew32d.lib" ) 
-			#pragma comment( lib, "glew32d.lib" )
+
+	// Build-specific Libs
+	#ifdef _DEBUG
+		#if _MSC_VER==1600		// If VC100 (VS2010)
+			#ifdef _WIN64
+				#pragma message("     Adding library: glew64d_VC100.lib" ) 
+				#pragma comment( lib, "glew64d_VC100.lib" )
+				#pragma message("     Adding library: fbxsdk_20113_amd64d_VC100.lib" ) 
+				#pragma comment( lib, "fbxsdk_20113_amd64d_VC100.lib" )
+			#else
+				#pragma message("     Adding library: glew32d_VC100.lib" ) 
+				#pragma comment( lib, "glew32d_VC100.lib" )
+				#pragma message("     Adding library: fbxsdk_20113d_VC100.lib" ) 
+				#pragma comment( lib, "fbxsdk_20113d_VC100.lib" )
+			#endif
+		#elif _MSC_VER==1500	// If VC90 (VS2008)
+			#ifdef _WIN64
+				#pragma message("     Adding library: glew64d_VC90.lib" ) 
+				#pragma comment( lib, "glew64d_VC90.lib" )
+				#pragma message("     Adding library: fbxsdk_20113_amd64d_VC90.lib" ) 
+				#pragma comment( lib, "fbxsdk_20113_amd64d_VC90.lib" )
+			#else
+				#pragma message("     Adding library: glew32d_VC90.lib" ) 
+				#pragma comment( lib, "glew32d_VC90.lib" )
+				#pragma message("     Adding library: fbxsdk_20113d_VC90.lib" ) 
+				#pragma comment( lib, "fbxsdk_20113d_VC90.lib" )
+			#endif
+		#else					// Otherwise
+			#ifdef _WIN64
+				#pragma message("     Adding library: glew64d.lib" ) 
+				#pragma comment( lib, "glew64d.lib" )
+				#pragma message("     Adding library: fbxsdk_20113_amd64d.lib" ) 
+				#pragma comment( lib, "fbxsdk_20113_amd64d.lib" )
+			#else
+				#pragma message("     Adding library: glew32d.lib" ) 
+				#pragma comment( lib, "glew32d.lib" )
+				#pragma message("     Adding library: fbxsdk_20113d.lib" ) 
+				#pragma comment( lib, "fbxsdk_20113d.lib" )
+			#endif
 		#endif
-	#else
-		#ifdef _WIN64
-			#pragma message("     Adding library: glew64.lib" ) 
-			#pragma comment( lib, "glew64.lib" )
-		#else
-			#pragma message("     Adding library: glew32.lib" ) 
-			#pragma comment( lib, "glew32.lib" )
+	#else	// If Release
+		#if _MSC_VER==1600		// If VC100 (VS2010)
+			#ifdef _WIN64
+				#pragma message("     Adding library: glew64_VC100.lib" ) 
+				#pragma comment( lib, "glew64_VC100.lib" )
+				#pragma message("     Adding library: fbxsdk_20113_amd64_VC100.lib" ) 
+				#pragma comment( lib, "fbxsdk_20113_amd64_VC100.lib" )
+			#else
+				#pragma message("     Adding library: glew32_VC100.lib" ) 
+				#pragma comment( lib, "glew32_VC100.lib" )
+				#pragma message("     Adding library: fbxsdk_20113_VC100.lib" ) 
+				#pragma comment( lib, "fbxsdk_20113_VC100.lib" )
+			#endif
+		#elif _MSC_VER==1500	// If VC90 (VS2008)
+			#ifdef _WIN64
+				#pragma message("     Adding library: glew64_VC90.lib" ) 
+				#pragma comment( lib, "glew64_VC90.lib" )
+				#pragma message("     Adding library: fbxsdk_20113_amd64_VC90.lib" ) 
+				#pragma comment( lib, "fbxsdk_20113_amd64_VC90.lib" )
+			#else
+				#pragma message("     Adding library: glew32_VC90.lib" ) 
+				#pragma comment( lib, "glew32_VC90.lib" )
+				#pragma message("     Adding library: fbxsdk_20113_VC90.lib" ) 
+				#pragma comment( lib, "fbxsdk_20113_VC90.lib" )
+			#endif
+		#else					// Otherwise
+			#ifdef _WIN64
+				#pragma message("     Adding library: glew64.lib" ) 
+				#pragma comment( lib, "glew64.lib" )
+				#pragma message("     Adding library: fbxsdk_20113_amd64.lib" ) 
+				#pragma comment( lib, "fbxsdk_20113_amd64.lib" )
+			#else
+				#pragma message("     Adding library: glew32.lib" ) 
+				#pragma comment( lib, "glew32.lib" )
+				#pragma message("     Adding library: fbxsdk_20113.lib" ) 
+				#pragma comment( lib, "fbxsdk_20113.lib" )
+			#endif
 		#endif
-	#endif
-	
-	// FBX Libraries
-	#ifdef _WIN64
-		#ifdef _DEBUG
-			#pragma message("     Adding library: fbxsdk_20113_amd64d.lib" ) 
-			#pragma comment( lib, "fbxsdk_20113_amd64d.lib" )
-		#else
-			#pragma message("     Adding library: fbxsdk_20113_amd64.lib" ) 
-			#pragma comment( lib, "fbxsdk_20113_amd64.lib" )
-		#endif
-	#else
-		#ifdef _DEBUG
-			#pragma message("     Adding library: fbxsdk_20113d.lib" ) 
-			#pragma comment( lib, "fbxsdk_20113d.lib" )
-		#else
-			#pragma message("     Adding library: fbxsdk_20113.lib" ) 
-			#pragma comment( lib, "fbxsdk_20113.lib" )
-		#endif
-	#endif
-	
+	#endif	
 
 	#pragma message("     Adding library: uxtheme.lib" ) 
 	#pragma comment( lib, "uxtheme.lib" ) // WinXP Theme Engine
@@ -76,9 +118,9 @@
 	#pragma comment( lib, "rpcrt4.lib" )
 #endif
 
+// More Libs
 #ifdef _DEBUG
 	#ifdef _WINDOWS
-
 		#pragma comment( lib, "wxmsw28d_core.lib" )	// wxCore Debug Lib
 		#pragma comment( lib, "wxmsw28d_adv.lib" )
 		#pragma comment( lib, "wxmsw28d_qa.lib" )
@@ -86,15 +128,12 @@
 		
 		// Winsock 2
 		#pragma comment( lib, "ws2_32.lib ") // This lib is required by wxbase28_net lib
-
 	#elif _MAC
-
 		#pragma comment( lib, "wxmac28d_core.lib" )
 		#pragma comment( lib, "wxmac28d_adv.lib" )
 		#pragma comment( lib, "wxmac28d_gl.lib" )
 		#pragma comment( lib, "wxmac28d_qa.lib" )
 		#pragma comment( lib, "wxmac28d_aui.lib" )
-
 	#endif
 
 	#pragma comment( lib, "wxzlibd.lib" )
@@ -103,13 +142,34 @@
 	#pragma comment( lib, "wxbase28d_net.lib" )
 	#pragma comment( lib, "wxexpatd.lib" )
 	#pragma comment( lib, "wxbase28d_xml.lib" )
-	
-	#pragma message("     Adding library: cximagecrtd.lib" ) 
-	#pragma comment( lib, "cximagecrtd.lib" )	// cxImage
 
-// release
-#else
-	
+	// cxImage
+	#ifdef _WINDOWS
+		#if _MSC_VER==1600		// If VC100 (VS2010)
+			#ifdef _WIN64
+				#pragma message("     Adding library: cximagecrt64d_VC100.lib" ) 
+				#pragma comment( lib, "cximagecrt64d_VC100.lib" )
+			#else
+				#pragma message("     Adding library: cximagecrt32d_VC100.lib" ) 
+				#pragma comment( lib, "cximagecrt32d_VC100.lib" )
+			#endif
+		#elif _MSC_VER==1500	// If VC90 (VS2008)
+			#ifdef _WIN64
+				#pragma message("     Adding library: cximagecrt64d_VC90.lib" ) 
+				#pragma comment( lib, "cximagecrt64d_VC90.lib" )
+			#else
+				#pragma message("     Adding library: cximagecrt32d_VC90.lib" ) 
+				#pragma comment( lib, "cximagecrt32d_VC90.lib" )
+			#endif
+		#else					// Otherwise
+			#pragma message("     Adding library: cximagecrtd.lib" ) 
+			#pragma comment( lib, "cximagecrtd.lib" )
+		#endif
+	#else
+		#pragma message("     Adding library: cximagecrtd.lib" ) 
+		#pragma comment( lib, "cximagecrtd.lib" )
+	#endif
+#else	// Release
 	#define NDEBUG			// Disables Asserts in release
 	#define VC_EXTRALEAN	// Exclude rarely-used stuff from Windows headers
 	#define WIN32_LEAN_AND_MEAN
@@ -120,7 +180,14 @@
 		#pragma comment( lib, "wxmsw28_qa.lib" )
 		#pragma comment( lib, "wxmsw28_aui.lib" )
 	
-	#pragma comment( lib, "ws2_32.lib ") // This lib is required by wxbase28_net lib
+		#pragma comment( lib, "ws2_32.lib ") // This lib is required by wxbase28_net lib
+	#elif _MAC
+		#pragma comment( lib, "wxmac28_core.lib" )
+		#pragma comment( lib, "wxmac28_adv.lib" )
+		#pragma comment( lib, "wxmac28_gl.lib" )
+		#pragma comment( lib, "wxmac28_qa.lib" )
+		#pragma comment( lib, "wxmac28_aui.lib" )
+	#endif
 
 	#pragma comment( lib, "wxzlib.lib" )
 	#pragma comment( lib, "wxregex.lib" )
@@ -128,9 +195,32 @@
 	#pragma comment( lib, "wxbase28_net.lib" )
 	#pragma comment( lib, "wxexpat.lib" )
 	#pragma comment( lib, "wxbase28_xml.lib" )
-	
-	#pragma message("     Adding library: cximagecrt.lib" ) 
-	#pragma comment( lib, "cximagecrt.lib" )
+
+	// cxImage
+	#ifdef _WINDOWS
+		#if _MSC_VER==1600		// If VC100 (VS2010)
+			#ifdef _WIN64
+				#pragma message("     Adding library: cximagecrt64_VC100.lib" ) 
+				#pragma comment( lib, "cximagecrt64_VC100.lib" )
+			#else
+				#pragma message("     Adding library: cximagecrt32_VC100.lib" ) 
+				#pragma comment( lib, "cximagecrt32_VC100.lib" )
+			#endif
+		#elif _MSC_VER==1500	// If VC90 (VS2008)
+			#ifdef _WIN64
+				#pragma message("     Adding library: cximagecrt64_VC90.lib" ) 
+				#pragma comment( lib, "cximagecrt64_VC90.lib" )
+			#else
+				#pragma message("     Adding library: cximagecrt32_VC90.lib" ) 
+				#pragma comment( lib, "cximagecrt32_VC90.lib" )
+			#endif
+		#else					// Otherwise
+			#pragma message("     Adding library: cximagecrt.lib" ) 
+			#pragma comment( lib, "cximagecrt.lib" )
+		#endif
+	#else
+		#pragma message("     Adding library: cximagecrt.lib" ) 
+		#pragma comment( lib, "cximagecrt.lib" )
 	#endif
 #endif // _DEBUG
 

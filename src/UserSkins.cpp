@@ -50,7 +50,7 @@ void UserSkins::LoadFile(const wxString &filename)
 			return;
 		}
 
-		int numGroups = atoi(line.c_str());
+		size_t numGroups = atoi(line.c_str());
 		if (numGroups < 0) {
 			wxLogMessage(wxT("Error - UserSkins: negativ number of groups specified in line %d"), lineNr);
 			return;

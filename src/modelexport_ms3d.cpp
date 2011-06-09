@@ -245,7 +245,7 @@ void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init)
 			joint.rotation[1] = 0;
 			joint.rotation[2] = 0;
 
-			Vec3D p = FixPivot(m, i, m->bones[i].pivot);
+			Vec3D p = FixPivot(m, (int)i, m->bones[i].pivot);
 			joint.position[0] = p.x;
 			joint.position[1] = p.y;
 			joint.position[2] = p.z;

@@ -271,12 +271,12 @@ ModelViewer::ModelViewer()
 
 void ModelViewer::InitMenu()
 {
-	wxLogMessage(wxT("Initializing File Menu.."));
+	wxLogMessage(wxT("Initializing File Menu..."));
 
 	CreateStatusBar(3);
 	int widths[] = {-1, 100, 50};
 	SetStatusWidths(3, widths);
-	SetStatusText(wxT("Initializing File Menu.."));
+	SetStatusText(wxT("Initializing File Menu..."));
 
 	// MENU
 	fileMenu = new wxMenu;

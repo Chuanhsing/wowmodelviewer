@@ -223,7 +223,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 		else if (!strcmp(fourcc,"MOPR")) {
 			// Portal <> group relationship? 2*nPortals entries of 8 bytes.
 			// I think this might specify the two WMO groups that a portal connects.
-			int nn = (int)size / 8;
+			size_t nn = size / 8;
 			WMOPR *pr = (WMOPR*)f.getPointer();
 			for (size_t i=0; i<nn; i++) {
 				prs.push_back(*pr++);
@@ -239,7 +239,7 @@ WMO::WMO(wxString name): ManagedItem(name)
 		}
 		else if (!strcmp(fourcc,"MFOG")) {
 			// Fog information. Made up of blocks of 48 bytes.
-			int nfogs = (int)size / 0x30;
+			size_t nfogs = size / 0x30;
 			for (size_t i=0; i<nfogs; i++) {
 				WMOFog fog;
 				fog.init(f);

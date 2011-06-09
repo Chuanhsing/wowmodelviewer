@@ -108,7 +108,7 @@ void ParticleSystem::init(MPQFile &f, ModelParticleEmitterDef &mta, uint32 *glob
 	// init tiles, slice the texture
 	for (size_t i=0; i<rows*cols; i++) {
 		TexCoordSet tc;
-		initTile(tc.tc, i);
+		initTile(tc.tc, (int)i);
 		tiles.push_back(tc);
 	}
 }

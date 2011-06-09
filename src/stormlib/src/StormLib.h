@@ -92,17 +92,80 @@ extern "C" {
 
 #if defined(_MSC_VER) && !defined (__STORMLIB_SELF__)
   #ifdef _DEBUG                                 // DEBUG VERSIONS
-    #ifdef _DLL                               
-      #pragma comment(lib, "StormLibDAD.lib")   // Debug Ansi Dynamic version
-    #else        
-      #pragma comment(lib, "StormLibDAS.lib")   // Debug Ansi Static version
-    #endif
-  #else                                         // RELEASE VERSIONS
+	/*
     #ifdef _DLL
-      #pragma comment(lib, "StormLibRAD.lib")   // Release Ansi Dynamic version
-    #else        
-      #pragma comment(lib, "StormLibRAS.lib")   // Release Ansi Static version
-    #endif
+	  // Debug Ansi Dynamic version
+	  #if _MSC_VER==1600
+		#ifdef _WIN64
+          #pragma comment(lib, "StormLibDAD64_VC100.lib")
+		#else
+		  #pragma comment(lib, "StormLibDAD32_VC100.lib")
+		#endif
+	  #elif _MSC_VER==1500
+		#ifdef _WIN64
+          #pragma comment(lib, "StormLibDAD64_VC90.lib")
+		#else
+		  #pragma comment(lib, "StormLibDAD32_VC90.lib")
+		#endif
+	  #else
+		#pragma comment(lib, "StormLibDAD.lib")
+	  #endif
+    #else
+	*/
+	  // Debug Ansi Static version
+	  #if _MSC_VER==1600
+		#ifdef _WIN64
+          #pragma comment(lib, "StormLibDAS64_VC100.lib")
+		#else
+		  #pragma comment(lib, "StormLibDAS32_VC100.lib")
+		#endif
+	  #elif _MSC_VER==1500
+		#ifdef _WIN64
+          #pragma comment(lib, "StormLibDAS64_VC90.lib")
+		#else
+		  #pragma comment(lib, "StormLibDAS32_VC90.lib")
+		#endif
+	  #else
+		#pragma comment(lib, "StormLibDAS.lib")
+	  #endif
+   // #endif
+  #else                                         // RELEASE VERSIONS
+   /* #ifdef _DLL
+	  // Release Ansi Dynamic version
+	  #if _MSC_VER==1600
+		#ifdef _WIN64
+          #pragma comment(lib, "StormLibRAD64_VC100.lib")
+		#else
+		  #pragma comment(lib, "StormLibRAD32_VC100.lib")
+		#endif
+	  #elif _MSC_VER==1500
+		#ifdef _WIN64
+          #pragma comment(lib, "StormLibRAD64_VC90.lib")
+		#else
+		  #pragma comment(lib, "StormLibRAD32_VC90.lib")
+		#endif
+	  #else
+		#pragma comment(lib, "StormLibRAD.lib")
+	  #endif
+    #else
+	*/
+	  // Release Ansi Static version
+	  #if _MSC_VER==1600
+		#ifdef _WIN64
+          #pragma comment(lib, "StormLibRAS64_VC100.lib")
+		#else
+		  #pragma comment(lib, "StormLibRAS32_VC100.lib")
+		#endif
+	  #elif _MSC_VER==1500
+		#ifdef _WIN64
+          #pragma comment(lib, "StormLibRAS64_VC90.lib")
+		#else
+		  #pragma comment(lib, "StormLibRAS32_VC90.lib")
+		#endif
+	  #else
+		#pragma comment(lib, "StormLibRAS.lib")
+	  #endif
+   // #endif
   #endif
 #endif
 

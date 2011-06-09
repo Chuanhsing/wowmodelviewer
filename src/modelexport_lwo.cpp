@@ -7,7 +7,7 @@
 
 // Write Lightwave Object data to a file.
 size_t WriteLWObject(wxString filename, LWObject Object) {
-
+	g_modelViewer->SetStatusText(wxT("Writing Lightwave Object..."));
 	/* LightWave object files use the IFF syntax described in the EA-IFF85 document. Data is stored in a collection of chunks. 
 	Each chunk begins with a 4-byte chunk ID and the size of the chunk in bytes, and this is followed by the chunk contents.
 
@@ -178,6 +178,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 	if (!f.IsOk()) {
 		wxMessageBox(wxString::Format(wxT("Unable to access Lightwave Object file.\nCould not export model %s."), file.AfterLast(SLASH).c_str()), wxT("Error"));
 		wxLogMessage(wxT("Error: Unable to open Lightwave Object file '%s'. Could not export model."), file.c_str());
+		g_modelViewer->SetStatusText(wxT("Unable to open Lightwave Object file. Could not export model."));
 		return EXPORT_ERROR_FILE_ACCESS;
 	}
 
@@ -222,6 +223,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 	// ===================================================
 
 	if (TagCount > 0) {
+		g_modelViewer->SetStatusText(wxT("LWO Export: Writing Tags..."));
 		f.Write("TAGS", 4);
 		uint32 tagsSize = 0;
 		f.Write(reinterpret_cast<char *>(&tagsSize), 4);
@@ -265,6 +267,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 	// our layers.
 	// -------------------------------------------------
 	for (size_t l=0;l<Object.Layers.size();l++){
+		g_modelViewer->SetStatusText(wxString::Format(wxT("LWO Export: Writing Layer %i data..."), l));
 		LWLayer cLyr = Object.Layers[l];
 		// Define a Layer & It's data
 		if (cLyr.Name.length() > 0)
@@ -307,6 +310,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 		// beyond 1 Layer, this should be nested.
 		// -------------------------------------------------
 
+		g_modelViewer->SetStatusText(wxT("LWO Export: Writing Points..."));
 		uint32 pointsSize = (uint32)cLyr.Points.size()*12;
 		f.Write("PNTS", 4);
 		u32 = MSB4<uint32>(pointsSize);
@@ -334,7 +338,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 
 		// --== Vertex Mapping ==--
 		// UV, Weights, Vertex Color Maps, etc.
-
+		g_modelViewer->SetStatusText(wxT("LWO Export: Writing Vertex Maps..."));
 		// ===================================================
 		//VMPA		// Vertex Map Parameters, Always Preceeds a VMAP & VMAD. 4bytes: Size, then Num Vars (2) * 4 bytes.
 					// UV Sub Type: 0-Linear, 1-Subpatched, 2-Linear Corners, 3-Linear Edges, 4-Across Discontinuous Edges.
@@ -492,7 +496,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 
 		// --== Polygons ==--
 		if (cLyr.Polys.size() > 0){
-
+			g_modelViewer->SetStatusText(wxT("LWO Export: Writing Polygons..."));
 			// -------------------------------------------------
 			// Polygon Chunk
 			// -------------------------------------------------
@@ -584,6 +588,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 
 			// --== Poly-Based Vertex Mapping ==--
 			if (cLyr.Polys[0].Normals.NormalMapName != wxEmptyString){
+				g_modelViewer->SetStatusText(wxT("LWO Export: Writing Poly-Based Vertex Maps..."));
 				// ===================================================
 				//VMPA		// Vertex Map Parameters, Always Preceeds a VMAP & VMAD. 4bytes: Size, then Num Vars (2) * 4 bytes.
 							// UV Sub Type: 0-Linear, 1-Subpatched, 2-Linear Corners, 3-Linear Edges, 4-Across Discontinuous Edges.
@@ -643,6 +648,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 
 	// --== Clips (Images) ==--
 	if (Object.Images.size() > 0){
+		g_modelViewer->SetStatusText(wxT("LWO Export: Writing Image file data..."));
 		for (size_t x=0;x<Object.Images.size();x++){
 			LWClip cImg = Object.Images[x];
 
@@ -686,6 +692,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 
 	// --== Surfaces ==--
 	if (Object.Surfaces.size() > 0){
+		g_modelViewer->SetStatusText(wxT("LWO Export: Writing Surface/Material data..."));
 		for (size_t x=0;x<Object.Surfaces.size();x++){
 			LWSurface cSurf = Object.Surfaces[x];
 
@@ -1170,6 +1177,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 		}
 	}
 
+	g_modelViewer->SetStatusText(wxT("LWO Export: Cleaning Up..."));
 	// Correct File Length
 	f.SeekO(4, wxFromStart);
 	u32 = MSB4<uint32>(fileLen);
@@ -1179,6 +1187,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 	f.Close();
 
 	// If we've gotten this far, then the file is good!
+	g_modelViewer->SetStatusText(wxT("Lightwave Object Export Successful!"));
 	return EXPORT_OKAY;
 }
 
