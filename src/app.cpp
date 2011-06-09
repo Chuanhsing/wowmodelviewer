@@ -2,6 +2,7 @@
 #include <wx/image.h>
 #include <wx/splash.h>
 #include <wx/mstream.h>
+#include <wx/stdpaths.h>
 #include "UserSkins.h"
 #include "resource1.h"
 
@@ -45,7 +46,7 @@ bool WowModelViewApp::OnInit()
 		} else {
 			splash = new wxSplashScreen(bitmap,
 				wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
-				6000, NULL, -1, wxDefaultPosition, wxDefaultSize,
+				2000, NULL, -1, wxDefaultPosition, wxDefaultSize,
 				wxBORDER_NONE);
 		}
 		wxYield();
@@ -58,7 +59,9 @@ bool WowModelViewApp::OnInit()
 	#endif
 #endif
 
-	wxFileName fname(argv[0]);
+	wxStandardPaths sp;
+	wxString execPath = sp.GetExecutablePath();
+	wxFileName fname(execPath);
 	wxString userPath = fname.GetPath(wxPATH_GET_VOLUME)+SLASH+wxT("userSettings");
 	wxFileName::Mkdir(userPath, 0777, wxPATH_MKDIR_FULL);
 
@@ -208,11 +211,17 @@ bool WowModelViewApp::OnInit()
 	wxLogMessage(wxT("WoW Model Viewer successfully loaded!\n----\n"));
 	
 	if (splash) {
-		// splash will auto closed after 6000ms
+		// splash will auto closed after 2000ms
 		// splash->Show(false);
 		// splash->~wxSplashScreen();
 	}
-	
+
+	// Classic Mode?
+	wxString msg = wxT("Would you like to load World of Warcraft right now?");
+	if (wxMessageBox(msg, wxT("Load World of Warcraft"), wxYES_NO) == wxYES) {
+		frame->LoadWoW();
+	}
+
 	return true;
 }
 
@@ -617,6 +626,17 @@ bool WowModelViewApp::LoadSettings()
 	modelExport_M3_SphereScale = wxAtof(tmp);
 	pConfig->Read(wxT("ModelExportM3TexturePath"), &modelExport_M3_TexturePath, wxEmptyString);
 
+	// Data path and mpq archive stuff
+	wxString archives;
+	pConfig->Read(wxT("MPQFiles"), &archives);
+	
+	wxStringTokenizer strToken(archives, wxT(";"), wxTOKEN_DEFAULT);
+	while (strToken.HasMoreTokens()) {
+		mpqArchives.Add(strToken.GetNextToken());
+	}
+
+	// Clear our ini file config object
+	wxDELETE( pConfig );
 
 	return false;
 }

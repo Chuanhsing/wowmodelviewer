@@ -24,6 +24,10 @@ static bool readline(std::istream& in, std::string& buf, size_t nr, bool skipEmp
 
 void UserSkins::LoadFile(const wxString &filename)
 {
+	if (!wxFileExists(filename)) {
+		return;
+	}
+
 	// FIXME: ifstream is not compitable with multibyte path name
 	std::ifstream in(filename.fn_str());
 	if (!in.is_open()) {
@@ -74,7 +78,8 @@ void UserSkins::LoadFile(const wxString &filename)
 	}
 	// everything ok (-:
 	loaded = true;
-	wxLogMessage(wxT("User skins loaded"), filename.c_str());
+	wxLogMessage(wxT("User skins %s loaded"), filename.c_str());
+	in.close();
 }
 
 bool UserSkins::AddUserSkins(const wxString &model, TextureSet &set)

@@ -36,10 +36,11 @@ MPQArchive::MPQArchive(wxString filename) : ok(false)
 			if (mpqArchives[j].AfterLast(SLASH).Len() == strlen("wow-update-xxxxx.mpq")) {
 				SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "base", 0);
 				SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), langName.fn_str(), 0);
-				wxLogMessage(wxT("Appending base & %s patch %s"), langName.c_str(), mpqArchives[j].Mid(gamePath.Len()).c_str());
+				// too many for ptr client, just comment it
+				// wxLogMessage(wxT("Appending base & %s patch %s"), langName.c_str(), mpqArchives[j].Mid(gamePath.Len()).c_str());
 			} else if (mpqArchives[j].BeforeLast(SLASH) == filename.BeforeLast(SLASH)) { // same directory only
 				SFileOpenPatchArchive(mpq_a, mpqArchives[j].fn_str(), "", 0);
-				wxLogMessage(wxT("Appending patch %s"), mpqArchives[j].Mid(gamePath.Len()).c_str());
+				// wxLogMessage(wxT("Appending patch %s"), mpqArchives[j].Mid(gamePath.Len()).c_str());
 			}
 		}
 	}

@@ -2,6 +2,7 @@
 #include <wx/regex.h>
 #include <wx/txtstrm.h>
 #include <wx/tokenzr.h>
+#include <wx/utils.h>
 
 #include "modelviewer.h"
 #include "globalvars.h"
@@ -26,6 +27,7 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 
 	// File menu
 	EVT_MENU(ID_LOAD_WOW, ModelViewer::OnGameToggle)
+	EVT_MENU(ID_FILE_VIEWLOG, ModelViewer::OnViewLog)
 	EVT_MENU(ID_VIEW_NPC, ModelViewer::OnCharToggle)
 	EVT_MENU(ID_VIEW_ITEM, ModelViewer::OnCharToggle)
 	EVT_MENU(ID_FILE_SCREENSHOT, ModelViewer::OnSave)
@@ -269,16 +271,17 @@ ModelViewer::ModelViewer()
 
 void ModelViewer::InitMenu()
 {
-	wxLogMessage(wxT("Initiating File Menu.."));
+	wxLogMessage(wxT("Initializing File Menu.."));
 
 	CreateStatusBar(3);
 	int widths[] = {-1, 100, 50};
 	SetStatusWidths(3, widths);
-	SetStatusText(wxT("Initiating File Menu.."));
+	SetStatusText(wxT("Initializing File Menu.."));
 
 	// MENU
 	fileMenu = new wxMenu;
 	fileMenu->Append(ID_LOAD_WOW, wxT("Load World of Warcraft"));
+	fileMenu->Append(ID_FILE_VIEWLOG, wxT("View Log"));
 	/*
 	wxMenu *gameMenu = new wxMenu;
 	gameMenu->Append(ID_LOAD_WOW, wxT("World of Warcraft"));
@@ -568,7 +571,7 @@ void ModelViewer::InitMenu()
 
 void ModelViewer::InitObjects()
 {
-	wxLogMessage(wxT("Initiating Objects..."));
+	wxLogMessage(wxT("Initializing Objects..."));
 
 	fileControl = new FileControl(this, ID_FILELIST_FRAME);
 
@@ -605,8 +608,8 @@ void ModelViewer::InitObjects()
 
 void ModelViewer::InitDatabase()
 {
-	wxLogMessage(wxT("Initiating Databases..."));
-	SetStatusText(wxT("Initiating Databases..."));
+	wxLogMessage(wxT("Initializing Databases..."));
+	SetStatusText(wxT("Initializing Databases..."));
 	initDB = true;
 
 	if (!itemdb.open()) {
@@ -614,7 +617,7 @@ void ModelViewer::InitDatabase()
 		wxLogMessage(wxT("Error: Could not open the Item DB."));
 	}
 
-	SetStatusText(wxT("Initiating items.csv Databases..."));
+	SetStatusText(wxT("Initializing items.csv Databases..."));
 	wxString filename = langName+SLASH+wxT("items.csv");
 	if (!wxFile::Exists(filename))
 		DownloadLocaleFiles();
@@ -713,7 +716,7 @@ void ModelViewer::InitDatabase()
 	else
 		setsdb.cleanup(items);
 
-	SetStatusText(wxT("Initiating npcs.csv Databases..."));
+	SetStatusText(wxT("Initializing npcs.csv Databases..."));
 	filename = langName+SLASH+wxT("npcs.csv");
 	if(!wxFile::Exists(filename))
 		filename = locales[0]+SLASH+wxT("npcs.csv");
@@ -738,7 +741,7 @@ void ModelViewer::InitDatabase()
 
 void ModelViewer::InitDocking()
 {
-	wxLogMessage(wxT("Initiating GUI Docking."));
+	wxLogMessage(wxT("Initializing GUI Docking."));
 	
 	// wxAUI stuff
 	//interfaceManager.SetFrame(this); 
@@ -1485,8 +1488,8 @@ wxString ModelViewer::InitMPQArchives()
 wxString ModelViewer::Init()
 {
 	// Initiate other stuff
-	wxLogMessage(wxT("Initiating Archives..."));
-	SetStatusText(wxT("Initiating Archives..."));
+	wxLogMessage(wxT("Initializing Archives..."));
+	SetStatusText(wxT("Initializing Archives..."));
 
 	// more detail logging, this is so when someone has a problem and they send their log info
 	wxLogMessage(wxT("Game Data Path: %s"), gamePath.c_str());
@@ -1507,7 +1510,7 @@ wxString ModelViewer::Init()
 		return mpqarch;
 	}
 
-	SetStatusText(wxT("Initiating File Control..."));
+	SetStatusText(wxT("Initializing File Control..."));
 	fileControl->Init(this);
 
 	if (charControl->Init() == false){
@@ -1914,6 +1917,17 @@ void ModelViewer::OnSetEquipment(wxCommandEvent &event)
 	UpdateControls();
 }
 
+void ModelViewer::OnViewLog(wxCommandEvent &event)
+{
+	int ID = event.GetId();
+	if (ID == ID_FILE_VIEWLOG) {
+		wxString logPath = cfgPath.BeforeLast(SLASH)+SLASH+wxT("log.txt");
+#ifdef	_WINDOWS
+		wxExecute(wxT("notepad.exe ")+logPath);
+#endif
+	}
+}
+
 void ModelViewer::OnGameToggle(wxCommandEvent &event)
 {
 	int ID = event.GetId();
@@ -1923,35 +1937,18 @@ void ModelViewer::OnGameToggle(wxCommandEvent &event)
 
 void ModelViewer::LoadWoW()
 {
-	wxFileConfig *pConfig = new wxFileConfig(wxT("Global"), wxEmptyString, cfgPath, wxEmptyString, wxCONFIG_USE_LOCAL_FILE);
-	pConfig->SetPath(wxT("/Settings"));
-
-	// Data path and mpq archive stuff
-	wxString archives;
-	pConfig->Read(wxT("MPQFiles"), &archives);
-	
-	wxStringTokenizer strToken(archives, wxT(";"), wxTOKEN_DEFAULT);
-	while (strToken.HasMoreTokens()) {
-		mpqArchives.Add(strToken.GetNextToken());
-	}
-
-	// Clear our ini file config object
-	wxDELETE( pConfig );
-
 	if (gamePath.IsEmpty() || !wxDirExists(gamePath)) {
 		getGamePath();
 		mpqArchives.Clear();
 	}
 
-	if (gamePath != wxEmptyString && gamePath.Last() != SLASH)
-		gamePath.Append(SLASH);
-
-	if (mpqArchives.GetCount()==0) {
+	// auto search for MPQ Archives
+	if (mpqArchives.GetCount() == 0) {
 		searchMPQs(true);
 	}
 
 	// if we can't search any mpqs
-	if (mpqArchives.GetCount()==0) {
+	if (mpqArchives.GetCount() == 0) {
 		wxLogMessage(wxT("World of Warcraft Data Directory Not Found. Returned GamePath: %s"), gamePath.c_str());
 		wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("Fatal Error: Could not find your World of Warcraft Data folder."), wxT("World of Warcraft Not Found"), wxOK | wxICON_ERROR);
 		dial->ShowModal();
@@ -1962,6 +1959,13 @@ void ModelViewer::LoadWoW()
         // the arrays should be in sync
         wxCOMPILE_TIME_ASSERT(WXSIZEOF(langNames) == WXSIZEOF(langIds), LangArraysMismatch);
         langID = wxGetSingleChoiceIndex(wxT("Please select a language:"), wxT("Language"), WXSIZEOF(langNames), langNames);
+	}
+
+	if (langID == -1) {
+		wxLogMessage(wxT("World of Warcraft Data Directory Not Found. Returned GamePath: %s"), gamePath.c_str());
+		wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("Fatal Error: Could not find your World of Warcraft Data folder."), wxT("World of Warcraft Not Found"), wxOK | wxICON_ERROR);
+		dial->ShowModal();
+		return;
 	}
 
 	// initial interfaceID as langID
@@ -1977,7 +1981,9 @@ void ModelViewer::LoadWoW()
 			langOffset = langID;
 	}
 
-	SetStatusText(langName, 2);
+	// we should get this from searchMPQs or pConfig
+	if (!langName.IsEmpty())
+		SetStatusText(langName, 2);
 
 	// load our World of Warcraft mpq archives
 	wxString initvar = Init();
@@ -1991,11 +1997,11 @@ void ModelViewer::LoadWoW()
 	}
 
 	// Load user skins 
-	wxString userPath = wxT("userSettings");
-	gUserSkins.LoadFile(userPath + SLASH + wxT("Skins.txt"));
+	gUserSkins.LoadFile(cfgPath.BeforeLast(SLASH) + SLASH + wxT("Skins.txt"));
 	if (!gUserSkins.Loaded())
 		wxLogMessage(wxT("Warning: Failed to load user skins"));
 
+	// Initial Databases like dbc, db2, csvs
 	InitDatabase();
 
 	// Error check
