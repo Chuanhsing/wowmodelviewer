@@ -87,7 +87,7 @@
       <AdditionalOptions>/D "WotLK"
 /D "PLAY_MUSIC" /J %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.11\include;D:\wxWidgets-2.8.11\include\msvc;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.12\include;D:\wxWidgets-2.8.12\include\msvc;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32;_WINDOWS;__WINDOWS__;__WXMSW__;_DEBUG;__WXDEBUG__;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -105,14 +105,14 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.11\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ResourceOutputFileName>$(IntDir)%(Filename)32.res</ResourceOutputFileName>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>glew$(PlatformArchitecture)_VC$(PlatformToolsetVersion).lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(PlatformArchitecture).exe</OutputFile>
       <Version>07.01.583</Version>
-      <AdditionalLibraryDirectories>D:\wxWidgets-2.8.11\lib\vc_lib\$(Platform);D:\wxWidgets-2.8.11\lib\vc_lib\;.\lib\Windows\32bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);D:\wxWidgets-2.8.12\lib\vc_lib\;.\lib\Windows\32bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -145,7 +145,7 @@ copy ..\bin\*.csv $(OutDir)
       <AdditionalOptions>/D "WotLK"
 /D "PLAY_MUSIC" /J %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.11\include;D:\wxWidgets-2.8.11\include\msvc;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.12\include;D:\wxWidgets-2.8.12\include\msvc;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32;_WINDOWS;WIN64;_WIN64;_AMD64_;_M_AMD64;__WINDOWS__;__WXMSW__;_DEBUG;__WXDEBUG__;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -163,7 +163,7 @@ copy ..\bin\*.csv $(OutDir)
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.11\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ResourceOutputFileName>$(IntDir)%(Filename)64.res</ResourceOutputFileName>
     </ResourceCompile>
     <Link>
@@ -171,7 +171,7 @@ copy ..\bin\*.csv $(OutDir)
       <OutputFile>$(OutDir)$(TargetName)$(PlatformArchitecture).exe</OutputFile>
       <Version>07.01.583</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>D:\wxWidgets-2.8.11\lib\vc_lib\$(Platform);.\lib\Windows\64bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);.\lib\Windows\64bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -207,7 +207,7 @@ copy ..\bin\*.csv $(OutDir)
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.11\include;D:\wxWidgets-2.8.11\include\msvc;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.12\include;D:\wxWidgets-2.8.12\include\msvc;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32;_WINDOWS;__WINDOWS__;__WXMSW__;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
@@ -233,7 +233,7 @@ copy ..\bin\*.csv $(OutDir)
       <OutputFile>$(OutDir)$(TargetName)$(PlatformArchitecture).exe</OutputFile>
       <Version>07.01.583</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>D:\wxWidgets-2.8.11\lib\vc_lib\$(Platform);D:\wxWidgets-2.8.11\lib\vc_lib\;.\lib\Windows\32bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);D:\wxWidgets-2.8.12\lib\vc_lib\;.\lib\Windows\32bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AssemblyDebug>false</AssemblyDebug>
@@ -283,7 +283,7 @@ copy ..\bin\userSettings\*.* $(OutDir)userSettings
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.11\include;D:\wxWidgets-2.8.11\include\msvc;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.12\include;D:\wxWidgets-2.8.12\include\msvc;.\zlib\;.\glew\include\;.\bzip2\;.\CxImage\;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32;_WINDOWS;WIN64;_WIN64;_AMD64_;__WINDOWS__;__WXMSW__;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
@@ -300,7 +300,7 @@ copy ..\bin\userSettings\*.* $(OutDir)userSettings
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.11\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\wxWidgets-2.8.12\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ResourceOutputFileName>$(IntDir)%(Filename)64.res</ResourceOutputFileName>
     </ResourceCompile>
     <Link>
@@ -309,7 +309,7 @@ copy ..\bin\userSettings\*.* $(OutDir)userSettings
       <OutputFile>$(OutDir)$(TargetName)$(PlatformArchitecture).exe</OutputFile>
       <Version>07.01.583</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>D:\wxWidgets-2.8.11\lib\vc_lib\$(Platform);.\lib\Windows\64bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);.\lib\Windows\64bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AssemblyDebug>false</AssemblyDebug>
