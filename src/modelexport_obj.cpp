@@ -34,11 +34,11 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 
 	LogExportData(wxT("OBJ"), m->modelname, fn);
 
-	unsigned short numVerts = 0;
-	unsigned short numGroups = 0;
-	unsigned short numFaces = 0;
-	ModelData *verts = NULL;
-	GroupData *groups = NULL;
+	//unsigned short numVerts = 0;
+	//unsigned short numGroups = 0;
+	//unsigned short numFaces = 0;
+	//ModelData *verts = NULL;
+	//GroupData *groups = NULL;
 
 	ssize_t cAnim = 0;
 	size_t cFrame = 0;
@@ -271,7 +271,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 
 						// InitPose is a reference to the HandsClosed animation (#15), which is the closest to the Initial pose.
 						// By using this animation, we'll get the proper scale for the items when in Init mode.
-						int InitPose = 15;
+						//int InitPose = 15;
 
 						if (init == true){
 							mPos = mParent->atts[boneID].pos;
@@ -458,9 +458,9 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 			if (m->modelType == MT_CHAR && mesh < 19 && meshes[mesh] != wxEmptyString){
 				wxString msh = meshes[mesh];
 				msh.Replace(wxT(" "),wxT("_"),true);
-				partName = wxString::Format(wxT("Geoset_%03i-%s"),g,msh);
+				partName = wxString::Format(wxT("Geoset_%03i-%s"), g, msh.c_str());
 			}else{
-				partName = wxString::Format(wxT("Geoset_%03i"),g);
+				partName = wxString::Format(wxT("Geoset_%03i"), g);
 			}
 
 			f << wxT("g ") << partName << endl;
@@ -503,9 +503,9 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 							if (thisslot < 15 && slots[thisslot]!=wxEmptyString){
 								wxString slt = slots[thisslot];
 								slt.Replace(wxT(" "),wxT("_"),true);
-								partName = wxString::Format(wxT("Child_%02i-%s"),j,slt);
+								partName = wxString::Format(wxT("Child_%02i-%s"), j ,slt.c_str());
 							}else{
-								partName = wxString::Format(wxT("Child_%02i-Slot_%02i"),j,att2->children[j]->slot);
+								partName = wxString::Format(wxT("Child_%02i-Slot_%02i"), j, att2->children[j]->slot);
 							}
 
 							f << wxT("g ") << partName << endl;

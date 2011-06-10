@@ -20,7 +20,7 @@ extern float animSpeed;
 #define	ANIM_STAND	0
 
 struct TextureGroup {
-	static const int num = 3;
+	static const size_t num = 3;
 	int base, count;
 	wxString tex[num];
 	TextureGroup()

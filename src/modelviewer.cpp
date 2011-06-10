@@ -1616,7 +1616,7 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 		{
 			wxFileDialog loadDialog(this, wxT("Load character"), wxEmptyString, wxEmptyString, wxT("Character files (*.chr)|*.chr"), wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 			if (loadDialog.ShowModal()==wxID_OK) {
-				wxLogMessage(wxT("\nLoading character from a save file: %s\n"),loadDialog.GetPath());
+				wxLogMessage(wxT("\nLoading character from a save file: %s\n"), loadDialog.GetPath().c_str());
 				for (size_t i=0; i<NUM_CHAR_SLOTS; i++)
 					charControl->cd.equipment[i] = 0;
 				
@@ -1630,7 +1630,7 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 		{
 			wxTextEntryDialog dialog(this, wxT("Please paste in the URL to the character you wish to import."), wxT("Please enter text"), wxEmptyString, wxOK | wxCANCEL | wxCENTRE, wxDefaultPosition);
 			if (dialog.ShowModal() == wxID_OK){
-				wxLogMessage(wxT("\nImporting character from the Armory: %s\n"),dialog.GetValue());
+				wxLogMessage(wxT("\nImporting character from the Armory: %s\n"), dialog.GetValue().c_str());
 				ImportArmoury(dialog.GetValue());
 			}
 		}
