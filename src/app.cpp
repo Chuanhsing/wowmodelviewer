@@ -597,6 +597,7 @@ bool WowModelViewApp::LoadSettings()
 	// Application settings
 	pConfig->SetPath(wxT("/Settings"));
 	pConfig->Read(wxT("Path"), &gamePath, wxEmptyString);
+	pConfig->Read(wxT("ArmoryPath"), &armoryPath, wxEmptyString);
 	pConfig->Read(wxT("TOCVersion"), &gameVersion, 0);
 
 	pConfig->Read(wxT("UseLocalFiles"), &useLocalFiles, false);
@@ -653,6 +654,7 @@ void WowModelViewApp::SaveSettings()
 
 	pConfig->SetPath(wxT("/Settings"));
 	pConfig->Write(wxT("Path"), gamePath);
+	pConfig->Write(wxT("ArmoryPath"), armoryPath);
 	pConfig->Write(wxT("TOCVersion"), gameVersion);
 	pConfig->Write(wxT("UseLocalFiles"), useLocalFiles);
 	pConfig->Write(wxT("SSCounter"), ssCounter);

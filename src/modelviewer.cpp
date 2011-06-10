@@ -1628,10 +1628,11 @@ void ModelViewer::OnToggleCommand(wxCommandEvent &event)
 
 	case ID_IMPORT_CHAR:
 		{
-			wxTextEntryDialog dialog(this, wxT("Please paste in the URL to the character you wish to import."), wxT("Please enter text"), wxEmptyString, wxOK | wxCANCEL | wxCENTRE, wxDefaultPosition);
+			wxTextEntryDialog dialog(this, wxT("Please paste in the URL to the character you wish to import."), wxT("Please enter text"), armoryPath, wxOK | wxCANCEL | wxCENTRE, wxDefaultPosition);
 			if (dialog.ShowModal() == wxID_OK){
-				wxLogMessage(wxT("\nImporting character from the Armory: %s\n"), dialog.GetValue().c_str());
-				ImportArmoury(dialog.GetValue());
+				armoryPath = dialog.GetValue();
+				wxLogMessage(wxT("\nImporting character from the Armory: %s\n"), armoryPath.c_str());
+				ImportArmoury(armoryPath);
 			}
 		}
 		break;

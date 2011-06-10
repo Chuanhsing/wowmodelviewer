@@ -56,6 +56,7 @@ using namespace std;
 extern wxString gamePath;
 extern wxString cfgPath;
 extern wxString bgImagePath;
+extern wxString armoryPath;
 
 extern int gameVersion;
 

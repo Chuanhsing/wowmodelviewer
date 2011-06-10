@@ -13,6 +13,7 @@
 wxString gamePath;
 wxString cfgPath;
 wxString bgImagePath;
+wxString armoryPath;
 
 wxArrayString mpqArchives;
 
