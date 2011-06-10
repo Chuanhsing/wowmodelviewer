@@ -3391,13 +3391,19 @@ void ModelViewer::ImportArmouryBattleNet(wxString strURL)
 				wxRegEx exItem;
 				wxString patternItem = wxT("data-item=\"i=([0-9]+)");
 				exItem.Compile(patternItem);
+				wxRegEx exItem2;
+				wxString patternItem2 = wxT("wow/[a-z]+/item/([0-9]+)");
+				exItem2.Compile(patternItem2);
 				long slotID = 0;
 
 				wxRegEx exRace;
 				wxString patternRace = wxT("character/summary/backgrounds/race/([0-9]+)");
 				exRace.Compile(patternRace);
+				wxRegEx exGender;
+				wxString patternGender = wxT("wow/static/images/2d/profilemain/race/([0-9]+)-([0-1]).jpg");
+				exGender.Compile(patternGender);
 
-				wxString line;
+				wxString line, race = wxT("Human"), gender = wxT("Male");
 				for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
 					if (exSlot.Matches(line)) {
 						// Manual correction for slot ID values
@@ -3422,9 +3428,14 @@ void ModelViewer::ImportArmouryBattleNet(wxString strURL)
 						default: slotID = -1;
 						}
 					} else if (slotID != -1 && exItem.Matches(line)) {
-						// Item ID
 						long itemID;
 						exItem.GetMatch(line, 1).ToLong(&itemID);
+
+						g_charControl->cd.equipment[slotID] = itemID;
+						slotID = -1;
+					} else if (slotID != -1 && exItem2.Matches(line)) {
+						long itemID;
+						exItem2.GetMatch(line, 1).ToLong(&itemID);
 
 						g_charControl->cd.equipment[slotID] = itemID;
 						slotID = -1;
@@ -3432,12 +3443,24 @@ void ModelViewer::ImportArmouryBattleNet(wxString strURL)
 						long raceId;
 						exRace.GetMatch(line, 1).ToLong(&raceId);
 						CharRacesDB::Record racer = racedb.getById(raceId);
-						wxString race;
 						if (gameVersion == 30100)
 							race = racer.getString(CharRacesDB::NameV310);
 						else
 							race = racer.getString(CharRacesDB::Name);
-						wxString gender = wxT("Male");
+						gender = wxT("Male");
+					} else if (exGender.Matches(line)) {
+						long raceId;
+						exGender.GetMatch(line, 1).ToLong(&raceId);
+						CharRacesDB::Record racer = racedb.getById(raceId);
+						if (gameVersion == 30100)
+							race = racer.getString(CharRacesDB::NameV310);
+						else
+							race = racer.getString(CharRacesDB::Name);
+
+						long genderId;
+						exGender.GetMatch(line, 2).ToLong(&genderId);
+						gender = (genderId == 0) ? wxT("Male") : wxT("Female");
+					} else if (line.Contains(wxT("<body"))) {
 						wxString strModel = wxT("Character\\") + race + MPQ_SLASH + gender + MPQ_SLASH + race + gender + wxT(".m2");
 						LoadModel(strModel);
 						if (!g_canvas->model)
