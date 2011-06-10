@@ -3731,16 +3731,16 @@
 10262,2,Musleras de aventurero
 10263,2,Sobrehombros de aventurero
 10264,2,Guerrera de aventurero
-10265,2,Brazales de obra maestra
-10266,2,Coraza de obra maestra
-10267,2,Manteo de obra maestra
-10268,2,Guanteletes de obra maestra
-10269,2,Faja de obra maestra
-10270,2,Botas de obra maestra
-10271,2,Escudo de obra maestra
-10272,2,Aro de obra maestra
-10273,2,Quijotes de obra maestra
-10274,2,Espaldares de obra maestra
+10265,2,Brazales magistrales
+10266,2,Coraza magistral
+10267,2,Manteo magistral
+10268,2,Guanteletes magistrales
+10269,2,Faja magistral
+10270,2,Botas magistrales
+10271,2,Escudo magistral
+10272,2,Aro magistral
+10273,2,Quijotes magistrales
+10274,2,Espaldares magistrales
 10275,2,Coraza esmeralda
 10276,2,Escarpes esmeralda
 10277,2,Guanteletes Esmeralda
@@ -9132,7 +9132,7 @@
 24832,2,Coraza de caminante-nexo
 24833,2,Guantes de caminante-nexo
 24834,2,Casco de caminante-nexo
-24835,2,Ataduras de caminante-nexo
+24835,2,Ataduras de caminante del Nexo
 24836,2,Manto de caminante-nexo
 24837,2,Brazal de caminante-nexo
 24838,2,Pretina iralerón
@@ -10072,7 +10072,7 @@
 27484,3,Tratado sobre revancha
 27485,3,Manteo bordado de misterios
 27487,3,Quijotes de señor de sangre
-27488,3,Alzacuellos de mago de tormenta de fuego
+27488,3,Alzacuellos de mago de tormenta de Fuego
 27489,3,Avambrazos de portador de virtud
 27490,3,Hacha de batalla pirotigma
 27492,3,Leotardos de hijo de la luna
@@ -12142,7 +12142,7 @@
 31332,4,Golpe de traslación
 31333,4,El velador de la noche
 31334,4,Bastón de furia natural
-31335,4,Kilt of Living Growth
+31335,4,Falda de crecimiento vivo
 31336,4,Hoja de hechicería
 31340,4,Voluntad de Edward el Raro
 31341,2,Capa de devoto del Culto Vermis
@@ -13522,8 +13522,8 @@
 34376,4,Guantes de escamas caladas de sol
 34377,4,Placa de batalla de korio duro
 34378,4,Puños de batalla de korio duro
-34379,4,Coraza bendecida por el Sol
-34380,4,Guanteletes bendecidos por el Sol
+34379,4,Coraza bendecida por el sol
+34380,4,Guanteletes bendecidos por el sol
 34381,4,Quijotes de fuerza vil
 34382,4,Musleras de enjuiciador
 34383,4,Falda de reconstrucción espiritual
@@ -21635,7 +21635,7 @@
 50459,4,Sigilo del colgado
 50460,4,Tratado sobre Luz cegadora
 50461,4,Tratado sobre la Torre Eterna
-50462,4,Sigilo del grifo óseo
+50462,4,Sigilo del grifo osario
 50463,4,Tótem de la avalancha
 50464,4,Tótem del mar resurgente
 50466,4,Capa de invierno de centinela
@@ -24489,7 +24489,7 @@
 57170,2,Bastón de Lilian
 57171,2,Coraza del ejecutor
 57198,1,Guantes de nube rojos
-57199,1,Brazal blanqueado por el Sol
+57199,1,Brazal blanqueado por el sol
 57200,1,Calzas Clamaespinas
 57201,1,Togas del sol
 57202,1,Pechera de jabaguerrero con cicatrices
@@ -24605,7 +24605,7 @@
 57326,2,Coselete salado
 57327,2,Leotardos de salvaciervos
 57328,2,Capa de flores alegres
-57329,2,Hojacortante de tormenta de fuego
+57329,2,Hojacortante de tormenta de Fuego
 57330,2,Cetro de señor de pesadilla
 57332,2,Quijotes de persuasión
 57333,2,Sobrehombros castigadores
@@ -24912,7 +24912,7 @@
 58101,3,Peto del férreo
 58102,3,Grebas de esplendor
 58103,3,Yelmo del orgulloso
-58104,3,Espaldares quemados por el Sol
+58104,3,Espaldares quemados por el sol
 58105,3,Manoplas de aturdimiento
 58106,3,Coselete de olas danzantes
 58107,3,Musleras del discreto
@@ -29691,7 +29691,7 @@
 69552,4,Brazales de propósito oscuro
 69554,4,Espaldares de Nalorakk
 69555,4,Botas del osuno
-69556,4,Bandas del espíritu de oso
+69556,4,Bandas del espíritu oso
 69557,4,Zancos de la selva
 69558,4,Máscara de escudo de espíritu
 69559,4,Brazales Amani'shi
@@ -29710,7 +29710,7 @@
 69575,4,Maza de los sacrificados
 69576,4,Ornato de visión agudizada
 69577,4,Collar de huesos
-69578,4,Togas embrujadoras
+69578,4,Togas de aojo
 69579,4,Ornato Amani
 69580,4,Máscara de los espíritus inquietos
 69581,4,Cetro Amani de ritos
@@ -29751,7 +29751,7 @@
 69619,4,Manoplas de placa ósea
 69620,4,Doble filo de los Hakkari
 69621,4,Doble filo de los Hakkari
-69622,4,Ornato del Aojador
+69622,4,Máscara del Aojador
 69623,4,Vestimentas del cazador de almas
 69624,4,Legado de Arlokk
 69625,4,Tributo de Mandokir
@@ -29811,7 +29811,7 @@
 69890,7,Espaldares de poderío bruñidos
 69892,7,Capa Tormenta de Arena rasgada
 69893,7,Espetadora Forjacráneos empapada de sangre
-69897,4,Aguja llameante de Fandral
+69897,4,Guadaña llameante de Fandral
 69916,4,Aterratrols (Daakara)
 69936,4,Puños de furia
 69937,4,Manoplas de elementium eternas
@@ -29901,17 +29901,31 @@
 70077,3,Talismán de triunfo sanguinolento
 70078,3,Globo ocular de dominancia sanguinolento
 70079,3,Mandíbula de conquista sanguinolenta
-70080,4,Reforged Heartless
+70080,4,Despiadada reforjada
 70088,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Blue
 70097,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Green
+70108,4,Grebas de piroseñor
+70109,4,Reliquia de la sombra de Elune
+70111,4,Reliquia de la luz de Elune
+70112,4,Globo de Luz de luna
+70114,4,Faja de pluma de fuego
+70115,4,Botines ígneos
+70116,4,Guanteletes de obsidium vivo
+70117,4,Cinturón de obsidium vivo
+70118,4,Garras de viuda
+70120,4,Cinturón destartalado
+70121,4,Protegebrazos de Ricket
+70122,4,Mandiletes de Aviana
+70123,4,Grebas de lancero
+70128,4,Reliquia de Tortolla
 70155,4,Tajasesos
-70156,4,Hoja de hechizo de elementium de obra maestra
+70156,4,Hoja de hechizo de elementium magistral
 70157,4,Martillo de elementium forjado con luz
 70158,4,Trasquiladora con filo de elementium
 70159,3,Llamada de Mylune
 70162,4,Resguardo contra hechizos de pirium
 70163,4,Guardiana irrompible
-70164,4,Hojamuerte de elementium de obra maestra
+70164,4,Hojamuerte de elementium magistral
 70165,4,Cosechador del cazador de brujas
 70178,4,Espada magna de Gladiador implacable
 70179,4,Bastón de Gladiador implacable
@@ -29944,7 +29958,7 @@
 70206,4,Reducto de Gladiador implacable
 70207,4,Barrera de Gladiador implacable
 70208,4,Escudo muro de Gladiador implacable
-70209,4,Indultode de Gladiador implacable
+70209,4,Indulto de Gladiador implacable
 70210,4,Fin de juego de Gladiador implacable
 70211,4,Cuchilla de Gladiador implacable
 70212,4,Rebanadora de Gladiador implacable
@@ -30348,11 +30362,11 @@
 70675,4,Bufas de pellejo de vermis de Gladiador sañoso
 70723,4,Sulfuras la Mano extinta
 70733,4,Cuchilla de Alysra
-70734,4,Gran yelmo madriguera
+70734,4,Gran yelmo de la fauce voraz
 70735,4,Braciles chisporroteantes
-70736,4,Leotardos desertafuego
+70736,4,Leotardos pluma de magma
 70737,4,Bufas de llama recurrente
-70739,4,Quijotes espantallamas
+70739,4,Quijotes de gusano de lava
 70792,2,Art Template Cloth Belt - Robe_RaidMage_J - Arcane
 70793,2,Art Template Cloth Boot - Robe_RaidMage_J - Arcane
 70794,2,Art Template Cloth Chest - Robe_RaidMage_J - Arcane
@@ -30409,15 +30423,15 @@
 70907,2,Art Template Plate Wrist - RaidWarrior_J - Red
 70912,4,Apisonadoras de obsidiana rajada
 70913,4,Quijotes de devoción demente
-70914,4,Caparazón marcado por las llamas
+70914,4,Caparazón de llamas imbuidas
 70915,4,Fragmento de tormento
 70916,4,Yelmo de gloria llameante
 70917,4,Manoplas chisporroteantes
 70920,4,Brazales del sendero ígneo
-70921,4,Bufas de llama pura
+70921,4,Espaldares de llama rugidora
 70922,4,Mandíbula de Beth'tilac
 70923,2,Jersey chillón del Festival de Invierno
-70930,4,Capa de pirocólera durable
+70930,4,Gran capa de pirocólera durable
 70933,4,Faja de llama indómita
 70937,4,Brazales de fuerza majestuosa
 70939,4,Figurilla de garra mortal
@@ -30437,40 +30451,40 @@
 70954,4,Visera de placamuerte de elementium
 70955,4,Coselete de placamuerte de elementium
 70985,4,Bufas del cráter en llamas
-70986,4,Guanteletes de la nidada
+70986,4,Guanteletes tallagarras
 70987,4,Botines de fénix derribado
 70988,4,Garra de la madre de fuego
-70989,4,Leotardos de llama etérea
-70990,4,Capa Ala de Luz
+70989,4,Leotardos de fuego vaporoso
+70990,4,Alas de llamas
 70991,4,Arbalesta de furia en erupción
 70992,4,Mantón de fuego aterrador
 70993,4,Guanteletes piel de fuego
-71003,4,Visión de la calavera flameante
+71003,4,Caperuza de desdén rampante
 71004,4,Brazales hiendetierra
 71005,4,Coselete de núcleo llameante
 71006,4,Puntavolcán
 71007,4,Mandiletes del gigante enfurecido
-71009,4,Braciles cauterizadores
-71010,4,Togas incendiarias
-71011,4,Visión de la llama chisporroteante
+71009,4,Braciles Línea de lava
+71010,4,Coselete incendiario
+71011,4,Capucha chisporroteante
 71013,4,Frenesí hambriento
 71014,4,Gran hacha del Robacráneos
 71018,4,Cabellera del príncipe bandido
 71020,4,Guantes de humo desvanecido
 71021,4,Cinturón de furia acerado
-71022,4,Concha de abulón de Forjallamas
-71023,4,Sandalias eludeascuas
+71022,4,Cáliz de inquina
+71023,4,Sandalias pisacarbón
 71025,4,Guardahombros chisporroteantes
 71026,4,Brazales del cazador aterrador
 71027,4,Botines de obediencia implícita
 71028,4,Quijotes de control absoluto
-71029,4,Apisonadoras de arañas
-71030,4,Sobrehombros de quitina chamuscada
+71029,4,Botines de llamaracna
+71030,4,Sobrehombros chisporroteantes
 71031,4,Leotardos Telaceniza
 71038,4,Resguardo de la Viuda Roja
 71039,4,Pira funeraria
 71040,4,Capucha de la amenaza apremiante
-71041,4,Togas tejidas por arañas
+71041,4,Togas de devastación humeante
 71042,4,Falda de llama torácica
 71043,4,Brazales de los ojos colectores
 71044,4,Guantes de seda ceniza
@@ -30528,28 +30542,28 @@
 71131,4,Faja vinculadora de llamas
 71142,2,Test Item
 71145,0,Monster - Caster Legendary Stage 0
-71146,4,Reliquia corazóncruel
-71147,4,Fetiche de llama maldita
+71146,4,El Pacto de la Llama
+71147,4,Reliquia de los señores elementales
 71148,4,Vial de llama de almas
-71149,4,Reliquia de vinculador de fuego
-71150,4,Varita de pluma de fénix
-71151,4,Varita de ascua resplandeciente
+71149,4,Pluma de Aviana chamuscada
+71150,4,Varita chamuscaparra
+71151,4,Senda de ascuas
 71152,4,Fragmento de estrella de la mañana
 71154,4,Cercenagigantes
 71218,4,Estrella deflectora
-71227,4,Capa de pirocólera de hojas
+71227,4,Casquete de pirocólera de hojas
 71228,4,Capa de pirocólera impoluta
-71229,4,Capa de pirocólera suelta
-71230,4,Capa de pirocólera tensada
+71229,4,Manteo de pirocólera suelto
+71230,4,Mantón de pirocólera tensada
 71249,4,Fajín cicatriz de fuego
 71250,4,Cincho de la brasa llameante
-71253,4,Faja de tajo abrasador
-71254,4,Faja de la ciudadela llameante
+71253,4,Cinturón de los Siete Sellos
+71254,4,Cincho de alivio de fuego
 71255,4,Cinturón flecha de fuego
 71258,4,Cinturón de ojo de ascuas
 71260,4,Brazales de verdades imperiosas
 71261,4,Brazales ciclópeos
-71262,4,Ataduras quemacráneos
+71262,4,Ataduras humeantes
 71263,4,Brazales de ceniza neblinosa
 71264,4,Brazales de relámpago bifurcado
 71265,4,Brazales de llama de ascuas
@@ -30590,9 +30604,10 @@
 71304,4,Musleras volcánicas en erupción
 71305,4,Bufas volcánicas en erupción
 71312,4,Rompepuertas
-71313,4,Sandalias del escorpión llameante
-71314,4,Ala de Señor demoníaco
-71323,4,Escrito sobre el Vínculo lúgubre
+71313,4,Sandalias de carbón inquieto
+71314,4,Coraza del alma incendiaria
+71315,4,Botines exterminadores
+71323,4,Grito de magma
 71325,4,Sable siniestro de El Jinete
 71326,4,Casco espantoso de El Jinete
 71331,4,Faca de cerveza temible ensangrentada
@@ -30601,44 +30616,44 @@
 71341,4,Brazales de alas resplandecientes
 71342,4,Borgoñota de llama
 71343,4,Manto de puertas cerradas
-71344,4,Caparazón de visiones cambiantes
+71344,4,Coraza de visiones cambiantes
 71345,4,Hombreras de la puerta olvidada
 71346,4,Mandiletes de precisión infalible
 71347,4,Aguijón del escorpión llameante
 71349,4,Leotardos de felino de fuego
-71350,4,Cubremuñecas de demarcación
+71350,4,Cubremuñecas de condena arrogante
 71351,4,Botines del penitente
 71352,4,Sulfuras la Mano extinta
-71353,4,Arathar the Eye of Flame
-71355,4,Martillo del Señor del Fuego
+71353,4,Arathar el Ojo de la Llama
+71355,4,Ko'gun Martillo del Señor del Fuego
 71356,4,Corona de llamas
-71357,4,Faja de llamas
-71358,4,Guantes de halcón de fuego
+71357,4,Cadena de oficio de mayordomo
+71358,4,Dedos de incineración
 71359,4,Escalpelo esterilizado de Chelley
 71360,4,Aguja de dolor escarlata
 71361,4,Corcesca de odio
-71362,4,Taladora tajonegro
+71362,4,Cuchilla de obsidium
 71365,4,Cadenas ineludibles
-71366,4,Lava Bolt Crossbow
+71366,4,Ballesta Descarga de lava
 71388,4,Capa de pirocólera impoluta
-71389,4,Capa de pirocólera tensada
-71390,4,Capa de pirocólera suelta
-71391,4,Capa de pirocólera de hojas
-71392,4,Capa de pirocólera durable
+71389,4,Mantón de pirocólera tensada
+71390,4,Manteo de pirocólera suelto
+71391,4,Casquete de pirocólera de hojas
+71392,4,Gran capa de pirocólera durable
 71393,4,Cinturón de ojo de ascuas
 71394,4,Faja vinculadora de llamas
 71395,4,Fajín cicatriz de fuego
 71396,4,Cinturón flecha de fuego
-71397,4,Faja de la ciudadela llameante
-71398,4,Faja de tajo abrasador
+71397,4,Cincho de alivio de fuego
+71398,4,Cinturón de los Siete Sellos
 71399,4,Cincho de la brasa llameante
 71400,4,Faja de llama indómita
 71402,4,Leotardos Telaceniza
-71403,4,Sobrehombros de quitina chamuscada
-71404,4,Apisonadoras de arañas
-71405,4,Caparazón marcado por las llamas
+71403,4,Sobrehombros chisporroteantes
+71404,4,Botines de llamaracna
+71405,4,Caparazón de llamas imbuidas
 71406,4,Mandíbula de Beth'tilac
-71407,4,Togas tejidas por arañas
+71407,4,Togas de devastación humeante
 71408,4,Resguardo de la Viuda Roja
 71409,4,Pira funeraria
 71410,4,Guantes de seda ceniza
@@ -30647,26 +30662,26 @@
 71413,4,Brazales de los ojos colectores
 71414,4,Arbalesta de furia en erupción
 71415,4,Mantón de fuego aterrador
-71416,4,Visión de la calavera flameante
+71416,4,Caperuza de desdén rampante
 71417,4,Coselete de núcleo llameante
 71418,4,Brazales hiendetierra
 71419,4,Guanteletes piel de fuego
 71420,4,Apisonadoras de obsidiana rajada
-71421,4,Visión de la llama chisporroteante
+71421,4,Capucha chisporroteante
 71422,4,Puntavolcán
-71424,4,Togas incendiarias
-71425,4,Braciles cauterizadores
+71424,4,Coselete incendiario
+71425,4,Braciles Línea de lava
 71426,4,Mandiletes del gigante enfurecido
 71427,4,Cuchilla de Alysra
 71428,4,Braciles chisporroteantes
-71429,4,Leotardos desertafuego
-71430,4,Gran yelmo madriguera
-71431,4,Quijotes espantallamas
+71429,4,Leotardos pluma de magma
+71430,4,Gran yelmo de la fauce voraz
+71431,4,Quijotes de gusano de lava
 71432,4,Bufas de llama recurrente
-71434,4,Capa Ala de Luz
-71435,4,Leotardos de llama etérea
+71434,4,Alas de llamas
+71435,4,Leotardos de fuego vaporoso
 71436,4,Botines de fénix derribado
-71437,4,Guanteletes de la nidada
+71437,4,Guanteletes tallagarras
 71438,4,Bufas del cráter en llamas
 71439,4,Garra de la madre de fuego
 71440,4,Guantes de humo desvanecido
@@ -30675,29 +30690,30 @@
 71443,4,Cinturón de furia acerado
 71444,4,Quijotes de devoción demente
 71445,4,Gran hacha del Robacráneos
-71447,4,Sandalias eludeascuas
-71448,4,Concha de abulón de Forjallamas
+71447,4,Sandalias pisacarbón
+71448,4,Cáliz de inquina
 71450,4,Guardahombros chisporroteantes
 71451,4,Botines de obediencia implícita
 71452,4,Brazales del cazador aterrador
 71453,4,Quijotes de control absoluto
 71454,4,Rompepuertas
-71455,4,Ala de Señor demoníaco
+71455,4,Coraza del alma incendiaria
 71456,4,Hombreras de la puerta olvidada
+71457,4,Botines exterminadores
 71458,4,Manoplas chisporroteantes
 71459,4,Yelmo de gloria llameante
 71460,4,Fragmento de tormento
 71461,4,Manto de puertas cerradas
-71462,4,Escrito sobre el Vínculo lúgubre
+71462,4,Grito de magma
 71463,4,Brazales de alas resplandecientes
 71464,4,El abrazo del Guardián de la Puerta
 71465,4,Borgoñota de llama
-71466,4,Aguja llameante de Fandral
-71467,4,Sandalias del escorpión llameante
+71466,4,Guadaña llameante de Fandral
+71467,4,Sandalias de carbón inquieto
 71468,4,Mandiletes de precisión infalible
-71469,4,Caparazón de visiones cambiantes
+71469,4,Coraza de visiones cambiantes
 71470,4,Brazales del sendero ígneo
-71471,4,Cubremuñecas de demarcación
+71471,4,Cubremuñecas de condena arrogante
 71473,4,Aguijón del escorpión llameante
 71474,4,Leotardos de felino de fuego
 71475,4,Botines del penitente
@@ -30761,7 +30777,7 @@
 71534,4,Leotardos de la llama purificadora
 71535,4,Vestimentas de la llama purificadora
 71536,4,Jinetas de la llama purificadora
-71537,4,Jubón de fénix oscuro
+71537,4,Guerrera de fénix oscuro
 71538,4,Guantes de fénix oscuro
 71539,4,Yelmo de fénix oscuro
 71540,4,Musleras de fénix oscuro
@@ -30782,27 +30798,27 @@
 71555,4,Falda volcánica en erupción
 71556,4,Jinetas volcánicas en erupción
 71557,4,Corcesca de odio
-71558,4,Lava Bolt Crossbow
+71558,4,Ballesta Descarga de lava
 71559,4,Aguja de dolor escarlata
 71560,4,Escalpelo esterilizado de Chelley
 71561,4,Cadenas ineludibles
-71562,4,Taladora tajonegro
-71567,4,Reliquia corazóncruel
+71562,4,Cuchilla de obsidium
+71567,4,El Pacto de la Llama
 71568,4,Fragmento de estrella de la mañana
 71569,4,Brazales de vinculador de llamas
 71570,4,Brazales de relámpago bifurcado
 71571,4,Brazales de llama de ascuas
 71572,4,Guardamuñecas de alma de fuego
-71575,4,Varita de ascua resplandeciente
-71577,4,Reliquia de vinculador de fuego
-71579,4,Varita de pluma de fénix
-71580,4,Sortija de llama de almas
-71581,4,Ataduras quemacráneos
+71575,4,Senda de ascuas
+71577,4,Pluma de Aviana chamuscada
+71579,4,Varita chamuscaparra
+71580,4,Vial de llama de almas
+71581,4,Ataduras humeantes
 71582,4,Brazales de ceniza neblinosa
 71583,4,Brazales de verdades imperiosas
 71584,4,Brazales ciclópeos
 71585,4,Brazales de fuerza majestuosa
-71587,4,Fetiche de llama maldita
+71587,4,Reliquia de los señores elementales
 71590,4,Figurilla de garra mortal
 71592,4,Estrella deflectora
 71593,4,Cercenagigantes
@@ -30821,26 +30837,28 @@
 71606,4,Visera del gigante fundido
 71607,4,Leotardos del gigante fundido
 71608,4,Guardahombros del gigante fundido
-71611,4,Arathar the Eye of Flame
-71612,4,Bufas de llama pura
-71613,4,Faja de llamas
-71614,4,Guantes de halcón de fuego
-71615,4,Martillo del Señor del Fuego
+71611,4,Arathar el Ojo de la Llama
+71612,4,Espaldares de llama rugidora
+71613,4,Cadena de oficio de mayordomo
+71614,4,Dedos de incineración
+71615,4,Ko'gun Martillo del Señor del Fuego
 71616,4,Corona de llamas
-71640,4,Riplimb's Lost Collar
-71641,4,Riplimb's Lost Collar
+71640,4,Collera de Desmembrador
+71641,4,Collera de Desmembrador
 71713,4,Stave Icecrown Raid D02 Green
-71774,4,Smoldering Censer of Purity
-71775,4,Smoldering Censer of Purity
-71776,4,Eye of Purification
-71777,4,Eye of Purification
-71778,4,Avool's Incendiary Shanker
-71779,4,Avool's Incendiary Shanker
-71780,4,Zoid's Firelit Greatsword
-71781,4,Zoid's Firelit Greatsword
-71782,4,Shatterskull Bonecrusher
-71783,4,Shatterskull Bonecrusher
-71784,4,Firethorn Mindslicer
-71785,4,Firethorn Mindslicer
-71786,4,Entrail Disgorger
-71787,4,Entrail Disgorger
+71774,4,Incensario humeante de pureza
+71775,4,Incensario humeante de pureza
+71776,4,Ojo de purificación
+71777,4,Ojo de purificación
+71778,4,Faca incendiaria de Avool
+71779,4,Faca incendiaria de Avool
+71780,4,Espada magna rusiente de Zoid
+71781,4,Espada magna rusiente de Zoid
+71782,4,Machacahuesos Trizacráneo
+71783,4,Machacahuesos Trizacráneo
+71784,4,Cercenamentes espino de fuego
+71785,4,Cercenamentes espino de fuego
+71786,4,Sacaentrañas
+71787,4,Sacaentrañas
+71797,4,Sho'ravon gran báculo de aniquilación
+71798,4,Sho'ravon gran báculo de aniquilación

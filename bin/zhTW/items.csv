@@ -30248,7 +30248,7 @@
 69890,7,光潔的力量肩鎧
 69892,7,撕裂沙塵披風
 69893,7,浸血的斬骨掠刃
-69897,4,Fandral's Flaming Spire
+69897,4,Fandral's Flamescythe
 69916,4,托爾貝恩(達卡拉)
 69936,4,Fists of Fury
 69937,4,Eternal Elementium Handguards
@@ -30800,11 +30800,11 @@
 70675,4,Vicious Gladiator's Wyrmhide Spaulders
 70723,4,Sulfuras The Extinguished Hand
 70733,4,Alysra's Razor
-70734,4,Nestheart Greathelm
+70734,4,Greathelm of the Voracious Maw
 70735,4,Flickering Wristbands
-70736,4,Fireflight Leggings
+70736,4,Moltenfeather Leggings
 70737,4,Spaulders of Recurring Flame
-70739,4,Flightflame Legplates
+70739,4,Lavaworm Legplates
 70792,2,Art Template Cloth Belt - Robe_RaidMage_J - Arcane
 70793,2,Art Template Cloth Boot - Robe_RaidMage_J - Arcane
 70794,2,Art Template Cloth Chest - Robe_RaidMage_J - Arcane
@@ -30861,15 +30861,15 @@
 70907,2,Art Template Plate Wrist - RaidWarrior_J - Red
 70912,4,Cracked Obsidian Stompers
 70913,4,Legplates of Frenzied Devotion
-70914,4,Flamescarred Carapace
+70914,4,Carapace of Imbibed Flame
 70915,4,Shard of Torment
 70916,4,Helm of Blazing Glory
 70917,4,Flickering Handguards
 70920,4,Bracers of the Fiery Path
-70921,4,Spaulders of Pure Flame
+70921,4,Pauldrons of Roaring Flame
 70922,4,Mandible of Beth'tilac
 70923,2,Gaudy Winter Veil Sweater
-70930,4,Durable Flamewrath Cloak
+70930,4,Durable Flamewrath Greatcloak
 70933,4,Girdle of the Indomitable Flame
 70937,4,Bracers of Regal Force
 70939,4,Deathclutch Figurine
@@ -30889,40 +30889,40 @@
 70954,4,Elementium Deathplate Faceguard
 70955,4,Elementium Deathplate Chestguard
 70985,4,Craterflame Spaulders
-70986,4,Egg-Clutch Gauntlets
+70986,4,Clawshaper Gauntlets
 70987,4,Phoenix-Down Treads
 70988,4,Clutch of the Firemother
-70989,4,Leggings of Airy Flame
-70990,4,Lightwing Cloak
+70989,4,Leggings of Billowing Fire
+70990,4,Wings of Flame
 70991,4,Arbalest of Erupting Fury
 70992,4,Dreadfire Drape
 70993,4,Fireskin Gauntlets
-71003,4,Vision of the Flaming Skull
+71003,4,Hood of Rampant Disdain
 71004,4,Earthcrack Bracers
 71005,4,Flaming Core Chestguard
 71006,4,Volcanospike
 71007,4,Grips of the Raging Giant
-71009,4,Cauterizing Wristbands
-71010,4,Incendic Robes
-71011,4,Vision of Flickering Flame
+71009,4,Lava Line Wristbands
+71010,4,Incendic Chestguard
+71011,4,Flickering Cowl
 71013,4,Feeding Frenzy
 71014,4,Skullstealer Greataxe
 71018,4,Scalp of the Bandit Prince
 71020,4,Gloves of Dissolving Smoke
 71021,4,Uncrushable Belt of Fury
-71022,4,Flamewrought Abalone Shell
-71023,4,Emberskip Sandals
+71022,4,Goblet of Anger
+71023,4,Coalwalker Sandals
 71025,4,Flickering Shoulderpads
 71026,4,Bracers of the Dread Hunter
 71027,4,Treads of Implicit Obedience
 71028,4,Legplates of Absolute Control
-71029,4,Spiderstompers
-71030,4,Seared Chitin Shoulders
+71029,4,Arachnaflame Treads
+71030,4,Flickering Shoulders
 71031,4,Cinderweb Leggings
 71038,4,Ward of the Red Widow
 71039,4,Funeral Pyre
 71040,4,Cowl of the Clicking Menace
-71041,4,Spiderwoven Robes
+71041,4,Robes of Smoldering Devastation
 71042,4,Thoracic Flame Kilt
 71043,4,Spaulders of Manifold Eyes
 71044,4,Cindersilk Gloves
@@ -30980,28 +30980,28 @@
 71131,4,Flamebinding Girdle
 71142,2,Test Item
 71145,0,Monster - Caster Legendary Stage 0
-71146,4,Hardheart Relic
-71147,4,Doomflame Fetish
+71146,4,Covenant of the Flame
+71147,4,Relic of the Elemental Lords
 71148,4,Soulflame Vial
-71149,4,Firebinder Relic
-71150,4,Phoenix-Feather Wand
-71151,4,Glowing Ember Wand
+71149,4,Singed Plume of Aviana
+71150,4,Scorchvine Wand
+71151,4,Trail of Embers
 71152,4,Morningstar Shard
 71154,4,Giantslicer
 71218,4,Deflecting Star
-71227,4,Bladed Flamewrath Cloak
+71227,4,Bladed Flamewrath Cover
 71228,4,Sleek Flamewrath Cloak
-71229,4,Flowing Flamewrath Cloak
-71230,4,Rippling Flamewrath Cloak
+71229,4,Flowing Flamewrath Cape
+71230,4,Rippling Flamewrath Drape
 71249,4,Firescar Sash
 71250,4,Cinch of the Flaming Ember
-71253,4,Searing Slice Girdle
-71254,4,Girdle of the Flaming Foothold
+71253,4,Belt of the Seven Seals
+71254,4,Firemend Cinch
 71255,4,Firearrow Belt
 71258,4,Embereye Belt
 71260,4,Bracers of Imperious Truths
 71261,4,Gigantiform Bracers
-71262,4,Scorchskull Bindings
+71262,4,Smolderskull Bindings
 71263,4,Bracers of Misting Ash
 71264,4,Bracers of Forked Lightning
 71265,4,Emberflame Bracers
@@ -31046,9 +31046,10 @@
 71304,4,Erupting Volcanic Legguards
 71305,4,Erupting Volcanic Spaulders
 71312,4,Gatecrasher
-71313,4,Sandals of the Flaming Scorpion
-71314,4,Demon Lord's Wing
-71323,4,Tome of Grim Binding
+71313,4,Sandals of Leaping Coals
+71314,4,Breastplate of the Incendiary Soul
+71315,4,Decimation Treads
+71323,4,Molten Scream
 71325,4,The Horseman's Sinister Saber
 71326,4,The Horseman's Horrific Helmet
 71331,4,Direbrew's Bloodied Shanker
@@ -31057,44 +31058,44 @@
 71341,4,Glowing Wing Bracers
 71342,4,Casque of Flame
 71343,4,Mantle of Closed Doors
-71344,4,Carapace of Shifting Visions
+71344,4,Breastplate of Shifting Visions
 71345,4,Shoulderpads of the Forgotten Gate
 71346,4,Grips of Unerring Precision
 71347,4,Stinger of the Flaming Scorpion
 71349,4,Firecat Leggings
-71350,4,Wristwraps of Demarcation
+71350,4,Wristwraps of Arrogant Doom
 71351,4,Treads of the Penitent Man
 71352,4,Sulfuras The Extinguished Hand
-71353,4,Arathar the Wings of Flame
-71355,4,Hammer of the Firelord
+71353,4,Arathar the Eye of Flame
+71355,4,Ko'gun Hammer of the Firelord
 71356,4,Crown of Flame
-71357,4,Girdle of Flame
-71358,4,Firehawk Gloves
+71357,4,Majordomo's Chain of Office
+71358,4,Fingers of Incineration
 71359,4,Chelley's Sterilized Scalpel
 71360,4,Spire of Scarlet Pain
 71361,4,Ranseur of Hatred
-71362,4,Blackcleave Chopper
+71362,4,Obsidium Cleaver
 71365,4,Hide-Bound Chains
-71366,4,Lava Bore Blunderbuss
+71366,4,Lava Bolt Crossbow
 71388,4,Sleek Flamewrath Cloak
-71389,4,Rippling Flamewrath Cloak
-71390,4,Flowing Flamewrath Cloak
-71391,4,Bladed Flamewrath Cloak
-71392,4,Durable Flamewrath Cloak
+71389,4,Rippling Flamewrath Drape
+71390,4,Flowing Flamewrath Cape
+71391,4,Bladed Flamewrath Cover
+71392,4,Durable Flamewrath Greatcloak
 71393,4,Embereye Belt
 71394,4,Flamebinding Girdle
 71395,4,Firescar Sash
 71396,4,Firearrow Belt
-71397,4,Girdle of the Flaming Foothold
-71398,4,Searing Slice Girdle
+71397,4,Firemend Cinch
+71398,4,Belt of the Seven Seals
 71399,4,Cinch of the Flaming Ember
 71400,4,Girdle of the Indomitable Flame
 71402,4,Cinderweb Leggings
-71403,4,Seared Chitin Shoulders
-71404,4,Spiderstompers
-71405,4,Flamescarred Carapace
+71403,4,Flickering Shoulders
+71404,4,Arachnaflame Treads
+71405,4,Carapace of Imbibed Flame
 71406,4,Mandible of Beth'tilac
-71407,4,Spiderwoven Robes
+71407,4,Robes of Smoldering Devastation
 71408,4,Ward of the Red Widow
 71409,4,Funeral Pyre
 71410,4,Cindersilk Gloves
@@ -31103,26 +31104,26 @@
 71413,4,Spaulders of Manifold Eyes
 71414,4,Arbalest of Erupting Fury
 71415,4,Dreadfire Drape
-71416,4,Vision of the Flaming Skull
+71416,4,Hood of Rampant Disdain
 71417,4,Flaming Core Chestguard
 71418,4,Earthcrack Bracers
 71419,4,Fireskin Gauntlets
 71420,4,Cracked Obsidian Stompers
-71421,4,Vision of Flickering Flame
+71421,4,Flickering Cowl
 71422,4,Volcanospike
-71424,4,Incendic Robes
-71425,4,Cauterizing Wristbands
+71424,4,Incendic Chestguard
+71425,4,Lava Line Wristbands
 71426,4,Grips of the Raging Giant
 71427,4,Alysra's Razor
 71428,4,Flickering Wristbands
-71429,4,Fireflight Leggings
-71430,4,Nestheart Greathelm
-71431,4,Flightflame Legplates
+71429,4,Moltenfeather Leggings
+71430,4,Greathelm of the Voracious Maw
+71431,4,Lavaworm Legplates
 71432,4,Spaulders of Recurring Flame
-71434,4,Lightwing Cloak
-71435,4,Leggings of Airy Flame
+71434,4,Wings of Flame
+71435,4,Leggings of Billowing Fire
 71436,4,Phoenix-Down Treads
-71437,4,Egg-Clutch Gauntlets
+71437,4,Clawshaper Gauntlets
 71438,4,Craterflame Spaulders
 71439,4,Clutch of the Firemother
 71440,4,Gloves of Dissolving Smoke
@@ -31131,29 +31132,30 @@
 71443,4,Uncrushable Belt of Fury
 71444,4,Legplates of Frenzied Devotion
 71445,4,Skullstealer Greataxe
-71447,4,Emberskip Sandals
-71448,4,Flamewrought Abalone Shell
+71447,4,Coalwalker Sandals
+71448,4,Goblet of Anger
 71450,4,Flickering Shoulderpads
 71451,4,Treads of Implicit Obedience
 71452,4,Bracers of the Dread Hunter
 71453,4,Legplates of Absolute Control
 71454,4,Gatecrasher
-71455,4,Demon Lord's Wing
+71455,4,Breastplate of the Incendiary Soul
 71456,4,Shoulderpads of the Forgotten Gate
+71457,4,Decimation Treads
 71458,4,Flickering Handguards
 71459,4,Helm of Blazing Glory
 71460,4,Shard of Torment
 71461,4,Mantle of Closed Doors
-71462,4,Tome of Grim Binding
+71462,4,Molten Scream
 71463,4,Glowing Wing Bracers
 71464,4,Gatekeeper's Embrace
 71465,4,Casque of Flame
-71466,4,Fandral's Flaming Spire
-71467,4,Sandals of the Flaming Scorpion
+71466,4,Fandral's Flamescythe
+71467,4,Sandals of Leaping Coals
 71468,4,Grips of Unerring Precision
-71469,4,Carapace of Shifting Visions
+71469,4,Breastplate of Shifting Visions
 71470,4,Bracers of the Fiery Path
-71471,4,Wristwraps of Demarcation
+71471,4,Wristwraps of Arrogant Doom
 71473,4,Stinger of the Flaming Scorpion
 71474,4,Firecat Leggings
 71475,4,Treads of the Penitent Man
@@ -31238,27 +31240,27 @@
 71555,4,Erupting Volcanic Kilt
 71556,4,Erupting Volcanic Shoulderwraps
 71557,4,Ranseur of Hatred
-71558,4,Lava Bore Blunderbuss
+71558,4,Lava Bolt Crossbow
 71559,4,Spire of Scarlet Pain
 71560,4,Chelley's Sterilized Scalpel
 71561,4,Hide-Bound Chains
-71562,4,Blackcleave Chopper
-71567,4,Hardheart Relic
+71562,4,Obsidium Cleaver
+71567,4,Covenant of the Flame
 71568,4,Morningstar Shard
 71569,4,Flamebinder Bracers
 71570,4,Bracers of Forked Lightning
 71571,4,Emberflame Bracers
 71572,4,Firesoul Wristguards
-71575,4,Glowing Ember Wand
-71577,4,Firebinder Relic
-71579,4,Phoenix-Feather Wand
+71575,4,Trail of Embers
+71577,4,Singed Plume of Aviana
+71579,4,Scorchvine Wand
 71580,4,Soulflame Vial
-71581,4,Scorchskull Bindings
+71581,4,Smolderskull Bindings
 71582,4,Bracers of Misting Ash
 71583,4,Bracers of Imperious Truths
 71584,4,Gigantiform Bracers
 71585,4,Bracers of Regal Force
-71587,4,Doomflame Fetish
+71587,4,Relic of the Elemental Lords
 71590,4,Deathclutch Figurine
 71592,4,Deflecting Star
 71593,4,Giantslicer
@@ -31277,11 +31279,11 @@
 71606,4,Faceguard of the Molten Giant
 71607,4,Legguards of the Molten Giant
 71608,4,Shoulderguards of the Molten Giant
-71611,4,Arathar the Wings of Flame
-71612,4,Spaulders of Pure Flame
-71613,4,Girdle of Flame
-71614,4,Firehawk Gloves
-71615,4,Hammer of the Firelord
+71611,4,Arathar the Eye of Flame
+71612,4,Pauldrons of Roaring Flame
+71613,4,Majordomo's Chain of Office
+71614,4,Fingers of Incineration
+71615,4,Ko'gun Hammer of the Firelord
 71616,4,Crown of Flame
 71640,4,Riplimb's Lost Collar
 71641,4,Riplimb's Lost Collar
@@ -31300,3 +31302,5 @@
 71785,4,Firethorn Mindslicer
 71786,4,Entrail Disgorger
 71787,4,Entrail Disgorger
+71797,4,Sho'ravon Greatstaff of Annihilation
+71798,4,Sho'ravon Greatstaff of Annihilation

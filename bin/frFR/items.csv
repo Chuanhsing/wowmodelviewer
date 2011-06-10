@@ -6754,7 +6754,7 @@
 18369,3,Protège-mains gordoks
 18372,3,Lame de la nouvelle lune
 18373,3,Pansière de tranquillité
-18374,3,Epaulières marquées par le feu
+18374,3,Epaulières marquées par les flammes
 18375,3,Brassards de l'éclipse
 18376,3,Masse usée
 18377,3,Gants de tir rapide
@@ -12142,7 +12142,7 @@
 31332,4,Frappe-éclair
 31333,4,Le guetteur de nuit
 31334,4,Bâton de la fureur naturelle
-31335,4,Kilt of Living Growth
+31335,4,Kilt de la croissance vivante
 31336,4,Lame de sorcellerie
 31340,4,Volonté d'Edward l'Etrange
 31341,2,Cape de sectateur du Ver
@@ -29685,91 +29685,91 @@
 69258,3,ZG Leather Shoulder 3
 69259,3,ZG Leather Shoulder 1
 69260,0,[Monster] - Item Dagger (Umbral Shiv)
-69549,4,Wristguards of the Predator
-69550,4,Leggings of Ancient Magics
-69551,4,Feathers of Akil'zon
-69552,4,Bracers of Hidden Purpose
-69554,4,Pauldrons of Nalorakk
-69555,4,Boots of the Ursine
-69556,4,Armbands of the Bear Spirit
-69557,4,Jungle Striders
-69558,4,Spiritshield Mask
-69559,4,Amani'shi Bracers
-69560,4,Jan'alai's Spaulders
-69561,4,Hawkscale Waistguard
-69562,4,Boots of Bad Mojo
-69564,4,The Savager's Mask
-69565,4,Breastplate of Primal Fury
-69567,4,Wristwraps of Departed Spirits
-69568,4,Shadowmender Wristguards
-69569,4,Shadowtooth Trollskin Breastplate
-69570,4,Waistband of Hexes
-69572,4,Hex Lord's Bloody Cloak
-69573,4,Pauldrons of Sacrifice
-69574,4,Tusked Shoulderpads
-69575,4,Mace of the Sacrificed
-69576,4,Headdress of Sharpened Vision
-69577,4,Collar of Bones
-69578,4,Hexing Robes
-69579,4,Amani Headdress
-69580,4,Mask of Restless Spirits
-69581,4,Amani Scepter of Rites
-69582,4,Skullpiercer Pauldrons
-69583,4,Legguards of the Unforgiving
-69584,4,Recovered Cloak of Frostheim
-69585,4,Wristwraps of Madness
-69586,4,Two-Toed Boots
-69587,4,Chestplate of Hubris
-69588,4,Skullcrusher Warboots
-69589,4,Leggings of Dancing Blades
-69590,4,Mojo-Mender's Gloves
-69591,4,Voodoo Hexblade
-69592,4,Reforged Trollbane
-69593,4,Battleplate of the Amani Empire
-69594,4,T'wansi's Handwraps
-69595,4,Fetish Greaves
-69596,4,Voodoo Hunting Bow
-69597,4,Zulian Throwing Axe
-69598,4,Robes of Dissention
-69599,4,Pauldrons of Ambition
-69600,4,Belt of Slithering Serpents
-69601,4,Serpentine Leggings
-69603,4,Breastplate of Serenity
-69604,4,Coils of Hate
-69606,4,Hakkari Loa Drape
-69607,4,Touch of Discord
-69608,4,Deathcharged Wristguards
-69609,4,Bloodlord's Protector
-69611,4,Sash of Anguish
-69612,4,Claw-Fringe Mantle
-69613,4,Leggings of the Pride
-69614,4,Roaring Mask of Bethekk
-69615,4,Zombie Walker Legguards
-69616,4,Spiritbinder Spaulders
-69617,4,Plumed Medicine Helm
-69618,4,Zulian Slasher
-69619,4,Bone Plate Handguards
-69620,4,Twinblade of the Hakkari
-69621,4,Twinblade of the Hakkari
-69622,4,The Hexxer's Headdress
-69623,4,Vestments of the Soulflayer
-69624,4,Legacy of Arlokk
-69625,4,Mandokir's Tribute
-69626,4,Jin'do's Verdict
-69627,4,Zulian Ward
+69549,4,Garde-poignets du prédateur
+69550,4,Jambières des magies anciennes
+69551,4,Plumes d'Akil'zon
+69552,4,Brassards de but caché
+69554,4,Espauliers de Nalorakk
+69555,4,Bottes de l'ursidé
+69556,4,Bracières de l'esprit ours
+69557,4,Cuissardes de la jungle
+69558,4,Masque du bouclier spirituel
+69559,4,Brassards amani'shi
+69560,4,Spallières de Jan'alai
+69561,4,Sangle écaille-de-faucon
+69562,4,Bottes de mauvais mojo
+69564,4,Masque du sauvage
+69565,4,Cuirasse de fureur primitive
+69567,4,Bandelettes des esprits défunts
+69568,4,Garde-poignets de soignelombre
+69569,4,Cuirasse en peau de troll crocs-d'ombre
+69570,4,Baudrier des sorts
+69572,4,Cape ensanglantée du seigneur des maléfices
+69573,4,Espauliers de sacrifice
+69574,4,Protège-épaules roharts
+69575,4,Masse du sacrifié
+69576,4,Coiffure de la vision aiguisée
+69577,4,Collerette d'os
+69578,4,Robe maléficiante
+69579,4,Coiffure amani
+69580,4,Masque des esprits sans repos
+69581,4,Sceptre de rites amani
+69582,4,Espauliers de perce-crâne
+69583,4,Garde-jambes du sans-pitié
+69584,4,Cape de Givrheim de récupération
+69585,4,Bandelettes de la folie
+69586,4,Bottes à deux orteils
+69587,4,Pansière d'orgueil
+69588,4,Bottes de guerre brise-tête
+69589,4,Jambières de lames dansantes
+69590,4,Gants de soigne-mojo
+69591,4,Laméfice vaudou
+69592,4,Trollemort reforgée
+69593,4,Harnois de bataille de l'empire amani
+69594,4,Protège-mains de T’wansi
+69595,4,Grèves fétiches
+69596,4,Arc de chasse vaudou
+69597,4,Hache de lancer zulienne
+69598,4,Robe de dissension
+69599,4,Espauliers d’ambition
+69600,4,Ceinture des serpents glissants
+69601,4,Jambières serpentines
+69603,4,Cuirasse de sérénité
+69604,4,Anneaux de la haine
+69606,4,Drapé de loa hakkari
+69607,4,Toucher de discorde
+69608,4,Garde-poignets chargés-de-mort
+69609,4,Protecteur du seigneur sanglant
+69611,4,Echarpe d'angoisse
+69612,4,Mantelet frangé de griffes
+69613,4,Jambières du fier
+69614,4,Masque rugissant de Bethekk
+69615,4,Garde-jambes de marcheur zombie
+69616,4,Spallières de lieur d'esprit
+69617,4,Heaume-médecine empanaché
+69618,4,Balafreuse zulienne
+69619,4,Garde-mains en plaques d'os
+69620,4,Lames-jumelles des Hakkari
+69621,4,Lames-jumelles des Hakkari
+69622,4,Masque du maléficieur
+69623,4,Habit du fléau des âmes
+69624,4,Héritage d'Arlokk
+69625,4,Tribut de Mandokir
+69626,4,Verdict de Jin'do
+69627,4,Gardien zulien
 69628,4,Jeklik's Smasher
-69629,4,Shield of the Blood God
-69630,4,Handguards of the Tormented
-69631,4,Zulian Voodoo Stick
-69632,4,Lost Bag of Whammies
-69633,4,Plunderer's Gauntlets
-69634,4,Fasc's Preserved Boots
-69636,4,Thekal's Claws
-69637,4,Gurubashi Destroyer
-69638,4,Arlokk's Claws
-69639,4,Renataki's Soul Slicer
-69640,4,Kilt of Forgotten Rites
-69641,4,Troll Skull Chestplate
+69629,4,Bouclier du Dieu sanglant
+69630,4,Garde-mains du tourmenté
+69631,4,Bâton vaudou zulien
+69632,4,Sac perdu de sales tours
+69633,4,Gantelets du pilleur
+69634,4,Bottes préservées de Fasc
+69636,4,Griffes de Thekal
+69637,4,Destructeur gurubashi
+69638,4,Griffes d'Arlokk
+69639,4,Tranche-âme de Renataki
+69640,4,Kilt des rites oubliés
+69641,4,Pansière en crâne de troll
 69643,0,[Monster] - Amani Punisher (Zandalari Archon)
 69644,0,[Monster] - Felsteel Reaper (alt color)
 69764,4,Carapace de tortue disparue
@@ -29779,12 +29779,12 @@
 69769,4,Cape des vents algides
 69770,4,Cape cerclée de glace
 69771,4,Faux de givre du seigneur Ahune
-69796,4,Spiritcaller Cloak
-69797,4,Charmbinder Grips
-69798,4,Knotted Handwraps
-69800,4,Spiritguard Drape
-69801,4,Amani Armguards
-69803,4,Gurubashi Punisher
+69796,4,Cape de mande-esprit
+69797,4,Poignes de lieur-de-charme
+69798,4,Protège-mains noués
+69800,4,Drapé de garde-esprit
+69801,4,Garde-bras amani
+69803,4,Punisseur gurubashi
 69814,7,Arme héritage de test de bug
 69819,1,Vrykul Drinking Horn Helm
 69831,4,Drapé de mistral
@@ -29811,7 +29811,7 @@
 69890,7,Espauliers de puissance brunis
 69892,7,Cape de tempête de sable abîmée
 69893,7,Déchireuse de Stratholme imprégnée de sang
-69897,4,Cime enflammée de Fandral
+69897,4,Faux de flammes de Fandral
 69916,4,Trollemort
 69936,4,Poings de fureur
 69937,4,Garde-mains en élémentium éternels
@@ -29901,9 +29901,23 @@
 70077,3,Charme de triomphe assoiffé de sang
 70078,3,Globe oculaire de domination assoiffée de sang
 70079,3,Mâchoire de conquête assoiffée de sang
-70080,4,Reforged Heartless
+70080,4,Sancoeur reforgée
 70088,2,[Art] Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Blue
 70097,2,[Art] Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Green
+70108,4,Grèves de pyroseigneur
+70109,4,Ombre de la relique d’Élune
+70111,4,Lumière de la relique d’Élune
+70112,4,Globe de lumière lunaire
+70114,4,Ceinturon du panache de feu
+70115,4,Bottines embrasées
+70116,4,Gantelets en obsidium vivant
+70117,4,Ceinture en obsidium vivant
+70118,4,Etreintes de la veuve
+70120,4,Ceinture bringuebalante
+70121,4,Pare-fusil de Ricket
+70122,4,Poignes d’Aviana
+70123,4,Grèves du lancier
+70128,4,Relique de Tortolla
 70155,4,Brise-cervelle
 70156,4,Sorcelame en élémentium ouvragé
 70157,4,Marteau en élémentium de Sancteforge
@@ -30348,11 +30362,11 @@
 70675,4,Spallières du gladiateur vicieux en peau de wyrm
 70723,4,Sulfuras la Main éteinte
 70733,4,Rasoir d’Alysra
-70734,4,Grand heaume cœur-du-nid
+70734,4,Grand heaume de la gueule vorace
 70735,4,Protège-poignets aux flammes vacillantes
-70736,4,Jambières du vol de feu
+70736,4,Jambières de plumes de feu
 70737,4,Spallières de la flamme récurrente
-70739,4,Cuissards aux flammes vacillantes
+70739,4,Cuissards de ver de lave
 70792,2,[Art] Template Cloth Belt - Robe_RaidMage_J - Arcane
 70793,2,[Art] Template Cloth Boot - Robe_RaidMage_J - Arcane
 70794,2,[Art] Template Cloth Chest - Robe_RaidMage_J - Arcane
@@ -30409,15 +30423,15 @@
 70907,2,[Art] Template Plate Wrist - RaidWarrior_J - Red
 70912,4,Croquenots d’obsidienne craquelés
 70913,4,Cuissards de dévotion frénétique
-70914,4,Carapace marquée par les flammes
+70914,4,Carapace imbibée de flammes
 70915,4,Eclat de tourment
 70916,4,Heaume de gloire flamboyante
 70917,4,Garde-mains aux flammes vacillantes
 70920,4,Brassards de la voie embrasée
-70921,4,Spallières de la flamme pure
+70921,4,Espauliers de la flamme ronflante
 70922,4,Mandibule de Beth'tilac
 70923,2,Pull bariolé du Voile d’hiver
-70930,4,Cape durable du courroux des flammes
+70930,4,Grande cape durable du courroux des flammes
 70933,4,Ceinturon de la flamme indomptable
 70937,4,Brassards de la force régalienne
 70939,4,Figurine de l’étreinte de la mort
@@ -30437,40 +30451,40 @@
 70954,4,Ventaille de plates mortelles en élémentium
 70955,4,Corselet de plates mortelles en élémentium
 70985,4,Spallières des flammes du cratère
-70986,4,Gantelets de la couvée
+70986,4,Gantelets de sculptegriffe
 70987,4,Bottines à duvet de phénix
 70988,4,Etreinte de la mère du feu
-70989,4,Jambières de la flamme aérienne
-70990,4,Cape de l’aile légère
+70989,4,Jambières de feu tourbillonnant
+70990,4,Ailes de flamme
 70991,4,Arbalète de la fureur éruptive
 70992,4,Drapé du feu d’effroi
 70993,4,Gantelets de la peau de feu
-71003,4,Vision du crâne enflammé
+71003,4,Chaperon de dédain rampant
 71004,4,Brasssards de la fissure terrestre
 71005,4,Corselet au coeur enflammé
 71006,4,Pointe du volcan
 71007,4,Poignes du géant enragé
-71009,4,Protège-poignets de cautérisation
-71010,4,Robe incendique
-71011,4,Vision de la flamme vacillante
+71009,4,Protège-poignets de ligne de lave
+71010,4,Corselet incendique
+71011,4,Capuche vacillante
 71013,4,Frénésie affamée
 71014,4,Bardiche du faucheur de crâne
 71018,4,Scalp du prince bandit
 71020,4,Gants de fumée dissolvante
 71021,4,Ceinture infroissable de la fureur
-71022,4,Coquille d’ormeau en flammes forgées
-71023,4,Sandales des braises bondissantes
+71022,4,Coupe de colère
+71023,4,Sandales du foule-braises
 71025,4,Protège-épaules aux flammes vacillantes
 71026,4,Brassards du chasseur redouté
 71027,4,Bottines de l’obéissance implicite
 71028,4,Cuissards du contrôle absolu
-71029,4,Ecrase-araignées
-71030,4,Epaulières calcinées en chitine
+71029,4,Bottines d’araignée embrasée
+71030,4,Epaulières vacillantes
 71031,4,Jambières braisetoile
 71038,4,Bouclier de la veuve rouge
 71039,4,Bûcher funéraire
 71040,4,Capuche de la menace cliquetante
-71041,4,Robe tissée par les araignées
+71041,4,Robe de dévastation fumante
 71042,4,Kilt de la flamme thoracique
 71043,4,Spallières des yeux multiples
 71044,4,Gants de cendre-soie
@@ -30528,28 +30542,28 @@
 71131,4,Ceinturon lieur-de-flamme
 71142,2,[Test Item]
 71145,0,[Monster] - Caster Legendary Stage 0
-71146,4,Relique du cœur endurci
-71147,4,Fétiche de la flamme funeste
+71146,4,Concordat de la Flamme
+71147,4,Relique des seigneurs élémentaires
 71148,4,Fiole d’âmeflamme
-71149,4,Relique lieuse-de-feu
-71150,4,Baguette plume-de-phénix
-71151,4,Baguette de la braise rougeoyante
+71149,4,Plume roussie d’Aviana
+71150,4,Baguette brûlevigne
+71151,4,Traînée de braises
 71152,4,Eclat d’étoile du matin
 71154,4,Trancheuse de géant
 71218,4,Etoile de déviation
-71227,4,Cape du courroux des flammes à lames
+71227,4,Couverture du courroux des flammes à lames
 71228,4,Cape du courroux des flammes brillante
 71229,4,Cape du courroux des flammes flottante
-71230,4,Cape du courroux des flammes ondoyante
+71230,4,Drapé du courroux des flammes ondoyante
 71249,4,Echarpe de la marque du feu
 71250,4,Cordelière de la braise flamboyante
-71253,4,Ceinturon de la tranche incendiaire
-71254,4,Ceinturon du débarquement enflammé
+71253,4,Ceinture des sept sceaux
+71254,4,Cordelière soigneflamme
 71255,4,Ceinture de la flèche de feu
 71258,4,Ceinture œil-de-braise
 71260,4,Brassards des vérités impérieuses
 71261,4,Brassards gigantiformes
-71262,4,Manchettes brûlecrâne
+71262,4,Manchettes fumecrâne
 71263,4,Brassards de la cendre brumeuse
 71264,4,Brassards de l’éclair fourchu
 71265,4,Brassards de braise-flammes
@@ -30590,9 +30604,10 @@
 71304,4,Garde-jambes de l’éruption volcanique
 71305,4,Spallières de l’éruption volcanique
 71312,4,Enfonce-porte
-71313,4,Sandales du scorpion enflammé
-71314,4,Aile du seigneur démon
-71323,4,Tome de lien sinistre
+71313,4,Sandales de charbons sauteurs
+71314,4,Cuirasse de l’âme incendiaire
+71315,4,Bottines de décimation
+71323,4,Cri de la fournaise
 71325,4,Le sabre sinistre du cavalier
 71326,4,Le casque calamiteux du cavalier
 71331,4,Tesson sanglant de Navrebière
@@ -30601,44 +30616,44 @@
 71341,4,Brassards de l'aile rougeoyante
 71342,4,Casque de flammes
 71343,4,Mantelet des portes fermées
-71344,4,Carapace de visions mouvantes
+71344,4,Cuirasse de visions mouvantes
 71345,4,Protège-épaules de la porte oubliée
 71346,4,Poignes de précision infaillible
 71347,4,Aiguillon du scorpion enflammé
 71349,4,Jambières de félin des flammes
-71350,4,Bandelettes de démarcation
+71350,4,Bandelettes de condamnation arrogante
 71351,4,Bottines du pénitent
 71352,4,Sulfuras la Main éteinte
-71353,4,Arathar the Eye of Flame
-71355,4,Marteau du seigneur du Feu
+71353,4,Arathar l’œil de la Flamme
+71355,4,Ko’gun marteau du seigneur du Feu
 71356,4,Couronne des flammes
-71357,4,Ceinturon des flammes
-71358,4,Gants faucon-de-feu
+71357,4,Chaine de fonction du chambellan
+71358,4,Doigts d’incinération
 71359,4,Scalpel stérile de Chelley
 71360,4,Cime de la douleur écarlate
 71361,4,Corsèque de haine
-71362,4,Couperet noirfendre
+71362,4,Fendoir d’obsidium
 71365,4,Chaînes liées de peau
-71366,4,Lava Bolt Crossbow
+71366,4,Arbalète trait de lave
 71388,4,Cape du courroux des flammes brillante
-71389,4,Cape du courroux des flammes ondoyante
+71389,4,Drapé du courroux des flammes ondoyante
 71390,4,Cape du courroux des flammes flottante
-71391,4,Cape du courroux des flammes à lames
-71392,4,Cape durable du courroux des flammes
+71391,4,Couverture du courroux des flammes à lames
+71392,4,Grande cape durable du courroux des flammes
 71393,4,Ceinture œil-de-braise
 71394,4,Ceinturon lieur-de-flamme
 71395,4,Echarpe de la marque du feu
 71396,4,Ceinture de la flèche de feu
-71397,4,Ceinturon du débarquement enflammé
-71398,4,Ceinturon de la tranche incendiaire
+71397,4,Cordelière soigneflamme
+71398,4,Ceinture des sept sceaux
 71399,4,Cordelière de la braise flamboyante
 71400,4,Ceinturon de la flamme indomptable
 71402,4,Jambières braisetoile
-71403,4,Epaulières calcinées en chitine
-71404,4,Ecrase-araignées
-71405,4,Carapace marquée par les flammes
+71403,4,Epaulières vacillantes
+71404,4,Bottines d’araignée embrasée
+71405,4,Carapace imbibée de flammes
 71406,4,Mandibule de Beth'tilac
-71407,4,Robe tissée par les araignées
+71407,4,Robe de dévastation fumante
 71408,4,Bouclier de la veuve rouge
 71409,4,Bûcher funéraire
 71410,4,Gants de cendre-soie
@@ -30647,26 +30662,26 @@
 71413,4,Spallières des yeux multiples
 71414,4,Arbalète de la fureur éruptive
 71415,4,Drapé du feu d’effroi
-71416,4,Vision du crâne enflammé
+71416,4,Chaperon de dédain rampant
 71417,4,Corselet au coeur enflammé
 71418,4,Brasssards de la fissure terrestre
 71419,4,Gantelets de la peau de feu
 71420,4,Croquenots d’obsidienne craquelés
-71421,4,Vision de la flamme vacillante
+71421,4,Capuche vacillante
 71422,4,Pointe du volcan
-71424,4,Robe incendique
-71425,4,Protège-poignets de cautérisation
+71424,4,Corselet incendique
+71425,4,Protège-poignets de ligne de lave
 71426,4,Poignes du géant enragé
 71427,4,Rasoir d’Alysra
 71428,4,Protège-poignets aux flammes vacillantes
-71429,4,Jambières du vol de feu
-71430,4,Grand heaume cœur-du-nid
-71431,4,Cuissards aux flammes vacillantes
+71429,4,Jambières de plumes de feu
+71430,4,Grand heaume de la gueule vorace
+71431,4,Cuissards de ver de lave
 71432,4,Spallières de la flamme récurrente
-71434,4,Cape de l’aile légère
-71435,4,Jambières de la flamme aérienne
+71434,4,Ailes de flamme
+71435,4,Jambières de feu tourbillonnant
 71436,4,Bottines à duvet de phénix
-71437,4,Gantelets de la couvée
+71437,4,Gantelets de sculptegriffe
 71438,4,Spallières des flammes du cratère
 71439,4,Etreinte de la mère du feu
 71440,4,Gants de fumée dissolvante
@@ -30675,29 +30690,30 @@
 71443,4,Ceinture infroissable de la fureur
 71444,4,Cuissards de dévotion frénétique
 71445,4,Bardiche du faucheur de crâne
-71447,4,Sandales des braises bondissantes
-71448,4,Coquille d’ormeau en flammes forgées
+71447,4,Sandales du foule-braises
+71448,4,Coupe de colère
 71450,4,Protège-épaules aux flammes vacillantes
 71451,4,Bottines de l’obéissance implicite
 71452,4,Brassards du chasseur redouté
 71453,4,Cuissards du contrôle absolu
 71454,4,Enfonce-porte
-71455,4,Aile du seigneur démon
+71455,4,Cuirasse de l’âme incendiaire
 71456,4,Protège-épaules de la porte oubliée
+71457,4,Bottines de décimation
 71458,4,Garde-mains aux flammes vacillantes
 71459,4,Heaume de gloire flamboyante
 71460,4,Eclat de tourment
 71461,4,Mantelet des portes fermées
-71462,4,Tome de lien sinistre
+71462,4,Cri de la fournaise
 71463,4,Brassards de l'aile rougeoyante
 71464,4,Etreinte du gardien de la porte
 71465,4,Casque de flammes
-71466,4,Cime enflammée de Fandral
-71467,4,Sandales du scorpion enflammé
+71466,4,Faux de flammes de Fandral
+71467,4,Sandales de charbons sauteurs
 71468,4,Poignes de précision infaillible
-71469,4,Carapace de visions mouvantes
+71469,4,Cuirasse de visions mouvantes
 71470,4,Brassards de la voie embrasée
-71471,4,Bandelettes de démarcation
+71471,4,Bandelettes de condamnation arrogante
 71473,4,Aiguillon du scorpion enflammé
 71474,4,Jambières de félin des flammes
 71475,4,Bottines du pénitent
@@ -30782,27 +30798,27 @@
 71555,4,Kilt de l’éruption volcanique
 71556,4,Drape-épaules de l’éruption volcanique
 71557,4,Corsèque de haine
-71558,4,Lava Bolt Crossbow
+71558,4,Arbalète trait de lave
 71559,4,Cime de la douleur écarlate
 71560,4,Scalpel stérile de Chelley
 71561,4,Chaînes liées de peau
-71562,4,Couperet noirfendre
-71567,4,Relique du cœur endurci
+71562,4,Fendoir d’obsidium
+71567,4,Concordat de la Flamme
 71568,4,Eclat d’étoile du matin
 71569,4,Brassards de lieur de flamme
 71570,4,Brassards de l’éclair fourchu
 71571,4,Brassards de braise-flammes
 71572,4,Garde-poignets d’âmefeu
-71575,4,Baguette de la braise rougeoyante
-71577,4,Relique lieuse-de-feu
-71579,4,Baguette plume-de-phénix
+71575,4,Traînée de braises
+71577,4,Plume roussie d’Aviana
+71579,4,Baguette brûlevigne
 71580,4,Fiole d’âmeflamme
-71581,4,Manchettes brûlecrâne
+71581,4,Manchettes fumecrâne
 71582,4,Brassards de la cendre brumeuse
 71583,4,Brassards des vérités impérieuses
 71584,4,Brassards gigantiformes
 71585,4,Brassards de la force régalienne
-71587,4,Fétiche de la flamme funeste
+71587,4,Relique des seigneurs élémentaires
 71590,4,Figurine de l’étreinte de la mort
 71592,4,Etoile de déviation
 71593,4,Trancheuse de géant
@@ -30821,26 +30837,28 @@
 71606,4,Ventaille du géant de lave
 71607,4,Garde-jambes du géant de lave
 71608,4,Garde-épaules du géant de lave
-71611,4,Arathar the Eye of Flame
-71612,4,Spallières de la flamme pure
-71613,4,Ceinturon des flammes
-71614,4,Gants faucon-de-feu
-71615,4,Marteau du seigneur du Feu
+71611,4,Arathar l’œil de la Flamme
+71612,4,Espauliers de la flamme ronflante
+71613,4,Chaine de fonction du chambellan
+71614,4,Doigts d’incinération
+71615,4,Ko’gun marteau du seigneur du Feu
 71616,4,Couronne des flammes
-71640,4,Riplimb's Lost Collar
-71641,4,Riplimb's Lost Collar
+71640,4,Collier perdu de Croquepatte
+71641,4,Collier perdu de Croquepatte
 71713,4,Stave Icecrown Raid D02 Green
-71774,4,Smoldering Censer of Purity
-71775,4,Smoldering Censer of Purity
-71776,4,Eye of Purification
-71777,4,Eye of Purification
-71778,4,Avool's Incendiary Shanker
-71779,4,Avool's Incendiary Shanker
-71780,4,Zoid's Firelit Greatsword
-71781,4,Zoid's Firelit Greatsword
-71782,4,Shatterskull Bonecrusher
-71783,4,Shatterskull Bonecrusher
-71784,4,Firethorn Mindslicer
-71785,4,Firethorn Mindslicer
-71786,4,Entrail Disgorger
-71787,4,Entrail Disgorger
+71774,4,Encensoir de pureté fumant
+71775,4,Encensoir de pureté fumant
+71776,4,Oeil de purification
+71777,4,Oeil de purification
+71778,4,Perforeuse incendiaire d’Avool
+71779,4,Perforeuse incendiaire d’Avool
+71780,4,Estramaçon illuminé par les flammes de Zoïd
+71781,4,Estramaçon illuminé par les flammes de Zoïd
+71782,4,Ecraseur d’os fracasse-crâne
+71783,4,Ecraseur d’os fracasse-crâne
+71784,4,Tranche-cerveau épine-de-feu
+71785,4,Tranche-cerveau épine-de-feu
+71786,4,Crochet à entrailles
+71787,4,Crochet à entrailles
+71797,4,Sho’ravon grand bâton d’annihilation
+71798,4,Sho’ravon grand bâton d’annihilation
