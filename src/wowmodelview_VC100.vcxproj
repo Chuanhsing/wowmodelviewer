@@ -198,9 +198,6 @@ copy ..\bin\*.csv $(OutDir)
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <PreBuildEvent>
-      <Command>rmdir /s /q $(OutDir)</Command>
-    </PreBuildEvent>
     <ClCompile>
       <AdditionalOptions>/D "WotLK" /J %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Full</Optimization>
@@ -271,9 +268,6 @@ copy ..\bin\userSettings\*.* $(OutDir)userSettings
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <PreBuildEvent>
-      <Command>rmdir /s /q $(OutDir)</Command>
-    </PreBuildEvent>
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
