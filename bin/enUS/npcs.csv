@@ -4409,7 +4409,7 @@
 5932,487,7,Taskmaster Whipfang
 5933,9418,7,Achellios the Banished
 5934,11011,1,Heartrazor
-5935,2076,1,Ironeye the Invincible
+5935,25203,1,Ironeye the Invincible
 5936,21975,1,Orca
 5937,10988,1,Vile Sting
 5938,4604,7,Uthan Stillwater
@@ -24435,6 +24435,7 @@
 40433,31846,10,Shark Bait Sack (Blood Effect)
 40434,1070,4,Blazing Trainer
 40435,31851,7,Headless Ghost
+40436,31849,7,Earthen Ring Pathfinder
 40437,31848,7,Battered Brewer
 40438,31852,7,Steamwheedle Shyster
 40441,31847,7,Battered Brewmaster
@@ -25045,7 +25046,8 @@
 41457,32242,7,Executioner Verathress
 41459,328,10,Player Float Vehicle
 41461,32470,10,Rusty Anvil
-41463,31660,7,Captured Feralas Sentinel
+41463,34374,7,Captured Feralas Sentinel
+41464,34374,7,Feralas Sentinel
 41466,31809,7,Idra'kess Sentinel
 41467,32474,7,Idra'kess Enchantress
 41470,4426,3,Doomguard Destroyer
@@ -27012,7 +27014,7 @@
 45031,6727,7,Nethergarde Footman
 45032,1126,10,Fenris Keep Stalker
 45041,29252,1,Forsaken Warhorse
-45042,35571,7,Thrall
+45042,38689,7,Thrall
 45043,26664,7,Peak Grindstone
 45062,34747,7,Oathsworn Scorpid Keeper
 45063,2729,1,Bonesnapper Scorpid
@@ -27124,6 +27126,7 @@
 45267,34362,7,Twilight Phase-Twister
 45270,34367,7,Hillsbrad Worgen
 45274,16869,7,Magistrix Elosai
+45277,34373,7,Feralas Sentinel
 45278,34375,7,Freewind Brave
 45280,34378,7,Forsaken Vanguard
 45281,16480,10,Staff Bunny
@@ -27221,14 +27224,19 @@
 45438,34503,7,Arnak Grimtotem
 45442,34504,7,Lakota Windsong
 45444,22125,6,Death's Step Miscreation
+45446,34507,1,Arikara
+45447,17612,1,Arikara
 45450,34508,1,The Lone Hunter
 45451,34509,7,Argus Highbeacon
 45452,11686,10,Liquid Ice
 45453,33998,1,Blighthound
 45454,29885,9,Portal
 45455,34532,4,Slipstream
+45463,11686,10,The Rattle of Bones
 45464,26224,7,Argent Flight Commander Vahdat
+45466,11686,10,The Writ of History
 45467,33289,7,Trogg Dweller
+45468,11686,10,The Drums of War
 45469,11686,10,Earth Shards
 45475,24470,10,Plague Disseminator
 45476,1126,10,Gravity Crush
@@ -27508,6 +27516,7 @@
 45991,1126,4,Zephyr
 45992,34812,2,Valiona
 45993,34813,2,Theralion
+45994,1126,10,General Purpose Bunny Nonflying JMF Level 42
 45995,34814,7,General Marstone
 45996,34815,7,Worgen Warbringer
 45997,34520,7,Commander Lorna Crowley
@@ -27531,6 +27540,7 @@
 46059,34212,7,Phin Odelic
 46060,34213,7,Bartolo Ginsetti
 46061,34215,7,Loremaster Dibbs
+46067,10227,7,Grimtotem Spirit
 46068,332,2,Corrupted Guardian
 46070,1126,10,Catapult Target
 46071,34838,2,Lord Itharius
@@ -27576,7 +27586,9 @@
 46145,34916,7,Bloodgorged Ettin
 46146,15275,1,Stagalbog Serpent
 46147,1126,10,Valiona
+46149,31861,7,Southsea Grenadier
 46153,22003,1,Highland Worg
+46154,31857,7,Southsea Burnmaster
 46157,11686,10,Hand of Gul'dan
 46158,1148,1,Untamed Gryphon
 46162,10831,1,Tawny Owl
@@ -28241,6 +28253,7 @@
 47473,11686,10,Lost City Intro Betrayal Camera
 47479,35656,7,Twilight Trapper
 47481,35664,1,Highperch Prideling
+47483,35651,1,Highperch Prideling
 47484,21598,7,Yetimus the Yeti Lord
 47485,2298,1,Highperch Wind Rider
 47486,35655,1,Heartrazor
@@ -28251,6 +28264,7 @@
 47500,35541,7,Ramkahen Traitor
 47501,11686,10,Inferno Rush
 47502,35584,7,Silenced Twilight Patroller
+47509,29312,1,Richtofen's Wind Rider
 47510,35665,7,Twilight Skymaster Richtofen
 47514,35666,7,Pretentious Businessman
 47517,34367,7,Lord Geoffery Wildwolf
@@ -28313,6 +28327,7 @@
 47609,11866,7,Horde Rogue Infantry
 47610,11866,7,Horde Shaman Infantry
 47617,35724,7,Farlus Wildheart
+47619,35730,7,Elementalist Starion
 47620,35731,7,Commander Fastfuse
 47621,35732,7,Bulwark Prisoner
 47622,35736,7,Peacebloom
@@ -29535,6 +29550,8 @@
 50977,36854,7,Slidfen
 50988,36855,7,Linore Erona
 51038,11686,10,Cinematic Camera Target 00
+51060,36054,7,Farseer Nobundo
+51065,35963,7,Muln Earthfury
 51071,4693,7,Captain Florence
 51079,30103,7,Captain Foulwind
 51081,252,7,Nathan Stockton
@@ -29587,6 +29604,7 @@
 51352,956,2,Rhea's Child
 51353,11591,7,Servant of House Barov
 51358,15180,10,Deathwing Intro Cutscene Vehicle [INTERNAL ONLY]
+51359,37324,9,Spirit of Cliffwatcher Longhorn
 51366,7804,2,Eranikus' Shade
 51367,4416,7,PTR Portcullis Helper
 51371,2306,7,Darnassus Hippogryph Rider
@@ -29888,6 +29906,7 @@
 53433,37935,10,Crackling Flame
 53450,37935,10,Web Rip
 53474,16925,10,Web Rip
+53475,38375,11,Cauterizing Flame
 53482,38113,10,Convalescence of Winds
 53483,38113,10,Shadow Gate
 53488,169,10,Summon Enabler Stalker
@@ -29935,7 +29954,7 @@
 54275,1206,8,Ashtongue Adder
 54276,35803,8,Cinderslither Snake
 54277,20265,8,Kindleworm
-54313,38689,7,Thrall
 54317,1405,4,Seether
 54339,38760,4,Ancient Charhound
 54374,38776,12,Brilliant Kaliri
+54392,38781,7,Ranela Featherglen

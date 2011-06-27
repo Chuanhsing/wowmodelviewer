@@ -377,7 +377,7 @@
 1455,2,黑石勇士戰斧
 1457,2,影皮釘錘
 1458,2,影皮木槌
-1459,2,影皮刮骨刀
+1459,2,影皮割顱斧
 1460,2,影皮雙手劍
 1461,2,屠戮戰鬥斧
 1465,2,屠虎匕首
@@ -12558,7 +12558,7 @@
 31332,4,閃現打擊
 31333,4,暗夜守衛者
 31334,4,自然之怒法杖
-31335,4,成長束褲
+31335,4,成長褶裙
 31336,4,巫術之刃
 31340,4,『怪咖』愛德華之願
 31341,2,巨龍教團披風
@@ -21523,7 +21523,7 @@
 49054,3,征服外袍
 49086,4,無情鬥士外袍
 49120,4,恐酒的血腥凶器
-49126,4,無頭騎士恐怖盔帽
+49126,4,無頭騎士恐怖頭盔
 49128,4,無頭騎士不幸之刃
 49179,4,無情鬥士矯捷之索
 49181,4,無情鬥士矯捷腕輪
@@ -24457,7 +24457,7 @@
 56109,3,起源之書
 56112,3,蠻錘騎乘頭盔
 56113,3,被詛咒的斯卡汀外衣
-56116,3,莫德古德之刃
+56116,3,莫德古得之刃
 56118,3,鍛造大師腰帶
 56119,3,黑鐵鍊甲長靴
 56122,3,無瑕能量魔杖
@@ -24601,7 +24601,7 @@
 56435,3,午日護腿
 56436,3,癒法軟靴
 56438,3,起源之書
-56441,3,莫德古德之刃
+56441,3,莫德古得之刃
 56442,3,被詛咒的斯卡汀外衣
 56443,3,蠻錘騎乘頭盔
 56446,3,無瑕能量魔杖
@@ -26542,7 +26542,7 @@
 60529,4,兇惡鬥士凱旋護腕
 60533,4,兇惡鬥士冥想護腰
 60534,4,兇惡鬥士冥想脛甲
-60535,4,兇惡鬥士冥想腕甲
+60535,4,兇惡鬥士冥想臂環
 60536,4,兇惡鬥士殘虐護腰
 60537,4,兇惡鬥士支配脛甲
 60538,4,兇惡鬥士支配腕甲
@@ -26651,7 +26651,7 @@
 60713,2,赤脊腿甲
 60714,2,死亡巨型火器
 60715,2,麻醉藥劑瓶
-60716,2,泥漿魚人手套
+60716,2,泥居魚手套
 60717,2,止水胸甲
 60718,2,影皮長靴
 60719,2,丹佛斯的胸甲
@@ -26671,8 +26671,8 @@
 60779,4,兇惡鬥士無畏斗篷
 60782,4,兇惡鬥士征服披風
 60783,4,兇惡鬥士殘虐斗篷
-60784,4,支配披風
-60785,4,支配披風
+60784,4,兇惡鬥士支配披風
+60785,4,兇惡鬥士支配披風
 60786,4,兇惡鬥士擴散披氅
 60787,4,兇惡鬥士無畏披氅
 60788,4,兇惡鬥士冥想披氅
@@ -30248,563 +30248,563 @@
 69890,7,光潔的力量肩鎧
 69892,7,撕裂沙塵披風
 69893,7,浸血的斬骨掠刃
-69897,4,Fandral's Flamescythe
+69897,4,范達爾的烈焰鐮刀
 69916,4,托爾貝恩(達卡拉)
-69936,4,Fists of Fury
-69937,4,Eternal Elementium Handguards
-69938,4,Holy Flame Gauntlets
-69939,4,Dragonfire Gloves
-69941,4,Gloves of Unforgiving Flame
-69942,4,Clutches of Evil
-69943,4,Heavenly Gloves of the Moon
-69944,4,Grips of Altered Reality
-69945,4,Don Tayo's Inferno Mittens
-69946,4,Warboots of Mighty Lords
-69947,4,Mirrored Boots
-69948,4,Emberforged Elementium Boots
-69949,4,Earthen Scale Sabatons
-69950,4,Footwraps of Quenched Fire
-69951,4,Treads of the Craft
-69952,4,Ethereal Footfalls
-69953,4,Endless Dream Walkers
-69954,4,Boots of the Black Flame
-70004,3,Bloodthirsty Pyrium Breastplate
-70005,3,Bloodthirsty Pyrium Boots
-70006,3,Bloodthirsty Pyrium Gauntlets
-70007,3,Bloodthirsty Pyrium Helm
-70008,3,Bloodthirsty Pyrium Legguards
-70009,3,Bloodthirsty Pyrium Shoulders
-70010,3,Bloodthirsty Pyrium Belt
-70011,3,Bloodthirsty Pyrium Bracers
-70012,3,Bloodthirsty Ornate Pyrium Breastplate
-70013,3,Bloodthirsty Ornate Pyrium Boots
-70014,3,Bloodthirsty Ornate Pyrium Gauntlets
-70015,3,Bloodthirsty Ornate Pyrium Helm
-70016,3,Bloodthirsty Ornate Pyrium Legguards
-70017,3,Bloodthirsty Ornate Pyrium Shoulders
-70018,3,Bloodthirsty Ornate Pyrium Belt
-70019,3,Bloodthirsty Ornate Pyrium Bracers
-70020,3,Bloodthirsty Leather Belt
-70021,3,Bloodthirsty Leather Boots
-70022,3,Bloodthirsty Leather Bracers
-70023,3,Bloodthirsty Leather Chest
-70024,3,Bloodthirsty Leather Gloves
-70025,3,Bloodthirsty Leather Helm
-70026,3,Bloodthirsty Leather Legs
-70027,3,Bloodthirsty Leather Shoulders
-70028,3,Bloodthirsty Wyrmhide Belt
-70029,3,Bloodthirsty Wyrmhide Boots
-70030,3,Bloodthirsty Wyrmhide Bracers
-70031,3,Bloodthirsty Wyrmhide Chest
-70032,3,Bloodthirsty Wyrmhide Gloves
-70033,3,Bloodthirsty Wyrmhide Helm
-70034,3,Bloodthirsty Wyrmhide Legs
-70035,3,Bloodthirsty Wyrmhide Shoulders
-70036,3,Bloodthirsty Dragonscale Belt
-70037,3,Bloodthirsty Dragonscale Boots
-70038,3,Bloodthirsty Dragonscale Bracers
-70039,3,Bloodthirsty Dragonscale Chest
-70040,3,Bloodthirsty Dragonscale Gloves
-70041,3,Bloodthirsty Dragonscale Helm
-70042,3,Bloodthirsty Dragonscale Legs
-70043,3,Bloodthirsty Dragonscale Shoulders
-70044,3,Bloodthirsty Charscale Belt
-70045,3,Bloodthirsty Charscale Boots
-70046,3,Bloodthirsty Charscale Bracers
-70047,3,Bloodthirsty Charscale Chest
-70048,3,Bloodthirsty Charscale Gloves
-70049,3,Bloodthirsty Charscale Helm
-70050,3,Bloodthirsty Charscale Legs
-70051,3,Bloodthirsty Charscale Shoulders
-70052,3,Bloodthirsty Fireweave Belt
-70053,3,Bloodthirsty Fireweave Boots
-70054,3,Bloodthirsty Fireweave Bracers
-70055,3,Bloodthirsty Fireweave Cowl
-70056,3,Bloodthirsty Fireweave Gloves
-70057,3,Bloodthirsty Fireweave Pants
-70058,3,Bloodthirsty Fireweave Robe
-70059,3,Bloodthirsty Fireweave Shoulders
-70060,3,Bloodthirsty Embersilk Robe
-70061,3,Bloodthirsty Embersilk Boots
-70062,3,Bloodthirsty Embersilk Belt
-70063,3,Bloodthirsty Embersilk Bracers
-70064,3,Bloodthirsty Embersilk Shoulders
-70065,3,Bloodthirsty Embersilk Gloves
-70066,3,Bloodthirsty Embersilk Pants
-70067,3,Bloodthirsty Embersilk Cowl
-70068,3,Bloodthirsty Fur Cloak
-70069,3,Bloodthirsty Hide Cloak
-70070,3,Bloodthirsty Embersilk Cape
-70077,3,Bloodthirsty Charm of Triumph
-70078,3,Bloodthirsty Eyeball of Dominance
-70079,3,Bloodthirsty Jawbone of Conquest
+69936,4,憤怒之拳
+69937,4,永恆源質手甲
+69938,4,聖焰護手
+69939,4,龍火手套
+69941,4,難恕烈焰手套
+69942,4,邪惡之攫
+69943,4,天上月光手套
+69944,4,現實變換之握
+69945,4,唐塔亞的煉獄連指手套
+69946,4,力王戰靴
+69947,4,鏡返長靴
+69948,4,燼鑄源質長靴
+69949,4,地化鱗片脛甲
+69950,4,滅焰裹足
+69951,4,技藝足靴
+69952,4,縹緲足音
+69953,4,無盡夢境步靴
+69954,4,黑色烈焰長靴
+70004,3,嗜血黃鐵胸甲
+70005,3,嗜血黃鐵長靴
+70006,3,嗜血黃鐵護手
+70007,3,嗜血黃鐵頭盔
+70008,3,嗜血黃鐵腿甲
+70009,3,嗜血黃鐵護肩
+70010,3,嗜血黃鐵腰帶
+70011,3,嗜血黃鐵護腕
+70012,3,嗜血華麗黃鐵胸甲
+70013,3,嗜血華麗黃鐵戰靴
+70014,3,嗜血華麗黃鐵護手
+70015,3,嗜血華麗黃鐵頭盔
+70016,3,嗜血華麗黃鐵腿甲
+70017,3,嗜血華麗黃鐵護肩
+70018,3,嗜血華麗黃鐵腰帶
+70019,3,嗜血華麗黃鐵護腕
+70020,3,嗜血皮甲腰帶
+70021,3,嗜血皮甲長靴
+70022,3,嗜血皮甲護腕
+70023,3,嗜血皮甲護胸
+70024,3,嗜血皮甲手套
+70025,3,嗜血皮甲頭盔
+70026,3,嗜血皮甲護腿
+70027,3,嗜血皮甲護肩
+70028,3,嗜血龍革腰帶
+70029,3,嗜血龍革長靴
+70030,3,嗜血龍革護腕
+70031,3,嗜血龍革護胸
+70032,3,嗜血龍革手套
+70033,3,嗜血龍革頭盔
+70034,3,嗜血龍革護腿
+70035,3,嗜血龍革護肩
+70036,3,嗜血龍鱗腰帶
+70037,3,嗜血龍鱗長靴
+70038,3,嗜血龍鱗護腕
+70039,3,嗜血龍鱗護胸
+70040,3,嗜血龍鱗手套
+70041,3,嗜血龍鱗頭盔
+70042,3,嗜血龍鱗護腿
+70043,3,嗜血龍鱗護肩
+70044,3,嗜血碳鱗腰帶
+70045,3,嗜血碳鱗長靴
+70046,3,嗜血碳鱗護腕
+70047,3,嗜血碳鱗護胸
+70048,3,嗜血碳鱗手套
+70049,3,嗜血碳鱗頭盔
+70050,3,嗜血碳鱗護腿
+70051,3,嗜血碳鱗護肩
+70052,3,嗜血火織腰帶
+70053,3,嗜血火織長靴
+70054,3,嗜血火織護腕
+70055,3,嗜血火織風帽
+70056,3,嗜血火織手套
+70057,3,嗜血火織束褲
+70058,3,嗜血火織長袍
+70059,3,嗜血火織護肩
+70060,3,嗜血燼絲長袍
+70061,3,嗜血燼絲長靴
+70062,3,嗜血燼絲腰帶
+70063,3,嗜血燼絲護腕
+70064,3,嗜血燼絲護肩
+70065,3,嗜血燼絲手套
+70066,3,嗜血燼絲束褲
+70067,3,嗜血燼絲風帽
+70068,3,嗜血毛皮披風
+70069,3,嗜血皮革披風
+70070,3,嗜血燼絲斗篷
+70077,3,嗜血凱旋符咒
+70078,3,嗜血支配之眼
+70079,3,嗜血征服顎骨
 70080,4,重鑄的冷酷無心
 70088,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Blue
 70097,2,Art Template Cloth Shoulder - Robe_PVPWarlock_C_02 - Green
-70108,4,Pyrelord Greaves
-70109,4,Relic of Elune's Shadow
-70111,4,Relic of Elune's Light
-70112,4,Globe of Moonlight
-70114,4,Fireplume Girdle
-70115,4,Fiery Treads
-70116,4,Gauntlets of Living Obsidium
-70117,4,Belt of Living Obsidium
-70118,4,Widow's Clutches
-70120,4,Rickety Belt
-70121,4,Ricket's Gun Show
-70122,4,Aviana's Grips
-70123,4,Lancer's Greaves
-70125,4,Relic of Lo'Gosh
-70128,4,Relic of Tortolla
-70155,4,Brainsplinter
-70156,4,Masterwork Elementium Spellblade
-70157,4,Lightforged Elementium Hammer
-70158,4,Elementium-Edged Scalper
-70159,3,Mylune's Call
-70162,4,Pyrium Spellward
-70163,4,Unbreakable Guardian
-70164,4,Masterwork Elementium Deathblade
-70165,4,Witch-Hunter's Harvester
-70178,4,Ruthless Gladiator's Greatsword
-70179,4,Ruthless Gladiator's Staff
-70180,4,Ruthless Gladiator's Energy Staff
-70181,4,Ruthless Gladiator's Battle Staff
-70182,4,Ruthless Gladiator's Pike
-70183,4,Ruthless Gladiator's Bonegrinder
-70184,4,Ruthless Gladiator's Decapitator
-70185,4,Ruthless Gladiator's Gavel
-70186,4,Ruthless Gladiator's Right Render
-70187,4,Ruthless Gladiator's Right Ripper
-70188,4,Ruthless Gladiator's Spellblade
-70189,4,Ruthless Gladiator's Left Render
-70190,4,Ruthless Gladiator's Left Ripper
-70191,4,Ruthless Gladiator's Shiv
-70192,4,Ruthless Gladiator's Longbow
-70193,4,Ruthless Gladiator's Heavy Crossbow
-70194,4,Ruthless Gladiator's Rifle
-70195,4,Ruthless Gladiator's Baton of Light
-70196,4,Ruthless Gladiator's Touch of Defeat
-70197,4,Ruthless Gladiator's Hatchet
-70198,4,Ruthless Gladiator's War Edge
-70199,4,Ruthless Gladiator's Quickblade
-70200,4,Ruthless Gladiator's Slicer
-70201,4,Ruthless Gladiator's Bonecracker
-70202,4,Ruthless Gladiator's Pummeler
-70203,4,Ruthless Gladiator's Shanker
-70204,4,Ruthless Gladiator's Hacker
-70205,4,Ruthless Gladiator's Cleaver
-70206,4,Ruthless Gladiator's Redoubt
-70207,4,Ruthless Gladiator's Barrier
-70208,4,Ruthless Gladiator's Shield Wall
-70209,4,Ruthless Gladiator's Reprieve
-70210,4,Ruthless Gladiator's Endgame
-70211,4,Ruthless Gladiator's Cleaver
-70212,4,Ruthless Gladiator's Hacker
-70213,4,Ruthless Gladiator's Decapitator
-70214,4,Ruthless Gladiator's Shanker
-70215,4,Ruthless Gladiator's Shiv
-70216,4,Ruthless Gladiator's Spellblade
-70217,4,Ruthless Gladiator's Right Ripper
-70218,4,Ruthless Gladiator's Left Ripper
-70219,4,Ruthless Gladiator's Left Render
-70220,4,Ruthless Gladiator's Right Render
-70221,4,Ruthless Gladiator's Pummeler
-70222,4,Ruthless Gladiator's Bonecracker
-70223,4,Ruthless Gladiator's Gavel
-70224,4,Ruthless Gladiator's Bonegrinder
-70225,4,Ruthless Gladiator's Pike
-70226,4,Ruthless Gladiator's Battle Staff
-70227,4,Ruthless Gladiator's Energy Staff
-70228,4,Ruthless Gladiator's Staff
-70229,4,Ruthless Gladiator's Slicer
-70230,4,Ruthless Gladiator's Quickblade
-70231,4,Ruthless Gladiator's Greatsword
-70232,4,Ruthless Gladiator's War Edge
-70233,4,Ruthless Gladiator's Hatchet
-70234,4,Ruthless Gladiator's Touch of Defeat
-70235,4,Ruthless Gladiator's Baton of Light
-70236,4,Ruthless Gladiator's Longbow
-70237,4,Ruthless Gladiator's Rifle
-70238,4,Ruthless Gladiator's Heavy Crossbow
-70239,4,Ruthless Gladiator's Endgame
-70240,4,Ruthless Gladiator's Reprieve
-70241,4,Ruthless Gladiator's Shield Wall
-70242,4,Ruthless Gladiator's Barrier
-70243,4,Ruthless Gladiator's Redoubt
-70244,4,Ruthless Gladiator's Dreadplate Chestpiece
-70245,4,Ruthless Gladiator's Dreadplate Gauntlets
-70246,4,Ruthless Gladiator's Dreadplate Helm
-70247,4,Ruthless Gladiator's Dreadplate Legguards
-70248,4,Ruthless Gladiator's Dreadplate Shoulders
-70249,4,Ruthless Gladiator's Scaled Chestpiece
-70250,4,Ruthless Gladiator's Scaled Gauntlets
-70251,4,Ruthless Gladiator's Scaled Helm
-70252,4,Ruthless Gladiator's Scaled Legguards
-70253,4,Ruthless Gladiator's Scaled Shoulders
-70254,4,Ruthless Gladiator's Plate Chestpiece
-70255,4,Ruthless Gladiator's Plate Gauntlets
-70256,4,Ruthless Gladiator's Plate Helm
-70257,4,Ruthless Gladiator's Plate Legguards
-70258,4,Ruthless Gladiator's Plate Shoulders
-70259,4,Ruthless Gladiator's Chain Armor
-70260,4,Ruthless Gladiator's Chain Gauntlets
-70261,4,Ruthless Gladiator's Chain Helm
-70262,4,Ruthless Gladiator's Chain Leggings
-70263,4,Ruthless Gladiator's Chain Spaulders
-70264,4,Ruthless Gladiator's Ringmail Armor
-70265,4,Ruthless Gladiator's Ringmail Gauntlets
-70266,4,Ruthless Gladiator's Ringmail Helm
-70267,4,Ruthless Gladiator's Ringmail Leggings
-70268,4,Ruthless Gladiator's Ringmail Spaulders
-70269,4,Ruthless Gladiator's Linked Armor
-70270,4,Ruthless Gladiator's Linked Gauntlets
-70271,4,Ruthless Gladiator's Linked Helm
-70272,4,Ruthless Gladiator's Linked Leggings
-70273,4,Ruthless Gladiator's Linked Spaulders
-70274,4,Ruthless Gladiator's Mail Armor
-70275,4,Ruthless Gladiator's Mail Gauntlets
-70276,4,Ruthless Gladiator's Mail Helm
-70277,4,Ruthless Gladiator's Mail Leggings
-70278,4,Ruthless Gladiator's Mail Spaulders
-70279,4,Ruthless Gladiator's Dragonhide Gloves
-70280,4,Ruthless Gladiator's Dragonhide Helm
-70281,4,Ruthless Gladiator's Dragonhide Legguards
-70282,4,Ruthless Gladiator's Dragonhide Robes
-70283,4,Ruthless Gladiator's Dragonhide Spaulders
-70284,4,Ruthless Gladiator's Kodohide Gloves
-70285,4,Ruthless Gladiator's Kodohide Helm
-70286,4,Ruthless Gladiator's Kodohide Legguards
-70287,4,Ruthless Gladiator's Kodohide Robes
-70288,4,Ruthless Gladiator's Kodohide Spaulders
-70289,4,Ruthless Gladiator's Wyrmhide Gloves
-70290,4,Ruthless Gladiator's Wyrmhide Helm
-70291,4,Ruthless Gladiator's Wyrmhide Legguards
-70292,4,Ruthless Gladiator's Wyrmhide Robes
-70293,4,Ruthless Gladiator's Wyrmhide Spaulders
-70294,4,Ruthless Gladiator's Leather Tunic
-70295,4,Ruthless Gladiator's Leather Gloves
-70296,4,Ruthless Gladiator's Leather Helm
-70297,4,Ruthless Gladiator's Leather Legguards
-70298,4,Ruthless Gladiator's Leather Spaulders
-70299,4,Ruthless Gladiator's Silk Handguards
-70300,4,Ruthless Gladiator's Silk Cowl
-70301,4,Ruthless Gladiator's Silk Trousers
-70302,4,Ruthless Gladiator's Silk Robe
-70303,4,Ruthless Gladiator's Silk Amice
-70304,4,Ruthless Gladiator's Mooncloth Gloves
-70305,4,Ruthless Gladiator's Mooncloth Helm
-70306,4,Ruthless Gladiator's Mooncloth Leggings
-70307,4,Ruthless Gladiator's Mooncloth Robe
-70308,4,Ruthless Gladiator's Mooncloth Mantle
-70309,4,Ruthless Gladiator's Satin Gloves
-70310,4,Ruthless Gladiator's Satin Hood
-70311,4,Ruthless Gladiator's Satin Leggings
-70312,4,Ruthless Gladiator's Satin Robe
-70313,4,Ruthless Gladiator's Satin Mantle
-70314,4,Ruthless Gladiator's Felweave Handguards
-70315,4,Ruthless Gladiator's Felweave Cowl
-70316,4,Ruthless Gladiator's Felweave Trousers
-70317,4,Ruthless Gladiator's Felweave Raiment
-70318,4,Ruthless Gladiator's Felweave Amice
-70319,4,Ruthless Gladiator's Clasp of Cruelty
-70320,4,Ruthless Gladiator's Girdle of Cruelty
-70321,4,Ruthless Gladiator's Warboots of Cruelty
-70322,4,Ruthless Gladiator's Armplates of Alacrity
-70323,4,Ruthless Gladiator's Warboots of Alacrity
-70324,4,Ruthless Gladiator's Greaves of Alacrity
-70325,4,Ruthless Gladiator's Bracers of Prowess
-70326,4,Ruthless Gladiator's Girdle of Prowess
-70327,4,Ruthless Gladiator's Armplates of Proficiency
-70328,4,Ruthless Gladiator's Waistguard of Meditation
-70329,4,Ruthless Gladiator's Sabatons of Meditation
-70330,4,Ruthless Gladiator's Armbands of Meditation
-70331,4,Ruthless Gladiator's Waistguard of Cruelty
-70332,4,Ruthless Gladiator's Clasp of Meditation
-70333,4,Ruthless Gladiator's Greaves of Meditation
-70334,4,Ruthless Gladiator's Bracers of Meditation
-70335,4,Ruthless Gladiator's Sabatons of Cruelty
-70336,4,Ruthless Gladiator's Links of Cruelty
-70337,4,Ruthless Gladiator's Sabatons of Alacrity
-70338,4,Ruthless Gladiator's Wristguards of Alacrity
-70339,4,Ruthless Gladiator's Links of Accuracy
-70340,4,Ruthless Gladiator's Wristguards of Accuracy
-70341,4,Ruthless Gladiator's Sabatons of Alacrity
-70342,4,Ruthless Gladiator's Armbands of Prowess
-70343,4,Ruthless Gladiator's Belt of Meditation
-70344,4,Ruthless Gladiator's Footguards of Meditation
-70345,4,Ruthless Gladiator's Bindings of Meditation
-70346,4,Ruthless Gladiator's Belt of Cruelty
-70347,4,Ruthless Gladiator's Waistband of Cruelty
-70348,4,Ruthless Gladiator's Boots of Cruelty
-70349,4,Ruthless Gladiator's Waistband of Accuracy
-70350,4,Ruthless Gladiator's Armwraps of Accuracy
-70351,4,Ruthless Gladiator's Boots of Alacrity
-70352,4,Ruthless Gladiator's Armwraps of Alacrity
-70353,4,Ruthless Gladiator's Ornamented Chestguard
-70354,4,Ruthless Gladiator's Ornamented Gloves
-70355,4,Ruthless Gladiator's Ornamented Headcover
-70356,4,Ruthless Gladiator's Ornamented Legplates
-70357,4,Ruthless Gladiator's Ornamented Spaulders
-70358,4,Ruthless Gladiator's Footguards of Alacrity
-70359,4,Ruthless Gladiator's Bindings of Prowess
-70360,4,Ruthless Gladiator's Cord of Cruelty
-70361,4,Ruthless Gladiator's Treads of Cruelty
-70362,4,Ruthless Gladiator's Cord of Accuracy
-70363,4,Ruthless Gladiator's Cuffs of Accuracy
-70364,4,Ruthless Gladiator's Treads of Alacrity
-70365,4,Ruthless Gladiator's Cuffs of Prowess
-70366,4,Ruthless Gladiator's Cuffs of Meditation
-70367,4,Ruthless Gladiator's Treads of Meditation
-70368,4,Ruthless Gladiator's Cord of Meditation
-70383,4,Ruthless Gladiator's Cloak of Alacrity
-70384,4,Ruthless Gladiator's Cloak of Prowess
-70385,4,Ruthless Gladiator's Cape of Prowess
-70386,4,Ruthless Gladiator's Cape of Cruelty
-70387,4,Ruthless Gladiator's Drape of Diffusion
-70388,4,Ruthless Gladiator's Drape of Prowess
-70389,4,Ruthless Gladiator's Drape of Meditation
-70405,4,Ruthless Gladiator's Relic of Dominance
-70406,4,Ruthless Gladiator's Relic of Salvation
-70407,4,Ruthless Gladiator's Relic of Triumph
-70408,4,Ruthless Gladiator's Relic of Conquest
-70415,4,Ruthless Gladiator's Ornamented Spaulders
-70416,4,Ruthless Gladiator's Ornamented Legplates
-70417,4,Ruthless Gladiator's Ornamented Headcover
-70418,4,Ruthless Gladiator's Ornamented Gloves
-70419,4,Ruthless Gladiator's Ornamented Chestguard
-70420,4,Ruthless Gladiator's Mail Spaulders
-70421,4,Ruthless Gladiator's Mail Leggings
-70422,4,Ruthless Gladiator's Mail Helm
-70423,4,Ruthless Gladiator's Mail Gauntlets
-70424,4,Ruthless Gladiator's Mail Armor
-70425,4,Ruthless Gladiator's Felweave Amice
-70426,4,Ruthless Gladiator's Felweave Raiment
-70427,4,Ruthless Gladiator's Felweave Trousers
-70428,4,Ruthless Gladiator's Wyrmhide Helm
-70429,4,Ruthless Gladiator's Wyrmhide Gloves
-70430,4,Ruthless Gladiator's Kodohide Spaulders
-70431,4,Ruthless Gladiator's Kodohide Robes
-70432,4,Ruthless Gladiator's Kodohide Legguards
-70433,4,Ruthless Gladiator's Ringmail Armor
-70434,4,Ruthless Gladiator's Chain Spaulders
-70435,4,Ruthless Gladiator's Chain Leggings
-70436,4,Ruthless Gladiator's Kodohide Helm
-70437,4,Ruthless Gladiator's Kodohide Gloves
-70438,4,Ruthless Gladiator's Dragonhide Spaulders
-70439,4,Ruthless Gladiator's Dragonhide Robes
-70440,4,Ruthless Gladiator's Chain Helm
-70441,4,Ruthless Gladiator's Chain Gauntlets
-70442,4,Ruthless Gladiator's Leather Spaulders
-70443,4,Ruthless Gladiator's Leather Legguards
-70444,4,Ruthless Gladiator's Leather Helm
-70445,4,Ruthless Gladiator's Leather Gloves
-70446,4,Ruthless Gladiator's Leather Tunic
-70447,4,Ruthless Gladiator's Wyrmhide Spaulders
-70448,4,Ruthless Gladiator's Wyrmhide Robes
-70449,4,Ruthless Gladiator's Wyrmhide Legguards
-70450,4,Ruthless Gladiator's Mooncloth Robe
-70451,4,Ruthless Gladiator's Mooncloth Leggings
-70452,4,Ruthless Gladiator's Mooncloth Helm
-70453,4,Ruthless Gladiator's Mooncloth Gloves
-70454,4,Ruthless Gladiator's Silk Amice
-70455,4,Ruthless Gladiator's Silk Robe
-70456,4,Ruthless Gladiator's Linked Spaulders
-70457,4,Ruthless Gladiator's Linked Leggings
-70458,4,Ruthless Gladiator's Linked Helm
-70459,4,Ruthless Gladiator's Linked Gauntlets
-70460,4,Ruthless Gladiator's Linked Armor
-70461,4,Ruthless Gladiator's Silk Trousers
-70462,4,Ruthless Gladiator's Silk Cowl
-70463,4,Ruthless Gladiator's Silk Handguards
-70464,4,Ruthless Gladiator's Ringmail Spaulders
-70465,4,Ruthless Gladiator's Ringmail Leggings
-70466,4,Ruthless Gladiator's Ringmail Helm
-70467,4,Ruthless Gladiator's Ringmail Gauntlets
-70468,4,Ruthless Gladiator's Felweave Cowl
-70469,4,Ruthless Gladiator's Felweave Handguards
-70470,4,Ruthless Gladiator's Satin Mantle
-70471,4,Ruthless Gladiator's Satin Robe
-70472,4,Ruthless Gladiator's Satin Leggings
-70473,4,Ruthless Gladiator's Satin Hood
-70474,4,Ruthless Gladiator's Satin Gloves
-70475,4,Ruthless Gladiator's Mooncloth Mantle
-70476,4,Ruthless Gladiator's Chain Armor
-70477,4,Ruthless Gladiator's Plate Shoulders
-70478,4,Ruthless Gladiator's Plate Legguards
-70479,4,Ruthless Gladiator's Plate Helm
-70480,4,Ruthless Gladiator's Plate Gauntlets
-70481,4,Ruthless Gladiator's Plate Chestpiece
-70482,4,Ruthless Gladiator's Scaled Shoulders
-70483,4,Ruthless Gladiator's Scaled Legguards
-70484,4,Ruthless Gladiator's Dragonhide Legguards
-70485,4,Ruthless Gladiator's Dragonhide Helm
-70486,4,Ruthless Gladiator's Dragonhide Gloves
-70487,4,Ruthless Gladiator's Scaled Helm
-70488,4,Ruthless Gladiator's Scaled Gauntlets
-70489,4,Ruthless Gladiator's Scaled Chestpiece
-70490,4,Ruthless Gladiator's Dreadplate Shoulders
-70491,4,Ruthless Gladiator's Dreadplate Legguards
-70492,4,Ruthless Gladiator's Dreadplate Helm
-70493,4,Ruthless Gladiator's Dreadplate Gauntlets
-70494,4,Ruthless Gladiator's Dreadplate Chestpiece
-70495,4,Ruthless Gladiator's Treads of Cruelty
-70496,4,Ruthless Gladiator's Treads of Alacrity
-70497,4,Ruthless Gladiator's Treads of Meditation
-70498,4,Ruthless Gladiator's Footguards of Meditation
-70499,4,Ruthless Gladiator's Footguards of Alacrity
-70500,4,Ruthless Gladiator's Sabatons of Cruelty
-70501,4,Ruthless Gladiator's Sabatons of Alacrity
-70502,4,Ruthless Gladiator's Greaves of Alacrity
-70503,4,Ruthless Gladiator's Greaves of Meditation
-70504,4,Ruthless Gladiator's Warboots of Cruelty
-70505,4,Ruthless Gladiator's Warboots of Alacrity
-70506,4,Ruthless Gladiator's Boots of Cruelty
-70507,4,Ruthless Gladiator's Boots of Alacrity
-70508,4,Ruthless Gladiator's Sabatons of Alacrity
-70509,4,Ruthless Gladiator's Sabatons of Meditation
-70511,4,Vicious Gladiator's Armbands of Meditation
-70512,4,Vicious Gladiator's Armbands of Prowess
-70513,4,Vicious Gladiator's Armplates of Alacrity
-70514,4,Vicious Gladiator's Armplates of Proficiency
-70515,4,Vicious Gladiator's Armwraps of Accuracy
-70516,4,Vicious Gladiator's Armwraps of Alacrity
-70523,4,Vicious Gladiator's Belt of Cruelty
-70524,4,Vicious Gladiator's Belt of Meditation
-70525,4,Vicious Gladiator's Bindings of Meditation
-70526,4,Vicious Gladiator's Bindings of Prowess
-70527,4,Vicious Gladiator's Boots of Alacrity
-70528,4,Vicious Gladiator's Boots of Cruelty
-70529,4,Vicious Gladiator's Bracers of Meditation
-70530,4,Vicious Gladiator's Bracers of Prowess
-70531,4,Vicious Gladiator's Cape of Cruelty
-70532,4,Vicious Gladiator's Cape of Prowess
-70533,4,Vicious Gladiator's Chain Armor
-70534,4,Vicious Gladiator's Chain Gauntlets
-70535,4,Vicious Gladiator's Chain Helm
-70536,4,Vicious Gladiator's Chain Leggings
-70537,4,Vicious Gladiator's Chain Spaulders
-70540,4,Vicious Gladiator's Clasp of Cruelty
-70541,4,Vicious Gladiator's Clasp of Meditation
-70542,4,Vicious Gladiator's Cloak of Alacrity
-70543,4,Vicious Gladiator's Cloak of Prowess
-70544,4,Vicious Gladiator's Cord of Accuracy
-70545,4,Vicious Gladiator's Cord of Cruelty
-70546,4,Vicious Gladiator's Cord of Meditation
-70547,4,Vicious Gladiator's Cuffs of Accuracy
-70548,4,Vicious Gladiator's Cuffs of Meditation
-70549,4,Vicious Gladiator's Cuffs of Prowess
-70550,4,Vicious Gladiator's Dragonhide Gloves
-70551,4,Vicious Gladiator's Dragonhide Helm
-70552,4,Vicious Gladiator's Dragonhide Legguards
-70553,4,Vicious Gladiator's Dragonhide Robes
-70554,4,Vicious Gladiator's Dragonhide Spaulders
-70555,4,Vicious Gladiator's Drape of Diffusion
-70556,4,Vicious Gladiator's Drape of Meditation
-70557,4,Vicious Gladiator's Drape of Prowess
-70558,4,Vicious Gladiator's Dreadplate Chestpiece
-70559,4,Vicious Gladiator's Dreadplate Gauntlets
-70560,4,Vicious Gladiator's Dreadplate Helm
-70561,4,Vicious Gladiator's Dreadplate Legguards
-70562,4,Vicious Gladiator's Dreadplate Shoulders
-70566,4,Vicious Gladiator's Felweave Amice
-70567,4,Vicious Gladiator's Felweave Cowl
-70568,4,Vicious Gladiator's Felweave Handguards
-70569,4,Vicious Gladiator's Felweave Raiment
-70570,4,Vicious Gladiator's Felweave Trousers
-70571,4,Vicious Gladiator's Footguards of Alacrity
-70572,4,Vicious Gladiator's Footguards of Meditation
-70573,4,Vicious Gladiator's Girdle of Cruelty
-70574,4,Vicious Gladiator's Girdle of Prowess
-70575,4,Vicious Gladiator's Greaves of Alacrity
-70576,4,Vicious Gladiator's Greaves of Meditation
-70580,4,Vicious Gladiator's Kodohide Gloves
-70581,4,Vicious Gladiator's Kodohide Helm
-70582,4,Vicious Gladiator's Kodohide Legguards
-70583,4,Vicious Gladiator's Kodohide Robes
-70584,4,Vicious Gladiator's Kodohide Spaulders
-70585,4,Vicious Gladiator's Leather Gloves
-70586,4,Vicious Gladiator's Leather Helm
-70587,4,Vicious Gladiator's Leather Legguards
-70588,4,Vicious Gladiator's Leather Spaulders
-70589,4,Vicious Gladiator's Leather Tunic
-70590,4,Vicious Gladiator's Linked Armor
-70591,4,Vicious Gladiator's Linked Gauntlets
-70592,4,Vicious Gladiator's Linked Helm
-70593,4,Vicious Gladiator's Linked Leggings
-70594,4,Vicious Gladiator's Linked Spaulders
-70595,4,Vicious Gladiator's Links of Accuracy
-70596,4,Vicious Gladiator's Links of Cruelty
-70597,4,Vicious Gladiator's Mail Armor
-70598,4,Vicious Gladiator's Mail Gauntlets
-70599,4,Vicious Gladiator's Mail Helm
-70600,4,Vicious Gladiator's Mail Leggings
-70601,4,Vicious Gladiator's Mail Spaulders
-70608,4,Vicious Gladiator's Mooncloth Gloves
-70609,4,Vicious Gladiator's Mooncloth Helm
-70610,4,Vicious Gladiator's Mooncloth Leggings
-70611,4,Vicious Gladiator's Mooncloth Mantle
-70612,4,Vicious Gladiator's Mooncloth Robe
-70615,4,Vicious Gladiator's Ornamented Chestguard
-70616,4,Vicious Gladiator's Ornamented Gloves
-70617,4,Vicious Gladiator's Ornamented Headcover
-70618,4,Vicious Gladiator's Ornamented Legplates
-70619,4,Vicious Gladiator's Ornamented Spaulders
-70623,4,Vicious Gladiator's Plate Chestpiece
-70624,4,Vicious Gladiator's Plate Gauntlets
-70625,4,Vicious Gladiator's Plate Helm
-70626,4,Vicious Gladiator's Plate Legguards
-70627,4,Vicious Gladiator's Plate Shoulders
-70628,4,Vicious Gladiator's Relic of Conquest
-70629,4,Vicious Gladiator's Relic of Dominance
-70630,4,Vicious Gladiator's Relic of Salvation
-70631,4,Vicious Gladiator's Relic of Triumph
-70632,4,Vicious Gladiator's Ringmail Armor
-70633,4,Vicious Gladiator's Ringmail Gauntlets
-70634,4,Vicious Gladiator's Ringmail Helm
-70635,4,Vicious Gladiator's Ringmail Leggings
-70636,4,Vicious Gladiator's Ringmail Spaulders
-70639,4,Vicious Gladiator's Sabatons of Alacrity
-70640,4,Vicious Gladiator's Sabatons of Alacrity
-70641,4,Vicious Gladiator's Sabatons of Cruelty
-70642,4,Vicious Gladiator's Sabatons of Meditation
-70643,4,Vicious Gladiator's Satin Gloves
-70644,4,Vicious Gladiator's Satin Hood
-70645,4,Vicious Gladiator's Satin Leggings
-70646,4,Vicious Gladiator's Satin Mantle
-70647,4,Vicious Gladiator's Satin Robe
-70648,4,Vicious Gladiator's Scaled Chestpiece
-70649,4,Vicious Gladiator's Scaled Gauntlets
-70650,4,Vicious Gladiator's Scaled Helm
-70651,4,Vicious Gladiator's Scaled Legguards
-70652,4,Vicious Gladiator's Scaled Shoulders
-70655,4,Vicious Gladiator's Silk Amice
-70656,4,Vicious Gladiator's Silk Cowl
-70657,4,Vicious Gladiator's Silk Handguards
-70658,4,Vicious Gladiator's Silk Robe
-70659,4,Vicious Gladiator's Silk Trousers
-70660,4,Vicious Gladiator's Treads of Alacrity
-70661,4,Vicious Gladiator's Treads of Cruelty
-70662,4,Vicious Gladiator's Treads of Meditation
-70663,4,Vicious Gladiator's Waistband of Accuracy
-70664,4,Vicious Gladiator's Waistband of Cruelty
-70665,4,Vicious Gladiator's Waistguard of Cruelty
-70666,4,Vicious Gladiator's Waistguard of Meditation
-70667,4,Vicious Gladiator's Warboots of Alacrity
-70668,4,Vicious Gladiator's Warboots of Cruelty
-70669,4,Vicious Gladiator's Wristguards of Accuracy
-70670,4,Vicious Gladiator's Wristguards of Alacrity
-70671,4,Vicious Gladiator's Wyrmhide Gloves
-70672,4,Vicious Gladiator's Wyrmhide Helm
-70673,4,Vicious Gladiator's Wyrmhide Legguards
-70674,4,Vicious Gladiator's Wyrmhide Robes
-70675,4,Vicious Gladiator's Wyrmhide Spaulders
-70723,4,Sulfuras The Extinguished Hand
-70733,4,Alysra's Razor
-70734,4,Greathelm of the Voracious Maw
-70735,4,Flickering Wristbands
-70736,4,Moltenfeather Leggings
-70737,4,Spaulders of Recurring Flame
-70739,4,Lavaworm Legplates
+70108,4,炎之王護脛
+70109,4,伊露恩幽影聖物
+70111,4,伊露恩光輝聖物
+70112,4,月光之球
+70114,4,火羽束腰
+70115,4,熾炎足靴
+70116,4,活體黑曜石護手
+70117,4,活體黑曜石腰帶
+70118,4,寡婦攫爪
+70120,4,不牢固的腰帶
+70121,4,瑞基特的槍腕套
+70122,4,艾維娜之握
+70123,4,持矛者護脛
+70125,4,洛戈許聖物
+70128,4,托爾托拉聖物
+70155,4,裂腦之刃
+70156,4,精工源質法刃
+70157,4,光鑄源質錘
+70158,4,源質鋒刃割顱斧
+70159,3,蜜露恩之喚
+70162,4,黃鐵禦法劍
+70163,4,無毀守護
+70164,4,精工源質亡刃
+70165,4,巫師獵人戈刃
+70178,4,殘酷鬥士巨劍
+70179,4,殘酷鬥士法杖
+70180,4,殘酷鬥士能量法杖
+70181,4,殘酷鬥士戰鬥法杖
+70182,4,殘酷鬥士尖刺
+70183,4,殘酷鬥士磨骨槌
+70184,4,殘酷鬥士斬首者
+70185,4,殘酷鬥士裁決槌
+70186,4,殘酷鬥士右裂鋸
+70187,4,殘酷鬥士右齒鋸
+70188,4,殘酷鬥士法刃
+70189,4,殘酷鬥士左裂鋸
+70190,4,殘酷鬥士左齒鋸
+70191,4,殘酷鬥士剃刃
+70192,4,殘酷鬥士長弓
+70193,4,殘酷鬥士重弩
+70194,4,殘酷鬥士步槍
+70195,4,殘酷鬥士聖光短棒
+70196,4,殘酷鬥士戰勝之觸
+70197,4,殘酷鬥士短斧
+70198,4,殘酷鬥士戰鋒飛斧
+70199,4,殘酷鬥士速刃
+70200,4,殘酷鬥士分割刃
+70201,4,殘酷鬥士碎骨錘
+70202,4,殘酷鬥士懲戒錘
+70203,4,殘酷鬥士凶器
+70204,4,殘酷鬥士劈斧
+70205,4,殘酷鬥士斬斧
+70206,4,殘酷鬥士盾牌壁壘
+70207,4,殘酷鬥士屏障
+70208,4,殘酷鬥士盾牆
+70209,4,殘酷鬥士緩刑法典
+70210,4,殘酷鬥士終卷
+70211,4,殘酷鬥士斬斧
+70212,4,殘酷鬥士劈斧
+70213,4,殘酷鬥士斬首者
+70214,4,殘酷鬥士凶器
+70215,4,殘酷鬥士剃刃
+70216,4,殘酷鬥士法刃
+70217,4,殘酷鬥士右齒鋸
+70218,4,殘酷鬥士左齒鋸
+70219,4,殘酷鬥士左裂鋸
+70220,4,殘酷鬥士右裂鋸
+70221,4,殘酷鬥士懲戒錘
+70222,4,殘酷鬥士碎骨錘
+70223,4,殘酷鬥士裁決槌
+70224,4,殘酷鬥士磨骨槌
+70225,4,殘酷鬥士尖刺
+70226,4,殘酷鬥士戰鬥法杖
+70227,4,殘酷鬥士能量法杖
+70228,4,殘酷鬥士法杖
+70229,4,殘酷鬥士分割刃
+70230,4,殘酷鬥士速刃
+70231,4,殘酷鬥士巨劍
+70232,4,殘酷鬥士戰鋒飛斧
+70233,4,殘酷鬥士短斧
+70234,4,殘酷鬥士戰勝之觸
+70235,4,殘酷鬥士聖光短棒
+70236,4,殘酷鬥士長弓
+70237,4,殘酷鬥士步槍
+70238,4,殘酷鬥士重弩
+70239,4,殘酷鬥士終卷
+70240,4,殘酷鬥士緩刑法典
+70241,4,殘酷鬥士盾牆
+70242,4,殘酷鬥士屏障
+70243,4,殘酷鬥士盾牌壁壘
+70244,4,殘酷鬥士懼鎧護軀
+70245,4,殘酷鬥士懼鎧護手
+70246,4,殘酷鬥士懼鎧頭盔
+70247,4,殘酷鬥士懼鎧腿甲
+70248,4,殘酷鬥士懼鎧護肩
+70249,4,殘酷鬥士綴鱗護軀
+70250,4,殘酷鬥士綴鱗護手
+70251,4,殘酷鬥士綴鱗頭盔
+70252,4,殘酷鬥士綴鱗腿甲
+70253,4,殘酷鬥士綴鱗護肩
+70254,4,殘酷鬥士鎧甲護軀
+70255,4,殘酷鬥士鎧甲護手
+70256,4,殘酷鬥士鎧甲盔帽
+70257,4,殘酷鬥士鎧甲腿甲
+70258,4,殘酷鬥士鎧甲護肩
+70259,4,殘酷鬥士鍊甲護甲
+70260,4,殘酷鬥士鍊甲護手
+70261,4,殘酷鬥士鍊甲頭盔
+70262,4,殘酷鬥士鍊甲護腿
+70263,4,殘酷鬥士鍊甲肩甲
+70264,4,殘酷鬥士環甲護甲
+70265,4,殘酷鬥士環甲護手
+70266,4,殘酷鬥士環甲頭盔
+70267,4,殘酷鬥士環甲護腿
+70268,4,殘酷鬥士環甲肩甲
+70269,4,殘酷鬥士鎖鍊護甲
+70270,4,殘酷鬥士鎖鍊護手
+70271,4,殘酷鬥士鎖鍊頭盔
+70272,4,殘酷鬥士鎖鍊護腿
+70273,4,殘酷鬥士鎖鍊肩甲
+70274,4,殘酷鬥士鎖甲護甲
+70275,4,殘酷鬥士鎖甲護手
+70276,4,殘酷鬥士鎖甲頭盔
+70277,4,殘酷鬥士鎖甲護腿
+70278,4,殘酷鬥士鎖甲肩甲
+70279,4,殘酷鬥士龍皮手套
+70280,4,殘酷鬥士龍皮頭盔
+70281,4,殘酷鬥士龍皮腿甲
+70282,4,殘酷鬥士龍皮長袍
+70283,4,殘酷鬥士龍皮肩甲
+70284,4,殘酷鬥士科多獸皮手套
+70285,4,殘酷鬥士科多獸皮頭盔
+70286,4,殘酷鬥士科多獸皮腿甲
+70287,4,殘酷鬥士科多獸皮長袍
+70288,4,殘酷鬥士科多獸皮肩甲
+70289,4,殘酷鬥士龍革手套
+70290,4,殘酷鬥士龍革頭盔
+70291,4,殘酷鬥士龍革腿甲
+70292,4,殘酷鬥士龍革長袍
+70293,4,殘酷鬥士龍革肩甲
+70294,4,殘酷鬥士皮甲外套
+70295,4,殘酷鬥士皮甲手套
+70296,4,殘酷鬥士皮甲頭盔
+70297,4,殘酷鬥士皮甲腿甲
+70298,4,殘酷鬥士皮甲肩甲
+70299,4,殘酷鬥士絲質手甲
+70300,4,殘酷鬥士絲質風帽
+70301,4,殘酷鬥士絲質長褲
+70302,4,殘酷鬥士絲質長袍
+70303,4,殘酷鬥士絲質襯肩
+70304,4,殘酷鬥士月布手套
+70305,4,殘酷鬥士月布兜帽
+70306,4,殘酷鬥士月布護腿
+70307,4,殘酷鬥士月布長袍
+70308,4,殘酷鬥士月布披肩
+70309,4,殘酷鬥士緞質手套
+70310,4,殘酷鬥士緞質兜帽
+70311,4,殘酷鬥士緞質護腿
+70312,4,殘酷鬥士緞質長袍
+70313,4,殘酷鬥士緞質披肩
+70314,4,殘酷鬥士魔織手甲
+70315,4,殘酷鬥士魔織風帽
+70316,4,殘酷鬥士魔織長褲
+70317,4,殘酷鬥士魔織衣飾
+70318,4,殘酷鬥士魔織襯肩
+70319,4,殘酷鬥士殘虐扣環
+70320,4,殘酷鬥士殘虐束腰
+70321,4,殘酷鬥士殘虐戰靴
+70322,4,殘酷鬥士矯捷臂鎧
+70323,4,殘酷鬥士矯捷戰靴
+70324,4,殘酷鬥士矯捷護脛
+70325,4,殘酷鬥士無畏護腕
+70326,4,殘酷鬥士無畏束腰
+70327,4,殘酷鬥士精通臂鎧
+70328,4,殘酷鬥士冥想護腰
+70329,4,殘酷鬥士冥想脛甲
+70330,4,殘酷鬥士冥想臂環
+70331,4,殘酷鬥士殘虐護腰
+70332,4,殘酷鬥士冥想扣環
+70333,4,殘酷鬥士冥想護脛
+70334,4,殘酷鬥士冥想護腕
+70335,4,殘酷鬥士殘虐脛甲
+70336,4,殘酷鬥士殘虐鎖鍊
+70337,4,殘酷鬥士矯捷脛甲
+70338,4,殘酷鬥士矯捷腕甲
+70339,4,殘酷鬥士精準鎖鍊
+70340,4,殘酷鬥士精準腕甲
+70341,4,殘酷鬥士矯捷脛甲
+70342,4,殘酷鬥士無畏臂環
+70343,4,殘酷鬥士冥想腰帶
+70344,4,殘酷鬥士冥想護足
+70345,4,殘酷鬥士冥想束腕
+70346,4,殘酷鬥士殘虐腰帶
+70347,4,殘酷鬥士殘虐腰環
+70348,4,殘酷鬥士殘虐長靴
+70349,4,殘酷鬥士精準腰環
+70350,4,殘酷鬥士精準裹臂
+70351,4,殘酷鬥士矯捷長靴
+70352,4,殘酷鬥士矯捷裹臂
+70353,4,殘酷鬥士裝飾護胸
+70354,4,殘酷鬥士裝飾手套
+70355,4,殘酷鬥士裝飾頭罩
+70356,4,殘酷鬥士裝飾腿鎧
+70357,4,殘酷鬥士裝飾肩甲
+70358,4,殘酷鬥士矯捷護足
+70359,4,殘酷鬥士無畏束腕
+70360,4,殘酷鬥士殘虐之索
+70361,4,殘酷鬥士殘虐足靴
+70362,4,殘酷鬥士精準之索
+70363,4,殘酷鬥士精準腕輪
+70364,4,殘酷鬥士矯捷足靴
+70365,4,殘酷鬥士無畏腕輪
+70366,4,殘酷鬥士冥想腕輪
+70367,4,殘酷鬥士冥想足靴
+70368,4,殘酷鬥士冥想之索
+70383,4,殘酷鬥士矯捷披風
+70384,4,殘酷鬥士無畏披風
+70385,4,殘酷鬥士無畏斗篷
+70386,4,殘酷鬥士殘虐斗篷
+70387,4,殘酷鬥士擴散披氅
+70388,4,殘酷鬥士無畏披氅
+70389,4,殘酷鬥士冥想披氅
+70405,4,殘酷鬥士支配聖物
+70406,4,殘酷鬥士拯救聖物
+70407,4,殘酷鬥士凱旋聖物
+70408,4,殘酷鬥士征服聖物
+70415,4,殘酷鬥士裝飾肩甲
+70416,4,殘酷鬥士裝飾腿鎧
+70417,4,殘酷鬥士裝飾頭罩
+70418,4,殘酷鬥士裝飾手套
+70419,4,殘酷鬥士裝飾護胸
+70420,4,殘酷鬥士鎖甲肩甲
+70421,4,殘酷鬥士鎖甲護腿
+70422,4,殘酷鬥士鎖甲頭盔
+70423,4,殘酷鬥士鎖甲護手
+70424,4,殘酷鬥士鎖甲護甲
+70425,4,殘酷鬥士魔織襯肩
+70426,4,殘酷鬥士魔織衣飾
+70427,4,殘酷鬥士魔織長褲
+70428,4,殘酷鬥士龍革頭盔
+70429,4,殘酷鬥士龍革手套
+70430,4,殘酷鬥士科多獸皮肩甲
+70431,4,殘酷鬥士科多獸皮長袍
+70432,4,殘酷鬥士科多獸皮腿甲
+70433,4,殘酷鬥士環甲護甲
+70434,4,殘酷鬥士鍊甲肩甲
+70435,4,殘酷鬥士鍊甲護腿
+70436,4,殘酷鬥士科多獸皮頭盔
+70437,4,殘酷鬥士科多獸皮手套
+70438,4,殘酷鬥士龍皮肩甲
+70439,4,殘酷鬥士龍皮長袍
+70440,4,殘酷鬥士鍊甲頭盔
+70441,4,殘酷鬥士鍊甲護手
+70442,4,殘酷鬥士皮甲肩甲
+70443,4,殘酷鬥士皮甲腿甲
+70444,4,殘酷鬥士皮甲頭盔
+70445,4,殘酷鬥士皮甲手套
+70446,4,殘酷鬥士皮甲外套
+70447,4,殘酷鬥士龍革肩甲
+70448,4,殘酷鬥士龍革長袍
+70449,4,殘酷鬥士龍革腿甲
+70450,4,殘酷鬥士月布長袍
+70451,4,殘酷鬥士月布護腿
+70452,4,殘酷鬥士月布兜帽
+70453,4,殘酷鬥士月布手套
+70454,4,殘酷鬥士絲質襯肩
+70455,4,殘酷鬥士絲質長袍
+70456,4,殘酷鬥士鎖鍊肩甲
+70457,4,殘酷鬥士鎖鍊護腿
+70458,4,殘酷鬥士鎖鍊頭盔
+70459,4,殘酷鬥士鎖鍊護手
+70460,4,殘酷鬥士鎖鍊護甲
+70461,4,殘酷鬥士絲質長褲
+70462,4,殘酷鬥士絲質風帽
+70463,4,殘酷鬥士絲質手甲
+70464,4,殘酷鬥士環甲肩甲
+70465,4,殘酷鬥士環甲護腿
+70466,4,殘酷鬥士環甲頭盔
+70467,4,殘酷鬥士環甲護手
+70468,4,殘酷鬥士魔織風帽
+70469,4,殘酷鬥士魔織手甲
+70470,4,殘酷鬥士緞質披肩
+70471,4,殘酷鬥士緞質長袍
+70472,4,殘酷鬥士緞質護腿
+70473,4,殘酷鬥士緞質兜帽
+70474,4,殘酷鬥士緞質手套
+70475,4,殘酷鬥士月布披肩
+70476,4,殘酷鬥士鍊甲護甲
+70477,4,殘酷鬥士鎧甲護肩
+70478,4,殘酷鬥士鎧甲腿甲
+70479,4,殘酷鬥士鎧甲盔帽
+70480,4,殘酷鬥士鎧甲護手
+70481,4,殘酷鬥士鎧甲護軀
+70482,4,殘酷鬥士綴鱗護肩
+70483,4,殘酷鬥士綴鱗腿甲
+70484,4,殘酷鬥士龍皮腿甲
+70485,4,殘酷鬥士龍皮頭盔
+70486,4,殘酷鬥士龍皮手套
+70487,4,殘酷鬥士綴鱗頭盔
+70488,4,殘酷鬥士綴鱗護手
+70489,4,殘酷鬥士綴鱗護軀
+70490,4,殘酷鬥士懼鎧護肩
+70491,4,殘酷鬥士懼鎧腿甲
+70492,4,殘酷鬥士懼鎧頭盔
+70493,4,殘酷鬥士懼鎧護手
+70494,4,殘酷鬥士懼鎧護軀
+70495,4,殘酷鬥士殘虐足靴
+70496,4,殘酷鬥士矯捷足靴
+70497,4,殘酷鬥士冥想足靴
+70498,4,殘酷鬥士冥想護足
+70499,4,殘酷鬥士矯捷護足
+70500,4,殘酷鬥士殘虐脛甲
+70501,4,殘酷鬥士矯捷脛甲
+70502,4,殘酷鬥士矯捷護脛
+70503,4,殘酷鬥士冥想護脛
+70504,4,殘酷鬥士殘虐戰靴
+70505,4,殘酷鬥士矯捷戰靴
+70506,4,殘酷鬥士殘虐長靴
+70507,4,殘酷鬥士矯捷長靴
+70508,4,殘酷鬥士矯捷脛甲
+70509,4,殘酷鬥士冥想脛甲
+70511,4,兇惡鬥士冥想臂環
+70512,4,兇惡鬥士無畏臂環
+70513,4,兇惡鬥士矯捷臂鎧
+70514,4,兇惡鬥士精通臂鎧
+70515,4,兇惡鬥士精準裹臂
+70516,4,兇惡鬥士矯捷裹臂
+70523,4,兇惡鬥士殘虐腰帶
+70524,4,兇惡鬥士冥想腰帶
+70525,4,兇惡鬥士冥想束腕
+70526,4,兇惡鬥士無畏束腕
+70527,4,兇惡鬥士矯捷長靴
+70528,4,兇惡鬥士殘虐長靴
+70529,4,兇惡鬥士冥想護腕
+70530,4,兇惡鬥士無畏護腕
+70531,4,兇惡鬥士殘虐斗篷
+70532,4,兇惡鬥士無畏斗篷
+70533,4,兇惡鬥士鍊甲護甲
+70534,4,兇惡鬥士鍊甲護手
+70535,4,兇惡鬥士鍊甲頭盔
+70536,4,兇惡鬥士鍊甲護腿
+70537,4,兇惡鬥士鍊甲肩甲
+70540,4,兇惡鬥士殘虐扣環
+70541,4,兇惡鬥士冥想扣環
+70542,4,兇惡鬥士矯捷披風
+70543,4,兇惡鬥士無畏披風
+70544,4,兇惡鬥士精準之索
+70545,4,兇惡鬥士殘虐之索
+70546,4,兇惡鬥士冥想之索
+70547,4,兇惡鬥士精準腕輪
+70548,4,兇惡鬥士冥想腕輪
+70549,4,兇惡鬥士無畏腕輪
+70550,4,兇惡鬥士龍皮手套
+70551,4,兇惡鬥士龍皮頭盔
+70552,4,兇惡鬥士龍皮腿甲
+70553,4,兇惡鬥士龍皮長袍
+70554,4,兇惡鬥士龍皮肩甲
+70555,4,兇惡鬥士擴散披氅
+70556,4,兇惡鬥士冥想披氅
+70557,4,兇惡鬥士無畏披氅
+70558,4,兇惡鬥士懼鎧護軀
+70559,4,兇惡鬥士懼鎧護手
+70560,4,兇惡鬥士懼鎧頭盔
+70561,4,兇惡鬥士懼鎧腿甲
+70562,4,兇惡鬥士懼鎧護肩
+70566,4,兇惡鬥士魔織襯肩
+70567,4,兇惡鬥士魔織風帽
+70568,4,兇惡鬥士魔織手甲
+70569,4,兇惡鬥士魔織衣飾
+70570,4,兇惡鬥士魔織長褲
+70571,4,兇惡鬥士矯捷護足
+70572,4,兇惡鬥士冥想護足
+70573,4,兇惡鬥士殘虐束腰
+70574,4,兇惡鬥士無畏束腰
+70575,4,兇惡鬥士矯捷護脛
+70576,4,兇惡鬥士冥想護脛
+70580,4,兇惡鬥士科多獸皮手套
+70581,4,兇惡鬥士科多獸皮頭盔
+70582,4,兇惡鬥士科多獸皮腿甲
+70583,4,兇惡鬥士科多獸皮長袍
+70584,4,兇惡鬥士科多獸皮肩甲
+70585,4,兇惡鬥士皮甲手套
+70586,4,兇惡鬥士皮甲頭盔
+70587,4,兇惡鬥士皮甲腿甲
+70588,4,兇惡鬥士皮甲肩甲
+70589,4,兇惡鬥士皮甲外套
+70590,4,兇惡鬥士鎖鍊護甲
+70591,4,兇惡鬥士鎖鍊護手
+70592,4,兇惡鬥士鎖鍊頭盔
+70593,4,兇惡鬥士鎖鍊護腿
+70594,4,兇惡鬥士鎖鍊肩甲
+70595,4,兇惡鬥士精準鎖鍊
+70596,4,兇惡鬥士殘虐鎖鍊
+70597,4,兇惡鬥士鎖甲護甲
+70598,4,兇惡鬥士鎖甲護手
+70599,4,兇惡鬥士鎖甲頭盔
+70600,4,兇惡鬥士鎖甲護腿
+70601,4,兇惡鬥士鎖甲肩甲
+70608,4,兇惡鬥士月布手套
+70609,4,兇惡鬥士月布兜帽
+70610,4,兇惡鬥士月布護腿
+70611,4,兇惡鬥士月布披肩
+70612,4,兇惡鬥士月布長袍
+70615,4,兇惡鬥士裝飾護胸
+70616,4,兇惡鬥士裝飾手套
+70617,4,兇惡鬥士裝飾頭罩
+70618,4,兇惡鬥士裝飾腿鎧
+70619,4,兇惡鬥士裝飾肩甲
+70623,4,兇惡鬥士鎧甲護軀
+70624,4,兇惡鬥士鎧甲護手
+70625,4,兇惡鬥士鎧甲盔帽
+70626,4,兇惡鬥士鎧甲腿甲
+70627,4,兇惡鬥士鎧甲護肩
+70628,4,兇惡鬥士征服聖物
+70629,4,兇惡鬥士支配聖物
+70630,4,兇惡鬥士拯救聖物
+70631,4,兇惡鬥士凱旋聖物
+70632,4,兇惡鬥士環甲護甲
+70633,4,兇惡鬥士環甲護手
+70634,4,兇惡鬥士環甲頭盔
+70635,4,兇惡鬥士環甲護腿
+70636,4,兇惡鬥士環甲肩甲
+70639,4,兇惡鬥士矯捷脛甲
+70640,4,兇惡鬥士矯捷脛甲
+70641,4,兇惡鬥士殘虐脛甲
+70642,4,兇惡鬥士冥想脛甲
+70643,4,兇惡鬥士緞質手套
+70644,4,兇惡鬥士緞質兜帽
+70645,4,兇惡鬥士緞質護腿
+70646,4,兇惡鬥士緞質披肩
+70647,4,兇惡鬥士緞質長袍
+70648,4,兇惡鬥士綴鱗護軀
+70649,4,兇惡鬥士綴鱗護手
+70650,4,兇惡鬥士綴鱗頭盔
+70651,4,兇惡鬥士綴鱗腿甲
+70652,4,兇惡鬥士綴鱗護肩
+70655,4,兇惡鬥士絲質襯肩
+70656,4,兇惡鬥士絲質風帽
+70657,4,兇惡鬥士絲質手甲
+70658,4,兇惡鬥士絲質長袍
+70659,4,兇惡鬥士絲質長褲
+70660,4,兇惡鬥士矯捷足靴
+70661,4,兇惡鬥士殘虐足靴
+70662,4,兇惡鬥士冥想足靴
+70663,4,兇惡鬥士精準腰環
+70664,4,兇惡鬥士殘虐腰環
+70665,4,兇惡鬥士殘虐護腰
+70666,4,兇惡鬥士冥想護腰
+70667,4,兇惡鬥士矯捷戰靴
+70668,4,兇惡鬥士殘虐戰靴
+70669,4,兇惡鬥士精準腕甲
+70670,4,兇惡鬥士矯捷腕甲
+70671,4,兇惡鬥士龍革手套
+70672,4,兇惡鬥士龍革頭盔
+70673,4,兇惡鬥士龍革腿甲
+70674,4,兇惡鬥士龍革長袍
+70675,4,兇惡鬥士龍革肩甲
+70723,4,薩弗拉斯，熄滅之手
+70733,4,艾里絲拉的利刃
+70734,4,貪噬大口巨盔
+70735,4,火光搖曳腕環
+70736,4,熔火之羽護腿
+70737,4,復燃烈焰肩甲
+70739,4,熔岩蟲腿鎧
 70792,2,Art Template Cloth Belt - Robe_RaidMage_J - Arcane
 70793,2,Art Template Cloth Boot - Robe_RaidMage_J - Arcane
 70794,2,Art Template Cloth Chest - Robe_RaidMage_J - Arcane
@@ -30859,448 +30859,448 @@
 70905,2,Art Template Plate Legs - RaidWarrior_J - Red
 70906,2,Art Template Plate Shoulder - RaidWarrior_J - Red
 70907,2,Art Template Plate Wrist - RaidWarrior_J - Red
-70912,4,Cracked Obsidian Stompers
-70913,4,Legplates of Frenzied Devotion
-70914,4,Carapace of Imbibed Flame
-70915,4,Shard of Torment
-70916,4,Helm of Blazing Glory
-70917,4,Flickering Handguards
-70920,4,Bracers of the Fiery Path
-70921,4,Pauldrons of Roaring Flame
-70922,4,Mandible of Beth'tilac
-70923,2,Gaudy Winter Veil Sweater
-70930,4,Durable Flamewrath Greatcloak
-70933,4,Girdle of the Indomitable Flame
-70937,4,Bracers of Regal Force
-70939,4,Deathclutch Figurine
-70941,4,Shoulderguards of the Molten Giant
-70942,4,Legguards of the Molten Giant
-70943,4,Handguards of the Molten Giant
-70944,4,Faceguard of the Molten Giant
-70945,4,Chestguard of the Molten Giant
-70946,4,Immolation Shoulderguards
-70947,4,Immolation Legguards
-70948,4,Immolation Faceguard
-70949,4,Immolation Handguards
-70950,4,Immolation Chestguard
-70951,4,Elementium Deathplate Shoulderguards
-70952,4,Elementium Deathplate Legguards
-70953,4,Elementium Deathplate Handguards
-70954,4,Elementium Deathplate Faceguard
-70955,4,Elementium Deathplate Chestguard
-70985,4,Craterflame Spaulders
-70986,4,Clawshaper Gauntlets
-70987,4,Phoenix-Down Treads
-70988,4,Clutch of the Firemother
-70989,4,Leggings of Billowing Fire
-70990,4,Wings of Flame
-70991,4,Arbalest of Erupting Fury
-70992,4,Dreadfire Drape
-70993,4,Fireskin Gauntlets
-71003,4,Hood of Rampant Disdain
-71004,4,Earthcrack Bracers
-71005,4,Flaming Core Chestguard
-71006,4,Volcanospike
-71007,4,Grips of the Raging Giant
-71009,4,Lava Line Wristbands
-71010,4,Incendic Chestguard
-71011,4,Flickering Cowl
-71013,4,Feeding Frenzy
-71014,4,Skullstealer Greataxe
-71018,4,Scalp of the Bandit Prince
-71020,4,Gloves of Dissolving Smoke
-71021,4,Uncrushable Belt of Fury
-71022,4,Goblet of Anger
-71023,4,Coalwalker Sandals
-71025,4,Flickering Shoulderpads
-71026,4,Bracers of the Dread Hunter
-71027,4,Treads of Implicit Obedience
-71028,4,Legplates of Absolute Control
-71029,4,Arachnaflame Treads
-71030,4,Flickering Shoulders
-71031,4,Cinderweb Leggings
-71038,4,Ward of the Red Widow
-71039,4,Funeral Pyre
-71040,4,Cowl of the Clicking Menace
-71041,4,Robes of Smoldering Devastation
-71042,4,Thoracic Flame Kilt
-71043,4,Spaulders of Manifold Eyes
-71044,4,Cindersilk Gloves
-71045,4,Dark Phoenix Tunic
-71046,4,Dark Phoenix Gloves
-71047,4,Dark Phoenix Helmet
-71048,4,Dark Phoenix Legguards
-71049,4,Dark Phoenix Spaulders
-71050,4,Flamewaker's Gloves
-71051,4,Flamewaker's Headguard
-71052,4,Flamewaker's Legguards
-71053,4,Flamewaker's Spaulders
-71054,4,Flamewaker's Tunic
-71058,4,Elementium Deathplate Breastplate
-71059,4,Elementium Deathplate Gauntlets
-71060,4,Elementium Deathplate Helmet
-71061,4,Elementium Deathplate Greaves
-71062,4,Elementium Deathplate Pauldrons
-71063,4,Immolation Battleplate
-71064,4,Immolation Gauntlets
-71065,4,Immolation Helmet
-71066,4,Immolation Legplates
-71067,4,Immolation Pauldrons
-71068,4,Battleplate of the Molten Giant
-71069,4,Gauntlets of the Molten Giant
-71070,4,Helmet of the Molten Giant
-71071,4,Legplates of the Molten Giant
-71072,4,Pauldrons of the Molten Giant
-71077,4,Extreme-Impact Hole Puncher
+70912,4,碎裂黑曜石踏靴
+70913,4,狂熱獻身腿鎧
+70914,4,浴火甲殼
+70915,4,折磨裂片
+70916,4,熾炎榮光頭盔
+70917,4,火光搖曳手甲
+70920,4,熾熱之途護腕
+70921,4,嘯焰肩鎧
+70922,4,貝絲堤拉克之顎
+70923,2,慶典冬幕汗衫
+70930,4,耐火焰怒巨披風
+70933,4,不撓烈焰束腰
+70937,4,莊嚴力量護腕
+70939,4,死攫刻像
+70941,4,熔火巨人肩衛
+70942,4,熔火巨人腿甲
+70943,4,熔火巨人手甲
+70944,4,熔火巨人面甲
+70945,4,熔火巨人護胸
+70946,4,炎祭肩衛
+70947,4,炎祭腿甲
+70948,4,炎祭面甲
+70949,4,炎祭手甲
+70950,4,炎祭護胸
+70951,4,源質亡甲肩衛
+70952,4,源質亡甲腿甲
+70953,4,源質亡甲手甲
+70954,4,源質亡甲面甲
+70955,4,源質亡甲護胸
+70985,4,火口烈焰肩甲
+70986,4,利爪護手
+70987,4,鳳凰絨羽足靴
+70988,4,火母之攫
+70989,4,翻騰火浪護腿
+70990,4,火焰之翼
+70991,4,盛怒重弩
+70992,4,懼火披氅
+70993,4,火膚護手
+71003,4,猖獗藐視兜帽
+71004,4,地裂護腕
+71005,4,焰核護胸
+71006,4,火山刺
+71007,4,狂怒巨人之握
+71009,4,岩漿分界腕環
+71010,4,火岩護胸
+71011,4,火光搖曳風帽
+71013,4,亦趨狂亂
+71014,4,削顱巨斧
+71018,4,強盜親王的頭皮
+71020,4,消散煙塵手套
+71021,4,烈怒耐壓腰帶
+71022,4,怒之高腳杯
+71023,4,炭燼行者便鞋
+71025,4,火光搖曳肩墊
+71026,4,恐懼狩獵者護腕
+71027,4,盲從足靴
+71028,4,絕對制御腿鎧
+71029,4,蛛焰踏靴
+71030,4,火光搖曳護肩
+71031,4,燼網護腿
+71038,4,紅寡婦禦盾
+71039,4,葬炎
+71040,4,碎裂威脅風帽
+71041,4,悶燒破壞長袍
+71042,4,滿腔烈焰褶裙
+71043,4,繁眼肩甲
+71044,4,餘燼絲綢手套
+71045,4,黑暗鳳凰外套
+71046,4,黑暗鳳凰手套
+71047,4,黑暗鳳凰盔帽
+71048,4,黑暗鳳凰腿甲
+71049,4,黑暗鳳凰肩甲
+71050,4,烈焰行者手套
+71051,4,烈焰行者護盔
+71052,4,烈焰行者腿甲
+71053,4,烈焰行者肩甲
+71054,4,烈焰行者外套
+71058,4,源質亡甲胸甲
+71059,4,源質亡甲護手
+71060,4,源質亡甲盔帽
+71061,4,源質亡甲護脛
+71062,4,源質亡甲肩鎧
+71063,4,炎祭戰甲
+71064,4,炎祭護手
+71065,4,炎祭盔帽
+71066,4,炎祭腿鎧
+71067,4,炎祭肩鎧
+71068,4,熔火巨人戰甲
+71069,4,熔火巨人護手
+71070,4,熔火巨人盔帽
+71071,4,熔火巨人腿鎧
+71072,4,熔火巨人肩鎧
+71077,4,極度衝擊打孔機
 71084,4,Branch of Nordrassil
 71085,4,Runestaff of Nordrassil
-71086,5,Dragonwrath Tarecgosa's Rest
+71086,5,龍怒，塔瑞克苟莎之眠
 71090,5,Legendary Shadoweave Shirt
-71091,4,Immolation Breastplate
-71092,4,Immolation Gloves
-71093,4,Immolation Headguard
-71094,4,Immolation Greaves
-71095,4,Immolation Mantle
-71097,4,Obsidian Arborweave Grips
-71098,4,Obsidian Arborweave Headpiece
-71099,4,Obsidian Arborweave Legguards
-71100,4,Obsidian Arborweave Raiment
-71101,4,Obsidian Arborweave Spaulders
-71102,4,Obsidian Arborweave Handwraps
-71103,4,Obsidian Arborweave Helm
-71104,4,Obsidian Arborweave Legwraps
-71105,4,Obsidian Arborweave Robes
-71106,4,Obsidian Arborweave Mantle
-71107,4,Obsidian Arborweave Gloves
-71108,4,Obsidian Arborweave Cover
-71109,4,Obsidian Arborweave Leggings
-71110,4,Obsidian Arborweave Vestment
-71111,4,Obsidian Arborweave Shoulderwraps
-71130,4,Flamebinder Bracers
-71131,4,Flamebinding Girdle
-71142,2,Test Item
+71091,4,炎祭胸甲
+71092,4,炎祭手套
+71093,4,炎祭護盔
+71094,4,炎祭護脛
+71095,4,炎祭披肩
+71097,4,黑曜樹紋之握
+71098,4,黑曜樹紋首盔
+71099,4,黑曜樹紋腿甲
+71100,4,黑曜樹紋衣飾
+71101,4,黑曜樹紋肩甲
+71102,4,黑曜樹紋裹手
+71103,4,黑曜樹紋頭盔
+71104,4,黑曜樹紋裹腿
+71105,4,黑曜樹紋長袍
+71106,4,黑曜樹紋披肩
+71107,4,黑曜樹紋手套
+71108,4,黑曜樹紋頭罩
+71109,4,黑曜樹紋護腿
+71110,4,黑曜樹紋法衣
+71111,4,黑曜樹紋裹肩
+71130,4,縛火者護腕
+71131,4,縛火束腰
+71142,2,測試物品
 71145,0,Monster - Caster Legendary Stage 0
-71146,4,Covenant of the Flame
-71147,4,Relic of the Elemental Lords
-71148,4,Soulflame Vial
-71149,4,Singed Plume of Aviana
-71150,4,Scorchvine Wand
-71151,4,Trail of Embers
-71152,4,Morningstar Shard
-71154,4,Giantslicer
-71218,4,Deflecting Star
-71227,4,Bladed Flamewrath Cover
-71228,4,Sleek Flamewrath Cloak
-71229,4,Flowing Flamewrath Cape
-71230,4,Rippling Flamewrath Drape
-71249,4,Firescar Sash
-71250,4,Cinch of the Flaming Ember
-71253,4,Belt of the Seven Seals
-71254,4,Firemend Cinch
-71255,4,Firearrow Belt
-71258,4,Embereye Belt
-71260,4,Bracers of Imperious Truths
-71261,4,Gigantiform Bracers
-71262,4,Smolderskull Bindings
-71263,4,Bracers of Misting Ash
-71264,4,Bracers of Forked Lightning
-71265,4,Emberflame Bracers
-71266,4,Firesoul Wristguards
-71267,4,Mantle of Desire
-71268,4,Mantle of Doubt
-71269,4,Mantle of Fury
-71270,4,Mantle of Patience
-71271,4,Handwraps of the Cleansing Flame
-71272,4,Cowl of the Cleansing Flame
-71273,4,Legwraps of the Cleansing Flame
-71274,4,Robes of the Cleansing Flame
-71275,4,Mantle of the Cleansing Flame
-71276,4,Gloves of the Cleansing Flame
-71277,4,Hood of the Cleansing Flame
-71278,4,Leggings of the Cleansing Flame
-71279,4,Vestment of the Cleansing Flame
-71280,4,Shoulderwraps of the Cleansing Flame
-71281,4,Balespider's Handwraps
-71282,4,Balespider's Hood
-71283,4,Balespider's Leggings
-71284,4,Balespider's Robes
-71285,4,Balespider's Mantle
-71286,4,Firehawk Gloves
-71287,4,Firehawk Hood
-71288,4,Firehawk Leggings
-71289,4,Firehawk Robes
-71290,4,Firehawk Mantle
-71291,4,Erupting Volcanic Hauberk
-71292,4,Erupting Volcanic Gloves
-71293,4,Erupting Volcanic Headpiece
-71294,4,Erupting Volcanic Kilt
-71295,4,Erupting Volcanic Shoulderwraps
-71296,4,Erupting Volcanic Tunic
-71297,4,Erupting Volcanic Handwraps
-71298,4,Erupting Volcanic Faceguard
-71299,4,Erupting Volcanic Legwraps
-71300,4,Erupting Volcanic Mantle
-71301,4,Erupting Volcanic Cuirass
-71302,4,Erupting Volcanic Grips
-71303,4,Erupting Volcanic Helmet
-71304,4,Erupting Volcanic Legguards
-71305,4,Erupting Volcanic Spaulders
-71312,4,Gatecrasher
-71313,4,Sandals of Leaping Coals
-71314,4,Breastplate of the Incendiary Soul
-71315,4,Decimation Treads
-71323,4,Molten Scream
-71325,4,The Horseman's Sinister Saber
-71326,4,The Horseman's Horrific Helmet
-71331,4,Direbrew's Bloodied Shanker
-71332,4,Tremendous Tankard O' Terror
-71340,4,Gatekeeper's Embrace
-71341,4,Glowing Wing Bracers
-71342,4,Casque of Flame
-71343,4,Mantle of Closed Doors
-71344,4,Breastplate of Shifting Visions
-71345,4,Shoulderpads of the Forgotten Gate
-71346,4,Grips of Unerring Precision
-71347,4,Stinger of the Flaming Scorpion
-71349,4,Firecat Leggings
-71350,4,Wristwraps of Arrogant Doom
-71351,4,Treads of the Penitent Man
-71352,4,Sulfuras The Extinguished Hand
-71353,4,Arathar the Eye of Flame
-71355,4,Ko'gun Hammer of the Firelord
-71356,4,Crown of Flame
-71357,4,Majordomo's Chain of Office
-71358,4,Fingers of Incineration
-71359,4,Chelley's Sterilized Scalpel
-71360,4,Spire of Scarlet Pain
-71361,4,Ranseur of Hatred
-71362,4,Obsidium Cleaver
-71365,4,Hide-Bound Chains
-71366,4,Lava Bolt Crossbow
-71388,4,Sleek Flamewrath Cloak
-71389,4,Rippling Flamewrath Drape
-71390,4,Flowing Flamewrath Cape
-71391,4,Bladed Flamewrath Cover
-71392,4,Durable Flamewrath Greatcloak
-71393,4,Embereye Belt
-71394,4,Flamebinding Girdle
-71395,4,Firescar Sash
-71396,4,Firearrow Belt
-71397,4,Firemend Cinch
-71398,4,Belt of the Seven Seals
-71399,4,Cinch of the Flaming Ember
-71400,4,Girdle of the Indomitable Flame
-71402,4,Cinderweb Leggings
-71403,4,Flickering Shoulders
-71404,4,Arachnaflame Treads
-71405,4,Carapace of Imbibed Flame
-71406,4,Mandible of Beth'tilac
-71407,4,Robes of Smoldering Devastation
-71408,4,Ward of the Red Widow
-71409,4,Funeral Pyre
-71410,4,Cindersilk Gloves
-71411,4,Cowl of the Clicking Menace
-71412,4,Thoracic Flame Kilt
-71413,4,Spaulders of Manifold Eyes
-71414,4,Arbalest of Erupting Fury
-71415,4,Dreadfire Drape
-71416,4,Hood of Rampant Disdain
-71417,4,Flaming Core Chestguard
-71418,4,Earthcrack Bracers
-71419,4,Fireskin Gauntlets
-71420,4,Cracked Obsidian Stompers
-71421,4,Flickering Cowl
-71422,4,Volcanospike
-71424,4,Incendic Chestguard
-71425,4,Lava Line Wristbands
-71426,4,Grips of the Raging Giant
-71427,4,Alysra's Razor
-71428,4,Flickering Wristbands
-71429,4,Moltenfeather Leggings
-71430,4,Greathelm of the Voracious Maw
-71431,4,Lavaworm Legplates
-71432,4,Spaulders of Recurring Flame
-71434,4,Wings of Flame
-71435,4,Leggings of Billowing Fire
-71436,4,Phoenix-Down Treads
-71437,4,Clawshaper Gauntlets
-71438,4,Craterflame Spaulders
-71439,4,Clutch of the Firemother
-71440,4,Gloves of Dissolving Smoke
-71441,4,Feeding Frenzy
-71442,4,Scalp of the Bandit Prince
-71443,4,Uncrushable Belt of Fury
-71444,4,Legplates of Frenzied Devotion
-71445,4,Skullstealer Greataxe
-71447,4,Coalwalker Sandals
-71448,4,Goblet of Anger
-71450,4,Flickering Shoulderpads
-71451,4,Treads of Implicit Obedience
-71452,4,Bracers of the Dread Hunter
-71453,4,Legplates of Absolute Control
-71454,4,Gatecrasher
-71455,4,Breastplate of the Incendiary Soul
-71456,4,Shoulderpads of the Forgotten Gate
-71457,4,Decimation Treads
-71458,4,Flickering Handguards
-71459,4,Helm of Blazing Glory
-71460,4,Shard of Torment
-71461,4,Mantle of Closed Doors
-71462,4,Molten Scream
-71463,4,Glowing Wing Bracers
-71464,4,Gatekeeper's Embrace
-71465,4,Casque of Flame
-71466,4,Fandral's Flamescythe
-71467,4,Sandals of Leaping Coals
-71468,4,Grips of Unerring Precision
-71469,4,Breastplate of Shifting Visions
-71470,4,Bracers of the Fiery Path
-71471,4,Wristwraps of Arrogant Doom
-71473,4,Stinger of the Flaming Scorpion
-71474,4,Firecat Leggings
-71475,4,Treads of the Penitent Man
-71476,4,Elementium Deathplate Breastplate
-71477,4,Elementium Deathplate Gauntlets
-71478,4,Elementium Deathplate Helmet
-71479,4,Elementium Deathplate Greaves
-71480,4,Elementium Deathplate Pauldrons
-71481,4,Elementium Deathplate Chestguard
-71482,4,Elementium Deathplate Handguards
-71483,4,Elementium Deathplate Faceguard
-71484,4,Elementium Deathplate Legguards
-71485,4,Elementium Deathplate Shoulderguards
-71486,4,Obsidian Arborweave Raiment
-71487,4,Obsidian Arborweave Grips
-71488,4,Obsidian Arborweave Headpiece
-71489,4,Obsidian Arborweave Legguards
-71490,4,Obsidian Arborweave Spaulders
-71491,4,Obsidian Arborweave Handwraps
-71492,4,Obsidian Arborweave Helm
-71493,4,Obsidian Arborweave Legwraps
-71494,4,Obsidian Arborweave Robes
-71495,4,Obsidian Arborweave Mantle
-71496,4,Obsidian Arborweave Gloves
-71497,4,Obsidian Arborweave Cover
-71498,4,Obsidian Arborweave Leggings
-71499,4,Obsidian Arborweave Vestment
-71500,4,Obsidian Arborweave Shoulderwraps
-71501,4,Flamewaker's Tunic
-71502,4,Flamewaker's Gloves
-71503,4,Flamewaker's Headguard
-71504,4,Flamewaker's Legguards
-71505,4,Flamewaker's Spaulders
-71507,4,Firehawk Gloves
-71508,4,Firehawk Hood
-71509,4,Firehawk Leggings
-71510,4,Firehawk Robes
-71511,4,Firehawk Mantle
-71512,4,Immolation Battleplate
-71513,4,Immolation Gauntlets
-71514,4,Immolation Helmet
-71515,4,Immolation Legplates
-71516,4,Immolation Pauldrons
-71517,4,Immolation Breastplate
-71518,4,Immolation Gloves
-71519,4,Immolation Headguard
-71520,4,Immolation Greaves
-71521,4,Immolation Mantle
-71522,4,Immolation Chestguard
-71523,4,Immolation Handguards
-71524,4,Immolation Faceguard
-71525,4,Immolation Legguards
-71526,4,Immolation Shoulderguards
-71527,4,Handwraps of the Cleansing Flame
-71528,4,Cowl of the Cleansing Flame
-71529,4,Legwraps of the Cleansing Flame
-71530,4,Robes of the Cleansing Flame
-71531,4,Mantle of the Cleansing Flame
-71532,4,Gloves of the Cleansing Flame
-71533,4,Hood of the Cleansing Flame
-71534,4,Leggings of the Cleansing Flame
-71535,4,Vestment of the Cleansing Flame
-71536,4,Shoulderwraps of the Cleansing Flame
-71537,4,Dark Phoenix Tunic
-71538,4,Dark Phoenix Gloves
-71539,4,Dark Phoenix Helmet
-71540,4,Dark Phoenix Legguards
-71541,4,Dark Phoenix Spaulders
-71542,4,Erupting Volcanic Tunic
-71543,4,Erupting Volcanic Handwraps
-71544,4,Erupting Volcanic Faceguard
-71545,4,Erupting Volcanic Legwraps
-71546,4,Erupting Volcanic Mantle
-71547,4,Erupting Volcanic Cuirass
-71548,4,Erupting Volcanic Grips
-71549,4,Erupting Volcanic Helmet
-71550,4,Erupting Volcanic Legguards
-71551,4,Erupting Volcanic Spaulders
-71552,4,Erupting Volcanic Hauberk
-71553,4,Erupting Volcanic Gloves
-71554,4,Erupting Volcanic Headpiece
-71555,4,Erupting Volcanic Kilt
-71556,4,Erupting Volcanic Shoulderwraps
-71557,4,Ranseur of Hatred
-71558,4,Lava Bolt Crossbow
-71559,4,Spire of Scarlet Pain
-71560,4,Chelley's Sterilized Scalpel
-71561,4,Hide-Bound Chains
-71562,4,Obsidium Cleaver
-71567,4,Covenant of the Flame
-71568,4,Morningstar Shard
-71569,4,Flamebinder Bracers
-71570,4,Bracers of Forked Lightning
-71571,4,Emberflame Bracers
-71572,4,Firesoul Wristguards
-71575,4,Trail of Embers
-71577,4,Singed Plume of Aviana
-71579,4,Scorchvine Wand
-71580,4,Soulflame Vial
-71581,4,Smolderskull Bindings
-71582,4,Bracers of Misting Ash
-71583,4,Bracers of Imperious Truths
-71584,4,Gigantiform Bracers
-71585,4,Bracers of Regal Force
-71587,4,Relic of the Elemental Lords
-71590,4,Deathclutch Figurine
-71592,4,Deflecting Star
-71593,4,Giantslicer
-71594,4,Balespider's Handwraps
-71595,4,Balespider's Hood
-71596,4,Balespider's Leggings
-71597,4,Balespider's Robes
-71598,4,Balespider's Mantle
-71599,4,Helmet of the Molten Giant
-71600,4,Battleplate of the Molten Giant
-71601,4,Gauntlets of the Molten Giant
-71602,4,Legplates of the Molten Giant
-71603,4,Pauldrons of the Molten Giant
-71604,4,Chestguard of the Molten Giant
-71605,4,Handguards of the Molten Giant
-71606,4,Faceguard of the Molten Giant
-71607,4,Legguards of the Molten Giant
-71608,4,Shoulderguards of the Molten Giant
-71611,4,Arathar the Eye of Flame
-71612,4,Pauldrons of Roaring Flame
-71613,4,Majordomo's Chain of Office
-71614,4,Fingers of Incineration
-71615,4,Ko'gun Hammer of the Firelord
-71616,4,Crown of Flame
-71640,4,Riplimb's Lost Collar
-71641,4,Riplimb's Lost Collar
+71146,4,烈焰誓盟
+71147,4,元素之王聖物
+71148,4,魂焰之瓶
+71149,4,艾維娜的燒焦羽毛
+71150,4,焦藤魔杖
+71151,4,餘燼之跡
+71152,4,晨星裂片
+71154,4,巨人切割擲斧
+71218,4,偏斜之星
+71227,4,刀刃焰怒罩篷
+71228,4,光滑焰怒披風
+71229,4,流動焰怒斗篷
+71230,4,漣漪焰怒披氅
+71249,4,火疤束帶
+71250,4,燃焰餘燼繫腰
+71253,4,七印腰帶
+71254,4,焰癒繫腰
+71255,4,火焰弓箭腰帶
+71258,4,燼眼腰帶
+71260,4,刁蠻真理護腕
+71261,4,巨大形體護腕
+71262,4,燃顱束腕
+71263,4,迷霧灰燼護腕
+71264,4,叉狀閃電護腕
+71265,4,燼焰護腕
+71266,4,火魂腕甲
+71267,4,欲望披肩
+71268,4,懷疑披肩
+71269,4,狂怒披肩
+71270,4,耐心披肩
+71271,4,烈焰淨化裹手
+71272,4,烈焰淨化風帽
+71273,4,烈焰淨化裹腿
+71274,4,烈焰淨化長袍
+71275,4,烈焰淨化披肩
+71276,4,烈焰淨化手套
+71277,4,烈焰淨化兜帽
+71278,4,烈焰淨化護腿
+71279,4,烈焰淨化法衣
+71280,4,烈焰淨化裹肩
+71281,4,禍蛛裹手
+71282,4,禍蛛兜帽
+71283,4,禍蛛護腿
+71284,4,禍蛛長袍
+71285,4,禍蛛披肩
+71286,4,火鷹手套
+71287,4,火鷹兜帽
+71288,4,火鷹護腿
+71289,4,火鷹長袍
+71290,4,火鷹披肩
+71291,4,火山爆發鍊衫
+71292,4,火山爆發手套
+71293,4,火山爆發首盔
+71294,4,火山爆發褶裙
+71295,4,火山爆發裹肩
+71296,4,火山爆發外套
+71297,4,火山爆發裹手
+71298,4,火山爆發面甲
+71299,4,火山爆發裹腿
+71300,4,火山爆發披肩
+71301,4,火山爆發胸衣
+71302,4,火山爆發之握
+71303,4,火山爆發盔帽
+71304,4,火山爆發腿甲
+71305,4,火山爆發肩甲
+71312,4,破門斧
+71313,4,躍行煤炭便鞋
+71314,4,燃夷之靈胸甲
+71315,4,屠虐足靴
+71323,4,熔岩尖嘯
+71325,4,無頭騎士邪惡軍刀
+71326,4,無頭騎士恐怖盔帽
+71331,4,恐酒染血凶器
+71332,4,巨大恐懼酒杯
+71340,4,守門人之擁
+71341,4,煥采光翼護腕
+71342,4,烈焰兜盔
+71343,4,閉門披肩
+71344,4,流轉幻象胸甲
+71345,4,遺忘之門肩墊
+71346,4,百發百中之握
+71347,4,烈焰蠍之刺
+71349,4,火豹護腿
+71350,4,傲慢末日裹腕
+71351,4,懺悔者足靴
+71352,4,薩弗拉斯，熄滅之手
+71353,4,艾拉薩，烈焰之眼
+71355,4,寇鋼，炎魔之錘
+71356,4,烈焰之冠
+71357,4,管理者的辦公鍊
+71358,4,燃夷之指
+71359,4,榭利的消毒手術刀
+71360,4,緋紅苦痛之尖
+71361,4,恨意三叉矛
+71362,4,黑曜石斬斧
+71365,4,頑固腕鍊
+71366,4,岩漿火彈弩
+71388,4,光滑焰怒披風
+71389,4,漣漪焰怒披氅
+71390,4,流動焰怒斗篷
+71391,4,刀刃焰怒罩篷
+71392,4,耐火焰怒巨披風
+71393,4,燼眼腰帶
+71394,4,縛火束腰
+71395,4,火疤束帶
+71396,4,火焰弓箭腰帶
+71397,4,焰癒繫腰
+71398,4,七印腰帶
+71399,4,燃焰餘燼繫腰
+71400,4,不撓烈焰束腰
+71402,4,燼網護腿
+71403,4,火光搖曳護肩
+71404,4,蛛焰踏靴
+71405,4,浴火甲殼
+71406,4,貝絲堤拉克之顎
+71407,4,悶燒破壞長袍
+71408,4,紅寡婦禦盾
+71409,4,葬炎
+71410,4,餘燼絲綢手套
+71411,4,碎裂威脅風帽
+71412,4,滿腔烈焰褶裙
+71413,4,繁眼肩甲
+71414,4,盛怒重弩
+71415,4,懼火披氅
+71416,4,猖獗藐視兜帽
+71417,4,焰核護胸
+71418,4,地裂護腕
+71419,4,火膚護手
+71420,4,碎裂黑曜石踏靴
+71421,4,火光搖曳風帽
+71422,4,火山刺
+71424,4,火岩護胸
+71425,4,岩漿分界腕環
+71426,4,狂怒巨人之握
+71427,4,艾里絲拉的利刃
+71428,4,火光搖曳腕環
+71429,4,熔火之羽護腿
+71430,4,貪噬大口巨盔
+71431,4,熔岩蟲腿鎧
+71432,4,復燃烈焰肩甲
+71434,4,火焰之翼
+71435,4,翻騰火浪護腿
+71436,4,鳳凰絨羽足靴
+71437,4,利爪護手
+71438,4,火口烈焰肩甲
+71439,4,火母之攫
+71440,4,消散煙塵手套
+71441,4,亦趨狂亂
+71442,4,強盜親王的頭皮
+71443,4,烈怒耐壓腰帶
+71444,4,狂熱獻身腿鎧
+71445,4,削顱巨斧
+71447,4,炭燼行者便鞋
+71448,4,怒之高腳杯
+71450,4,火光搖曳肩墊
+71451,4,盲從足靴
+71452,4,恐懼狩獵者護腕
+71453,4,絕對制御腿鎧
+71454,4,破門斧
+71455,4,燃夷之靈胸甲
+71456,4,遺忘之門肩墊
+71457,4,屠虐足靴
+71458,4,火光搖曳手甲
+71459,4,熾炎榮光頭盔
+71460,4,折磨裂片
+71461,4,閉門披肩
+71462,4,熔岩尖嘯
+71463,4,煥采光翼護腕
+71464,4,守門人之擁
+71465,4,烈焰兜盔
+71466,4,范達爾的烈焰鐮刀
+71467,4,躍行煤炭便鞋
+71468,4,百發百中之握
+71469,4,流轉幻象胸甲
+71470,4,熾熱之途護腕
+71471,4,傲慢末日裹腕
+71473,4,烈焰蠍之刺
+71474,4,火豹護腿
+71475,4,懺悔者足靴
+71476,4,源質亡甲胸甲
+71477,4,源質亡甲護手
+71478,4,源質亡甲盔帽
+71479,4,源質亡甲護脛
+71480,4,源質亡甲肩鎧
+71481,4,源質亡甲護胸
+71482,4,源質亡甲手甲
+71483,4,源質亡甲面甲
+71484,4,源質亡甲腿甲
+71485,4,源質亡甲肩衛
+71486,4,黑曜樹紋衣飾
+71487,4,黑曜樹紋之握
+71488,4,黑曜樹紋首盔
+71489,4,黑曜樹紋腿甲
+71490,4,黑曜樹紋肩甲
+71491,4,黑曜樹紋裹手
+71492,4,黑曜樹紋頭盔
+71493,4,黑曜樹紋裹腿
+71494,4,黑曜樹紋長袍
+71495,4,黑曜樹紋披肩
+71496,4,黑曜樹紋手套
+71497,4,黑曜樹紋頭罩
+71498,4,黑曜樹紋護腿
+71499,4,黑曜樹紋法衣
+71500,4,黑曜樹紋裹肩
+71501,4,烈焰行者外套
+71502,4,烈焰行者手套
+71503,4,烈焰行者護盔
+71504,4,烈焰行者腿甲
+71505,4,烈焰行者肩甲
+71507,4,火鷹手套
+71508,4,火鷹兜帽
+71509,4,火鷹護腿
+71510,4,火鷹長袍
+71511,4,火鷹披肩
+71512,4,炎祭戰甲
+71513,4,炎祭護手
+71514,4,炎祭盔帽
+71515,4,炎祭腿鎧
+71516,4,炎祭肩鎧
+71517,4,炎祭胸甲
+71518,4,炎祭手套
+71519,4,炎祭護盔
+71520,4,炎祭護脛
+71521,4,炎祭披肩
+71522,4,炎祭護胸
+71523,4,炎祭手甲
+71524,4,炎祭面甲
+71525,4,炎祭腿甲
+71526,4,炎祭肩衛
+71527,4,烈焰淨化裹手
+71528,4,烈焰淨化風帽
+71529,4,烈焰淨化裹腿
+71530,4,烈焰淨化長袍
+71531,4,烈焰淨化披肩
+71532,4,烈焰淨化手套
+71533,4,烈焰淨化兜帽
+71534,4,烈焰淨化護腿
+71535,4,烈焰淨化法衣
+71536,4,烈焰淨化裹肩
+71537,4,黑暗鳳凰外套
+71538,4,黑暗鳳凰手套
+71539,4,黑暗鳳凰盔帽
+71540,4,黑暗鳳凰腿甲
+71541,4,黑暗鳳凰肩甲
+71542,4,火山爆發外套
+71543,4,火山爆發裹手
+71544,4,火山爆發面甲
+71545,4,火山爆發裹腿
+71546,4,火山爆發披肩
+71547,4,火山爆發胸衣
+71548,4,火山爆發之握
+71549,4,火山爆發盔帽
+71550,4,火山爆發腿甲
+71551,4,火山爆發肩甲
+71552,4,火山爆發鍊衫
+71553,4,火山爆發手套
+71554,4,火山爆發首盔
+71555,4,火山爆發褶裙
+71556,4,火山爆發裹肩
+71557,4,恨意之刃
+71558,4,岩漿火彈弩
+71559,4,緋紅苦痛之尖
+71560,4,榭利的消毒手術刀
+71561,4,鑲皮腕鍊
+71562,4,黑曜石斬斧
+71567,4,烈焰誓盟
+71568,4,晨星裂片
+71569,4,縛火者護腕
+71570,4,叉狀閃電護腕
+71571,4,燼焰護腕
+71572,4,火魂腕甲
+71575,4,餘燼之跡
+71577,4,艾維娜的燒焦羽毛
+71579,4,焦藤魔杖
+71580,4,魂焰之瓶
+71581,4,燃顱束腕
+71582,4,迷霧灰燼護腕
+71583,4,刁蠻真理護腕
+71584,4,巨大形體護腕
+71585,4,莊嚴力量護腕
+71587,4,元素之王聖物
+71590,4,死攫刻像
+71592,4,偏斜之星
+71593,4,巨人切割擲斧
+71594,4,禍蛛裹手
+71595,4,禍蛛兜帽
+71596,4,禍蛛護腿
+71597,4,禍蛛長袍
+71598,4,禍蛛披肩
+71599,4,熔火巨人盔帽
+71600,4,熔火巨人戰甲
+71601,4,熔火巨人護手
+71602,4,熔火巨人腿鎧
+71603,4,熔火巨人肩鎧
+71604,4,熔火巨人護胸
+71605,4,熔火巨人手甲
+71606,4,熔火巨人面甲
+71607,4,熔火巨人腿甲
+71608,4,熔火巨人肩衛
+71611,4,艾拉薩，烈焰之眼
+71612,4,嘯焰肩鎧
+71613,4,管理者的辦公鍊
+71614,4,燃夷之指
+71615,4,寇鋼，炎魔之錘
+71616,4,烈焰之冠
+71640,4,裂軀遺失的項圈
+71641,4,裂軀遺失的項圈
 71713,4,Stave Icecrown Raid D02 Green
-71774,4,Smoldering Censer of Purity
-71775,4,Smoldering Censer of Purity
-71776,4,Eye of Purification
-71777,4,Eye of Purification
-71778,4,Avool's Incendiary Shanker
-71779,4,Avool's Incendiary Shanker
-71780,4,Zoid's Firelit Greatsword
-71781,4,Zoid's Firelit Greatsword
-71782,4,Shatterskull Bonecrusher
-71783,4,Shatterskull Bonecrusher
-71784,4,Firethorn Mindslicer
-71785,4,Firethorn Mindslicer
-71786,4,Entrail Disgorger
-71787,4,Entrail Disgorger
-71797,4,Sho'ravon Greatstaff of Annihilation
-71798,4,Sho'ravon Greatstaff of Annihilation
+71774,4,淨化悶燃香爐
+71775,4,淨化悶燃香爐
+71776,4,淨化之眼
+71777,4,淨化之眼
+71778,4,阿弗爾的燃夷兇器
+71779,4,阿弗爾的燃夷兇器
+71780,4,佐伊德的火光巨劍
+71781,4,佐伊德的火光巨劍
+71782,4,碎顱裂骨錘
+71783,4,碎顱裂骨錘
+71784,4,火棘削心刃
+71785,4,火棘削心刃
+71786,4,勾腸匕
+71787,4,勾腸匕
+71797,4,朽拉梵，殲敵之杖
+71798,4,朽拉梵，殲敵之杖

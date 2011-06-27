@@ -7621,13 +7621,13 @@
 20723,2,Pioche loyale de Brann
 20724,2,Bâton noirbois corrompu
 20832,3,Couronne d'âmelune
-20835,1,Epée de Haut-soleil
-20836,1,Dague de Haut-soleil
-20837,1,Hache de Haut-soleil
-20838,1,Arc de Haut-soleil
-20839,1,Bâton de Haut-soleil
-20840,1,Masse de Haut-soleil
-20841,1,Bouclier de Haut-soleil
+20835,1,Epée de Haut-Soleil
+20836,1,Dague de Haut-Soleil
+20837,1,Hache de Haut-Soleil
+20838,1,Arc de Haut-Soleil
+20839,1,Bâton de Haut-Soleil
+20840,1,Masse de Haut-Soleil
+20841,1,Bouclier de Haut-Soleil
 20849,1,Epée courte forgée par les Arcanes
 20850,1,Hache forgée par les Arcanes
 20851,1,Masse forgée par les Arcanes
@@ -9681,7 +9681,7 @@
 25478,2,Gantelets du défenseur
 25479,2,Bottes de l'implorateur de la terre
 25480,2,Echarpe de la marche aride
-25481,2,Gantelets de Haut-soleil
+25481,2,Gantelets de Haut-Soleil
 25482,2,Bottes de Venn'ren
 25483,2,Echarpe raffinée
 25486,2,Garde-poignets de tueur de démon
@@ -9838,7 +9838,7 @@
 25778,2,Maniques du souvenir
 25780,2,Cape de défenseur cogneguerre
 25781,2,Cuirasse segmentée
-25782,2,Garde-jambes de Haut-soleil
+25782,2,Garde-jambes de Haut-Soleil
 25783,2,Couvre-chef de pèlerin
 25788,3,Garde-mains déterminés
 25789,3,Ceinture runique ciselée
@@ -11364,7 +11364,7 @@
 29989,4,Cape légère de la bruine solaire
 29990,4,Couronne du soleil
 29991,4,Jambières d'Epervier du soleil
-29992,4,Cape royale des Haut-soleil
+29992,4,Cape royale des Haut-Soleil
 29993,4,Lames-jumelles du phénix
 29994,4,Cape sauvage thalassienne
 29995,4,Jambières des intentions meurtrières
@@ -13681,7 +13681,7 @@
 34796,3,Robe de la flamme d'été
 34797,3,Bâton focalisateur imprégné de soleil
 34799,4,Haubert du porteguerre
-34807,4,Bottes de guerre de Haut-soleil
+34807,4,Bottes de guerre de Haut-Soleil
 34808,4,Gants d'acuité arcanique
 34809,4,Bottines rage-soleil
 34810,4,Cape de déviation de lames
@@ -18711,7 +18711,7 @@
 44645,1,Marteau de Dalaran
 44647,1,Chapeau pourpre
 44648,1,Turban violet
-44649,3,Ongle de pied d'Ecorce-de-cristal
+44649,3,Ongle de pied d’Écorce-de-Cristal
 44652,1,Dague de Dalaran
 44654,1,Lance de Dalaran
 44655,1,Bâton de Dalaran
@@ -20092,21 +20092,21 @@
 47760,4,Jambières de triomphe de Khadgar
 47761,4,Chaperon de triomphe de Khadgar
 47762,4,Gantelets de triomphe de Khadgar
-47763,4,Gantelets de triomphe de Haut-soleil
-47764,4,Chaperon de triomphe de Haut-soleil
-47765,4,Jambières de triomphe de Haut-soleil
-47766,4,Robe de triomphe de Haut-soleil
-47767,4,Protège-épaules de triomphe de Haut-soleil
-47768,4,Protège-épaules de triomphe de Haut-soleil
-47769,4,Robe de triomphe de Haut-soleil
-47770,4,Jambières de triomphe de Haut-soleil
-47771,4,Chaperon de triomphe de Haut-soleil
-47772,4,Gantelets de triomphe de Haut-soleil
-47773,4,Gantelets de conquête de Haut-soleil
-47774,4,Chaperon de conquête de Haut-soleil
-47775,4,Jambières de conquête de Haut-soleil
-47776,4,Robe de conquête de Haut-soleil
-47777,4,Protège-épaules de conquête de Haut-soleil
+47763,4,Gantelets de triomphe de Haut-Soleil
+47764,4,Chaperon de triomphe de Haut-Soleil
+47765,4,Jambières de triomphe de Haut-Soleil
+47766,4,Robe de triomphe de Haut-Soleil
+47767,4,Protège-épaules de triomphe de Haut-Soleil
+47768,4,Protège-épaules de triomphe de Haut-Soleil
+47769,4,Robe de triomphe de Haut-Soleil
+47770,4,Jambières de triomphe de Haut-Soleil
+47771,4,Chaperon de triomphe de Haut-Soleil
+47772,4,Gantelets de triomphe de Haut-Soleil
+47773,4,Gantelets de conquête de Haut-Soleil
+47774,4,Chaperon de conquête de Haut-Soleil
+47775,4,Jambières de conquête de Haut-Soleil
+47776,4,Robe de conquête de Haut-Soleil
+47777,4,Protège-épaules de conquête de Haut-Soleil
 47778,4,Chaperon de triomphe de Kel'Thuzad
 47779,4,Robe de triomphe de Kel'Thuzad
 47780,4,Jambières de triomphe de Kel'Thuzad
@@ -20885,11 +20885,11 @@
 48727,4,Jambières de Khadgar
 48728,4,Robe de Khadgar
 48729,4,Protège-épaules de Khadgar
-48730,4,Gantelets de Haut-soleil
-48731,4,Chaperon de Haut-soleil
-48732,4,Jambières de Haut-soleil
-48733,4,Robe de Haut-soleil
-48734,4,Protège-épaules de Haut-soleil
+48730,4,Gantelets de Haut-Soleil
+48731,4,Chaperon de Haut-Soleil
+48732,4,Jambières de Haut-Soleil
+48733,4,Robe de Haut-Soleil
+48734,4,Protège-épaules de Haut-Soleil
 48735,4,Gants de Gul'dan
 48736,4,Chaperon de Gul'dan
 48737,4,Jambières de Gul'dan
@@ -25614,7 +25614,7 @@
 59463,4,Canne-épée de Maldo
 59464,4,Bottines de corrections sauvages
 59465,4,Ceinturon riveté de Martel-Coeur
-59466,4,Capuche impénétrable d'Etoile-de-fer
+59466,4,Capuche impénétrable d'Etoile-de-Fer
 59467,4,Peau de Chromaggus
 59468,4,Blouse d'ombreforge liée à la Lumière
 59469,4,Bottes du chevauche-tempête
@@ -28223,7 +28223,7 @@
 65007,4,Akirus le Briseur de ver
 65008,4,Blouse d'ombreforge liée à la Lumière
 65009,4,Peau de Chromaggus
-65010,4,Capuche impénétrable d'Etoile-de-fer
+65010,4,Capuche impénétrable d'Etoile-de-Fer
 65011,4,Ceinturon riveté de Martel-Coeur
 65012,4,Bottines de corrections sauvages
 65013,4,Canne-épée de Maldo
@@ -29245,7 +29245,7 @@
 66892,3,Bande des cent un
 66894,3,Jambières de l'enfant perdu
 66895,3,Bouclier brillant de don Gonzales
-66896,3,Ceinture du Cœur-de-pierre
+66896,3,Ceinture du Cœur-de-Pierre
 66897,3,Cape scintillante en cristal
 66898,3,Cape d'Itesh
 66899,3,Jambières de la cime du Vortex
