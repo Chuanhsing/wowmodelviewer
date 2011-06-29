@@ -30675,6 +30675,7 @@
 52586,37957,7,Hanner Gembold
 52587,37958,7,Neller Fayne
 52588,37959,7,Sara Lanner
+52593,38747,10,Spirit of the Flame
 52594,25007,1,Goldwing Hawk
 52595,28215,1,Alpine Songbird
 52596,10830,1,Forest Owl
@@ -30707,6 +30708,7 @@
 52661,38015,1,Druid of the Flame
 52662,38064,4,Unstable Flamerager
 52663,36419,4,Flamewatch Sentinel
+52672,38018,1,Flameward Hippogryph
 52676,22903,10,Climbing Tree
 52697,26,12,Greedy Kobold
 52703,33364,7,Hyjal Enforcer
@@ -30815,14 +30817,24 @@
 53088,2176,1,Temple Rat
 53092,38148,4,Firekin
 53093,31808,7,Flamewaker Shaman
+53095,38149,1,Matriarch Fire Turtle
 53099,22903,10,Wave Genesis Bunny
 53102,38012,4,Inferno Hawk
 53107,30233,4,Smothervine
 53112,38152,1,Subterranean Magma Worm
+53115,38765,5,Molten Lord
+53119,38241,7,Flamewaker Forward Guard
+53120,13031,7,Flamewaker Pathfinder
+53121,38239,7,Flamewaker Cauterizer
 53122,169,7,Pillar
 53127,37539,1,Fire Scorpion
+53128,38404,1,Giant Fire Scorpion
 53129,37993,1,Lava Dweller
+53130,38175,1,Ancient Lava Dweller
+53134,10193,1,Ancient Core Hound
 53136,38177,1,Amani Bear Cub
+53140,1070,4,Son of Flame
+53141,36019,4,Molten Surger
 53143,31808,7,Flamewaker Hunter
 53151,38190,7,Overseer Blingbang
 53152,38186,4,Charhound
@@ -30831,6 +30843,8 @@
 53166,38197,7,Gurubashi Soul-Seeker
 53167,38019,4,Unbound Pyrelord
 53178,169,10,Spiderling Stalker
+53189,38520,4,Molten Elemental
+53206,38223,4,Hell Hound
 53209,29538,7,Flamewaker Trapper
 53211,38225,4,Spark of Rhyolith
 53212,12190,10,Furnace Bunny Fire A 1.6 scale
@@ -30838,6 +30852,7 @@
 53214,38226,0,Damek Bloombeard
 53225,38229,12,Pterrordax Hatchling
 53228,38230,10,Thermal Pocket Bunny
+53231,38019,4,Lava Scion
 53232,38232,12,Voodoo Figurine
 53237,16925,10,Destination Stalker
 53240,37539,1,Emberspit Scorpion
@@ -30850,6 +30865,8 @@
 53281,16925,10,Lift Off
 53352,3167,7,Commander Sharp
 53361,16925,10,Descend
+53369,38557,7,Blazing Talon Initiate
+53375,38652,7,Herald of the Burning End
 53381,38305,4,Obsidian Slaglord
 53384,37757,4,Obsidian Monstrosity
 53388,23711,10,Ember Pool Pulse Pre-Load
@@ -30869,6 +30886,7 @@
 53490,16925,10,Sticky Webbing
 53493,38364,1,Malorne
 53494,38621,0,Baleroc
+53509,38372,4,Voracious Hatchling
 53517,38376,10,Squirming Slime Mold
 53522,38377,1,Baby Octopus
 53526,38380,1,Brightwater Snail
@@ -30884,6 +30902,7 @@
 53590,30165,10,Moat Monster
 53598,30063,7,Hungry Overseer
 53616,38591,4,Kar the Everburning
+53619,38441,7,Druid of the Flame
 53623,16943,12,Cenarion Hatchling
 53626,38421,7,Stormwind Orphan
 53630,35681,4,Unstable Pyrelord
@@ -30892,12 +30911,21 @@
 53658,38455,12,Hyjal Bear Cub
 53662,28726,10,Solar Core Channel Bunny
 53691,38448,0,Shannox
+53694,38449,1,Riplimb
+53695,38450,1,Rageface
 53697,38462,8,Cinderling
+53734,38013,7,Blazing Talon Clawshaper
 53741,38486,7,Hyjal Scout
 53743,38543,1,Cinderweb Broodling
+53745,38366,1,Engorged Broodling
 53765,38473,1,Cinderweb Spiderling
 53771,38675,7,Ancient Smoldering Behemoth
+53786,38501,4,Blazing Monstrosity
+53793,38503,7,Harbinger of Flame
+53794,38505,4,Smouldering Hatchling
+53795,38445,4,Egg Pile
 53805,38511,7,Ystelle Oaksong
+53819,38627,10,Crystal Prison
 53829,38512,12,Fuzzy Wuzzy Butterfly
 53830,28288,12,Fuzzy Wuzzy Bunny
 53831,654,12,Fuzzy Wuzzy Deer
@@ -30906,9 +30934,12 @@
 53866,20570,10,Fire Torrent Channel Bunny
 53881,38536,0,Ayla Shadowstorm
 53882,38537,0,Varlan Highbough
+53896,38317,7,Blazing Talon Initiate
 53962,24719,10,Seed of the Sentinel Tree
 53986,1126,10,Firestorm
 54004,14589,7,Jaga
+54015,37953,7,Majordomo Staghelm
+54019,38603,7,Captive Druid of the Talon
 54036,20570,10,Furnace Bunny Fire B 1.0 scale
 54037,20570,10,Furnace Bunny Fire C 1.0 scale
 54038,38148,10,Furnace Bunny Fire B 0.8 scale
@@ -30916,6 +30947,9 @@
 54040,12190,10,Furnace Bunny Fire B 1.6 scale
 54113,38631,1,Spooks
 54137,169,10,Fire Patch
+54143,38766,5,Molten Flamefather
+54145,38625,10,Magma Conduit
+54161,38030,4,Flame Archon
 54183,28726,10,Cyclone
 54227,38693,12,Nuts
 54230,11686,10,Lieutenant of Flame
@@ -30926,5 +30960,6 @@
 54277,20265,8,Kindleworm
 54317,1405,4,Seether
 54339,38760,4,Ancient Charhound
+54349,7935,7,Jacob McWeaksauce
 54374,38776,12,Brilliant Kaliri
 54392,38781,7,Ranela Featherglen
