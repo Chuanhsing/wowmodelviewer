@@ -2503,7 +2503,7 @@
 3292,3851,7,Brewmaster Drohn
 3293,7129,7,Rezlak
 3294,1654,7,Ophek
-3295,360,10,Sludge Beast
+3295,360,4,Sludge Anomaly
 3296,4259,7,Orgrimmar Grunt
 3297,4083,7,Sen'jin Watcher
 3298,1442,7,Gabrielle Chase
@@ -5392,7 +5392,7 @@
 7955,7039,7,Milli Featherwhistle
 7956,7044,7,Kindal Moonweaver
 7957,7045,7,Jer'kai Moonweaver
-7975,7115,7,Mulgore Protector
+7975,7115,7,Camp Narache Brave
 7976,7120,7,Thalgus Thunderfist
 7977,37417,1,Gammerita
 7978,7119,7,Bimble Longberry
@@ -5474,7 +5474,7 @@
 8202,11532,7,Cyclok the Mad
 8203,7509,7,Kregg Keelhaul
 8204,14521,1,Soriid the Devourer
-8205,11092,10,Haarka the Ravenous
+8205,15439,1,Haarka the Ravenous
 8207,34048,1,Emberwing
 8208,1534,1,Murderous Blisterpaw
 8210,5927,7,Razortalon
@@ -5861,7 +5861,7 @@
 9163,8511,1,Diemetradon
 9164,8512,1,Elder Diemetradon
 9165,8410,1,Fledgling Pterrordax
-9166,8411,1,Pterrordax
+9166,37782,1,Pterrordax
 9167,8412,1,Frenzied Pterrordax
 9176,11553,7,Gorlop
 9177,8872,7,Oralius
@@ -6167,7 +6167,7 @@
 10197,3208,7,Mezzir the Howler
 10198,10317,5,Kashoch the Reaver
 10199,9491,7,Grizzle Snowpaw
-10200,37545,1,Rak'shiri
+10200,10054,1,Rak'shiri
 10201,10925,3,Lady Hederine
 10202,6373,2,Azurous
 10204,9492,1,Misha
@@ -7658,7 +7658,7 @@
 14230,391,7,Burgle Eye
 14231,631,4,Drogoth the Roamer
 14232,788,1,Dart
-14233,2549,1,Ripscale
+14233,37748,1,Ripscale
 14234,2703,1,Hayoc
 14235,11140,10,The Rot
 14236,14257,7,Lord Angler
@@ -9542,7 +9542,7 @@
 16799,17818,7,Ikan
 16800,19706,7,Grand Magister Rommath
 16801,19707,7,Halduron Brightwing
-16802,17122,7,Lor'themar Theron
+16802,17122,7,Lor'themar Theron 
 16803,16539,7,Death Knight Understudy
 16804,16342,7,Night Elf Corpse
 16805,18824,6,Broken Skeleton
@@ -11207,7 +11207,7 @@
 18933,17865,7,Isfar
 18934,18336,7,Durnholde Mage
 18937,20193,7,Amerun Leafshade
-18938,1233,7,Krexcil
+18938,37716,7,Krexcil
 18939,7250,7,Brubeck Stormfoot
 18940,20969,7,Nutral
 18942,16685,7,Innalia
@@ -12392,7 +12392,7 @@
 20607,19695,1,Craghide Basilisk
 20608,17035,10,Ya-six Spell Generator
 20609,19772,7,Razaani Nexus Stalker
-20610,19696,1,Talbuk Doe
+20610,37779,1,Talbuk Doe
 20611,19771,1,Shimmerwing Moth
 20612,19703,7,Sorim Lightsong
 20613,19698,7,Arodis Sunblade
@@ -13356,7 +13356,7 @@
 22103,20807,7,Baron Sablemane
 22104,11686,10,Cyclone (Karathress)
 22105,19582,1,Decrepit Clefthoof
-22106,20809,2,Ruul's Nether Drake
+22106,20809,2,Ruul's Netherdrake
 22107,18486,7,Captain Darkhowl
 22108,497,2,Blackwhelp
 22109,19368,0,Skald Bunny
@@ -13566,7 +13566,7 @@
 22391,20973,5,Vortex Shardling
 22392,20974,3,Wrath Fiend
 22393,18058,7,Deathshadow Overlord
-22394,6195,3,Deathshadow Hound
+22394,6195,1,Deathshadow Hound
 22395,4449,10,[PH]Altar of Shadows target
 22396,20982,7,Draaca Longtail
 22398,17999,7,Durnholde Reinforcement
@@ -14068,7 +14068,7 @@
 23282,12869,2,Obsidia
 23283,21401,2,Lady Sinestra
 23284,21399,2,Lady Sinestra
-23285,16395,10,Nethermine Burster
+23285,16395,1,Nethermine Burster
 23286,15380,10,Black Blood of Draenor
 23287,18281,7,Murkblood Miner
 23288,1126,10,Akama Event Stalker
@@ -17605,7 +17605,7 @@
 27681,24741,1,Bristlepine
 27682,24743,2,Azure Drake
 27683,24744,6,Remnant of Dahlia Suntouch
-27684,24745,0,Swift Zhevra
+27684,24745,1,Swift Zhevra
 27685,24993,6,Frigid Ghoul Attacker
 27686,24590,6,Frigid Geist Attacker
 27687,24692,7,Frigid Necromancer Attacker
@@ -17794,7 +17794,7 @@
 27911,24922,1,Nell
 27912,24923,1,Pepper
 27913,24924,7,Lordaeron Crier
-27914,25002,0,Ethereal Soul-Trader
+27914,25002,12,Ethereal Soul-Trader
 27918,15387,0,Horde Recruiter
 27919,15387,0,Herald of the Horde
 27920,15389,0,Herald of the Alliance
@@ -19877,7 +19877,7 @@
 30985,27576,6,Summoned Soldier
 30986,27423,6,Reanimated Captain
 30987,23137,6,Hideous Plaguebringer
-30988,26255,6,Scourgebeak Fleshripper
+30988,26255,1,Scourgebeak Fleshripper
 30989,27427,6,Halof the Deathbringer
 30990,1126,10,Metal Post Bunny
 30992,16063,6,Doctor Sabnok
@@ -20053,7 +20053,7 @@
 31260,25837,7,Ymirjar Skycaller
 31261,27539,7,Brother Keltan
 31262,27541,7,Blight Falconer
-31263,27543,6,Carrion Hunter
+31263,27543,1,Carrion Hunter
 31264,169,10,A Mysterious Voice
 31265,26715,2,Savage Proto-Drake
 31266,26734,6,Shadow Vault Assaulter
@@ -20632,7 +20632,7 @@
 32546,28048,9,Ebon Knight's Training Dummy
 32547,28049,9,Highlord's Nemesis Trainer
 32548,28050,2,Corastrasza
-32562,28053,0,Green Proto-Drake
+32562,28053,2,Green Proto-Drake
 32564,28058,7,Logistics Officer Silverstone
 32565,28059,7,Gara Skullcrush
 32567,28117,10,Magnificent Flying Carpet
@@ -20805,7 +20805,7 @@
 32815,23440,7,Crystalsong Forest Flame Keeper
 32816,16340,7,Zul'Drak Flame Keeper
 32818,21774,12,Plump Turkey
-32819,4626,12,Plump Turkey Bunny
+32819,4626,10,Plump Turkey Bunny
 32820,21774,0,Wild Turkey
 32823,28293,10,Bountiful Table
 32824,28294,10,[PH] Pilgrim's Bounty Table - Turkey
@@ -21494,7 +21494,7 @@
 33843,28888,1,Stabled Quel'dorei Steed
 33846,26053,7,Dark Rune Sentinel
 33847,16480,10,Forest Heart Bunny (Horde)
-33848,28890,0,Mimiron's Head
+33848,28890,9,Mimiron's Head
 33849,28892,7,Helidan Lightwing
 33853,28891,7,Broxel Goldgrasp
 33854,28893,7,Thomas Partridge
@@ -22681,7 +22681,7 @@
 35874,29960,7,Huntsman Blake
 35875,29936,7,Aggra
 35876,29937,1,Crusader's White Warhorse
-35878,29938,0,Crusader's Black Warhorse
+35878,29938,1,Crusader's Black Warhorse
 35879,16480,10,Neptulon Engravings Bunny
 35880,11261,7,Lady Silisthra
 35881,11261,7,Lady Vesthra
@@ -23147,7 +23147,7 @@
 36902,30400,7,Wind Rider Gorsch
 36907,30401,6,Wrathbone Siegesmith
 36908,30412,0,Gryphon Hatchling
-36909,30413,0,Wind Rider Cub
+36909,30413,12,Wind Rider Cub
 36910,30402,12,Zipao Tiger
 36911,30414,12,Pandaren Monk
 36912,3718,0,Chen Stormstout
@@ -23526,6 +23526,7 @@
 37757,10702,6,Howling Banshee
 37758,4614,7,Yonada's Spirit
 37759,9771,7,Omusa's Spirit
+37764,17122,7,Lor'themar Theron
 37766,30756,0,Orc Air Totem
 37774,30684,7,Archmage Elandra
 37776,30764,7,Apprentice Nelphi
@@ -23791,7 +23792,7 @@
 38248,31004,6,Impaling Spear
 38252,169,10,"Dragon"
 38254,25654,4,Steaming Fury
-38260,31007,0,Invincible
+38260,31007,6,Invincible
 38263,31051,7,Ithis Moonwarden
 38268,30937,7,Novice Darkspear Warrior
 38269,31052,7,Zen'Aliri
@@ -23968,7 +23969,7 @@
 38706,31298,7,Zeke Bootscuff
 38707,17697,1,Northwatch Gryphon
 38714,31920,7,Carmen Ibanozzle
-38718,31171,10,Silithid Bait
+38718,37127,10,Silithid Bait
 38719,6944,10,Burning Southsea Pirate
 38739,11093,10,Wrangled Swarmer
 38742,328,10,Wrangled Bug Credit Bunny
@@ -24110,6 +24111,7 @@
 39040,31282,7,Alliance Field Defender
 39041,31307,7,Gnomeregan Pilot
 39042,33958,7,Alliance Paratrooper
+39046,25279,1,Crimson Deathcharger
 39047,4607,4,Agitated Fire Spirit
 39048,20365,6,Sylvanas' Lamenter
 39049,31275,1,Plagued Bruin
@@ -24203,6 +24205,7 @@
 39226,31592,7,Farseer Gadra
 39236,30761,10,Poison Extraction Totem
 39238,328,10,Burning Debris
+39239,2327,1,Durotar Riding Wolf
 39244,17345,10,Northwatch Caravan A
 39245,31405,7,Northwatch Lug
 39249,31402,7,Northwatch Lug
@@ -24832,6 +24835,7 @@
 40619,15581,7,Commander Jarod Shadowsong
 40620,23767,4,Bloodpetal Blossom
 40622,16946,7,Bloodpetal Blossom
+40624,31956,12,Celestial Dragon
 40630,24900,4,Bloodpetal Sprout
 40632,31959,7,Southsea Musketeer
 40633,32348,7,Naz'jar Honor Guard
@@ -26204,9 +26208,9 @@
 43007,33275,1,Shadra
 43008,33174,7,Raven Hollister
 43009,33688,7,Alsudar the Bastion
-43010,33190,7,Delios
+43010,33190,7,Delios Silverblade
 43011,33175,7,Lyndsay Hollister
-43012,33687,7,Lothan
+43012,33687,7,Lothan Silverblade
 43013,33510,7,Sunwalker Iopi
 43015,33509,7,Seer Alsoomse
 43016,2685,7,Deathstalker Bodychopper
@@ -26488,7 +26492,7 @@
 43464,33381,7,Halbin Frosthammer
 43467,16480,10,Generic Bunny (Phase 21)
 43479,11686,11,Effloresence
-43480,4766,4,Tempermental Rumbler
+43480,4766,4,Temperamental Rumbler
 43481,33382,7,Dinorae Swiftfeather
 43483,328,10,Dragonmaw Invisible Bunny Trigger - Chapter I Only
 43484,13069,11,Fungal Growth II
@@ -27129,7 +27133,7 @@
 44568,33971,1,Dune Rattler
 44569,33972,4,Sand Lasher
 44572,14376,9,Skystrider
-44573,15774,10,Dune Worm
+44573,15774,1,Dune Worm
 44574,11686,6,Desiccated Scourge
 44576,9476,9,Proto-Strider
 44577,34743,7,General Husam
@@ -27555,7 +27559,7 @@
 45298,34393,7,Mule Driver Ironshod
 45300,34395,7,Caretaker Nuunwa
 45301,34400,7,Torok the Colossus
-45302,1547,1,Sunchaser Gazelle
+45302,2237,1,Sunchaser Gazelle
 45303,14546,1,Explorers' League Pack Mule
 45304,16480,10,Harrison Staff Transform Bunny
 45305,7933,1,Reliquary Pack Kodo
@@ -28682,6 +28686,7 @@
 47347,35552,7,Mitch Yostpaddle
 47350,34710,7,S.A.F.E. Guide
 47352,35551,2,Volcanic Stone Drake
+47353,35757,2,Drake of the East Wind
 47360,328,10,Impsy
 47361,35560,7,Doranir
 47362,35561,7,Aelnara
@@ -30033,9 +30038,9 @@
 50140,36971,7,Auctioneer Lyrsara
 50141,1141,8,Corpse-Fed Rat
 50142,36899,7,Summoner Calwen
-50143,36970,7,Itoran
+50143,36970,7,Auctioneer Itoran
 50144,36900,7,Ranger Eoss
-50145,36969,7,Braku
+50145,36969,7,Auctioneer Braku
 50146,36561,7,Agatian Fallanos
 50147,36903,7,Pathstalker Rislar
 50148,36905,7,Matron Ossela
@@ -30074,6 +30079,7 @@
 50263,36744,7,Jadrag the Slicer
 50264,36745,10,Spiked Tentacle
 50266,26556,9,Flintlocke's Seaplane
+50269,35750,2,Sandstone Drake
 50270,36746,7,Captain Taylor
 50272,36747,7,Legionnaire Nazgrim
 50277,31068,7,Naz'jar Spiritmender (1)
@@ -30302,6 +30308,7 @@
 51217,37141,7,Cavorting Pygmy
 51229,37293,9,Cardboard Assassin
 51230,33191,7,Earthmender
+51236,37177,2,Aeonaxx
 51259,35899,1,Domesticated Camel
 51268,35543,10,Sword Dance Invisible Stalker
 51269,37188,10,Sword Dancer A
@@ -30364,6 +30371,7 @@
 51512,37403,7,Mirla Silverblaze
 51513,37430,7,Irontree Bruiser
 51514,37424,7,Camp Ataya Brave
+51515,7115,7,Mulgore Protector
 51516,37453,7,Nozzlepot Bruiser
 51517,37433,7,Bootlegger Bruiser
 51518,1598,7,Loch Modan Mountaineer
@@ -30434,6 +30442,7 @@
 51681,37712,1,Frostsaber Cub
 51682,16341,7,Hyjal Flame Guardian
 51697,16341,7,Vashj'ir Flame Guardian
+51698,16341,7,Deepholm Flame Guardian
 51709,37617,7,Harris Franklin
 51711,20570,10,Snow-Covered Burrow
 51712,37743,1,Ferndweller Wasp
@@ -30518,6 +30527,7 @@
 52092,34569,7,Izak Mixmaster 
 52093,34569,7,Zanagan Mixmaster 
 52107,2169,4,Obsidian Punisher
+52134,38656,7,Commander Jarod Shadowsong
 52146,909,1,Chitter
 52148,37789,7,Jin'do the Godbreaker
 52151,37816,7,Bloodlord Mandokir
@@ -30543,7 +30553,7 @@
 52209,29282,1,Chief Caravan Kodo
 52211,36555,1,Crossroads Caravan Cart
 52212,29225,1,Mor'shan Caravan Kodo
-52213,32258,7,Hyjal Protector
+52213,38817,7,Hyjal Protector
 52214,32256,7,Hyjal Protector
 52215,32255,7,Hyjal Protector
 52216,32257,7,Hyjal Protector
@@ -30612,6 +30622,7 @@
 52382,37864,2,Ziradormi
 52383,37866,1,Nemesis
 52386,4198,7,Burning Blade Windrider
+52389,37867,10,Eye of Occu'thar
 52392,37868,7,Gurubashi Master Chef
 52399,13031,7,Galenges
 52401,11686,1,Spirit of Malorne
@@ -30632,6 +30643,8 @@
 52422,37880,7,Kaulema the Mover
 52423,37881,7,Apprentice Mage
 52425,1244,1,Tooga
+52427,35906,9,Destroyed Containment Unit
+52428,37887,10,Eye of Occu'thar
 52429,37886,7,Zanza the Restless
 52430,169,10,Hakkar's Chains
 52434,37888,7,Gurubashi Villager
@@ -30660,13 +30673,15 @@
 52525,11686,10,Bloodvenom
 52528,37935,10,Egg Satchel
 52529,37939,10,Zanzil's Cauldron of Toxic Torment
-52530,38446,0,Alysrazor
+52530,38446,4,Alysrazor
 52531,20570,10,Fire Attacker Portal
 52547,28718,4,Ancient Hyjal Protector
-52552,38665,5,Molten Behemoth
+52552,38850,5,Molten Behemoth
+52556,11686,10,Druid Combat Circle
+52557,35371,4,Raging Invader
 52558,38414,4,Lord Rhyolith
 52562,37952,7,Johnny Awesome
-52571,37953,0,Majordomo Fandral Staghelm
+52571,37953,7,Majordomo Staghelm
 52577,169,4,Left Foot
 52581,38256,1,Cinderweb Drone
 52582,169,7,Volcano
@@ -30704,10 +30719,12 @@
 52655,38009,7,Palehoof's Big Bag of Parts
 52657,38010,7,Nahari Cloudchaser
 52658,38011,7,Paku Cloudchaser
+52659,169,7,Movement Controller - Lord Rhyolith 
 52660,38013,4,Fire Hawk
 52661,38015,1,Druid of the Flame
 52662,38064,4,Unstable Flamerager
 52663,36419,4,Flamewatch Sentinel
+52665,38017,1,Malorne
 52672,38018,1,Flameward Hippogryph
 52676,22903,10,Climbing Tree
 52697,26,12,Greedy Kobold
@@ -30718,15 +30735,19 @@
 52749,38256,1,Pyrachnis
 52751,22448,10,Cinderweb Cocoon
 52766,11997,1,Lylagar
+52771,37993,1,Lava Burster
 52777,38034,7,Elder Runetotem
 52778,38035,7,Elder Mistwalker
 52779,38036,7,Elder Bloodhoof
 52780,38037,7,Elder Dreamseer
 52781,38038,7,Elder Skyseer
 52782,38039,7,Elder Stonespire
+52790,38692,7,Aggra
 52791,12030,7,Charred Flamewaker
 52794,38481,4,Brimstone Destroyer
 52795,12168,1,Brimstone Hound
+52796,38042,7,Malfurion Stormrage
+52797,38754,7,Nozdormu
 52804,38088,7,Shadow Warden
 52806,31839,7,Darkspear Warrior
 52809,38047,7,Blax Bottlerocket
@@ -30740,6 +30761,11 @@
 52827,37456,10,Blood Worm
 52830,38055,7,Michelle De Rum
 52834,31212,7,Wounded Hyjal Defender
+52846,31228,7,Hyjal Ritualist
+52847,29764,7,Hyjal Assault Trooper
+52848,20857,7,Hyjal Assault Trooper
+52849,29418,7,Hyjal Assault Trooper
+52863,38062,7,Leyara
 52866,169,7,Crater
 52870,37483,7,Digsite Zombie Survivor
 52872,38436,7,Druid of the Flame
@@ -30791,7 +30817,6 @@
 53005,20570,10,Flame Spout Target Bunny
 53006,4590,11,Spirit Link Totem
 53011,1065,7,Hideaway Zombie
-53014,38062,7,Leyara
 53016,37483,7,Hardwrench Zombie Survivor
 53017,11686,10,Forlorn Spire Assault Camera Bunny
 53021,38119,7,Amani'shi Peon
@@ -30815,9 +30840,12 @@
 53085,38144,7,Flamewaker Sentinel
 53087,169,4,Right Foot
 53088,2176,1,Temple Rat
+53089,38146,10,Molten Feather
 53092,38148,4,Firekin
 53093,31808,7,Flamewaker Shaman
+53094,37282,1,Patriarch Fire Turtle
 53095,38149,1,Matriarch Fire Turtle
+53096,36702,1,Fire Turtle Hatchling
 53099,22903,10,Wave Genesis Bunny
 53102,38012,4,Inferno Hawk
 53107,30233,4,Smothervine
@@ -30839,10 +30867,15 @@
 53151,38190,7,Overseer Blingbang
 53152,38186,4,Charhound
 53153,12310,4,Ice Elemental
+53154,1126,10,Generic Firelands Raid Bunny JMF
+53158,1126,10,Volcano Fire Bunny
 53165,38193,7,Gurubashi War-Seeker
 53166,38197,7,Gurubashi Soul-Seeker
 53167,38019,4,Unbound Pyrelord
 53178,169,10,Spiderling Stalker
+53185,38140,7,Flamewaker Overseer
+53187,13030,7,Flamewaker Animator
+53188,26704,7,Flamewaker Subjugator
 53189,38520,4,Molten Elemental
 53206,38223,4,Hell Hound
 53209,29538,7,Flamewaker Trapper
@@ -30850,27 +30883,39 @@
 53212,12190,10,Furnace Bunny Fire A 1.6 scale
 53213,38148,10,Furnace Bunny Fire A 0.8 scale
 53214,38226,0,Damek Bloombeard
+53222,38241,7,Flamewaker Centurion
+53223,26704,7,Flamewaker Beast Handler
+53224,38240,7,Flamewaker Taskmaster
 53225,38229,12,Pterrordax Hatchling
 53228,38230,10,Thermal Pocket Bunny
 53231,38019,4,Lava Scion
 53232,38232,12,Voodoo Figurine
 53237,16925,10,Destination Stalker
 53240,37539,1,Emberspit Scorpion
+53244,12030,7,Flamewaker Trainee
 53249,38259,4,Fire Hawk Matriarch
 53256,38307,10,Ember Pool Bunny
+53258,38629,1,Lord Rhyolith
+53260,11686,10,Malorne Event Camera
 53261,20570,10,Fall Recovery Primary Controller
+53264,38255,4,Searris
 53265,38258,4,Kelbnar
 53267,38012,4,Andrazor
 53269,20570,10,Fall Recovery Secondary Controller
+53271,38674,4,Fah Jarakk
+53276,38261,1,Amani Battle Bear
 53281,16925,10,Lift Off
+53291,38273,7,Istaria
 53352,3167,7,Commander Sharp
 53361,16925,10,Descend
 53369,38557,7,Blazing Talon Initiate
+53372,1126,10,Brushfire
 53375,38652,7,Herald of the Burning End
 53381,38305,4,Obsidian Slaglord
 53384,37757,4,Obsidian Monstrosity
 53388,23711,10,Ember Pool Pulse Pre-Load
 53433,37935,10,Crackling Flame
+53435,1126,10,Unstable Magma Elemental Stalker
 53440,38334,7,Durango
 53441,38335,7,Kin'weelay
 53442,38336,7,Priestess Hu'rala
@@ -30885,42 +30930,70 @@
 53488,169,10,Summon Enabler Stalker
 53490,16925,10,Sticky Webbing
 53493,38364,1,Malorne
-53494,38621,0,Baleroc
+53494,38621,4,Baleroc
+53495,1126,10,Shard of Torment
 53509,38372,4,Voracious Hatchling
+53516,26381,4,Essence of Doubt
 53517,38376,10,Squirming Slime Mold
+53518,38379,7,Thrall
+53520,37993,1,Plump Lava Worm
+53521,1126,10,Lava Worm Target
 53522,38377,1,Baby Octopus
+53524,18360,4,Cyclonas
 53526,38380,1,Brightwater Snail
 53528,38381,7,Chef Audrey
+53530,34910,4,Shadow of Doubt
 53534,38383,7,Technician Joram
 53535,32044,7,Technician Marco
+53541,1126,10,Incindiary Cloud
 53544,15395,7,Squirky
+53554,1126,10,Blazing Power
 53555,38392,7,Kinnel
 53556,38393,7,Priestess Thaalia
 53557,38394,7,Wulfred Harrys
 53561,32941,1,Stonebull Crayfish
 53568,5369,8,Dun Morogh Chicken
 53590,30165,10,Moat Monster
+53591,21955,10,[DND] Moat Monster Spawn Loc
 53598,30063,7,Hungry Overseer
 53616,38591,4,Kar the Everburning
 53619,38441,7,Druid of the Flame
 53623,16943,12,Cenarion Hatchling
 53626,38421,7,Stormwind Orphan
 53630,35681,4,Unstable Pyrelord
+53639,38240,7,Flamewaker Cauterizer
 53641,38422,7,Allison Potts
+53646,32724,4,Tides of Longing
+53647,36323,4,Vortex of Longing
 53656,38479,1,Cinderweb Clutchkeeper
 53658,38455,12,Hyjal Bear Cub
 53662,28726,10,Solar Core Channel Bunny
+53676,38580,7,Thrall
+53677,38440,4,Hydrius
+53680,38443,4,Blazing Broodmother
+53681,38445,4,Molten Egg
 53691,38448,0,Shannox
+53693,1126,10,Fiery Vortex
 53694,38449,1,Riplimb
 53695,38450,1,Rageface
 53697,38462,8,Cinderling
+53698,1126,10,Fiery Tornado
+53723,1126,10,Alysrsazor Timing Bunny
+53732,35201,4,Unbound Smoldering Elemental
 53734,38013,7,Blazing Talon Clawshaper
+53736,38470,7,Thrall
+53739,33682,4,Element of Patience
 53741,38486,7,Hyjal Scout
 53743,38543,1,Cinderweb Broodling
 53745,38366,1,Engorged Broodling
+53755,38478,7,Thrall
 53765,38473,1,Cinderweb Spiderling
 53771,38675,7,Ancient Smoldering Behemoth
+53772,38594,4,Lord Rhyolith
 53786,38501,4,Blazing Monstrosity
+53787,20324,10,Molten Barrage
+53788,11686,10,Molten Barrage
+53789,38502,10,Blazing Monstrosity
 53793,38503,7,Harbinger of Flame
 53794,38505,4,Smouldering Hatchling
 53795,38445,4,Egg Pile
@@ -30930,36 +31003,72 @@
 53830,28288,12,Fuzzy Wuzzy Bunny
 53831,654,12,Fuzzy Wuzzy Deer
 53840,15375,7,Gart Mistrunner
+53863,11686,10,Path of Earth
 53864,38591,7,Ancient Firelord
 53866,20570,10,Fire Torrent Channel Bunny
 53881,38536,0,Ayla Shadowstorm
 53882,38537,0,Varlan Highbough
+53894,37192,4,Corestone of Patience
+53895,23742,7,Aggra
 53896,38317,7,Blazing Talon Initiate
+53901,12231,4,Unstable Magma
+53905,38561,7,Thrall
+53914,37286,4,Molten Egg
+53928,24905,4,Seed of Fury
+53929,38653,4,Flames of Fury
 53962,24719,10,Seed of the Sentinel Tree
 53986,1126,10,Firestorm
+53990,34581,4,Whirling Vortex
 54004,14589,7,Jaga
-54015,37953,7,Majordomo Staghelm
 54019,38603,7,Captive Druid of the Talon
+54020,31174,10,General Purpose Bunny JMF (Look 2 - Flying Huge AOI)
 54036,20570,10,Furnace Bunny Fire B 1.0 scale
 54037,20570,10,Furnace Bunny Fire C 1.0 scale
 54038,38148,10,Furnace Bunny Fire B 0.8 scale
 54039,38148,10,Furnace Bunny Fire C 0.8 scale
 54040,12190,10,Furnace Bunny Fire B 1.6 scale
+54073,26704,7,Flamewaker Hound Master
 54113,38631,1,Spooks
+54116,38801,1,Dori'thur
+54117,19091,7,Vin
 54137,169,10,Fire Patch
 54143,38766,5,Molten Flamefather
 54145,38625,10,Magma Conduit
 54161,38030,4,Flame Archon
+54175,38846,7,Kalecgos
+54178,38658,7,Muln Earthfury
 54183,28726,10,Cyclone
+54192,38669,4,Lord Rhyolith
+54199,38676,4,Lord Rhyolith
 54227,38693,12,Nuts
 54230,11686,10,Lieutenant of Flame
+54241,25204,7,Mysterious Stranger
+54243,25204,7,Twilight Lackey
+54244,34459,7,Undercity Citizen
+54245,27824,7,Twilight Lackey
 54251,38705,10,Fireball
 54274,38740,8,Magmaspray Beetle
 54275,1206,8,Ashtongue Adder
 54276,35803,8,Cinderslither Snake
 54277,20265,8,Kindleworm
+54299,38738,10,Magma Orb
+54316,38704,7,Druid of the Flame
 54317,1405,4,Seether
+54318,38748,1,Ankha
+54319,38749,1,Magria
+54320,38634,1,Ban'thalos
 54339,38760,4,Ancient Charhound
+54348,33553,10,Circle of Thorns Portal
 54349,7935,7,Jacob McWeaksauce
+54362,38769,7,Scarred Acolyte
 54374,38776,12,Brilliant Kaliri
+54382,38778,4,Alysrazor
 54392,38781,7,Ranela Featherglen
+54401,38788,7,Naresir Stormfury
+54402,38789,7,Lurah Wrathvine
+54421,16480,10,Prophet of the Flame
+54437,38797,7,Avatar of Ragnaros
+54465,27104,7,The Keymaster
+54470,30415,4,Figment of Longing
+54539,38343,12,Alliance Balloon
+54541,38342,12,Horde Balloon
