@@ -1,6 +1,6 @@
 World of Warcraft Model Viewer v0.7.0.1
 
-r596 (Fickle Felguard)
+r598 (Fickle Felguard)
  - WoW Model Viewer is released under the GNU General Public License v3, Non-Commercial Use.
  - WoW will no longer automatically load when starting WMV. You can load it from the File Menu.
  - Added View Log function in File Menu.
