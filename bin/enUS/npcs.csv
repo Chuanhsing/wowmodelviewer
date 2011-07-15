@@ -30699,6 +30699,7 @@
 52604,571,7,Digsite Zombie
 52606,37968,7,Gurubashi Warmonger
 52608,38023,6,Twisted Shadow
+52619,33006,4,Liquid Obsidian
 52620,35201,4,Fragment of Rhyolith
 52621,37989,1,Wings of Aviana
 52624,25553,6,Twisted Spirit
@@ -30851,6 +30852,7 @@
 53107,30233,4,Smothervine
 53112,38152,1,Subterranean Magma Worm
 53115,38765,5,Molten Lord
+53116,35681,4,Unbound Blazing Elemental
 53119,38241,7,Flamewaker Forward Guard
 53120,13031,7,Flamewaker Pathfinder
 53121,38239,7,Flamewaker Cauterizer
@@ -30914,8 +30916,18 @@
 53381,38305,4,Obsidian Slaglord
 53384,37757,4,Obsidian Monstrosity
 53388,23711,10,Ember Pool Pulse Pre-Load
+53403,38315,7,Allen Bright
+53404,38314,7,Redia Vaunt
+53405,38316,7,Raedra Windhammer
+53407,38318,7,Sansha MacVince
+53409,38319,7,
+53410,38322,7,Lissah Spellwick
+53415,38324,7,Theoden Manners
+53421,38328,7,Faena Woolybush
 53433,37935,10,Crackling Flame
 53435,1126,10,Unstable Magma Elemental Stalker
+53436,38331,7,Eustace Tanwell
+53437,38332,7,Humbert Tanwell
 53440,38334,7,Durango
 53441,38335,7,Kin'weelay
 53442,38336,7,Priestess Hu'rala
@@ -30932,6 +30944,7 @@
 53493,38364,1,Malorne
 53494,38621,4,Baleroc
 53495,1126,10,Shard of Torment
+53500,38475,10,Living Meteor
 53509,38372,4,Voracious Hatchling
 53516,26381,4,Essence of Doubt
 53517,38376,10,Squirming Slime Mold
@@ -30953,6 +30966,7 @@
 53557,38394,7,Wulfred Harrys
 53561,32941,1,Stonebull Crayfish
 53568,5369,8,Dun Morogh Chicken
+53575,38255,4,Lava Wielder
 53590,30165,10,Moat Monster
 53591,21955,10,[DND] Moat Monster Spawn Loc
 53598,30063,7,Hungry Overseer
@@ -30968,6 +30982,7 @@
 53656,38479,1,Cinderweb Clutchkeeper
 53658,38455,12,Hyjal Bear Cub
 53662,28726,10,Solar Core Channel Bunny
+53665,38432,7,Orc Child
 53676,38580,7,Thrall
 53677,38440,4,Hydrius
 53680,38443,4,Blazing Broodmother
@@ -31019,9 +31034,11 @@
 53962,24719,10,Seed of the Sentinel Tree
 53986,1126,10,Firestorm
 53990,34581,4,Whirling Vortex
+53991,38596,7,Quincy Cutler
 54004,14589,7,Jaga
 54019,38603,7,Captive Druid of the Talon
 54020,31174,10,General Purpose Bunny JMF (Look 2 - Flying Huge AOI)
+54026,38626,1,Dotty
 54036,20570,10,Furnace Bunny Fire B 1.0 scale
 54037,20570,10,Furnace Bunny Fire C 1.0 scale
 54038,38148,10,Furnace Bunny Fire B 0.8 scale
@@ -31040,8 +31057,15 @@
 54183,28726,10,Cyclone
 54192,38669,4,Lord Rhyolith
 54199,38676,4,Lord Rhyolith
+54214,38683,7,Scott Keenan
+54215,38686,7,Lana Ashwin
+54216,38685,7,Warren Fulton
+54217,38687,7,Daphne 
+54218,38688,7,Daniel Kinsey
+54219,38684,7,Sean Copeland
 54227,38693,12,Nuts
 54230,11686,10,Lieutenant of Flame
+54232,38697,7,Mrs. Gant
 54241,25204,7,Mysterious Stranger
 54243,25204,7,Twilight Lackey
 54244,34459,7,Undercity Citizen
@@ -31052,12 +31076,14 @@
 54276,35803,8,Cinderslither Snake
 54277,20265,8,Kindleworm
 54299,38738,10,Magma Orb
+54308,38745,7,Kirsty Logan
 54316,38704,7,Druid of the Flame
 54317,1405,4,Seether
 54318,38748,1,Ankha
 54319,38749,1,Magria
 54320,38634,1,Ban'thalos
 54339,38760,4,Ancient Charhound
+54344,27510,9,Highlord's Nemesis Trainer
 54348,33553,10,Circle of Thorns Portal
 54349,7935,7,Jacob McWeaksauce
 54362,38769,7,Scarred Acolyte
