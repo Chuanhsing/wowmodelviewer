@@ -1,8 +1,8 @@
 
-#include <wx/regex.h>
 #include <wx/txtstrm.h>
 #include <wx/tokenzr.h>
 #include <wx/utils.h>
+#include <wx/regex.h>
 
 #include "modelviewer.h"
 #include "globalvars.h"
@@ -1925,6 +1925,8 @@ void ModelViewer::OnViewLog(wxCommandEvent &event)
 		wxString logPath = cfgPath.BeforeLast(SLASH)+SLASH+wxT("log.txt");
 #ifdef	_WINDOWS
 		wxExecute(wxT("notepad.exe ")+logPath);
+#elif	_MAC
+		wxExecute(wxT("/Applications/TextEdit.app/Contents/MacOS/TextEdit ")+logPath);
 #endif
 	}
 }
@@ -2391,22 +2393,22 @@ is (C)2006-2011 Blizzard Entertainment(R). All rights reserved.")));
 void ModelViewer::DownloadLocaleFiles()
 {
 	wxString trunk = wxT("http://wowmodelviewer.googlecode.com/svn/trunk/");
-	wxString lang;
-	if (langName == wxT("enGB"))
+	wxString lang = langName;
+	if (lang == wxT("enGB"))
 		lang = wxT("enUS");
 
-	wxString msg = wxT("Would you like to download ") + langName + wxT(" locale files?");
+	wxString msg = wxT("Would you like to download ") + lang + wxT(" locale files?");
 	if (wxMessageBox(msg, wxT("Update Locale Files"), wxYES_NO) == wxYES) {
 		wxString csvs[] = {wxT("items.csv"), wxT("npcs.csv")};
-		if (!wxDirExists(langName))
-			wxMkdir(langName);
+		if (!wxDirExists(lang))
+			wxMkdir(lang);
 		for(size_t i=0; i<WXSIZEOF(csvs); i++) {
 			wxString items_csv = trunk + wxT("bin/") + lang + wxT("/") + csvs[i];
 			wxURL items_url(items_csv);
 			if(items_url.GetError() == wxURL_NOERR) {
 				wxInputStream *stream = items_url.GetInputStream();
 				if (stream) {
-					wxFFileOutputStream f(langName + SLASH + csvs[i], wxT("w+b"));
+					wxFFileOutputStream f(lang + SLASH + csvs[i], wxT("w+b"));
 					wxString data;
 					char buffer[1024];
 					while(!stream->Eof()) {
@@ -2415,7 +2417,11 @@ void ModelViewer::DownloadLocaleFiles()
 					}
 					delete stream;
 					f.Close();
+				} else {
+				    wxLogMessage(_T("wxInputStream failed: ")+items_csv);
 				}
+			} else {
+			    wxLogMessage(_T("wxURL failed: ")+items_csv);
 			}
 		}
 	}

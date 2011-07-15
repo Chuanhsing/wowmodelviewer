@@ -553,7 +553,7 @@ struct NPCRecord
 	bool discovery;
 
 	NPCRecord(const char* line);
-	NPCRecord(): id(0), model(0) {}
+	NPCRecord(): id(0), model(0), type(0) {}
 	NPCRecord(const NPCRecord &r): name(r.name), id(r.id), model(r.model), type(r.type) {}
 
 	const bool operator< (const NPCRecord &r) const

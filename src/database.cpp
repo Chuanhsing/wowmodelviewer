@@ -868,6 +868,9 @@ wxString NPCDatabase::addDiscoveryId(int id, wxString name)
 
 NPCRecord::NPCRecord(const char* line)
 {
+	id = model = type = 0;
+	if (strlen(line) <= 3)
+	    return;
 	sscanf(line, "%u,%u,%u,", &id, &model, &type);
 	discovery = false;
 	for (size_t i=strlen(line)-2; i>1; i--) {

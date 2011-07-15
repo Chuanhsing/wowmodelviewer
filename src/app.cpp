@@ -689,6 +689,7 @@ void WowModelViewApp::SaveSettings()
 	}
 
 	pConfig->Write(wxT("MPQFiles"), archives);
+	pConfig->Flush();
 
 	// Clear our ini file config object
 	wxDELETE( pConfig );
