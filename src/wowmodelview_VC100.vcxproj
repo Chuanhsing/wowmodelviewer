@@ -75,10 +75,10 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\Clean\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\Clean\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
   </PropertyGroup>
@@ -258,8 +258,8 @@ mkdir $(OutDir)mo
 copy po\*.mo $(OutDir)mo\
 mkdir $(OutDir)Export
 mkdir $(OutDir)Import
-copy ..\bin_support\Windows\32bit\msvcr90.dll $(OutDir)
-copy ..\bin_support\Windows\32bit\msvcp90.dll $(OutDir)
+copy ..\bin_support\Windows\32bit\msvcr100.dll $(OutDir)
+copy ..\bin_support\Windows\32bit\msvcp100.dll $(OutDir)
 copy ..\doc\ChangeLog.txt $(OutDir)
 copy ..\bin\COPYING $(OutDir)
 mkdir $(OutDir)userSettings
@@ -331,6 +331,8 @@ mkdir $(OutDir)mo
 copy po\*.mo $(OutDir)mo\
 mkdir $(OutDir)Export
 mkdir $(OutDir)Import
+copy ..\bin_support\Windows\64bit\msvcr100.dll $(OutDir)
+copy ..\bin_support\Windows\64bit\msvcp100.dll $(OutDir)
 copy ..\doc\ChangeLog.txt $(OutDir)
 copy ..\bin\COPYING $(OutDir)
 mkdir $(OutDir)userSettings

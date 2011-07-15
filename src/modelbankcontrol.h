@@ -29,14 +29,14 @@ struct ModelBank
 	Vec3D rot;
 
 	// Char and NPC character info
-	unsigned int skinColor;
-	unsigned int faceType;
-	unsigned int hairColor;
-	unsigned int hairStyle;
-	unsigned int facialHair;
-	unsigned int facialColor;
-	unsigned int race, gender;
-	unsigned int useNPC;
+	size_t skinColor;
+	size_t faceType;
+	size_t hairColor;
+	size_t hairStyle;
+	size_t facialHair;
+	size_t facialColor;
+	size_t race, gender;
+	size_t useNPC;
 	bool showUnderwear, showEars, showHair, showFacialHair, showFeet;
 	int equipment[NUM_CHAR_SLOTS];
 	// -----------

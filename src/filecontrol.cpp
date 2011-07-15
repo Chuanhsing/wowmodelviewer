@@ -497,6 +497,10 @@ void FileControl::UpdateInterface()
 {
 	// Disable whatever formats can't be export yet.
 
+	// Don't run if there aren't any models loaded!
+	if (modelviewer == NULL)
+		return;
+
 	// You MUST put true in one if the other is false! Otherwise, if they open the other model type and go back,
 	// your function will still be disabled!!
 	if (modelviewer->isModel == true){

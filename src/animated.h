@@ -121,7 +121,7 @@ template <class T, class D=T, class Conv=Identity<T> >
 class Animated {
 public:
 
-	int type, seq;
+	ssize_t type, seq;
 	uint32 *globals;
 #ifndef WotLK
 	bool used;
@@ -137,14 +137,14 @@ public:
 	std::vector<T> in[MAX_ANIMATED], out[MAX_ANIMATED];
 	size_t sizes; // for fix function
 #endif
-	bool uses(size_t anim)
+	bool uses(ssize_t anim)
 	{
 		if (seq>-1)
 			anim = 0;
 		return ((data[anim].size()) > 0);
 	}
 
-	T getValue(size_t anim, size_t time)
+	T getValue(ssize_t anim, size_t time)
 	{
 #ifdef WotLK
 		// obtain a time value and a data range

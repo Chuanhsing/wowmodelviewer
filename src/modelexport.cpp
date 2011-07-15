@@ -130,6 +130,11 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID = wxEmptyStr
 	wxDELETE(newImage);
 }
 
+// Alter a Vert by a Quaternion
+Vec3D AlterVertByQuat(Vec3D vert, Quaternion q, Matrix m){
+	return vert;
+}
+
 // Limit a value by a min & a max. The Inc controls by how much to reduce for every run.
 double Clamp(double value, float min, float max, float inc = PI){
 	if (value > 0){

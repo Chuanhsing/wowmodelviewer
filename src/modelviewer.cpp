@@ -211,6 +211,7 @@ ModelViewer::ModelViewer()
 	fileMenu = NULL;
 	camMenu = NULL;
 
+	isWoWLoaded = false;
 	isModel = false;
 	isWMO = false;
 	isChar = false;
@@ -273,14 +274,18 @@ void ModelViewer::InitMenu()
 {
 	wxLogMessage(wxT("Initializing File Menu..."));
 
-	CreateStatusBar(3);
-	int widths[] = {-1, 100, 50};
-	SetStatusWidths(3, widths);
-	SetStatusText(wxT("Initializing File Menu..."));
+	if (GetStatusBar() == NULL){
+		CreateStatusBar(3);
+		int widths[] = {-1, 100, 50};
+		SetStatusWidths(3, widths);
+		SetStatusText(wxT("Initializing File Menu..."));
+	}
 
 	// MENU
 	fileMenu = new wxMenu;
 	fileMenu->Append(ID_LOAD_WOW, wxT("Load World of Warcraft"));
+	if (isWoWLoaded == true)
+		fileMenu->Enable(ID_LOAD_WOW,false);
 	fileMenu->Append(ID_FILE_VIEWLOG, wxT("View Log"));
 	/*
 	wxMenu *gameMenu = new wxMenu;
@@ -2013,6 +2018,7 @@ void ModelViewer::LoadWoW()
 		fileControl->Disable();
 		SetStatusText(wxT("Some DBC files could not be loaded."));
 	} else {
+		isWoWLoaded = true;
 		SetStatusText(wxT("Initial WoW Done."));
 		fileMenu->Enable(ID_LOAD_WOW, false);
 	}
@@ -2370,9 +2376,9 @@ wxString(wxT("World of Warcraft(R) is a Registered trademark of\n\
 Blizzard Entertainment(R). All game assets and content\n\
 is (C)2006-2011 Blizzard Entertainment(R). All rights reserved.")));
 
-	info.SetLicence(wxT("WoWmodelview is released under the GNU General Public License v3, Non-Commercial Use."));
+	info.SetLicence(wxT("WoW Model Viewer is released under the GNU General Public License v3, Non-Commercial Use."));
 
-	info.SetDescription(wxT("WoWmodelview is a 3D model viewer for World of Warcraft.\nIt uses the data files included with the game to display\nthe 3D models from the game: creatures, characters, spell\neffects, objects and so forth.\n\nCredits To: Linghuye,  nSzAbolcs,  Sailesh, Terran and Cryect\nfor their contributions either directly or indirectly."));
+	info.SetDescription(wxT("WoW Model Viewer is a 3D model viewer for World of Warcraft.\nIt uses the data files included with the game to display\nthe 3D models from the game: creatures, characters, spell\neffects, objects and so forth.\n\nCredits To: Linghuye,  nSzAbolcs,  Sailesh, Terran and Cryect\nfor their contributions either directly or indirectly."));
 	//info.SetArtists();
 	//info.SetDocWriters();
 
@@ -3295,6 +3301,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 			g_selModel->animManager->Play();
 		}
 	}
+	
 	// Only show if we've successfully completed a model export.
 	if (returncode == EXPORT_OKAY){
 		wxMessageBox(wxT("Export Completed."),wxT("Finished Exporting"));

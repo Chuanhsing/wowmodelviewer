@@ -1,5 +1,48 @@
 World of Warcraft Model Viewer v0.7.0.1
 
+r596 (Fickle Felguard)
+ - WoW Model Viewer is released under the GNU General Public License v3, Non-Commercial Use.
+ - WoW will no longer automatically load when starting WMV. You can load it from the File Menu.
+ - Added View Log function in File Menu.
+ - WMV can now officially work with either WotLK or Cataclysm data!
+ - Updated CSVs for 4.2.
+ - Added Status Bar.
+ - Added Real World Scale option. Using this, the models will export into a real-world scale! (Currently only works on Lightwave and OBJ exporters.)
+ - WMV will now save your lastest Armory Import path.
+ - Fixed several Armory Import issues!
+ - Fixed the Guild Tarbard!
+ - Added Cataclysm Guild Tarbards
+ - Fixed several patch issues.
+ - Fixed an issue with multibyte file/path names when saving/exporting.
+ * Lightwave Exporter:
+  - The exporter will now ask if you want to overwrite model files.
+  - Scene files will no longer be generated if the object doesn't export.
+  - Added Always Export Scene option. When enabled, this will export the scene file, even if the object doesn't export for some reason.
+  - All exported items obey the Real World Scale option.
+  - Partial-Fix for Weight exporting. Works perfectly on everything but characters, creatures & NPCs.
+  - Added Status Bar Messages
+ * Wavefront OBJ Exporter:
+  - Now exports attached models! (Helms, Weapons and Shoulders)
+  - Now obeys the Preserve Directory option!
+  - Image filenames now work just like the Lightwave exporter's image filenames.
+  - All exported items obey the Real World Scale option.
+ * Mac Edition:
+  - Fixed Mac locale files download
+  - Fixed Mac init render issue
+ * Dev Work:
+  - Built & separated Visual Studio 2008 & 2010 versions of WMV's project files.
+  - StormLib is now included in the VS Project files and will be compiled prior to WMV being built.
+  - Updated to wxWidgets 2.8.12
+  - Recompiled & renamed all the .lib files.
+  - Removed 2 unnecessary lib files from our build of StormLib.
+  - Massive, and I do mean MASSIVE 64-bit updates.
+  - Moved Mesh and Slot names to the modelexport.h
+  - Removed fn from GetM2TextureName, as it wasn't needed.
+  - Fixed MakeModelFaceForwards, and changed the 2nd option to flip the Z axis, instead of the X axis. If your model comes out backwards when using this, set flipZ to true.
+  - Fixed Mac post build script
+  - Various code fixes.
+  - Various Stormlib updates
+
 r544 (Gnome Punter)
  - Updated CSVs!
  - Added a notice for when Exporting has finished.

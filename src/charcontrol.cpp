@@ -1147,7 +1147,7 @@ void CharControl::RefreshModel()
 	spins[SPIN_FACIAL_COLOR]->SetValue(cd.facialColor);
 
 	// Eye Glows
-	for(uint32 i=0; i<model->passes.size(); i++) {
+	for(size_t i=0; i<model->passes.size(); i++) {
 		ModelRenderPass &p = model->passes[i];
 		wxString texName = model->TextureList[p.tex].AfterLast('\\').Lower();
 

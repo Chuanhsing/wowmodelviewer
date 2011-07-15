@@ -50,18 +50,18 @@
 
 // defines
 #define APP_TITLE wxT("World of Warcraft Model Viewer")
-#define APP_VERSION wxT("v0.7.0.1 r594")			// Revision number should match the revision number on GoogleCode.
+#define APP_VERSION wxT("v0.7.0.1 r598")			// Revision number should match the revision number on GoogleCode.
 #define APP_BUILDNAME wxT("Fickle Felguard")		// Fun thing for developers to play with. Should change with each Main Release. (Not counting DEV WORK editions)
 /*
 	--==List of Build Name ideas==--	(Feel free to add!)
 	Bouncing Baracuda
 	Hoppin Jalapeno
 	Stealthed Rogue
-	Lost Druid
+	Deadly Druid
 	Demented Deathwing
 	Killer Krakken
 	Crazy Kaelthas
-	Deadly Lich King
+	Lost Lich King
 	Lonely Mastiff
 	Cold Kelthuzad
 	Jiggly Jaina
@@ -69,7 +69,9 @@
 	Vashj's Folly
 	Pickled Herring
 	Epic Win
+	Epic Lose
 	Lord Kezzak
+	Perky Pug
 
 	--== Used Build Names ==--			(So we don't repeat...)
 	Wascally Wabbit
@@ -156,6 +158,7 @@ public:
 	wxAuiManager interfaceManager;
 
 	// Boolean flags
+	bool isWoWLoaded;
 	bool isModel;
 	bool isChar;
 	bool isWMO;

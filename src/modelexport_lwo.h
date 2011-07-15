@@ -25,23 +25,38 @@ struct CountSystem{
 private:
 	size_t Value;
 public:
-	void Reset(){
-		Value = 0;
+	// Functions
+	void Reset(){		Value = 0; }
+	size_t GetValue(){	return Value; }
+	size_t GetPlus(){	return Value++; }
+	size_t PlusGet(){	return ++Value; }
+
+	// Constructors
+	CountSystem(){
+		Reset();
 	}
-	void Plus(size_t num = 1){
-		Value += num;
+	CountSystem(size_t StartingNumber){
+		Value = StartingNumber;
 	}
-	void Minus(size_t num = 1){
-		Value += num;
+
+	// Operators
+	size_t operator+ (const size_t &v) const{
+		size_t a = Value+v;
+		return a;
 	}
-	size_t GetValue(){
+	size_t operator- (const size_t &v) const{
+		size_t a = Value-v;
+		return a;
+	}
+	size_t& operator+= (const size_t &v)
+	{
+		Value += v;
 		return Value;
 	}
-	size_t GetPlus(){
-		return Value++;
-	}
-	size_t PlusGet(){
-		return ++Value;
+	size_t& operator-= (const size_t &v)
+	{
+		Value += v;
+		return Value;
 	}
 };
 
@@ -293,11 +308,11 @@ struct LWScene{
 	}
 
 	~LWScene(){
-		Objects.clear();
-		Lights.clear();
-		Cameras.clear();
-		FileName.Clear();
-		FilePath.Clear();
+		Objects.~vector();
+		Lights.~vector();
+		Cameras.~vector();
+		FileName = "";
+		FilePath = "";
 		//free(&AmbientIntensity);
 	}
 
@@ -465,7 +480,7 @@ struct LWObject {
 		SourceType = wxEmptyString;
 	}
 
-	void Plus(LWObject o, int LayerNum=0,wxString PartNamePrefix = wxT("")){
+	void Plus(LWObject o, ssize_t LayerNum=0,wxString PartNamePrefix = wxT("")){
 		//wxLogMessage(wxT("Running LW Plus Function, Num Layers: %i, into Layer %i."),o.Layers.size(),LayerNum);
 		// Add layers if nessicary...
 		while (Layers.size() < (size_t)LayerNum+1){
@@ -544,7 +559,7 @@ struct LWObject {
 			}
 		}
 	}
-	LWObject operator= (LWObject o){
+	LWObject operator= (const LWObject o){
 		PartNames = o.PartNames;
 		Layers = o.Layers;
 		Images = o.Images;
@@ -552,15 +567,20 @@ struct LWObject {
 
 		SourceType = o.SourceType;
 
-		// return LWObject?
-		return o;
+		// return new LWObject
+		return *this;
 	}
 	~LWObject(){
-		PartNames.Clear();
-		Layers.clear();
-		Images.clear();
-		Surfaces.clear();
-		SourceType.Clear();
+		if (PartNames.size() > 0)
+			PartNames.Clear();
+		if (Layers.size() > 0)
+			Layers.clear();
+		if (Images.size() > 0)
+			Images.clear();
+		if (Surfaces.size() > 0)
+			Surfaces.clear();
+		if (SourceType.size() > 0)
+			SourceType.Clear();
 	}
 };
 
