@@ -2366,9 +2366,9 @@ Windows 98\\ME\\2000\\XP on 17th December 2006\n\n\
     info.SetCopyright(
 wxString(wxT("World of Warcraft(R) is a Registered trademark of\n\
 Blizzard Entertainment(R). All game assets and content\n\
-is (C)2006 Blizzard Entertainment(R). All rights reserved.")));
+is (C)2006-2011 Blizzard Entertainment(R). All rights reserved.")));
 
-	info.SetLicence(wxT("WoWmodelview is released under the GNU General Public License."));
+	info.SetLicence(wxT("WoWmodelview is released under the GNU General Public License v3, Non-Commercial Use."));
 
 	info.SetDescription(wxT("WoWmodelview is a 3D model viewer for World of Warcraft.\nIt uses the data files included with the game to display\nthe 3D models from the game: creatures, characters, spell\neffects, objects and so forth.\n\nCredits To: Linghuye,  nSzAbolcs,  Sailesh, Terran and Cryect\nfor their contributions either directly or indirectly."));
 	//info.SetArtists();

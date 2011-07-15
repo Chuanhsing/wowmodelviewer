@@ -402,31 +402,31 @@ typedef void (WINAPI * SFILE_COMPACT_CALLBACK)(void * pvUserData, DWORD dwWorkTy
 struct TFileStream;
 
 typedef bool (*STREAM_GETPOS)(
-    TFileStream * pStream,              // Pointer to an open stream
+    struct TFileStream * pStream,       // Pointer to an open stream
     ULONGLONG & ByteOffset              // Pointer to store current file position
     );
 
 typedef bool (*STREAM_READ)(
-    TFileStream * pStream,              // Pointer to an open stream
+    struct TFileStream * pStream,       // Pointer to an open stream
     ULONGLONG * pByteOffset,            // Pointer to file byte offset. If NULL, it reads from the current position
     void * pvBuffer,                    // Pointer to data to be read
     DWORD dwBytesToRead                 // Number of bytes to read from the file
     );
 
 typedef bool (*STREAM_WRITE)(
-    TFileStream * pStream,              // Pointer to an open stream
+    struct TFileStream * pStream,       // Pointer to an open stream
     ULONGLONG * pByteOffset,            // Pointer to file byte offset. If NULL, it writes to the current position
     const void * pvBuffer,              // Pointer to data to be written
     DWORD dwBytesToWrite                // Number of bytes to read from the file
     );
 
 typedef bool (*STREAM_GETSIZE)(
-    TFileStream * pStream,              // Pointer to an open stream
+    struct TFileStream * pStream,       // Pointer to an open stream
     ULONGLONG & FileSize                // Receives the file size, in bytes
     );
 
 typedef bool (*STREAM_SETSIZE)(
-    TFileStream * pStream,              // Pointer to an open stream
+    struct TFileStream * pStream,       // Pointer to an open stream
     ULONGLONG FileSize                  // New size for the file, in bytes
     );
 
@@ -915,6 +915,7 @@ bool   WINAPI SFileSetCompactCallback(HANDLE hMpq, SFILE_COMPACT_CALLBACK Compac
 bool   WINAPI SFileCompactArchive(HANDLE hMpq, const char * szListFile = NULL, bool bReserved = 0);
 
 // Changing the maximum file count
+DWORD  WINAPI SFileGetMaxFileCount(HANDLE hMpq);
 bool   WINAPI SFileSetMaxFileCount(HANDLE hMpq, DWORD dwMaxFileCount);
 
 // Changing (attributes) file
@@ -982,7 +983,7 @@ bool   WINAPI SFileFinishFile(HANDLE hFile);
 bool   WINAPI SFileAddFileEx(HANDLE hMpq, const char * szFileName, const char * szArchivedName, DWORD dwFlags, DWORD dwCompression, DWORD dwCompressionNext = 0xFFFFFFFF); 
 bool   WINAPI SFileAddFile(HANDLE hMpq, const char * szFileName, const char * szArchivedName, DWORD dwFlags); 
 bool   WINAPI SFileAddWave(HANDLE hMpq, const char * szFileName, const char * szArchivedName, DWORD dwFlags, DWORD dwQuality); 
-bool   WINAPI SFileRemoveFile(HANDLE hMpq, const char * szFileName, DWORD dwSearchScope);
+bool   WINAPI SFileRemoveFile(HANDLE hMpq, const char * szFileName, DWORD dwSearchScope = SFILE_OPEN_FROM_MPQ);
 bool   WINAPI SFileRenameFile(HANDLE hMpq, const char * szOldFileName, const char * szNewFileName);
 bool   WINAPI SFileSetFileLocale(HANDLE hFile, LCID lcNewLocale);
 bool   WINAPI SFileSetDataCompression(DWORD DataCompression);
