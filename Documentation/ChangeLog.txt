@@ -1,0 +1,8 @@
+WoW Model Viewer v0.8.0.0
+
+r600
+-Initial WMV 0.8.0.0 Branch Upload.
+-Switched to Qt 4.7.3, which replaces wxWidgets.
+-Qt Pro Project file included.
+-VS2008 Edition, 32bit Only, included. Requires Visual Studio Qt Addin to work. Qt must be independently built for VS2010 & for 64bit editions to be available.
+-Changed file layout.

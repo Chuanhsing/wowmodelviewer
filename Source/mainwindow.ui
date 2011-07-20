@@ -1,0 +1,1194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>768</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string notr="true">WoW Model Viewer</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>F:/World of Warcraft/WoWModelView/trunk/bin_support/Icons/wmv.ico</normaloff>F:/World of Warcraft/WoWModelView/trunk/bin_support/Icons/wmv.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>16</y>
+      <width>143</width>
+      <height>134</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QRadioButton" name="rBtn_NoModel">
+       <property name="text">
+        <string>No File Loaded</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QRadioButton" name="rBtn_IsChar">
+       <property name="text">
+        <string>File is Character</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QRadioButton" name="rBtn_IsNPC">
+       <property name="text">
+        <string>File is NPC</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QRadioButton" name="rBtn_IsWMO">
+       <property name="text">
+        <string>File is WMO/Set</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QRadioButton" name="rBtn_IsADT">
+       <property name="text">
+        <string>File is ADT/Landscape</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QRadioButton" name="rBtn_IsTexture">
+       <property name="text">
+        <string>File is an Image</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1024</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <widget class="QMenu" name="menuExport_Models">
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>&amp;Export Models</string>
+     </property>
+     <addaction name="actionExporterSettings"/>
+     <addaction name="separator"/>
+     <addaction name="actionInitial_Pose_Only"/>
+     <addaction name="separator"/>
+     <addaction name="actionExport_3DSMAX"/>
+     <addaction name="actionExport_FBX"/>
+     <addaction name="actionExport_Collada"/>
+     <addaction name="actionExport_Lightwave"/>
+     <addaction name="actionExport_Milkshape"/>
+     <addaction name="actionExport_Ogre_XML"/>
+     <addaction name="actionExport_M3"/>
+     <addaction name="actionExport_OBJ"/>
+     <addaction name="actionExport_X3D"/>
+     <addaction name="actionExport_X3D_in_XHTML"/>
+    </widget>
+    <addaction name="actionLoad_World_of_Wacraft"/>
+    <addaction name="separator"/>
+    <addaction name="actionLoad_Character"/>
+    <addaction name="actionRandomize_Character"/>
+    <addaction name="actionLoad_NPC"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_File"/>
+    <addaction name="actionSave_Screenshot"/>
+    <addaction name="actionSave_Image_Sequence"/>
+    <addaction name="separator"/>
+    <addaction name="menuExport_Models"/>
+    <addaction name="actionExport_Textures"/>
+    <addaction name="separator"/>
+    <addaction name="actionDiscover_Items"/>
+    <addaction name="actionDiscover_NPCs"/>
+    <addaction name="separator"/>
+    <addaction name="actionView_Log"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuCharacter">
+    <property name="title">
+     <string extracomment="Options for Charactrers &amp; M2 files">&amp;Character</string>
+    </property>
+    <widget class="QMenu" name="menuEye_Glow">
+     <property name="title">
+      <string>Eye Glow</string>
+     </property>
+     <addaction name="actionGlowDefault"/>
+     <addaction name="actionGlowDeathKnight"/>
+     <addaction name="actionGlowNone"/>
+    </widget>
+    <addaction name="actionSave_Character"/>
+    <addaction name="actionSave_to_Model_Bank"/>
+    <addaction name="separator"/>
+    <addaction name="actionClear_Equiptment"/>
+    <addaction name="actionLoad_Equipment"/>
+    <addaction name="actionLoad_Equipment_Set"/>
+    <addaction name="actionLoad_Starting_Outfit"/>
+    <addaction name="actionLoad_NPC_Outfit"/>
+    <addaction name="actionSave_Equipment"/>
+    <addaction name="separator"/>
+    <addaction name="menuEye_Glow"/>
+    <addaction name="actionShow_Underwear"/>
+    <addaction name="actionShow_Ears"/>
+    <addaction name="actionShow_Hair"/>
+    <addaction name="actionShow_Facial_Hair"/>
+    <addaction name="actionShow_Feet"/>
+    <addaction name="actionSheath_Weapons"/>
+    <addaction name="separator"/>
+    <addaction name="actionApply_Enchants"/>
+    <addaction name="separator"/>
+    <addaction name="actionLoad_a_Mount"/>
+   </widget>
+   <widget class="QMenu" name="menuLighting">
+    <property name="title">
+     <string>L&amp;ighting</string>
+    </property>
+    <widget class="QMenu" name="menuUse_Lights">
+     <property name="title">
+      <string>&amp;Use Lights</string>
+     </property>
+     <addaction name="actionLightType_Dynamic"/>
+     <addaction name="actionLightType_Ambient"/>
+     <addaction name="actionLightType_ModelOnly"/>
+    </widget>
+    <addaction name="actionAdjust_Lighting"/>
+    <addaction name="separator"/>
+    <addaction name="actionLoad_Lighting"/>
+    <addaction name="actionSave_Lighting"/>
+    <addaction name="separator"/>
+    <addaction name="actionRender_Light_Objects"/>
+    <addaction name="separator"/>
+    <addaction name="actionUse_True_Lighting"/>
+    <addaction name="menuUse_Lights"/>
+   </widget>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>Options</string>
+    </property>
+    <addaction name="actionSettings"/>
+    <addaction name="separator"/>
+    <addaction name="actionExporter_Settings_2"/>
+    <addaction name="actionInitial_Pose_Only_2"/>
+    <addaction name="separator"/>
+    <addaction name="actionUpdate_Databases"/>
+    <addaction name="actionUpdate_Program"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>&amp;About</string>
+    </property>
+    <addaction name="actionHelp"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menuSets">
+    <property name="title">
+     <string>&amp;Set</string>
+    </property>
+    <widget class="QMenu" name="menuDoodad_Set">
+     <property name="title">
+      <string>Doodad Set</string>
+     </property>
+     <addaction name="action_List_of_Doodad_Sets"/>
+    </widget>
+    <addaction name="actionAlways_show_Default_Doodads"/>
+    <addaction name="separator"/>
+    <addaction name="actionShow_Doodads_2"/>
+    <addaction name="menuDoodad_Set"/>
+   </widget>
+   <widget class="QMenu" name="menuLandscape">
+    <property name="title">
+     <string>&amp;Landscape</string>
+    </property>
+    <widget class="QMenu" name="menuADT_Quality">
+     <property name="title">
+      <string>Landscape Quality</string>
+     </property>
+     <addaction name="actionADTQualityHigh"/>
+     <addaction name="actionADTQualityLow"/>
+    </widget>
+    <addaction name="menuADT_Quality"/>
+    <addaction name="separator"/>
+    <addaction name="actionShow_WMOs"/>
+    <addaction name="actionShow_Doodads"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_Masks"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <widget class="QMenu" name="menuShow_Controls">
+     <property name="title">
+      <string>&amp;Show Controls</string>
+     </property>
+     <addaction name="actionShowCtrl_FileList"/>
+     <addaction name="actionShowCtrl_Animation"/>
+     <addaction name="actionShowCtrl_Character"/>
+     <addaction name="actionShowCtrl_Lighting"/>
+     <addaction name="actionShowCtrl_Model"/>
+    </widget>
+    <widget class="QMenu" name="menuCamera">
+     <property name="title">
+      <string>&amp;Camera</string>
+     </property>
+     <addaction name="actionCam_Model"/>
+     <addaction name="actionCam_Additional"/>
+     <addaction name="separator"/>
+     <addaction name="actionCam_Perspective"/>
+     <addaction name="separator"/>
+     <addaction name="actionCam_Top"/>
+     <addaction name="actionCam_Left"/>
+     <addaction name="actionCam_Right"/>
+     <addaction name="actionCam_Back"/>
+    </widget>
+    <widget class="QMenu" name="menuSet_Canvas_Size">
+     <property name="title">
+      <string>Set Canvas Size</string>
+     </property>
+     <addaction name="actionCanvasSize11_0120x0120"/>
+     <addaction name="actionCanvasSize11_0256x0256"/>
+     <addaction name="actionCanvasSize11_0512x0512"/>
+     <addaction name="actionCanvasSize11_1024x1024"/>
+     <addaction name="separator"/>
+     <addaction name="actionCanvasSize43_0640x0480"/>
+     <addaction name="actionCanvasSize43_0800x0600"/>
+     <addaction name="actionCanvasSize43_1024x0768"/>
+     <addaction name="actionCanvasSize43_1280x1024"/>
+     <addaction name="actionCanvasSize43_1600x1200"/>
+     <addaction name="separator"/>
+     <addaction name="actionCanvasSize169_0864x0480"/>
+     <addaction name="actionCanvasSize169_1280x0720"/>
+     <addaction name="actionCanvasSize169_1920x1080"/>
+     <addaction name="separator"/>
+     <addaction name="actionCanvasSizeMisc_1280x0768"/>
+     <addaction name="actionCanvasSizeMisc_1920x1200"/>
+    </widget>
+    <addaction name="menuShow_Controls"/>
+    <addaction name="separator"/>
+    <addaction name="menuCamera"/>
+    <addaction name="separator"/>
+    <addaction name="actionModel_Bank"/>
+    <addaction name="separator"/>
+    <addaction name="actionBackground_Color"/>
+    <addaction name="actionBackground_Image"/>
+    <addaction name="actionSkybox"/>
+    <addaction name="separator"/>
+    <addaction name="actionShow_Grid"/>
+    <addaction name="actionShow_Mask"/>
+    <addaction name="separator"/>
+    <addaction name="menuSet_Canvas_Size"/>
+   </widget>
+   <widget class="QMenu" name="menuNPC">
+    <property name="title">
+     <string>NPC</string>
+    </property>
+    <addaction name="actionLeft_Hand_Item"/>
+    <addaction name="actionRight_Hand_Item"/>
+    <addaction name="actionApply_Enchants_2"/>
+   </widget>
+   <widget class="QMenu" name="menuImage">
+    <property name="title">
+     <string>&amp;Image</string>
+    </property>
+    <addaction name="actionDisplayImageInfo"/>
+    <addaction name="separator"/>
+    <addaction name="actionImage_ShowAlpha"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuCharacter"/>
+   <addaction name="menuNPC"/>
+   <addaction name="menuSets"/>
+   <addaction name="menuLandscape"/>
+   <addaction name="menuImage"/>
+   <addaction name="menuLighting"/>
+   <addaction name="menuView"/>
+   <addaction name="menuOptions"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionLoad_World_of_Wacraft">
+   <property name="text">
+    <string>Load &amp;World of Warcraft Data</string>
+   </property>
+  </action>
+  <action name="actionView_Log">
+   <property name="text">
+    <string>&amp;View Log...</string>
+   </property>
+  </action>
+  <action name="actionSave_File">
+   <property name="text">
+    <string>Save &amp;File...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_Screenshot">
+   <property name="text">
+    <string>Save &amp;Screenshot...</string>
+   </property>
+  </action>
+  <action name="actionSave_Image_Sequence">
+   <property name="text">
+    <string>Save &amp;Image Sequence...</string>
+   </property>
+  </action>
+  <action name="actionExport_Textures">
+   <property name="text">
+    <string>Export &amp;Textures...</string>
+   </property>
+  </action>
+  <action name="actionInitial_Pose_Only">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Initial Pose Only</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionExporterSettings">
+   <property name="text">
+    <string>Exporter Settings...</string>
+   </property>
+   <property name="toolTip">
+    <string>Exporter Settings</string>
+   </property>
+  </action>
+  <action name="actionExport_3DSMAX">
+   <property name="text">
+    <string>3D Studio MAX...</string>
+   </property>
+  </action>
+  <action name="actionExport_Collada">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Collada...</string>
+   </property>
+  </action>
+  <action name="actionExport_FBX">
+   <property name="text">
+    <string>Autodesk FBX...</string>
+   </property>
+  </action>
+  <action name="actionExport_Lightwave">
+   <property name="text">
+    <string>Lightwave 3D...</string>
+   </property>
+  </action>
+  <action name="actionExport_Milkshape">
+   <property name="text">
+    <string>Milkshape...</string>
+   </property>
+  </action>
+  <action name="actionExport_OBJ">
+   <property name="text">
+    <string>Wavefront OBJ...</string>
+   </property>
+  </action>
+  <action name="actionExport_M3">
+   <property name="text">
+    <string>Starcraft II M3...</string>
+   </property>
+  </action>
+  <action name="actionExport_Ogre_XML">
+   <property name="text">
+    <string>Ogre XML...</string>
+   </property>
+  </action>
+  <action name="actionExport_X3D">
+   <property name="text">
+    <string>X3D...</string>
+   </property>
+  </action>
+  <action name="actionExport_X3D_in_XHTML">
+   <property name="text">
+    <string>X3D in XHTML...</string>
+   </property>
+  </action>
+  <action name="actionDiscover_Items">
+   <property name="text">
+    <string>&amp;Discover Items</string>
+   </property>
+  </action>
+  <action name="actionDiscover_NPCs">
+   <property name="text">
+    <string>Discover N&amp;PCs</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>&amp;Help...</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>&amp;About...</string>
+   </property>
+   <property name="toolTip">
+    <string>About WoW Model Viewer</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="actionAlways_show_Default_Doodads">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Always show Default Doodads</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>&amp;Settings...</string>
+   </property>
+   <property name="toolTip">
+    <string>Program Settings</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
+  </action>
+  <action name="actionExporter_Settings_2">
+   <property name="text">
+    <string>&amp;Exporter Settings...</string>
+   </property>
+  </action>
+  <action name="actionInitial_Pose_Only_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Initial Pose Only</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionUpdate_Databases">
+   <property name="text">
+    <string>Update &amp;Databases...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="actionUpdate_Program">
+   <property name="text">
+    <string>Update &amp;Program...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionShow_WMOs">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Sets</string>
+   </property>
+  </action>
+  <action name="actionShow_Doodads">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Doodads</string>
+   </property>
+  </action>
+  <action name="actionADTQualityHigh">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>High</string>
+   </property>
+   <property name="toolTip">
+    <string>Quality High</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
+  </action>
+  <action name="actionADTQualityLow">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Low</string>
+   </property>
+   <property name="toolTip">
+    <string>Quality Low</string>
+   </property>
+  </action>
+  <action name="actionLoad_Character">
+   <property name="text">
+    <string>&amp;Load Character...</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="actionSave_Character">
+   <property name="text">
+    <string>Save Character...</string>
+   </property>
+   <property name="shortcut">
+    <string>F6</string>
+   </property>
+  </action>
+  <action name="actionRandomize_Character">
+   <property name="text">
+    <string>Import &amp;Armory Character...</string>
+   </property>
+  </action>
+  <action name="actionLoad_Equipment">
+   <property name="text">
+    <string>Load Equipment...</string>
+   </property>
+   <property name="shortcut">
+    <string>F7</string>
+   </property>
+  </action>
+  <action name="actionSave_Equipment">
+   <property name="text">
+    <string>Save Equipment...</string>
+   </property>
+   <property name="shortcut">
+    <string>F8</string>
+   </property>
+  </action>
+  <action name="actionClear_Equiptment">
+   <property name="text">
+    <string>Clear Equipment</string>
+   </property>
+   <property name="shortcut">
+    <string>F9</string>
+   </property>
+  </action>
+  <action name="actionLoad_Equipment_Set">
+   <property name="text">
+    <string>Load Equipment Set...</string>
+   </property>
+  </action>
+  <action name="actionLoad_Starting_Outfit">
+   <property name="text">
+    <string>Load Starting Outfit...</string>
+   </property>
+  </action>
+  <action name="actionLoad_NPC_Outfit">
+   <property name="text">
+    <string>Load NPC Outfit...</string>
+   </property>
+  </action>
+  <action name="actionGlowNone">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>None</string>
+   </property>
+   <property name="toolTip">
+    <string>No Eyeglow</string>
+   </property>
+  </action>
+  <action name="actionGlowDefault">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Default</string>
+   </property>
+   <property name="toolTip">
+    <string>Default Eyeglow</string>
+   </property>
+  </action>
+  <action name="actionGlowDeathKnight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Death Knight</string>
+   </property>
+   <property name="toolTip">
+    <string>Death Knight Eyeglow</string>
+   </property>
+  </action>
+  <action name="actionShow_Underwear">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Underwear</string>
+   </property>
+  </action>
+  <action name="actionShow_Ears">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Ears</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionShow_Hair">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Hair</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
+   </property>
+  </action>
+  <action name="actionShow_Facial_Hair">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Facial Hair</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionShow_Feet">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Feet</string>
+   </property>
+  </action>
+  <action name="actionSheath_Weapons">
+   <property name="text">
+    <string>Sheath Weapons</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionLoad_a_Mount">
+   <property name="text">
+    <string>Load a Mount...</string>
+   </property>
+  </action>
+  <action name="actionLoad_NPC">
+   <property name="text">
+    <string>Load &amp;NPC...</string>
+   </property>
+  </action>
+  <action name="actionAdjust_Lighting">
+   <property name="text">
+    <string>&amp;Edit Lighting...</string>
+   </property>
+  </action>
+  <action name="actionShowCtrl_Animation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Animation</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Animation Controls</string>
+   </property>
+  </action>
+  <action name="actionShowCtrl_Character">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Character</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Character Controls</string>
+   </property>
+  </action>
+  <action name="actionShowCtrl_Lighting">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Lighting</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Lighting Controls</string>
+   </property>
+  </action>
+  <action name="actionShowCtrl_Model">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Model</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Model Controls</string>
+   </property>
+  </action>
+  <action name="actionModel_Bank">
+   <property name="text">
+    <string>Model &amp;Bank...</string>
+   </property>
+  </action>
+  <action name="actionSave_to_Model_Bank">
+   <property name="text">
+    <string>Save to Model Bank...</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
+   </property>
+  </action>
+  <action name="actionShowCtrl_FileList">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>File List</string>
+   </property>
+  </action>
+  <action name="actionBackground_Color">
+   <property name="text">
+    <string>Background Color...</string>
+   </property>
+  </action>
+  <action name="actionBackground_Image">
+   <property name="text">
+    <string>Background Image...</string>
+   </property>
+  </action>
+  <action name="actionSkybox">
+   <property name="text">
+    <string>Load Skybox...</string>
+   </property>
+  </action>
+  <action name="actionShow_Grid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Grid</string>
+   </property>
+  </action>
+  <action name="actionShow_Mask">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Mask</string>
+   </property>
+  </action>
+  <action name="actionCam_Perspective">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Perspective</string>
+   </property>
+  </action>
+  <action name="actionCam_Top">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Top</string>
+   </property>
+  </action>
+  <action name="actionCam_Left">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Left</string>
+   </property>
+  </action>
+  <action name="actionCam_Right">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Right</string>
+   </property>
+  </action>
+  <action name="actionCam_Back">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Back</string>
+   </property>
+  </action>
+  <action name="actionCam_Model">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Model Camera</string>
+   </property>
+  </action>
+  <action name="actionSave_Masks">
+   <property name="text">
+    <string>Save Masks...</string>
+   </property>
+  </action>
+  <action name="actionShow_Doodads_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Doodads</string>
+   </property>
+  </action>
+  <action name="actionLoad_Lighting">
+   <property name="text">
+    <string>&amp;Load Lighting...</string>
+   </property>
+  </action>
+  <action name="actionSave_Lighting">
+   <property name="text">
+    <string>&amp;Save Lighting...</string>
+   </property>
+  </action>
+  <action name="actionRender_Light_Objects">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Render Light Objects</string>
+   </property>
+  </action>
+  <action name="actionUse_True_Lighting">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use &amp;True Lighting</string>
+   </property>
+  </action>
+  <action name="actionLightType_Dynamic">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Dynamic Lights</string>
+   </property>
+  </action>
+  <action name="actionLightType_Ambient">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Ambient Light</string>
+   </property>
+  </action>
+  <action name="actionLightType_ModelOnly">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Model Lights Only</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize11_0120x0120">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>120x120</string>
+   </property>
+   <property name="toolTip">
+    <string>120x120, 1:1 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize11_0256x0256">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>256x256</string>
+   </property>
+   <property name="toolTip">
+    <string>256x256, 1:1 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize11_0512x0512">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>512x512</string>
+   </property>
+   <property name="toolTip">
+    <string>512x512, 1:1 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize11_1024x1024">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1024x1024</string>
+   </property>
+   <property name="toolTip">
+    <string>1024x1024, 1:1 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize43_0640x0480">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>640x480</string>
+   </property>
+   <property name="toolTip">
+    <string>640x480, 4:3 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize43_0800x0600">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>800x600</string>
+   </property>
+   <property name="toolTip">
+    <string>800x600, 4:3 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize43_1024x0768">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1024x768</string>
+   </property>
+   <property name="toolTip">
+    <string>1024x768, 4:3 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize43_1280x1024">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1280x1024</string>
+   </property>
+   <property name="toolTip">
+    <string>1280x1024, 4:3 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize43_1600x1200">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1600x1200</string>
+   </property>
+   <property name="toolTip">
+    <string>1600x1200, 4:3 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize169_0864x0480">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>864x480</string>
+   </property>
+   <property name="toolTip">
+    <string>864x480, 16:9 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize169_1280x0720">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1280x720</string>
+   </property>
+   <property name="toolTip">
+    <string>1280x720, 16:9 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize169_1920x1080">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1920x1080</string>
+   </property>
+   <property name="toolTip">
+    <string>1920x1080, 16:9 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSizeMisc_1280x0768">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1280x768</string>
+   </property>
+   <property name="toolTip">
+    <string>1280x768, 5:3 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSizeMisc_1920x1200">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1920x1200</string>
+   </property>
+   <property name="toolTip">
+    <string>1920x1200, 8:5 Ratio</string>
+   </property>
+  </action>
+  <action name="actionApply_Enchants">
+   <property name="text">
+    <string>Apply Enchants...</string>
+   </property>
+  </action>
+  <action name="actionLeft_Hand_Item">
+   <property name="text">
+    <string>Left Hand Item...</string>
+   </property>
+  </action>
+  <action name="actionRight_Hand_Item">
+   <property name="text">
+    <string>Right Hand Item...</string>
+   </property>
+  </action>
+  <action name="actionApply_Enchants_2">
+   <property name="text">
+    <string>Apply Enchants...</string>
+   </property>
+  </action>
+  <action name="action_List_of_Doodad_Sets">
+   <property name="text">
+    <string>(List of Doodad Sets)</string>
+   </property>
+  </action>
+  <action name="actionCam_Additional">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>(Additional Cameras)</string>
+   </property>
+  </action>
+  <action name="actionImage_ShowAlpha">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show &amp;Alpha</string>
+   </property>
+  </action>
+  <action name="actionDisplayImageInfo">
+   <property name="text">
+    <string>&amp;Display Info</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
