@@ -126,6 +126,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>copy ..\bin_support\Windows\32bit\cximagecrt32d.dll $(OutDir)
@@ -186,6 +187,7 @@ copy ..\bin\*.csv $(OutDir)
       </DataExecutionPrevention>
       <TargetMachine>MachineX64</TargetMachine>
       <CLRThreadAttribute>DefaultThreadingAttribute</CLRThreadAttribute>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>copy ..\bin_support\Windows\64bit\cximagecrt64d.dll $(OutDir)\
@@ -246,6 +248,7 @@ copy ..\bin\*.csv $(OutDir)
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>copy ..\bin_support\Windows\32bit\cximagecrt32.dll $(OutDir)
@@ -319,6 +322,7 @@ copy ..\bin\userSettings\*.* $(OutDir)userSettings
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX64</TargetMachine>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>copy ..\bin_support\Windows\64bit\cximagecrt64.dll $(OutDir)
