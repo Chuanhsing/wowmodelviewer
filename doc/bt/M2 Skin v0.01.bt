@@ -88,7 +88,8 @@ typedef struct
     {
         uint16 bitFlags <format=binary>;
         FSkip (-2);
-        uint16 : 1;
+        uint16 : 4;
+		uint16 Static: 1;
     } texFlags;
     struct
     {

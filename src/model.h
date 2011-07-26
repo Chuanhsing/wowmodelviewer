@@ -185,7 +185,6 @@ struct ModelRenderPass {
 	float p;
 	
 	int16 texanim, color, opacity, blendmode;
-	uint16 order;
 
 	// Geoset ID
 	int geoset;
@@ -202,14 +201,9 @@ struct ModelRenderPass {
 	bool operator< (const ModelRenderPass &m) const
 	{
 		// This is the old sort order method which I'm pretty sure is wrong - need to try something else.
-		//return !trans;
+		// Althogh transparent part should be displayed later, but don't know how to sort it
+		// And it will sort by geoset id now.
 		return geoset < m.geoset;
-		if (order<m.order)
-			return true;
-		else if (order>m.order)
-			return false;
-		else
-			return blendmode == m.blendmode ? (p<m.p) : (blendmode<m.blendmode);
 	}
 };
 

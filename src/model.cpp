@@ -1173,6 +1173,7 @@ void Model::setLOD(MPQFile &f, int index)
 		pass.unlit = false;
 		pass.noZWrite = false;
 		pass.billboard = false;
+		pass.texanim = -1; // no texture animation
 
 		//pass.texture2 = 0;
 		size_t geoset = tex[j].op;
@@ -1183,8 +1184,6 @@ void Model::setLOD(MPQFile &f, int index)
 		pass.indexCount = ops[geoset].icount;
 		pass.vertexStart = ops[geoset].vstart;
 		pass.vertexEnd = pass.vertexStart + ops[geoset].vcount;
-
-		pass.order = 0;
 
 		//TextureID texid = textures[texlookup[tex[j].textureid]];
 		//pass.texture = texid;
@@ -1224,15 +1223,9 @@ void Model::setLOD(MPQFile &f, int index)
 		pass.swrap = (texdef[pass.tex].flags & TEXTURE_WRAPX) != 0; // Texture wrap X
 		pass.twrap = (texdef[pass.tex].flags & TEXTURE_WRAPY) != 0; // Texture wrap Y
 		
-		if (animTextures) {
-			// tex[j].flags: Usually 16 for static textures, and 0 for animated textures.	
-			if (tex[j].flags & TEXTUREUNIT_STATIC) {
-				pass.texanim = -1; // no texture animation
-			} else {
-				pass.texanim = texanimlookup[tex[j].texanimid];
-			}
-		} else {
-			pass.texanim = -1; // no texture animation
+		// tex[j].flags: Usually 16 for static textures, and 0 for animated textures.	
+		if (animTextures && (tex[j].flags & TEXTUREUNIT_STATIC) == 0) {
+			pass.texanim = texanimlookup[tex[j].texanimid];
 		}
 
 		passes.push_back(pass);
@@ -1242,7 +1235,7 @@ void Model::setLOD(MPQFile &f, int index)
 	g.close();
 #endif
 	// transparent parts come later
-	std::sort(passes.begin(), passes.end());
+	//std::sort(passes.begin(), passes.end());
 }
 
 void Model::calcBones(ssize_t anim, size_t time)
@@ -1634,8 +1627,6 @@ bool ModelRenderPass::init(Model *m)
 
 	if (cull) {
 		glEnable(GL_CULL_FACE);
-	} else {
-		glDisable(GL_CULL_FACE);
 	}
 
 	// Texture wrapping around the geometry
@@ -1647,8 +1638,6 @@ bool ModelRenderPass::init(Model *m)
 	// no writing to the depth buffer.
 	if (noZWrite)
 		glDepthMask(GL_FALSE);
-	else
-		glDepthMask(GL_TRUE);
 
 	// Environmental mapping, material, and effects
 	if (useEnvMap) {
@@ -1681,8 +1670,6 @@ bool ModelRenderPass::init(Model *m)
 	// don't use lighting on the surface
 	if (unlit) {
 		glDisable(GL_LIGHTING);
-	} else {
-		glEnable(GL_LIGHTING);
 	}
 
 	if (blendmode<=1 && ocol.w<1.0f)

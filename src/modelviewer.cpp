@@ -2773,6 +2773,8 @@ void ModelViewer::ModelInfo()
 		xml << "      <vertexStart>" << p.vertexStart << "</vertexStart>" << endl;
 		xml << "      <vertexEnd>" << p.vertexEnd << "</vertexEnd>" << endl;
 		xml << "      <tex>" << p.tex << "</tex>" << endl;
+		if (p.tex >= 0)
+			xml << "      <texName>" << m->TextureList[p.tex] << "</texName>" << endl;
 		xml << "      <useTex2>" << p.useTex2 << "</useTex2>" << endl;
 		xml << "      <useEnvMap>" << p.useEnvMap << "</useEnvMap>" << endl;
 		xml << "      <cull>" << p.cull << "</cull>" << endl;
@@ -2785,7 +2787,6 @@ void ModelViewer::ModelInfo()
 		xml << "      <color>" << p.color << "</color>" << endl;
 		xml << "      <opacity>" << p.opacity << "</opacity>" << endl;
 		xml << "      <blendmode>" << p.blendmode << "</blendmode>" << endl;
-		xml << "      <order>" << p.order << "</order>" << endl;
 		xml << "      <geoset>" << p.geoset << "</geoset>" << endl;
 		xml << "      <swrap>" << p.swrap << "</swrap>" << endl;
 		xml << "      <twrap>" << p.twrap << "</twrap>" << endl;
@@ -2966,6 +2967,12 @@ void ModelViewer::ModelInfo()
 	xml << "	</Miscellaneous>" << endl;
 
 //	xml << "    <>" << m->header. << "</>" << endl;
+	xml << "  <TextureLists>" << endl;
+	for(int i=0; i<m->TextureList.size(); i++) {
+		xml << "    <TextureList id=\"" << i << "\">" << m->TextureList[i] << "</TextureList>" << endl;
+	}
+	xml << "  </TextureLists>" << endl;
+
 	xml << "</m2>" << endl;
 	xml.close();
 	f.close();
