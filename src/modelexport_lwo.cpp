@@ -1942,7 +1942,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 							size_t thisslot = att2->children[j]->slot;
 
 							// Part Names
-							if (thisslot < slotnum && slots[thisslot]!=wxEmptyString){
+							if (thisslot < WXSIZEOF(slots) && slots[thisslot]!=wxEmptyString){
 								partName = wxString::Format(wxT("Child %02i - %s"),j,slots[thisslot].c_str());
 							}else{
 								partName = wxString::Format(wxT("Child %02i - Slot %02i"),j,att2->children[j]->slot);
@@ -1956,7 +1956,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 
 							// Surface Name
 							matName = mAttChild->TextureList[p.tex].AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
-							if (thisslot < slotnum && slots[thisslot]!=wxEmptyString){
+							if (thisslot < WXSIZEOF(slots) && slots[thisslot]!=wxEmptyString){
 								if (matName != wxEmptyString){
 									matName = wxString::Format(wxT("%s - %s"),slots[thisslot].c_str(),matName.c_str());
 								}else {
@@ -2347,9 +2347,9 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 
 					if (mAttChild){
 						if (mAttChild->header.nLights > 0){
-							wxLogMessage(wxT("Found Attached light! Model: %s, on %s"),mAttChild->modelname,m->modelname);
+							wxLogMessage(wxT("Found Attached light! Model: %s, on %s"),mAttChild->modelname.c_str(),m->modelname.c_str());
 #ifdef _DEBUG
-							g_modelViewer->SetStatusText(wxString::Format(wxT("Found Attached light! Model: %s, on %s"),mAttChild->modelname,m->modelname));
+							g_modelViewer->SetStatusText(wxString::Format(wxT("Found Attached light! Model: %s, on %s"),mAttChild->modelname.c_str(),m->modelname.c_str()));
 #endif
 						}
 						/*for (size_t x=0;x<mAttChild->header.nLights;x++){
