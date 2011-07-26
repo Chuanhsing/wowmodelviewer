@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed Jul 20 02:36:02 2011
+** Created: Mon Jul 25 20:13:46 2011
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -14,13 +14,19 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QComboBox>
+#include <QtGui/QDockWidget>
 #include <QtGui/QGridLayout>
 #include <QtGui/QHeaderView>
+#include <QtGui/QLabel>
+#include <QtGui/QLineEdit>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
+#include <QtGui/QPushButton>
 #include <QtGui/QRadioButton>
 #include <QtGui/QStatusBar>
+#include <QtGui/QTreeWidget>
 #include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -134,12 +140,12 @@ public:
     QWidget *centralWidget;
     QWidget *layoutWidget;
     QGridLayout *gridLayout;
-    QRadioButton *rBtn_NoModel;
     QRadioButton *rBtn_IsChar;
     QRadioButton *rBtn_IsNPC;
     QRadioButton *rBtn_IsWMO;
     QRadioButton *rBtn_IsADT;
     QRadioButton *rBtn_IsTexture;
+    QRadioButton *rBtn_NoModel;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuExport_Models;
@@ -160,6 +166,13 @@ public:
     QMenu *menuNPC;
     QMenu *menuImage;
     QStatusBar *statusBar;
+    QDockWidget *FileListDockWidget;
+    QWidget *FileListDockWidgetContents;
+    QTreeWidget *WoWFileTree;
+    QComboBox *FileTypeSelector;
+    QLineEdit *FilterEditBox;
+    QLabel *Filterlabel;
+    QPushButton *ClearFilterButton;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -168,7 +181,7 @@ public:
         MainWindow->resize(1024, 768);
         MainWindow->setWindowTitle(QString::fromUtf8("WoW Model Viewer"));
         QIcon icon;
-        icon.addFile(QString::fromUtf8("F:/World of Warcraft/WoWModelView/trunk/bin_support/Icons/wmv.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8(":/Icons/Resources/Icons/wmv.ico"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
         actionLoad_World_of_Wacraft = new QAction(MainWindow);
         actionLoad_World_of_Wacraft->setObjectName(QString::fromUtf8("actionLoad_World_of_Wacraft"));
@@ -451,18 +464,12 @@ public:
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         layoutWidget = new QWidget(centralWidget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 16, 143, 134));
+        layoutWidget->setGeometry(QRect(10, 10, 140, 134));
         gridLayout = new QGridLayout(layoutWidget);
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        rBtn_NoModel = new QRadioButton(layoutWidget);
-        rBtn_NoModel->setObjectName(QString::fromUtf8("rBtn_NoModel"));
-        rBtn_NoModel->setChecked(true);
-
-        gridLayout->addWidget(rBtn_NoModel, 0, 0, 1, 1);
-
         rBtn_IsChar = new QRadioButton(layoutWidget);
         rBtn_IsChar->setObjectName(QString::fromUtf8("rBtn_IsChar"));
 
@@ -487,6 +494,12 @@ public:
         rBtn_IsTexture->setObjectName(QString::fromUtf8("rBtn_IsTexture"));
 
         gridLayout->addWidget(rBtn_IsTexture, 5, 0, 1, 1);
+
+        rBtn_NoModel = new QRadioButton(layoutWidget);
+        rBtn_NoModel->setObjectName(QString::fromUtf8("rBtn_NoModel"));
+        rBtn_NoModel->setChecked(true);
+
+        gridLayout->addWidget(rBtn_NoModel, 0, 0, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -532,7 +545,116 @@ public:
         MainWindow->setMenuBar(menuBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
+        statusBar->setAutoFillBackground(true);
+        statusBar->setSizeGripEnabled(false);
         MainWindow->setStatusBar(statusBar);
+        FileListDockWidget = new QDockWidget(MainWindow);
+        FileListDockWidget->setObjectName(QString::fromUtf8("FileListDockWidget"));
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(FileListDockWidget->sizePolicy().hasHeightForWidth());
+        FileListDockWidget->setSizePolicy(sizePolicy);
+        FileListDockWidget->setMinimumSize(QSize(201, 201));
+        FileListDockWidget->setBaseSize(QSize(201, 727));
+        FileListDockWidget->setFloating(false);
+        FileListDockWidget->setFeatures(QDockWidget::AllDockWidgetFeatures);
+        FileListDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+        FileListDockWidgetContents = new QWidget();
+        FileListDockWidgetContents->setObjectName(QString::fromUtf8("FileListDockWidgetContents"));
+        WoWFileTree = new QTreeWidget(FileListDockWidgetContents);
+        QFont font;
+        font.setBold(true);
+        font.setWeight(75);
+        font.setStrikeOut(false);
+        font.setKerning(true);
+        QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
+        __qtreewidgetitem->setFont(0, font);
+        WoWFileTree->setHeaderItem(__qtreewidgetitem);
+        QTreeWidgetItem *__qtreewidgetitem1 = new QTreeWidgetItem(WoWFileTree);
+        QTreeWidgetItem *__qtreewidgetitem2 = new QTreeWidgetItem(__qtreewidgetitem1);
+        QTreeWidgetItem *__qtreewidgetitem3 = new QTreeWidgetItem(__qtreewidgetitem2);
+        new QTreeWidgetItem(__qtreewidgetitem3);
+        QTreeWidgetItem *__qtreewidgetitem4 = new QTreeWidgetItem(__qtreewidgetitem2);
+        new QTreeWidgetItem(__qtreewidgetitem4);
+        QTreeWidgetItem *__qtreewidgetitem5 = new QTreeWidgetItem(__qtreewidgetitem1);
+        QTreeWidgetItem *__qtreewidgetitem6 = new QTreeWidgetItem(__qtreewidgetitem5);
+        new QTreeWidgetItem(__qtreewidgetitem6);
+        QTreeWidgetItem *__qtreewidgetitem7 = new QTreeWidgetItem(__qtreewidgetitem5);
+        new QTreeWidgetItem(__qtreewidgetitem7);
+        QTreeWidgetItem *__qtreewidgetitem8 = new QTreeWidgetItem(WoWFileTree);
+        QTreeWidgetItem *__qtreewidgetitem9 = new QTreeWidgetItem(__qtreewidgetitem8);
+        new QTreeWidgetItem(__qtreewidgetitem9);
+        new QTreeWidgetItem(__qtreewidgetitem9);
+        QTreeWidgetItem *__qtreewidgetitem10 = new QTreeWidgetItem(WoWFileTree);
+        QTreeWidgetItem *__qtreewidgetitem11 = new QTreeWidgetItem(__qtreewidgetitem10);
+        new QTreeWidgetItem(__qtreewidgetitem11);
+        WoWFileTree->setObjectName(QString::fromUtf8("WoWFileTree"));
+        WoWFileTree->setGeometry(QRect(0, 48, 201, 611));
+        WoWFileTree->setMinimumSize(QSize(101, 101));
+        WoWFileTree->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
+"alternate-background-color: rgb(229, 228, 242);"));
+        WoWFileTree->setFrameShadow(QFrame::Sunken);
+        WoWFileTree->setLineWidth(1);
+        WoWFileTree->setEditTriggers(QAbstractItemView::CurrentChanged);
+        WoWFileTree->setProperty("showDropIndicator", QVariant(true));
+        WoWFileTree->setAlternatingRowColors(true);
+        WoWFileTree->setSelectionBehavior(QAbstractItemView::SelectRows);
+        WoWFileTree->setRootIsDecorated(true);
+        WoWFileTree->setItemsExpandable(true);
+        WoWFileTree->setAnimated(false);
+        WoWFileTree->setHeaderHidden(true);
+        FileTypeSelector = new QComboBox(FileListDockWidgetContents);
+        FileTypeSelector->setObjectName(QString::fromUtf8("FileTypeSelector"));
+        FileTypeSelector->setGeometry(QRect(0, 0, 201, 22));
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(FileTypeSelector->sizePolicy().hasHeightForWidth());
+        FileTypeSelector->setSizePolicy(sizePolicy1);
+        FileTypeSelector->setMinimumSize(QSize(101, 0));
+        FilterEditBox = new QLineEdit(FileListDockWidgetContents);
+        FilterEditBox->setObjectName(QString::fromUtf8("FilterEditBox"));
+        FilterEditBox->setGeometry(QRect(27, 25, 131, 20));
+        sizePolicy1.setHeightForWidth(FilterEditBox->sizePolicy().hasHeightForWidth());
+        FilterEditBox->setSizePolicy(sizePolicy1);
+        FilterEditBox->setMinimumSize(QSize(0, 20));
+        FilterEditBox->setMaximumSize(QSize(16777215, 20));
+        FilterEditBox->setBaseSize(QSize(0, 20));
+        FilterEditBox->setContextMenuPolicy(Qt::DefaultContextMenu);
+        FilterEditBox->setAcceptDrops(false);
+        FilterEditBox->setAutoFillBackground(false);
+        Filterlabel = new QLabel(FileListDockWidgetContents);
+        Filterlabel->setObjectName(QString::fromUtf8("Filterlabel"));
+        Filterlabel->setGeometry(QRect(3, 26, 31, 16));
+        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(Filterlabel->sizePolicy().hasHeightForWidth());
+        Filterlabel->setSizePolicy(sizePolicy2);
+        Filterlabel->setMaximumSize(QSize(31, 16));
+        ClearFilterButton = new QPushButton(FileListDockWidgetContents);
+        ClearFilterButton->setObjectName(QString::fromUtf8("ClearFilterButton"));
+        ClearFilterButton->setGeometry(QRect(160, 25, 40, 20));
+        sizePolicy2.setHeightForWidth(ClearFilterButton->sizePolicy().hasHeightForWidth());
+        ClearFilterButton->setSizePolicy(sizePolicy2);
+        ClearFilterButton->setMinimumSize(QSize(40, 20));
+        ClearFilterButton->setMaximumSize(QSize(40, 20));
+        ClearFilterButton->setBaseSize(QSize(40, 20));
+        FileListDockWidget->setWidget(FileListDockWidgetContents);
+        MainWindow->addDockWidget(static_cast<Qt::DockWidgetArea>(1), FileListDockWidget);
+#ifndef QT_NO_SHORTCUT
+        Filterlabel->setBuddy(FilterEditBox);
+#endif // QT_NO_SHORTCUT
+        QWidget::setTabOrder(FileTypeSelector, FilterEditBox);
+        QWidget::setTabOrder(FilterEditBox, ClearFilterButton);
+        QWidget::setTabOrder(ClearFilterButton, WoWFileTree);
+        QWidget::setTabOrder(WoWFileTree, rBtn_NoModel);
+        QWidget::setTabOrder(rBtn_NoModel, rBtn_IsChar);
+        QWidget::setTabOrder(rBtn_IsChar, rBtn_IsNPC);
+        QWidget::setTabOrder(rBtn_IsNPC, rBtn_IsWMO);
+        QWidget::setTabOrder(rBtn_IsWMO, rBtn_IsADT);
+        QWidget::setTabOrder(rBtn_IsADT, rBtn_IsTexture);
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuCharacter->menuAction());
@@ -689,6 +811,7 @@ public:
         menuImage->addAction(actionImage_ShowAlpha);
 
         retranslateUi(MainWindow);
+        QObject::connect(ClearFilterButton, SIGNAL(clicked()), FilterEditBox, SLOT(clear()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -892,12 +1015,12 @@ public:
         actionCam_Additional->setText(QApplication::translate("MainWindow", "(Additional Cameras)", 0, QApplication::UnicodeUTF8));
         actionImage_ShowAlpha->setText(QApplication::translate("MainWindow", "Show &Alpha", 0, QApplication::UnicodeUTF8));
         actionDisplayImageInfo->setText(QApplication::translate("MainWindow", "&Display Info", 0, QApplication::UnicodeUTF8));
-        rBtn_NoModel->setText(QApplication::translate("MainWindow", "No File Loaded", 0, QApplication::UnicodeUTF8));
         rBtn_IsChar->setText(QApplication::translate("MainWindow", "File is Character", 0, QApplication::UnicodeUTF8));
         rBtn_IsNPC->setText(QApplication::translate("MainWindow", "File is NPC", 0, QApplication::UnicodeUTF8));
         rBtn_IsWMO->setText(QApplication::translate("MainWindow", "File is WMO/Set", 0, QApplication::UnicodeUTF8));
         rBtn_IsADT->setText(QApplication::translate("MainWindow", "File is ADT/Landscape", 0, QApplication::UnicodeUTF8));
         rBtn_IsTexture->setText(QApplication::translate("MainWindow", "File is an Image", 0, QApplication::UnicodeUTF8));
+        rBtn_NoModel->setText(QApplication::translate("MainWindow", "No File Loaded", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "&File", 0, QApplication::UnicodeUTF8));
         menuExport_Models->setTitle(QApplication::translate("MainWindow", "&Export Models", 0, QApplication::UnicodeUTF8));
         menuCharacter->setTitle(QApplication::translate("MainWindow", "&Character", 0, QApplication::UnicodeUTF8));
@@ -916,6 +1039,63 @@ public:
         menuSet_Canvas_Size->setTitle(QApplication::translate("MainWindow", "Set Canvas Size", 0, QApplication::UnicodeUTF8));
         menuNPC->setTitle(QApplication::translate("MainWindow", "NPC", 0, QApplication::UnicodeUTF8));
         menuImage->setTitle(QApplication::translate("MainWindow", "&Image", 0, QApplication::UnicodeUTF8));
+        FileListDockWidget->setWindowTitle(QApplication::translate("MainWindow", "WoW Files", "WoWFiles", QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem = WoWFileTree->headerItem();
+        ___qtreewidgetitem->setText(0, QApplication::translate("MainWindow", "WoW Files", 0, QApplication::UnicodeUTF8));
+
+        const bool __sortingEnabled = WoWFileTree->isSortingEnabled();
+        WoWFileTree->setSortingEnabled(false);
+        QTreeWidgetItem *___qtreewidgetitem1 = WoWFileTree->topLevelItem(0);
+        ___qtreewidgetitem1->setText(0, QApplication::translate("MainWindow", "Character", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem2 = ___qtreewidgetitem1->child(0);
+        ___qtreewidgetitem2->setText(0, QApplication::translate("MainWindow", "Nightelf", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem3 = ___qtreewidgetitem2->child(0);
+        ___qtreewidgetitem3->setText(0, QApplication::translate("MainWindow", "Female", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem4 = ___qtreewidgetitem3->child(0);
+        ___qtreewidgetitem4->setText(0, QApplication::translate("MainWindow", "nightelffemale.m2", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem5 = ___qtreewidgetitem2->child(1);
+        ___qtreewidgetitem5->setText(0, QApplication::translate("MainWindow", "Male", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem6 = ___qtreewidgetitem5->child(0);
+        ___qtreewidgetitem6->setText(0, QApplication::translate("MainWindow", "nightelfmale.m2", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem7 = ___qtreewidgetitem1->child(1);
+        ___qtreewidgetitem7->setText(0, QApplication::translate("MainWindow", "Tauren", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem8 = ___qtreewidgetitem7->child(0);
+        ___qtreewidgetitem8->setText(0, QApplication::translate("MainWindow", "Female", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem9 = ___qtreewidgetitem8->child(0);
+        ___qtreewidgetitem9->setText(0, QApplication::translate("MainWindow", "taurenfemale.m2", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem10 = ___qtreewidgetitem7->child(1);
+        ___qtreewidgetitem10->setText(0, QApplication::translate("MainWindow", "Male", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem11 = ___qtreewidgetitem10->child(0);
+        ___qtreewidgetitem11->setText(0, QApplication::translate("MainWindow", "taurenmale.m2", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem12 = WoWFileTree->topLevelItem(1);
+        ___qtreewidgetitem12->setText(0, QApplication::translate("MainWindow", "Creature", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem13 = ___qtreewidgetitem12->child(0);
+        ___qtreewidgetitem13->setText(0, QApplication::translate("MainWindow", "Arthaslichking", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem14 = ___qtreewidgetitem13->child(0);
+        ___qtreewidgetitem14->setText(0, QApplication::translate("MainWindow", "arthaslichking.m2", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem15 = ___qtreewidgetitem13->child(1);
+        ___qtreewidgetitem15->setText(0, QApplication::translate("MainWindow", "arthaslichking_unarmed.m2", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem16 = WoWFileTree->topLevelItem(2);
+        ___qtreewidgetitem16->setText(0, QApplication::translate("MainWindow", "Items", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem17 = ___qtreewidgetitem16->child(0);
+        ___qtreewidgetitem17->setText(0, QApplication::translate("MainWindow", "Sword", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem18 = ___qtreewidgetitem17->child(0);
+        ___qtreewidgetitem18->setText(0, QApplication::translate("MainWindow", "sword.m2", 0, QApplication::UnicodeUTF8));
+        WoWFileTree->setSortingEnabled(__sortingEnabled);
+
+        FileTypeSelector->clear();
+        FileTypeSelector->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "Model (M2) Files", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Set (WMO) Files", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Landscape (ADT) Files", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Image (BLP) Files", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("MainWindow", "Sound (WAV, OGG, MP3) Files", 0, QApplication::UnicodeUTF8)
+        );
+        FilterEditBox->setInputMask(QString());
+        FilterEditBox->setText(QString());
+        FilterEditBox->setPlaceholderText(QString());
+        Filterlabel->setText(QApplication::translate("MainWindow", "Filter", 0, QApplication::UnicodeUTF8));
+        ClearFilterButton->setText(QApplication::translate("MainWindow", "Clear", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(MainWindow);
     } // retranslateUi
 

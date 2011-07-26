@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QActionGroup>
 #include <QMenu>
+#include "enums.h"
 
 namespace Ui {
     class MainWindow;
@@ -15,8 +16,10 @@ class WoWModelViewer : public QMainWindow
 
 public:
     explicit WoWModelViewer(QWidget *parent = 0);
-    size_t FileType;
+    size_t InterfaceType;
     void UpdateMenu();
+	void createStatusBar();
+	void updateFileList();
     ~WoWModelViewer();
 
 private:

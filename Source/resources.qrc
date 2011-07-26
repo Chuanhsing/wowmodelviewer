@@ -1,1 +1,6 @@
-<RCC/>
+<RCC>
+  <qresource prefix="Icons">
+    <file>../Resources/Icons/chrFile.ico</file>
+    <file>../Resources/Icons/wmv.ico</file>
+  </qresource>
+</RCC>

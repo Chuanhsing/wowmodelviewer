@@ -14,30 +14,20 @@
    <string notr="true">WoW Model Viewer</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>F:/World of Warcraft/WoWModelView/trunk/bin_support/Icons/wmv.ico</normaloff>F:/World of Warcraft/WoWModelView/trunk/bin_support/Icons/wmv.ico</iconset>
+   <iconset resource="resources.qrc">
+    <normaloff>:/Icons/Resources/Icons/wmv.ico</normaloff>:/Icons/Resources/Icons/wmv.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>16</y>
-      <width>143</width>
+      <y>10</y>
+      <width>140</width>
       <height>134</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QRadioButton" name="rBtn_NoModel">
-       <property name="text">
-        <string>No File Loaded</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
       <widget class="QRadioButton" name="rBtn_IsChar">
        <property name="text">
@@ -70,6 +60,16 @@
       <widget class="QRadioButton" name="rBtn_IsTexture">
        <property name="text">
         <string>File is an Image</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QRadioButton" name="rBtn_NoModel">
+       <property name="text">
+        <string>No File Loaded</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -332,7 +332,368 @@
    <addaction name="menuOptions"/>
    <addaction name="menuAbout"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QDockWidget" name="FileListDockWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>201</width>
+     <height>201</height>
+    </size>
+   </property>
+   <property name="baseSize">
+    <size>
+     <width>201</width>
+     <height>727</height>
+    </size>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string comment="WoWFiles" extracomment="The docking window that holds all the files from WoW">WoW Files</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="FileListDockWidgetContents">
+    <widget class="QTreeWidget" name="WoWFileTree">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>48</y>
+       <width>201</width>
+       <height>611</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>101</width>
+       <height>101</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);
+alternate-background-color: rgb(229, 228, 242);</string>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::CurrentChanged</set>
+     </property>
+     <property name="showDropIndicator" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="rootIsDecorated">
+      <bool>true</bool>
+     </property>
+     <property name="itemsExpandable">
+      <bool>true</bool>
+     </property>
+     <property name="animated">
+      <bool>false</bool>
+     </property>
+     <property name="headerHidden">
+      <bool>true</bool>
+     </property>
+     <column>
+      <property name="text">
+       <string>WoW Files</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+        <strikeout>false</strikeout>
+        <kerning>true</kerning>
+       </font>
+      </property>
+     </column>
+     <item>
+      <property name="text">
+       <string>Character</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Nightelf</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Female</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>nightelffemale.m2</string>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>Male</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>nightelfmale.m2</string>
+         </property>
+        </item>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>Tauren</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Female</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>taurenfemale.m2</string>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>Male</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>taurenmale.m2</string>
+         </property>
+        </item>
+       </item>
+      </item>
+     </item>
+     <item>
+      <property name="text">
+       <string>Creature</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Arthaslichking</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>arthaslichking.m2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>arthaslichking_unarmed.m2</string>
+        </property>
+       </item>
+      </item>
+     </item>
+     <item>
+      <property name="text">
+       <string>Items</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Sword</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>sword.m2</string>
+        </property>
+       </item>
+      </item>
+     </item>
+    </widget>
+    <widget class="QComboBox" name="FileTypeSelector">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>201</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>101</width>
+       <height>0</height>
+      </size>
+     </property>
+     <item>
+      <property name="text">
+       <string>Model (M2) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Set (WMO) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Landscape (ADT) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Image (BLP) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Sound (WAV, OGG, MP3) Files</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLineEdit" name="FilterEditBox">
+     <property name="geometry">
+      <rect>
+       <x>27</x>
+       <y>25</y>
+       <width>131</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="baseSize">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::DefaultContextMenu</enum>
+     </property>
+     <property name="acceptDrops">
+      <bool>false</bool>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="inputMask">
+      <string/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="placeholderText">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Filterlabel">
+     <property name="geometry">
+      <rect>
+       <x>3</x>
+       <y>26</y>
+       <width>31</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>31</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Filter</string>
+     </property>
+     <property name="buddy">
+      <cstring>FilterEditBox</cstring>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="ClearFilterButton">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>25</y>
+       <width>40</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="baseSize">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Clear</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
   <action name="actionLoad_World_of_Wacraft">
    <property name="text">
     <string>Load &amp;World of Warcraft Data</string>
@@ -1189,6 +1550,37 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
- <connections/>
+ <tabstops>
+  <tabstop>FileTypeSelector</tabstop>
+  <tabstop>FilterEditBox</tabstop>
+  <tabstop>ClearFilterButton</tabstop>
+  <tabstop>WoWFileTree</tabstop>
+  <tabstop>rBtn_NoModel</tabstop>
+  <tabstop>rBtn_IsChar</tabstop>
+  <tabstop>rBtn_IsNPC</tabstop>
+  <tabstop>rBtn_IsWMO</tabstop>
+  <tabstop>rBtn_IsADT</tabstop>
+  <tabstop>rBtn_IsTexture</tabstop>
+ </tabstops>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>ClearFilterButton</sender>
+   <signal>clicked()</signal>
+   <receiver>FilterEditBox</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>164</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>105</x>
+     <y>82</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

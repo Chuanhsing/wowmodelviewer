@@ -1,5 +1,13 @@
 WoW Model Viewer v0.8.0.0
 
+r603
+-Added dockable FileList interface with test-data. Not yet functional.
+-Added Filelist Filter & Clear button. Filter NYF.
+-Added StatusBar.
+-Added VS2010 32/64-bit & VS2008 64-bit project files.
+-Added Wiki page, describing how to properly build Qt for VS2010 & VS2008 for both 32 & 64 bit versions.
+
+
 r600
 -Initial WMV 0.8.0.0 Branch Upload.
 -Switched to Qt 4.7.3, which replaces wxWidgets.

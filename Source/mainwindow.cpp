@@ -6,7 +6,7 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
     ui->setupUi(this);
 
     // Defaults
-    FileType = 0;   // 0 = No File Loaded. 1 = Char, 2 = NPC, 3 = WMO/Set, 4 = ADT/Landscape, 5 = Image
+    InterfaceType = INTERFACETYPE_NONE;   // Full list of interface types in enums.h
 
     /* -= Groups =- */
     // Eye Glow
@@ -59,11 +59,20 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
     CameraGroup->addAction(ui->actionCam_Additional);
     ui->actionCam_Perspective->setChecked(true);
 
-
     // Doodad Sets
     DoodadSetGroup = new QActionGroup(this);
 
+	// Build Status Bars
+	createStatusBar();
+
     UpdateMenu();
+}
+
+void WoWModelViewer::createStatusBar()
+{
+	statusBar()->setAutoFillBackground(true);
+	statusBar()->setSizeGripEnabled(false);
+	statusBar()->showMessage(tr("Ready"));
 }
 
 WoWModelViewer::~WoWModelViewer()
@@ -78,25 +87,32 @@ void WoWModelViewer::UpdateMenu(){
     menuBar()->removeAction(ui->menuSets->menuAction());
     menuBar()->removeAction(ui->menuLandscape->menuAction());
     menuBar()->removeAction(ui->menuImage->menuAction());
+
+	// Disable Model-Only Options
     ui->menuLighting->setDisabled(false);
     ui->menuCamera->setDisabled(false);
     ui->menuExport_Models->setDisabled(false);
 
-    // Insert Menus based on Model Type
-    if (FileType == 5){
+    // Change Options and Insert Menus based on the File Type
+    if (InterfaceType == INTERFACETYPE_IMAGE){
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuImage->menuAction());
         ui->menuLighting->setDisabled(true);
         ui->menuCamera->setDisabled(true);
         ui->menuExport_Models->setDisabled(true);
-    }else if (FileType == 4){
+	}else if (InterfaceType == INTERFACETYPE_SOUND){
+        ui->menuLighting->setDisabled(true);
+        ui->menuCamera->setDisabled(true);
+        ui->menuExport_Models->setDisabled(true);
+    }else if (InterfaceType == INTERFACETYPE_LANDSCAPE){
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuLandscape->menuAction());
-    }else if (FileType == 3){
+    }else if (InterfaceType == INTERFACETYPE_SET){
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuSets->menuAction());
-    }else if (FileType == 2){
+	}else if (InterfaceType == INTERFACETYPE_ITEM){
+    }else if (InterfaceType == INTERFACETYPE_CREATURE){
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuNPC->menuAction());
-    }else if (FileType == 1){
+    }else if (InterfaceType == INTERFACETYPE_CHARACTER){
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuCharacter->menuAction());
-    }else if (FileType == 0){
+    }else if (InterfaceType == INTERFACETYPE_NONE){
         ui->menuLighting->setDisabled(true);
         ui->menuCamera->setDisabled(true);
         ui->menuExport_Models->setDisabled(true);
@@ -105,49 +121,62 @@ void WoWModelViewer::UpdateMenu(){
     // Update other Menus...
 }
 
+void WoWModelViewer::updateFileList()
+{
+	// Update the File Tree, based on the selected filetype
+	if (ui->FileTypeSelector->currentIndex() == FILETYPE_MODEL){
+	}else if(ui->FileTypeSelector->currentIndex() == FILETYPE_SET){
+	}else if(ui->FileTypeSelector->currentIndex() == FILETYPE_LANDSCAPE){
+	}else if(ui->FileTypeSelector->currentIndex() == FILETYPE_IMAGE){
+	}else if(ui->FileTypeSelector->currentIndex() == FILETYPE_SOUND){
+	}
+}
+
+// Connect the two Initial Pose Only checkboxes.
 void WoWModelViewer::on_actionInitial_Pose_Only_2_toggled(bool arg1)
 {
     ui->actionInitial_Pose_Only->setChecked(arg1);
 }
-
 void WoWModelViewer::on_actionInitial_Pose_Only_toggled(bool arg1)
 {
     ui->actionInitial_Pose_Only_2->setChecked(arg1);
 }
 
+
+// Functions for the temporary radio buttons on the main window.
 void WoWModelViewer::on_rBtn_NoModel_clicked()
 {
-    FileType = 0;
+    InterfaceType = INTERFACETYPE_NONE;
     UpdateMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsChar_clicked()
 {
-    FileType = 1;
+    InterfaceType = INTERFACETYPE_CHARACTER;
     UpdateMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsNPC_clicked()
 {
-    FileType = 2;
+    InterfaceType = INTERFACETYPE_CREATURE;
     UpdateMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsWMO_clicked()
 {
-    FileType = 3;
+    InterfaceType = INTERFACETYPE_SET;
     UpdateMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsADT_clicked()
 {
-    FileType = 4;
+    InterfaceType = INTERFACETYPE_LANDSCAPE;
     UpdateMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsTexture_clicked()
 {
-    FileType = 5;
+    InterfaceType = INTERFACETYPE_IMAGE;
     UpdateMenu();
 }
 
