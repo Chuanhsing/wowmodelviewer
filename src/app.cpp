@@ -151,7 +151,9 @@ bool WowModelViewApp::OnInit()
 	g_charControl = frame->charControl;
 	g_fileControl = frame->fileControl;
 
+#ifndef	_LINUX // buggy
 	frame->interfaceManager.Update();
+#endif
 
 	if (frame->canvas) {
 		frame->canvas->Show(true);

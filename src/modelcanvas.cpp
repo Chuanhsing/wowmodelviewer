@@ -123,7 +123,9 @@ ModelCanvas::ModelCanvas(wxWindow *parent, VideoCaps *caps)
 	} else 
 #endif
 	{
+#ifndef	_LINUX // buggy
 		SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+#endif
 		Show(true);
 
 		// Initiate the timer that handles our animation and setting the canvas to redraw

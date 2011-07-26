@@ -222,7 +222,9 @@ ModelViewer::ModelViewer()
 	// create our main frame
 	if (Create(NULL, wxID_ANY, wxString(APP_TITLE wxT(" ") APP_VERSION wxT(" ") APP_PLATFORM APP_ISDEBUG), wxDefaultPosition, wxSize(1024, 768), wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN, wxT("ModelViewerFrame"))) {
 		SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
+#ifndef	_LINUX // buggy
 		SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+#endif
 
 		InitObjects();  // create our canvas, anim control, character control, etc
 
@@ -243,7 +245,9 @@ ModelViewer::ModelViewer()
 		InitDocking();
 
 		// Are these really needed?
+#ifndef	_LINUX // buggy
 		interfaceManager.Update();
+#endif
 		Refresh();
 		Update();
 
@@ -986,9 +990,9 @@ void ModelViewer::LoadLayout()
 
 			// If character panel is showing,  hide it
 			interfaceManager.GetPane(charControl).Show(isChar);
-
+#ifndef	_LINUX // buggy
 			interfaceManager.Update();
-
+#endif
 			wxLogMessage(wxT("Info: GUI Layout loaded from previous session."));
 		}
 	}
