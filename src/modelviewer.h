@@ -50,15 +50,14 @@
 
 // defines
 #define APP_TITLE wxT("World of Warcraft Model Viewer")
-#define APP_VERSION wxT("v0.7.0.1 r598")			// Revision number should match the revision number on GoogleCode.
-#define APP_BUILDNAME wxT("Fickle Felguard")		// Fun thing for developers to play with. Should change with each Main Release. (Not counting DEV WORK editions)
+#define APP_VERSION wxT("v0.7.0.1 r603")			// Revision number should match the revision number on GoogleCode.
+#define APP_BUILDNAME wxT("Demented Deathwing")		// Fun thing for developers to play with. Should change with each Main Release. (Not counting DEV WORK editions)
 /*
 	--==List of Build Name ideas==--	(Feel free to add!)
 	Bouncing Baracuda
 	Hoppin Jalapeno
 	Stealthed Rogue
 	Deadly Druid
-	Demented Deathwing
 	Killer Krakken
 	Crazy Kaelthas
 	Lost Lich King
@@ -77,6 +76,7 @@
 	Wascally Wabbit
 	Gnome Punter
 	Fickle Felguard
+	Demented Deathwing
 
 */
 
