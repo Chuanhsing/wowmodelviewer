@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
 #include <QMainWindow>
 #include <QActionGroup>
@@ -7,7 +7,7 @@
 #include "enums.h"
 
 namespace Ui {
-    class MainWindow;
+    class Main_Window_Viewer;
 }
 
 class WoWModelViewer : public QMainWindow
@@ -16,8 +16,9 @@ class WoWModelViewer : public QMainWindow
 
 public:
     explicit WoWModelViewer(QWidget *parent = 0);
-    size_t InterfaceType;
-    void UpdateMenu();
+	size_t InterfaceMode;
+    size_t ViewerInterfaceType;
+    void UpdateViewerMenu();
 	void createStatusBar();
 	void updateFileList();
     ~WoWModelViewer();
@@ -41,11 +42,13 @@ private slots:
     void on_rBtn_IsADT_clicked();
     void on_rBtn_IsWMO_clicked();
     void on_rBtn_IsTexture_clicked();
+	void on_rBtn_IsItem_clicked();
+    void on_rBtn_IsSound_clicked();
 
     void on_actionExit_triggered();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::Main_Window_Viewer *ui;
 };
 
 #endif // MAINWINDOW_H

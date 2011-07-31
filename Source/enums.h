@@ -1,16 +1,22 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
-enum InterfaceType
+enum InterfaceMode
 {
-	INTERFACETYPE_NONE,			// No File
-	INTERFACETYPE_CHARACTER,	// Character M2 File
-	INTERFACETYPE_CREATURE,		// Creatures & NPC M2 Files
-	INTERFACETYPE_ITEM,			// M2 Models that aren't a Character, Creature or NPC.
-	INTERFACETYPE_SET,			// WMO Files
-	INTERFACETYPE_LANDSCAPE,	// ADT Files
-	INTERFACETYPE_IMAGE,		// Image Files
-	INTERFACETYPE_SOUND		// Sound Files
+	INTERFACEMODE_VIEWER,		// Default/Classic Viewer mode
+	INTERFACEMODE_CINEMA		// Cinema Mode, for Machinima & the like.
+};
+
+enum Viewer_InterfaceType
+{
+	VIEWER_INTERFACETYPE_NONE,			// No File
+	VIEWER_INTERFACETYPE_CHARACTER,		// Character M2 File
+	VIEWER_INTERFACETYPE_CREATURE,		// Creatures & NPC M2 Files
+	VIEWER_INTERFACETYPE_ITEM,			// M2 Models that aren't a Character, Creature or NPC.
+	VIEWER_INTERFACETYPE_SET,			// WMO Files
+	VIEWER_INTERFACETYPE_LANDSCAPE,		// ADT Files
+	VIEWER_INTERFACETYPE_IMAGE,			// Image Files
+	VIEWER_INTERFACETYPE_SOUND			// Sound Files
 };
 
 enum FileType

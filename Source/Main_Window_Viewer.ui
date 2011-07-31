@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>Main_Window_Viewer</class>
+ <widget class="QMainWindow" name="Main_Window_Viewer">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
-    <normaloff>:/Icons/Resources/Icons/wmv.ico</normaloff>:/Icons/Resources/Icons/wmv.ico</iconset>
+    <normaloff>:/Resources/FileIcons/wmv.ico</normaloff>:/Resources/FileIcons/wmv.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="layoutWidget">
@@ -23,8 +23,8 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>140</width>
-      <height>134</height>
+      <width>147</width>
+      <height>180</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -38,25 +38,25 @@
      <item row="2" column="0">
       <widget class="QRadioButton" name="rBtn_IsNPC">
        <property name="text">
-        <string>File is NPC</string>
+        <string>File is Creature/NPC</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QRadioButton" name="rBtn_IsWMO">
        <property name="text">
         <string>File is WMO/Set</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QRadioButton" name="rBtn_IsADT">
        <property name="text">
         <string>File is ADT/Landscape</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item row="6" column="0">
       <widget class="QRadioButton" name="rBtn_IsTexture">
        <property name="text">
         <string>File is an Image</string>
@@ -70,6 +70,20 @@
        </property>
        <property name="checked">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QRadioButton" name="rBtn_IsSound">
+       <property name="text">
+        <string>File is an Audio/Sound file</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QRadioButton" name="rBtn_IsItem">
+       <property name="text">
+        <string>File is an Item</string>
        </property>
       </widget>
      </item>
@@ -136,6 +150,9 @@
      <string extracomment="Options for Charactrers &amp; M2 files">&amp;Character</string>
     </property>
     <widget class="QMenu" name="menuEye_Glow">
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
      <property name="title">
       <string>Eye Glow</string>
      </property>
@@ -212,6 +229,9 @@
      <string>&amp;Set</string>
     </property>
     <widget class="QMenu" name="menuDoodad_Set">
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
      <property name="title">
       <string>Doodad Set</string>
      </property>
@@ -245,6 +265,9 @@
      <string>View</string>
     </property>
     <widget class="QMenu" name="menuShow_Controls">
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
      <property name="title">
       <string>&amp;Show Controls</string>
      </property>
@@ -255,6 +278,9 @@
      <addaction name="actionShowCtrl_Model"/>
     </widget>
     <widget class="QMenu" name="menuCamera">
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
      <property name="title">
       <string>&amp;Camera</string>
      </property>
@@ -269,6 +295,12 @@
      <addaction name="actionCam_Back"/>
     </widget>
     <widget class="QMenu" name="menuSet_Canvas_Size">
+     <property name="statusTip">
+      <string>Change the size of the Canvas to fit your needs.</string>
+     </property>
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
      <property name="title">
       <string>Set Canvas Size</string>
      </property>
@@ -307,7 +339,7 @@
    </widget>
    <widget class="QMenu" name="menuNPC">
     <property name="title">
-     <string>NPC</string>
+     <string>Creature/NPC</string>
     </property>
     <addaction name="actionLeft_Hand_Item"/>
     <addaction name="actionRight_Hand_Item"/>
@@ -947,6 +979,10 @@ alternate-background-color: rgb(229, 228, 242);</string>
    </property>
   </action>
   <action name="actionLoad_Character">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/Resources/Images/Character_Load.png</normaloff>:/Resources/Images/Character_Load.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Load Character...</string>
    </property>
@@ -955,6 +991,10 @@ alternate-background-color: rgb(229, 228, 242);</string>
    </property>
   </action>
   <action name="actionSave_Character">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/Resources/Images/Character_Save.png</normaloff>:/Resources/Images/Character_Save.png</iconset>
+   </property>
    <property name="text">
     <string>Save Character...</string>
    </property>

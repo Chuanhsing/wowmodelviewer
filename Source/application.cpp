@@ -1,12 +1,13 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "application.h"
+#include "ui_Main_Window_Viewer.h"
 
-WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui::Main_Window_Viewer)
 {
     ui->setupUi(this);
 
     // Defaults
-    InterfaceType = INTERFACETYPE_NONE;   // Full list of interface types in enums.h
+	InterfaceMode = INTERFACEMODE_VIEWER;				// Set the default mode to Viewer.
+    ViewerInterfaceType = VIEWER_INTERFACETYPE_NONE;	// Full list of viewer interface types in enums.h
 
     /* -= Groups =- */
     // Eye Glow
@@ -55,6 +56,7 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
     CameraGroup->addAction(ui->actionCam_Top);
     CameraGroup->addAction(ui->actionCam_Left);
     CameraGroup->addAction(ui->actionCam_Right);
+	CameraGroup->addAction(ui->actionCam_Back);
     CameraGroup->addAction(ui->actionCam_Model);
     CameraGroup->addAction(ui->actionCam_Additional);
     ui->actionCam_Perspective->setChecked(true);
@@ -65,7 +67,7 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
 	// Build Status Bars
 	createStatusBar();
 
-    UpdateMenu();
+    UpdateViewerMenu();
 }
 
 void WoWModelViewer::createStatusBar()
@@ -80,7 +82,7 @@ WoWModelViewer::~WoWModelViewer()
     delete ui;
 }
 
-void WoWModelViewer::UpdateMenu(){
+void WoWModelViewer::UpdateViewerMenu(){
     // Remove Menus
     menuBar()->removeAction(ui->menuCharacter->menuAction());
     menuBar()->removeAction(ui->menuNPC->menuAction());
@@ -94,25 +96,25 @@ void WoWModelViewer::UpdateMenu(){
     ui->menuExport_Models->setDisabled(false);
 
     // Change Options and Insert Menus based on the File Type
-    if (InterfaceType == INTERFACETYPE_IMAGE){
+    if (ViewerInterfaceType == VIEWER_INTERFACETYPE_IMAGE){
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuImage->menuAction());
         ui->menuLighting->setDisabled(true);
         ui->menuCamera->setDisabled(true);
         ui->menuExport_Models->setDisabled(true);
-	}else if (InterfaceType == INTERFACETYPE_SOUND){
+	}else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_SOUND){
         ui->menuLighting->setDisabled(true);
         ui->menuCamera->setDisabled(true);
         ui->menuExport_Models->setDisabled(true);
-    }else if (InterfaceType == INTERFACETYPE_LANDSCAPE){
+    }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_LANDSCAPE){
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuLandscape->menuAction());
-    }else if (InterfaceType == INTERFACETYPE_SET){
+    }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_SET){
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuSets->menuAction());
-	}else if (InterfaceType == INTERFACETYPE_ITEM){
-    }else if (InterfaceType == INTERFACETYPE_CREATURE){
+	}else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_ITEM){
+    }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_CREATURE){
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuNPC->menuAction());
-    }else if (InterfaceType == INTERFACETYPE_CHARACTER){
+    }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_CHARACTER){
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuCharacter->menuAction());
-    }else if (InterfaceType == INTERFACETYPE_NONE){
+    }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_NONE){
         ui->menuLighting->setDisabled(true);
         ui->menuCamera->setDisabled(true);
         ui->menuExport_Models->setDisabled(true);
@@ -146,38 +148,50 @@ void WoWModelViewer::on_actionInitial_Pose_Only_toggled(bool arg1)
 // Functions for the temporary radio buttons on the main window.
 void WoWModelViewer::on_rBtn_NoModel_clicked()
 {
-    InterfaceType = INTERFACETYPE_NONE;
-    UpdateMenu();
+    ViewerInterfaceType = VIEWER_INTERFACETYPE_NONE;
+    UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsChar_clicked()
 {
-    InterfaceType = INTERFACETYPE_CHARACTER;
-    UpdateMenu();
+    ViewerInterfaceType = VIEWER_INTERFACETYPE_CHARACTER;
+    UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsNPC_clicked()
 {
-    InterfaceType = INTERFACETYPE_CREATURE;
-    UpdateMenu();
+    ViewerInterfaceType = VIEWER_INTERFACETYPE_CREATURE;
+    UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsWMO_clicked()
 {
-    InterfaceType = INTERFACETYPE_SET;
-    UpdateMenu();
+    ViewerInterfaceType = VIEWER_INTERFACETYPE_SET;
+    UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsADT_clicked()
 {
-    InterfaceType = INTERFACETYPE_LANDSCAPE;
-    UpdateMenu();
+    ViewerInterfaceType = VIEWER_INTERFACETYPE_LANDSCAPE;
+    UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsTexture_clicked()
 {
-    InterfaceType = INTERFACETYPE_IMAGE;
-    UpdateMenu();
+    ViewerInterfaceType = VIEWER_INTERFACETYPE_IMAGE;
+    UpdateViewerMenu();
+}
+
+void WoWModelViewer::on_rBtn_IsItem_clicked()
+{
+    ViewerInterfaceType = VIEWER_INTERFACETYPE_ITEM;
+    UpdateViewerMenu();
+}
+
+void WoWModelViewer::on_rBtn_IsSound_clicked()
+{
+    ViewerInterfaceType = VIEWER_INTERFACETYPE_SOUND;
+    UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_actionExit_triggered()

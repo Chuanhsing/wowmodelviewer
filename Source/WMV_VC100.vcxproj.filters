@@ -48,42 +48,42 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mainwindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\qrc_resources.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug_Win32\moc_mainwindow.cpp">
+    <ClCompile Include="GeneratedFiles\Debug_Win32\moc_application.cpp">
       <Filter>Generated Files\Debug_Win32</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug_x64\moc_mainwindow.cpp">
+    <ClCompile Include="GeneratedFiles\Debug_x64\moc_application.cpp">
       <Filter>Generated Files\Debug_x64</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release_Win32\moc_mainwindow.cpp">
+    <ClCompile Include="GeneratedFiles\Release_Win32\moc_application.cpp">
       <Filter>Generated Files\Release_Win32</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release_x64\moc_mainwindow.cpp">
+    <ClCompile Include="GeneratedFiles\Release_x64\moc_application.cpp">
       <Filter>Generated Files\Release_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="application.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="enums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ui_Main_Window_Viewer.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="mainwindow.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ui_mainwindow.h">
-      <Filter>Generated Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="mainwindow.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="resources.qrc">
       <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Main_Window_Viewer.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="application.h">
+      <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>
