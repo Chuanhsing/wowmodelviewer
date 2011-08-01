@@ -81,6 +81,10 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\Clean\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)$(PlatformArchitecture)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)$(PlatformArchitecture)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectName)$(PlatformArchitecture)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectName)$(PlatformArchitecture)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -110,8 +114,8 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>glew$(PlatformArchitecture)_VC$(PlatformToolsetVersion).lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(TargetName)$(PlatformArchitecture).exe</OutputFile>
-      <Version>07.01.583</Version>
+      <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
+      <Version>07.01.606</Version>
       <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);D:\wxWidgets-2.8.12\lib\vc_lib\;.\lib\Windows\32bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -162,6 +166,7 @@ copy ..\bin\*.csv $(OutDir)
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>D:\wxWidgets-2.8.12\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -169,8 +174,8 @@ copy ..\bin\*.csv $(OutDir)
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>glew$(PlatformArchitecture)_VC$(PlatformToolsetVersion).lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(TargetName)$(PlatformArchitecture).exe</OutputFile>
-      <Version>07.01.583</Version>
+      <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
+      <Version>07.01.606</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);.\lib\Windows\64bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -229,8 +234,8 @@ copy ..\bin\*.csv $(OutDir)
     <Link>
       <AdditionalDependencies>glew$(PlatformArchitecture)_VC$(PlatformToolsetVersion).lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerboseLib</ShowProgress>
-      <OutputFile>$(OutDir)$(TargetName)$(PlatformArchitecture).exe</OutputFile>
-      <Version>07.01.583</Version>
+      <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
+      <Version>07.01.606</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);D:\wxWidgets-2.8.12\lib\vc_lib\;.\lib\Windows\32bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -303,8 +308,8 @@ copy ..\bin\userSettings\*.* $(OutDir)userSettings
     <Link>
       <AdditionalDependencies>glew$(PlatformArchitecture)_VC$(PlatformToolsetVersion).lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerboseLib</ShowProgress>
-      <OutputFile>$(OutDir)$(TargetName)$(PlatformArchitecture).exe</OutputFile>
-      <Version>07.01.583</Version>
+      <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
+      <Version>07.01.606</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);.\lib\Windows\64bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>

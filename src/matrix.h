@@ -1,7 +1,6 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include <cmath>
 #include "vec3d.h"
 #include "quaternion.h"
 
@@ -112,6 +111,50 @@ public:
 		m[2][2] = 1.0f - 2.0f * q.x * q.x - 2.0f * q.y * q.y;
 		m[0][3] = m[1][3] = m[2][3] = m[3][0] = m[3][1] = m[3][2] = 0;
 		m[3][3] = 1.0f;
+	}
+
+	void QRotate(const Quaternion& q){
+		float x = q.x;
+		float y = q.y;
+		float z = q.z;
+		float angle = q.w;
+		/*
+			R = u u^T + cos theta (I - u u^T) + sin theta S
+			  = u u^T + I cos(theta) - u u^T cos(theta) + S sin(theta)
+			  = u u^t (1 - cos(theta)) + I cos(theta) + S sin(theta)
+			u = v/||v|| = (x' y' z')^T
+			u u^T = (x'x'  x'y'  x'z')
+					(y'x'  y'y'  y'z')
+					(z'x'  z'y'  z'z')
+			S = ( 0  -z'  y')
+				( z'  0  -x')
+				(-y'  x'  0 )
+
+		*/
+		unit();
+
+		float l = sqrt(x*x + y*y + z*z);
+		if(l == 0)
+			return;
+
+		x /= l;
+		y /= l;
+		z /= l;
+
+		float sina = sin(angle);
+		float cosa = cos(angle);
+
+		m[0][0] = x*x * (1 - cosa) + cosa;
+		m[0][1] = x*y * (1 - cosa)         - z * sina;
+		m[0][2] = x*z * (1 - cosa)         + y * sina;
+
+		m[1][0] = y*x * (1 - cosa)         + z * sina;
+		m[1][1] = y*y * (1 - cosa) + cosa;
+		m[1][2] = y*z * (1 - cosa)         - x * sina;
+
+		m[2][0] = z*x * (1 - cosa)         - y * sina;
+		m[2][1] = z*y * (1 - cosa)         + x * sina;
+		m[2][2] = z*z * (1 - cosa) + cosa;
 	}
 
 	static const Matrix newQuatRotate(const Quaternion& qr)
@@ -263,8 +306,85 @@ public:
 		return (float*)this;
 	}
 
-};
+	void Rotate_HPB(const double h, const double p, const double b){
+		double sinh = sin(h);
+		double cosh = cos(h);
+		double sinp = sin(p);
+		double cosp = cos(p);
+		double sinb = sin(b);
+		double cosb = cos(b);
 
+		m[0][0] = cosh * cosb + sinh * sinp * sinb;
+		m[1][0] = cosp * sinb;
+		m[2][0] = -sinh * cosb + cosh * sinp * sinb;
+		m[0][1] = -cosh * sinb + sinh * sinp * cosb;
+		m[1][1] = cosp * cosb;
+		m[2][1] = sinh * sinb + cosh * sinp * cosb;
+		m[0][2] = sinh * cosp;
+		m[1][2] = -sinp;
+		m[2][2] = cosh * cosp;
+	}
+
+	Matrix newRotate_HPB(const double h, const double p, double b){
+		Matrix dest;
+		dest.unit();
+		dest.Rotate_HPB(h,p,b);
+		return dest;
+	}
+
+	Vec3D GetHPB(){
+		Vec3D y(m[0][1], m[1][1], m[2][1]);
+		Vec3D z(m[0][2], m[1][2], m[2][2]);
+
+		Vec3D hpb;
+
+		// First get RX and RY
+		bool zzero[3] = {
+			(fabs(z[0]) <= std::numeric_limits<float>::epsilon()),
+			(fabs(z[1]) <= std::numeric_limits<float>::epsilon()),
+			(fabs(z[2]) <= std::numeric_limits<float>::epsilon())
+		};
+
+		if (zzero[0] && zzero[2])
+		{
+			hpb[0] = 0;
+			if (!zzero[1])
+				hpb[1] = (z[1] < 0) ? HALFPI : -HALFPI;
+			else
+				hpb[1] = 0;
+		}
+		else
+		{
+			if (zzero[2])
+				hpb[0] = (z[0] < 0) ? -HALFPI : HALFPI;
+			else
+				hpb[0] = atan2(z[0], z[2]);
+			float hyp = sqrt(z[0] * z[0] + z[2] * z[2]);
+			if (hyp <= std::numeric_limits<float>::epsilon())
+				hpb[1] = (z[1] < 0.0) ? HALFPI : -HALFPI;
+			else
+				hpb[1] = -atan2(z[1], hyp);
+		}
+
+		// Find RZ
+		Matrix rot_hp(newRotate_HPB(hpb[0], hpb[1], 0));
+		rot_hp.invert();
+		Vec3D rot_y(rot_hp * y);
+		bool rot_yzero[3] = {
+			(fabs(rot_y[0]) <= std::numeric_limits<float>::epsilon()),
+			(fabs(rot_y[1]) <= std::numeric_limits<float>::epsilon()),
+			(fabs(rot_y[2]) <= std::numeric_limits<float>::epsilon())
+		};
+		if(rot_yzero[0] && rot_yzero[1])
+			hpb[2] = 0;
+		else if(rot_yzero[1])
+			hpb[2] = (rot_y[0] < 0) ? HALFPI : -HALFPI;
+		else
+			hpb[2] = atan2(-rot_y[0], rot_y[1]);
+
+		return hpb;
+	}
+};
 
 #endif
 

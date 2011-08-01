@@ -140,6 +140,19 @@ public:
 		return v1*(1.0f-r) + v2*r;
 	}
 
+    Vec3D GetHPB()
+    {
+        Vec3D hpb;
+		hpb.x = atan2(2 * (x*z + y*w), 1 - 2 * (x*x + y*y));
+        float sp = 2*(x*w - y*z);
+        if(sp < -1) sp = -1;
+        else if(sp > 1) sp = 1;
+        hpb.y = asin(sp);
+		hpb.z = atan2(2 * (x*y + z*w), 1 - 2 * (x*x + z*z));
+
+        return hpb;
+    }
+
 };
 
 

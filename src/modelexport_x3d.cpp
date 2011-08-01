@@ -285,7 +285,7 @@ void M2toX3D(tabbed_ostream s, Model *m, bool init, const char* fn, bool xhtml)
             if (rot[n] != 0.f)
             {   
                 s << "<Transform rotation='" << (n == 0) << " " << (n == 1) << " " << (n == 2) << " " 
-                  << PIOVER180*rot[n] << "'>" << std::endl;
+                  << PIOVER180d*rot[n] << "'>" << std::endl;
                 num_rot++;
                 s.tab();
             }

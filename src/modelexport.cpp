@@ -241,7 +241,7 @@ void RotationMatrixToEulerAnglesXYZ(const Matrix& rkRot, float& rfXAngle, float&
 			// y_angle = -pi/2
 			// z_angle - x_angle = atan2(r10,r11)
 			// WARNING.  The solution is not unique.  Choosing z_angle = 0.
-			rfYAngle = (float)(-PIHALF);
+			rfYAngle = -HALFPIf;
 			rfXAngle = -atan2(rkRot.m[1][0],rkRot.m[1][1]);
 			rfZAngle = (float)0.0f;
 			return ;
@@ -250,7 +250,7 @@ void RotationMatrixToEulerAnglesXYZ(const Matrix& rkRot, float& rfXAngle, float&
 		// y_angle = +pi/2
 		// z_angle + x_angle = atan2(r10,r11)
 		// WARNING.  The solutions is not unique.  Choosing z_angle = 0.
-		rfYAngle = (float)PIHALF;
+		rfYAngle = HALFPIf;
 		rfXAngle = atan2(rkRot.m[1][0],rkRot.m[1][1]);
 		rfZAngle = (float)0.0f;
 		return ;

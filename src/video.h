@@ -8,11 +8,6 @@
 #include "manager.h"
 #include "ddslib.h"
 
-
-#ifndef PI
-	#define PI 3.14159265358f
-#endif
-
 typedef GLuint TextureID;
 
 

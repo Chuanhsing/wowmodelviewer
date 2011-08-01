@@ -1539,6 +1539,49 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 	Layer.ParentLayer = -1;
 	std::vector<wxString> surfnamearray;
 
+	/*
+	Brilliant idea! Place all the models into a vector list, then parse the list. Should reduce code, specifically remove duplicate code for attached objects!
+	Just have to find a way to deal with any positioning problems...
+
+	struct ListModel{
+		Model *m,
+		size_t ID;
+		size_t ParentID;
+	}
+
+	std::vector<ListModel> mlist;
+	ListModel a;
+	a.m = m;
+	a.ID = 1;
+	a.ParentID = 0;
+	mlist.push_back(a);
+	size_t counter = 1;
+	if (att != NULL){
+		g_modelViewer->SetStatusText(wxT("Processing Attached Model Files..."));
+		/* Have yet to find an att->model, so skip it until we do.
+		if (att->model){
+		} *//*
+		for (size_t c=0; c<att->children.size(); c++) {
+			Attachment *att2 = att->children[c];
+			for (size_t j=0; j<att2->children.size(); j++) {
+				Model *mAttChild = static_cast<Model*>(att2->children[j]->model);
+				counter++;
+
+				if (mAttChild){
+					ListModel ac;
+					ac.m = mAttChild;
+					ac.ID = counter;
+					ac.ParentID = a.ID;
+					mlist.push_back(mAttChild);
+				}
+			}
+		}
+	}
+
+	// Parse the model list...
+
+	*/
+
 	// Bounding Box for the Layer
 	/*if (m->bounds[0]){
 		Layer.BoundingBox1 = m->bounds[0];
@@ -1850,7 +1893,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 	for (size_t i=0; i<numv; i++) {
 		ModelVertex& vertex = m->origVertices[i];
 		for (size_t j=0;j<4; j++) {
-			if ((vertex.bones[j] == 0) && (vertex.weights[j] == 0))
+			if ((vertex.bones[j] == 0) || (vertex.weights[j] == 0))
 				continue;
 
 			LWWeightInfo a;
@@ -2769,12 +2812,19 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 					}
 
 					LWSceneObj doodad(ddfilename,ddID,ddSetID,LW_ITEMTYPE_OBJECT,isNull);
+					Matrix ddmat;
+					Quaternion qRot = Quaternion(ddinstance->dir,ddinstance->w);
+					float ddiscale = ddinstance->sc*(modelExport_ScaleToRealWorld == true?REALWORLD_SCALE:1.0);
+					ddmat.scale(Vec3D(ddiscale,ddiscale,ddiscale));
+					ddmat.translation(ddinstance->pos);
+					ddmat.QRotate(qRot);
+
 					Vec3D ddid = ddinstance->dir;
 					//ddid.x += (float)(PI/2); // (PI/2) = 90 degree turn
 					Vec3D rot = QuaternionToXYZ(ddid,ddinstance->w);
 
 					AnimVector dpx,dpy,dpz,drx,dry,drz,ds;
-					ds.Push((ddinstance->sc*(modelExport_ScaleToRealWorld == true?REALWORLD_SCALE:1.0)),0);
+					ds.Push(ddiscale,0);
 					Vec3D ddipos = ddinstance->pos;
 					ddipos *= (modelExport_ScaleToRealWorld == true?REALWORLD_SCALE:1.0);
 					dpx.Push(-ddipos.z,0);

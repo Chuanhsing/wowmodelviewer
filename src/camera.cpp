@@ -54,7 +54,7 @@ void CCamera::RotateX(float Angle)
 	m_vRotation.x += Angle;
 	
 	//Rotate viewdir around the right vector:
-	m_vViewDir = ((m_vViewDir * cosf(Angle*(float)PIOVER180)) + (m_vUpVector * sinf(Angle*(float)PIOVER180))).normalize();
+	m_vViewDir = ((m_vViewDir * cosf(Angle*PIOVER180f)) + (m_vUpVector * sinf(Angle*PIOVER180f))).normalize();
 
 	//now compute the new UpVector (by cross product)
 	m_vUpVector = (m_vViewDir % m_vRightVector) * -1;
@@ -65,7 +65,7 @@ void CCamera::RotateY (float Angle)
 	m_vRotation.y += Angle;
 	
 	//Rotate viewdir around the up vector:
-	m_vViewDir = ((m_vViewDir * cosf(Angle*(float)PIOVER180)) - (m_vRightVector * sinf(Angle*(float)PIOVER180))).normalize();
+	m_vViewDir = ((m_vViewDir * cosf(Angle*PIOVER180f)) - (m_vRightVector * sinf(Angle*PIOVER180f))).normalize();
 
 	//now compute the new RightVector (by cross product)
 	m_vRightVector = (m_vViewDir % m_vUpVector);
@@ -76,7 +76,7 @@ void CCamera::RotateZ(float Angle)
 	m_vRotation.z += Angle;
 	
 	//Rotate viewdir around the right vector:
-	m_vRightVector = (m_vRightVector*cosf(Angle*(float)PIOVER180) + m_vUpVector*sinf(Angle*(float)PIOVER180)).normalize();
+	m_vRightVector = (m_vRightVector*cosf(Angle*PIOVER180f) + m_vUpVector*sinf(Angle*PIOVER180f)).normalize();
 
 	//now compute the new UpVector (by cross product)
 	m_vUpVector = (m_vViewDir % m_vRightVector) * -1;
