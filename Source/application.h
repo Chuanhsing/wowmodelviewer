@@ -5,6 +5,13 @@
 #include <QActionGroup>
 #include <QMenu>
 #include "enums.h"
+#include "math\math_base.h"
+
+// These are temporarly added, just to test the files.
+// Move these to the proper file when we get to implementing them.
+#include "Model_M2.h"
+#include "Model_WMO.h"
+#include "Model_ADT.h"
 
 namespace Ui {
     class Main_Window_Viewer;

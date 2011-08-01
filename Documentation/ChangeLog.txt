@@ -1,5 +1,19 @@
 WoW Model Viewer v0.8.0.0
 
+r607
+-Added a crazy amount of Vector, Matrix and Quaternion math functions.
+-Added basic header files for M2s, WMOs & ADTs.
+
+
+r606
+-Added a list of goals for Developers to work on for the first v8 release.
+-Moved around a lot of files.
+-Renamed some source files for better clarity.
+-Added Menu preview buttons for Items and Sound files.
+-Started work on integrating a "Modes" functionality.
+-Added in-program icons for loading and saving Character files.
+
+
 r603
 -Added dockable FileList interface with test-data. Not yet functional.
 -Added Filelist Filter & Clear button. Filter NYF.

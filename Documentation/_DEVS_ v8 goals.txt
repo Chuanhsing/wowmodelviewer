@@ -15,6 +15,7 @@ PRIMARY GOALS:
 - Allow for the display of multiple M2 models at once, including placement controls, and animation instance controllers.
 - Redesign the UI for better space usage, better controls, and better displaying of visual data.
 - Fix many of the long-standing display issues. (Alpha-Channel issues, Lack of Reflections/Specularity, etc.)
+- Fix many of the Cross-Platform issues.
 - Add full ADT support, including the optional displaying of WMOs and M2s listed in that ADT.
 - Change our item lists to use DBC files, instead of CSV files. Or, alternatly, WMV builds the CSV files automatically. CSV files will still be used for custom user-items.
 
@@ -27,7 +28,6 @@ SECONDARY GOALS:
 - Allow Scripter to load and play an audio file to script animation to.
 - Allow Scripter to animate Model position and rotation.
 - Allow Scripter to animate the Camera's/Viewer's position and rotation.
-- Fix many of the Cross-Platform issues.
 
 
 ===============================
