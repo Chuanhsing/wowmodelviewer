@@ -259,7 +259,7 @@ public:
 	//static const size_t GeoType3V400 = 19;
 
 	Record getByName(wxString name);
-	Record getById(unsigned int id);
+	Record getById(size_t id);
 };
 
 

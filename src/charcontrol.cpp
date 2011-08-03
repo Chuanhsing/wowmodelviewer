@@ -621,7 +621,7 @@ void CharControl::OnCheck(wxCommandEvent &event)
 		} else {
 			cd.skinColor = 0;
 			spins[0]->SetValue(0);
-			spins[0]->SetRange(0, cd.maxSkinColor-1);
+			spins[0]->SetRange(0, (int)(cd.maxSkinColor)-1);
 		}
 	}
 
@@ -639,19 +639,19 @@ bool slotHasModel(size_t i)
 inline void CharControl::RandomiseChar()
 {
 	// Choose random values for the looks! ^_^
-	cd.skinColor = randint(0, cd.maxSkinColor-1);
-	cd.faceType = randint(0, cd.maxFaceType-1);
-	cd.hairColor = randint(0, cd.maxHairColor-1);
-	cd.hairStyle = randint(0, cd.maxHairStyle-1);
-	cd.facialHair = randint(0, cd.maxFacialHair-1);
+	cd.skinColor = randint(0, (int)cd.maxSkinColor-1);
+	cd.faceType = randint(0, (int)cd.maxFaceType-1);
+	cd.hairColor = randint(0, (int)cd.maxHairColor-1);
+	cd.hairStyle = randint(0, (int)cd.maxHairStyle-1);
+	cd.facialHair = randint(0, (int)cd.maxFacialHair-1);
 	cd.facialColor = cd.hairColor;
 
-	spins[SPIN_SKIN_COLOR]->SetValue(cd.skinColor);
-	spins[SPIN_FACE_TYPE]->SetValue(cd.faceType);
-	spins[SPIN_HAIR_COLOR]->SetValue(cd.hairColor);
-	spins[SPIN_HAIR_STYLE]->SetValue(cd.hairStyle);
-	spins[SPIN_FACIAL_HAIR]->SetValue(cd.facialHair);
-	spins[SPIN_FACIAL_COLOR]->SetValue(cd.facialColor);
+	spins[SPIN_SKIN_COLOR]->SetValue((int)cd.skinColor);
+	spins[SPIN_FACE_TYPE]->SetValue((int)cd.faceType);
+	spins[SPIN_HAIR_COLOR]->SetValue((int)cd.hairColor);
+	spins[SPIN_HAIR_STYLE]->SetValue((int)cd.hairStyle);
+	spins[SPIN_FACIAL_HAIR]->SetValue((int)cd.facialHair);
+	spins[SPIN_FACIAL_COLOR]->SetValue((int)cd.facialColor);
 }
 
 void CharControl::RefreshEquipment()
@@ -695,12 +695,12 @@ void CharControl::OnButton(wxCommandEvent &event)
 		if (dialog.ShowModal()==wxID_OK) {
 			wxString s(dialog.GetPath());
 			if (cd.load(s, &td)) {
-				spins[SPIN_SKIN_COLOR]->SetValue(cd.skinColor);
-				spins[SPIN_FACE_TYPE]->SetValue(cd.faceType);
-				spins[SPIN_HAIR_COLOR]->SetValue(cd.hairColor);
-				spins[SPIN_HAIR_STYLE]->SetValue(cd.hairStyle);
-				spins[SPIN_FACIAL_HAIR]->SetValue(cd.facialHair);
-				spins[SPIN_FACIAL_COLOR]->SetValue(cd.hairColor);
+				spins[SPIN_SKIN_COLOR]->SetValue((int)cd.skinColor);
+				spins[SPIN_FACE_TYPE]->SetValue((int)cd.faceType);
+				spins[SPIN_HAIR_COLOR]->SetValue((int)cd.hairColor);
+				spins[SPIN_HAIR_STYLE]->SetValue((int)cd.hairStyle);
+				spins[SPIN_FACIAL_HAIR]->SetValue((int)cd.facialHair);
+				spins[SPIN_FACIAL_COLOR]->SetValue((int)cd.hairColor);
 				for (size_t i=0; i<NUM_SPIN_BTNS; i++) 
 					spins[i]->Refresh(false);
 			}
@@ -869,7 +869,7 @@ void CharControl::RefreshModel()
 
 		// facial feature geosets
 		try {
-			CharFacialHairDB::Record frec = facialhairdb.getByParams(cd.race, cd.gender, cd.facialHair);
+			CharFacialHairDB::Record frec = facialhairdb.getByParams((unsigned int)(cd.race & 0xFF00), (unsigned int)(cd.gender & 0xFF00), (unsigned int)(cd.facialHair & 0xFF00));
 			if (gameVersion >= VERSION_CATACLYSM) {
 				cd.geosets[CG_GEOSET100] = frec.getUInt(CharFacialHairDB::Geoset100V400);
 				cd.geosets[CG_GEOSET200] = frec.getUInt(CharFacialHairDB::Geoset200V400);
@@ -1113,7 +1113,7 @@ void CharControl::RefreshModel()
 			model->showGeosets[j] = bald;
 
 		for (size_t i=1; i<NUM_GEOSETS; i++) {
-			int a = i*100, b = (i+1) * 100;
+			int a = (int)i*100, b = ((int)i+1) * 100;
 			if (id>a && id<b) 
 				model->showGeosets[j] = (id == (a + cd.geosets[i]));
 		}
@@ -1139,12 +1139,12 @@ void CharControl::RefreshModel()
 	for (size_t i=0; i<NUM_SPIN_BTNS; i++)
 		spinLabels[i]->SetLabel(wxString::Format(wxT("%i / %i"), spins[i]->GetValue(), spins[i]->GetMax()));
 
-	spins[SPIN_SKIN_COLOR]->SetValue(cd.skinColor);
-	spins[SPIN_FACE_TYPE]->SetValue(cd.faceType);
-	spins[SPIN_HAIR_COLOR]->SetValue(cd.hairColor);
-	spins[SPIN_HAIR_STYLE]->SetValue(cd.hairStyle);
-	spins[SPIN_FACIAL_HAIR]->SetValue(cd.facialHair);
-	spins[SPIN_FACIAL_COLOR]->SetValue(cd.facialColor);
+	spins[SPIN_SKIN_COLOR]->SetValue((int)cd.skinColor);
+	spins[SPIN_FACE_TYPE]->SetValue((int)cd.faceType);
+	spins[SPIN_HAIR_COLOR]->SetValue((int)cd.hairColor);
+	spins[SPIN_HAIR_STYLE]->SetValue((int)cd.hairStyle);
+	spins[SPIN_FACIAL_HAIR]->SetValue((int)cd.facialHair);
+	spins[SPIN_FACIAL_COLOR]->SetValue((int)cd.facialColor);
 
 	// Eye Glows
 	for(size_t i=0; i<model->passes.size(); i++) {
@@ -1286,7 +1286,7 @@ void CharControl::RefreshNPCModel()
 
 	// facial hair geosets
 	try {
-		CharFacialHairDB::Record frec = facialhairdb.getByParams(cd.race, cd.gender, cd.facialHair);
+		CharFacialHairDB::Record frec = facialhairdb.getByParams((unsigned int)cd.race, (unsigned int)cd.gender, (unsigned int)cd.facialHair);
 		if (gameVersion < VERSION_CATACLYSM) {
 			cd.geosets[CG_GEOSET100] = frec.getUInt(CharFacialHairDB::Geoset100);
 			cd.geosets[CG_GEOSET200] = frec.getUInt(CharFacialHairDB::Geoset200);
@@ -1405,7 +1405,7 @@ void CharControl::RefreshNPCModel()
 			model->showGeosets[j] = bald;
 
 		for (size_t i=1; i<NUM_GEOSETS; i++) {
-			int a = i*100, b = (i+1) * 100;
+			int a = (int)i*100, b = ((int)i+1) * 100;
 			if (id>a && id<b) 
 				model->showGeosets[j] = (id == (a + cd.geosets[i]));
 		}
@@ -1715,7 +1715,7 @@ void CharControl::RefreshItem(ssize_t slot)
 								ItemVisualEffectDB::Record eff = effectdb.getById(effectid);
 								wxString filename = eff.getString(ItemVisualEffectDB::Model);
 
-								att->addChild(filename.mb_str(), i, -1);
+								att->addChild(filename.mb_str(), (int)i, -1);
 
 							} catch (ItemVisualEffectDB::NotFound) {}
 						}
@@ -1813,7 +1813,7 @@ void CharControl::RefreshCreatureItem(ssize_t slot)
 								ItemVisualEffectDB::Record eff = effectdb.getById(effectid);
 								wxString filename = eff.getString(ItemVisualEffectDB::Model);
 
-								att->addChild(filename.mb_str(), i, -1);
+								att->addChild(filename.mb_str(), (int)i, -1);
 
 							} catch (ItemVisualEffectDB::NotFound) {}
 						}

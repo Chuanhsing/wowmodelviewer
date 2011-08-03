@@ -254,7 +254,7 @@ CharRacesDB::Record CharRacesDB::getByName(wxString name)
 	throw NotFound();
 }
 
-CharRacesDB::Record CharRacesDB::getById(unsigned int id)
+CharRacesDB::Record CharRacesDB::getById(size_t id)
 {
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
