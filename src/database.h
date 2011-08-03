@@ -211,11 +211,19 @@ public:
 	#endif
 
 	/// Types
+	enum{
+		SkinType = 0,
+		FaceType,
+		FacialHairType,
+		HairType,
+		UnderwearType
+	};
+	/*
 	static const size_t SkinType = 0;
 	static const size_t FaceType = 1;
 	static const size_t FacialHairType = 2;
 	static const size_t HairType = 3;
-	static const size_t UnderwearType = 4;
+	static const size_t UnderwearType = 4;*/
 
 	Record getByParams(size_t race, size_t gender, size_t type, size_t section, size_t color, size_t npc);
 	int getColorsFor(size_t race, size_t gender, size_t type, size_t section, size_t npc);

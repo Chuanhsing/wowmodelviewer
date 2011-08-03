@@ -3376,7 +3376,7 @@ void ModelViewer::UpdateControls()
 
 void ModelViewer::ImportArmouryBattleNet(wxString strURL)
 {
-	//http://us.battle.net/wow/en/character/nerzhul/tssarlol/simple
+	//http://us.battle.net/wow/en/character/steamwheedle-cartel/Kjasi/simple
 	wxString strDomain = strURL.Mid(7).BeforeFirst('/');
 	wxString strPage = strURL.Mid(7).Mid(strDomain.Len());
 
@@ -3398,6 +3398,8 @@ void ModelViewer::ImportArmouryBattleNet(wxString strURL)
 		wxInputStream *stream = http.GetInputStream(strPage); 
 		if (!stream || !stream->IsOk()) {
 			http.Close();
+			wxMessageBox(wxT("Unable to connect to the supplied link.\nYou may be having connection issues, or that page may not exist."),wxT("Armory Error"));
+			wxLogMessage(wxT("Error connecting to the supplied website. Page may not exist."));
 			return;
 		}
 
@@ -3405,8 +3407,21 @@ void ModelViewer::ImportArmouryBattleNet(wxString strURL)
 		if(http.GetError() == wxPROTO_NOERR) {
 			wxString filename(wxT("temp.xml"));
 			wxFileOutputStream output(filename);
-            stream->Read(output); 
+			if (!stream->CanRead()){
+				wxMessageBox(wxT("Unable to read the Armory page."),wxT("Armory Error"));
+				wxLogMessage(wxT("Error reading Armory website page."));
+			}
+            if (!stream->Read(output)){
+				wxMessageBox(wxT("Error gathering Armory data."),wxT("Armory Error"));
+				wxLogMessage(wxT("Error sending Armory data to file."));
+				return;
+			}
 			output.Close();
+			if (output.GetSize() == 0){
+				wxMessageBox(wxT("Error reading Armory data."),wxT("Armory Error"));
+				wxLogMessage(wxT("Armory data file is Zero bytes."));
+				return;
+			}
 
 			wxTextFile fin(filename);
 			if (fin.Open(filename)) {

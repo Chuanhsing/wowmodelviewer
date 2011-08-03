@@ -1,5 +1,17 @@
 World of Warcraft Model Viewer v0.7.0.1
 
+r610 (Demented Deathwing)
+ - WMV now requires Administrator priveledges.
+ - Texture fixes.
+ - Temporary fix for Ubuntu 11.4 crashes.
+ - Math fixes, and new functions.
+ - Fix linux build.
+ - Fix wrong use of StartsWith().
+ - Fixes for 64-bit Character issues.
+ - Armory errors will no longer crash WMV.
+ - Added Documentation for Cataclysm ADT files.
+
+
 r598 (Fickle Felguard)
  - WoW Model Viewer is released under the GNU General Public License v3, Non-Commercial Use.
  - WoW will no longer automatically load when starting WMV. You can load it from the File Menu.
