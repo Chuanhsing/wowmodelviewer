@@ -8,17 +8,21 @@
 // File Formats
 #include "Models\Model_WMO_v17.h"
 
-template <class WMOVersion>
-class Model_WMO;
-
-typedef Model_WMO<Model_WMO_v17> Model_WMO_17;		// All known WMO files
-
 // Primary WMO Class
 // Store Data, and Add Functions.
 template <class WMOVersion>
 class Model_WMO
 {
+public:
+	// Constructor
+	
+	Model_WMO<WMOVersion>() {};
 
+	// Data structures
+	QString ModelName;		// Complete File Path & Name for this model.
+	QString FileName;		// Just the File Name of the model.
+	QString PathName;		// Just the Path for the model.
 };
+
 
 #endif

@@ -29,6 +29,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="copy &quot;StormLib\bin\StormLib_dll\$(PlatformName)\$(ConfigurationName)\StormLib.lib&quot; &quot;$(IntDir)&quot;&#x0D;&#x0A;copy &quot;Exporters\$(ConfigurationName)\32_VC90\Exporters.lib&quot; &quot;$(IntDir)&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -78,10 +79,10 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
 				AdditionalOptions="&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
-				AdditionalDependencies="qtmaind.lib QtGuid4.lib QtCored4.lib"
+				AdditionalDependencies="qtmaind.lib QtGuid4.lib QtCored4.lib $(IntDir)Exportersd.lib"
 				OutputFile="$(OutDir)\WoWModelViewer32.exe"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;StormLib\bin\StormLib\$(PlatformName)\$(ConfigurationName)AD&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=""
 				SubSystem="2"
@@ -107,7 +108,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(QTDIR)\lib\QtCored4.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;$(QTDIR)\lib\QtGuid4.dll&quot; $(OutDir)&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(QTDIR)\lib\QtCored4.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;$(QTDIR)\lib\QtGuid4.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;StormLib\bin\StormLib_dll\$(PlatformName)\$(ConfigurationName)\StormLib.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;Exporters\$(ConfigurationName)\32_VC90\Exporters.dll&quot; $(OutDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -120,6 +121,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="copy &quot;StormLib\bin\StormLib_dll\$(PlatformName)\$(ConfigurationName)\StormLib.lib&quot; &quot;$(IntDir)&quot;&#x0D;&#x0A;copy &quot;Exporters\$(ConfigurationName)\64_VC90\Exporters.lib&quot; &quot;$(IntDir)&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -170,10 +172,10 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
 				AdditionalOptions="&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
-				AdditionalDependencies="qtmaind.lib QtGuid4.lib QtCored4.lib"
+				AdditionalDependencies="qtmaind.lib QtGuid4.lib QtCored4.lib $(IntDir)Exportersd.lib"
 				OutputFile="$(OutDir)\WoWModelViewer64.exe"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;StormLib\bin\StormLib\$(PlatformName)\$(ConfigurationName)AD&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=""
 				SubSystem="2"
@@ -200,7 +202,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(QTDIR)\lib\QtCored4.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;$(QTDIR)\lib\QtGuid4.dll&quot; $(OutDir)&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(QTDIR)\lib\QtCored4.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;$(QTDIR)\lib\QtGuid4.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;StormLib\bin\StormLib_dll\$(PlatformName)\$(ConfigurationName)\StormLib.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;Exporters\$(ConfigurationName)\64_VC90\Exporters.dll&quot; $(OutDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -213,6 +215,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="copy &quot;StormLib\bin\StormLib_dll\$(PlatformName)\$(ConfigurationName)\StormLib.lib&quot; &quot;$(IntDir)&quot;&#x0D;&#x0A;copy &quot;Exporters\$(ConfigurationName)\32_VC90\Exporters.lib&quot; &quot;$(IntDir)&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -262,11 +265,11 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
 				AdditionalOptions="&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
-				AdditionalDependencies="qtmain.lib QtGui4.lib QtCore4.lib"
+				AdditionalDependencies="qtmain.lib QtGui4.lib QtCore4.lib $(IntDir)Exporters.lib"
 				OutputFile="$(OutDir)\WoWModelViewer32.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;StormLib\bin\StormLib\$(PlatformName)\$(ConfigurationName)AD&quot;"
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile=""
 				SubSystem="2"
@@ -292,7 +295,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(QTDIR)\lib\QtCore4.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;$(QTDIR)\lib\QtGui4.dll&quot; $(OutDir)&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(QTDIR)\lib\QtCore4.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;$(QTDIR)\lib\QtGui4.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;StormLib\bin\StormLib_dll\$(PlatformName)\$(ConfigurationName)\StormLib.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;Exporters\$(ConfigurationName)\32_VC90\Exporters.dll&quot; $(OutDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -305,6 +308,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="copy &quot;StormLib\bin\StormLib_dll\$(PlatformName)\$(ConfigurationName)\StormLib.lib&quot; &quot;$(IntDir)&quot;&#x0D;&#x0A;copy &quot;Exporters\$(ConfigurationName)\64_VC90\Exporters.lib&quot; &quot;$(IntDir)&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -355,11 +359,11 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
 				AdditionalOptions="&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
-				AdditionalDependencies="qtmain.lib QtGui4.lib QtCore4.lib"
+				AdditionalDependencies="qtmain.lib QtGui4.lib QtCore4.lib $(IntDir)Exporters.lib"
 				OutputFile="$(OutDir)\WoWModelViewer64.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;StormLib\bin\StormLib\$(PlatformName)\$(ConfigurationName)AD&quot;"
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile=""
 				SubSystem="2"
@@ -386,7 +390,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(QTDIR)\lib\QtCore4.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;$(QTDIR)\lib\QtGui4.dll&quot; $(OutDir)&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(QTDIR)\lib\QtCore4.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;$(QTDIR)\lib\QtGui4.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;StormLib\bin\StormLib_dll\$(PlatformName)\$(ConfigurationName)\StormLib.dll&quot; $(OutDir)&#x0D;&#x0A;copy &quot;Exporters\$(ConfigurationName)\64_VC90\Exporters.dll&quot; $(OutDir)&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

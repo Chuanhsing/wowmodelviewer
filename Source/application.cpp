@@ -1,6 +1,12 @@
 #include "application.h"
 #include "ui_Main_Window_Viewer.h"
 
+// These are temporarly added, just to test the files.
+// Move these to the proper file when we get to implementing them.
+#include "Model_M2.h"
+#include "Model_WMO.h"
+#include "Model_ADT.h"
+
 WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui::Main_Window_Viewer)
 {
     ui->setupUi(this);
@@ -8,6 +14,8 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
     // Defaults
 	InterfaceMode = INTERFACEMODE_VIEWER;				// Set the default mode to Viewer.
     ViewerInterfaceType = VIEWER_INTERFACETYPE_NONE;	// Full list of viewer interface types in enums.h
+	isWoWLoaded = false;
+	canReloadWoW = false;
 
     /* -= Groups =- */
     // Eye Glow
@@ -47,6 +55,12 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
     LightTypeGroup->addAction(ui->actionLightType_Ambient);
     LightTypeGroup->addAction(ui->actionLightType_ModelOnly);
     ui->actionLightType_Dynamic->setChecked(true);
+
+	// Viewer Modes
+	ViewerModeGroup = new QActionGroup(this);
+	ViewerModeGroup->addAction(ui->actionMode_Viewer);
+	ViewerModeGroup->addAction(ui->actionMode_Cinema);
+	ui->actionMode_Viewer->setChecked(true);
 
     /* -= Dynamic Groups =- */
     // Camera Group
@@ -90,47 +104,107 @@ void WoWModelViewer::UpdateViewerMenu(){
     menuBar()->removeAction(ui->menuLandscape->menuAction());
     menuBar()->removeAction(ui->menuImage->menuAction());
 
-	// Disable Model-Only Options
-    ui->menuLighting->setDisabled(false);
-    ui->menuCamera->setDisabled(false);
-    ui->menuExport_Models->setDisabled(false);
+	// Disabled functions, because they ONLY work with a model or file loaded
+    ui->menuLighting->setDisabled(true);
+    ui->menuCamera->setDisabled(true);
+    ui->menuExport_Models->setDisabled(true);
+	ui->actionSave_Screenshot->setDisabled(true);
+	ui->actionSave_Image_Sequence->setDisabled(true);
+	ui->actionExport_Textures->setDisabled(true);
+	ui->actionSave_File->setDisabled(true);
+
+	// Disable functions if WoW is not loaded, then end.
+	if (isWoWLoaded == false){
+		ui->actionLoad_World_of_Wacraft->setDisabled(false);
+		ui->actionLoad_Character->setDisabled(true);
+		ui->actionImportArmoryCharacter->setDisabled(true);
+		ui->actionLoad_NPC->setDisabled(true);
+		ui->actionLoadSkybox->setDisabled(true);
+		ui->actionModel_Bank->setDisabled(true);
+		ui->actionSave_File->setDisabled(true);
+		ui->actionDiscover_Items->setDisabled(true);
+		ui->actionDiscover_NPCs->setDisabled(true);
+		return;
+	}
+
+	// Else if WoW is loaded...
+	ui->actionLoad_Character->setDisabled(false);
+	ui->actionImportArmoryCharacter->setDisabled(false);
+	ui->actionLoad_NPC->setDisabled(false);
+	ui->actionLoadSkybox->setDisabled(false);
+	ui->actionModel_Bank->setDisabled(false);
+	ui->actionDiscover_Items->setDisabled(false);
+	ui->actionDiscover_NPCs->setDisabled(false);
+	if (canReloadWoW == true)
+		ui->actionLoad_World_of_Wacraft->setDisabled(false);
+	else
+		ui->actionLoad_World_of_Wacraft->setDisabled(true);
+
+	// Broad Strokes
+	if (ViewerInterfaceType != VIEWER_INTERFACETYPE_NONE){
+		ui->actionSave_File->setDisabled(false);
+	}
 
     // Change Options and Insert Menus based on the File Type
     if (ViewerInterfaceType == VIEWER_INTERFACETYPE_IMAGE){
+		ui->actionSave_Screenshot->setDisabled(false);
+		ui->actionSave_Image_Sequence->setDisabled(false);
+		ui->actionExport_Textures->setDisabled(false);
+		ui->actionLoadSkybox->setDisabled(true);
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuImage->menuAction());
-        ui->menuLighting->setDisabled(true);
-        ui->menuCamera->setDisabled(true);
-        ui->menuExport_Models->setDisabled(true);
 	}else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_SOUND){
-        ui->menuLighting->setDisabled(true);
-        ui->menuCamera->setDisabled(true);
-        ui->menuExport_Models->setDisabled(true);
+		ui->actionLoadSkybox->setDisabled(true);
     }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_LANDSCAPE){
+		ui->menuLighting->setDisabled(false);
+		ui->menuCamera->setDisabled(false);
+		ui->menuExport_Models->setDisabled(false);
+		ui->actionSave_Screenshot->setDisabled(false);
+		ui->actionSave_Image_Sequence->setDisabled(false);
+		ui->actionExport_Textures->setDisabled(false);
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuLandscape->menuAction());
     }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_SET){
+		ui->menuLighting->setDisabled(false);
+		ui->menuCamera->setDisabled(false);
+		ui->menuExport_Models->setDisabled(false);
+		ui->actionSave_Screenshot->setDisabled(false);
+		ui->actionSave_Image_Sequence->setDisabled(false);
+		ui->actionExport_Textures->setDisabled(false);
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuSets->menuAction());
 	}else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_ITEM){
+		ui->menuLighting->setDisabled(false);
+		ui->menuCamera->setDisabled(false);
+		ui->menuExport_Models->setDisabled(false);
+		ui->actionSave_Screenshot->setDisabled(false);
+		ui->actionSave_Image_Sequence->setDisabled(false);
+		ui->actionExport_Textures->setDisabled(false);
     }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_CREATURE){
+		ui->menuLighting->setDisabled(false);
+		ui->menuCamera->setDisabled(false);
+		ui->menuExport_Models->setDisabled(false);
+		ui->actionSave_Screenshot->setDisabled(false);
+		ui->actionSave_Image_Sequence->setDisabled(false);
+		ui->actionExport_Textures->setDisabled(false);
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuNPC->menuAction());
     }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_CHARACTER){
+		ui->menuLighting->setDisabled(false);
+		ui->menuCamera->setDisabled(false);
+		ui->menuExport_Models->setDisabled(false);
+		ui->actionSave_Screenshot->setDisabled(false);
+		ui->actionSave_Image_Sequence->setDisabled(false);
+		ui->actionExport_Textures->setDisabled(false);
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuCharacter->menuAction());
     }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_NONE){
-        ui->menuLighting->setDisabled(true);
-        ui->menuCamera->setDisabled(true);
-        ui->menuExport_Models->setDisabled(true);
     }
-
-    // Update other Menus...
 }
 
 void WoWModelViewer::updateFileList()
 {
 	// Update the File Tree, based on the selected filetype
-	if (ui->FileTypeSelector->currentIndex() == FILETYPE_MODEL){
-	}else if(ui->FileTypeSelector->currentIndex() == FILETYPE_SET){
-	}else if(ui->FileTypeSelector->currentIndex() == FILETYPE_LANDSCAPE){
-	}else if(ui->FileTypeSelector->currentIndex() == FILETYPE_IMAGE){
-	}else if(ui->FileTypeSelector->currentIndex() == FILETYPE_SOUND){
+	if (ui->ViewerFileTypeSelector->currentIndex() == FILETYPE_MODEL){
+	}else if(ui->ViewerFileTypeSelector->currentIndex() == FILETYPE_SET){
+	}else if(ui->ViewerFileTypeSelector->currentIndex() == FILETYPE_LANDSCAPE){
+	}else if(ui->ViewerFileTypeSelector->currentIndex() == FILETYPE_IMAGE){
+	}else if(ui->ViewerFileTypeSelector->currentIndex() == FILETYPE_SOUND){
 	}
 }
 
@@ -144,52 +218,76 @@ void WoWModelViewer::on_actionInitial_Pose_Only_toggled(bool arg1)
     ui->actionInitial_Pose_Only_2->setChecked(arg1);
 }
 
+// Show Controls
+void WoWModelViewer::on_actionShowCtrl_FileList_toggled(bool arg1)
+{
+	if (arg1 == false){
+		ui->ViewerFileListDockWidget->hide();
+	}else{
+		ui->ViewerFileListDockWidget->show();
+	}
+}
+
 
 // Functions for the temporary radio buttons on the main window.
+void WoWModelViewer::on_rBtn_WoWNotLoaded_clicked()
+{
+	isWoWLoaded = false;
+    UpdateViewerMenu();
+}
+
 void WoWModelViewer::on_rBtn_NoModel_clicked()
 {
+	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_NONE;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsChar_clicked()
 {
+	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_CHARACTER;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsNPC_clicked()
 {
+	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_CREATURE;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsWMO_clicked()
 {
+	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_SET;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsADT_clicked()
 {
+	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_LANDSCAPE;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsTexture_clicked()
 {
+	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_IMAGE;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsItem_clicked()
 {
+	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_ITEM;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsSound_clicked()
 {
+	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_SOUND;
     UpdateViewerMenu();
 }

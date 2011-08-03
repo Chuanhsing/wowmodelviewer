@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Exporter Files">
+      <UniqueIdentifier>{cd7c515a-a8f5-4d38-868a-93c08cc900e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exporter Files\Wavefront OBJ">
+      <UniqueIdentifier>{13af67b7-ebd3-4655-985e-e880b9d9d6cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exporter Files\Milkshape">
+      <UniqueIdentifier>{2da98919-feaa-402a-89cd-33fe331ee61b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exporter Files\FBX">
+      <UniqueIdentifier>{d21d9af6-4559-413c-a545-6bd07c1ae216}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exporter Files\M3">
+      <UniqueIdentifier>{6706d643-7976-4a53-a22d-5d30ac89804c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exporter Files\3DSMax">
+      <UniqueIdentifier>{2ba09b03-7bf5-4f0c-95dc-65f0ee212e3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exporter Files\Lightwave 3D">
+      <UniqueIdentifier>{b9855f4e-be69-47d1-8e6b-2a5a9bbb6cb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exporter Files\Misc">
+      <UniqueIdentifier>{57d1be4f-7228-4a8a-b13e-e5928eb63866}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="exporters.h" />
+    <ClInclude Include="exporters_global.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="exporters.cpp" />
+  </ItemGroup>
+</Project>

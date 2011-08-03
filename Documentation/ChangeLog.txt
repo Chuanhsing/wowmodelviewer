@@ -1,5 +1,16 @@
 WoW Model Viewer v0.8.0.0
 
+r609
+-Added Animation Controls layout.
+-Added preliminary Exporters dll project.
+-Added StormLib 8.0.1.
+-Added more Content-awareness to the main menu.
+-Certain menu options will now be disabled if WoW is not loaded.
+-Continued work on the Model headers.
+-The File List is now openable & closable from the View->Controls menu.
+-Rebuilt .pro files.
+
+
 r607
 -Added a crazy amount of Vector, Matrix and Quaternion math functions.
 -Added basic header files for M2s, WMOs & ADTs.

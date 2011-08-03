@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'Main_Window_Viewer.ui'
 **
-** Created: Sat Jul 30 18:54:37 2011
+** Created: Wed Aug 3 09:04:26 2011
 **      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -25,6 +25,7 @@
 #include <QtGui/QMenuBar>
 #include <QtGui/QPushButton>
 #include <QtGui/QRadioButton>
+#include <QtGui/QSlider>
 #include <QtGui/QStatusBar>
 #include <QtGui/QTreeWidget>
 #include <QtGui/QWidget>
@@ -69,7 +70,7 @@ public:
     QAction *actionADTQualityLow;
     QAction *actionLoad_Character;
     QAction *actionSave_Character;
-    QAction *actionRandomize_Character;
+    QAction *actionImportArmoryCharacter;
     QAction *actionLoad_Equipment;
     QAction *actionSave_Equipment;
     QAction *actionClear_Equiptment;
@@ -97,7 +98,7 @@ public:
     QAction *actionShowCtrl_FileList;
     QAction *actionBackground_Color;
     QAction *actionBackground_Image;
-    QAction *actionSkybox;
+    QAction *actionLoadSkybox;
     QAction *actionShow_Grid;
     QAction *actionShow_Mask;
     QAction *actionCam_Perspective;
@@ -137,6 +138,8 @@ public:
     QAction *actionCam_Additional;
     QAction *actionImage_ShowAlpha;
     QAction *actionDisplayImageInfo;
+    QAction *actionMode_Viewer;
+    QAction *actionMode_Cinema;
     QWidget *centralWidget;
     QWidget *layoutWidget;
     QGridLayout *gridLayout;
@@ -148,6 +151,7 @@ public:
     QRadioButton *rBtn_NoModel;
     QRadioButton *rBtn_IsSound;
     QRadioButton *rBtn_IsItem;
+    QRadioButton *rBtn_WoWNotLoaded;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuExport_Models;
@@ -156,6 +160,7 @@ public:
     QMenu *menuLighting;
     QMenu *menuUse_Lights;
     QMenu *menuOptions;
+    QMenu *menuChange_Modes;
     QMenu *menuAbout;
     QMenu *menuSets;
     QMenu *menuDoodad_Set;
@@ -168,13 +173,26 @@ public:
     QMenu *menuNPC;
     QMenu *menuImage;
     QStatusBar *statusBar;
-    QDockWidget *FileListDockWidget;
+    QDockWidget *ViewerFileListDockWidget;
     QWidget *FileListDockWidgetContents;
-    QTreeWidget *WoWFileTree;
-    QComboBox *FileTypeSelector;
-    QLineEdit *FilterEditBox;
+    QTreeWidget *ViewerWoWFileTree;
+    QComboBox *ViewerFileTypeSelector;
+    QLineEdit *ViewerFilterEditBox;
     QLabel *Filterlabel;
-    QPushButton *ClearFilterButton;
+    QPushButton *ViewerClearFilterButton;
+    QDockWidget *ViewerAnimToolsdockWidget;
+    QWidget *dockWidgetContents;
+    QComboBox *ViewerAnimCtrl_AnimList;
+    QLabel *AnimListlabel;
+    QLabel *CurrentFramelabel;
+    QLabel *ViewerAnimCtrl_CurrentFrame;
+    QSlider *CurrentFrameCtrl;
+    QLabel *AnimSpeedlabel;
+    QLabel *AnimCurrentSpeed;
+    QPushButton *AnimButton_Play;
+    QPushButton *AnimButton_Pause;
+    QPushButton *AnimButton_Stop;
+    QSlider *CurrentSpeedCtrl;
 
     void setupUi(QMainWindow *Main_Window_Viewer)
     {
@@ -279,8 +297,8 @@ public:
         QIcon icon2;
         icon2.addFile(QString::fromUtf8(":/Resources/Images/Character_Save.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionSave_Character->setIcon(icon2);
-        actionRandomize_Character = new QAction(Main_Window_Viewer);
-        actionRandomize_Character->setObjectName(QString::fromUtf8("actionRandomize_Character"));
+        actionImportArmoryCharacter = new QAction(Main_Window_Viewer);
+        actionImportArmoryCharacter->setObjectName(QString::fromUtf8("actionImportArmoryCharacter"));
         actionLoad_Equipment = new QAction(Main_Window_Viewer);
         actionLoad_Equipment->setObjectName(QString::fromUtf8("actionLoad_Equipment"));
         actionSave_Equipment = new QAction(Main_Window_Viewer);
@@ -355,8 +373,8 @@ public:
         actionBackground_Color->setObjectName(QString::fromUtf8("actionBackground_Color"));
         actionBackground_Image = new QAction(Main_Window_Viewer);
         actionBackground_Image->setObjectName(QString::fromUtf8("actionBackground_Image"));
-        actionSkybox = new QAction(Main_Window_Viewer);
-        actionSkybox->setObjectName(QString::fromUtf8("actionSkybox"));
+        actionLoadSkybox = new QAction(Main_Window_Viewer);
+        actionLoadSkybox->setObjectName(QString::fromUtf8("actionLoadSkybox"));
         actionShow_Grid = new QAction(Main_Window_Viewer);
         actionShow_Grid->setObjectName(QString::fromUtf8("actionShow_Grid"));
         actionShow_Grid->setCheckable(true);
@@ -468,11 +486,18 @@ public:
         actionImage_ShowAlpha->setCheckable(true);
         actionDisplayImageInfo = new QAction(Main_Window_Viewer);
         actionDisplayImageInfo->setObjectName(QString::fromUtf8("actionDisplayImageInfo"));
+        actionMode_Viewer = new QAction(Main_Window_Viewer);
+        actionMode_Viewer->setObjectName(QString::fromUtf8("actionMode_Viewer"));
+        actionMode_Viewer->setCheckable(true);
+        actionMode_Viewer->setChecked(true);
+        actionMode_Cinema = new QAction(Main_Window_Viewer);
+        actionMode_Cinema->setObjectName(QString::fromUtf8("actionMode_Cinema"));
+        actionMode_Cinema->setCheckable(true);
         centralWidget = new QWidget(Main_Window_Viewer);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         layoutWidget = new QWidget(centralWidget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 10, 147, 180));
+        layoutWidget->setGeometry(QRect(10, 10, 182, 203));
         gridLayout = new QGridLayout(layoutWidget);
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
@@ -481,43 +506,49 @@ public:
         rBtn_IsChar = new QRadioButton(layoutWidget);
         rBtn_IsChar->setObjectName(QString::fromUtf8("rBtn_IsChar"));
 
-        gridLayout->addWidget(rBtn_IsChar, 1, 0, 1, 1);
+        gridLayout->addWidget(rBtn_IsChar, 2, 0, 1, 1);
 
         rBtn_IsNPC = new QRadioButton(layoutWidget);
         rBtn_IsNPC->setObjectName(QString::fromUtf8("rBtn_IsNPC"));
 
-        gridLayout->addWidget(rBtn_IsNPC, 2, 0, 1, 1);
+        gridLayout->addWidget(rBtn_IsNPC, 3, 0, 1, 1);
 
         rBtn_IsWMO = new QRadioButton(layoutWidget);
         rBtn_IsWMO->setObjectName(QString::fromUtf8("rBtn_IsWMO"));
 
-        gridLayout->addWidget(rBtn_IsWMO, 4, 0, 1, 1);
+        gridLayout->addWidget(rBtn_IsWMO, 5, 0, 1, 1);
 
         rBtn_IsADT = new QRadioButton(layoutWidget);
         rBtn_IsADT->setObjectName(QString::fromUtf8("rBtn_IsADT"));
 
-        gridLayout->addWidget(rBtn_IsADT, 5, 0, 1, 1);
+        gridLayout->addWidget(rBtn_IsADT, 6, 0, 1, 1);
 
         rBtn_IsTexture = new QRadioButton(layoutWidget);
         rBtn_IsTexture->setObjectName(QString::fromUtf8("rBtn_IsTexture"));
 
-        gridLayout->addWidget(rBtn_IsTexture, 6, 0, 1, 1);
+        gridLayout->addWidget(rBtn_IsTexture, 7, 0, 1, 1);
 
         rBtn_NoModel = new QRadioButton(layoutWidget);
         rBtn_NoModel->setObjectName(QString::fromUtf8("rBtn_NoModel"));
-        rBtn_NoModel->setChecked(true);
+        rBtn_NoModel->setChecked(false);
 
-        gridLayout->addWidget(rBtn_NoModel, 0, 0, 1, 1);
+        gridLayout->addWidget(rBtn_NoModel, 1, 0, 1, 1);
 
         rBtn_IsSound = new QRadioButton(layoutWidget);
         rBtn_IsSound->setObjectName(QString::fromUtf8("rBtn_IsSound"));
 
-        gridLayout->addWidget(rBtn_IsSound, 7, 0, 1, 1);
+        gridLayout->addWidget(rBtn_IsSound, 8, 0, 1, 1);
 
         rBtn_IsItem = new QRadioButton(layoutWidget);
         rBtn_IsItem->setObjectName(QString::fromUtf8("rBtn_IsItem"));
 
-        gridLayout->addWidget(rBtn_IsItem, 3, 0, 1, 1);
+        gridLayout->addWidget(rBtn_IsItem, 4, 0, 1, 1);
+
+        rBtn_WoWNotLoaded = new QRadioButton(layoutWidget);
+        rBtn_WoWNotLoaded->setObjectName(QString::fromUtf8("rBtn_WoWNotLoaded"));
+        rBtn_WoWNotLoaded->setChecked(true);
+
+        gridLayout->addWidget(rBtn_WoWNotLoaded, 0, 0, 1, 1);
 
         Main_Window_Viewer->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(Main_Window_Viewer);
@@ -539,6 +570,8 @@ public:
         menuUse_Lights->setObjectName(QString::fromUtf8("menuUse_Lights"));
         menuOptions = new QMenu(menuBar);
         menuOptions->setObjectName(QString::fromUtf8("menuOptions"));
+        menuChange_Modes = new QMenu(menuOptions);
+        menuChange_Modes->setObjectName(QString::fromUtf8("menuChange_Modes"));
         menuAbout = new QMenu(menuBar);
         menuAbout->setObjectName(QString::fromUtf8("menuAbout"));
         menuSets = new QMenu(menuBar);
@@ -571,21 +604,21 @@ public:
         statusBar->setAutoFillBackground(true);
         statusBar->setSizeGripEnabled(false);
         Main_Window_Viewer->setStatusBar(statusBar);
-        FileListDockWidget = new QDockWidget(Main_Window_Viewer);
-        FileListDockWidget->setObjectName(QString::fromUtf8("FileListDockWidget"));
+        ViewerFileListDockWidget = new QDockWidget(Main_Window_Viewer);
+        ViewerFileListDockWidget->setObjectName(QString::fromUtf8("ViewerFileListDockWidget"));
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(FileListDockWidget->sizePolicy().hasHeightForWidth());
-        FileListDockWidget->setSizePolicy(sizePolicy);
-        FileListDockWidget->setMinimumSize(QSize(201, 201));
-        FileListDockWidget->setBaseSize(QSize(201, 727));
-        FileListDockWidget->setFloating(false);
-        FileListDockWidget->setFeatures(QDockWidget::AllDockWidgetFeatures);
-        FileListDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+        sizePolicy.setHeightForWidth(ViewerFileListDockWidget->sizePolicy().hasHeightForWidth());
+        ViewerFileListDockWidget->setSizePolicy(sizePolicy);
+        ViewerFileListDockWidget->setMinimumSize(QSize(201, 201));
+        ViewerFileListDockWidget->setBaseSize(QSize(201, 727));
+        ViewerFileListDockWidget->setFloating(false);
+        ViewerFileListDockWidget->setFeatures(QDockWidget::AllDockWidgetFeatures);
+        ViewerFileListDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
         FileListDockWidgetContents = new QWidget();
         FileListDockWidgetContents->setObjectName(QString::fromUtf8("FileListDockWidgetContents"));
-        WoWFileTree = new QTreeWidget(FileListDockWidgetContents);
+        ViewerWoWFileTree = new QTreeWidget(FileListDockWidgetContents);
         QFont font;
         font.setBold(true);
         font.setWeight(75);
@@ -593,8 +626,8 @@ public:
         font.setKerning(true);
         QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
         __qtreewidgetitem->setFont(0, font);
-        WoWFileTree->setHeaderItem(__qtreewidgetitem);
-        QTreeWidgetItem *__qtreewidgetitem1 = new QTreeWidgetItem(WoWFileTree);
+        ViewerWoWFileTree->setHeaderItem(__qtreewidgetitem);
+        QTreeWidgetItem *__qtreewidgetitem1 = new QTreeWidgetItem(ViewerWoWFileTree);
         QTreeWidgetItem *__qtreewidgetitem2 = new QTreeWidgetItem(__qtreewidgetitem1);
         QTreeWidgetItem *__qtreewidgetitem3 = new QTreeWidgetItem(__qtreewidgetitem2);
         new QTreeWidgetItem(__qtreewidgetitem3);
@@ -605,74 +638,145 @@ public:
         new QTreeWidgetItem(__qtreewidgetitem6);
         QTreeWidgetItem *__qtreewidgetitem7 = new QTreeWidgetItem(__qtreewidgetitem5);
         new QTreeWidgetItem(__qtreewidgetitem7);
-        QTreeWidgetItem *__qtreewidgetitem8 = new QTreeWidgetItem(WoWFileTree);
+        QTreeWidgetItem *__qtreewidgetitem8 = new QTreeWidgetItem(ViewerWoWFileTree);
         QTreeWidgetItem *__qtreewidgetitem9 = new QTreeWidgetItem(__qtreewidgetitem8);
         new QTreeWidgetItem(__qtreewidgetitem9);
         new QTreeWidgetItem(__qtreewidgetitem9);
-        QTreeWidgetItem *__qtreewidgetitem10 = new QTreeWidgetItem(WoWFileTree);
+        QTreeWidgetItem *__qtreewidgetitem10 = new QTreeWidgetItem(ViewerWoWFileTree);
         QTreeWidgetItem *__qtreewidgetitem11 = new QTreeWidgetItem(__qtreewidgetitem10);
         new QTreeWidgetItem(__qtreewidgetitem11);
-        WoWFileTree->setObjectName(QString::fromUtf8("WoWFileTree"));
-        WoWFileTree->setGeometry(QRect(0, 48, 201, 611));
-        WoWFileTree->setMinimumSize(QSize(101, 101));
-        WoWFileTree->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
+        ViewerWoWFileTree->setObjectName(QString::fromUtf8("ViewerWoWFileTree"));
+        ViewerWoWFileTree->setGeometry(QRect(0, 48, 201, 551));
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy1.setHorizontalStretch(1);
+        sizePolicy1.setVerticalStretch(2);
+        sizePolicy1.setHeightForWidth(ViewerWoWFileTree->sizePolicy().hasHeightForWidth());
+        ViewerWoWFileTree->setSizePolicy(sizePolicy1);
+        ViewerWoWFileTree->setMinimumSize(QSize(101, 101));
+        ViewerWoWFileTree->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
 "alternate-background-color: rgb(229, 228, 242);"));
-        WoWFileTree->setFrameShadow(QFrame::Sunken);
-        WoWFileTree->setLineWidth(1);
-        WoWFileTree->setEditTriggers(QAbstractItemView::CurrentChanged);
-        WoWFileTree->setProperty("showDropIndicator", QVariant(true));
-        WoWFileTree->setAlternatingRowColors(true);
-        WoWFileTree->setSelectionBehavior(QAbstractItemView::SelectRows);
-        WoWFileTree->setRootIsDecorated(true);
-        WoWFileTree->setItemsExpandable(true);
-        WoWFileTree->setAnimated(false);
-        WoWFileTree->setHeaderHidden(true);
-        FileTypeSelector = new QComboBox(FileListDockWidgetContents);
-        FileTypeSelector->setObjectName(QString::fromUtf8("FileTypeSelector"));
-        FileTypeSelector->setGeometry(QRect(0, 0, 201, 22));
-        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(FileTypeSelector->sizePolicy().hasHeightForWidth());
-        FileTypeSelector->setSizePolicy(sizePolicy1);
-        FileTypeSelector->setMinimumSize(QSize(101, 0));
-        FilterEditBox = new QLineEdit(FileListDockWidgetContents);
-        FilterEditBox->setObjectName(QString::fromUtf8("FilterEditBox"));
-        FilterEditBox->setGeometry(QRect(27, 25, 131, 20));
-        sizePolicy1.setHeightForWidth(FilterEditBox->sizePolicy().hasHeightForWidth());
-        FilterEditBox->setSizePolicy(sizePolicy1);
-        FilterEditBox->setMinimumSize(QSize(0, 20));
-        FilterEditBox->setMaximumSize(QSize(16777215, 20));
-        FilterEditBox->setBaseSize(QSize(0, 20));
-        FilterEditBox->setContextMenuPolicy(Qt::DefaultContextMenu);
-        FilterEditBox->setAcceptDrops(false);
-        FilterEditBox->setAutoFillBackground(false);
+        ViewerWoWFileTree->setFrameShadow(QFrame::Sunken);
+        ViewerWoWFileTree->setLineWidth(1);
+        ViewerWoWFileTree->setEditTriggers(QAbstractItemView::CurrentChanged);
+        ViewerWoWFileTree->setProperty("showDropIndicator", QVariant(true));
+        ViewerWoWFileTree->setAlternatingRowColors(true);
+        ViewerWoWFileTree->setSelectionBehavior(QAbstractItemView::SelectRows);
+        ViewerWoWFileTree->setRootIsDecorated(true);
+        ViewerWoWFileTree->setItemsExpandable(true);
+        ViewerWoWFileTree->setAnimated(false);
+        ViewerWoWFileTree->setHeaderHidden(true);
+        ViewerFileTypeSelector = new QComboBox(FileListDockWidgetContents);
+        ViewerFileTypeSelector->setObjectName(QString::fromUtf8("ViewerFileTypeSelector"));
+        ViewerFileTypeSelector->setGeometry(QRect(0, 0, 201, 22));
+        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(ViewerFileTypeSelector->sizePolicy().hasHeightForWidth());
+        ViewerFileTypeSelector->setSizePolicy(sizePolicy2);
+        ViewerFileTypeSelector->setMinimumSize(QSize(101, 0));
+        ViewerFilterEditBox = new QLineEdit(FileListDockWidgetContents);
+        ViewerFilterEditBox->setObjectName(QString::fromUtf8("ViewerFilterEditBox"));
+        ViewerFilterEditBox->setGeometry(QRect(27, 25, 131, 20));
+        sizePolicy2.setHeightForWidth(ViewerFilterEditBox->sizePolicy().hasHeightForWidth());
+        ViewerFilterEditBox->setSizePolicy(sizePolicy2);
+        ViewerFilterEditBox->setMinimumSize(QSize(0, 20));
+        ViewerFilterEditBox->setMaximumSize(QSize(16777215, 20));
+        ViewerFilterEditBox->setBaseSize(QSize(0, 20));
+        ViewerFilterEditBox->setContextMenuPolicy(Qt::DefaultContextMenu);
+        ViewerFilterEditBox->setAcceptDrops(false);
+        ViewerFilterEditBox->setAutoFillBackground(false);
         Filterlabel = new QLabel(FileListDockWidgetContents);
         Filterlabel->setObjectName(QString::fromUtf8("Filterlabel"));
         Filterlabel->setGeometry(QRect(3, 26, 31, 16));
-        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(Filterlabel->sizePolicy().hasHeightForWidth());
-        Filterlabel->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy3(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(Filterlabel->sizePolicy().hasHeightForWidth());
+        Filterlabel->setSizePolicy(sizePolicy3);
         Filterlabel->setMaximumSize(QSize(31, 16));
-        ClearFilterButton = new QPushButton(FileListDockWidgetContents);
-        ClearFilterButton->setObjectName(QString::fromUtf8("ClearFilterButton"));
-        ClearFilterButton->setGeometry(QRect(160, 25, 40, 20));
-        sizePolicy2.setHeightForWidth(ClearFilterButton->sizePolicy().hasHeightForWidth());
-        ClearFilterButton->setSizePolicy(sizePolicy2);
-        ClearFilterButton->setMinimumSize(QSize(40, 20));
-        ClearFilterButton->setMaximumSize(QSize(40, 20));
-        ClearFilterButton->setBaseSize(QSize(40, 20));
-        FileListDockWidget->setWidget(FileListDockWidgetContents);
-        Main_Window_Viewer->addDockWidget(static_cast<Qt::DockWidgetArea>(1), FileListDockWidget);
+        ViewerClearFilterButton = new QPushButton(FileListDockWidgetContents);
+        ViewerClearFilterButton->setObjectName(QString::fromUtf8("ViewerClearFilterButton"));
+        ViewerClearFilterButton->setGeometry(QRect(160, 25, 40, 20));
+        sizePolicy3.setHeightForWidth(ViewerClearFilterButton->sizePolicy().hasHeightForWidth());
+        ViewerClearFilterButton->setSizePolicy(sizePolicy3);
+        ViewerClearFilterButton->setMinimumSize(QSize(40, 20));
+        ViewerClearFilterButton->setMaximumSize(QSize(40, 20));
+        ViewerClearFilterButton->setBaseSize(QSize(40, 20));
+        ViewerFileListDockWidget->setWidget(FileListDockWidgetContents);
+        Main_Window_Viewer->addDockWidget(static_cast<Qt::DockWidgetArea>(1), ViewerFileListDockWidget);
+        ViewerAnimToolsdockWidget = new QDockWidget(Main_Window_Viewer);
+        ViewerAnimToolsdockWidget->setObjectName(QString::fromUtf8("ViewerAnimToolsdockWidget"));
+        ViewerAnimToolsdockWidget->setMinimumSize(QSize(201, 101));
+        ViewerAnimToolsdockWidget->setFloating(false);
+        ViewerAnimToolsdockWidget->setFeatures(QDockWidget::AllDockWidgetFeatures);
+        ViewerAnimToolsdockWidget->setAllowedAreas(Qt::AllDockWidgetAreas);
+        dockWidgetContents = new QWidget();
+        dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
+        ViewerAnimCtrl_AnimList = new QComboBox(dockWidgetContents);
+        ViewerAnimCtrl_AnimList->setObjectName(QString::fromUtf8("ViewerAnimCtrl_AnimList"));
+        ViewerAnimCtrl_AnimList->setGeometry(QRect(5, 20, 196, 22));
+        ViewerAnimCtrl_AnimList->setMinimumSize(QSize(0, 22));
+        ViewerAnimCtrl_AnimList->setMinimumContentsLength(80);
+        AnimListlabel = new QLabel(dockWidgetContents);
+        AnimListlabel->setObjectName(QString::fromUtf8("AnimListlabel"));
+        AnimListlabel->setGeometry(QRect(5, 0, 91, 16));
+        CurrentFramelabel = new QLabel(dockWidgetContents);
+        CurrentFramelabel->setObjectName(QString::fromUtf8("CurrentFramelabel"));
+        CurrentFramelabel->setGeometry(QRect(210, 5, 41, 16));
+        CurrentFramelabel->setMinimumSize(QSize(0, 16));
+        CurrentFramelabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        ViewerAnimCtrl_CurrentFrame = new QLabel(dockWidgetContents);
+        ViewerAnimCtrl_CurrentFrame->setObjectName(QString::fromUtf8("ViewerAnimCtrl_CurrentFrame"));
+        ViewerAnimCtrl_CurrentFrame->setGeometry(QRect(255, 5, 61, 16));
+        ViewerAnimCtrl_CurrentFrame->setMinimumSize(QSize(0, 16));
+        CurrentFrameCtrl = new QSlider(dockWidgetContents);
+        CurrentFrameCtrl->setObjectName(QString::fromUtf8("CurrentFrameCtrl"));
+        CurrentFrameCtrl->setGeometry(QRect(210, 25, 196, 19));
+        CurrentFrameCtrl->setMinimumSize(QSize(0, 16));
+        CurrentFrameCtrl->setMaximum(100);
+        CurrentFrameCtrl->setOrientation(Qt::Horizontal);
+        CurrentFrameCtrl->setInvertedControls(false);
+        CurrentFrameCtrl->setTickPosition(QSlider::TicksAbove);
+        CurrentFrameCtrl->setTickInterval(10);
+        AnimSpeedlabel = new QLabel(dockWidgetContents);
+        AnimSpeedlabel->setObjectName(QString::fromUtf8("AnimSpeedlabel"));
+        AnimSpeedlabel->setGeometry(QRect(210, 45, 46, 16));
+        AnimSpeedlabel->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        AnimCurrentSpeed = new QLabel(dockWidgetContents);
+        AnimCurrentSpeed->setObjectName(QString::fromUtf8("AnimCurrentSpeed"));
+        AnimCurrentSpeed->setGeometry(QRect(260, 45, 51, 16));
+        AnimCurrentSpeed->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+        AnimButton_Play = new QPushButton(dockWidgetContents);
+        AnimButton_Play->setObjectName(QString::fromUtf8("AnimButton_Play"));
+        AnimButton_Play->setGeometry(QRect(5, 45, 61, 21));
+        AnimButton_Pause = new QPushButton(dockWidgetContents);
+        AnimButton_Pause->setObjectName(QString::fromUtf8("AnimButton_Pause"));
+        AnimButton_Pause->setGeometry(QRect(70, 45, 61, 21));
+        AnimButton_Stop = new QPushButton(dockWidgetContents);
+        AnimButton_Stop->setObjectName(QString::fromUtf8("AnimButton_Stop"));
+        AnimButton_Stop->setGeometry(QRect(135, 45, 66, 21));
+        CurrentSpeedCtrl = new QSlider(dockWidgetContents);
+        CurrentSpeedCtrl->setObjectName(QString::fromUtf8("CurrentSpeedCtrl"));
+        CurrentSpeedCtrl->setGeometry(QRect(210, 60, 196, 19));
+        CurrentSpeedCtrl->setMinimumSize(QSize(0, 16));
+        CurrentSpeedCtrl->setMinimum(10);
+        CurrentSpeedCtrl->setMaximum(400);
+        CurrentSpeedCtrl->setSingleStep(10);
+        CurrentSpeedCtrl->setPageStep(25);
+        CurrentSpeedCtrl->setValue(100);
+        CurrentSpeedCtrl->setOrientation(Qt::Horizontal);
+        CurrentSpeedCtrl->setInvertedControls(false);
+        CurrentSpeedCtrl->setTickPosition(QSlider::TicksAbove);
+        CurrentSpeedCtrl->setTickInterval(50);
+        ViewerAnimToolsdockWidget->setWidget(dockWidgetContents);
+        Main_Window_Viewer->addDockWidget(static_cast<Qt::DockWidgetArea>(8), ViewerAnimToolsdockWidget);
 #ifndef QT_NO_SHORTCUT
-        Filterlabel->setBuddy(FilterEditBox);
+        Filterlabel->setBuddy(ViewerFilterEditBox);
 #endif // QT_NO_SHORTCUT
-        QWidget::setTabOrder(FileTypeSelector, FilterEditBox);
-        QWidget::setTabOrder(FilterEditBox, ClearFilterButton);
-        QWidget::setTabOrder(ClearFilterButton, WoWFileTree);
-        QWidget::setTabOrder(WoWFileTree, rBtn_NoModel);
+        QWidget::setTabOrder(ViewerFileTypeSelector, ViewerFilterEditBox);
+        QWidget::setTabOrder(ViewerFilterEditBox, ViewerClearFilterButton);
+        QWidget::setTabOrder(ViewerClearFilterButton, ViewerWoWFileTree);
+        QWidget::setTabOrder(ViewerWoWFileTree, rBtn_NoModel);
         QWidget::setTabOrder(rBtn_NoModel, rBtn_IsChar);
         QWidget::setTabOrder(rBtn_IsChar, rBtn_IsNPC);
         QWidget::setTabOrder(rBtn_IsNPC, rBtn_IsWMO);
@@ -692,7 +796,7 @@ public:
         menuFile->addAction(actionLoad_World_of_Wacraft);
         menuFile->addSeparator();
         menuFile->addAction(actionLoad_Character);
-        menuFile->addAction(actionRandomize_Character);
+        menuFile->addAction(actionImportArmoryCharacter);
         menuFile->addAction(actionLoad_NPC);
         menuFile->addSeparator();
         menuFile->addAction(actionSave_File);
@@ -758,6 +862,8 @@ public:
         menuUse_Lights->addAction(actionLightType_Dynamic);
         menuUse_Lights->addAction(actionLightType_Ambient);
         menuUse_Lights->addAction(actionLightType_ModelOnly);
+        menuOptions->addAction(menuChange_Modes->menuAction());
+        menuOptions->addSeparator();
         menuOptions->addAction(actionSettings);
         menuOptions->addSeparator();
         menuOptions->addAction(actionExporter_Settings_2);
@@ -765,6 +871,8 @@ public:
         menuOptions->addSeparator();
         menuOptions->addAction(actionUpdate_Databases);
         menuOptions->addAction(actionUpdate_Program);
+        menuChange_Modes->addAction(actionMode_Viewer);
+        menuChange_Modes->addAction(actionMode_Cinema);
         menuAbout->addAction(actionHelp);
         menuAbout->addSeparator();
         menuAbout->addAction(actionAbout);
@@ -789,7 +897,7 @@ public:
         menuView->addSeparator();
         menuView->addAction(actionBackground_Color);
         menuView->addAction(actionBackground_Image);
-        menuView->addAction(actionSkybox);
+        menuView->addAction(actionLoadSkybox);
         menuView->addSeparator();
         menuView->addAction(actionShow_Grid);
         menuView->addAction(actionShow_Mask);
@@ -834,7 +942,7 @@ public:
         menuImage->addAction(actionImage_ShowAlpha);
 
         retranslateUi(Main_Window_Viewer);
-        QObject::connect(ClearFilterButton, SIGNAL(clicked()), FilterEditBox, SLOT(clear()));
+        QObject::connect(ViewerClearFilterButton, SIGNAL(clicked()), ViewerFilterEditBox, SLOT(clear()));
 
         QMetaObject::connectSlotsByName(Main_Window_Viewer);
     } // setupUi
@@ -899,7 +1007,7 @@ public:
         actionLoad_Character->setShortcut(QApplication::translate("Main_Window_Viewer", "F5", 0, QApplication::UnicodeUTF8));
         actionSave_Character->setText(QApplication::translate("Main_Window_Viewer", "Save Character...", 0, QApplication::UnicodeUTF8));
         actionSave_Character->setShortcut(QApplication::translate("Main_Window_Viewer", "F6", 0, QApplication::UnicodeUTF8));
-        actionRandomize_Character->setText(QApplication::translate("Main_Window_Viewer", "Import &Armory Character...", 0, QApplication::UnicodeUTF8));
+        actionImportArmoryCharacter->setText(QApplication::translate("Main_Window_Viewer", "Import &Armory Character...", 0, QApplication::UnicodeUTF8));
         actionLoad_Equipment->setText(QApplication::translate("Main_Window_Viewer", "Load Equipment...", 0, QApplication::UnicodeUTF8));
         actionLoad_Equipment->setShortcut(QApplication::translate("Main_Window_Viewer", "F7", 0, QApplication::UnicodeUTF8));
         actionSave_Equipment->setText(QApplication::translate("Main_Window_Viewer", "Save Equipment...", 0, QApplication::UnicodeUTF8));
@@ -934,29 +1042,32 @@ public:
         actionLoad_a_Mount->setText(QApplication::translate("Main_Window_Viewer", "Load a Mount...", 0, QApplication::UnicodeUTF8));
         actionLoad_NPC->setText(QApplication::translate("Main_Window_Viewer", "Load &NPC...", 0, QApplication::UnicodeUTF8));
         actionAdjust_Lighting->setText(QApplication::translate("Main_Window_Viewer", "&Edit Lighting...", 0, QApplication::UnicodeUTF8));
-        actionShowCtrl_Animation->setText(QApplication::translate("Main_Window_Viewer", "Animation", 0, QApplication::UnicodeUTF8));
+        actionShowCtrl_Animation->setText(QApplication::translate("Main_Window_Viewer", "&Animation", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         actionShowCtrl_Animation->setToolTip(QApplication::translate("Main_Window_Viewer", "Show Animation Controls", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
-        actionShowCtrl_Character->setText(QApplication::translate("Main_Window_Viewer", "Character", 0, QApplication::UnicodeUTF8));
+        actionShowCtrl_Character->setText(QApplication::translate("Main_Window_Viewer", "&Character", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         actionShowCtrl_Character->setToolTip(QApplication::translate("Main_Window_Viewer", "Show Character Controls", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
-        actionShowCtrl_Lighting->setText(QApplication::translate("Main_Window_Viewer", "Lighting", 0, QApplication::UnicodeUTF8));
+        actionShowCtrl_Lighting->setText(QApplication::translate("Main_Window_Viewer", "&Lighting", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         actionShowCtrl_Lighting->setToolTip(QApplication::translate("Main_Window_Viewer", "Show Lighting Controls", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
-        actionShowCtrl_Model->setText(QApplication::translate("Main_Window_Viewer", "Model", 0, QApplication::UnicodeUTF8));
+        actionShowCtrl_Model->setText(QApplication::translate("Main_Window_Viewer", "&Model", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         actionShowCtrl_Model->setToolTip(QApplication::translate("Main_Window_Viewer", "Show Model Controls", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         actionModel_Bank->setText(QApplication::translate("Main_Window_Viewer", "Model &Bank...", 0, QApplication::UnicodeUTF8));
         actionSave_to_Model_Bank->setText(QApplication::translate("Main_Window_Viewer", "Save to Model Bank...", 0, QApplication::UnicodeUTF8));
         actionSave_to_Model_Bank->setShortcut(QApplication::translate("Main_Window_Viewer", "Alt+S", 0, QApplication::UnicodeUTF8));
-        actionShowCtrl_FileList->setText(QApplication::translate("Main_Window_Viewer", "File List", 0, QApplication::UnicodeUTF8));
+        actionShowCtrl_FileList->setText(QApplication::translate("Main_Window_Viewer", "&File List", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        actionShowCtrl_FileList->setToolTip(QApplication::translate("Main_Window_Viewer", "Show the File List", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
         actionBackground_Color->setText(QApplication::translate("Main_Window_Viewer", "Background Color...", 0, QApplication::UnicodeUTF8));
         actionBackground_Image->setText(QApplication::translate("Main_Window_Viewer", "Background Image...", 0, QApplication::UnicodeUTF8));
-        actionSkybox->setText(QApplication::translate("Main_Window_Viewer", "Load Skybox...", 0, QApplication::UnicodeUTF8));
+        actionLoadSkybox->setText(QApplication::translate("Main_Window_Viewer", "Load Skybox...", 0, QApplication::UnicodeUTF8));
         actionShow_Grid->setText(QApplication::translate("Main_Window_Viewer", "Show Grid", 0, QApplication::UnicodeUTF8));
         actionShow_Mask->setText(QApplication::translate("Main_Window_Viewer", "Show Mask", 0, QApplication::UnicodeUTF8));
         actionCam_Perspective->setText(QApplication::translate("Main_Window_Viewer", "&Perspective", 0, QApplication::UnicodeUTF8));
@@ -1038,14 +1149,22 @@ public:
         actionCam_Additional->setText(QApplication::translate("Main_Window_Viewer", "(Additional Cameras)", 0, QApplication::UnicodeUTF8));
         actionImage_ShowAlpha->setText(QApplication::translate("Main_Window_Viewer", "Show &Alpha", 0, QApplication::UnicodeUTF8));
         actionDisplayImageInfo->setText(QApplication::translate("Main_Window_Viewer", "&Display Info", 0, QApplication::UnicodeUTF8));
+        actionMode_Viewer->setText(QApplication::translate("Main_Window_Viewer", "&Viewer Mode", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        actionMode_Viewer->setToolTip(QApplication::translate("Main_Window_Viewer", "Switch to the classic Viewer Mode", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        actionMode_Viewer->setShortcut(QApplication::translate("Main_Window_Viewer", "Alt+V", 0, QApplication::UnicodeUTF8));
+        actionMode_Cinema->setText(QApplication::translate("Main_Window_Viewer", "&Cinema Mode", 0, QApplication::UnicodeUTF8));
+        actionMode_Cinema->setShortcut(QApplication::translate("Main_Window_Viewer", "Alt+C", 0, QApplication::UnicodeUTF8));
         rBtn_IsChar->setText(QApplication::translate("Main_Window_Viewer", "File is Character", 0, QApplication::UnicodeUTF8));
         rBtn_IsNPC->setText(QApplication::translate("Main_Window_Viewer", "File is Creature/NPC", 0, QApplication::UnicodeUTF8));
         rBtn_IsWMO->setText(QApplication::translate("Main_Window_Viewer", "File is WMO/Set", 0, QApplication::UnicodeUTF8));
         rBtn_IsADT->setText(QApplication::translate("Main_Window_Viewer", "File is ADT/Landscape", 0, QApplication::UnicodeUTF8));
         rBtn_IsTexture->setText(QApplication::translate("Main_Window_Viewer", "File is an Image", 0, QApplication::UnicodeUTF8));
-        rBtn_NoModel->setText(QApplication::translate("Main_Window_Viewer", "No File Loaded", 0, QApplication::UnicodeUTF8));
+        rBtn_NoModel->setText(QApplication::translate("Main_Window_Viewer", "WoW Loaded, No File Selected", 0, QApplication::UnicodeUTF8));
         rBtn_IsSound->setText(QApplication::translate("Main_Window_Viewer", "File is an Audio/Sound file", 0, QApplication::UnicodeUTF8));
         rBtn_IsItem->setText(QApplication::translate("Main_Window_Viewer", "File is an Item", 0, QApplication::UnicodeUTF8));
+        rBtn_WoWNotLoaded->setText(QApplication::translate("Main_Window_Viewer", "WoW Not Loaded", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("Main_Window_Viewer", "&File", 0, QApplication::UnicodeUTF8));
         menuExport_Models->setTitle(QApplication::translate("Main_Window_Viewer", "&Export Models", 0, QApplication::UnicodeUTF8));
         menuCharacter->setTitle(QApplication::translate("Main_Window_Viewer", "&Character", 0, QApplication::UnicodeUTF8));
@@ -1053,6 +1172,7 @@ public:
         menuLighting->setTitle(QApplication::translate("Main_Window_Viewer", "L&ighting", 0, QApplication::UnicodeUTF8));
         menuUse_Lights->setTitle(QApplication::translate("Main_Window_Viewer", "&Use Lights", 0, QApplication::UnicodeUTF8));
         menuOptions->setTitle(QApplication::translate("Main_Window_Viewer", "Options", 0, QApplication::UnicodeUTF8));
+        menuChange_Modes->setTitle(QApplication::translate("Main_Window_Viewer", "Change &Modes", 0, QApplication::UnicodeUTF8));
         menuAbout->setTitle(QApplication::translate("Main_Window_Viewer", "&About", 0, QApplication::UnicodeUTF8));
         menuSets->setTitle(QApplication::translate("Main_Window_Viewer", "&Set", 0, QApplication::UnicodeUTF8));
         menuDoodad_Set->setTitle(QApplication::translate("Main_Window_Viewer", "Doodad Set", 0, QApplication::UnicodeUTF8));
@@ -1067,13 +1187,13 @@ public:
         menuSet_Canvas_Size->setTitle(QApplication::translate("Main_Window_Viewer", "Set Canvas Size", 0, QApplication::UnicodeUTF8));
         menuNPC->setTitle(QApplication::translate("Main_Window_Viewer", "Creature/NPC", 0, QApplication::UnicodeUTF8));
         menuImage->setTitle(QApplication::translate("Main_Window_Viewer", "&Image", 0, QApplication::UnicodeUTF8));
-        FileListDockWidget->setWindowTitle(QApplication::translate("Main_Window_Viewer", "WoW Files", "WoWFiles", QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem = WoWFileTree->headerItem();
+        ViewerFileListDockWidget->setWindowTitle(QApplication::translate("Main_Window_Viewer", "WoW Files", "WoWFiles", QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem = ViewerWoWFileTree->headerItem();
         ___qtreewidgetitem->setText(0, QApplication::translate("Main_Window_Viewer", "WoW Files", 0, QApplication::UnicodeUTF8));
 
-        const bool __sortingEnabled = WoWFileTree->isSortingEnabled();
-        WoWFileTree->setSortingEnabled(false);
-        QTreeWidgetItem *___qtreewidgetitem1 = WoWFileTree->topLevelItem(0);
+        const bool __sortingEnabled = ViewerWoWFileTree->isSortingEnabled();
+        ViewerWoWFileTree->setSortingEnabled(false);
+        QTreeWidgetItem *___qtreewidgetitem1 = ViewerWoWFileTree->topLevelItem(0);
         ___qtreewidgetitem1->setText(0, QApplication::translate("Main_Window_Viewer", "Character", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem2 = ___qtreewidgetitem1->child(0);
         ___qtreewidgetitem2->setText(0, QApplication::translate("Main_Window_Viewer", "Nightelf", 0, QApplication::UnicodeUTF8));
@@ -1095,7 +1215,7 @@ public:
         ___qtreewidgetitem10->setText(0, QApplication::translate("Main_Window_Viewer", "Male", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem11 = ___qtreewidgetitem10->child(0);
         ___qtreewidgetitem11->setText(0, QApplication::translate("Main_Window_Viewer", "taurenmale.m2", 0, QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem12 = WoWFileTree->topLevelItem(1);
+        QTreeWidgetItem *___qtreewidgetitem12 = ViewerWoWFileTree->topLevelItem(1);
         ___qtreewidgetitem12->setText(0, QApplication::translate("Main_Window_Viewer", "Creature", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem13 = ___qtreewidgetitem12->child(0);
         ___qtreewidgetitem13->setText(0, QApplication::translate("Main_Window_Viewer", "Arthaslichking", 0, QApplication::UnicodeUTF8));
@@ -1103,27 +1223,46 @@ public:
         ___qtreewidgetitem14->setText(0, QApplication::translate("Main_Window_Viewer", "arthaslichking.m2", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem15 = ___qtreewidgetitem13->child(1);
         ___qtreewidgetitem15->setText(0, QApplication::translate("Main_Window_Viewer", "arthaslichking_unarmed.m2", 0, QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem16 = WoWFileTree->topLevelItem(2);
+        QTreeWidgetItem *___qtreewidgetitem16 = ViewerWoWFileTree->topLevelItem(2);
         ___qtreewidgetitem16->setText(0, QApplication::translate("Main_Window_Viewer", "Items", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem17 = ___qtreewidgetitem16->child(0);
         ___qtreewidgetitem17->setText(0, QApplication::translate("Main_Window_Viewer", "Sword", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem18 = ___qtreewidgetitem17->child(0);
         ___qtreewidgetitem18->setText(0, QApplication::translate("Main_Window_Viewer", "sword.m2", 0, QApplication::UnicodeUTF8));
-        WoWFileTree->setSortingEnabled(__sortingEnabled);
+        ViewerWoWFileTree->setSortingEnabled(__sortingEnabled);
 
-        FileTypeSelector->clear();
-        FileTypeSelector->insertItems(0, QStringList()
+        ViewerFileTypeSelector->clear();
+        ViewerFileTypeSelector->insertItems(0, QStringList()
          << QApplication::translate("Main_Window_Viewer", "Model (M2) Files", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("Main_Window_Viewer", "Set (WMO) Files", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("Main_Window_Viewer", "Landscape (ADT) Files", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("Main_Window_Viewer", "Image (BLP) Files", 0, QApplication::UnicodeUTF8)
          << QApplication::translate("Main_Window_Viewer", "Sound (WAV, OGG, MP3) Files", 0, QApplication::UnicodeUTF8)
         );
-        FilterEditBox->setInputMask(QString());
-        FilterEditBox->setText(QString());
-        FilterEditBox->setPlaceholderText(QString());
+        ViewerFilterEditBox->setInputMask(QString());
+        ViewerFilterEditBox->setText(QString());
+        ViewerFilterEditBox->setPlaceholderText(QString());
         Filterlabel->setText(QApplication::translate("Main_Window_Viewer", "Filter", 0, QApplication::UnicodeUTF8));
-        ClearFilterButton->setText(QApplication::translate("Main_Window_Viewer", "Clear", 0, QApplication::UnicodeUTF8));
+        ViewerClearFilterButton->setText(QApplication::translate("Main_Window_Viewer", "Clear", 0, QApplication::UnicodeUTF8));
+        ViewerAnimToolsdockWidget->setWindowTitle(QApplication::translate("Main_Window_Viewer", "Animation Controls", 0, QApplication::UnicodeUTF8));
+        ViewerAnimCtrl_AnimList->clear();
+        ViewerAnimCtrl_AnimList->insertItems(0, QStringList()
+         << QApplication::translate("Main_Window_Viewer", "Stand 0", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Main_Window_Viewer", "Stand 1", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Main_Window_Viewer", "Walk", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Main_Window_Viewer", "Sit", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Main_Window_Viewer", "Run", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Main_Window_Viewer", "Bark", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("Main_Window_Viewer", "Wave", 0, QApplication::UnicodeUTF8)
+        );
+        AnimListlabel->setText(QApplication::translate("Main_Window_Viewer", "Animation List", 0, QApplication::UnicodeUTF8));
+        CurrentFramelabel->setText(QApplication::translate("Main_Window_Viewer", "Frame:", 0, QApplication::UnicodeUTF8));
+        ViewerAnimCtrl_CurrentFrame->setText(QApplication::translate("Main_Window_Viewer", "0", 0, QApplication::UnicodeUTF8));
+        AnimSpeedlabel->setText(QApplication::translate("Main_Window_Viewer", "Speed:", 0, QApplication::UnicodeUTF8));
+        AnimCurrentSpeed->setText(QApplication::translate("Main_Window_Viewer", "1.0", 0, QApplication::UnicodeUTF8));
+        AnimButton_Play->setText(QApplication::translate("Main_Window_Viewer", "Play", 0, QApplication::UnicodeUTF8));
+        AnimButton_Pause->setText(QApplication::translate("Main_Window_Viewer", "Pause", 0, QApplication::UnicodeUTF8));
+        AnimButton_Stop->setText(QApplication::translate("Main_Window_Viewer", "Stop", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(Main_Window_Viewer);
     } // retranslateUi
 

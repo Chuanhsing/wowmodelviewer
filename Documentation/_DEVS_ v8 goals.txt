@@ -9,7 +9,7 @@ PRIMARY GOALS:
 ===============================
 - Rewrite WMV from the ground up, using the Qt Framework.
 - Make WMV completely backwards compatible. IE: Able to load data from any WoW version.
-- Add Multiple "Modes" that WMV can operate in. Defaults to classic "Viewer" mode.
+- Add Multiple "Modes" that WMV can operate in. Defaults to the classic "Viewer" mode.
 - Add a Cinema Mode that changes WMV into more of a Machinima tool, and changes the main Viewer into a Camera with controls.
 - Redesign internal classes to help with forwards/backwards Compatibility issues, Displaying, and Exporting the model.
 - Allow for the display of multiple M2 models at once, including placement controls, and animation instance controllers.
@@ -26,8 +26,9 @@ SECONDARY GOALS:
 - Functionality when browsing items, to add them to the equipable items list.
 - Add a "Scripter" to the Cinema Mode. Lets the user play a list of animations with custom animation settings.
 - Allow Scripter to load and play an audio file to script animation to.
-- Allow Scripter to animate Model position and rotation.
+- Allow Scripter to animate a Model's position and rotation.
 - Allow Scripter to animate the Camera's/Viewer's position and rotation.
+- Add a list of stored WoW directories, for quick and easy switching. (No need to load up a different version of WoW and read the registery!)
 
 
 ===============================
@@ -36,4 +37,4 @@ FUTURE GOALS:
 - Update all the exporters to take full advantage of that format's capabilities.
 - Add Collada Exporter.
 - Cross-Platform Video Export, including Alpha-Channel support.
-- Unify many of the reduntant, and common functions.
+- Unify many of the reduntant, and commonly used functions.

@@ -2,6 +2,11 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WoW Model Viewer", "WMV_VC100.vcxproj", "{21A0F0C8-F40F-3C05-A620-84E72DE591DF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C670FCB5-1102-4077-A74D-432210220EEA} = {C670FCB5-1102-4077-A74D-432210220EEA}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exporters", "Exporters\Exporters_VC100.vcxproj", "{C670FCB5-1102-4077-A74D-432210220EEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +24,14 @@ Global
 		{21A0F0C8-F40F-3C05-A620-84E72DE591DF}.Release|Win32.Build.0 = Release|Win32
 		{21A0F0C8-F40F-3C05-A620-84E72DE591DF}.Release|x64.ActiveCfg = Release|x64
 		{21A0F0C8-F40F-3C05-A620-84E72DE591DF}.Release|x64.Build.0 = Release|x64
+		{C670FCB5-1102-4077-A74D-432210220EEA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C670FCB5-1102-4077-A74D-432210220EEA}.Debug|Win32.Build.0 = Debug|Win32
+		{C670FCB5-1102-4077-A74D-432210220EEA}.Debug|x64.ActiveCfg = Debug|x64
+		{C670FCB5-1102-4077-A74D-432210220EEA}.Debug|x64.Build.0 = Debug|x64
+		{C670FCB5-1102-4077-A74D-432210220EEA}.Release|Win32.ActiveCfg = Release|Win32
+		{C670FCB5-1102-4077-A74D-432210220EEA}.Release|Win32.Build.0 = Release|Win32
+		{C670FCB5-1102-4077-A74D-432210220EEA}.Release|x64.ActiveCfg = Release|x64
+		{C670FCB5-1102-4077-A74D-432210220EEA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

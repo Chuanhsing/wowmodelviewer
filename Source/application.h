@@ -4,14 +4,14 @@
 #include <QMainWindow>
 #include <QActionGroup>
 #include <QMenu>
+
+// Be careful of what you #include here. This header is included with the auto-generated
+// moc_application.cpp file, and can sometimes cause linking errors.
 #include "enums.h"
 #include "math\math_base.h"
+#include "Exporters\exporters.h"
+#include "StormLib\src\StormLib.h"
 
-// These are temporarly added, just to test the files.
-// Move these to the proper file when we get to implementing them.
-#include "Model_M2.h"
-#include "Model_WMO.h"
-#include "Model_ADT.h"
 
 namespace Ui {
     class Main_Window_Viewer;
@@ -30,19 +30,26 @@ public:
 	void updateFileList();
     ~WoWModelViewer();
 
+	// Booleans
+	bool isWoWLoaded;		// Is there a version of WoW loaded.
+	bool canReloadWoW;		// If isWoWLoaded == true, are we allowed to reload it? Should only be used if the MPQ list is changed, or we change WoW directories.
+
 private:
     // Groups
     QActionGroup *EyeGlowGroup;
     QActionGroup *LandscapeQualityGroup;
     QActionGroup *LightTypeGroup;
     QActionGroup *CanvasSizeGroup;
+	QActionGroup *ViewerModeGroup;
     QActionGroup *CameraGroup;
     QActionGroup *DoodadSetGroup;
 
 private slots:
     void on_actionInitial_Pose_Only_2_toggled(bool arg1);
     void on_actionInitial_Pose_Only_toggled(bool arg1);
+	void on_actionShowCtrl_FileList_toggled(bool arg1);
 
+	void on_rBtn_WoWNotLoaded_clicked();
     void on_rBtn_NoModel_clicked();
     void on_rBtn_IsChar_clicked();
     void on_rBtn_IsNPC_clicked();
