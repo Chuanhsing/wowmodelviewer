@@ -128,7 +128,7 @@ void FileControl::Init(ModelViewer* mv)
 	wxLogMessage(wxT("Initializing File Controls..."));
 	// Gets the list of files that meet the filter criteria
 	// and puts them into an array to be processed into out file tree
-	content = txtContent->GetValue().MakeLower().Trim();
+	content = txtContent->GetValue().Lower().Trim();
 
 	filterString = filterStrings[filterMode];
 	filterArchive = filterArchives[filterModeMPQ];
@@ -633,7 +633,7 @@ void FileControl::OnTreeSelect(wxTreeEvent &event)
 		ClearCanvas();
 
 		wxString rootfn(data->fn);
-		if (bAlternate && rootfn.StartsWith(wxT("Alternate"), false)) {
+		if (bAlternate && rootfn.Lower().StartsWith(wxT("alternate"))) {
 			rootfn = rootfn.Mid(10);
 		}
 

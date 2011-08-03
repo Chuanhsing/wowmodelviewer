@@ -1510,7 +1510,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 			// Objects
 			Path1 << filename.BeforeLast(SLASH);
 			Name << filename.AfterLast(SLASH);
-			Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+			Path2 << m->name.BeforeLast(SLASH);
 			MakeDirs(Path1,Path2);
 			filename.Empty();
 			filename << Path1 << SLASH << Path2 << SLASH << Name;
@@ -1535,7 +1535,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 
 	// Main Object
 	LWLayer Layer;
-	Layer.Name = wxString(m->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
+	Layer.Name = m->name.AfterLast('\\').BeforeLast('.');
 	Layer.ParentLayer = -1;
 	std::vector<wxString> surfnamearray;
 
@@ -1558,9 +1558,9 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 	size_t counter = 1;
 	if (att != NULL){
 		g_modelViewer->SetStatusText(wxT("Processing Attached Model Files..."));
-		/* Have yet to find an att->model, so skip it until we do.
-		if (att->model){
-		} *//*
+		// Have yet to find an att->model, so skip it until we do.
+		//if (att->model){
+		//}
 		for (size_t c=0; c<att->children.size(); c++) {
 			Attachment *att2 = att->children[c];
 			for (size_t j=0; j<att2->children.size(); j++) {
@@ -1737,7 +1737,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 			// Add Images to Model
 			LWClip ClipImage;
 			// Image Filename
-			wxString Texture = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8);
+			wxString Texture = m->TextureList[p.tex];
 			wxString TexturePath = Texture.BeforeLast(MPQ_SLASH);
 			wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
 
@@ -1790,7 +1790,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 			SaveTexture(ExportName);
 			//SaveTexture2(ClipImage.Filename,ClipImage.Source,wxString(wxT("LWO")),wxString(wxT("tga")));
 
-			LWSurface Surface(matName,wxString(m->TextureList[p.tex].c_str(), wxConvUTF8),SurfImage_Color,LWSurf_Image(),LWSurf_Image(),NULL,Surf_Diff,Surf_Lum,doublesided);
+			LWSurface Surface(matName,m->TextureList[p.tex],SurfImage_Color,LWSurf_Image(),LWSurf_Image(),Vec3D(.0f, .0f, .0f),Surf_Diff,Surf_Lum,doublesided);
 			Object.Surfaces.push_back(Surface);
 
 			// Points
@@ -2040,7 +2040,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 							// Add Images to Model
 							LWClip ClipImage;
 							// Image Filename
-							wxString Texture = wxString(mAttChild->TextureList[p.tex].c_str(), wxConvUTF8);
+							wxString Texture = mAttChild->TextureList[p.tex];
 							wxString TexturePath = Texture.BeforeLast(MPQ_SLASH);
 							wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
 
@@ -2080,7 +2080,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 
 							SaveTexture(ExportName);
 
-							LWSurface Surface(matName,Texture.BeforeLast('.'),SurfImage_Color,LWSurf_Image(),LWSurf_Image(),NULL,Surf_Diff,Surf_Lum,doublesided);
+							LWSurface Surface(matName,Texture.BeforeLast('.'),SurfImage_Color,LWSurf_Image(),LWSurf_Image(),Vec3D(.0f, .0f, .0f),Surf_Diff,Surf_Lum,doublesided);
 							Object.Surfaces.push_back(Surface);
 
 							// Points
@@ -2540,7 +2540,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 
 		Path1 << FileName.BeforeLast(SLASH);
 		Name << FileName.AfterLast(SLASH);
-		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+		Path2 << m->name.BeforeLast(SLASH);
 		MakeDirs(Path1,Path2);
 		FileName.Empty();
 		FileName << Path1 << SLASH << Path2 << SLASH << Name;
@@ -2551,7 +2551,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 
 	// Main Object
 	LWLayer Layer;
-	Layer.Name = wxString(m->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
+	Layer.Name = m->name.AfterLast('\\').BeforeLast('.');
 	Layer.ParentLayer = -1;
 
 	// Bounding Box for the Layer
@@ -2630,7 +2630,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 				matName = matName + wxT("_Dbl");
 			}
 
-			LWSurface Surface(matName,Texture,SurfColor_Image,LWSurf_Image(),LWSurf_Image(),NULL,Surf_Diff,Surf_Lum,doublesided,Layer.HasVectorColors);
+			LWSurface Surface(matName,Texture,SurfColor_Image,LWSurf_Image(),LWSurf_Image(),Vec3D(.0f, .0f, .0f),Surf_Diff,Surf_Lum,doublesided,Layer.HasVectorColors);
 			Object.Surfaces.push_back(Surface);
 
 			// Process Verticies
@@ -2980,7 +2980,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 						wxString Path1, Path2, Name;
 						Path1 << doodadname.BeforeLast(SLASH);
 						Name << doodadname.AfterLast(SLASH);
-						Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+						Path2 << m->name.BeforeLast(SLASH);
 
 						MakeDirs(Path1,Path2);
 
@@ -3132,7 +3132,7 @@ LWObject GatherADTforLWO(MapTile *m, const char *fn, LWScene &scene){
 
 		Path1 << FileName.BeforeLast(SLASH);
 		Name << FileName.AfterLast(SLASH);
-		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+		Path2 << m->name.BeforeLast(SLASH);
 		MakeDirs(Path1,Path2);
 		FileName.Empty();
 		FileName << Path1 << SLASH << Path2 << SLASH << Name;
@@ -3143,7 +3143,7 @@ LWObject GatherADTforLWO(MapTile *m, const char *fn, LWScene &scene){
 
 	// Main Object
 	LWLayer Layer;
-	Layer.Name = wxString(m->name.c_str(), wxConvUTF8).AfterLast('\\').BeforeLast('.');
+	Layer.Name = m->name.AfterLast('\\').BeforeLast('.');
 	Layer.ParentLayer = -1;
 
 	// Bounding Box for the Layer
@@ -3209,7 +3209,7 @@ size_t ExportLWO_M2(Attachment *att, Model *m, const char *fn, bool init){
 			// Objects
 			Path1 << filename.BeforeLast(SLASH);
 			Name << filename.AfterLast(SLASH);
-			Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+			Path2 << m->name.BeforeLast(SLASH);
 			MakeDirs(Path1,Path2);
 			filename.Empty();
 			filename << Path1 << SLASH << Path2 << SLASH << Name;
@@ -3220,7 +3220,7 @@ size_t ExportLWO_M2(Attachment *att, Model *m, const char *fn, bool init){
 			Name.Empty();
 			Path1 << scfilename.BeforeLast(SLASH);
 			Name << scfilename.AfterLast(SLASH);
-			Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+			Path2 << m->name.BeforeLast(SLASH);
 			MakeDirs(Path1,Path2);
 			scfilename.Empty();
 			scfilename << Path1 << SLASH << Path2 << SLASH << Name;
@@ -3336,7 +3336,7 @@ size_t ExportLWO_WMO(WMO *m, const char *fn){
 		// Objects
 		Path1 << filename.BeforeLast(SLASH);
 		Name << filename.AfterLast(SLASH);
-		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+		Path2 << m->name.BeforeLast(SLASH);
 		MakeDirs(Path1,Path2);
 		filename.Empty();
 		filename << Path1 << SLASH << Path2 << SLASH << Name;
@@ -3347,7 +3347,7 @@ size_t ExportLWO_WMO(WMO *m, const char *fn){
 		Name.Empty();
 		Path1 << scfilename.BeforeLast(SLASH);
 		Name << scfilename.AfterLast(SLASH);
-		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+		Path2 << m->name.BeforeLast(SLASH);
 		MakeDirs(Path1,Path2);
 		scfilename.Empty();
 		scfilename << Path1 << SLASH << Path2 << SLASH << Name;
@@ -3462,7 +3462,7 @@ size_t ExportLWO_ADT(MapTile *m, const char *fn){
 		// Objects
 		Path1 << filename.BeforeLast(SLASH);
 		Name << filename.AfterLast(SLASH);
-		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+		Path2 << m->name.BeforeLast(SLASH);
 		MakeDirs(Path1,Path2);
 		filename.Empty();
 		filename << Path1 << SLASH << Path2 << SLASH << Name;
@@ -3473,7 +3473,7 @@ size_t ExportLWO_ADT(MapTile *m, const char *fn){
 		Name.Empty();
 		Path1 << scfilename.BeforeLast(SLASH);
 		Name << scfilename.AfterLast(SLASH);
-		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+		Path2 << m->name.BeforeLast(SLASH);
 		MakeDirs(Path1,Path2);
 		scfilename.Empty();
 		scfilename << Path1 << SLASH << Path2 << SLASH << Name;

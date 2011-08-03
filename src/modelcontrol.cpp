@@ -149,7 +149,7 @@ void ModelControl::RefreshModel(Attachment *root)
 		for (std::vector<Attachment*>::iterator it=attachments.begin(); it!=attachments.end(); ++it) {
 			m = static_cast<Model*>((*it)->model);
 			if (m) {
-				tmp = wxString(m->name.c_str(), wxConvUTF8);
+				tmp = m->name;
 				modelname->Append(tmp.AfterLast(MPQ_SLASH));
 			}
 		}
@@ -179,7 +179,7 @@ void ModelControl::UpdateModel(Attachment *a)
 		model = m;
 		att = a;
 
-		modelname->SetLabel(wxString(m->name.c_str(), wxConvUTF8));
+		modelname->SetLabel(m->name);
 
 		Update();
 	}

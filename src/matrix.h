@@ -6,6 +6,10 @@
 
 #undef minor
 
+#include <cstdlib>
+#include <limits>
+using namespace std;
+
 class Matrix {
 public:
 	float m[4][4];

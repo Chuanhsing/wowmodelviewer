@@ -137,7 +137,7 @@ MPQFile::openFile(wxString filename)
 	}
 
 	// zhCN alternate file mode
-	if (bAlternate && !filename.StartsWith(wxT("Alternate"), false)) {
+	if (bAlternate && !filename.Lower().StartsWith(wxT("alternate"))) {
 		wxString alterName = wxT("alternate")+SLASH+filename;
 
 		for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end(); ++i)

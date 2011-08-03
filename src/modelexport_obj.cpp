@@ -18,7 +18,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 
 			Path1 << filename.BeforeLast(SLASH);
 			Name << filename.AfterLast(SLASH);
-			Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast(SLASH);
+			Path2 << m->name.BeforeLast(SLASH);
 			MakeDirs(Path1,Path2);
 			filename.Empty();
 			filename << Path1 << SLASH << Path2 << SLASH << Name;
@@ -73,7 +73,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 		ModelRenderPass &p = m->passes[i];
 			
 		if (p.init(m)) {
-			wxString Texture = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8);
+			wxString Texture = m->TextureList[p.tex];
 			wxString TexturePath = Texture.BeforeLast(MPQ_SLASH);
 			wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
 			if (m->modelType == MT_CHAR){
@@ -153,7 +153,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 						ModelRenderPass &p = mAttChild->passes[i];
 
 						if (p.init(mAttChild)) {
-							wxString Texture = wxString(mAttChild->TextureList[p.tex].c_str(), wxConvUTF8);
+							wxString Texture = mAttChild->TextureList[p.tex];
 							wxString TexturePath = Texture.BeforeLast(MPQ_SLASH);
 							wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
 							wxString ExportName = wxString(fn, wxConvUTF8).BeforeLast(SLASH) + SLASH + texName;
@@ -429,7 +429,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 				Vert2Point[v] = pointnum;
 			}
 
-			wxString Texture = wxString(m->TextureList[p.tex].c_str(), wxConvUTF8);
+			wxString Texture = m->TextureList[p.tex];
 			wxString TexturePath = Texture.BeforeLast(MPQ_SLASH);
 			wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
 			if (m->modelType == MT_CHAR){
@@ -493,7 +493,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 						ModelRenderPass &p = mAttChild->passes[i];
 
 						if (p.init(mAttChild)) {
-							wxString Texture = wxString(mAttChild->TextureList[p.tex].c_str(), wxConvUTF8);
+							wxString Texture = mAttChild->TextureList[p.tex];
 							wxString TexturePath = Texture.BeforeLast(MPQ_SLASH);
 							wxString texName = Texture.AfterLast(MPQ_SLASH).BeforeLast(wxT('.'));
 
@@ -543,7 +543,7 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 		wxString Path1, Path2, Name;
 		Path1 << file.BeforeLast('\\');
 		Name << file.AfterLast('\\');
-		Path2 << wxString(m->name.c_str(), wxConvUTF8).BeforeLast('\\');
+		Path2 << m->name.BeforeLast('\\');
 
 		MakeDirs(Path1,Path2);
 

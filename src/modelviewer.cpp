@@ -1025,7 +1025,7 @@ void ModelViewer::LoadModel(const wxString fn)
 	isModel = true;
 
 	// check if this is a character model
-	isChar = (fn.StartsWith(wxT("Char"), false) || fn.StartsWith(wxT("Alternate\\Char"), false));
+	isChar = (fn.Lower().StartsWith(wxT("char")) || fn.Lower().StartsWith(wxT("alternate\\char")));
 
 	Attachment *modelAtt = NULL;
 
