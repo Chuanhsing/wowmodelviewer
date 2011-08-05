@@ -20,7 +20,7 @@
     </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
-      <Extensions>qrc;*</Extensions>
+      <Extensions>rc;qrc;*</Extensions>
       <ParseFiles>false</ParseFiles>
     </Filter>
     <Filter Include="Generated Files\Debug_Win32">
@@ -125,6 +125,15 @@
     <ClInclude Include="Model_WMO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ui_About.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="resources.qrc">
@@ -136,5 +145,13 @@
     <CustomBuild Include="application.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="About.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
-    <normaloff>:/Resources/FileIcons/wmv.ico</normaloff>:/Resources/FileIcons/wmv.ico</iconset>
+    <normaloff>:/WMV_Win</normaloff>:/WMV_Win</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="layoutWidget">
@@ -28,42 +28,42 @@
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="2" column="0">
+     <item row="1" column="0">
       <widget class="QRadioButton" name="rBtn_IsChar">
        <property name="text">
         <string>File is Character</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="2" column="0">
       <widget class="QRadioButton" name="rBtn_IsNPC">
        <property name="text">
         <string>File is Creature/NPC</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item row="4" column="0">
       <widget class="QRadioButton" name="rBtn_IsWMO">
        <property name="text">
         <string>File is WMO/Set</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
+     <item row="5" column="0">
       <widget class="QRadioButton" name="rBtn_IsADT">
        <property name="text">
         <string>File is ADT/Landscape</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="0">
+     <item row="6" column="0">
       <widget class="QRadioButton" name="rBtn_IsTexture">
        <property name="text">
         <string>File is an Image</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item row="0" column="0">
       <widget class="QRadioButton" name="rBtn_NoModel">
        <property name="text">
         <string>WoW Loaded, No File Selected</string>
@@ -73,27 +73,17 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="0">
+     <item row="7" column="0">
       <widget class="QRadioButton" name="rBtn_IsSound">
        <property name="text">
         <string>File is an Audio/Sound file</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="3" column="0">
       <widget class="QRadioButton" name="rBtn_IsItem">
        <property name="text">
         <string>File is an Item</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QRadioButton" name="rBtn_WoWNotLoaded">
-       <property name="text">
-        <string>WoW Not Loaded</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -220,12 +210,25 @@
     </property>
     <widget class="QMenu" name="menuChange_Modes">
      <property name="title">
-      <string>Change &amp;Modes</string>
+      <string>Change &amp;Mode</string>
      </property>
      <addaction name="actionMode_Viewer"/>
      <addaction name="actionMode_Cinema"/>
     </widget>
+    <widget class="QMenu" name="menuChange_WoW_Directory">
+     <property name="title">
+      <string>Change &amp;WoW Directory</string>
+     </property>
+     <addaction name="actionPath_To_WoW_Dirs"/>
+     <addaction name="actionWoWDir_Vanilla"/>
+     <addaction name="actionWoWDir_BC"/>
+     <addaction name="actionWoWDir_WotLK"/>
+     <addaction name="actionWoWDir_Cataclysm"/>
+     <addaction name="actionWoWDir_PTR"/>
+     <addaction name="actionOther_installs"/>
+    </widget>
     <addaction name="menuChange_Modes"/>
+    <addaction name="menuChange_WoW_Directory"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
     <addaction name="separator"/>
@@ -1030,8 +1033,21 @@ alternate-background-color: rgb(229, 228, 242);</string>
    </widget>
   </widget>
   <action name="actionLoad_World_of_Wacraft">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/WoW Versions/WoWIcon1-Vanilla</normaloff>
+     <normalon>:/WoW Versions/WoWIcon1-Vanilla</normalon>
+     <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
+     <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon1-Vanilla</iconset>
+   </property>
    <property name="text">
-    <string>Load &amp;World of Warcraft Data</string>
+    <string>Load &amp;World of Warcraft</string>
+   </property>
+   <property name="iconText">
+    <string>Load WoW</string>
+   </property>
+   <property name="toolTip">
+    <string>Load your World of Warcraft data from the selected directory.</string>
    </property>
   </action>
   <action name="actionView_Log">
@@ -1284,7 +1300,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
   <action name="actionLoad_Character">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/Resources/Images/Character_Load.png</normaloff>:/Resources/Images/Character_Load.png</iconset>
+     <normaloff>:/menuIcons/menuChrLoad</normaloff>:/menuIcons/menuChrLoad</iconset>
    </property>
    <property name="text">
     <string>&amp;Load Character...</string>
@@ -1296,7 +1312,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
   <action name="actionSave_Character">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/Resources/Images/Character_Save.png</normaloff>:/Resources/Images/Character_Save.png</iconset>
+     <normaloff>:/menuIcons/menuChrSave</normaloff>:/menuIcons/menuChrSave</iconset>
    </property>
    <property name="text">
     <string>Save Character...</string>
@@ -1920,6 +1936,59 @@ alternate-background-color: rgb(229, 228, 242);</string>
    </property>
    <property name="shortcut">
     <string>Alt+C</string>
+   </property>
+  </action>
+  <action name="actionWoWDir_Vanilla">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Vanilla Directory</string>
+   </property>
+  </action>
+  <action name="actionWoWDir_BC">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Burning Crusade Dir</string>
+   </property>
+  </action>
+  <action name="actionWoWDir_WotLK">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>WotLK Dir</string>
+   </property>
+  </action>
+  <action name="actionWoWDir_Cataclysm">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Cataclysm Dir</string>
+   </property>
+  </action>
+  <action name="actionOther_installs">
+   <property name="text">
+    <string>etc...</string>
+   </property>
+  </action>
+  <action name="actionWoWDir_PTR">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>PTR Dir</string>
+   </property>
+  </action>
+  <action name="actionPath_To_WoW_Dirs">
+   <property name="text">
+    <string>Path\To\WoW\Dirs</string>
    </property>
   </action>
  </widget>

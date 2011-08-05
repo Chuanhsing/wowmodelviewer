@@ -7,7 +7,9 @@
 message("You are running qmake on a generated .pro file. This may not work!")
 
 
-HEADERS += ./enums.h \
+HEADERS += ./resource.h \
+    ./version.h \
+    ./enums.h \
     ./Model_WMO.h \
     ./Model_M2.h \
     ./Model_ADT.h \
@@ -26,5 +28,6 @@ HEADERS += ./enums.h \
     ./Models/Model_WMO_v17.h
 SOURCES += ./application.cpp \
     ./main.cpp
-FORMS += ./Main_Window_Viewer.ui
+FORMS += ./Main_Window_Viewer.ui \
+    ./About.ui
 RESOURCES += resources.qrc

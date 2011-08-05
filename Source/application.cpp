@@ -7,15 +7,35 @@
 #include "Model_WMO.h"
 #include "Model_ADT.h"
 
+// About Window
+WindowAbout::WindowAbout(QWidget *parent) : QDialog(parent), ui_About(new Ui::AboutWindow)
+{
+	ui_About->setupUi(this);
+
+	ui_About->VersionNumber->setText(QString(MAJORVERSION + BUILDVERSION));
+	ui_About->Edition->setText(QString(SYSTEMVERSION + DEBUGVERSION + tr(" Edition")));
+}
+WindowAbout::~WindowAbout()
+{
+	delete ui_About;
+}
+
+// Main WoW Model Viewer
 WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui::Main_Window_Viewer)
 {
+	// Setup the UI
     ui->setupUi(this);
-
+	
     // Defaults
 	InterfaceMode = INTERFACEMODE_VIEWER;				// Set the default mode to Viewer.
     ViewerInterfaceType = VIEWER_INTERFACETYPE_NONE;	// Full list of viewer interface types in enums.h
+	WoWTypeCurrent = WOW_VANILLA;						// The next World of Warcraft type that will be loaded.
+	WoWTypeNext = WOW_NOTLOADED;
 	isWoWLoaded = false;
 	canReloadWoW = false;
+
+	// Set the main Window's Title
+	setWindowTitle(PROGRAMNAME + tr(" ","WindowTitle1") + MAJORVERSION + BUILDVERSION + tr(" ","WindowTitle2") + SYSTEMVERSION + DEBUGVERSION);
 
     /* -= Groups =- */
     // Eye Glow
@@ -63,6 +83,16 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
 	ui->actionMode_Viewer->setChecked(true);
 
     /* -= Dynamic Groups =- */
+	// WoW Dirs
+	// For the Temp/Testing dirs
+	WoWDirGroup = new QActionGroup(this);
+	WoWDirGroup->addAction(ui->actionWoWDir_Vanilla);
+	WoWDirGroup->addAction(ui->actionWoWDir_BC);
+	WoWDirGroup->addAction(ui->actionWoWDir_WotLK);
+	WoWDirGroup->addAction(ui->actionWoWDir_Cataclysm);
+	WoWDirGroup->addAction(ui->actionWoWDir_PTR);
+    ui->actionWoWDir_Vanilla->setChecked(true);
+
     // Camera Group
     CameraGroup = new QActionGroup(this);
     // Static Views
@@ -78,10 +108,23 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
     // Doodad Sets
     DoodadSetGroup = new QActionGroup(this);
 
+	// Connections
+	QObject::connect(WoWDirGroup, SIGNAL(triggered(QAction*)), this, SLOT(ChangeLoadButton()));
+
+	// UI Cheats
+	ui->rBtn_IsChar->setDisabled(true);
+	ui->rBtn_IsADT->setDisabled(true);
+	ui->rBtn_IsItem->setDisabled(true);
+	ui->rBtn_IsNPC->setDisabled(true);
+	ui->rBtn_IsSound->setDisabled(true);
+	ui->rBtn_IsTexture->setDisabled(true);
+	ui->rBtn_IsWMO->setDisabled(true);
+	ui->rBtn_NoModel->setDisabled(true);
+	
+	UpdateViewerMenu();
+
 	// Build Status Bars
 	createStatusBar();
-
-    UpdateViewerMenu();
 }
 
 void WoWModelViewer::createStatusBar()
@@ -195,6 +238,31 @@ void WoWModelViewer::UpdateViewerMenu(){
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuCharacter->menuAction());
     }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_NONE){
     }
+
+	ChangeLoadButton();
+
+	// Disable Temps if WoW is not Loaded
+	if (isWoWLoaded == true){
+		ui->rBtn_IsChar->setDisabled(false);
+		ui->rBtn_IsADT->setDisabled(false);
+		ui->rBtn_IsItem->setDisabled(false);
+		ui->rBtn_IsNPC->setDisabled(false);
+		ui->rBtn_IsSound->setDisabled(false);
+		ui->rBtn_IsTexture->setDisabled(false);
+		ui->rBtn_IsWMO->setDisabled(false);
+		ui->rBtn_NoModel->setDisabled(false);
+	}else{
+		ui->rBtn_IsChar->setDisabled(true);
+		ui->rBtn_IsADT->setDisabled(true);
+		ui->rBtn_IsItem->setDisabled(true);
+		ui->rBtn_IsNPC->setDisabled(true);
+		ui->rBtn_IsSound->setDisabled(true);
+		ui->rBtn_IsTexture->setDisabled(true);
+		ui->rBtn_IsWMO->setDisabled(true);
+		ui->rBtn_NoModel->setDisabled(true);
+	}
+
+	this->update();
 }
 
 void WoWModelViewer::updateFileList()
@@ -228,71 +296,137 @@ void WoWModelViewer::on_actionShowCtrl_FileList_toggled(bool arg1)
 	}
 }
 
-
-// Functions for the temporary radio buttons on the main window.
-void WoWModelViewer::on_rBtn_WoWNotLoaded_clicked()
+// Close WMV from File Menu
+void WoWModelViewer::on_actionExit_triggered()
 {
-	isWoWLoaded = false;
+    QApplication::quit();
+}
+
+// Update Load WoW Button
+void WoWModelViewer::UpdateLoadButton()
+{
+	UpdateViewerMenu();
+}
+
+// Update the Load WoW Button
+void WoWModelViewer::ChangeLoadButton()
+{
+	// WoW Icons
+	QIcon LoadWoW;
+	LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-Disabled"), QSize(), QIcon::Disabled, QIcon::Off);
+    LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-Disabled"), QSize(), QIcon::Disabled, QIcon::On);
+	if (ui->actionWoWDir_Vanilla->isChecked()){
+		WoWTypeNext = WOW_VANILLA;
+		if ((isWoWLoaded == true) && (WoWTypeCurrent != WoWTypeNext))
+			canReloadWoW = true;
+		LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon1-Vanilla"), QSize(), QIcon::Normal, QIcon::Off);
+        LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon1-Vanilla"), QSize(), QIcon::Normal, QIcon::On);
+	}else if(ui->actionWoWDir_BC->isChecked()){
+		WoWTypeNext = WOW_TBC;
+		if ((isWoWLoaded == true) && (WoWTypeCurrent != WoWTypeNext))
+			canReloadWoW = true;
+		LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon2-TBC"), QSize(), QIcon::Normal, QIcon::Off);
+        LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon2-TBC"), QSize(), QIcon::Normal, QIcon::On);
+	}else if(ui->actionWoWDir_WotLK->isChecked()){
+		WoWTypeNext = WOW_WOTLK;
+		if ((isWoWLoaded == true) && (WoWTypeCurrent != WoWTypeNext))
+			canReloadWoW = true;
+		LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon3-WotLK"), QSize(), QIcon::Normal, QIcon::Off);
+        LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon3-WotLK"), QSize(), QIcon::Normal, QIcon::On);
+	}else if(ui->actionWoWDir_Cataclysm->isChecked()){
+		WoWTypeNext = WOW_CATACLYSM;
+		if ((isWoWLoaded == true) && (WoWTypeCurrent != WoWTypeNext))
+				canReloadWoW = true;
+		LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon4-Cataclysm"), QSize(), QIcon::Normal, QIcon::Off);
+        LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon4-Cataclysm"), QSize(), QIcon::Normal, QIcon::On);
+	}else if(ui->actionWoWDir_PTR->isChecked()){
+		WoWTypeNext = WOW_PTR;
+		if ((isWoWLoaded == true) && (WoWTypeCurrent != WoWTypeNext))
+			canReloadWoW = true;
+		LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-PTR"), QSize(), QIcon::Normal, QIcon::Off);
+        LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-PTR"), QSize(), QIcon::Normal, QIcon::On);
+	}else{
+		// Default to the standard, just in case.
+		LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon1-Vanilla"), QSize(), QIcon::Normal, QIcon::Off);
+        LoadWoW.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon1-Vanilla"), QSize(), QIcon::Normal, QIcon::On);
+	}
+	ui->actionLoad_World_of_Wacraft->setIcon(LoadWoW);
+
+	if ((canReloadWoW == true)||(isWoWLoaded == false)){
+		ui->actionLoad_World_of_Wacraft->setDisabled(false);
+	}else{
+		ui->actionLoad_World_of_Wacraft->setDisabled(true);
+	}
+	
+	menuBar()->update();
+}
+
+// Load World of Warcraft
+void WoWModelViewer::on_actionLoad_World_of_Wacraft_triggered()
+{
+	// Load the New WoW
+
+	// Set Global Variables
+	WoWTypeCurrent = WoWTypeNext;
+	WoWTypeNext = WOW_NOTLOADED;
+	isWoWLoaded = true;
+	canReloadWoW = false;
+
+	// Update the Menu
     UpdateViewerMenu();
 }
 
+// Open About Window
+void WoWModelViewer::on_actionAbout_triggered()
+{
+	Window_About.show();
+}
+
+// Functions for the temporary radio buttons on the main window.
 void WoWModelViewer::on_rBtn_NoModel_clicked()
 {
-	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_NONE;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsChar_clicked()
 {
-	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_CHARACTER;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsNPC_clicked()
 {
-	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_CREATURE;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsWMO_clicked()
 {
-	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_SET;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsADT_clicked()
 {
-	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_LANDSCAPE;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsTexture_clicked()
 {
-	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_IMAGE;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsItem_clicked()
 {
-	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_ITEM;
     UpdateViewerMenu();
 }
 
 void WoWModelViewer::on_rBtn_IsSound_clicked()
 {
-	isWoWLoaded = true;
     ViewerInterfaceType = VIEWER_INTERFACETYPE_SOUND;
     UpdateViewerMenu();
-}
-
-void WoWModelViewer::on_actionExit_triggered()
-{
-    QApplication::quit();
 }

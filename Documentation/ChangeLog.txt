@@ -1,5 +1,12 @@
 WoW Model Viewer v0.8.0.0
 
+r611
+-Built and finished the About Window.
+-Added Icon for Load World of Warcraft. It changes, depending what version of WoW you're going to load.
+-Added interface for List of WoW Directories. Currently contains only test data.
+-Fixed Application Icon issue for Windows.
+-Removed the generated ui_[Filename].h from the sourcecode. It's auto-generated when the UIs are compiled.
+
 r609
 -Added Animation Controls layout.
 -Added preliminary Exporters dll project.

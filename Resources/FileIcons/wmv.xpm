@@ -1,5 +1,5 @@
 /* XPM */ 
-static const char * wmv_xpm[] = {
+static const unsigned char * wmv_xpm[] = {
 "256 256 22160 3",
 "   	c None",
 "!  	c black",
