@@ -609,7 +609,7 @@ Real angle(const Vector<N,Real>& lvec, const Vector<N,Real>& rvec)
     Real cos_angle = l_dot_r / l;
     cos_angle = std::max( std::min(cos_angle, (Real)1), (Real)-1);
 
-    return std::acos(cos_angle);
+    return acos(cos_angle);
 }
 
 template <class Real>
