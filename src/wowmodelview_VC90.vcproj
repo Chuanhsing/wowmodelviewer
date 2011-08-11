@@ -79,7 +79,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="glew32d_VC90.lib wxpngd.lib"
 				OutputFile="$(OutDir)/wowmodelview32.exe"
-				Version="07.01.610"
+				Version="07.01.614"
 				LinkIncremental="0"
 				AdditionalLibraryDirectories="&quot;D:\wxWidgets-2.8.12\lib\vc_lib\$(PlatformName)&quot;;&quot;D:\wxWidgets-2.8.12\lib\vc_lib\&quot;;.\lib\Windows\32bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
 				UACExecutionLevel="2"
@@ -180,7 +180,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="glew64d_VC90.lib wxpngd.lib"
 				OutputFile="$(OutDir)/wowmodelview64.exe"
-				Version="07.01.610"
+				Version="07.01.614"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;D:\wxWidgets-2.8.12\lib\vc_lib\$(PlatformName)&quot;;.\lib\Windows\64bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
@@ -289,7 +289,7 @@
 				AdditionalDependencies="glew32_VC90.lib wxpng.lib"
 				ShowProgress="2"
 				OutputFile="$(OutDir)$(TargetName)$(PlatformArchitecture).exe"
-				Version="07.01.610"
+				Version="07.01.614"
 				LinkIncremental="0"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;D:\wxWidgets-2.8.12\lib\vc_lib\$(PlatformName)&quot;;&quot;D:\wxWidgets-2.8.12\lib\vc_lib\&quot;;.\lib\Windows\32bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
@@ -330,7 +330,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy ..\bin_support\Windows\32bit\cximagecrt32.dll $(OutDir)&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\fbxsdk_20113.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Splash\Splash_001.png $(OutDir)\Splash.png&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\*.csv $(OutDir)\enUS\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\mo&#x0D;&#x0A;copy po\*.mo $(OutDir)\mo\&#x0D;&#x0A;mkdir $(OutDir)\Export&#x0D;&#x0A;mkdir $(OutDir)\Import&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\msvcr90.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\msvcp90.dll $(OutDir)\&#x0D;&#x0A;copy ..\doc\ChangeLog.txt $(OutDir)\&#x0D;&#x0A;copy ..\bin\COPYING $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\userSettings&#x0D;&#x0A;copy ..\bin\userSettings\*.* $(OutDir)\userSettings&#x0D;&#x0A;"
+				CommandLine="del $(OutDir)*.lib&#x0D;&#x0A;del $(OutDir)*.exp&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\cximagecrt32.dll $(OutDir)&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\fbxsdk_20113.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Splash\Splash_001.png $(OutDir)\Splash.png&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\*.csv $(OutDir)\enUS\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\mo&#x0D;&#x0A;copy po\*.mo $(OutDir)\mo\&#x0D;&#x0A;mkdir $(OutDir)\Export&#x0D;&#x0A;mkdir $(OutDir)\Import&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\msvcr90.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\32bit\msvcp90.dll $(OutDir)\&#x0D;&#x0A;copy ..\doc\ChangeLog.txt $(OutDir)\&#x0D;&#x0A;copy ..\Installers\License.rtf $(OutDir)\&#x0D;&#x0A;copy ..\bin\COPYING $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\userSettings&#x0D;&#x0A;copy ..\bin\userSettings\*.* $(OutDir)\userSettings&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -401,7 +401,7 @@
 				AdditionalDependencies="glew64_VC90.lib wxpng.lib"
 				ShowProgress="2"
 				OutputFile="$(OutDir)$(TargetName)$(PlatformArchitecture).exe"
-				Version="07.01.610"
+				Version="07.01.614"
 				LinkIncremental="0"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;D:\wxWidgets-2.8.12\lib\vc_lib\$(PlatformName)&quot;;.\lib\Windows\64bit;&quot;.\zlib\$(OutDir)&quot;;&quot;.\bzip2\$(OutDir)&quot;"
@@ -442,7 +442,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy ..\bin_support\Windows\64bit\cximagecrt64.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\fbxsdk_20113_amd64.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Splash\Splash_001.png $(OutDir)\Splash.png&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\*.csv $(OutDir)\enUS\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\mo&#x0D;&#x0A;copy po\*.mo $(OutDir)\mo\&#x0D;&#x0A;mkdir $(OutDir)\Export&#x0D;&#x0A;mkdir $(OutDir)\Import&#x0D;&#x0A;copy ..\doc\ChangeLog.txt $(OutDir)\&#x0D;&#x0A;copy ..\bin\COPYING $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\userSettings&#x0D;&#x0A;copy ..\bin\userSettings\*.* $(OutDir)\userSettings&#x0D;&#x0A;"
+				CommandLine="del $(OutDir)*.lib&#x0D;&#x0A;del $(OutDir)*.exp&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\cximagecrt64.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Windows\64bit\fbxsdk_20113_amd64.dll $(OutDir)\&#x0D;&#x0A;copy ..\bin_support\Splash\Splash_001.png $(OutDir)\Splash.png&#x0D;&#x0A;mkdir $(OutDir)\enUS&#x0D;&#x0A;copy ..\bin\enUS\*.csv $(OutDir)\enUS\&#x0D;&#x0A;copy ..\bin\*.csv $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\mo&#x0D;&#x0A;copy po\*.mo $(OutDir)\mo\&#x0D;&#x0A;mkdir $(OutDir)\Export&#x0D;&#x0A;mkdir $(OutDir)\Import&#x0D;&#x0A;copy ..\doc\ChangeLog.txt $(OutDir)\&#x0D;&#x0A;copy ..\Installers\License.rtf $(OutDir)\&#x0D;&#x0A;copy ..\bin\COPYING $(OutDir)\&#x0D;&#x0A;mkdir $(OutDir)\userSettings&#x0D;&#x0A;copy ..\bin\userSettings\*.* $(OutDir)\userSettings&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -512,6 +512,18 @@
 			</File>
 			<File
 				RelativePath=".\itemselection.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\jsonreader.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\jsonval.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\jsonwriter.cpp"
 				>
 			</File>
 			<File
@@ -726,6 +738,22 @@
 			</File>
 			<File
 				RelativePath=".\itemselection.h"
+				>
+			</File>
+			<File
+				RelativePath=".\wx\json_defs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\wx\jsonreader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\wx\jsonval.h"
+				>
+			</File>
+			<File
+				RelativePath=".\wx\jsonwriter.h"
 				>
 			</File>
 			<File

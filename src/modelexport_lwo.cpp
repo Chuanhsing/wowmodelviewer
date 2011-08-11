@@ -1790,7 +1790,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 			SaveTexture(ExportName);
 			//SaveTexture2(ClipImage.Filename,ClipImage.Source,wxString(wxT("LWO")),wxString(wxT("tga")));
 
-			LWSurface Surface(matName,m->TextureList[p.tex],SurfImage_Color,LWSurf_Image(),LWSurf_Image(),Vec3D(.0f, .0f, .0f),Surf_Diff,Surf_Lum,doublesided);
+			LWSurface Surface(matName,m->TextureList[p.tex],SurfImage_Color,LWSurf_Image(),LWSurf_Image(),Vec3D(1,1,1),Surf_Diff,Surf_Lum,doublesided);
 			Object.Surfaces.push_back(Surface);
 
 			// Points
@@ -2080,7 +2080,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 
 							SaveTexture(ExportName);
 
-							LWSurface Surface(matName,Texture.BeforeLast('.'),SurfImage_Color,LWSurf_Image(),LWSurf_Image(),Vec3D(.0f, .0f, .0f),Surf_Diff,Surf_Lum,doublesided);
+							LWSurface Surface(matName,Texture.BeforeLast('.'),SurfImage_Color,LWSurf_Image(),LWSurf_Image(),Vec3D(1,1,1),Surf_Diff,Surf_Lum,doublesided);
 							Object.Surfaces.push_back(Surface);
 
 							// Points
@@ -2630,7 +2630,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 				matName = matName + wxT("_Dbl");
 			}
 
-			LWSurface Surface(matName,Texture,SurfColor_Image,LWSurf_Image(),LWSurf_Image(),Vec3D(.0f, .0f, .0f),Surf_Diff,Surf_Lum,doublesided,Layer.HasVectorColors);
+			LWSurface Surface(matName,Texture,SurfColor_Image,LWSurf_Image(),LWSurf_Image(),Vec3D(1,1,1),Surf_Diff,Surf_Lum,doublesided,Layer.HasVectorColors);
 			Object.Surfaces.push_back(Surface);
 
 			// Process Verticies
@@ -2650,10 +2650,11 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 				// Vertex Colors
 				LWVertexColor vc;
 				if (group->hascv) {
-					vc.r = group->VertexColors[v].r;
-					vc.g = group->VertexColors[v].g;
-					vc.b = group->VertexColors[v].b;
-					vc.a = group->VertexColors[v].a;
+					WMOVertColor wvc = group->VertexColors[v];
+					vc.r = wvc.r;
+					vc.g = wvc.g;
+					vc.b = wvc.b;
+					vc.a = wvc.a;
 				}
 				Point.VertexColors = LWVertexColor(vc.r,vc.g,vc.b,vc.a);
 
@@ -2664,6 +2665,8 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 
 			// Process Indices
 			for (size_t i=0; i<batch->indexCount; i+=3) {
+				size_t ci = batch->indexStart+i;
+
 				// --== Polygon Data ==--	
 				LWPoly Poly;
 				Poly.PolyData.numVerts = 3;
@@ -2678,7 +2681,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 					}
 
 					// Polygon Indice
-					size_t a = batch->indexStart + i + x + mod;
+					size_t a = ci + x + mod;
 					size_t b = group->IndiceToVerts[a];
 					//wxLogMessage(wxT("Group: %i, a: %i, b:%i, Final Indice: %i"),g,a,b,Vert2Point[b]);
 					Poly.PolyData.indice[x] = Vert2Point[b];

@@ -115,7 +115,7 @@
     <Link>
       <AdditionalDependencies>glew$(PlatformArchitecture)_VC$(PlatformToolsetVersion).lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
-      <Version>07.01.610</Version>
+      <Version>07.01.614</Version>
       <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);D:\wxWidgets-2.8.12\lib\vc_lib\;.\lib\Windows\32bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -175,7 +175,7 @@ copy ..\bin\*.csv $(OutDir)
     <Link>
       <AdditionalDependencies>glew$(PlatformArchitecture)_VC$(PlatformToolsetVersion).lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
-      <Version>07.01.610</Version>
+      <Version>07.01.614</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);.\lib\Windows\64bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -235,7 +235,7 @@ copy ..\bin\*.csv $(OutDir)
       <AdditionalDependencies>glew$(PlatformArchitecture)_VC$(PlatformToolsetVersion).lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerboseLib</ShowProgress>
       <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
-      <Version>07.01.610</Version>
+      <Version>07.01.614</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);D:\wxWidgets-2.8.12\lib\vc_lib\;.\lib\Windows\32bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -256,7 +256,9 @@ copy ..\bin\*.csv $(OutDir)
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
-      <Command>copy ..\bin_support\Windows\32bit\cximagecrt32.dll $(OutDir)
+      <Command>del $(OutDir)*.lib
+del $(OutDir)*.exp
+copy ..\bin_support\Windows\32bit\cximagecrt32.dll $(OutDir)
 copy ..\bin_support\Windows\32bit\fbxsdk_20113.dll $(OutDir)
 copy ..\bin_support\Splash\Splash_001.png $(OutDir)Splash.png
 mkdir $(OutDir)enUS
@@ -269,6 +271,7 @@ mkdir $(OutDir)Import
 copy ..\bin_support\Windows\32bit\msvcr100.dll $(OutDir)
 copy ..\bin_support\Windows\32bit\msvcp100.dll $(OutDir)
 copy ..\doc\ChangeLog.txt $(OutDir)
+copy ..\Installers\License.rtf $(OutDir)
 copy ..\bin\COPYING $(OutDir)
 mkdir $(OutDir)userSettings
 copy ..\bin\userSettings\*.* $(OutDir)userSettings
@@ -309,7 +312,7 @@ copy ..\bin\userSettings\*.* $(OutDir)userSettings
       <AdditionalDependencies>glew$(PlatformArchitecture)_VC$(PlatformToolsetVersion).lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerboseLib</ShowProgress>
       <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
-      <Version>07.01.610</Version>
+      <Version>07.01.614</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);.\lib\Windows\64bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -330,7 +333,9 @@ copy ..\bin\userSettings\*.* $(OutDir)userSettings
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
-      <Command>copy ..\bin_support\Windows\64bit\cximagecrt64.dll $(OutDir)
+      <Command>del $(OutDir)*.lib
+del $(OutDir)*.exp
+copy ..\bin_support\Windows\64bit\cximagecrt64.dll $(OutDir)
 copy ..\bin_support\Windows\64bit\fbxsdk_20113_amd64.dll $(OutDir)
 copy ..\bin_support\Splash\Splash_001.png $(OutDir)Splash.png
 mkdir $(OutDir)enUS
@@ -343,6 +348,7 @@ mkdir $(OutDir)Import
 copy ..\bin_support\Windows\64bit\msvcr100.dll $(OutDir)
 copy ..\bin_support\Windows\64bit\msvcp100.dll $(OutDir)
 copy ..\doc\ChangeLog.txt $(OutDir)
+copy ..\Installers\License.rtf $(OutDir)
 copy ..\bin\COPYING $(OutDir)
 mkdir $(OutDir)userSettings
 copy ..\bin\userSettings\*.* $(OutDir)userSettings

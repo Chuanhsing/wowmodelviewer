@@ -447,7 +447,7 @@ struct LWSurface {
 	LWSurf_Image Image_Trans;	// Transparancy Image data
 
 	// Constructors
-	LWSurface(wxString name, wxString comment, LWSurf_Image ColorID, LWSurf_Image SpecID, LWSurf_Image TransID, Vec3D SurfColor=Vec3D(0.75,0.75,0.75), float Diffusion=1.0f, float Luminosity = 0.0f, bool doublesided = false, bool hasVC = false){
+	LWSurface(wxString name, wxString comment, LWSurf_Image ColorID, LWSurf_Image SpecID, LWSurf_Image TransID, Vec3D SurfColor=Vec3D(1,1,1), float Diffusion=1.0f, float Luminosity = 0.0f, bool doublesided = false, bool hasVC = false){
 		Name = name;
 		Comment = comment;
 

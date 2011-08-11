@@ -1,8 +1,14 @@
 World of Warcraft Model Viewer v0.7.0.1
 
-r613 (Pickled Herring)
+r614 (Pickled Herring)
  - Updated the Armory API. Armory import now supports full facial recognition.
  - Fixed missing jaws issue.
+ - Added License display to the installers.
+ * Lightwave Exporter:
+  - Fixed black Vertex Colors issue.
+ * Dev Work: 
+  - Added License Rich Text Format file to installer directory.
+  - The Projects will now delete the .exp and .lib files generated in the Release folder.
 
 
 r610 (Demented Deathwing)
