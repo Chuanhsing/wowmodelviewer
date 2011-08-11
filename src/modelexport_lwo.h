@@ -311,8 +311,8 @@ struct LWScene{
 		Objects.~vector();
 		Lights.~vector();
 		Cameras.~vector();
-		FileName = _T("");
-		FilePath = _T("");
+		FileName = wxT("");
+		FilePath = wxT("");
 		//free(&AmbientIntensity);
 	}
 

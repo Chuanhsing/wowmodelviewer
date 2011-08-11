@@ -809,8 +809,9 @@ enum Races
 	RACE_WORGEN             = 22
 };
 
-/*
+
 // Class value is index in ChrClasses.dbc
+// Matches ID of website's API
 enum Classes
 {
     CLASS_WARRIOR       = 1,
@@ -822,10 +823,10 @@ enum Classes
     CLASS_SHAMAN        = 7,
     CLASS_MAGE          = 8,
     CLASS_WARLOCK       = 9,
-    // CLASS_UNK2       = 10,unused
     CLASS_DRUID         = 11,
 };
 
+/*
 enum ItemQualities
 {
     ITEM_QUALITY_POOR                  = 0,                 //GREY

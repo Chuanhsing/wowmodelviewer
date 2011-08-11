@@ -3,6 +3,7 @@
 #include <wx/tokenzr.h>
 #include <wx/utils.h>
 #include <wx/regex.h>
+#include "wx/jsonreader.h"
 
 #include "modelviewer.h"
 #include "globalvars.h"
@@ -3374,315 +3375,162 @@ void ModelViewer::UpdateControls()
 	modelControl->RefreshModel(canvas->root);
 }
 
-void ModelViewer::ImportArmouryBattleNet(wxString strURL)
+void ModelViewer::ImportArmoury(wxString strURL)
 {
-	//http://us.battle.net/wow/en/character/steamwheedle-cartel/Kjasi/simple
+	/*
+	Blizzard's API is mostly RESTful, with data being returned as JSON arrays.
+	Full documentation available here: http://blizzard.github.com/api-wow-docs/
+
+	We can now gather all the data with a single request of Host + "/api/wow/character/" + Realm + "/" + CharacterName + "?fields=appearance,items"
+	Example: http://us.battle.net/api/wow/character/steamwheedle-cartel/Kjasi?fields=appearance,items
+
+	This will give us all the information we need inside of a JSON array.
+	Format as follows:
+	{
+		"name":"Kjasi",
+		"realm":"Steamwheedle Cartel",
+		"class":5,
+		"race":1,
+		"gender":0,
+		"level":83,
+		"achievementPoints":4290,
+		"thumbnail":"steamwheedle-cartel/193/3589057-avatar.jpg",
+		"items":{	This is the Items array. All available item information is listed here.
+			"averageItemLevel":298,
+			"averageItemLevelEquipped":277,
+			"head":{
+				"id":50006,
+				"name":"Corp'rethar Ceremonial Crown",
+				"icon":"inv_helmet_156",
+				"quality":4,
+				"tooltipParams":{
+					"gem0":41376,
+					"gem1":40151,
+					"enchant":3819,
+					"reforge":119
+				}
+			},
+			(More slots),
+			"ranged":{
+				"id":55480,
+				"name":"Swamplight Wand of the Invoker",
+				"icon":"inv_wand_1h_cataclysm_b_01",
+				"quality":2,
+				"tooltipParams":{
+					"suffix":-39
+				}
+			}
+		},
+		"appearance":{
+			"faceVariation":11,
+			"skinColor":1,
+			"hairVariation":11,
+			"hairColor":4,
+			"featureVariation":1,
+			"showHelm":true,
+			"showCloak":true
+		}
+	}
+	
+	As you can see, this will give us almost all the data we need to properly rebuild the character.
+
+	*/
+
+	// Import from http://us.battle.net/wow/en/character/steamwheedle-cartel/Kjasi/simple
+	if ((strURL.Mid(7).Find(wxT("simple"))<0)&&(strURL.Mid(7).Find(wxT("advanced"))<0)){
+		wxMessageBox(wxT("Improperly Formatted URL.\nMake sure your link ends in /simple or /advanced."),wxT("Bad Armory Link"));
+		wxLogMessage(wxT("Improperly Formatted URL. Lacks /simple and /advanced"));
+		return;
+	}		
 	wxString strDomain = strURL.Mid(7).BeforeFirst('/');
 	wxString strPage = strURL.Mid(7).Mid(strDomain.Len());
 
-	wxLogMessage(wxT("Attemping to access WoWArmory Page: %s"), wxString(strDomain + strPage).c_str());
+	wxString strp = strPage.BeforeLast('/');	// No simple/advanced
+	wxString CharName = strp.AfterLast('/');
+	strp = strp.BeforeLast('/');				// Update strp
+	wxString Realm = strp.AfterLast('/');
 
-	// Get the page from the armoury website
-	wxHTTP http;
+	wxLogMessage(wxT("Loading Battle.Net Armory. Site: %s, Realm: %s, Character: %s"),strDomain.c_str(),Realm.c_str(),CharName.c_str());
 
-	// set the headers
-	http.SetHeader(wxT("User-Agent"), wxT("Mozilla/5.0 (Windows;U;Windows NT 5.1;zh-TW;rv:1.8.1.2) Gecko/20070219 Firefox/2.0.0.12")); 
-	http.SetHeader(wxT("Accept"), wxT("text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"));
-	http.SetHeader(wxT("Accept-Language"), wxT("en-us,en;q=0.5"));
-	http.SetHeader(wxT("Accept-Charset"), wxT("ISO-8859-1,utf-8;q=0.7,*;q=0.7"));
-	http.SetHeader(wxT("Host"), strDomain);
+	wxString apiPage = wxT("http://") + strDomain;
+	apiPage << wxT("/api/wow/character/") << Realm << wxT('/') << CharName << wxT("?fields=appearance,items");
 
-	if (http.Connect(strDomain))
-	{ 
-		// Success
-		wxInputStream *stream = http.GetInputStream(strPage); 
-		if (!stream || !stream->IsOk()) {
-			http.Close();
-			wxMessageBox(wxT("Unable to connect to the supplied link.\nYou may be having connection issues, or that page may not exist."),wxT("Armory Error"));
-			wxLogMessage(wxT("Error connecting to the supplied website. Page may not exist."));
-			return;
-		}
+	wxLogMessage(wxT("Final API Page: %s"),apiPage.c_str());
 
-		// Make sure there was no error retrieving the page
-		if(http.GetError() == wxPROTO_NOERR) {
-			wxString filename(wxT("temp.xml"));
-			wxFileOutputStream output(filename);
-			if (!stream->CanRead()){
-				wxMessageBox(wxT("Unable to read the Armory page."),wxT("Armory Error"));
-				wxLogMessage(wxT("Error reading Armory website page."));
-			}
-            if (!stream->Read(output)){
-				wxMessageBox(wxT("Error gathering Armory data."),wxT("Armory Error"));
-				wxLogMessage(wxT("Error sending Armory data to file."));
-				return;
-			}
-			output.Close();
-			if (output.GetSize() == 0){
-				wxMessageBox(wxT("Error reading Armory data."),wxT("Armory Error"));
-				wxLogMessage(wxT("Armory data file is Zero bytes."));
-				return;
-			}
+	// Build the JSON data containers
+	wxJSONValue root;
+	wxJSONReader reader;
 
-			wxTextFile fin(filename);
-			if (fin.Open(filename)) {
-				wxRegEx exSlot;
-				wxString patternSlot = wxT("data-type=\"([0-9]+)\"");
-				exSlot.Compile(patternSlot);
-				wxRegEx exItem;
-				wxString patternItem = wxT("data-item=\"i=([0-9]+)");
-				exItem.Compile(patternItem);
-				wxRegEx exItem2;
-				wxString patternItem2 = wxT("wow/[a-z]+/item/([0-9]+)");
-				exItem2.Compile(patternItem2);
-				long slotID = 0;
+	//Read the Armory API Page & get the error numbers
+	wxURL apiPageURL(apiPage);
+	wxInputStream *doc = apiPageURL.GetInputStream();
+	int numErrors = reader.Parse(*doc,&root);
 
-				wxRegEx exRace;
-				wxString patternRace = wxT("character/summary/backgrounds/race/([0-9]+)");
-				exRace.Compile(patternRace);
-				wxRegEx exGender;
-				wxString patternGender = wxT("wow/static/images/2d/profilemain/race/([0-9]+)-([0-1]).jpg");
-				exGender.Compile(patternGender);
+	if (numErrors == 0)
+	{
+		// No Gathering Errors Detected.
 
-				wxString line, race = wxT("Human"), gender = wxT("Male");
-				for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
-					if (exSlot.Matches(line)) {
-						// Manual correction for slot ID values
-						exSlot.GetMatch(line, 1).ToLong(&slotID);
-						switch (slotID) {
-						case IT_HEAD:		slotID = CS_HEAD; break;
-						case IT_NECK:		slotID = CS_NECK; break;
-						case IT_SHOULDER:	slotID = CS_SHOULDER; break;
-						case IT_SHIRT:		slotID = CS_SHIRT; break;
-						case IT_CHEST:
-						case IT_ROBE:		slotID = CS_CHEST; break;
-						case IT_BELT:		slotID = CS_BELT; break;
-						case IT_PANTS:		slotID = CS_PANTS; break;
-						case IT_BOOTS:		slotID = CS_BOOTS; break;
-						case IT_BRACERS:	slotID = CS_BRACERS; break;
-						case IT_GLOVES:		slotID = CS_GLOVES; break;
-						case IT_LEFTHANDED: slotID = CS_HAND_LEFT; break;
-						case IT_RIGHTHANDED: slotID = CS_HAND_RIGHT; break;
-						case IT_CAPE:		slotID = CS_CAPE; break;
-						case IT_TABARD:		slotID = CS_TABARD; break;
-						case IT_QUIVER:		slotID = CS_QUIVER; break;
-						default: slotID = -1;
-						}
-					} else if (slotID != -1 && exItem.Matches(line)) {
-						long itemID;
-						exItem.GetMatch(line, 1).ToLong(&itemID);
+		// Gather Race & Gender
+		size_t raceID = root[wxT("race")].AsInt();
+		size_t genderID = root[wxT("gender")].AsInt();
+		wxString race = wxT("Human");
+		wxString gender = (genderID == 0) ? wxT("Male") : wxT("Female");
+		CharRacesDB::Record racer = racedb.getById(raceID);
+		if (gameVersion == 30100)
+			race = racer.getString(CharRacesDB::NameV310);
+		else
+			race = racer.getString(CharRacesDB::Name);
+		//wxLogMessage(wxT("RaceID: %i, Race: %s\n          GenderID: %i, Gender: %s"),raceID,race,genderID,gender);
 
-						g_charControl->cd.equipment[slotID] = itemID;
-						slotID = -1;
-					} else if (slotID != -1 && exItem2.Matches(line)) {
-						long itemID;
-						exItem2.GetMatch(line, 1).ToLong(&itemID);
-
-						g_charControl->cd.equipment[slotID] = itemID;
-						slotID = -1;
-					} else if (exRace.Matches(line)) {
-						long raceId;
-						exRace.GetMatch(line, 1).ToLong(&raceId);
-						CharRacesDB::Record racer = racedb.getById(raceId);
-						if (gameVersion == 30100)
-							race = racer.getString(CharRacesDB::NameV310);
-						else
-							race = racer.getString(CharRacesDB::Name);
-						gender = wxT("Male");
-					} else if (exGender.Matches(line)) {
-						long raceId;
-						exGender.GetMatch(line, 1).ToLong(&raceId);
-						CharRacesDB::Record racer = racedb.getById(raceId);
-						if (gameVersion == 30100)
-							race = racer.getString(CharRacesDB::NameV310);
-						else
-							race = racer.getString(CharRacesDB::Name);
-
-						long genderId;
-						exGender.GetMatch(line, 2).ToLong(&genderId);
-						gender = (genderId == 0) ? wxT("Male") : wxT("Female");
-					} else if (line.Contains(wxT("<body"))) {
-						wxString strModel = wxT("Character\\") + race + MPQ_SLASH + gender + MPQ_SLASH + race + gender + wxT(".m2");
-						LoadModel(strModel);
-						if (!g_canvas->model)
-							return;
-					}
-				}
-				fin.Close();
-
-				// Update the model
-				g_charControl->RefreshModel();
-				g_charControl->RefreshEquipment();
-			}
-
-#ifndef _DEBUG
-			wxRemoveFile(filename);
-#endif
-		}
-
-		http.Close();
-		delete stream;
-	}
-}
-
-void ModelViewer::ImportArmoury(wxString strURL)
-{
-	// Format the URL
-	if (strURL.Contains(wxT("battle.net")))
-		return ImportArmouryBattleNet(strURL);
-	wxString strDomain = strURL.BeforeLast(wxT('/')).AfterLast(wxT('/')); // "armory.worldofwarcraft.com"
-	wxString strParam = strURL.AfterLast(wxT('/'));
-	int pos = strParam.Find(wxT("?r="));
-	wxString strFile = strParam.Mid(0, pos);
-	strParam = strParam.Mid(pos+3);
-	pos = strParam.Find(wxT("&cn=")); // newer version change from 'n=' to 'cn='
-	wxString strRealm, strChar;
-	if (pos >= 0) {
-		strRealm = strParam.Mid(0, pos);
-		strChar = strParam.Mid(pos+4);
-	} else {
-		pos = strParam.Find(wxT("&n="));
-		strRealm = strParam.Mid(0, pos);
-		strChar = strParam.Mid(pos+3);
-	}
-
-	// Char Name Corrections
-	// Done so names like Daïmhôndrùs will get the proper page...
-	strChar = wxString(strChar.ToUTF8(), wxConvUTF8);
-
-	// Build Page file
-	// "/character-sheet.xml?r=%s&n=%s"
-	wxString strPage = wxT('/') + strFile;
-	strPage.Append(wxT("?r=")).Append(strRealm).Append(wxT("&cn=")).Append(strChar);
-	//http://armory.wow-europe.com/character-sheet.xml?r=Spinebreaker&cn=Nostrum
-
-	wxLogMessage(wxT("Attemping to access WoWArmory Page: %s"), wxString(strDomain + strPage).c_str());
-
-	// Get the page from the armoury website
-	wxHTTP http;
-
-	// set the headers
-	http.SetHeader(wxT("User-Agent"), wxT("Mozilla/5.0 (Windows;U;Windows NT 5.1;zh-TW;rv:1.8.1.2) Gecko/20070219 Firefox/2.0.0.12")); 
-	http.SetHeader(wxT("Accept"), wxT("text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"));
-	http.SetHeader(wxT("Accept-Language"), wxT("en-us,en;q=0.5"));
-	http.SetHeader(wxT("Accept-Charset"), wxT("ISO-8859-1,utf-8;q=0.7,*;q=0.7"));
-	http.SetHeader(wxT("Host"), strDomain);
-
-	if (http.Connect(strDomain))
-	{ 
-		// Success
-		wxInputStream *stream = http.GetInputStream(strPage); 
-		if (!stream || !stream->IsOk())
+		// Load the model
+		wxString strModel = wxT("Character\\") + race + MPQ_SLASH + gender + MPQ_SLASH + race + gender + wxT(".m2");
+		LoadModel(strModel);
+		if (!g_canvas->model)
 			return;
 
-		// Make sure there was no error retrieving the page
-		if(http.GetError() == wxPROTO_NOERR) {
-			wxFileOutputStream output(wxT("temp.xml"));
-            stream->Read(output); 
-			output.Close();
-			
-			wxXmlDocument xmlDoc;
-			if (!xmlDoc.Load(wxT("temp.xml"), wxT("UTF-8")))
-				return;
-			
-			// character-model.xml?r=Realm&cn=CharacterName
-			// Model Details, to be decoded later
+		// Character Details
+		CharDetails cd = g_charControl->cd;
+		wxJSONValue app = root[wxT("appearance")];
+		cd.skinColor = app[wxT("skinColor")].AsInt();
+		cd.faceType = app[wxT("faceVariation")].AsInt();
+		cd.hairColor = app[wxT("hairColor")].AsInt();
+		cd.facialColor = app[wxT("hairColor")].AsInt();
+		cd.hairStyle = app[wxT("hairVariation")].AsInt();
+		cd.facialHair = app[wxT("featureVariation")].AsInt();
 
-			// start processing the XML file
-			if (xmlDoc.GetRoot()->GetName() != wxT("page"))
-				return;
+		// Hide the helmet
+		// Currently broken.
+		//bHideHelmet = (app[wxT("featureVariation")].AsBool()==true?false:true);
 
-			wxXmlNode *child = xmlDoc.GetRoot()->GetChildren(); // page->tabInfo
-			while(child) {
-				if (child->GetName() == wxT("characterInfo"))
-					break;
-				child = child->GetNext(); // page->characterInfo
-			}
+		// Gather Items
+		wxJSONValue items = root[wxT("items")];
+		if (items[wxT("back")].Size()>0)		cd.equipment[CS_CAPE]		= items[wxT("back")][wxT("id")].AsInt();
+		if (items[wxT("chest")].Size()>0)		cd.equipment[CS_CHEST]		= items[wxT("chest")][wxT("id")].AsInt();
+		if (items[wxT("feet")].Size()>0)		cd.equipment[CS_BOOTS]		= items[wxT("feet")][wxT("id")].AsInt();
+		if (items[wxT("hands")].Size()>0)		cd.equipment[CS_GLOVES]		= items[wxT("hands")][wxT("id")].AsInt();
+		if (items[wxT("head")].Size()>0)		cd.equipment[CS_HEAD]		= items[wxT("head")][wxT("id")].AsInt();
+		if (items[wxT("legs")].Size()>0)		cd.equipment[CS_PANTS]		= items[wxT("legs")][wxT("id")].AsInt();
+		if (items[wxT("mainHand")].Size()>0)	cd.equipment[CS_HAND_RIGHT]	= items[wxT("mainHand")][wxT("id")].AsInt();
+		if (items[wxT("offHand")].Size()>0)		cd.equipment[CS_HAND_LEFT]	= items[wxT("offHand")][wxT("id")].AsInt();
+		if (items[wxT("shirt")].Size()>0)		cd.equipment[CS_SHIRT]		= items[wxT("shirt")][wxT("id")].AsInt();
+		if (items[wxT("shoulder")].Size()>0)	cd.equipment[CS_SHOULDER]	= items[wxT("shoulder")][wxT("id")].AsInt();
+		if (items[wxT("tabard")].Size()>0)		cd.equipment[CS_TABARD]		= items[wxT("tabard")][wxT("id")].AsInt();
+		if (items[wxT("waist")].Size()>0)		cd.equipment[CS_BELT]		= items[wxT("waist")][wxT("id")].AsInt();
+		if (items[wxT("wrist")].Size()>0)		cd.equipment[CS_BRACERS]	= items[wxT("wrist")][wxT("id")].AsInt();
 
-			if (!child)
-				return;
-
-			child = child->GetChildren();
-
-			while (child) {
-
-				if (child->GetName() == wxT("character")) { // page->characterInfo->character
-
-					// process text enclosed by <tag1></tag1>
-					//wxString content = child->GetNodeContent();
-
-					// process properties of <tag1>, raceId will better?
-					int raceId = wxAtoi(child->GetPropVal(wxT("raceId"), wxT("1")));
-					CharRacesDB::Record racer = racedb.getById(raceId);
-					wxString race;
-					if (gameVersion == 30100)
-						race = racer.getString(CharRacesDB::NameV310);
-					else
-						race = racer.getString(CharRacesDB::Name);
-					//race = race.MakeLower();
-					wxString gender = child->GetPropVal(wxT("gender"), wxT("Male"));
-					//gender = gender.MakeLower();
-
-					wxString strModel = wxT("Character\\") + race + MPQ_SLASH + gender + MPQ_SLASH + race + gender + wxT(".m2");
-
-					LoadModel(strModel);
-
-					if (!g_canvas->model)
-						return;
-
-				} else if (child->GetName() == wxT("characterTab")) { // page->characterInfo->characterTab
-					child = child->GetChildren();
-
-				} else if (child->GetName() == wxT("items")) { // page->characterInfo->characterTab->items
-
-					wxXmlNode *itemNode = child->GetChildren();
-					while (itemNode) { // // page->characterInfo->characterTab->items->item
-						if (itemNode->GetName() == wxT("item")) {
-							wxString id = itemNode->GetPropVal(wxT("id"), wxT("0"));
-							wxString slot = itemNode->GetPropVal(wxT("slot"), wxT("0"));
-							
-							// Item ID
-							long itemID;
-							id.ToLong(&itemID);
-
-							// Equipment Slot
-							long slotID;
-							slot.ToLong(&slotID);
-
-							// Manual correction for slot ID values
-							if (slotID == 4) // Chest
-								slotID = CS_CHEST;
-							else if (slotID == 5) // Waist
-								slotID = CS_BELT;
-							else if (slotID == 7) // Feet
-								slotID = CS_BOOTS;
-							else if (slotID == 14) // Back
-								slotID = CS_CAPE;
-							else if (slotID == 15) // Right Hand
-								slotID = CS_HAND_RIGHT;
-							else if (slotID == 16) // Left Hand
-								slotID = CS_HAND_LEFT;
-
-							g_charControl->cd.equipment[slotID] = itemID;
-						}
-
-						itemNode = itemNode->GetNext();
-					}
-					
-					// Update the model
-					g_charControl->RefreshModel();
-					g_charControl->RefreshEquipment();
-					break;
-				}
-
-				child = child->GetNext();
-			}
-#ifndef _DEBUG
-			wxRemoveFile(wxT("temp.xml"));
-#endif
+		// Set proper eyeglow
+		if (root[wxT("class")].AsInt() == CLASS_DEATH_KNIGHT){
+			cd.eyeGlowType = EGT_DEATHKNIGHT;
+		}else{
+			cd.eyeGlowType = EGT_DEFAULT;
 		}
-		http.Close();
-		delete stream;
+
+		// Update the model
+		g_charControl->cd = cd;
+		g_charControl->RefreshModel();
+		g_charControl->RefreshEquipment();
+	}else{
+		wxLogMessage(wxT("There were errors gathering the Armory page."));
+		wxMessageBox(wxT("There was an error when gathering the Armory data.\nPlease try again later."),wxT("Armory Error"));
 	}
 }
-
-// --

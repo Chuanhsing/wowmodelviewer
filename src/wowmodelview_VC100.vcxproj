@@ -365,6 +365,9 @@ copy ..\bin\userSettings\*.* $(OutDir)userSettings
     <ClCompile Include="globalvars.cpp" />
     <ClCompile Include="imagecontrol.cpp" />
     <ClCompile Include="itemselection.cpp" />
+    <ClCompile Include="jsonreader.cpp" />
+    <ClCompile Include="jsonval.cpp" />
+    <ClCompile Include="jsonwriter.cpp" />
     <ClCompile Include="lightcontrol.cpp" />
     <ClCompile Include="liquid.cpp" />
     <ClCompile Include="maptile.cpp" />
@@ -479,6 +482,10 @@ copy ..\bin\userSettings\*.* $(OutDir)userSettings
     <ClInclude Include="opengl\glext.h" />
     <ClInclude Include="opengl\glxext.h" />
     <ClInclude Include="opengl\wglext.h" />
+    <ClInclude Include="wx\jsonreader.h" />
+    <ClInclude Include="wx\jsonval.h" />
+    <ClInclude Include="wx\jsonwriter.h" />
+    <ClInclude Include="wx\json_defs.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\bin_support\Icons\chrFile.ico" />

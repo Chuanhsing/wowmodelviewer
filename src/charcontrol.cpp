@@ -869,7 +869,7 @@ void CharControl::RefreshModel()
 
 		// facial feature geosets
 		try {
-			CharFacialHairDB::Record frec = facialhairdb.getByParams((unsigned int)(cd.race & 0xFF00), (unsigned int)(cd.gender & 0xFF00), (unsigned int)(cd.facialHair & 0xFF00));
+			CharFacialHairDB::Record frec = facialhairdb.getByParams((unsigned int)cd.race, (unsigned int)cd.gender, (unsigned int)cd.facialHair);
 			if (gameVersion >= VERSION_CATACLYSM) {
 				cd.geosets[CG_GEOSET100] = frec.getUInt(CharFacialHairDB::Geoset100V400);
 				cd.geosets[CG_GEOSET200] = frec.getUInt(CharFacialHairDB::Geoset200V400);

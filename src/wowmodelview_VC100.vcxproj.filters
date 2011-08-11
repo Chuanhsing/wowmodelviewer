@@ -153,6 +153,15 @@
     <ClCompile Include="wmo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="jsonreader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="jsonval.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="jsonwriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animated.h">
@@ -397,6 +406,18 @@
     </ClInclude>
     <ClInclude Include="opengl\wglext.h">
       <Filter>opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="wx\jsonreader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wx\jsonval.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wx\jsonwriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wx\json_defs.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
