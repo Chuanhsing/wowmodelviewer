@@ -617,9 +617,10 @@ ItemDB::Record ItemDB::getByDisplayId(unsigned int id)
 	throw NotFound();
 }
 
+// old format, deprecated
 void ItemRecord::getLine(const char *line)
 {
-	sscanf(line, "%u,%u,%u,%u,%u,%u,%u", &id, &model, &itemclass, &subclass, &type, &sheath, &quality);
+	sscanf(line, "%u,%u,%u,%u,%u,%u,%u", &id, &model, &itemclass, &subclass, &type, &sheath, &quality); // failed with MacOS
 	for (size_t i=strlen(line)-2; i>1; i--) {
 		if (line[i]==',') {
 			name = wxString(line + i + 1, wxConvUTF8);
@@ -629,9 +630,13 @@ void ItemRecord::getLine(const char *line)
 	discovery = true;
 }
 
-ItemRecord::ItemRecord(const char* line)
+ItemRecord::ItemRecord(wxString line)
+    : type(0)
 {
-	sscanf(line, "%u,%u", &id, &quality);
+	id = wxAtoi(line.BeforeFirst(','));
+	line = line.AfterFirst(',');
+	quality = wxAtoi(line.BeforeFirst(','));
+	line = line.AfterFirst(',');
 	try {
 		ItemDB::Record r = itemdb.getById(id);
 		model = r.getInt(ItemDB::ItemDisplayInfo);
@@ -646,13 +651,7 @@ ItemRecord::ItemRecord(const char* line)
 			default: sheath = SHEATHETYPE_NONE;
 		}
 		discovery = false;
-		for (size_t i=strlen(line)-2; i>1; i--) {
-			if (line[i]==',') {
-				//name = (line + i + 1);
-				name.Printf(wxT("%s [%d] [%d]"), wxString(line+i+1, wxConvUTF8).c_str(), id, model);
-				break;
-			}
-		}
+		name.Printf(wxT("%s [%d] [%d]"), line.c_str(), id, model);
 	} catch (ItemDB::NotFound) {}
 
 }
@@ -670,7 +669,7 @@ void ItemDatabase::open(wxString filename)
 	if (wxFileExists(filename) && fin.Open(filename)) {
 		wxString line;
 		for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
-			ItemRecord rec((char *)line.c_str());
+			ItemRecord rec(line);
 			if (rec.type > 0) {
 				items.push_back(rec);
 			}
@@ -866,20 +865,19 @@ wxString NPCDatabase::addDiscoveryId(int id, wxString name)
 }
 
 
-NPCRecord::NPCRecord(const char* line)
+NPCRecord::NPCRecord(wxString line)
+    : id(0), model(0), type(0)
 {
-	id = model = type = 0;
-	if (strlen(line) <= 3)
+	if (line.Len() <= 3)
 	    return;
-	sscanf(line, "%u,%u,%u,", &id, &model, &type);
+	id = wxAtoi(line.BeforeFirst(','));
+	line = line.AfterFirst(',');
+	model = wxAtoi(line.BeforeFirst(','));
+	line = line.AfterFirst(',');
+	type = wxAtoi(line.BeforeFirst(','));
+	line = line.AfterFirst(',');
 	discovery = false;
-	for (size_t i=strlen(line)-2; i>1; i--) {
-		if (line[i]==',') {
-			//name = (line + i + 1);
-			name.Printf(wxT("%s [%d] [%d]"), wxString(line+i+1, wxConvUTF8).c_str(), id, model);
-			break;
-		}
-	}
+	name.Printf(wxT("%s [%d] [%d]"), line.c_str(), id, model);
 }
 
 NPCDatabase::NPCDatabase(wxString filename)
@@ -891,7 +889,7 @@ NPCDatabase::NPCDatabase(wxString filename)
 	if (fin.Open(filename)) {
 		wxString line;
 		for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
-			NPCRecord rec((char *)line.c_str());
+			NPCRecord rec(line);
 			if (rec.model > 0) {
 				npcs.push_back(rec);
 			}
@@ -914,7 +912,7 @@ void NPCDatabase::open(wxString filename)
 	if (fin.Open(filename)) {
 		wxString line;
 		for ( line = fin.GetFirstLine(); !fin.Eof(); line = fin.GetNextLine() ) {
-			NPCRecord rec((char *)line.c_str());
+			NPCRecord rec(line);
 			if (rec.model > 0) {
 				npcs.push_back(rec);
 			}

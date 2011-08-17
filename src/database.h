@@ -470,7 +470,7 @@ struct ItemRecord {
 	int id, itemclass, subclass, type, model, sheath, quality;
 	bool discovery;
 
-	ItemRecord(const char* line);
+	ItemRecord(wxString line);
 	ItemRecord():id(0), itemclass(-1), subclass(-1), type(0), model(0), sheath(0), quality(0), discovery(false)
 	{}
 	ItemRecord(wxString name, int type): name(name), id(0), itemclass(-1), subclass(-1), type(type), model(0), sheath(0), quality(0), discovery(false)
@@ -560,7 +560,7 @@ struct NPCRecord
 	int id, model, type;
 	bool discovery;
 
-	NPCRecord(const char* line);
+	NPCRecord(wxString line);
 	NPCRecord(): id(0), model(0), type(0) {}
 	NPCRecord(const NPCRecord &r): name(r.name), id(r.id), model(r.model), type(r.type) {}
 

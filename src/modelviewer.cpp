@@ -733,7 +733,7 @@ void ModelViewer::InitDatabase()
 	if(wxFile::Exists(filename)) {
 		npcs.open(filename);
 	} else {
-		NPCRecord rec("26499,24949,7,Arthas");
+		NPCRecord rec(wxT("26499,24949,7,Arthas"));
 		if (rec.model > 0) {
 			npcs.npcs.push_back(rec);
 		}		
