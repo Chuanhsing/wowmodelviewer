@@ -113,7 +113,6 @@ ChoiceDialog::ChoiceDialog(CharControl *dest, int type,
 void ChoiceDialog::OnClick(wxCommandEvent &event)
 {
     m_selection = m_listbox->GetSelection();
-
 	if (m_selection == -1) // If nothing was selected, exit function.
 		return;
 
@@ -124,7 +123,10 @@ void ChoiceDialog::OnClick(wxCommandEvent &event)
 
 void ChoiceDialog::OnSelect(wxListEvent &event)
 {
-    m_selection = m_listctrl->GetFocusedItem();
+    // MacOS is buggy with GetFocusedItem(), use GetFirstSelected instead
+    m_selection = m_listctrl->GetFirstSelected();
+    if (m_selection == -1)
+	m_selection = m_listctrl->GetFocusedItem();
 
 	if (m_selection == -1) // If nothing was selected, exit function.
 		return;
