@@ -95,9 +95,10 @@ bool WowModelViewApp::OnInit()
 #ifdef _WINDOWS
 	// This chunk of code is all related to locale translation (if a translation is available).
 	// Only use locale for non-english?
-	wxString fn = wxT("mo")+SLASH+locales[0]+wxT(".mo");
+	wxString fn;
+	fn.Printf(wxT("mo%c%s.mo"), SLASH, locales[0]);
 	if (interfaceID >= 0)
-		fn = wxT("mo")+SLASH+locales[interfaceID]+wxT(".mo");
+		fn.Printf(wxT("mo%c%s.mo"), SLASH, locales[interfaceID]);
 	if (wxFileExists(fn))
 	{
 		locale.Init(langIds[interfaceID], wxLOCALE_CONV_ENCODING);

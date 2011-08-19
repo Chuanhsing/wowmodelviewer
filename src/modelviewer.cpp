@@ -288,22 +288,22 @@ void ModelViewer::InitMenu()
 
 	// MENU
 	fileMenu = new wxMenu;
-	fileMenu->Append(ID_LOAD_WOW, wxT("Load World of Warcraft"));
+	fileMenu->Append(ID_LOAD_WOW, _("Load World of Warcraft"));
 	if (isWoWLoaded == true)
 		fileMenu->Enable(ID_LOAD_WOW,false);
-	fileMenu->Append(ID_FILE_VIEWLOG, wxT("View Log"));
+	fileMenu->Append(ID_FILE_VIEWLOG, _("View Log"));
 	/*
 	wxMenu *gameMenu = new wxMenu;
 	gameMenu->Append(ID_LOAD_WOW, wxT("World of Warcraft"));
 	fileMenu->Append(ID_CAMERA, wxT("Load Game"), gameMenu);
 	*/
 	fileMenu->AppendSeparator();
-	fileMenu->Append(ID_MODELEXPORT_BASE, wxT("Save File..."));
+	fileMenu->Append(ID_MODELEXPORT_BASE, _("Save File..."));
 	fileMenu->Enable(ID_MODELEXPORT_BASE, false);
-	fileMenu->Append(ID_FILE_SCREENSHOT, wxT("Save Screenshot\tF12"));
-	fileMenu->Append(ID_FILE_SCREENSHOTCONFIG, wxT("Save Sized Screenshot\tCTRL+S"));
-	fileMenu->Append(ID_FILE_EXPORTGIF, wxT("GIF/Sequence Export"));
-	fileMenu->Append(ID_FILE_EXPORTAVI, wxT("Export AVI"));
+	fileMenu->Append(ID_FILE_SCREENSHOT, _("Save Screenshot\tF12"));
+	fileMenu->Append(ID_FILE_SCREENSHOTCONFIG, _("Save Sized Screenshot\tCTRL+S"));
+	fileMenu->Append(ID_FILE_EXPORTGIF, _("GIF/Sequence Export"));
+	fileMenu->Append(ID_FILE_EXPORTAVI, _("Export AVI"));
 	fileMenu->AppendSeparator();
 /*
 	fileMenu->Append(ID_FILE_TEXIMPORT, wxT("Import Texture"));
@@ -311,16 +311,16 @@ void ModelViewer::InitMenu()
 	fileMenu->Append(ID_FILE_TEXEXPORT, wxT("Export Texture"));
 	fileMenu->Enable(ID_FILE_TEXEXPORT, false);
 */
-	fileMenu->Append(ID_EXPORT_TEXTURES, wxT("Export Textures..."));
+	fileMenu->Append(ID_EXPORT_TEXTURES, _("Export Textures..."));
 
 	// --== New Model Export Menu! ==--
 	//To add your exporter, simply copy the bottom line below, and change the nessicary information.
 
 	exportMenu = new wxMenu;
-	exportMenu->AppendCheckItem(ID_MODELEXPORT_INIT, wxT("Initial Pose Only"));
+	exportMenu->AppendCheckItem(ID_MODELEXPORT_INIT, _("Initial Pose Only"));
 	exportMenu->Check(ID_MODELEXPORT_INIT, modelExportInitOnly);
 	exportMenu->AppendSeparator();
-	exportMenu->Append(ID_MODELEXPORT_OPTIONS, wxT("Export Options..."));
+	exportMenu->Append(ID_MODELEXPORT_OPTIONS, _("Export Options..."));
 	exportMenu->AppendSeparator();
 	// Perfered Exporter First
 	if (Perfered_Exporter != -1) {
@@ -339,105 +339,103 @@ void ModelViewer::InitMenu()
 	exportMenu->Enable(ID_MODELEXPORT_COLLADA, false);
 
 	// -= Create Model Export Menu =-
-	fileMenu->Append(ID_FILE_MODELEXPORT_MENU, wxT("Export Model"), exportMenu);
+	fileMenu->Append(ID_FILE_MODELEXPORT_MENU, _("Export Model"), exportMenu);
 	fileMenu->Enable(ID_FILE_MODELEXPORT_MENU, false);
 
 	// --== Continue regular menu ==--
 	fileMenu->AppendSeparator();
-	fileMenu->Append(ID_FILE_DISCOVERY_ITEM, wxT("Discovery Item"));
-	fileMenu->Append(ID_FILE_DISCOVERY_NPC, wxT("Discovery NPC"));
+	fileMenu->Append(ID_FILE_DISCOVERY_ITEM, _("Discovery Item"));
+	fileMenu->Append(ID_FILE_DISCOVERY_NPC, _("Discovery NPC"));
 	fileMenu->AppendSeparator();
 	fileMenu->Append(ID_FILE_MODEL_INFO, wxT("Export ModelInfo.xml"));
 
 	fileMenu->AppendSeparator();
-	fileMenu->Append(ID_FILE_RESETLAYOUT, wxT("Reset Layout"));
+	fileMenu->Append(ID_FILE_RESETLAYOUT, _("Reset Layout"));
 	fileMenu->AppendSeparator();
-	fileMenu->Append(ID_FILE_EXIT, wxT("E&xit\tCTRL+X"));
+	fileMenu->Append(ID_FILE_EXIT, _("E&xit\tCTRL+X"));
 
 	viewMenu = new wxMenu;
-	viewMenu->Append(ID_VIEW_NPC, wxT("View NPC"));
-	viewMenu->Append(ID_VIEW_ITEM, wxT("View Item"));
+	viewMenu->Append(ID_VIEW_NPC, _("View NPC"));
+	viewMenu->Append(ID_VIEW_ITEM, _("View Item"));
 	viewMenu->AppendSeparator();
-	viewMenu->Append(ID_SHOW_FILE_LIST, wxT("Show file list"));
-	viewMenu->Append(ID_SHOW_ANIM, wxT("Show animaton control"));
-	viewMenu->Append(ID_SHOW_CHAR, wxT("Show character control"));
-	viewMenu->Append(ID_SHOW_LIGHT, wxT("Show light control"));
-	viewMenu->Append(ID_SHOW_MODEL, wxT("Show model control"));
-	viewMenu->Append(ID_SHOW_MODELBANK, wxT("Show model bank"));
+	viewMenu->Append(ID_SHOW_FILE_LIST, _("Show file list"));
+	viewMenu->Append(ID_SHOW_ANIM, _("Show animaton control"));
+	viewMenu->Append(ID_SHOW_CHAR, _("Show character control"));
+	viewMenu->Append(ID_SHOW_LIGHT, _("Show light control"));
+	viewMenu->Append(ID_SHOW_MODEL, _("Show model control"));
+	viewMenu->Append(ID_SHOW_MODELBANK, _("Show model bank"));
 	viewMenu->AppendSeparator();
 	if (canvas) {
-		viewMenu->Append(ID_BG_COLOR, wxT("Background Color..."));
-		viewMenu->AppendCheckItem(ID_BACKGROUND, wxT("Load Background\tCTRL+L"));
+		viewMenu->Append(ID_BG_COLOR, _("Background Color..."));
+		viewMenu->AppendCheckItem(ID_BACKGROUND, _("Load Background\tCTRL+L"));
 		viewMenu->Check(ID_BACKGROUND, canvas->drawBackground);
-		viewMenu->AppendCheckItem(ID_SKYBOX, wxT("Skybox"));
+		viewMenu->AppendCheckItem(ID_SKYBOX, _("Skybox"));
 		viewMenu->Check(ID_SKYBOX, canvas->drawSky);
-		viewMenu->AppendCheckItem(ID_SHOW_GRID, wxT("Show Grid"));
+		viewMenu->AppendCheckItem(ID_SHOW_GRID, _("Show Grid"));
 		viewMenu->Check(ID_SHOW_GRID, canvas->drawGrid);
 
-		viewMenu->AppendCheckItem(ID_SHOW_MASK, wxT("Show Mask"));
+		viewMenu->AppendCheckItem(ID_SHOW_MASK, _("Show Mask"));
 		viewMenu->Check(ID_SHOW_MASK, false);
 
 		viewMenu->AppendSeparator();
 	}
-	
-	
 
 	try {
 		
 		// Camera Menu
 		wxMenu *camMenu = new wxMenu;
-		camMenu->AppendCheckItem(ID_USE_CAMERA, wxT("Use model camera"));
+		camMenu->AppendCheckItem(ID_USE_CAMERA, _("Use model camera"));
 		camMenu->AppendSeparator();
-		camMenu->Append(ID_CAM_FRONT, wxT("Front"));
-		camMenu->Append(ID_CAM_BACK, wxT("Back"));
-		camMenu->Append(ID_CAM_SIDE, wxT("Side"));
-		camMenu->Append(ID_CAM_ISO, wxT("Perspective"));
+		camMenu->Append(ID_CAM_FRONT, _("Front"));
+		camMenu->Append(ID_CAM_BACK, _("Back"));
+		camMenu->Append(ID_CAM_SIDE, _("Side"));
+		camMenu->Append(ID_CAM_ISO, _("Perspective"));
 
-		viewMenu->Append(ID_CAMERA, wxT("Camera"), camMenu);
+		viewMenu->Append(ID_CAMERA, _("Camera"), camMenu);
 		viewMenu->AppendSeparator();
 
 		wxMenu *setSize = new wxMenu;
-		setSize->AppendRadioItem(ID_CANVASS120, wxT("(1:1) 120 x 120"),wxT("Square (1:1)"));
-		setSize->AppendRadioItem(ID_CANVASS512, wxT("(1:1) 512 x 512"),wxT("Square (1:1)"));
-		setSize->AppendRadioItem(ID_CANVASS1024, wxT("(1:1) 1024 x 1024"),wxT("Square (1:1)"));
-		setSize->AppendRadioItem(ID_CANVASF480, wxT("(4:3) 640 x 480"),wxT("Fullscreen (4:3)"));
-		setSize->AppendRadioItem(ID_CANVASF600, wxT("(4:3) 800 x 600"),wxT("Fullscreen (4:3)"));
-		setSize->AppendRadioItem(ID_CANVASF768, wxT("(4:3) 1024 x 768"),wxT("Fullscreen (4:3)"));
-		setSize->AppendRadioItem(ID_CANVASF864, wxT("(4:3) 1152 x 864"),wxT("Fullscreen (4:3)"));
-		setSize->AppendRadioItem(ID_CANVASF1200, wxT("(4:3) 1600 x 1200"),wxT("Fullscreen (4:3)"));
-		setSize->AppendRadioItem(ID_CANVASW480, wxT("(16:9) 864 x 480"),wxT("Widescreen (16:9)"));
-		setSize->AppendRadioItem(ID_CANVASW720, wxT("(16:9) 1280 x 720"),wxT("Widescreen (16:9)"));
-		setSize->AppendRadioItem(ID_CANVASW1080, wxT("(16:9) 1920 x 1080"),wxT("Widescreen (16:9)"));
-		setSize->AppendRadioItem(ID_CANVASM768, wxT("(5:3) 1280 x 768"),wxT("Misc (5:3)"));
-		setSize->AppendRadioItem(ID_CANVASM1200, wxT("(8:5) 1920 x 1200"),wxT("Misc (8:5)"));
+		setSize->AppendRadioItem(ID_CANVASS120, wxT("(1:1) 120 x 120"),_("Square (1:1)"));
+		setSize->AppendRadioItem(ID_CANVASS512, wxT("(1:1) 512 x 512"),_("Square (1:1)"));
+		setSize->AppendRadioItem(ID_CANVASS1024, wxT("(1:1) 1024 x 1024"),_("Square (1:1)"));
+		setSize->AppendRadioItem(ID_CANVASF480, wxT("(4:3) 640 x 480"),_("Fullscreen (4:3)"));
+		setSize->AppendRadioItem(ID_CANVASF600, wxT("(4:3) 800 x 600"),_("Fullscreen (4:3)"));
+		setSize->AppendRadioItem(ID_CANVASF768, wxT("(4:3) 1024 x 768"),_("Fullscreen (4:3)"));
+		setSize->AppendRadioItem(ID_CANVASF864, wxT("(4:3) 1152 x 864"),_("Fullscreen (4:3)"));
+		setSize->AppendRadioItem(ID_CANVASF1200, wxT("(4:3) 1600 x 1200"),_("Fullscreen (4:3)"));
+		setSize->AppendRadioItem(ID_CANVASW480, wxT("(16:9) 864 x 480"),_("Widescreen (16:9)"));
+		setSize->AppendRadioItem(ID_CANVASW720, wxT("(16:9) 1280 x 720"),_("Widescreen (16:9)"));
+		setSize->AppendRadioItem(ID_CANVASW1080, wxT("(16:9) 1920 x 1080"),_("Widescreen (16:9)"));
+		setSize->AppendRadioItem(ID_CANVASM768, wxT("(5:3) 1280 x 768"),_("Misc (5:3)"));
+		setSize->AppendRadioItem(ID_CANVASM1200, wxT("(8:5) 1920 x 1200"),_("Misc (8:5)"));
 
 		viewMenu->Append(ID_CANVASSIZE, wxT("Set Canvas Size"), setSize);
 		
 		//lightMenu->Append(ID_LT_COLOR, wxT("Lighting Color..."));
 
 		lightMenu = new wxMenu;
-		lightMenu->Append(ID_LT_SAVE, wxT("Save Lighting"));
-		lightMenu->Append(ID_LT_LOAD, wxT("Load Lighting"));
+		lightMenu->Append(ID_LT_SAVE, _("Save Lighting"));
+		lightMenu->Append(ID_LT_LOAD, _("Load Lighting"));
 		lightMenu->AppendSeparator();
-		lightMenu->AppendCheckItem(ID_LT_DIRECTION, wxT("Render Light Objects"));
+		lightMenu->AppendCheckItem(ID_LT_DIRECTION, _("Render Light Objects"));
 		lightMenu->AppendSeparator();
-		lightMenu->AppendCheckItem(ID_LT_TRUE, wxT("Use true lighting"));
+		lightMenu->AppendCheckItem(ID_LT_TRUE, _("Use true lighting"));
 		lightMenu->Check(ID_LT_TRUE, false);
-		lightMenu->AppendRadioItem(ID_LT_DIRECTIONAL, wxT("Use dynamic light"));
+		lightMenu->AppendRadioItem(ID_LT_DIRECTIONAL, _("Use dynamic light"));
 		lightMenu->Check(ID_LT_DIRECTIONAL, true);
-		lightMenu->AppendRadioItem(ID_LT_AMBIENT, wxT("Use ambient light"));
-		lightMenu->AppendRadioItem(ID_LT_MODEL, wxT("Model lights only"));
+		lightMenu->AppendRadioItem(ID_LT_AMBIENT, _("Use ambient light"));
+		lightMenu->AppendRadioItem(ID_LT_MODEL, _("Model lights only"));
 
 		charMenu = new wxMenu;
-		charMenu->Append(ID_LOAD_CHAR, wxT("Load Character\tF8"));
-		charMenu->Append(ID_IMPORT_CHAR, wxT("Import Armory Character"));
-		charMenu->Append(ID_SAVE_CHAR, wxT("Save Character\tF7"));
+		charMenu->Append(ID_LOAD_CHAR, _("Load Character\tF8"));
+		charMenu->Append(ID_IMPORT_CHAR, _("Import Armory Character"));
+		charMenu->Append(ID_SAVE_CHAR, _("Save Character\tF7"));
 		charMenu->AppendSeparator();
 
 		charGlowMenu = new wxMenu;
-		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_NONE, wxT("None"));
-		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEFAULT, wxT("Default"));
-		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEATHKNIGHT, wxT("Death Knight"));
+		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_NONE, _("None"));
+		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEFAULT, _("Default"));
+		charGlowMenu->AppendRadioItem(ID_CHAREYEGLOW_DEATHKNIGHT, _("Death Knight"));
 		if (charControl->cd.eyeGlowType){
 			size_t egt = charControl->cd.eyeGlowType;
 			if (egt == EGT_NONE)
@@ -450,32 +448,32 @@ void ModelViewer::InitMenu()
 			charControl->cd.eyeGlowType = EGT_DEFAULT;
 			charGlowMenu->Check(ID_CHAREYEGLOW_DEFAULT, true);
 		}
-		charMenu->Append(ID_CHAREYEGLOW, wxT("Eye Glow"), charGlowMenu);
+		charMenu->Append(ID_CHAREYEGLOW, _("Eye Glow"), charGlowMenu);
 
-		charMenu->AppendCheckItem(ID_SHOW_UNDERWEAR, wxT("Show Underwear"));
+		charMenu->AppendCheckItem(ID_SHOW_UNDERWEAR, _("Show Underwear"));
 		charMenu->Check(ID_SHOW_UNDERWEAR, true);
-		charMenu->AppendCheckItem(ID_SHOW_EARS, wxT("Show Ears\tCTRL+E"));
+		charMenu->AppendCheckItem(ID_SHOW_EARS, _("Show Ears\tCTRL+E"));
 		charMenu->Check(ID_SHOW_EARS, true);
-		charMenu->AppendCheckItem(ID_SHOW_HAIR, wxT("Show Hair\tCTRL+H"));
+		charMenu->AppendCheckItem(ID_SHOW_HAIR, _("Show Hair\tCTRL+H"));
 		charMenu->Check(ID_SHOW_HAIR, true);
-		charMenu->AppendCheckItem(ID_SHOW_FACIALHAIR, wxT("Show Facial Hair\tCTRL+F"));
+		charMenu->AppendCheckItem(ID_SHOW_FACIALHAIR, _("Show Facial Hair\tCTRL+F"));
 		charMenu->Check(ID_SHOW_FACIALHAIR, true);
-		charMenu->AppendCheckItem(ID_SHOW_FEET, wxT("Show Feet"));
+		charMenu->AppendCheckItem(ID_SHOW_FEET, _("Show Feet"));
 		charMenu->Check(ID_SHOW_FEET, false);
-		charMenu->AppendCheckItem(ID_SHEATHE, wxT("Sheathe Weapons\tCTRL+Z"));
+		charMenu->AppendCheckItem(ID_SHEATHE, _("Sheathe Weapons\tCTRL+Z"));
 		charMenu->Check(ID_SHEATHE, false);
 
 		charMenu->AppendSeparator();
-		charMenu->Append(ID_SAVE_EQUIPMENT, wxT("Save Equipment\tF5"));
-		charMenu->Append(ID_LOAD_EQUIPMENT, wxT("Load Equipment\tF6"));
-		charMenu->Append(ID_CLEAR_EQUIPMENT, wxT("Clear Equipment\tF9"));
+		charMenu->Append(ID_SAVE_EQUIPMENT, _("Save Equipment\tF5"));
+		charMenu->Append(ID_LOAD_EQUIPMENT, _("Load Equipment\tF6"));
+		charMenu->Append(ID_CLEAR_EQUIPMENT, _("Clear Equipment\tF9"));
 		charMenu->AppendSeparator();
-		charMenu->Append(ID_LOAD_SET, wxT("Load Item Set"));
-		charMenu->Append(ID_LOAD_START, wxT("Load Start Outfit"));
-		charMenu->Append(ID_LOAD_NPC_START, wxT("Load NPC Outfit"));
+		charMenu->Append(ID_LOAD_SET, _("Load Item Set"));
+		charMenu->Append(ID_LOAD_START, _("Load Start Outfit"));
+		charMenu->Append(ID_LOAD_NPC_START, _("Load NPC Outfit"));
 		charMenu->AppendSeparator();
-		charMenu->Append(ID_MOUNT_CHARACTER, wxT("Mount a character..."));
-		charMenu->Append(ID_CHAR_RANDOMISE, wxT("Randomise Character\tF10"));
+		charMenu->Append(ID_MOUNT_CHARACTER, _("Mount a character..."));
+		charMenu->Append(ID_CHAR_RANDOMISE, _("Randomise Character\tF10"));
 
 		// Start out Disabled.
 		charMenu->Enable(ID_SAVE_CHAR, false);
@@ -496,46 +494,46 @@ void ModelViewer::InitMenu()
 		charMenu->Enable(ID_CHAR_RANDOMISE, false);
 
 		wxMenu *effectsMenu = new wxMenu;
-		effectsMenu->Append(ID_ENCHANTS, wxT("Apply Enchants"));
-		effectsMenu->Append(ID_EQCREATURE_R, wxT("Creature Right-Hand"));
-		effectsMenu->Append(ID_EQCREATURE_L, wxT("Creature Left-Hand"));
+		effectsMenu->Append(ID_ENCHANTS, _("Apply Enchants"));
+		effectsMenu->Append(ID_EQCREATURE_R, _("Creature Right-Hand"));
+		effectsMenu->Append(ID_EQCREATURE_L, _("Creature Left-Hand"));
 		if (gameVersion < VERSION_WOTLK) {
-			effectsMenu->Append(ID_SPELLS, wxT("Spell Effects"));
+			effectsMenu->Append(ID_SPELLS, _("Spell Effects"));
 			effectsMenu->Enable(ID_SPELLS, false);
-			effectsMenu->Append(ID_SHADER_DEATH, wxT("Death Effect"));
+			effectsMenu->Append(ID_SHADER_DEATH, _("Death Effect"));
 			effectsMenu->Enable(ID_SHADER_DEATH, false);
 		}
-		effectsMenu->Append(ID_TEST, wxT("Arrows Test"));
+		effectsMenu->Append(ID_TEST, _("Arrows Test"));
 
 		// Options menu
 		optMenu = new wxMenu;
 		if (gameVersion < VERSION_WOTLK) {
-			optMenu->AppendCheckItem(ID_USE_NPCSKINS, wxT("Use npc character skins"));
+			optMenu->AppendCheckItem(ID_USE_NPCSKINS, _("Use npc character skins"));
 			optMenu->Check(ID_USE_NPCSKINS, false);
 		}
-		optMenu->AppendCheckItem(ID_DEFAULT_DOODADS, wxT("Always show default doodads in WMOs"));
+		optMenu->AppendCheckItem(ID_DEFAULT_DOODADS, _("Always show default doodads in WMOs"));
 		optMenu->Check(ID_DEFAULT_DOODADS, true);
 		optMenu->AppendSeparator();
-		optMenu->Append(ID_MODELEXPORT_OPTIONS, wxT("Export Options..."));
-		optMenu->Append(ID_SHOW_SETTINGS, wxT("Settings..."));
+		optMenu->Append(ID_MODELEXPORT_OPTIONS, _("Export Options..."));
+		optMenu->Append(ID_SHOW_SETTINGS, _("Settings..."));
 
 
 		wxMenu *aboutMenu = new wxMenu;
-		aboutMenu->Append(ID_LANGUAGE, wxT("Language"));
-		aboutMenu->Append(ID_HELP, wxT("Help"));
+		aboutMenu->Append(ID_LANGUAGE, _("Language"));
+		aboutMenu->Append(ID_HELP, _("Help"));
 		aboutMenu->Enable(ID_HELP, false);
-		aboutMenu->Append(ID_ABOUT, wxT("About"));
+		aboutMenu->Append(ID_ABOUT, _("About"));
 		aboutMenu->AppendSeparator();
-		aboutMenu->Append(ID_CHECKFORUPDATE, wxT("Check for Update"));
+		aboutMenu->Append(ID_CHECKFORUPDATE, _("Check for Update"));
 
 		menuBar = new wxMenuBar();
-		menuBar->Append(fileMenu, wxT("&File"));
-		menuBar->Append(viewMenu, wxT("&View"));
-		menuBar->Append(charMenu, wxT("&Character"));
-		menuBar->Append(lightMenu, wxT("&Lighting"));
-		menuBar->Append(optMenu, wxT("&Options"));
-		menuBar->Append(effectsMenu, wxT("&Effects"));
-		menuBar->Append(aboutMenu, wxT("&About"));
+		menuBar->Append(fileMenu, _("&File"));
+		menuBar->Append(viewMenu, _("&View"));
+		menuBar->Append(charMenu, _("&Character"));
+		menuBar->Append(lightMenu, _("&Lighting"));
+		menuBar->Append(optMenu, _("&Options"));
+		menuBar->Append(effectsMenu, _("&Effects"));
+		menuBar->Append(aboutMenu, _("&About"));
 		SetMenuBar(menuBar);
 	} catch(...) {};
 

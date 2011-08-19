@@ -414,7 +414,7 @@ public:
 	void setupAtt2(int id);
 
 	std::vector<ModelAttachment> atts;
-	static const size_t ATT_MAX = 50;
+	static const size_t ATT_MAX = 60;
 	int16 attLookup[ATT_MAX];
 	int16 keyBoneLookup[BONE_MAX];
 
