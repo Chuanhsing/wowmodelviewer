@@ -3,6 +3,7 @@
 #include <wx/tokenzr.h>
 #include <wx/utils.h>
 #include <wx/regex.h>
+#include <wx/app.h>
 #include "wx/jsonreader.h"
 
 #include "modelviewer.h"
@@ -1975,8 +1976,9 @@ void ModelViewer::LoadWoW()
 	}
 
 	// initial interfaceID as langID
-	if (interfaceID == 0 && langID >= 0)
+	if (interfaceID == 0 && langID >= 0) {
 		interfaceID = langID;
+	}
 
 	// initial langOffset
 	if (langOffset == -1) {
@@ -2305,38 +2307,12 @@ void ModelViewer::LoadChar(wxString fn)
 void ModelViewer::OnLanguage(wxCommandEvent &event)
 {
 	if (event.GetId() == ID_LANGUAGE) {
-		/*
-		static const wxLanguage langIds[] =
-		{
-			wxLANGUAGE_ENGLISH,
-			wxLANGUAGE_KOREAN,
-			wxLANGUAGE_FRENCH,
-			wxLANGUAGE_GERMAN,
-			wxLANGUAGE_CHINESE_SIMPLIFIED,
-			wxLANGUAGE_CHINESE_TRADITIONAL,
-			wxLANGUAGE_SPANISH,
-		};
-		*/
-		
-		wxString langNames[] =
-		{
-			wxT("English"),
-			wxT("Korean"),
-			wxT("French"),
-			wxT("German"),
-			wxT("Simplified Chinese"),
-			wxT("Traditional Chinese"),
-			wxT("Spanish (EU)"),
-			wxT("Spanish (Latin American)"),
-			wxT("Russian"),
-		};
-
 		// the arrays should be in sync
-		//wxCOMPILE_TIME_ASSERT(WXSIZEOF(langNames) == WXSIZEOF(langIds), LangArraysMismatch);
+		wxCOMPILE_TIME_ASSERT(WXSIZEOF(langNames) == WXSIZEOF(langIds), LangArraysMismatch);
 
-		long lng = wxGetSingleChoiceIndex(wxT("Please select a language:"), wxT("Language"), WXSIZEOF(langNames), langNames);
+		long lng = wxGetSingleChoiceIndex(_("Please select a language:"), _("Language"), WXSIZEOF(langNames), langNames);
 
-		if (lng != -1) {
+		if (lng != -1 && lng != interfaceID) {
 			interfaceID = lng;
 			wxMessageBox(wxT("You will need to reload WoW Model Viewer for changes to take effect."), wxT("Language Changed"), wxOK | wxICON_INFORMATION);
 		}
@@ -2401,8 +2377,8 @@ void ModelViewer::DownloadLocaleFiles()
 	if (lang == wxT("enGB"))
 		lang = wxT("enUS");
 
-	wxString msg = wxT("Would you like to download ") + lang + wxT(" locale files?");
-	if (wxMessageBox(msg, wxT("Update Locale Files"), wxYES_NO) == wxYES) {
+	wxString msg = wxString::Format(_("Would you like to download %s locale files?"), lang.c_str());
+	if (wxMessageBox(msg, _("Update Locale Files"), wxYES_NO) == wxYES) {
 		wxString csvs[] = {wxT("items.csv"), wxT("npcs.csv")};
 		if (!wxDirExists(lang))
 			wxMkdir(lang);
@@ -2454,10 +2430,10 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 #endif
 
 		if (Compare == 0) {
-			wxMessageBox(wxT("You have the most up-to-date version."), wxT("Update Check"));
+			wxMessageBox(_("You have the most up-to-date version."), _("Update Check"));
 		} else {
-			wxString msg = wxT("The most current version is: ") + version + wxT("\nWould you like to go to the download page?");
-			if (wxMessageBox(msg, wxT("Update Check"), wxYES_NO, this) == wxYES)
+			wxString msg = wxString::Format(wxT("The most current version is: %s\nWould you like to go to the download page?"), version.c_str());
+			if (wxMessageBox(msg, _("Update Check"), wxYES_NO, this) == wxYES)
 				wxLaunchDefaultBrowser(wxString(downloadURL.ToUTF8(), wxConvUTF8));
 		}
 

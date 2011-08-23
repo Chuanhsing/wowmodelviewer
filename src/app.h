@@ -241,34 +241,28 @@
 #include "modelviewer.h"
 
 // vars
-const wxString langNames[] =
+static wxString langNames[] =
 {
 	wxT("English"),
-	//#if wxUSE_UNICODE
-		wxT("Korean"),
-	//#endif
+	wxT("Korean"),
 	wxT("French"),
 	wxT("German"),
-	//#if wxUSE_UNICODE
-		wxT("Chinese (Simplified)"),
-		wxT("Chinese (Traditional)"),
-	//#endif
-	wxT("Spanish"),
+	wxT("Simplified Chinese"),
+	wxT("Traditional Chinese"),
+	wxT("Spanish (EU)"),
+	wxT("Spanish (Latin American)"),
 	wxT("Russian"),
 };
 
 static const wxLanguage langIds[] =
 {
 	wxLANGUAGE_ENGLISH,
-	//#if wxUSE_UNICODE
-		wxLANGUAGE_KOREAN,
-	//#endif
+	wxLANGUAGE_KOREAN,
 	wxLANGUAGE_FRENCH,
 	wxLANGUAGE_GERMAN,
-	//#if wxUSE_UNICODE
-		wxLANGUAGE_CHINESE_SIMPLIFIED,
-		wxLANGUAGE_CHINESE_TRADITIONAL,
-	//#endif
+	wxLANGUAGE_CHINESE_SIMPLIFIED,
+	wxLANGUAGE_CHINESE_TRADITIONAL,
+	wxLANGUAGE_SPANISH,
 	wxLANGUAGE_SPANISH,
 	wxLANGUAGE_RUSSIAN,
 };
@@ -280,6 +274,7 @@ public:
 	virtual int OnExit();
 	virtual void OnUnhandledException();
 	virtual void OnFatalException();
+	void setInterfaceLocale();
 
 	//virtual bool OnExceptionInMainLoop();
 	//virtual void HandleEvent(wxEvtHandler *handler, wxEventFunction func, wxEvent& event) const ; 

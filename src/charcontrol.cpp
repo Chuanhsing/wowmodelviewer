@@ -120,12 +120,12 @@ CharControl::CharControl(wxWindow* parent, wxWindowID id)
 	gs->Add(spins[type] = new wxSpinButton(this, id, wxDefaultPosition, wxSize(30,16), wxSP_HORIZONTAL|wxSP_WRAP), wxSizerFlags(1).Align(wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL)); \
 	gs->Add(spinLabels[type] = new wxStaticText(this, wxID_ANY, wxT("0")), wxSizerFlags(2).Align(wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL));
 
-	ADD_CONTROLS(SPIN_SKIN_COLOR, ID_SKIN_COLOR, wxT("Skin color"))
-	ADD_CONTROLS(SPIN_FACE_TYPE, ID_FACE_TYPE, wxT("Face type"))
-	ADD_CONTROLS(SPIN_HAIR_COLOR, ID_HAIR_COLOR, wxT("Hair color"))
-	ADD_CONTROLS(SPIN_HAIR_STYLE, ID_HAIR_STYLE, wxT("Hair style"))
-	ADD_CONTROLS(SPIN_FACIAL_HAIR, ID_FACIAL_HAIR, wxT("Facial feature"))
-	ADD_CONTROLS(SPIN_FACIAL_COLOR, ID_FACIAL_COLOR, wxT("Facial color"))
+	ADD_CONTROLS(SPIN_SKIN_COLOR, ID_SKIN_COLOR, _("Skin color"))
+	ADD_CONTROLS(SPIN_FACE_TYPE, ID_FACE_TYPE, _("Face type"))
+	ADD_CONTROLS(SPIN_HAIR_COLOR, ID_HAIR_COLOR, _("Hair color"))
+	ADD_CONTROLS(SPIN_HAIR_STYLE, ID_HAIR_STYLE, _("Hair style"))
+	ADD_CONTROLS(SPIN_FACIAL_HAIR, ID_FACIAL_HAIR, _("Facial feature"))
+	ADD_CONTROLS(SPIN_FACIAL_COLOR, ID_FACIAL_COLOR, _("Facial color"))
 	#undef ADD_CONTROLS
 	
 	//gs->Add(new wxButton(this, ID_CHAR_RANDOMISE, wxT("Randomise"), wxDefaultPosition, wxDefaultSize), wxSizerFlags().Proportion(0).Expand());
@@ -137,33 +137,33 @@ CharControl::CharControl(wxWindow* parent, wxWindowID id)
 		labels[i] = NULL;
 	}
 	
-	top->Add(new wxStaticText(this, -1, wxT("Equipment"), wxDefaultPosition, wxSize(200,20), wxALIGN_CENTRE), wxSizerFlags().Border(wxTOP, 10));
+	top->Add(new wxStaticText(this, -1, _("Equipment"), wxDefaultPosition, wxSize(200,20), wxALIGN_CENTRE), wxSizerFlags().Border(wxTOP, 10));
 	wxFlexGridSizer *gs2 = new wxFlexGridSizer(2, 5, 5);
 	gs2->AddGrowableCol(1);
 
 	#define ADD_CONTROLS(type, caption) \
 	gs2->Add(buttons[type]=new wxButton(this, ID_EQUIPMENT + type, caption), wxSizerFlags().Align(wxALIGN_CENTER_VERTICAL)); \
-	gs2->Add(labels[type]=new wxStaticText(this, -1, wxT("---- None ----")), wxSizerFlags().Proportion(1).Expand().Align(wxALIGN_CENTER_VERTICAL).Border(wxRIGHT, 10));
+	gs2->Add(labels[type]=new wxStaticText(this, -1, _("---- None ----")), wxSizerFlags().Proportion(1).Expand().Align(wxALIGN_CENTER_VERTICAL).Border(wxRIGHT, 10));
 	
-	ADD_CONTROLS(CS_HEAD, wxT("Head"))
+	ADD_CONTROLS(CS_HEAD, _("Head"))
 	//ADD_CONTROLS(CS_NECK, wxT("Neck"))
-	ADD_CONTROLS(CS_SHOULDER, wxT("Shoulder"))
+	ADD_CONTROLS(CS_SHOULDER, _("Shoulder"))
 
-	ADD_CONTROLS(CS_SHIRT, wxT("Shirt"))
-	ADD_CONTROLS(CS_CHEST, wxT("Chest"))
-	ADD_CONTROLS(CS_BELT, wxT("Belt"))
-	ADD_CONTROLS(CS_PANTS, wxT("Legs"))
-	ADD_CONTROLS(CS_BOOTS, wxT("Boots"))
+	ADD_CONTROLS(CS_SHIRT, _("Shirt"))
+	ADD_CONTROLS(CS_CHEST, _("Chest"))
+	ADD_CONTROLS(CS_BELT, _("Belt"))
+	ADD_CONTROLS(CS_PANTS, _("Legs"))
+	ADD_CONTROLS(CS_BOOTS, _("Boots"))
 
-	ADD_CONTROLS(CS_BRACERS, wxT("Bracers"))
-	ADD_CONTROLS(CS_GLOVES, wxT("Gloves"))
-	ADD_CONTROLS(CS_CAPE, wxT("Cape"))
+	ADD_CONTROLS(CS_BRACERS, _("Bracers"))
+	ADD_CONTROLS(CS_GLOVES, _("Gloves"))
+	ADD_CONTROLS(CS_CAPE, _("Cape"))
 
-	ADD_CONTROLS(CS_HAND_RIGHT, wxT("Right hand"))
-	ADD_CONTROLS(CS_HAND_LEFT, wxT("Left hand"))
+	ADD_CONTROLS(CS_HAND_RIGHT, _("Right hand"))
+	ADD_CONTROLS(CS_HAND_LEFT, _("Left hand"))
 
-	ADD_CONTROLS(CS_QUIVER, wxT("Quiver"))
-	ADD_CONTROLS(CS_TABARD, wxT("Tabard"))
+	ADD_CONTROLS(CS_QUIVER, _("Quiver"))
+	ADD_CONTROLS(CS_TABARD, _("Tabard"))
 	#undef ADD_CONTROLS
 	
 	top->Add(gs2, wxEXPAND);
@@ -175,17 +175,17 @@ CharControl::CharControl(wxWindow* parent, wxWindowID id)
 	gs3->Add(tabardSpins[type]=new wxSpinButton(this, id, wxDefaultPosition, wxSize(30,16), wxSP_HORIZONTAL|wxSP_WRAP), wxSizerFlags(1).Align(wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL)); \
 	gs3->Add(spinTbLabels[type] = new wxStaticText(this, wxID_ANY, wxT("0")), wxSizerFlags(2).Align(wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL));
 
-	ADD_CONTROLS(SPIN_TABARD_ICON, ID_TABARD_ICON, wxT("Icon"))
-	ADD_CONTROLS(SPIN_TABARD_ICONCOLOR, ID_TABARD_ICONCOLOR, wxT("Icon Color"))
-	ADD_CONTROLS(SPIN_TABARD_BORDER, ID_TABARD_BORDER, wxT("Border"))
-	ADD_CONTROLS(SPIN_TABARD_BORDERCOLOR, ID_TABARD_BORDERCOLOR, wxT("Border Color"))
-	ADD_CONTROLS(SPIN_TABARD_BACKGROUND, ID_TABARD_BACKGROUND, wxT("BG Color"))
+	ADD_CONTROLS(SPIN_TABARD_ICON, ID_TABARD_ICON, _("Icon"))
+	ADD_CONTROLS(SPIN_TABARD_ICONCOLOR, ID_TABARD_ICONCOLOR, _("Icon Color"))
+	ADD_CONTROLS(SPIN_TABARD_BORDER, ID_TABARD_BORDER, _("Border"))
+	ADD_CONTROLS(SPIN_TABARD_BORDERCOLOR, ID_TABARD_BORDERCOLOR, _("Border Color"))
+	ADD_CONTROLS(SPIN_TABARD_BACKGROUND, ID_TABARD_BACKGROUND, _("BG Color"))
 
 	#undef ADD_CONTROLS
 
-	top->Add(new wxStaticText(this, -1, wxT("Tabard details")), wxSizerFlags().Align(wxALIGN_CENTRE).Border(wxALL, 1));
+	top->Add(new wxStaticText(this, -1, _("Tabard details")), wxSizerFlags().Align(wxALIGN_CENTRE).Border(wxALL, 1));
 	top->Add(gs3, wxEXPAND);
-	top->Add(new wxButton(this, ID_MOUNT, wxT("Choose mount")), wxSizerFlags().Align(wxALIGN_CENTRE).Border(wxTOP, 15));
+	top->Add(new wxButton(this, ID_MOUNT, _("Choose mount")), wxSizerFlags().Align(wxALIGN_CENTRE).Border(wxTOP, 15));
 
 	//p->SetSizer(top);
 	
@@ -387,7 +387,7 @@ void CharControl::UpdateModel(Attachment *a)
 
 	for (size_t i=0; i<NUM_CHAR_SLOTS; i++) {
 		if (labels[i]) {
-			labels[i]->SetLabel(wxT("---- None ----"));
+			labels[i]->SetLabel(_("---- None ----"));
 			labels[i]->SetForegroundColour(*wxBLACK);
 		}
 	}
@@ -2272,7 +2272,7 @@ void CharControl::selectMount()
 		filelistInitialized = true;
 	}
 
-	choices.Add(wxT("---- None ----"));
+	choices.Add(_("---- None ----"));
 	cats.push_back(0);
 	
 	for (size_t i=0; i<creaturemodels.size(); i++) {
@@ -2360,9 +2360,9 @@ void CharControl::selectNPC(ssize_t type)
 			cats.push_back(typeLookup[r.type]);
 		}
 
-		itemDialog = new CategoryChoiceDialog(this, (int)type, g_modelViewer, wxT("Select an NPC"), wxT("NPC Models"), choices, cats, catnames, &quality, false, true);
+		itemDialog = new CategoryChoiceDialog(this, (int)type, g_modelViewer, _("Select an NPC"), _("NPC Models"), choices, cats, catnames, &quality, false, true);
 	} else {
-		itemDialog = new FilteredChoiceDialog(this, (int)type, g_modelViewer, wxT("Select an NPC"), wxT("NPC Models"), choices, &quality, false);
+		itemDialog = new FilteredChoiceDialog(this, (int)type, g_modelViewer, _("Select an NPC"), _("NPC Models"), choices, &quality, false);
 	}
 	
 	itemDialog->SetSelection(sel);
@@ -2553,67 +2553,67 @@ void CharControl::OnUpdateItem(int type, int id)
 				cd.equipment[CS_HEAD] = itemid;
 				if (slotHasModel(CS_HEAD)) RefreshItem(CS_HEAD);
 				if (itemid) labels[CS_HEAD]->SetLabel(CSConv(items.getById(cd.equipment[CS_HEAD]).name));
-				else labels[CS_HEAD]->SetLabel(wxT("---- None ----"));
+				else labels[CS_HEAD]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::ShoulderID));
 				cd.equipment[CS_SHOULDER] = itemid;
 				if (slotHasModel(CS_SHOULDER)) RefreshItem(CS_SHOULDER);
 				if (itemid) labels[CS_SHOULDER]->SetLabel(CSConv(items.getById(cd.equipment[CS_SHOULDER]).name));
-				else labels[CS_SHOULDER]->SetLabel(wxT("---- None ----"));
+				else labels[CS_SHOULDER]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::ShirtID));
 				cd.equipment[CS_SHIRT] = itemid;
 				//if (slotHasModel(CS_SHIRT)) RefreshItem(CS_SHIRT);
 				if (itemid) labels[CS_SHIRT]->SetLabel(CSConv(items.getById(cd.equipment[CS_SHIRT]).name));
-				else labels[CS_SHIRT]->SetLabel(wxT("---- None ----"));
+				else labels[CS_SHIRT]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::ChestID));
 				cd.equipment[CS_CHEST] = itemid;
 				//if (slotHasModel(CS_CHEST)) RefreshItem(CS_CHEST);
 				if (itemid) labels[CS_CHEST]->SetLabel(CSConv(items.getById(cd.equipment[CS_CHEST]).name));
-				else labels[CS_CHEST]->SetLabel(wxT("---- None ----"));
+				else labels[CS_CHEST]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::BeltID));
 				cd.equipment[CS_BELT] = itemid;
 				//if (slotHasModel(CS_BELT)) RefreshItem(CS_BELT);
 				if (itemid) labels[CS_BELT]->SetLabel(CSConv(items.getById(cd.equipment[CS_BELT]).name));
-				else labels[CS_BELT]->SetLabel(wxT("---- None ----"));
+				else labels[CS_BELT]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::PantsID));
 				cd.equipment[CS_PANTS] = itemid;
 				//if (slotHasModel(CS_PANTS)) RefreshItem(CS_PANTS);
 				if (itemid) labels[CS_PANTS]->SetLabel(CSConv(items.getById(cd.equipment[CS_PANTS]).name));
-				else labels[CS_PANTS]->SetLabel(wxT("---- None ----"));
+				else labels[CS_PANTS]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::BootsID));
 				cd.equipment[CS_BOOTS] = itemid;
 				//if (slotHasModel(CS_BOOTS)) RefreshItem(CS_BOOTS);
 				if (itemid) labels[CS_BOOTS]->SetLabel(CSConv(items.getById(cd.equipment[CS_BOOTS]).name));
-				else labels[CS_BOOTS]->SetLabel(wxT("---- None ----"));
+				else labels[CS_BOOTS]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::BracersID));
 				cd.equipment[CS_BRACERS] = itemid;
 				//if (slotHasModel(CS_BRACERS)) RefreshItem(CS_BRACERS);
 				if (itemid) labels[CS_BRACERS]->SetLabel(CSConv(items.getById(cd.equipment[CS_BRACERS]).name));
-				else labels[CS_BRACERS]->SetLabel(wxT("---- None ----"));
+				else labels[CS_BRACERS]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::GlovesID));
 				cd.equipment[CS_GLOVES] = itemid;
 				//if (slotHasModel(CS_GLOVES)) RefreshItem(CS_GLOVES);
 				if (itemid) labels[CS_GLOVES]->SetLabel(CSConv(items.getById(cd.equipment[CS_GLOVES]).name));
-				else labels[CS_GLOVES]->SetLabel(wxT("---- None ----"));
+				else labels[CS_GLOVES]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::TabardID));
 				cd.equipment[CS_TABARD] = itemid;
 				//if (slotHasModel(CS_TABARD)) RefreshItem(CS_TABARD);
 				if (itemid) labels[CS_TABARD]->SetLabel(CSConv(items.getById(cd.equipment[CS_TABARD]).name));
-				else labels[CS_TABARD]->SetLabel(wxT("---- None ----"));
+				else labels[CS_TABARD]->SetLabel(_("---- None ----"));
 
 				itemid = items.getItemIDByModel(npcrec.getUInt(NPCDB::CapeID));
 				cd.equipment[CS_CAPE] = itemid;
 				if (slotHasModel(CS_CAPE)) RefreshItem(CS_CAPE);
 				if (itemid) labels[CS_CAPE]->SetLabel(CSConv(items.getById(cd.equipment[CS_CAPE]).name));
-				else labels[CS_CAPE]->SetLabel(wxT("---- None ----"));
+				else labels[CS_CAPE]->SetLabel(_("---- None ----"));
 				//wxLogMessage(wxT("npcdb.getByNPCID good: %d"), npcrec.getUInt(NPCDB::HelmID));
 			} catch (...) {
 				wxLogMessage(wxT("npcdb.getByNPCID error"));

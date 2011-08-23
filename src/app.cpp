@@ -3,6 +3,8 @@
 #include <wx/splash.h>
 #include <wx/mstream.h>
 #include <wx/stdpaths.h>
+#include <wx/app.h>
+
 #include "UserSkins.h"
 #include "resource1.h"
 
@@ -30,6 +32,30 @@ IMPLEMENT_APP(WowModelViewApp)
 
 //#include "globalvars.h"
 
+void WowModelViewApp::setInterfaceLocale()
+{
+	if (interfaceID <= 0)
+		return;
+#ifdef _WINDOWS
+	// This chunk of code is all related to locale translation (if a translation is available).
+	// Only use locale for non-english?
+	wxString fn;
+	fn.Printf(wxT("mo%c%s.mo"), SLASH, locales[0]);
+	if (interfaceID >= 0)
+		fn.Printf(wxT("mo%c%s.mo"), SLASH, locales[interfaceID]);
+	if (wxFileExists(fn))
+	{
+		locale.Init(langIds[interfaceID], wxLOCALE_CONV_ENCODING);
+		
+		wxLocale::AddCatalogLookupPathPrefix(wxT("mo"));
+		//wxLocale::AddCatalogLookupPathPrefix(wxT(".."));
+
+		//locale.AddCatalog(wxT("wowmodelview")); // Initialize the catalogs we'll be using
+		locale.AddCatalog(locales[interfaceID]);
+	}
+#endif
+}
+
 bool WowModelViewApp::OnInit()
 {
 	frame = NULL;
@@ -41,7 +67,7 @@ bool WowModelViewApp::OnInit()
 	if (wxFile::Exists(wxT("Splash.png"))) {
 		wxBitmap bitmap;
 		if (bitmap.LoadFile(wxT("Splash.png"),wxBITMAP_TYPE_PNG) == false){
-			wxMessageBox(wxT("Failed to load Splash Screen.\nPress OK to continue loading WMV."),wxT("Failure"));
+			wxMessageBox(_("Failed to load Splash Screen.\nPress OK to continue loading WMV."), _("Failure"));
 			//return false;		// Used while debugging the splash screen.
 		} else {
 			splash = new wxSplashScreen(bitmap,
@@ -92,24 +118,7 @@ bool WowModelViewApp::OnInit()
 		return false;
 	}
 
-#ifdef _WINDOWS
-	// This chunk of code is all related to locale translation (if a translation is available).
-	// Only use locale for non-english?
-	wxString fn;
-	fn.Printf(wxT("mo%c%s.mo"), SLASH, locales[0]);
-	if (interfaceID >= 0)
-		fn.Printf(wxT("mo%c%s.mo"), SLASH, locales[interfaceID]);
-	if (wxFileExists(fn))
-	{
-		locale.Init(langIds[interfaceID], wxLOCALE_CONV_ENCODING);
-		
-		wxLocale::AddCatalogLookupPathPrefix(wxT("mo"));
-		//wxLocale::AddCatalogLookupPathPrefix(wxT(".."));
-
-		//locale.AddCatalog(wxT("wowmodelview")); // Initialize the catalogs we'll be using
-		locale.AddCatalog(locales[interfaceID]);
-	}
-#endif
+	setInterfaceLocale();
 
 	// Now create our main frame.
     frame = new ModelViewer();
@@ -220,8 +229,7 @@ bool WowModelViewApp::OnInit()
 	}
 
 	// Classic Mode?
-	wxString msg = wxT("Would you like to load World of Warcraft right now?");
-	if (wxMessageBox(msg, wxT("Load World of Warcraft"), wxYES_NO) == wxYES) {
+	if (wxMessageBox(_("Would you like to load World of Warcraft right now?"), _("Load World of Warcraft"), wxYES_NO) == wxYES) {
 		frame->LoadWoW();
 	}
 
@@ -334,8 +342,8 @@ void searchMPQs(bool firstTime)
 		return;
 
 	bool bSearchCache = false;
-	wxMessageDialog *dial = new wxMessageDialog(NULL, wxT("Do you want to search Cache dir?"),
-		wxT("Question"), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
+	wxMessageDialog *dial = new wxMessageDialog(NULL, _("Do you want to search Cache dir?"),
+		_("Question"), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);
 	if (wxID_YES == dial->ShowModal())
 		bSearchCache = true;
 
@@ -387,7 +395,7 @@ void searchMPQs(bool firstTime)
 		else if (avaiLocales.size() == 1) // only 1 locale
 			langName = avaiLocales[0];
 		else
-			langName = wxGetSingleChoice(wxT("Please select a Locale:"), wxT("Locale"), avaiLocales);
+			langName = wxGetSingleChoice(_("Please select a Locale:"), _("Locale"), avaiLocales);
 	}
 
 	// search Partial MPQs
