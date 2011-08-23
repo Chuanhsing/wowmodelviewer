@@ -82,7 +82,7 @@ struct Attachment {
 	
 	void setup();
 	void setupParticle();
-	Attachment* addChild(const char *fn, int id, int slot, float scale=1.0f, float rot=0.0f, Vec3D pos=Vec3D(0.0f, 0.0f, 0.0f));
+	Attachment* addChild(wxString fn, int id, int slot, float scale=1.0f, float rot=0.0f, Vec3D pos=Vec3D(0.0f, 0.0f, 0.0f));
 	Attachment* addChild(Displayable *disp, int id, int slot, float scale=1.0f, float rot=0.0f, Vec3D pos=Vec3D(0.0f, 0.0f, 0.0f));
 	void delSlot(int slot);
 	void delChildren();

@@ -292,11 +292,6 @@ void ModelViewer::InitMenu()
 	if (isWoWLoaded == true)
 		fileMenu->Enable(ID_LOAD_WOW,false);
 	fileMenu->Append(ID_FILE_VIEWLOG, _("View Log"));
-	/*
-	wxMenu *gameMenu = new wxMenu;
-	gameMenu->Append(ID_LOAD_WOW, wxT("World of Warcraft"));
-	fileMenu->Append(ID_CAMERA, wxT("Load Game"), gameMenu);
-	*/
 	fileMenu->AppendSeparator();
 	fileMenu->Append(ID_MODELEXPORT_BASE, _("Save File..."));
 	fileMenu->Enable(ID_MODELEXPORT_BASE, false);

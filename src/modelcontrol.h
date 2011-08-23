@@ -38,8 +38,9 @@ class ModelControl: public wxWindow
 	wxSlider *alpha, *scale;
 	wxCheckBox *bones, *box, *render, *wireframe, *texture, *particles;
 	wxCheckListBox *clbGeosets;
-	wxStaticText *lblGeosets, *lblLod, *lblScale, *lblAlpha, *lblXYZ;
+	wxStaticText *lblGeosets, *lblLod, *lblScale, *lblAlpha, *lblXYZ, *rotXYZ;
 	wxTextCtrl *txtX, *txtY, *txtZ;
+	wxTextCtrl *rotX, *rotY, *rotZ;
 
 	// List of models in the scene.
 	//std::vector<Model*> models;
@@ -62,7 +63,7 @@ public:
 	void OnCombo(wxCommandEvent &event);
 	void OnList(wxCommandEvent &event);
 	void OnSlider(wxScrollEvent &event);
-
+	void OnEnter(wxCommandEvent &event);
 };
 
 class ScrWindow : public wxFrame

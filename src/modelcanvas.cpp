@@ -1725,6 +1725,18 @@ inline void Attachment::draw(ModelCanvas *c)
 				glEnable(GL_TEXTURE_2D);
 		}
 
+		// shift or rotate the attached model
+		if (c->model && c->model != m) {
+			if (m->pos != Vec3D(0.0f, 0.0f, 0.0f))
+				glTranslatef(m->pos.x, m->pos.y, m->pos.z);
+
+			if (m->rot != Vec3D(0.0f,0.0f,0.0f)) {
+				glRotatef(m->rot.x, 1.0f, 0.0f, 0.0f);
+				glRotatef(m->rot.y, 0.0f, 1.0f, 0.0f);
+				glRotatef(m->rot.z, 0.0f, 0.0f, 1.0f);
+			}
+		}
+
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		// We call this no matter what so that the model will still 'animate'.
 		// and we do the 'showmodel' check inside the function
@@ -2295,12 +2307,12 @@ void Attachment::setupParticle()
 		parent->model->setupAtt2(id);
 }
 
-Attachment* Attachment::addChild(const char *modelfn, int id, int slot, float scale, float rot, Vec3D pos)
+Attachment* Attachment::addChild(wxString modelfn, int id, int slot, float scale, float rot, Vec3D pos)
 {
-	if (!modelfn || !strlen(modelfn) || id<0) 
+	if (!modelfn || modelfn.Len() == 0 || id<0) 
 		return 0;
 
-	Model *m = new Model(wxString(modelfn, wxConvUTF8), true);
+	Model *m = new Model(modelfn, true);
 
 	if (m && m->ok) {
 		return addChild(m, id, slot, scale, rot, pos);
@@ -2312,6 +2324,7 @@ Attachment* Attachment::addChild(const char *modelfn, int id, int slot, float sc
 
 Attachment* Attachment::addChild(Displayable *disp, int id, int slot, float scale, float rot, Vec3D pos)
 {
+	wxLogMessage(wxT("Attach on id %d slot %d scale %f rot %f pos (%f,%f,%f)"), id, slot, scale, rot, pos.x, pos.y, pos.z);
 	Attachment *att = new Attachment(this, disp, id, slot, scale, rot, pos);
 	children.push_back(att);
 	return att;

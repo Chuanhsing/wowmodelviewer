@@ -284,6 +284,9 @@ enum ObjectID {
 	ID_MODEL_X,
 	ID_MODEL_Y,
 	ID_MODEL_Z,
+	ID_MODEL_ROT_X,
+	ID_MODEL_ROT_Y,
+	ID_MODEL_ROT_Z,
 
 	// ----------------------------------------
 	// Model Bank Control Frame

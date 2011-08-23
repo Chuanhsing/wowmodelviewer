@@ -68,7 +68,7 @@ void ArrowControl::OnButton(wxCommandEvent &event)
 	if(id == ID_ARROW_ATTACH) {
 		wxString mp = wxT("Item\\ObjectComponents\\Ammo\\Arrow_A_01Brown.blp");
 		
-		curAtt = charAtt->addChild((wxT("Item\\Objectcomponents\\ammo\\") + model->GetStringSelection()).mb_str(), joint->GetSelection(), -1);
+		curAtt = charAtt->addChild(wxT("Item\\Objectcomponents\\ammo\\") + model->GetStringSelection(), joint->GetSelection(), -1);
 		atts.push_back(curAtt);
 		
 		GLuint tex = texturemanager.add(mp);

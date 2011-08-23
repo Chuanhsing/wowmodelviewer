@@ -4,6 +4,7 @@
 #include "CxImage/ximage.h"
 #include <wx/wx.h>
 #include <wx/ffile.h>
+#include <wx/textctrl.h>
 
 IMPLEMENT_CLASS(ModelControl, wxWindow)
 
@@ -22,6 +23,13 @@ BEGIN_EVENT_TABLE(ModelControl, wxWindow)
 
 	EVT_COMMAND_SCROLL(ID_MODEL_ALPHA, ModelControl::OnSlider)
 	EVT_COMMAND_SCROLL(ID_MODEL_SCALE, ModelControl::OnSlider)
+
+	EVT_TEXT_ENTER(ID_MODEL_X, ModelControl::OnEnter)
+	EVT_TEXT_ENTER(ID_MODEL_Y, ModelControl::OnEnter)
+	EVT_TEXT_ENTER(ID_MODEL_Z, ModelControl::OnEnter)
+	EVT_TEXT_ENTER(ID_MODEL_ROT_X, ModelControl::OnEnter)
+	EVT_TEXT_ENTER(ID_MODEL_ROT_Y, ModelControl::OnEnter)
+	EVT_TEXT_ENTER(ID_MODEL_ROT_Z, ModelControl::OnEnter)
 END_EVENT_TABLE()
 
 
@@ -73,11 +81,14 @@ ModelControl::ModelControl(wxWindow* parent, wxWindowID id)
 		lblGeosets = new wxStaticText(this, wxID_ANY, wxT("Show Geosets"), wxPoint(5,175), wxDefaultSize);
 		clbGeosets = new wxCheckListBox(this, ID_MODEL_GEOSETS, wxPoint(5, 190), wxSize(150,120), 0, NULL, 0, wxDefaultValidator, wxT("GeosetsList"));
 		
-		lblXYZ = new wxStaticText(this, wxID_ANY, wxT("X\nY\nZ"), wxPoint(2,320), wxSize(20,60));
-		txtX = new wxTextCtrl(this, ID_MODEL_X, wxT("0.0"), wxPoint(25,320), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
-		txtY = new wxTextCtrl(this, ID_MODEL_Y, wxT("0.0"), wxPoint(25,340), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
-		txtZ = new wxTextCtrl(this, ID_MODEL_Z, wxT("0.0"), wxPoint(25,360), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
-
+		lblXYZ = new wxStaticText(this, wxID_ANY, wxT("X\nY\nZ"), wxPoint(2,320), wxSize(30,60));
+		txtX = new wxTextCtrl(this, ID_MODEL_X, wxT("0.0"), wxPoint(30,320), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		txtY = new wxTextCtrl(this, ID_MODEL_Y, wxT("0.0"), wxPoint(30,340), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		txtZ = new wxTextCtrl(this, ID_MODEL_Z, wxT("0.0"), wxPoint(30,360), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		rotXYZ = new wxStaticText(this, wxID_ANY, wxT("rX\nrY\nrZ"), wxPoint(2,380), wxSize(30,60));
+		rotX = new wxTextCtrl(this, ID_MODEL_ROT_X, wxT("0.0"), wxPoint(30,380), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		rotY = new wxTextCtrl(this, ID_MODEL_ROT_Y, wxT("0.0"), wxPoint(30,400), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		rotZ = new wxTextCtrl(this, ID_MODEL_ROT_Z, wxT("0.0"), wxPoint(30,420), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
 	} catch(...) {};
 }
 
@@ -97,6 +108,9 @@ ModelControl::~ModelControl()
 	txtX->Destroy();
 	txtY->Destroy();
 	txtZ->Destroy();
+	rotX->Destroy();
+	rotY->Destroy();
+	rotZ->Destroy();
 }
 
 // Iterates through all the models counting and creating a list
@@ -241,6 +255,9 @@ void ModelControl::Update()
 	txtX->SetValue(wxString::Format(wxT("%f"), model->pos.x));
 	txtY->SetValue(wxString::Format(wxT("%f"), model->pos.y));
 	txtZ->SetValue(wxString::Format(wxT("%f"), model->pos.z));
+	rotX->SetValue(wxString::Format(wxT("%f"), model->rot.x));
+	rotY->SetValue(wxString::Format(wxT("%f"), model->rot.y));
+	rotZ->SetValue(wxString::Format(wxT("%f"), model->rot.z));
 }
 
 void ModelControl::OnCheck(wxCommandEvent &event)
@@ -336,6 +353,19 @@ void ModelControl::OnSlider(wxScrollEvent &event)
 	}
 }
 
+void ModelControl::OnEnter(wxCommandEvent &event)
+{
+	if (!init || !model)
+		return;
+
+	int id = event.GetId();
+	model->pos.x = wxAtof(txtX->GetValue());
+	model->pos.y = wxAtof(txtY->GetValue());
+	model->pos.z = wxAtof(txtZ->GetValue());
+	model->rot.x = wxAtof(rotX->GetValue());
+	model->rot.y = wxAtof(rotY->GetValue());
+	model->rot.z = wxAtof(rotZ->GetValue());
+}
 
 /**************************************************************************
   * ScrWindow

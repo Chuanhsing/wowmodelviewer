@@ -1640,7 +1640,7 @@ void CharControl::RefreshItem(ssize_t slot)
 				}
 
 				if (mp.length()) {
-					att = charAtt->addChild((char *)mp.c_str(), id1, slot);
+					att = charAtt->addChild(mp, id1, slot);
 					if (att) {
 						m = static_cast<Model*>(att->model);
 						if (m->ok) {
@@ -1656,6 +1656,36 @@ void CharControl::RefreshItem(ssize_t slot)
 							m->replaceTextures[TEXTURE_CAPE] = tex;
 							
 							succ = true;
+
+							// hardcode fix
+							wxLogMessage(model->name + wxT(" id1"));
+							if (model->name.CmpNoCase(wxT("character\\human\\male\\humanmale.m2")) == 0 ||
+								model->name.CmpNoCase(wxT("character\\human\\female\\humanfemale.m2")) == 0 ||
+								model->name.CmpNoCase(wxT("character\\gnome\\male\\gnomemale.m2")) == 0 ||
+								model->name.CmpNoCase(wxT("character\\gnome\\female\\gnomefemale.m2")) == 0 ||
+								model->name.CmpNoCase(wxT("character\\scourge\\male\\scourgemale.m2")) == 0 ||
+								model->name.CmpNoCase(wxT("character\\scourge\\female\\scourgefemale.m2")) == 0 ||
+								model->name.CmpNoCase(wxT("character\\dwarf\\male\\dwarfmale.m2")) == 0 ||
+								model->name.CmpNoCase(wxT("character\\dwarf\\female\\dwarffemale.m2")) == 0 ||
+								model->name.CmpNoCase(wxT("character\\tauren\\male\\taurenmale.m2")) == 0) {
+								if (id1 == ATT_LEFT_BACK_SHEATH)
+									m->rot = Vec3D(135.0, 90.0, 90.0);
+								else if (id1 == ATT_RIGHT_BACK_SHEATH)
+									m->rot = Vec3D(225.0, 90.0, 90.0);
+								else if (id1 == ATT_MIDDLE_BACK_SHEATH)
+									m->rot = Vec3D(0.0, 90.0, 90.0);
+							} else if (model->name.CmpNoCase(wxT("character\\nightelf\\female\\nightelffemale.m2")) == 0) {
+								if (id1 == ATT_RIGHT_BACK_SHEATH)
+									m->rot = Vec3D(225.0, 90.0, 90.0);
+							} else if (model->name.CmpNoCase(wxT("character\\bloodelf\\female\\bloodelffemale.m2")) == 0) {
+								if (id1 == ATT_MIDDLE_BACK_SHEATH)
+									m->rot = Vec3D(0.0, 90.0, 90.0);
+							} else if (model->name.CmpNoCase(wxT("character\\tauren\\female\\taurenfemale.m2")) == 0) {
+								if (id1 == ATT_LEFT_BACK_SHEATH)
+									m->rot = Vec3D(135.0, 90.0, 90.0);
+								if (id1 == ATT_MIDDLE_BACK_SHEATH)
+									m->rot = Vec3D(0.0, 90.0, 90.0);
+							}
 						}
 					}
 				}
@@ -1663,7 +1693,7 @@ void CharControl::RefreshItem(ssize_t slot)
 			if (id2>=0) {
 				mp = (path + r.getString(ItemDisplayDB::Model2));
 				if (mp.length()) {
-					att = charAtt->addChild((char *)mp.c_str(), id2, slot);
+					att = charAtt->addChild(mp, id2, slot);
 					if (att) {
 						m = static_cast<Model*>(att->model);
 						if (m->ok) {
@@ -1715,7 +1745,7 @@ void CharControl::RefreshItem(ssize_t slot)
 								ItemVisualEffectDB::Record eff = effectdb.getById(effectid);
 								wxString filename = eff.getString(ItemVisualEffectDB::Model);
 
-								att->addChild(filename.mb_str(), (int)i, -1);
+								att->addChild(filename, (int)i, -1);
 
 							} catch (ItemVisualEffectDB::NotFound) {}
 						}
@@ -1772,7 +1802,7 @@ void CharControl::RefreshCreatureItem(ssize_t slot)
 				mp = (path + r.getString(ItemDisplayDB::Model));
 
 				if (mp.length()) {
-					att = g_canvas->root->addChild((char *)mp.c_str(), id1, slot);
+					att = g_canvas->root->addChild(mp, id1, slot);
 					if (att) {
 						m = static_cast<Model*>(att->model);
 						if (m->ok) {
@@ -1813,7 +1843,7 @@ void CharControl::RefreshCreatureItem(ssize_t slot)
 								ItemVisualEffectDB::Record eff = effectdb.getById(effectid);
 								wxString filename = eff.getString(ItemVisualEffectDB::Model);
 
-								att->addChild(filename.mb_str(), (int)i, -1);
+								att->addChild(filename, (int)i, -1);
 
 							} catch (ItemVisualEffectDB::NotFound) {}
 						}
