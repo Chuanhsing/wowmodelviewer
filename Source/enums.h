@@ -3,13 +3,13 @@
 
 enum InterfaceMode
 {
-	INTERFACEMODE_VIEWER,		// Default/Classic Viewer mode
+	INTERFACEMODE_VIEWER = 0,	// Default/Classic Viewer mode
 	INTERFACEMODE_CINEMA		// Cinema Mode, for Machinima & the like.
 };
 
 enum Viewer_InterfaceType
 {
-	VIEWER_INTERFACETYPE_NONE,			// No File
+	VIEWER_INTERFACETYPE_NONE = 0,		// No File
 	VIEWER_INTERFACETYPE_CHARACTER,		// Character M2 File
 	VIEWER_INTERFACETYPE_CREATURE,		// Creatures & NPC M2 Files
 	VIEWER_INTERFACETYPE_ITEM,			// M2 Models that aren't a Character, Creature or NPC.
@@ -21,7 +21,7 @@ enum Viewer_InterfaceType
 
 enum FileType
 {
-	FILETYPE_MODEL,		// M2 Files
+	FILETYPE_MODEL = 0,	// M2 Files
 	FILETYPE_SET,		// WMO Files
 	FILETYPE_LANDSCAPE,	// ADT Files
 	FILETYPE_IMAGE,		// BLP Files

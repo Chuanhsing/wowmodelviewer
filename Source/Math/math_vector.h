@@ -9,14 +9,14 @@
 template <int N, class Real>
 class Vector;
 
-typedef Vector<2, int> Vector2i;		// 2-component mathematical vector, single precision
-typedef Vector<3, int> Vector3i;		// 3-component mathematical vector, single precision
-typedef Vector<2, float> Vector2f;		// 2-component mathematical vector, single precision
-typedef Vector<2, double> Vector2d;		// 2-component mathematical vector, double precision
-typedef Vector<3, float> Vector3f;		// 3-component mathematical vector, single precision
-typedef Vector<3, double> Vector3d;		// 3-component mathematical vector, double precision
-typedef Vector<4, float> Vector4f;		// 4-component mathematical vector, single precision
-typedef Vector<4, double> Vector4d;		// 4-component mathematical vector, double precision
+typedef Vector<2, int> Vec2i;			// 2-component mathematical vector, single precision
+typedef Vector<3, int> Vec3i;			// 3-component mathematical vector, single precision
+typedef Vector<2, float> Vec2f;			// 2-component mathematical vector, single precision
+typedef Vector<2, double> Vec2d;		// 2-component mathematical vector, double precision
+typedef Vector<3, float> Vec3f;			// 3-component mathematical vector, single precision
+typedef Vector<3, double> Vec3d;		// 3-component mathematical vector, double precision
+typedef Vector<4, float> Vecf;			// 4-component mathematical vector, single precision
+typedef Vector<4, double> Vec4d;		// 4-component mathematical vector, double precision
 
 // --== Class Definition ==--
 

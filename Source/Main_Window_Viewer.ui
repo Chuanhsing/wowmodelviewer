@@ -219,6 +219,8 @@
      <property name="title">
       <string>Change &amp;WoW Directory</string>
      </property>
+     <addaction name="actionManage_Directories"/>
+     <addaction name="separator"/>
      <addaction name="actionPath_To_WoW_Dirs"/>
      <addaction name="actionWoWDir_Vanilla"/>
      <addaction name="actionWoWDir_BC"/>
@@ -1945,6 +1947,12 @@ alternate-background-color: rgb(229, 228, 242);</string>
    <property name="checked">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/WoW Versions/WoWIcon1-Vanilla</normaloff>
+     <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
+     <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon1-Vanilla</iconset>
+   </property>
    <property name="text">
     <string>Vanilla Directory</string>
    </property>
@@ -1952,6 +1960,13 @@ alternate-background-color: rgb(229, 228, 242);</string>
   <action name="actionWoWDir_BC">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/WoW Versions/WoWIcon2-TBC</normaloff>
+     <normalon>:/WoW Versions/WoWIcon2-TBC</normalon>
+     <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
+     <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon2-TBC</iconset>
    </property>
    <property name="text">
     <string>Burning Crusade Dir</string>
@@ -1961,6 +1976,13 @@ alternate-background-color: rgb(229, 228, 242);</string>
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/WoW Versions/WoWIcon3-WotLK</normaloff>
+     <normalon>:/WoW Versions/WoWIcon3-WotLK</normalon>
+     <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
+     <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon3-WotLK</iconset>
+   </property>
    <property name="text">
     <string>WotLK Dir</string>
    </property>
@@ -1968,6 +1990,13 @@ alternate-background-color: rgb(229, 228, 242);</string>
   <action name="actionWoWDir_Cataclysm">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/WoW Versions/WoWIcon4-Cataclysm</normaloff>
+     <normalon>:/WoW Versions/WoWIcon4-Cataclysm</normalon>
+     <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
+     <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon4-Cataclysm</iconset>
    </property>
    <property name="text">
     <string>Cataclysm Dir</string>
@@ -1982,6 +2011,13 @@ alternate-background-color: rgb(229, 228, 242);</string>
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/WoW Versions/WoWIcon-PTR</normaloff>
+     <normalon>:/WoW Versions/WoWIcon-PTR</normalon>
+     <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
+     <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon-PTR</iconset>
+   </property>
    <property name="text">
     <string>PTR Dir</string>
    </property>
@@ -1989,6 +2025,11 @@ alternate-background-color: rgb(229, 228, 242);</string>
   <action name="actionPath_To_WoW_Dirs">
    <property name="text">
     <string>Path\To\WoW\Dirs</string>
+   </property>
+  </action>
+  <action name="actionManage_Directories">
+   <property name="text">
+    <string>Manage Directories</string>
    </property>
   </action>
  </widget>

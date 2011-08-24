@@ -5,6 +5,8 @@
 #ifndef MODEL_ADT_H
 #define MODEL_ADT_H
 
+#include "MPQ.h"
+
 // File Formats
 #include "Models\Model_ADT_v18.h"
 

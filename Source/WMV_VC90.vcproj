@@ -410,6 +410,14 @@
 				RelativePath="main.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\MPQ.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Settings_Main.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -481,7 +489,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MPQ.h"
+				>
+			</File>
+			<File
 				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Settings_Main.h"
 				>
 			</File>
 			<File

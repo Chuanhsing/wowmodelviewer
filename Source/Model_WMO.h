@@ -5,6 +5,8 @@
 #ifndef MODEL_WMO_H
 #define MODEL_WMO_H
 
+#include "MPQ.h"
+
 // File Formats
 #include "Models\Model_WMO_v17.h"
 

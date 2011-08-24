@@ -1,5 +1,7 @@
 #include "application.h"
 #include "ui_Main_Window_Viewer.h"
+#include "Settings_Main.h"
+#include "Exporters\exporters.h"
 
 // These are temporarly added, just to test the files.
 // Move these to the proper file when we get to implementing them.
@@ -25,17 +27,27 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
 {
 	// Setup the UI
     ui->setupUi(this);
+
+	// Set Application Data
+	QCoreApplication::setApplicationName(PROGRAMNAME);
+	QCoreApplication::setApplicationVersion(MAJORVERSION + BUILDVERSION);
+	QCoreApplication::setOrganizationName(ORGANIZATIONNAME);
+	QCoreApplication::setOrganizationDomain(ORGANIZATIONWEBSITE);
+
+	Exporters();			// Initialize the Exporters
+
+	CheckSettings_Main();	// Check Main Program Settings
 	
     // Defaults
 	InterfaceMode = INTERFACEMODE_VIEWER;				// Set the default mode to Viewer.
     ViewerInterfaceType = VIEWER_INTERFACETYPE_NONE;	// Full list of viewer interface types in enums.h
-	WoWTypeCurrent = WOW_VANILLA;						// The next World of Warcraft type that will be loaded.
-	WoWTypeNext = WOW_NOTLOADED;
+	WoWTypeCurrent = WOW_VANILLA;						// The currently loaded World of Warcraft type.
+	WoWTypeNext = WOW_NOTLOADED;						// The next World of Warcraft type that will be loaded.
 	isWoWLoaded = false;
 	canReloadWoW = false;
 
 	// Set the main Window's Title
-	setWindowTitle(PROGRAMNAME + tr(" ","WindowTitle1") + MAJORVERSION + BUILDVERSION + tr(" ","WindowTitle2") + SYSTEMVERSION + DEBUGVERSION);
+	setWindowTitle(PROGRAMNAME + tr(" ","WindowTitleSpace1") + MAJORVERSION + tr(" ","WindowTitleSpace2") + BUILDVERSION + tr(" ","WindowTitleSpace3") + SYSTEMVERSION + DEBUGVERSION);
 
     /* -= Groups =- */
     // Eye Glow

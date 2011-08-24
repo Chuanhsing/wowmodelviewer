@@ -1,11 +1,23 @@
 WoW Model Viewer v0.8.0.0
 
+r621
+-Started MPQ support.
+-Added Settings for the main program and for the Exporters.
+-Changed the Math Vector typedefs to slightly shorter names. (Vec3f instead of Vector3f)
+-Fixed some WoWDir icon issues.
+
+
+r612
+-cmake/MinGW compatibility fixes.
+
+
 r611
 -Built and finished the About Window.
 -Added Icon for Load World of Warcraft. It changes, depending what version of WoW you're going to load.
 -Added interface for List of WoW Directories. Currently contains only test data.
 -Fixed Application Icon issue for Windows.
 -Removed the generated ui_[Filename].h from the sourcecode. It's auto-generated when the UIs are compiled.
+
 
 r609
 -Added Animation Controls layout.

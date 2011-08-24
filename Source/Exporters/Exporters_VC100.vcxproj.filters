@@ -7,7 +7,7 @@
     </Filter>
     <Filter Include="Generated Files">
       <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
-      <Extensions>moc;h;cpp</Extensions>
+      <Extensions>moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
     <Filter Include="Exporter Files">
@@ -38,6 +38,10 @@
   <ItemGroup>
     <ClInclude Include="exporters.h" />
     <ClInclude Include="exporters_global.h" />
+    <ClInclude Include="Settings_Exporters.h" />
+    <ClInclude Include="Lightwave3D.h">
+      <Filter>Exporter Files\Lightwave 3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="exporters.cpp" />

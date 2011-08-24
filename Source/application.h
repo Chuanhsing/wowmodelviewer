@@ -15,9 +15,8 @@
 // Other Windows
 #include "ui_About.h"
 
-// Functions, Exporters & Stormlib
+// Functions & Stormlib
 #include "math\math_base.h"
-#include "Exporters\exporters.h"
 #include "StormLib\src\StormLib.h"
 
 

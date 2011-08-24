@@ -5,6 +5,8 @@
 #ifndef MODEL_M2_H
 #define MODEL_M2_H
 
+#include "MPQ.h"
+
 // File Formats
 #include "Models\Model_M2_v00.h"
 #include "Models\Model_M2_v04.h"
