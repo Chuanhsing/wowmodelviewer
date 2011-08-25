@@ -2506,7 +2506,8 @@ void CharControl::OnUpdateItem(int type, int id)
 			}
 
 			g_canvas->ResetView();
-			g_canvas->model->rot.x = 0; // mounted characters look better from the side
+			model->rot = model->pos = Vec3D(0.0f, 0.0f, 0.0f);
+			g_canvas->model->rot.x = 0.0f; // mounted characters look better from the side
 		}
 		//canvas->timer.Start();
 		break;
