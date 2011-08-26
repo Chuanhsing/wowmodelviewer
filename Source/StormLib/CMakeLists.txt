@@ -273,8 +273,8 @@ add_library(StormLib_static STATIC ${SRC_FILES} ${SRC_ADDITIONAL_FILES})
 target_link_libraries(StormLib_static ${LINK_LIBS})
 set_target_properties(StormLib_static PROPERTIES OUTPUT_NAME StormLib)
 
-add_executable(StormLib_test ${TEST_SRC_FILES})
-target_link_libraries(StormLib_test StormLib_static)
+#add_executable(StormLib_test ${TEST_SRC_FILES})
+#target_link_libraries(StormLib_test StormLib_static)
 
 if(APPLE)
     set_target_properties(StormLib PROPERTIES FRAMEWORK true)
@@ -286,5 +286,6 @@ if(UNIX)
     set_target_properties(StormLib PROPERTIES SOVERSION 0)
 endif()
 
-install(TARGETS StormLib StormLib_static RUNTIME DESTINATION bin LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
-install(FILES src/StormLib.h src/StormPort.h DESTINATION include)
+install(TARGETS StormLib StormLib_static RUNTIME DESTINATION ${WMV_BASE_DEST_DIR}/bin LIBRARY DESTINATION ${WMV_BASE_DEST_DIR}/lib ARCHIVE DESTINATION ${WMV_BASE_DEST_DIR}/lib)
+install(FILES src/StormLib.h src/StormPort.h DESTINATION ${WMV_BASE_DEST_DIR}/include)
+

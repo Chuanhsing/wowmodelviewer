@@ -6,6 +6,8 @@ cmake_minimum_required(VERSION 2.6)
 add_definitions(-D_WINDOWS )
 add_definitions(-D_WIN64 )
 
+set(WMV_BASE_DEST_DIR ${CMAKE_CURRENT_BINARY_DIR})
+
 #####################################
 
 
@@ -36,7 +38,13 @@ file(GLOB wmv_ui *.ui)
 QT4_WRAP_CPP(wmv_moc ${wmv_h})
 QT4_WRAP_UI(wmv_ui_h ${wmv_ui})
 
+# for building exporters
+add_subdirectory("Exporters")
+
+# for building StormLib
+add_subdirectory("StormLib")
 
 add_executable(wowmodelviewer ${wmv_src} ${wmv_moc} ${wmv_ui_h})
-
-target_link_libraries(wowmodelviewer ${QT_LIBRARIES})
+add_dependencies(wowmodelviewer exporters StormLib)
+target_link_libraries(wowmodelviewer exporters StormLib ${QT_LIBRARIES})
+install(TARGETS wowmodelviewer RUNTIME DESTINATION ${WMV_BASE_DEST_DIR}/bin)
