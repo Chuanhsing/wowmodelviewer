@@ -7,12 +7,15 @@
 message("You are running qmake on a generated .pro file. This may not work!")
 
 
-HEADERS += ./resource.h \
+HEADERS += ./lists.h \
+    ./MPQ.h \
+    ./Settings_Main.h \
     ./version.h \
     ./enums.h \
     ./Model_WMO.h \
     ./Model_M2.h \
     ./Model_ADT.h \
+    ./resource.h \
     ./application.h \
     ./math/math_base.h \
     ./math/math_constants.h \
@@ -27,7 +30,10 @@ HEADERS += ./resource.h \
     ./Models/Model_M2_v10.h \
     ./Models/Model_WMO_v17.h
 SOURCES += ./application.cpp \
-    ./main.cpp
-FORMS += ./Main_Window_Viewer.ui \
-    ./About.ui
+    ./main.cpp \
+    ./MPQ.cpp \
+    ./Settings_Main.cpp
+FORMS += ./ui/Main_Window_Viewer.ui \
+    ./ui/About.ui \
+    ./ui/WoWDirManager.ui
 RESOURCES += resources.qrc

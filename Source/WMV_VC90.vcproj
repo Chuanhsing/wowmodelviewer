@@ -477,6 +477,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\lists.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Model_ADT.h"
 				>
 			</File>
@@ -612,6 +616,10 @@
 			</File>
 			<File
 				RelativePath=".\ui_Main_Window_Viewer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui_WoWDirManager.h"
 				>
 			</File>
 			<Filter
@@ -758,7 +766,7 @@
 			ParseFiles="false"
 			>
 			<File
-				RelativePath=".\About.ui"
+				RelativePath=".\ui\About.ui"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -806,7 +814,55 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Main_Window_Viewer.ui"
+				RelativePath=".\ui\Main_Window_Viewer.ui"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Uic&apos;ing $(InputFileName)..."
+						CommandLine="&quot;$(QTDIR)\bin\uic.exe&quot; -o &quot;.\ui_$(InputName).h&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(QTDIR)\bin\uic.exe"
+						Outputs="&quot;.\ui_$(InputName).h&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ui\WoWDirManager.ui"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"

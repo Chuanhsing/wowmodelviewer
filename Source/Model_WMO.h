@@ -13,17 +13,11 @@
 // Primary WMO Class
 // Store Data, and Add Functions.
 template <class WMOVersion>
-class Model_WMO
+class Model_WMO : public cModelBase
 {
 public:
 	// Constructor
-	
 	Model_WMO<WMOVersion>() {};
-
-	// Data structures
-	QString ModelName;		// Complete File Path & Name for this model.
-	QString FileName;		// Just the File Name of the model.
-	QString PathName;		// Just the Path for the model.
 };
 
 

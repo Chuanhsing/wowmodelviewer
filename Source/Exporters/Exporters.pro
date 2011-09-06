@@ -7,7 +7,7 @@ TARGET = Exporters
 DESTDIR = ./Release/32_VC100
 QT += core
 CONFIG += release
-DEFINES += QT_LARGEFILE_SUPPORT EXPORTERS_LIB QT_DLL
+DEFINES += EXPORTERS_LIB _WINDOWS _WIN32 QT_LARGEFILE_SUPPORT QT_DLL
 INCLUDEPATH += ./GeneratedFiles \
     ./GeneratedFiles/Release_x64 \
     .

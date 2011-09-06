@@ -32,11 +32,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>About WoW Model Viewer</string>
+   <string comment="About_Title">About WoW Model Viewer</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/Resources/FileIcons/wmv.ico</normaloff>:/Resources/FileIcons/wmv.ico</iconset>
+   <iconset resource="../resources.qrc">
+    <normaloff>:/WMV_Win</normaloff>:/WMV_Win</iconset>
   </property>
   <property name="sizeGripEnabled">
    <bool>false</bool>
@@ -102,7 +102,7 @@ border-color: rgb(0, 0, 0);</string>
     </rect>
    </property>
    <property name="title">
-    <string>Developers</string>
+    <string comment="About_Devs">Developers</string>
    </property>
    <widget class="QLabel" name="Developers">
     <property name="geometry">
@@ -114,7 +114,7 @@ border-color: rgb(0, 0, 0);</string>
      </rect>
     </property>
     <property name="text">
-     <string>Kjasi (AKA Sephiroth 3D)</string>
+     <string comment="About_DevNames">Kjasi, Jeromnimo</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -134,7 +134,7 @@ border-color: rgb(0, 0, 0);</string>
     </rect>
    </property>
    <property name="title">
-    <string>Original Developers</string>
+    <string comment="About_OriginalDevs">Original Developers</string>
    </property>
    <property name="flat">
     <bool>false</bool>
@@ -155,7 +155,7 @@ border-color: rgb(0, 0, 0);</string>
      </rect>
     </property>
     <property name="text">
-     <string> Ufo_Z, Darjk, Chuanhsing, Kjasi, Tob.Franke
+     <string comment="About_OriginalDevNames"> Ufo_Z, Darjk, Chuanhsing, Kjasi, Tob.Franke
 
 With Special Thanks to: 
      Linghuye, nSzAbolcs, Sailesh, Terran &amp; Cryect</string>
@@ -185,7 +185,7 @@ With Special Thanks to:
     </font>
    </property>
    <property name="text">
-    <string>World of Warcraft Model Viewer</string>
+    <string notr="true" extracomment="= PROGRAMNAME">World of Warcraft Model Viewer</string>
    </property>
    <property name="textFormat">
     <enum>Qt::AutoText</enum>
@@ -214,7 +214,7 @@ With Special Thanks to:
     </font>
    </property>
    <property name="text">
-    <string>v0.8.0.0 r610</string>
+    <string notr="true" extracomment="Version &amp; Release numbers. These are set directly, and will not be translated.">v0.8.0.0 r610</string>
    </property>
    <property name="scaledContents">
     <bool>false</bool>
@@ -246,7 +246,7 @@ With Special Thanks to:
     </font>
    </property>
    <property name="text">
-    <string>Windows 64-bit Edition</string>
+    <string comment="About_Edition" extracomment="%1 = SYSTEMVERSION and DEBUGVERSION">%1 Edition</string>
    </property>
    <property name="scaledContents">
     <bool>false</bool>
@@ -281,7 +281,7 @@ With Special Thanks to:
     </font>
    </property>
    <property name="text">
-    <string extracomment="Links">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+    <string comment="About_Links" extracomment="Links">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:600; font-style:normal;&quot;&gt;
@@ -314,7 +314,7 @@ p, li { white-space: pre-wrap; }
     </rect>
    </property>
    <property name="text">
-    <string>World of Warcraft® is a Registered trademark of Blizzard Entertainment®.</string>
+    <string comment="About_RegisteredTrademark">World of Warcraft® is a Registered trademark of Blizzard Entertainment®.</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -364,7 +364,7 @@ p, li { white-space: pre-wrap; }
     </size>
    </property>
    <property name="toolTip">
-    <string>GNU General Public License v3</string>
+    <string comment="About_GPLv3Logo_Tooltip">GNU General Public License v3</string>
    </property>
    <property name="styleSheet">
     <string notr="true">image: url(:/Support Software/GNU_GLPv3);</string>
@@ -380,7 +380,7 @@ p, li { white-space: pre-wrap; }
     </rect>
    </property>
    <property name="text">
-    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+    <string comment="About_GPLNotice">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -403,7 +403,7 @@ p, li { white-space: pre-wrap; }
     </rect>
    </property>
    <property name="text">
-    <string>Powered by</string>
+    <string comment="About_PoweredBy">Powered by</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -419,7 +419,7 @@ p, li { white-space: pre-wrap; }
     </rect>
    </property>
    <property name="text">
-    <string>WoW Model Viewer is a 3D model viewer for World of Warcraft. It uses the data files included with the game to display the 3D models from the game: creatures, characters, spell effects, objects and so forth.</string>
+    <string comment="About_UsageStatement">WoW Model Viewer is a 3D model viewer for World of Warcraft. It uses the data files included with the game to display the 3D models from the game: creatures, characters, spell effects, objects and so forth.</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -432,18 +432,24 @@ p, li { white-space: pre-wrap; }
    <property name="geometry">
     <rect>
      <x>85</x>
-     <y>375</y>
+     <y>365</y>
      <width>346</width>
-     <height>16</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>All game assets and content are ©2006-2011 Blizzard Entertainment®. All rights reserved.</string>
+    <string comment="About_ContentCopyright" extracomment="%1 is the current year">All game assets and content are ©2004-%1 Blizzard Entertainment®. All rights reserved.</string>
+   </property>
+   <property name="scaledContents">
+    <bool>false</bool>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

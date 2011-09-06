@@ -10,10 +10,13 @@
 
 #define PROGRAMNAME QObject::tr("World of Warcraft Model Viewer","WMVProgramName")
 #define MAJORVERSION QString("v0.8.0.0")
-#define BUILDVERSION QString("r621")
+#define BUILDVERSION QString("r624")
 #define ORGANIZATIONNAME QObject::tr("WoW Model Viewer Community","WMVCommunityName")
 #define ORGANIZATIONWEBSITE QString("http://www.wowmodelviewer.org/forum/index.php")
 #define SOURCEWEBSITE QString("http://code.google.com/p/wowmodelviewer/")
+
+// Directory Slash type for MPQ files
+#define SLASH_MPQ "\\"
 
 #if defined (_WINDOWS)
 	#if defined (_WIN64)

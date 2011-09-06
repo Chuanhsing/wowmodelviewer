@@ -1,9 +1,12 @@
 #ifndef MPQ_H
 #define MPQ_H
 
+#include <QString>
 #include <QList>
 #include <QMap>
-#include <QString>
+#include "enums.h"
+#include "lists.h"
+#include "Settings_Main.h"
 #include "StormLib/src/StormLib.h"
 
 class MPQArchive
@@ -21,5 +24,8 @@ public:
 	bool isPartialMPQ(QString ArchiveName);
 	void Close();
 };
+
+// Retrieves a list of MPQ files, based on the specified WoWDir's version.
+QList<QString> MPQList_Get(stWoWDir WoWDir);
 
 #endif

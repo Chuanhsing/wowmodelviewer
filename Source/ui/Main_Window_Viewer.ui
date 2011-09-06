@@ -14,7 +14,7 @@
    <string notr="true">WoW Model Viewer</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/WMV_Win</normaloff>:/WMV_Win</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -1036,7 +1036,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
   </widget>
   <action name="actionLoad_World_of_Wacraft">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/WoW Versions/WoWIcon1-Vanilla</normaloff>
      <normalon>:/WoW Versions/WoWIcon1-Vanilla</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -1301,7 +1301,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
   </action>
   <action name="actionLoad_Character">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/menuIcons/menuChrLoad</normaloff>:/menuIcons/menuChrLoad</iconset>
    </property>
    <property name="text">
@@ -1313,7 +1313,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
   </action>
   <action name="actionSave_Character">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/menuIcons/menuChrSave</normaloff>:/menuIcons/menuChrSave</iconset>
    </property>
    <property name="text">
@@ -1948,7 +1948,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/WoW Versions/WoWIcon1-Vanilla</normaloff>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
      <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon1-Vanilla</iconset>
@@ -1962,7 +1962,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/WoW Versions/WoWIcon2-TBC</normaloff>
      <normalon>:/WoW Versions/WoWIcon2-TBC</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -1977,7 +1977,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/WoW Versions/WoWIcon3-WotLK</normaloff>
      <normalon>:/WoW Versions/WoWIcon3-WotLK</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -1992,7 +1992,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/WoW Versions/WoWIcon4-Cataclysm</normaloff>
      <normalon>:/WoW Versions/WoWIcon4-Cataclysm</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -2012,7 +2012,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/WoW Versions/WoWIcon-PTR</normaloff>
      <normalon>:/WoW Versions/WoWIcon-PTR</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -2047,7 +2047,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
   <tabstop>rBtn_IsTexture</tabstop>
  </tabstops>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections>
   <connection>

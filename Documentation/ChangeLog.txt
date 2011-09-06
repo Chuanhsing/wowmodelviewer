@@ -1,5 +1,22 @@
 WoW Model Viewer v0.8.0.0
 
+r624
+-Added new forwards-compatibility goal to Dev v8 Goals.txt
+-Added WoW Directory Manager window. Functionality not yet implemented.
+-Moved UI files into new UI directory.
+-Added locale list.
+-Added WoW Version data.
+-Added MPQList_Get function that returns a list of MPQ files, based on the passed WoW Version.
+-About Window now dymanically updates the Content Copyright's year to the current year.
+-Changed the Content Copyright's start year from 2006 to 2004, which is when WoW was first released.
+-Changed a lot of the dynamic text on the About Window to better facilitate translation.
+-Rebuilt .pro/.pri files.
+
+
+r623
+-cmake/MinGW compatibility fixes.
+
+
 r621
 -Started MPQ support.
 -Added Settings for the main program and for the Exporters.
@@ -27,7 +44,7 @@ r609
 -Certain menu options will now be disabled if WoW is not loaded.
 -Continued work on the Model headers.
 -The File List is now openable & closable from the View->Controls menu.
--Rebuilt .pro files.
+-Rebuilt .pro/.pri files.
 
 
 r607

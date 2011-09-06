@@ -8,6 +8,29 @@ See ChangeLog.txt for a current list of changes to WoW Model Viewer!
 
 =======================================================================
 
+r614 (Pickled Herring)
+ - Updated the Armory API. Armory import now supports full facial recognition.
+ - Fixed missing jaws issue.
+ - Added License display to the installers.
+ * Lightwave Exporter:
+  - Fixed black Vertex Colors issue.
+ * Dev Work: 
+  - Added License Rich Text Format file to installer directory.
+  - The Projects will now delete the .exp and .lib files generated in the Release folder.
+
+
+r610 (Demented Deathwing)
+ - WMV now requires Administrator priveledges.
+ - Texture fixes.
+ - Temporary fix for Ubuntu 11.4 crashes.
+ - Math fixes, and new functions.
+ - Fix linux build.
+ - Fix wrong use of StartsWith().
+ - Fixes for 64-bit Character issues.
+ - Armory errors will no longer crash WMV.
+ - Added Documentation for Cataclysm ADT files.
+
+
 r598 (Fickle Felguard)
  - WoW Model Viewer is released under the GNU General Public License v3, Non-Commercial Use.
  - WoW will no longer automatically load when starting WMV. You can load it from the File Menu.
@@ -50,6 +73,7 @@ r598 (Fickle Felguard)
   - Fixed Mac post build script
   - Various code fixes.
   - Various Stormlib updates
+
 
 r544 (Gnome Punter)
  - Updated CSVs!
@@ -116,6 +140,7 @@ r500 (Wascally Wabbit)
   - Windows Executables are now named wowmodelview32.exe and wowmodelview64.exe, for the 32 & 64bit versions, respectively.
   - Moved some functions from the FBX exporter into the main Model Export files.
 
+
 r499
  - Eye Glows are now a Character Option! Choose from None, Default, and Death Knight! Character Save files will remember this setting!
  - Updated items.csv & npcs.csv files!
@@ -142,6 +167,7 @@ r499
   - Removed redundant functions in mpq_stormlib.
   - Removed Experimental Lightwave exporter. No longer needed.
 
+
 r487
  - Updated for 4.0.x.
  - Depreciated 3.3.x edition of WoW.
@@ -153,6 +179,7 @@ r487
  - LWO Exporter:
   - Fixed Parent Layer error.
   - Continued worked on new Doodad exporter
+
 
 r462
  - WMV can now be used while WoW is running!
@@ -179,6 +206,7 @@ r462
   - Fixed Saving problem with SaveTexture2.
   - Fixed WMO IndiceToVert array.
   - Exporters are now easier to add & setup.
+
 
 r268
  - You can now Filter your search by file type. (M2, WMO, ADT, etc...)
@@ -219,6 +247,7 @@ r268
   - Made various updates to the Windows installers.
   - Made custom installer graphic. (Source PSD file included.)
 
+
 r206
  - You can now Save Files listed in WMV to your Hard-drive. Use File->Save File... or Right-Click the file in the File List!
  - You can now browser Sounds, Images and ADTs in the file List.
@@ -238,6 +267,7 @@ r206
  - (Dev Work) BLP type 0 supported.
  - (Dev Work) Fixed Null issue in LW Bone Export function.
 
+
 r142
  - Expanded Cataclysm support.
  - Attempt to fix Win 7/Vista file creation issues.
@@ -246,9 +276,11 @@ r142
  - (Dev Work) Switched from LibMPQ to StormLib.
  - (Dev Work) Removed Zlib & Bzip2 support libraries. (No longer needed.)
 
+
 r141
  - Preliminary Cataclysm Support.
  - esMX locale supported.
+
 
 r133
  - Fixed the bug that wouldn't let the OBJ & Milkshape Exporters do their jobs.

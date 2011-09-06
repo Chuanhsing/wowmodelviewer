@@ -339,8 +339,11 @@ copy Exporters\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersi
     <ClCompile Include="Settings_Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="classes.h" />
+    <ClInclude Include="lists.h" />
     <ClInclude Include="MPQ.h" />
     <ClInclude Include="Settings_Main.h" />
+    <ClInclude Include="ui_WoWDirManager.h" />
     <ClInclude Include="version.h" />
     <CustomBuild Include="application.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
@@ -405,7 +408,7 @@ copy Exporters\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersi
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="Main_Window_Viewer.ui">
+    <CustomBuild Include="ui\Main_Window_Viewer.ui">
       <FileType>Document</FileType>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(Identity)...</Message>
@@ -426,7 +429,7 @@ copy Exporters\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersi
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="About.ui">
+    <CustomBuild Include="ui\About.ui">
       <FileType>Document</FileType>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(Identity)...</Message>
@@ -448,6 +451,27 @@ copy Exporters\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersi
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="ui\WoWDirManager.ui">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\uic.exe" -o ".\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\uic.exe" -o ".\ui_%(Filename).h" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Uic%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\ui_%(Filename).h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\uic.exe" -o ".\ui_%(Filename).h" "%(FullPath)"</Command>
+    </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

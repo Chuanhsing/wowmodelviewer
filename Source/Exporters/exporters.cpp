@@ -13,9 +13,9 @@ Exporters::Exporters()
 	// Make a temp list of the defaults.
 	QMap<QString,QVariant> temp = SettingsExList;
 
-	// If the last Version Number does not equal the current version number, and there are more than 1 Settings in the Exporter Settings List...
-	// Bascially, don't run this if the version is the same, or there are no settings in the list.
-	if ((sWMVExSettings.value("Version") != MAJORVERSION+BUILDVERSION)&&(SettingsExList.size() > 0)){
+	// If the last Version Number does not equal the current version number...
+	// Bascially, don't run this if the version is the same.
+	if (sWMVExSettings.value("Version") != MAJORVERSION+BUILDVERSION){
 
 		// Go over each Default setting
 		for (QMap<QString,QVariant>::Iterator it=temp.begin();it!=temp.end();++it){

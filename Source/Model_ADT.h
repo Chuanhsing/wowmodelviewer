@@ -13,16 +13,11 @@
 // --== Primary ADT Class ==--
 // Store Data, and Add Functions.
 template <class ADTVersion>
-class Model_ADT
+class Model_ADT : public cModelBase
 {
 public:
 	// Constructor
 	Model_ADT<ADTVersion>() {};
-
-	// Data structures
-	QString ModelName;		// Complete File Path & Name for this model.
-	QString FileName;		// Just the File Name of the model.
-	QString PathName;		// Just the Path for the model.
 };
 
 

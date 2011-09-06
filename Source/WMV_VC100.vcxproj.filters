@@ -146,18 +146,30 @@
     <ClInclude Include="Settings_Main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="lists.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_WoWDirManager.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="classes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="resources.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="Main_Window_Viewer.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="application.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="About.ui">
+    <CustomBuild Include="ui\About.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\Main_Window_Viewer.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\WoWDirManager.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>

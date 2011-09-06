@@ -33,7 +33,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 file(GLOB wmv_src *.cpp)
 file(GLOB wmv_h *.h)
-file(GLOB wmv_ui *.ui)
+file(GLOB wmv_ui ui/*.ui)
 
 QT4_WRAP_CPP(wmv_moc ${wmv_h})
 QT4_WRAP_UI(wmv_ui_h ${wmv_ui})

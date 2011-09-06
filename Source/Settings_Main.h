@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QMap>
 #include "version.h"
+#include "classes.h"
 
 #define WMV_INI_NAME "wmv.ini"
 #define WOWDIRS_INI_NAME "wowdirs.ini"
@@ -22,6 +23,7 @@
 static QSettings sWoWDirs(QDir::currentPath()+"/"+WOWDIRS_INI_NAME,QSettings::IniFormat);	// WoW Directory List
 
 static QMap<QString,QVariant> SettingsList;
+static QMap<QString,stWoWDir> WoWDirList;
 
 // Initalization of our default settings
 static void SettingsListInit()

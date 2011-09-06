@@ -12,14 +12,31 @@
 // About Window
 WindowAbout::WindowAbout(QWidget *parent) : QDialog(parent), ui_About(new Ui::AboutWindow)
 {
+	// Setup Window
 	ui_About->setupUi(this);
 
-	ui_About->VersionNumber->setText(QString(MAJORVERSION + BUILDVERSION));
-	ui_About->Edition->setText(QString(SYSTEMVERSION + DEBUGVERSION + tr(" Edition")));
+	// Set Various Variables
+	ui_About->WMVName->setText(PROGRAMNAME);
+	ui_About->VersionNumber->setText(QString(MAJORVERSION + tr(" ","About_VersionSpace") + BUILDVERSION));
+	ui_About->Edition->setText(ui_About->Edition->text().arg(SYSTEMVERSION + DEBUGVERSION));
+	ui_About->ContentCopyright->setText(ui_About->ContentCopyright->text().arg(QDate().currentDate().toString("yyyy")));
 }
 WindowAbout::~WindowAbout()
 {
 	delete ui_About;
+}
+
+// WoW Directory Manager
+WoWDirManager::WoWDirManager(QWidget *parent) : QDialog(parent), ui_WoWDirManager(new Ui::WoWDirManager)
+{
+	// Setup Window
+	ui_WoWDirManager->setupUi(this);
+
+	// Populate Window
+}
+WoWDirManager::~WoWDirManager()
+{
+	delete ui_WoWDirManager;
 }
 
 // Main WoW Model Viewer
@@ -34,8 +51,8 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
 	QCoreApplication::setOrganizationName(ORGANIZATIONNAME);
 	QCoreApplication::setOrganizationDomain(ORGANIZATIONWEBSITE);
 
+	PopulateLists();		// Populate our Lists
 	Exporters();			// Initialize the Exporters
-
 	CheckSettings_Main();	// Check Main Program Settings
 	
     // Defaults
@@ -386,6 +403,12 @@ void WoWModelViewer::on_actionLoad_World_of_Wacraft_triggered()
 
 	// Update the Menu
     UpdateViewerMenu();
+}
+
+// Open WoW Directory Manager
+void WoWModelViewer::on_actionManage_Directories_triggered()
+{
+	WoWDirectoryManager.show();
 }
 
 // Open About Window

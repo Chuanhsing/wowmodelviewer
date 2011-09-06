@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QActionGroup>
 #include <QMenu>
+#include <QDate>
 
 // Be careful of what you #include here. This header is included with the auto-generated
 // moc_application.cpp file, and can sometimes cause linking errors.
@@ -11,9 +12,11 @@
 // Globals
 #include "version.h"
 #include "enums.h"
+#include "lists.h"
 
 // Other Windows
 #include "ui_About.h"
+#include "ui_WoWDirManager.h"
 
 // Functions & Stormlib
 #include "math\math_base.h"
@@ -23,6 +26,7 @@
 namespace Ui {
     class Main_Window_Viewer;
 	class AboutWindow;
+	class WoWDirManager;
 }
 
 class WindowAbout : public QDialog
@@ -39,6 +43,22 @@ private slots:
 
 private:
 	Ui::AboutWindow *ui_About;
+};
+
+class WoWDirManager : public QDialog
+{
+	Q_OBJECT
+
+public:
+    explicit WoWDirManager(QWidget *parent = 0);
+	~WoWDirManager();
+private slots:
+	void on_buttonBox_Cancel_clicked() {
+		QDialog::close();
+	}
+
+private:
+	Ui::WoWDirManager *ui_WoWDirManager;
 };
 
 class WoWModelViewer : public QMainWindow
@@ -62,6 +82,7 @@ public:
 
 	// SubWindows
 	WindowAbout Window_About;
+	WoWDirManager WoWDirectoryManager;
 
 public slots:
 	void ChangeLoadButton();
@@ -92,8 +113,14 @@ private slots:
 	void on_rBtn_IsItem_clicked();
     void on_rBtn_IsSound_clicked();
 
+	// File Menu
 	void on_actionLoad_World_of_Wacraft_triggered();
     void on_actionExit_triggered();
+
+	// Options Menu
+	void on_actionManage_Directories_triggered();
+
+	// About Menu
 	void on_actionAbout_triggered();
 
 private:
