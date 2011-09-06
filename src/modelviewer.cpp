@@ -2348,7 +2348,7 @@ Windows 98\\ME\\2000\\XP on 17th December 2006\n\n\
     info.SetCopyright(
 wxString(wxT("World of Warcraft(R) is a Registered trademark of\n\
 Blizzard Entertainment(R). All game assets and content\n\
-is (C)2006-2011 Blizzard Entertainment(R). All rights reserved.")));
+is (C)2004-2011 Blizzard Entertainment(R). All rights reserved.")));
 
 	info.SetLicence(wxT("WoW Model Viewer is released under the GNU General Public License v3, Non-Commercial Use."));
 
