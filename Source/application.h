@@ -5,6 +5,7 @@
 #include <QActionGroup>
 #include <QMenu>
 #include <QDate>
+#include <QMessageBox>
 
 // Be careful of what you #include here. This header is included with the auto-generated
 // moc_application.cpp file, and can sometimes cause linking errors.
@@ -13,15 +14,16 @@
 #include "version.h"
 #include "enums.h"
 #include "lists.h"
+#include "classes.h"
 
-// Other Windows
+// Windows
+#include "ui_Main_Window_Viewer.h"
 #include "ui_About.h"
-#include "ui_WoWDirManager.h"
+#include "wowdirmanager.h"
 
 // Functions & Stormlib
 #include "math\math_base.h"
 #include "StormLib\src\StormLib.h"
-
 
 namespace Ui {
     class Main_Window_Viewer;
@@ -29,6 +31,7 @@ namespace Ui {
 	class WoWDirManager;
 }
 
+// About Window
 class WindowAbout : public QDialog
 {
 	Q_OBJECT
@@ -45,22 +48,7 @@ private:
 	Ui::AboutWindow *ui_About;
 };
 
-class WoWDirManager : public QDialog
-{
-	Q_OBJECT
-
-public:
-    explicit WoWDirManager(QWidget *parent = 0);
-	~WoWDirManager();
-private slots:
-	void on_buttonBox_Cancel_clicked() {
-		QDialog::close();
-	}
-
-private:
-	Ui::WoWDirManager *ui_WoWDirManager;
-};
-
+// WoW Model Viewer
 class WoWModelViewer : public QMainWindow
 {
     Q_OBJECT
@@ -71,8 +59,10 @@ public:
     size_t ViewerInterfaceType;
 	size_t WoWTypeCurrent;
 	size_t WoWTypeNext;
+	st_WoWDir CurrentDir;
     void UpdateViewerMenu();
 	void createStatusBar();
+	void updateStatusBar(QString);
 	void updateFileList();
     ~WoWModelViewer();
 

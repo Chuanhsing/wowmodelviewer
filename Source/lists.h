@@ -1,27 +1,47 @@
 #ifndef WMV_LISTS_H
 #define WMV_LISTS_H
 
-#include <qstring.h>
-#include <qlist.h>
+// This is used for various lists and other static variables.
+
+#include <QString>
+#include <QList>
+#include <QMap>
 #include "version.h"
+#include "constants.h"
+#include "classes.h"
 
+// Locale List
 // Placement matches WoWLocale number
-static QList<QString> LocaleList;
+static QList<QString> LocaleList = QList<QString>()
+	<< "enUS"		// American English
+	<< "enGB"		// British English (Identical to enUS)
+	<< "frFR"		// French
+	<< "deDE"		// German
+	<< "koKR"		// Korean
+	<< "zhCN"		// Chinese Simplified
+	<< "zhTW"		// Chinese Traditional
+	<< "esES"		// Spanish Spanish
+	<< "esMX"		// Mexican Spanish
+	<< "ruRU"		// Russian
+	<< "jaJP"		// Japanese
+	<< "ptBR"		// Brazilian Portuguese
+	<< "itIT"		// Italian	-- Found these two in the PTR Installer
+	<< "plPL"		// Polish
 
-inline void PopulateLists(){
-	// Locale List
-	LocaleList.push_back("enUS");		// American English
-	LocaleList.push_back("enGB");		// British English (Identical to enUS)
-	LocaleList.push_back("frFR");		// French
-	LocaleList.push_back("deDE");		// German
-	LocaleList.push_back("koKR");		// Korean
-	LocaleList.push_back("zhCN");		// Chinese Simplified
-	LocaleList.push_back("zhTW");		// Chinese Traditional
-	LocaleList.push_back("esES");		// Spanish Spanish
-	LocaleList.push_back("esMX");		// Mexican Spanish
-	LocaleList.push_back("ruRU");		// Russian
-	LocaleList.push_back("jaJP");		// Japanese
-	LocaleList.push_back("ptBR");		// Brazilian Portuguese
-};
+	<< "None";		// Used for Error Detection. Should ALWAYS be last!
+
+// Expansion Name List
+static QList<QString> ExpansionNameList = QList<QString>()
+	<< QObject::tr("Vanilla")
+	<< QObject::tr("Burning Crusade")
+	<< QObject::tr("Wrath of the Lich King")
+	<< QObject::tr("Cataclysm")
+	<< QObject::tr("Public Test Realm")
+	<< QObject::tr("Beta Server");
+
+typedef QMap<QString, HANDLE*> t_ArchiveSet;
+static t_ArchiveSet LoadedArchives;
+
+static QDir LastDir;
 
 #endif

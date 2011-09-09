@@ -1,8 +1,71 @@
+#include <QFileInfo>
+#include <QMessageBox>
+#include "Settings_Main.h"
+#include "globals.h"
 #include "MPQ.h"
+/*
+Most of the MPQ functions are directly converted from WMV 0.7.0.1, as their functions
+haven't needed to be changed since they were originally written. These SHOULD work
+with all versions of WoW, but have yet to be tested.
 
-typedef QMap<QString, HANDLE*> ArchiveSet;
-static ArchiveSet LoadedArchives;
+NOTE: I've decided NOT to include the capability of using local files. If we want to
+restore that functionality, we can simply copy the old source code for it, and update
+it for QT and the new variable names.
+*/
 
+// --== MPQ Archive ==--
+
+MPQArchive::MPQArchive(QString filename) : OK(false), ErrorCode(MPQERROR_OKAY)
+{
+	g_WMV->updateStatusBar(QObject::tr("Initializing %1 MPQ Archive...").arg(filename));
+
+	// Get File Info
+	QFileInfo f(filename);
+
+	// Check for .Lock file.
+	// Actually, we should move this to ABOVE this function. We shouldn't call MPQArchive() if .lock exists.
+	if (QFile(f.filePath().append(".lock")).exists()){
+		/*QMessageBox m;
+		m.setWindowTitle(QObject::tr("Error: Unable to open MPQ file!"));
+		m.setText(QObject::tr("Could not open MPQ file, because it is in use.\nPlease close World of Warcraft, then try again."));
+		m.setIcon(QMessageBox::Icon::Critical);
+		m.exec();*/
+
+		ErrorCode = MPQERROR_LOCKFILEFOUND;
+		return;
+	}
+
+	// Attempt to open the MPQ file
+	if (!SFileOpenArchive(filename.toUtf8(), 0, MPQ_OPEN_READ_ONLY, &MPQArch )) {
+		ErrorCode = MPQERROR_COULDNOTOPEN;
+		ErrorData = GetLastError();
+		return;
+	}
+
+	// Do Patch files, But Skip the Cache Directory
+	if (!(f.dir().path().toLower().contains("cache")) && (f.completeBaseName().toLower().startsWith("patch")) && (!isPartialMPQ(filename))){
+		// Process Patch Files
+
+		for (size_t j=g_WMV->CurrentDir.MPQList.size()-1;j>=0;j--){
+			QString mpqv = g_WMV->CurrentDir.MPQList.value((int)j);
+			QFileInfo arch(mpqv);
+			if (!arch.baseName().toLower().startsWith("wow-update-"))
+				continue;
+
+			if (arch.baseName().length() == QString("wow-update-xxxxx.mpq").length()){
+				SFileOpenPatchArchive(MPQArch, mpqv.toUtf8(), "base", 0);
+				SFileOpenPatchArchive(MPQArch, mpqv.toUtf8(), LocaleList.value((int)g_WMV->CurrentDir.Version).toAscii(), 0);
+			}else if(arch.dir().path() == f.dir().path()){		// If the Same Directory...
+				SFileOpenPatchArchive(MPQArch, mpqv.toUtf8(), "", 0);
+			}
+		}
+	}
+
+	OK = true;
+	LoadedArchives.insert(filename, &MPQArch );
+}
+
+// Close the MPQ Archive
 void MPQArchive::Close()
 {
 	// If the file wasn't properly loaded, then there's nothing to close.
@@ -13,7 +76,7 @@ void MPQArchive::Close()
 	SFileCloseArchive(MPQArch);
 
 	// Remove from the list of loaded Archive Files
-	for (ArchiveSet::Iterator iter=LoadedArchives.begin(); iter!=LoadedArchives.end(); ++iter) {
+	for (t_ArchiveSet::Iterator iter=LoadedArchives.begin(); iter!=LoadedArchives.end(); ++iter) {
 		HANDLE thisMPQ = iter.value();
 		if (thisMPQ == MPQArch){
 			LoadedArchives.erase(iter);
@@ -22,8 +85,120 @@ void MPQArchive::Close()
 	}
 }
 
+// Determine if the MPQ is a Partical MPQ
+bool checkIsPartialMPQ(QString filename)
+{
+	QFileInfo f(filename);
+	if (f.completeBaseName().toLower().startsWith("wow-update-"))
+		return true;
+	return false;
+}
+bool MPQArchive::isPartialMPQ(QString filename){	// MPQArchive's isPartialMPQ
+	return checkIsPartialMPQ(filename);
+}
+bool MPQFile::isPartialMPQ(QString filename){		// MPQFile's isPartialMPQ
+	return checkIsPartialMPQ(filename);
+}
+
+
+// --== MPQ File ==--
+
+MPQFile::MPQFile(QString filename):EoF(false),buffer(0),pointer(0),size(0){
+	openFile(filename);
+}
+
+MPQFile::~MPQFile()
+{
+	close();
+}
+
+void MPQFile::openFile(QString filename){
+	EoF = false;
+	buffer = 0;
+	pointer = 0;
+	size = 0;
+
+	/*
+	Not sure if we need this yet... This is from the original code, and needs to be converted.
+
+	// zhCN alternate file mode
+	if (bAlternate && !filename.Lower().StartsWith(wxT("alternate"))) {
+		wxString alterName = wxT("alternate")+SLASH+filename;
+
+		for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end(); ++i)
+		{
+			HANDLE &mpq_a = *i->second;
+
+			HANDLE fh;
+
+			if( !SFileOpenFileEx( mpq_a, alterName.fn_str(), SFILE_OPEN_PATCHED_FILE, &fh ) )
+				continue;
+
+			// Found!
+			DWORD filesize = SFileGetFileSize( fh );
+			size = filesize;
+
+			// HACK: in patch.mpq some files don't want to open and give 1 for filesize
+			if (size<=1) {
+				eof = true;
+				buffer = 0;
+				return;
+			}
+
+			buffer = new unsigned char[size];
+			SFileReadFile( fh, buffer, (DWORD)size );
+			SFileCloseFile( fh );
+
+			return;
+		}
+	}
+	*/
+
+	for(t_ArchiveSet::iterator i=LoadedArchives.begin(); i!=LoadedArchives.end(); ++i)
+	{
+		HANDLE &MPQArch = *i.value();
+		HANDLE fh;
+
+		if( !SFileOpenFileEx( MPQArch, filename.toUtf8(), SFILE_OPEN_PATCHED_FILE, &fh ) )
+			continue;
+
+		// Found!
+		DWORD filesize = SFileGetFileSize( fh );
+		size = filesize;
+
+		/* Need to see if this is still true &/or still needed.
+
+		// HACK: in patch.mpq some files don't want to open and give 1 for filesize
+		if (size<=1) {
+			EoF = true;
+			buffer = 0;
+			return;
+		}
+		*/
+
+		buffer = new unsigned char[size];
+		SFileReadFile( fh, buffer, (DWORD)size );
+		SFileCloseFile( fh );
+
+		return;
+	}
+
+	EoF = true;
+	buffer = 0;
+}
+
+void MPQFile::close()
+{
+	delete(buffer);
+	EoF = true;
+}
+
+
+// --== MPQ File List==--
+
 // Retrieves a list of MPQ files, based on the specified WoWDir's version.
-QList<QString> MPQList_Get(stWoWDir WoWDir){
+// Returns both a QList AND places the list inside the specified WoWDir.
+QList<QString> MPQList_Get(st_WoWDir &WoWDir){
 	QList<QString> MPQList;
 	QString locale = LocaleList.value(WoWDir.Version);
 	QDir dir(WoWDir.Directory);
@@ -102,11 +277,13 @@ QList<QString> MPQList_Get(stWoWDir WoWDir){
 		QDir ldir(dir);
 		ldir.cd(locale);
 		// Cache Directory
+		/* For now, we're skipping the cache directory.
 		QDir cachedir(dir);
 		cachedir.cd("Cache");
 		// Cache Locale Directory
 		QDir cacheldir(cachedir);
 		cacheldir.cd(locale);
+		*/
 
 		// Common MPQs
 		// Base-SYSTEM.MPQ replaces the base-LOCALE.MPQ and backup-LOCALE.MPQ files
@@ -118,12 +295,17 @@ QList<QString> MPQList_Get(stWoWDir WoWDir){
 		MPQList.push_back("art.MPQ");
 		MPQList.push_back("sound.MPQ");
 		MPQList.push_back("world.MPQ");
-		MPQList.push_back("expansion1.MPQ");
-		MPQList.push_back("expansion2.MPQ");
-		MPQList.push_back("expansion3.MPQ");
+
+		QDir dir_u(dir);
+		dir_u.setFilter(QDir::Files);
+		dir_u.setNameFilters(QStringList("expansion?.MPQ"));
+		dir_u.setSorting(QDir::Name);
+		for (size_t i=0;i<dir_u.count();i++){
+			MPQList.push_back(dir_u.entryList().value((int)i));
+		}
 
 		// Update Files
-		QDir dir_u(dir);
+		dir_u = dir;
 		dir_u.setFilter(QDir::Files);								// Filter out the directories
 		dir_u.setNameFilters(QStringList("wow-update-?????.MPQ"));	// Filter out everything but the Update MPQ files
 		dir_u.setSorting(QDir::Name);
@@ -136,10 +318,17 @@ QList<QString> MPQList_Get(stWoWDir WoWDir){
 		MPQList.push_back(ldir.path()+"backup-"+locale+".MPQ");		// Kept because 4.0.x still uses these
 		MPQList.push_back(ldir.path()+"locale-"+locale+".MPQ");
 		MPQList.push_back(ldir.path()+"speech-"+locale+".MPQ");
-		MPQList.push_back(ldir.path()+"expansion1-locale-"+locale+".MPQ");
-		MPQList.push_back(ldir.path()+"expansion1-speech-"+locale+".MPQ");
-		MPQList.push_back(ldir.path()+"expansion2-locale-"+locale+".MPQ");
-		MPQList.push_back(ldir.path()+"expansion2-speech-"+locale+".MPQ");
+
+		// Locale Expansion Files
+		dir_u = ldir;
+		dir_u.setFilter(QDir::Files);
+		QStringList f;
+		f << "expansion?-locale-????.MPQ" << "expansion?-speech-????.MPQ";
+		dir_u.setNameFilters(f);
+		dir_u.setSorting(QDir::Name);
+		for (size_t i=0;i<dir_u.count();i++){
+			MPQList.push_back(dir_u.entryList().value((int)i));
+		}
 
 		// Locale Update Files
 		dir_u = ldir;
@@ -150,10 +339,11 @@ QList<QString> MPQList_Get(stWoWDir WoWDir){
 			MPQList.push_back(dir_u.entryList().value((int)i));
 		}
 
+		/* Again, skipping Cache directory
 		// Cache MPQs
 		dir_u = cachedir;
 		dir_u.setFilter(QDir::Files);
-		QStringList f;
+		f.clear();
 		f << "patch-base*.MPQ" << "SoundCache-?.MPQ" << "SoundCache-patch*.MPQ";
 		dir_u.setNameFilters(f);
 		dir_u.setSorting(QDir::Name);
@@ -171,6 +361,7 @@ QList<QString> MPQList_Get(stWoWDir WoWDir){
 		for (size_t i=0;i<dir_u.count();i++){
 			MPQList.push_back(dir_u.entryList().value((int)i));
 		}
+		*/
 	}else if (WoWDir.Version == WOW_PTR){
 		// Copied from the latest Version of WoW
 
@@ -178,11 +369,13 @@ QList<QString> MPQList_Get(stWoWDir WoWDir){
 		QDir ldir(dir);
 		ldir.cd(locale);
 		// Cache Directory
+		/* For now, we're skipping the cache directory.
 		QDir cachedir(dir);
 		cachedir.cd("Cache");
 		// Cache Locale Directory
 		QDir cacheldir(cachedir);
 		cacheldir.cd(locale);
+		*/
 
 		// Common MPQs
 		// Base-SYSTEM.MPQ replaces the base-LOCALE.MPQ and backup-LOCALE.MPQ files
@@ -194,12 +387,17 @@ QList<QString> MPQList_Get(stWoWDir WoWDir){
 		MPQList.push_back("art.MPQ");
 		MPQList.push_back("sound.MPQ");
 		MPQList.push_back("world.MPQ");
-		MPQList.push_back("expansion1.MPQ");
-		MPQList.push_back("expansion2.MPQ");
-		MPQList.push_back("expansion3.MPQ");
+
+		QDir dir_u(dir);
+		dir_u.setFilter(QDir::Files);
+		dir_u.setNameFilters(QStringList("expansion?.MPQ"));
+		dir_u.setSorting(QDir::Name);
+		for (size_t i=0;i<dir_u.count();i++){
+			MPQList.push_back(dir_u.entryList().value((int)i));
+		}
 
 		// Update Files
-		QDir dir_u(dir);
+		dir_u = dir;
 		dir_u.setFilter(QDir::Files);								// Filter out the directories
 		dir_u.setNameFilters(QStringList("wow-update-?????.MPQ"));	// Filter out everything but the Update MPQ files
 		dir_u.setSorting(QDir::Name);
@@ -210,10 +408,17 @@ QList<QString> MPQList_Get(stWoWDir WoWDir){
 		// Locale MPQs
 		MPQList.push_back(ldir.path()+"locale-"+locale+".MPQ");
 		MPQList.push_back(ldir.path()+"speech-"+locale+".MPQ");
-		MPQList.push_back(ldir.path()+"expansion1-locale-"+locale+".MPQ");
-		MPQList.push_back(ldir.path()+"expansion1-speech-"+locale+".MPQ");
-		MPQList.push_back(ldir.path()+"expansion2-locale-"+locale+".MPQ");
-		MPQList.push_back(ldir.path()+"expansion2-speech-"+locale+".MPQ");
+
+		// Locale Expansion Files
+		dir_u = ldir;
+		dir_u.setFilter(QDir::Files);
+		QStringList f;
+		f << "expansion?-locale-????.MPQ" << "expansion?-speech-????.MPQ";
+		dir_u.setNameFilters(f);
+		dir_u.setSorting(QDir::Name);
+		for (size_t i=0;i<dir_u.count();i++){
+			MPQList.push_back(dir_u.entryList().value((int)i));
+		}
 
 		// Locale Update Files
 		dir_u = ldir;
@@ -224,10 +429,11 @@ QList<QString> MPQList_Get(stWoWDir WoWDir){
 			MPQList.push_back(dir_u.entryList().value((int)i));
 		}
 
+		/* Again, skipping Cache directory
 		// Cache MPQs
 		dir_u = cachedir;
 		dir_u.setFilter(QDir::Files);
-		QStringList f;
+		f.clear();
 		f << "patch-base*.MPQ" << "SoundCache-?.MPQ" << "SoundCache-patch*.MPQ";
 		dir_u.setNameFilters(f);
 		dir_u.setSorting(QDir::Name);
@@ -245,9 +451,12 @@ QList<QString> MPQList_Get(stWoWDir WoWDir){
 		for (size_t i=0;i<dir_u.count();i++){
 			MPQList.push_back(dir_u.entryList().value((int)i));
 		}
+		*/
 	}else if (WoWDir.Version == WOW_BETA){
 		// No clue about the current beta, so this is empty for now.
 	}
+
+	WoWDir.MPQList = MPQList;
 
 	return MPQList;
 }

@@ -33,6 +33,8 @@ enum FileType
 
 These Match the TOC Numbers of the game. There's a good chance we may never
 need all of these, but it's probably a good thing to have, just in case.
+Note: Version is used for detecting file-type formats, not content! You can
+have only Vanilla content, but the files are in Cata formats.
 */
 enum WoWVersion
 {
@@ -60,7 +62,7 @@ enum WoWVersion
 	WOW_WOTLK_FIRST = 30000,		// First Wrath of the Lich King (3.0.x)
 	WOW_WOTLK_310 = 30100,			// Wrath of the Lich King 3.1.x
 	WOW_WOTLK_320 = 30200,			// Wrath of the Lich King 3.2.x
-	WOW_WOTLK = 30300,				// Final Wrath of the Lich King, 3.3.5a
+	WOW_WOTLK = 30300,				// Final Wrath of the Lich King, 3.3.x
 
 	// Cataclysm
 	WOW_CATACLYSM_FIRST = 40000,	// First Cataclysm (4.0.x)
@@ -77,7 +79,7 @@ enum WoWVersion
 // Number matches location in LocaleList
 enum WoWLocale
 {
-	LOCALE_ENUS = 1,
+	LOCALE_ENUS = 0,
 	LOCALE_ENGB,
 	LOCALE_FRFR,
 	LOCALE_DEDE,
@@ -88,20 +90,22 @@ enum WoWLocale
 	LOCALE_ESMX,
 	LOCALE_RURU,
 	LOCALE_JAJP,
-	LOCALE_PTBR
+	LOCALE_PTBR,
+	LOCALE_ITIT,
+	LOCALE_PLPL,
+
+	LOCALE_NONE		// if Locale = LOCALE_NONE, then there was an error.
 };
 
-// Error Codes for reading and loading models.
-enum ModelReadErrors
+// Expansion Name Identifier
+enum ExpansionName
 {
-	MODELREADERROR_OKAY = 0,
-	MODELREADERROR_FILENOTFOUND,
-	MODELREADERROR_UNKNOWNFORMAT,
-	MODELREADERROR_INVALIDFORMAT,
-	MODELREADERROR_CANTOPENFILE,
-	MODELREADERROR_CANTREADFILE,
-	MODELREADERROR_CANTOPENMPQ,
-	MODELREADERROR_CANTREADMPQ
+	EXPANSIONNAME_VANILLA = 0,
+	EXPANSIONNAME_BURNINGCRUSADE,
+	EXPANSIONNAME_WOTLK,
+	EXPANSIONNAME_CATACLYSM,
+	EXPANSIONNAME_PTR,
+	EXPANSIONNAME_BETA
 };
 
 // These are based on official WoW numbers
@@ -121,5 +125,28 @@ enum CharRaces
 
 	RACE_WORGEN = 22
 };
+
+// --== Error Codes ==--
+
+// Reading and loading models.
+enum ModelReadErrors
+{
+	MODELREADERROR_OKAY = 0,
+	MODELREADERROR_FILENOTFOUND,
+	MODELREADERROR_UNKNOWNFORMAT,
+	MODELREADERROR_INVALIDFORMAT,
+	MODELREADERROR_CANTOPENFILE,
+	MODELREADERROR_CANTREADFILE,
+	MODELREADERROR_CANTOPENMPQ,
+	MODELREADERROR_CANTREADMPQ
+};
+
+enum MPQErrorCodes
+{
+	MPQERROR_OKAY = 0,
+	MPQERROR_LOCKFILEFOUND,
+	MPQERROR_COULDNOTOPEN,
+};
+
 
 #endif

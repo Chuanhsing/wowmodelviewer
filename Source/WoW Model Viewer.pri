@@ -7,7 +7,10 @@
 message("You are running qmake on a generated .pro file. This may not work!")
 
 
-HEADERS += ./lists.h \
+HEADERS += ./classes.h \
+    ./constants.h \
+    ./globals.h \
+    ./lists.h \
     ./MPQ.h \
     ./Settings_Main.h \
     ./version.h \
@@ -28,11 +31,14 @@ HEADERS += ./lists.h \
     ./Models/Model_M2_v04.h \
     ./Models/Model_M2_v08.h \
     ./Models/Model_M2_v10.h \
-    ./Models/Model_WMO_v17.h
+    ./Models/Model_WMO_v17.h \
+    ./WoWDirManager.h
 SOURCES += ./application.cpp \
     ./main.cpp \
     ./MPQ.cpp \
-    ./Settings_Main.cpp
+    ./Settings_Main.cpp \
+    ./WoWDirManager.cpp \
+    ./globals.cpp
 FORMS += ./ui/Main_Window_Viewer.ui \
     ./ui/About.ui \
     ./ui/WoWDirManager.ui

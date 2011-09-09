@@ -23,7 +23,7 @@
 static QSettings sWoWDirs(QDir::currentPath()+"/"+WOWDIRS_INI_NAME,QSettings::IniFormat);	// WoW Directory List
 
 static QMap<QString,QVariant> SettingsList;
-static QMap<QString,stWoWDir> WoWDirList;
+static QMap<QString,st_WoWDir> WoWDirList;
 
 // Initalization of our default settings
 static void SettingsListInit()

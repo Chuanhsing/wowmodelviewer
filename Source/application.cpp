@@ -1,5 +1,4 @@
 #include "application.h"
-#include "ui_Main_Window_Viewer.h"
 #include "Settings_Main.h"
 #include "Exporters\exporters.h"
 
@@ -26,19 +25,6 @@ WindowAbout::~WindowAbout()
 	delete ui_About;
 }
 
-// WoW Directory Manager
-WoWDirManager::WoWDirManager(QWidget *parent) : QDialog(parent), ui_WoWDirManager(new Ui::WoWDirManager)
-{
-	// Setup Window
-	ui_WoWDirManager->setupUi(this);
-
-	// Populate Window
-}
-WoWDirManager::~WoWDirManager()
-{
-	delete ui_WoWDirManager;
-}
-
 // Main WoW Model Viewer
 WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui::Main_Window_Viewer)
 {
@@ -51,7 +37,6 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
 	QCoreApplication::setOrganizationName(ORGANIZATIONNAME);
 	QCoreApplication::setOrganizationDomain(ORGANIZATIONWEBSITE);
 
-	PopulateLists();		// Populate our Lists
 	Exporters();			// Initialize the Exporters
 	CheckSettings_Main();	// Check Main Program Settings
 	
@@ -161,6 +146,11 @@ void WoWModelViewer::createStatusBar()
 	statusBar()->setAutoFillBackground(true);
 	statusBar()->setSizeGripEnabled(false);
 	statusBar()->showMessage(tr("Ready"));
+}
+
+void WoWModelViewer::updateStatusBar(QString newstatus)
+{
+	statusBar()->showMessage(newstatus);
 }
 
 WoWModelViewer::~WoWModelViewer()
@@ -416,6 +406,8 @@ void WoWModelViewer::on_actionAbout_triggered()
 {
 	Window_About.show();
 }
+
+
 
 // Functions for the temporary radio buttons on the main window.
 void WoWModelViewer::on_rBtn_NoModel_clicked()

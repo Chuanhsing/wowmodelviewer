@@ -236,15 +236,15 @@
     <addaction name="separator"/>
     <addaction name="actionExporter_Settings_2"/>
     <addaction name="actionInitial_Pose_Only_2"/>
-    <addaction name="separator"/>
-    <addaction name="actionUpdate_Databases"/>
-    <addaction name="actionUpdate_Program"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
      <string>&amp;About</string>
     </property>
     <addaction name="actionHelp"/>
+    <addaction name="separator"/>
+    <addaction name="actionUpdate_Databases"/>
+    <addaction name="actionUpdate_Program"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
@@ -1950,6 +1950,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
    <property name="icon">
     <iconset resource="../resources.qrc">
      <normaloff>:/WoW Versions/WoWIcon1-Vanilla</normaloff>
+     <normalon>:/WoW Versions/WoWIcon1-Vanilla</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
      <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon1-Vanilla</iconset>
    </property>
