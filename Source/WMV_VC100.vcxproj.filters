@@ -49,6 +49,9 @@
     <Filter Include="Header Files\Models">
       <UniqueIdentifier>{2f0120f1-f988-41be-8acc-8c8c3a21c3a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="QsLog">
+      <UniqueIdentifier>{85afc30f-3a3e-45dc-a77c-36994fea4e48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -95,6 +98,15 @@
     </ClCompile>
     <ClCompile Include="globals.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QsDebugOutput.cpp">
+      <Filter>QsLog</Filter>
+    </ClCompile>
+    <ClCompile Include="QsLog.cpp">
+      <Filter>QsLog</Filter>
+    </ClCompile>
+    <ClCompile Include="QsLogDest.cpp">
+      <Filter>QsLog</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +190,15 @@
     </ClInclude>
     <ClInclude Include="globals.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QsDebugOutput.h">
+      <Filter>QsLog</Filter>
+    </ClInclude>
+    <ClInclude Include="QsLog.h">
+      <Filter>QsLog</Filter>
+    </ClInclude>
+    <ClInclude Include="QsLogDest.h">
+      <Filter>QsLog</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

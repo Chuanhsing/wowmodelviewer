@@ -40,15 +40,15 @@ enum WoWVersion
 {
 	// Vanilla WoW
 	WOW_VANILLA_FIRST = 3975,		// Vanilla's Original, unpatched TOC. Assumed this is used for all versions before 1.3.
-	WOW_VANILLA_103 = 1300,			// Vanilla 1.3 & 1.4 - First recorded TOC number
-	WOW_VANILLA_105 = 1500,			// Vanilla 1.5
-	WOW_VANILLA_106 = 1600,			// Vanilla 1.6
-	WOW_VANILLA_107 = 1700,			// Vanilla 1.7
-	WOW_VANILLA_108 = 1800,			// Vanilla 1.8
-	WOW_VANILLA_109 = 10900,		// Vanilla 1.9
-	WOW_VANILLA_110 = 11000,		// Vanilla 1.10
-	WOW_VANILLA_111 = 11100,		// Vanilla 1.11
-	WOW_VANILLA = 11200,			// Final Vanilla, 1.12
+	WOW_VANILLA_103 = 1300,			// Vanilla 1.3.x & 1.4.x - First recorded TOC number
+	WOW_VANILLA_105 = 1500,			// Vanilla 1.5.x
+	WOW_VANILLA_106 = 1600,			// Vanilla 1.6.x
+	WOW_VANILLA_107 = 1700,			// Vanilla 1.7.x
+	WOW_VANILLA_108 = 1800,			// Vanilla 1.8.x
+	WOW_VANILLA_109 = 10900,		// Vanilla 1.9.x
+	WOW_VANILLA_110 = 11000,		// Vanilla 1.10.x
+	WOW_VANILLA_111 = 11100,		// Vanilla 1.11.x
+	WOW_VANILLA = 11200,			// Final Vanilla, 1.12.x
 
 	// The Burning Cursade
 	WOW_TBC_FIRST = 20000,			// First Burning Crusade (2.0.1)
@@ -104,6 +104,7 @@ enum ExpansionName
 	EXPANSIONNAME_BURNINGCRUSADE,
 	EXPANSIONNAME_WOTLK,
 	EXPANSIONNAME_CATACLYSM,
+
 	EXPANSIONNAME_PTR,
 	EXPANSIONNAME_BETA
 };
@@ -144,6 +145,7 @@ enum ModelReadErrors
 enum MPQErrorCodes
 {
 	MPQERROR_OKAY = 0,
+	MPQERROR_FILENOTFOUND,
 	MPQERROR_LOCKFILEFOUND,
 	MPQERROR_COULDNOTOPEN,
 };

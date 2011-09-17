@@ -16,8 +16,8 @@ WindowAbout::WindowAbout(QWidget *parent) : QDialog(parent), ui_About(new Ui::Ab
 
 	// Set Various Variables
 	ui_About->WMVName->setText(PROGRAMNAME);
-	ui_About->VersionNumber->setText(QString(MAJORVERSION + tr(" ","About_VersionSpace") + BUILDVERSION));
-	ui_About->Edition->setText(ui_About->Edition->text().arg(SYSTEMVERSION + DEBUGVERSION));
+	ui_About->VersionNumber->setText(ui_About->VersionNumber->text().arg(MAJORVERSION).arg(BUILDVERSION));
+	ui_About->Edition->setText(ui_About->Edition->text().arg(SYSTEMVERSION).arg(DEBUGVERSION));
 	ui_About->ContentCopyright->setText(ui_About->ContentCopyright->text().arg(QDate().currentDate().toString("yyyy")));
 }
 WindowAbout::~WindowAbout()
@@ -33,23 +33,28 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
 
 	// Set Application Data
 	QCoreApplication::setApplicationName(PROGRAMNAME);
-	QCoreApplication::setApplicationVersion(MAJORVERSION + BUILDVERSION);
+	QCoreApplication::setApplicationVersion(MajorBuildVersion);
 	QCoreApplication::setOrganizationName(ORGANIZATIONNAME);
 	QCoreApplication::setOrganizationDomain(ORGANIZATIONWEBSITE);
 
 	Exporters();			// Initialize the Exporters
 	CheckSettings_Main();	// Check Main Program Settings
+	ReadWoWDirList();		// Read the WoW Directory List
 	
     // Defaults
-	InterfaceMode = INTERFACEMODE_VIEWER;				// Set the default mode to Viewer.
-    ViewerInterfaceType = VIEWER_INTERFACETYPE_NONE;	// Full list of viewer interface types in enums.h
-	WoWTypeCurrent = WOW_VANILLA;						// The currently loaded World of Warcraft type.
-	WoWTypeNext = WOW_NOTLOADED;						// The next World of Warcraft type that will be loaded.
 	isWoWLoaded = false;
 	canReloadWoW = false;
+	WoWTypeNext = WOW_NOTLOADED;						// The next World of Warcraft type that will be loaded.
+    ViewerInterfaceType = VIEWER_INTERFACETYPE_NONE;	// Full list of viewer interface types in enums.h
+
+	// Dependant Defaults
+	InterfaceMode = sWMVSettings.value("LastInterfaceMode").toUInt();	// Set the default mode to Viewer.
+	CurrentDir = WoWDirList.value(sWMVSettings.value("CurrentWoWDir").toString(),st_WoWDir());
+	WoWTypeCurrent = CurrentDir.Version;								// The currently loaded World of Warcraft type.
 
 	// Set the main Window's Title
-	setWindowTitle(PROGRAMNAME + tr(" ","WindowTitleSpace1") + MAJORVERSION + tr(" ","WindowTitleSpace2") + BUILDVERSION + tr(" ","WindowTitleSpace3") + SYSTEMVERSION + DEBUGVERSION);
+	//: Passed arguments: ProgramName (WMV), MajorVersion (v0.8.0.0), BuildVersion (r650), SystemVersion ("Windows 64-bit"), DebugVersion (" Debug" or "")
+	setWindowTitle(tr("%1 %2 %3 %4%5","Window Title").arg(PROGRAMNAME).arg(MAJORVERSION).arg(BUILDVERSION).arg(SYSTEMVERSION).arg(DEBUGVERSION));
 
     /* -= Groups =- */
     // Eye Glow

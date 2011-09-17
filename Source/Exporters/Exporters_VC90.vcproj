@@ -350,6 +350,34 @@
 			SourceControlFiles="false"
 			>
 		</Filter>
+		<Filter
+			Name="QsLog"
+			>
+			<File
+				RelativePath="..\QsDebugOutput.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\QsDebugOutput.h"
+				>
+			</File>
+			<File
+				RelativePath="..\QsLog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\QsLog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\QsLogDest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\QsLogDest.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\exporters.cpp"
 			>

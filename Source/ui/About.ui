@@ -214,7 +214,7 @@ With Special Thanks to:
     </font>
    </property>
    <property name="text">
-    <string notr="true" extracomment="Version &amp; Release numbers. These are set directly, and will not be translated.">v0.8.0.0 r610</string>
+    <string notr="true" extracomment="Version &amp; Release numbers. These are set directly, and will not be translated.">%1 %2</string>
    </property>
    <property name="scaledContents">
     <bool>false</bool>
@@ -246,7 +246,7 @@ With Special Thanks to:
     </font>
    </property>
    <property name="text">
-    <string comment="About_Edition" extracomment="%1 = SYSTEMVERSION and DEBUGVERSION">%1 Edition</string>
+    <string comment="About_Edition" extracomment="%1 = SYSTEMVERSION %2 = DEBUGVERSION">%1%2 Edition</string>
    </property>
    <property name="scaledContents">
     <bool>false</bool>

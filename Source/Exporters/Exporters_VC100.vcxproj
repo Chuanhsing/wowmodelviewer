@@ -148,9 +148,15 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\QsDebugOutput.cpp" />
+    <ClCompile Include="..\QsLog.cpp" />
+    <ClCompile Include="..\QsLogDest.cpp" />
     <ClCompile Include="exporters.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\QsDebugOutput.h" />
+    <ClInclude Include="..\QsLog.h" />
+    <ClInclude Include="..\QsLogDest.h" />
     <ClInclude Include="exporters.h" />
     <ClInclude Include="exporters_global.h" />
     <ClInclude Include="Lightwave3D.h" />

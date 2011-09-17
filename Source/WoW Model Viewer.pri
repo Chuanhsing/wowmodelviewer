@@ -19,6 +19,7 @@ HEADERS += ./classes.h \
     ./Model_M2.h \
     ./Model_ADT.h \
     ./resource.h \
+    ./WoWDirManager.h \
     ./application.h \
     ./math/math_base.h \
     ./math/math_constants.h \
@@ -32,13 +33,18 @@ HEADERS += ./classes.h \
     ./Models/Model_M2_v08.h \
     ./Models/Model_M2_v10.h \
     ./Models/Model_WMO_v17.h \
-    ./WoWDirManager.h
+    ./QsDebugOutput.h \
+    ./QsLog.h \
+    ./QsLogDest.h
 SOURCES += ./application.cpp \
+    ./globals.cpp \
     ./main.cpp \
     ./MPQ.cpp \
     ./Settings_Main.cpp \
     ./WoWDirManager.cpp \
-    ./globals.cpp
+    ./QsDebugOutput.cpp \
+    ./QsLog.cpp \
+    ./QsLogDest.cpp
 FORMS += ./ui/Main_Window_Viewer.ui \
     ./ui/About.ui \
     ./ui/WoWDirManager.ui

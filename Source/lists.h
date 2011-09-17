@@ -39,9 +39,13 @@ static QList<QString> ExpansionNameList = QList<QString>()
 	<< QObject::tr("Public Test Realm")
 	<< QObject::tr("Beta Server");
 
-typedef QMap<QString, HANDLE*> t_ArchiveSet;
+
+// --== Static Global Variables ==--
+
+// Our master list of currently loaded MPQ archives
 static t_ArchiveSet LoadedArchives;
 
-static QDir LastDir;
+// A list to temporaily store an MPQ list.
+static t_ArchiveSet TempArchiveList;
 
 #endif

@@ -1,5 +1,30 @@
 WoW Model Viewer v0.8.0.0
 
+r626
+-Added QsLog as Logging system.
+-Added a lot of Logging messages.
+-Finished & tested preliminary MPQ reading functionality. Extensive & unusual testing still needed.
+-Configured StormLib projects for VS2008 and VS2010.
+-Replaced _MAC_PPC and _MAC_INTEL configurations with _MAC32 and _MAC64 configurations.
+* WoW Directory Manager (WDM)
+ -Now properly reads patched TOC files for WoW Version.
+ -WDM now reads and saves added directories.
+ -The list now displays data, however the data does not yet display properly.
+ -WDM now remembers the last WoW directory you added, and will start there the next time you add a directory!
+
+
+r625
+-Updated PTR Icon, and included PSD.
+-Added WMV global.
+-Added updateStatusBar function to WMV window. Used with the global, any function can set statusBar text.
+-Moved Update functions to Help menu.
+-Lots of work migrating the MPQ functions. Can't test until we have working WoW directories.
+* WoW Directory Manager (WDM)
+ -Moved WDM to it's own files.
+ -Added most of the Add Directory functionality. Does everything but get the WoW Version and save the data.
+ -Added a pull down to quickly change an added directory's WoW version.
+
+
 r624
 -Added new forwards-compatibility goal to Dev v8 Goals.txt
 -Added WoW Directory Manager window. Functionality not yet implemented.

@@ -34,6 +34,9 @@
     <Filter Include="Exporter Files\Misc">
       <UniqueIdentifier>{57d1be4f-7228-4a8a-b13e-e5928eb63866}</UniqueIdentifier>
     </Filter>
+    <Filter Include="QsLog">
+      <UniqueIdentifier>{75a16877-64c7-4ea5-b7a1-f66608970907}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exporters.h" />
@@ -42,8 +45,26 @@
     <ClInclude Include="Lightwave3D.h">
       <Filter>Exporter Files\Lightwave 3D</Filter>
     </ClInclude>
+    <ClInclude Include="..\QsDebugOutput.h">
+      <Filter>QsLog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\QsLog.h">
+      <Filter>QsLog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\QsLogDest.h">
+      <Filter>QsLog</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="exporters.cpp" />
+    <ClCompile Include="..\QsDebugOutput.cpp">
+      <Filter>QsLog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QsLog.cpp">
+      <Filter>QsLog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\QsLogDest.cpp">
+      <Filter>QsLog</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

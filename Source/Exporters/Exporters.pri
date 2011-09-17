@@ -10,5 +10,11 @@ message("You are running qmake on a generated .pro file. This may not work!")
 HEADERS += ./exporters.h \
     ./exporters_global.h \
     ./Settings_Exporters.h \
-    ./Lightwave3D.h
-SOURCES += ./exporters.cpp
+    ./Lightwave3D.h \
+    ../QsDebugOutput.h \
+    ../QsLog.h \
+    ../QsLogDest.h
+SOURCES += ./exporters.cpp \
+    ../QsDebugOutput.cpp \
+    ../QsLog.cpp \
+    ../QsLogDest.cpp

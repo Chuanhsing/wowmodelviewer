@@ -29,7 +29,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="copy &quot;StormLib\bin\StormLib_dll\$(PlatformName)\$(ConfigurationName)\StormLib.lib&quot; &quot;$(IntDir)&quot;&#x0D;&#x0A;copy &quot;Exporters\$(ConfigurationName)\32_VC90\Exporters.lib&quot; &quot;$(IntDir)&quot;&#x0D;&#x0A;"
+				CommandLine="&#x0D;&#x0A;copy &quot;StormLib\bin\StormLib_dll\$(PlatformName)\$(ConfigurationName)\StormLib.lib&quot; &quot;$(IntDir)&quot;&#x0D;&#x0A;copy &quot;Exporters\$(ConfigurationName)\32_VC90\Exporters.lib&quot; &quot;$(IntDir)&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -1146,6 +1146,34 @@
 			</File>
 			<File
 				RelativePath=".\resources.rc"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="QsLog"
+			>
+			<File
+				RelativePath=".\QsDebugOutput.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\QsDebugOutput.h"
+				>
+			</File>
+			<File
+				RelativePath=".\QsLog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\QsLog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\QsLogDest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\QsLogDest.h"
 				>
 			</File>
 		</Filter>

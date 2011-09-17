@@ -1,13 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StormLib_dll", "StormLib_dll.vcproj", "{CB385198-50B1-4CF4-883B-11F042DED6AA}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StormLib_dll_VC100", "StormLib_dll_VC100.vcxproj", "{CB385198-50B1-4CF4-883B-11F042DED6AA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StormLib_test", "StormLib_test.vcproj", "{AA561A7B-26EA-49AF-90E8-C53C1FA2965D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StormLib_test_VC100", "StormLib_test_VC100.vcxproj", "{AA561A7B-26EA-49AF-90E8-C53C1FA2965D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Storm_dll", "Storm_dll.vcproj", "{BD600973-C6FA-4CE3-8821-67F6418B7F9C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Storm_dll_VC100", "Storm_dll_VC100.vcxproj", "{BD600973-C6FA-4CE3-8821-67F6418B7F9C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StormLib", "StormLib.vcproj", "{78424708-1F6E-4D4B-920C-FB6D26847055}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StormLib_VC100", "StormLib_VC100.vcxproj", "{78424708-1F6E-4D4B-920C-FB6D26847055}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,7 +81,7 @@ Global
 		{BD600973-C6FA-4CE3-8821-67F6418B7F9C}.ReleaseAS|Win32.ActiveCfg = Release|Win32
 		{BD600973-C6FA-4CE3-8821-67F6418B7F9C}.ReleaseAS|Win32.Build.0 = Release|Win32
 		{BD600973-C6FA-4CE3-8821-67F6418B7F9C}.ReleaseAS|x64.ActiveCfg = Release|Win32
-		{78424708-1F6E-4D4B-920C-FB6D26847055}.Debug|Win32.ActiveCfg = DebugAS|x64
+		{78424708-1F6E-4D4B-920C-FB6D26847055}.Debug|Win32.ActiveCfg = DebugAS|Win32
 		{78424708-1F6E-4D4B-920C-FB6D26847055}.Debug|x64.ActiveCfg = DebugAS|x64
 		{78424708-1F6E-4D4B-920C-FB6D26847055}.Debug|x64.Build.0 = DebugAS|x64
 		{78424708-1F6E-4D4B-920C-FB6D26847055}.DebugAD|Win32.ActiveCfg = DebugAD|Win32
@@ -92,7 +92,7 @@ Global
 		{78424708-1F6E-4D4B-920C-FB6D26847055}.DebugAS|Win32.Build.0 = DebugAS|Win32
 		{78424708-1F6E-4D4B-920C-FB6D26847055}.DebugAS|x64.ActiveCfg = DebugAS|x64
 		{78424708-1F6E-4D4B-920C-FB6D26847055}.DebugAS|x64.Build.0 = DebugAS|x64
-		{78424708-1F6E-4D4B-920C-FB6D26847055}.Release|Win32.ActiveCfg = ReleaseAS|x64
+		{78424708-1F6E-4D4B-920C-FB6D26847055}.Release|Win32.ActiveCfg = ReleaseAS|Win32
 		{78424708-1F6E-4D4B-920C-FB6D26847055}.Release|x64.ActiveCfg = ReleaseAS|x64
 		{78424708-1F6E-4D4B-920C-FB6D26847055}.Release|x64.Build.0 = ReleaseAS|x64
 		{78424708-1F6E-4D4B-920C-FB6D26847055}.ReleaseAD|Win32.ActiveCfg = ReleaseAD|Win32

@@ -15,8 +15,8 @@ Exporters::Exporters()
 
 	// If the last Version Number does not equal the current version number...
 	// Bascially, don't run this if the version is the same.
-	if (sWMVExSettings.value("Version") != MAJORVERSION+BUILDVERSION){
-
+	if (sWMVExSettings.value("Version") != MajorBuildVersion){
+		QLOG_INFO() << "Exporter Settings appear out of date. Checking and updating as needed.";
 		// Go over each Default setting
 		for (QMap<QString,QVariant>::Iterator it=temp.begin();it!=temp.end();++it){
 			// If the User has a setting using the same name, copy it's value into our temp list.
@@ -39,10 +39,11 @@ Exporters::Exporters()
 
 		// Set the current version
 		// If we don't do this, Version will never be updated!
-		sWMVExSettings.setValue("Version",MAJORVERSION+BUILDVERSION);
+		sWMVExSettings.setValue("Version",MajorBuildVersion);
 
 		// Save our new settings
 		sWMVExSettings.sync();
+		QLOG_INFO() << "Finished updating Exporter Settings.";
 	}
 }
 

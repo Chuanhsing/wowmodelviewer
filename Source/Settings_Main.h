@@ -29,10 +29,15 @@ static QMap<QString,st_WoWDir> WoWDirList;
 static void SettingsListInit()
 {
 	// Groups are done with a Prefix, such as "GroupName/VarName". Settings without a prefix will be listed in the General Group.
-	SettingsList.insert("Version",MAJORVERSION+BUILDVERSION);		// Used to compare the settings version against the program's version.
+	SettingsList.insert("Version",MajorBuildVersion);		// Used to compare the settings version against the program's version.
+	SettingsList.insert("LastInterfaceMode",INTERFACEMODE_VIEWER);	// Default Interface mode.
+	SettingsList.insert("CurrentWoWDir","None");					// Sets the Current WoW Dirto a String. String will match the names in the WoWDirList.
 }
 
 // Check to see if the Main settings exist, and if not, set them.
 void CheckSettings_Main();
+
+// Process the sWoWDirs and dump them into the WoWDirList
+void ReadWoWDirList();
 
 #endif
