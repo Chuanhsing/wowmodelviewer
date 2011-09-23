@@ -67,6 +67,8 @@ public:
 	void updateFileList();
     ~WoWModelViewer();
 
+    void init();
+
 	// Booleans
 	bool isWoWLoaded;		// Is there a version of WoW loaded.
 	bool canReloadWoW;		// If isWoWLoaded == true, are we allowed to reload it? Should only be used if the MPQ list is changed, or we change WoW directories.

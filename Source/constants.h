@@ -57,6 +57,7 @@
 #ifndef HANDLE
 typedef void* HANDLE;
 #endif
+/*
 #ifndef ssize_t
 	#if defined (_WIN64) // || defined (_LINUX64)	// Not sure about this...
 		typedef __int64 ssize_t;
@@ -64,5 +65,5 @@ typedef void* HANDLE;
 		typedef __int32 ssize_t;
 	#endif
 #endif
-
+*/
 #endif

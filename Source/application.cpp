@@ -36,10 +36,6 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
 	QCoreApplication::setApplicationVersion(MajorBuildVersion);
 	QCoreApplication::setOrganizationName(ORGANIZATIONNAME);
 	QCoreApplication::setOrganizationDomain(ORGANIZATIONWEBSITE);
-
-	Exporters();			// Initialize the Exporters
-	CheckSettings_Main();	// Check Main Program Settings
-	ReadWoWDirList();		// Read the WoW Directory List
 	
     // Defaults
 	isWoWLoaded = false;
@@ -140,6 +136,16 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
 	ui->rBtn_IsWMO->setDisabled(true);
 	ui->rBtn_NoModel->setDisabled(true);
 	
+
+}
+
+
+void WoWModelViewer::init()
+{
+	Exporters();			// Initialize the Exporters
+	CheckSettings_Main();	// Check Main Program Settings
+	ReadWoWDirList();		// Read the WoW Directory List
+
 	UpdateViewerMenu();
 
 	// Build Status Bars

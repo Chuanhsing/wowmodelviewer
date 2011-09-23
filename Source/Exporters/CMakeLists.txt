@@ -18,8 +18,8 @@ include_directories(.)
 # for preprocessed ui
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-file(GLOB exporters_src *.cpp)
-file(GLOB exporters_h *.h)
+file(GLOB exporters_src *.cpp ../Qs*.cpp)
+file(GLOB exporters_h *.h ../Qs*.h)
 
 QT4_WRAP_CPP(exporters_moc ${exporters_h})
 

@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
 
     WoWModelViewer w;
 	g_WMV = &w;
+	w.init();
     w.show();
 
     return app.exec();
