@@ -2,7 +2,7 @@
 #include <QInputDialog>
 #include <QMenu>
 #include <QFile>
-#include "wowdirmanager.h"
+#include "WoWDirManager.h"
 #include "globals.h"
 #include "lists.h"
 #include "Settings_Main.h"
@@ -236,7 +236,37 @@ void WoWDirManager::on_WDM_bDirAdd_clicked(){
 
 // Make the Currently selected directory the Current Directory.
 void WoWDirManager::on_WDM_bDirMakeCurrent_clicked(){
+	QLOG_INFO() << "Attempting to set Current WoW Dir...";
+	QString dirname = "None";
+	QString olddir = sWMVSettings.value("CurrentWoWDir").toString();
 
+	for (size_t i=0;i<List->count();i++){
+		QListWidgetItem *a = List->item((int)i);
+		//QLOG_TRACE() << "Checking list with text:" << a->text();
+
+		if (a->isSelected() == true){
+			dirname = a->data(Qt::UserRole).toString();
+			//QLOG_TRACE() << "Found selection! DirName:" << dirname;
+			break;
+		}
+	}
+
+	if (olddir == dirname){
+		QLOG_INFO() << "Current Directory already set.";
+		return;
+	}
+	st_WoWDir b(WoWDirList.value(dirname));
+
+	QLOG_INFO() << "Setting Current Directory...";
+	g_WMV->CurrentDir = WoWDirList.value(dirname);
+	sWMVSettings.setValue("CurrentWoWDir",dirname);
+	sWMVSettings.sync();
+
+	g_WMV->WoWTypeNext = b.Version;
+	g_WMV->canReloadWoW = true;
+	
+	QLOG_INFO() << "Updating WoWDir List...";
+	UpdateList();
 }
 
 // Called when someone clicks the "Delete All" button
@@ -256,6 +286,10 @@ void WoWDirManager::on_WDM_bDirDeleteAll_clicked(){
 		QLOG_INFO() << "User has chosen to Delete All their WoW Directories. Deleting...";
 		WoWDirList.clear();
 		sWoWDirs.clear();
+		g_WMV->CurrentDir = st_WoWDir();
+		sWMVSettings.setValue("CurrentWoWDir","None");
+		sWMVSettings.sync();
+		g_WMV->UnLoadWoW();
 		UpdateList();
 		SettingsList.insert("WDMLastDir","None");
 		QLOG_INFO() << "Finished deleting all WoW Directories.";
@@ -301,6 +335,7 @@ void WoWDirManager::UpdateList()
 		st_WoWDir a = i.value();
 		a.Position = i.key();
 		QListWidgetItem *newItem = new QListWidgetItem;
+		QString loc = LocaleList.value(a.Locale);
 
 		// Catch-all/Default Icon. Should always be the latest release's icon.
 		newItem->setIcon(iconCata);
@@ -316,7 +351,7 @@ void WoWDirManager::UpdateList()
 		}else if ((a.Version <= WOW_BETA) || (a.Version == WOW_PTR)){
 			newItem->setIcon(iconPTR);
 		}
-		QString loc = LocaleList.value(a.Locale);
+		newItem->setData(Qt::UserRole,WoWDirGroupName(a));
 		QString ver = QString::number(a.Version);
 		if (a.Version == WOW_PTR){
 			ver = tr("PTR");
@@ -325,10 +360,10 @@ void WoWDirManager::UpdateList()
 		}
 
 		if (g_WMV->CurrentDir == a){
-			QLOG_TRACE() << "Setting text for Current Directory...";
+			//QLOG_TRACE() << "Setting text for Current Directory...";
 			newItem->setText(QString("%1, %2, %3, %4").arg(a.Name,ver,loc,tr("(Current)")));
 		}else{
-			QLOG_TRACE() << "Setting text for Directory...";
+			//QLOG_TRACE() << "Setting text for Directory...";
 			newItem->setText(QString("%1, %2, %3").arg(a.Name,ver,loc));
 		}
 		List->insertItem(a.Position, newItem);
@@ -337,6 +372,7 @@ void WoWDirManager::UpdateList()
 	// Apply the new data
 	ui_WoWDirManager->WDM_List = List;
 	QLOG_INFO() << "Finished Updating WDM List!";
+	g_WMV->UpdateViewerMenu();
 }
 
 // Scan the passed directory and return a WoWDir.

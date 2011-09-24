@@ -18,7 +18,7 @@
 
 #define PROGRAMNAME static_cast<const char*>(QObject::tr("World of Warcraft Model Viewer","WMVProgramName").toUtf8())
 #define MAJORVERSION "v0.8.0.0"
-#define BUILDVERSION "r629"
+#define BUILDVERSION "r631"
 #define ORGANIZATIONNAME static_cast<const char*>(QObject::tr("WoW Model Viewer Community","WMVCommunityName").toUtf8())
 #define ORGANIZATIONWEBSITE "http://www.wowmodelviewer.org/forum/index.php"
 #define SOURCEWEBSITE "http://code.google.com/p/wowmodelviewer/"

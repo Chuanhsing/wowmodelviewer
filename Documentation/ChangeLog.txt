@@ -1,5 +1,11 @@
 WoW Model Viewer v0.8.0.0
 
+r631
+-Directories will now properly list in the menu.
+-You can now specify which WoW directory is your current directory. You can change this in the menu or in the WoW Directory Manager.
+-Fixed a bug that wouldn't update the menu if a WoW directory wasn't loaded.
+
+
 r629
 -WMV can now open the log.txt file on most operating systems!
 -Refined MPQ functions a bit.

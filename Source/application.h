@@ -69,6 +69,8 @@ public:
 	void createStatusBar();
 	void updateStatusBar(QString);
 	void updateFileList();
+	void LoadWoW();
+	void UnLoadWoW();
     ~WoWModelViewer();
 
 	// Icons
@@ -83,6 +85,16 @@ public:
 	bool isWoWLoaded;		// Is there a version of WoW loaded.
 	bool canReloadWoW;		// If isWoWLoaded == true, are we allowed to reload it? Should only be used if the MPQ list is changed, or we change WoW directories.
 
+	// Groups
+	QActionGroup *WoWDirGroup;
+    QActionGroup *EyeGlowGroup;
+    QActionGroup *LandscapeQualityGroup;
+    QActionGroup *LightTypeGroup;
+    QActionGroup *CanvasSizeGroup;
+	QActionGroup *ViewerModeGroup;
+    QActionGroup *CameraGroup;
+    QActionGroup *DoodadSetGroup;
+
 	// SubWindows
 	WindowAbout Window_About;
 	WoWDirManager WoWDirectoryManager;
@@ -96,17 +108,8 @@ public slots:
 
 private:
 
-    // Groups
-	QActionGroup *WoWDirGroup;
-    QActionGroup *EyeGlowGroup;
-    QActionGroup *LandscapeQualityGroup;
-    QActionGroup *LightTypeGroup;
-    QActionGroup *CanvasSizeGroup;
-	QActionGroup *ViewerModeGroup;
-    QActionGroup *CameraGroup;
-    QActionGroup *DoodadSetGroup;
-
 private slots:
+	void updateCurrentDirfromMenu();
     void on_actionInitial_Pose_Only_2_toggled(bool arg1);
     void on_actionInitial_Pose_Only_toggled(bool arg1);
 	void on_actionShowCtrl_FileList_toggled(bool arg1);

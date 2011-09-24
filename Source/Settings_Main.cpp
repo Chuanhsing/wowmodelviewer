@@ -2,7 +2,7 @@
 #include "globals.h"
 #include "Settings_Main.h"
 
-QMap<QString,QVariant> SettingsList;
+QMap<QString,QVariant> SettingsList;		// List of Default Settings
 QMap<QString,st_WoWDir> WoWDirList;
 
 // Check to see if the Main settings exist, and if not, set them.
@@ -94,7 +94,7 @@ void ReadWoWDirList(){
 
 		// Insert our st_WoWDir into our directory list.
 		WoWDirList.insert(g,dir);
-		QLOG_TRACE() << "Post-Insert list count:" << WoWDirList.count();
+		//QLOG_TRACE() << "Post-Insert list count:" << WoWDirList.count();
 	}
 
 	QLOG_INFO() << "Finished rebuilding WoWDirList. Final count:" << WoWDirList.count();

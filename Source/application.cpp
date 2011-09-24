@@ -150,16 +150,17 @@ void WoWModelViewer::init()
 
 	// Dependant Defaults
 	InterfaceMode = sWMVSettings.value("LastInterfaceMode").toUInt();	// Set the default mode to Viewer.
-	CurrentDir = WoWDirList.value(SettingsList.value("CurrentWoWDir").toString(),st_WoWDir());
+	CurrentDir = WoWDirList.value(sWMVSettings.value("CurrentWoWDir").toString(),st_WoWDir());
 	WoWTypeCurrent = CurrentDir.Version;								// The currently loaded World of Warcraft type.
 
 	QLOG_INFO() << "Current WoW Directory:" << sWMVSettings.value("CurrentWoWDir").toString();
 	QLOG_INFO() << "Current WoW Version:" << CurrentDir.Version;
 
-	UpdateViewerMenu();
-
 	// Build Status Bars
 	createStatusBar();
+	
+	// Process and Update our Menus
+	UpdateViewerMenu();
 }
 
 void WoWModelViewer::createStatusBar()
@@ -180,12 +181,14 @@ WoWModelViewer::~WoWModelViewer()
 }
 
 void WoWModelViewer::UpdateViewerMenu(){
+	QLOG_INFO() << "Updating Viewer Menu...";
     // Remove Menus
     menuBar()->removeAction(ui->menuCharacter->menuAction());
     menuBar()->removeAction(ui->menuNPC->menuAction());
     menuBar()->removeAction(ui->menuSets->menuAction());
     menuBar()->removeAction(ui->menuLandscape->menuAction());
     menuBar()->removeAction(ui->menuImage->menuAction());
+	ui->menuChange_WoW_Directory->clear();
 
 	// Disabled functions, because they ONLY work with a model or file loaded
     ui->menuLighting->setDisabled(true);
@@ -207,21 +210,20 @@ void WoWModelViewer::UpdateViewerMenu(){
 		ui->actionSave_File->setDisabled(true);
 		ui->actionDiscover_Items->setDisabled(true);
 		ui->actionDiscover_NPCs->setDisabled(true);
-		return;
+	}else{
+		// Else if WoW is loaded...
+		ui->actionLoad_Character->setDisabled(false);
+		ui->actionImportArmoryCharacter->setDisabled(false);
+		ui->actionLoad_NPC->setDisabled(false);
+		ui->actionLoadSkybox->setDisabled(false);
+		ui->actionModel_Bank->setDisabled(false);
+		ui->actionDiscover_Items->setDisabled(false);
+		ui->actionDiscover_NPCs->setDisabled(false);
+		if (canReloadWoW == true)
+			ui->actionLoad_World_of_Wacraft->setDisabled(false);
+		else
+			ui->actionLoad_World_of_Wacraft->setDisabled(true);
 	}
-
-	// Else if WoW is loaded...
-	ui->actionLoad_Character->setDisabled(false);
-	ui->actionImportArmoryCharacter->setDisabled(false);
-	ui->actionLoad_NPC->setDisabled(false);
-	ui->actionLoadSkybox->setDisabled(false);
-	ui->actionModel_Bank->setDisabled(false);
-	ui->actionDiscover_Items->setDisabled(false);
-	ui->actionDiscover_NPCs->setDisabled(false);
-	if (canReloadWoW == true)
-		ui->actionLoad_World_of_Wacraft->setDisabled(false);
-	else
-		ui->actionLoad_World_of_Wacraft->setDisabled(true);
 
 	// Broad Strokes
 	if (ViewerInterfaceType != VIEWER_INTERFACETYPE_NONE){
@@ -279,6 +281,52 @@ void WoWModelViewer::UpdateViewerMenu(){
     }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_NONE){
     }
 
+	// Clear and Add back all the WoW Directories...
+	ui->menuChange_WoW_Directory->addAction(ui->actionManage_Directories);
+	ui->menuChange_WoW_Directory->addSeparator();
+	if (WoWDirList.count() == 0){
+		QLOG_INFO() << "No WoW Directories loaded. No actions listed.";
+		QAction actionNone(iconDisabled,"None",this);
+		actionNone.setDisabled(true);
+		WoWDirGroup->addAction(&actionNone);
+		ui->menuChange_WoW_Directory->addAction(&actionNone);
+	}else{
+		QLOG_INFO() << "Adding WoW Directory Listings...";
+		for (QMap<QString,st_WoWDir>::Iterator i=WoWDirList.begin();i!=WoWDirList.end();i++){
+			st_WoWDir a = i.value();
+			QString g = WoWDirGroupName(a);
+			QString loc = LocaleList.value(a.Locale);
+
+			QAction *newAction = new QAction(a.Name,this);
+			newAction->setCheckable(true);
+			newAction->setActionGroup(WoWDirGroup);
+			newAction->setText(QString("%1, %2").arg(a.Name,loc));
+			newAction->setData(g);
+			connect(newAction, SIGNAL(triggered()), this, SLOT(updateCurrentDirfromMenu()));
+
+			// Catch-all/Default Icon. Should always be the latest release's icon.
+			newAction->setIcon(iconCata);
+
+			if (a.Version <= WOW_VANILLA){
+				newAction->setIcon(iconVanilla);
+			}else if (a.Version <= WOW_TBC){
+				newAction->setIcon(iconTBC);
+			}else if (a.Version <= WOW_WOTLK){
+				newAction->setIcon(iconWotLK);
+			}else if (a.Version <= WOW_CATACLYSM){
+				newAction->setIcon(iconCata);
+			}else if ((a.Version <= WOW_BETA) || (a.Version == WOW_PTR)){
+				newAction->setIcon(iconPTR);
+			}
+
+			newAction->setChecked(false);
+			if (CurrentDir == a)
+				newAction->setChecked(true);
+			
+			ui->menuChange_WoW_Directory->addAction(newAction);
+		}
+	}
+
 	ChangeLoadButton();
 
 	// Disable Temps if WoW is not Loaded
@@ -302,17 +350,8 @@ void WoWModelViewer::UpdateViewerMenu(){
 		ui->rBtn_NoModel->setDisabled(true);
 	}
 
-	QAction actionNone(iconDisabled,"None",this);
-	actionNone.setDisabled(true);
-	if (WoWDirList.count() == 0){
-		QLOG_INFO() << "No WoW Directories loaded. No actions listed.";
-		WoWDirGroup->addAction(&actionNone);
-		ui->menuChange_WoW_Directory->insertAction(ui->actionManage_Directories,&actionNone);
-	}else{
-		QLOG_INFO() << "Adding WoW Directory Listings...";
-	}
-
 	this->update();
+	QLOG_INFO() << "Finished Updating the Viewer Menu.";
 }
 
 void WoWModelViewer::updateFileList()
@@ -324,6 +363,39 @@ void WoWModelViewer::updateFileList()
 	}else if(ui->ViewerFileTypeSelector->currentIndex() == FILETYPE_IMAGE){
 	}else if(ui->ViewerFileTypeSelector->currentIndex() == FILETYPE_SOUND){
 	}
+}
+
+// Update Current Dir
+void WoWModelViewer::updateCurrentDirfromMenu()
+{
+	QLOG_INFO() << "Changing Current Directory from menu...";
+	QString dirname = "None";
+	QString olddir = sWMVSettings.value("CurrentWoWDir").toString();
+
+	for (size_t i=0;i<WoWDirGroup->actions().count();i++)
+	{
+		QAction *a = WoWDirGroup->actions().value(i);
+
+		if (a->isChecked()){
+			dirname = a->data().toString();
+			break;
+		}
+	}
+
+	if (olddir == dirname){
+		QLOG_INFO() << "Current Directory already set.";
+		return;
+	}
+
+	st_WoWDir b(WoWDirList.value(dirname));
+
+	QLOG_INFO() << "Setting Current Directory...";
+	CurrentDir = WoWDirList.value(dirname);
+	sWMVSettings.setValue("CurrentWoWDir",dirname);
+	sWMVSettings.sync();
+
+	WoWTypeNext = b.Version;
+	canReloadWoW = true;
 }
 
 // Connect the two Initial Pose Only checkboxes.
@@ -412,10 +484,8 @@ void WoWModelViewer::ChangeLoadButton()
 }
 
 // Load World of Warcraft
-void WoWModelViewer::on_actionLoad_World_of_Wacraft_triggered()
+void WoWModelViewer::LoadWoW()
 {
-	// Load the New WoW
-
 	// Set Global Variables
 	WoWTypeCurrent = WoWTypeNext;
 	WoWTypeNext = WOW_NOTLOADED;
@@ -424,6 +494,25 @@ void WoWModelViewer::on_actionLoad_World_of_Wacraft_triggered()
 
 	// Update the Menu
     UpdateViewerMenu();
+}
+
+// Unload World of Warcraft
+void WoWModelViewer::UnLoadWoW()
+{
+	// Set Global Variables
+	WoWTypeCurrent = WOW_NOTLOADED;
+	WoWTypeNext = WOW_NOTLOADED;
+	isWoWLoaded = false;
+	canReloadWoW = false;
+
+	// Update the Menu
+    UpdateViewerMenu();
+}
+
+// Menu function for Loading World of Warcraft
+void WoWModelViewer::on_actionLoad_World_of_Wacraft_triggered()
+{
+	LoadWoW();
 }
 
 // This, sadly will have to be OS-dependant...
