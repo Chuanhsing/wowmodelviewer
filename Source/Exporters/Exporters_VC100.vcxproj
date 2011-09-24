@@ -152,6 +152,7 @@
     <ClCompile Include="..\QsLog.cpp" />
     <ClCompile Include="..\QsLogDest.cpp" />
     <ClCompile Include="exporters.cpp" />
+    <ClCompile Include="Settings_Exporters.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\QsDebugOutput.h" />

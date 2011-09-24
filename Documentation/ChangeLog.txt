@@ -1,5 +1,25 @@
 WoW Model Viewer v0.8.0.0
 
+r629
+-WMV can now open the log.txt file on most operating systems!
+-Refined MPQ functions a bit.
+-Updated "How to Build v8" wiki page.
+-Fixed a bug where Settings and the WoW Directory List wouldn't save data between functions.
+-Fixed a bug where only the first WoWDir would be read.
+-Fixed a MinGW/Visual Studio conflict involving ssize_t.
+-Cleaned up some localization-related code.
+-Removed the temp directories from the UI.
+* WoW Directory Manager (WDM)
+ -WoW Directory List now shows the proper information!
+ -Added Delete All functionality
+ -Replaced Version modifier button in favor of a Set as Current Directory button.
+
+
+r628
+-MinGW (Windows) compatibility commit
+-Fixed an initialisation (and crash) problem on startup
+
+
 r626
 -Added QsLog as Logging system.
 -Added a lot of Logging messages.

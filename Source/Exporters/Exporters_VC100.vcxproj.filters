@@ -10,6 +10,17 @@
       <Extensions>moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="QsLog">
+      <UniqueIdentifier>{75a16877-64c7-4ea5-b7a1-f66608970907}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;cxx;c;def</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{0177bad7-c4bf-49a2-9732-840f854726df}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Exporter Files">
       <UniqueIdentifier>{cd7c515a-a8f5-4d38-868a-93c08cc900e8}</UniqueIdentifier>
     </Filter>
@@ -34,14 +45,8 @@
     <Filter Include="Exporter Files\Misc">
       <UniqueIdentifier>{57d1be4f-7228-4a8a-b13e-e5928eb63866}</UniqueIdentifier>
     </Filter>
-    <Filter Include="QsLog">
-      <UniqueIdentifier>{75a16877-64c7-4ea5-b7a1-f66608970907}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="exporters.h" />
-    <ClInclude Include="exporters_global.h" />
-    <ClInclude Include="Settings_Exporters.h" />
     <ClInclude Include="Lightwave3D.h">
       <Filter>Exporter Files\Lightwave 3D</Filter>
     </ClInclude>
@@ -54,9 +59,17 @@
     <ClInclude Include="..\QsLogDest.h">
       <Filter>QsLog</Filter>
     </ClInclude>
+    <ClInclude Include="exporters.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings_Exporters.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="exporters_global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="exporters.cpp" />
     <ClCompile Include="..\QsDebugOutput.cpp">
       <Filter>QsLog</Filter>
     </ClCompile>
@@ -65,6 +78,12 @@
     </ClCompile>
     <ClCompile Include="..\QsLogDest.cpp">
       <Filter>QsLog</Filter>
+    </ClCompile>
+    <ClCompile Include="Settings_Exporters.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="exporters.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

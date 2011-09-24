@@ -17,6 +17,8 @@ public:
     explicit WoWDirManager(QWidget *parent = 0);
 	~WoWDirManager();
 
+	//Functions
+	void init();
 	void SetupList();
 	void UpdateList();
 
@@ -35,7 +37,9 @@ private:
 	void saveDir(st_WoWDir);		// Save the Directory
 
 private slots:
+	void on_WDM_bDirMakeCurrent_clicked();
 	void on_WDM_bDirAdd_clicked();
+	void on_WDM_bDirDeleteAll_clicked();
 	void on_buttonBox_Cancel_clicked() {
 		QDialog::close();
 	}

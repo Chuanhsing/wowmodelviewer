@@ -15,15 +15,6 @@ static QSettings sWMVExSettings(QDir::currentPath()+"/"+EXPORTER_INI_NAME,QSetti
 static QMap<QString, QVariant> SettingsExList;		// This can be accessed by the Exporters, so they can include their own settings.
 
 // Set the Exporter Defaults
-void ExporterSettingInit()
-{
-	// Groups will be used for each Export's specific variables. They are done with a Prefix, such as "GroupName/VarName".
-	// Settings without a prefix will be listed in the General Group.
-	SettingsExList.insert("Version",MajorBuildVersion);
-	SettingsExList.insert("Export_Perferred",-1);
-	SettingsExList.insert("Export_InitOnly",true);
-	SettingsExList.insert("Export_UseWMVPosRot",false);
-	SettingsExList.insert("Export_ScaleToRealWorld",false);
-};
+void ExporterSettingInit();
 
 #endif

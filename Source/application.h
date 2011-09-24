@@ -20,7 +20,7 @@
 // Windows
 #include "ui_Main_Window_Viewer.h"
 #include "ui_About.h"
-#include "wowdirmanager.h"
+#include "WoWDirManager.h"
 
 // Functions & Stormlib
 #include "math\math_base.h"
@@ -55,19 +55,29 @@ class WoWModelViewer : public QMainWindow
     Q_OBJECT
 
 public:
+	// Vars
     explicit WoWModelViewer(QWidget *parent = 0);
 	size_t InterfaceMode;
     size_t ViewerInterfaceType;
 	size_t WoWTypeCurrent;
 	size_t WoWTypeNext;
 	st_WoWDir CurrentDir;
+
+	// Functions
+	void init();
     void UpdateViewerMenu();
 	void createStatusBar();
 	void updateStatusBar(QString);
 	void updateFileList();
     ~WoWModelViewer();
 
-    void init();
+	// Icons
+	QIcon iconVanilla;
+	QIcon iconTBC;
+	QIcon iconWotLK;
+	QIcon iconCata;
+	QIcon iconPTR;
+	QIcon iconDisabled;
 
 	// Booleans
 	bool isWoWLoaded;		// Is there a version of WoW loaded.
@@ -77,11 +87,15 @@ public:
 	WindowAbout Window_About;
 	WoWDirManager WoWDirectoryManager;
 
+	// User-Interface
+    Ui::Main_Window_Viewer *ui;
+
 public slots:
 	void ChangeLoadButton();
 	void UpdateLoadButton();
 
 private:
+
     // Groups
 	QActionGroup *WoWDirGroup;
     QActionGroup *EyeGlowGroup;
@@ -108,6 +122,7 @@ private slots:
 
 	// File Menu
 	void on_actionLoad_World_of_Wacraft_triggered();
+	void on_actionView_Log_triggered();
     void on_actionExit_triggered();
 
 	// Options Menu
@@ -115,9 +130,6 @@ private slots:
 
 	// About Menu
 	void on_actionAbout_triggered();
-
-private:
-    Ui::Main_Window_Viewer *ui;
 };
 
 #endif // MAINWINDOW_H

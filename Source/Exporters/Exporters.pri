@@ -7,14 +7,15 @@
 message("You are running qmake on a generated .pro file. This may not work!")
 
 
-HEADERS += ./exporters.h \
+HEADERS += ../QsDebugOutput.h \
+    ../QsLog.h \
+    ../QsLogDest.h \
+    ./exporters.h \
     ./exporters_global.h \
     ./Settings_Exporters.h \
-    ./Lightwave3D.h \
-    ../QsDebugOutput.h \
-    ../QsLog.h \
-    ../QsLogDest.h
-SOURCES += ./exporters.cpp \
-    ../QsDebugOutput.cpp \
+    ./Lightwave3D.h
+SOURCES += ../QsDebugOutput.cpp \
     ../QsLog.cpp \
-    ../QsLogDest.cpp
+    ../QsLogDest.cpp \
+    ./exporters.cpp \
+    ./Settings_Exporters.cpp

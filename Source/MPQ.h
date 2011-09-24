@@ -11,11 +11,11 @@
 class MPQArchive
 {
 private:
-	bool OK;			// Was there any problems loading the Archive?
 	HANDLE MPQArch;		// Identifies the current MPQ file.
 
 public:
 	// Data
+	bool OK;			// Was there any problems loading the Archive?
 	QFileInfo FileInfo;
 	bool isPatchFile;
 	size_t ErrorCode;
@@ -23,6 +23,7 @@ public:
 
 	// Constructors
 	MPQArchive(QString);
+	MPQArchive(QString,QStringList);
 	~MPQArchive() {	Close(); };
 
 	// Functions

@@ -2,14 +2,21 @@
 
 Exporters::Exporters()
 {
-	bool performSync = false;
+	QLOG_INFO() << "Initializing Exporters...";
 
 	// Initialize Default Settings
 	ExporterSettingInit();
 
 	// Exporter Intializers
 	Lightwave3D_Init();
-	
+
+	QLOG_INFO() << "Exporter Initializing complete.";
+}
+
+void Exporters::init()
+{
+	bool performSync = false;
+
 	// Make a temp list of the defaults.
 	QMap<QString,QVariant> temp = SettingsExList;
 
@@ -45,9 +52,9 @@ Exporters::Exporters()
 		sWMVExSettings.sync();
 		QLOG_INFO() << "Finished updating Exporter Settings.";
 	}
+	QLOG_INFO() << "Exporter Updating complete.";
 }
 
 Exporters::~Exporters()
 {
-
 }

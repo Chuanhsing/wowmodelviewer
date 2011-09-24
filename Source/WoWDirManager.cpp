@@ -19,9 +19,6 @@ WoWDirManager::WoWDirManager(QWidget *parent) : QDialog(parent), ui_WoWDirManage
 {
 	// -= Setup Window =-
 	ui_WoWDirManager->setupUi(this);
-
-	// -= WoW Type Selector Menu =-
-	QMenu *menuWoWTypeSelector = new QMenu(this);
 	
 	// Icons
     iconVanilla.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon1-Vanilla"), QSize(), QIcon::Normal, QIcon::Off);
@@ -35,53 +32,18 @@ WoWDirManager::WoWDirManager(QWidget *parent) : QDialog(parent), ui_WoWDirManage
     iconPTR.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-PTR"), QSize(), QIcon::Normal, QIcon::Off);
 	iconPTR.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-PTR"), QSize(), QIcon::Normal, QIcon::On);
 
-	// Set Up Table
+	// Set Up List
 	SetupList();
-
-	// Actions
-	QAction *actionWTS_Vanilla = new QAction(parent);
-	actionWTS_Vanilla->setText(ExpansionNameList.value(EXPANSIONNAME_VANILLA));
-    actionWTS_Vanilla->setObjectName(QString::fromUtf8("actionWTS_Vanilla"));
-	actionWTS_Vanilla->setIcon(iconVanilla);
-	//actionWTS_Vanilla->setCheckable(true);
-	QAction *actionWTS_BurningCrusade = new QAction(parent);
-	actionWTS_BurningCrusade->setText(ExpansionNameList.value(EXPANSIONNAME_BURNINGCRUSADE));
-    actionWTS_BurningCrusade->setObjectName(QString::fromUtf8("actionWTS_BurningCrusade"));
-	actionWTS_BurningCrusade->setIcon(iconTBC);
-	//actionWTS_BurningCrusade->setCheckable(true);
-	QAction *actionWTS_WotLK = new QAction(parent);
-	actionWTS_WotLK->setText(ExpansionNameList.value(EXPANSIONNAME_WOTLK));
-    actionWTS_WotLK->setObjectName(QString::fromUtf8("actionWTS_WotLK"));
-	actionWTS_WotLK->setIcon(iconWotLK);
-	//actionWTS_WotLK->setCheckable(true);
-	QAction *actionWTS_Cataclysm = new QAction(parent);
-	actionWTS_Cataclysm->setText(ExpansionNameList.value(EXPANSIONNAME_CATACLYSM));
-    actionWTS_Cataclysm->setObjectName(QString::fromUtf8("actionWTS_Cataclysm"));
-	actionWTS_Cataclysm->setIcon(iconCata);
-	//actionWTS_Cataclysm->setCheckable(true);
-	QAction *actionWTS_PTR = new QAction(parent);
-	actionWTS_PTR->setText(ExpansionNameList.value(EXPANSIONNAME_PTR));
-    actionWTS_PTR->setObjectName(QString::fromUtf8("actionWTS_PTR"));
-	actionWTS_PTR->setIcon(iconPTR);
-	//actionWTS_PTR->setCheckable(true);
-
-	// Append Actions
-	menuWoWTypeSelector->addAction(actionWTS_Vanilla);
-	menuWoWTypeSelector->addAction(actionWTS_BurningCrusade);
-	menuWoWTypeSelector->addAction(actionWTS_WotLK);
-	menuWoWTypeSelector->addAction(actionWTS_Cataclysm);
-	menuWoWTypeSelector->addAction(actionWTS_PTR);
-	
-	// Set Menu
-	ui_WoWDirManager->WoWTypeButton->setMenu(menuWoWTypeSelector);
-
-	// -= Populate Window =-
-	// Update List
-	UpdateList();
 }
+
 WoWDirManager::~WoWDirManager()
 {
 	delete ui_WoWDirManager;
+}
+
+void WoWDirManager::init(){
+	// Update List
+	UpdateList();
 }
 
 // Save the Directory to the WoWDirs.ini file
@@ -111,8 +73,6 @@ void WoWDirManager::saveDir(st_WoWDir dir)
 	sWoWDirs.sync();
 	QLOG_INFO() << "Finished saving new WoWDir.";
 
-	ReadWoWDirList();
-
 	// Update List
 	UpdateList();
 }
@@ -121,18 +81,18 @@ void WoWDirManager::saveDir(st_WoWDir dir)
 void WoWDirManager::on_WDM_bDirAdd_clicked(){
 	QLOG_INFO() << "Attempting to add a new WoWDir...";
 	// Directory chooser
-	QString dir = QFileDialog::getExistingDirectory(this,QObject::tr("Choose the WoW Directory you wish to add."),sWMVSettings.value("WDMLastDir").toString());
+	QString dir = QFileDialog::getExistingDirectory(this,tr("Choose the WoW Directory you wish to add."),sWMVSettings.value("WDMLastDir").toString());
 	if (dir == QString()){
 		// User probably hit cancel, so silently fail.
-		QLOG_WARN() << "User Canceled adding a new WoWDir.";
+		QLOG_WARN() << "User Cancelled adding a new WoWDir.";
 		return;
 	}
 	QLOG_INFO() << "New WoWDir Path:" << dir;
 	QDir dDir(dir);
-	g_WMV->updateStatusBar(QObject::tr("Checking Directory %1...").arg(dir));
+	g_WMV->updateStatusBar(tr("Checking Directory %1...").arg(dir));
 	if (!QDir(dir).exists()){
 		QLOG_ERROR() << "Specified WoWDir Directory doesn't exist.";
-		g_WMV->updateStatusBar(QObject::tr("Specified Directory doesn't exist."));
+		g_WMV->updateStatusBar(tr("Specified Directory doesn't exist."));
 		return;
 	}
 	
@@ -141,9 +101,9 @@ void WoWDirManager::on_WDM_bDirAdd_clicked(){
 
 	if ((!QFile(dir+"/WoW.exe").exists())&&(!QFile(dir+"/World of Warcraft.app").exists())){
 		QLOG_ERROR() << "Directory found, but it doesn't appear to contain the World of Warcraft Application.";
-		g_WMV->updateStatusBar(QObject::tr("Directory found, but couldn't find World of Warcraft Application."));
-		err.setWindowTitle(QObject::tr("Unable to find World of Warcraft"));
-		err.setText(QObject::tr("Unable to find the World of Warcraft application.\nPlease make sure to select the proper directory!\n\nYou should see the following folders:\nData, Interface, Logs, and WTF"));
+		g_WMV->updateStatusBar(tr("Directory found, but couldn't find World of Warcraft Application."));
+		err.setWindowTitle(tr("Unable to find World of Warcraft"));
+		err.setText(tr("Unable to find the World of Warcraft application.\nPlease make sure to select the proper directory!\n\nYou should see the following folders:\nData, Interface, Logs, and WTF"));
 		err.exec();
 		return;
 	}
@@ -152,7 +112,7 @@ void WoWDirManager::on_WDM_bDirAdd_clicked(){
 	sWMVSettings.setValue("WDMLastDir", dDir.absolutePath());
 	sWMVSettings.sync();
 
-	g_WMV->updateStatusBar(QObject::tr("Directory is valid! Gathering Localization Data..."));
+	g_WMV->updateStatusBar(tr("Directory is valid! Gathering Localization Data..."));
 	QLOG_INFO() << "Successfully found World of Warcraft! Scanning for Locale information...";
 
 	// Get Locales
@@ -180,13 +140,13 @@ void WoWDirManager::on_WDM_bDirAdd_clicked(){
 	}
 
 	if (items.count() == 0){
-		g_WMV->updateStatusBar(QObject::tr("Error gathering Localization Data. No Locales found."));
+		g_WMV->updateStatusBar(tr("Error gathering Localization Data. No Locales found."));
 		QLOG_ERROR() << "No locales in list. Aborting add WoWDir...";
-		err.setWindowTitle(QObject::tr("No Locales Found"));
+		err.setWindowTitle(tr("No Locales Found"));
 		if (isVanilla == true){
-			err.setText(QObject::tr("There was an error gathering the list of WoW Locales. Please try again."));
+			err.setText(tr("There was an error gathering the list of WoW Locales. Please try again."));
 		}else{
-			err.setText(QObject::tr("Could not find any Locales in your World of Warcraft Directory.\nCheck your \"WoW/Data\" folder for locale directories."));
+			err.setText(tr("Could not find any Locales in your World of Warcraft Directory.\nCheck your \"WoW/Data\" folder for locale directories."));
 		}
 		err.exec();
 		return;
@@ -196,11 +156,11 @@ void WoWDirManager::on_WDM_bDirAdd_clicked(){
 		// Display list and get selection
 		QInputDialog loc_d;
 		loc_d.setComboBoxItems(items);
-		loc_d.setWindowTitle(QObject::tr("World of Warcraft Locale"));
+		loc_d.setWindowTitle(tr("World of Warcraft Locale"));
 		if (isVanilla == true){
-			loc_d.setLabelText(QObject::tr("Which locale is this installation?"));
+			loc_d.setLabelText(tr("Which locale is this installation?"));
 		}else{
-			loc_d.setLabelText(QObject::tr("Which of the installed locales would you like to use?"));
+			loc_d.setLabelText(tr("Which of the installed locales would you like to use?"));
 		}
 		loc_d.exec();
 
@@ -233,44 +193,75 @@ void WoWDirManager::on_WDM_bDirAdd_clicked(){
 		msg.exec();
 		*/
 	}
+	g_WMV->updateStatusBar(tr("Locale data gathered. Preparing to scan Directory..."));
+
 
 	st_WoWDir t_dir = ScanWoWDir(dDir,loc,WoWDirList.count());
 	if (t_dir.Locale == LOCALE_NONE){
 		QLOG_ERROR() << "An error occured while scanning the WoW Directory.";
-		g_WMV->updateStatusBar(QObject::tr("Error scanning WoW directory."));
-		err.setWindowTitle(QObject::tr("Error Scanning WoW Directory"));
-		err.setText(QObject::tr("An error occured while trying to scan your WoW directory for files.\n\nPlease double-check the directory, and try again."));
+		g_WMV->updateStatusBar(tr("Error scanning WoW directory."));
+		err.setWindowTitle(tr("Error Scanning WoW Directory"));
+		err.setText(tr("An error occured while trying to scan your WoW directory for files.\n\nPlease double-check the directory, and try again."));
 		err.exec();
 		return;
 	}
 	QLOG_INFO() << "Sucessfully scanned the WoW Directory. Asking for the Directory's name...";
+	g_WMV->updateStatusBar(tr("WoW Directory Scanned. Choosing Directory Name..."));
 
 	QInputDialog n;
-	g_WMV->updateStatusBar(QObject::tr("Setting the Directory's name..."));
-	n.setWindowTitle(QObject::tr("Set Directory Name"));
-	n.setLabelText(QObject::tr("Please choose a name for this Directory."));
+	g_WMV->updateStatusBar(tr("Setting the Directory's name..."));
+	n.setWindowTitle(tr("Set Directory Name"));
+	n.setLabelText(tr("Please choose a name for this Directory."));
 	QString name = t_dir.Name;
 	if (name == "WoW Folder"){
 		name = dDir.dirName();
 	}
-	if (items.count() > 1)
-		name.append("-"+LocaleList.value(t_dir.Locale));
 	n.setTextValue(name);
 	n.exec();
 
 	t_dir.Name = n.textValue();
 
 	// Save the Directory
-	g_WMV->updateStatusBar(QObject::tr("Saving the Directory's information..."));
+	g_WMV->updateStatusBar(tr("Saving the Directory's information..."));
 	saveDir(t_dir);
 
 	// Debug Message
 	/*
 	QMessageBox msg;
-	msg.setText(QObject::tr("Found the World of Warcraft Application!\nInstall Name: %3\nDir Result: %1\nChosen Locale: %2").arg(t_dir.Directory.absolutePath()).arg(LocaleList.value(t_dir.Locale)).arg(t_dir.Name));
+	msg.setText(tr("Found the World of Warcraft Application!\nInstall Name: %3\nDir Result: %1\nChosen Locale: %2").arg(t_dir.Directory.absolutePath(),LocaleList.value(t_dir.Locale),t_dir.Name));
 	msg.exec();
 	*/
 	g_WMV->updateStatusBar(tr("Successfully gathered Directory data!"));
+}
+
+// Make the Currently selected directory the Current Directory.
+void WoWDirManager::on_WDM_bDirMakeCurrent_clicked(){
+
+}
+
+// Called when someone clicks the "Delete All" button
+void WoWDirManager::on_WDM_bDirDeleteAll_clicked(){
+	QLOG_INFO() << "User clicked Delete All button. Asking for confirmation...";
+	QMessageBox daConfirm;
+	daConfirm.setModal(true);
+	daConfirm.setWindowTitle(tr("Delete All Confirmation"));
+	daConfirm.setText(tr("Are you sure you wish to delete all of your WoW Directories? If you do, you will need to add a new directory for WMV to work.\n\nNOTE: This will not delete the directories from your Hard Drive."));
+	daConfirm.setStandardButtons(QMessageBox::Yes|QMessageBox::No);
+	daConfirm.setDefaultButton(QMessageBox::No);
+
+	int choice = daConfirm.exec();;
+	QLOG_INFO() << "Confirmation result:" << (choice==QMessageBox::Yes?"Yes":"No");
+
+	if (choice == QMessageBox::Yes){
+		QLOG_INFO() << "User has chosen to Delete All their WoW Directories. Deleting...";
+		WoWDirList.clear();
+		sWoWDirs.clear();
+		UpdateList();
+		SettingsList.insert("WDMLastDir","None");
+		QLOG_INFO() << "Finished deleting all WoW Directories.";
+		return;
+	}
+	QLOG_INFO() << "User has chosen to cancel the Delete All function.";
 }
 
 // Prepare the List
@@ -288,21 +279,58 @@ void WoWDirManager::SetupList()
 // Update the List with our items!
 void WoWDirManager::UpdateList()
 {
+	ReadWoWDirList();
 	QLOG_INFO() << "Updating WDM List...";
 	List->clear();	// Clear the list of all old data, as we'll be regenerating it all...
 	QStringList groups = sWoWDirs.childGroups();
+	QMap<int,st_WoWDir> sortlist;
+
 	for (size_t i=0;i<groups.count();i++){
 		st_WoWDir a = WoWDirList.value(groups.value((int)i),st_WoWDir());
 
-		QLOG_TRACE() << "Discovered" << a.Name << "locale:" << LocaleList.value(a.Locale) << "of" << groups.value((int)i);
+		//QLOG_TRACE() << "Discovered" << a.Name << "locale:" << LocaleList.value(a.Locale) << "of" << groups.value((int)i);
 		
 		if (a == st_WoWDir())
 			continue;
 
-		QLOG_TRACE() << "Processing and adding to the list...";
+		sortlist.insertMulti(a.Position,a);
+	}
 
+	QLOG_INFO() << "Sorting WDM List...";
+	for (QMap<int,st_WoWDir>::Iterator i=sortlist.begin();i!=sortlist.end();i++){
+		st_WoWDir a = i.value();
+		a.Position = i.key();
 		QListWidgetItem *newItem = new QListWidgetItem;
-		newItem->setText(QString("%1, %2").arg(a.Name).arg(LocaleList.value(a.Locale)));
+
+		// Catch-all/Default Icon. Should always be the latest release's icon.
+		newItem->setIcon(iconCata);
+
+		if (a.Version <= WOW_VANILLA){
+			newItem->setIcon(iconVanilla);
+		}else if (a.Version <= WOW_TBC){
+			newItem->setIcon(iconTBC);
+		}else if (a.Version <= WOW_WOTLK){
+			newItem->setIcon(iconWotLK);
+		}else if (a.Version <= WOW_CATACLYSM){
+			newItem->setIcon(iconCata);
+		}else if ((a.Version <= WOW_BETA) || (a.Version == WOW_PTR)){
+			newItem->setIcon(iconPTR);
+		}
+		QString loc = LocaleList.value(a.Locale);
+		QString ver = QString::number(a.Version);
+		if (a.Version == WOW_PTR){
+			ver = tr("PTR");
+		}else if (a.Version == WOW_BETA){
+			ver = tr("Beta");
+		}
+
+		if (g_WMV->CurrentDir == a){
+			QLOG_TRACE() << "Setting text for Current Directory...";
+			newItem->setText(QString("%1, %2, %3, %4").arg(a.Name,ver,loc,tr("(Current)")));
+		}else{
+			QLOG_TRACE() << "Setting text for Directory...";
+			newItem->setText(QString("%1, %2, %3").arg(a.Name,ver,loc));
+		}
 		List->insertItem(a.Position, newItem);
 	}
 
@@ -355,7 +383,7 @@ st_WoWDir ScanWoWDir(QDir dir, int locale, int position = 0){
 	// So, now we should figure out what version of the game we're running.
 
 	// Scan for the inteface's MPQ file, and any patch files for it.
-	QList<QString> iface = QList<QString>();
+	QStringList iface = QStringList();
 	QDir idir(dir);
 	idir.cd("Data");
 	if (QFile(idir.path().append("/interface.MPQ")).exists()){
@@ -390,6 +418,15 @@ st_WoWDir ScanWoWDir(QDir dir, int locale, int position = 0){
 		for (size_t i=0;i<patch.count();i++){
 			iface.push_back(sloc+"/"+patch.entryList().value((int)i));
 		}
+		// Cache Locale files
+		patch = idir;
+		patch.cd("Cache/"+sloc);
+		f.clear();
+		f << "patch-????-?????.MPQ";				// Cataclysm Cache Patch files
+		patch.setNameFilters(f);
+		for (size_t i=0;i<patch.count();i++){
+			iface.push_back("Cache/"+sloc+"/"+patch.entryList().value((int)i));
+		}
 	}
 
 	// Fail if there's not any interface files.
@@ -409,8 +446,9 @@ st_WoWDir ScanWoWDir(QDir dir, int locale, int position = 0){
 
 	// Initialize our limited MPQ list, so we can extract the TOC file
 	t_ArchiveSet tocarch;
+	TempArchiveList.clear();	// Clear the Temp Archives, as we only needed them for patching.
 	QLOG_INFO() << "Initializing the Interface MPQ files...";
-	for (size_t i=0;i<iface.count();i++){
+	for (ssize_t i=iface.count()-1;i>=0;i--){
 		QString a = dir.absolutePath().append("/Data/").append(iface.value((int)i));
 		QLOG_TRACE() << "Processing" << a << "...";
 		if (QFile(a).exists()){
@@ -424,23 +462,28 @@ st_WoWDir ScanWoWDir(QDir dir, int locale, int position = 0){
 			}else{
 				QLOG_TRACE() << "Opening the MPQ archive...";
 				g_WMV->updateStatusBar(QObject::tr("Adding %1 to the Inteface MPQ List...").arg(a));
-				MPQArchive *mpq = new MPQArchive(a);
+				MPQArchive *mpq = new MPQArchive(a,iface);
+				if (!mpq->OK)
+					continue;
 				tocarch.push_back(cMPQArchHandle(mpq->FileInfo,mpq->getHANDLE(),mpq->isPatchFile));
-				TempArchiveList.push_back(cMPQArchHandle(mpq->FileInfo,mpq->getHANDLE(),mpq->isPatchFile));
 			}
 		}
 	}
 	QLOG_INFO() << "Sucessfully Initialized the Interface MPQ files! Attemping to open TOC file...";
 
-	TempArchiveList.clear();	// Clear the Temp Archives, as we only needed them for patching.
+	if (tocarch.count()<=0){
+		QLOG_ERROR() << "No Archives loaded.";
+		g_WMV->updateStatusBar(QObject::tr("Error: No MPQs files loaded."));
+		err.setWindowTitle(QObject::tr("Error: No MPQs files have been loaded!"));
+		err.setText(QObject::tr("An error occured that resulted in no MPQ files being loaded.\n\nPlease close World of Warcraft, then try again."));
+		err.exec();
+		return st_WoWDir();
+	}
 
-	/*
 	QLOG_TRACE() << "TOCArch list";
 	for (size_t i=0;i<tocarch.count();i++){
-		//HANDLE *h = tocarch.value((int)i).Handle;
 		QLOG_TRACE() << "   " << tocarch.value((int)i).Info.absoluteFilePath() << "=" << (unsigned int)tocarch.value((int)i).Handle;
 	}
-	*/
 
 	// Extract file from MPQ archives
 	g_WMV->updateStatusBar(QObject::tr("Attempting to find TOC file..."));
@@ -452,6 +495,7 @@ st_WoWDir ScanWoWDir(QDir dir, int locale, int position = 0){
 	QLOG_TRACE() << "File Exists: "<< (ex?"true":"false");
 	if (ex==false){
 		QLOG_ERROR() << "TOC File not found in MPQs.";
+		mf.close();
 		g_WMV->updateStatusBar(QObject::tr("Error trying to find the TOC file in the interface MPQs."));
 		err.setText(QObject::tr("Error finding the TOC file in the MPQ Archives.\n\nPlease make sure all downloads/updates have finished, then try again."));
 		err.setWindowTitle(QObject::tr("Error Finding TOC File."));
@@ -483,6 +527,16 @@ st_WoWDir ScanWoWDir(QDir dir, int locale, int position = 0){
 	size_t inum = tocnum.toUInt();
 
 	mf.close();
+
+	if (inum == 0){
+		QLOG_ERROR() << "TOC version was returned as 0...";
+		mf.close();
+		g_WMV->updateStatusBar(QObject::tr("Error gathering TOC version. Value was returned as 0."));
+		err.setText(QObject::tr("Error gathering the TOC version.\n\nIf this problem persists, try repairing or reinstalling WoW."));
+		err.setWindowTitle(QObject::tr("Error gathering TOC vrsion."));
+		err.exec();
+		return st_WoWDir();
+	}
 
 	QLOG_INFO() << "TOC version:" << tocnum.toInt();
 	g_WMV->updateStatusBar(QObject::tr("TOC number gathered. Setting version..."));

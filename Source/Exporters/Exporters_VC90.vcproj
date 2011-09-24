@@ -319,6 +319,10 @@
 			<Filter
 				Name="Lightwave 3D"
 				>
+				<File
+					RelativePath=".\Lightwave3D.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="M3"
@@ -378,22 +382,36 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\exporters.cpp"
+		<Filter
+			Name="Header Files"
 			>
-		</File>
-		<File
-			RelativePath=".\exporters.h"
+			<File
+				RelativePath=".\exporters.h"
+				>
+			</File>
+			<File
+				RelativePath=".\exporters_global.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Settings_Exporters.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;cxx;c;def"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-		</File>
-		<File
-			RelativePath=".\exporters_global.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Settings_Exporters.h"
-			>
-		</File>
+			<File
+				RelativePath=".\exporters.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Settings_Exporters.cpp"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 		<Global

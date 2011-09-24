@@ -13,6 +13,8 @@ public:
 	Exporters();
 	~Exporters();
 
+	void init();
+
 private:
 
 };

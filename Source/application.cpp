@@ -1,5 +1,7 @@
+#include <QProcess>
 #include "application.h"
 #include "Settings_Main.h"
+#include "Exporters\Settings_Exporters.h"
 #include "Exporters\exporters.h"
 
 // These are temporarly added, just to test the files.
@@ -16,8 +18,8 @@ WindowAbout::WindowAbout(QWidget *parent) : QDialog(parent), ui_About(new Ui::Ab
 
 	// Set Various Variables
 	ui_About->WMVName->setText(PROGRAMNAME);
-	ui_About->VersionNumber->setText(ui_About->VersionNumber->text().arg(MAJORVERSION).arg(BUILDVERSION));
-	ui_About->Edition->setText(ui_About->Edition->text().arg(SYSTEMVERSION).arg(DEBUGVERSION));
+	ui_About->VersionNumber->setText(ui_About->VersionNumber->text().arg(MAJORVERSION,BUILDVERSION));
+	ui_About->Edition->setText(ui_About->Edition->text().arg(SYSTEMVERSION,DEBUGVERSION));
 	ui_About->ContentCopyright->setText(ui_About->ContentCopyright->text().arg(QDate().currentDate().toString("yyyy")));
 }
 WindowAbout::~WindowAbout()
@@ -37,20 +39,29 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
 	QCoreApplication::setOrganizationName(ORGANIZATIONNAME);
 	QCoreApplication::setOrganizationDomain(ORGANIZATIONWEBSITE);
 	
+	// Icons
+	iconVanilla.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon1-Vanilla"), QSize(), QIcon::Normal, QIcon::Off);
+    iconVanilla.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon1-Vanilla"), QSize(), QIcon::Normal, QIcon::On);
+    iconTBC.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon2-TBC"), QSize(), QIcon::Normal, QIcon::Off);
+    iconTBC.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon2-TBC"), QSize(), QIcon::Normal, QIcon::On);
+    iconWotLK.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon3-WotLK"), QSize(), QIcon::Normal, QIcon::Off);
+	iconWotLK.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon3-WotLK"), QSize(), QIcon::Normal, QIcon::On);
+    iconCata.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon4-Cataclysm"), QSize(), QIcon::Normal, QIcon::Off);
+	iconCata.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon4-Cataclysm"), QSize(), QIcon::Normal, QIcon::On);
+    iconPTR.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-PTR"), QSize(), QIcon::Normal, QIcon::Off);
+	iconPTR.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-PTR"), QSize(), QIcon::Normal, QIcon::On);
+	iconDisabled.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-Disabled"), QSize(), QIcon::Normal, QIcon::Off);
+	iconDisabled.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-Disabled"), QSize(), QIcon::Normal, QIcon::On);
+
     // Defaults
 	isWoWLoaded = false;
 	canReloadWoW = false;
 	WoWTypeNext = WOW_NOTLOADED;						// The next World of Warcraft type that will be loaded.
     ViewerInterfaceType = VIEWER_INTERFACETYPE_NONE;	// Full list of viewer interface types in enums.h
 
-	// Dependant Defaults
-	InterfaceMode = sWMVSettings.value("LastInterfaceMode").toUInt();	// Set the default mode to Viewer.
-	CurrentDir = WoWDirList.value(sWMVSettings.value("CurrentWoWDir").toString(),st_WoWDir());
-	WoWTypeCurrent = CurrentDir.Version;								// The currently loaded World of Warcraft type.
-
 	// Set the main Window's Title
 	//: Passed arguments: ProgramName (WMV), MajorVersion (v0.8.0.0), BuildVersion (r650), SystemVersion ("Windows 64-bit"), DebugVersion (" Debug" or "")
-	setWindowTitle(tr("%1 %2 %3 %4%5","Window Title").arg(PROGRAMNAME).arg(MAJORVERSION).arg(BUILDVERSION).arg(SYSTEMVERSION).arg(DEBUGVERSION));
+	setWindowTitle(QString("%1 %2 %3 %4%5").arg(PROGRAMNAME,MAJORVERSION,BUILDVERSION,SYSTEMVERSION,DEBUGVERSION));
 
     /* -= Groups =- */
     // Eye Glow
@@ -99,14 +110,7 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
 
     /* -= Dynamic Groups =- */
 	// WoW Dirs
-	// For the Temp/Testing dirs
 	WoWDirGroup = new QActionGroup(this);
-	WoWDirGroup->addAction(ui->actionWoWDir_Vanilla);
-	WoWDirGroup->addAction(ui->actionWoWDir_BC);
-	WoWDirGroup->addAction(ui->actionWoWDir_WotLK);
-	WoWDirGroup->addAction(ui->actionWoWDir_Cataclysm);
-	WoWDirGroup->addAction(ui->actionWoWDir_PTR);
-    ui->actionWoWDir_Vanilla->setChecked(true);
 
     // Camera Group
     CameraGroup = new QActionGroup(this);
@@ -135,16 +139,22 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
 	ui->rBtn_IsTexture->setDisabled(true);
 	ui->rBtn_IsWMO->setDisabled(true);
 	ui->rBtn_NoModel->setDisabled(true);
-	
-
 }
 
 
 void WoWModelViewer::init()
 {
-	Exporters();			// Initialize the Exporters
+	Exporters::Exporters();	// Initialize the Exporters
 	CheckSettings_Main();	// Check Main Program Settings
 	ReadWoWDirList();		// Read the WoW Directory List
+
+	// Dependant Defaults
+	InterfaceMode = sWMVSettings.value("LastInterfaceMode").toUInt();	// Set the default mode to Viewer.
+	CurrentDir = WoWDirList.value(SettingsList.value("CurrentWoWDir").toString(),st_WoWDir());
+	WoWTypeCurrent = CurrentDir.Version;								// The currently loaded World of Warcraft type.
+
+	QLOG_INFO() << "Current WoW Directory:" << sWMVSettings.value("CurrentWoWDir").toString();
+	QLOG_INFO() << "Current WoW Version:" << CurrentDir.Version;
 
 	UpdateViewerMenu();
 
@@ -292,6 +302,16 @@ void WoWModelViewer::UpdateViewerMenu(){
 		ui->rBtn_NoModel->setDisabled(true);
 	}
 
+	QAction actionNone(iconDisabled,"None",this);
+	actionNone.setDisabled(true);
+	if (WoWDirList.count() == 0){
+		QLOG_INFO() << "No WoW Directories loaded. No actions listed.";
+		WoWDirGroup->addAction(&actionNone);
+		ui->menuChange_WoW_Directory->insertAction(ui->actionManage_Directories,&actionNone);
+	}else{
+		QLOG_INFO() << "Adding WoW Directory Listings...";
+	}
+
 	this->update();
 }
 
@@ -406,9 +426,55 @@ void WoWModelViewer::on_actionLoad_World_of_Wacraft_triggered()
     UpdateViewerMenu();
 }
 
+// This, sadly will have to be OS-dependant...
+void WoWModelViewer::on_actionView_Log_triggered()
+{
+	QProcess *openProgram = new QProcess();
+	QString file(QDir().absoluteFilePath(LOGTXTFILENAME));
+	
+	QMessageBox err;
+	err.setIcon(QMessageBox::Critical);
+
+	if (QFile(file).exists() == false){
+		QLOG_ERROR() << "Amazingly, this log file was not found!";		// Yes, I know logging this is redunant and possibly stupid, but you never know...
+		updateStatusBar(tr("Error: Log file not found. Please check for it's existance."));
+		err.setWindowTitle(tr("Error: Log file not found!"));
+		err.setText(tr("Could not find the %1 file.\n\nCheck your permissions, as you might be running WMV in a location that does not allow for the generation of files.").arg(LOGTXTFILENAME));
+		err.exec();
+		return;
+	}
+
+#ifdef _WINDOWS
+	// Windows will open the file in Notepad.
+	openProgram->start("notepad.exe \""+file+"\"",QIODevice::ReadOnly);
+	QLOG_INFO() << "Opening Notepad to load" << file;
+#elif defined (_MAC)
+	// Mac will open the file using TextEdit
+	openProgram->start("/Applications/TextEdit.app/Contents/MacOS/TextEdit \""+file+"\"",QIODevice::ReadOnly);
+	QLOG_INFO() << "Opening TextEdit to load" << file;
+#elif defined (_LINUX)
+	// Linux might require some more juggling, depending on several factors, some of which are defined in the constants.h file.
+	prog = LINUX_TXT_VIEWER;
+	openProgram->start(LINUX_TXT_VIEWER+" \""+file+"\"",QIODevice::ReadOnly);
+	QLOG_INFO() << "Opening" << static_cast<const char*>(LINUX_TXT_VIEWER) << "to load" << file;
+#endif
+
+	if (!openProgram->waitForStarted())
+	{
+		QLOG_ERROR() << "An error occured while trying to open the log file.";
+		updateStatusBar(tr("There was an error while trying to open your text viewer."));
+		err.setWindowTitle(tr("Error opening Log file..."));
+		err.setText(tr("Could not open the log file for an unknown reason.\n\nPlease navigate to %1 and open the file manually.").arg(file));
+		err.exec();
+		return;
+	}
+	QLOG_INFO() << "Successfully opened the log file.";
+}
+
 // Open WoW Directory Manager
 void WoWModelViewer::on_actionManage_Directories_triggered()
 {
+	WoWDirectoryManager.init();
 	WoWDirectoryManager.show();
 }
 

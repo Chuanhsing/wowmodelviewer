@@ -2,6 +2,9 @@
 #include "globals.h"
 #include "Settings_Main.h"
 
+QMap<QString,QVariant> SettingsList;
+QMap<QString,st_WoWDir> WoWDirList;
+
 // Check to see if the Main settings exist, and if not, set them.
 void CheckSettings_Main(){
 	bool performSync = false;
@@ -60,23 +63,39 @@ void ReadWoWDirList(){
 
 	for (size_t i=0;i<glist.count();i++)
 	{
+		QString g = glist.value((int)i);
+		//QLOG_TRACE() << "glist:" << g;
 		st_WoWDir dir;
-		QStringList keys;
-		sWoWDirs.beginGroup(glist.value((int)i));
+		sWoWDirs.beginGroup(g);
 
+		// Add the saved values to our local st_WoWDir
 		dir.Name = sWoWDirs.value("Name").toString();
 		dir.Directory = QDir(sWoWDirs.value("Directory").toString());
 		dir.Version = sWoWDirs.value("Version").toInt();
 		dir.Position = sWoWDirs.value("Position").toInt();
 		dir.Locale = sWoWDirs.value("Locale").toInt();
 
+		// Process saved MPQ list...
 		QString mpqs = sWoWDirs.value("MPQList").toString();
 		QStringList mpqlist = mpqs.split(";");
 		for (size_t m=0;m<mpqlist.count();m++){
 			dir.MPQList.push_back(mpqlist.value((int)m));
 		}
+		sWoWDirs.endGroup();
 
-		WoWDirList.insert(glist.value((int)i),dir);
+		// Debug Messages
+		/*
+		QLOG_TRACE() << "Name:" << dir.Name;
+		QLOG_TRACE() << "Dir:" << dir.Directory.path();
+		QLOG_TRACE() << "Version:" << dir.Version;
+		QLOG_TRACE() << "Locale:" << LocaleList.value(dir.Locale);
+		QLOG_TRACE() << "MPQ List:" << mpqlist;
+		*/
+
+		// Insert our st_WoWDir into our directory list.
+		WoWDirList.insert(g,dir);
+		QLOG_TRACE() << "Post-Insert list count:" << WoWDirList.count();
 	}
-	QLOG_INFO() << "Finished rebuilding WoWDirList.";
+
+	QLOG_INFO() << "Finished rebuilding WoWDirList. Final count:" << WoWDirList.count();
 }

@@ -17,23 +17,20 @@ it for QT and the new variable names.
 
 MPQArchive::MPQArchive(QString filename) : OK(false), ErrorCode(MPQERROR_OKAY)
 {
+	QStringList a;
+	for (QList<cMPQArchHandle>::Iterator i=LoadedArchives.begin();i!=LoadedArchives.end(); ++i){
+		a.push_back(i->Info.filePath());
+	}
+	MPQArchive::MPQArchive(filename, a);
+}
+
+MPQArchive::MPQArchive(QString filename, QStringList ArchList) : OK(false), ErrorCode(MPQERROR_OKAY)
+{
 	QLOG_INFO() << "Initializing MPQ Archive:" << filename;
 	g_WMV->updateStatusBar(QObject::tr("Initializing MPQ Archive %1...").arg(filename));
 
 	QMessageBox err;
 	err.setIcon(QMessageBox::Critical);
-
-	// Get File Info
-	st_WoWDir d = g_WMV->CurrentDir;
-
-	if (d == st_WoWDir()){
-		QLOG_ERROR() << "Global WoWDir is empty.";
-		err.setWindowTitle(QObject::tr("Error: No current WoW Directory"));
-		err.setText(QObject::tr("There is currently no WoW directory. Please set one."));
-		err.exec();
-		return;
-	}
-
 	FileInfo = QFileInfo(filename);
 	isPatchFile = false;
 
@@ -75,31 +72,33 @@ MPQArchive::MPQArchive(QString filename) : OK(false), ErrorCode(MPQERROR_OKAY)
 	QLOG_INFO() << "Successfully opened MPQ Archive.";
 
 	// Do Patch files, But Skip the Cache Directory
-	if (!(FileInfo.dir().path().toLower().contains("cache")) && (FileInfo.completeBaseName().toLower().startsWith("patch")) && (!isPartialMPQ(FileInfo.absoluteFilePath()))){
+	if (!(FileInfo.absolutePath().toLower().contains("cache")) && FileInfo.completeBaseName().toLower().startsWith("patch") && !isPartialMPQ(filename)) { // skip the Patch files archives
 		QLOG_INFO() <<  "Finding and applying Patch files...";
 		// Process Patch Files
+		for(ssize_t j=ArchList.count()-1; j>=0; j--) {
+			QFileInfo arch(ArchList.value((int)j));
 
-		for (size_t j=LoadedArchives.count()-1;j>=0;j--){
-			QFileInfo arch = LoadedArchives.value((int)j).Info;
-			HANDLE mpqa = LoadedArchives.value((int)j).Handle;
-			QString mpqv = arch.absoluteFilePath();
-			if (arch.baseName() == "")
-				break;
-			// Filter files that don't exists & that aren't Cata-style patch files.
-			if ((!QFile(arch.absoluteFilePath()).exists()) || (!arch.baseName().toLower().startsWith("wow-update-")))
-				continue;
+			// Find Locale, if added.
+			size_t loc = LOCALE_ENUS;		// Default to enUS
+			for (size_t l=0;l<LocaleList.count();l++){
+				if (arch.completeBaseName().contains(LocaleList.value((int)l))){
+					loc = l;
+					break;
+				}
+			}
+			QString sloc = LocaleList.value((int)loc);
 
 			QLOG_TRACE() << "Processing MPQ patch" << arch.absoluteFilePath();
 
-			if (arch.fileName().length() == QString("wow-update-xxxxx.mpq").length()){
-				QLOG_TRACE() << "Applying Patch file" << FileInfo.fileName() << "to" << arch.fileName() << " base & locale directory...";
-				SFileOpenPatchArchive(mpqa, FileInfo.absoluteFilePath().toUtf8(), "base", 0);
-				SFileOpenPatchArchive(mpqa, FileInfo.absoluteFilePath().toUtf8(), LocaleList.value((int)d.Version).toAscii(), 0);
-				isPatchFile = true;
-			}else if(arch.dir().path() == FileInfo.dir().path()){		// If the Same Directory...
-				QLOG_TRACE() << "Applying Patch file" << arch.fileName() << "to current directory...";
-				SFileOpenPatchArchive(mpqa, FileInfo.absoluteFilePath().toUtf8(), "", 0);
-				isPatchFile = true;
+			if (!arch.completeBaseName().toLower().startsWith("wow-update-"))
+				continue;
+			if (arch.completeBaseName().length() == strlen("wow-update-xxxxx.mpq")) {
+				QLOG_TRACE() << "Applying Patch file" << FileInfo.fileName() << "to" << arch.fileName() << "base & locale directory...";
+				SFileOpenPatchArchive(MPQArch, ArchList.value(j).toUtf8(), "base", 0);
+				SFileOpenPatchArchive(MPQArch, ArchList.value(j).toUtf8(), sloc.toUtf8(), 0);
+			} else if (arch.absolutePath() == FileInfo.absolutePath()) {
+				QLOG_TRACE() << "Applying Patch file" << arch.fileName() << "to" << arch.absoluteDir().path() << "directory...";
+				SFileOpenPatchArchive(MPQArch,  ArchList.value(j).toUtf8(), "", 0);
 			}
 		}
 		QLOG_INFO() << "Successfully patched MPQ Archive.";
@@ -218,16 +217,14 @@ void MPQFile::openFile(QString filename, t_ArchiveSet arch){
 	}
 	*/
 
-	for(size_t i=fileList.count()-1;i>=0; i--)
+	for(QList<cMPQArchHandle>::Iterator i=fileList.begin();i!=fileList.end(); ++i)
 	{
-		cMPQArchHandle tarch = fileList.value((int)i);
-		if (tarch.Info.absoluteFilePath() == "")
-			break;
+		cMPQArchHandle &tarch = *i;
 		QLOG_TRACE() << "Checking Archive:" << tarch.Info.absoluteFilePath();
 		HANDLE MPQArch = tarch.Handle;
 		HANDLE fh;
 
-		int flags = (fileList.value((int)i).isPatched==true ? SFILE_OPEN_PATCHED_FILE : SFILE_OPEN_FROM_MPQ);
+		int flags = (tarch.isPatched==true ? SFILE_OPEN_PATCHED_FILE : SFILE_OPEN_FROM_MPQ);
 
 		if( !SFileOpenFileEx(MPQArch, filename.toUtf8(), flags, &fh ) )
 			continue;
