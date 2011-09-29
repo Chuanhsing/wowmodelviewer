@@ -154,7 +154,7 @@
 295,1291,7,Innkeeper Farley
 296,232,0,[UNUSED] Goodmother Jans
 297,1756,7,Caretaker Folsom
-299,31049,1,Diseased Young Wolf
+299,18156,1,Young Wolf
 300,10170,7,Zzarc' Vul
 302,915,6,Blind Mary
 304,2346,3,Felsteed
@@ -25364,7 +25364,7 @@
 41422,31531,7,Bloodwash Zealot
 41423,4972,7,Bloodwash Acolyte
 41424,16272,4,Mouldering Mirebeast
-41430,22903,7,Bloodwash Idol Bunny
+41430,22903,10,Bloodwash Idol Bunny
 41431,32457,7,Grimtotem Invader
 41432,32461,7,Mirkfallon Post Scout
 41434,32463,7,"Goblin" Pump Controller
@@ -30513,6 +30513,7 @@
 51978,37695,7,Dun Morogh Sledder
 51982,31174,10,Ollie
 51983,1157,1,Deadwind Widow
+51984,34169,8,Deadwind Widow Invisible Stalker
 51997,37705,7,Stephanie Krutsick
 51998,37706,7,Arthur Huwe
 52007,10811,4,Flamekin Firestarter
@@ -30624,6 +30625,7 @@
 52338,4198,7,Burning Blade Attacker
 52339,37983,7,Lesser Priest of Bethekk
 52340,169,10,Tiki Lord Mu'Loa
+52343,30507,12,Landro's Lichling
 52344,37846,12,Nightsaber Cub
 52346,38060,7,Grent Direhammer
 52348,25770,7,Berserking Boulder Roller
@@ -30970,6 +30972,7 @@
 53404,38314,7,Redia Vaunt
 53405,38316,7,Raedra Windhammer
 53407,38318,7,Sansha MacVince
+53408,25256,2,Blue Drake
 53409,38319,7,"Kobold" Kerik
 53410,38322,7,Lissah Spellwick
 53414,24906,1,Magic Hunter
@@ -30996,6 +30999,7 @@
 53486,31506,1,Twilight Invader
 53488,169,10,Summon Enabler Stalker
 53490,16925,10,Sticky Webbing
+53491,911,3,Fiery Imp
 53493,38364,1,Malorne
 53494,38621,4,Baleroc
 53495,1126,10,Shard of Torment
@@ -31052,6 +31056,8 @@
 53694,38449,1,Riplimb
 53695,38450,1,Rageface
 53698,1126,10,Fiery Tornado
+53715,11686,10,Tarecgosa
+53716,11686,10,Clone
 53723,1126,10,Alysrsazor Timing Bunny
 53732,35201,4,Unbound Smoldering Elemental
 53734,38013,7,Blazing Talon Clawshaper
@@ -31086,6 +31092,7 @@
 53866,20570,10,Fire Torrent Channel Bunny
 53881,38536,0,Ayla Shadowstorm
 53882,38537,0,Varlan Highbough
+53883,38538,11,Moonwell
 53894,37192,4,Corestone of Patience
 53895,23742,7,Aggra
 53896,38317,7,Blazing Talon Initiate
@@ -31169,7 +31176,12 @@
 54401,38788,7,Naresir Stormfury
 54402,38789,7,Lurah Wrathvine
 54421,16480,10,Prophet of the Flame
+54432,38931,2,Murozond
 54437,38797,7,Avatar of Ragnaros
+54438,38803,12,Murkablo
+54441,38799,7,Thaumaturge Vashreen
+54442,38804,7,Warpweaver Hashom
+54443,38800,7,Vaultkeeper Razhid
 54465,27104,7,The Keymaster
 54470,30415,4,Figment of Longing
 54539,38343,12,Alliance Balloon

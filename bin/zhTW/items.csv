@@ -7290,7 +7290,7 @@
 18696,3,無序符文盾
 18697,3,冷石軟靴
 18698,3,襤褸皮兜帽
-18699,3,冰墓肩甲
+18699,3,寒冰之墓肩甲
 18700,3,煞星護腕
 18702,3,神權腰帶
 18709,3,競技場腕甲
@@ -10492,7 +10492,7 @@
 27489,3,貞潔先驅者護臂
 27490,3,火炬戰鬥斧
 27492,3,月兒護腿
-27493,3,死亡注視者手套
+27493,3,死亡看守者手套
 27494,3,翡翠之眼護腕
 27497,3,末日戰甲護手
 27505,3,正義紅寶石頭盔
@@ -13099,7 +13099,7 @@
 32270,4,法力集中束腕
 32271,4,永恆自然褶裙
 32273,4,輝煌光明襯肩
-32275,4,靈魂行者護手
+32275,4,靈行者護手
 32276,4,爍火束腰
 32278,4,寂靜正義之握
 32279,4,搜捕者腕甲
@@ -23040,7 +23040,7 @@
 52486,3,珠寶匠的藍寶石單邊鏡片
 52487,3,珠寶匠的琥珀單邊鏡片
 52488,3,珠寶匠的藍寶石單邊鏡片
-52489,1,萊茵石太陽眼鏡
+52489,3,萊茵石太陽眼鏡
 52492,2,紅玉髓尖刺
 52493,3,穿孔器
 52518,0,Monster - Shield Twilight's Hammer
@@ -24799,7 +24799,7 @@
 56729,2,森林之心錐刺劍
 56840,2,綠洲披肩
 56841,2,虛實分辨手套
-56842,2,瑪柔伽的棄置罩盔
+56842,2,瑪左迦的棄置罩盔
 56843,2,輕錘肩鎧
 56844,2,骨峽之錘
 56845,2,血語者外套
@@ -25342,7 +25342,7 @@
 58102,3,光采護脛
 58103,3,驕傲頭盔
 58104,3,日燃肩鎧
-58105,3,麻痹手甲
+58105,3,麻痺手甲
 58106,3,跳動波濤護胸
 58107,3,和善腿甲
 58108,3,烈陽之冠
@@ -25767,7 +25767,7 @@
 59099,2,暗陷匕首
 59100,2,老守衛的巨斧
 59101,2,席拉之刃
-59102,2,老守衛的鐵鎚
+59102,2,老守衛的鐵錘
 59103,2,石紋護腿
 59104,2,拔栓護腿
 59105,2,古董胸甲
@@ -25932,7 +25932,7 @@
 59325,4,嘯焰披肩
 59327,4,王國之心
 59328,4,熔火暴怒長靴
-59329,4,寄生指環
+59329,4,寄生腕輪
 59330,4,沙拉格度，壞滅之斧
 59331,4,致命武力護腿
 59333,4,熔岩之脊
@@ -25943,7 +25943,7 @@
 59340,4,復仇火焰胸甲
 59341,4,辛納瑞塔斯
 59342,4,絕對零度腰帶
-59343,4,畸形者護腿
+59343,4,變異怪護腿
 59344,4,龍骨戰盔
 59346,4,實驗失敗外套
 59347,4,苦澀死亡釘錘
@@ -28138,7 +28138,7 @@
 63817,2,破桶錘
 63818,2,布朗第的胸甲
 63819,2,竊桶賊護腕
-63820,2,破桶鎚
+63820,2,破桶錘
 63821,2,死亡矮人肩墊
 63822,2,碎羽腰帶
 63823,2,鍛件護腕
@@ -28470,7 +28470,7 @@
 64804,3,嗜血鬥士裝飾頭罩
 64805,3,嗜血鬥士裝飾腿鎧
 64806,3,嗜血鬥士裝飾肩甲
-64810,4,嗜血鬥士尖刺
+64810,4,嗜血鬥士長槍
 64811,3,嗜血鬥士鎧甲護軀
 64812,3,嗜血鬥士鎧甲護手
 64813,3,嗜血鬥士鎧甲盔帽
@@ -28478,7 +28478,7 @@
 64815,3,嗜血鬥士鎧甲護肩
 64816,4,嗜血鬥士懲戒錘
 64817,4,嗜血鬥士速刃
-64818,3,嗜血鬥士盾牌壁壘
+64818,3,嗜血鬥士壁壘
 64819,3,嗜血鬥士征服聖物
 64820,3,嗜血鬥士支配聖物
 64821,3,嗜血鬥士拯救聖物
@@ -28677,7 +28677,7 @@
 65036,4,苦澀死亡釘錘
 65037,4,實驗失敗外套
 65038,4,龍骨戰盔
-65039,4,畸形者護腿
+65039,4,變異怪護腿
 65040,4,絕對零度腰帶
 65041,4,辛納瑞塔斯
 65042,4,復仇火焰胸甲
@@ -29368,7 +29368,7 @@
 65952,3,貢品腕環
 65953,3,達索漢的釘錘
 65954,3,深淵腰帶
-65955,3,瑪柔伽的長靴
+65955,3,瑪左迦的長靴
 65956,3,麥斯威爾的披風
 65957,3,霸主腿甲
 65958,3,維埃蘭之爪
@@ -30369,7 +30369,7 @@
 70179,4,殘酷鬥士法杖
 70180,4,殘酷鬥士能量法杖
 70181,4,殘酷鬥士戰鬥法杖
-70182,4,殘酷鬥士尖刺
+70182,4,殘酷鬥士長槍
 70183,4,殘酷鬥士磨骨槌
 70184,4,殘酷鬥士斬首者
 70185,4,殘酷鬥士裁決槌
@@ -30393,7 +30393,7 @@
 70203,4,殘酷鬥士凶器
 70204,4,殘酷鬥士劈斧
 70205,4,殘酷鬥士斬斧
-70206,4,殘酷鬥士盾牌壁壘
+70206,4,殘酷鬥士壁壘
 70207,4,殘酷鬥士屏障
 70208,4,殘酷鬥士盾牆
 70209,4,殘酷鬥士緩刑法典
@@ -30412,7 +30412,7 @@
 70222,4,殘酷鬥士碎骨錘
 70223,4,殘酷鬥士裁決槌
 70224,4,殘酷鬥士磨骨槌
-70225,4,殘酷鬥士尖刺
+70225,4,殘酷鬥士長槍
 70226,4,殘酷鬥士戰鬥法杖
 70227,4,殘酷鬥士能量法杖
 70228,4,殘酷鬥士法杖
@@ -30430,7 +30430,7 @@
 70240,4,殘酷鬥士緩刑法典
 70241,4,殘酷鬥士盾牆
 70242,4,殘酷鬥士屏障
-70243,4,殘酷鬥士盾牌壁壘
+70243,4,殘酷鬥士壁壘
 70244,4,殘酷鬥士懼鎧護軀
 70245,4,殘酷鬥士懼鎧護手
 70246,4,殘酷鬥士懼鎧頭盔
@@ -30905,7 +30905,7 @@
 71009,4,岩漿分界腕環
 71010,4,火岩護胸
 71011,4,火光搖曳風帽
-71013,4,亦趨狂亂
+71013,4,益趨狂亂
 71014,4,削顱巨斧
 71018,4,強盜親王的頭皮
 71020,4,消散煙塵手套
@@ -30953,7 +30953,7 @@
 71072,4,熔火巨人肩鎧
 71077,4,極度衝擊打孔機
 71084,4,諾達希爾木枝
-71085,4,Runestaff of Nordrassil
+71085,4,諾達希爾符文法杖
 71086,5,龍怒，塔瑞克苟莎之眠
 71090,5,Legendary Shadoweave Shirt
 71091,4,炎祭胸甲
@@ -31127,7 +31127,7 @@
 71438,4,火口烈焰肩甲
 71439,4,火母之攫
 71440,4,消散煙塵手套
-71441,4,亦趨狂亂
+71441,4,益趨狂亂
 71442,4,強盜親王的頭皮
 71443,4,烈怒耐壓腰帶
 71444,4,狂熱獻身腿鎧
@@ -31304,3 +31304,1214 @@
 71787,4,勾腸匕
 71797,4,朽拉梵，殲敵之杖
 71798,4,朽拉梵，殲敵之杖
+71969,1,暗月木槌
+71980,4,熔岩地震裹腿
+71981,4,世界治癒者的束褲
+71982,4,淨化邪惡黃鐵腿鎧
+71983,4,無敵毀滅者的腿鎧
+71984,4,勇氣緊身束褲
+71985,4,刃影護腿
+71986,4,自然勇士護腿
+71987,4,撕裂大地護腿
+71988,4,暴風之死鱗護腿
+71989,4,無敵力量護腕
+71990,4,聖光幻夢裹腕
+71991,4,靈魂救贖者護腕
+71992,4,毀滅力量護腕
+71993,4,泰坦守衛腕鎧
+71994,4,刃影腕甲
+71995,4,流動平靜護腕
+71996,4,獵人殺手護腕
+71997,4,雷霆死鱗腕甲
+72069,2,忍者測試物品
+72098,0,暗月步槍
+72101,2,黑色絲質外衣
+72202,0,Art Template Plate Wrist - Plate_PVPWarrior_D_01 - Red
+72203,0,Art Template Plate Shoulder - Plate_PVPWarrior_D_01 - Red
+72204,0,Art Template Plate Legs - Plate_PVPWarrior_D_01 - Red
+72205,0,Art Template Plate Head - Plate_PVPWarrior_D_01 - Red
+72206,0,Art Template Plate Hand - Plate_PVPWarrior_D_01 - Red
+72207,0,Art Template Plate Chest - Plate_PVPWarrior_D_01 - Red
+72208,0,Art Template Plate Boot - Plate_PVPWarrior_D_01 - Red
+72209,0,Art Template Plate Belt - Plate_PVPWarrior_D_01 - Red
+72210,0,Art Template Plate Belt - Plate_PVPWarrior_D_01 - Green
+72211,0,Art Template Plate Boot - Plate_PVPWarrior_D_01 - Green
+72212,0,Art Template Plate Chest - Plate_PVPWarrior_D_01 - Green
+72213,0,Art Template Plate Hand - Plate_PVPWarrior_D_01 - Green
+72214,0,Art Template Plate Head - Plate_PVPWarrior_D_01 - Green
+72215,0,Art Template Plate Legs - Plate_PVPWarrior_D_01 - Green
+72216,0,Art Template Plate Shoulder - Plate_PVPWarrior_D_01 - Green
+72217,0,Art Template Plate Wrist - Plate_PVPWarrior_D_01 - Green
+72218,0,Art Template Plate Belt - Plate_PVPWarrior_D_01 - Blue
+72219,0,Art Template Plate Boot - Plate_PVPWarrior_D_01 - Blue
+72220,0,Art Template Plate Chest - Plate_PVPWarrior_D_01 - Blue
+72221,2,Art Template Plate Hand - Plate_PVPWarrior_D_01 - Blue
+72222,0,Art Template Plate Head - Plate_PVPWarrior_D_01 - Blue
+72223,0,Art Template Plate Legs - Plate_PVPWarrior_D_01 - Blue
+72224,0,Art Template Plate Shoulder - Plate_PVPWarrior_D_01 - Blue
+72225,0,Art Template Plate Wrist - Plate_PVPWarrior_D_01 - Blue
+72226,0,Art Template Plate Belt - Plate_PVPWarrior_D_01 - Orange
+72227,0,Art Template Plate Boot - Plate_PVPWarrior_D_01 - Orange
+72228,0,Art Template Plate Chest - Plate_PVPWarrior_D_01 - Orange
+72229,0,Art Template Plate Hand - Plate_PVPWarrior_D_01 - Orange
+72230,0,Art Template Plate Head - Plate_PVPWarrior_D_01 - Orange
+72231,0,Art Template Plate Legs - Plate_PVPWarrior_D_01 - Orange
+72232,0,Art Template Plate Shoulder - Plate_PVPWarrior_D_01 - Orange
+72233,0,Art Template Plate Wrist - Plate_PVPWarrior_D_01 - Orange
+72258,0,Monster - Axe 2H DeathwingRaid D 01 -  Default
+72259,0,Monster - Axe 2H DeathwingRaid D 01 -  Blue
+72260,0,Monster - Axe 2H DeathwingRaid D 01 -  Green
+72261,0,Monster - Axe 2H DeathwingRaid D 01 -  Magenta
+72305,4,殘酷鬥士殘虐斗篷
+72306,4,殘酷鬥士無畏斗篷
+72310,4,殘酷鬥士凱旋聖物
+72313,4,殘酷鬥士殘虐之索
+72314,4,殘酷鬥士精準之索
+72315,4,殘酷鬥士冥想之索
+72316,4,殘酷鬥士殘虐足靴
+72317,4,殘酷鬥士矯捷足靴
+72318,4,殘酷鬥士冥想足靴
+72319,4,殘酷鬥士精準腕輪
+72320,4,殘酷鬥士無畏腕輪
+72321,4,殘酷鬥士冥想腕輪
+72322,4,殘酷鬥士無畏披氅
+72323,4,殘酷鬥士擴散披氅
+72324,4,殘酷鬥士冥想披氅
+72328,4,殘酷鬥士支配聖物
+72332,4,殘酷鬥士懼鎧護軀
+72333,4,殘酷鬥士懼鎧護手
+72334,4,殘酷鬥士懼鎧頭盔
+72335,4,殘酷鬥士懼鎧腿甲
+72336,4,殘酷鬥士懼鎧護肩
+72337,4,殘酷鬥士龍皮手套
+72338,4,殘酷鬥士龍皮頭盔
+72339,4,殘酷鬥士龍皮腿甲
+72340,4,殘酷鬥士龍皮長袍
+72341,4,殘酷鬥士龍皮肩甲
+72342,4,殘酷鬥士冥想腰帶
+72343,4,殘酷鬥士冥想護足
+72344,4,殘酷鬥士冥想束腕
+72345,4,殘酷鬥士科多獸皮手套
+72346,4,殘酷鬥士科多獸皮頭盔
+72347,4,殘酷鬥士科多獸皮腿甲
+72348,4,殘酷鬥士科多獸皮長袍
+72349,4,殘酷鬥士科多獸皮肩甲
+72350,4,殘酷鬥士殘虐腰帶
+72351,4,殘酷鬥士矯捷護足
+72352,4,殘酷鬥士無畏束腕
+72353,4,殘酷鬥士龍革手套
+72354,4,殘酷鬥士龍革頭盔
+72355,4,殘酷鬥士龍革腿甲
+72356,4,殘酷鬥士龍革長袍
+72357,4,殘酷鬥士龍革肩甲
+72358,4,殘酷鬥士拯救聖物
+72362,4,殘酷鬥士殘虐鎖鍊
+72363,4,殘酷鬥士精準鎖鍊
+72364,4,殘酷鬥士殘虐脛甲
+72365,4,殘酷鬥士矯捷脛甲
+72366,4,殘酷鬥士矯捷腕甲
+72367,4,殘酷鬥士精準腕甲
+72368,4,殘酷鬥士鍊甲護甲
+72369,4,殘酷鬥士鍊甲護手
+72370,4,殘酷鬥士鍊甲頭盔
+72371,4,殘酷鬥士鍊甲護腿
+72372,4,殘酷鬥士鍊甲肩甲
+72373,4,殘酷鬥士絲質手甲
+72374,4,殘酷鬥士絲質風帽
+72375,4,殘酷鬥士絲質長褲
+72376,4,殘酷鬥士絲質長袍
+72377,4,殘酷鬥士絲質襯肩
+72378,4,殘酷鬥士綴鱗護軀
+72379,4,殘酷鬥士綴鱗護手
+72380,4,殘酷鬥士綴鱗頭盔
+72381,4,殘酷鬥士綴鱗腿甲
+72382,4,殘酷鬥士綴鱗護肩
+72383,4,殘酷鬥士殘虐扣環
+72384,4,殘酷鬥士冥想扣環
+72385,4,殘酷鬥士矯捷護脛
+72386,4,殘酷鬥士冥想護脛
+72387,4,殘酷鬥士無畏護腕
+72388,4,殘酷鬥士冥想護腕
+72389,4,殘酷鬥士裝飾護胸
+72390,4,殘酷鬥士裝飾手套
+72391,4,殘酷鬥士裝飾頭罩
+72392,4,殘酷鬥士裝飾腿鎧
+72393,4,殘酷鬥士裝飾肩甲
+72394,4,殘酷鬥士殘虐束腰
+72395,4,殘酷鬥士無畏束腰
+72396,4,殘酷鬥士殘虐戰靴
+72397,4,殘酷鬥士矯捷戰靴
+72398,4,殘酷鬥士精通臂鎧
+72399,4,殘酷鬥士矯捷臂鎧
+72400,4,殘酷鬥士月布手套
+72401,4,殘酷鬥士月布兜帽
+72402,4,殘酷鬥士月布護腿
+72403,4,殘酷鬥士月布長袍
+72404,4,殘酷鬥士月布披肩
+72405,4,殘酷鬥士緞質手套
+72406,4,殘酷鬥士緞質兜帽
+72407,4,殘酷鬥士緞質護腿
+72408,4,殘酷鬥士緞質長袍
+72409,4,殘酷鬥士緞質披肩
+72416,4,殘酷鬥士殘虐腰環
+72417,4,殘酷鬥士精準腰環
+72418,4,殘酷鬥士殘虐長靴
+72419,4,殘酷鬥士矯捷長靴
+72420,4,殘酷鬥士矯捷裹臂
+72421,4,殘酷鬥士精準裹臂
+72422,4,殘酷鬥士皮甲外套
+72423,4,殘酷鬥士皮甲手套
+72424,4,殘酷鬥士皮甲盔帽
+72425,4,殘酷鬥士皮甲腿甲
+72426,4,殘酷鬥士皮甲肩甲
+72427,4,殘酷鬥士冥想護腰
+72428,4,殘酷鬥士矯捷脛甲
+72429,4,殘酷鬥士冥想脛甲
+72430,4,殘酷鬥士無畏臂環
+72431,4,殘酷鬥士冥想臂環
+72432,4,殘酷鬥士環甲護甲
+72433,4,殘酷鬥士環甲護手
+72434,4,殘酷鬥士環甲頭盔
+72435,4,殘酷鬥士環甲護腿
+72436,4,殘酷鬥士環甲肩甲
+72437,4,殘酷鬥士鎖鍊護甲
+72438,4,殘酷鬥士鎖鍊護手
+72439,4,殘酷鬥士鎖鍊頭盔
+72440,4,殘酷鬥士鎖鍊護腿
+72441,4,殘酷鬥士鎖鍊肩甲
+72442,4,殘酷鬥士殘虐護腰
+72443,4,殘酷鬥士鎖甲護甲
+72444,4,殘酷鬥士鎖甲護手
+72445,4,殘酷鬥士鎖甲頭盔
+72446,4,殘酷鬥士鎖甲護腿
+72447,4,殘酷鬥士鎖甲肩甲
+72451,4,殘酷鬥士矯捷披風
+72452,4,殘酷鬥士無畏披風
+72456,4,殘酷鬥士征服聖物
+72459,4,殘酷鬥士魔織手甲
+72460,4,殘酷鬥士魔織風帽
+72461,4,殘酷鬥士魔織長褲
+72462,4,殘酷鬥士魔織衣飾
+72463,4,殘酷鬥士魔織襯肩
+72464,4,殘酷鬥士鎧甲護軀
+72465,4,殘酷鬥士鎧甲護手
+72466,4,殘酷鬥士鎧甲頭盔
+72467,4,殘酷鬥士鎧甲腿甲
+72468,4,殘酷鬥士鎧甲護肩
+72507,0,Art Template Cloth Shoulder - Robe_PVPWarlock_D_01 - Purple
+72617,0,Art Template Cloth Shoulder - Robe_PVPWarlock_D_01 - Green
+72621,2,法師靈魂長袍
+72622,2,法師靈魂便鞋
+72623,2,法師靈魂裹手
+72624,2,法師靈魂兜帽
+72625,2,法師靈魂護腿
+72626,2,法師靈魂肩墊
+72627,2,法師靈魂之索
+72628,2,法師靈魂裹腕
+72636,0,Art Template Cloth Shoulder - Robe_PVPWarlock_D_01 - Orange
+72638,2,驚懼靈魂便鞋
+72639,2,驚懼靈魂裹手
+72640,2,驚懼靈魂風帽
+72641,2,驚懼靈魂護腿
+72642,2,驚懼靈魂長袍
+72643,2,驚懼靈魂肩墊
+72644,2,驚懼靈魂之索
+72645,2,驚懼靈魂裹腕
+72646,2,純潔長靴
+72647,2,純潔手套
+72648,2,純潔風帽
+72649,2,純潔束褲
+72650,2,純潔長袍
+72651,2,純潔披肩
+72652,2,純潔束帶
+72653,2,純潔束縛
+72655,2,純潔便鞋
+72656,2,純潔裹手
+72657,2,純潔兜帽
+72658,2,純潔護腿
+72659,2,純潔法衣
+72660,2,純潔肩墊
+72661,2,純潔之索
+72662,2,純潔裹腕
+72664,2,暗影追蹤上衣
+72665,2,暗影追蹤長靴
+72666,2,暗影追蹤手套
+72667,2,暗影追蹤兜帽
+72668,2,暗影追蹤馬褲
+72669,2,暗影追蹤護肩
+72670,2,暗影追蹤腰環
+72671,2,暗影追蹤束縛
+72672,2,狂野靈魂外衣
+72673,2,狂野靈魂薄靴
+72674,2,狂野靈魂手甲
+72675,2,狂野靈魂頭盔
+72676,2,狂野靈魂腿甲
+72677,2,狂野靈魂肩衛
+72678,2,狂野靈魂之索
+72679,2,狂野靈魂腕輪
+72681,2,狂野靈魂上衣
+72682,2,狂野靈魂長靴
+72683,2,狂野靈魂手套
+72684,2,狂野靈魂兜帽
+72685,2,狂野靈魂馬褲
+72686,2,狂野靈魂護肩
+72687,2,狂野靈魂腰環
+72688,2,狂野靈魂束縛
+72689,2,狂野靈魂外套
+72690,2,狂野靈魂足靴
+72691,2,狂野靈魂之握
+72692,2,狂野靈魂首盔
+72693,2,狂野靈魂護腿
+72694,2,狂野靈魂肩甲
+72695,2,狂野靈魂腰帶
+72696,2,狂野靈魂護腕
+72697,0,Monster - Sword Mage (High Yellow Glow)
+72698,2,暴風守縛者護胸
+72699,2,暴風守縛者護脛
+72700,2,暴風守縛者護手
+72701,2,暴風守縛者頭盔
+72702,2,暴風守縛者腿甲
+72703,2,暴風守縛者肩衛
+72704,2,暴風守縛者護腰
+72705,2,暴風守縛者臂甲
+72798,4,Cord of Lost Hope
+72799,4,Dead End Boots
+72800,4,Gauntlets of Temporal Interference
+72801,4,Breastplate of Sorrow
+72802,4,Time Traveler's Leggings
+72803,4,Girdle of Heroes
+72804,4,Dragonshrine Scepter
+72805,4,Gloves of the Hollow
+72806,4,Echoing Headguard
+72807,4,Waistguard of Lost Time
+72808,4,Jaina's Staff
+72809,4,Ward of Incantations
+72810,4,Windrunner's Bow
+72811,4,Cloak of the Banshee Queen
+72812,4,Crescent Moon
+72813,4,Whisperwind Robes
+72814,4,Axe of the Tauren Chieftains
+72815,4,Bloodhoof Legguards
+72816,4,Twisted Greaves
+72817,4,Time Altered Legguards
+72818,4,Breastplate of Tarnished Bronze
+72819,4,Chrono Boots
+72820,4,Crown of Epochs
+72821,4,Temporal Pauldrons
+72822,4,Jagged Edge of Time
+72823,4,Timeway Headgear
+72824,4,Distortion Chestguard
+72825,4,Mantle of Time
+72826,4,Robes of Fate
+72889,2,暴風守縛者外套
+72890,2,暴風守縛者長靴
+72891,2,暴風守縛者手套
+72892,2,暴風守縛者罩盔
+72893,2,暴風守縛者裹腿
+72894,2,暴風守縛者肩鎧
+72895,2,暴風守縛者腰帶
+72896,2,暴風守縛者臂環
+72902,2,暴風守縛者外衣
+72903,2,暴風守縛者脛甲
+72904,2,暴風守縛者之握
+72905,2,暴風守縛者風帽
+72906,2,暴風守縛者護腿
+72907,2,暴風守縛者肩甲
+72908,2,暴風守縛者束腰
+72909,2,暴風守縛者護腕
+72910,2,獸靈外衣
+72911,2,獸靈護脛
+72912,2,獸靈護手
+72913,2,獸靈頭盔
+72914,2,獸靈腿甲
+72915,2,獸靈肩甲
+72916,2,獸靈腰帶
+72917,2,獸靈護腕
+72918,2,黑靈魂胸甲
+72919,2,黑靈魂脛甲
+72920,2,黑靈魂護手
+72921,2,黑靈魂頭盔
+72922,2,黑靈魂腿鎧
+72923,2,黑靈魂肩鎧
+72924,2,黑靈魂束腰
+72925,2,黑靈魂護臂
+72929,2,黑靈魂護胸
+72930,2,黑靈魂護脛
+72931,2,黑靈魂手甲
+72932,2,黑靈魂面甲
+72933,2,黑靈魂腿甲
+72934,2,黑靈魂肩衛
+72935,2,黑靈魂腰環
+72936,2,黑靈魂臂甲
+72937,2,驍士護胸
+72938,2,驍士護脛
+72939,2,驍士手甲
+72940,2,驍士面甲
+72941,2,驍士腿甲
+72942,2,驍士肩衛
+72943,2,驍士腰環
+72944,2,驍士臂甲
+72945,2,驍士胸甲
+72946,2,驍士脛甲
+72947,2,驍士護手
+72948,2,驍士頭盔
+72949,2,驍士腿鎧
+72950,2,驍士肩鎧
+72951,2,驍士束腰
+72952,2,驍士護臂
+72955,2,熱情戰甲
+72956,2,熱情脛甲
+72957,2,熱情護手
+72958,2,熱情頭盔
+72959,2,熱情腿鎧
+72960,2,熱情肩鎧
+72961,2,熱情束腰
+72962,2,熱情護臂
+72963,2,熱情護胸
+72964,2,熱情護脛
+72965,2,熱情手甲
+72966,2,熱情面甲
+72967,2,熱情腿甲
+72968,2,熱情肩衛
+72969,2,熱情腰環
+72970,2,熱情臂甲
+72971,2,熱情胸甲
+72972,2,熱情長靴
+72973,2,熱情手套
+72974,2,熱情首盔
+72975,2,熱情護腿
+72976,2,熱情肩甲
+72977,2,熱情腰帶
+72978,2,熱情臂鎧
+72980,2,驍士之劍
+72981,2,熱情之劍
+72982,2,驍士壁壘
+72983,2,熱情壁壘
+72984,2,熱情盾牌
+72989,2,熱情權杖
+72990,2,黑靈魂之錘
+72991,2,黑靈魂之槌
+72992,2,驍士巨劍
+72993,2,熱情巨劍
+72994,2,黑靈魂之刃
+72995,2,暗影追蹤匕首
+72996,2,暗影追蹤剃刃
+72997,2,暗影追蹤之劍
+72998,2,暴風守縛者釘錘
+72999,2,驍士木槌
+73000,2,獸靈步槍
+73001,2,獸靈長矛
+73002,2,暴風守縛者權杖
+73003,2,暴風守縛者裁決槌
+73004,2,暴風守縛者盾牌
+73005,2,暴風守縛者聖禦盾
+73006,2,法師靈魂法杖
+73007,2,驚懼靈魂法杖
+73008,2,純潔法杖
+73009,2,純潔護杖
+73010,2,狂野靈魂護杖
+73011,2,狂野靈魂法杖
+73012,2,狂野靈魂長矛
+73306,2,狂野靈魂憤怒披風
+73307,2,狂野靈魂智慧披風
+73308,2,狂野靈魂毀滅披風
+73309,2,驍士堅忍披風
+73310,2,驍士戰鬥披風
+73311,2,暴風守縛者憤怒披風
+73312,2,暴風守縛者智慧披風
+73313,2,暴風守縛者毀滅披風
+73314,2,獸靈憤怒披風
+73315,2,黑靈魂戰鬥披風
+73316,2,黑靈魂堅忍披風
+73317,2,熱情戰鬥披風
+73318,2,熱情堅忍披風
+73319,2,熱情智慧披風
+73320,2,暗影追蹤憤怒披風
+73321,2,純潔智慧披風
+73322,2,純潔毀滅披風
+73323,2,法師靈魂毀滅披風
+73324,2,驚懼靈魂毀滅披風
+73325,2,法師靈魂魔杖
+73326,2,驚懼靈魂魔杖
+73328,0,Art Template Cloth Shoulder - Robe PVPPriest D 01 - Black
+73336,2,純潔魔杖
+73337,2,狂野靈魂智慧塑像
+73338,2,狂野靈魂憤怒塑像
+73339,2,狂野靈魂毀滅塑像
+73340,2,暴風守縛者毀滅圖騰
+73341,2,暴風守縛者智慧圖騰
+73342,2,暴風守縛者憤怒圖騰
+73343,2,黑靈魂戰鬥符印
+73346,2,黑靈魂堅忍符印
+73354,2,熱情戰鬥聖契
+73355,2,熱情堅忍聖契
+73356,2,熱情智慧聖契
+73357,2,暗影追蹤飛刀
+73358,2,驍士戰鬥飛刀
+73359,2,驍士堅忍飛刀
+73396,0,Art Template Cloth Shoulder - Robe PVPPriest D 01 - Blue
+73408,0,Art Template Cloth Shoulder - Robe PVPPriest D 01 - Red
+73412,4,絕命鬥士戰鋒飛斧
+73413,4,絕命鬥士盾牆
+73414,4,絕命鬥士分割刃
+73415,4,絕命鬥士碎骨錘
+73416,4,絕命鬥士劈斧
+73417,4,絕命鬥士聖光短棒
+73418,4,絕命鬥士左裂鋸
+73419,4,絕命鬥士右裂鋸
+73420,4,絕命鬥士左齒鋸
+73421,4,絕命鬥士右齒鋸
+73422,4,絕命鬥士凶器
+73423,4,絕命鬥士長矛
+73424,4,絕命鬥士能量法杖
+73425,4,絕命鬥士壁壘
+73426,4,絕命鬥士裁決槌
+73427,4,絕命鬥士步槍
+73428,4,絕命鬥士剃刃
+73429,4,絕命鬥士法杖
+73430,4,絕命鬥士重弩
+73431,4,絕命鬥士戰勝之觸
+73432,4,絕命鬥士緩刑法典
+73433,4,絕命鬥士戰鬥法杖
+73434,4,絕命鬥士法刃
+73435,4,絕命鬥士屏障
+73436,4,絕命鬥士終卷
+73437,4,絕命鬥士長弓
+73438,4,絕命鬥士短斧
+73439,4,絕命鬥士速刃
+73440,4,絕命鬥士懲戒錘
+73441,4,絕命鬥士斬斧
+73442,4,絕命鬥士巨劍
+73443,4,絕命鬥士磨骨槌
+73444,4,絕命鬥士斬首者
+73445,4,絕命鬥士戰鋒飛斧
+73446,4,絕命鬥士盾牆
+73447,4,絕命鬥士分割刃
+73448,4,絕命鬥士碎骨錘
+73449,4,絕命鬥士劈斧
+73450,4,絕命鬥士聖光短棒
+73451,4,絕命鬥士左裂鋸
+73452,4,絕命鬥士右裂鋸
+73453,4,絕命鬥士左齒鋸
+73454,4,絕命鬥士右齒鋸
+73455,4,絕命鬥士凶器
+73456,4,絕命鬥士長矛
+73457,4,絕命鬥士能量法杖
+73458,4,絕命鬥士壁壘
+73459,4,絕命鬥士裁決槌
+73460,4,絕命鬥士步槍
+73461,4,絕命鬥士剃刃
+73462,4,絕命鬥士法仗
+73463,4,絕命鬥士重弩
+73464,4,絕命鬥士戰勝之觸
+73465,4,絕命鬥士緩刑法典
+73466,4,絕命鬥士戰鬥法杖
+73467,4,絕命鬥士法刃
+73468,4,絕命鬥士屏障
+73469,4,絕命鬥士終卷
+73470,4,絕命鬥士長弓
+73471,4,絕命鬥士短斧
+73472,4,絕命鬥士速刃
+73473,4,絕命鬥士懲戒錘
+73474,4,絕命鬥士斬斧
+73475,4,絕命鬥士巨劍
+73476,4,絕命鬥士磨骨槌
+73477,4,絕命鬥士斬首者
+73478,4,絕命鬥士鎧甲護肩
+73479,4,絕命鬥士鎧甲腿甲
+73480,4,絕命鬥士鎧甲頭盔
+73481,4,絕命鬥士鎧甲護手
+73482,4,絕命鬥士鎧甲護軀
+73483,4,絕命鬥士魔織襯肩
+73484,4,絕命鬥士魔織衣飾
+73485,4,絕命鬥士魔織長褲
+73486,4,絕命鬥士魔織風帽
+73487,4,絕命鬥士魔織手甲
+73490,4,絕命鬥士征服聖物
+73494,4,絕命鬥士無畏披風
+73495,4,絕命鬥士矯捷披風
+73502,4,絕命鬥士鎖甲肩甲
+73503,4,絕命鬥士環甲護腿
+73504,4,絕命鬥士鎖甲頭盔
+73505,4,絕命鬥士鎖甲護手
+73506,4,絕命鬥士鎖甲護甲
+73507,4,絕命鬥士殘虐腰環
+73508,4,絕命鬥士鎖鍊肩甲
+73509,4,絕命鬥士鎖鍊護腿
+73510,4,絕命鬥士鎖鍊頭盔
+73511,4,絕命鬥士鎖鍊護手
+73512,4,絕命鬥士鎖鍊護甲
+73513,4,絕命鬥士環甲肩甲
+73514,4,絕命鬥士環甲護腿
+73515,4,絕命鬥士環甲頭盔
+73516,4,絕命鬥士環甲護手
+73517,4,絕命鬥士環甲護甲
+73518,4,絕命鬥士冥想臂環
+73519,4,絕命鬥士無畏臂環
+73520,4,絕命鬥士冥想脛甲
+73521,4,絕命鬥士矯捷脛甲
+73522,4,絕命鬥士冥想護腰
+73523,4,絕命鬥士皮甲肩甲
+73524,4,絕命鬥士皮甲腿甲
+73525,4,絕命鬥士皮甲頭盔
+73526,4,絕命鬥士皮甲手套
+73527,4,絕命鬥士皮甲外套
+73528,4,絕命鬥士精準裹臂
+73529,4,絕命鬥士矯捷裹臂
+73530,4,絕命鬥士矯捷長靴
+73531,4,絕命鬥士殘虐長靴
+73532,4,絕命鬥士精準腰環
+73533,4,絕命鬥士殘虐腰環
+73540,4,絕命鬥士緞質披肩
+73541,4,絕命鬥士緞質長袍
+73542,4,絕命鬥士緞質護腿
+73543,4,絕命鬥士緞質兜帽
+73544,4,絕命鬥士緞質手套
+73545,4,絕命鬥士月布披肩
+73546,4,絕命鬥士月布長袍
+73547,4,絕命鬥士月布護腿
+73548,4,絕命鬥士月布兜帽
+73549,4,絕命鬥士月布手套
+73550,4,絕命鬥士矯捷臂鎧
+73551,4,絕命鬥士精通臂鎧
+73552,4,絕命鬥士矯捷戰靴
+73553,4,絕命鬥士殘虐戰靴
+73554,4,絕命鬥士無畏束腰
+73555,4,絕命鬥士殘虐束腰
+73556,4,絕命鬥士裝飾肩甲
+73557,4,絕命鬥士裝飾腿鎧
+73558,4,絕命鬥士裝飾頭罩
+73559,4,絕命鬥士裝飾手套
+73560,4,絕命鬥士裝飾護胸
+73561,4,絕命鬥士冥想護腕
+73562,4,絕命鬥士無畏護腕
+73563,4,絕命鬥士冥想護脛
+73564,4,絕命鬥士矯捷護脛
+73565,4,絕命鬥士冥想扣環
+73566,4,絕命鬥士殘虐扣環
+73567,4,絕命鬥士綴鱗護肩
+73568,4,絕命鬥士綴鱗腿甲
+73569,4,絕命鬥士綴鱗頭盔
+73570,4,絕命鬥士綴鱗護手
+73571,4,絕命鬥士綴鱗護軀
+73572,4,絕命鬥士絲質襯肩
+73573,4,絕命鬥士絲質長袍
+73574,4,絕命鬥士絲質長褲
+73575,4,絕命鬥士絲質風帽
+73576,4,絕命鬥士絲質手甲
+73580,4,絕命鬥士鍊甲肩甲
+73581,4,絕命鬥士鍊甲護腿
+73582,4,絕命鬥士鍊甲頭盔
+73583,4,絕命鬥士鍊甲護手
+73584,4,絕命鬥士鍊甲護甲
+73585,4,絕命鬥士精準腕甲
+73586,4,絕命鬥士矯捷腕甲
+73587,4,絕命鬥士矯捷脛甲
+73588,4,絕命鬥士殘虐脛甲
+73589,4,絕命鬥士精準鎖鍊
+73590,4,絕命鬥士殘虐鎖鍊
+73594,4,絕命鬥士拯救聖物
+73595,4,絕命鬥士龍革肩甲
+73596,4,絕命鬥士龍革長袍
+73597,4,絕命鬥士龍革腿甲
+73598,4,絕命鬥士龍革頭盔
+73599,4,絕命鬥士龍革手套
+73600,4,絕命鬥士無畏束腕
+73601,4,絕命鬥士矯捷護足
+73602,4,絕命鬥士殘虐腰帶
+73603,4,絕命鬥士科多獸皮肩甲
+73604,4,絕命鬥士科多獸皮長袍
+73605,4,絕命鬥士科多獸皮腿甲
+73606,4,絕命鬥士科多獸皮頭盔
+73607,4,絕命鬥士科多獸皮手套
+73608,4,絕命鬥士冥想束腕
+73609,4,絕命鬥士冥想護足
+73610,4,絕命鬥士冥想腰帶
+73611,4,絕命鬥士龍皮肩甲
+73612,4,絕命鬥士龍皮長袍
+73613,4,絕命鬥士龍皮腿甲
+73614,4,絕命鬥士龍皮頭盔
+73615,4,絕命鬥士龍皮手套
+73616,4,絕命鬥士懼鎧護肩
+73617,4,絕命鬥士懼鎧腿甲
+73618,4,絕命鬥士懼鎧頭盔
+73619,4,絕命鬥士懼鎧護手
+73620,4,絕命鬥士懼鎧護軀
+73624,4,絕命鬥士支配聖物
+73628,4,絕命鬥士冥想披氅
+73629,4,絕命鬥士擴散披氅
+73630,4,絕命鬥士無畏披氅
+73631,4,絕命鬥士冥想手銬
+73632,4,絕命鬥士無畏手銬
+73633,4,絕命鬥士精準腕輪
+73634,4,絕命鬥士冥想足靴
+73635,4,絕命鬥士矯捷足靴
+73636,4,絕命鬥士殘虐足靴
+73637,4,絕命鬥士冥想之索
+73638,4,絕命鬥士精準之索
+73639,4,絕命鬥士殘虐之索
+73642,4,絕命鬥士凱旋聖物
+73646,4,絕命鬥士無畏斗篷
+73647,4,絕命鬥士殘虐斗篷
+73651,4,絕命鬥士鎧甲護肩
+73652,4,絕命鬥士鎧甲腿甲
+73653,4,絕命鬥士鎧甲頭盔
+73654,4,絕命鬥士鎧甲護手
+73655,4,絕命鬥士鎧甲護軀
+73656,4,絕命鬥士魔織襯肩
+73657,4,絕命鬥士魔織衣飾
+73658,4,絕命鬥士魔織長褲
+73659,4,絕命鬥士魔織風帽
+73660,4,絕命鬥士魔織手甲
+73661,4,絕命鬥士鎖甲肩甲
+73662,4,絕命鬥士鎖甲護腿
+73663,4,絕命鬥士鎖甲頭盔
+73664,4,絕命鬥士鎖甲護手
+73665,4,絕命鬥士鎖甲護甲
+73666,4,絕命鬥士鎖鍊肩甲
+73667,4,絕命鬥士鎖鍊護腿
+73668,4,絕命鬥士鎖鍊頭盔
+73669,4,絕命鬥士鎖鍊護手
+73670,4,絕命鬥士鎖鍊護甲
+73671,4,絕命鬥士環甲肩甲
+73672,4,絕命鬥士環甲護腿
+73673,4,絕命鬥士環甲頭盔
+73674,4,絕命鬥士環甲護手
+73675,4,絕命鬥士環甲護甲
+73676,4,絕命鬥士冥想脛甲
+73677,4,絕命鬥士矯捷脛甲
+73678,4,絕命鬥士皮甲肩甲
+73679,4,絕命鬥士皮甲腿甲
+73680,4,絕命鬥士皮甲頭盔
+73681,4,絕命鬥士皮甲手套
+73682,4,絕命鬥士皮甲外套
+73683,4,絕命鬥士矯捷長靴
+73684,4,絕命鬥士殘虐長靴
+73685,4,絕命鬥士緞質披肩
+73686,4,絕命鬥士緞質長袍
+73687,4,絕命鬥士緞質護腿
+73688,4,絕命鬥士緞質兜帽
+73689,4,絕命鬥士緞質手套
+73690,4,絕命鬥士月布披肩
+73691,4,絕命鬥士月布長袍
+73692,4,絕命鬥士月布護腿
+73693,4,絕命鬥士月布兜帽
+73694,4,絕命鬥士月布手套
+73695,4,絕命鬥士矯捷戰靴
+73696,4,絕命鬥士殘虐戰靴
+73697,4,絕命鬥士裝飾肩甲
+73698,4,絕命鬥士裝飾腿鎧
+73699,4,絕命鬥士裝飾頭罩
+73700,4,絕命鬥士裝飾手套
+73701,4,絕命鬥士裝飾護胸
+73702,4,絕命鬥士冥想護脛
+73703,4,絕命鬥士矯捷護脛
+73704,4,絕命鬥士綴鱗護肩
+73705,4,絕命鬥士綴鱗腿甲
+73706,4,絕命鬥士綴鱗頭盔
+73707,4,絕命鬥士綴鱗護手
+73708,4,絕命鬥士綴鱗護軀
+73709,4,絕命鬥士絲質襯肩
+73710,4,絕命鬥士絲質長袍
+73711,4,絕命鬥士絲質長褲
+73712,4,絕命鬥士絲質風帽
+73713,4,絕命鬥士絲質手甲
+73714,4,絕命鬥士鍊甲肩甲
+73715,4,絕命鬥士鍊甲護腿
+73716,4,絕命鬥士鍊甲頭盔
+73717,4,絕命鬥士鍊甲護手
+73718,4,絕命鬥士鍊甲護甲
+73719,4,絕命鬥士矯捷脛甲
+73720,4,絕命鬥士殘虐脛甲
+73721,4,絕命鬥士龍革肩甲
+73722,4,絕命鬥士龍革長袍
+73723,4,絕命鬥士龍革腿甲
+73724,4,絕命鬥士龍革頭盔
+73725,4,絕命鬥士龍革手套
+73726,4,絕命鬥士矯捷護足
+73727,4,絕命鬥士科多獸皮肩甲
+73728,4,絕命鬥士科多獸皮長袍
+73729,4,絕命鬥士科多獸皮腿甲
+73730,4,絕命鬥士科多獸皮頭盔
+73731,4,絕命鬥士科多獸皮手套
+73732,4,絕命鬥士冥想護足
+73733,4,絕命鬥士龍皮肩甲
+73734,4,絕命鬥士龍皮長袍
+73735,4,絕命鬥士龍皮腿甲
+73736,4,絕命鬥士龍皮頭盔
+73737,4,絕命鬥士龍皮手套
+73738,4,絕命鬥士懼鎧護肩
+73739,4,絕命鬥士懼鎧腿甲
+73740,4,絕命鬥士懼鎧頭盔
+73741,4,絕命鬥士懼鎧護手
+73742,4,絕命鬥士懼鎧護軀
+73743,4,絕命鬥士冥想足靴
+73744,4,絕命鬥士矯捷足靴
+73745,4,絕命鬥士殘虐足靴
+73793,0,Monster - Thrown 1H PVPCataclysmS3 C 01 - Default
+73794,0,Monster - Thrown 1H PVPCataclysmS3 C 01 - Blue
+73795,0,Monster - Thrown 1H PVPCataclysmS3 C 01 - Green
+73796,0,Monster - Thrown 1H PVPCataclysmS3 C 01 - Red
+73803,0,Art Template Plate Wrist - Plate PVPDeathKnight D 01 - Frost
+73804,0,Art Template Plate Shoulder - Plate PVPDeathKnight D 01 - Frost
+73805,0,Art Template Plate Legs - Plate PVPDeathKnight D 01 - Frost
+73806,0,Art Template Plate Head - Plate PVPDeathKnight D 01 - Frost
+73807,0,Art Template Plate Hand - Plate PVPDeathKnight D 01 - Frost
+73808,0,Art Template Plate Chest - Plate PVPDeathKnight D 01 - Frost
+73809,0,Art Template Plate Boot - Plate PVPDeathKnight D 01 - Frost
+73810,0,Art Template Plate Belt - Plate PVPDeathKnight D 01 - Frost
+73811,0,Art Template Plate Belt - Plate PVPDeathKnight D 01 - Blood
+73812,0,Art Template Plate Boot - Plate PVPDeathKnight D 01 - Blood
+73813,0,Art Template Plate Chest - Plate PVPDeathKnight D 01 - Blood
+73814,0,Art Template Plate Hand - Plate PVPDeathKnight D 01 - Blood
+73815,0,Art Template Plate Head - Plate PVPDeathKnight D 01 - Blood
+73816,0,Art Template Plate Legs - Plate PVPDeathKnight D 01 - Blood
+73817,0,Art Template Plate Shoulder - Plate PVPDeathKnight D 01 - Blood
+73818,0,Art Template Plate Wrist - Plate PVPDeathKnight D 01 - Blood
+73819,0,Art Template Plate Wrist - Plate PVPDeathKnight D 01 - Unholy
+73820,0,Art Template Plate Shoulder - Plate PVPDeathKnight D 01 - Unholy
+73821,0,Art Template Plate Legs - Plate PVPDeathKnight D 01 - Unholy
+73822,0,Art Template Plate Head - Plate PVPDeathKnight D 01 - Unholy
+73823,0,Art Template Plate Hand - Plate PVPDeathKnight D 01 - Unholy
+73824,0,Art Template Plate Chest - Plate PVPDeathKnight D 01 - Unholy
+73825,0,Art Template Plate Boot - Plate PVPDeathKnight D 01 - Unholy
+73826,0,Art Template Plate Belt - Plate PVPDeathKnight D 01 - Unholy
+73841,0,Art Template Cloth Shoulder - Robe PVPMage D 01 - Frost
+73871,0,Art Template Cloth Shoulder - Robe DungeonRobe C 05 - Mage
+73880,0,Art Template Cloth Shoulder - Robe DungeonRobe C 05 - Priest
+73889,0,Art Template Cloth Shoulder - Robe DungeonRobe C 05 - Warlock
+73922,0,Art Template Cloth Shoulder - Robe PVPMage D 01 - Red
+73925,0,Art Template Cloth Shoulder - Robe PVPMage D 01 - Brown
+74278,1,火焰節慶頭盔
+74282,1,黑色春日頭環
+74283,1,粉紅春日頭環
+74783,4,絕命鬥士征服聖物
+74784,4,絕命鬥士拯救聖物
+74785,4,絕命鬥士支配聖物
+74786,4,絕命鬥士凱旋聖物
+74888,2,Art Template Cloth Belt - Robe RaidMage K 01 - Yellow
+74889,2,Art Template Cloth Boot - Robe RaidMage K 01 - Yellow
+74890,2,Art Template Cloth Chest - Robe RaidMage K 01 - Yellow
+74891,2,Art Template Cloth Hand - Robe RaidMage K 01 - Yellow
+74892,2,Art Template Cloth Head - Robe RaidMage K 01 - Yellow
+74893,2,Art Template Cloth Legs - Robe RaidMage K 01 - Yellow
+74894,2,Art Template Cloth Robe - Robe RaidMage K 01 - Yellow
+74895,2,Art Template Cloth Shoulder - Robe RaidMage K 01 - Yellow
+74896,2,Art Template Cloth Wrist - Robe RaidMage K 01 - Yellow
+74897,2,Art Template Cloth Belt - Robe RaidMage K 01 - Purple
+74898,2,Art Template Cloth Boot - Robe RaidMage K 01 - Purple
+74899,2,Art Template Cloth Chest - Robe RaidMage K 01 - Purple
+74900,2,Art Template Cloth Hand - Robe RaidMage K 01 - Purple
+74901,2,Art Template Cloth Head - Robe RaidMage K 01 - Purple
+74902,2,Art Template Cloth Legs - Robe RaidMage K 01 - Purple
+74903,2,Art Template Cloth Robe - Robe RaidMage K 01 - Purple
+74904,2,Art Template Cloth Shoulder - Robe RaidMage K 01 - Purple
+74905,2,Art Template Cloth Wrist - Robe RaidMage K 01 - Purple
+74906,2,Art Template Cloth Belt - Robe RaidMage K 01 - Aqua
+74907,2,Art Template Cloth Boot - Robe RaidMage K 01 - Aqua
+74908,2,Art Template Cloth Chest - Robe RaidMage K 01 - Aqua
+74909,2,Art Template Cloth Hand - Robe RaidMage K 01 - Aqua
+74910,2,Art Template Cloth Head - Robe RaidMage K 01 - Aqua
+74911,2,Art Template Cloth Legs - Robe RaidMage K 01 - Aqua
+74912,2,Art Template Cloth Robe - Robe RaidMage K 01 - Aqua
+74913,2,Art Template Cloth Shoulder - Robe RaidMage K 01 - Aqua
+74914,2,Art Template Cloth Wrist - Robe RaidMage K 01 - Aqua
+74930,0,Art Template Plate Wrist - Plate DungeonPlate C 06 - Warrior
+74931,0,Art Template Plate Shoulder - Plate DungeonPlate C 06 - Warrior
+74932,0,Art Template Plate Legs - Plate DungeonPlate C 06 - Warrior
+74933,0,Art Template Plate Head - Plate DungeonPlate C 06 - Warrior
+74934,2,Art Template Plate Hand - Plate DungeonPlate C 06 - Warrior
+74935,0,Art Template Plate Chest - Plate DungeonPlate C 06 - Warrior
+74936,0,Art Template Plate Boot - Plate DungeonPlate C 06 - Warrior
+74937,0,Art Template Plate Belt - Plate DungeonPlate C 06 - Warrior
+74939,0,Art Template Plate Wrist - Plate DungeonPlate C 06 - Death Knight
+74940,0,Art Template Plate Shoulder - Plate DungeonPlate C 06 - Death Knight
+74941,0,Art Template Plate Legs - Plate DungeonPlate C 06 - Death Knight
+74942,0,Art Template Plate Head - Plate DungeonPlate C 06 - Death Knight
+74943,2,Art Template Plate Hand - Plate DungeonPlate C 06 - Death Knight
+74944,0,Art Template Plate Chest - Plate DungeonPlate C 06 - Death Knight
+74945,0,Art Template Plate Boot - Plate DungeonPlate C 06 - Death Knight
+74946,0,Art Template Plate Belt - Plate DungeonPlate C 06 - Death Knight
+74947,0,Art Template Plate Wrist - Plate DungeonPlate C 06 - Paladin
+74948,0,Art Template Plate Shoulder - Plate DungeonPlate C 06 - Paladin
+74949,0,Art Template Plate Legs - Plate DungeonPlate C 06 - Paladin
+74950,0,Art Template Plate Head - Plate DungeonPlate C 06 - Paladin
+74951,2,Art Template Plate Hand - Plate DungeonPlate C 06 - Paladin
+74952,0,Art Template Plate Chest - Plate DungeonPlate C 06 - Paladin
+74953,0,Art Template Plate Boot - Plate DungeonPlate C 06 - Paladin
+74954,0,Art Template Plate Belt - Plate DungeonPlate C 06 - Paladin
+74972,0,Art Template Plate Belt - Plate RaidWarrior K 01 - Blue
+74973,0,Art Template Plate Boot - Plate RaidWarrior K 01 - Blue
+74974,0,Art Template Plate Chest - Plate RaidWarrior K 01 - Blue
+74975,2,Art Template Plate Hand - Plate RaidWarrior K 01 - Blue
+74976,0,Art Template Plate Head - Plate RaidWarrior K 01 - Blue
+74977,0,Art Template Plate Legs - Plate RaidWarrior K 01 - Blue
+74978,0,Art Template Plate Shoulder - Plate RaidWarrior K 01 - Blue
+74979,0,Art Template Plate Wrist - Plate RaidWarrior K 01 - Blue
+74982,0,Art Template Plate Belt - Plate RaidWarrior K 01 - Red
+74983,0,Art Template Plate Boot - Plate RaidWarrior K 01 - Red
+74984,0,Art Template Plate Chest - Plate RaidWarrior K 01 - Red
+74985,2,Art Template Plate Hand - Plate RaidWarrior K 01 - Red
+74986,0,Art Template Plate Head - Plate RaidWarrior K 01 - Red
+74987,0,Art Template Plate Legs - Plate RaidWarrior K 01 - Red
+74988,0,Art Template Plate Shoulder - Plate RaidWarrior K 01 - Red
+74989,0,Art Template Plate Wrist - Plate RaidWarrior K 01 - Red
+74990,0,Art Template Plate Wrist - Plate RaidWarrior K 01 - Yellow
+74991,0,Art Template Plate Shoulder - Plate RaidWarrior K 01 - Yellow
+74992,0,Art Template Plate Legs - Plate RaidWarrior K 01 - Yellow
+74993,0,Art Template Plate Head - Plate RaidWarrior K 01 - Yellow
+74994,2,Art Template Plate Hand - Plate RaidWarrior K 01 - Yellow
+74995,0,Art Template Plate Chest - Plate RaidWarrior K 01 - Yellow
+74996,0,Art Template Plate Boot - Plate RaidWarrior K 01 - Yellow
+74997,0,Art Template Plate Belt - Plate RaidWarrior K 01 - Yellow
+75061,3,兇惡碳鱗護肩
+75062,3,兇惡火織風帽
+75063,3,兇惡火織手套
+75064,3,兇惡燼絲護肩
+75065,3,兇惡燼絲斗篷
+75066,3,兇惡支配之眼
+75069,3,兇惡征服顎骨
+75070,3,兇惡燼絲手套
+75072,3,兇惡燼絲束褲
+75073,3,兇惡燼絲風帽
+75076,3,兇惡毛皮披風
+75077,3,兇惡隱藏披風
+75079,3,兇惡凱旋符咒
+75080,3,兇惡龍革護腿
+75081,3,兇惡龍鱗手套
+75082,3,兇惡火織束褲
+75083,3,兇惡碳鱗腰帶
+75084,3,兇惡碳鱗護胸
+75085,3,兇惡碳鱗手套
+75086,3,兇惡火織腰帶
+75087,3,兇惡火織長靴
+75088,3,兇惡火織長袍
+75089,3,兇惡火織護腕
+75090,3,兇惡碳鱗頭盔
+75091,3,兇惡火織護肩
+75092,3,兇惡碳鱗長靴
+75093,3,兇惡燼絲長袍
+75094,3,兇惡碳鱗護腕
+75095,3,兇惡燼絲長靴
+75096,3,兇惡燼絲腰帶
+75097,3,兇惡碳鱗護腿
+75098,3,兇惡燼絲護腕
+75099,3,兇惡龍革護肩
+75100,3,兇惡龍鱗腰帶
+75101,3,兇惡龍革長靴
+75102,3,兇惡龍鱗頭盔
+75103,3,兇惡皮甲護胸
+75104,3,兇惡皮甲手套
+75105,3,兇惡皮甲頭盔
+75106,3,兇惡龍革護腕
+75107,3,兇惡龍革護胸
+75108,3,兇惡龍鱗護腿
+75109,3,兇惡龍革手套
+75110,3,兇惡龍鱗長靴
+75111,3,兇惡龍革頭盔
+75112,3,兇惡皮甲護腿
+75113,3,兇惡皮甲護肩
+75114,3,兇惡龍鱗護腕
+75115,3,兇惡龍鱗護胸
+75116,3,兇惡龍鱗護肩
+75117,3,兇惡龍革腰帶
+75118,3,兇惡華麗黃鐵腰帶
+75119,3,兇惡黃鐵護肩
+75120,3,兇惡黃鐵長靴
+75121,3,兇惡華麗黃鐵護手
+75122,3,兇惡黃鐵護手
+75123,3,兇惡黃鐵腰帶
+75124,3,兇惡黃鐵護腕
+75125,3,兇惡華麗黃鐵護腕
+75126,3,兇惡黃鐵頭盔
+75127,3,兇惡皮甲腰帶
+75128,3,兇惡華麗黃鐵胸甲
+75129,3,兇惡華麗黃鐵頭盔
+75130,3,兇惡皮甲長靴
+75131,3,兇惡皮甲護腕
+75132,3,兇惡華麗黃鐵長靴
+75133,3,兇惡華麗黃鐵腿甲
+75134,3,兇惡華麗黃鐵護肩
+75135,3,兇惡黃鐵胸甲
+75136,3,兇惡黃鐵腿甲
+75177,2,Art Template Mail Robe - Mail RaidShaman K 01 - Blue
+75178,2,Art Template Mail Robe - Mail RaidShaman K 01 - Green
+75187,2,Art Template Mail Robe - Mail RaidShaman K 01 - Yellow
+75222,0,Monster - Axe_2h_PVPCataclysmS3_C_01 - Default
+75223,0,Monster - Axe_2h_PVPCataclysmS3_C_01 - Blue
+75224,0,Monster - Axe_2h_PVPCataclysmS3_C_01 - Red
+75225,0,Monster - Axe_2h_PVPCataclysmS3_C_01 - Yellow
+76175,4,Monster - Shivan 1 Sword
+76176,4,Monster - Alizabal Sword
+76185,0,Art Template Plate Wrist - Plate_RaidDeathKnight_K_01 - Frost
+76186,0,Art Template Plate Shoulder - Plate_RaidDeathKnight_K_01 - Frost
+76187,0,Art Template Plate Legs - Plate_RaidDeathKnight_K_01 - Frost
+76188,0,Art Template Plate Head - Plate_RaidDeathKnight_K_01 - Frost
+76189,2,Art Template Plate Hand - Plate_RaidDeathKnight_K_01 - Frost
+76190,0,Art Template Plate Chest - Plate_RaidDeathKnight_K_01 - Frost
+76191,0,Art Template Plate Boot - Plate_RaidDeathKnight_K_01 - Frost
+76192,0,Art Template Plate Belt - Plate_RaidDeathKnight_K_01 - Frost
+76193,0,Art Template Plate Wrist - Plate_RaidDeathKnight_K_01 - Blood
+76194,0,Art Template Plate Shoulder - Plate_RaidDeathKnight_K_01 - Blood
+76195,0,Art Template Plate Legs - Plate_RaidDeathKnight_K_01 - Blood
+76196,0,Art Template Plate Head - Plate_RaidDeathKnight_K_01 - Blood
+76197,2,Art Template Plate Hand - Plate_RaidDeathKnight_K_01 - Blood
+76198,0,Art Template Plate Chest - Plate_RaidDeathKnight_K_01 - Blood
+76199,0,Art Template Plate Boot - Plate_RaidDeathKnight_K_01 - Blood
+76200,0,Art Template Plate Belt - Plate_RaidDeathKnight_K_01 - Blood
+76201,0,Art Template Plate Wrist - Plate_RaidDeathKnight_K_01 - Unholy
+76202,0,Art Template Plate Shoulder - Plate_RaidDeathKnight_K_01 - Unholy
+76203,0,Art Template Plate Legs - Plate_RaidDeathKnight_K_01 - Unholy
+76204,0,Art Template Plate Head - Plate_RaidDeathKnight_K_01 - Unholy
+76205,2,Art Template Plate Hand - Plate_RaidDeathKnight_K_01 - Unholy
+76206,0,Art Template Plate Chest - Plate_RaidDeathKnight_K_01 - Unholy
+76207,0,Art Template Plate Boot - Plate_RaidDeathKnight_K_01 - Unholy
+76208,0,Art Template Plate Belt - Plate_RaidDeathKnight_K_01 - Unholy
+76212,4,時間領主手套
+76213,4,時間領主兜帽
+76214,4,時間領主護腿
+76215,4,時間領主長袍
+76216,4,時間領主披肩
+76236,0,Art Template Plate Belt - Plate_RaidPaladin_K_01 - Black
+76237,0,Art Template Plate Boot - Plate_RaidPaladin_K_01 - Black
+76238,0,Art Template Plate Chest - Plate_RaidPaladin_K_01 - Black
+76239,2,Art Template Plate Hand - Plate_RaidPaladin_K_01 - Black
+76240,0,Art Template Plate Head - Plate_RaidPaladin_K_01 - Black
+76241,0,Art Template Plate Legs - Plate_RaidPaladin_K_01 - Black
+76242,0,Art Template Plate Shoulder - Plate_RaidPaladin_K_01 - Black
+76243,0,Art Template Plate Wrist - Plate_RaidPaladin_K_01 - Black
+76244,0,Art Template Plate Belt - Plate_RaidPaladin_K_01 - Gold
+76245,0,Art Template Plate Boot - Plate_RaidPaladin_K_01 - Gold
+76246,0,Art Template Plate Chest - Plate_RaidPaladin_K_01 - Gold
+76247,2,Art Template Plate Hand - Plate_RaidPaladin_K_01 - Gold
+76248,0,Art Template Plate Head - Plate_RaidPaladin_K_01 - Gold
+76249,0,Art Template Plate Legs - Plate_RaidPaladin_K_01 - Gold
+76250,0,Art Template Plate Shoulder - Plate_RaidPaladin_K_01 - Gold
+76251,0,Art Template Plate Wrist - Plate_RaidPaladin_K_01 - Gold
+76252,0,Art Template Plate Belt - Plate_RaidPaladin_K_01 - Silver
+76253,0,Art Template Plate Boot - Plate_RaidPaladin_K_01 - Silver
+76254,0,Art Template Plate Chest - Plate_RaidPaladin_K_01 - Silver
+76255,2,Art Template Plate Hand - Plate_RaidPaladin_K_01 - Silver
+76256,0,Art Template Plate Head - Plate_RaidPaladin_K_01 - Silver
+76257,0,Art Template Plate Legs - Plate_RaidPaladin_K_01 - Silver
+76258,0,Art Template Plate Shoulder - Plate_RaidPaladin_K_01 - Silver
+76259,0,Art Template Plate Wrist - Plate_RaidPaladin_K_01 - Silver
+76281,2,Art Template Leather Hand Leather_PVPRogue_D_01 - Blue
+76286,0,將領黑角武器
+76320,2,Art Template Leather Hand Leather_PVPRogue_D_01 - Red
+76328,2,Art Template Leather Hand Leather_PVPRogue_D_01 - Green
+76339,4,無面罩氅披肩
+76340,4,無面罩氅長袍
+76341,4,無面罩氅護腿
+76342,4,無面罩氅兜帽
+76343,4,無面罩氅手套
+76344,4,聖光將熄披肩
+76345,4,聖光將熄長袍
+76346,4,聖光將熄護腿
+76347,4,聖光將熄兜帽
+76348,4,聖光將熄手套
+76357,4,聖光將熄裹手
+76358,4,聖光將熄風帽
+76359,4,聖光將熄裹腿
+76360,4,聖光將熄長袍
+76361,4,聖光將熄披肩
+76363,1,Monster - Staff Dalaran Blue (Frost)
+76364,1,Monster - Staff Dalaran (Fire)
+76414,0,Monster - Thrown_1h_430NightElf_C_01 - Blue
+76415,0,Monster - Thrown_1h_430NightElf_C_01 - Orange
+76416,0,Monster - Thrown_1h_430NightElf_C_01 - Purple
+76417,0,Monster - Thrown_1h_430NightElf_C_01 - Red
+76749,4,地核裹手
+76750,4,地核頭盔
+76751,4,地核裹腿
+76752,4,地核長袍
+76753,4,地核披肩
+76756,4,靈行者的外套
+76757,4,靈行者的裹手
+76758,4,靈行者的面甲
+76759,4,靈行者的裹腿
+76760,4,靈行者的披肩
+76765,4,榮耀輻光胸甲
+76766,4,榮耀輻光手套
+76767,4,榮耀輻光護盔
+76768,4,榮耀輻光護脛
+76769,4,榮耀輻光披肩
+76874,4,Battleplate of Radiant Glory
+76875,4,Gauntlets of Radiant Glory
+76876,4,Helmet of Radiant Glory
+76877,4,Legplates of Radiant Glory
+76878,4,Pauldrons of Radiant Glory
+76974,4,Necrotic Boneplate Breastplate
+76975,4,Necrotic Boneplate Gauntlets
+76976,4,Necrotic Boneplate Helmet
+76977,4,Necrotic Boneplate Greaves
+76978,4,Necrotic Boneplate Pauldrons
+76983,4,Colossal Dragonplate Helmet
+76984,4,Colossal Dragonplate Battleplate
+76985,4,Colossal Dragonplate Gauntlets
+76986,4,Colossal Dragonplate Legplates
+76987,4,Colossal Dragonplate Pauldrons
+76988,4,Colossal Dragonplate Chestguard
+76989,4,Colossal Dragonplate Handguards
+76990,4,Colossal Dragonplate Faceguard
+76991,4,Colossal Dragonplate Legguards
+76992,4,Colossal Dragonplate Shoulderguards
+77003,4,Chestguard of Radiant Glory
+77004,4,Handguards of Radiant Glory
+77005,4,Faceguard of Radiant Glory
+77006,4,Legguards of Radiant Glory
+77007,4,Shoulderguards of Radiant Glory
+77008,4,Necrotic Boneplate Chestguard
+77009,4,Necrotic Boneplate Handguards
+77010,4,Necrotic Boneplate Faceguard
+77011,4,Necrotic Boneplate Legguards
+77012,4,Necrotic Boneplate Shoulderguards
+77013,4,Deep Earth Raiment
+77014,4,Deep Earth Grips
+77015,4,Deep Earth Headpiece
+77016,4,Deep Earth Legguards
+77017,4,Deep Earth Spaulders
+77018,4,Deep Earth Gloves
+77019,4,Deep Earth Cover
+77020,4,Deep Earth Leggings
+77021,4,Deep Earth Vestment
+77022,4,Deep Earth Shoulderwraps
+77023,4,Blackfang Battleweave Tunic
+77024,4,Blackfang Battleweave Gloves
+77025,4,Blackfang Battleweave Helmet
+77026,4,Blackfang Battleweave Legguards
+77027,4,Blackfang Battleweave Spaulders
+77028,4,Wrymstalker's Tunic
+77029,4,Wrymstalker's Gloves
+77030,4,Wrymstalker's Headguard
+77031,4,Wrymstalker's Legguards
+77032,4,Wrymstalker's Spaulders
+77035,4,Spiritwalker's Shoulderwraps
+77036,4,Spiritwalker's Kilt
+77037,4,Spiritwalker's Headpiece
+77038,4,Spiritwalker's Gloves
+77039,4,Spiritwalker's Hauberk
+77040,4,Spiritwalker's Cuirass
+77041,4,Spiritwalker's Grips
+77042,4,Spiritwalker's Helmet
+77043,4,Spiritwalker's Legguards
+77044,4,Spiritwalker's Spaulders
+77078,4,Wand of Drifting Hallucination
+77079,4,Wand of Purchased Sadness
+77080,4,Relic of the Feral Form
+77081,4,Relic of the Icy Fury
+77082,4,Relic of Shattered Dreams
+77083,4,Relic of Forlorn Hopes
+77084,4,Relic of the Stolid Bulwark
+77085,4,Nimblefoot Throwing Axe
+77086,4,Shard of Broken Tomorrows
+77087,4,Heartcrusher
+77095,4,Valorous Sleek Flamewrath Cloak
+77096,4,Valorous Flowing Flamewrath Cape
+77097,4,Valorous Bladed Flamewrath Cover
+77098,4,Valorous Rippling Flamewrath Drape
+77099,4,Valorous Durable Flamewrath Greatcloak
+77119,4,Valorous Chestplate
+77120,4,Valorous Chestguard
+77121,4,Valorous Robe
+77122,4,Valorous Heartrobe
+77123,4,Valorous Heartplate
+77124,4,Valorous Dreamguard
+77125,4,Valorous Lightningguard
+77126,4,Valorous Nightguard
+77127,4,Valorous Menderguard
+77146,4,Valorous Hood
+77147,4,Valorous Cowl
+77148,4,Valorous Helmet
+77149,4,Valorous Mindcowl
+77150,4,Valorous Circlet
+77151,4,Valorous Faceguard
+77153,4,Valorous Headguard
+77155,4,Valorous Helmet
+77156,4,Valorous Faceplate
+77157,4,Valorous Handwraps
+77159,4,Valorous Palms
+77160,4,Valorous Handwrap
+77161,4,Valorous Grips
+77162,4,Valorous Skinners
+77163,4,Valorous Handbinders
+77164,4,Valorous Woundbinders
+77165,4,Valorous Throatgrabbers
+77166,4,Valorous Swordgrabbers
+77169,4,Valorous Boots
+77170,4,Valorous Warboots
+77171,4,Valorous Stompers
+77172,4,Valorous Footfalls
+77173,4,Valorous Treads
+77174,4,Valorous Footwraps
+77175,4,Valorous Sabatons
+77176,4,Valorous Sandals
+77177,4,Valorous Walkers
+77179,4,Valorous Embereye Belt
+77180,4,Valorous Flamebinding Girdle
+77181,4,Valorous Firescar Sash
+77182,4,Valorous Firearrow Belt
+77183,4,Valorous Firemend Cinch
+77184,4,Valorous Belt
+77185,4,Valorous Cinch
+77186,4,Valorous Girdle
+77187,4,Valorous Embereye Belt
+77188,4,Horrific Axe
+77189,4,Horrific Dagger
+77190,4,Horrific Staff
+77191,4,Horrific Greatsword
+77192,4,Horrific Gun
+77193,4,Horrific Deflecting Sword
+77194,4,Horrific Polearm
+77195,4,Horrific Sacrificial Knife
+77196,4,Horrific Mace
+77212,4,Horrific Cleaver
+77214,4,Horrific Gavel
+77215,4,Horrific Arbalest
+77216,4,Horrific Stinger
+77217,4,Horrific Greataxe
+77218,4,Horrific Scythe
+77219,4,Horrific Scalpel
+77220,4,Horrific Razor
+77221,4,Horrific Spirestaff
+77223,4,Horrific Bonecrusher
+77224,4,Horrific Greatmace
+77225,4,Horrific Heartstaff
+77226,4,Horrific Shield
+77227,4,Horrific Redoubt
+77234,4,Horrific Slippers
+77235,4,Horrific Woundbinders
+77236,4,Horrific Pauldrons
+77237,4,Horrific Cinch
+77238,4,Horrific Treads
+77239,4,Horrific Girdle
+77240,4,Horrific Wristguards
+77241,4,Horrific Belt
+77242,4,Horrific Mantle
+77243,4,Horrific Footfalls
+77244,4,Horrific Belt
+77245,4,Horrific Offhand
+77246,4,Horrific Stompers
+77247,4,Horrific Bracers
+77248,4,Horrific Sash
+77249,4,Horrific Dreamwraps
+77250,4,Horrific Cinch
+77251,4,Horrific Sabatons
+77252,4,Horrific Footwraps
+77253,4,Horrific Bracers
+77254,4,Horrific Treads
+77255,4,Horrific Chain
+77256,1,Darkmoon "Sword"
+77257,4,Horrific Wristguards
+77258,4,Horrific Wristplates
+77259,4,Horrific Warboots
+77260,4,Horrific Girdle
+77261,4,Horrific Serene Bracers
+77263,4,Horrific Robe
+77265,4,Horrific Boots
+77266,4,Horrific Cinch
+77267,4,Horrific Mantle
+77268,4,Horrific Pauldrons
+77269,4,Horrific Skinners
+77270,4,Horrific Bracers
+77271,4,Horrific Spaulders
