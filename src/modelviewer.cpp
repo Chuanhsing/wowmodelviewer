@@ -1454,7 +1454,7 @@ wxString ModelViewer::InitMPQArchives()
 			wxMessageBox(info, wxT("Compatible Version v3.03.00 Found."),wxOK);
 			gameVersion = 30300;
 		}
-	} else if (strncmp((char*)toc, "40000", 5) == 0 || strncmp((char*)toc, "40100", 5) == 0 || strncmp((char*)toc, "40200", 5) == 0) {
+	} else if (strncmp((char*)toc, "40000", 5) == 0 || strncmp((char*)toc, "40100", 5) == 0 || strncmp((char*)toc, "40200", 5) == 0 || strncmp((char*)toc, "40300", 5) == 0) {
 		gameVersion = VERSION_CATACLYSM;
 		langOffset = 0;
 	} else { // else if not our primary supported edition...
