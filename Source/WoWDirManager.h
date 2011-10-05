@@ -34,11 +34,16 @@ public:
 	QListWidget *List;
 
 private:
-	void saveDir(st_WoWDir);		// Save the Directory
+	void saveDir(st_WoWDir,bool);				// Save the Directory
+	void ListOffset(int);
+	template <class UnReal, class Real>
+	void ReOrderList(UnReal, Real);			// Re-orders the WoW list
 
 private slots:
 	void on_WDM_bDirMakeCurrent_clicked();
 	void on_WDM_bDirAdd_clicked();
+	void on_WDM_bDirUp_clicked();
+	void on_WDM_bDirDown_clicked();
 	void on_WDM_bDirDeleteAll_clicked();
 	void on_buttonBox_Cancel_clicked() {
 		QDialog::close();

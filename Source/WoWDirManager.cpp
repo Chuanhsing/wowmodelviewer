@@ -47,7 +47,7 @@ void WoWDirManager::init(){
 }
 
 // Save the Directory to the WoWDirs.ini file
-void WoWDirManager::saveDir(st_WoWDir dir)
+void WoWDirManager::saveDir(st_WoWDir dir, bool noUpdate = false)
 {
 	// Get the Group Name
 	QString g = WoWDirGroupName(dir);
@@ -74,7 +74,8 @@ void WoWDirManager::saveDir(st_WoWDir dir)
 	QLOG_INFO() << "Finished saving new WoWDir.";
 
 	// Update List
-	UpdateList();
+	if (noUpdate == false)
+		UpdateList();
 }
 
 // Called when someone clicks the "Add" button
@@ -242,18 +243,10 @@ void WoWDirManager::on_WDM_bDirMakeCurrent_clicked(){
 
 	for (size_t i=0;i<List->count();i++){
 		QListWidgetItem *a = List->item((int)i);
-		//QLOG_TRACE() << "Checking list with text:" << a->text();
-
 		if (a->isSelected() == true){
 			dirname = a->data(Qt::UserRole).toString();
-			//QLOG_TRACE() << "Found selection! DirName:" << dirname;
 			break;
 		}
-	}
-
-	if (olddir == dirname){
-		QLOG_INFO() << "Current Directory already set.";
-		return;
 	}
 	st_WoWDir b(WoWDirList.value(dirname));
 
@@ -267,6 +260,35 @@ void WoWDirManager::on_WDM_bDirMakeCurrent_clicked(){
 	
 	QLOG_INFO() << "Updating WoWDir List...";
 	UpdateList();
+}
+
+void WoWDirManager::ListOffset(int offset){
+	int num = -1;
+	for (size_t i=0;i<List->count();i++){
+		QListWidgetItem *a = List->item((int)i);
+		if (a->isSelected() == true){
+			num = WoWDirList.value(a->data(Qt::UserRole).toString()).Position;
+			break;
+		}
+	}
+	if ((num == -1)||(num+offset<0)||(num+offset>List->count()-1))
+		return;
+
+	ReOrderList<unsigned int,int>(num, offset);
+	List->item(num+offset)->setSelected(true);
+	UpdateList();
+}
+
+// Move directory up the list
+void WoWDirManager::on_WDM_bDirUp_clicked(){
+	QLOG_INFO() << "Moving Directory Up 1 Slot...";
+	ListOffset(-1);
+}
+
+// Move directory down the list
+void WoWDirManager::on_WDM_bDirDown_clicked(){
+	QLOG_INFO() << "Moving Directory Down 1 Slot...";
+	ListOffset(1);
 }
 
 // Called when someone clicks the "Delete All" button
@@ -315,19 +337,25 @@ void WoWDirManager::UpdateList()
 {
 	ReadWoWDirList();
 	QLOG_INFO() << "Updating WDM List...";
+	// Grab selected item
+	int selection = 0;	// default to the first item
+	for (size_t i=0;i<List->count();i++){
+		QListWidgetItem *selected = List->item((int)i);
+		if (selected->isSelected() == true){
+			selection = (int)i;
+			break;
+		}
+	}
 	List->clear();	// Clear the list of all old data, as we'll be regenerating it all...
 	QStringList groups = sWoWDirs.childGroups();
 	QMap<int,st_WoWDir> sortlist;
 
 	for (size_t i=0;i<groups.count();i++){
 		st_WoWDir a = WoWDirList.value(groups.value((int)i),st_WoWDir());
-
 		//QLOG_TRACE() << "Discovered" << a.Name << "locale:" << LocaleList.value(a.Locale) << "of" << groups.value((int)i);
-		
 		if (a == st_WoWDir())
 			continue;
-
-		sortlist.insertMulti(a.Position,a);
+		sortlist.insertMulti(a.Position,a);	// Used Multi just in case. We don't want to overwrite directories with the same position number.
 	}
 
 	QLOG_INFO() << "Sorting WDM List...";
@@ -359,15 +387,15 @@ void WoWDirManager::UpdateList()
 			ver = tr("Beta");
 		}
 
-		if (g_WMV->CurrentDir == a){
-			//QLOG_TRACE() << "Setting text for Current Directory...";
+		//QLOG_TRACE() << "Setting text for Directory...";
+		newItem->setText(QString("%1, %2, %3").arg(a.Name,ver,loc));
+		if (a == g_WMV->CurrentDir){
 			newItem->setText(QString("%1, %2, %3, %4").arg(a.Name,ver,loc,tr("(Current)")));
-		}else{
-			//QLOG_TRACE() << "Setting text for Directory...";
-			newItem->setText(QString("%1, %2, %3").arg(a.Name,ver,loc));
 		}
 		List->insertItem(a.Position, newItem);
 	}
+
+	List->item(selection)->setSelected(true);
 
 	// Apply the new data
 	ui_WoWDirManager->WDM_List = List;
@@ -602,4 +630,68 @@ st_WoWDir ScanWoWDir(QDir dir, int locale, int position = 0){
 
 	QLOG_INFO() << "WoW Scan completed successfully! Returning WoW Directory...";
 	return wdir;
+}
+
+// Re-orders the WoW Directory List, moving the current directory (in_pos) up/down by offset.
+template <class UnReal, class Real>
+void WoWDirManager::ReOrderList(UnReal in_pos, Real offset)
+{
+	// Check and fix out-of-bounds issues.
+	if ((in_pos == 0) && (offset<0))
+		offset = 0;
+	if (offset > (WoWDirList.count()-1)-(Real)in_pos)
+		offset = (WoWDirList.count()-1)-(Real)in_pos;
+
+	// If there is no offset, finish.
+	if (offset == 0)
+		return;
+
+	QLOG_INFO() << "Reordering Directory List...";
+
+	bool isNeg = false;
+	if (offset<0)
+		isNeg = true;
+	
+	QMap<int,st_WoWDir> reorder;
+	QStringList groups = sWoWDirs.childGroups();
+
+	for (size_t i=0;i<groups.count();i++){
+		st_WoWDir a = WoWDirList.value(groups.value((int)i),st_WoWDir());
+		if (a == st_WoWDir())
+			continue;
+
+		int pos = a.Position;
+		int npos = pos;
+
+		if (pos == in_pos){
+			npos = pos+offset;
+			QLOG_TRACE() << "Changing" << a.Name << "position from" << pos << "to" << npos;
+		}else{
+			if (offset>0){	// Positive offset
+				if ((pos>(int)in_pos)&&(pos<=(int)(in_pos+offset))){
+					npos = pos-1;
+					QLOG_TRACE() << "Changing" << a.Name << "position from" << pos << "to" << npos;
+				}else{
+					QLOG_TRACE() << "Keeping" << a.Name << "position the same at" << npos;
+				}
+			}else{			// Negative offset
+				if ((pos<(int)in_pos)&&(pos>=(int)(in_pos+offset))){
+					npos = pos+1;
+					QLOG_TRACE() << "Changing" << a.Name << "position from" << pos << "to" << npos;
+				}else{
+					QLOG_TRACE() << "Keeping" << a.Name << "position the same at" << npos;
+				}
+			}
+		}
+		a.Position = npos;
+		reorder.insertMulti(npos,a);	// Used Multi just in case. We don't want to overwrite directories with the same position number.
+	}
+
+	// Save the new Directories
+	for (size_t i=0;i<reorder.size();i++){
+		st_WoWDir a = reorder.value((int)i);
+		saveDir(a, false);
+	}
+	UpdateList();
+	QLOG_INFO() << "Finished re-ordering list.";
 }

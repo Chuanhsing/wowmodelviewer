@@ -292,8 +292,17 @@ void WoWModelViewer::UpdateViewerMenu(){
 		ui->menuChange_WoW_Directory->addAction(&actionNone);
 	}else{
 		QLOG_INFO() << "Adding WoW Directory Listings...";
+
+		QMap<int,st_WoWDir> sortlist;
 		for (QMap<QString,st_WoWDir>::Iterator i=WoWDirList.begin();i!=WoWDirList.end();i++){
 			st_WoWDir a = i.value();
+			if (a == st_WoWDir())
+				continue;
+			sortlist.insertMulti(a.Position,a);	// Used Multi just in case. We don't want to overwrite directories with the same position number.
+		}
+
+		for (size_t i=0;i<sortlist.size();i++){
+			st_WoWDir a = sortlist.value((int)i);
 			QString g = WoWDirGroupName(a);
 			QString loc = LocaleList.value(a.Locale);
 
@@ -374,7 +383,7 @@ void WoWModelViewer::updateCurrentDirfromMenu()
 
 	for (size_t i=0;i<WoWDirGroup->actions().count();i++)
 	{
-		QAction *a = WoWDirGroup->actions().value(i);
+		QAction *a = WoWDirGroup->actions().value((int)i);
 
 		if (a->isChecked()){
 			dirname = a->data().toString();

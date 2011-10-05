@@ -67,7 +67,8 @@ enum WoWVersion
 	// Cataclysm
 	WOW_CATACLYSM_FIRST = 40000,	// First Cataclysm (4.0.x)
 	WOW_CATACLYSM_401 = 40100,		// Cataclysm 4.1.x
-	WOW_CATACLYSM_402 = 40200,		// Cataclysm 4.2.x (Current Version)
+	WOW_CATACLYSM_402 = 40200,		// Cataclysm 4.2.x
+	WOW_CATACLYSM_403 = 40300,		// Cataclysm 4.3.x (Current Version)
 	WOW_CATACLYSM = 49999,			// Max Cataclysm. Used this way until Cata has ended.
 
 	// Others
@@ -79,20 +80,20 @@ enum WoWVersion
 // Number matches location in LocaleList
 enum WoWLocale
 {
-	LOCALE_ENUS = 0,
-	LOCALE_ENGB,
-	LOCALE_FRFR,
-	LOCALE_DEDE,
-	LOCALE_KOKR,
-	LOCALE_ZHCN,
-	LOCALE_ZHTW,
-	LOCALE_ESES,
-	LOCALE_ESMX,
-	LOCALE_RURU,
-	LOCALE_JAJP,
-	LOCALE_PTBR,
-	LOCALE_ITIT,
-	LOCALE_PLPL,
+	LOCALE_ENUS = 0,		// English, US
+	LOCALE_ENGB,			// English, Great Britian (England)
+	LOCALE_FRFR,			// French
+	LOCALE_DEDE,			// German
+	LOCALE_KOKR,			// Korean
+	LOCALE_ZHCN,			// Simplified Chinese
+	LOCALE_ZHTW,			// Traditional Chinese
+	LOCALE_ESES,			// Spanish, Spain
+	LOCALE_ESMX,			// Spanish, Mexico
+	LOCALE_RURU,			// Russian
+	LOCALE_JAJP,			// Japanese
+	LOCALE_PTBR,			// Portuguese, Brazil
+	LOCALE_ITIT,			// Italian
+	LOCALE_PLPL,			// Polish
 
 	LOCALE_NONE		// if Locale = LOCALE_NONE, then there was an error.
 };

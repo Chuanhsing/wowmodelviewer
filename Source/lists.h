@@ -13,19 +13,19 @@
 // Locale List
 // Placement matches WoWLocale number
 static QList<QString> LocaleList = QList<QString>()
-	<< "enUS"		// American English
-	<< "enGB"		// British English (Identical to enUS)
+	<< "enUS"		// English, US
+	<< "enGB"		// English, Great Britian
 	<< "frFR"		// French
 	<< "deDE"		// German
 	<< "koKR"		// Korean
-	<< "zhCN"		// Chinese Simplified
-	<< "zhTW"		// Chinese Traditional
-	<< "esES"		// Spanish Spanish
-	<< "esMX"		// Mexican Spanish
+	<< "zhCN"		// Chinese, Simplified
+	<< "zhTW"		// Chinese, Traditional
+	<< "esES"		// Spanish, Spain
+	<< "esMX"		// Spanish, Mexico
 	<< "ruRU"		// Russian
 	<< "jaJP"		// Japanese
-	<< "ptBR"		// Brazilian Portuguese
-	<< "itIT"		// Italian	-- Found these two in the PTR Installer
+	<< "ptBR"		// Portuguese, Brazil
+	<< "itIT"		// Italian
 	<< "plPL"		// Polish
 
 	<< "None";		// Used for Error Detection. Should ALWAYS be last!
