@@ -82,6 +82,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 		TROP	// Same as RFOP, but for Refraction.
 		SIDE	// Is it Double-Sided?
 		NVSK	// Exclude from VStack
+		NORM	// Specifies the Normal Map's Name
 
 		CMNT // Surface Comment. 2bytes: Size. Simple Text line for this surface. Make sure it doesn't end on an odd byte! VERS must be 931 or 950!
 		VERS // Version Compatibility mode, including what it's compatible with. 2 bytes (int16, value 4), 4 bytes (int32, value is 850 for LW8.5 Compatability, 931 for LW9.3.1, and 950 for Default)
@@ -882,6 +883,22 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 			f.Write(reinterpret_cast<char *>(&u16), 2);
 
 			surfaceDefSize += 8;
+
+			// NVSK (Exclude from VStack)
+
+			// Normal Map (NORM)
+			if (cSurf.NormalMapName != wxEmptyString){
+				wxString NormMapName = cSurf.NormalMapName;
+				NormMapName += wxT('\0');
+				if (fmod((float)NormMapName.length(), 2.0f) > 0)
+					NormMapName.Append(wxT('\0'));
+				f.Write("NORM", 4);
+				u16 = MSB2((uint16)NormMapName.length());
+				f.Write(reinterpret_cast<char *>(&u16), 2);
+				surfaceDefSize += 6;
+				f.Write(NormMapName.data(), NormMapName.length());
+				surfaceDefSize += (uint32)NormMapName.length();
+			}
 
 			// --
 			// BLOK
@@ -1791,7 +1808,6 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 			//SaveTexture2(ClipImage.Filename,ClipImage.Source,wxString(wxT("LWO")),wxString(wxT("tga")));
 
 			LWSurface Surface(matName,m->TextureList[p.tex],SurfImage_Color,LWSurf_Image(),LWSurf_Image(),Vec3D(1,1,1),Surf_Diff,Surf_Lum,doublesided);
-			Object.Surfaces.push_back(Surface);
 
 			// Points
 			for (size_t v=p.vertexStart; v<p.vertexEnd; v++) {
@@ -1820,15 +1836,18 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 				Point.UVData = m->origVertices[v].texcoords;	// UV Data
 				
 				// Vertex Colors
-				/*
-				if (m->colors[p.color].opacity.uses(cAnim) == true){
+				
+				if (m->colors[p.color].color.uses(cAnim) == true){
 					LWVertexColor vc;
-					vc.a = m->colors[p.color].opacity.getValue(cAnim,cFrame);
+					vc.a = 1.0f;
+					//Currently bugs out...
+					//if (m->colors[p.color].opacity.uses(cAnim) == true)
+					//	vc.a = m->colors[p.color].opacity.getValue(cAnim,cFrame);
 					vc.r = 1.0f;
 					vc.g = 1.0f;
 					vc.b = 1.0f;
 					Point.VertexColors = vc;
-				}*/
+				}
 
 				Vert2Point[v] = pointnum;
 				Layer.Points.push_back(Point);
@@ -1854,17 +1873,22 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 					Poly.PolyData.indice[x] = Vert2Point[b];
 
 					// Normal Indice
-					/*Poly.Normals.indice[x] = Vert2Point[b];
-					Poly.Normals.direction[x].x = m->normals[b].x;
-					Poly.Normals.direction[x].y = m->normals[b].z;
-					Poly.Normals.direction[x].z = -m->normals[b].y;*/
+					/*
+					Poly.Normals.indice[x] = Vert2Point[b];
+					Poly.Normals.direction[x].x = m->origVertices[b].normal.x;
+					Poly.Normals.direction[x].y = m->origVertices[b].normal.z;
+					Poly.Normals.direction[x].z = -(m->origVertices[b].normal.y);
+					*/
 				}
 				Poly.PartTagID = partID;
 				Poly.SurfTagID = (uint32)Object.PartNames.size() + SurfCounter;
 				//Poly.Normals.polygon = (uint32)Layer.Polys.size();
-				Poly.Normals.NormalMapName = wxEmptyString; //Layer.Name + wxString(wxT("_NormalMap"));
+				wxString NormName = wxEmptyString; //Layer.Name + wxString(wxT("_NormalMap"));
+				Poly.Normals.NormalMapName = NormName;
+				Surface.NormalMapName = NormName;
 				Layer.Polys.push_back(Poly);
 			}
+			Object.Surfaces.push_back(Surface);
 			SurfCounter++;
 		}
 	}

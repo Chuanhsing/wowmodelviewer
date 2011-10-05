@@ -429,6 +429,7 @@ struct LWSurf_Image {
 struct LWSurface {
 	wxString Name;			// The Surface's Name
 	wxString Comment;		// Comment for the surface.
+	wxString NormalMapName;	// Name of the Normal Map this surface uses.
 
 	bool isDoubleSided;		// Should it show the same surface on both sides of a poly.
 	bool hasVertColors;
@@ -450,6 +451,7 @@ struct LWSurface {
 	LWSurface(wxString name, wxString comment, LWSurf_Image ColorID, LWSurf_Image SpecID, LWSurf_Image TransID, Vec3D SurfColor=Vec3D(1,1,1), float Diffusion=1.0f, float Luminosity = 0.0f, bool doublesided = false, bool hasVC = false){
 		Name = name;
 		Comment = comment;
+		NormalMapName = wxEmptyString;
 
 		Surf_Color = SurfColor;
 		Surf_Diff = Diffusion;
@@ -587,7 +589,12 @@ struct LWObject {
 // --== Writing Functions ==--
 // VX is Lightwave Shorthand for any Point Number, because Lightwave stores points differently if they're over a certain threshold.
 void LW_WriteVX(wxFFileOutputStream &f, size_t p, uint32 &Size){
-	uint32 q = (uint32)p;
+	uint32 q;
+	if (sizeof(p)>sizeof(uint32)){
+		q = (uint32)(p & 0x0000FFFFFFFF);
+	}else{
+		q = (uint32)p;
+	}
 	if (q <= 0xFF00){
 		uint16 indice = MSB2(q & 0x0000FFFF);
 		f.Write(reinterpret_cast<char *>(&indice),2);
@@ -603,7 +610,7 @@ void LW_WriteVX(wxFFileOutputStream &f, size_t p, uint32 &Size){
 // Writes a single Key for an envelope.
 void WriteLWSceneEnvKey(wxTextOutputStream &fs, uint32 Chan, float value, float time, uint16 spline = 0)
 {
-	fs << wxT("  Key ");				// Announces the start of a Key
+	fs << wxT("  Key ");			// Announces the start of a Key
 	fs << value;					// The Key's Value;
 	fs << wxT(" ") << time;			// Time, in seconds, a float. This can be negative, zero or positive. Keys are listed in the envelope in increasing time order.
 	fs << wxT(" ") << spline;		// The curve type, an integer: 0 - TCB, 1 - Hermite, 2 - 1D Bezier (obsolete, equivalent to Hermite), 3 - Linear, 4 - Stepped, 5 - 2D Bezier
