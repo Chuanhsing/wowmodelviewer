@@ -623,6 +623,7 @@ void ModelViewer::InitDatabase()
 
 	SetStatusText(wxT("Initializing items.csv Databases..."));
 	wxString filename = langName+SLASH+wxT("items.csv");
+	wxLogMessage(wxT("Trying to open %s file (for updating locale files)"),filename);
 	if (!wxFile::Exists(filename))
 		DownloadLocaleFiles();
 	if (!wxFile::Exists(filename))
@@ -2426,7 +2427,7 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 		if (Compare == 0) {
 			wxMessageBox(_("You have the most up-to-date version."), _("Update Check"));
 		} else {
-			wxString msg = wxString::Format(wxT("The most current version is: %s\nWould you like to go to the download page?"), version.c_str());
+			wxString msg = wxString::Format(wxT("The most recent version is : %s\nWould you like to go to the download page?"), version.c_str());
 			if (wxMessageBox(msg, _("Update Check"), wxYES_NO, this) == wxYES)
 				wxLaunchDefaultBrowser(wxString(downloadURL.ToUTF8(), wxConvUTF8));
 		}
