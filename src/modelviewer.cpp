@@ -1436,28 +1436,22 @@ wxString ModelViewer::InitMPQArchives()
 	}
 
 	wxString info = wxT("WoW Model Viewer is designed to work with the latest version of World of Warcraft.\nYour version is supported, but support will be removed in the near future.\nYou may experience diminished capacity while working with WoW Model Viewer.\nPlease update your World of Warcraft client soon.");
+	
+	// Convert our TOC into an integer
+	wxString stoc = (char*)toc;
+	long itoc;
+	stoc.ToLong(&itoc);
+
 	// If we support more than 1 TOC version, place the others here.
-	if (strncmp((char*)toc, "30100", 5) == 0) {
-		if (gameVersion != 30100){
-			wxMessageBox(info, wxT("Compatible Version v3.01.00 Found."),wxOK);
-			gameVersion = 30100;
-		}
-	} else if (strncmp((char*)toc, "30200", 5) == 0) {
-		wxLogMessage(info);
-		if (gameVersion != 30200){
-			wxMessageBox(info, wxT("Compatible Version v3.02.00 Found."),wxOK);
-			gameVersion = 30200;
-		}
-	} else if (strncmp((char*)toc, "30300", 5) == 0) {
-		wxLogMessage(info);
-		if (gameVersion != 30300){
-			wxMessageBox(info, wxT("Compatible Version v3.03.00 Found."),wxOK);
-			gameVersion = 30300;
-		}
-	} else if (strncmp((char*)toc, "40000", 5) == 0 || strncmp((char*)toc, "40100", 5) == 0 || strncmp((char*)toc, "40200", 5) == 0 || strncmp((char*)toc, "40300", 5) == 0) {
+	if ((itoc >= 30100) && (itoc <=30300)) {			// WotLK TOCs
+		wxLogMessage("Compatible Wrath of the Lich King Version Found.");
+		wxMessageBox(info, wxT("Compatible Wrath of the Lich King Version Found."),wxOK);
+		gameVersion = itoc;
+	} else if ((itoc >= 40000) && (itoc < 49999)) {		// This will accept any TOC for Cataclysm.
+		wxLogMessage("Compatible Cataclysm Version Found.");
 		gameVersion = VERSION_CATACLYSM;
 		langOffset = 0;
-	} else { // else if not our primary supported edition...
+	} else { // else if not a supported edition...
 		wxString info = wxT("WoW Model Viewer does not support your version of World of Warcraft.\nPlease update your World of Warcraft client soon.");
 		wxLogMessage(wxT("Notice: ") + info);
 		SetStatusText(wxT("WoW Model Viewer does not support your version of World of Warcraft."));
