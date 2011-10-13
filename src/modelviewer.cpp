@@ -1439,17 +1439,17 @@ wxString ModelViewer::InitMPQArchives()
 	wxString info = wxT("WoW Model Viewer is designed to work with the latest version of World of Warcraft.\nYour version is supported, but support will be removed in the near future.\nYou may experience diminished capacity while working with WoW Model Viewer.\nPlease update your World of Warcraft client soon.");
 	
 	// Convert our TOC into an integer
-	wxString stoc = (char*)toc;
+	wxString stoc((char*)toc, wxConvUTF8);
 	long itoc;
 	stoc.ToLong(&itoc);
 
 	// If we support more than 1 TOC version, place the others here.
 	if ((itoc >= 30100) && (itoc <=30300)) {			// WotLK TOCs
-		wxLogMessage("Compatible Wrath of the Lich King Version Found.");
+		wxLogMessage(wxT("Compatible Wrath of the Lich King Version Found."));
 		wxMessageBox(info, wxT("Compatible Wrath of the Lich King Version Found."),wxOK);
 		gameVersion = itoc;
 	} else if ((itoc >= 40000) && (itoc < 49999)) {		// This will accept any TOC for Cataclysm.
-		wxLogMessage("Compatible Cataclysm Version Found.");
+		wxLogMessage(wxT("Compatible Cataclysm Version Found."));
 		gameVersion = VERSION_CATACLYSM;
 		langOffset = 0;
 	} else { // else if not a supported edition...
