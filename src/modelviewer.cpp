@@ -623,7 +623,7 @@ void ModelViewer::InitDatabase()
 
 	SetStatusText(wxT("Initializing items.csv Databases..."));
 	wxString filename = langName+SLASH+wxT("items.csv");
-	wxLogMessage(wxT("Trying to open %s file (for updating locale files)"),filename);
+	wxLogMessage(wxT("Trying to open %s file (for updating locale files)"),filename.c_str());
 	if (!wxFile::Exists(filename))
 		DownloadLocaleFiles();
 	if (!wxFile::Exists(filename))
