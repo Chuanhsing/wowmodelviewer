@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E2128B70-EB77-4D85-8041-CE9E2B7C5834}</ProjectGuid>
+    <Keyword>Qt4VSv1.0</Keyword>
+    <ProjectName>Application</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">WoWModelViewer$(PlatformArchitecture)</TargetName>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">WoWModelViewer$(PlatformArchitecture)</TargetName>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">WoWModelViewer$(PlatformArchitecture)</TargetName>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">WoWModelViewer$(PlatformArchitecture)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_LARGEFILE_SUPPORT;_DEBUG;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)_$(PlatformName);$(QTDIR)\include\qtmain;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <MinimalRebuild>
+      </MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(IntDir);..\Engine\$(IntDir);..\Interface_Viewer\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Engine.lib;Interface_Viewer.lib;qtmaind.lib;QtCored4.lib;QtGuid4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir ..\$(OutDir)
+copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)
+copy $(QTDIR)\bin\QtCored4.dll ..\$(OutDir)
+copy $(QTDIR)\bin\QtGuid4.dll ..\$(OutDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_LARGEFILE_SUPPORT;_DEBUG;_WIN64;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)_$(PlatformName);$(QTDIR)\include\qtmain;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <MinimalRebuild>
+      </MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(IntDir);..\Engine\$(IntDir);..\Interface_Viewer\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Engine.lib;Interface_Viewer.lib;qtmaind.lib;QtCored4.lib;QtGuid4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir ..\$(OutDir)
+copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)
+copy $(QTDIR)\bin\QtCored4.dll ..\$(OutDir)
+copy $(QTDIR)\bin\QtGuid4.dll ..\$(OutDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_LARGEFILE_SUPPORT;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)_$(PlatformName);$(QTDIR)\include\qtmain;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <MinimalRebuild>
+      </MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(IntDir);..\Engine\$(IntDir);..\Interface_Viewer\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalDependencies>Engine.lib;Interface_Viewer.lib;qtmain.lib;QtCore4.lib;QtGui4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir ..\$(OutDir)
+copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)
+copy $(QTDIR)\bin\QtCore4.dll ..\$(OutDir)
+copy $(QTDIR)\bin\QtGui4.dll ..\$(OutDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_LARGEFILE_SUPPORT;_WIN64;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)_$(PlatformName);$(QTDIR)\include\qtmain;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <MinimalRebuild>
+      </MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(IntDir);..\Engine\$(IntDir);..\Interface_Viewer\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalDependencies>Engine.lib;Interface_Viewer.lib;qtmain.lib;QtCore4.lib;QtGui4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir ..\$(OutDir)
+copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)
+copy $(QTDIR)\bin\QtCore4.dll ..\$(OutDir)
+copy $(QTDIR)\bin\QtGui4.dll ..\$(OutDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="GeneratedFiles\qrc_resources.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Logging.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Settings.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Logging.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Settings.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonWindows\CommonWindows.vcxproj">
+      <Project>{14711780-cff5-48a4-b2dd-7d344e8b3982}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine\Engine_VC100.vcxproj">
+      <Project>{49c39452-ef73-4a8b-a11b-7959310ca556}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Interface_Cinema\Interface_Cinema_VC100.vcxproj">
+      <Project>{be2e8a7f-8afd-4a57-a0c1-709532446b06}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Interface_Viewer\Interface_Viewer_VC100.vcxproj">
+      <Project>{21a0f0c8-f40f-3c05-a620-84e72de591df}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="resources.qrc">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(FullPath);..\Resources\FileIcons\wmv.ico;..\Resources\FileIcons\wmv.xpm;..\Resources\FileIcons\wmv.icns;..\Resources\FileIcons\chrFile.ico;..\Resources\FileIcons\chrFile.icns;..\Resources\Images\About_Icon.png;..\Resources\Splash\Splash_001.png;..\Resources\Images\Character_Load.png;..\Resources\Images\Character_Save.png;..\Resources\SoftwareLogos\gplv3.png;..\Resources\SoftwareLogos\qt.png;..\Resources\Images\WoWIcon1-Vanilla.png;..\Resources\Images\WoWIcon2-TBC.png;..\Resources\Images\WoWIcon3-WotLK.png;..\Resources\Images\WoWIcon4-Cataclysm.png;..\Resources\Images\WoWIcon5-MoP.png;..\Resources\Images\WoWIcon-Disabled.png;..\Resources\Images\WoWIcon-PTR.png;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Rcc%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\qrc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\rcc.exe" -name "%(Filename)" -no-compress "%(FullPath)" -o .\GeneratedFiles\qrc_%(Filename).cpp</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath);..\Resources\FileIcons\wmv.ico;..\Resources\FileIcons\wmv.xpm;..\Resources\FileIcons\wmv.icns;..\Resources\FileIcons\chrFile.ico;..\Resources\FileIcons\chrFile.icns;..\Resources\Images\About_Icon.png;..\Resources\Splash\Splash_001.png;..\Resources\Images\Character_Load.png;..\Resources\Images\Character_Save.png;..\Resources\SoftwareLogos\gplv3.png;..\Resources\SoftwareLogos\qt.png;..\Resources\Images\WoWIcon1-Vanilla.png;..\Resources\Images\WoWIcon2-TBC.png;..\Resources\Images\WoWIcon3-WotLK.png;..\Resources\Images\WoWIcon4-Cataclysm.png;..\Resources\Images\WoWIcon5-MoP.png;..\Resources\Images\WoWIcon-Disabled.png;..\Resources\Images\WoWIcon-PTR.png;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Rcc%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\qrc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\rcc.exe" -name "%(Filename)" -no-compress "%(FullPath)" -o .\GeneratedFiles\qrc_%(Filename).cpp</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(FullPath);..\Resources\FileIcons\wmv.ico;..\Resources\FileIcons\wmv.xpm;..\Resources\FileIcons\wmv.icns;..\Resources\FileIcons\chrFile.ico;..\Resources\FileIcons\chrFile.icns;..\Resources\Images\About_Icon.png;..\Resources\Splash\Splash_001.png;..\Resources\Images\Character_Load.png;..\Resources\Images\Character_Save.png;..\Resources\SoftwareLogos\gplv3.png;..\Resources\SoftwareLogos\qt.png;..\Resources\Images\WoWIcon1-Vanilla.png;..\Resources\Images\WoWIcon2-TBC.png;..\Resources\Images\WoWIcon3-WotLK.png;..\Resources\Images\WoWIcon4-Cataclysm.png;..\Resources\Images\WoWIcon5-MoP.png;..\Resources\Images\WoWIcon-Disabled.png;..\Resources\Images\WoWIcon-PTR.png;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Rcc%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\qrc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\rcc.exe" -name "%(Filename)" -no-compress "%(FullPath)" -o .\GeneratedFiles\qrc_%(Filename).cpp</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(FullPath);..\Resources\FileIcons\wmv.ico;..\Resources\FileIcons\wmv.xpm;..\Resources\FileIcons\wmv.icns;..\Resources\FileIcons\chrFile.ico;..\Resources\FileIcons\chrFile.icns;..\Resources\Images\About_Icon.png;..\Resources\Splash\Splash_001.png;..\Resources\Images\Character_Load.png;..\Resources\Images\Character_Save.png;..\Resources\SoftwareLogos\gplv3.png;..\Resources\SoftwareLogos\qt.png;..\Resources\Images\WoWIcon1-Vanilla.png;..\Resources\Images\WoWIcon2-TBC.png;..\Resources\Images\WoWIcon3-WotLK.png;..\Resources\Images\WoWIcon4-Cataclysm.png;..\Resources\Images\WoWIcon5-MoP.png;..\Resources\Images\WoWIcon-Disabled.png;..\Resources\Images\WoWIcon-PTR.png;%(AdditionalInputs)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Rcc%27ing %(Identity)...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\qrc_%(Filename).cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\rcc.exe" -name "%(Filename)" -no-compress "%(FullPath)" -o .\GeneratedFiles\qrc_%(Filename).cpp</Command>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties UicDir=".\GeneratedFiles" MocDir=".\GeneratedFiles\$(ConfigurationName)_$(PlatformName)" MocOptions="" RccDir=".\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" QtVersion_x0020_x64="4.7.3-msvc2010-64" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

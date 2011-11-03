@@ -1,0 +1,149 @@
+WoW Model Viewer v0.8.0.0
+
+r639
+-Added initial support & icons for Mists of Pandaria.
+-Added a Show/Hide menu to the Character menu.
+-Moved the Show/Hide options into the Show/Hide menu.
+-Added Medium quality ADT option to the Landscape menu.
+-Added Plugin Edition Source. This will eventually replace the current Source when more functionality is working.
+* Plugin Edition
+ !Known Bug: QsLog does not work across DLLs. Need help to fix this!
+ !Notice: Only the VC100 project files are available. CMake, QtPro and VC90 project files still need to be made.
+ -Many functions are now in specific DLL files.
+
+
+r634
+-Directories will now be properly sorted in the pull-down menu.
+-Added TOC support for 4.3
+*WoW Directory Manager
+ -You can now move directories up or down the list using the supplied buttons.
+ !Known Bug: After moving the current directory, you will need to re-set it as the current directory.
+ -Fixed a bug that would unselect the currently selected directory when updating the list.
+
+
+r631
+-Directories will now properly list in the menu.
+-You can now specify which WoW directory is your current directory. You can change this in the menu or in the WoW Directory Manager.
+-Fixed a bug that wouldn't update the menu if a WoW directory wasn't loaded.
+
+
+r629
+-WMV can now open the log.txt file on most operating systems!
+-Refined MPQ functions a bit.
+-Updated "How to Build v8" wiki page.
+-Fixed a bug where Settings and the WoW Directory List wouldn't save data between functions.
+-Fixed a bug where only the first WoWDir would be read.
+-Fixed a MinGW/Visual Studio conflict involving ssize_t.
+-Cleaned up some localization-related code.
+-Removed the temp directories from the UI.
+* WoW Directory Manager (WDM)
+ -WoW Directory List now shows the proper information!
+ -Added Delete All functionality
+ -Replaced Version modifier button in favor of a Set as Current Directory button.
+
+
+r628
+-MinGW (Windows) compatibility commit
+-Fixed an initialization (and crash) problem on startup
+
+
+r626
+-Added QsLog as Logging system.
+-Added a lot of Logging messages.
+-Finished & tested preliminary MPQ reading functionality. Extensive & unusual testing still needed.
+-Configured StormLib projects for VS2008 and VS2010.
+-Replaced _MAC_PPC and _MAC_INTEL configurations with _MAC32 and _MAC64 configurations.
+* WoW Directory Manager (WDM)
+ -Now properly reads patched TOC files for WoW Version.
+ -WDM now reads and saves added directories.
+ -The list now displays data, however the data does not yet display properly.
+ -WDM now remembers the last WoW directory you added, and will start there the next time you add a directory!
+
+
+r625
+-Updated PTR Icon, and included PSD.
+-Added WMV global.
+-Added updateStatusBar function to WMV window. Used with the global, any function can set statusBar text.
+-Moved Update functions to Help menu.
+-Lots of work migrating the MPQ functions. Can't test until we have working WoW directories.
+* WoW Directory Manager (WDM)
+ -Moved WDM to it's own files.
+ -Added most of the Add Directory functionality. Does everything but get the WoW Version and save the data.
+ -Added a pull down to quickly change an added directory's WoW version.
+
+
+r624
+-Added new forwards-compatibility goal to Dev v8 Goals.txt
+-Added WoW Directory Manager window. Functionality not yet implemented.
+-Moved UI files into new UI directory.
+-Added locale list.
+-Added WoW Version data.
+-Added MPQList_Get function that returns a list of MPQ files, based on the passed WoW Version.
+-About Window now dymanically updates the Content Copyright's year to the current year.
+-Changed the Content Copyright's start year from 2006 to 2004, which is when WoW was first released.
+-Changed a lot of the dynamic text on the About Window to better facilitate translation.
+-Rebuilt .pro/.pri files.
+
+
+r623
+-cmake/MinGW compatibility fixes.
+
+
+r621
+-Started MPQ support.
+-Added Settings for the main program and for the Exporters.
+-Changed the Math Vector typedefs to slightly shorter names. (Vec3f instead of Vector3f)
+-Fixed some WoWDir icon issues.
+
+
+r612
+-cmake/MinGW compatibility fixes.
+
+
+r611
+-Built and finished the About Window.
+-Added Icon for Load World of Warcraft. It changes, depending what version of WoW you're going to load.
+-Added interface for List of WoW Directories. Currently contains only test data.
+-Fixed Application Icon issue for Windows.
+-Removed the generated ui_[Filename].h from the sourcecode. It's auto-generated when the UIs are compiled.
+
+
+r609
+-Added Animation Controls layout.
+-Added preliminary Exporters dll project.
+-Added StormLib 8.0.1.
+-Added more Content-awareness to the main menu.
+-Certain menu options will now be disabled if WoW is not loaded.
+-Continued work on the Model headers.
+-The File List is now openable & closable from the View->Controls menu.
+-Rebuilt .pro/.pri files.
+
+
+r607
+-Added a crazy amount of Vector, Matrix and Quaternion math functions.
+-Added basic header files for M2s, WMOs & ADTs.
+
+
+r606
+-Added a list of goals for Developers to work on for the first v8 release.
+-Moved around a lot of files.
+-Renamed some source files for better clarity.
+-Added Menu preview buttons for Items and Sound files.
+-Started work on integrating a "Modes" functionality.
+-Added in-program icons for loading and saving Character files.
+
+
+r603
+-Added dockable FileList interface with test-data. Not yet functional.
+-Added Filelist Filter & Clear button. Filter NYF.
+-Added StatusBar.
+-Added VS2010 32/64-bit & VS2008 64-bit project files.
+-Added Wiki page, describing how to properly build Qt for VS2010 & VS2008 for both 32 & 64 bit versions.
+
+
+r600
+-Initial WMV 0.8.0.0 Branch Upload.
+-Switched to Qt 4.7.3, which replaces wxWidgets.
+-Qt Pro Project file included.
+-VS2008 Edition, 32bit Only, included. Requires Visual Studio Qt Addin to work. Qt must be independently built for VS2010 & for 64bit editions to be available.
+-Changed file layout.

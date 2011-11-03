@@ -1,0 +1,2214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Interface_Viewer</class>
+ <widget class="QMainWindow" name="Interface_Viewer">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>768</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string notr="true">WoW Model Viewer</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../Application/resources.qrc">
+    <normaloff>:/WMV_Win</normaloff>:/WMV_Win</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>182</width>
+      <height>203</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="0">
+      <widget class="QRadioButton" name="rBtn_IsChar">
+       <property name="text">
+        <string>File is Character</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QRadioButton" name="rBtn_IsNPC">
+       <property name="text">
+        <string>File is Creature/NPC</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QRadioButton" name="rBtn_IsWMO">
+       <property name="text">
+        <string>File is WMO/Set</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QRadioButton" name="rBtn_IsADT">
+       <property name="text">
+        <string>File is ADT/Landscape</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QRadioButton" name="rBtn_IsTexture">
+       <property name="text">
+        <string>File is an Image</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QRadioButton" name="rBtn_NoModel">
+       <property name="text">
+        <string>WoW Loaded, No File Selected</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QRadioButton" name="rBtn_IsSound">
+       <property name="text">
+        <string>File is an Audio/Sound file</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QRadioButton" name="rBtn_IsItem">
+       <property name="text">
+        <string>File is an Item</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1024</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <widget class="QMenu" name="menuExport_Models">
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>&amp;Export Models</string>
+     </property>
+     <addaction name="actionExporterSettings"/>
+     <addaction name="separator"/>
+     <addaction name="actionInitial_Pose_Only"/>
+     <addaction name="separator"/>
+     <addaction name="actionExport_3DSMAX"/>
+     <addaction name="actionExport_FBX"/>
+     <addaction name="actionExport_Collada"/>
+     <addaction name="actionExport_Lightwave"/>
+     <addaction name="actionExport_Milkshape"/>
+     <addaction name="actionExport_Ogre_XML"/>
+     <addaction name="actionExport_M3"/>
+     <addaction name="actionExport_OBJ"/>
+     <addaction name="actionExport_X3D"/>
+     <addaction name="actionExport_X3D_in_XHTML"/>
+    </widget>
+    <addaction name="actionLoad_World_of_Wacraft"/>
+    <addaction name="separator"/>
+    <addaction name="actionLoad_Character"/>
+    <addaction name="actionImportArmoryCharacter"/>
+    <addaction name="actionLoad_NPC"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_File"/>
+    <addaction name="actionSave_Screenshot"/>
+    <addaction name="actionSave_Image_Sequence"/>
+    <addaction name="separator"/>
+    <addaction name="menuExport_Models"/>
+    <addaction name="actionExport_Textures"/>
+    <addaction name="separator"/>
+    <addaction name="actionDiscover_Items"/>
+    <addaction name="actionDiscover_NPCs"/>
+    <addaction name="separator"/>
+    <addaction name="actionView_Log"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuCharacter">
+    <property name="title">
+     <string extracomment="Options for Charactrers &amp; M2 files">&amp;Character</string>
+    </property>
+    <widget class="QMenu" name="menuEye_Glow">
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>Eye Glow</string>
+     </property>
+     <addaction name="actionGlowDefault"/>
+     <addaction name="actionGlowDeathKnight"/>
+     <addaction name="actionGlowNone"/>
+    </widget>
+    <widget class="QMenu" name="menuShow_Hide">
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>Show/Hide</string>
+     </property>
+     <addaction name="actionShow_Helmet"/>
+     <addaction name="actionShow_Hair"/>
+     <addaction name="actionShow_Facial_Hair"/>
+     <addaction name="actionShow_Ears"/>
+     <addaction name="actionShow_Cape"/>
+     <addaction name="actionShow_Underwear"/>
+     <addaction name="actionShow_Feet"/>
+    </widget>
+    <addaction name="actionSave_Character"/>
+    <addaction name="actionSave_to_Model_Bank"/>
+    <addaction name="separator"/>
+    <addaction name="actionClear_Equiptment"/>
+    <addaction name="actionLoad_Equipment"/>
+    <addaction name="actionLoad_Equipment_Set"/>
+    <addaction name="actionLoad_Starting_Outfit"/>
+    <addaction name="actionLoad_NPC_Outfit"/>
+    <addaction name="actionSave_Equipment"/>
+    <addaction name="separator"/>
+    <addaction name="menuEye_Glow"/>
+    <addaction name="menuShow_Hide"/>
+    <addaction name="actionSheath_Weapons"/>
+    <addaction name="separator"/>
+    <addaction name="actionApply_Enchants"/>
+    <addaction name="separator"/>
+    <addaction name="actionLoad_a_Mount"/>
+   </widget>
+   <widget class="QMenu" name="menuLighting">
+    <property name="title">
+     <string>L&amp;ighting</string>
+    </property>
+    <widget class="QMenu" name="menuUse_Lights">
+     <property name="title">
+      <string>&amp;Use Lights</string>
+     </property>
+     <addaction name="actionLightType_Dynamic"/>
+     <addaction name="actionLightType_Ambient"/>
+     <addaction name="actionLightType_ModelOnly"/>
+    </widget>
+    <addaction name="actionAdjust_Lighting"/>
+    <addaction name="separator"/>
+    <addaction name="actionLoad_Lighting"/>
+    <addaction name="actionSave_Lighting"/>
+    <addaction name="separator"/>
+    <addaction name="actionRender_Light_Objects"/>
+    <addaction name="separator"/>
+    <addaction name="actionUse_True_Lighting"/>
+    <addaction name="menuUse_Lights"/>
+   </widget>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>Options</string>
+    </property>
+    <widget class="QMenu" name="menuChange_Modes">
+     <property name="title">
+      <string>Change &amp;Mode</string>
+     </property>
+     <addaction name="actionMode_Viewer"/>
+     <addaction name="actionMode_Cinema"/>
+    </widget>
+    <widget class="QMenu" name="menuChange_WoW_Directory">
+     <property name="title">
+      <string>Change &amp;WoW Directory</string>
+     </property>
+     <addaction name="actionManage_Directories"/>
+     <addaction name="separator"/>
+    </widget>
+    <addaction name="menuChange_Modes"/>
+    <addaction name="menuChange_WoW_Directory"/>
+    <addaction name="separator"/>
+    <addaction name="actionSettings"/>
+    <addaction name="separator"/>
+    <addaction name="actionExporter_Settings_2"/>
+    <addaction name="actionInitial_Pose_Only_2"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>&amp;About</string>
+    </property>
+    <addaction name="actionHelp"/>
+    <addaction name="separator"/>
+    <addaction name="actionUpdate_Databases"/>
+    <addaction name="actionUpdate_Program"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout_Plugins"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menuSets">
+    <property name="title">
+     <string>&amp;Set</string>
+    </property>
+    <widget class="QMenu" name="menuDoodad_Set">
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>Doodad Set</string>
+     </property>
+     <addaction name="action_List_of_Doodad_Sets"/>
+    </widget>
+    <addaction name="actionAlways_show_Default_Doodads"/>
+    <addaction name="separator"/>
+    <addaction name="actionShow_Doodads_2"/>
+    <addaction name="menuDoodad_Set"/>
+   </widget>
+   <widget class="QMenu" name="menuLandscape">
+    <property name="title">
+     <string>&amp;Landscape</string>
+    </property>
+    <widget class="QMenu" name="menuADT_Quality">
+     <property name="title">
+      <string>Landscape Quality</string>
+     </property>
+     <addaction name="actionADTQualityHigh"/>
+     <addaction name="actionADTQualityMedium"/>
+     <addaction name="actionADTQualityLow"/>
+    </widget>
+    <addaction name="menuADT_Quality"/>
+    <addaction name="separator"/>
+    <addaction name="actionShow_WMOs"/>
+    <addaction name="actionShow_Doodads"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_Masks"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <widget class="QMenu" name="menuShow_Controls">
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>&amp;Show Controls</string>
+     </property>
+     <addaction name="actionShowCtrl_FileList"/>
+     <addaction name="actionShowCtrl_Animation"/>
+     <addaction name="actionShowCtrl_Character"/>
+     <addaction name="actionShowCtrl_Lighting"/>
+     <addaction name="actionShowCtrl_Model"/>
+    </widget>
+    <widget class="QMenu" name="menuCamera">
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>&amp;Camera</string>
+     </property>
+     <addaction name="actionCam_Model"/>
+     <addaction name="actionCam_Additional"/>
+     <addaction name="separator"/>
+     <addaction name="actionCam_Perspective"/>
+     <addaction name="separator"/>
+     <addaction name="actionCam_Top"/>
+     <addaction name="actionCam_Left"/>
+     <addaction name="actionCam_Right"/>
+     <addaction name="actionCam_Back"/>
+    </widget>
+    <widget class="QMenu" name="menuSet_Canvas_Size">
+     <property name="statusTip">
+      <string>Change the size of the Canvas to fit your needs.</string>
+     </property>
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>Set Canvas Size</string>
+     </property>
+     <addaction name="actionCanvasSize11_0120x0120"/>
+     <addaction name="actionCanvasSize11_0256x0256"/>
+     <addaction name="actionCanvasSize11_0512x0512"/>
+     <addaction name="actionCanvasSize11_1024x1024"/>
+     <addaction name="separator"/>
+     <addaction name="actionCanvasSize43_0640x0480"/>
+     <addaction name="actionCanvasSize43_0800x0600"/>
+     <addaction name="actionCanvasSize43_1024x0768"/>
+     <addaction name="actionCanvasSize43_1280x1024"/>
+     <addaction name="actionCanvasSize43_1600x1200"/>
+     <addaction name="separator"/>
+     <addaction name="actionCanvasSize169_0864x0480"/>
+     <addaction name="actionCanvasSize169_1280x0720"/>
+     <addaction name="actionCanvasSize169_1920x1080"/>
+     <addaction name="separator"/>
+     <addaction name="actionCanvasSizeMisc_1280x0768"/>
+     <addaction name="actionCanvasSizeMisc_1920x1200"/>
+    </widget>
+    <addaction name="menuShow_Controls"/>
+    <addaction name="separator"/>
+    <addaction name="menuCamera"/>
+    <addaction name="separator"/>
+    <addaction name="actionModel_Bank"/>
+    <addaction name="separator"/>
+    <addaction name="actionBackground_Color"/>
+    <addaction name="actionBackground_Image"/>
+    <addaction name="actionLoadSkybox"/>
+    <addaction name="separator"/>
+    <addaction name="actionShow_Grid"/>
+    <addaction name="actionShow_Mask"/>
+    <addaction name="separator"/>
+    <addaction name="menuSet_Canvas_Size"/>
+   </widget>
+   <widget class="QMenu" name="menuNPC">
+    <property name="title">
+     <string>Creature/NPC</string>
+    </property>
+    <addaction name="actionLeft_Hand_Item"/>
+    <addaction name="actionRight_Hand_Item"/>
+    <addaction name="actionApply_Enchants_2"/>
+   </widget>
+   <widget class="QMenu" name="menuImage">
+    <property name="title">
+     <string>&amp;Image</string>
+    </property>
+    <addaction name="actionDisplayImageInfo"/>
+    <addaction name="separator"/>
+    <addaction name="actionImage_ShowAlpha"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuCharacter"/>
+   <addaction name="menuNPC"/>
+   <addaction name="menuSets"/>
+   <addaction name="menuLandscape"/>
+   <addaction name="menuImage"/>
+   <addaction name="menuLighting"/>
+   <addaction name="menuView"/>
+   <addaction name="menuOptions"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QDockWidget" name="ViewerFileListDockWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>201</width>
+     <height>201</height>
+    </size>
+   </property>
+   <property name="baseSize">
+    <size>
+     <width>201</width>
+     <height>727</height>
+    </size>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string comment="WoWFiles" extracomment="The docking window that holds all the files from WoW">WoW Files</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="FileListDockWidgetContents">
+    <widget class="QTreeWidget" name="ViewerWoWFileTree">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>50</y>
+       <width>201</width>
+       <height>521</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>1</horstretch>
+       <verstretch>2</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>101</width>
+       <height>101</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);
+alternate-background-color: rgb(229, 228, 242);</string>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::CurrentChanged</set>
+     </property>
+     <property name="showDropIndicator" stdset="0">
+      <bool>true</bool>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="rootIsDecorated">
+      <bool>true</bool>
+     </property>
+     <property name="itemsExpandable">
+      <bool>true</bool>
+     </property>
+     <property name="animated">
+      <bool>false</bool>
+     </property>
+     <property name="headerHidden">
+      <bool>true</bool>
+     </property>
+     <column>
+      <property name="text">
+       <string>WoW Files</string>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+        <strikeout>false</strikeout>
+        <kerning>true</kerning>
+       </font>
+      </property>
+     </column>
+     <item>
+      <property name="text">
+       <string>Character</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Nightelf</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Female</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>nightelffemale.m2</string>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>Male</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>nightelfmale.m2</string>
+         </property>
+        </item>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>Tauren</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Female</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>taurenfemale.m2</string>
+         </property>
+        </item>
+       </item>
+       <item>
+        <property name="text">
+         <string>Male</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>taurenmale.m2</string>
+         </property>
+        </item>
+       </item>
+      </item>
+     </item>
+     <item>
+      <property name="text">
+       <string>Creature</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Arthaslichking</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>arthaslichking.m2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>arthaslichking_unarmed.m2</string>
+        </property>
+       </item>
+      </item>
+     </item>
+     <item>
+      <property name="text">
+       <string>Items</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Sword</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>sword.m2</string>
+        </property>
+       </item>
+      </item>
+     </item>
+    </widget>
+    <widget class="QComboBox" name="ViewerFileTypeSelector">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>201</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>101</width>
+       <height>0</height>
+      </size>
+     </property>
+     <item>
+      <property name="text">
+       <string>Model (M2) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Set (WMO) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Landscape (ADT) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Image (BLP) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Sound (WAV, OGG, MP3) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Database (DBC &amp; DB2) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Interface (LUA, XML &amp; TOC) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Shader (BLS) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Levels-Of-Detail (SKIN) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Other Files</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLineEdit" name="ViewerFilterEditBox">
+     <property name="geometry">
+      <rect>
+       <x>27</x>
+       <y>25</y>
+       <width>131</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="baseSize">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::DefaultContextMenu</enum>
+     </property>
+     <property name="acceptDrops">
+      <bool>false</bool>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="inputMask">
+      <string/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="placeholderText">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Filterlabel">
+     <property name="geometry">
+      <rect>
+       <x>3</x>
+       <y>25</y>
+       <width>31</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>31</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Filter</string>
+     </property>
+     <property name="buddy">
+      <cstring>ViewerFilterEditBox</cstring>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="ViewerClearFilterButton">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>25</y>
+       <width>40</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="baseSize">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Clear</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="ViewerFileTypeSelector_2">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>575</y>
+       <width>201</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>101</width>
+       <height>0</height>
+      </size>
+     </property>
+     <item>
+      <property name="text">
+       <string>All MPQ Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>art.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>sound.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>world.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>expansion1.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>expansion2.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>expansion3.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>locale-enUS.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>more MPQ files...</string>
+      </property>
+     </item>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="ViewerAnimToolsdockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>201</width>
+     <height>101</height>
+    </size>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::AllDockWidgetAreas</set>
+   </property>
+   <property name="windowTitle">
+    <string extracomment="Viewer Animation Controls">Animation Controls</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <widget class="QComboBox" name="ViewerAnimCtrl_AnimList">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>20</y>
+       <width>196</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="minimumContentsLength">
+      <number>80</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>Stand 0</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Stand 1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Walk</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Sit</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Run</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Bark</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Wave</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="AnimListlabel">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>0</y>
+       <width>91</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Animation List</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="CurrentFramelabel">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>5</y>
+       <width>41</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Frame:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="ViewerAnimCtrl_CurrentFrame">
+     <property name="geometry">
+      <rect>
+       <x>255</x>
+       <y>5</y>
+       <width>61</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
+    <widget class="QSlider" name="CurrentFrameCtrl">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>25</y>
+       <width>196</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="invertedControls">
+      <bool>false</bool>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TicksAbove</enum>
+     </property>
+     <property name="tickInterval">
+      <number>10</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="AnimSpeedlabel">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>45</y>
+       <width>46</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Speed:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="AnimCurrentSpeed">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>45</y>
+       <width>51</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>1.0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="AnimButton_Play">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>45</y>
+       <width>61</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Play</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="AnimButton_Pause">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>45</y>
+       <width>61</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Pause</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="AnimButton_Stop">
+     <property name="geometry">
+      <rect>
+       <x>135</x>
+       <y>45</y>
+       <width>66</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Stop</string>
+     </property>
+    </widget>
+    <widget class="QSlider" name="CurrentSpeedCtrl">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>60</y>
+       <width>196</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="minimum">
+      <number>10</number>
+     </property>
+     <property name="maximum">
+      <number>400</number>
+     </property>
+     <property name="singleStep">
+      <number>10</number>
+     </property>
+     <property name="pageStep">
+      <number>25</number>
+     </property>
+     <property name="value">
+      <number>100</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="invertedControls">
+      <bool>false</bool>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TicksAbove</enum>
+     </property>
+     <property name="tickInterval">
+      <number>50</number>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <action name="actionLoad_World_of_Wacraft">
+   <property name="icon">
+    <iconset resource="../../Application/resources.qrc">
+     <normaloff>:/WoW Versions/WoWIcon1-Vanilla</normaloff>
+     <normalon>:/WoW Versions/WoWIcon1-Vanilla</normalon>
+     <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
+     <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon1-Vanilla</iconset>
+   </property>
+   <property name="text">
+    <string>Load &amp;World of Warcraft</string>
+   </property>
+   <property name="iconText">
+    <string>Load WoW</string>
+   </property>
+   <property name="toolTip">
+    <string>Load your World of Warcraft data from the selected directory.</string>
+   </property>
+  </action>
+  <action name="actionView_Log">
+   <property name="text">
+    <string>&amp;View Log...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionSave_File">
+   <property name="text">
+    <string>Save &amp;File...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_Screenshot">
+   <property name="text">
+    <string>Save &amp;Screenshot...</string>
+   </property>
+  </action>
+  <action name="actionSave_Image_Sequence">
+   <property name="text">
+    <string>Save &amp;Image Sequence...</string>
+   </property>
+  </action>
+  <action name="actionExport_Textures">
+   <property name="text">
+    <string>Export &amp;Textures...</string>
+   </property>
+  </action>
+  <action name="actionInitial_Pose_Only">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Initial Pose Only</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionExporterSettings">
+   <property name="text">
+    <string>Exporter Settings...</string>
+   </property>
+   <property name="toolTip">
+    <string>Exporter Settings</string>
+   </property>
+  </action>
+  <action name="actionExport_3DSMAX">
+   <property name="text">
+    <string>3D Studio MAX...</string>
+   </property>
+  </action>
+  <action name="actionExport_Collada">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Collada...</string>
+   </property>
+  </action>
+  <action name="actionExport_FBX">
+   <property name="text">
+    <string>Autodesk FBX...</string>
+   </property>
+  </action>
+  <action name="actionExport_Lightwave">
+   <property name="text">
+    <string>Lightwave 3D...</string>
+   </property>
+  </action>
+  <action name="actionExport_Milkshape">
+   <property name="text">
+    <string>Milkshape...</string>
+   </property>
+  </action>
+  <action name="actionExport_OBJ">
+   <property name="text">
+    <string>Wavefront OBJ...</string>
+   </property>
+  </action>
+  <action name="actionExport_M3">
+   <property name="text">
+    <string>Starcraft II M3...</string>
+   </property>
+  </action>
+  <action name="actionExport_Ogre_XML">
+   <property name="text">
+    <string>Ogre XML...</string>
+   </property>
+  </action>
+  <action name="actionExport_X3D">
+   <property name="text">
+    <string>X3D...</string>
+   </property>
+  </action>
+  <action name="actionExport_X3D_in_XHTML">
+   <property name="text">
+    <string>X3D in XHTML...</string>
+   </property>
+  </action>
+  <action name="actionDiscover_Items">
+   <property name="text">
+    <string>&amp;Discover Items</string>
+   </property>
+  </action>
+  <action name="actionDiscover_NPCs">
+   <property name="text">
+    <string>Discover N&amp;PCs</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>&amp;Help...</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>&amp;About...</string>
+   </property>
+   <property name="toolTip">
+    <string>About WoW Model Viewer</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="actionAlways_show_Default_Doodads">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Always show Default Doodads</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>&amp;Settings...</string>
+   </property>
+   <property name="toolTip">
+    <string>Program Settings</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
+  </action>
+  <action name="actionExporter_Settings_2">
+   <property name="text">
+    <string>&amp;Exporter Settings...</string>
+   </property>
+  </action>
+  <action name="actionInitial_Pose_Only_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Initial Pose Only</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionUpdate_Databases">
+   <property name="text">
+    <string>Update &amp;Databases...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="actionUpdate_Program">
+   <property name="text">
+    <string>Update &amp;Program...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionShow_WMOs">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Sets</string>
+   </property>
+  </action>
+  <action name="actionShow_Doodads">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Doodads</string>
+   </property>
+  </action>
+  <action name="actionADTQualityHigh">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>High</string>
+   </property>
+   <property name="toolTip">
+    <string>Quality High</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
+  </action>
+  <action name="actionADTQualityLow">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Low</string>
+   </property>
+   <property name="toolTip">
+    <string>Quality Low</string>
+   </property>
+  </action>
+  <action name="actionLoad_Character">
+   <property name="icon">
+    <iconset resource="../../Application/resources.qrc">
+     <normaloff>:/menuIcons/menuChrLoad</normaloff>:/menuIcons/menuChrLoad</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Load Character...</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="actionSave_Character">
+   <property name="icon">
+    <iconset resource="../../Application/resources.qrc">
+     <normaloff>:/menuIcons/menuChrSave</normaloff>:/menuIcons/menuChrSave</iconset>
+   </property>
+   <property name="text">
+    <string>Save Character...</string>
+   </property>
+   <property name="shortcut">
+    <string>F6</string>
+   </property>
+  </action>
+  <action name="actionImportArmoryCharacter">
+   <property name="text">
+    <string>Import &amp;Armory Character...</string>
+   </property>
+  </action>
+  <action name="actionLoad_Equipment">
+   <property name="text">
+    <string>Load Equipment...</string>
+   </property>
+   <property name="shortcut">
+    <string>F7</string>
+   </property>
+  </action>
+  <action name="actionSave_Equipment">
+   <property name="text">
+    <string>Save Equipment...</string>
+   </property>
+   <property name="shortcut">
+    <string>F8</string>
+   </property>
+  </action>
+  <action name="actionClear_Equiptment">
+   <property name="text">
+    <string>Clear Equipment</string>
+   </property>
+   <property name="shortcut">
+    <string>F9</string>
+   </property>
+  </action>
+  <action name="actionLoad_Equipment_Set">
+   <property name="text">
+    <string>Load Equipment Set...</string>
+   </property>
+  </action>
+  <action name="actionLoad_Starting_Outfit">
+   <property name="text">
+    <string>Load Starting Outfit...</string>
+   </property>
+  </action>
+  <action name="actionLoad_NPC_Outfit">
+   <property name="text">
+    <string>Load NPC Outfit...</string>
+   </property>
+  </action>
+  <action name="actionGlowNone">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>None</string>
+   </property>
+   <property name="toolTip">
+    <string>No Eyeglow</string>
+   </property>
+  </action>
+  <action name="actionGlowDefault">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Default</string>
+   </property>
+   <property name="toolTip">
+    <string>Default Eyeglow</string>
+   </property>
+  </action>
+  <action name="actionGlowDeathKnight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Death Knight</string>
+   </property>
+   <property name="toolTip">
+    <string>Death Knight Eyeglow</string>
+   </property>
+  </action>
+  <action name="actionShow_Underwear">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Underwear</string>
+   </property>
+  </action>
+  <action name="actionShow_Ears">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Ears</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionShow_Hair">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Hair</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
+   </property>
+  </action>
+  <action name="actionShow_Facial_Hair">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Facial Hair</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionShow_Feet">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Feet</string>
+   </property>
+  </action>
+  <action name="actionSheath_Weapons">
+   <property name="text">
+    <string>Sheath Weapons</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionLoad_a_Mount">
+   <property name="text">
+    <string>Load a Mount...</string>
+   </property>
+  </action>
+  <action name="actionLoad_NPC">
+   <property name="text">
+    <string>Load &amp;NPC...</string>
+   </property>
+  </action>
+  <action name="actionAdjust_Lighting">
+   <property name="text">
+    <string>&amp;Edit Lighting...</string>
+   </property>
+  </action>
+  <action name="actionShowCtrl_Animation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Animation</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Animation Controls</string>
+   </property>
+  </action>
+  <action name="actionShowCtrl_Character">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Character</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Character Controls</string>
+   </property>
+  </action>
+  <action name="actionShowCtrl_Lighting">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Lighting</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Lighting Controls</string>
+   </property>
+  </action>
+  <action name="actionShowCtrl_Model">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Model</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Model Controls</string>
+   </property>
+  </action>
+  <action name="actionModel_Bank">
+   <property name="text">
+    <string>Model &amp;Bank...</string>
+   </property>
+  </action>
+  <action name="actionSave_to_Model_Bank">
+   <property name="text">
+    <string>Save to Model Bank...</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
+   </property>
+  </action>
+  <action name="actionShowCtrl_FileList">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;File List</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the File List</string>
+   </property>
+  </action>
+  <action name="actionBackground_Color">
+   <property name="text">
+    <string>Background Color...</string>
+   </property>
+  </action>
+  <action name="actionBackground_Image">
+   <property name="text">
+    <string>Background Image...</string>
+   </property>
+  </action>
+  <action name="actionLoadSkybox">
+   <property name="text">
+    <string>Load Skybox...</string>
+   </property>
+  </action>
+  <action name="actionShow_Grid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Grid</string>
+   </property>
+  </action>
+  <action name="actionShow_Mask">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Mask</string>
+   </property>
+  </action>
+  <action name="actionCam_Perspective">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Perspective</string>
+   </property>
+  </action>
+  <action name="actionCam_Top">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Top</string>
+   </property>
+  </action>
+  <action name="actionCam_Left">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Left</string>
+   </property>
+  </action>
+  <action name="actionCam_Right">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Right</string>
+   </property>
+  </action>
+  <action name="actionCam_Back">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Back</string>
+   </property>
+  </action>
+  <action name="actionCam_Model">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Model Camera</string>
+   </property>
+  </action>
+  <action name="actionSave_Masks">
+   <property name="text">
+    <string>Save Masks...</string>
+   </property>
+  </action>
+  <action name="actionShow_Doodads_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Doodads</string>
+   </property>
+  </action>
+  <action name="actionLoad_Lighting">
+   <property name="text">
+    <string>&amp;Load Lighting...</string>
+   </property>
+  </action>
+  <action name="actionSave_Lighting">
+   <property name="text">
+    <string>&amp;Save Lighting...</string>
+   </property>
+  </action>
+  <action name="actionRender_Light_Objects">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Render Light Objects</string>
+   </property>
+  </action>
+  <action name="actionUse_True_Lighting">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use &amp;True Lighting</string>
+   </property>
+  </action>
+  <action name="actionLightType_Dynamic">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Dynamic Lights</string>
+   </property>
+  </action>
+  <action name="actionLightType_Ambient">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Ambient Light</string>
+   </property>
+  </action>
+  <action name="actionLightType_ModelOnly">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Model Lights Only</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize11_0120x0120">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>120x120</string>
+   </property>
+   <property name="toolTip">
+    <string>120x120, 1:1 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize11_0256x0256">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>256x256</string>
+   </property>
+   <property name="toolTip">
+    <string>256x256, 1:1 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize11_0512x0512">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>512x512</string>
+   </property>
+   <property name="toolTip">
+    <string>512x512, 1:1 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize11_1024x1024">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1024x1024</string>
+   </property>
+   <property name="toolTip">
+    <string>1024x1024, 1:1 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize43_0640x0480">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>640x480</string>
+   </property>
+   <property name="toolTip">
+    <string>640x480, 4:3 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize43_0800x0600">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>800x600</string>
+   </property>
+   <property name="toolTip">
+    <string>800x600, 4:3 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize43_1024x0768">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1024x768</string>
+   </property>
+   <property name="toolTip">
+    <string>1024x768, 4:3 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize43_1280x1024">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1280x1024</string>
+   </property>
+   <property name="toolTip">
+    <string>1280x1024, 4:3 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize43_1600x1200">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1600x1200</string>
+   </property>
+   <property name="toolTip">
+    <string>1600x1200, 4:3 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize169_0864x0480">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>864x480</string>
+   </property>
+   <property name="toolTip">
+    <string>864x480, 16:9 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize169_1280x0720">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1280x720</string>
+   </property>
+   <property name="toolTip">
+    <string>1280x720, 16:9 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSize169_1920x1080">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1920x1080</string>
+   </property>
+   <property name="toolTip">
+    <string>1920x1080, 16:9 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSizeMisc_1280x0768">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1280x768</string>
+   </property>
+   <property name="toolTip">
+    <string>1280x768, 5:3 Ratio</string>
+   </property>
+  </action>
+  <action name="actionCanvasSizeMisc_1920x1200">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1920x1200</string>
+   </property>
+   <property name="toolTip">
+    <string>1920x1200, 8:5 Ratio</string>
+   </property>
+  </action>
+  <action name="actionApply_Enchants">
+   <property name="text">
+    <string>Apply Enchants...</string>
+   </property>
+  </action>
+  <action name="actionLeft_Hand_Item">
+   <property name="text">
+    <string>Left Hand Item...</string>
+   </property>
+  </action>
+  <action name="actionRight_Hand_Item">
+   <property name="text">
+    <string>Right Hand Item...</string>
+   </property>
+  </action>
+  <action name="actionApply_Enchants_2">
+   <property name="text">
+    <string>Apply Enchants...</string>
+   </property>
+  </action>
+  <action name="action_List_of_Doodad_Sets">
+   <property name="text">
+    <string>(List of Doodad Sets)</string>
+   </property>
+  </action>
+  <action name="actionCam_Additional">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>(Additional Cameras)</string>
+   </property>
+  </action>
+  <action name="actionImage_ShowAlpha">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show &amp;Alpha</string>
+   </property>
+  </action>
+  <action name="actionDisplayImageInfo">
+   <property name="text">
+    <string>&amp;Display Info</string>
+   </property>
+  </action>
+  <action name="actionMode_Viewer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Viewer Mode</string>
+   </property>
+   <property name="toolTip">
+    <string>Switch to the classic Viewer Mode</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+V</string>
+   </property>
+  </action>
+  <action name="actionMode_Cinema">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Cinema Mode</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+C</string>
+   </property>
+  </action>
+  <action name="actionWoWDir_Vanilla">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Application/resources.qrc">
+     <normaloff>:/WoW Versions/WoWIcon1-Vanilla</normaloff>
+     <normalon>:/WoW Versions/WoWIcon1-Vanilla</normalon>
+     <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
+     <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon1-Vanilla</iconset>
+   </property>
+   <property name="text">
+    <string>Vanilla Directory</string>
+   </property>
+  </action>
+  <action name="actionWoWDir_BC">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Application/resources.qrc">
+     <normaloff>:/WoW Versions/WoWIcon2-TBC</normaloff>
+     <normalon>:/WoW Versions/WoWIcon2-TBC</normalon>
+     <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
+     <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon2-TBC</iconset>
+   </property>
+   <property name="text">
+    <string>Burning Crusade Dir</string>
+   </property>
+  </action>
+  <action name="actionWoWDir_WotLK">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Application/resources.qrc">
+     <normaloff>:/WoW Versions/WoWIcon3-WotLK</normaloff>
+     <normalon>:/WoW Versions/WoWIcon3-WotLK</normalon>
+     <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
+     <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon3-WotLK</iconset>
+   </property>
+   <property name="text">
+    <string>WotLK Dir</string>
+   </property>
+  </action>
+  <action name="actionWoWDir_Cataclysm">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Application/resources.qrc">
+     <normaloff>:/WoW Versions/WoWIcon4-Cataclysm</normaloff>
+     <normalon>:/WoW Versions/WoWIcon4-Cataclysm</normalon>
+     <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
+     <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon4-Cataclysm</iconset>
+   </property>
+   <property name="text">
+    <string>Cataclysm Dir</string>
+   </property>
+  </action>
+  <action name="actionOther_installs">
+   <property name="text">
+    <string>etc...</string>
+   </property>
+  </action>
+  <action name="actionWoWDir_PTR">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../Application/resources.qrc">
+     <normaloff>:/WoW Versions/WoWIcon-PTR</normaloff>
+     <normalon>:/WoW Versions/WoWIcon-PTR</normalon>
+     <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
+     <disabledon>:/WoW Versions/WoWIcon-Disabled</disabledon>:/WoW Versions/WoWIcon-PTR</iconset>
+   </property>
+   <property name="text">
+    <string>PTR Dir</string>
+   </property>
+  </action>
+  <action name="actionPath_To_WoW_Dirs">
+   <property name="text">
+    <string>Path\To\WoW\Dirs</string>
+   </property>
+  </action>
+  <action name="actionManage_Directories">
+   <property name="text">
+    <string>Manage Directories</string>
+   </property>
+  </action>
+  <action name="actionShow_Helmet">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Helmet</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionShow_Cape">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Cape</string>
+   </property>
+  </action>
+  <action name="actionADTQualityMedium">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Medium</string>
+   </property>
+   <property name="toolTip">
+    <string>Quality Medium</string>
+   </property>
+  </action>
+  <action name="actionAbout_Plugins">
+   <property name="text">
+    <string>About Plugins...</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>ViewerFileTypeSelector</tabstop>
+  <tabstop>ViewerFilterEditBox</tabstop>
+  <tabstop>ViewerClearFilterButton</tabstop>
+  <tabstop>ViewerWoWFileTree</tabstop>
+  <tabstop>rBtn_NoModel</tabstop>
+  <tabstop>rBtn_IsChar</tabstop>
+  <tabstop>rBtn_IsNPC</tabstop>
+  <tabstop>rBtn_IsWMO</tabstop>
+  <tabstop>rBtn_IsADT</tabstop>
+  <tabstop>rBtn_IsTexture</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../Application/resources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>ViewerClearFilterButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ViewerFilterEditBox</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>164</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>105</x>
+     <y>82</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

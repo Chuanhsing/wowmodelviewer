@@ -1,0 +1,42 @@
+===============================================================
+  Goals for WoW Model Viewer V0.8.0.0 (Or, WMV v8 for short.)
+===============================================================
+
+These are goals we need to aim at for the first v8 release. Primary goals are things we need to consider while we're rebuilding the core system. This is the stuff we should be focusing on. Secondary goals are less important, but are still needed for our first release. Future goals are things to add or fix at some point in the current, or a future development cycle, but aren't necessary for the first release of v8. Feel free to add your own ideas to this list.
+
+===============================
+PRIMARY GOALS:
+===============================
+- Rewrite WMV from the ground up, using the Qt Framework.
+- Redesign the internal structure to allow for plugins to be used for displaying the models, exporting the models to other 3D formats, and recording animations to video files.
+- Make WMV completely backwards-compatible. IE: Able to load data from any WoW version.
+- Make WMV as forwards-compatible as we can, so the program doesn't need to be updated every patch.
+- Add Multiple "Modes" that WMV can operate in. Defaults to the classic "Viewer" mode.
+- Add a Cinema Mode that changes WMV into more of a Machinima tool, and changes the main Viewer into a Camera with controls.
+- Redesign internal classes to help with forwards/backwards Compatibility issues, Displaying, and Exporting the models.
+- Allow for the display of multiple M2 models at once, including placement controls, and animation instance controllers.
+- Redesign the UI for better space usage, better controls, and better displaying of visual data.
+- Fix many of the long-standing display issues. (Alpha-Channel issues, Lack of Reflections/Specularity, etc.)
+- Fix many of the Cross-Platform issues.
+- Add full ADT support, including the optional displaying of WMOs and M2s listed in that ADT.
+- Change our item lists to use the DBC files, instead of CSV files. Or, alternately, WMV builds the CSV files automatically. CSV files will still be used for custom user-items.
+
+
+===============================
+SECONDARY GOALS:
+===============================
+- Functionality when browsing items, to add them to the equipable items list.
+- Add a "Scripter" to the Cinema Mode. Lets the user play a list of animations with custom animation settings.
+- Allow Scripter to load and play an audio file to script animation to.
+- Allow Scripter to animate a Model's position and rotation.
+- Allow Scripter to animate the Camera's/Viewer's position and rotation.
+- Add a list of stored WoW directories, for quick and easy switching. (No need to load up a different version of WoW and re-read the registery!)
+
+
+===============================
+FUTURE GOALS:
+===============================
+- Update all the exporters to take full advantage of that format's capabilities.
+- Add Collada Exporter.
+- Cross-Platform Video Export, including Alpha-Channel support.
+- Unify many of the reduntant, and commonly used functions.

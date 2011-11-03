@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AboutWindow</class>
+ <widget class="QDialog" name="AboutWindow">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>515</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>515</width>
+    <height>400</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>515</width>
+    <height>400</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string comment="About_Title">About WoW Model Viewer</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../Application/resources.qrc">
+    <normaloff>:/WMV_Win</normaloff>:/WMV_Win</iconset>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>false</bool>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <widget class="QPushButton" name="CloseButton">
+   <property name="geometry">
+    <rect>
+     <x>435</x>
+     <y>370</y>
+     <width>75</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::DefaultContextMenu</enum>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QWidget" name="WMVIcon" native="true">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>0</y>
+     <width>128</width>
+     <height>128</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>128</width>
+     <height>128</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">image: url(:/AboutIcon);
+border-color: rgb(0, 0, 0);</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="DevGroupbox">
+   <property name="geometry">
+    <rect>
+     <x>5</x>
+     <y>240</y>
+     <width>251</width>
+     <height>76</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string comment="About_Devs">Developers</string>
+   </property>
+   <widget class="QLabel" name="Developers">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>15</y>
+      <width>236</width>
+      <height>46</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string notr="true">Kjasi, Jeromnimo</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::NoTextInteraction</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="OldDevGroupBox">
+   <property name="geometry">
+    <rect>
+     <x>255</x>
+     <y>240</y>
+     <width>256</width>
+     <height>76</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string comment="About_OriginalDevs">Original Developers</string>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <widget class="QLabel" name="OldDevelopers">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>15</y>
+      <width>246</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string notr="true" comment="Original Dev Names"> Ufo_Z, Darjk, Chuanhsing, Kjasi, Tob.Franke</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::NoTextInteraction</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="OldDevelopers_2">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>40</y>
+      <width>246</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string comment="Special Thanks To...">With Special Thanks to:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::NoTextInteraction</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="OldDevelopers_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>55</y>
+      <width>246</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string notr="true" comment="Special Thanks Names">Linghuye, nSzAbolcs, Sailesh, Terran &amp; Cryect</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::NoTextInteraction</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="WMVName">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>5</y>
+     <width>365</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string notr="true" extracomment="= PROGRAMNAME">World of Warcraft Model Viewer</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::NoTextInteraction</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="VersionNumber">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>25</y>
+     <width>365</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string notr="true" extracomment="Version &amp; Release numbers. These are set directly, and will not be translated.">%1 %2</string>
+   </property>
+   <property name="scaledContents">
+    <bool>false</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::NoTextInteraction</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Edition">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>40</y>
+     <width>365</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>true</italic>
+     <bold>false</bold>
+     <underline>false</underline>
+     <kerning>true</kerning>
+    </font>
+   </property>
+   <property name="text">
+    <string comment="About_Edition" extracomment="%1 = SYSTEMVERSION %2 = DEBUGVERSION">%1%2 Edition</string>
+   </property>
+   <property name="scaledContents">
+    <bool>false</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::NoTextInteraction</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Websites">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>65</y>
+     <width>371</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>140</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+     <kerning>true</kerning>
+    </font>
+   </property>
+   <property name="text">
+    <string comment="About_Links" extracomment="Links">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Homepage: &lt;/span&gt;&lt;a href=&quot;http://wowmodelviewer.googlecode.com/&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://wowmodelviewer.googlecode.com/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Support: &lt;/span&gt;&lt;a href=&quot;http://www.wowmodelviewer.org/forum/index.php&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.wowmodelviewer.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="scaledContents">
+    <bool>false</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="openExternalLinks">
+    <bool>true</bool>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="WoWOwnedbyBlizz">
+   <property name="geometry">
+    <rect>
+     <x>85</x>
+     <y>350</y>
+     <width>376</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string comment="About_RegisteredTrademark">World of Warcraft® is a Registered trademark of Blizzard Entertainment®.</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QWidget" name="QTIcon" native="true">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>330</y>
+     <width>64</width>
+     <height>64</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>64</width>
+     <height>64</height>
+    </size>
+   </property>
+   <property name="toolTip">
+    <string>Qt Framework</string>
+   </property>
+   <property name="statusTip">
+    <string>Qt Framework</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">image: url(:/Support Software/QtLogo);</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="GPLIcon" native="true">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>135</y>
+     <width>127</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>127</width>
+     <height>51</height>
+    </size>
+   </property>
+   <property name="toolTip">
+    <string comment="About_GPLv3Logo_Tooltip">GNU General Public License v3</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">image: url(:/Support Software/GNU_GLPv3);</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="GPLText">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>190</y>
+     <width>236</width>
+     <height>42</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string comment="About_GPLNotice">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;WoW Model Viewer is released under the &lt;/span&gt;&lt;a href=&quot;http://www.gnu.org/licenses/gpl-3.0.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; for Non-Commerical use only.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="PoweredBy">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>320</y>
+     <width>64</width>
+     <height>10</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string comment="About_PoweredBy">Powered by</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="WMVDescription">
+   <property name="geometry">
+    <rect>
+     <x>145</x>
+     <y>110</y>
+     <width>366</width>
+     <height>46</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string comment="About_UsageStatement">WoW Model Viewer is a 3D model viewer for World of Warcraft. It uses the data files included with the game to display the 3D models from the game: creatures, characters, spell effects, objects and so forth.</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="ContentCopyright">
+   <property name="geometry">
+    <rect>
+     <x>85</x>
+     <y>365</y>
+     <width>346</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string comment="About_ContentCopyright" extracomment="%1 is the current year, and is set by the program">All game assets and content are ©2004-%1 Blizzard Entertainment®. All rights reserved.</string>
+   </property>
+   <property name="scaledContents">
+    <bool>false</bool>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../../Application/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
