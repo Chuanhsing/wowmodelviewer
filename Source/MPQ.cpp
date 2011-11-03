@@ -614,9 +614,9 @@ QList<QString> MPQList_Get(st_WoWDir &WoWDir){
 		for (size_t i=0;i<dir_u.count();i++){
 			MPQList.push_back(scldir+dir_u.entryList().value((int)i));
 		}
-	}else if (WoWDir.Version == WOW_BETA){
-		QLOG_INFO() << "Adding Beta MPQs to the List...";
-		// No clue about the current beta, so this is empty for now.
+	}else if ((WoWDir.Version == WOW_BETA) || (WoWDir.Version == WOW_MOP)){
+		QLOG_INFO() << "Adding Beta/Mists of Pandaria MPQs to the List...";
+		// No clue about the current beta/Mists of Pandaria, so this is empty for now.
 	}
 	QLOG_TRACE() << "Final MPQ List:";
 	for (size_t i=0;i<MPQList.count();i++){

@@ -1,5 +1,26 @@
 WoW Model Viewer v0.8.0.0
 
+r639
+-Added initial support & icons for Mists of Pandaria.
+-Added a Show/Hide menu to the Character menu.
+-Moved the Show/Hide options into the Show/Hide menu.
+-Added Medium quality ADT option to the Landscape menu.
+-Added Plugin Edition Source. This will eventually replace the current Source when more functionality is working.
+* Plugin Edition
+ !Known Bug: QsLog does not work across DLLs. Need help to fix this!
+ !Notice: Only the VC100 project files are available. CMake, QtPro and VC90 project files still need to be made.
+ -Many functions are now in specific DLL files.
+
+
+r634
+-Directories will now be properly sorted in the pull-down menu.
+-Added TOC support for 4.3
+*WoW Directory Manager
+ -You can now move directories up or down the list using the supplied buttons.
+ !Known Bug: After moving the current directory, you will need to re-set it as the current directory.
+ -Fixed a bug that would unselect the currently selected directory when updating the list.
+
+
 r631
 -Directories will now properly list in the menu.
 -You can now specify which WoW directory is your current directory. You can change this in the menu or in the WoW Directory Manager.
@@ -23,7 +44,7 @@ r629
 
 r628
 -MinGW (Windows) compatibility commit
--Fixed an initialisation (and crash) problem on startup
+-Fixed an initialization (and crash) problem on startup
 
 
 r626

@@ -71,8 +71,12 @@ enum WoWVersion
 	WOW_CATACLYSM_403 = 40300,		// Cataclysm 4.3.x (Current Version)
 	WOW_CATACLYSM = 49999,			// Max Cataclysm. Used this way until Cata has ended.
 
+	// Mists of Pandaria
+	WOW_MOP_FIRST = 50000,			// First Mists of Pandaria (5.0.x)
+	WOW_MOP = 59990,				// Max Mists of Pandaria
+
 	// Others
-	WOW_BETA = 59999,				// Next Expansion Beta ID
+	WOW_BETA = 59999,				// Beta for Mists of Pandaria
 	WOW_PTR = 100000,				// Public Test Realm
 	WOW_NOTLOADED = 999999			// Unloaded WoW
 };
@@ -105,6 +109,7 @@ enum ExpansionName
 	EXPANSIONNAME_BURNINGCRUSADE,
 	EXPANSIONNAME_WOTLK,
 	EXPANSIONNAME_CATACLYSM,
+	EXPANSIONNAME_MOP,
 
 	EXPANSIONNAME_PTR,
 	EXPANSIONNAME_BETA

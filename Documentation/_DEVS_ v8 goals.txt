@@ -8,6 +8,7 @@ These are goals we need to aim at for the first v8 release. Primary goals are th
 PRIMARY GOALS:
 ===============================
 - Rewrite WMV from the ground up, using the Qt Framework.
+- Redesign the internal structure to allow for plugins to be used for displaying the models, exporting the models to other 3D formats, and recording animations to video files.
 - Make WMV completely backwards-compatible. IE: Able to load data from any WoW version.
 - Make WMV as forwards-compatible as we can, so the program doesn't need to be updated every patch.
 - Add Multiple "Modes" that WMV can operate in. Defaults to the classic "Viewer" mode.

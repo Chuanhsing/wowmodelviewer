@@ -27,6 +27,7 @@ public:
 	QIcon iconTBC;
 	QIcon iconWotLK;
 	QIcon iconCata;
+	QIcon iconMoP;
 	QIcon iconPTR;
 
 	QString selected;		// The Selected WoWDir's name

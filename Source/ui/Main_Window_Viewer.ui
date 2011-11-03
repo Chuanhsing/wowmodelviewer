@@ -14,7 +14,7 @@
    <string notr="true">WoW Model Viewer</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset>
     <normaloff>:/WMV_Win</normaloff>:/WMV_Win</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -160,6 +160,21 @@
      <addaction name="actionGlowDeathKnight"/>
      <addaction name="actionGlowNone"/>
     </widget>
+    <widget class="QMenu" name="menuShow_Hide">
+     <property name="tearOffEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>Show/Hide</string>
+     </property>
+     <addaction name="actionShow_Helmet"/>
+     <addaction name="actionShow_Hair"/>
+     <addaction name="actionShow_Facial_Hair"/>
+     <addaction name="actionShow_Ears"/>
+     <addaction name="actionShow_Cape"/>
+     <addaction name="actionShow_Underwear"/>
+     <addaction name="actionShow_Feet"/>
+    </widget>
     <addaction name="actionSave_Character"/>
     <addaction name="actionSave_to_Model_Bank"/>
     <addaction name="separator"/>
@@ -171,11 +186,7 @@
     <addaction name="actionSave_Equipment"/>
     <addaction name="separator"/>
     <addaction name="menuEye_Glow"/>
-    <addaction name="actionShow_Underwear"/>
-    <addaction name="actionShow_Ears"/>
-    <addaction name="actionShow_Hair"/>
-    <addaction name="actionShow_Facial_Hair"/>
-    <addaction name="actionShow_Feet"/>
+    <addaction name="menuShow_Hide"/>
     <addaction name="actionSheath_Weapons"/>
     <addaction name="separator"/>
     <addaction name="actionApply_Enchants"/>
@@ -268,6 +279,7 @@
       <string>Landscape Quality</string>
      </property>
      <addaction name="actionADTQualityHigh"/>
+     <addaction name="actionADTQualityMedium"/>
      <addaction name="actionADTQualityLow"/>
     </widget>
     <addaction name="menuADT_Quality"/>
@@ -428,9 +440,9 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>48</y>
+       <y>50</y>
        <width>201</width>
-       <height>551</height>
+       <height>521</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -629,6 +641,26 @@ alternate-background-color: rgb(229, 228, 242);</string>
        <string>Sound (WAV, OGG, MP3) Files</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Database (DBC &amp; DB2) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Interface (LUA, XML &amp; TOC) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Shader (BLS) Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Levels-Of-Detail (SKIN) Files</string>
+      </property>
+     </item>
     </widget>
     <widget class="QLineEdit" name="ViewerFilterEditBox">
      <property name="geometry">
@@ -686,7 +718,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
      <property name="geometry">
       <rect>
        <x>3</x>
-       <y>26</y>
+       <y>25</y>
        <width>31</width>
        <height>16</height>
       </rect>
@@ -746,6 +778,73 @@ alternate-background-color: rgb(229, 228, 242);</string>
      <property name="text">
       <string>Clear</string>
      </property>
+    </widget>
+    <widget class="QComboBox" name="ViewerFileTypeSelector_2">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>575</y>
+       <width>201</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>101</width>
+       <height>0</height>
+      </size>
+     </property>
+     <item>
+      <property name="text">
+       <string>All MPQ Files</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>art.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>sound.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>world.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>expansion1.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>expansion2.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>expansion3.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>locale-enUS.MPQ</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>more MPQ files...</string>
+      </property>
+     </item>
     </widget>
    </widget>
   </widget>
@@ -1029,7 +1128,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
   </widget>
   <action name="actionLoad_World_of_Wacraft">
    <property name="icon">
-    <iconset resource="../resources.qrc">
+    <iconset>
      <normaloff>:/WoW Versions/WoWIcon1-Vanilla</normaloff>
      <normalon>:/WoW Versions/WoWIcon1-Vanilla</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -1297,7 +1396,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
   </action>
   <action name="actionLoad_Character">
    <property name="icon">
-    <iconset resource="../resources.qrc">
+    <iconset>
      <normaloff>:/menuIcons/menuChrLoad</normaloff>:/menuIcons/menuChrLoad</iconset>
    </property>
    <property name="text">
@@ -1309,7 +1408,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
   </action>
   <action name="actionSave_Character">
    <property name="icon">
-    <iconset resource="../resources.qrc">
+    <iconset>
      <normaloff>:/menuIcons/menuChrSave</normaloff>:/menuIcons/menuChrSave</iconset>
    </property>
    <property name="text">
@@ -1944,7 +2043,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources.qrc">
+    <iconset>
      <normaloff>:/WoW Versions/WoWIcon1-Vanilla</normaloff>
      <normalon>:/WoW Versions/WoWIcon1-Vanilla</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -1959,7 +2058,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources.qrc">
+    <iconset>
      <normaloff>:/WoW Versions/WoWIcon2-TBC</normaloff>
      <normalon>:/WoW Versions/WoWIcon2-TBC</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -1974,7 +2073,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources.qrc">
+    <iconset>
      <normaloff>:/WoW Versions/WoWIcon3-WotLK</normaloff>
      <normalon>:/WoW Versions/WoWIcon3-WotLK</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -1989,7 +2088,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources.qrc">
+    <iconset>
      <normaloff>:/WoW Versions/WoWIcon4-Cataclysm</normaloff>
      <normalon>:/WoW Versions/WoWIcon4-Cataclysm</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -2009,7 +2108,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources.qrc">
+    <iconset>
      <normaloff>:/WoW Versions/WoWIcon-PTR</normaloff>
      <normalon>:/WoW Versions/WoWIcon-PTR</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -2027,6 +2126,42 @@ alternate-background-color: rgb(229, 228, 242);</string>
   <action name="actionManage_Directories">
    <property name="text">
     <string>Manage Directories</string>
+   </property>
+  </action>
+  <action name="actionShow_Helmet">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Helmet</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionShow_Cape">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Cape</string>
+   </property>
+  </action>
+  <action name="actionADTQualityMedium">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Medium</string>
+   </property>
+   <property name="toolTip">
+    <string>Quality Medium</string>
    </property>
   </action>
  </widget>

@@ -36,6 +36,8 @@ static QList<QString> ExpansionNameList = QList<QString>()
 	<< QObject::tr("Burning Crusade")
 	<< QObject::tr("Wrath of the Lich King")
 	<< QObject::tr("Cataclysm")
+	<< QObject::tr("Mists of Pandaria")
+	
 	<< QObject::tr("Public Test Realm")
 	<< QObject::tr("Beta Server");
 

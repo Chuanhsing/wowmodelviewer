@@ -29,6 +29,8 @@ WoWDirManager::WoWDirManager(QWidget *parent) : QDialog(parent), ui_WoWDirManage
 	iconWotLK.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon3-WotLK"), QSize(), QIcon::Normal, QIcon::On);
     iconCata.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon4-Cataclysm"), QSize(), QIcon::Normal, QIcon::Off);
 	iconCata.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon4-Cataclysm"), QSize(), QIcon::Normal, QIcon::On);
+    iconMoP.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon5-MoP"), QSize(), QIcon::Normal, QIcon::Off);
+	iconMoP.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon5-MoP"), QSize(), QIcon::Normal, QIcon::On);
     iconPTR.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-PTR"), QSize(), QIcon::Normal, QIcon::Off);
 	iconPTR.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-PTR"), QSize(), QIcon::Normal, QIcon::On);
 
@@ -378,6 +380,9 @@ void WoWDirManager::UpdateList()
 			newItem->setIcon(iconCata);
 		}else if ((a.Version <= WOW_BETA) || (a.Version == WOW_PTR)){
 			newItem->setIcon(iconPTR);
+		// Unreleased Expanions come AFTER the Beta and PTR.
+		}else if (a.Version <= WOW_MOP){
+			newItem->setIcon(iconMoP);
 		}
 		newItem->setData(Qt::UserRole,WoWDirGroupName(a));
 		QString ver = QString::number(a.Version);
@@ -615,15 +620,17 @@ st_WoWDir ScanWoWDir(QDir dir, int locale, int position = 0){
 		wdir.Name = QObject::tr("Burning Crusade Directory","Burning Crusade Folder Default Name");
 	}else if (inum <= WOW_WOTLK ){
 		QLOG_INFO() << "TOC indicates that this is a Wrath of the Lich King WoW. Setting Directory name...";
-		wdir.Name = QObject::tr("WotLK Directory","WotLK Folder Default Name");
+		wdir.Name = QObject::tr("Wrath of the Lich King Directory","WotLK Folder Default Name");
 	}else if (inum <= WOW_CATACLYSM ){
 		QLOG_INFO() << "TOC indicates that this is a Cataclysm WoW. Setting Directory name...";
 		wdir.Name = QObject::tr("Cataclysm Directory","Burning Crusade Folder Default Name");
 	}else if (inum <= WOW_BETA ){
 		QLOG_INFO() << "TOC indicates that this is a Beta WoW. Setting Directory name...";
 		wdir.Name = QObject::tr("Beta Directory","Beta Folder Default Name");
+	}else if (inum <= WOW_MOP ){
+		QLOG_INFO() << "TOC indicates that this is a Mists of Pandaria WoW. Setting Directory name...";
+		wdir.Name = QObject::tr("Mists of Pandaria Directory","Mists of Pandaria Folder Default Name");
 	}
-
 	MPQList_Get(wdir);
 
 	g_WMV->updateStatusBar(QObject::tr("Scanning Complete. TOC Version Found: %1").arg(inum));

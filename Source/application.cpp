@@ -92,6 +92,7 @@ WoWModelViewer::WoWModelViewer(QWidget *parent) : QMainWindow(parent), ui(new Ui
     // ADT Quality
     LandscapeQualityGroup = new QActionGroup(this);
     LandscapeQualityGroup->addAction(ui->actionADTQualityHigh);
+	LandscapeQualityGroup->addAction(ui->actionADTQualityMedium);
     LandscapeQualityGroup->addAction(ui->actionADTQualityLow);
     ui->actionADTQualityHigh->setChecked(true);
 
