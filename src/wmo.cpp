@@ -765,7 +765,7 @@ void WMOGroup::initDisplayList()
 
 			// materials per triangle
 			nTriangles = (uint32)(size / 2);
-			materials = new uint16[nTriangles];
+			materials = new uint16[(uint32)nTriangles];
 			memcpy(materials, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOVI")) {
@@ -773,7 +773,7 @@ void WMOGroup::initDisplayList()
 			Vertex indices for triangles. Three 16-bit integers per triangle, that are indices into the vertex list. The numbers specify the 3 vertices for each triangle, their order makes it possible to do backface culling.
 			*/
 			nIndices = (uint32)(size / 2);
-			indices = new uint16[(nIndices & 0x0000FFFF)];
+			indices = new uint16[(uint32)nIndices];
 			memcpy(indices, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOVT")) {
@@ -782,7 +782,7 @@ void WMOGroup::initDisplayList()
 			*/
 			nVertices = (uint32)(size / 12);
 			// let's hope it's padded to 12 bytes, not 16...
-			vertices = new Vec3D[nVertices];
+			vertices = new Vec3D[(uint32)nVertices];
 			memcpy(vertices, gf.getPointer(), size);
 			vmin = Vec3D( 9999999.0f, 9999999.0f, 9999999.0f);
 			vmax = Vec3D(-9999999.0f,-9999999.0f,-9999999.0f);
@@ -802,12 +802,12 @@ void WMOGroup::initDisplayList()
 		else if (!strcmp(fourcc,"MONR")) {
 			// Normals. 3 floats per vertex normal, in (X,Z,-Y) order.
 			//uint32 NormSize = (uint32)(size / 12);
-			normals = new Vec3D[(size / 12)];
+			normals = new Vec3D[(uint32)(size / 12)];
 			memcpy(normals, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOTV")) {
 			// Texture coordinates, 2 floats per vertex in (X,Y) order. The values range from 0.0 to 1.0. Vertices, normals and texture coordinates are in corresponding order, of course.
-			texcoords = new Vec2D[(size/8)];
+			texcoords = new Vec2D[(uint32)(size/8)];
 			memcpy(texcoords, gf.getPointer(), size);
 		}
 		else if (!strcmp(fourcc,"MOLR")) {
@@ -825,7 +825,7 @@ void WMOGroup::initDisplayList()
 			The numbers are indices into the doodad instance table (MODD chunk) of the WMO root file. These have to be filtered to the doodad set being used in any given WMO instance.
 			*/
 			nDoodads = (int)size / 2;
-			ddr = new short[nDoodads];
+			ddr = new short[(size_t)nDoodads];
 			gf.read(ddr,size);
 		}
 		else if (strcmp(fourcc,"MOBN")==0) {

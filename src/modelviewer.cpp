@@ -891,7 +891,7 @@ void ModelViewer::LoadSession()
 		pConfig->Read(wxT("HideHelmet"), &bHideHelmet, false);
 		pConfig->Read(wxT("ShowParticle"), &bShowParticle, true);
 		pConfig->Read(wxT("ZeroParticle"), &bZeroParticle, true);
-		pConfig->Read(wxT("Alternate"), &bAlternate, true);
+		pConfig->Read(wxT("Alternate"), &bAlternate, false);
 		pConfig->Read(wxT("DBackground"), &canvas->drawBackground, false);
 		pConfig->Read(wxT("BackgroundImage"), &bgImagePath, wxEmptyString);
 		if (!bgImagePath.IsEmpty()) {
@@ -3493,6 +3493,8 @@ void ModelViewer::ImportArmoury(wxString strURL)
 		g_charControl->cd = cd;
 		g_charControl->RefreshModel();
 		g_charControl->RefreshEquipment();
+
+		g_modelViewer->fileMenu->Enable(ID_FILE_MODELEXPORT_MENU, true);
 	}else{
 		wxLogMessage(wxT("There were errors gathering the Armory page."));
 		wxMessageBox(wxT("There was an error when gathering the Armory data.\nPlease try again later."),wxT("Armory Error"));

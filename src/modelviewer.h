@@ -50,8 +50,8 @@
 
 // defines
 #define APP_TITLE wxT("World of Warcraft Model Viewer")
-#define APP_VERSION wxT("v0.7.0.1 r635")			// Revision number should match the revision number on GoogleCode.
-#define APP_BUILDNAME wxT("Pickled Herring")		// Fun thing for developers to play with. Should change with each Main Release. (Not counting DEV WORK editions)
+#define APP_VERSION wxT("v0.7.0.1 r640")			// Revision number should match the revision number on GoogleCode.
+#define APP_BUILDNAME wxT("Windrunner's Lament")	// Fun thing for developers to play with. Should change with each Main Release. (Not counting DEV WORK editions)
 /*
 	--==List of Build Name ideas==--	(Feel free to add!)
 	Bouncing Baracuda
@@ -64,7 +64,6 @@
 	Lonely Mastiff
 	Cold Kelthuzad
 	Jiggly Jaina
-	Windrunner's Lament
 	Vashj's Folly
 	Epic Win
 	Epic Lose
@@ -77,6 +76,7 @@
 	Fickle Felguard
 	Demented Deathwing
 	Pickled Herring
+	Windrunner's Lament
 
 */
 
