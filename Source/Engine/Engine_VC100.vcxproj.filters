@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="QsLog">
-      <UniqueIdentifier>{460cbbc5-6bbf-4c53-abe4-c9c3f66dd5f4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h</Extensions>
@@ -14,8 +11,8 @@
       <Extensions>cpp;cxx;c;def</Extensions>
       <ParseFiles>true</ParseFiles>
     </Filter>
-    <Filter Include="Header Files\Math">
-      <UniqueIdentifier>{34a2ead2-4df1-4723-a121-6ec2ed05dfc4}</UniqueIdentifier>
+    <Filter Include="Math">
+      <UniqueIdentifier>{72584cf8-14a3-459e-aa80-b8fc5172be6a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -24,15 +21,6 @@
     </ClCompile>
     <ClCompile Include="wmv_engine.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\QsLog\QsDebugOutput.cpp">
-      <Filter>QsLog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\QsLog\QsLog.cpp">
-      <Filter>QsLog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\QsLog\QsLogDest.cpp">
-      <Filter>QsLog</Filter>
     </ClCompile>
     <ClCompile Include="MPQ.cpp">
       <Filter>Source Files</Filter>
@@ -53,30 +41,6 @@
     </ClInclude>
     <ClInclude Include="wmv_engine.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\math_base.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\math_constants.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\math_matrix.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\math_quaternion.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\math_vector.h">
-      <Filter>Header Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\QsLog\QsDebugOutput.h">
-      <Filter>QsLog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\QsLog\QsLog.h">
-      <Filter>QsLog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\QsLog\QsLogDest.h">
-      <Filter>QsLog</Filter>
     </ClInclude>
     <ClInclude Include="video_exporter_server.h">
       <Filter>Header Files</Filter>
@@ -108,8 +72,20 @@
     <ClInclude Include="WoWDirectoryTools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Includes\QsLog\QsLogExport.h">
-      <Filter>QsLog</Filter>
+    <ClInclude Include="Math\math_base.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\math_constants.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\math_matrix.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\math_quaternion.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\math_vector.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

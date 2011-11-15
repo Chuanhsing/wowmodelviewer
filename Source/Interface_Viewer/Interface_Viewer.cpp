@@ -34,14 +34,16 @@ Interface_Viewer::Interface_Viewer(QWidget *parent) : QMainWindow(parent), ui(ne
 	QCoreApplication::setOrganizationDomain(ORGANIZATIONWEBSITE);
 	
 	// Icons
-	iconVanilla.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon1-Vanilla"), QSize(), QIcon::Normal, QIcon::Off);
-    iconVanilla.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon1-Vanilla"), QSize(), QIcon::Normal, QIcon::On);
-    iconTBC.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon2-TBC"), QSize(), QIcon::Normal, QIcon::Off);
-    iconTBC.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon2-TBC"), QSize(), QIcon::Normal, QIcon::On);
-    iconWotLK.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon3-WotLK"), QSize(), QIcon::Normal, QIcon::Off);
-	iconWotLK.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon3-WotLK"), QSize(), QIcon::Normal, QIcon::On);
-    iconCata.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon4-Cataclysm"), QSize(), QIcon::Normal, QIcon::Off);
-	iconCata.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon4-Cataclysm"), QSize(), QIcon::Normal, QIcon::On);
+	icon01Vanilla.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon01-Vanilla"), QSize(), QIcon::Normal, QIcon::Off);
+    icon01Vanilla.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon01-Vanilla"), QSize(), QIcon::Normal, QIcon::On);
+    icon02TBC.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon02-TBC"), QSize(), QIcon::Normal, QIcon::Off);
+    icon02TBC.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon02-TBC"), QSize(), QIcon::Normal, QIcon::On);
+    icon03WotLK.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon03-WotLK"), QSize(), QIcon::Normal, QIcon::Off);
+	icon03WotLK.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon03-WotLK"), QSize(), QIcon::Normal, QIcon::On);
+    icon04Cata.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon04-Cataclysm"), QSize(), QIcon::Normal, QIcon::Off);
+	icon04Cata.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon04-Cataclysm"), QSize(), QIcon::Normal, QIcon::On);
+	icon05MoP.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon05-MoP"), QSize(), QIcon::Normal, QIcon::Off);
+	icon05MoP.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon05-MoP"), QSize(), QIcon::Normal, QIcon::On);
     iconPTR.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-PTR"), QSize(), QIcon::Normal, QIcon::Off);
 	iconPTR.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-PTR"), QSize(), QIcon::Normal, QIcon::On);
 	iconDisabled.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-Disabled"), QSize(), QIcon::Normal, QIcon::Off);

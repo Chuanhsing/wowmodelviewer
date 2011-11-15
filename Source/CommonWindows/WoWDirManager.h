@@ -20,23 +20,25 @@ class WoWDirManager : public QDialog
 public:
     explicit WoWDirManager(QWidget *parent = 0);
 	~WoWDirManager();
-	/*
+	
 	//Functions
 	void init();
 	void SetupList();
 	void UpdateList();
-
+	
+	/*
 	// Icons
-	QIcon iconVanilla;
-	QIcon iconTBC;
-	QIcon iconWotLK;
-	QIcon iconCata;
-	QIcon iconMoP;
+	QIcon icon01Vanilla;
+	QIcon icon02TBC;
+	QIcon icon03WotLK;
+	QIcon icon04Cata;
+	QIcon icon05MoP;
 	QIcon iconPTR;
 
 	QString selected;		// The Selected WoWDir's name
-
+	*/
 	QListWidget *List;
+	/*
 
 private:
 	void saveDir(st_WoWDir,bool);				// Save the Directory
@@ -50,10 +52,10 @@ private slots:
 	void on_WDM_bDirUp_clicked();
 	void on_WDM_bDirDown_clicked();
 	void on_WDM_bDirDeleteAll_clicked();
+	*/
 	void on_buttonBox_Cancel_clicked() {
 		QDialog::close();
 	}
-	*/
 private:
 	Ui::WoWDirManager *ui_WoWDirManager;
 };

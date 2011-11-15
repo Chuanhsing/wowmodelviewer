@@ -1,7 +1,7 @@
 #ifndef MPQ_H
 #define MPQ_H
 
-#include "../Engine/wmv_engine.h"
+#include "wmv_engine.h"
 
 #include <QString>
 #include <QList>

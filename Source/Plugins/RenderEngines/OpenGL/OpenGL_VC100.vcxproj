@@ -200,6 +200,9 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\..\..\$(OutDir)\Plugins</Command>
     <ProjectReference Include="..\..\..\Engine\Engine_VC100.vcxproj">
       <Project>{49c39452-ef73-4a8b-a11b-7959310ca556}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Foundation\Foundation.vcxproj">
+      <Project>{583dceed-978b-493d-b7f3-b54718c46ec3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

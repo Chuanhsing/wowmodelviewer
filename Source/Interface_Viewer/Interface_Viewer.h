@@ -52,10 +52,11 @@ public:
 	void UnLoadWoW();
 
 	// Icons
-	QIcon iconVanilla;
-	QIcon iconTBC;
-	QIcon iconWotLK;
-	QIcon iconCata;
+	QIcon icon01Vanilla;
+	QIcon icon02TBC;
+	QIcon icon03WotLK;
+	QIcon icon04Cata;
+	QIcon icon05MoP;
 	QIcon iconPTR;
 	QIcon iconDisabled;
 

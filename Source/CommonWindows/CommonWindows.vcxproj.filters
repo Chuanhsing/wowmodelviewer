@@ -23,9 +23,6 @@
       <Extensions>moc;h;cpp</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
-    <Filter Include="QsLog">
-      <UniqueIdentifier>{19368ea9-6fe5-468c-aad9-657ea8cf52fd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Generated Files\Debug_Win32">
       <UniqueIdentifier>{6ec63056-0b1e-4b50-977c-17057c1f25ca}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
@@ -48,15 +45,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Includes\QsLog\QsDebugOutput.cpp">
-      <Filter>QsLog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\QsLog\QsLog.cpp">
-      <Filter>QsLog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Includes\QsLog\QsLogDest.cpp">
-      <Filter>QsLog</Filter>
-    </ClCompile>
     <ClCompile Include="WoWDirManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -104,15 +92,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Includes\QsLog\QsDebugOutput.h">
-      <Filter>QsLog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\QsLog\QsLog.h">
-      <Filter>QsLog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Includes\QsLog\QsLogDest.h">
-      <Filter>QsLog</Filter>
-    </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_WoWDirManager.h">
       <Filter>Generated Files</Filter>
     </ClInclude>

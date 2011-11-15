@@ -8,7 +8,7 @@
 
 // Filenames & Paths
 #define LOGFILE_FILENAME			"log.txt"
-#define PLUGIN_PATH					"Plugins"	// Relative to the application
+#define PLUGIN_PATH					"./Plugins/"	// Relative to the application
 
 // Directory Slash type for MPQ files
 #define SLASH_MPQ "\\"

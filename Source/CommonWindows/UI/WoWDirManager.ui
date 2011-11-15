@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../../Application/resources.qrc">
-    <normaloff>:/WoW Versions/WoWIcon1-Vanilla</normaloff>:/WoW Versions/WoWIcon1-Vanilla</iconset>
+    <normaloff>:/WoW Versions/WoWIcon01-Vanilla</normaloff>:/WoW Versions/WoWIcon01-Vanilla</iconset>
   </property>
   <property name="sizeGripEnabled">
    <bool>false</bool>
@@ -155,7 +155,7 @@ Directory</string>
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>370</x>

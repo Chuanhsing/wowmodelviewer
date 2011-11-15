@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../../Application/resources.qrc">
-    <normaloff>:/WMV_Win</normaloff>:/WMV_Win</iconset>
+    <normaloff>:/WMVIcon</normaloff>:/WMVIcon</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="layoutWidget">

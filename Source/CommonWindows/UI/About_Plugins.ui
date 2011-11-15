@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AboutPlugins</class>
+ <widget class="QDialog" name="AboutPlugins">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>About Plugins</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../Application/resources.qrc">
+    <normaloff>:/WMVIcon</normaloff>:/WMVIcon</iconset>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <widget class="QListWidget" name="pluginList">
+   <property name="geometry">
+    <rect>
+     <x>5</x>
+     <y>5</y>
+     <width>391</width>
+     <height>256</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="closeButton">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>270</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="pluginCountRenderers">
+   <property name="geometry">
+    <rect>
+     <x>135</x>
+     <y>265</y>
+     <width>116</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Renderers: %1</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="pluginCountVideoExporters">
+   <property name="geometry">
+    <rect>
+     <x>5</x>
+     <y>284</y>
+     <width>117</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Video Exporters: %1</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="pluginCountModelExporters">
+   <property name="geometry">
+    <rect>
+     <x>5</x>
+     <y>265</y>
+     <width>117</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Model Exporters: %1</string>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../../Application/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

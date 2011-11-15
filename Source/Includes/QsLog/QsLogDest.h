@@ -27,7 +27,6 @@
 #define QSLOGDEST_H
 
 #include <memory>
-#include "QsLogExport.h"
 class QString;
 
 namespace QsLogging
@@ -36,19 +35,18 @@ namespace QsLogging
 class Destination
 {
 public:
-	Destination(){};
-	virtual ~Destination(){}
-	virtual void write(const QString& message) = 0;
+   virtual ~Destination(){}
+   virtual void write(const QString& message) = 0;
 };
-//typedef std::auto_ptr<Destination> DestinationPtr;
+typedef std::auto_ptr<Destination> DestinationPtr;
 
 //! Creates logging destinations/sinks. The caller will have ownership of 
 //! the newly created destinations.
 class DestinationFactory
 {
 public:
-	static QSLOG_EXPORT Destination* MakeFileDestination(const QString& filePath, const bool append = false);
-	static QSLOG_EXPORT Destination* MakeDebugOutputDestination();
+   static DestinationPtr MakeFileDestination(const QString& filePath, const bool append = false);
+   static DestinationPtr MakeDebugOutputDestination();
 };
 
 } // end namespace

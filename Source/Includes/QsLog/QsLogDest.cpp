@@ -73,14 +73,14 @@ void DebugOutputDestination::write(const QString& message)
    QsDebugOutput::output(message);
 }
 
-Destination* DestinationFactory::MakeFileDestination(const QString& filePath, const bool append)
+DestinationPtr DestinationFactory::MakeFileDestination(const QString& filePath, const bool append)
 {
-   return new FileDestination(filePath,append);
+   return DestinationPtr(new FileDestination(filePath,append));
 }
 
-Destination* DestinationFactory::MakeDebugOutputDestination()
+DestinationPtr DestinationFactory::MakeDebugOutputDestination()
 {
-   return new DebugOutputDestination;
+   return DestinationPtr(new DebugOutputDestination);
 }
 
 } // end namespace

@@ -38,9 +38,15 @@ have only Vanilla content, but the files are in Cata formats.
 */
 enum WoWVersion
 {
+	// Vanilla WoW, Pre 1.3 
+	// TOCs matching between WOW_VANILLA_PRE13_FIRST and WOW_VANILLA_PRE13_LAST are pre-1.3 Vanillas.
+	// This is used, rather than simply listing and matching like the rest, because before 1.3, the TOC
+	// number matched WoW's Build number.
+	WOW_VANILLA_PRE13_FIRST = 3975,		// Vanilla 1.0.0 TOC number. 1.0.0's Build number is actually 3980...
+	WOW_VANILLA_PRE13_LAST = 4222,		// Vanilla 1.2.4 Build/TOC number
+	
 	// Vanilla WoW
-	WOW_VANILLA_FIRST = 3975,		// Vanilla's Original, unpatched TOC. Assumed this is used for all versions before 1.3.
-	WOW_VANILLA_103 = 1300,			// Vanilla 1.3.x & 1.4.x - First recorded TOC number
+	WOW_VANILLA_FIRST = 1300,		// Vanilla 1.3.x & 1.4.x - First recorded modern TOC number
 	WOW_VANILLA_105 = 1500,			// Vanilla 1.5.x
 	WOW_VANILLA_106 = 1600,			// Vanilla 1.6.x
 	WOW_VANILLA_107 = 1700,			// Vanilla 1.7.x

@@ -2,6 +2,10 @@
 #ifndef WMV_KERNEL_H
 #define WMV_KERNEL_H
 
+// Qt Includes
+#include <QString>
+#include <QMap>
+
 // Primary Includes
 #include "wmv_engine.h"
 #include "version.h"
@@ -11,9 +15,6 @@
 #include "model_exporter_server.h"	// Our 3D Model Exporter Engine list
 #include "video_exporter_server.h"	// Our Video Exporter Engine list
 #include "plugin.h"					// The Plugin system
-
-#include <QString>
-#include <QMap>
 
 namespace WMVEngine {
 

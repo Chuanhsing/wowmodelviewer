@@ -198,38 +198,36 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Includes\QsLog\QsDebugOutput.cpp" />
-    <ClCompile Include="..\Includes\QsLog\QsLog.cpp" />
-    <ClCompile Include="..\Includes\QsLog\QsLogDest.cpp" />
     <ClCompile Include="MPQ.cpp" />
     <ClCompile Include="plugin.cpp" />
     <ClCompile Include="wmv_engine.cpp" />
     <ClCompile Include="WoWDirectoryTools.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Includes\QsLog\QsDebugOutput.h" />
-    <ClInclude Include="..\Includes\QsLog\QsLog.h" />
-    <ClInclude Include="..\Includes\QsLog\QsLogDest.h" />
-    <ClInclude Include="..\Includes\QsLog\QsLogExport.h" />
     <ClInclude Include="classes.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="display_server.h" />
     <ClInclude Include="enums.h" />
     <ClInclude Include="lists.h" />
-    <ClInclude Include="model_exporter_header.h" />
-    <ClInclude Include="model_exporter_server.h" />
-    <ClInclude Include="kernel.h" />
     <ClInclude Include="Math\math_base.h" />
     <ClInclude Include="Math\math_constants.h" />
     <ClInclude Include="Math\math_matrix.h" />
     <ClInclude Include="Math\math_quaternion.h" />
     <ClInclude Include="Math\math_vector.h" />
+    <ClInclude Include="model_exporter_header.h" />
+    <ClInclude Include="model_exporter_server.h" />
+    <ClInclude Include="kernel.h" />
     <ClInclude Include="MPQ.h" />
     <ClInclude Include="plugin.h" />
     <ClInclude Include="version.h" />
     <ClInclude Include="video_exporter_server.h" />
     <ClInclude Include="wmv_engine.h" />
     <ClInclude Include="WoWDirectoryTools.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Foundation\Foundation.vcxproj">
+      <Project>{583dceed-978b-493d-b7f3-b54718c46ec3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

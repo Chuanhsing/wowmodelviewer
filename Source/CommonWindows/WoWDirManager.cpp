@@ -17,16 +17,16 @@ WoWDirManager::WoWDirManager(QWidget *parent) : QDialog(parent), ui_WoWDirManage
 	ui_WoWDirManager->setupUi(this);
 	/*
 	// Icons
-    iconVanilla.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon1-Vanilla"), QSize(), QIcon::Normal, QIcon::Off);
-    iconVanilla.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon1-Vanilla"), QSize(), QIcon::Normal, QIcon::On);
-    iconTBC.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon2-TBC"), QSize(), QIcon::Normal, QIcon::Off);
-    iconTBC.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon2-TBC"), QSize(), QIcon::Normal, QIcon::On);
-    iconWotLK.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon3-WotLK"), QSize(), QIcon::Normal, QIcon::Off);
-	iconWotLK.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon3-WotLK"), QSize(), QIcon::Normal, QIcon::On);
-    iconCata.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon4-Cataclysm"), QSize(), QIcon::Normal, QIcon::Off);
-	iconCata.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon4-Cataclysm"), QSize(), QIcon::Normal, QIcon::On);
-    iconMoP.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon5-MoP"), QSize(), QIcon::Normal, QIcon::Off);
-	iconMoP.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon5-MoP"), QSize(), QIcon::Normal, QIcon::On);
+    iconVanilla.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon01-Vanilla"), QSize(), QIcon::Normal, QIcon::Off);
+    iconVanilla.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon01-Vanilla"), QSize(), QIcon::Normal, QIcon::On);
+    iconTBC.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon02-TBC"), QSize(), QIcon::Normal, QIcon::Off);
+    iconTBC.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon02-TBC"), QSize(), QIcon::Normal, QIcon::On);
+    iconWotLK.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon03-WotLK"), QSize(), QIcon::Normal, QIcon::Off);
+	iconWotLK.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon03-WotLK"), QSize(), QIcon::Normal, QIcon::On);
+    iconCata.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon04-Cataclysm"), QSize(), QIcon::Normal, QIcon::Off);
+	iconCata.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon04-Cataclysm"), QSize(), QIcon::Normal, QIcon::On);
+    iconMoP.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon05-MoP"), QSize(), QIcon::Normal, QIcon::Off);
+	iconMoP.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon05-MoP"), QSize(), QIcon::Normal, QIcon::On);
     iconPTR.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-PTR"), QSize(), QIcon::Normal, QIcon::Off);
 	iconPTR.addFile(QString::fromUtf8(":/WoW Versions/WoWIcon-PTR"), QSize(), QIcon::Normal, QIcon::On);
 
@@ -39,12 +39,12 @@ WoWDirManager::~WoWDirManager()
 {
 	delete ui_WoWDirManager;
 }
-/*
 void WoWDirManager::init(){
 	// Update List
 	UpdateList();
 }
 
+/*
 // Save the Directory to the WoWDirs.ini file
 void WoWDirManager::saveDir(st_WoWDir dir, bool noUpdate = false)
 {
@@ -321,7 +321,7 @@ void WoWDirManager::on_WDM_bDirDeleteAll_clicked(){
 	}
 	QLOG_INFO() << "User has chosen to cancel the Delete All function.";
 }
-
+*/
 // Prepare the List
 void WoWDirManager::SetupList()
 {
@@ -337,6 +337,7 @@ void WoWDirManager::SetupList()
 // Update the List with our items!
 void WoWDirManager::UpdateList()
 {
+	/*
 	ReadWoWDirList();
 	QLOG_INFO() << "Updating WDM List...";
 	// Grab selected item
@@ -406,8 +407,9 @@ void WoWDirManager::UpdateList()
 	ui_WoWDirManager->WDM_List = List;
 	QLOG_INFO() << "Finished Updating WDM List!";
 	g_WMV->UpdateViewerMenu();
+	*/
 }
-
+/*
 // Scan the passed directory and return a WoWDir.
 st_WoWDir ScanWoWDir(QDir dir, int locale, int position = 0){
 	if (dir.exists() == false){

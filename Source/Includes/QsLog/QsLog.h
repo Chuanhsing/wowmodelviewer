@@ -28,7 +28,6 @@
 
 #include <QDebug>
 #include <QString>
-#include "QsLogExport.h"
 
 namespace QsLogging
 {
@@ -44,7 +43,8 @@ enum Level
 };
 
 class LoggerImpl; // d pointer
-class QSLOG_EXPORT Logger {
+class Logger
+{
 public:
    static Logger& instance()
    {
@@ -61,7 +61,7 @@ public:
 
    //! The helper forwards the streaming to QDebug and builds the final
    //! log message.
-   class QSLOG_EXPORT Helper
+   class Helper
    {
    public:
       explicit Helper(Level logLevel) :
@@ -88,8 +88,6 @@ private:
 
    LoggerImpl* d;
 };
-
-} // end namespace
 
 //! Logging macros: define QS_LOG_LINE_NUMBERS to get the file and line number
 //! in the log output.
@@ -130,5 +128,7 @@ private:
    #define QLOG_FATAL() \
       QsLogging::Logger::Helper(QsLogging::FatalLevel).stream() << __FILE__ << '@' << __LINE__ << '-'
 #endif
+
+} // end namespace
 
 #endif // QSLOG_H

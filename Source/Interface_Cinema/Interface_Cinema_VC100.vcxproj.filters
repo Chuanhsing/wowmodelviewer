@@ -44,4 +44,14 @@
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Interface_Cinema.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Interface_Cinema.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

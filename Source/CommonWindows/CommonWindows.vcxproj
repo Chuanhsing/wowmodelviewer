@@ -164,9 +164,6 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Includes\QsLog\QsDebugOutput.cpp" />
-    <ClCompile Include="..\Includes\QsLog\QsLog.cpp" />
-    <ClCompile Include="..\Includes\QsLog\QsLogDest.cpp" />
     <ClCompile Include="About.cpp" />
     <ClCompile Include="AboutPlugins.cpp" />
     <ClCompile Include="GeneratedFiles\Debug_Win32\moc_About.cpp">
@@ -232,9 +229,6 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
     <ClCompile Include="WoWDirManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Includes\QsLog\QsDebugOutput.h" />
-    <ClInclude Include="..\Includes\QsLog\QsLog.h" />
-    <ClInclude Include="..\Includes\QsLog\QsLogDest.h" />
     <CustomBuild Include="About.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing %(Identity)...</Message>
@@ -355,6 +349,11 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\uic.exe" -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"</Command>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Foundation\Foundation.vcxproj">
+      <Project>{583dceed-978b-493d-b7f3-b54718c46ec3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

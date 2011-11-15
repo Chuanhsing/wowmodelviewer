@@ -1,5 +1,15 @@
 WoW Model Viewer v0.8.0.0
 
+r642 WMV-78 (Plugin Edition)
+-Created Foundation.Lib project. All commonly used functions (such as logging) will go in here.
+-Reverted several QsLog changes that prevented WMV from being compiled.
+!Known Bug: QsLog does not work across DLLs. Need help to fix this!
+-Added TOC data pertaining to Pre-1.3 Vanilla WoW.
+-Added many more definitions to the ExporterCanDo class. Since we have yet to start on exporters, MODELEXPORTERHEADERVERSION was unchanged.
+-Replaced the Platform-Specific icons in the Qt Resource file with PNG versions. Platform-Specific icon files are still available for implementation as the application icon.
+-Added the About Plugins window. Not yet fully functional. (Need to get a working plugin to fully test it.)
+
+
 r639
 -Added initial support & icons for Mists of Pandaria.
 -Added a Show/Hide menu to the Character menu.
