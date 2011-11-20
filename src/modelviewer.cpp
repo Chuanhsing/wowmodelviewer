@@ -54,7 +54,6 @@ BEGIN_EVENT_TABLE(ModelViewer, wxFrame)
 	EVT_MENU(ID_MODELEXPORT_OBJ, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_COLLADA, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_MS3D, ModelViewer::OnExport)
-	EVT_MENU(ID_MODELEXPORT_3DS, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_X3D, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_XHTML, ModelViewer::OnExport)
 	EVT_MENU(ID_MODELEXPORT_OGRE, ModelViewer::OnExport)
@@ -3182,18 +3181,6 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
 
 				ExportMS3D_M2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
-			}else{
-				returncode = EXPORT_ERROR_BAD_FILENAME;
-			}
-		}
-	} else if (id == ID_MODELEXPORT_3DS) {
-		newfilename << wxT(".3ds");
-		if (canvas->model) {
-			wxFileDialog dialog(this, wxT("Export Model..."), wxEmptyString, newfilename, wxT("3D Studio Max (*.3ds)|*.3ds"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-			if (dialog.ShowModal()==wxID_OK) {
-				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
-
-				Export3DS_M2(canvas->root, canvas->model, dialog.GetPath().fn_str(), init);
 			}else{
 				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}

@@ -42,7 +42,7 @@ void InitializeSdkObjects(KFbxSdkManager*& pSdkManager, KFbxScene*& pScene) {
 
 	// Load plugins from the executable directory
 	KString lPath = KFbxGetApplicationDirectory();
-	lPath += "FBXPlugins\\";
+	lPath += "FBXPlugins" + SLASH;
 #if defined(KARCH_ENV_WIN)
 	KString lExtension = "dll";
 #elif defined(KARCH_ENV_MACOSX)
@@ -259,7 +259,7 @@ void CreateMaterials(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const 
 			material->GetAmbientColor().Set(fbxDouble3(0.7, 0.7, 0.7));
 
 			wxString tex_name = GetM2TextureName(m, pass, i) + wxT(".tga");
-			wxString tex_fullpath_filename = g_fbx_basename.BeforeLast('\\') + wxT("\\") + tex_name;
+			wxString tex_fullpath_filename = g_fbx_basename.BeforeLast(SLASH) + wxT(SLASH) + tex_name;
 			SaveTexture(tex_fullpath_filename);
 			KFbxTexture* texture = KFbxTexture::Create(sdk_mgr, tex_name.c_str());
 			texture->SetFileName(tex_fullpath_filename.c_str());
@@ -665,7 +665,7 @@ void CreateSkeleton(KFbxSdkManager* sdk_mgr, KFbxScene* scene, Model* m, const c
 void ExportFBX_M2(Model* m, const char* fn, bool init) {
 	g_fbx_meshname = wxString(fn, wxConvUTF8);
 	g_fbx_basename = (g_fbx_meshname.Right(4).CmpNoCase(wxT(".fbx")) == 0) ? (g_fbx_meshname.Left(g_fbx_meshname.Length() - 4)) : g_fbx_meshname;
-	g_fbx_name = g_fbx_basename.AfterLast('\\');
+	g_fbx_name = g_fbx_basename.AfterLast(SLASH);
 
 	LogExportData(wxT("FBX"),m->modelname,wxString(fn, wxConvUTF8));
 

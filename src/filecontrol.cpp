@@ -189,28 +189,28 @@ void FileControl::Init(ModelViewer* mv)
 				//if (colour == true) {
                 switch(it->color){
                     case 0:
-                        fileTree->SetItemTextColour(newItem.first, *wxBLACK);				// patch.mpq
+                        fileTree->SetItemTextColour(newItem.first, *wxBLACK);				// Base Color
                         break;
                     case 1:
-                        fileTree->SetItemTextColour(newItem.first, *wxBLUE);				// patch-2.mpq
+                        fileTree->SetItemTextColour(newItem.first, *wxBLUE);				// patch.mpq & wow-update files
                         break;
                     case 2:
-                        fileTree->SetItemTextColour(newItem.first, *wxRED);					// patch-3.mpq
+                        fileTree->SetItemTextColour(newItem.first, *wxRED);					// patch-2.mpq & Cache patch files
                         break;
-                    case 3:
-                        fileTree->SetItemTextColour(newItem.first, wxColour(0,170,0));		// Green
+					case 3:
+                        fileTree->SetItemTextColour(newItem.first, wxColour(160,0,160));	// Outland Purple (First Expansion)
                         break;
-					case 4:
-                        fileTree->SetItemTextColour(newItem.first, wxColour(160,0,160));	// Outland Purple
+                    case 4:
+                        fileTree->SetItemTextColour(newItem.first, wxColour(35,130,179));	// Frozen Blue (Second Expansion)
                         break;
                     case 5:
-                        fileTree->SetItemTextColour(newItem.first, wxColour(35,130,179));	// Frozen Blue
+                        fileTree->SetItemTextColour(newItem.first, wxColour(233,109,17));	// Destruction Orange (Third Expansion)
                         break;
                     case 6:
-                        fileTree->SetItemTextColour(newItem.first, wxColour(233,109,17));	// Destruction Orange
+                        fileTree->SetItemTextColour(newItem.first, wxColour(0,207,107));	// Bamboo Green (Fourth Expansion)
                         break;
                     case 7:
-                        fileTree->SetItemTextColour(newItem.first, *wxCYAN);				// patch-4.mpq
+                        fileTree->SetItemTextColour(newItem.first, *wxCYAN);				// Reserved
                         break;
                     default:
                         fileTree->SetItemTextColour(newItem.first, *wxLIGHT_GREY);
@@ -229,28 +229,28 @@ void FileControl::Init(ModelViewer* mv)
 		item = fileTree->AppendItem(stack[stack.size()-1].first, fileName, -1, -1, new FileTreeData(str));
         switch(it->color){
             case 0:
-                fileTree->SetItemTextColour(item, *wxBLACK);				// patch.mpq
+                fileTree->SetItemTextColour(item, *wxBLACK);				// Base Color
                 break;
             case 1:
-                fileTree->SetItemTextColour(item, *wxBLUE);					// patch-2.mpq
+                fileTree->SetItemTextColour(item, *wxBLUE);					// patch.mpq & wow-update files
                 break;
             case 2:
-                fileTree->SetItemTextColour(item, *wxRED);					// patch-3.mpq
+                fileTree->SetItemTextColour(item, *wxRED);					// patch-2.mpq & Cache patch files
                 break;
             case 3:
-                fileTree->SetItemTextColour(item, wxColour(0,170,0));		// Green
+				fileTree->SetItemTextColour(item, wxColour(160,0,160));		// Outland Purple (First Expansion)
                 break;
             case 4:
-                fileTree->SetItemTextColour(item, wxColour(160,0,160));		// Outland Purple
+                fileTree->SetItemTextColour(item, wxColour(35,130,179));	// Frozen Blue (Second Expansion)
                 break;
             case 5:
-                fileTree->SetItemTextColour(item, wxColour(35,130,179));	// Frozen Blue
+                fileTree->SetItemTextColour(item, wxColour(233,109,17));	// Destruction Orange (Third Expansion)
                 break;
             case 6:
-                fileTree->SetItemTextColour(item, wxColour(233,109,17));	// Destruction Orange
+                fileTree->SetItemTextColour(item, wxColour(0,207,107));		// Bamboo Green (Fourth Expansion)
                 break;
             case 7:
-                fileTree->SetItemTextColour(item, *wxCYAN);				// patch-4.mpq
+                fileTree->SetItemTextColour(item, *wxCYAN);					// Reserved
                 break;
             default:
                 fileTree->SetItemTextColour(item, *wxLIGHT_GREY);

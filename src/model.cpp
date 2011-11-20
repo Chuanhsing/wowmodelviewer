@@ -394,7 +394,6 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 
 	if (gameVersion >= VERSION_WOTLK) {
 		modelname = tempname;
-
 		if (header.nameOfs != 304 && header.nameOfs != 320) {
 			wxLogMessage(wxT("Error:\t\tInvalid model nameOfs=%d/%d!  May be corrupted."), header.nameOfs, sizeof(ModelHeader));
 			//ok = false;

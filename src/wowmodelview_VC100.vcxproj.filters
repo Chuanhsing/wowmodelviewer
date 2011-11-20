@@ -93,9 +93,6 @@
     <ClCompile Include="modelexport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="modelexport_3ds.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="modelexport_fbx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -252,9 +249,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="modelexport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="modelexport_3ds.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="modelexport_lwo.h">

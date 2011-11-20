@@ -406,19 +406,19 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 			temp.MakeLower();
 			int col = 0; // Black
 
-			if (temp.Find(wxT("patch.mpq")) > -1)
+			if ((temp.Find(wxT("wow-update-")) > -1) || (temp.Find(wxT("patch.mpq")) > -1))
 				col = 1; // Blue
-			else if (temp.Find(wxT("patch-2.mpq")) > -1)
+			else if (temp.Find(wxT("cache")) > -1 || temp.Find(wxT("patch-2.mpq")) > -1)
 				col = 2; // Red
-			else if (temp.Find(wxT("patch-3.mpq")) > -1)
-				col = 3; // Green
-			else if (temp.Find(wxT("expansion.mpq")) > -1)
-				col = 4; // Outlands Purple
+			else if(temp.Find(wxT("expansion1.mpq")) > -1 || temp.Find(wxT("expansion.mpq")) > -1)
+				col = 3; // Outlands Purple
 			else if (temp.Find(wxT("expansion2.mpq")) > -1 || temp.Find(wxT("lichking.mpq")) > -1)
-				col = 5; // Frozen Blue
+				col = 4; // Frozen Blue
 			else if (temp.Find(wxT("expansion3.mpq")) > -1)
-				col = 6; // Destruction Orange
-			else if (temp.Find(wxT("wow-update-")) > -1)
+				col = 5; // Destruction Orange
+			else if (temp.Find(wxT("expansion4.mpq")) > -1 || temp.Find(wxT("patch-3.mpq")) > -1)
+				col = 6; // Bamboo Green
+			else if (temp.Find(wxT("alternate.mpq")) > -1)
 				col = 7; // Cyan
 
 			if (size > 0 ) {

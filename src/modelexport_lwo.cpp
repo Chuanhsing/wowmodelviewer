@@ -11,7 +11,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 	/* LightWave object files use the IFF syntax described in the EA-IFF85 document. Data is stored in a collection of chunks. 
 	Each chunk begins with a 4-byte chunk ID and the size of the chunk in bytes, and this is followed by the chunk contents.
 
-	LWO Model Format, as layed out in official LWO2 files.( I Hex Edited to find most of this information from files I made/saved in Lightwave. -Kjasi)
+	LWO Model Format, as layed out in official LWO2 files. (I Hex-edited to find most of this information from files I made/saved in Lightwave. -Kjasi)
 
 	FORM	// Format Declaration
 	LWO2	// Declares this is the Lightwave Object 2 file format. LWOB is the first format. Doesn't have a lot of the cool stuff LWO2 has...
@@ -49,7 +49,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 			PTCH	// Cat-mull Clarke Patches. Don't need this, but it mirror's FACE's sub-chunks.
 			SUBD	// Subdivision Patches. Same as above.
 			MBAL	// Metaballs. Don't bother...
-			BONE	// Line segments representing the object's skeleton. These are converted to bones for deformation during rendering.
+			BONE	// Line segments representing the object's skeleton. These are converted to bones for deformation during setup/rigging.
 
 	CLIP (for each Image)
 		STIL	// 2 bytes, size of string, followed by image name.extention
@@ -74,10 +74,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 			RGBA	// Vertex Color Map Type with an Alpha
 		GVAL	// Glow
 		SHRP	// Diffuse Sharpness
-
 		SMAN	// Smoothing Amount
-		NORM	// Specifies the Normal Map to use
-
 		RFOP	// Reflection Options: 0-Backdrop Only (default), 1-Raytracing + Backdrop, 2 - Spherical Map, 3 - Raytracing + Spherical Map
 		TROP	// Same as RFOP, but for Refraction.
 		SIDE	// Is it Double-Sided?
@@ -1552,7 +1549,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 
 	// Main Object
 	LWLayer Layer;
-	Layer.Name = m->name.AfterLast('\\').BeforeLast('.');
+	Layer.Name = m->name.AfterLast(MPQ_SLASH).BeforeLast('.');
 	Layer.ParentLayer = -1;
 	std::vector<wxString> surfnamearray;
 
@@ -1613,6 +1610,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 	// Build Part Names
 	// Seperated from the rest of the build for various reasons.
 	g_modelViewer->SetStatusText(wxT("Building Part Names..."));
+	wxLogMessage(wxT("Building Part Names..."));
 	for (size_t i=0; i<m->passes.size(); i++) {
 		ModelRenderPass &p = m->passes[i];
 		if (p.init(m)){
@@ -1680,8 +1678,10 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 	}
 
 	// Process Passes
+	wxLogMessage(wxT("Processing Model File..."));
 	g_modelViewer->SetStatusText(wxT("Processing Model File..."));
 	for (size_t i=0; i<m->passes.size(); i++) {
+		wxLogMessage(wxT("Processing model, pass %i of %i..."),i,m->passes.size());
 		ModelRenderPass &p = m->passes[i];
 		if (p.init(m)){
 			// Main Model
@@ -1725,6 +1725,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 */
 			// If Luminous...
 			if (p.unlit == true) {
+				wxLogMessage(wxT("Surface is Luminous..."));
 				Surf_Diff = 0.0f;
 				Surf_Lum = 1.0f;
 				// Add Lum, just in case there's a non-luminous surface with the same name.
@@ -1733,6 +1734,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 
 			// If Doublesided
 			if (doublesided == false) {
+				wxLogMessage(wxT("Surface is Double-sided..."));
 				matName = matName + wxT("_Dbl");
 			}
 
@@ -1740,7 +1742,8 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 			/*if ((p.blendmode == BM_OPAQUE)&&(p.opacity>0)){
 				matName = matName + wxT("_Spc");
 			}*/
-
+			
+			wxLogMessage(wxT("Surface name: %s"),matName);
 			for (size_t x=0;x<Object.Surfaces.size();x++){
 				if (Object.Surfaces[x].Name == matName){
 					isFound = true;
@@ -1748,8 +1751,10 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 					break;
 				}
 			}
-			
+
 			//wxLogMessage(wxT("Doublesided: %s, P.Cull: %s"),(doublesided?wxT("true"):wxT("false")),(p.cull?wxT("true"):wxT("false")));
+
+			wxLogMessage(wxT("Processing Texture & image names..."));
 
 			// Add Images to Model
 			LWClip ClipImage;
@@ -1807,15 +1812,18 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 			SaveTexture(ExportName);
 			//SaveTexture2(ClipImage.Filename,ClipImage.Source,wxString(wxT("LWO")),wxString(wxT("tga")));
 
+			wxLogMessage(wxT("Building Surface..."));
 			LWSurface Surface(matName,m->TextureList[p.tex],SurfImage_Color,LWSurf_Image(),LWSurf_Image(),Vec3D(1,1,1),Surf_Diff,Surf_Lum,doublesided);
 
 			// Points
+			wxLogMessage(wxT("Processing Vertex point data..."));
 			for (size_t v=p.vertexStart; v<p.vertexEnd; v++) {
 				// --== Point Data ==--
 				LWPoint Point;
 				uint32 pointnum = (uint32)Layer.Points.size();
 
 				// Points
+				//wxLogMessage(wxT("Processing Points..."));
 				Vec3D vert;
 				if ((m->animated == true) && (init == false) && (m->vertices)) {
 					if (vertMsg == false){
@@ -1836,8 +1844,10 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 				Point.UVData = m->origVertices[v].texcoords;	// UV Data
 				
 				// Vertex Colors
-				
+				//wxLogMessage(wxT("Checking for Vertex Colors..."));	
+				/*
 				if (m->colors[p.color].color.uses(cAnim) == true){
+					wxLogMessage(wxT("Processing Vertex Colors..."));	
 					LWVertexColor vc;
 					vc.a = 1.0f;
 					//Currently bugs out...
@@ -1848,12 +1858,15 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 					vc.b = 1.0f;
 					Point.VertexColors = vc;
 				}
-
+				*/
+				
+				//wxLogMessage(wxT("Recording Point data..."));
 				Vert2Point[v] = pointnum;
 				Layer.Points.push_back(Point);
 			}
 
 			// Polys
+			wxLogMessage(wxT("Processing Polygon data..."));
 			for (size_t k=0; k<p.indexCount; k+=3) {
 				// --== Polygon Data ==--	
 				LWPoly Poly;
@@ -1893,43 +1906,49 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 		}
 	}
 	
-	// Build Bone Data for Weight Maps
-	for (size_t x=0;x<m->header.nBones;x++){
-		LWWeightMap wMap;
+	// Functions that should only be called if there are bones...
+	if (m->header.nBones > 0) {
+		// Build Bone Data for Weight Maps
+		wxLogMessage(wxT("Processing Bone data..."));
+		for (size_t x=0;x<m->header.nBones;x++){
+			LWWeightMap wMap;
 
-		// Weight Map Name = Bone Name
-		wxString bone_name = wxString::Format(wxT("Bone_%03i"), x);
-		for (size_t j=0; j<BONE_MAX; ++j) {
-			if (m->keyBoneLookup[j] == (int16)x) {
-				bone_name = Bone_Names[j];
-				break;
+			// Weight Map Name = Bone Name
+			wxString bone_name = wxString::Format(wxT("Bone_%03i"), x);
+			for (size_t j=0; j<BONE_MAX; ++j) {
+				if (m->keyBoneLookup[j] == (int16)x) {
+					bone_name = Bone_Names[j];
+					break;
+				}
 			}
-		}
 
-		wMap.WeightMapName = bone_name;
-		wMap.BoneID = x;
-		Layer.Weights.push_back(wMap);
-	};
+			wMap.WeightMapName = bone_name;
+			wMap.BoneID = x;
+			Layer.Weights.push_back(wMap);
+		};
 
-	// Fill Weightmap Data
-	size_t numv = m->header.nVertices;
-	LWWeightMap wMap;
-	for (size_t i=0; i<numv; i++) {
-		ModelVertex& vertex = m->origVertices[i];
-		for (size_t j=0;j<4; j++) {
-			if ((vertex.bones[j] == 0) || (vertex.weights[j] == 0))
-				continue;
+		// Fill Weightmap Data
+		wxLogMessage(wxT("Processing Bone Limits..."));
+		size_t numv = m->header.nVertices;
+		LWWeightMap wMap;
+		for (size_t i=0; i<numv; i++) {
+			ModelVertex& vertex = m->origVertices[i];
+			for (size_t j=0;j<4; j++) {
+				if ((vertex.bones[j] == 0) || (vertex.weights[j] == 0))
+					continue;
 
-			LWWeightInfo a;
-			a.Value = (float)(vertex.weights[j] / 255.0);
-			a.PointID = i;
-			Layer.Weights[vertex.bones[j]].PData.push_back(a);
+				LWWeightInfo a;
+				a.Value = (float)(vertex.weights[j] / 255.0);
+				a.PointID = i;
+				Layer.Weights[vertex.bones[j]].PData.push_back(a);
+			}
 		}
 	}
 
 	// --== Attachments ==--
 	if (att != NULL){
 		g_modelViewer->SetStatusText(wxT("Processing Attached Model Files..."));
+		wxLogMessage(wxT("Processing Attached Model Files..."));
 		/* Have yet to find an att->model, so skip it until we do.
 		if (att->model){
 		} */
@@ -2201,6 +2220,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 
 	// --== Scene Data ==--
 	g_modelViewer->SetStatusText(wxT("Gathering Scene Data..."));
+	wxLogMessage(wxT("Gathering Scene Data..."));
 	int modelExport_LW_ExportAnim = 0;	// Temp here until I build the interface.
 	//bool animExportError = false;
 	// Object Placement
@@ -2375,7 +2395,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 			LWLight Light;
 
 			Light.LightID = LW_LightCount.GetPlus();
-			Light.Name = m->name.AfterLast('\\').BeforeLast('.');
+			Light.Name = m->name.AfterLast(MPQ_SLASH).BeforeLast('.');
 			Light.Name << wxString::Format(wxT(" Light %02i"), Light.LightID);
 			if (l->parent > LW_ITEMTYPE_NOPARENT){
 				Light.ParentType = LW_ITEMTYPE_BONE;
@@ -2575,7 +2595,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 
 	// Main Object
 	LWLayer Layer;
-	Layer.Name = m->name.AfterLast('\\').BeforeLast('.');
+	Layer.Name = m->name.AfterLast(MPQ_SLASH).BeforeLast('.');
 	Layer.ParentLayer = -1;
 
 	// Bounding Box for the Layer
@@ -2781,7 +2801,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 			while (lNum.Len() < liNum.Len()){
 				lNum = wxString(wxT("0")) + lNum;
 			}
-			l.Name = wxString::Format(wxT("%s Light %03i"), m->name.AfterLast('\\').BeforeLast('.').c_str(), LightID);
+			l.Name = wxString::Format(wxT("%s Light %03i"), m->name.AfterLast(MPQ_SLASH).BeforeLast('.').c_str(), LightID);
 
 			scene.Lights.push_back(l);
 		}
@@ -2794,7 +2814,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 	Need to get this working with layers before we enable it.
 	For now, use the old method in the main function.	
 */
-
+	int currset = m->doodadset;
 	if (modelExport_LW_ExportDoodads == true){
 		if ((modelExport_LW_DoodadsAs == 0)||(modelExport_LW_DoodadsAs == 1)){			// Doodads as Nulls or Scene Objects...
 			g_modelViewer->SetStatusText(wxT("Exporting Doodads as part of the Scene File..."));
@@ -2804,8 +2824,13 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 				doodadset.AnimData = AnimationData(animValue0, animValue0, animValue1);
 				scene.Objects.push_back(doodadset);
 
-				wxLogMessage(wxT("Processing Doodadset %i: %s"),ds, m->doodadsets[ds].name);
+				// Load the doodads
+				m->doodadset = ds;
+				m->updateModels();
+
+				wxLogMessage(wxT("Processing Doodadset %i: %s, Num Doodads in set: %i, Starts: %i"),ds, m->doodadsets[ds].name,m->doodadsets[ds].size,m->doodadsets[ds].start);
 				for (size_t dd=m->doodadsets[ds].start;dd<(m->doodadsets[ds].start+m->doodadsets[ds].size);dd++){
+					wxLogMessage(wxT("Processing Doodad #%i, %s..."),dd, m->modelis[dd].filename);
 					WMOModelInstance *ddinstance = &m->modelis[dd];
 					size_t ddID = LW_ObjCount.GetPlus();
 
@@ -2837,7 +2862,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 						}
 						isNull = false;
 					}
-
+					//wxLogMessage(wxT("Doodad File Name: %s"),ddinstance->filename);
 					LWSceneObj doodad(ddfilename,ddID,ddSetID,LW_ITEMTYPE_OBJECT,isNull);
 					Matrix ddmat;
 					Quaternion qRot = Quaternion(ddinstance->dir,ddinstance->w);
@@ -2864,18 +2889,31 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 					doodad.AnimData = AnimationData(AnimVec3D(dpx,dpy,dpz),AnimVec3D(drx,dry,drz),AnimVec3D(ds,ds,ds));
 
 					scene.Objects.push_back(doodad);
+					wxLogMessage(wxT("Doodad added to scene. Checking for Lights..."));
 
-					uint32 ddnLights = ddinstance->model->header.nLights;
+					if (!ddinstance->model){
+						wxLogMessage(wxT("Loading Model..."));
+						ddinstance->loadModel(m->loadedModels);
+						wxLogMessage(wxT("Finished Loading Model."));
+					}
 					Model *ddm = ddinstance->model;
+					uint32 ddnLights = ddm->header.nLights;
 					if ((modelExport_LW_ExportLights == true) && (ddnLights > 0)){
-						for (size_t x=0;x<ddnLights;x++){
+						wxLogMessage(wxT("Processing %i Doodad Lights..."),ddnLights);
+						for (size_t ddl=0;ddl<ddm->header.nLights;ddl++){
+							wxLogMessage(wxT("Gathering Light %i data..."),ddl);
 							size_t LightID = LW_LightCount.GetPlus();
 							LWLight l;
-							ModelLight cl = ddm->lights[x];
+							//wxLogMessage(wxT("Model Light..."));
+							ModelLight cl = ddm->lights[ddl];
+							//wxLogMessage(wxT("Diff Light Color..."));
 							Vec3D diffColor = cl.diffColor.getValue(0,0);
+							//wxLogMessage(wxT("Light RGB Color..."));
 							Vec3D Lcolor(diffColor.x, diffColor.y, diffColor.z);
+							//wxLogMessage(wxT("Light Intensity..."));
 							float Lint = cl.diffIntensity.getValue(0,0);
 
+							wxLogMessage(wxT("Adjusting Light levels..."));
 							while ((Lcolor.x > 1.0f)||(Lcolor.y > 1.0f)||(Lcolor.z > 1.0f)) {
 								Lcolor.x = Lcolor.x * 0.99;
 								Lcolor.y = Lcolor.y * 0.99;
@@ -2883,13 +2921,15 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 								Lint = Lint / 0.99;
 							}
 							
+							wxLogMessage(wxT("Processing Location..."));
 							AnimVector lx,ly,lz;
 							Vec3D lpos = cl.pos;
 							lpos *= (modelExport_ScaleToRealWorld == true?REALWORLD_SCALE:1.0);
 							lx.Push(-lpos.z,0,0);
 							ly.Push(lpos.y,0,0);
 							lz.Push(-lpos.x,0,0);
-
+							
+							wxLogMessage(wxT("Setting variables..."));
 							l.AnimData = AnimationData(AnimVec3D(lx,ly,lz),animValue0,animValue1);
 
 							l.LightID = LightID;
@@ -2909,19 +2949,23 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 							l.ParentID = ddID;
 							wxString lNum,liNum;
 							lNum << LightID;
-							liNum << m->nLights;
+							liNum << ddnLights;
 							while (lNum.Len() < liNum.Len()){
 								lNum = wxString(wxT("0")) + lNum;
 							}
-							wxString lName(m->name.AfterLast(MPQ_SLASH).BeforeLast('.'));
+							wxString lName(ddm->name.AfterLast(MPQ_SLASH).BeforeLast('.'));
 							l.Name = lName << wxT(" Light ") << (wxChar)LightID;
 
 							scene.Lights.push_back(l);
 						}
+						wxLogMessage(wxT("Finished Processing Doodad Lights."));
 					}
+					wxLogMessage(wxT("Finished Processing Doodad."));
 				}
 			}
+			wxLogMessage(wxT("Scene completed!"));
 			if (modelExport_LW_DoodadsAs == 1){
+				wxLogMessage(wxT("Exporting Doodad Model..."));
 				wxArrayString used;
 				for (size_t i=0;i<m->modelis.size();i++){
 					Model *ddm = m->modelis[i].model;
@@ -2934,10 +2978,11 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 					if (tripped == false){
 						wxString fname = RootDir.BeforeLast(SLASH);
 						fname << SLASH << ddm->modelname.AfterLast(SLASH).BeforeLast(wxT('.')) << wxT(".lwo");
+						wxLogMessage(wxT("Pre-Gather Doodad Model Filename: %s"),fname);
 						// Must gather before paths, else it generates files in the wrong place.
 						LWScene empty_scene;
+						wxLogMessage(wxT("Gathering Doodad Model..."));
 						LWObject DDObject = GatherM2forLWO(NULL,ddm,true,fname,empty_scene,false);
-
 						if (modelExport_LW_PreserveDir == true){
 							wxString Path, Name;
 
@@ -2959,6 +3004,8 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 							fname.Empty();
 							fname << Path1 << SLASH << Path2 << SLASH << Name;
 						}
+						wxLogMessage(wxT("Gathering Complete."));
+						wxLogMessage(wxT("Final Doodad Model Filename: %s"),fname);
 
 						if (DDObject.SourceType == wxEmptyString){
 							//wxMessageBox(wxT("Error gathering information for export."),wxT("Export Error"));
@@ -2991,7 +3038,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 
 					// --== Model Debugger ==--
 					// Exports the model immediately after gathering, to help determine if a problem is with the gathering function or the doodad-placement functions.
-					wxString doodadname = wxString(fn, wxConvUTF8).BeforeLast('.') << wxT("_") << ddinstance->filename.AfterLast('\\').BeforeLast('.') << wxT(".lwo");
+					wxString doodadname = wxString(fn, wxConvUTF8).BeforeLast('.') << wxT("_") << ddinstance->filename.AfterLast(MPQ_SLASH).BeforeLast('.') << wxT(".lwo");
 					if (modelExport_LW_PreserveDir == true){
 						wxString Path, Name;
 
@@ -3056,7 +3103,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 					while (ddnum.Length() < numdds.Length()) {
 						ddnum = wxString(wxT("0")) << ddnum;
 					}					
-					ddPrefix << ddnum << wxT("_") << m->modelis[dd].filename.AfterLast('\\').BeforeLast('.') << wxT("_");
+					ddPrefix << ddnum << wxT("_") << m->modelis[dd].filename.AfterLast(MPQ_SLASH).BeforeLast('.') << wxT("_");
 					//wxLogMessage(wxT("Doodad Prefix: %s"),ddPrefix);
 					Object.Plus(Doodad,ds+1,ddPrefix);
 					doodadAdded = true;
@@ -3107,7 +3154,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 							while (lNum.Len() < liNum.Len()){
 								lNum = wxString(wxT("0")) + lNum;
 							}
-							wxString lName(m->name.AfterLast('\\').BeforeLast('.'));
+							wxString lName(m->name.AfterLast(MPQ_SLASH).BeforeLast('.'));
 							l.Name = lName << wxT(" Light ") << (wxChar)LightID;
 
 							LightID++;
@@ -3129,6 +3176,8 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 		}
 	}
 	
+	m->showDoodadSet(currset);
+
 	g_modelViewer->SetStatusText(wxT("Finished Gathering WMO Data!"));
 	return Object;
 	Object.~LWObject();
@@ -3170,7 +3219,7 @@ LWObject GatherADTforLWO(MapTile *m, const char *fn, LWScene &scene){
 
 	// Main Object
 	LWLayer Layer;
-	Layer.Name = m->name.AfterLast('\\').BeforeLast('.');
+	Layer.Name = m->name.AfterLast(MPQ_SLASH).BeforeLast('.');
 	Layer.ParentLayer = -1;
 
 	// Bounding Box for the Layer

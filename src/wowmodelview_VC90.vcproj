@@ -559,10 +559,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\modelexport_3ds.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\modelexport_fbx.cpp"
 				>
 			</File>
@@ -794,10 +790,6 @@
 			</File>
 			<File
 				RelativePath=".\modelexport.h"
-				>
-			</File>
-			<File
-				RelativePath=".\modelexport_3ds.h"
 				>
 			</File>
 			<File

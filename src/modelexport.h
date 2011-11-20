@@ -171,9 +171,6 @@ void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init);
 void ExportCOLLADA_M2(Attachment *att, Model *m, const char *fn, bool init);
 void ExportCOLLADA_WMO(WMO *m, const char *fn);
 
-//3D Studio Max
-void Export3DS_M2(Attachment *att, Model *m, const char *fn, bool init);
-
 // X3D
 void ExportX3D_M2(Model *m, const char *fn, bool init);
 

@@ -190,8 +190,8 @@ void ExportMS3D_M2(Attachment *att, Model *m, const char *fn, bool init)
 			f.Write(reinterpret_cast<char *>(&mat), sizeof(ms3d_material_t));
 
 			wxString texFilename(fn, wxConvUTF8);
-			texFilename = texFilename.BeforeLast('\\');
-			texFilename += '\\';
+			texFilename = texFilename.BeforeLast(SLASH);
+			texFilename += SLASH;
 			texFilename += texName;
 			wxLogMessage(wxT("Exporting Image: %s"),texFilename.c_str());
 			SaveTexture(texFilename);

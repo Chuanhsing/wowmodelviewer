@@ -382,7 +382,6 @@ copy ..\bin\userSettings\*.* $(OutDir)userSettings
     <ClCompile Include="modelcanvas.cpp" />
     <ClCompile Include="modelcontrol.cpp" />
     <ClCompile Include="modelexport.cpp" />
-    <ClCompile Include="modelexport_3ds.cpp" />
     <ClCompile Include="modelexport_fbx.cpp" />
     <ClCompile Include="modelexport_lwo.cpp" />
     <ClCompile Include="modelexport_m3.cpp" />
@@ -437,7 +436,6 @@ copy ..\bin\userSettings\*.* $(OutDir)userSettings
     <ClInclude Include="modelcanvas.h" />
     <ClInclude Include="modelcontrol.h" />
     <ClInclude Include="modelexport.h" />
-    <ClInclude Include="modelexport_3ds.h" />
     <ClInclude Include="modelexport_lwo.h" />
     <ClInclude Include="modelexport_m3.h" />
     <ClInclude Include="modelexport_ms3d.h" />

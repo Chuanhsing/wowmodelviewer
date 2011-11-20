@@ -45,8 +45,10 @@ class WMOGroup {
 public:
 	Vec3D *vertices, *normals;
 	Vec2D *texcoords;
-	uint16 *indices, *materials;
-	uint32 nTriangles, nVertices, nIndices, *cv, nBatches;
+	uint16 *indices;
+	uint16 *materials;
+	int32 nTriangles, nVertices,  nIndices, nBatches;
+	unsigned int *cv;
 	WMOBatch *batches;
 	WMOVertColor *VertexColors;
 	size_t *IndiceToVerts;

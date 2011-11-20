@@ -154,7 +154,7 @@ void ExportOgreXML_M2(Model *m, const char *fn, bool init) {
 	wxString baseName = (meshName.Right(9).CmpNoCase(wxT(".mesh.xml")) == 0) ? (meshName.Left(meshName.Length() - 9)) : meshName;
 	wxString matName = baseName + wxT(".material");
 	wxString sktName = baseName + wxT(".skeleton.xml");
-	wxString name = baseName.AfterLast('\\');
+	wxString name = baseName.AfterLast(SLASH);
 
 	ExportData data = { m, fn, init, baseName, name };
 
@@ -235,7 +235,7 @@ static void WriteMesh(const ExportData &data, wxString filename)
 	}
 	s << lt << "</submeshes>" << endl;
 
-	wxString sktName = data.baseName.AfterLast('\\') + wxT(".skeleton");
+	wxString sktName = data.baseName.AfterLast(SLASH) + wxT(".skeleton");
 	s << "<skeletonlink name=\"" << sktName << "\" />" << endl;
 
 	s << "<boneassignments>" << endl;
@@ -281,7 +281,7 @@ static void WriteMaterial(const ExportData &data, wxString filename)
 			s << rt;
 			wxString texName = GetM2TextureName(data.model, p, (int)n) + wxT(".tga");
 			s << "texture " << texName << " -1" << endl;
-			SaveTexture(data.baseName.BeforeLast('\\') + wxT("\\") + texName);
+			SaveTexture(data.baseName.BeforeLast(SLASH) + wxT(SLASH) + texName);
 			s << lt << "}" << endl;
 			s << lt << "}" << endl;
 			s << lt << "}" << endl;

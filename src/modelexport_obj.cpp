@@ -61,7 +61,7 @@ void ExportOBJ_M2(Attachment *att, Model *m, wxString fn, bool init)
 		return;
 	}
 	wxTextOutputStream fm (ms);
-	matName = matName.AfterLast('\\');
+	matName = matName.AfterLast(SLASH);
 
 
 	fm << wxT("#") << endl;
@@ -541,9 +541,9 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 	// Open file
 	if (modelExport_PreserveDir == true){
 		wxString Path1, Path2, Name;
-		Path1 << file.BeforeLast('\\');
-		Name << file.AfterLast('\\');
-		Path2 << m->name.BeforeLast('\\');
+		Path1 << file.BeforeLast(SLASH);
+		Name << file.AfterLast(SLASH);
+		Path2 << m->name.BeforeLast(SLASH);
 
 		MakeDirs(Path1,Path2);
 
@@ -594,7 +594,7 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 				}
 			}
 			if (nomatch == true){
-				outname = outname.AfterLast('\\');
+				outname = outname.AfterLast(SLASH);
 				texarray[mat->tex] = outname << wxString::Format(wxT("_Material_%03i"), mat->tex);
 			}
 		}
@@ -611,17 +611,16 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 
 			//wxString texName(fn, wxConvUTF8);
 			wxString texName = texarray[mat->tex];
-			wxString texPath = texName.BeforeLast('\\');
-			texName = texName.AfterLast('\\');
+			wxString texPath = texName.BeforeLast(MPQ_SLASH);
+			texName = texName.AfterLast(MPQ_SLASH);
 			//texName << wxT("_") << mat->tex << wxT(".tga");
 			texName << wxT(".tga");
 
 			//fm << "newmtl " << "Material_" << mat->tex+1 << endl;
-			// MilkShape3D cann't read long texname
 			if (modelExport_PreserveDir == true)
 				fm << "newmtl " << texarray[mat->tex] << endl;
 			else
-				fm << "newmtl " << texarray[mat->tex].AfterLast('\\') << endl;
+				fm << "newmtl " << texarray[mat->tex].AfterLast(MPQ_SLASH) << endl;
 			fm << "Kd 0.750000 0.750000 0.750000" << endl; // diffuse
 			fm << "Ka 0.250000 0.250000 0.250000" << endl; // ambient
 			fm << "Ks 0.000000 0.000000 0.000000" << endl; // specular
@@ -630,20 +629,20 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 			fm << "map_Kd " << texName.c_str() << endl << endl;
 
 			wxString texFilename = file;
-			texFilename = texFilename.BeforeLast('\\');
-			texFilename += '\\';
+			texFilename = texFilename.BeforeLast(SLASH);
+			texFilename += SLASH;
 			texFilename += texName;
 			
 			if (modelExport_PreserveDir == true){
 				wxString Path1, Path2, Name;
-				Path1 << wxString(texFilename, wxConvUTF8).BeforeLast('\\');
-				Name << texName.AfterLast('\\');
+				Path1 << wxString(texFilename, wxConvUTF8).BeforeLast(SLASH);
+				Name << texName.AfterLast(MPQ_SLASH);
 				Path2 << texPath;
 
 				MakeDirs(Path1,Path2);
 
 				texFilename.Empty();
-				texFilename << Path1 << '\\' << Path2 << '\\' << Name;
+				texFilename << Path1 << SLASH << Path2 << SLASH << Name;
 			}
 
 			// setup texture
@@ -654,7 +653,7 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 	}
 	fm.close();
 
-	f << "# Wavefront OBJ exported by WoW Model Viewer v0.5.0.8" << endl << endl;
+	f << "# Wavefront OBJ exported by WoW Model Viewer " << APP_VERSION << endl << endl;
 	f << "mtllib " << mtlName.mb_str() << endl << endl;
 
 	// geometric vertices (v)
@@ -721,7 +720,7 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 			if (modelExport_PreserveDir == true)
 				f << "usemtl " << texarray[mat->tex] << endl;
 			else
-				f << "usemtl " << texarray[mat->tex].AfterLast('\\') << endl;
+				f << "usemtl " << texarray[mat->tex].AfterLast(MPQ_SLASH) << endl;
 			for (size_t k=0; k<batch->indexCount; k+=3) {
 				f << "f ";
 				f << counter << "/" << counter << "/" << counter << " ";

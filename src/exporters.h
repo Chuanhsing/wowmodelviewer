@@ -21,12 +21,11 @@ struct Exporter_Type {
 };
 
 // Exporters
-const static size_t ExporterTypeCount = 10;
+const static size_t ExporterTypeCount = 9;
 
 // This list should be alphabetical.
 // Format: Exporter_Type(Exporter Name, Exporter_ID, Export Menu Text, Exports M2, Exports WMO, Exports ADT),
 const static Exporter_Type Exporter_Types[ExporterTypeCount] = {
-	Exporter_Type(wxT("3D Studio Max (3DS)"),ID_MODELEXPORT_3DS,wxT("3DS..."),true),
 	Exporter_Type(wxT("Collada"),ID_MODELEXPORT_COLLADA,wxT("Collada...")),
 #ifdef	_WINDOWS
 	Exporter_Type(wxT("FBX"),ID_MODELEXPORT_FBX,wxT("FBX..."),true),
@@ -39,7 +38,7 @@ const static Exporter_Type Exporter_Types[ExporterTypeCount] = {
 	Exporter_Type(wxT("Lightwave 3D"),ID_MODELEXPORT_LWO,wxT("Lightwave 3D..."),true,true),
 #endif
 	Exporter_Type(wxT("M3"),ID_MODELEXPORT_M3,wxT("M3..."),true),
-	Exporter_Type(wxT("Milkshake"),ID_MODELEXPORT_MS3D,wxT("Milkshape..."),true),
+	Exporter_Type(wxT("Milkshape"),ID_MODELEXPORT_MS3D,wxT("Milkshape..."),true),
 	Exporter_Type(wxT("Ogre XML"),ID_MODELEXPORT_OGRE,wxT("Ogre XML..."),true),
 	Exporter_Type(wxT("Wavefront OBJ"),ID_MODELEXPORT_OBJ,wxT("Wavefront OBJ..."),true,true),
 	Exporter_Type(wxT("X3D"),ID_MODELEXPORT_X3D,wxT("X3D..."),true),
