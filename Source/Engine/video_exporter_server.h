@@ -31,9 +31,6 @@ public:
 		virtual ~VideoExporterType() {};
 		// Get Name
 		virtual const QString &getName() const = 0;
-
-		// Get the capabilities of this exporter
-		virtual const ExporterCanDo &exporterCapabilities() const = 0;
 		
 		// Exporter Functions
 		virtual QSharedPointer<VideoExporter> exportVideoFile() = 0;

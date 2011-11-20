@@ -92,22 +92,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GeneratedFiles\ui_WoWDirManager.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_About.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_About_Plugins.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_WDM_Edit.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_WDM_Main.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="WoWDirManager.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="UI\WoWDirManager.ui">
-      <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="UI\About.ui">
       <Filter>Form Files</Filter>
@@ -119,6 +119,12 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="UI\About_Plugins.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\WDM_Edit.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UI\WDM_Main.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>

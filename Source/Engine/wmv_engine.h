@@ -8,8 +8,8 @@
 #endif
 
 // Logging Includes
-#include "../Includes/QsLog/QsLog.h"
-#include "../Includes/QsLog/QsLogDest.h"
+#include "../Foundation/QsLog/QsLog.h"
+#include "../Foundation/QsLog/QsLogDest.h"
 
 // Logging
 #ifdef _DEBUG

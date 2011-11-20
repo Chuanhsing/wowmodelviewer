@@ -1,25 +1,28 @@
 <RCC>
-    <qresource prefix="/">
-		<file alias="WMVIcon">../../Resources/FileIcons/wmv.png</file>
-		<file alias="chrFile">../../Resources/FileIcons/chrFile.png</file>
-        <file alias="AboutIcon">../../Resources/Images/About_Icon.png</file>
-        <file>../../Resources/Splash/Splash_001.png</file>
-    </qresource>
-    <qresource prefix="/menuIcons">
-        <file alias="menuChrLoad">../../Resources/Images/Character_Load.png</file>
-        <file alias="menuChrSave">../../Resources/Images/Character_Save.png</file>
-    </qresource>
-    <qresource prefix="/Support Software">
-        <file alias="GNU_GLPv3">../../Resources/SoftwareLogos/gplv3.png</file>
-        <file alias="QtLogo">../../Resources/SoftwareLogos/qt.png</file>
-    </qresource>
-    <qresource prefix="/WoW Versions">
-        <file alias="WoWIcon01-Vanilla">../../Resources/Images/WoWIcon01-Vanilla.png</file>
-        <file alias="WoWIcon02-TBC">../../Resources/Images/WoWIcon02-TBC.png</file>
-        <file alias="WoWIcon03-WotLK">../../Resources/Images/WoWIcon03-WotLK.png</file>
-        <file alias="WoWIcon04-Cataclysm">../../Resources/Images/WoWIcon04-Cataclysm.png</file>
-        <file alias="WoWIcon05-MoP">../../Resources/Images/WoWIcon05-MoP.png</file>
-        <file alias="WoWIcon-Disabled">../../Resources/Images/WoWIcon-Disabled.png</file>
-        <file alias="WoWIcon-PTR">../../Resources/Images/WoWIcon-PTR.png</file>
-    </qresource>
+  <qresource prefix="/">
+    <file alias="WMVIcon">../../Resources/FileIcons/wmv.png</file>
+    <file alias="AboutIcon">../../Resources/Images/About_Icon.png</file>
+    <file>../../Resources/Splash/Splash_001.png</file>
+  </qresource>
+  <qresource prefix="/fileIcons">
+    <file alias="iconChrFile">../../Resources/FileIcons/iconChrFile.png</file>
+    <file alias="iconFolder">../../Resources/FileIcons/iconFolder.png</file>
+  </qresource>
+  <qresource prefix="/menuIcons">
+    <file alias="menuChrLoad">../../Resources/Images/Character_Load.png</file>
+    <file alias="menuChrSave">../../Resources/Images/Character_Save.png</file>
+  </qresource>
+  <qresource prefix="/Support Software">
+    <file alias="GNU_GLPv3">../../Resources/SoftwareLogos/gplv3.png</file>
+    <file alias="QtLogo">../../Resources/SoftwareLogos/qt.png</file>
+  </qresource>
+  <qresource prefix="/WoW Versions">
+    <file alias="WoWIcon01-Vanilla">../../Resources/Images/WoWIcon01-Vanilla.png</file>
+    <file alias="WoWIcon02-TBC">../../Resources/Images/WoWIcon02-TBC.png</file>
+    <file alias="WoWIcon03-WotLK">../../Resources/Images/WoWIcon03-WotLK.png</file>
+    <file alias="WoWIcon04-Cataclysm">../../Resources/Images/WoWIcon04-Cataclysm.png</file>
+    <file alias="WoWIcon05-MoP">../../Resources/Images/WoWIcon05-MoP.png</file>
+    <file alias="WoWIcon-Disabled">../../Resources/Images/WoWIcon-Disabled.png</file>
+    <file alias="WoWIcon-PTR">../../Resources/Images/WoWIcon-PTR.png</file>
+  </qresource>
 </RCC>

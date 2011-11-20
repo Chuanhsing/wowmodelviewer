@@ -33,8 +33,12 @@ public:
 	public:
 		// Destructor
 		virtual ~ModelExporterType() {};
-		// Get Name
+		
+		// Get the Plugin Name, as listed in the About Plugins Window
 		virtual const QString &getName() const = 0;
+		
+		// Get the basic information about this exporter
+		virtual const ExporterInfo &getExporterInfo() const = 0;
 
 		// Get the capabilities of this exporter
 		virtual const ExporterCanDo &exporterCapabilities() const = 0;
@@ -52,7 +56,23 @@ public:
 
 	// Allows plugins to add new Exporters
 	WMV_ENGINE_API void addExporter(QSharedPointer<ModelExporterType> ET){
-		m_ModelExporterTypes.push_back(ET.data());
+		ExporterInfo info = ET.data()->getExporterInfo();
+		#if defined(_WINDOWS)
+			if (info.OS_Windows > -1){
+				m_ModelExporterTypes.push_back(ET.data());
+				return;
+			}
+		#elif defined(_MAC)
+			if (info.OS_MacOSX > -1){
+				m_ModelExporterTypes.push_back(ET.data());
+				return;
+			}
+		#elif defined(_LINUX)
+			if (info.OS_Linux > -1){
+				m_ModelExporterTypes.push_back(ET.data());
+				return;
+			}
+		#endif
 	}
 
 	// Get the total number of registered Exporters

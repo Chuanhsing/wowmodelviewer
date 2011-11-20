@@ -452,11 +452,67 @@ void Interface_Viewer::on_actionView_Log_triggered()
 	QLOG_INFO() << "Successfully opened the log file.";
 }
 
+// Connect the two Initial Pose Only checkboxes.
+void Interface_Viewer::on_actionInitial_Pose_Only_toggled(bool arg1)
+{
+    ui->actionInitial_Pose_Only_2->setChecked(arg1);
+}
+void Interface_Viewer::on_actionInitial_Pose_Only_2_toggled(bool arg1)
+{
+    ui->actionInitial_Pose_Only->setChecked(arg1);
+}
+
+// Show Controls
+void Interface_Viewer::on_actionShowCtrl_FileList_toggled(bool arg1)
+{
+	if (arg1 == false){
+		ui->ViewerFileListDockWidget->hide();
+	}else{
+		ui->ViewerFileListDockWidget->show();
+	}
+}
+
+// Update Current Dir
+void Interface_Viewer::updateCurrentDirfromMenu(){
+	/*
+
+	QLOG_INFO() << "Changing Current Directory from menu...";
+	QString dirname = "None";
+	QString olddir = sWMVSettings.value("CurrentWoWDir").toString();
+
+	for (size_t i=0;i<WoWDirGroup->actions().count();i++)
+	{
+		QAction *a = WoWDirGroup->actions().value((int)i);
+
+		if (a->isChecked()){
+			dirname = a->data().toString();
+			break;
+		}
+	}
+
+	if (olddir == dirname){
+		QLOG_INFO() << "Current Directory already set.";
+		return;
+	}
+
+	st_WoWDir b(WoWDirList.value(dirname));
+
+	QLOG_INFO() << "Setting Current Directory...";
+	CurrentDir = WoWDirList.value(dirname);
+	sWMVSettings.setValue("CurrentWoWDir",dirname);
+	sWMVSettings.sync();
+
+	WoWTypeNext = b.Version;
+	canReloadWoW = true;
+
+	*/
+}
+
 // Open WoW Directory Manager
 void Interface_Viewer::on_actionManage_Directories_triggered()
 {
-	//WoWDirectoryManager.init();
-	//WoWDirectoryManager.show();
+	WoWDirectoryManager.init();
+	WoWDirectoryManager.show();
 }
 
 // Open About Window

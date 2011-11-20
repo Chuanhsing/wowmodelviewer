@@ -44,10 +44,11 @@ void WoWDirManager::init(){
 	UpdateList();
 }
 
-/*
+
 // Save the Directory to the WoWDirs.ini file
 void WoWDirManager::saveDir(st_WoWDir dir, bool noUpdate = false)
 {
+	/*
 	// Get the Group Name
 	QString g = WoWDirGroupName(dir);
 
@@ -75,10 +76,12 @@ void WoWDirManager::saveDir(st_WoWDir dir, bool noUpdate = false)
 	// Update List
 	if (noUpdate == false)
 		UpdateList();
+	*/
 }
 
 // Called when someone clicks the "Add" button
 void WoWDirManager::on_WDM_bDirAdd_clicked(){
+	/*
 	QLOG_INFO() << "Attempting to add a new WoWDir...";
 	// Directory chooser
 	QString dir = QFileDialog::getExistingDirectory(this,tr("Choose the WoW Directory you wish to add."),sWMVSettings.value("WDMLastDir").toString());
@@ -235,10 +238,18 @@ void WoWDirManager::on_WDM_bDirAdd_clicked(){
 	*/
 	/*
 	g_WMV->updateStatusBar(tr("Successfully gathered Directory data!"));
+	*/
+}
+
+// Edit the currently selected directory.
+void WoWDirManager::on_WDM_bDirEdit_clicked(){
+	Window_WDMEdit.init();
+	Window_WDMEdit.show();
 }
 
 // Make the Currently selected directory the Current Directory.
 void WoWDirManager::on_WDM_bDirMakeCurrent_clicked(){
+	/*
 	QLOG_INFO() << "Attempting to set Current WoW Dir...";
 	QString dirname = "None";
 	QString olddir = sWMVSettings.value("CurrentWoWDir").toString();
@@ -262,9 +273,10 @@ void WoWDirManager::on_WDM_bDirMakeCurrent_clicked(){
 	
 	QLOG_INFO() << "Updating WoWDir List...";
 	UpdateList();
+*/
 }
-
 void WoWDirManager::ListOffset(int offset){
+/*
 	int num = -1;
 	for (size_t i=0;i<List->count();i++){
 		QListWidgetItem *a = List->item((int)i);
@@ -279,6 +291,7 @@ void WoWDirManager::ListOffset(int offset){
 	ReOrderList<unsigned int,int>(num, offset);
 	List->item(num+offset)->setSelected(true);
 	UpdateList();
+	*/
 }
 
 // Move directory up the list
@@ -295,6 +308,7 @@ void WoWDirManager::on_WDM_bDirDown_clicked(){
 
 // Called when someone clicks the "Delete All" button
 void WoWDirManager::on_WDM_bDirDeleteAll_clicked(){
+	/*
 	QLOG_INFO() << "User clicked Delete All button. Asking for confirmation...";
 	QMessageBox daConfirm;
 	daConfirm.setModal(true);
@@ -320,8 +334,9 @@ void WoWDirManager::on_WDM_bDirDeleteAll_clicked(){
 		return;
 	}
 	QLOG_INFO() << "User has chosen to cancel the Delete All function.";
+	*/
 }
-*/
+
 // Prepare the List
 void WoWDirManager::SetupList()
 {
@@ -409,7 +424,7 @@ void WoWDirManager::UpdateList()
 	g_WMV->UpdateViewerMenu();
 	*/
 }
-/*
+
 // Scan the passed directory and return a WoWDir.
 st_WoWDir ScanWoWDir(QDir dir, int locale, int position = 0){
 	if (dir.exists() == false){
@@ -418,8 +433,9 @@ st_WoWDir ScanWoWDir(QDir dir, int locale, int position = 0){
 	}
 	
 	QLOG_INFO() << "Scanning WoW Directory:" << dir.absolutePath();
-	g_WMV->updateStatusBar(QObject::tr("Scanning WoW Directory..."));
+	//g_WMV->updateStatusBar(QObject::tr("Scanning WoW Directory..."));
 	st_WoWDir wdir(dir,locale);
+	/*
 	wdir.Position = position;
 	QString sloc = LocaleList.value(locale);
 
@@ -636,7 +652,8 @@ st_WoWDir ScanWoWDir(QDir dir, int locale, int position = 0){
 	MPQList_Get(wdir);
 
 	g_WMV->updateStatusBar(QObject::tr("Scanning Complete. TOC Version Found: %1").arg(inum));
-
+	
+	*/
 	QLOG_INFO() << "WoW Scan completed successfully! Returning WoW Directory...";
 	return wdir;
 }
@@ -645,6 +662,7 @@ st_WoWDir ScanWoWDir(QDir dir, int locale, int position = 0){
 template <class UnReal, class Real>
 void WoWDirManager::ReOrderList(UnReal in_pos, Real offset)
 {
+	/*
 	// Check and fix out-of-bounds issues.
 	if ((in_pos == 0) && (offset<0))
 		offset = 0;
@@ -703,5 +721,30 @@ void WoWDirManager::ReOrderList(UnReal in_pos, Real offset)
 	}
 	UpdateList();
 	QLOG_INFO() << "Finished re-ordering list.";
+	*/
 }
-*/
+
+// --= WoW Directory Manager Directory Editor =--
+
+WDM_Edit::WDM_Edit(QWidget *parent) : QDialog(parent), ui_WDM_Edit(new Ui::WDM_Edit)
+{
+	ui_WDM_Edit->setupUi(this);
+}
+
+WDM_Edit::~WDM_Edit()
+{
+	delete ui_WDM_Edit;
+}
+
+void WDM_Edit::init()
+{
+
+}
+
+void WDM_Edit::on_btn_Okay_clicked()
+{
+	// Save the data
+
+	// Close the Window
+	QDialog::close();
+}

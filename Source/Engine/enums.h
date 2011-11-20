@@ -84,8 +84,10 @@ enum WoWVersion
 	// Others
 	WOW_BETA = 59999,				// Beta for Mists of Pandaria
 	WOW_PTR = 100000,				// Public Test Realm
-	WOW_NOTLOADED = 999999			// Unloaded WoW
+	WOW_NOTLOADED = 0				// Unloaded WoW
 };
+
+// --== List Identifiers ==--
 
 // Number matches location in LocaleList
 enum WoWLocale
@@ -105,7 +107,7 @@ enum WoWLocale
 	LOCALE_ITIT,			// Italian
 	LOCALE_PLPL,			// Polish
 
-	LOCALE_NONE		// if Locale = LOCALE_NONE, then there was an error.
+	LOCALE_NONE				// if Locale = LOCALE_NONE, then there was an error.
 };
 
 // Expansion Name Identifier

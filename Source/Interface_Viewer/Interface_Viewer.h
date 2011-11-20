@@ -18,7 +18,7 @@
 // Commonly used Windows
 #include "../CommonWindows/About.h"
 #include "../CommonWindows/AboutPlugins.h"
-//#include "../CommonWindows/WoWDirManager.h"
+#include "../CommonWindows/WoWDirManager.h"
 
 namespace Ui {
     class Interface_Viewer;
@@ -77,7 +77,7 @@ public:
 	// SubWindows
 	WindowAbout Window_About;
 	WindowAboutPlugins Window_AboutPlugins;
-	//WoWDirManager WoWDirectoryManager;
+	WoWDirManager WoWDirectoryManager;
 
 	// User-Interface
     Ui::Interface_Viewer *ui;
@@ -89,12 +89,11 @@ public slots:
 private:
 
 private slots:
-	/*
 	void updateCurrentDirfromMenu();
     void on_actionInitial_Pose_Only_2_toggled(bool arg1);
     void on_actionInitial_Pose_Only_toggled(bool arg1);
 	void on_actionShowCtrl_FileList_toggled(bool arg1);
-	*/
+
     void on_rBtn_NoModel_clicked();
     void on_rBtn_IsChar_clicked();
     void on_rBtn_IsNPC_clicked();

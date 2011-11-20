@@ -4,27 +4,51 @@
     <Filter Include="QsLog">
       <UniqueIdentifier>{f135aa82-23d9-412f-8055-814b5d576a68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{19b5c10e-ed4d-4d72-bccf-7a4f2d84192b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Includes\QsLog\QsDebugOutput.cpp">
+    <ClCompile Include="QsLog\QsDebugOutput.cpp">
       <Filter>QsLog</Filter>
     </ClCompile>
-    <ClCompile Include="..\Includes\QsLog\QsLog.cpp">
+    <ClCompile Include="QsLog\QsLog.cpp">
       <Filter>QsLog</Filter>
     </ClCompile>
-    <ClCompile Include="..\Includes\QsLog\QsLogDest.cpp">
+    <ClCompile Include="QsLog\QsLogDest.cpp">
       <Filter>QsLog</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Includes\QsLog\QsDebugOutput.h">
+    <ClInclude Include="QsLog\QsDebugOutput.h">
       <Filter>QsLog</Filter>
     </ClInclude>
-    <ClInclude Include="..\Includes\QsLog\QsLog.h">
+    <ClInclude Include="QsLog\QsLog.h">
       <Filter>QsLog</Filter>
     </ClInclude>
-    <ClInclude Include="..\Includes\QsLog\QsLogDest.h">
+    <ClInclude Include="QsLog\QsLogDest.h">
       <Filter>QsLog</Filter>
     </ClInclude>
+    <ClInclude Include="Math\math_vector.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\math_base.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\math_constants.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\math_matrix.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\math_quaternion.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h" />
   </ItemGroup>
 </Project>
