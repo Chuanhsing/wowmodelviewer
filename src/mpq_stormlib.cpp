@@ -426,7 +426,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 				SFileReadFile( fh, buffer, (DWORD)size );
 				unsigned char *p = buffer, *end = buffer + size;
 
-				while (p <= end) {
+				while (p < end) { // if p = end here, no need to go into next loop !
 					unsigned char *q=p;
 					do {
 						if (*q=='\r' || *q=='\n') // carriage return or new line
