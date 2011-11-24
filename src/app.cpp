@@ -40,9 +40,17 @@ void WowModelViewApp::setInterfaceLocale()
 	// This chunk of code is all related to locale translation (if a translation is available).
 	// Only use locale for non-english?
 	wxString fn;
+#ifndef _MINGW
 	fn.Printf(wxT("mo%c%s.mo"), SLASH, locales[0]);
+#else
+	fn.Printf(wxT("mo%c%s.mo"), SLASH, (locales[0]).wc_str());
+#endif
 	if (interfaceID >= 0)
+#ifndef _MINGW
 		fn.Printf(wxT("mo%c%s.mo"), SLASH, locales[interfaceID]);
+#else
+		fn.Printf(wxT("mo%c%s.mo"), SLASH, (locales[interfaceID]).wc_str());
+#endif
 	if (wxFileExists(fn))
 	{
 		locale.Init(langIds[interfaceID], wxLOCALE_CONV_ENCODING);

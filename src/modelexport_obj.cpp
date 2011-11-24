@@ -552,8 +552,11 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 	}
 
 	// FIXME: ofstream is not compitable with multibyte path name
+#ifndef _MINGW
 	ofstream f(file.fn_str(), ios_base::out | ios_base::trunc);
-
+#else
+	ofstream f(file.char_str(), ios_base::out | ios_base::trunc);
+#endif
 	if (!f.is_open()) {
 		wxLogMessage(wxT("Error: Unable to open file '%s'. Could not export model."), file.c_str());
 		return;
@@ -565,7 +568,11 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 	mtlName << wxT(".mtl");
 
 	// FIXME: ofstream is not compitable with multibyte path name
+#ifndef _MINGW
 	ofstream fm(mtlName.fn_str(), ios_base::out | ios_base::trunc);
+#else
+	ofstream fm(mtlName.char_str(), ios_base::out | ios_base::trunc);
+#endif
 	mtlName = mtlName.AfterLast(SLASH);
 
 	fm << "#" << endl;

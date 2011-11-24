@@ -311,7 +311,11 @@ void CAnimationExporter::CreateGif()
 		// Append PNG extension, save out PNG file with frame number
 		wxString filen = m_strFilename;
 		filen << wxT("_") << i << wxT(".png");
+#ifndef _MINGW
 		newImage->Save(filen.mb_str(), CXIMAGE_FORMAT_PNG);
+#else
+		newImage->Save(filen.wc_str(), CXIMAGE_FORMAT_PNG);
+#endif
 		
 		//gifImages must not be empty
 		gifImages[i] = newImage;
@@ -339,7 +343,7 @@ void CAnimationExporter::CreateGif()
 	filen << wxT(".gif");
 
 	FILE *hFile = NULL;
-#ifdef	_WINDOWS
+#if	defined(_WINDOWS) && !defined(_MINGW)
 	fopen_s(&hFile, filen.mb_str(), "wb");
 #else
 	hFile = fopen(filen.mb_str(), "wb");
@@ -430,7 +434,7 @@ void CAnimationExporter::OnCheck(wxCommandEvent &event)
 
 void CAnimationExporter::CreateAvi(wxString fn)
 {
-#ifdef _WINDOWS
+#if defined(_WINDOWS) && !defined(_MINGW)
 	if (!g_canvas || !g_canvas->model || !g_canvas->model->animManager) {
 		wxMessageBox(wxT("Unable to create AVI animation!"), wxT("Error"));
 		wxLogMessage(wxT("Error: Unable to created AVI animation.  A required object pointer was null!"));

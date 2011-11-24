@@ -43,6 +43,12 @@
 //    variable:
 //          WXDLLIMPEXP_DATA_MYCOMP(int) myGlobalIntVar;
 //
+#if defined(_MINGW) && defined(WXUSINGDLL)
+	#undef WXUSINGDLL
+	#define REVERT_WX_DLL_MINGW_STATUS
+#endif
+
+
 #ifdef WXMAKINGDLL_JSON
     #define WXDLLIMPEXP_JSON                  WXEXPORT
     #define WXDLLIMPEXP_DATA_JSON(type)       WXEXPORT type
@@ -52,6 +58,10 @@
 #else // not making nor using DLL
     #define WXDLLIMPEXP_JSON
     #define WXDLLIMPEXP_DATA_JSON(type)	    type
+#endif
+
+#if defined(_MINGW) && defined(REVERT_WX_DLL_MINGW_STATUS)
+	#define WXUSINGDLL
 #endif
 
 // the __PRETTY_FUNCTION__ macro expands to the full class's

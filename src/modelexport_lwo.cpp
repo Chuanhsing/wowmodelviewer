@@ -1743,7 +1743,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 				matName = matName + wxT("_Spc");
 			}*/
 			
-			wxLogMessage(wxT("Surface name: %s"),matName);
+			wxLogMessage(wxT("Surface name: %s"),matName.c_str());
 			for (size_t x=0;x<Object.Surfaces.size();x++){
 				if (Object.Surfaces[x].Name == matName){
 					isFound = true;
@@ -2830,7 +2830,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 
 				wxLogMessage(wxT("Processing Doodadset %i: %s, Num Doodads in set: %i, Starts: %i"),ds, m->doodadsets[ds].name,m->doodadsets[ds].size,m->doodadsets[ds].start);
 				for (size_t dd=m->doodadsets[ds].start;dd<(m->doodadsets[ds].start+m->doodadsets[ds].size);dd++){
-					wxLogMessage(wxT("Processing Doodad #%i, %s..."),dd, m->modelis[dd].filename);
+					wxLogMessage(wxT("Processing Doodad #%i, %s..."),dd, m->modelis[dd].filename.c_str());
 					WMOModelInstance *ddinstance = &m->modelis[dd];
 					size_t ddID = LW_ObjCount.GetPlus();
 
@@ -2978,7 +2978,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 					if (tripped == false){
 						wxString fname = RootDir.BeforeLast(SLASH);
 						fname << SLASH << ddm->modelname.AfterLast(SLASH).BeforeLast(wxT('.')) << wxT(".lwo");
-						wxLogMessage(wxT("Pre-Gather Doodad Model Filename: %s"),fname);
+						wxLogMessage(wxT("Pre-Gather Doodad Model Filename: %s"),fname.c_str());
 						// Must gather before paths, else it generates files in the wrong place.
 						LWScene empty_scene;
 						wxLogMessage(wxT("Gathering Doodad Model..."));
@@ -3005,7 +3005,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 							fname << Path1 << SLASH << Path2 << SLASH << Name;
 						}
 						wxLogMessage(wxT("Gathering Complete."));
-						wxLogMessage(wxT("Final Doodad Model Filename: %s"),fname);
+						wxLogMessage(wxT("Final Doodad Model Filename: %s"),fname.c_str());
 
 						if (DDObject.SourceType == wxEmptyString){
 							//wxMessageBox(wxT("Error gathering information for export."),wxT("Export Error"));

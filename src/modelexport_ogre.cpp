@@ -190,7 +190,11 @@ void write(ofstream &f, const T &t) {
 static void WriteMesh(const ExportData &data, wxString filename) 
 {
 	// FIXME: ofstream is not compitable with multibyte path name
+#ifndef _MINGW
 	ofstream f(filename.fn_str(), ios::trunc);
+#else
+	ofstream f(filename.char_str(), ios::trunc);
+#endif
 	if (!f.good())
 		return;
 
@@ -258,7 +262,11 @@ static void WriteMesh(const ExportData &data, wxString filename)
 static void WriteMaterial(const ExportData &data, wxString filename) 
 {
 	// FIXME: ofstream is not compitable with multibyte path name
+#ifndef _MINGW
 	ofstream f(filename.fn_str(), ios::trunc);
+#else
+	ofstream f(filename.char_str(), ios::trunc);
+#endif
 	if (!f.good())
 		return;
 
@@ -281,7 +289,10 @@ static void WriteMaterial(const ExportData &data, wxString filename)
 			s << rt;
 			wxString texName = GetM2TextureName(data.model, p, (int)n) + wxT(".tga");
 			s << "texture " << texName << " -1" << endl;
-			SaveTexture(data.baseName.BeforeLast(SLASH) + wxT(SLASH) + texName);
+#ifndef _MINGW
+			// @TODO : fixme, broken on mingw
+			SaveTexture(data.baseName.BeforeLast(SLASH) + wxT(SLASH) + texName.wc_str());
+#endif
 			s << lt << "}" << endl;
 			s << lt << "}" << endl;
 			s << lt << "}" << endl;
@@ -295,7 +306,11 @@ static void WriteMaterial(const ExportData &data, wxString filename)
 static void WriteSkeleton(const ExportData &data, wxString filename) 
 {
 	// FIXME: ofstream is not compitable with multibyte path name
+#ifndef _MINGW
 	ofstream f(filename.fn_str(), ios::trunc);
+#else
+	ofstream f(filename.char_str(), ios::trunc);
+#endif
 	if (!f.good())
 		return;
 

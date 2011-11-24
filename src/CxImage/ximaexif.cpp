@@ -8,6 +8,11 @@
 
 #include "ximajpg.h"
 
+#ifdef _MINGW
+#include <ctype.h> // isprint
+#endif
+
+
 #if CXIMAGEJPG_SUPPORT_EXIF
 
 ////////////////////////////////////////////////////////////////////////////////

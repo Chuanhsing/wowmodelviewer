@@ -27,7 +27,7 @@ public:
 	{
 		if (m_fp) return false;	// Can't re-open without closing first
 
-#ifdef	_WINDOWS
+#if defined(_WINDOWS) && !defined(_MINGW)
 		fopen_s(&m_fp, filename, mode);
 #else
 		m_fp = _tfopen(filename, mode);
@@ -123,7 +123,7 @@ public:
 	virtual long	Scanf(const char *format, void* output)
 	{
 		if (!m_fp) return EOF;
-#ifdef	_WINDOWS
+#if defined(_WINDOWS) && !defined(_MINGW)
 		return fscanf_s(m_fp, format, output);
 #else
 		return fscanf(m_fp, format, output);

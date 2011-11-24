@@ -9,6 +9,7 @@
 
 IF (WIN32)
 	FIND_PATH( GLEW_INCLUDE_PATH GL/glew.h
+	    c:/MinGW/include
 		$ENV{PROGRAMFILES}/GLEW/include
 		${GLEW_ROOT_DIR}/include
 		DOC "The directory where GL/glew.h resides")

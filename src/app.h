@@ -10,6 +10,8 @@
     #include <wx/wx.h>
 #endif
 
+#ifndef _MINGW
+
 #if _MSC_VER>=1400
 	// This gives us Win XP style common controls in MSVC 8.0.
 	#if defined _M_X64
@@ -197,7 +199,7 @@
 	#pragma comment( lib, "wxbase28_xml.lib" )
 
 	// cxImage
-	#ifdef _WINDOWS
+	#if defined(_WINDOWS)
 		#if _MSC_VER==1600		// If VC100 (VS2010)
 			#ifdef _WIN64
 				#pragma message("     Adding library: cximagecrt64_VC100.lib" ) 
@@ -223,6 +225,9 @@
 		#pragma comment( lib, "cximagecrt.lib" )
 	#endif
 #endif // _DEBUG
+
+#endif // _MINGW
+
 
 #ifndef _WINDOWS
 	#include "../bin_support/Icons/wmv.xpm"

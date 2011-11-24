@@ -26,7 +26,7 @@
 #define CXIMAGE_SUPPORT_WBMP 1
 #define CXIMAGE_SUPPORT_WMF 1
 
-#ifdef _WINDOWS
+#if defined(_WINDOWS) && !defined(_MINGW)
 #define CXIMAGE_SUPPORT_TIF 1
 #define CXIMAGE_SUPPORT_JP2 1
 #define CXIMAGE_SUPPORT_JPC 1
@@ -45,6 +45,7 @@
 #define CXIMAGE_SUPPORT_MNG 0
 #define CXIMAGE_SUPPORT_RAW 0
 #endif
+
 
 
 #define CXIMAGE_SUPPORT_JBG 0		// GPL'd see ../jbig/copying.txt & ../jbig/patents.htm

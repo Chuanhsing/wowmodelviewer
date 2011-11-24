@@ -1219,7 +1219,7 @@ long CxImage::DrawStringEx(HDC hdc, long x, long y, CXTEXTINFO *pTextType, bool 
 	RECT pos = {0,0,0,0};
 	
     // get text length and number of lines
-    long i=0, numlines=1, len=(long)_tcsclen(pTextType->text);
+    long i=0, numlines=1, len=(long)_tcslen(pTextType->text);
     while (i<len)
     {
         if ( pTextType->text[i++]==13 )
@@ -1378,7 +1378,11 @@ void CxImage::InitTextInfo( CXTEXTINFO *txt )
     txt->b_outline = 0;     // default: no outline (OUTLINE NOT IMPLEMENTED AT THIS TIME)
     txt->b_round   = 20;    // default: rounding radius is 20% of the rectangle height
     // the text 
+#ifndef _MINGW
     _stprintf( txt->text, _T("Sample Text 01234õû")); // text use TCHAR mappings <Cesar M>
+#else
+    //swprintf( txt->text, _T("Sample Text 01234õû")); // TODO : find what to do with MinGW !
+#endif
     txt->align = DT_CENTER;
     return;
 }

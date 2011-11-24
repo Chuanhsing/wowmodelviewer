@@ -30,7 +30,7 @@
 //#include "CShader.h"
 #include "camera.h"
 #include "AnimExporter.h"
-#ifdef _WINDOWS
+#if defined (_WINDOWS) && !defined(_MINGW)
 #include "AVIGenerator.h"
 #endif
 
@@ -239,7 +239,7 @@ public:
 	// Backgroun image stuff
 	GLuint uiBGTexture;
 	void LoadBackground(wxString filename);
-#ifdef _WINDOWS
+#if defined(_WINDOWS) && !defined(_MINGW)
 	CAVIGenerator cAvi;
 #endif
 };

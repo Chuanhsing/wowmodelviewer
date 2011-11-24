@@ -695,7 +695,7 @@ void VideoSettings::SwapBuffers()
 #endif
 }
 
-inline void VideoSettings::SetCurrent()
+void VideoSettings::SetCurrent()
 {
 #ifdef _WINDOWS
 	if(!wglMakeCurrent(hDC, hRC)) {					// Try To Activate The Rendering Context
@@ -752,7 +752,11 @@ bool TryLoadLocalTexture(const wxString& texName, int type, CxImage **imgptr)
 
 	if (!wxFile::Exists(fname))
 		return false;
+#ifndef _MINGW
 	*imgptr = new (std::nothrow) CxImage(fname.mb_str(), type);
+#else
+	*imgptr = new (std::nothrow) CxImage(fname.wc_str(), type);
+#endif
 	return true;
 }
 
