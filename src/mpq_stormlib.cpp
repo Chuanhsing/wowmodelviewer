@@ -411,7 +411,6 @@ unsigned char* MPQFile::getPointer()
 
 void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 {
-	bool display = false;
 	for(ArchiveSet::iterator i=gOpenArchives.begin(); i!=gOpenArchives.end();++i)
 	{
 		HANDLE &mpq_a = *i->second;
@@ -422,6 +421,7 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 			isPartial = false;
 		else if (i->first.AfterLast(SLASH).StartsWith(wxT("wow-update-")))
 			isPartial = true;
+
 		HANDLE fh;
 		if( SFileOpenFileEx( mpq_a, "(listfile)", 0, &fh ) )
 		{
@@ -431,51 +431,36 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 
 			wxString temp(i->first);
 			temp.MakeLower();
-			std::cout << temp << " : ";
 			int col = 0; // Black
 
-			if (temp.Find(wxT("patch.mpq")) > -1)
+			if ((temp.Find(wxT("wow-update-")) > -1) || (temp.Find(wxT("patch.mpq")) > -1))
 				col = 1; // Blue
-			else if (temp.Find(wxT("patch-2.mpq")) > -1)
+			else if (temp.Find(wxT("cache")) > -1 || temp.Find(wxT("patch-2.mpq")) > -1)
 				col = 2; // Red
-			else if (temp.Find(wxT("patch-3.mpq")) > -1)
-				col = 3; // Green
-			else if (temp.Find(wxT("expansion.mpq")) > -1)
-				col = 4; // Outlands Purple
+			else if(temp.Find(wxT("expansion1.mpq")) > -1 || temp.Find(wxT("expansion.mpq")) > -1)
+				col = 3; // Outlands Purple
 			else if (temp.Find(wxT("expansion2.mpq")) > -1 || temp.Find(wxT("lichking.mpq")) > -1)
-				col = 5; // Frozen Blue
+				col = 4; // Frozen Blue
 			else if (temp.Find(wxT("expansion3.mpq")) > -1)
-				col = 6; // Destruction Orange
-			else if (temp.Find(wxT("wow-update-")) > -1)
+				col = 5; // Destruction Orange
+			else if (temp.Find(wxT("expansion4.mpq")) > -1 || temp.Find(wxT("patch-3.mpq")) > -1)
+				col = 6; // Bamboo Green
+			else if (temp.Find(wxT("alternate.mpq")) > -1)
 				col = 7; // Cyan
-			std::cout << col << std::endl;
-
-			bool display2 = false;
 
 			if (size > 0 ) {
 				unsigned char *buffer = new unsigned char[size];
 				SFileReadFile( fh, buffer, (DWORD)size );
 				unsigned char *p = buffer, *end = buffer + size;
-				std::cout << "size = " << size << std::endl;
-				if(size == 847839) display = true;
-				while (p <= end) {
-					if(display) std::cout << "- " << std::endl;
 
+				while (p < end) { // if p = end here, no need to go into next loop !
 					unsigned char *q=p;
-					if(display2) std::cout << "=> q = " << q << std::endl;
-					if(display2) std::cout << "=> end = " << end << std::endl;
 					do {
 						if (*q=='\r' || *q=='\n') // carriage return or new line
 							break;
 					} while (q++<=end);
 
 					wxString line(reinterpret_cast<char *>(p), wxConvUTF8, q-p);
-					if(display) std::cout << "line  = " << line.ToAscii() << std::endl;
-					if(line == wxT("Wow.ini"))
-					{
-						std::cout << "wow ini found !" << std::endl;
-						display2 = true;
-					}
 					if (line.Length()==0) 
 						break;
 					p = q;
@@ -492,25 +477,30 @@ void getFileLists(std::set<FileTreeItem> &dest, bool filterfunc(wxString))
 						else
 							continue;
 					}
+
 					if (filterfunc(wxString(line.mb_str(), wxConvUTF8))) {
 						// This is just to help cleanup Duplicates
 						// Ideally I should tokenise the string and clean it up automatically
 						FileTreeItem tmp;
+
 						tmp.fileName = line;
 						line.MakeLower();
 						line[0] = toupper(line.GetChar(0));
 						int ret = line.Find('\\');
 						if (ret>-1)
 							line[ret+1] = toupper(line.GetChar(ret+1));
+
 						tmp.displayName = line;
 						tmp.color = col;
 						dest.insert(tmp);
 					}
 				}
+
 				wxDELETEA(buffer);
 				p = NULL;
 				end = NULL;
 			}
+
 			SFileCloseFile( fh );
 		}
 	}
