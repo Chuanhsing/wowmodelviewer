@@ -14,6 +14,10 @@
 #include "util.h"
 #include "app.h"
 
+#ifdef _MINGW
+#include "GlobalSettings.h"
+#endif
+
 // default colour values
 const static float def_ambience[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 const static float def_diffuse[4] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -221,7 +225,11 @@ ModelViewer::ModelViewer()
 
 	//wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU
 	// create our main frame
+#ifndef _MINGW
 	if (Create(NULL, wxID_ANY, wxString(APP_TITLE wxT(" ") APP_VERSION wxT(" ") APP_PLATFORM APP_ISDEBUG), wxDefaultPosition, wxSize(1024, 768), wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN, wxT("ModelViewerFrame"))) {
+#else
+	if (Create(NULL, wxID_ANY, wxString(GLOBALSETTINGS.appTitle()), wxDefaultPosition, wxSize(1024, 768), wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN, wxT("ModelViewerFrame"))) {
+#endif
 		SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
 #ifndef	_LINUX // buggy
 		SetBackgroundStyle(wxBG_STYLE_CUSTOM);
@@ -2343,18 +2351,25 @@ Windows 98\\ME\\2000\\XP on 17th December 2006\n\n\
 */
 
 	wxAboutDialogInfo info;
+#ifndef _MINGW
     info.SetName(APP_TITLE);
 	info.SetVersion(wxT("\n") APP_VERSION wxT(" (") APP_BUILDNAME wxT(")\n") APP_PLATFORM APP_ISDEBUG wxT(" Edition"));
+#else
+	info.SetName(GLOBALSETTINGS.appName());
+	wxString l_version = L"\n" + GLOBALSETTINGS.appVersion() + L" (" + GLOBALSETTINGS.buildName() + L")\n";
+	info.SetVersion(l_version);
+#endif
 	info.AddDeveloper(wxT("Ufo_Z"));
 	info.AddDeveloper(wxT("Darjk"));
 	info.AddDeveloper(wxT("Chuanhsing"));
 	info.AddDeveloper(wxT("Kjasi (A.K.A. Sephiroth3D)"));
 	info.AddDeveloper(wxT("Tob.Franke"));
+	info.AddDeveloper(wxT("Jeromnimo"));
 	info.AddTranslator(wxT("MadSquirrel (French)"));
 	info.AddTranslator(wxT("Tigurius (Deutsch)"));
 	info.AddTranslator(wxT("Kurax (Chinese)"));
 
-	info.SetWebSite(wxT("http://wowmodelviewer.googlecode.com/"));
+	info.SetWebSite(wxT("http://wowmodelviewer.org/forum/"));
     info.SetCopyright(
 wxString(wxT("World of Warcraft(R) is a Registered trademark of\n\
 Blizzard Entertainment(R). All game assets and content\n\

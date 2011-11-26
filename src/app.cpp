@@ -8,6 +8,11 @@
 #include "UserSkins.h"
 #include "resource1.h"
 
+#ifdef _MINGW
+#include "GlobalSettings.h"
+#endif
+
+
 /*	THIS IS OUR MAIN "START UP" FILE.
 	App.cpp creates our wxApp class object.
 	the wxApp initiates our program (takes over the role of main())
@@ -114,7 +119,13 @@ bool WowModelViewApp::OnInit()
 	SetAppName(wxT("WoWModelViewer"));
 
 	// Just a little header to start off the log file.
+#ifndef _MINGW
 	wxLogMessage(wxString(wxT("Starting:\n") APP_TITLE wxT(" ") APP_VERSION wxT(" (") APP_BUILDNAME wxT(") ") APP_PLATFORM APP_ISDEBUG wxT("\n\n")));
+#else
+	wxLogMessage(wxString(wxT("Starting:")));
+	wxString l_logMess = GLOBALSETTINGS.appName() + L" " + GLOBALSETTINGS.appVersion() + L" " + GLOBALSETTINGS.buildName() + L"\n\n";
+	wxLogMessage(l_logMess);
+#endif
 
 	// set the config file path.
 	cfgPath = userPath+SLASH+wxT("Config.ini");
