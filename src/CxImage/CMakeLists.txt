@@ -37,11 +37,23 @@ set(SRC_FILES
 
 message(STATUS "Using CxImage")
 
+if (APPLE)
+add_definitions(-D_MAC)
+add_definitions(-D_MAC_INTEL)
+endif()
+
+if (${CMAKE_SYSTEM_NAME} STREQUAL Linux)
+add_definitions(-D_LINUX)
+add_definitions(-D_LINUX32)
+endif()
+
+if (WIN32)
 add_definitions(-D_MINGW)
 add_definitions(-D_WINDOWS)
 add_definitions(-D_WIN32)
 add_definitions(-D_UNICODE)
 add_definitions(-DUNICODE)
+endif()
 
 add_library(cximage STATIC ${SRC_FILES})
 
