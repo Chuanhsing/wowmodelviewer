@@ -54,7 +54,7 @@ bool CHECK_FRAMEBUFFER_STATUS()
 	return false;
 }
 
-
+#ifdef	_WINDOWS
 void RenderTexture::InitGL()
 {
 	video.InitGL();
@@ -358,4 +358,4 @@ void RenderTexture::Shutdown()
 		wglMakeCurrent(canvas_hDC, canvas_hRC);
 	}
 }
-
+#endif
