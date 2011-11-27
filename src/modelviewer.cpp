@@ -628,6 +628,10 @@ void ModelViewer::InitDatabase()
 		wxLogMessage(wxT("Error: Could not open the Item DB."));
 	}
 
+	if (!itemsparsedb.open()) {
+		wxLogMessage(wxT("Error: Could not open the Item Sparse DB."));
+	}
+
 	SetStatusText(wxT("Initializing items.csv Databases..."));
 	wxString filename = langName+SLASH+wxT("items.csv");
 	wxLogMessage(wxT("Trying to open %s file (for updating locale files)"),filename.c_str());
@@ -1455,9 +1459,9 @@ wxString ModelViewer::InitMPQArchives()
 		wxLogMessage(wxT("Compatible Wrath of the Lich King Version Found."));
 		wxMessageBox(info, wxT("Compatible Wrath of the Lich King Version Found."),wxOK);
 		gameVersion = itoc;
-	} else if ((itoc >= 40000) && (itoc < 49999)) {		// This will accept any TOC for Cataclysm.
+	} else if ((itoc >= VERSION_CATACLYSM) && (itoc < 49999)) {		// This will accept any TOC for Cataclysm.
 		wxLogMessage(wxT("Compatible Cataclysm Version Found."));
-		gameVersion = VERSION_CATACLYSM;
+		gameVersion = itoc;
 		langOffset = 0;
 	} else { // else if not a supported edition...
 		wxString info = wxT("WoW Model Viewer does not support your version of World of Warcraft.\nPlease update your World of Warcraft client soon.");

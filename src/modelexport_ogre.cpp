@@ -291,7 +291,7 @@ static void WriteMaterial(const ExportData &data, wxString filename)
 			s << "texture " << texName << " -1" << endl;
 #ifndef _MINGW
 			// @TODO : fixme, broken on mingw
-			SaveTexture(data.baseName.BeforeLast(SLASH) + wxT(SLASH) + texName.wc_str());
+			SaveTexture(data.baseName.BeforeLast(SLASH) + wxT(SLASH) + texName);
 #endif
 			s << lt << "}" << endl;
 			s << lt << "}" << endl;

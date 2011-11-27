@@ -16,6 +16,7 @@ ItemSubClassDB		subclassdb;
 ItemVisualDB		visualdb;
 ItemSetDB			setsdb;
 ItemDB				itemdb;
+ItemSparseDB		itemsparsedb;
 // --
 AnimDB				animdb;
 CharHairGeosetsDB	hairdb;
@@ -617,6 +618,29 @@ ItemDB::Record ItemDB::getByDisplayId(unsigned int id)
 	throw NotFound();
 }
 
+void ItemSparseDB::init()
+{
+	int id, qualityid;
+	wxString name, itemstring;
+	//wxLogMessage(wxT("gameVersion: %d"), gameVersion);
+	if (gameVersion != 40200 && gameVersion != 40300)
+		return;
+	for(Iterator i=begin(); i!=end(); ++i) {
+		id = i->getInt(ID);
+		qualityid = i->getInt(QualityID);
+		if (gameVersion == 40200)
+			name = i->getString(Name40200);
+		else if (gameVersion == 40300)
+			name = i->getString(Name40300);
+		//wxLogMessage(wxT("ItemSparseDB::init %d,%d,%s"), id, qualityid, name.c_str());
+		itemstring = wxString::Format(wxT("%d,%d,"), id, qualityid) + name;
+		ItemRecord rec(itemstring);
+		if (rec.type > 0) {
+			items.items.push_back(rec);
+		}
+	}
+}
+
 // old format, deprecated
 void ItemRecord::getLine(const char *line)
 {
@@ -665,6 +689,10 @@ ItemDatabase::ItemDatabase()
 
 void ItemDatabase::open(wxString filename)
 {
+	// 1. in-game db
+	itemsparsedb.init();
+
+	// 2. items.csv
 	wxTextFile fin;
 	if (wxFileExists(filename) && fin.Open(filename)) {
 		wxString line;
@@ -677,6 +705,7 @@ void ItemDatabase::open(wxString filename)
 		fin.Close();
 	}
 
+	// 3. discoveryitems.csv
 	wxTextFile fin2;;
 	if (wxFileExists(wxT("discoveryitems.csv")) && fin2.Open(wxT("discoveryitems.csv"))) {
 		wxString line;

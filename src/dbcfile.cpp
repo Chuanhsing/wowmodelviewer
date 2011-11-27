@@ -16,8 +16,12 @@ DBCFile::DBCFile(const wxString &filename) : filename(filename)
 
 bool DBCFile::open()
 {
-	int db_type = 0;
-
+	enum FileType {
+		FT_UNK,
+		FT_WDBC,
+		FT_WDB2,
+	};
+	int db_type = FT_UNK;
 	if (filename.Lower().EndsWith(wxT("item.dbc")) && gameVersion >= VERSION_CATACLYSM) {
 		filename = filename.BeforeLast('.') + wxT(".db2");
 	}
@@ -35,11 +39,11 @@ bool DBCFile::open()
 	f.read(header, 4); // File Header
 
 	if (strncmp(header, "WDBC", 4) == 0)
-		db_type = 1;
+		db_type = FT_WDBC;
 	else if (strncmp(header, "WDB2", 4) == 0)
-		db_type = 2;
+		db_type = FT_WDB2;
 
-	if (db_type == 0) {
+	if (db_type == FT_UNK) {
 		f.close();
 		data = NULL;
 		wxLogMessage(wxT("Critical Error: An error occured while trying to read the DBCFile %s."), filename.c_str());
@@ -53,7 +57,7 @@ bool DBCFile::open()
 	f.read(&es,4); // Size of a record
 	f.read(&ss,4); // String size
 
-	if (db_type == 2) {
+	if (db_type == FT_WDB2) {
 		f.seekRelative(28);
 		// just some buggy check
 		unsigned int check;
@@ -74,6 +78,9 @@ bool DBCFile::open()
 
 	data = new unsigned char[recordSize*recordCount+stringSize];
 	stringTable = data + recordSize*recordCount;
+	if (db_type == FT_WDB2) {
+		f.seek(f.getSize() - recordSize*recordCount - stringSize);
+	}
 	f.read(data, recordSize*recordCount+stringSize);
 	f.close();
 	return true;

@@ -58,6 +58,7 @@ class SpellItemEnchantmentDB;
 class ItemVisualsDB;
 class ItemDB;
 class CamCinematicDB;
+class ItemSparseDB;
 
 // dbs
 extern ItemDatabase	items;
@@ -84,6 +85,7 @@ extern SpellItemEnchantmentDB spellitemenchantmentdb;
 extern ItemVisualsDB itemvisualsdb;
 extern ItemDB itemdb;
 extern CamCinematicDB camcinemadb;
+extern ItemSparseDB itemsparsedb;
 
 class ItemDB: public DBCFile
 {
@@ -106,6 +108,22 @@ public:
 
 	Record getById(unsigned int id);
 	Record getByDisplayId(unsigned int id);
+};
+
+class ItemSparseDB: public DBCFile
+{
+public:
+	ItemSparseDB(): DBCFile(wxT("DBFilesClient\\Item-sparse.db2")) {}
+	~ItemSparseDB() {}
+
+	// Fields
+	static const size_t ID = 0;	// unit
+	static const size_t QualityID = 1;	// unit
+	static const size_t SlotID = 9; // unit
+	static const size_t Name40200 = 96;		// string, localization
+	static const size_t Name40300 = 99;		// string, localization
+
+	void init();
 };
 
 class SpellItemEnchantmentDB: public DBCFile
