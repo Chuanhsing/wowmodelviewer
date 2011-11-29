@@ -43,9 +43,6 @@ if (WIN32)
 	set(JPEG_INCLUDE_DIR c:/MinGW/include)
 endif()
 
-include(${wxWidgets_USE_FILE})
-include(cmake/sources.cmake)
-
 add_subdirectory(CxImage)
 	
 if (USE_STORM)
@@ -62,6 +59,9 @@ endif()
 add_definitions(
     -DWotLK -Wall -Wno-unknown-pragmas -g
 )
+
+include(${wxWidgets_USE_FILE})
+include(cmake/sources.cmake)
 
 if(WIN32)
 	message(STATUS "Using glew")
