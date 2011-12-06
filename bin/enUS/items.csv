@@ -35548,7 +35548,7 @@
 71102,4,Obsidian Arborweave Handwraps
 71103,4,Obsidian Arborweave Helm
 71104,4,Obsidian Arborweave Legwraps
-71105,4,Obsidian Arborweave Robes
+71105,4,Obsidian Arborweave Tunic
 71106,4,Obsidian Arborweave Mantle
 71107,4,Obsidian Arborweave Gloves
 71108,4,Obsidian Arborweave Cover
@@ -35756,7 +35756,7 @@
 71491,4,Obsidian Arborweave Handwraps
 71492,4,Obsidian Arborweave Helm
 71493,4,Obsidian Arborweave Legwraps
-71494,4,Obsidian Arborweave Robes
+71494,4,Obsidian Arborweave Tunic
 71495,4,Obsidian Arborweave Mantle
 71496,4,Obsidian Arborweave Gloves
 71497,4,Obsidian Arborweave Cover
@@ -35892,7 +35892,7 @@
 71985,4,Bladeshadow Leggings
 71986,4,Leggings of Nature's Champion
 71987,4,Rended Earth Leggings
-71988,4,Deathscale Leggings of the Storm
+71988,4,Deathscale Leggings
 71989,4,Bracers of Unconquered Power
 71990,4,Dreamwraps of the Light
 71991,4,Soul Redeemer Bracers
@@ -36158,7 +36158,7 @@
 72800,4,Gauntlets of Temporal Interference
 72801,4,Breastplate of Sorrow
 72802,4,Time Traveler's Leggings
-72803,4,Girdle of Heroes
+72803,4,Girdle of Lost Heroes
 72804,4,Dragonshrine Scepter
 72805,4,Gloves of the Hollow
 72806,4,Echoing Headguard
@@ -36171,7 +36171,7 @@
 72813,4,Whisperwind Robes
 72814,4,Axe of the Tauren Chieftains
 72815,4,Bloodhoof Legguards
-72816,4,Twisted Greaves
+72816,4,Distortion Greaves
 72817,4,Time Altered Legguards
 72818,4,Breastplate of Tarnished Bronze
 72819,4,Chrono Boots
@@ -36179,9 +36179,64 @@
 72821,4,Temporal Pauldrons
 72822,4,Jagged Edge of Time
 72823,4,Timeway Headgear
-72824,4,Distortion Chestguard
+72824,4,Time Twisted Tunic
 72825,4,Mantle of Time
 72826,4,Robes of Fate
+72827,4,Gavel of Peroth'arn
+72828,4,Trickster's Edge
+72829,4,Orb of the First Satyrs
+72830,4,Peroth'arn's Belt
+72832,4,Girdle of the Queen's Champion
+72833,4,Scepter of Azshara
+72834,4,Breastplate of the Queen's Guard
+72835,4,Puppeteer's Pantaloons
+72836,4,Slippers of Wizardry
+72838,4,Cloak of the Royal Protector
+72839,4,Cowl of Highborne Sorcerors
+72840,4,Spaulders of Eternity
+72841,4,Demonsbane Chestguard
+72842,4,Annihilan Helm
+72843,4,Helm of Power
+72844,4,Pit Lord's Destroyer
+72846,4,Thornwood Staff
+72847,4,Helm of Thorns
+72848,4,Legguards of the Legion
+72849,4,Wayfinder Boots
+72850,4,Surestride Boots
+72851,4,Chillbane Belt
+72852,4,Archivist's Gloves
+72853,4,Arcurion Legguards
+72854,4,Iceward Cloak
+72855,4,Corrupted Carapace
+72856,4,Pauldrons of Midnight Whispers
+72857,4,Leggings of Blinding Speed
+72858,4,Safeguard Gloves
+72859,4,Dawnslayer Helm
+72860,4,Mandible of the Old Ones
+72861,4,Pauldrons of the Dragonblight
+72862,4,Fanged Tentacle
+72863,4,Stalk of Corruption
+72864,4,Pauldrons of Conviction
+72865,4,Mantle of False Virtue
+72866,4,Treachery's Bite
+72867,4,Clattering Claw
+72868,4,Desecrated Shoulderguards
+72869,4,Dragonsmaw Blaster
+72870,4,Betrayer's Pauldrons
+72871,4,Crescent Wand
+72872,4,Time Strand Gauntlets
+72873,4,Bronze Blaster
+72874,4,Boots of the Forked Road
+72875,4,Time Twister's Gauntlets
+72876,4,Ironfeather Longbow
+72877,4,Chain of the Demon Hunter
+72878,4,Demonic Skull
+72879,4,Boots of the Treacherous Path
+72881,4,Treads of the Past
+72882,4,Chronicler's Chestguard
+72883,4,Historian's Sash
+72884,4,Writhing Wand
+72887,4,Cinch of the World Shaman
 72889,2,Stormbinder Tunic
 72890,2,Stormbinder Boots
 72891,2,Stormbinder Gloves
@@ -36820,6 +36875,17 @@
 75223,0,Monster - Axe_2h_PVPCataclysmS3_C_01 - Blue
 75224,0,Monster - Axe_2h_PVPCataclysmS3_C_01 - Red
 75225,0,Monster - Axe_2h_PVPCataclysmS3_C_01 - Yellow
+76150,4,Evergreen Wristbands
+76151,4,Cloak of Subtle Light
+76152,4,Cowl of Destiny
+76154,4,Breastplate of Despair
+76155,4,Thorns of the Dying Day
+76156,4,Bindings of the End Times
+76157,4,Waterworn Handguards
+76158,4,Courtier's Slippers
+76159,4,Legion Bindings
+76160,4,Drapes of the Dragonshrine
+76161,4,Gauntlets of the Twilight Hour
 76175,4,Monster - Shivan 1 Sword
 76176,4,Monster - Alizabal Sword
 76185,0,Art Template Plate Wrist - Plate_RaidDeathKnight_K_01 - Frost
@@ -36960,11 +37026,11 @@
 77025,4,Blackfang Battleweave Helmet
 77026,4,Blackfang Battleweave Legguards
 77027,4,Blackfang Battleweave Spaulders
-77028,4,Wrymstalker's Tunic
-77029,4,Wrymstalker's Gloves
-77030,4,Wrymstalker's Headguard
-77031,4,Wrymstalker's Legguards
-77032,4,Wrymstalker's Spaulders
+77028,4,Wyrmstalker's Tunic
+77029,4,Wyrmstalker's Gloves
+77030,4,Wyrmstalker's Headguard
+77031,4,Wyrmstalker's Legguards
+77032,4,Wyrmstalker's Spaulders
 77035,4,Spiritwalker's Shoulderwraps
 77036,4,Spiritwalker's Kilt
 77037,4,Spiritwalker's Headpiece
@@ -36975,122 +37041,1116 @@
 77042,4,Spiritwalker's Helmet
 77043,4,Spiritwalker's Legguards
 77044,4,Spiritwalker's Spaulders
-77078,4,Wand of Drifting Hallucination
-77079,4,Wand of Purchased Sadness
-77080,4,Relic of the Feral Form
-77081,4,Relic of the Icy Fury
-77082,4,Relic of Shattered Dreams
-77083,4,Relic of Forlorn Hopes
-77084,4,Relic of the Stolid Bulwark
-77085,4,Nimblefoot Throwing Axe
-77086,4,Shard of Broken Tomorrows
-77087,4,Heartcrusher
-77095,4,Valorous Sleek Flamewrath Cloak
-77096,4,Valorous Flowing Flamewrath Cape
-77097,4,Valorous Bladed Flamewrath Cover
-77098,4,Valorous Rippling Flamewrath Drape
-77099,4,Valorous Durable Flamewrath Greatcloak
-77119,4,Valorous Chestplate
-77120,4,Valorous Chestguard
-77121,4,Valorous Robe
-77122,4,Valorous Heartrobe
-77123,4,Valorous Heartplate
-77124,4,Valorous Dreamguard
-77125,4,Valorous Lightningguard
-77126,4,Valorous Nightguard
-77127,4,Valorous Menderguard
-77146,4,Valorous Hood
-77147,4,Valorous Cowl
-77148,4,Valorous Helmet
-77149,4,Valorous Mindcowl
-77150,4,Valorous Circlet
-77151,4,Valorous Faceguard
-77153,4,Valorous Headguard
-77155,4,Valorous Helmet
-77156,4,Valorous Faceplate
-77157,4,Valorous Handwraps
-77159,4,Valorous Palms
-77160,4,Valorous Handwrap
-77161,4,Valorous Grips
-77162,4,Valorous Skinners
-77163,4,Valorous Handbinders
-77164,4,Valorous Woundbinders
-77165,4,Valorous Throatgrabbers
-77166,4,Valorous Swordgrabbers
-77169,4,Valorous Boots
-77170,4,Valorous Warboots
-77171,4,Valorous Stompers
-77172,4,Valorous Footfalls
-77173,4,Valorous Treads
-77174,4,Valorous Footwraps
-77175,4,Valorous Sabatons
-77176,4,Valorous Sandals
-77177,4,Valorous Walkers
-77179,4,Valorous Embereye Belt
-77180,4,Valorous Flamebinding Girdle
-77181,4,Valorous Firescar Sash
-77182,4,Valorous Firearrow Belt
-77183,4,Valorous Firemend Cinch
-77184,4,Valorous Belt
-77185,4,Valorous Cinch
-77186,4,Valorous Girdle
-77187,4,Valorous Embereye Belt
-77188,4,Horrific Axe
-77189,4,Horrific Dagger
-77190,4,Horrific Staff
-77191,4,Horrific Greatsword
-77192,4,Horrific Gun
-77193,4,Horrific Deflecting Sword
-77194,4,Horrific Polearm
-77195,4,Horrific Sacrificial Knife
-77196,4,Horrific Mace
-77212,4,Horrific Cleaver
-77214,4,Horrific Gavel
-77215,4,Horrific Arbalest
-77216,4,Horrific Stinger
-77217,4,Horrific Greataxe
-77218,4,Horrific Scythe
-77219,4,Horrific Scalpel
-77220,4,Horrific Razor
-77221,4,Horrific Spirestaff
-77223,4,Horrific Bonecrusher
-77224,4,Horrific Greatmace
-77225,4,Horrific Heartstaff
-77226,4,Horrific Shield
-77227,4,Horrific Redoubt
-77234,4,Horrific Slippers
-77235,4,Horrific Woundbinders
-77236,4,Horrific Pauldrons
-77237,4,Horrific Cinch
-77238,4,Horrific Treads
-77239,4,Horrific Girdle
-77240,4,Horrific Wristguards
-77241,4,Horrific Belt
-77242,4,Horrific Mantle
-77243,4,Horrific Footfalls
-77244,4,Horrific Belt
-77245,4,Horrific Offhand
-77246,4,Horrific Stompers
-77247,4,Horrific Bracers
-77248,4,Horrific Sash
-77249,4,Horrific Dreamwraps
-77250,4,Horrific Cinch
-77251,4,Horrific Sabatons
-77252,4,Horrific Footwraps
-77253,4,Horrific Bracers
-77254,4,Horrific Treads
-77255,4,Horrific Chain
+77078,4,Scintillating Rods
+77079,4,Hungermouth Wand
+77080,4,Ripfang Relic
+77081,4,Gutripper Shard
+77082,4,Mindbender Lens
+77083,4,Lightning Spirit in a Bottle
+77084,4,Stoutheart Talisman
+77085,4,Unexpected Backup
+77086,4,Windslicer Boomerang
+77087,4,Darting Chakram
+77095,4,Batwing Cloak
+77096,4,Woundlicker Cover
+77097,4,Dreamcrusher Drape
+77098,4,Nanoprecise Cape
+77099,4,Indefatigable Greatcloak
+77119,4,Bones of the Damned
+77120,4,Chestplate of the Unshakable Titan
+77121,4,Lightwarper Vestments
+77122,4,Robes of Searing Shadow
+77123,4,Shining Carapace of Glory
+77124,4,Dragonflayer Vest
+77125,4,Ghostworld Chestguard
+77126,4,Shadowbinder Chestguard
+77127,4,Decaying Herbalist's Robes
+77146,4,Soulgaze Cowl
+77147,4,Hood of Hidden Flesh
+77148,4,Nocturnal Gaze
+77149,4,Helmet of Perpetual Rebirth
+77150,4,Zeherah's Dragonskull Crown
+77151,4,Wolfdream Circlet
+77153,4,Glowing Wings of Hope
+77155,4,Visage of Petrification
+77156,4,Jaw of Repudiation
+77157,4,The Hands of Gilly
+77159,4,Clockwinder's Immaculate Gloves
+77160,4,Fungus-Born Gloves
+77161,4,Lightfinger Handwraps
+77162,4,Arrowflick Gauntlets
+77163,4,Gloves of Ghostly Dreams
+77164,4,Gleaming Grips of Mending
+77165,4,Grimfist Crushers
+77166,4,Gauntlets of Feathery Blows
+77169,4,Silver Sabatons of Fury
+77170,4,Kneebreaker Boots
+77171,4,Bladeshatter Treads
+77172,4,Boots of Fungoid Growth
+77173,4,Rooftop Griptoes
+77174,4,Sabatons of the Graceful Spirit
+77175,4,Boneshard Boots
+77176,4,Kavan's Forsaken Treads
+77177,4,Splinterfoot Sandals
+77179,4,Tentacular Belt
+77180,4,Belt of Hidden Keys
+77181,4,Belt of Universal Curing
+77182,4,Cord of Dragon Sinew
+77183,4,Girdle of Shamanic Fury
+77184,4,Blinding Girdle of Truth
+77185,4,Demonbone Waistguard
+77186,4,Forgesmelter Waistplate
+77187,4,Vestal's Irrepressible Girdle
+77188,4,No'Kaled the Elements of Death
+77189,4,Blade of the Unmaker
+77190,4,Ti'tahk the Steps of Time
+77191,4,Gurthalak Voice of the Deeps
+77192,4,Ruinblaster Shotgun
+77193,4,Souldrinker
+77194,4,Kiril Fury of Beasts
+77195,4,Rathrak the Poisonous Mind
+77196,4,Maw of the Dragonlord
+77212,4,Hand of Morchok
+77214,4,Vagaries of Time
+77215,4,Horrifying Horn Arbalest
+77216,4,Finger of Zon'ozz
+77217,4,Experimental Specimen Slicer
+77218,4,Spire of Coagulated Globules
+77219,4,Scalpel of Unrelenting Agony
+77220,4,Electrowing Dagger
+77221,4,Lightning Rod
+77223,4,Morningstar of Heroic Will
+77224,4,Ataraxis Cudgel of the Warmaster
+77225,4,Visage of the Destroyer
+77226,4,Blackhorn's Mighty Bulwark
+77227,4,Timepiece of the Bronze Flight
+77234,4,Janglespur Jackboots
+77235,4,Gauntlets of the Golden Thorn
+77236,4,Backbreaker Spaulders
+77237,4,Belt of Shattered Elementium
+77238,4,Molten Blood Footpads
+77239,4,Goriona's Collar
+77240,4,Shadow Wing Armbands
+77241,4,Belt of the Beloved Companion
+77242,4,Imperfect Specimens 27 and 28
+77243,4,Treads of Sordid Screams
+77244,4,Dragonfracture Belt
+77245,4,Ledger of Revolting Rituals
+77246,4,Stillheart Warboots
+77247,4,Bracers of Looming Darkness
+77248,4,Girdle of the Grotesque
+77249,4,Bracers of the Banished
+77250,4,Runescriven Demon Collar
+77251,4,Treads of Dormant Dreams
+77252,4,Mindstrainer Treads
+77253,4,Heartblood Wristplates
+77254,4,Interrogator's Bloody Footpads
+77255,4,Cord of the Slain Champion
 77256,1,Darkmoon "Sword"
-77257,4,Horrific Wristguards
-77258,4,Horrific Wristplates
-77259,4,Horrific Warboots
-77260,4,Horrific Girdle
-77261,4,Horrific Serene Bracers
-77263,4,Horrific Robe
-77265,4,Horrific Boots
-77266,4,Horrific Cinch
-77267,4,Horrific Mantle
-77268,4,Horrific Pauldrons
-77269,4,Horrific Skinners
-77270,4,Horrific Bracers
-77271,4,Horrific Spaulders
+77257,4,Grotesquely Writhing Bracers
+77258,4,Graveheart Bracers
+77259,4,Treads of Crushed Flesh
+77260,4,Belt of Flayed Skin
+77261,4,Mycosynth Wristguards
+77263,4,Robe of Glowing Stone
+77265,4,Pillarfoot Greaves
+77266,4,Girdle of Shattered Stone
+77267,4,Mosswrought Shoulderguards
+77268,4,Brackenshell Shoulderplates
+77269,4,Sporebeard Gauntlets
+77270,4,Rockhide Bracers
+77271,4,Underdweller's Spaulders
+77316,4,Flashing Bracers of Warmth
+77317,4,Heartcrusher Wristplates
+77318,4,Bracers of Unrelenting Excellence
+77319,4,Bracers of the Spectral Wolf
+77320,4,Luminescent Bracers
+77321,4,Dragonbelly Bracers
+77322,4,Bracers of Manifold Pockets
+77323,4,Bracers of the Black Dream
+77324,4,Chronoboost Bracers
+77365,0,Monster - Tyrande's Dagger
+77549,4,Grand Marshal's Demolisher
+77550,4,Grand Marshal's Swiftblade
+77551,4,Grand Marshal's Dirk
+77552,4,Grand Marshal's Mageblade
+77553,4,Grand Marshal's Warhammer
+77554,4,Grand Marshal's Sunderer
+77555,4,Grand Marshal's Hand Cannon
+77556,4,Grand Marshal's Stave
+77557,4,Grand Marshal's Right Hand Blade
+77558,4,Grand Marshal's Punisher
+77559,4,Grand Marshal's Left Hand Blade
+77560,4,Grand Marshal's Claymore
+77561,4,Grand Marshal's Longsword
+77562,4,Grand Marshal's Handaxe
+77563,4,Grand Marshal's Battle Hammer
+77564,4,Grand Marshal's Glaive
+77565,4,Grand Marshal's Bullseye
+77566,4,Grand Marshal's Repeater
+77567,4,High Warlord's Battle Mace
+77568,4,High Warlord's Spellblade
+77569,4,High Warlord's Quickblade
+77570,4,High Warlord's Battle Mace
+77571,4,High Warlord's Destroyer
+77572,4,High Warlord's Pig Sticker
+77573,4,High Warlord's Pulverizer
+77574,4,High Warlord's Battle Axe
+77575,4,High Warlord's Right Claw
+77576,4,High Warlord's Razor
+77577,4,High Warlord's Greatsword
+77578,4,High Warlord's Recurve
+77579,4,High Warlord's Street Sweeper
+77580,4,High Warlord's Cleaver
+77581,4,High Warlord's War Staff
+77582,4,High Warlord's Blade
+77583,4,High Warlord's Left Claw
+77584,4,High Warlord's Bludgeon
+77585,4,High Warlord's Crossbow
+77586,4,High Warlord's Spellblade
+77587,4,High Warlord's Destroyer
+77588,4,High Warlord's Quickblade
+77592,4,High Warlord's Tome of Mending
+77593,4,High Warlord's Tome of Destruction
+77594,4,Grand Marshal's Tome of Restoration
+77595,4,Grand Marshal's Tome of Power
+77596,4,Grand Marshal's Aegis
+77597,4,High Warlord's Shield Wall
+77598,3,Lieutenant Commander's Dragonhide Epaulets
+77599,3,Knight-Lieutenant's Dragonhide Footwraps
+77600,3,Lieutenant Commander's Dragonhide Shroud
+77601,3,Knight-Captain's Dragonhide Leggings
+77602,3,Knight-Captain's Dragonhide Tunic
+77603,3,Knight-Lieutenant's Dragonhide Gloves
+77604,3,Sergeant Major's Dragonhide Armsplints
+77605,3,Sergeant Major's Dragonhide Armsplints
+77606,3,Knight-Lieutenant's Chain Boots
+77607,3,Lieutenant Commander's Chain Pauldrons
+77608,3,Knight-Captain's Chain Hauberk
+77609,3,Lieutenant Commander's Chain Helmet
+77610,3,Knight-Lieutenant's Chain Gauntlets
+77611,3,Knight-Captain's Chain Leggings
+77612,3,Sergeant Major's Chain Armguards
+77613,3,Sergeant Major's Chain Armguards
+77614,3,Knight-Captain's Silk Raiment
+77615,3,Lieutenant Commander's Silk Spaulders
+77616,3,Knight-Lieutenant's Silk Boots
+77617,3,Knight-Lieutenant's Silk Gloves
+77618,3,Knight-Captain's Silk Leggings
+77619,3,Lieutenant Commander's Crown
+77620,3,Sergeant Major's Silk Cuffs
+77621,3,Lieutenant Commander's Lamellar Shoulders
+77622,3,Knight-Lieutenant's Lamellar Gauntlets
+77623,3,Knight-Captain's Lamellar Leggings
+77624,3,Lieutenant Commander's Lamellar Headguard
+77625,3,Knight-Lieutenant's Lamellar Sabatons
+77626,3,Knight-Captain's Lamellar Breastplate
+77627,3,Knight-Lieutenant's Satin Gloves
+77628,3,Knight-Captain's Satin Leggings
+77629,3,Lieutenant Commander's Diadem
+77630,3,Knight-Captain's Satin Robes
+77631,3,Lieutenant Commander's Satin Amice
+77632,3,Knight-Lieutenant's Satin Boots
+77633,3,Knight-Captain's Leather Armor
+77634,3,Knight-Lieutenant's Leather Gauntlets
+77635,3,Lieutenant Commander's Leather Veil
+77636,3,Lieutenant Commander's Leather Spaulders
+77637,3,Knight-Lieutenant's Leather Boots
+77638,3,Knight-Captain's Leather Legguards
+77639,3,Sergeant Major's Leather Armsplints
+77640,3,Sergeant Major's Leather Armsplints
+77641,3,Knight-Captain's Mail Hauberk
+77642,3,Lieutenant Commander's Mail Headguard
+77643,3,Knight-Captain's Mail Legguards
+77644,3,Knight-Lieutenant's Mail Greaves
+77645,3,Lieutenant Commander's Mail Pauldrons
+77646,3,Knight-Lieutenant's Mail Vices
+77647,3,Lieutenant Commander's Dreadweave Mantle
+77648,3,Knight-Captain's Dreadweave Robe
+77649,3,Knight-Captain's Dreadweave Leggings
+77650,3,Knight-Lieutenant's Dreadweave Gloves
+77651,3,Knight-Lieutenant's Dreadweave Boots
+77652,3,Lieutenant Commander's Headguard
+77653,3,Knight-Lieutenant's Plate Gauntlets
+77654,3,Knight-Captain's Plate Chestguard
+77655,3,Knight-Captain's Plate Leggings
+77656,3,Lieutenant Commander's Plate Helm
+77657,3,Lieutenant Commander's Plate Pauldrons
+77658,3,Knight-Lieutenant's Plate Boots
+77659,3,Sergeant Major's Plate Wristguards
+77660,3,Sergeant Major's Plate Wristguards
+77661,3,Knight-Captain's Lamellar Leggings
+77662,3,Knight-Captain's Lamellar Breastplate
+77663,3,Legionnaire's Lamellar Leggings
+77664,3,Lieutenant Commander's Lamellar Headguard
+77665,3,Lieutenant Commander's Lamellar Shoulders
+77666,4,Marshal's Dragonhide Gauntlets
+77667,4,Field Marshal's Dragonhide Spaulders
+77668,4,Marshal's Dragonhide Legguards
+77669,4,Marshal's Dragonhide Boots
+77670,4,Field Marshal's Dragonhide Breastplate
+77671,4,Field Marshal's Dragonhide Helmet
+77672,4,Marshal's Chain Boots
+77673,4,Field Marshal's Chain Spaulders
+77674,4,Field Marshal's Chain Breastplate
+77675,4,Marshal's Chain Legguards
+77676,4,Field Marshal's Chain Helm
+77677,4,Marshal's Chain Grips
+77678,4,Field Marshal's Silk Vestments
+77679,4,Field Marshal's Silk Spaulders
+77680,4,Marshal's Silk Leggings
+77681,4,Marshal's Silk Gloves
+77682,4,Field Marshal's Coronet
+77683,4,Marshal's Silk Footwraps
+77684,4,Marshal's Lamellar Boots
+77685,4,Marshal's Lamellar Gloves
+77686,4,Marshal's Lamellar Legplates
+77687,4,Field Marshal's Lamellar Chestplate
+77688,4,Field Marshal's Lamellar Faceguard
+77689,4,Field Marshal's Lamellar Pauldrons
+77690,4,Marshal's Satin Sandals
+77691,4,Marshal's Satin Pants
+77692,4,Field Marshal's Satin Mantle
+77693,4,Marshal's Satin Gloves
+77694,4,Field Marshal's Satin Vestments
+77695,4,Field Marshal's Headdress
+77696,4,Marshal's Leather Leggings
+77697,4,Field Marshal's Leather Epaulets
+77698,4,Marshal's Leather Handgrips
+77699,4,Marshal's Leather Footguards
+77700,4,Field Marshal's Leather Mask
+77701,4,Field Marshal's Leather Chestpiece
+77702,4,Marshal's Mail Boots
+77703,4,Marshal's Mail Gauntlets
+77704,4,Field Marshal's Mail Helm
+77705,4,Field Marshal's Mail Spaulders
+77706,4,Marshal's Mail Leggings
+77707,4,Field Marshal's Mail Armor
+77708,4,Marshal's Dreadweave Boots
+77709,4,Field Marshal's Dreadweave Shoulders
+77710,4,Field Marshal's Coronal
+77711,4,Marshal's Dreadweave Leggings
+77712,4,Field Marshal's Dreadweave Robe
+77713,4,Marshal's Dreadweave Gloves
+77714,4,Field Marshal's Plate Armor
+77715,4,Field Marshal's Plate Helm
+77716,4,Marshal's Plate Gauntlets
+77717,4,Marshal's Plate Legguards
+77718,4,Field Marshal's Plate Shoulderguards
+77719,4,Marshal's Plate Boots
+77720,3,Knight-Lieutenant's Dragonhide Grips
+77721,3,Knight-Lieutenant's Dragonhide Treads
+77722,3,Knight-Lieutenant's Chain Vices
+77723,3,Knight-Lieutenant's Chain Greaves
+77724,3,Knight-Lieutenant's Silk Walkers
+77725,3,Knight-Lieutenant's Silk Handwraps
+77726,3,Knight-Lieutenant's Lamellar Sabatons
+77727,3,Knight-Lieutenant's Lamellar Gauntlets
+77728,3,Knight-Lieutenant's Satin Handwraps
+77729,3,Knight-Lieutenant's Satin Walkers
+77730,3,Knight-Lieutenant's Leather Walkers
+77731,3,Knight-Lieutenant's Leather Grips
+77732,3,Knight-Lieutenant's Dreadweave Walkers
+77733,3,Knight-Lieutenant's Dreadweave Handwraps
+77734,3,Knight-Lieutenant's Plate Gauntlets
+77735,3,Knight-Lieutenant's Plate Greaves
+77736,3,Blood Guard's Dragonhide Boots
+77737,3,Champion's Dragonhide Spaulders
+77738,3,Legionnaire's Dragonhide Breastplate
+77739,3,Champion's Dragonhide Helm
+77740,3,Legionnaire's Dragonhide Trousers
+77741,3,Blood Guard's Dragonhide Gauntlets
+77742,3,Lieutenant Commander's Dragonhide Headguard
+77743,3,First Sergeant's Dragonhide Armguards
+77744,3,Legionnaire's Dragonhide Leggings
+77745,3,Knight-Captain's Dragonhide Leggings
+77746,3,Champion's Dragonhide Shoulders
+77747,3,Blood Guard's Dragonhide Treads
+77748,3,Lieutenant Commander's Dragonhide Shoulders
+77749,3,Legionnaire's Dragonhide Chestpiece
+77750,3,Blood Guard's Dragonhide Grips
+77751,3,Knight-Captain's Dragonhide Chestpiece
+77752,3,Champion's Dragonhide Headguard
+77753,3,First Sergeant's Dragonhide Armguards
+77754,3,Champion's Chain Pauldrons
+77755,3,Blood Guard's Chain Boots
+77756,3,Blood Guard's Chain Gauntlets
+77757,3,Legionnaire's Chain Breastplate
+77758,3,Legionnaire's Chain Leggings
+77759,3,Champion's Chain Headguard
+77760,3,Legionnaire's Chain Legguards
+77761,3,Knight-Captain's Chain Hauberk
+77762,3,Lieutenant Commander's Chain Shoulders
+77763,3,Lieutenant Commander's Chain Helm
+77764,3,Blood Guard's Chain Vices
+77765,3,Champion's Chain Helm
+77766,3,Champion's Chain Shoulders
+77767,3,Blood Guard's Chain Greaves
+77768,3,Legionnaire's Chain Hauberk
+77769,3,Knight-Captain's Chain Legguards
+77770,3,Legionnaire's Silk Robes
+77771,3,Blood Guard's Silk Footwraps
+77772,3,Champion's Silk Shoulderpads
+77773,3,Blood Guard's Silk Walkers
+77774,3,Legionnaire's Silk Pants
+77775,3,Blood Guard's Silk Gloves
+77776,3,Champion's Silk Hood
+77777,3,Knight-Captain's Silk Legguards
+77778,3,Champion's Silk Cowl
+77779,3,Champion's Silk Mantle
+77780,3,Lieutenant Commander's Silk Mantle
+77781,3,Legionnaire's Silk Tunic
+77782,3,Legionnaire's Silk Legguards
+77783,3,Blood Guard's Silk Handwraps
+77784,3,Lieutenant Commander's Silk Cowl
+77785,3,Knight-Captain's Silk Tunic
+77786,3,First Sergeant's Silk Cuffs
+77787,3,Sergeant Major's Silk Cuffs
+77788,3,First Sergeant's Silk Cuffs
+77789,3,Champion's Satin Shoulderpads
+77790,3,Blood Guard's Satin Boots
+77791,3,Blood Guard's Satin Gloves
+77792,3,Champion's Satin Cowl
+77793,3,Legionnaire's Satin Vestments
+77794,3,Legionnaire's Satin Trousers
+77795,3,Champion's Satin Hood
+77796,3,Champion's Satin Mantle
+77797,3,Knight-Captain's Satin Legguards
+77798,3,Legionnaire's Satin Legguards
+77799,3,Knight-Captain's Satin Tunic
+77800,3,Lieutenant Commander's Satin Hood
+77801,3,Lieutenant Commander's Satin Mantle
+77802,3,Legionnaire's Satin Tunic
+77803,3,Blood Guard's Satin Handwraps
+77804,3,Blood Guard's Satin Walkers
+77805,3,Champion's Leather Headguard
+77806,3,Champion's Leather Mantle
+77807,3,Legionnaire's Leather Leggings
+77808,3,Legionnaire's Leather Hauberk
+77809,3,Blood Guard's Leather Treads
+77810,3,Blood Guard's Leather Vices
+77811,3,Knight-Captain's Leather Chestpiece
+77812,3,Knight-Captain's Leather Legguards
+77813,3,Lieutenant Commander's Leather Shoulders
+77814,3,First Sergeant's Leather Armguards
+77815,3,Champion's Leather Helm
+77816,3,Blood Guard's Leather Walkers
+77817,3,Blood Guard's Leather Grips
+77818,3,Legionnaire's Leather Legguards
+77819,3,Champion's Leather Shoulders
+77820,3,Lieutenant Commander's Leather Helm
+77821,3,Legionnaire's Leather Chestpiece
+77822,3,First Sergeant's Leather Armguards
+77823,3,Blood Guard's Mail Grips
+77824,3,Legionnaire's Mail Chestpiece
+77825,3,Legionnaire's Mail Leggings
+77826,3,Champion's Mail Shoulders
+77827,3,Champion's Mail Helm
+77828,3,Blood Guard's Mail Walkers
+77829,3,Legionnaire's Mail Legguards
+77830,3,Blood Guard's Mail Greaves
+77831,3,Champion's Mail Pauldrons
+77832,3,Champion's Mail Headguard
+77833,3,Blood Guard's Mail Vices
+77834,3,Legionnaire's Mail Hauberk
+77835,3,First Sergeant's Mail Wristguards
+77836,3,First Sergeant's Mail Wristguards
+77837,3,Champion's Dreadweave Hood
+77838,3,Legionnaire's Dreadweave Leggings
+77839,3,Blood Guard's Dreadweave Boots
+77840,3,Blood Guard's Dreadweave Gloves
+77841,3,Legionnaire's Dreadweave Robe
+77842,3,Champion's Dreadweave Shoulders
+77843,3,Blood Guard's Dreadweave Walkers
+77844,3,Lieutenant Commander's Dreadweave Cowl
+77845,3,Champion's Dreadweave Cowl
+77846,3,Champion's Dreadweave Spaulders
+77847,3,Knight-Captain's Dreadweave Legguards
+77848,3,Knight-Captain's Dreadweave Tunic
+77849,3,Blood Guard's Dreadweave Handwraps
+77850,3,Lieutenant Commander's Dreadweave Spaulders
+77851,3,Legionnaire's Dreadweave Tunic
+77852,3,Legionnaire's Dreadweave Legguards
+77853,3,Blood Guard's Plate Boots
+77854,3,Legionnaire's Plate Armor
+77855,3,Champion's Plate Headguard
+77856,3,Champion's Plate Pauldrons
+77857,3,Legionnaire's Plate Legguards
+77858,3,Knight-Captain's Plate Hauberk
+77859,3,Lieutenant Commander's Plate Shoulders
+77860,3,Blood Guard's Plate Gloves
+77861,3,First Sergeant's Plate Bracers
+77862,3,Blood Guard's Plate Greaves
+77863,3,Blood Guard's Plate Gauntlets
+77864,3,Knight-Captain's Plate Leggings
+77865,3,Legionnaire's Plate Hauberk
+77866,3,Legionnaire's Plate Leggings
+77867,3,Lieutenant Commander's Plate Helmet
+77868,3,Champion's Plate Shoulders
+77869,3,Champion's Plate Helm
+77870,3,First Sergeant's Plate Bracers
+77871,3,Champion's Lamellar Headguard
+77872,3,Champion's Lamellar Shoulders
+77873,3,Legionnaire's Lamellar Breastplate
+77874,4,Warlord's Dragonhide Helmet
+77875,4,General's Dragonhide Boots
+77876,4,Warlord's Dragonhide Hauberk
+77877,4,General's Dragonhide Leggings
+77878,4,Warlord's Dragonhide Epaulets
+77879,4,General's Dragonhide Gloves
+77880,4,Warlord's Chain Shoulders
+77881,4,General's Chain Legguards
+77882,4,Warlord's Chain Chestpiece
+77883,4,Warlord's Chain Helmet
+77884,4,General's Chain Boots
+77885,4,General's Chain Gloves
+77886,4,Warlord's Silk Cowl
+77887,4,General's Silk Handguards
+77888,4,General's Silk Boots
+77889,4,Warlord's Silk Raiment
+77890,4,Warlord's Silk Amice
+77891,4,General's Silk Trousers
+77892,4,Warlord's Lamellar Chestplate
+77893,4,General's Lamellar Boots
+77894,4,Warlord's Lamellar Faceguard
+77895,4,General's Lamellar Gloves
+77896,4,General's Lamellar Legplates
+77897,4,Warlord's Lamellar Pauldrons
+77898,4,General's Satin Gloves
+77899,4,Warlord's Satin Mantle
+77900,4,Warlord's Satin Cowl
+77901,4,Warlord's Satin Robes
+77902,4,General's Satin Leggings
+77903,4,General's Satin Boots
+77904,4,General's Leather Treads
+77905,4,General's Leather Mitts
+77906,4,General's Leather Legguards
+77907,4,Warlord's Leather Spaulders
+77908,4,Warlord's Leather Breastplate
+77909,4,Warlord's Leather Helm
+77910,4,Warlord's Mail Spaulders
+77911,4,General's Mail Boots
+77912,4,General's Mail Gauntlets
+77913,4,Warlord's Mail Helm
+77914,4,Warlord's Mail Armor
+77915,4,General's Mail Leggings
+77916,4,General's Dreadweave Gloves
+77917,4,Warlord's Dreadweave Hood
+77918,4,General's Dreadweave Boots
+77919,4,Warlord's Dreadweave Robe
+77920,4,Warlord's Dreadweave Mantle
+77921,4,General's Dreadweave Pants
+77922,4,General's Plate Boots
+77923,4,Warlord's Plate Shoulders
+77924,4,Warlord's Plate Armor
+77925,4,General's Plate Gauntlets
+77926,4,General's Plate Leggings
+77927,4,Warlord's Plate Headpiece
+77928,3,Blood Guard's Lamellar Sabatons
+77929,3,Blood Guard's Lamellar Gauntlets
+77938,4,Dragonfire Orb
+77945,4,Fear
+77946,4,Vengeance
+77949,5,Golad Twilight of Aspects
+77950,5,Tiriosh Nightmare of Ages
+77968,0,Monster - Thrown_1h_DeathwingRaid_D_01 - Default
+78167,0,Monster - Thrown_1h_DeathwingRaid_D_01 - Purple
+78168,0,Monster - Thrown_1h_DeathwingRaid_D_01 - Blue
+78169,0,Monster - Thrown_1h_DeathwingRaid_D_01 - Green
+78186,3,Replica Magister's Boots
+78187,3,Replica Magister's Gloves
+78188,3,Replica Magister's Crown
+78189,3,Replica Magister's Leggings
+78190,3,Replica Magister's Robes
+78191,3,Replica Magister's Mantle
+78192,3,Replica Magister's Belt
+78193,3,Replica Magister's Bindings
+78196,4,Replica Sorcerer's Boots
+78197,4,Replica Sorcerer's Gloves
+78198,4,Replica Sorcerer's Crown
+78199,3,Replica Sorcerer's Leggings
+78200,4,Replica Sorcerer's Robes
+78201,3,Replica Sorcerer's Mantle
+78202,3,Replica Sorcerer's Belt
+78203,3,Replica Sorcerer's Bindings
+78204,3,Replica Devout Mantle
+78205,3,Replica Devout Crown
+78206,3,Replica Devout Skirt
+78207,3,Replica Devout Belt
+78208,3,Replica Devout Gloves
+78209,3,Replica Devout Robe
+78210,3,Replica Devout Sandals
+78211,3,Replica Devout Bracers
+78212,4,Replica Virtuous Robe
+78213,3,Replica Virtuous Mantle
+78214,3,Replica Virtuous Skirt
+78215,3,Replica Virtuous Bracers
+78216,4,Replica Virtuous Crown
+78217,4,Replica Virtuous Gloves
+78218,3,Replica Virtuous Belt
+78219,4,Replica Virtuous Sandals
+78222,3,Replica Dreadmist Belt
+78223,3,Replica Dreadmist Wraps
+78224,3,Replica Dreadmist Sandals
+78225,3,Replica Dreadmist Robe
+78226,3,Replica Dreadmist Mantle
+78227,3,Replica Dreadmist Mask
+78228,3,Replica Dreadmist Leggings
+78229,3,Replica Dreadmist Bracers
+78230,4,Replica Deathmist Mask
+78231,3,Replica Deathmist Leggings
+78232,3,Replica Deathmist Bracers
+78233,3,Replica Deathmist Belt
+78234,3,Replica Deathmist Mantle
+78235,4,Replica Deathmist Sandals
+78236,4,Replica Deathmist Wraps
+78237,4,Replica Deathmist Robe
+78238,3,Replica Wildheart Cowl
+78239,3,Replica Wildheart Spaulders
+78240,3,Replica Wildheart Bracers
+78241,3,Replica Wildheart Gloves
+78242,3,Replica Wildheart Vest
+78243,3,Replica Wildheart Boots
+78244,3,Replica Wildheart Belt
+78245,3,Replica Wildheart Kilt
+78246,3,Replica Feralheart Belt
+78247,3,Replica Feralheart Spaulders
+78248,4,Replica Feralheart Gloves
+78249,4,Replica Feralheart Cowl
+78250,3,Replica Feralheart Kilt
+78251,4,Replica Feralheart Boots
+78252,4,Replica Feralheart Vest
+78253,3,Replica Feralheart Bracers
+78254,3,Replica Shadowcraft Tunic
+78255,3,Replica Shadowcraft Bracers
+78256,3,Replica Shadowcraft Boots
+78257,3,Replica Shadowcraft Gloves
+78258,3,Replica Shadowcraft Pants
+78259,3,Replica Shadowcraft Belt
+78260,3,Replica Shadowcraft Cap
+78261,3,Replica Shadowcraft Spaulders
+78262,4,Replica Darkmantle Boots
+78263,4,Replica Darkmantle Cap
+78264,3,Replica Darkmantle Bracers
+78265,3,Replica Darkmantle Belt
+78266,4,Replica Darkmantle Gloves
+78267,3,Replica Darkmantle Spaulders
+78268,3,Replica Darkmantle Pants
+78269,4,Replica Darkmantle Tunic
+78270,3,Replica Beaststalker's Tunic
+78271,3,Replica Beaststalker's Gloves
+78272,3,Replica Beaststalker's Boots
+78273,3,Replica Beaststalker's Mantle
+78274,3,Replica Beaststalker's Belt
+78275,3,Replica Beaststalker's Cap
+78276,3,Replica Beaststalker's Pants
+78277,3,Replica Beaststalker's Bindings
+78278,4,Replica Beastmaster's Gloves
+78279,4,Replica Beastmaster's Boots
+78280,3,Replica Beastmaster's Pants
+78281,3,Replica Beastmaster's Mantle
+78282,4,Replica Beastmaster's Tunic
+78283,3,Replica Beastmaster's Bindings
+78284,4,Replica Beastmaster's Cap
+78285,3,Replica Beastmaster's Belt
+78286,3,Replica Coif of Elements
+78287,3,Replica Kilt of Elements
+78288,3,Replica Pauldrons of Elements
+78289,3,Replica Bindings of Elements
+78290,3,Replica Vest of Elements
+78291,3,Replica Gauntlets of Elements
+78292,3,Replica Boots of Elements
+78293,3,Replica Cord of Elements
+78302,3,Replica Lightforge Belt
+78303,3,Replica Lightforge Gauntlets
+78304,3,Replica Lightforge Bracers
+78305,3,Replica Lightforge Legplates
+78306,3,Replica Lightforge Breastplate
+78307,3,Replica Lightforge Helm
+78308,3,Replica Lightforge Spaulders
+78309,3,Replica Lightforge Boots
+78310,4,Replica Soulforge Boots
+78311,3,Replica Soulforge Belt
+78312,4,Replica Soulforge Helm
+78313,4,Replica Soulforge Breastplate
+78314,4,Replica Soulforge Gauntlets
+78315,3,Replica Soulforge Legplates
+78316,3,Replica Soulforge Spaulders
+78317,3,Replica Soulforge Bracers
+78318,3,Replica Boots of Valor
+78319,3,Replica Belt of Valor
+78320,3,Replica Gauntlets of Valor
+78321,3,Replica Bracers of Valor
+78322,3,Replica Helm of Valor
+78323,3,Replica Breastplate of Valor
+78324,3,Replica Legplates of Valor
+78325,3,Replica Spaulders of Valor
+78326,4,Replica Boots of Heroism
+78327,3,Replica Bracers of Heroism
+78328,4,Replica Breastplate of Heroism
+78329,4,Replica Gauntlets of Heroism
+78330,4,Replica Helm of Heroism
+78331,3,Replica Legplates of Heroism
+78332,3,Replica Spaulders of Heroism
+78333,3,Replica Belt of Heroism
+78337,3,Test
+78338,3,Test
+78340,1,Cloak of the Darkmoon Faire
+78341,1,Darkmoon Hammer
+78357,4,Gloves of Liquid Smoke
+78359,4,Vishanka Jaws of the Earth
+78361,4,Pillarfoot Greaves
+78362,4,Sporebeard Gauntlets
+78363,4,Vagaries of Time
+78365,4,Robe of Glowing Stone
+78366,4,Mosswrought Shoulderguards
+78367,4,Brackenshell Shoulderplates
+78368,4,Underdweller's Spaulders
+78370,4,Girdle of Shattered Stone
+78371,4,Hand of Morchok
+78372,4,Mycosynth Wristguards
+78373,4,Rockhide Bracers
+78375,4,Underdweller's Spaulders
+78376,4,Sporebeard Gauntlets
+78377,4,Rockhide Bracers
+78378,4,Brackenshell Shoulderplates
+78379,4,Hand of Morchok
+78380,4,Robe of Glowing Stone
+78381,4,Mosswrought Shoulderguards
+78383,4,Vagaries of Time
+78384,4,Mycosynth Wristguards
+78385,4,Girdle of Shattered Stone
+78386,4,Pillarfoot Greaves
+78387,4,Horrifying Horn Arbalest
+78388,4,Belt of Flayed Skin
+78389,4,Treads of Crushed Flesh
+78390,4,Graveheart Bracers
+78391,4,Cord of the Slain Champion
+78392,4,Finger of Zon'ozz
+78393,4,Grotesquely Writhing Bracers
+78394,4,Horrifying Horn Arbalest
+78395,4,Belt of Flayed Skin
+78396,4,Treads of Crushed Flesh
+78397,4,Graveheart Bracers
+78398,4,Cord of the Slain Champion
+78399,4,Finger of Zon'ozz
+78400,4,Grotesquely Writhing Bracers
+78401,4,Spire of Coagulated Globules
+78402,4,Interrogator's Bloody Footpads
+78403,4,Experimental Specimen Slicer
+78404,4,Scalpel of Unrelenting Agony
+78405,4,Mindstrainer Treads
+78406,4,Heartblood Wristplates
+78407,4,Spire of Coagulated Globules
+78408,4,Interrogator's Bloody Footpads
+78409,4,Experimental Specimen Slicer
+78410,4,Scalpel of Unrelenting Agony
+78411,4,Mindstrainer Treads
+78412,4,Heartblood Wristplates
+78414,4,Electrowing Dagger
+78415,4,Treads of Dormant Dreams
+78416,4,Runescriven Demon Collar
+78417,4,Bracers of the Banished
+78418,4,Lightning Rod
+78420,4,Girdle of the Grotesque
+78422,4,Electrowing Dagger
+78423,4,Treads of Dormant Dreams
+78424,4,Runescriven Demon Collar
+78425,4,Bracers of the Banished
+78426,4,Lightning Rod
+78428,4,Girdle of the Grotesque
+78429,4,Morningstar of Heroic Will
+78430,4,Bracers of Looming Darkness
+78431,4,Stillheart Warboots
+78433,4,Ledger of Revolting Rituals
+78434,4,Treads of Sordid Screams
+78435,4,Imperfect Specimens 27 and 28
+78436,4,Dragonfracture Belt
+78437,4,Morningstar of Heroic Will
+78438,4,Bracers of Looming Darkness
+78439,4,Stillheart Warboots
+78441,4,Ledger of Revolting Rituals
+78442,4,Treads of Sordid Screams
+78443,4,Imperfect Specimens 27 and 28
+78444,4,Dragonfracture Belt
+78445,4,Ataraxis Cudgel of the Warmaster
+78446,4,Shadow Wing Armbands
+78447,4,Belt of the Beloved Companion
+78448,4,Blackhorn's Mighty Bulwark
+78449,4,Janglespur Jackboots
+78450,4,Timepiece of the Bronze Flight
+78451,4,Visage of the Destroyer
+78452,4,Goriona's Collar
+78453,4,Ataraxis Cudgel of the Warmaster
+78454,4,Shadow Wing Armbands
+78455,4,Belt of the Beloved Companion
+78456,4,Blackhorn's Mighty Bulwark
+78457,4,Janglespur Jackboots
+78458,4,Timepiece of the Bronze Flight
+78459,4,Visage of the Destroyer
+78460,4,Goriona's Collar
+78461,4,Gloves of Liquid Smoke
+78462,4,Molten Blood Footpads
+78463,4,Belt of Shattered Elementium
+78464,4,Gauntlets of the Golden Thorn
+78465,4,Backbreaker Spaulders
+78466,4,Gloves of Liquid Smoke
+78467,4,Molten Blood Footpads
+78468,4,Belt of Shattered Elementium
+78469,4,Gauntlets of the Golden Thorn
+78470,4,Backbreaker Spaulders
+78471,4,Vishanka Jaws of the Earth
+78472,4,No'Kaled the Elements of Death
+78473,4,Kiril Fury of Beasts
+78474,4,Blade of the Unmaker
+78475,4,Rathrak the Poisonous Mind
+78476,4,Maw of the Dragonlord
+78477,4,Ti'tahk the Steps of Time
+78478,4,Gurthalak Voice of the Deeps
+78479,4,Souldrinker
+78480,4,Vishanka Jaws of the Earth
+78481,4,No'Kaled the Elements of Death
+78482,4,Kiril Fury of Beasts
+78483,4,Blade of the Unmaker
+78484,4,Rathrak the Poisonous Mind
+78485,4,Maw of the Dragonlord
+78486,4,Ti'tahk the Steps of Time
+78487,4,Gurthalak Voice of the Deeps
+78488,4,Souldrinker
+78499,4,Bones of the Damned
+78500,4,Chestplate of the Unshakable Titan
+78501,4,Dragonflayer Vest
+78502,4,Ghostworld Chestguard
+78503,4,Shining Carapace of Glory
+78504,4,Shadowbinder Chestguard
+78505,4,Decaying Herbalist's Robes
+78506,4,Dreamcrusher Drape
+78507,4,Indefatigable Greatcloak
+78508,4,Woundlicker Cover
+78509,4,Batwing Cloak
+78510,4,Nanoprecise Cape
+78511,4,Bladeshatter Treads
+78512,4,Boneshard Boots
+78513,4,Sabatons of the Graceful Spirit
+78514,4,Silver Sabatons of Fury
+78515,4,Kneebreaker Boots
+78516,4,Rooftop Griptoes
+78517,4,Boots of Fungoid Growth
+78518,4,Kavan's Forsaken Treads
+78519,4,Splinterfoot Sandals
+78525,4,Grimfist Crushers
+78526,4,Gauntlets of Feathery Blows
+78527,4,Arrowflick Gauntlets
+78528,4,Gloves of Ghostly Dreams
+78529,4,Gleaming Grips of Mending
+78530,4,Lightfinger Handwraps
+78531,4,Fungus-Born Gloves
+78532,4,Clockwinder's Immaculate Gloves
+78533,4,The Hands of Gilly
+78534,4,Visage of Petrification
+78535,4,Jaw of Repudiation
+78536,4,Zeherah's Dragonskull Crown
+78537,4,Wolfdream Circlet
+78538,4,Glowing Wings of Hope
+78539,4,Nocturnal Gaze
+78540,4,Helmet of Perpetual Rebirth
+78541,4,Hood of Hidden Flesh
+78542,4,Soulgaze Cowl
+78548,4,Hungermouth Wand
+78549,4,Scintillating Rods
+78550,4,Gutripper Shard
+78551,4,Stoutheart Talisman
+78552,4,Lightning Spirit in a Bottle
+78553,4,Mindbender Lens
+78554,4,Ripfang Relic
+78555,4,Robes of Searing Shadow
+78556,4,Lightwarper Vestments
+78557,4,Unexpected Backup
+78558,4,Darting Chakram
+78559,4,Windslicer Boomerang
+78560,4,Forgesmelter Waistplate
+78561,4,Cord of Dragon Sinew
+78562,4,Girdle of Shamanic Fury
+78563,4,Blinding Girdle of Truth
+78564,4,Demonbone Waistguard
+78565,4,Belt of Hidden Keys
+78566,4,Belt of Universal Curing
+78567,4,Tentacular Belt
+78568,4,Vestal's Irrepressible Girdle
+78569,4,Heartcrusher Wristplates
+78570,4,Bracers of Unrelenting Excellence
+78571,4,Dragonbelly Bracers
+78572,4,Bracers of the Spectral Wolf
+78573,4,Flashing Bracers of Warmth
+78574,4,Bracers of Manifold Pockets
+78575,4,Luminescent Bracers
+78576,4,Chronoboost Bracers
+78577,4,Bracers of the Black Dream
+78578,4,Shining Carapace of Glory
+78579,4,Dragonflayer Vest
+78580,4,Ghostworld Chestguard
+78581,4,Shadowbinder Chestguard
+78582,4,Decaying Herbalist's Robes
+78583,4,Bones of the Damned
+78584,4,Chestplate of the Unshakable Titan
+78585,4,Woundlicker Cover
+78586,4,Dreamcrusher Drape
+78587,4,Batwing Cloak
+78588,4,Nanoprecise Cape
+78589,4,Indefatigable Greatcloak
+78590,4,Kneebreaker Boots
+78591,4,Bladeshatter Treads
+78592,4,Boots of Fungoid Growth
+78593,4,Silver Sabatons of Fury
+78594,4,Rooftop Griptoes
+78595,4,Sabatons of the Graceful Spirit
+78596,4,Boneshard Boots
+78597,4,Kavan's Forsaken Treads
+78598,4,Splinterfoot Sandals
+78604,4,Fungus-Born Gloves
+78605,4,Grimfist Crushers
+78606,4,Gauntlets of Feathery Blows
+78607,4,The Hands of Gilly
+78608,4,Clockwinder's Immaculate Gloves
+78609,4,Lightfinger Handwraps
+78610,4,Arrowflick Gauntlets
+78611,4,Gloves of Ghostly Dreams
+78612,4,Gleaming Grips of Mending
+78613,4,Wolfdream Circlet
+78614,4,Visage of Petrification
+78615,4,Jaw of Repudiation
+78616,4,Hood of Hidden Flesh
+78617,4,Nocturnal Gaze
+78618,4,Helmet of Perpetual Rebirth
+78619,4,Zeherah's Dragonskull Crown
+78620,4,Soulgaze Cowl
+78621,4,Glowing Wings of Hope
+78627,4,Hungermouth Wand
+78628,4,Scintillating Rods
+78629,4,Gutripper Shard
+78630,4,Mindbender Lens
+78631,4,Lightning Spirit in a Bottle
+78632,4,Stoutheart Talisman
+78633,4,Ripfang Relic
+78634,4,Robes of Searing Shadow
+78635,4,Lightwarper Vestments
+78636,4,Unexpected Backup
+78637,4,Windslicer Boomerang
+78638,4,Darting Chakram
+78639,4,Tentacular Belt
+78640,4,Belt of Hidden Keys
+78641,4,Belt of Universal Curing
+78642,4,Cord of Dragon Sinew
+78643,4,Girdle of Shamanic Fury
+78644,4,Blinding Girdle of Truth
+78645,4,Demonbone Waistguard
+78646,4,Forgesmelter Waistplate
+78647,4,Vestal's Irrepressible Girdle
+78648,4,Flashing Bracers of Warmth
+78649,4,Heartcrusher Wristplates
+78650,4,Bracers of Unrelenting Excellence
+78651,4,Bracers of the Spectral Wolf
+78652,4,Luminescent Bracers
+78653,4,Dragonbelly Bracers
+78654,4,Bracers of Manifold Pockets
+78655,4,Bracers of the Black Dream
+78656,4,Chronoboost Bracers
+78657,4,Colossal Dragonplate Battleplate
+78658,4,Colossal Dragonplate Chestguard
+78659,4,Necrotic Boneplate Breastplate
+78660,4,Deep Earth Robes
+78661,4,Wyrmstalker's Tunic
+78662,4,Deep Earth Vestment
+78663,4,Necrotic Boneplate Chestguard
+78664,4,Blackfang Battleweave Tunic
+78665,4,Deep Earth Raiment
+78666,4,Spiritwalker's Gloves
+78667,4,Spiritwalker's Grips
+78668,4,Colossal Dragonplate Gauntlets
+78669,4,Colossal Dragonplate Handguards
+78670,4,Necrotic Boneplate Gauntlets
+78671,4,Time Lord's Gloves
+78672,4,Spiritwalker's Handwraps
+78673,4,Gloves of Radiant Glory
+78674,4,Wyrmstalker's Gloves
+78675,4,Gauntlets of Radiant Glory
+78676,4,Deep Earth Gloves
+78677,4,Handguards of Radiant Glory
+78678,4,Necrotic Boneplate Handguards
+78679,4,Blackfang Battleweave Gloves
+78680,4,Deep Earth Handwraps
+78681,4,Gloves of the Faceless Shroud
+78682,4,Gloves of Dying Light
+78683,4,Handwraps of Dying Light
+78684,4,Deep Earth Grips
+78685,4,Spiritwalker's Headpiece
+78686,4,Spiritwalker's Helmet
+78687,4,Necrotic Boneplate Helmet
+78688,4,Colossal Dragonplate Helmet
+78689,4,Colossal Dragonplate Faceguard
+78690,4,Deep Earth Helm
+78691,4,Spiritwalker's Faceguard
+78692,4,Headguard of Radiant Glory
+78693,4,Helmet of Radiant Glory
+78694,4,Deep Earth Headpiece
+78695,4,Faceguard of Radiant Glory
+78696,4,Deep Earth Cover
+78697,4,Necrotic Boneplate Faceguard
+78698,4,Wyrmstalker's Headguard
+78699,4,Blackfang Battleweave Helmet
+78700,4,Cowl of Dying Light
+78701,4,Time Lord's Hood
+78702,4,Hood of the Faceless Shroud
+78703,4,Hood of Dying Light
+78704,4,Spiritwalker's Legguards
+78705,4,Colossal Dragonplate Legguards
+78706,4,Colossal Dragonplate Legplates
+78707,4,Necrotic Boneplate Greaves
+78708,4,Blackfang Battleweave Legguards
+78709,4,Wyrmstalker's Legguards
+78710,4,Deep Earth Legwraps
+78711,4,Spiritwalker's Kilt
+78712,4,Legplates of Radiant Glory
+78713,4,Deep Earth Legguards
+78714,4,Deep Earth Leggings
+78715,4,Legguards of Radiant Glory
+78716,4,Necrotic Boneplate Legguards
+78717,4,Greaves of Radiant Glory
+78718,4,Spiritwalker's Legwraps
+78719,4,Legwraps of Dying Light
+78720,4,Time Lord's Leggings
+78721,4,Leggings of the Faceless Shroud
+78722,4,Leggings of Dying Light
+78723,4,Spiritwalker's Hauberk
+78724,4,Spiritwalker's Cuirass
+78725,4,Spiritwalker's Tunic
+78726,4,Breastplate of Radiant Glory
+78727,4,Battleplate of Radiant Glory
+78728,4,Robes of Dying Light
+78729,4,Time Lord's Robes
+78730,4,Robes of the Faceless Shroud
+78731,4,Robes of Dying Light
+78732,4,Chestguard of Radiant Glory
+78733,4,Spiritwalker's Spaulders
+78734,4,Colossal Dragonplate Shoulderguards
+78735,4,Colossal Dragonplate Pauldrons
+78736,4,Necrotic Boneplate Pauldrons
+78737,4,Wyrmstalker's Spaulders
+78738,4,Blackfang Battleweave Spaulders
+78739,4,Spiritwalker's Mantle
+78740,4,Deep Earth Mantle
+78741,4,Spiritwalker's Shoulderwraps
+78742,4,Pauldrons of Radiant Glory
+78743,4,Deep Earth Spaulders
+78744,4,Deep Earth Shoulderwraps
+78745,4,Shoulderguards of Radiant Glory
+78746,4,Mantle of Radiant Glory
+78747,4,Mantle of Dying Light
+78748,4,Time Lord's Mantle
+78749,4,Mantle of the Faceless Shroud
+78750,4,Mantle of Dying Light
+78751,4,Necrotic Boneplate Shoulderguards
+78752,4,Colossal Dragonplate Battleplate
+78753,4,Colossal Dragonplate Chestguard
+78754,4,Necrotic Boneplate Breastplate
+78755,4,Deep Earth Robes
+78756,4,Wyrmstalker's Tunic
+78757,4,Deep Earth Vestment
+78758,4,Necrotic Boneplate Chestguard
+78759,4,Blackfang Battleweave Tunic
+78760,4,Deep Earth Raiment
+78761,4,Spiritwalker's Gloves
+78762,4,Spiritwalker's Grips
+78763,4,Colossal Dragonplate Gauntlets
+78764,4,Colossal Dragonplate Handguards
+78765,4,Necrotic Boneplate Gauntlets
+78766,4,Time Lord's Gloves
+78767,4,Spiritwalker's Handwraps
+78768,4,Gloves of Radiant Glory
+78769,4,Wyrmstalker's Gloves
+78770,4,Gauntlets of Radiant Glory
+78771,4,Deep Earth Gloves
+78772,4,Handguards of Radiant Glory
+78773,4,Necrotic Boneplate Handguards
+78774,4,Blackfang Battleweave Gloves
+78775,4,Deep Earth Handwraps
+78776,4,Gloves of the Faceless Shroud
+78777,4,Gloves of Dying Light
+78778,4,Handwraps of Dying Light
+78779,4,Deep Earth Grips
+78780,4,Spiritwalker's Headpiece
+78781,4,Spiritwalker's Helmet
+78782,4,Necrotic Boneplate Helmet
+78783,4,Colossal Dragonplate Helmet
+78784,4,Colossal Dragonplate Faceguard
+78785,4,Deep Earth Helm
+78786,4,Spiritwalker's Faceguard
+78787,4,Headguard of Radiant Glory
+78788,4,Helmet of Radiant Glory
+78789,4,Deep Earth Headpiece
+78790,4,Faceguard of Radiant Glory
+78791,4,Deep Earth Cover
+78792,4,Necrotic Boneplate Faceguard
+78793,4,Wyrmstalker's Headguard
+78794,4,Blackfang Battleweave Helmet
+78795,4,Cowl of Dying Light
+78796,4,Time Lord's Hood
+78797,4,Hood of the Faceless Shroud
+78798,4,Hood of Dying Light
+78799,4,Spiritwalker's Legguards
+78800,4,Colossal Dragonplate Legguards
+78801,4,Colossal Dragonplate Legplates
+78802,4,Necrotic Boneplate Greaves
+78803,4,Blackfang Battleweave Legguards
+78804,4,Wyrmstalker's Legguards
+78805,4,Deep Earth Legwraps
+78806,4,Spiritwalker's Kilt
+78807,4,Legplates of Radiant Glory
+78808,4,Deep Earth Legguards
+78809,4,Deep Earth Leggings
+78810,4,Legguards of Radiant Glory
+78811,4,Necrotic Boneplate Legguards
+78812,4,Greaves of Radiant Glory
+78813,4,Spiritwalker's Legwraps
+78814,4,Legwraps of Dying Light
+78815,4,Time Lord's Leggings
+78816,4,Leggings of the Faceless Shroud
+78817,4,Leggings of Dying Light
+78818,4,Spiritwalker's Hauberk
+78819,4,Spiritwalker's Cuirass
+78820,4,Spiritwalker's Tunic
+78821,4,Breastplate of Radiant Glory
+78822,4,Battleplate of Radiant Glory
+78823,4,Robes of Dying Light
+78824,4,Time Lord's Robes
+78825,4,Robes of the Faceless Shroud
+78826,4,Robes of Dying Light
+78827,4,Chestguard of Radiant Glory
+78828,4,Spiritwalker's Spaulders
+78829,4,Colossal Dragonplate Shoulderguards
+78830,4,Colossal Dragonplate Pauldrons
+78831,4,Necrotic Boneplate Pauldrons
+78832,4,Wyrmstalker's Spaulders
+78833,4,Blackfang Battleweave Spaulders
+78834,4,Spiritwalker's Mantle
+78835,4,Deep Earth Mantle
+78836,4,Spiritwalker's Shoulderwraps
+78837,4,Pauldrons of Radiant Glory
+78838,4,Deep Earth Spaulders
+78839,4,Deep Earth Shoulderwraps
+78840,4,Shoulderguards of Radiant Glory
+78841,4,Mantle of Radiant Glory
+78842,4,Mantle of Dying Light
+78843,4,Time Lord's Mantle
+78844,4,Mantle of the Faceless Shroud
+78845,4,Mantle of Dying Light
+78846,4,Necrotic Boneplate Shoulderguards
+78878,4,Spine of the Thousand Cuts
+78879,4,Sash of Relentless Truth
+78882,4,Nightblind Cinch
+78884,4,Girdle of Fungal Dreams
+78885,4,Dragoncarver Belt
+78886,4,Belt of Ghostly Graces
+78887,4,Girdle of Soulful Mending
+78888,4,Waistguard of Bleeding Bone
+78889,4,Waistplate of the Desecrated Future
