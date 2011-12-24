@@ -121,7 +121,7 @@ void ModelControl::RefreshModel(Attachment *root)
 
 		Model *m = static_cast<Model*>(root->model);
 		if (m) {
-			wxASSERT(m);
+		//	wxASSERT(m);
 			attachments.push_back(root);
 			if (!init)
 				UpdateModel(root);

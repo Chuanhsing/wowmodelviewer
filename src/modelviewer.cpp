@@ -1146,7 +1146,7 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 
 	try {
 		CreatureSkinDB::Record modelRec = skindb.getBySkinID(modelid);
-		int displayID = modelRec.getUInt(CreatureSkinDB::NPCID);
+		int displayID = modelRec.getUInt(CreatureSkinDB::ExtraInfoID);
 
 		// if the creature ID ISN'T a "NPC",  then load the creature model and skin it.
 		if (displayID == 0) {
@@ -1164,7 +1164,7 @@ void ModelViewer::LoadNPC(unsigned int modelid)
 			TextureGroup grp;
 			int count = 0;
 			for (size_t i=0; i<TextureGroup::num; i++) {
-				wxString skin(modelRec.getString(CreatureSkinDB::Skin + i));
+				wxString skin(modelRec.getString(CreatureSkinDB::Skin1 + i));
 				
 				grp.tex[i] = skin;
 				if (skin.length() > 0)
@@ -2455,7 +2455,9 @@ void ModelViewer::OnCheckForUpdate(wxCommandEvent &event)
 		wxString downloadURL = data.AfterLast(10);
 		int Compare = (int)version.find(wxString(APP_VERSION));
 #ifdef _DEBUG
+#ifndef _MINGW
 		wxLogMessage("Update Data:\nCurrent Version: \"%s\"\nRecorded Version \"%s\"\nURL Download: \"%s\"\nComparison Result: %i",wxString(APP_VERSION), version, downloadURL, Compare);
+#endif
 #endif
 
 		if (Compare == 0) {
@@ -2989,7 +2991,7 @@ void DiscoveryNPC()
 	wxString name, ret;
 	// 1. from creaturedisplayinfo.dbc
 	for (CreatureSkinDB::Iterator it = skindb.begin(); it != skindb.end(); ++it) {
-		int npcid = it->getUInt(CreatureSkinDB::NPCID);
+		int npcid = it->getUInt(CreatureSkinDB::ExtraInfoID);
 		int id = it->getUInt(CreatureSkinDB::SkinID);
 		if (npcid == 0)
 			continue;

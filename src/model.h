@@ -278,6 +278,8 @@ class Model: public ManagedItem, public Displayable
 	bool forceAnim;
 
 	void init(MPQFile &f);
+	void displayHeader(ModelHeader & a_header);
+
 	inline void drawModel();
 	void initCommon(MPQFile &f);
 	bool isAnimated(MPQFile &f);

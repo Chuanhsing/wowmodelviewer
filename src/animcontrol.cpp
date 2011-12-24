@@ -337,8 +337,9 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 {
 	wxString fn = m->name;
 
-	// replace .M2 with .MDX
-	fn = fn.BeforeLast(wxT('.')) + wxT(".mdx");
+	// remove extension
+	fn = fn.BeforeLast(wxT('.'));
+
 
 	TextureSet skins;
 
@@ -358,7 +359,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 					TextureGroup grp;
 					int count = 0;
 					for (size_t i=0; i<TextureGroup::num; i++) {
-						wxString skin(it->getString(CreatureSkinDB::Skin + i));
+						wxString skin(it->getString(CreatureSkinDB::Skin1 + i));
 						if (skin != wxEmptyString) {
 							grp.tex[i] = skin;
 							count++;
@@ -372,7 +373,7 @@ bool AnimControl::UpdateCreatureModel(Model *m)
 			}
 		}
 	} catch (CreatureModelDB::NotFound) {
-		// Try hardcoding some fixes for missing model info from the DBC
+		wxLogMessage(wxT("CreatureModelDB not found !!!"));
 	}
 	
 	wxString lwrName = fn;

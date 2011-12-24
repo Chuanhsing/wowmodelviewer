@@ -50,8 +50,8 @@
 
 // defines
 #define APP_TITLE wxT("World of Warcraft Model Viewer")
-#define APP_VERSION wxT("v0.7.0.2")			// Revision number should match the revision number on GoogleCode.
-#define APP_BUILDNAME wxT("Lost Lich King")	// Fun thing for developers to play with. Should change with each Main Release. (Not counting DEV WORK editions)
+#define APP_VERSION wxT("v0.7.0.3")			// Revision number should match the revision number on GoogleCode.
+#define APP_BUILDNAME wxT("Great-father Winter")	// Fun thing for developers to play with. Should change with each Main Release. (Not counting DEV WORK editions)
 /*
 	--==List of Build Name ideas==--	(Feel free to add!)
 	Bouncing Baracuda
@@ -77,6 +77,7 @@
 	Pickled Herring
 	Windrunner's Lament
 	Lost Lich King
+	Great-father Winter
 
 */
 

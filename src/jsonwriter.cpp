@@ -913,7 +913,7 @@ wxJSONWriter::WriteIntValue( wxOutputStream& os, const wxJSONValue& value )
     size_t len;
 
     wxJSONRefData* data = value.GetRefData();
-    wxASSERT( data );
+    //wxASSERT( data );
 
 #if defined( wxJSON_64BIT_INT )
     #if wxCHECK_VERSION(2, 9, 0 ) || !defined( wxJSON_USE_UNICODE )
@@ -930,7 +930,7 @@ wxJSONWriter::WriteIntValue( wxOutputStream& os, const wxJSONValue& value )
         wxCharBuffer cb = s.ToUTF8();
         const char* cbData = cb.data();
         len = strlen( cbData );
-        wxASSERT( len < 32 );
+        //wxASSERT( len < 32 );
         memcpy( buffer, cbData, len );
         buffer[len] = 0;
     #endif
@@ -967,7 +967,7 @@ wxJSONWriter::WriteUIntValue( wxOutputStream& os, const wxJSONValue& value )
 
     char buffer[32];        // need to store 64-bits integers (max 20 digits)
     wxJSONRefData* data = value.GetRefData();
-    wxASSERT( data );
+    //wxASSERT( data );
 
 #if defined( wxJSON_64BIT_INT )
     #if wxCHECK_VERSION(2, 9, 0 ) || !defined( wxJSON_USE_UNICODE )
@@ -984,7 +984,7 @@ wxJSONWriter::WriteUIntValue( wxOutputStream& os, const wxJSONValue& value )
         wxCharBuffer cb = s.ToUTF8();
         const char* cbData = cb.data();
         len = strlen( cbData );
-        wxASSERT( len < 32 );
+        //wxASSERT( len < 32 );
         memcpy( buffer, cbData, len );
         buffer[len] = 0;
     #endif
@@ -1018,7 +1018,7 @@ wxJSONWriter::WriteDoubleValue( wxOutputStream& os, const wxJSONValue& value )
 
     char buffer[32];
     wxJSONRefData* data = value.GetRefData();
-    wxASSERT( data );
+    //wxASSERT( data );
     snprintf( buffer, 32, m_fmt, data->m_value.m_valDouble );
     size_t len = strlen( buffer );
     os.Write( buffer, len );
@@ -1041,7 +1041,7 @@ wxJSONWriter::WriteBoolValue( wxOutputStream& os, const wxJSONValue& value )
     int r = 0;
     const char* f = "false"; const char* t = "true";
     wxJSONRefData* data = value.GetRefData();
-    wxASSERT( data );
+    //wxASSERT( data );
 
     const char* c = f;    // defaults to FALSE
 
@@ -1131,7 +1131,7 @@ wxJSONWriter::WriteMemoryBuff( wxOutputStream& os, const wxMemoryBuffer& buff )
 
     size_t buffLen = buff.GetDataLen();
     unsigned char* ptr = (unsigned char*) buff.GetData();
-    wxASSERT( ptr );
+    //wxASSERT( ptr );
     char openChar = '\'';
     char closeChar = '\'';
     bool asArray = false;
@@ -1152,8 +1152,8 @@ wxJSONWriter::WriteMemoryBuff( wxOutputStream& os, const wxMemoryBuffer& buff )
         if ( asArray )  {
             snprintf( str, 14, "%d", c );
             size_t len = strlen( str );
-            wxASSERT( len <= 3 );
-            wxASSERT( len >= 1 );
+            //wxASSERT( len <= 3 );
+            //wxASSERT( len >= 1 );
             str[len] = ',';
             // do not write the comma char for the last element
             if ( i < buffLen - 1 )    {

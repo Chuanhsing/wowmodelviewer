@@ -354,7 +354,7 @@ wxJSONReader::Parse( wxInputStream& is, wxJSONValue* val )
     if ( val == 0 )  {
         val = &temp;
     }
-    wxASSERT( val );
+   // wxASSERT( val );
 
     // set the wxJSONValue object's pointers for comment storage
     m_next       = val;
@@ -1587,7 +1587,7 @@ wxJSONReader::AppendUES( wxMemoryBuffer& utf8Buff, const char* uesBuffer )
     utf8Buff.AppendData( buffer, len );
 
     // sould never fail
-    wxASSERT( len != wxCONV_FAILED );
+   // wxASSERT( len != wxCONV_FAILED );
     return 0;
 }
 

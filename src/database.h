@@ -651,6 +651,25 @@ public:
 	CreatureSkinDB(): DBCFile(wxT("DBFilesClient\\CreatureDisplayInfo.dbc")) {}
 	~CreatureSkinDB() {}
 
+	static const size_t SkinID = 0; 	 	 // uint
+	static const size_t ModelID = 1;	 	 // uint
+	static const size_t SoundID = 2;	 	 // uint
+	static const size_t ExtraInfoID = 3; 	 // uint
+	static const size_t Scale = 4;		 	 // float
+	static const size_t Opacity = 5;	 	 // uint
+	static const size_t Skin1 = 6;		 	 // string
+	static const size_t Skin2 = 7;		 	 // string
+	static const size_t Skin3 = 8;		 	 // string
+	static const size_t PortraitTexture = 9; // string
+	static const size_t BloodLevel = 10;	 // uint
+	static const size_t Blood = 11;	 		 // uint
+	static const size_t NPCSounds = 12;	 	 // uint
+	static const size_t Particles = 13;	 	 // uint
+	static const size_t GeoSetData = 14;	 // uint
+	static const size_t EffectPackage = 15;	 // uint
+
+	/*
+
 	/// Fields
 	static const size_t SkinID = 0;			// uint
 	static const size_t ModelID = 1;		// uint
@@ -659,8 +678,8 @@ public:
 	//static const size_t Scale = 4;			// float
 	//static const size_t Opacity = 5;			// uint, 0-255, 255 is solid
 	static const size_t Skin = 6;			// string
-	//static const size_t Skin2 = 7;			// string
-	//static const size_t Skin3 = 8;			// string
+	static const size_t Skin2 = 7;			// string
+	static const size_t Skin3 = 8;			// string
 	// uint IconID
 	// unit sizeClass
 	// unit bloodID
@@ -668,7 +687,7 @@ public:
 	// unit particleColorID
 	// unit creatureGeosetData
 	// unit objectEffectPackageID
-
+*/
 	Record getByModelID(unsigned int id);
 	Record getBySkinID(unsigned int id);
 };

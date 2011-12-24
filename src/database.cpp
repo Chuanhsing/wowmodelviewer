@@ -340,14 +340,19 @@ HelmGeosetDB::Record HelmGeosetDB::getById(unsigned int id)
 //
 CreatureModelDB::Record CreatureModelDB::getByFilename(wxString fn)
 {
+	int nbtests = 0;
 	/// Brute force search for now
 	for(Iterator i=begin(); i!=end(); ++i)
 	{
-		wxString str(i->getString(Filename));
+		nbtests++;
+		wxString str(i->getString(CreatureModelDB::Filename));
+
+		str = str.BeforeLast(wxT('.'));
+
 		if(str.IsSameAs(fn, false) == true)
 			return (*i);
 	}
-	//wxLogMessage(wxT("NotFound: %s:%s#%d"), __FILE__, __FUNCTION__, __LINE__);
+	wxLogMessage(wxT("CreatureModelDB::getByFilename %s => %i tests !!! NOT FOUND !!!"), fn.c_str(), nbtests);
 	throw NotFound();
 }
 

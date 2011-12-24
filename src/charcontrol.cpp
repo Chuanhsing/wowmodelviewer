@@ -2538,7 +2538,7 @@ void CharControl::OnUpdateItem(int type, int id)
 			NPCRecord r = npcs.get(id);
 			//wxLogMessage(wxT("id: %d, %d, %d, %s"), id, r.id, r.model, r.name.c_str());
 			CreatureSkinDB::Record modelRec = skindb.getBySkinID(r.model);
-			displayID = modelRec.getUInt(CreatureSkinDB::NPCID);
+			displayID = modelRec.getUInt(CreatureSkinDB::ExtraInfoID);
 			//wxLogMessage(wxT("displayID: %d\n"), displayID);
 		} catch (...) {
 			wxLogMessage(wxT("Can't get extra info from: %d,%d,%d"), npcs.get(id).id, 

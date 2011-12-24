@@ -382,6 +382,8 @@ Model::Model(wxString name, bool forceAnim) : ManagedItem(name), forceAnim(force
 
 	wxLogMessage(wxT("Loading model: %s, size: %d\n"), tempname.c_str(), f.getSize());
 
+	//displayHeader(header);
+
 	// Error check
 	if (header.id[0] != 'M' && header.id[1] != 'D' && header.id[2] != '2' && header.id[3] != '0') {
 		wxLogMessage(wxT("Error:\t\tInvalid model!  May be corrupted."));
@@ -529,6 +531,80 @@ Model::~Model()
 }
 
 
+void Model::displayHeader(ModelHeader & a_header)
+{
+	std::cout << "id : " << a_header.id[0] << a_header.id[1] << a_header.id[2] << a_header.id[3] << std::endl;
+	std::cout << "version : " << (int)a_header.version[0] << (int)a_header.version[1] << (int)a_header.version[2] << (int)a_header.version[3] << std::endl;
+	std::cout << "nameLength : " << a_header.nameLength << std::endl;
+	std::cout << "nameOfs : " << a_header.nameOfs << std::endl;
+	std::cout << "GlobalModelFlags : " << a_header.GlobalModelFlags << std::endl;
+	std::cout << "nGlobalSequences : " << a_header.nGlobalSequences << std::endl;
+	std::cout << "ofsGlobalSequences : " << a_header.ofsGlobalSequences << std::endl;
+	std::cout << "nAnimations : " << a_header.nAnimations << std::endl;
+	std::cout << "ofsAnimations : " << a_header.ofsAnimations << std::endl;
+	std::cout << "nAnimationLookup : " << a_header.nAnimationLookup << std::endl;
+	std::cout << "ofsAnimationLookup : " << a_header.ofsAnimationLookup << std::endl;
+	std::cout << "nBones : " << a_header.nBones << std::endl;
+	std::cout << "ofsBones : " << a_header.ofsBones << std::endl;
+	std::cout << "nKeyBoneLookup : " << a_header.nKeyBoneLookup << std::endl;
+	std::cout << "ofsKeyBoneLookup : " << a_header.ofsKeyBoneLookup << std::endl;
+	std::cout << "nVertices : " << a_header.nVertices << std::endl;
+	std::cout << "ofsVertices : " << a_header.ofsVertices << std::endl;
+	std::cout << "nViews : " << a_header.nViews << std::endl;
+	std::cout << "nColors : " << a_header.nColors << std::endl;
+	std::cout << "ofsColors : " << a_header.ofsColors << std::endl;
+	std::cout << "nTextures : " << a_header.nTextures << std::endl;
+	std::cout << "ofsTextures : " << a_header.ofsTextures << std::endl;
+	std::cout << "nTransparency : " << a_header.nTransparency << std::endl;
+	std::cout << "ofsTransparency : " << a_header.ofsTransparency << std::endl;
+	std::cout << "nTexAnims : " << a_header.nTexAnims << std::endl;
+	std::cout << "ofsTexAnims : " << a_header.ofsTexAnims << std::endl;
+	std::cout << "nTexReplace : " << a_header.nTexReplace << std::endl;
+	std::cout << "ofsTexReplace : " << a_header.ofsTexReplace << std::endl;
+	std::cout << "nTexFlags : " << a_header.nTexFlags << std::endl;
+	std::cout << "ofsTexFlags : " << a_header.ofsTexFlags << std::endl;
+	std::cout << "nBoneLookup : " << a_header.nBoneLookup << std::endl;
+	std::cout << "ofsBoneLookup : " << a_header.ofsBoneLookup << std::endl;
+	std::cout << "nTexLookup : " << a_header.nTexLookup << std::endl;
+	std::cout << "ofsTexLookup : " << a_header.ofsTexLookup << std::endl;
+	std::cout << "nTexUnitLookup : " << a_header.nTexUnitLookup << std::endl;
+	std::cout << "ofsTexUnitLookup : " << a_header.ofsTexUnitLookup << std::endl;
+	std::cout << "nTransparencyLookup : " << a_header.nTransparencyLookup << std::endl;
+	std::cout << "ofsTransparencyLookup : " << a_header.ofsTransparencyLookup << std::endl;
+	std::cout << "nTexAnimLookup : " << a_header.nTexAnimLookup << std::endl;
+	std::cout << "ofsTexAnimLookup : " << a_header.ofsTexAnimLookup << std::endl;
+
+//	std::cout << "collisionSphere :" << std::endl;
+//	displaySphere(a_header.collisionSphere);
+//	std::cout << "boundSphere :" << std::endl;
+//	displaySphere(a_header.boundSphere);
+
+	std::cout << "nBoundingTriangles : " << a_header.nBoundingTriangles << std::endl;
+	std::cout << "ofsBoundingTriangles : " << a_header.ofsBoundingTriangles << std::endl;
+	std::cout << "nBoundingVertices : " << a_header.nBoundingVertices << std::endl;
+	std::cout << "ofsBoundingVertices : " << a_header.ofsBoundingVertices << std::endl;
+	std::cout << "nBoundingNormals : " << a_header.nBoundingNormals << std::endl;
+	std::cout << "ofsBoundingNormals : " << a_header.ofsBoundingNormals << std::endl;
+
+	std::cout << "nAttachments : " << a_header.nAttachments << std::endl;
+	std::cout << "ofsAttachments : " << a_header.ofsAttachments << std::endl;
+	std::cout << "nAttachLookup : " << a_header.nAttachLookup << std::endl;
+	std::cout << "ofsAttachLookup : " << a_header.ofsAttachLookup << std::endl;
+	std::cout << "nEvents : " << a_header.nEvents << std::endl;
+	std::cout << "ofsEvents : " << a_header.ofsEvents << std::endl;
+	std::cout << "nLights : " << a_header.nLights << std::endl;
+	std::cout << "ofsLights : " << a_header.ofsLights << std::endl;
+	std::cout << "nCameras : " << a_header.nCameras << std::endl;
+	std::cout << "ofsCameras : " << a_header.ofsCameras << std::endl;
+	std::cout << "nCameraLookup : " << a_header.nCameraLookup << std::endl;
+	std::cout << "ofsCameraLookup : " << a_header.ofsCameraLookup << std::endl;
+	std::cout << "nRibbonEmitters : " << a_header.nRibbonEmitters << std::endl;
+	std::cout << "ofsRibbonEmitters : " << a_header.ofsRibbonEmitters << std::endl;
+	std::cout << "nParticleEmitters : " << a_header.nParticleEmitters << std::endl;
+	std::cout << "ofsParticleEmitters : " << a_header.ofsParticleEmitters << std::endl;
+}
+
+
 bool Model::isAnimated(MPQFile &f)
 {
 	// see if we have any animated bones
@@ -667,6 +743,7 @@ void Model::initCommon(MPQFile &f)
 	if (header.nTextures) {
 		textures = new TextureID[header.nTextures];
 		for (size_t i=0; i<header.nTextures; i++) {
+
 			// Error check
 			if (i > TEXTURE_MAX-1) {
 				wxLogMessage(wxT("Critical Error: Model Texture %d over %d"), header.nTextures, TEXTURE_MAX);
@@ -722,6 +799,10 @@ void Model::initCommon(MPQFile &f)
 					else if(texdef[i].type == TEXTURE_FUR)
 						tex = wxT("Fur.blp");
 				}
+
+
+
+
 				//wxString tex = modelname.BeforeLast('.').AfterLast(SLASH) + wxT("_");
 				/*
 				if (modelType == MT_NORMAL){
@@ -778,6 +859,7 @@ void Model::initCommon(MPQFile &f)
 					}
 				}
 				*/
+
 				wxLogMessage(wxT("Info: Added %s to the TextureList[%i] via specialTextures. Type: %i"), tex.c_str(), TextureList.size(), texdef[i].type);
 				TextureList.push_back(tex);
 
@@ -1147,8 +1229,43 @@ void Model::setLOD(MPQFile &f, int index)
 	// render ops
 	ModelGeoset *ops = (ModelGeoset*)(f.getBuffer() + view->ofsSub);
 	ModelTexUnit *tex = (ModelTexUnit*)(f.getBuffer() + view->ofsTex);
-#endif // WotLK
 
+#endif // WotLK
+	/*
+	{
+		std::cout << "flags = " << hex << tex->flags << std::endl;
+		std::cout << "shading = " << hex << tex->shading << std::endl;
+		std::cout << "op = " << tex->op << std::endl;
+		std::cout << "op2 = " << tex->op2 << std::endl;
+		std::cout << "colorIndex = " << tex->colorIndex << std::endl;
+		std::cout << "flagsIndex = " << hex << tex->flagsIndex << std::endl;
+		std::cout << "texunit = " << tex->texunit << std::endl;
+		std::cout << "mode = " << tex->mode << std::endl;
+		std::cout << "textureid = " << tex->textureid << std::endl;
+		std::cout << "texunit2 = " << tex->texunit2 << std::endl;
+		std::cout << "transid = " << tex->transid << std::endl;
+		std::cout << "texanimid = " << tex->texanimid << std::endl;
+	}
+
+
+	{
+		std::cout << "=== ModelView ===" << std::endl;
+#ifdef WotLK
+		std::cout << "id : " << view->id[0] << view->id[1] << view->id[2] << view->id[3] << std::endl;
+#endif
+		std::cout << "nIndex : " << view->nIndex << std::endl;
+		std::cout << "ofsIndex : " << view->ofsIndex << std::endl;
+		std::cout << "nTris : " << view->nTris << std::endl;
+		std::cout << "ofsTris : " << view->ofsTris << std::endl;
+		std::cout << "nProps : " << view->nProps << std::endl;
+		std::cout << "ofsProps : " << view->ofsProps << std::endl;
+		std::cout << "nSub : " << view->nSub << std::endl;
+		std::cout << "ofsSub : " << view->ofsSub << std::endl;
+		std::cout << "nTex : " << view->nTex << std::endl;
+		std::cout << "ofsTex : " << view->ofsTex << std::endl;
+		std::cout << "lod : " << view->lod << std::endl;
+	}
+*/
 	ModelRenderFlags *renderFlags = (ModelRenderFlags*)(f.getBuffer() + header.ofsTexFlags);
 	uint16 *texlookup = (uint16*)(f.getBuffer() + header.ofsTexLookup);
 	uint16 *texanimlookup = (uint16*)(f.getBuffer() + header.ofsTexAnimLookup);
@@ -1156,6 +1273,8 @@ void Model::setLOD(MPQFile &f, int index)
 
 	wxDELETEA(showGeosets);
 	showGeosets = new bool[view->nSub];
+
+
 	for (size_t i=0; i<view->nSub; i++) {
 		geosets.push_back(ops[i]);
 		showGeosets[i] = true;
@@ -1525,6 +1644,7 @@ bool ModelRenderPass::init(Model *m)
 	// exit and return false before affecting the opengl render state
 	if (!((ocol.w > 0) && (color==-1 || ecol.w > 0)))
 		return false;
+
 
 	// TEXTURE
 	// bind to our texture

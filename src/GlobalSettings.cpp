@@ -38,10 +38,10 @@ GlobalSettings::GlobalSettings()
 	m_versionMajorNumber = 0;
 	m_versionMinorNumber = 7;
 	m_versionMajorRevNumber = 0;
-	m_versionMinorRevNumber = 2;
+	m_versionMinorRevNumber = 3;
 
 	m_appName = L"WoW Model Viewer";
-	m_buildName = L"Lost Lich King";
+	m_buildName = L"Great-father Winter";
 
 	/*
 		--==List of Build Name ideas==--	(Feel free to add!)
@@ -68,6 +68,7 @@ GlobalSettings::GlobalSettings()
 		Pickled Herring
 		Windrunner's Lament
 		Lost Lich King
+		Great-father Winter
 
 	*/
 

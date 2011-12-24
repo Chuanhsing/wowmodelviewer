@@ -2935,7 +2935,7 @@ void
 wxJSONValue::UnRef()
 {
     if ( m_refData )   {
-        wxASSERT_MSG( m_refData->m_refCount > 0, _T("invalid ref data count") );
+       // wxASSERT_MSG( m_refData->m_refCount > 0, _T("invalid ref data count") );
 
         if ( --m_refData->m_refCount == 0 )    {
             delete m_refData;
@@ -3077,8 +3077,8 @@ wxJSONValue::AllocExclusive()
     }
     //else: ref count is 1, we are exclusive owners of m_refData anyhow
 
-    wxASSERT_MSG( m_refData && m_refData->GetRefCount() == 1,
-                  _T("wxObject::AllocExclusive() failed.") );
+    //wxASSERT_MSG( m_refData && m_refData->GetRefCount() == 1,
+      //            _T("wxObject::AllocExclusive() failed.") );
 }
 
 //! Convert memory buffer object to a string representation.
