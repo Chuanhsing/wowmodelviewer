@@ -115,7 +115,7 @@
     <Link>
       <AdditionalDependencies>glew$(PlatformArchitecture)_VC$(PlatformToolsetVersion).lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
-      <Version>07.01.640</Version>
+      <Version>0.7.0.3</Version>
       <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);D:\wxWidgets-2.8.12\lib\vc_lib\;.\lib\Windows\32bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -175,7 +175,7 @@ copy ..\bin\*.csv $(OutDir)
     <Link>
       <AdditionalDependencies>glew$(PlatformArchitecture)_VC$(PlatformToolsetVersion).lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
-      <Version>07.01.640</Version>
+      <Version>0.7.0.3</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);.\lib\Windows\64bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -235,7 +235,7 @@ copy ..\bin\*.csv $(OutDir)
       <AdditionalDependencies>glew$(PlatformArchitecture)_VC$(PlatformToolsetVersion).lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerboseLib</ShowProgress>
       <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
-      <Version>0.7.0.2</Version>
+      <Version>0.7.0.3</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);D:\wxWidgets-2.8.12\lib\vc_lib\;.\lib\Windows\32bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -312,7 +312,7 @@ copy ..\bin\userSettings\*.* $(OutDir)userSettings
       <AdditionalDependencies>glew$(PlatformArchitecture)_VC$(PlatformToolsetVersion).lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>LinkVerboseLib</ShowProgress>
       <OutputFile>$(OutDir)$(TargetName).exe</OutputFile>
-      <Version>0.7.0.2</Version>
+      <Version>0.7.0.3</Version>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>D:\wxWidgets-2.8.12\lib\vc_lib\$(Platform);.\lib\Windows\64bit;.\zlib\$(OutDir);.\bzip2\$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>

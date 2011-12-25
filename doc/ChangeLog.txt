@@ -1,4 +1,9 @@
-World of Warcraft Model Viewer v0.7.0.1
+World of Warcraft Model Viewer v0.7.0.3
+
+v0.7.0.3
+ - Fixed 4.3 support!
+ - Fixed a problem with texture search id dbc files
+ - Removed some asserts (should never be present in a released software)
 
 r640 (Windrunner's Lament)
  - Changed the Content Copyright's start year from 2006 to 2004, which is when WoW was first released.
