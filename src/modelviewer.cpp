@@ -3315,6 +3315,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 			wxFileDialog dialog(this, wxT("Export Model..."), wxEmptyString, newfilename, wxT("FBX (*.fbx)|*.fbx"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				ExportFBX_M2(canvas->model, dialog.GetPath().fn_str(), init);
 			}else{
 				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
@@ -3322,6 +3323,7 @@ void ModelViewer::OnExport(wxCommandEvent &event)
 			wxFileDialog dialog(this, wxT("Export World Model Object..."), wxEmptyString, newfilename, wxT("FBX (*.fbx)|*.fbx"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 			if (dialog.ShowModal()==wxID_OK) {
 				wxLogMessage(wxT("Info: Exporting model to %s..."), wxString(dialog.GetPath().fn_str(), wxConvUTF8).c_str());
+				ExportFBX_WMO(canvas->wmo, dialog.GetPath().fn_str());
 			}else{
 				returncode = EXPORT_ERROR_BAD_FILENAME;
 			}
