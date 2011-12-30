@@ -50,12 +50,12 @@ public:
 	};
 
 	// Destructor
-	WMV_ENGINE_API ~ModelExporterServer() {
+	~ModelExporterServer() {
 		m_ModelExporterTypes.clear();
 	}
 
 	// Allows plugins to add new Exporters
-	WMV_ENGINE_API void addExporter(QSharedPointer<ModelExporterType> ET){
+	void addExporter(QSharedPointer<ModelExporterType> ET){
 		ExporterInfo info = ET.data()->getExporterInfo();
 		#if defined(_WINDOWS)
 			if (info.OS_Windows > -1){
@@ -76,12 +76,12 @@ public:
 	}
 
 	// Get the total number of registered Exporters
-	WMV_ENGINE_API size_t getExporterTypeCount() const {
+	size_t getExporterTypeCount() const {
 		return m_ModelExporterTypes.size();
 	}
 
 	// Access an Exporter by it's Index
-	WMV_ENGINE_API ModelExporterType &getExporter(size_t Index){
+	ModelExporterType &getExporter(size_t Index){
 		return *m_ModelExporterTypes.value((int)Index);
 	}
 

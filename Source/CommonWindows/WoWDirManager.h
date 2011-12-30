@@ -39,9 +39,9 @@ class WoWDirManager : public QDialog
 
 public:
 	// Public Functions
-    WMV_ENGINE_API explicit WoWDirManager(QWidget *parent = 0);
-	WMV_ENGINE_API ~WoWDirManager();
-	WMV_ENGINE_API void init();
+    explicit WoWDirManager(QWidget *parent = 0);
+	~WoWDirManager();
+	void init();
 
 private:
 	void SetupList();

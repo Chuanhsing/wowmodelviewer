@@ -35,22 +35,22 @@ public:
 	};
 
 	// Destructor
-	WMV_ENGINE_API ~DisplayServer() {
+	~DisplayServer() {
 		m_DisplayDrivers.clear();
 	}
 
 	// Allows plugins to add new display drivers
-	WMV_ENGINE_API void addDisplayDriver(QSharedPointer<DisplayDriver> DD){
+	void addDisplayDriver(QSharedPointer<DisplayDriver> DD){
 		m_DisplayDrivers.push_back(DD.data());
 	}
 
 	// Get the total number of registers Display Drivers
-	WMV_ENGINE_API size_t getDisplayDriverCount() const {
+	size_t getDisplayDriverCount() const {
 		return m_DisplayDrivers.size();
 	}
 
 	// Access a driver by it's Index
-	WMV_ENGINE_API DisplayDriver &getDriver(size_t Index){
+	DisplayDriver &getDriver(size_t Index){
 		return *m_DisplayDrivers.value((int)Index);
 	}
 

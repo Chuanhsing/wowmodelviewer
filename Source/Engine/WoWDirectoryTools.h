@@ -8,7 +8,7 @@
 
 namespace WMVEngine {
 
-WMV_ENGINE_API QString WoWDirGroupName(st_WoWDir);
+QString WoWDirGroupName(st_WoWDir);
 
 } // Namespace
 

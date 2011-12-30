@@ -1,5 +1,11 @@
 WoW Model Viewer v0.8.0.0
 
+r663 WMV-78 (Plugin Edition)
+-Changed all core DLL projects to LIB projects. (Plugins & support projects are unaffected.)
+-Logging system now works again.
+-Removed DLL code.
+
+
 r642 WMV-78 (Plugin Edition)
 -Created Foundation.Lib project. All commonly used functions (such as logging) will go in here.
 -Reverted several QsLog changes that prevented WMV from being compiled.

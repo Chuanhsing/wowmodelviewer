@@ -11,16 +11,6 @@ using namespace QsLogging;
 // Viewer Interface Window
 Interface_Viewer::Interface_Viewer(QWidget *parent) : QMainWindow(parent), ui(new Ui::Interface_Viewer)
 {
-	/*
-	QsLog_logger.setLoggingLevel(QsLogging::TraceLevel);
-	const QString sLogPath(QDir().filePath(LOGFILE_FILENAME));
-	QsLogging::DestinationPtr fileDestination(
-		QsLogging::DestinationFactory::MakeFileDestination(sLogPath,true) );
-	QsLogging::DestinationPtr debugDestination(
-		QsLogging::DestinationFactory::MakeDebugOutputDestination() );
-	QsLog_logger.addDestination(debugDestination.get());
-	QsLog_logger.addDestination(fileDestination.get());
-	*/
 
 	QLOG_INFO() << "Interface Viewer DLL test";
 

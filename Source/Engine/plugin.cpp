@@ -56,7 +56,6 @@ Plugin Plugin::operator=(const Plugin &Other){
 }
 
 Plugin::~Plugin() {
-	QLOG_INFO() << "Logging Test, Plugin Destruction";
 	// Only unload the DLL if there are no more references to it
 	if(!--*m_DLLRefCount) {
 		m_plugin.unload();

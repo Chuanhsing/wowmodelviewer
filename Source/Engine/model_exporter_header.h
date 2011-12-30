@@ -25,6 +25,7 @@ public:
 	QString Exporter_Name;					// The name of the Exporter. This is used in the pulldown menu. (Examples: Lightwave 3D, FBX, Wavefront OBJ)
 	QString Exporter_Notes;					// A string to write any notes about the exporter in.
 	QList<QString> Exporter_Extensions;		// A list of model extensions used by this format. Most common goes first. (Examples: lwo, fbx, obj)
+	bool hasOptionsPage;					// The exporter has an options page/dialog available before exporting.
 	
 	/*
 	Operating System Support
@@ -39,13 +40,14 @@ public:
 	int OS_Linux;							// Status of Linux support.
 	
 	// Constructor
-	// n = Name, l = QList of Extentions, osw = Windows support, osm = Mac Support, osl = Linux support, note = Any notes for this exporter.
-	ExporterInfo(QString n, QList<QString> l, int osw = -1, int osm = -1, int osl = -1, QString note = QString()) {
+	// n = Name, l = QList of Extentions, hop = hasOptionsPage, osw = Windows support, osm = Mac Support, osl = Linux support, note = Any notes for this exporter.
+	ExporterInfo(QString n, QList<QString> l, bool hop = false, int osw = -1, int osm = -1, int osl = -1, QString note = QString()) {
 		HeaderVersion = MODELEXPORTERHEADERVERSION;
 		
 		Exporter_Name = n;
 		Exporter_Extensions = l;
 		Exporter_Notes = note;
+		hasOptionsPage = hop;
 		
 		OS_Windows = osw;
 		OS_MacOSX = osm;
@@ -62,6 +64,7 @@ private:
 public:
 	// M2 Capabilities
 	bool M2_Export;							// This plug-in can export M2 models.
+	bool M2_Options;						// Has an options page/dialog for M2-Specific settings.
 	bool M2_PreserveDirectory;				// Can export the model using the in-game directory structure. This applys to ALL items exported by this exporter! (Models, Images, etc...)
 	bool M2_InitialPose;					// Can export the initial, unanimated pose of animated models.
 	bool M2_Attached;						// Can export attached items, such as helmets, weapons and shoulders.
@@ -80,12 +83,14 @@ public:
 	bool M2_UVAnim;							// Can export UV Animation.
 	bool M2_Normals;						// Can export the Normal Maps.
 	bool M2_VertexColors;					// Can export Vertex Coloring data.
+	bool M2_VertexColorAnim;				// Can export Animation for Vertex Colors.
 	bool M2_Bones;							// Can export Bones.
 	bool M2_BoneLimits;						// Can export the influence maps of Bones.
-	bool M2_Animation;						// Can export M2 animation.
+	bool M2_BoneAnimation;					// Can export a Bone's animation.
 	bool M2_Cameras;						// Can export Cameras.
 	bool M2_CameraAnim;						// Can export Camera Animation.
 	bool M2_CameraFOV;						// Can export the Field Of View of a camera.
+	bool M2_CameraClipNear;					// Can export the near clipping plane of a camera.
 	bool M2_CameraClipFar;					// Can export the far clipping plane of a camera.
 	bool M2_CameraTarget;					// Can export Camera Targets.
 	bool M2_CameraTargetAnim;				// Can export Camera Target animation.
@@ -94,14 +99,17 @@ public:
 	bool M2_LightsAnim;						// Can export a Light's animation.
 	bool M2_LightsColor;					// Can export Light color information.
 	bool M2_LightsColorAnim;				// Can export Light color animation.
-	bool M2_LightsFalloff;					// Can export Light falloff settings.
-	bool M2_LightsFalloffAnim;				// Can export Light falloff animation.
+	bool M2_LightsAttenuationStart;			// Can export the Start range of a Light's Attenuation. (Falloff)
+	bool M2_LightsAttenuationEnd;			// Can export the End range of a Light's Attenuation.
+	bool M2_LightsAttenuationStartAnim;		// Can export the animation of the Start Attenuation.
+	bool M2_LightsAttenuationEndAnim;		// Can export the animation of the End Attenuation.
 	bool M2_Particles;						// Can export Particles from M2 files.
 	bool M2_ParticlesAnim;					// Can export Particle animation from M2 files.
 	bool M2_Ribbons;						// Can export Ribbon/Contrail effects from M2 files.
 
 	// WMO Capabilities
 	bool WMO_Export;						// This plug-in can export WMO models.
+	bool WMO_Options;						// Has an options page/dialog for WMO-Specific settings.
 	bool WMO_PreserveDirectory;				// Can export the model using the in-game directory structure. This applys to ALL items exported by this exporter! (Models, Images, etc...)
 	bool WMO_AsVerts;						// Can export the model using Verticies, rather than indices.
 	bool WMO_Collisions;					// Can export Collision Polys.
@@ -118,7 +126,8 @@ public:
 	bool WMO_Lights;						// Can export Lights from WMO files.
 	bool WMO_LightTypes;					// Can export the different types of Lights.
 	bool WMO_LightsColor;					// Can export Light color information.
-	bool WMO_LightsFalloff;					// Can export Light falloff settings.
+	bool WMO_LightsAttenuationStart;		// Can export the Start range of a Light's Attenuation.
+	bool WMO_LightsAttenuationEnd;			// Can export the End range of a Light's Attenuation.
 	bool WMO_Water;							// Can export Water planes from WMO files.
 	bool WMO_WaterTexture;					// Can export the texture/surface-settings of WMO Water.
 	bool WMO_Fog;							// Can export/setup Fog.
@@ -128,11 +137,15 @@ public:
 	bool WMO_DoodadSets;					// Can export sets/collections of doodads.
 	bool WMO_DoodadsAsNulls;				// Can export doodads as reference nulls.
 	bool WMO_DoodadsAsModels;				// Can export doodads as the individual models.
-	bool WMO_DoodadsAsSingleModel;			// Can export doodads as a single model.
+	bool WMO_DoodadsAsSingleModel;			// Can export all the doodads as a single model.
 	bool WMO_DoodadSetsAsSingleModel;		// Can export each doodad set as a single model.
 	bool WMO_DoodadsMergedWithParent;		// Can export doodads as part of the parent model.
-	bool WMO_DoodadsAsSubobject;			// Can export doodads as a new sub-object(s)/layer(s) of the parent model.
-	bool WMO_DoodadLights;					// Can export Doodad Lights.
+	bool WMO_DoodadSetsMergedWithParent;	// Can export doodad sets as part of the parent model.
+	bool WMO_DoodadsAsSubobject;			// Can export doodads as a single sub-object/layer of the parent model.
+	bool WMO_DoodadsAsSubobjects;			// Can export doodads as separate sub-objects/layers of the parent model.
+	bool WMO_DoodadSetsAsSubobject;			// Can export doodad sets as a single sub-object/layer of the parent model.
+	bool WMO_DoodadSetsAsSubobjects;		// Can export doodad sets as separate sub-objects/layers of the parent model.
+	bool WMO_DoodadLights;					// Can export a doodad's lights. Has all the Light properies of M2 files.
 
 	/* --= ADT Capabilities =--
 	Basics:
@@ -152,6 +165,7 @@ public:
 
 	*/
 	bool ADT_Export;						// This plug-in can export ADT models.
+	bool ADT_Options;						// Has an options page/dialog for ADT-Specific settings.
 	bool ADT_PreserveDirectory;				// Can export the model using the in-game directory structure. This applys to ALL items exported by this exporter! (Models, Images, etc...)
 	bool ADT_Quality_Choice;				// User has a choice of ADT Quality when exporting. If = true, one of the following Quality choices MUST be true!
 	bool ADT_Quality_Level_00;				// Can export Level 00 quality ADT Files. 4 Polys per Chunk. Every point is used to make Polys. 65536 polys total.
@@ -184,13 +198,15 @@ public:
 	bool ADT_DoodadsAsModels;				// Can export doodads as the individual models.
 	bool ADT_DoodadsAsSingleModel;			// Can export doodads as a single model.
 	bool ADT_DoodadsMergedWithParent;		// Can export doodads as part of the parent model.
-	bool ADT_DoodadsAsSubobject;			// Can export doodads as a new sub-object/layer of the parent model.
+	bool ADT_DoodadsAsSubobject;			// Can export doodads as a single sub-object/layer of the parent model.
+	bool ADT_DoodadsAsSubobjects;			// Can export doodads as separate sub-objects/layers of the parent model.
 	bool ADT_WMOs;							// Can export WMOs of this ADT file. Contains all the properties of WMO files.
 	bool ADT_WMOsAsNulls;					// Can export WMOs as reference nulls.
 	bool ADT_WMOsAsModels;					// Can export WMOs as the individual models.
 	bool ADT_WMOsAsSingleModel;				// Can export WMOs as a single model.
 	bool ADT_WMOsMergedWithParent;			// Can export WMOs as part of the parent model.
-	bool ADT_WMOsAsSubobject;				// Can export WMOs as a new sub-object(s)/layer(s) of the parent model.
+	bool ADT_WMOsAsSubobject;				// Can export the WMOs as a single sub-object/layer of the parent model.
+	bool ADT_WMOsAsSubobjects;				// Can export the WMOs as separate sub-objects/layers of the parent model.
 
 	ExporterCanDo() {
 		// Primary Options
@@ -198,6 +214,9 @@ public:
 		M2_Export = false;
 		WMO_Export = false;
 		ADT_Export = false;
+		M2_Options = false;
+		WMO_Options = false;
+		ADT_Options = false;
 
 		// M2 Options
 		M2_PreserveDirectory = false;
@@ -218,12 +237,14 @@ public:
 		M2_UVAnim = false;
 		M2_Normals = false;
 		M2_VertexColors = false;
+		M2_VertexColorAnim = false;
 		M2_Bones = false;
 		M2_BoneLimits = false;
-		M2_Animation = false;
+		M2_BoneAnimation = false;
 		M2_Cameras = false;
 		M2_CameraAnim = false;
 		M2_CameraFOV = false;
+		M2_CameraClipNear = false;
 		M2_CameraClipFar = false;
 		M2_CameraTarget = false;
 		M2_CameraTargetAnim = false;
@@ -232,8 +253,10 @@ public:
 		M2_LightsAnim = false;
 		M2_LightsColor = false;
 		M2_LightsColorAnim = false;
-		M2_LightsFalloff = false;
-		M2_LightsFalloffAnim = false;
+		M2_LightsAttenuationStart = false;
+		M2_LightsAttenuationEnd = false;
+		M2_LightsAttenuationStartAnim = false;
+		M2_LightsAttenuationEndAnim = false;
 		M2_Particles = false;
 		M2_ParticlesAnim = false;
 		M2_Ribbons = false;
@@ -255,7 +278,8 @@ public:
 		WMO_Lights = false;
 		WMO_LightTypes = false;
 		WMO_LightsColor = false;
-		WMO_LightsFalloff = false;
+		WMO_LightsAttenuationStart = false;
+		WMO_LightsAttenuationEnd = false;
 		WMO_Water = false;
 		WMO_WaterTexture = false;
 		WMO_Fog = false;
@@ -268,7 +292,11 @@ public:
 		WMO_DoodadsAsSingleModel = false;
 		WMO_DoodadSetsAsSingleModel = false;
 		WMO_DoodadsMergedWithParent = false;
+		WMO_DoodadSetsMergedWithParent = false;
 		WMO_DoodadsAsSubobject = false;
+		WMO_DoodadsAsSubobjects = false;
+		WMO_DoodadSetsAsSubobject = false;
+		WMO_DoodadSetsAsSubobjects = false;
 		WMO_DoodadLights = false;
 
 		// ADT Options
@@ -305,12 +333,14 @@ public:
 		ADT_DoodadsAsSingleModel = false;
 		ADT_DoodadsMergedWithParent = false;
 		ADT_DoodadsAsSubobject = false;
+		ADT_DoodadsAsSubobjects = false;
 		ADT_WMOs = false;
 		ADT_WMOsAsNulls = false;
 		ADT_WMOsAsModels = false;
 		ADT_WMOsAsSingleModel = false;
 		ADT_WMOsMergedWithParent = false;
 		ADT_WMOsAsSubobject = false;
+		ADT_WMOsAsSubobjects = false;
 	}
 
 };	// End ExporterCanDo class

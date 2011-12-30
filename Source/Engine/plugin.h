@@ -12,27 +12,27 @@ namespace WMVEngine {
 	class Plugin {
 	public:
 		// Initialize and load Plugin
-		WMV_ENGINE_API Plugin(const QString &sFilename);
+		Plugin(const QString &sFilename);
 		// Copying Existing Plugin instance
-		WMV_ENGINE_API Plugin(const Plugin &Other);
+		Plugin(const Plugin &Other);
 		// Unload the Plugin
-		WMV_ENGINE_API ~Plugin();
+		~Plugin();
 
 		// Implementation
 
 		// Ask the plugin for it's engine version
-		WMV_ENGINE_API int getEngineVersion() const {
+		int getEngineVersion() const {
 			return m_GetEngineVersion();
 		}
 
 		// Register the plugin to a Kernel
-		WMV_ENGINE_API void registerPlugin(Kernel &k){
+		void registerPlugin(Kernel &k){
 			QLOG_TRACE() << "Registering Plugin with Kernel...";
 			m_RegisterPlugin(k);
 		}
 		
 		// lazy copy
-		WMV_ENGINE_API Plugin operator =(const Plugin &Other);
+		Plugin operator =(const Plugin &Other);
 
 	private:
 		// Signature for the version query function

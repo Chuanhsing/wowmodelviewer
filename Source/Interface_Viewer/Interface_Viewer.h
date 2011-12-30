@@ -32,8 +32,8 @@ class Interface_Viewer : public QMainWindow
 	Q_OBJECT
 
 public:
-	WMV_ENGINE_API explicit Interface_Viewer(QWidget *parent = 0);
-	WMV_ENGINE_API ~Interface_Viewer();
+	explicit Interface_Viewer(QWidget *parent = 0);
+	~Interface_Viewer();
 	
 	// Vars
 	size_t InterfaceMode;
@@ -43,7 +43,7 @@ public:
 	st_WoWDir CurrentDir;
 
 	// Functions
-	WMV_ENGINE_API void init();
+	void init();
     void UpdateViewerMenu();
 	void createStatusBar();
 	void updateStatusBar(QString);

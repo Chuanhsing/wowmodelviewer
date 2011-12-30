@@ -37,22 +37,22 @@ public:
 	};
 
 	// Destructor
-	WMV_ENGINE_API ~VideoExporterServer() {
+	~VideoExporterServer() {
 		m_VideoExporterTypes.clear();
 	}
 
 	// Allows plugins to add new Exporters
-	WMV_ENGINE_API void addExporter(QSharedPointer<VideoExporterType> ET){
+	void addExporter(QSharedPointer<VideoExporterType> ET){
 		m_VideoExporterTypes.push_back(ET.data());
 	}
 
 	// Get the total number of registered Exporters
-	WMV_ENGINE_API size_t getExporterTypeCount() const {
+	size_t getExporterTypeCount() const {
 		return m_VideoExporterTypes.size();
 	}
 
 	// Access an Exporter by it's Index
-	WMV_ENGINE_API VideoExporterType &getExporter(size_t Index){
+	VideoExporterType &getExporter(size_t Index){
 		return *m_VideoExporterTypes.value((int)Index);
 	}
 

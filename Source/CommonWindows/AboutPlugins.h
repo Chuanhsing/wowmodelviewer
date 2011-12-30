@@ -17,9 +17,9 @@ class WindowAboutPlugins : public QDialog
 	Q_OBJECT
 
 public:
-    WMV_ENGINE_API explicit WindowAboutPlugins(QWidget *parent = 0);
-	WMV_ENGINE_API ~WindowAboutPlugins();
-	WMV_ENGINE_API void init();
+    explicit WindowAboutPlugins(QWidget *parent = 0);
+	~WindowAboutPlugins();
+	void init();
 
 private:
 	QListWidget *List;

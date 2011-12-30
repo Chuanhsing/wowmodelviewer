@@ -26,8 +26,8 @@ namespace WMVEngine {
 
 static QSettings sWoWDirs(QDir::currentPath()+"/"+WOWDIRS_INI_NAME,QSettings::IniFormat);	// WoW Directory List
 
-WMV_ENGINE_API extern QMap<QString,QVariant> SettingsList;
-WMV_ENGINE_API extern QMap<QString,st_WoWDir> WoWDirList;
+extern QMap<QString,QVariant> SettingsList;
+extern QMap<QString,st_WoWDir> WoWDirList;
 
 // Initalization of our default settings
 static void SettingsListInit()

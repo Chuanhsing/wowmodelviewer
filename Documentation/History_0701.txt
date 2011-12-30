@@ -3,10 +3,33 @@
 
 =======================================================================
 
-This file chronicles the history of World of Warcraft Model Viewer v0.7.0.1.
+This file chronicles the history of World of Warcraft Model Viewer v0.7.x.x.
 See ChangeLog.txt for a current list of changes to WoW Model Viewer!
 
 =======================================================================
+
+v0.7.0.3
+ - Fixed 4.3 support!
+ - Fixed a problem with texture search id dbc files
+ - Removed some asserts (should never be present in a released software)
+
+r640 (Windrunner's Lament)
+ - Changed the Content Copyright's start year from 2006 to 2004, which is when WoW was first released.
+ - Added support for 4.3, including PTR items.
+ - Fixed a problem with supported TOCs when a new one comes out. Fix will remain effective until a new expansion comes out.
+ - Fixed a bug where the exporter menu would be disabled after an Armory import.
+ - Hardcode fix for sheathing weapons
+ - You can rotate or shift the model in View -> Show Model Control now
+ - Linux compatible fixes
+ - Fixed mount position
+ - Fixed an initialisation (and crash) problem on startup
+ - Fixed items.csv and npcs.csv loading in MacOS
+ - Added/Updated MinGW (windows) compatibility
+ - Added/Updated cmake compatibility
+ * Lightwave 3D Exporter:
+  - Fixed a vertex writing bug.
+  - Preliminary Normal-Map support.
+  - Fixed a Vertex color bug with M2 files. NOTE: M2 model support of Vertex Alphas are currently disabled. (It crashes when enabled.)
 
 r614 (Pickled Herring)
  - Updated the Armory API. Armory import now supports full facial recognition.

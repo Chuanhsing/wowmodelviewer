@@ -17,8 +17,8 @@ class WindowAbout : public QDialog
 	Q_OBJECT
 
 public:
-    WMV_ENGINE_API explicit WindowAbout(QWidget *parent = 0);
-	WMV_ENGINE_API ~WindowAbout();
+    explicit WindowAbout(QWidget *parent = 0);
+	~WindowAbout();
 private slots:
 	void on_CloseButton_clicked() {
 		QDialog::close();

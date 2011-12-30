@@ -21,14 +21,14 @@ namespace WMVEngine {
 class Kernel{
 	public:
 		// Access the Display Server
-		WMV_ENGINE_API DisplayServer &getDisplayServer() {return m_DisplayServer;}
+		DisplayServer &getDisplayServer() {return m_DisplayServer;}
 		// Access the 3D Model Exporter Server
-		WMV_ENGINE_API ModelExporterServer &getModelExporterServer() {return m_ModelExporterServer;}
+		ModelExporterServer &getModelExporterServer() {return m_ModelExporterServer;}
 		// Access the Video Exporter Server
-		WMV_ENGINE_API VideoExporterServer &getVideoExporterServer() {return m_VideoExporterServer;}
+		VideoExporterServer &getVideoExporterServer() {return m_VideoExporterServer;}
 
 		// Loads a Plugin
-		WMV_ENGINE_API void loadPlugin(const QString &sFileName) {
+		void loadPlugin(const QString &sFileName) {
 			QLOG_TRACE() << "Loading Plugin:" << sFileName;
 			QLOG_TRACE() << "Checking to see if we've alreay loaded it...";
 			if (m_LoadedPlugins.contains(sFileName) == false){
@@ -51,6 +51,6 @@ class Kernel{
 static Kernel TheKernel;
 //static QsLogging::Logger& QsLog_logger = QsLogging::Logger::instance();
 
-}
+}	// End Namespace
 
 #endif

@@ -26,9 +26,6 @@ int main(int argc, char *argv[])
 
 	QLOG_INFO() << "Logging Test, Application";
 
-//	QMessageBox b(QMessageBox::Information,"Application Logger Testing...",QString("Application Logging Level: %1").arg(QsLog_logger.loggingLevel()).toUtf8());
-//	b.exec();
-
 	// Scan for, and attempt to add any plugins...
 	// hacked for now, just attempt the OpenGL plugin...
 	TheKernel.loadPlugin(QString("%1renderer_opengl").arg(PLUGIN_PATH));

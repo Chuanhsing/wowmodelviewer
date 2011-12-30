@@ -19,7 +19,9 @@ PRIMARY GOALS:
 - Fix many of the long-standing display issues. (Alpha-Channel issues, Lack of Reflections/Specularity, etc.)
 - Fix many of the Cross-Platform issues.
 - Add full ADT support, including the optional displaying of WMOs and M2s listed in that ADT.
-- Change our item lists to use the DBC files, instead of CSV files. Or, alternately, WMV builds the CSV files automatically. CSV files will still be used for custom user-items.
+- Change our item lists to use the DBC files, instead of CSV files. Or, alternately, WMV builds the CSV files automatically. CSV files can still be used for custom user-items.
+- Add a list of stored WoW directories, for quick and easy switching. (No need to load up a different version of WoW and re-read the registery!)
+- Add functionality to reload the currently loaded WoW when appropriate.
 
 
 ===============================
@@ -30,7 +32,8 @@ SECONDARY GOALS:
 - Allow Scripter to load and play an audio file to script animation to.
 - Allow Scripter to animate a Model's position and rotation.
 - Allow Scripter to animate the Camera's/Viewer's position and rotation.
-- Add a list of stored WoW directories, for quick and easy switching. (No need to load up a different version of WoW and re-read the registery!)
+- Change the Character files into a binary format.
+- Extend Character files to include Geoset settings. (Visibility, scale, placement, etc.)
 
 
 ===============================
@@ -38,5 +41,7 @@ FUTURE GOALS:
 ===============================
 - Update all the exporters to take full advantage of that format's capabilities.
 - Add Collada Exporter.
+- Add Maxscript Exporter.
+- Add Google Sketchup Exporter.
 - Cross-Platform Video Export, including Alpha-Channel support.
 - Unify many of the reduntant, and commonly used functions.
