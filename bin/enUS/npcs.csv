@@ -5401,7 +5401,7 @@
 7996,7122,7,Qiaga the Keeper
 7997,9345,2,Captured Sprite Darter
 7998,7138,7,Blastmaster Emi Shortfuse
-7999,33530,7,Tyrande Whisperwind
+7999,39620,7,Tyrande Whisperwind
 8015,4841,7,Ashenvale Sentinel
 8016,4261,7,Barrens Guard
 8017,4083,7,Sen'jin Guardian
@@ -8037,7 +8037,7 @@
 14846,14882,7,Lhara
 14847,14883,7,Professor Thaddeus Paleo
 14848,13069,10,Herald
-14849,14890,7,Darkmoon Faire Carnie
+14849,14890,7,Darkmoon Carnie
 14850,14589,7,Gruk
 14857,14589,7,Erk
 14859,14894,7,Guard Taruc
@@ -8230,7 +8230,7 @@
 15213,15407,7,Twilight Overlord
 15214,1126,10,Invisible Stalker
 15215,15330,7,Mistress Natalia Mar'alith
-15218,21955,10,Faire Cannon Trigger
+15218,21955,10,Darkmoon Faire Cannon
 15220,7569,1,The Duke of Zephyrs
 15221,13069,10,Frankal Invisible Trigger
 15222,1126,10,Rutgar Invisible Trigger
@@ -12397,7 +12397,7 @@
 20612,19703,7,Sorim Lightsong
 20613,19698,7,Arodis Sunblade
 20614,20987,7,Razaani Spell-Thief
-20615,37736,1,Darkmaw Cub
+20615,37736,1,Araga's Cub
 20616,19699,7,Asuur
 20617,17035,10,Red Crystal Trigger
 20618,19702,1,Mana Invader
@@ -29499,8 +29499,8 @@
 48860,35123,7,Hanbal
 48861,35123,7,Umi
 48862,347,1,Sofera's Naze Credit
-48864,347,1,Corrahn's Dagger Credit
-48865,347,1,The Headland Credit
+48864,347,10,Corrahn's Dagger Credit
+48865,347,10,The Headland Credit
 48867,347,1,Gavin's Naze Credit
 48868,35117,7,Chuma
 48873,3886,8,Tekton
@@ -30575,6 +30575,7 @@
 52034,37724,7,Togar
 52036,37725,7,Galra
 52037,37726,7,Zulna
+52039,26241,10,ELM General Purpose Bunny (scale x0.75)
 52053,37813,7,Zanzil
 52054,25491,7,Zanzili Berserker
 52055,6417,6,Zanzili Zombie
@@ -30998,6 +30999,7 @@
 53275,38814,4,Fire Hawk Hatchling
 53276,38261,1,Amani Battle Bear
 53281,16925,10,Lift Off
+53283,38359,12,Guardian Cub
 53286,38270,7,Valstann Staghelm
 53288,38271,7,General Rajaxx
 53289,38264,7,Leyara
@@ -31227,6 +31229,7 @@
 54169,2653,7,Maxim the Sly
 54175,38846,7,Kalecgos
 54178,38658,7,Muln Earthfury
+54179,33530,7,Tyrande Whisperwind
 54183,28726,10,Cyclone
 54191,38671,6,Risen Ghoul
 54192,38669,4,Lord Rhyolith
@@ -31292,21 +31295,36 @@
 54471,38799,7,Thaumaturge Zajir
 54472,38800,7,Vaultkeeper Jazra
 54473,38804,7,Warpweaver Dushar
+54485,39073,10,Jessica Rogers
+54487,38809,12,Darkmoon Turtle
+54490,39038,10,Dubenko
+54491,39549,12,Darkmoon Monkey
 54494,1126,10,Frost Blade
 54496,169,7,Rock Island
+54499,39021,1,The Abominable Greench
 54500,39544,3,Legion Demon
 54507,23138,6,Time-Twisted Scourge Beast
 54508,1126,10,Pool of Moonlight
+54509,38834,7,Nasty Little Helper
+54510,39028,1,Baby
 54511,25592,6,Time-Twisted Geist
 54512,38908,7,Time-Twisted Sentinel
 54517,25630,6,Time-Twisted Shadowtalon
+54518,38838,7,Injured Carnie
+54519,38842,10,Winter Veil Tree
+54523,38845,10,Strange Snowman
+54524,38834,7,Wicked Little Helper
+54533,39009,1,Prince Lakma
 54539,38343,12,Alliance Balloon
 54541,38342,12,Horde Balloon
 54542,1126,10,Blink Target
 54543,39524,2,Time-Twisted Drake
 54544,38918,7,Echo of Tyrande
+54545,29183,10,Loose Stones
+54546,38857,10,Whack-a-Gnoll Barrel
 54548,39145,7,Thrall
 54550,9786,6,Undying Flame
+54551,29183,10,Darkmoon Cookpot
 54552,8311,2,Time-Twisted Breaker
 54553,8249,2,Time-Twisted Seer
 54555,36212,4,Frozen Servitor
@@ -31314,16 +31332,24 @@
 54566,169,6,Ruptured Ground
 54574,11686,10,Moonlance
 54585,9786,6,Call Flames
+54588,15382,9,Darkmoon Steam Tonk
 54589,38864,7,Enchanted Highmistress
 54590,39397,4,Arcurion
 54594,11686,10,Eye of Elune
+54595,257,7,Maggy
+54596,19092,7,Raan
+54601,39069,7,Mola
 54603,17087,7,Advance Scout Chadwick
+54605,39093,10,Finlay Coolshot
 54607,16292,7,Thrallmar Invader
 54612,38874,7,Eternal Champion
 54632,31903,10,Faceless Brute
 54633,39790,10,Faceless Shadow Weaver
+54637,18675,7,Thrallmar Scryer
 54639,1126,10,Arcane Circle
 54641,38894,6,Echo of Jaina
+54642,15381,9,Enemy Tonk
+54643,17192,9,Enemy MiniZep
 54645,38896,7,Royal Handmaiden
 54646,33006,10,Corrupted Slime
 54686,15788,10,Shadow Borer
@@ -31333,13 +31359,17 @@
 54691,38964,6,Time-Twisted Sorceress
 54693,38965,6,Time-Twisted Rifleman
 54694,19655,7,Mamdy the 
+54695,24653,7,Enchanted Reflection
 54696,38916,10,Flailing Tentacle
+54698,17926,6,Tormented Soulpriest
 54699,39065,1,Time-Twisted Nightsaber
 54700,39067,1,Time-Twisted Nightsaber
 54701,38908,7,Time-Twisted Huntress
 54725,17940,6,Draenei Spirit
 54728,40086,10,Hand of the Queen
+54746,16387,7,Honor Hold Recon
 54747,14430,3,Eye of the Legion
+54847,20987,7,Dealer Vijaad
 54853,39391,7,Queen Azshara
 54867,38754,7,Image of Nozdormu
 54882,38968,7,Enchanted Magus
@@ -31353,10 +31383,13 @@
 54945,25228,4,Sandstorm
 54952,38671,6,Brittle Ghoul
 54968,38995,7,Asira Dawnslayer
+54969,38996,3,Mannoroth
 54995,33717,10,Icy Tomb
+55003,38827,7,Rotten Little Helper
 55011,22922,7,Shattered Sun Warrior
 55013,22759,7,Shattered Sun Marksman
 55014,22768,7,Shattered Sun Marksman
+55072,39017,7,Barum
 55085,39182,3,Peroth'arn
 55088,39058,7,Fire Eater
 55089,39024,7,Fire Juggler
@@ -31367,44 +31400,109 @@
 55109,39032,7,Twilight Shadow-Walker
 55111,39033,7,Twilight Thug
 55112,39034,7,Twilight Bruiser
+55117,39165,1,Gargantua
+55118,17899,1,Jumbo
+55119,39196,1,Pygmy Cockatrice
+55120,39197,1,Darkmoon Penguin
+55187,38344,12,Darkmoon Balloon
+55220,39078,7,Fire Juggler
+55221,39079,7,Fire Juggler
+55222,39080,7,Fire Juggler
+55223,39081,7,Fire Juggler
+55225,39083,7,Fire Juggler
+55226,39084,7,Fire Juggler
+55229,39087,7,Fire Eater
+55230,39088,7,Fire Eater
+55231,39089,7,Fire Eater
+55247,38418,7,Poot
+55248,38420,7,Wallace
+55249,262,7,Bodie
+55254,21674,7,Ellie Goodup
 55260,15901,12,Winter Reindeer
 55262,15671,12,Tiny Snowman
+55264,39300,7,Sazz Coincatcher
 55265,39094,0,Morchok
+55266,39301,7,Zina Sharpworth
+55268,38419,7,Aja
+55269,19091,7,Jerrica
+55270,19315,7,Kimber
+55271,344,7,Shana
 55272,39096,1,Mountain Horse
 55273,39095,1,Swift Mountain Horse
+55278,39097,7,Boomie Sparks
 55285,39100,7,Astrid Langstrump
 55294,39099,0,Ultraxion
+55305,39313,7,Carl Goodup
+55306,33303,10,Balloon Cart
+55307,20570,10,Balloon Cart Bunny
 55308,39138,0,Warlord Zon'ozz
 55312,39101,0,Yor'sahj the Unsleeping
+55339,39302,7,Trixi Sharpworth
+55341,39104,7,Fire Juggler
+55342,39105,7,Fire Juggler
+55347,1501,7,Alliance Citizen
+55348,1501,7,Horde Citizen
+55356,15381,12,Darkmoon Tonk
+55367,17192,12,Darkmoon Zeppelin
 55382,39119,7,Darkmoon Faire Mystic Mage
+55386,39109,12,Sea Pony
 55396,39118,7,Darkmoon Faire Greeter
 55397,39113,7,Fire Juggler
 55398,39114,7,Fire Juggler
 55399,39115,7,Fire Eater
+55402,39121,7,Korgol Crushskull
 55415,25835,2,Life Warden
+55416,28615,10,Eye of Go'rath
+55417,39841,10,Flail of Go'rath
+55418,39132,10,Claw of Go'rath
 55419,39127,7,Captain Varo'then
 55426,39128,7,Highguard Elite
+55428,39131,1,Jumbo Jr.
+55429,21393,1,Jumbina
+55440,21268,1,Violet
+55443,39133,1,Goldwing
+55444,39134,1,King Leo
+55446,39135,1,Queen Savannah
+55448,39137,1,M'ku
+55449,39136,1,Binti
 55453,11829,1,Shadowbat
+55457,39142,1,Gleok
+55475,999,1,Darkmoon Tide Crawler
+55487,2536,8,Moonweb Spider
 55488,39144,2,Corastrasza
 55500,39183,9,Illidan Stormrage
 55503,39908,3,Legion Demon
 55510,39152,3,Abyssal Doombringer
 55519,39298,3,Doomguard Annihilator
-55524,39620,7,Tyrande Whisperwind
+55531,39155,7,Warmage Kaitlyn
+55535,39155,7,Image of Warmage Kaitlyn
 55549,31463,2,Life Warden
 55559,34274,4,Crystalline Elemental
 55563,22206,4,Frozen Shard
+55564,29325,10,Reclaimer A'zak
+55566,23566,10,Azjol-anak Warrior
 55570,39162,7,Malfurion Stormrage
+55573,23916,10,Nerubian Flyer
+55596,39164,7,Careless Carnie
+55598,2076,1,Krystal
+55602,25120,1,Urefu
 55654,39280,7,Corrupted Arcanist
 55656,39282,3,Dreadlord Defender
+55658,39177,10,Seer Ixit
+55661,23564,10,Azjol-anak Sorcerer
 55663,18419,3,Vigilant Shivan
 55684,39184,7,Jordan Smith
 55689,39318,0,Hagara the Stormbinder
 55700,39545,3,Doomguard Annihilator
+55712,358,10,Darkmoon Slime
+55714,39187,1,Darkmoon Monkey
 55739,19592,3,Doomguard Devastator
+55741,36743,8,Crow
+55749,36499,8,Sea Gull
 55762,39681,3,Dreadlord Debilitator
 55783,39211,7,Ravenholdt Sentry
 55808,39424,7,Ravenholdt Lookout
+55835,26664,7,Kaldir Ironbane
 55862,36110,10,Acidic Globule
 55863,39248,10,Shadowed Globule
 55864,39249,10,Glowing Globule
@@ -31417,33 +31515,64 @@
 55911,24174,2,Champion of Life
 55912,38333,2,Champion of Magic
 55913,24141,2,Champion of Time
+55914,24142,2,Champion of the Emerald Dream
 55967,21063,2,Harbinger of Destruction
 55969,32229,2,Harbinger of Twilight
+56002,5049,3,Felguard
 56027,24531,7,Stormherald Eljrrin
+56031,39137,12,Darkmoon Cub
+56035,39060,1,Kolin
+56044,30233,10,[DND] Spooky Ghost - Ghost Vehicle
+56068,39294,7,Steven Stagnaro
+56069,39295,7,Tatia Brine
+56072,39531,7,Image of Argent Confessor Paletress
+56073,16313,3,Voracious Felhound
+56080,39299,1,Little Samras
 56081,5027,1,Optimistic Benj
+56097,39319,9,Sandbox Tiger
+56129,39330,9,Sandbox Tiger
+56130,39331,9,Sandbox Tiger
+56131,39332,9,Sandbox Tiger
 56139,35862,2,Life Warden
+56140,28667,2,Dream Warden
+56141,39343,2,Arcane Warden
+56142,39344,2,Time Warden
 56143,39345,2,Force of Destruction
+56144,39346,2,Portent of Twilight
+56167,39354,4,Arm Tentacle
+56168,39349,4,Wing Tentacle
 56173,39355,0,Madness of Deathwing
 56188,39347,4,Blistering Tentacle
 56231,39369,10,Mana Void
+56252,39378,2,Twilight Assaulter
 56262,39381,4,Elementium Bolt
 56265,27849,10,Forgotten One
 56314,39386,2,Mostrasz
+56335,39389,7,Daenrand Dawncrest
 56350,39390,3,Disciple of Hate
 56371,39211,7,Suspicious Infiltrator
 56427,39399,0,Warmaster Blackhorn
+56471,39405,4,Mutated Corruption
 56515,39415,7,Ravenholdt Stalker
 56579,38865,7,Enchanted Highmistress
 56664,40049,2,Kalecgos
+56665,39447,2,Ysera the Awakened
+56666,38754,2,Nozdormu the Timeless One
 56700,34548,4,Bound Lightning Elemental
 56710,39463,4,Elementium Terror
+56724,39474,4,Elementium Fragment
 56796,39501,7,Angela Leifeld
+56846,39509,4,Arm Tentacle
 56899,39526,7,Ragged Jong
+56914,39533,2,Flamebringer
 56925,39532,7,Farrah Facet
 57107,39543,2,Bronze Drake
 57158,39550,4,Earthen Destroyer
 57159,39586,4,Earthen Soldier
 57160,39548,4,Ancient Water Lord
+57220,33547,4,Tentacle of the Old Ones
+57233,36019,4,Twilight Siege Breaker
+57262,19940,7,Gronk Hamcheeks
 57280,34631,7,Twilight Siege Captain
 57288,8317,7,Eiendormi
 57289,7975,7,Valeera
@@ -31464,6 +31593,7 @@
 57684,39775,2,Image of Tyrygosa
 57711,18888,7,Special Event Coordinator
 57746,28628,10,Faceless Destroyer
+57749,32810,10,Faceless Corruptor
 57762,40061,2,Mostrasz
 57767,39797,2,Wrathion
 57770,39799,7,Zazzo Twinklefingers
@@ -31476,24 +31606,26 @@
 57807,39828,7,Twilight Frost Evoker
 57810,39818,7,Blackhowl Sniper
 57812,39820,7,Blackhowl Stalker
+57816,33991,7,Slain Forsaken
 57817,39829,7,Stormborn Myrmidon
 57819,39830,4,Corrupted Fragment
 57821,39836,7,Lieutenant Shara
 57823,39914,7,Stormbinder Adept
 57861,30211,1,Blackhowl Bloodhound
 57864,39909,2,Alurmi
-57875,28615,10,Eye of Go'rath
 57877,40117,10,Flail of Go'rath
 57890,40116,10,Claw of Go'rath
-57917,39447,2,Ysera the Awakened
-57918,38754,2,Nozdormu the Timeless One
 57922,39910,7,Taryssa Lazuria
+57962,39947,4,Deathwing
+57983,39953,7,Baruma
 58152,40011,7,Tini Smalls
 58153,40074,2,Dasnurimi
 58154,40013,7,Toren Landow
 58155,40012,7,Rugok
+58167,40027,7,Colton Smith
 58207,40055,2,Alexstrasza
 58208,40056,2,Nozdormu
 58209,40057,2,Ysera
 58211,40068,7,Aggra
 58232,40070,7,Thrall
+58570,21955,10,[DNT] Darkmoon Faire Whack-a-Gnoll Bunny
