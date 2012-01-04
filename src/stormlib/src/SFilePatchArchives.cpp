@@ -9,7 +9,6 @@
 /*****************************************************************************/
 
 #define __STORMLIB_SELF__
-#define __INCLUDE_CRYPTOGRAPHY__
 #include "StormLib.h"
 #include "StormCommon.h"
 
@@ -27,17 +26,17 @@ typedef struct _BLIZZARD_BSDIFF40_FILE
 //-----------------------------------------------------------------------------
 // Local functions
 
-static bool CompareNameMask(const char * szMpqName, const char * szNameMask)
+static bool CompareNameMask(const TCHAR * szMpqName, const TCHAR * szNameMask)
 {
     for(;;)
     {
         // Compare character
         switch(*szNameMask)
         {
-            case 0:     // End of the mask
+            case 0:         // End of the mask
                 return (*szMpqName == 0) ? true : false;
 
-            case '#':   // We are expecting a number
+            case _T('#'):   // We are expecting a number
                 while('0' <= *szMpqName && *szMpqName <= '9')
                     szMpqName++;
                 szNameMask++;
@@ -52,39 +51,45 @@ static bool CompareNameMask(const char * szMpqName, const char * szNameMask)
 }
 
 static bool GetDefaultPatchPrefix(
-    const char * szBaseMpqName,
-    const char * szPatchMpqName,
+    const TCHAR * szBaseMpqName,
+    const TCHAR * szPatchMpqName,
     char * szBuffer)
 {
-    const char * szExtension;
-    const char * szDash;
+    const TCHAR * szExtension;
+    const TCHAR * szDash;
 
-    // Get the plain name of the patch MPQ
-    szPatchMpqName = GetPlainFileName(szPatchMpqName);
+    // Ensure that both names are plain names
+    szPatchMpqName = GetPlainFileNameT(szPatchMpqName);
+    szBaseMpqName = GetPlainFileNameT(szBaseMpqName);
 
     // For files like "wow-update-13164.MPQ", the patch prefix
     // is based on the base MPQ name
-    if(CompareNameMask(szPatchMpqName, "wow-update-#.mpq"))
+    if(CompareNameMask(szPatchMpqName, _T("wow-update-#.mpq")))
     {
         // Patch prefix is for the Cataclysm MPQs, whose names
         // are like "locale-enGB.MPQ" or "speech-enGB.MPQ"
-        szExtension = strrchr(szBaseMpqName, '.');
-        szDash = strrchr(szBaseMpqName, '-');
+        szExtension = _tcsrchr(szBaseMpqName, _T('.'));
+        szDash = _tcsrchr(szBaseMpqName, _T('-'));
         strcpy(szBuffer, "Base");
 
         // If the length of the prefix doesn't match, use default one
         if(szExtension != NULL && szDash != NULL && (szExtension - szDash) == 5)
         {
             // Copy the prefix
-            szBuffer[0] = szDash[1];
-            szBuffer[1] = szDash[2];
-            szBuffer[2] = szDash[3];
-            szBuffer[3] = szDash[4];
+            szBuffer[0] = (char)szDash[1];
+            szBuffer[1] = (char)szDash[2];
+            szBuffer[2] = (char)szDash[3];
+            szBuffer[3] = (char)szDash[4];
             szBuffer[4] = 0;
         }
 
         return true;
     }
+
+    //
+    // Note: Diablo 3 MPQs have name of "d3-update-####.mpq,
+    // but they don't use patch prefixes
+    //
 
     // No patch prefix
     *szBuffer = 0;
@@ -134,7 +139,7 @@ static int LoadMpqPatch_COPY(TMPQFile * hf, TPatchHeader * pPatchHeader)
     int nError = ERROR_SUCCESS;
 
     // Allocate space for patch header and compressed data
-    hf->pPatchHeader = (TPatchHeader *)ALLOCMEM(BYTE, pPatchHeader->dwSizeOfPatchData);
+    hf->pPatchHeader = (TPatchHeader *)STORM_ALLOC(BYTE, pPatchHeader->dwSizeOfPatchData);
     if(hf->pPatchHeader == NULL)
         nError = ERROR_NOT_ENOUGH_MEMORY;
 
@@ -166,7 +171,7 @@ static int LoadMpqPatch_BSD0(TMPQFile * hf, TPatchHeader * pPatchHeader)
 
     // Allocate space for compressed data
     cbCompressed = pPatchHeader->dwXfrmBlockSize - SIZE_OF_XFRM_HEADER;
-    pbCompressed = ALLOCMEM(BYTE, cbCompressed);
+    pbCompressed = STORM_ALLOC(BYTE, cbCompressed);
     if(pbCompressed == NULL)
         nError = ERROR_SUCCESS;
 
@@ -183,7 +188,7 @@ static int LoadMpqPatch_BSD0(TMPQFile * hf, TPatchHeader * pPatchHeader)
     if(nError == ERROR_SUCCESS)
     {
         cbDecompressed = pPatchHeader->dwSizeOfPatchData - sizeof(TPatchHeader);
-        hf->pPatchHeader = (TPatchHeader *)ALLOCMEM(BYTE, pPatchHeader->dwSizeOfPatchData);
+        hf->pPatchHeader = (TPatchHeader *)STORM_ALLOC(BYTE, pPatchHeader->dwSizeOfPatchData);
         if(hf->pPatchHeader == NULL)
             nError = ERROR_NOT_ENOUGH_MEMORY;
     }
@@ -209,7 +214,7 @@ static int LoadMpqPatch_BSD0(TMPQFile * hf, TPatchHeader * pPatchHeader)
 
     // Free buffers and exit
     if(pbCompressed != NULL)
-        FREEMEM(pbCompressed);
+        STORM_FREE(pbCompressed);
     return nError;
 }
 
@@ -222,7 +227,7 @@ static int ApplyMpqPatch_COPY(
 
     // Allocate space for new file data
     cbNewFileData = pPatchHeader->dwXfrmBlockSize - SIZE_OF_XFRM_HEADER;
-    pbNewFileData = ALLOCMEM(BYTE, cbNewFileData);
+    pbNewFileData = STORM_ALLOC(BYTE, cbNewFileData);
     if(pbNewFileData == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
 
@@ -230,7 +235,7 @@ static int ApplyMpqPatch_COPY(
     memcpy(pbNewFileData, (LPBYTE)pPatchHeader + sizeof(TPatchHeader), cbNewFileData);
 
     // Free the old file data
-    FREEMEM(hf->pbFileData);
+    STORM_FREE(hf->pbFileData);
 
     // Put the new file data there
     hf->pbFileData = pbNewFileData;
@@ -281,7 +286,7 @@ static int ApplyMpqPatch_BSD0(
     dwNewSize = (DWORD)BSWAP_INT64_UNSIGNED(pBsdiff->NewFileSize);
 
     // Allocate new buffer
-    pbNewData = ALLOCMEM(BYTE, dwNewSize);
+    pbNewData = STORM_ALLOC(BYTE, dwNewSize);
     if(pbNewData == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
 
@@ -296,7 +301,7 @@ static int ApplyMpqPatch_BSD0(
         // Sanity check
         if((dwNewOffset + dwAddDataLength) > dwNewSize)
         {
-            FREEMEM(pbNewData);
+            STORM_FREE(pbNewData);
             return ERROR_FILE_CORRUPT;
         }
 
@@ -317,7 +322,7 @@ static int ApplyMpqPatch_BSD0(
         // Sanity check
         if((dwNewOffset + dwMovDataLength) > dwNewSize)
         {
-            FREEMEM(pbNewData);
+            STORM_FREE(pbNewData);
             return ERROR_FILE_CORRUPT;
         }
 
@@ -334,7 +339,7 @@ static int ApplyMpqPatch_BSD0(
     }
 
     // Free the old file data
-    FREEMEM(hf->pbFileData);
+    STORM_FREE(hf->pbFileData);
 
     // Put the new data to the fil structure
     hf->pbFileData = pbNewData;
@@ -393,17 +398,12 @@ static int ApplyMpqPatch(
     TMPQFile * hf,
     TPatchHeader * pPatchHeader)
 {
-    unsigned char md5_digest[MD5_DIGEST_SIZE];
-    hash_state md5_state;
     int nError = ERROR_SUCCESS;
 
     // Verify the original file before patching
     if(pPatchHeader->dwSizeBeforePatch != 0)
     {
-        md5_init(&md5_state);
-        md5_process(&md5_state, hf->pbFileData, hf->cbFileData);
-        md5_done(&md5_state, md5_digest);
-        if(memcmp(pPatchHeader->md5_before_patch, md5_digest, MD5_DIGEST_SIZE))
+        if(!VerifyDataBlockHash(hf->pbFileData, hf->cbFileData, pPatchHeader->md5_before_patch))
             nError = ERROR_FILE_CORRUPT;
     }
 
@@ -430,10 +430,7 @@ static int ApplyMpqPatch(
     if(nError == ERROR_SUCCESS && pPatchHeader->dwSizeAfterPatch != 0)
     {
         // Verify the patched file
-        md5_init(&md5_state);
-        md5_process(&md5_state, hf->pbFileData, hf->cbFileData);
-        md5_done(&md5_state, md5_digest);
-        if(memcmp(pPatchHeader->md5_after_patch, md5_digest, MD5_DIGEST_SIZE))
+        if(!VerifyDataBlockHash(hf->pbFileData, hf->cbFileData, pPatchHeader->md5_after_patch))
             nError = ERROR_FILE_CORRUPT;
     }
 
@@ -522,7 +519,7 @@ int PatchFileData(TMPQFile * hf)
 
 bool WINAPI SFileOpenPatchArchive(
     HANDLE hMpq,
-    const char * szPatchMpqName,
+    const TCHAR * szPatchMpqName,
     const char * szPatchPathPrefix,
     DWORD dwFlags)
 {
