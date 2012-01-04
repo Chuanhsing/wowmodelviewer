@@ -377,15 +377,15 @@ void searchMPQs(bool firstTime)
 		wxEmptyString, wxEmptyString
 		};
 	const int localeSets = WXSIZEOF(locales) / 2;
-	const wxString defaultArchives[] = {wxT("patch-9.mpq"),wxT("patch-8.mpq"),wxT("patch-7.mpq"),wxT("patch-6.mpq"),
-		wxT("patch-5.mpq"),wxT("patch-4.mpq"),wxT("patch-3.mpq"),wxT("patch-2.mpq"),wxT("patch.mpq"),wxT("alternate.mpq"),
-		wxT("expansion3.mpq"),wxT("expansion2.mpq"),wxT("expansion1.mpq"),wxT("lichking.mpq"),wxT("expansion.mpq"),
-		wxT("world.mpq"),wxT("sound.mpq"),wxT("art.mpq"),wxT("common-3.mpq"),wxT("common-2.mpq"), wxT("common.mpq")};
-	const wxString localeArchives[] = {wxT("patch-%s-9.mpq"),wxT("patch-%s-8.mpq"),wxT("patch-%s-7.mpq"),
-		wxT("patch-%s-6.mpq"),wxT("patch-%s-5.mpq"),wxT("patch-%s-4.mpq"),wxT("patch-%s-3.mpq"), wxT("patch-%s-2.mpq"), 
-		wxT("patch-%s.mpq"), wxT("expansion3-locale-%s.mpq"), wxT("expansion2-locale-%s.mpq"), 
-		wxT("expansion1-locale-%s.mpq"), wxT("lichking-locale-%s.mpq"), wxT("expansion-locale-%s.mpq"), 
-		wxT("locale-%s.mpq"), wxT("base-%s.mpq")};
+	const wxString defaultArchives[] = {wxT("patch-9.MPQ"),wxT("patch-8.MPQ"),wxT("patch-7.MPQ"),wxT("patch-6.MPQ"),
+		wxT("patch-5.MPQ"),wxT("patch-4.MPQ"),wxT("patch-3.MPQ"),wxT("patch-2.MPQ"),wxT("patch.MPQ"),wxT("alternate.MPQ"),
+		wxT("expansion3.MPQ"),wxT("expansion2.MPQ"),wxT("expansion1.MPQ"),wxT("lichking.MPQ"),wxT("expansion.MPQ"),
+		wxT("world.MPQ"),wxT("world2.MPQ"),wxT("sound.MPQ"),wxT("art.MPQ"),wxT("common-3.MPQ"),wxT("common-2.MPQ"), wxT("common.MPQ")};
+	const wxString localeArchives[] = {wxT("patch-%s-9.MPQ"),wxT("patch-%s-8.MPQ"),wxT("patch-%s-7.MPQ"),
+		wxT("patch-%s-6.MPQ"),wxT("patch-%s-5.MPQ"),wxT("patch-%s-4.MPQ"),wxT("patch-%s-3.MPQ"), wxT("patch-%s-2.MPQ"), 
+		wxT("patch-%s.MPQ"), wxT("expansion3-locale-%s.MPQ"), wxT("expansion2-locale-%s.MPQ"), 
+		wxT("expansion1-locale-%s.MPQ"), wxT("lichking-locale-%s.MPQ"), wxT("expansion-locale-%s.MPQ"), 
+		wxT("locale-%s.MPQ"), wxT("base-%s.MPQ")};
 
 	// select avaiable locales, auto select user config locale
 	wxArrayString avaiLocales;
