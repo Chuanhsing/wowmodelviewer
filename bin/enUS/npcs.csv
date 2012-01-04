@@ -12994,7 +12994,7 @@
 21628,20365,6,Highborne Lamenter
 21632,10812,10,Nether Cloud
 21633,19949,3,Deathbringer Jovaan
-21635,21268,1,Afrazi Forest Strider
+21635,21268,1,Forest Strider
 21636,20289,6,Vengeful Draenei
 21637,20377,7,Wyrmcult Scout
 21638,20397,6,Vengeful Harbinger
@@ -13154,7 +13154,7 @@
 21846,20185,10,Slain Auchenai Warrior
 21847,1913,3,Fel Guard Hound
 21848,26120,0,Massive Seaforium Charge
-21849,20617,10,Bone Crawler
+21849,20617,1,Bone Crawler
 21851,11686,10,The Voice of the Raven God
 21852,20183,7,Auchenai Warrior
 21853,1923,4,Raven's Wood Ent
@@ -29941,7 +29941,7 @@
 49867,20570,10,Deep Garnet Bunny
 49869,32729,7,Stormwind Infantry
 49870,36651,7,Angela Hipple
-49871,22475,1,Blackrock Battle Worg
+49871,40147,1,Blackrock Battle Worg
 49872,31463,2,Vermillion Defender
 49873,34652,2,Twilight Shadowdrake
 49874,36653,7,Blackrock Spy
@@ -31303,6 +31303,7 @@
 54496,169,7,Rock Island
 54499,39021,1,The Abominable Greench
 54500,39544,3,Legion Demon
+54504,15381,9,Damaged Tonk
 54507,23138,6,Time-Twisted Scourge Beast
 54508,1126,10,Pool of Moonlight
 54509,38834,7,Nasty Little Helper
@@ -31404,7 +31405,9 @@
 55118,17899,1,Jumbo
 55119,39196,1,Pygmy Cockatrice
 55120,39197,1,Darkmoon Penguin
+55181,18517,10,Arakkoa Visitor
 55187,38344,12,Darkmoon Balloon
+55215,35015,12,Lumpy
 55220,39078,7,Fire Juggler
 55221,39079,7,Fire Juggler
 55222,39080,7,Fire Juggler
@@ -31419,6 +31422,7 @@
 55249,262,7,Bodie
 55254,21674,7,Ellie Goodup
 55260,15901,12,Winter Reindeer
+55261,1126,10,Darkmoon Parade Creature
 55262,15671,12,Tiny Snowman
 55264,39300,7,Sazz Coincatcher
 55265,39094,0,Morchok
@@ -31470,6 +31474,7 @@
 55475,999,1,Darkmoon Tide Crawler
 55487,2536,8,Moonweb Spider
 55488,39144,2,Corastrasza
+55491,39134,1,Lion
 55500,39183,9,Illidan Stormrage
 55503,39908,3,Legion Demon
 55510,39152,3,Abyssal Doombringer
@@ -31486,6 +31491,7 @@
 55596,39164,7,Careless Carnie
 55598,2076,1,Krystal
 55602,25120,1,Urefu
+55603,25121,1,Shingo
 55654,39280,7,Corrupted Arcanist
 55656,39282,3,Dreadlord Defender
 55658,39177,10,Seer Ixit
@@ -31496,9 +31502,11 @@
 55700,39545,3,Doomguard Annihilator
 55712,358,10,Darkmoon Slime
 55714,39187,1,Darkmoon Monkey
+55715,39192,1,Darkmoon Pony
 55739,19592,3,Doomguard Devastator
 55741,36743,8,Crow
 55749,36499,8,Sea Gull
+55761,251,7,Phillipe
 55762,39681,3,Dreadlord Debilitator
 55783,39211,7,Ravenholdt Sentry
 55808,39424,7,Ravenholdt Lookout
@@ -31529,6 +31537,7 @@
 56073,16313,3,Voracious Felhound
 56080,39299,1,Little Samras
 56081,5027,1,Optimistic Benj
+56082,38340,12,Green Balloon
 56097,39319,9,Sandbox Tiger
 56129,39330,9,Sandbox Tiger
 56130,39331,9,Sandbox Tiger
@@ -31611,6 +31620,7 @@
 57819,39830,4,Corrupted Fragment
 57821,39836,7,Lieutenant Shara
 57823,39914,7,Stormbinder Adept
+57850,39832,7,Teleportologist Fozlebub
 57861,30211,1,Blackhowl Bloodhound
 57864,39909,2,Alurmi
 57877,40117,10,Flail of Go'rath
