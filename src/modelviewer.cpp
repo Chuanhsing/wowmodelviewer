@@ -2427,10 +2427,10 @@ void ModelViewer::DownloadLocaleFiles()
 					delete stream;
 					f.Close();
 				} else {
-				    wxLogMessage(_T("wxInputStream failed: ")+items_csv);
+				    wxLogMessage(wxT("wxInputStream failed: ")+items_csv);
 				}
 			} else {
-			    wxLogMessage(_T("wxURL failed: ")+items_csv);
+			    wxLogMessage(wxT("wxURL failed: ")+items_csv);
 			}
 		}
 	}
