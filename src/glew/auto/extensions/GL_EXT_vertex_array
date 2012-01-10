@@ -38,7 +38,6 @@ GL_EXT_vertex_array
 	void glColorPointerEXT (GLint size, GLenum type, GLsizei stride, GLsizei count, const void* pointer)
 	void glDrawArraysEXT (GLenum mode, GLint first, GLsizei count)
 	void glEdgeFlagPointerEXT (GLsizei stride, GLsizei count, const GLboolean* pointer)
-	void glGetPointervEXT (GLenum pname, void** params)
 	void glIndexPointerEXT (GLenum type, GLsizei stride, GLsizei count, const void* pointer)
 	void glNormalPointerEXT (GLenum type, GLsizei stride, GLsizei count, const void* pointer)
 	void glTexCoordPointerEXT (GLint size, GLenum type, GLsizei stride, GLsizei count, const void* pointer)

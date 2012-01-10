@@ -42,6 +42,30 @@ if [ ! -d $1 ] ; then
     grep -v glGetIntegerIndexedvEXT $1/GL_EXT_transform_feedback > tmp
     mv tmp $1/GL_EXT_transform_feedback    
 
+# remove duplicates from GL_NV_video_capture and GLX_NV_video_capture
+    grep -v glX $1/GL_NV_video_capture > tmp
+    mv tmp $1/GL_NV_video_capture
+
+# add missing functions to GL_NV_video_capture
+	cat >> $1/GL_NV_video_capture <<EOT
+    void glGetVideoCaptureStreamivNV (GLuint video_capture_slot, GLuint stream, GLenum pname, GLint* params)
+    void glGetVideoCaptureStreamfvNV (GLuint video_capture_slot, GLuint stream, GLenum pname, GLfloat* params)
+    void glGetVideoCaptureStreamdvNV (GLuint video_capture_slot, GLuint stream, GLenum pname, GLdouble* params)
+    void glVideoCaptureStreamParameterivNV (GLuint video_capture_slot, GLuint stream, GLenum pname, const GLint* params)
+    void glVideoCaptureStreamParameterfvNV (GLuint video_capture_slot, GLuint stream, GLenum pname, const GLfloat* params)
+    void glVideoCaptureStreamParameterdvNV (GLuint video_capture_slot, GLuint stream, GLenum pname, const GLdouble* params)
+EOT
+
+# fix WGL_NV_video_capture
+    cat >> $1/WGL_NV_video_capture <<EOT
+    DECLARE_HANDLE(HVIDEOINPUTDEVICENV);
+EOT
+
+# fix GLX_NV_video_capture
+    cat >> $1/GLX_NV_video_capture <<EOT
+    typedef XID GLXVideoCaptureDeviceNV
+EOT
+
 # remove duplicates from GL_NV_present_video and GLX_NV_present_video
     grep -v -F -f $1/GLX_NV_present_video $1/GL_NV_present_video > tmp
     mv tmp $1/GL_NV_present_video
@@ -292,6 +316,31 @@ EOT
 
     grep -v "glGetPointerv" $1/GL_ARB_debug_output > tmp
     mv tmp $1/GL_ARB_debug_output
+
+# Filter glGetPointerv from GL_EXT_vertex_array
+# It's part of OpenGL 1.1, after all
+
+    grep -v "glGetPointerv" $1/GL_EXT_vertex_array > tmp
+    mv tmp $1/GL_EXT_vertex_array
+
+# add typedef to GL_AMD_debug_output
+# parse_spec.pl can't parse typedefs from New Types section, but ought to
+    cat >> $1/GL_AMD_debug_output <<EOT
+	typedef void (APIENTRY *GLDEBUGPROCAMD)(GLuint id, GLenum category, GLenum severity, GLsizei length, const GLchar* message, GLvoid* userParam)
+EOT
+
+# add typedef to GL_ARB_debug_output
+# parse_spec.pl can't parse typedefs from New Types section, but ought to
+    cat >> $1/GL_ARB_debug_output <<EOT
+	typedef void (APIENTRY *GLDEBUGPROCARB)(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, GLvoid* userParam)
+EOT
+
+# add typedefs to GL_ARB_cl_event
+# parse_spec.pl can't parse typedefs from New Types section, but ought to
+    cat >> $1/GL_ARB_cl_event <<EOT
+	typedef struct _cl_context *cl_context
+	typedef struct _cl_event *cl_event
+EOT
 
 # clean up
     rm -f $1/*.bak

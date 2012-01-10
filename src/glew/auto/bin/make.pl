@@ -11,7 +11,7 @@ my %regex = (
     exturl   => qr/^http.+$/,
     function => qr/^(.+) ([a-z][a-z0-9_]*) \((.+)\)$/i, 
     token    => qr/^([A-Z][A-Z0-9_x]*)\s+((?:0x)?[0-9A-Fa-f]+|[A-Z][A-Z0-9_]*)$/,
-    type     => qr/^typedef\s+(.+)\s+([\*A-Za-z0-9_]+)$/,
+    type     => qr/^typedef\s+(.+)$/,
     exact    => qr/.*;$/,
 );
 
@@ -19,7 +19,7 @@ my %regex = (
 sub prefixname($)
 {
     my $name = $_[0];
-    $name =~ s/^(.*)gl/__$1glew/;
+    $name =~ s/^(.*?)gl/__$1glew/;
     return $name;
 }
 
@@ -27,7 +27,7 @@ sub prefixname($)
 sub prefix_varname($)
 {
     my $name = $_[0];
-    $name =~ s/^(.*)GL(X*)EW/__$1GL$2EW/;
+    $name =~ s/^(.*?)GL(X*?)EW/__$1GL$2EW/;
     return $name;
 }
 
@@ -69,7 +69,7 @@ sub parse_ext($)
     my $filename = shift;
     my %functions = ();
     my %tokens = ();
-    my %types = ();
+    my @types = ();
     my @exacts = ();
     my $extname = "";    # Full extension name GL_FOO_extension
     my $exturl = "";     # Info URL
@@ -110,8 +110,7 @@ sub parse_ext($)
             }
             elsif (/$regex{type}/)
             {
-                my ($value, $name) = ($1, $2);
-                $types{$name} = $value;
+                push @types, $_;
             }
             elsif (/$regex{token}/)
             {
@@ -133,7 +132,7 @@ sub parse_ext($)
 
     close EXT;
 
-    return ($extname, $exturl, $extstring, \%types, \%tokens, \%functions, \@exacts);
+    return ($extname, $exturl, $extstring, \@types, \%tokens, \%functions, \@exacts);
 }
 
 sub output_tokens($$)
@@ -153,11 +152,11 @@ sub output_tokens($$)
 sub output_types($$)
 {
     my ($tbl, $fnc) = @_;
-    if (keys %{$tbl})
+    if (scalar @{$tbl})
     {
         local $, = "\n";
         print "\n";
-        print map { &{$fnc}($_, $tbl->{$_}) } sort { ${$tbl}{$a} cmp ${$tbl}{$b} } keys %{$tbl};
+        print map { &{$fnc}($_) } sort @{$tbl};
         print "\n";
     }
 }
