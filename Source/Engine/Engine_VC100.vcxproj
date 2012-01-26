@@ -102,6 +102,7 @@
       <PreprocessorDefinitions>_WINDOWS;WIN32;_USRDLL;_DEBUG;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -110,7 +111,6 @@
     </Link>
     <PostBuildEvent>
       <Command>mkdir ..\$(OutDir)
-copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)
 copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\StormLib.dll ..\$(OutDir)</Command>
     </PostBuildEvent>
     <PreBuildEvent>
@@ -126,6 +126,7 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
       <PreprocessorDefinitions>_WINDOWS;WIN32;_USRDLL;WIN64;_WIN64;_DEBUG;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -137,7 +138,6 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>mkdir ..\$(OutDir)
-copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)
 copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\StormLib.dll ..\$(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -151,6 +151,7 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
       <PreprocessorDefinitions>_WINDOWS;WIN32;_USRDLL;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -161,7 +162,6 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
     </Link>
     <PostBuildEvent>
       <Command>mkdir ..\$(OutDir)
-copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)
 copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\StormLib.dll ..\$(OutDir)</Command>
     </PostBuildEvent>
     <PreBuildEvent>
@@ -179,6 +179,7 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
       <PreprocessorDefinitions>_WINDOWS;WIN32;_USRDLL;WIN64;_WIN64;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -189,7 +190,6 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
     </Link>
     <PostBuildEvent>
       <Command>mkdir ..\$(OutDir)
-copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)
 copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\StormLib.dll ..\$(OutDir)</Command>
     </PostBuildEvent>
     <PreBuildEvent>
@@ -209,11 +209,7 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
     <ClInclude Include="display_server.h" />
     <ClInclude Include="enums.h" />
     <ClInclude Include="lists.h" />
-    <ClInclude Include="Math\math_base.h" />
-    <ClInclude Include="Math\math_constants.h" />
-    <ClInclude Include="Math\math_matrix.h" />
-    <ClInclude Include="Math\math_quaternion.h" />
-    <ClInclude Include="Math\math_vector.h" />
+    <ClInclude Include="ModelViewerModel.h" />
     <ClInclude Include="model_exporter_header.h" />
     <ClInclude Include="model_exporter_server.h" />
     <ClInclude Include="kernel.h" />

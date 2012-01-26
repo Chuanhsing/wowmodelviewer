@@ -81,6 +81,7 @@
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -90,8 +91,8 @@
       <AdditionalDependencies>Engine.lib;qtmaind.lib;QtCored4.lib;QtGuid4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir ..\$(OutDir)
-copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -104,6 +105,7 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -113,8 +115,8 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
       <AdditionalDependencies>Engine.lib;qtmaind.lib;QtCored4.lib;QtGuid4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir ..\$(OutDir)
-copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>
@@ -131,6 +133,7 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -140,8 +143,8 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
       <AdditionalDependencies>Engine.lib;qtmain.lib;QtCore4.lib;QtGui4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir ..\$(OutDir)
-copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -154,6 +157,7 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -163,8 +167,8 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
       <AdditionalDependencies>Engine.lib;qtmain.lib;QtCore4.lib;QtGui4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir ..\$(OutDir)
-copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

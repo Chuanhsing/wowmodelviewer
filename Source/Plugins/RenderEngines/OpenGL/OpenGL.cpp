@@ -29,18 +29,8 @@ class OpenGLDisplayDriver : public DisplayServer::DisplayDriver {
 
 // Retrieve the engine version we're going to expect
 // This is the first function ran in the plugin.
-extern "C" OPENGL_PLUGIN_API int getEngineVersion() {
-	/*
-	QsLog_logger.setLoggingLevel(QsLogging::TraceLevel);
-	const QString sLogPath(QDir().filePath(LOGFILE_FILENAME));
-	QsLogging::DestinationPtr fileDestination(
-		QsLogging::DestinationFactory::MakeFileDestination(sLogPath,true) );
-	QsLogging::DestinationPtr debugDestination(
-		QsLogging::DestinationFactory::MakeDebugOutputDestination() );
-	QsLog_logger.addDestination(debugDestination.get());
-	QsLog_logger.addDestination(fileDestination.get());		
-	*/
 
+extern "C" OPENGL_PLUGIN_API int getEngineVersion() {
 	//QLOG_INFO() << "Logging Test, OpenGL Plugin get Display Version";
 	return DISPLAYSERVERVERSION;
 }

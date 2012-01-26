@@ -155,7 +155,7 @@ border-color: rgb(0, 0, 0);</string>
      </rect>
     </property>
     <property name="text">
-     <string notr="true" comment="Original Dev Names"> Ufo_Z, Darjk, Chuanhsing, Kjasi, Tob.Franke</string>
+     <string notr="true" comment="Original Dev Names"> Ufo_Z, Darjk, Chuanhsing, Kjasi, Tob.Franke, Jeromnimo</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

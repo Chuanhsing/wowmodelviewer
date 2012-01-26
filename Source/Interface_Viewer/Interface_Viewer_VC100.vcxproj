@@ -134,8 +134,8 @@
       </TurnOffAssemblyGeneration>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir ..\$(OutDir)
-copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>
@@ -170,6 +170,7 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_GUI_LIB;QT_CORE_LIB;QT_HAVE_MMX;QT_HAVE_3DNOW;QT_HAVE_SSE;QT_HAVE_MMXEXT;QT_HAVE_SSE2;QT_THREAD_SUPPORT;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -189,8 +190,8 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir ..\$(OutDir)
-copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>
@@ -225,6 +226,7 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>QT_NO_DEBUG;NDEBUG;_WINDOWS;UNICODE;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_NO_DEBUG;QT_GUI_LIB;QT_CORE_LIB;QT_HAVE_MMX;QT_HAVE_3DNOW;QT_HAVE_SSE;QT_HAVE_MMXEXT;QT_HAVE_SSE2;QT_THREAD_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -243,8 +245,8 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
       </LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir ..\$(OutDir)
-copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>
@@ -280,6 +282,7 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>QT_NO_DEBUG;NDEBUG;_WINDOWS;UNICODE;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_NO_DEBUG;QT_GUI_LIB;QT_CORE_LIB;QT_HAVE_MMX;QT_HAVE_3DNOW;QT_HAVE_SSE;QT_HAVE_MMXEXT;QT_HAVE_SSE2;QT_THREAD_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -299,8 +302,8 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir ..\$(OutDir)
-copy $(OutDir)$(TargetName)$(TargetExt) ..\$(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>

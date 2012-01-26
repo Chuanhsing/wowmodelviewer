@@ -39,6 +39,7 @@ void WindowAboutPlugins::SetupList()
 // Update the List with our items!
 void WindowAboutPlugins::UpdateList()
 {
+	QLOG_INFO() << "Updating Plugin List...";
 	DisplayServer ds = TheKernel.getDisplayServer();
 	ModelExporterServer mes = TheKernel.getModelExporterServer();
 	VideoExporterServer ves = TheKernel.getVideoExporterServer();

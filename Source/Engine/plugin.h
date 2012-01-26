@@ -19,6 +19,7 @@ namespace WMVEngine {
 		~Plugin();
 
 		// Implementation
+		bool isLoaded;
 
 		// Ask the plugin for it's engine version
 		int getEngineVersion() const {
@@ -27,8 +28,10 @@ namespace WMVEngine {
 
 		// Register the plugin to a Kernel
 		void registerPlugin(Kernel &k){
-			QLOG_TRACE() << "Registering Plugin with Kernel...";
-			m_RegisterPlugin(k);
+			if (isLoaded == true){
+				QLOG_TRACE() << "Registering Plugin with Kernel...";
+				m_RegisterPlugin(k);
+			}
 		}
 		
 		// lazy copy

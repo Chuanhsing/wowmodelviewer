@@ -105,6 +105,7 @@
       <AdditionalIncludeDirectories>$(QTDIR)\include;$(QTDIR)\include\QtCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -123,7 +124,7 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\..\..\$(OutDir)\Plugins</Command>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>QT_CORE_LIB;QT_GUI_LIB;_USRDLL;OPENGL_PLUGIN_EXPORTS;_WINDOWS;_WIN32;_DEBUG;_WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(QTDIR)\include;$(QTDIR)\include\QtCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <CompileAs>Default</CompileAs>
+      <CompileAs>CompileAsCpp</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <OmitFramePointers>false</OmitFramePointers>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -152,6 +153,7 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\..\..\$(OutDir)\Plugins</Command>
       <AdditionalIncludeDirectories>$(QTDIR)\include;$(QTDIR)\include\QtCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -176,6 +178,7 @@ copy $(OutDir)$(TargetName)$(TargetExt) ..\..\..\$(OutDir)\Plugins</Command>
       <AdditionalIncludeDirectories>$(QTDIR)\include;$(QTDIR)\include\QtCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MinimalRebuild>
       </MinimalRebuild>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

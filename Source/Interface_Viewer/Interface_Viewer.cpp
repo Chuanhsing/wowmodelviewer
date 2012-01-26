@@ -47,7 +47,7 @@ Interface_Viewer::Interface_Viewer(QWidget *parent) : QMainWindow(parent), ui(ne
 
 	// Set the main Window's Title
 	//: Passed arguments: ProgramName (WMV), MajorVersion (v0.8.0.0), BuildVersion (r650), SystemVersion ("Windows 64-bit"), DebugVersion (" Debug" or "")
-	setWindowTitle(QString("%1 %2 %3 %4%5").arg(PROGRAMNAME,MAJORVERSION,BUILDVERSION,SYSTEMVERSION,DEBUGVERSION));
+	setWindowTitle(QString("%1 %2 %3%4").arg(PROGRAMNAME,MAJORVERSION,SYSTEMVERSION,DEBUGVERSION));
 
     /* -= Groups =- */
     // Eye Glow

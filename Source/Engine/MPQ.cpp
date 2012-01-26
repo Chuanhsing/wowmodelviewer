@@ -39,7 +39,7 @@ MPQArchive::MPQArchive(QString filename, QStringList ArchList) : OK(false), Erro
 
 	// Check if the file exists
 	if (QFile(FileInfo.absoluteFilePath()).exists() == false){
-		QLOG_ERROR() << "Unable to find Archive on disk. May not exists!";
+		QLOG_ERROR() << "Unable to find Archive on disk. May not exist!";
 		err.setWindowTitle(QObject::tr("Error: Unable to open MPQ file!"));
 		err.setText(QObject::tr("Could not an open MPQ file, because we could not find it!\n\nPlease make sure any downloading/updating is complete before trying again."));
 		err.exec();

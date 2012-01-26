@@ -10,6 +10,7 @@
 
 #include <qstring.h>
 #include <qlist.h>
+#include "ModelViewerModel.h"
 
 namespace WMVEngine {
 
@@ -19,7 +20,9 @@ namespace WMVEngine {
 // This class sets the variables and options of the exporter.
 class ExporterInfo {
 private:
+	// Both of these numbers must match the current version numbers for the exporter to be accepted!
 	size_t HeaderVersion;					// The version of the Exporter Header we're using.
+	size_t ModelVersion;					// The Model Viewer Model version number.
 
 public:
 	QString Exporter_Name;					// The name of the Exporter. This is used in the pulldown menu. (Examples: Lightwave 3D, FBX, Wavefront OBJ)
@@ -43,6 +46,7 @@ public:
 	// n = Name, l = QList of Extentions, hop = hasOptionsPage, osw = Windows support, osm = Mac Support, osl = Linux support, note = Any notes for this exporter.
 	ExporterInfo(QString n, QList<QString> l, bool hop = false, int osw = -1, int osm = -1, int osl = -1, QString note = QString()) {
 		HeaderVersion = MODELEXPORTERHEADERVERSION;
+		ModelVersion = MODELVIEWERMODELVERSION;
 		
 		Exporter_Name = n;
 		Exporter_Extensions = l;
@@ -52,6 +56,13 @@ public:
 		OS_Windows = osw;
 		OS_MacOSX = osm;
 		OS_Linux = osl;
+	}
+
+	size_t getHeaderVersion(){
+		return HeaderVersion;
+	}
+	size_t getModelVersion(){
+		return ModelVersion;
 	}
 };
 

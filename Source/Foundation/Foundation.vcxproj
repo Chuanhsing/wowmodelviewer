@@ -86,6 +86,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)\$(ProjectName).lib</OutputFile>
@@ -100,6 +101,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)\$(ProjectName).lib</OutputFile>
@@ -114,6 +116,7 @@
       </DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)\$(ProjectName).lib</OutputFile>
@@ -128,6 +131,7 @@
       </DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)\$(ProjectName).lib</OutputFile>

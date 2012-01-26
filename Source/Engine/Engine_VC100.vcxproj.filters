@@ -11,9 +11,6 @@
       <Extensions>cpp;cxx;c;def</Extensions>
       <ParseFiles>true</ParseFiles>
     </Filter>
-    <Filter Include="Math">
-      <UniqueIdentifier>{72584cf8-14a3-459e-aa80-b8fc5172be6a}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="plugin.cpp">
@@ -72,20 +69,8 @@
     <ClInclude Include="WoWDirectoryTools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Math\math_base.h">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\math_constants.h">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\math_matrix.h">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\math_quaternion.h">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\math_vector.h">
-      <Filter>Math</Filter>
+    <ClInclude Include="ModelViewerModel.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

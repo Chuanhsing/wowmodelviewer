@@ -28,6 +28,15 @@ enum FileType
 	FILETYPE_SOUND		// WAV, OGG & MP3 Files
 };
 
+enum ModelSource{
+	NOMODELSOURCE = 0,
+
+	// World of Warcraft model sources
+	WOW_M2,				// M2 Model file
+	WOW_WMO,			// WMO Set file
+	WOW_ADT,			// ADT Landscape file
+};
+
 /*
 -= World of Warcraft Version Numbers =-
 
@@ -163,6 +172,5 @@ enum MPQErrorCodes
 	MPQERROR_LOCKFILEFOUND,
 	MPQERROR_COULDNOTOPEN,
 };
-
 
 #endif

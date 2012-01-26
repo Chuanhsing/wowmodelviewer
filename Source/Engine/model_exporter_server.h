@@ -21,9 +21,6 @@ namespace WMVEngine {
 
 // Dummy classes
 class ModelExporter {};
-class M2File {};
-class WMOFile {};
-class ADTFile {};
 
 class ModelExporterServer {
 public:
@@ -44,9 +41,7 @@ public:
 		virtual const ExporterCanDo &exporterCapabilities() const = 0;
 		
 		// Exporter Functions
-		virtual QSharedPointer<ModelExporter> exportM2File(M2File *m2) = 0;			// Export an M2 file
-		virtual QSharedPointer<ModelExporter> exportWMOFile(WMOFile *wmo) = 0;		// Export an WMO file
-		virtual QSharedPointer<ModelExporter> exportADTFile(ADTFile *adt) = 0;		// Export an ADT file
+		virtual QSharedPointer<ModelExporter> exportMVMFile(ModelViewerModel *model) = 0;	// Export a Model Viewer Model file
 	};
 
 	// Destructor
@@ -57,6 +52,14 @@ public:
 	// Allows plugins to add new Exporters
 	void addExporter(QSharedPointer<ModelExporterType> ET){
 		ExporterInfo info = ET.data()->getExporterInfo();
+		if (info.getHeaderVersion() != MODELEXPORTERHEADERVERSION){
+			QLOG_WARN() << QString("Model Header version wrong in exporter \"%1\". Please check that the exporter is up-to-date.").arg(info.Exporter_Name).toUtf8();
+			return;
+		}
+		if (info.getModelVersion() != MODELVIEWERMODELVERSION){
+			QLOG_WARN() << QString("Model Viewer Model version wrong in exporter \"%1\". Please check that the exporter is up-to-date.").arg(info.Exporter_Name).toUtf8();
+			return;
+		}
 		#if defined(_WINDOWS)
 			if (info.OS_Windows > -1){
 				m_ModelExporterTypes.push_back(ET.data());

@@ -30,7 +30,7 @@ class Kernel{
 		// Loads a Plugin
 		void loadPlugin(const QString &sFileName) {
 			QLOG_TRACE() << "Loading Plugin:" << sFileName;
-			QLOG_TRACE() << "Checking to see if we've alreay loaded it...";
+			QLOG_TRACE() << "Checking to see if we've already loaded it...";
 			if (m_LoadedPlugins.contains(sFileName) == false){
 				QLOG_TRACE() << "Plugin Not Loaded. Loading...";
 				m_LoadedPlugins.insert(sFileName,Plugin(sFileName)).value().registerPlugin(*this);
