@@ -1,6 +1,17 @@
-World of Warcraft Model Viewer v0.7.0.3
+World of Warcraft Model Viewer v0.7.0.4
 
-v0.7.0.3
+v0.7.0.4 (Bouncing Baracuda)
+ - Item Updates for Patch 4.3.2
+ - Fixed FBX Exporter not working bug.
+ - Added an enGB locale directory. (Has the same content as the enUS Locale)
+ - Fixed a bug that would save Lighting files in the application's directory, and not where the user wanted it.
+ - Fixed a Linux bug.
+ - PTR 4.3.2 added new MPQ: world2.MPQ
+ - Uppercase the MPQ suffix
+ - Update stormlib to 8.02
+ - Update to libglew 1.7
+
+v0.7.0.3 (Greatfather Winter)
  - Fixed 4.3 support!
  - Fixed a problem with texture search id dbc files
  - Removed some asserts (should never be present in a released software)

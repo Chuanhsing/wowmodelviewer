@@ -178,7 +178,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\WMV_Installer_v0703_Win64.msi"
+        "OutputFilename" = "8:Release\\WMV_Installer_v0704_Win64.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -791,15 +791,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:World of Warcraft Model Viewer 64-bit"
-        "ProductCode" = "8:{0991D3E2-736E-4674-8C78-5E4AF3B9DD63}"
-        "PackageCode" = "8:{45C0B9B9-BCEA-4D05-9F00-C8D5BDEBB72E}"
+        "ProductCode" = "8:{93D15425-809E-499E-9E69-A0C1DE8EE741}"
+        "PackageCode" = "8:{7F5A5625-99BB-4B2A-8307-D2808C114AE2}"
         "UpgradeCode" = "8:{69AA293E-260B-47B1-A596-44671A8B6EDF}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:07.03.000"
+        "ProductVersion" = "8:07.04.000"
         "Manufacturer" = "8:WoWModelViewer.org"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -946,9 +946,9 @@
             "Attributes" = "3:1"
                 "Dialogs"
                 {
-                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_221664B74A8E43F0913D228B5192B67D"
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_6DBB058DA1FA42D192CEF28C59FEBB13"
                     {
-                    "Sequence" = "3:110"
+                    "Sequence" = "3:200"
                     "DisplayName" = "8:License Agreement"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
@@ -996,7 +996,7 @@
                     }
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_8AF2A237791C47A4AC6FD3BF813194E8"
                     {
-                    "Sequence" = "3:300"
+                    "Sequence" = "3:400"
                     "DisplayName" = "8:Confirm Installation"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
@@ -1019,7 +1019,7 @@
                     }
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_B0306CCF63074683B28C62C4FAF7DBBA"
                     {
-                    "Sequence" = "3:200"
+                    "Sequence" = "3:300"
                     "DisplayName" = "8:Installation Folder"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"

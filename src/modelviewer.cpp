@@ -1693,9 +1693,8 @@ void ModelViewer::OnLightMenu(wxCommandEvent &event)
 		case ID_LT_SAVE:
 		{
 			wxFileDialog dialog(this, wxT("Save Lighting"), wxEmptyString, wxEmptyString, wxT("Scene Lighting (*.lit)|*.lit"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-			
 			if (dialog.ShowModal()==wxID_OK) {
-				wxString fn = dialog.GetFilename();
+				wxString fn = dialog.GetPath();
 
 				// FIXME: ofstream is not compitable with multibyte path name
 #ifndef _MINGW
