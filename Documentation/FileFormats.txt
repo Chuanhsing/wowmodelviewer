@@ -1,0 +1,234 @@
+--== WoW Model Viewer v0.8.0.0 File Formats ==--
+
+============================================================
+	Purpose
+============================================================
+
+This file will describe in detail all of the file formats used by WoW Model Viewer to save various data to your hard-drive. This article does NOT cover formats added by exporter plugins.
+
+All of the new and updated file formats are IFF-Chunked binary files, just like the formats used by Blizzard for the WoW models. All chunks are followed by 4 unsigned bytes indicating the size of a chunk in bytes. All strings are Zero-terminated (ends with a 0) and are properly buffered. (The size of the String + 1 is divisible by 2, else add zeroes until it is.)
+
+============================================================
+	Contents List
+============================================================
+
+A.	Updated Formats
+	1)	Character File v2
+	2)	Equipment File v2
+	3)	Scene Lighting File v2
+B.	New Formats
+	4)	Scene File
+	5)	Script File
+	6)	Animation File
+	7)	Set/Location File
+C.	Legacy Formats
+	8)	Character File v1
+	9)	Equipment File v1
+	10)	Scene Lighting File v1
+
+============================================================
+	A. Updated Formats
+============================================================
+
+--== 1) Character File v2 ==--
+This is both the Character file and the NPC file, and is used as the actor file in Cinema mode.
+
+CHR2, followed by an UINT32 of 4, then UINT32 of the file format's version, 2. This will be used for versioning in the future.
+	FHDR, Header Chunk
+		UINT8,	Character Model Type, 1 byte. 0 = Char, 1 = NPC/Creature
+		String, Character's Name
+		String, Model file path and name
+		UINT8, Weapons Sheathed, 1 byte. 0 = No, 1 = Yes
+		UINT32, Character Details Offset, 4 bytes
+		UINT32, NPC Details Offset, 4 bytes
+		UINT32, Equipment List Offset, 4 bytes
+		UINT32, Guild Tabard Setup Offset, 4 bytes
+		UINT32, Model Positioning Offset, 4 bytes
+	CDTL, Character Details Chunk. Not used for NPCs
+		UINT16, Race ID, 2 bytes
+		UINT16, Gender ID, 2 bytes
+		UINT16, Skin Color Number, 2 bytes
+		UINT16, Face Type Number, 2 bytes
+		UINT16, Hair Style Number, 2 bytes
+		UINT16, Hair Color Number, 2 bytes
+		UINT16, Facial Features Number, 2 bytes
+		UINT16, Facial Features Color Number, 2 bytes
+		UINT8,	Eye Glow Type, 1 byte. 0 = No Eyeglow, 1 = Default Eyeglows, 2 = Death Knight Eyeglows.
+		UINT8,	Show Helm, 1 byte. 0 = No, 1 = Yes.
+		UINT8,	Show Cloak, 1 byte. 0 = No, 1 = Yes.
+	NDTL, NPC Details Chunk. Not used by Characters.
+		UINT16, Model Skin Number, 2 bytes.
+	EQLC, Equipment List Chunk
+		SIZE, UINT32, Number of Equipment items in list, 4 bytes
+		LIST, Item List Chunk.
+			UINT16, Equipment Slot ID, 2 bytes
+			INT32,	Item ID, 4 bytes. Used to identify normal, equipable items. -1 when using a model on an attached equipment slot, that's usually not equipable, like a mailbox or a Gnome.
+			String, Model file path and name. This allows a character to hold a mailbox like a weapon.
+			UINT16, Model Skin Number, 2 bytes
+			UINT32, Enchant ID, 4 bytes. Only used for weapon slots.
+	GLDT, Guild Tabard Data. Omitted if not using Guild Tabard.
+		UINT32, Icon Number
+		UINT16, Icon Color Number
+		UINT16, Border Style Number
+		UINT16, Border Color Number
+		UINT16, Background Color Number
+	MDLP, Model Positioning Chunk. Used to modify the models.
+		SIZE, UINT32, Number of models, 4 bytes
+		LIST, Model List
+			UINT16, Attached Equipment Slot ID, 2 bytes. Only works with attached items, such as Weapons, Helmets, Shoulders and Quivers.
+			Float[3], Model Position, 12 bytes
+			Float[4], Model Rotation, 16 bytes (Quatnerion data)
+			Float[3], Model Scale, 12 bytes
+
+------------------------------------------------------------
+
+--== 2) Equipment File v2 ==--
+The Equipment File: Allowing you to quickly outfit your army of super-soldiers with the same costume for over 6 years! Now in a sparkling 2.0 flavor!
+
+EQPT, followed by an UINT32 of 4, then UINT32 of the file format's version, 2. This will be used for versioning in the future.
+	FHDR, Header Chunk
+		String, Equipment Group Name, Optional. Useful if you want to call a set something special, like "Black Knight Gear".
+		UINT32, Equipment List Offset, 4 bytes
+		UINT32, Guild Tabard Setup Offset, 4 bytes
+	EQLC, Equipment List Chunk
+		SIZE, UINT32, Number of Equipment items in list, 4 bytes
+		LIST, Item List Chunk.
+			UINT16, Equipment Slot ID, 2 bytes
+			INT32,	Item ID, 4 bytes. Used to identify normal, equipable items. -1 when using a model on an attached equipment slot, that's usually not equipable, like a mailbox or a Gnome.
+			String, Model file path and name. This allows a character to hold a mailbox like a weapon.
+			UINT16, Model Skin Number, 2 bytes
+			UINT32, Enchant ID, 4 bytes. Only used for weapon slots.
+	GLDT, Guild Tabard Data. Omitted if not using Guild Tabard.
+		UINT32, Icon Number
+		UINT16, Icon Color Number
+		UINT16, Border Style Number
+		UINT16, Border Color Number
+		UINT16, Background Color Number
+
+------------------------------------------------------------
+
+--== 3) Lighting File v2 ==--
+Spent a lot of time working on great lighting for your scene? Want to see what it looks like on the model you're working on? Want consistant lighting even though your partner is across the globe? Then the Lighting File is exactly what you're looking for!
+
+WLGT, followed by an UINT32 of 4, then UINT32 of the file format's version, 2. This will be used for versioning in the future.
+	(NYI)
+
+
+============================================================
+	B. New Formats
+============================================================
+
+------------------------------------------------------------
+
+--== 4) Scene File ==--
+This file will load sets, characters, lighting, cameras, scripts, basically everything you need, into Cinema Mode with a single command!
+
+SCNE, followed by an UINT32 of 4, then UINT32 of the file format's version, 1. This will be used for versioning in the future.
+	(NYI)
+
+------------------------------------------------------------
+
+--== 5) Script File ==--
+Script files are what let you animate your actors, cameras, lights, sets and more at a specific moment, giving you exactly the look you want, every time!
+
+SCRP, followed by an UINT32 of 4, then UINT32 of the file format's version, 1. This will be used for versioning in the future.
+	(NYI)
+
+------------------------------------------------------------
+
+--== 6) Animation File ==--
+This is a file that stores modified and custom animations for use with WoW Characters in WMV. These animation files are Race and Gender specific! You can't load the animation file for a Female BloodElf into a Male Orc, nor can you load it into the Lich King!
+
+WMAF, followed by an UINT32 of 4, then UINT32 of the file format's version, 1. This will be used for versioning in the future.
+	FHDR, Header Chunk
+		UINT8,	Model Type, 0 = Char, 1 = NPC/Creature
+		String, Model file path and name
+		UINT16, Race ID, 2 bytes
+		UINT16, Gender ID, 2 bytes
+		UINT32, Modified Animation Offset, 4 bytes
+		UINT32, New Animation Offset, 4 bytes
+	MANM, Modified Animation Chunk. Allows for modification of existing animations.
+		SIZE, UINT32, Number of Modified Animations, 4 bytes
+		LIST, Modified Animation List Chunk
+			UINT32, Animation ID, 4 bytes
+			UINT32, Number of Adjusted Bones, 4 bytes
+			ANMD, Animation Data List Chunk, One per bone.
+				UINT32 Bone ID, 4 bytes
+				UINT32 Keyframe Count, 4 bytes
+				BANM, Bone Animation Chunk, One per keyframe.
+					UINT32 Keyframe Number, 4 bytes
+					Float[3], Bone Position, 12 bytes
+					Float[4], Bone Rotation, 16 bytes (Quatnerion data)
+					Float[3], Bone Scale, 12 bytes
+	ANIM, New Animation Chunk. Allows users to add new, custom animations.
+		SIZE, UINT32, Number of New Animations, 4 bytes
+		LIST, Animation List Chunk
+			String, Animation Name
+			UINT32, Number of Animated Bones, 4 bytes
+			ANMD, Animation Data List Chunk, One per bone.
+				UINT32 Bone ID, 4 bytes
+				UINT32 Keyframe Count, 4 bytes
+				BANM, Bone Animation Chunk, One per keyframe.
+					UINT32 Keyframe Number, 4 bytes
+					Float[3], Bone Position, 12 bytes
+					Float[4], Bone Rotation, 16 bytes (Quatnerion data)
+					Float[3], Bone Scale, 12 bytes
+
+------------------------------------------------------------
+
+--== 7) Set/Location File ==--
+An easy way to save sets that you have spent a lot of time working on, for future use!
+
+WSET, followed by an UINT32 of 4, then UINT32 of the file format's version, 1. This will be used for versioning in the future.
+	(NYI)
+
+
+============================================================
+	C. Legacy Formats
+============================================================
+
+This section will briefly discuss the older file formats use in previous WMVs, all of which can be read (but not written) by WMV v0800. All of these files are ASCII text files. Loading these files into WMV v0800 and saving them will update the file to the newer formats.
+
+------------------------------------------------------------
+
+--== 8) Character File v1 ==--
+
+The first line is the path and file of the character model.
+
+The second line defines the Race ID and the Gender ID of of the character.
+
+The third line defines the six features and colors of the model: Skin Color, then Face Type, Hair Color, Hair Style, Facial Feature, then Face Color.
+
+-- NOTE-- WMV v0.7.0.1 r498 (Nov 12, 2010) made an addition to the file format by adding a seventh variable, indicating the EyeGlow Type. 0 = None, 1 = Default, 2 = Death Knight. Earlier versions of WMV will not export this 7th variable and loading character files without this consideration might cause the data to be read improperly.
+
+The next 14 lines indicate item IDs, as defined in v0.7.0.x's items.csv file, for each slot of the character. Slot order: Head, Neck, Shoulder, Boots, Belt, Shirt, Legs, Chest, Bracers, Gloves, Right Hand, Left Hand, Cloak, Tabard and Quiver.
+
+A 19th line is present when the Tabard ID is 5976, otherwise known as the Guild Tabard. These numbers define the look of the guild tabard. Number order: Background Color, Border style, Border Color, Icon and Icon Color.
+
+------------------------------------------------------------
+
+--== 9) Equipment File v1 ==--
+
+The only difference between the v1 Equipment File and the v1 Character File is that the Equipment File doesn't have the model's path and name at the beginning.
+
+------------------------------------------------------------
+
+--== 10) Scene Lighting File v1 ==--
+
+The file starts by defining the following boolian switches: If it displays a light's direction cone (AKA rendering the lights), using true lights, dynamic lights, ambient lights, then model lights.
+
+Next is an array of data for each light;
+	1) We start with the Ambient color as 3 floats.
+	2) A float representing the arc angle of degrees for the light.
+	3) A float that effects the "sharpness" of the light.
+	4) Next up is the diffuse coloring, again as 3 floats.
+	5) A boolean toggle if the light's on or off.
+	6) The linear intensity of the light as a float.
+	7) 3 floats indicating the position of the light.
+	8) A float for the Quadradic intensity.
+	9) Boolean for if the light is relative to the model.
+	10) Specular Color as 3 floats.
+	11) 3 floats for the position of the light's target. (Where the light looks)
+	And finally, 12) an integer indicating the light's type. (0 = point, 1 = spot, 2 = directional)
+	
+And that's it!

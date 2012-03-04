@@ -119,6 +119,9 @@ border-color: rgb(0, 0, 0);</string>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
     </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
     <property name="textInteractionFlags">
      <set>Qt::NoTextInteraction</set>
     </property>
@@ -130,7 +133,7 @@ border-color: rgb(0, 0, 0);</string>
      <x>255</x>
      <y>240</y>
      <width>256</width>
-     <height>76</height>
+     <height>86</height>
     </rect>
    </property>
    <property name="title">
@@ -151,7 +154,7 @@ border-color: rgb(0, 0, 0);</string>
       <x>10</x>
       <y>15</y>
       <width>246</width>
-      <height>21</height>
+      <height>26</height>
      </rect>
     </property>
     <property name="text">
@@ -159,6 +162,9 @@ border-color: rgb(0, 0, 0);</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
     <property name="textInteractionFlags">
      <set>Qt::NoTextInteraction</set>
@@ -168,7 +174,7 @@ border-color: rgb(0, 0, 0);</string>
     <property name="geometry">
      <rect>
       <x>5</x>
-      <y>40</y>
+      <y>50</y>
       <width>246</width>
       <height>16</height>
      </rect>
@@ -187,7 +193,7 @@ border-color: rgb(0, 0, 0);</string>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>55</y>
+      <y>65</y>
       <width>246</width>
       <height>21</height>
      </rect>
@@ -320,8 +326,8 @@ border-color: rgb(0, 0, 0);</string>
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Homepage: &lt;/span&gt;&lt;a href=&quot;http://wowmodelviewer.googlecode.com/&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;http://wowmodelviewer.googlecode.com/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Support: &lt;/span&gt;&lt;a href=&quot;http://www.wowmodelviewer.org/forum/index.php&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.wowmodelviewer.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Homepage: &lt;/span&gt;&lt;a href=&quot;%1&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;%1&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Support: &lt;/span&gt;&lt;a href=&quot;%2&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;%2&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="textFormat">
     <enum>Qt::AutoText</enum>

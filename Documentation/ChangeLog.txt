@@ -1,4 +1,26 @@
-WoW Model Viewer v0.8.0.0
+World of Warcraft Model Viewer v0.8.0.0
+
+r673 WMV-78 (Plugin Edition)
+-Settings file is now active.
+-Started work on Cinema interface.
+-Viewer/Cinema interface will load depending on the StartupInterfaceMode option in wmv.ini file. Currently can't switch while the program is running.
+-You can no longer Load WoW if you don't have any woW directories specified.
+-Plugins will now load into TheKernel. Note: TheKernel is not yet a singleton, and it's data can not yet be accessed outside the main.cpp file.
+-ExporterCanDo no longer defines WoW-Specific details, but instead specifies similar functionalities that will be available from the ModelViewerModel format. All exporters will export data from the ModelViewerModel format, and not from the WoW Data. This way, exporters will only have to be updated when the ModelViewerModel format is changed.
+-Renamed BUILDVERSION to BUILDVERSIONNAME
+-Started documentation for the file-formats that will be used by WMV. NOTE: The file formats listed inside are WIPs. Changes may occur without a version update until they are coded.
+-Websites on the About window are now dynamic, and can be changed from the version.h file.
+
+
+r672 WMV-78 (Plugin Edition)
+-Started custom internal WMV model format specification.
+-Minor plugin updates. Still does not load Plugins...
+-Removed post-build commands that copied the LIB files into the output
+directory.
+-BUILDVERSION is now the Build's name. (Currently "Tofu".)
+-Shrank the Math files by replacing spaces with tabs.
+-Spelling Fixes
+
 
 r663 WMV-78 (Plugin Edition)
 -Changed all core DLL projects to LIB projects. (Plugins & support projects are unaffected.)

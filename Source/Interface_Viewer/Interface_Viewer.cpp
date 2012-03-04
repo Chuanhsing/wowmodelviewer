@@ -2,6 +2,7 @@
 #include <qdir.h>
 #include <qmessagebox.h>
 #include "Interface_Viewer.h"
+#include "../Interface_Cinema/Interface_Cinema.h"
 #include "../Engine/version.h"
 #include "../Engine/lists.h"
 
@@ -12,7 +13,10 @@ using namespace QsLogging;
 Interface_Viewer::Interface_Viewer(QWidget *parent) : QMainWindow(parent), ui(new Ui::Interface_Viewer)
 {
 
-	QLOG_INFO() << "Interface Viewer DLL test";
+	QLOG_INFO() << "Interface Viewer test";
+
+	// Check and update settings...
+	WMVEngine::CheckSettings_Main();
 
 	// Setup the UI
     ui->setupUi(this);
@@ -46,8 +50,8 @@ Interface_Viewer::Interface_Viewer(QWidget *parent) : QMainWindow(parent), ui(ne
     ViewerInterfaceType = VIEWER_INTERFACETYPE_NONE;	// Full list of viewer interface types in enums.h
 
 	// Set the main Window's Title
-	//: Passed arguments: ProgramName (WMV), MajorVersion (v0.8.0.0), BuildVersion (r650), SystemVersion ("Windows 64-bit"), DebugVersion (" Debug" or "")
-	setWindowTitle(QString("%1 %2 %3%4").arg(PROGRAMNAME,MAJORVERSION,SYSTEMVERSION,DEBUGVERSION));
+	// Passed arguments: ProgramName (WMV), MajorVersion (v0.8.0.0), BuildVersionName (Tofu) SystemVersion (Windows 64-bit), DebugVersion (" Debug" or "")
+	setWindowTitle(QString("%1 %2 \"%3\" %4%5 - Viewer Mode").arg(PROGRAMNAME,MAJORVERSION,BUILDVERSIONNAME,SYSTEMVERSION,DEBUGVERSION));
 
     /* -= Groups =- */
     // Eye Glow
@@ -222,6 +226,10 @@ void Interface_Viewer::UpdateViewerMenu(){
 	// Broad Strokes
 	if (ViewerInterfaceType != VIEWER_INTERFACETYPE_NONE){
 		ui->actionSave_File->setDisabled(false);
+	}
+	// If there are no WoW directories found...
+	if (WoWDirGroup->children().count()<=0){
+		ui->actionLoad_World_of_Wacraft->setDisabled(true);
 	}
 
     // Change Options and Insert Menus based on the File Type
@@ -496,6 +504,10 @@ void Interface_Viewer::updateCurrentDirfromMenu(){
 	canReloadWoW = true;
 
 	*/
+}
+
+// Change Interface to Cinema Mode
+void Interface_Viewer::on_actionMode_Cinema_triggered(){
 }
 
 // Open WoW Directory Manager

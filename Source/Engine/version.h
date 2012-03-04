@@ -12,10 +12,10 @@ namespace WMVEngine{
 
 #define PROGRAMNAME static_cast<const char*>(QObject::tr("World of Warcraft Model Viewer","WMVProgramName").toUtf8())
 #define MAJORVERSION "v0.8.0.0"
-#define BUILDVERSION "Tofu"
+#define BUILDVERSIONNAME "Tofu"
 #define ORGANIZATIONNAME static_cast<const char*>(QObject::tr("WoW Model Viewer Community","WMVCommunityName").toUtf8())
-#define ORGANIZATIONWEBSITE "http://www.wowmodelviewer.org/forum/index.php"
-#define SOURCEWEBSITE "http://code.google.com/p/wowmodelviewer/"
+#define ORGANIZATIONWEBSITE "http://www.wowmodelviewer.org/"
+#define SOURCEWEBSITE "http://wowmodelviewer.googlecode.com/"
 
 const QString MajorBuildVersion(QString(MAJORVERSION));
 

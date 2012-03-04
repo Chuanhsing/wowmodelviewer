@@ -114,16 +114,12 @@
      <addaction name="separator"/>
      <addaction name="actionInitial_Pose_Only"/>
      <addaction name="separator"/>
-     <addaction name="actionExport_3DSMAX"/>
+     <addaction name="action_Prefered_Exporter"/>
+     <addaction name="separator"/>
+     <addaction name="action_List_of_Loaded_Exporter_Plugins"/>
      <addaction name="actionExport_FBX"/>
-     <addaction name="actionExport_Collada"/>
      <addaction name="actionExport_Lightwave"/>
-     <addaction name="actionExport_Milkshape"/>
-     <addaction name="actionExport_Ogre_XML"/>
-     <addaction name="actionExport_M3"/>
      <addaction name="actionExport_OBJ"/>
-     <addaction name="actionExport_X3D"/>
-     <addaction name="actionExport_X3D_in_XHTML"/>
     </widget>
     <addaction name="actionLoad_World_of_Wacraft"/>
     <addaction name="separator"/>
@@ -175,8 +171,10 @@
      <addaction name="actionShow_Underwear"/>
      <addaction name="actionShow_Feet"/>
     </widget>
+    <addaction name="actionSet_Character_Name"/>
+    <addaction name="separator"/>
     <addaction name="actionSave_Character"/>
-    <addaction name="actionSave_to_Model_Bank"/>
+    <addaction name="actionSave_to_Favorites"/>
     <addaction name="separator"/>
     <addaction name="actionClear_Equiptment"/>
     <addaction name="actionLoad_Equipment"/>
@@ -189,7 +187,7 @@
     <addaction name="menuShow_Hide"/>
     <addaction name="actionSheath_Weapons"/>
     <addaction name="separator"/>
-    <addaction name="actionApply_Enchants"/>
+    <addaction name="actionModify_Enchants"/>
     <addaction name="separator"/>
     <addaction name="actionLoad_a_Mount"/>
    </widget>
@@ -238,6 +236,8 @@
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
     <addaction name="separator"/>
+    <addaction name="actionManage_Favorites"/>
+    <addaction name="separator"/>
     <addaction name="actionExporter_Settings_2"/>
     <addaction name="actionInitial_Pose_Only_2"/>
    </widget>
@@ -247,16 +247,14 @@
     </property>
     <addaction name="actionHelp"/>
     <addaction name="separator"/>
-    <addaction name="actionUpdate_Databases"/>
     <addaction name="actionUpdate_Program"/>
     <addaction name="separator"/>
-    <addaction name="actionAbout_Plugins"/>
-    <addaction name="separator"/>
     <addaction name="actionAbout"/>
+    <addaction name="actionAbout_Plugins"/>
    </widget>
    <widget class="QMenu" name="menuSets">
     <property name="title">
-     <string>&amp;Set</string>
+     <string>Location</string>
     </property>
     <widget class="QMenu" name="menuDoodad_Set">
      <property name="tearOffEnabled">
@@ -276,15 +274,7 @@
     <property name="title">
      <string>&amp;Landscape</string>
     </property>
-    <widget class="QMenu" name="menuADT_Quality">
-     <property name="title">
-      <string>Landscape Quality</string>
-     </property>
-     <addaction name="actionADTQualityHigh"/>
-     <addaction name="actionADTQualityMedium"/>
-     <addaction name="actionADTQualityLow"/>
-    </widget>
-    <addaction name="menuADT_Quality"/>
+    <addaction name="actionSet_Landscape_Quality"/>
     <addaction name="separator"/>
     <addaction name="actionShow_WMOs"/>
     <addaction name="actionShow_Doodads"/>
@@ -357,8 +347,6 @@
     <addaction name="separator"/>
     <addaction name="menuCamera"/>
     <addaction name="separator"/>
-    <addaction name="actionModel_Bank"/>
-    <addaction name="separator"/>
     <addaction name="actionBackground_Color"/>
     <addaction name="actionBackground_Image"/>
     <addaction name="actionLoadSkybox"/>
@@ -372,9 +360,14 @@
     <property name="title">
      <string>Creature/NPC</string>
     </property>
-    <addaction name="actionLeft_Hand_Item"/>
-    <addaction name="actionRight_Hand_Item"/>
-    <addaction name="actionApply_Enchants_2"/>
+    <addaction name="actionSet_NPC_Name"/>
+    <addaction name="separator"/>
+    <addaction name="action_Load_NPC"/>
+    <addaction name="action_Save_NPC"/>
+    <addaction name="separator"/>
+    <addaction name="actionNPC_LeftHandItem"/>
+    <addaction name="actionNPC_RightHandItem"/>
+    <addaction name="actionNPC_ModifyEnchants"/>
    </widget>
    <widget class="QMenu" name="menuImage">
     <property name="title">
@@ -1135,7 +1128,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
   </widget>
   <action name="actionLoad_World_of_Wacraft">
    <property name="icon">
-    <iconset resource="../../Application/resources.qrc">
+    <iconset>
      <normaloff>:/WoW Versions/WoWIcon1-Vanilla</normaloff>
      <normalon>:/WoW Versions/WoWIcon1-Vanilla</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -1638,12 +1631,12 @@ alternate-background-color: rgb(229, 228, 242);</string>
   </action>
   <action name="actionModel_Bank">
    <property name="text">
-    <string>Model &amp;Bank...</string>
+    <string>Manage &amp;Favorites...</string>
    </property>
   </action>
-  <action name="actionSave_to_Model_Bank">
+  <action name="actionSave_to_Favorites">
    <property name="text">
-    <string>Save to Model Bank...</string>
+    <string>Save to Favorites...</string>
    </property>
    <property name="shortcut">
     <string>Alt+S</string>
@@ -1968,24 +1961,24 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>1920x1200, 8:5 Ratio</string>
    </property>
   </action>
-  <action name="actionApply_Enchants">
+  <action name="actionModify_Enchants">
    <property name="text">
-    <string>Apply Enchants...</string>
+    <string>Modify Enchants...</string>
    </property>
   </action>
-  <action name="actionLeft_Hand_Item">
+  <action name="actionNPC_LeftHandItem">
    <property name="text">
-    <string>Left Hand Item...</string>
+    <string>L&amp;eft Hand Item...</string>
    </property>
   </action>
-  <action name="actionRight_Hand_Item">
+  <action name="actionNPC_RightHandItem">
    <property name="text">
-    <string>Right Hand Item...</string>
+    <string>&amp;Right Hand Item...</string>
    </property>
   </action>
-  <action name="actionApply_Enchants_2">
+  <action name="actionNPC_ModifyEnchants">
    <property name="text">
-    <string>Apply Enchants...</string>
+    <string>&amp;Modify Enchants...</string>
    </property>
   </action>
   <action name="action_List_of_Doodad_Sets">
@@ -2050,7 +2043,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../Application/resources.qrc">
+    <iconset>
      <normaloff>:/WoW Versions/WoWIcon1-Vanilla</normaloff>
      <normalon>:/WoW Versions/WoWIcon1-Vanilla</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -2065,7 +2058,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../Application/resources.qrc">
+    <iconset>
      <normaloff>:/WoW Versions/WoWIcon2-TBC</normaloff>
      <normalon>:/WoW Versions/WoWIcon2-TBC</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -2080,7 +2073,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../Application/resources.qrc">
+    <iconset>
      <normaloff>:/WoW Versions/WoWIcon3-WotLK</normaloff>
      <normalon>:/WoW Versions/WoWIcon3-WotLK</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -2095,7 +2088,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../Application/resources.qrc">
+    <iconset>
      <normaloff>:/WoW Versions/WoWIcon4-Cataclysm</normaloff>
      <normalon>:/WoW Versions/WoWIcon4-Cataclysm</normalon>
      <disabledoff>:/WoW Versions/WoWIcon-Disabled</disabledoff>
@@ -2174,6 +2167,46 @@ alternate-background-color: rgb(229, 228, 242);</string>
   <action name="actionAbout_Plugins">
    <property name="text">
     <string>About Plugins...</string>
+   </property>
+  </action>
+  <action name="actionSet_Character_Name">
+   <property name="text">
+    <string>Set Character Name...</string>
+   </property>
+  </action>
+  <action name="actionManage_Favorites">
+   <property name="text">
+    <string>Manage &amp;Favorites...</string>
+   </property>
+  </action>
+  <action name="action_Save_NPC">
+   <property name="text">
+    <string>&amp;Save NPC...</string>
+   </property>
+  </action>
+  <action name="action_Load_NPC">
+   <property name="text">
+    <string>&amp;Load NPC...</string>
+   </property>
+  </action>
+  <action name="actionSet_NPC_Name">
+   <property name="text">
+    <string>Set NPC Name...</string>
+   </property>
+  </action>
+  <action name="action_Prefered_Exporter">
+   <property name="text">
+    <string>(Prefered Exporter)</string>
+   </property>
+  </action>
+  <action name="action_List_of_Loaded_Exporter_Plugins">
+   <property name="text">
+    <string>(List of Exporter Plugins)</string>
+   </property>
+  </action>
+  <action name="actionSet_Landscape_Quality">
+   <property name="text">
+    <string>Set Landscape Quality...</string>
    </property>
   </action>
  </widget>

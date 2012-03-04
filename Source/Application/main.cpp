@@ -3,7 +3,8 @@
 #include <qstring.h>
 #include <qdir.h>
 #include "../Engine/kernel.h"
-#include "../Interface_Viewer/Interface_Viewer.h"
+#include "InterfaceController.h"
+#include "Settings.h"
 
 using namespace WMVEngine;
 using namespace QsLogging;
@@ -32,12 +33,29 @@ int main(int argc, char *argv[])
 	//TheKernel.loadPlugin(QString("%1oldrenderversion").arg(PLUGIN_PATH));	// Debugging, Old rendering plugin
 	//TheKernel.loadPlugin(QString("%1oldheaderversion").arg(PLUGIN_PATH));	// Debugging, Old Model Header Exporter plugin
 	//TheKernel.loadPlugin(QString("%1oldmvmversion").arg(PLUGIN_PATH));	// Debugging, Old Model Viewer Model Exporter plugin
-	TheKernel.loadPlugin(QString("%1renderer_opengl").arg(PLUGIN_PATH));	// OpenGL Plugin
+	WMVEngine::TheKernel.loadPlugin(QString("%1renderer_opengl").arg(PLUGIN_PATH));	// OpenGL Plugin
 
-	Interface_Viewer w;
-	w.init();
-	w.show();
+	WMVEngine::TheKernel.TestText = "Main File Corrected!";
+	
+	QLOG_INFO() << "Kernel Test Text:" << TheKernel.TestText;
+	QLOG_INFO() << "WMV::Kernel Test Text:" << WMVEngine::TheKernel.TestText;
 
-	return a.exec();
+	QLOG_INFO() << "--== Post Plugin Loading Test ==--";
+	QLOG_INFO() << "Number of Display Drivers:" << TheKernel.getDisplayServer().getDisplayDriverCount();
+	QLOG_INFO() << "--== End Post Plugin Loading Test ==--";
+
+	// The interfaces.
+	Interface_Cinema cine;// = Interface_Controller.getCinema();
+	Interface_Viewer view;// = Interface_Controller.getViewer();
+	cine.init();
+	view.init();
+
+	if (sWMVSettings.value("StartupInterfaceMode").toInt() == 1){
+		cine.show();
+		return a.exec();
+	}else{
+		view.show();
+		return a.exec();
+	}
 }
 

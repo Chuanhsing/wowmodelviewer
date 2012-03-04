@@ -150,6 +150,27 @@ enum CharRaces
 	RACE_WORGEN = 22
 };
 
+// Character Equipment Slots
+enum CharEquipSlots {
+	CES_HEAD,
+	CES_NECK,
+	CES_SHOULDER,
+	CES_BOOTS,
+	CES_BELT,
+	CES_SHIRT,
+	CES_PANTS,
+	CES_CHEST,
+	CES_BRACERS,
+	CES_GLOVES,
+	CES_HAND_RIGHT,
+	CES_HAND_LEFT,
+	CES_CAPE,
+	CES_TABARD,
+	CES_QUIVER,
+	
+	CES_NUMSLOTS
+}
+
 // --== Error Codes ==--
 
 // Reading and loading models.

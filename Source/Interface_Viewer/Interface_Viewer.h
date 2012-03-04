@@ -65,12 +65,12 @@ public:
 	bool canReloadWoW;		// If isWoWLoaded == true, are we allowed to reload it? Should only be used if the MPQ list is changed, or we change WoW directories.
 
 	// Groups
+	QActionGroup *ViewerModeGroup;
 	QActionGroup *WoWDirGroup;
     QActionGroup *EyeGlowGroup;
     QActionGroup *LandscapeQualityGroup;
     QActionGroup *LightTypeGroup;
     QActionGroup *CanvasSizeGroup;
-	QActionGroup *ViewerModeGroup;
     QActionGroup *CameraGroup;
     QActionGroup *DoodadSetGroup;
 
@@ -109,6 +109,7 @@ private slots:
     void on_actionExit_triggered();
 
 	// Options Menu
+	void on_actionMode_Cinema_triggered();
 	void on_actionManage_Directories_triggered();
 	
 	// About Menu

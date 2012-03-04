@@ -20,6 +20,8 @@ namespace WMVEngine {
 
 class Kernel{
 	public:
+		QString TestText;
+
 		// Access the Display Server
 		DisplayServer &getDisplayServer() {return m_DisplayServer;}
 		// Access the 3D Model Exporter Server
@@ -33,11 +35,14 @@ class Kernel{
 			QLOG_TRACE() << "Checking to see if we've already loaded it...";
 			if (m_LoadedPlugins.contains(sFileName) == false){
 				QLOG_TRACE() << "Plugin Not Loaded. Loading...";
-				m_LoadedPlugins.insert(sFileName,Plugin(sFileName)).value().registerPlugin(*this);
+				Plugin p = Plugin(sFileName);
+				m_LoadedPlugins.insert(sFileName,p);
+				p.registerPlugin(*this);
 			}else{
 				QLOG_TRACE() << "Plugin already loaded. Aborting...";
 			}
 		}
+		Kernel(){ TestText = "Default Test Text"; }
 
 	private:
 		typedef QMap<QString,Plugin> PluginMap;
@@ -49,7 +54,6 @@ class Kernel{
 };
 
 static Kernel TheKernel;
-//static QsLogging::Logger& QsLog_logger = QsLogging::Logger::instance();
 
 }	// End Namespace
 

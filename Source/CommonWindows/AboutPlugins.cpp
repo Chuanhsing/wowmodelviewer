@@ -40,18 +40,28 @@ void WindowAboutPlugins::SetupList()
 void WindowAboutPlugins::UpdateList()
 {
 	QLOG_INFO() << "Updating Plugin List...";
-	DisplayServer ds = TheKernel.getDisplayServer();
-	ModelExporterServer mes = TheKernel.getModelExporterServer();
-	VideoExporterServer ves = TheKernel.getVideoExporterServer();
+
+	QLOG_INFO() << "Kernel Test Text:" << TheKernel.TestText;
+	QLOG_INFO() << "WMV::Kernel Test Text:" << WMVEngine::TheKernel.TestText;
+
+	DisplayServer ds = WMVEngine::TheKernel.getDisplayServer();
+	ModelExporterServer mes = WMVEngine::TheKernel.getModelExporterServer();
+	VideoExporterServer ves = WMVEngine::TheKernel.getVideoExporterServer();
 
 	size_t totalcount = 0;
-	totalcount += ds.getDisplayDriverCount();
-	totalcount += mes.getExporterTypeCount();
-	totalcount += ves.getExporterTypeCount();
+	int dc = ds.getDisplayDriverCount();
+	int mec = mes.getExporterTypeCount();
+	int vec = ves.getExporterTypeCount();
+	totalcount += dc + mec + vec;
+	
+	QLOG_INFO() << "Display Driver Count:" << dc;
+	QLOG_INFO() << "Model Exporter Count:" << mec;
+	QLOG_INFO() << "Video Exporter Count:" << vec;
+	QLOG_INFO() << "Total Plugin Count:" << totalcount;
 
-	ui_AboutPlugins->pluginCountRenderers->setText(ui_AboutPlugins->pluginCountRenderers->text().arg(ds.getDisplayDriverCount()));
-	ui_AboutPlugins->pluginCountModelExporters->setText(ui_AboutPlugins->pluginCountModelExporters->text().arg(mes.getExporterTypeCount()));
-	ui_AboutPlugins->pluginCountVideoExporters->setText(ui_AboutPlugins->pluginCountVideoExporters->text().arg(ves.getExporterTypeCount()));
+	ui_AboutPlugins->pluginCountRenderers->setText(ui_AboutPlugins->pluginCountRenderers->text().arg(dc));
+	ui_AboutPlugins->pluginCountModelExporters->setText(ui_AboutPlugins->pluginCountModelExporters->text().arg(mec));
+	ui_AboutPlugins->pluginCountVideoExporters->setText(ui_AboutPlugins->pluginCountVideoExporters->text().arg(vec));
 
 	if (totalcount == 0) {
 		QLOG_WARN() << "No Plugins Found.";
@@ -59,6 +69,6 @@ void WindowAboutPlugins::UpdateList()
 		return;
 	}
 
-	QLOG_INFO() << "Here is where we would fill in the objects...";
+	QLOG_INFO() << "Found Plugins!\nHere is where we would fill in the objects...";
 
 }

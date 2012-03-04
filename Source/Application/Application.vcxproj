@@ -186,6 +186,7 @@ copy $(QTDIR)\bin\QtGui4.dll ..\$(OutDir)</Command>
     <ClCompile Include="Settings.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InterfaceController.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Settings.h" />
   </ItemGroup>

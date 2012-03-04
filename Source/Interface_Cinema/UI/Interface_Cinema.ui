@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Interface_Cinema</class>
+ <widget class="QMainWindow" name="Interface_Cinema">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>768</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>%1 %2 \&quot;%3\&quot; %4%5 - Cinema Mode</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1024</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionNew_Scene"/>
+    <addaction name="actionLoad_Scene"/>
+    <addaction name="actionSave_Scene"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_Scene_As"/>
+    <addaction name="actionSave_Scene_Copy"/>
+    <addaction name="separator"/>
+    <addaction name="actionRevert_Scene"/>
+    <addaction name="separator"/>
+    <addaction name="actionView_Log"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>Options</string>
+    </property>
+    <widget class="QMenu" name="menuChange_Mode">
+     <property name="title">
+      <string>Change Mode</string>
+     </property>
+     <addaction name="actionMode_Viewer"/>
+     <addaction name="actionMode_Cinema"/>
+    </widget>
+    <addaction name="menuChange_Mode"/>
+    <addaction name="separator"/>
+    <addaction name="actionSettings"/>
+    <addaction name="separator"/>
+    <addaction name="actionManage_Favorites"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="actionHelp"/>
+    <addaction name="separator"/>
+    <addaction name="actionUpdate_Program"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+    <addaction name="actionAbout_Plugins"/>
+   </widget>
+   <widget class="QMenu" name="menuActors">
+    <property name="title">
+     <string>Actors</string>
+    </property>
+    <widget class="QMenu" name="menuCurrent_Actor">
+     <property name="title">
+      <string>Current Actor</string>
+     </property>
+     <addaction name="action_List_of_Actors_in_this_scene"/>
+    </widget>
+    <widget class="QMenu" name="menuCharacter_Options">
+     <property name="title">
+      <string>Character Options</string>
+     </property>
+     <widget class="QMenu" name="menuEye_Glow">
+      <property name="title">
+       <string>Eye Glow</string>
+      </property>
+      <addaction name="actionEyeGlow_None"/>
+      <addaction name="actionEyeGlow_Default"/>
+      <addaction name="actionEyeGlow_Death_Knight"/>
+     </widget>
+     <addaction name="menuEye_Glow"/>
+     <addaction name="separator"/>
+     <addaction name="actionSheathe_Weapons"/>
+     <addaction name="actionModify_Enchants"/>
+    </widget>
+    <widget class="QMenu" name="menuActor_Display_Mode">
+     <property name="title">
+      <string>Actor Display Mode</string>
+     </property>
+     <addaction name="actionRM_Actor_Box"/>
+     <addaction name="actionRM_Actor_Wireframe"/>
+     <addaction name="actionRM_Actor_Flat"/>
+     <addaction name="actionRM_Actor_Smooth"/>
+     <addaction name="actionRM_Actor_Textured"/>
+     <addaction name="actionRM_Actor_Textured_Wireframe"/>
+    </widget>
+    <widget class="QMenu" name="menuFavorite_Actors">
+     <property name="title">
+      <string>Add Favorite Actor</string>
+     </property>
+     <addaction name="action_List_of_Favorited_Actors"/>
+    </widget>
+    <addaction name="actionLoad_Actor"/>
+    <addaction name="actionSave_Actor"/>
+    <addaction name="menuFavorite_Actors"/>
+    <addaction name="separator"/>
+    <addaction name="menuCurrent_Actor"/>
+    <addaction name="separator"/>
+    <addaction name="actionSet_Actor_Name"/>
+    <addaction name="actionClone_Actor"/>
+    <addaction name="actionDelete_Actor"/>
+    <addaction name="separator"/>
+    <addaction name="actionLoad_Outfit"/>
+    <addaction name="actionLoad_Prop"/>
+    <addaction name="menuCharacter_Options"/>
+    <addaction name="menuActor_Display_Mode"/>
+    <addaction name="separator"/>
+    <addaction name="actionAnimation_Editor"/>
+   </widget>
+   <widget class="QMenu" name="menuSets">
+    <property name="geometry">
+     <rect>
+      <x>434</x>
+      <y>126</y>
+      <width>199</width>
+      <height>328</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Sets</string>
+    </property>
+    <widget class="QMenu" name="menuFavorite_Sets">
+     <property name="title">
+      <string>Load Favorite Set</string>
+     </property>
+     <addaction name="action_List_of_Favorited_Sets"/>
+    </widget>
+    <addaction name="actionLoad_Set"/>
+    <addaction name="actionSave_Set"/>
+    <addaction name="menuFavorite_Sets"/>
+    <addaction name="separator"/>
+    <addaction name="actionLoad_Background_Image"/>
+    <addaction name="actionClear_Background_Image"/>
+    <addaction name="separator"/>
+    <addaction name="actionLocation_Scout"/>
+    <addaction name="separator"/>
+    <addaction name="actionLandscape_Quality"/>
+    <addaction name="actionLocation_Sky"/>
+    <addaction name="actionLocation_Weather"/>
+    <addaction name="actionLocation_Distance_Fog"/>
+    <addaction name="separator"/>
+    <addaction name="actionSet_Decoration"/>
+   </widget>
+   <widget class="QMenu" name="menuRecording">
+    <property name="title">
+     <string>Recording</string>
+    </property>
+    <addaction name="actionRecording_Options"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_Screenshot"/>
+    <addaction name="actionSave_Image_Sequence"/>
+    <addaction name="actionSave_Video"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_the_Cheerleader"/>
+    <addaction name="actionSave_the_World"/>
+   </widget>
+   <widget class="QMenu" name="menuScene">
+    <property name="title">
+     <string>Scene</string>
+    </property>
+    <widget class="QMenu" name="menuCameras">
+     <property name="title">
+      <string>Cameras</string>
+     </property>
+     <addaction name="action_List_of_Cameras"/>
+    </widget>
+    <addaction name="actionLoad_Script"/>
+    <addaction name="actionSave_Script"/>
+    <addaction name="separator"/>
+    <addaction name="actionScript_Editor"/>
+    <addaction name="separator"/>
+    <addaction name="menuCameras"/>
+    <addaction name="actionCamera_Settings"/>
+    <addaction name="separator"/>
+    <addaction name="actionPlay_Audio_During_Playback"/>
+   </widget>
+   <widget class="QMenu" name="menuDisplay">
+    <property name="title">
+     <string>Display</string>
+    </property>
+    <widget class="QMenu" name="menuActors_Display_Mode">
+     <property name="title">
+      <string>Actor Display Mode</string>
+     </property>
+     <addaction name="actionRM_Act_Box"/>
+     <addaction name="actionRM_Act_Wireframe"/>
+     <addaction name="actionRM_Act_Flat"/>
+     <addaction name="actionRM_Act_Smooth"/>
+     <addaction name="actionRM_Act_Textured"/>
+     <addaction name="actionRM_Act_Textured_Wireframe"/>
+    </widget>
+    <widget class="QMenu" name="menuSet_Display_Mode">
+     <property name="title">
+      <string>Set Display Mode</string>
+     </property>
+     <addaction name="actionRM_Loc_Box"/>
+     <addaction name="actionRM_Loc_Wireframe"/>
+     <addaction name="actionRM_Loc_Flat"/>
+     <addaction name="actionRM_Loc_Smooth"/>
+     <addaction name="actionRM_Loc_Textured"/>
+     <addaction name="actionRM_Loc_Textured_Wireframe"/>
+    </widget>
+    <addaction name="menuActors_Display_Mode"/>
+    <addaction name="menuSet_Display_Mode"/>
+    <addaction name="separator"/>
+    <addaction name="actionShow_Actors"/>
+    <addaction name="actionShow_Distance_Fog"/>
+    <addaction name="actionShow_Weather"/>
+    <addaction name="actionShow_Location_Doodads"/>
+    <addaction name="actionShow_Landscape"/>
+    <addaction name="separator"/>
+    <addaction name="actionDisplay_ActorAnimation"/>
+    <addaction name="actionDisplay_LocationAnimation"/>
+    <addaction name="separator"/>
+    <addaction name="actionDisplay_ShowCameras"/>
+    <addaction name="actionDisplay_ShowCameraGate"/>
+    <addaction name="actionDisplay_ShowLights"/>
+   </widget>
+   <widget class="QMenu" name="menuLighting">
+    <property name="title">
+     <string>Lighting</string>
+    </property>
+    <widget class="QMenu" name="menuLights">
+     <property name="title">
+      <string>Lights</string>
+     </property>
+     <addaction name="action_List_of_Lights"/>
+    </widget>
+    <addaction name="actionLoad_Lighting"/>
+    <addaction name="actionSave_Lighting"/>
+    <addaction name="separator"/>
+    <addaction name="menuLights"/>
+    <addaction name="actionLight_Properties"/>
+    <addaction name="separator"/>
+    <addaction name="actionAffects_Actors"/>
+    <addaction name="actionAffects_Location"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionCut"/>
+    <addaction name="actionPaste"/>
+    <addaction name="actionDelete"/>
+    <addaction name="separator"/>
+    <addaction name="actionClone"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuScene"/>
+   <addaction name="menuActors"/>
+   <addaction name="menuSets"/>
+   <addaction name="menuLighting"/>
+   <addaction name="menuDisplay"/>
+   <addaction name="menuRecording"/>
+   <addaction name="menuOptions"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Help...</string>
+   </property>
+  </action>
+  <action name="actionAbout_Plugins">
+   <property name="text">
+    <string>About Plugins...</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About...</string>
+   </property>
+  </action>
+  <action name="actionUpdate_Program">
+   <property name="text">
+    <string>Update Program...</string>
+   </property>
+  </action>
+  <action name="actionViewer">
+   <property name="text">
+    <string>Viewer</string>
+   </property>
+  </action>
+  <action name="actionCinema">
+   <property name="text">
+    <string>Cinema</string>
+   </property>
+  </action>
+  <action name="actionMode_Viewer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Viewer Mode</string>
+   </property>
+  </action>
+  <action name="actionMode_Cinema">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Cinema Mode</string>
+   </property>
+  </action>
+  <action name="actionLoad_Set">
+   <property name="text">
+    <string>Load Set...</string>
+   </property>
+  </action>
+  <action name="actionSave_Set">
+   <property name="text">
+    <string>Save Set...</string>
+   </property>
+  </action>
+  <action name="actionAdjust_Sky">
+   <property name="text">
+    <string>Adjust Sky...</string>
+   </property>
+  </action>
+  <action name="actionAdjust_Fog">
+   <property name="text">
+    <string>Adjust Fog...</string>
+   </property>
+  </action>
+  <action name="actionLocation_Sky">
+   <property name="text">
+    <string>Sky...</string>
+   </property>
+  </action>
+  <action name="actionFog">
+   <property name="text">
+    <string>Fog...</string>
+   </property>
+  </action>
+  <action name="actionLocation_Weather">
+   <property name="text">
+    <string>Weather...</string>
+   </property>
+  </action>
+  <action name="actionLocation_Distance_Fog">
+   <property name="text">
+    <string>Distance Fog...</string>
+   </property>
+  </action>
+  <action name="actionLocation_Scouting">
+   <property name="text">
+    <string>Location Scouting...</string>
+   </property>
+  </action>
+  <action name="actionLocation_Scout">
+   <property name="text">
+    <string>Location Scout...</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionView_Log">
+   <property name="text">
+    <string>View Log...</string>
+   </property>
+  </action>
+  <action name="actionLoad_Script">
+   <property name="text">
+    <string>Load Script...</string>
+   </property>
+  </action>
+  <action name="actionSave_Script">
+   <property name="text">
+    <string>Save Script...</string>
+   </property>
+  </action>
+  <action name="actionScript_Editor">
+   <property name="text">
+    <string>Script Editor...</string>
+   </property>
+  </action>
+  <action name="action_List_of_loaded_actors_here">
+   <property name="text">
+    <string>(List of loaded actors here)</string>
+   </property>
+  </action>
+  <action name="actionSave_Actor">
+   <property name="text">
+    <string>Save Actor...</string>
+   </property>
+  </action>
+  <action name="actionLoad_Character_Model">
+   <property name="text">
+    <string>Load Character Model...</string>
+   </property>
+  </action>
+  <action name="actionSet_Actor_Name">
+   <property name="text">
+    <string>Set Actor Name...</string>
+   </property>
+  </action>
+  <action name="actionSave_Screenshot">
+   <property name="text">
+    <string>Save Screenshot...</string>
+   </property>
+  </action>
+  <action name="actionSave_Video">
+   <property name="text">
+    <string>Save Video...</string>
+   </property>
+  </action>
+  <action name="actionSave_the_Cheerleader">
+   <property name="text">
+    <string>Save the Cheerleader...</string>
+   </property>
+  </action>
+  <action name="actionSave_the_World">
+   <property name="text">
+    <string>Save the World...</string>
+   </property>
+  </action>
+  <action name="action_List_of_Cameras">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>(List of Cameras)</string>
+   </property>
+  </action>
+  <action name="actionPlay_Audio_During_Playback">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Play Audio During Playback</string>
+   </property>
+  </action>
+  <action name="actionDisplay_LocationAnimation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Location Animation</string>
+   </property>
+  </action>
+  <action name="actionDisplay_ActorAnimation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Actor Animation</string>
+   </property>
+  </action>
+  <action name="actionLoad_Background_Image">
+   <property name="text">
+    <string>Load Background Image...</string>
+   </property>
+  </action>
+  <action name="actionClear_Background_Image">
+   <property name="text">
+    <string>Clear Background Image...</string>
+   </property>
+  </action>
+  <action name="action_List_of_Actors_in_this_scene">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>(List of Actors in this scene)</string>
+   </property>
+  </action>
+  <action name="actionLoad_Scene">
+   <property name="text">
+    <string>Open Scene...</string>
+   </property>
+  </action>
+  <action name="actionSave_Scene">
+   <property name="text">
+    <string>Save Scene...</string>
+   </property>
+  </action>
+  <action name="actionNew_Scene">
+   <property name="text">
+    <string>New Scene...</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings...</string>
+   </property>
+  </action>
+  <action name="actionSave_Image_Sequence">
+   <property name="text">
+    <string>Save Image Sequence...</string>
+   </property>
+  </action>
+  <action name="actionResolution">
+   <property name="text">
+    <string>Resolution</string>
+   </property>
+  </action>
+  <action name="actionFOV">
+   <property name="text">
+    <string>Field of View...</string>
+   </property>
+  </action>
+  <action name="actionRecording_Options">
+   <property name="text">
+    <string>Recording Options...</string>
+   </property>
+  </action>
+  <action name="action_List_is_of_character_file_names">
+   <property name="text">
+    <string>(List is of character file names)</string>
+   </property>
+  </action>
+  <action name="actionClone_Actor">
+   <property name="text">
+    <string>Clone Actor...</string>
+   </property>
+  </action>
+  <action name="actionDelete_Actor">
+   <property name="text">
+    <string>Delete Actor</string>
+   </property>
+  </action>
+  <action name="actionLoad_Actor">
+   <property name="text">
+    <string>Load Actor</string>
+   </property>
+  </action>
+  <action name="actionLoad_Outfit">
+   <property name="text">
+    <string>Load Outfit...</string>
+   </property>
+  </action>
+  <action name="actionNone">
+   <property name="text">
+    <string>None</string>
+   </property>
+  </action>
+  <action name="actionDefault">
+   <property name="text">
+    <string>Default</string>
+   </property>
+  </action>
+  <action name="actionDeath_Knight">
+   <property name="text">
+    <string>Death Knight</string>
+   </property>
+  </action>
+  <action name="actionSheathe_Weapons">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Sheath Weapons</string>
+   </property>
+  </action>
+  <action name="actionEyeGlow_None">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>None</string>
+   </property>
+  </action>
+  <action name="actionEyeGlow_Default">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Default</string>
+   </property>
+  </action>
+  <action name="actionEyeGlow_Death_Knight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Death Knight</string>
+   </property>
+  </action>
+  <action name="actionModify_Enchants">
+   <property name="text">
+    <string>Modify Enchants...</string>
+   </property>
+  </action>
+  <action name="actionCamera_Settings">
+   <property name="text">
+    <string>Camera Settings...</string>
+   </property>
+  </action>
+  <action name="actionBackground_View">
+   <property name="text">
+    <string>Background View</string>
+   </property>
+  </action>
+  <action name="actionShow_Fog">
+   <property name="text">
+    <string>Show Fog</string>
+   </property>
+  </action>
+  <action name="actionShow_Weather">
+   <property name="text">
+    <string>Show Weather</string>
+   </property>
+  </action>
+  <action name="actionShow_Actors">
+   <property name="text">
+    <string>Show Actors</string>
+   </property>
+  </action>
+  <action name="actionShow_Location">
+   <property name="text">
+    <string>Show Location</string>
+   </property>
+  </action>
+  <action name="actionRM_Actor_Box">
+   <property name="text">
+    <string>Box</string>
+   </property>
+  </action>
+  <action name="actionRM_Actor_Wireframe">
+   <property name="text">
+    <string>Wireframe</string>
+   </property>
+  </action>
+  <action name="actionRM_Actor_Flat">
+   <property name="text">
+    <string>Flat</string>
+   </property>
+  </action>
+  <action name="actionRM_Actor_Smooth">
+   <property name="text">
+    <string>Smooth</string>
+   </property>
+  </action>
+  <action name="actionRM_Actor_Textured">
+   <property name="text">
+    <string>Textured</string>
+   </property>
+  </action>
+  <action name="actionRM_Actor_Textured_Wireframe">
+   <property name="text">
+    <string>Textured + Wireframe</string>
+   </property>
+  </action>
+  <action name="actionRM_Act_Box">
+   <property name="text">
+    <string>Box</string>
+   </property>
+  </action>
+  <action name="actionRM_Act_Wireframe">
+   <property name="text">
+    <string>Wireframe</string>
+   </property>
+  </action>
+  <action name="actionRM_Act_Flat">
+   <property name="text">
+    <string>Flat</string>
+   </property>
+  </action>
+  <action name="actionRM_Act_Smooth">
+   <property name="text">
+    <string>Smooth</string>
+   </property>
+  </action>
+  <action name="actionRM_Act_Textured">
+   <property name="text">
+    <string>Textured</string>
+   </property>
+  </action>
+  <action name="actionRM_Act_Textured_Wireframe">
+   <property name="text">
+    <string>Textured + Wireframe</string>
+   </property>
+  </action>
+  <action name="actionRM_Loc_Box">
+   <property name="text">
+    <string>Box</string>
+   </property>
+  </action>
+  <action name="actionRM_Loc_Wireframe">
+   <property name="text">
+    <string>Wireframe</string>
+   </property>
+  </action>
+  <action name="actionRM_Loc_Flat">
+   <property name="text">
+    <string>Flat</string>
+   </property>
+  </action>
+  <action name="actionRM_Loc_Smooth">
+   <property name="text">
+    <string>Smooth</string>
+   </property>
+  </action>
+  <action name="actionRM_Loc_Textured">
+   <property name="text">
+    <string>Textured</string>
+   </property>
+  </action>
+  <action name="actionRM_Loc_Textured_Wireframe">
+   <property name="text">
+    <string>Textured + Wireframe</string>
+   </property>
+  </action>
+  <action name="actionLandscape_Quality">
+   <property name="text">
+    <string>Landscape Quality...</string>
+   </property>
+   <property name="whatsThis">
+    <string>Adjust the quality of the landscape geometry.</string>
+   </property>
+  </action>
+  <action name="actionShow_Landscape">
+   <property name="text">
+    <string>Show Landscape</string>
+   </property>
+  </action>
+  <action name="actionShow_Location_Doodads">
+   <property name="text">
+    <string>Show Location Doodads</string>
+   </property>
+  </action>
+  <action name="actionShow_Distance_Fog">
+   <property name="text">
+    <string>Show Distance Fog</string>
+   </property>
+  </action>
+  <action name="actionDisplay_ShowCameraGate">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Camera Gate</string>
+   </property>
+  </action>
+  <action name="actionDisplay_ShowLights">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Lights</string>
+   </property>
+  </action>
+  <action name="actionLoad_Lighting">
+   <property name="text">
+    <string>Load Lighting...</string>
+   </property>
+  </action>
+  <action name="actionSave_Lighting">
+   <property name="text">
+    <string>Save Lighting...</string>
+   </property>
+  </action>
+  <action name="actionLocation_Lighting">
+   <property name="text">
+    <string>Location Lighting...</string>
+   </property>
+  </action>
+  <action name="action_List_of_Lights">
+   <property name="text">
+    <string>(List of Cinema Lights)</string>
+   </property>
+  </action>
+  <action name="actionLight_Properties">
+   <property name="text">
+    <string>Light Properties...</string>
+   </property>
+  </action>
+  <action name="actionAffects_Location">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Affects Location</string>
+   </property>
+  </action>
+  <action name="actionAffects_Actors">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Affects Actors</string>
+   </property>
+  </action>
+  <action name="actionBlah">
+   <property name="text">
+    <string>blah</string>
+   </property>
+  </action>
+  <action name="actionDisplay">
+   <property name="text">
+    <string>Display</string>
+   </property>
+  </action>
+  <action name="actionDisplay_ShowCameras">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Cameras</string>
+   </property>
+  </action>
+  <action name="actionLoad_Model">
+   <property name="text">
+    <string>Load Model...</string>
+   </property>
+  </action>
+  <action name="actionSet_Decoration">
+   <property name="text">
+    <string>Set Decorations...</string>
+   </property>
+  </action>
+  <action name="action_List_of_Favorited_Sets">
+   <property name="text">
+    <string>(List of Favorited Sets)</string>
+   </property>
+  </action>
+  <action name="action_List_of_Favorited_Actors">
+   <property name="text">
+    <string>(List of Favorited Actors)</string>
+   </property>
+  </action>
+  <action name="actionSave_Scene_As">
+   <property name="text">
+    <string>Save Scene As...</string>
+   </property>
+  </action>
+  <action name="actionSave_Scene_Copy">
+   <property name="text">
+    <string>Save Scene Copy...</string>
+   </property>
+  </action>
+  <action name="actionRevert_Scene">
+   <property name="text">
+    <string>Revert Scene...</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="text">
+    <string>Cut</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="text">
+    <string>Paste</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+  </action>
+  <action name="actionClone">
+   <property name="text">
+    <string>Clone...</string>
+   </property>
+  </action>
+  <action name="actionManage_Favorites">
+   <property name="text">
+    <string>Manage &amp;Favorites...</string>
+   </property>
+  </action>
+  <action name="actionLoad_Prop">
+   <property name="text">
+    <string>Load Prop...</string>
+   </property>
+  </action>
+  <action name="actionAdjust_Animation">
+   <property name="text">
+    <string>Adjust Animation...</string>
+   </property>
+  </action>
+  <action name="actionAnimation_Editor">
+   <property name="text">
+    <string>Animation Editor...</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../../Application/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

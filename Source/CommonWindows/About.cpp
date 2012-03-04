@@ -15,8 +15,9 @@ WindowAbout::WindowAbout(QWidget *parent) : QDialog(parent), ui_About(new Ui::Ab
 
 	// Set Various Variables
 	ui_About->WMVName->setText(PROGRAMNAME);
-	ui_About->VersionNumber->setText(ui_About->VersionNumber->text().arg(MAJORVERSION,BUILDVERSION));
+	ui_About->VersionNumber->setText(ui_About->VersionNumber->text().arg(MAJORVERSION,BUILDVERSIONNAME));
 	ui_About->Edition->setText(ui_About->Edition->text().arg(SYSTEMVERSION,DEBUGVERSION));
+	ui_About->Websites->setText(ui_About->Websites->text().arg(SOURCEWEBSITE,ORGANIZATIONWEBSITE));
 	ui_About->ContentCopyright->setText(ui_About->ContentCopyright->text().arg(QDate().currentDate().toString("yyyy")));
 }
 WindowAbout::~WindowAbout()
