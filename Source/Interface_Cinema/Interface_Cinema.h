@@ -10,7 +10,7 @@
 #include <QMessageBox>
 #include "../Engine/classes.h"
 #include "../Application/Settings.h"
-#include "../Engine/WoWDirectoryTools.h"
+#include "../Games/WorldofWarcraft/DirectoryTools_WoW.h"
 
 // UI Files
 #include "GeneratedFiles/ui_Interface_Cinema.h"
@@ -18,7 +18,7 @@
 // Commonly used Windows
 #include "../CommonWindows/About.h"
 #include "../CommonWindows/AboutPlugins.h"
-#include "../CommonWindows/WoWDirManager.h"
+#include "../CommonWindows/GameDirManager.h"
 
 namespace Ui {
     class Interface_Cinema;
@@ -38,7 +38,7 @@ public:
 	// SubWindows
 	WindowAbout Window_About;
 	WindowAboutPlugins Window_AboutPlugins;
-	WoWDirManager WoWDirectoryManager;
+	GameDirManager GameDirectoryManager;
 
 	// User-Interface
     Ui::Interface_Cinema *ui;

@@ -10,7 +10,7 @@
 #include <QMessageBox>
 #include "../Engine/classes.h"
 #include "../Application/Settings.h"
-#include "../Engine/WoWDirectoryTools.h"
+#include "../Games/WorldofWarcraft/DirectoryTools_WoW.h"
 
 // UI Files
 #include "GeneratedFiles/ui_Interface_Viewer.h"
@@ -18,7 +18,7 @@
 // Commonly used Windows
 #include "../CommonWindows/About.h"
 #include "../CommonWindows/AboutPlugins.h"
-#include "../CommonWindows/WoWDirManager.h"
+#include "../CommonWindows/GameDirManager.h"
 
 namespace Ui {
     class Interface_Viewer;
@@ -41,6 +41,7 @@ public:
 	size_t WoWTypeCurrent;
 	size_t WoWTypeNext;
 	st_WoWDir CurrentDir;
+	bool isNPC;
 
 	// Functions
 	void init();
@@ -77,7 +78,7 @@ public:
 	// SubWindows
 	WindowAbout Window_About;
 	WindowAboutPlugins Window_AboutPlugins;
-	WoWDirManager WoWDirectoryManager;
+	GameDirManager GameDirectoryManager;
 
 	// User-Interface
     Ui::Interface_Viewer *ui;

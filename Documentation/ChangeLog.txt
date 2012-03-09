@@ -1,10 +1,24 @@
 World of Warcraft Model Viewer v0.8.0.0
 
+r674 WMV-78 (Plugin Edition)
+-MAJOR rearrangement, trying to segregate game-specific files out of the program itself.
+-New Games project, to hold all the game-specific data.
+-Removed the old keyboard short-cuts from the Viewer Interface. New shortcuts will be added during testing phase.
+-Renamed Viewer mode to Creation mode, since it will primarily be used for creating the characters used in Cinema mode. (File and function renaming to come later.)
+-Started Singleton definition. Currently not thread-safe.
+-Expanded the ModelViewerModel format a bit.
+-Better defined operation system identifiers should now detect most supported operating systems automatically.
+-Linux will now view the log using the "more" command. This makes it so we don't have to define the specific brand of Linux.
+-Added the font used in the WMV logo in the Splash_001.psd file.
+-Minor update to the Splash_001.psd to make the white border around "Model Viewer" stand out more.
+-Tweaks made to the FileFormats document. Switched booleans to flags, fixed some spelling issues.
+
+
 r673 WMV-78 (Plugin Edition)
 -Settings file is now active.
 -Started work on Cinema interface.
 -Viewer/Cinema interface will load depending on the StartupInterfaceMode option in wmv.ini file. Currently can't switch while the program is running.
--You can no longer Load WoW if you don't have any woW directories specified.
+-You can no longer Load WoW if you don't have any WoW directories specified.
 -Plugins will now load into TheKernel. Note: TheKernel is not yet a singleton, and it's data can not yet be accessed outside the main.cpp file.
 -ExporterCanDo no longer defines WoW-Specific details, but instead specifies similar functionalities that will be available from the ModelViewerModel format. All exporters will export data from the ModelViewerModel format, and not from the WoW Data. This way, exporters will only have to be updated when the ModelViewerModel format is changed.
 -Renamed BUILDVERSION to BUILDVERSIONNAME
@@ -14,7 +28,7 @@ r673 WMV-78 (Plugin Edition)
 
 r672 WMV-78 (Plugin Edition)
 -Started custom internal WMV model format specification.
--Minor plugin updates. Still does not load Plugins...
+-Minor Plugin updates. Still does not load Plugins...
 -Removed post-build commands that copied the LIB files into the output
 directory.
 -BUILDVERSION is now the Build's name. (Currently "Tofu".)
@@ -35,7 +49,7 @@ r642 WMV-78 (Plugin Edition)
 -Added TOC data pertaining to Pre-1.3 Vanilla WoW.
 -Added many more definitions to the ExporterCanDo class. Since we have yet to start on exporters, MODELEXPORTERHEADERVERSION was unchanged.
 -Replaced the Platform-Specific icons in the Qt Resource file with PNG versions. Platform-Specific icon files are still available for implementation as the application icon.
--Added the About Plugins window. Not yet fully functional. (Need to get a working plugin to fully test it.)
+-Added the About Plugins window. Not yet fully functional. (Need to get a working Plugin to fully test it.)
 
 
 r639

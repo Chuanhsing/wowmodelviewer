@@ -18,7 +18,7 @@ Interface_Cinema::Interface_Cinema(QWidget *parent) : QMainWindow(parent), ui(ne
     ui->setupUi(this);
 
 	// Passed arguments: ProgramName (WMV), MajorVersion (v0.8.0.0), BuildVersionName (Tofu) SystemVersion (Windows 64-bit), DebugVersion (" Debug" or "")
-	setWindowTitle(QString("%1 %2 \"%3\" %4%5 - Cinema Mode").arg(PROGRAMNAME,MAJORVERSION,BUILDVERSIONNAME,SYSTEMVERSION,DEBUGVERSION));
+	setWindowTitle(windowTitle().arg(PROGRAMNAME,MAJORVERSION,BUILDVERSIONNAME,SYSTEMVERSION,DEBUGVERSION));
 
 	// Viewer Modes
 	ViewerModeGroup = new QActionGroup(this);

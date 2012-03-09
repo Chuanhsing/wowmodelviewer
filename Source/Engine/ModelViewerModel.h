@@ -1,12 +1,13 @@
 #ifndef MODELVIEWERMODELFORMAT_H
 #define MODELVIEWERMODELFORMAT_H
 
-class Quatd{};
+class Quatd{};	// Temp until we can get it to compile with the math_Quat file.
 
 #include <qdir.h>
 #include "enums.h"
 #include "../Foundation/Math/math_vector.h"
 //#include "../Foundation/Math/math_quaternion.h"
+#include "../Games/ModelSource_enums.h"
 
 /*
 	Model Viewer Model Format.
@@ -42,7 +43,16 @@ public:
 };
 
 // Animation Sequence Data
-class AnimSequence {};
+class cAnimSequence {};
+
+// Texture Images
+class cTexture {
+public:
+	size_t type;			// Indicates the type of the texture, as defined in the enums.h file
+	QString filename;		// The name of the image file, with extension.
+	QString path;			// The path to the image, relative to the model.
+	size_t layer;			// The layer of the texture. Higher numbers go on top of lower ones.
+};
 
 // Our internal model format
 class ModelViewerModel {
@@ -54,13 +64,14 @@ public:
 	QString ModelName;					// Name of the Model. IE: The Big Bad Wolf
 	QString FileName;					// The filename of the model. IE: BigBadWolf.m2
 	QDir FilePath;						// Path to the file. IE: Creatures/Wolves/BigBadWolf
+	size_t ModelSource;					// The source of the model, as defined in Games\ModelSource_enums.h
 
-	Vec3d Position;						// Position of the model
-	Quatd Rotation;						// Rotation of the model
-	Vec3d Scale;						// Scale of the model
+	Vec3d iPosition;					// Initial Position of the model
+	Quatd iRotation;					// Initial Rotation of the model
+	Vec3d iScale;						// Initial Scale of the model
 	size_t ParentBone;					// The bone number this model is attached to. -1 for none.
-	QList<AnimSequence> AnimationList;	// List of animations for this model.
-	size_t SourceID;					// Used for identifying the current model's source type.
+	QList<cTexture> TextureList;		// List of textures used by the model.
+	QList<cAnimSequence> AnimationList;	// List of animations for this model.
 
 	// Constructors
 private:
@@ -68,16 +79,27 @@ private:
 	ModelViewerModel() {
 		ModelVersion = MODELVIEWERMODELVERSION;
 		ParentBone = -1;
-		Position = Vec3d(0.0);
-		Rotation = Quatd();		// 0,0,0,1
-		Scale = Vec3d(1.0);
-		SourceID = NOMODELSOURCE;
-		AnimationList = QList<AnimSequence>();
+		iPosition = Vec3d(0.0);
+		iRotation = Quatd();		// 0,0,0,1
+		iScale = Vec3d(1.0);
+		Submodels = QList<ModelViewerModel>();
+		AnimationList = QList<cAnimSequence>();
+		TextureList = QList<cTexture>();
+		ModelSource = NOMODELSOURCE;
 	}
 public:
 	ModelViewerModel(QString file){
-		ModelViewerModel();
-		// Fill out the data.
+		ModelViewerModel();		// Start with an empty model.
+
+		// Detect the game Type
+
+		// Grab the model data
+
+		// Convert the data
+
+		// Fill out our model format's data
+
+		// Finish up
 	}
 	
 	// Functions for getting Private Data

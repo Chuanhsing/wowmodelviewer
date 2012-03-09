@@ -8,6 +8,8 @@ This file will describe in detail all of the file formats used by WoW Model View
 
 All of the new and updated file formats are IFF-Chunked binary files, just like the formats used by Blizzard for the WoW models. All chunks are followed by 4 unsigned bytes indicating the size of a chunk in bytes. All strings are Zero-terminated (ends with a 0) and are properly buffered. (The size of the String + 1 is divisible by 2, else add zeroes until it is.)
 
+XML-based versions of these files will follow the same structure/layout.
+
 ============================================================
 	Contents List
 ============================================================
@@ -35,10 +37,11 @@ This is both the Character file and the NPC file, and is used as the actor file 
 
 CHR2, followed by an UINT32 of 4, then UINT32 of the file format's version, 2. This will be used for versioning in the future.
 	FHDR, Header Chunk
-		UINT8,	Character Model Type, 1 byte. 0 = Char, 1 = NPC/Creature
+		UINT16, Game ID, 2 bytes
+		UINT8,	Character Model Type, 1 byte. 0 = Character, 1 = NPC/Creature
 		String, Character's Name
 		String, Model file path and name
-		UINT8, Weapons Sheathed, 1 byte. 0 = No, 1 = Yes
+		UINT16, Flags, 2 bytes. Flags: 1 = Weapons Sheathed
 		UINT32, Character Details Offset, 4 bytes
 		UINT32, NPC Details Offset, 4 bytes
 		UINT32, Equipment List Offset, 4 bytes
@@ -53,9 +56,8 @@ CHR2, followed by an UINT32 of 4, then UINT32 of the file format's version, 2. T
 		UINT16, Hair Color Number, 2 bytes
 		UINT16, Facial Features Number, 2 bytes
 		UINT16, Facial Features Color Number, 2 bytes
-		UINT8,	Eye Glow Type, 1 byte. 0 = No Eyeglow, 1 = Default Eyeglows, 2 = Death Knight Eyeglows.
-		UINT8,	Show Helm, 1 byte. 0 = No, 1 = Yes.
-		UINT8,	Show Cloak, 1 byte. 0 = No, 1 = Yes.
+		UINT8,	Eye-glow Type, 1 byte. 0 = Default Eye-glow, 1 = Death Knight Eye-glow, 2 = No Eye-glows
+		UINT16, Character Flags, 2 bytes. Flags: 1 = Show Helm, 2 = Show Cloak
 	NDTL, NPC Details Chunk. Not used by Characters.
 		UINT16, Model Skin Number, 2 bytes.
 	EQLC, Equipment List Chunk
@@ -83,10 +85,11 @@ CHR2, followed by an UINT32 of 4, then UINT32 of the file format's version, 2. T
 ------------------------------------------------------------
 
 --== 2) Equipment File v2 ==--
-The Equipment File: Allowing you to quickly outfit your army of super-soldiers with the same costume for over 6 years! Now in a sparkling 2.0 flavor!
+The Equipment File: Allowing you to quickly outfit your army of super-soldiers with the same costume for over 6 years! Now in a sparkling 2.0 flavor! This holds the same data as the equipment section of the character file, except it adds the equipment group name.
 
 EQPT, followed by an UINT32 of 4, then UINT32 of the file format's version, 2. This will be used for versioning in the future.
 	FHDR, Header Chunk
+		UINT16, Game ID, 2 bytes
 		String, Equipment Group Name, Optional. Useful if you want to call a set something special, like "Black Knight Gear".
 		UINT32, Equipment List Offset, 4 bytes
 		UINT32, Guild Tabard Setup Offset, 4 bytes
@@ -108,7 +111,7 @@ EQPT, followed by an UINT32 of 4, then UINT32 of the file format's version, 2. T
 ------------------------------------------------------------
 
 --== 3) Lighting File v2 ==--
-Spent a lot of time working on great lighting for your scene? Want to see what it looks like on the model you're working on? Want consistant lighting even though your partner is across the globe? Then the Lighting File is exactly what you're looking for!
+Spent a lot of time working on great lighting for your scene? Want to see what it looks like on the model you're working on? Want consistent lighting even though your partner is across the globe? Then the Lighting File is exactly what you're looking for!
 
 WLGT, followed by an UINT32 of 4, then UINT32 of the file format's version, 2. This will be used for versioning in the future.
 	(NYI)
@@ -118,7 +121,8 @@ WLGT, followed by an UINT32 of 4, then UINT32 of the file format's version, 2. T
 	B. New Formats
 ============================================================
 
-------------------------------------------------------------
+These file formats are new in WMV v0.8.0.0, and are mostly used by Cinema Mode.
+
 
 --== 4) Scene File ==--
 This file will load sets, characters, lighting, cameras, scripts, basically everything you need, into Cinema Mode with a single command!
@@ -137,17 +141,18 @@ SCRP, followed by an UINT32 of 4, then UINT32 of the file format's version, 1. T
 ------------------------------------------------------------
 
 --== 6) Animation File ==--
-This is a file that stores modified and custom animations for use with WoW Characters in WMV. These animation files are Race and Gender specific! You can't load the animation file for a Female BloodElf into a Male Orc, nor can you load it into the Lich King!
+This is a file that stores modified and custom animations for use with WoW Characters in WMV. These animation files are Game, Race and Gender specific! You can't load the animation file for a Female BloodElf into a Male Bloodelf, a Female Orc, a Hydralisk, or even the Lich King!
 
 WMAF, followed by an UINT32 of 4, then UINT32 of the file format's version, 1. This will be used for versioning in the future.
 	FHDR, Header Chunk
-		UINT8,	Model Type, 0 = Char, 1 = NPC/Creature
+		UINT16, Game ID, 2 bytes
+		UINT8,	Model Type, 0 = Character, 1 = NPC/Creature
 		String, Model file path and name
 		UINT16, Race ID, 2 bytes
 		UINT16, Gender ID, 2 bytes
 		UINT32, Modified Animation Offset, 4 bytes
 		UINT32, New Animation Offset, 4 bytes
-	MANM, Modified Animation Chunk. Allows for modification of existing animations.
+	MANM, Modified Animation Chunk. Allows for modification of existing animations. This ONLY records the modified keyframes, not the entire animation.
 		SIZE, UINT32, Number of Modified Animations, 4 bytes
 		LIST, Modified Animation List Chunk
 			UINT32, Animation ID, 4 bytes
@@ -158,7 +163,7 @@ WMAF, followed by an UINT32 of 4, then UINT32 of the file format's version, 1. T
 				BANM, Bone Animation Chunk, One per keyframe.
 					UINT32 Keyframe Number, 4 bytes
 					Float[3], Bone Position, 12 bytes
-					Float[4], Bone Rotation, 16 bytes (Quatnerion data)
+					Float[4], Bone Rotation, 16 bytes (Quaternion data)
 					Float[3], Bone Scale, 12 bytes
 	ANIM, New Animation Chunk. Allows users to add new, custom animations.
 		SIZE, UINT32, Number of New Animations, 4 bytes
@@ -171,7 +176,7 @@ WMAF, followed by an UINT32 of 4, then UINT32 of the file format's version, 1. T
 				BANM, Bone Animation Chunk, One per keyframe.
 					UINT32 Keyframe Number, 4 bytes
 					Float[3], Bone Position, 12 bytes
-					Float[4], Bone Rotation, 16 bytes (Quatnerion data)
+					Float[4], Bone Rotation, 16 bytes (Quaternion data)
 					Float[3], Bone Scale, 12 bytes
 
 ------------------------------------------------------------
@@ -187,7 +192,7 @@ WSET, followed by an UINT32 of 4, then UINT32 of the file format's version, 1. T
 	C. Legacy Formats
 ============================================================
 
-This section will briefly discuss the older file formats use in previous WMVs, all of which can be read (but not written) by WMV v0800. All of these files are ASCII text files. Loading these files into WMV v0800 and saving them will update the file to the newer formats.
+This section will briefly discuss the older file formats use in previous WMVs, all of which can be read (but not written) by WMV v0800. All of these files are ASCII text files. Loading these files into WMV v0800 and saving them will update the file to the newer formats. These formats will ONLY work with World of Warcraft models!
 
 ------------------------------------------------------------
 

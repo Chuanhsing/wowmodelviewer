@@ -6,7 +6,7 @@
 #include <QDir>
 #include <QMap>
 #include "../Engine/version.h"
-#include "../Engine/classes.h"
+#include "../Games/Game_Classes.h"
 
 namespace WMVEngine {
 
@@ -14,16 +14,7 @@ namespace WMVEngine {
 #define WOWDIRS_INI_NAME "wowdirs.ini"
 
 // Settings
-/* Registry version disabled until we can get the settings to save and load correctly.
-#ifndef _DEBUG
-	//Use the Registry settings for non-debug versions.
-	QSettings sWMVSettings("WMV Community","WoW Model Viewer");		// Registry Version Settings
-#else
-	// Use an INI file for debugging settings and values.
-	*/
-	static QSettings sWMVSettings(QDir::currentPath()+"/"+WMV_INI_NAME,QSettings::IniFormat);	// Ini Version Settings
-//#endif
-
+static QSettings sWMVSettings(QDir::currentPath()+"/"+WMV_INI_NAME,QSettings::IniFormat);	// Ini Version Settings
 static QSettings sWoWDirs(QDir::currentPath()+"/"+WOWDIRS_INI_NAME,QSettings::IniFormat);	// WoW Directory List
 
 extern QMap<QString,QVariant> SettingsList;

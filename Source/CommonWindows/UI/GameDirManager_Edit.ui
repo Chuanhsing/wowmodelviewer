@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GameDirManager_Edit</class>
+ <widget class="QWidget" name="GameDirManager_Edit">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>555</width>
+    <height>370</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Edit Game Directory</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../Application/resources.qrc">
+    <normaloff>:/WoW Versions/WoWIcon01-Vanilla</normaloff>
+    <normalon>:/WoW Versions/WoWIcon01-Vanilla</normalon>:/WoW Versions/WoWIcon01-Vanilla</iconset>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <widget class="QLineEdit" name="lineEdit_Name">
+   <property name="geometry">
+    <rect>
+     <x>85</x>
+     <y>5</y>
+     <width>386</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Name">
+   <property name="geometry">
+    <rect>
+     <x>5</x>
+     <y>7</y>
+     <width>76</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Directory Name</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_NameGuess">
+   <property name="geometry">
+    <rect>
+     <x>475</x>
+     <y>4</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Generate</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Path">
+   <property name="geometry">
+    <rect>
+     <x>5</x>
+     <y>34</y>
+     <width>76</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="text">
+    <string>Directory Path</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_Path">
+   <property name="geometry">
+    <rect>
+     <x>85</x>
+     <y>32</y>
+     <width>386</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_Dir">
+   <property name="geometry">
+    <rect>
+     <x>475</x>
+     <y>30</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Choose Dir</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Files">
+   <property name="geometry">
+    <rect>
+     <x>5</x>
+     <y>60</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Files</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="listWidget">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>60</y>
+     <width>431</width>
+     <height>276</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string notr="true">F:/Games/World of Warcraft/Data/Art.MPQ</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">F:/Super Long Directory Name that should go beyond the edge/Games/World of Warcraft/Data/Art.MPQ</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">/Applications/World of Warcraft/Data/Terrain.MPQ</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">/dev/sda1/games/World of Warcraft/Cache/wow-update-14545.MPQ</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 01</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 02</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 03</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 04</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 05</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 06</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 07</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 08</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 09</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 10</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 11</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 12</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 13</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 14</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string notr="true">File 15</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QPushButton" name="btn_FilesRescan">
+   <property name="geometry">
+    <rect>
+     <x>475</x>
+     <y>60</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Rescan</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_FilesAdd">
+   <property name="geometry">
+    <rect>
+     <x>475</x>
+     <y>95</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_FilesDelete">
+   <property name="geometry">
+    <rect>
+     <x>475</x>
+     <y>120</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_FilesMoveUp">
+   <property name="geometry">
+    <rect>
+     <x>475</x>
+     <y>155</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Up</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_FilesMoveDown">
+   <property name="geometry">
+    <rect>
+     <x>475</x>
+     <y>180</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Down</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Version">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>345</y>
+     <width>119</width>
+     <height>14</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Detected WoW Version:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_VersionIcon">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>345</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../../Application/resources.qrc">:/WoW Versions/WoWIcon03-WotLK</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_VersionText">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>345</y>
+     <width>176</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Wrath of the Lich King</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_Cancel">
+   <property name="geometry">
+    <rect>
+     <x>475</x>
+     <y>343</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_Okay">
+   <property name="geometry">
+    <rect>
+     <x>475</x>
+     <y>318</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OK</string>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../../Application/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

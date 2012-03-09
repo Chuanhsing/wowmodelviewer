@@ -203,6 +203,9 @@ copy $(QTDIR)\bin\QtGui4.dll ..\$(OutDir)</Command>
     <ProjectReference Include="..\Foundation\Foundation.vcxproj">
       <Project>{583dceed-978b-493d-b7f3-b54718c46ec3}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Games\Games.vcxproj">
+      <Project>{01f02fe7-97fa-4f8f-819f-aa7493843fc3}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Interface_Cinema\Interface_Cinema_VC100.vcxproj">
       <Project>{be2e8a7f-8afd-4a57-a0c1-709532446b06}</Project>
     </ProjectReference>

@@ -1,6 +1,5 @@
 #include "Settings.h"
-
-using namespace WMVEngine;
+#include "../Engine/enums.h"
 
 QMap<QString,QVariant> WMVEngine::SettingsList;		// List of Default Settings
 QMap<QString,st_WoWDir> WMVEngine::WoWDirList;
@@ -8,7 +7,7 @@ QMap<QString,st_WoWDir> WMVEngine::WoWDirList;
 // Initalization of our default settings
 void WMVEngine::SettingsListInit()
 {
-	WMVEngine::SettingsList = QMap<QString,QVariant>();
+	SettingsList = QMap<QString,QVariant>();
 
 	// Groups are done with a Prefix, such as "GroupName/VarName". Settings without a prefix will be listed in the General Group.
 	SettingsList.insert("Version",MajorBuildVersion);					// Used to compare the settings version against the program's version.
@@ -21,10 +20,10 @@ void WMVEngine::CheckSettings_Main(){
 	bool performSync = false;
 
 	// Initialize the default Settings
-	WMVEngine::SettingsListInit();
+	SettingsListInit();
 	
 	// Make a temp list of the defaults.
-	QMap<QString,QVariant> temp = WMVEngine::SettingsList;
+	QMap<QString,QVariant> temp = SettingsList;
 
 	// Check the Setting's Version number against the Current Version number.
 	if (sWMVSettings.contains("Version") == false){								// If we can't find the version number, then there must be no settings.
@@ -42,7 +41,7 @@ void WMVEngine::CheckSettings_Main(){
 				performSync = true;
 			}
 		}
-	}else if (sWMVSettings.childKeys().count() != WMVEngine::SettingsList.count()){	// If the number of settings don't match...
+	}else if (sWMVSettings.childKeys().count() != SettingsList.count()){	// If the number of settings don't match...
 		QLOG_WARN() << "Incorrect number of settings. Fixing the issue...";
 		// Go over each Default setting
 		for (QMap<QString,QVariant>::Iterator it=temp.begin();it!=temp.end();++it){

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string notr="true">WoW Model Viewer</string>
+   <string notr="true">%1 %2 \&quot;%3\&quot; %4%5 - Creation Mode</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../../Application/resources.qrc">
@@ -145,51 +145,51 @@
     <property name="title">
      <string extracomment="Options for Charactrers &amp; M2 files">&amp;Character</string>
     </property>
-    <widget class="QMenu" name="menuEye_Glow">
+    <widget class="QMenu" name="menuChr_EyeGlow">
      <property name="tearOffEnabled">
       <bool>true</bool>
      </property>
      <property name="title">
       <string>Eye Glow</string>
      </property>
-     <addaction name="actionGlowDefault"/>
-     <addaction name="actionGlowDeathKnight"/>
-     <addaction name="actionGlowNone"/>
+     <addaction name="actionChr_GlowDefault"/>
+     <addaction name="actionChr_GlowDeathKnight"/>
+     <addaction name="actionChr_GlowNone"/>
     </widget>
-    <widget class="QMenu" name="menuShow_Hide">
+    <widget class="QMenu" name="menuChr_ShowHide">
      <property name="tearOffEnabled">
       <bool>true</bool>
      </property>
      <property name="title">
       <string>Show/Hide</string>
      </property>
-     <addaction name="actionShow_Helmet"/>
-     <addaction name="actionShow_Hair"/>
-     <addaction name="actionShow_Facial_Hair"/>
-     <addaction name="actionShow_Ears"/>
-     <addaction name="actionShow_Cape"/>
-     <addaction name="actionShow_Underwear"/>
-     <addaction name="actionShow_Feet"/>
+     <addaction name="actionChr_ShowHelmet"/>
+     <addaction name="actionChr_ShowCape"/>
+     <addaction name="actionChr_ShowHair"/>
+     <addaction name="actionChr_ShowEars"/>
+     <addaction name="actionChr_ShowFacialHair"/>
+     <addaction name="actionChr_ShowUnderwear"/>
+     <addaction name="actionChr_ShowFeet"/>
     </widget>
-    <addaction name="actionSet_Character_Name"/>
+    <addaction name="actionChr_SetName"/>
     <addaction name="separator"/>
-    <addaction name="actionSave_Character"/>
-    <addaction name="actionSave_to_Favorites"/>
+    <addaction name="actionChr_Save"/>
+    <addaction name="actionChr_SaveToFavorites"/>
     <addaction name="separator"/>
-    <addaction name="actionClear_Equiptment"/>
-    <addaction name="actionLoad_Equipment"/>
-    <addaction name="actionLoad_Equipment_Set"/>
-    <addaction name="actionLoad_Starting_Outfit"/>
-    <addaction name="actionLoad_NPC_Outfit"/>
-    <addaction name="actionSave_Equipment"/>
+    <addaction name="actionChr_ClearEquiptment"/>
+    <addaction name="actionChr_LoadEquipment"/>
+    <addaction name="actionChr_LoadEquipmentSet"/>
+    <addaction name="actionChr_LoadStartingOutfit"/>
+    <addaction name="actionChr_LoadNPCOutfit"/>
+    <addaction name="actionChr_SaveEquipment"/>
     <addaction name="separator"/>
-    <addaction name="menuEye_Glow"/>
-    <addaction name="menuShow_Hide"/>
-    <addaction name="actionSheath_Weapons"/>
+    <addaction name="menuChr_EyeGlow"/>
+    <addaction name="menuChr_ShowHide"/>
+    <addaction name="actionChr_SheathWeapons"/>
     <addaction name="separator"/>
-    <addaction name="actionModify_Enchants"/>
+    <addaction name="actionChr_ModifyEnchants"/>
     <addaction name="separator"/>
-    <addaction name="actionLoad_a_Mount"/>
+    <addaction name="actionChr_LoadMount"/>
    </widget>
    <widget class="QMenu" name="menuLighting">
     <property name="title">
@@ -208,7 +208,7 @@
     <addaction name="actionLoad_Lighting"/>
     <addaction name="actionSave_Lighting"/>
     <addaction name="separator"/>
-    <addaction name="actionRender_Light_Objects"/>
+    <addaction name="actionLightsShowObjects"/>
     <addaction name="separator"/>
     <addaction name="actionUse_True_Lighting"/>
     <addaction name="menuUse_Lights"/>
@@ -247,28 +247,28 @@
     </property>
     <addaction name="actionHelp"/>
     <addaction name="separator"/>
-    <addaction name="actionUpdate_Program"/>
+    <addaction name="actionCheckForUpdates"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
     <addaction name="actionAbout_Plugins"/>
    </widget>
    <widget class="QMenu" name="menuSets">
     <property name="title">
-     <string>Location</string>
+     <string>Sets</string>
     </property>
-    <widget class="QMenu" name="menuDoodad_Set">
+    <widget class="QMenu" name="menuSets_DoodadSetList">
      <property name="tearOffEnabled">
       <bool>true</bool>
      </property>
      <property name="title">
-      <string>Doodad Set</string>
+      <string>Doodad Sets</string>
      </property>
-     <addaction name="action_List_of_Doodad_Sets"/>
+     <addaction name="actionSets__List_of_Doodad_Sets"/>
     </widget>
-    <addaction name="actionAlways_show_Default_Doodads"/>
+    <addaction name="actionSets_AlwaysShowDefaultDoodads"/>
     <addaction name="separator"/>
-    <addaction name="actionShow_Doodads_2"/>
-    <addaction name="menuDoodad_Set"/>
+    <addaction name="actionSets_ShowDoodads"/>
+    <addaction name="menuSets_DoodadSetList"/>
    </widget>
    <widget class="QMenu" name="menuLandscape">
     <property name="title">
@@ -276,10 +276,10 @@
     </property>
     <addaction name="actionSet_Landscape_Quality"/>
     <addaction name="separator"/>
-    <addaction name="actionShow_WMOs"/>
-    <addaction name="actionShow_Doodads"/>
+    <addaction name="actionLandscape_ShowSets"/>
+    <addaction name="actionLandscape_ShowDoodads"/>
     <addaction name="separator"/>
-    <addaction name="actionSave_Masks"/>
+    <addaction name="actionLandscape_SaveAlphas"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -344,6 +344,9 @@
      <addaction name="actionCanvasSizeMisc_1920x1200"/>
     </widget>
     <addaction name="menuShow_Controls"/>
+    <addaction name="actionShow_Status_Bar"/>
+    <addaction name="separator"/>
+    <addaction name="actionFullscreen_Mode"/>
     <addaction name="separator"/>
     <addaction name="menuCamera"/>
     <addaction name="separator"/>
@@ -352,7 +355,7 @@
     <addaction name="actionLoadSkybox"/>
     <addaction name="separator"/>
     <addaction name="actionShow_Grid"/>
-    <addaction name="actionShow_Mask"/>
+    <addaction name="actionShowAlpha"/>
     <addaction name="separator"/>
     <addaction name="menuSet_Canvas_Size"/>
    </widget>
@@ -360,10 +363,11 @@
     <property name="title">
      <string>Creature/NPC</string>
     </property>
-    <addaction name="actionSet_NPC_Name"/>
+    <addaction name="actionNPC_SetName"/>
     <addaction name="separator"/>
-    <addaction name="action_Load_NPC"/>
-    <addaction name="action_Save_NPC"/>
+    <addaction name="actionNPC_Load"/>
+    <addaction name="actionNPC_Save"/>
+    <addaction name="actionNPC_SaveToFavorites"/>
     <addaction name="separator"/>
     <addaction name="actionNPC_LeftHandItem"/>
     <addaction name="actionNPC_RightHandItem"/>
@@ -1156,9 +1160,6 @@ alternate-background-color: rgb(229, 228, 242);</string>
    <property name="text">
     <string>Save &amp;File...</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+S</string>
-   </property>
   </action>
   <action name="actionSave_Screenshot">
    <property name="text">
@@ -1287,7 +1288,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <enum>QAction::AboutRole</enum>
    </property>
   </action>
-  <action name="actionAlways_show_Default_Doodads">
+  <action name="actionSets_AlwaysShowDefaultDoodads">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1336,15 +1337,15 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>Ctrl+U</string>
    </property>
   </action>
-  <action name="actionUpdate_Program">
+  <action name="actionCheckForUpdates">
    <property name="text">
-    <string>Update &amp;Program...</string>
+    <string>Check for &amp;Updates...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
    </property>
   </action>
-  <action name="actionShow_WMOs">
+  <action name="actionLandscape_ShowSets">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1355,7 +1356,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>Show Sets</string>
    </property>
   </action>
-  <action name="actionShow_Doodads">
+  <action name="actionLandscape_ShowDoodads">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1402,11 +1403,8 @@ alternate-background-color: rgb(229, 228, 242);</string>
    <property name="text">
     <string>&amp;Load Character...</string>
    </property>
-   <property name="shortcut">
-    <string>F5</string>
-   </property>
   </action>
-  <action name="actionSave_Character">
+  <action name="actionChr_Save">
    <property name="icon">
     <iconset resource="../../Application/resources.qrc">
      <normaloff>:/menuIcons/menuChrSave</normaloff>:/menuIcons/menuChrSave</iconset>
@@ -1415,7 +1413,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>Save Character...</string>
    </property>
    <property name="shortcut">
-    <string>F6</string>
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionImportArmoryCharacter">
@@ -1423,7 +1421,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>Import &amp;Armory Character...</string>
    </property>
   </action>
-  <action name="actionLoad_Equipment">
+  <action name="actionChr_LoadEquipment">
    <property name="text">
     <string>Load Equipment...</string>
    </property>
@@ -1431,7 +1429,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>F7</string>
    </property>
   </action>
-  <action name="actionSave_Equipment">
+  <action name="actionChr_SaveEquipment">
    <property name="text">
     <string>Save Equipment...</string>
    </property>
@@ -1439,7 +1437,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>F8</string>
    </property>
   </action>
-  <action name="actionClear_Equiptment">
+  <action name="actionChr_ClearEquiptment">
    <property name="text">
     <string>Clear Equipment</string>
    </property>
@@ -1447,22 +1445,22 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>F9</string>
    </property>
   </action>
-  <action name="actionLoad_Equipment_Set">
+  <action name="actionChr_LoadEquipmentSet">
    <property name="text">
     <string>Load Equipment Set...</string>
    </property>
   </action>
-  <action name="actionLoad_Starting_Outfit">
+  <action name="actionChr_LoadStartingOutfit">
    <property name="text">
     <string>Load Starting Outfit...</string>
    </property>
   </action>
-  <action name="actionLoad_NPC_Outfit">
+  <action name="actionChr_LoadNPCOutfit">
    <property name="text">
     <string>Load NPC Outfit...</string>
    </property>
   </action>
-  <action name="actionGlowNone">
+  <action name="actionChr_GlowNone">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1473,7 +1471,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>No Eyeglow</string>
    </property>
   </action>
-  <action name="actionGlowDefault">
+  <action name="actionChr_GlowDefault">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1487,7 +1485,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>Default Eyeglow</string>
    </property>
   </action>
-  <action name="actionGlowDeathKnight">
+  <action name="actionChr_GlowDeathKnight">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1498,7 +1496,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>Death Knight Eyeglow</string>
    </property>
   </action>
-  <action name="actionShow_Underwear">
+  <action name="actionChr_ShowUnderwear">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1509,7 +1507,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>Show Underwear</string>
    </property>
   </action>
-  <action name="actionShow_Ears">
+  <action name="actionChr_ShowEars">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1519,11 +1517,8 @@ alternate-background-color: rgb(229, 228, 242);</string>
    <property name="text">
     <string>Show Ears</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+E</string>
-   </property>
   </action>
-  <action name="actionShow_Hair">
+  <action name="actionChr_ShowHair">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1533,11 +1528,8 @@ alternate-background-color: rgb(229, 228, 242);</string>
    <property name="text">
     <string>Show Hair</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+H</string>
-   </property>
   </action>
-  <action name="actionShow_Facial_Hair">
+  <action name="actionChr_ShowFacialHair">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1547,11 +1539,8 @@ alternate-background-color: rgb(229, 228, 242);</string>
    <property name="text">
     <string>Show Facial Hair</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+F</string>
-   </property>
   </action>
-  <action name="actionShow_Feet">
+  <action name="actionChr_ShowFeet">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1562,7 +1551,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>Show Feet</string>
    </property>
   </action>
-  <action name="actionSheath_Weapons">
+  <action name="actionChr_SheathWeapons">
    <property name="text">
     <string>Sheath Weapons</string>
    </property>
@@ -1570,7 +1559,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>Ctrl+Z</string>
    </property>
   </action>
-  <action name="actionLoad_a_Mount">
+  <action name="actionChr_LoadMount">
    <property name="text">
     <string>Load a Mount...</string>
    </property>
@@ -1634,7 +1623,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>Manage &amp;Favorites...</string>
    </property>
   </action>
-  <action name="actionSave_to_Favorites">
+  <action name="actionChr_SaveToFavorites">
    <property name="text">
     <string>Save to Favorites...</string>
    </property>
@@ -1679,12 +1668,12 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>Show Grid</string>
    </property>
   </action>
-  <action name="actionShow_Mask">
+  <action name="actionShowAlpha">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Mask</string>
+    <string>Show Alpha Channel</string>
    </property>
   </action>
   <action name="actionCam_Perspective">
@@ -1735,12 +1724,12 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>&amp;Model Camera</string>
    </property>
   </action>
-  <action name="actionSave_Masks">
+  <action name="actionLandscape_SaveAlphas">
    <property name="text">
-    <string>Save Masks...</string>
+    <string>Save Alphas...</string>
    </property>
   </action>
-  <action name="actionShow_Doodads_2">
+  <action name="actionSets_ShowDoodads">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -1761,12 +1750,12 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>&amp;Save Lighting...</string>
    </property>
   </action>
-  <action name="actionRender_Light_Objects">
+  <action name="actionLightsShowObjects">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>&amp;Render Light Objects</string>
+    <string>&amp;Show Light Objects</string>
    </property>
   </action>
   <action name="actionUse_True_Lighting">
@@ -1961,7 +1950,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>1920x1200, 8:5 Ratio</string>
    </property>
   </action>
-  <action name="actionModify_Enchants">
+  <action name="actionChr_ModifyEnchants">
    <property name="text">
     <string>Modify Enchants...</string>
    </property>
@@ -1981,7 +1970,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>&amp;Modify Enchants...</string>
    </property>
   </action>
-  <action name="action_List_of_Doodad_Sets">
+  <action name="actionSets__List_of_Doodad_Sets">
    <property name="text">
     <string>(List of Doodad Sets)</string>
    </property>
@@ -2015,7 +2004,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>&amp;Viewer Mode</string>
+    <string>C&amp;reation Mode</string>
    </property>
    <property name="toolTip">
     <string>Switch to the classic Viewer Mode</string>
@@ -2128,7 +2117,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>Manage Directories</string>
    </property>
   </action>
-  <action name="actionShow_Helmet">
+  <action name="actionChr_ShowHelmet">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -2138,11 +2127,8 @@ alternate-background-color: rgb(229, 228, 242);</string>
    <property name="text">
     <string>Show Helmet</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+L</string>
-   </property>
   </action>
-  <action name="actionShow_Cape">
+  <action name="actionChr_ShowCape">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -2169,7 +2155,7 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>About Plugins...</string>
    </property>
   </action>
-  <action name="actionSet_Character_Name">
+  <action name="actionChr_SetName">
    <property name="text">
     <string>Set Character Name...</string>
    </property>
@@ -2179,17 +2165,20 @@ alternate-background-color: rgb(229, 228, 242);</string>
     <string>Manage &amp;Favorites...</string>
    </property>
   </action>
-  <action name="action_Save_NPC">
+  <action name="actionNPC_Save">
    <property name="text">
     <string>&amp;Save NPC...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
-  <action name="action_Load_NPC">
+  <action name="actionNPC_Load">
    <property name="text">
     <string>&amp;Load NPC...</string>
    </property>
   </action>
-  <action name="actionSet_NPC_Name">
+  <action name="actionNPC_SetName">
    <property name="text">
     <string>Set NPC Name...</string>
    </property>
@@ -2207,6 +2196,33 @@ alternate-background-color: rgb(229, 228, 242);</string>
   <action name="actionSet_Landscape_Quality">
    <property name="text">
     <string>Set Landscape Quality...</string>
+   </property>
+  </action>
+  <action name="actionShow_Status_Bar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Status Bar</string>
+   </property>
+  </action>
+  <action name="actionFullscreen_Mode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Fullscreen Mode</string>
+   </property>
+  </action>
+  <action name="actionNPC_SaveToFavorites">
+   <property name="text">
+    <string>Save to Favorites...</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
    </property>
   </action>
  </widget>

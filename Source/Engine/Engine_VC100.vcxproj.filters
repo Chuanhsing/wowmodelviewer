@@ -19,12 +19,6 @@
     <ClCompile Include="wmv_engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MPQ.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WoWDirectoryTools.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="display_server.h">
@@ -60,13 +54,7 @@
     <ClInclude Include="lists.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MPQ.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="version.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WoWDirectoryTools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ModelViewerModel.h">

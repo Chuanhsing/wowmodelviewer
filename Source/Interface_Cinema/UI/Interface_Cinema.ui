@@ -64,7 +64,7 @@
     </property>
     <addaction name="actionHelp"/>
     <addaction name="separator"/>
-    <addaction name="actionUpdate_Program"/>
+    <addaction name="actionCheckForUpdates"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
     <addaction name="actionAbout_Plugins"/>
@@ -298,9 +298,9 @@
     <string>About...</string>
    </property>
   </action>
-  <action name="actionUpdate_Program">
+  <action name="actionCheckForUpdates">
    <property name="text">
-    <string>Update Program...</string>
+    <string>Check for &amp;Updates...</string>
    </property>
   </action>
   <action name="actionViewer">

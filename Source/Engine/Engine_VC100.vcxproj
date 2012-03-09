@@ -99,10 +99,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(QTDIR)\include\QtCore;$(QTDIR)\include;.\;$(QTDIR)\include\QtGui</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINDOWS;WIN32;_USRDLL;_DEBUG;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>
-      </MinimalRebuild>
+      <PreprocessorDefinitions>WINDOWS;_WINDOWS;WIN32;_WIN32;_DEBUG;_USRDLL;UNICODE;QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
       <CompileAs>CompileAsCpp</CompileAs>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -110,12 +112,12 @@
       <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir ..\$(OutDir)
-copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\StormLib.dll ..\$(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>copy ..\Stormlib\bin\StormLib_VC100\$(PlatformName)\$(ConfigurationName)AD\StormLibDAD.lib $(IntDir)
-</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -123,10 +125,12 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(QTDIR)\include;$(QTDIR)\include\QtCore;.\;$(QTDIR)\include\QtGui</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINDOWS;WIN32;_USRDLL;WIN64;_WIN64;_DEBUG;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>
-      </MinimalRebuild>
+      <PreprocessorDefinitions>WINDOWS;_WINDOWS;WIN32;_WIN32;_DEBUG;WIN64;_WIN64;_USRDLL;UNICODE;QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
       <CompileAs>CompileAsCpp</CompileAs>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -134,11 +138,12 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
       <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy ..\Stormlib\bin\StormLib_VC100\$(PlatformName)\$(ConfigurationName)AD\StormLibDAD.lib $(IntDir)</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>mkdir ..\$(OutDir)
-copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\StormLib.dll ..\$(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -148,10 +153,12 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>$(QTDIR)\include\QtCore;$(QTDIR)\include;.\;$(QTDIR)\include\QtGui</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINDOWS;WIN32;_USRDLL;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>
-      </MinimalRebuild>
+      <PreprocessorDefinitions>WINDOWS;_WINDOWS;WIN32;_WIN32;_USRDLL;UNICODE;QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
       <CompileAs>CompileAsCpp</CompileAs>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -161,12 +168,12 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
       <AdditionalDependencies>QtCore4.lib;QtGui4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir ..\$(OutDir)
-copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\StormLib.dll ..\$(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>copy ..\Stormlib\bin\StormLib_VC100\$(PlatformName)\$(ConfigurationName)AD\StormLibDAD.lib $(IntDir)
-</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -176,10 +183,12 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>$(QTDIR)\include\QtCore;$(QTDIR)\include;.\;$(QTDIR)\include\QtGui</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_WINDOWS;WIN32;_USRDLL;WIN64;_WIN64;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>
-      </MinimalRebuild>
+      <PreprocessorDefinitions>WINDOWS;_WINDOWS;WIN32;_WIN32;WIN64;_WIN64;_USRDLL;UNICODE;QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
       <CompileAs>CompileAsCpp</CompileAs>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -189,19 +198,17 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
       <AdditionalDependencies>QtCore4.lib;QtGui4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir ..\$(OutDir)
-copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\StormLib.dll ..\$(OutDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>copy ..\Stormlib\bin\StormLib_VC100\$(PlatformName)\$(ConfigurationName)AD\StormLibDAD.lib $(IntDir)
-</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MPQ.cpp" />
     <ClCompile Include="plugin.cpp" />
     <ClCompile Include="wmv_engine.cpp" />
-    <ClCompile Include="WoWDirectoryTools.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="classes.h" />
@@ -213,12 +220,10 @@ copy ..\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\Sto
     <ClInclude Include="model_exporter_header.h" />
     <ClInclude Include="model_exporter_server.h" />
     <ClInclude Include="kernel.h" />
-    <ClInclude Include="MPQ.h" />
     <ClInclude Include="plugin.h" />
     <ClInclude Include="version.h" />
     <ClInclude Include="video_exporter_server.h" />
     <ClInclude Include="wmv_engine.h" />
-    <ClInclude Include="WoWDirectoryTools.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Foundation\Foundation.vcxproj">

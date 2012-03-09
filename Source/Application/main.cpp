@@ -33,12 +33,11 @@ int main(int argc, char *argv[])
 	//TheKernel.loadPlugin(QString("%1oldrenderversion").arg(PLUGIN_PATH));	// Debugging, Old rendering plugin
 	//TheKernel.loadPlugin(QString("%1oldheaderversion").arg(PLUGIN_PATH));	// Debugging, Old Model Header Exporter plugin
 	//TheKernel.loadPlugin(QString("%1oldmvmversion").arg(PLUGIN_PATH));	// Debugging, Old Model Viewer Model Exporter plugin
-	WMVEngine::TheKernel.loadPlugin(QString("%1renderer_opengl").arg(PLUGIN_PATH));	// OpenGL Plugin
+	TheKernel.loadPlugin(QString("%1renderer_opengl").arg(PLUGIN_PATH));	// OpenGL Plugin
 
-	WMVEngine::TheKernel.TestText = "Main File Corrected!";
+	TheKernel.TestText = "Main File Corrected!";
 	
 	QLOG_INFO() << "Kernel Test Text:" << TheKernel.TestText;
-	QLOG_INFO() << "WMV::Kernel Test Text:" << WMVEngine::TheKernel.TestText;
 
 	QLOG_INFO() << "--== Post Plugin Loading Test ==--";
 	QLOG_INFO() << "Number of Display Drivers:" << TheKernel.getDisplayServer().getDisplayDriverCount();

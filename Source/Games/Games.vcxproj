@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MPQ_base.cpp" />
+    <ClCompile Include="WorldofWarcraft\DirectoryTools_WoW.cpp" />
+    <ClCompile Include="WorldofWarcraft\MPQ_WoW.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game_Classes.h" />
+    <ClInclude Include="ModelSource_enums.h" />
+    <ClInclude Include="MPQ_base.h" />
+    <ClInclude Include="MPQ_enums.h" />
+    <ClInclude Include="WorldofWarcraft\classes_WoW.h" />
+    <ClInclude Include="WorldofWarcraft\DirectoryTools_WoW.h" />
+    <ClInclude Include="WorldofWarcraft\enums_WoW.h" />
+    <ClInclude Include="WorldofWarcraft\FileReader_WoW.h" />
+    <ClInclude Include="WorldofWarcraft\lists_WoW.h" />
+    <ClInclude Include="WorldofWarcraft\Models\Model_ADT_v18.h" />
+    <ClInclude Include="WorldofWarcraft\Models\Model_M2_v00.h" />
+    <ClInclude Include="WorldofWarcraft\Models\Model_M2_v04.h" />
+    <ClInclude Include="WorldofWarcraft\Models\Model_M2_v08.h" />
+    <ClInclude Include="WorldofWarcraft\Models\Model_M2_v09.h" />
+    <ClInclude Include="WorldofWarcraft\Models\Model_M2_v10.h" />
+    <ClInclude Include="WorldofWarcraft\Models\Model_WMO_v17.h" />
+    <ClInclude Include="WorldofWarcraft\Model_ADT.h" />
+    <ClInclude Include="WorldofWarcraft\Model_M2.h" />
+    <ClInclude Include="WorldofWarcraft\Model_WMO.h" />
+    <ClInclude Include="WorldofWarcraft\MPQ_WoW.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{01F02FE7-97FA-4F8F-819F-AA7493843FC3}</ProjectGuid>
+    <Keyword>Qt4VSv1.0</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Games</TargetName>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Games</TargetName>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Games</TargetName>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Bin\$(Configuration)\$(PlatformArchitecture)_VC$(PlatformToolsetVersion)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Games</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WINDOWS;_WINDOWS;WIN32;_WIN32;_DEBUG;_USRDLL;UNICODE;QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)_$(PlatformName);$(QTDIR)\include\qtmain;$(QTDIR)\include\QtCore;.\;$(QTDIR)\include\QtGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+    <PreBuildEvent>
+      <Command>copy ..\Games\StormLib\bin\StormLib_VC100\$(PlatformName)\$(ConfigurationName)AD\StormLibDAD.lib $(IntDir)</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy ..\Games\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\StormLib.dll ..\$(OutDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)_$(PlatformName);$(QTDIR)\include\qtmain;$(QTDIR)\include\QtCore;.\;$(QTDIR)\include\QtGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <PreprocessorDefinitions>WINDOWS;_WINDOWS;WIN32;_WIN32;_DEBUG;WIN64;_WIN64;_USRDLL;UNICODE;QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+    <PreBuildEvent>
+      <Command>copy ..\Games\StormLib\bin\StormLib_VC100\$(PlatformName)\$(ConfigurationName)AD\StormLibDAD.lib $(IntDir)</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy ..\Games\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\StormLib.dll ..\$(OutDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WINDOWS;_WINDOWS;WIN32;_WIN32;_USRDLL;UNICODE;QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)_$(PlatformName);$(QTDIR)\include\qtmain;$(QTDIR)\include\QtCore;.\;$(QTDIR)\include\QtGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <MinimalRebuild>false</MinimalRebuild>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+    <PreBuildEvent>
+      <Command>copy ..\Games\StormLib\bin\StormLib_VC100\$(PlatformName)\$(ConfigurationName)AD\StormLibRAD.lib $(IntDir)</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy ..\Games\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\StormLib.dll ..\$(OutDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\GeneratedFiles;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)_$(PlatformName);$(QTDIR)\include\qtmain;$(QTDIR)\include\QtCore;.\;$(QTDIR)\include\QtGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <PreprocessorDefinitions>WINDOWS;_WINDOWS;WIN32;_WIN32;WIN64;_WIN64;_USRDLL;UNICODE;QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+    <PreBuildEvent>
+      <Command>copy ..\Games\StormLib\bin\StormLib_VC100\$(PlatformName)\$(ConfigurationName)AD\StormLibRAD.lib $(IntDir)</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy ..\Games\StormLib\bin\StormLib_dll_VC100\$(PlatformName)\$(ConfigurationName)\StormLib.dll ..\$(OutDir)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties UicDir=".\GeneratedFiles" MocDir=".\GeneratedFiles\$(ConfigurationName)_$(PlatformName)" MocOptions="" RccDir=".\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" QtVersion_x0020_x64="4.7.3-msvc2010-64" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

@@ -31,6 +31,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonWindows", "CommonWind
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Foundation", "Foundation\Foundation.vcxproj", "{583DCEED-978B-493D-B7F3-B54718C46EC3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Games", "Games\Games.vcxproj", "{01F02FE7-97FA-4F8F-819F-AA7493843FC3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{583DCEED-978B-493D-B7F3-B54718C46EC3} = {583DCEED-978B-493D-B7F3-B54718C46EC3}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -95,6 +100,14 @@ Global
 		{583DCEED-978B-493D-B7F3-B54718C46EC3}.Release|Win32.Build.0 = Release|Win32
 		{583DCEED-978B-493D-B7F3-B54718C46EC3}.Release|x64.ActiveCfg = Release|x64
 		{583DCEED-978B-493D-B7F3-B54718C46EC3}.Release|x64.Build.0 = Release|x64
+		{01F02FE7-97FA-4F8F-819F-AA7493843FC3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{01F02FE7-97FA-4F8F-819F-AA7493843FC3}.Debug|Win32.Build.0 = Debug|Win32
+		{01F02FE7-97FA-4F8F-819F-AA7493843FC3}.Debug|x64.ActiveCfg = Debug|x64
+		{01F02FE7-97FA-4F8F-819F-AA7493843FC3}.Debug|x64.Build.0 = Debug|x64
+		{01F02FE7-97FA-4F8F-819F-AA7493843FC3}.Release|Win32.ActiveCfg = Release|Win32
+		{01F02FE7-97FA-4F8F-819F-AA7493843FC3}.Release|Win32.Build.0 = Release|Win32
+		{01F02FE7-97FA-4F8F-819F-AA7493843FC3}.Release|x64.ActiveCfg = Release|x64
+		{01F02FE7-97FA-4F8F-819F-AA7493843FC3}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

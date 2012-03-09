@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="WorldofWarcraft">
+      <UniqueIdentifier>{b9ad990b-37fa-4826-ade7-d5583fbfaeec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WorldofWarcraft\ModelFormats">
+      <UniqueIdentifier>{d0ea6923-d084-4036-8e83-b0c5e75dcfa1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="WorldofWarcraft\classes_WoW.h">
+      <Filter>WorldofWarcraft</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\enums_WoW.h">
+      <Filter>WorldofWarcraft</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\FileReader_WoW.h">
+      <Filter>WorldofWarcraft</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\lists_WoW.h">
+      <Filter>WorldofWarcraft</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelSource_enums.h" />
+    <ClInclude Include="MPQ_enums.h" />
+    <ClInclude Include="WorldofWarcraft\MPQ_WoW.h">
+      <Filter>WorldofWarcraft</Filter>
+    </ClInclude>
+    <ClInclude Include="MPQ_base.h" />
+    <ClInclude Include="WorldofWarcraft\DirectoryTools_WoW.h">
+      <Filter>WorldofWarcraft</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_Classes.h" />
+    <ClInclude Include="WorldofWarcraft\Model_ADT.h">
+      <Filter>WorldofWarcraft</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\Model_M2.h">
+      <Filter>WorldofWarcraft</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\Model_WMO.h">
+      <Filter>WorldofWarcraft</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\Models\Model_ADT_v18.h">
+      <Filter>WorldofWarcraft\ModelFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\Models\Model_M2_v00.h">
+      <Filter>WorldofWarcraft\ModelFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\Models\Model_M2_v10.h">
+      <Filter>WorldofWarcraft\ModelFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\Models\Model_WMO_v17.h">
+      <Filter>WorldofWarcraft\ModelFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\Models\Model_M2_v04.h">
+      <Filter>WorldofWarcraft\ModelFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\Models\Model_M2_v08.h">
+      <Filter>WorldofWarcraft\ModelFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\Models\Model_M2_v09.h">
+      <Filter>WorldofWarcraft\ModelFormats</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WorldofWarcraft\MPQ_WoW.cpp">
+      <Filter>WorldofWarcraft</Filter>
+    </ClCompile>
+    <ClCompile Include="MPQ_base.cpp" />
+    <ClCompile Include="WorldofWarcraft\DirectoryTools_WoW.cpp">
+      <Filter>WorldofWarcraft</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

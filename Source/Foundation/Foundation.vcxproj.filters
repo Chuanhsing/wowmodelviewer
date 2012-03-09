@@ -7,10 +7,13 @@
     <Filter Include="Math">
       <UniqueIdentifier>{19b5c10e-ed4d-4d72-bccf-7a4f2d84192b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h</Extensions>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;cxx;c;def</Extensions>
       <ParseFiles>true</ParseFiles>
+    </Filter>
+    <Filter Include="Platforms">
+      <UniqueIdentifier>{9c7fe466-8b43-4c16-9caf-bf6d5a621ff8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -23,6 +26,7 @@
     <ClCompile Include="QsLog\QsLogDest.cpp">
       <Filter>QsLog</Filter>
     </ClCompile>
+    <ClCompile Include="Singleton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QsLog\QsDebugOutput.h">
@@ -50,5 +54,11 @@
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Platforms\PlatformDefine.h">
+      <Filter>Platforms</Filter>
+    </ClInclude>
+    <ClInclude Include="Platforms\Compilers.h">
+      <Filter>Platforms</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

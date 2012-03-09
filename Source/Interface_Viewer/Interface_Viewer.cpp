@@ -16,7 +16,7 @@ Interface_Viewer::Interface_Viewer(QWidget *parent) : QMainWindow(parent), ui(ne
 	QLOG_INFO() << "Interface Viewer test";
 
 	// Check and update settings...
-	WMVEngine::CheckSettings_Main();
+	CheckSettings_Main();
 
 	// Setup the UI
     ui->setupUi(this);
@@ -46,20 +46,21 @@ Interface_Viewer::Interface_Viewer(QWidget *parent) : QMainWindow(parent), ui(ne
     // Defaults
 	isWoWLoaded = false;
 	canReloadWoW = false;
-	WoWTypeNext = WOW_NOTLOADED;						// The next World of Warcraft type that will be loaded.
-    ViewerInterfaceType = VIEWER_INTERFACETYPE_NONE;	// Full list of viewer interface types in enums.h
+	WoWTypeNext = WOW_NOTLOADED;			// The next World of Warcraft type that will be loaded.
+    ViewerInterfaceType = FILETYPE_NONE;	// Full list of viewer interface types in enums.h
+	isNPC = false;
 
 	// Set the main Window's Title
 	// Passed arguments: ProgramName (WMV), MajorVersion (v0.8.0.0), BuildVersionName (Tofu) SystemVersion (Windows 64-bit), DebugVersion (" Debug" or "")
-	setWindowTitle(QString("%1 %2 \"%3\" %4%5 - Viewer Mode").arg(PROGRAMNAME,MAJORVERSION,BUILDVERSIONNAME,SYSTEMVERSION,DEBUGVERSION));
+	setWindowTitle(windowTitle().arg(PROGRAMNAME,MAJORVERSION,BUILDVERSIONNAME,SYSTEMVERSION,DEBUGVERSION));
 
     /* -= Groups =- */
     // Eye Glow
     EyeGlowGroup = new QActionGroup(this);
-    EyeGlowGroup->addAction(ui->actionGlowNone);
-    EyeGlowGroup->addAction(ui->actionGlowDefault);
-    EyeGlowGroup->addAction(ui->actionGlowDeathKnight);
-    ui->actionGlowDefault->setChecked(true);
+    EyeGlowGroup->addAction(ui->actionChr_GlowNone);
+    EyeGlowGroup->addAction(ui->actionChr_GlowDefault);
+    EyeGlowGroup->addAction(ui->actionChr_GlowDeathKnight);
+    ui->actionChr_GlowDefault->setChecked(true);
 
     // Canvas Sizes
     CanvasSizeGroup = new QActionGroup(this);
@@ -224,24 +225,26 @@ void Interface_Viewer::UpdateViewerMenu(){
 	}
 
 	// Broad Strokes
-	if (ViewerInterfaceType != VIEWER_INTERFACETYPE_NONE){
+	if (ViewerInterfaceType != FILETYPE_NONE){
 		ui->actionSave_File->setDisabled(false);
 	}
 	// If there are no WoW directories found...
+	/*
+	disabled until we can actually ADD some...
 	if (WoWDirGroup->children().count()<=0){
 		ui->actionLoad_World_of_Wacraft->setDisabled(true);
 	}
-
+	*/
     // Change Options and Insert Menus based on the File Type
-    if (ViewerInterfaceType == VIEWER_INTERFACETYPE_IMAGE){
+    if (ViewerInterfaceType == FILETYPE_IMAGE){
 		ui->actionSave_Screenshot->setDisabled(false);
 		ui->actionSave_Image_Sequence->setDisabled(false);
 		ui->actionExport_Textures->setDisabled(false);
 		ui->actionLoadSkybox->setDisabled(true);
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuImage->menuAction());
-	}else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_SOUND){
+	}else if (ViewerInterfaceType == FILETYPE_SOUND){
 		ui->actionLoadSkybox->setDisabled(true);
-    }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_LANDSCAPE){
+    }else if (ViewerInterfaceType == FILETYPE_LANDSCAPE){
 		ui->menuLighting->setDisabled(false);
 		ui->menuCamera->setDisabled(false);
 		ui->menuExport_Models->setDisabled(false);
@@ -249,7 +252,7 @@ void Interface_Viewer::UpdateViewerMenu(){
 		ui->actionSave_Image_Sequence->setDisabled(false);
 		ui->actionExport_Textures->setDisabled(false);
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuLandscape->menuAction());
-    }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_SET){
+    }else if (ViewerInterfaceType == FILETYPE_SET){
 		ui->menuLighting->setDisabled(false);
 		ui->menuCamera->setDisabled(false);
 		ui->menuExport_Models->setDisabled(false);
@@ -257,14 +260,14 @@ void Interface_Viewer::UpdateViewerMenu(){
 		ui->actionSave_Image_Sequence->setDisabled(false);
 		ui->actionExport_Textures->setDisabled(false);
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuSets->menuAction());
-	}else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_ITEM){
+	}else if (ViewerInterfaceType == FILETYPE_MODEL_STATIC){
 		ui->menuLighting->setDisabled(false);
 		ui->menuCamera->setDisabled(false);
 		ui->menuExport_Models->setDisabled(false);
 		ui->actionSave_Screenshot->setDisabled(false);
 		ui->actionSave_Image_Sequence->setDisabled(false);
 		ui->actionExport_Textures->setDisabled(false);
-    }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_CREATURE){
+    }else if ((ViewerInterfaceType == FILETYPE_MODEL)&&(isNPC == true)){
 		ui->menuLighting->setDisabled(false);
 		ui->menuCamera->setDisabled(false);
 		ui->menuExport_Models->setDisabled(false);
@@ -272,7 +275,7 @@ void Interface_Viewer::UpdateViewerMenu(){
 		ui->actionSave_Image_Sequence->setDisabled(false);
 		ui->actionExport_Textures->setDisabled(false);
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuNPC->menuAction());
-    }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_CHARACTER){
+    }else if ((ViewerInterfaceType == FILETYPE_MODEL)&&(isNPC == false)){
 		ui->menuLighting->setDisabled(false);
 		ui->menuCamera->setDisabled(false);
 		ui->menuExport_Models->setDisabled(false);
@@ -280,7 +283,7 @@ void Interface_Viewer::UpdateViewerMenu(){
 		ui->actionSave_Image_Sequence->setDisabled(false);
 		ui->actionExport_Textures->setDisabled(false);
         menuBar()->insertAction(ui->menuLighting->menuAction(),ui->menuCharacter->menuAction());
-    }else if (ViewerInterfaceType == VIEWER_INTERFACETYPE_NONE){
+    }else if (ViewerInterfaceType == FILETYPE_NONE){
     }
 
 	// Clear and Add back all the WoW Directories...
@@ -428,13 +431,12 @@ void Interface_Viewer::on_actionView_Log_triggered()
 	openProgram->start("notepad.exe \""+file+"\"",QIODevice::ReadOnly);
 	QLOG_INFO() << "Opening Notepad to load" << file;
 #elif defined (_MAC)
-	// Mac will open the file using TextEdit
+	// Mac will open the file using TextEdit.
 	openProgram->start("/Applications/TextEdit.app/Contents/MacOS/TextEdit \""+file+"\"",QIODevice::ReadOnly);
 	QLOG_INFO() << "Opening TextEdit to load" << file;
 #elif defined (_LINUX)
-	// Linux might require some more juggling, depending on several factors, some of which are defined in the constants.h file.
-	prog = LINUX_TXT_VIEWER;
-	openProgram->start(LINUX_TXT_VIEWER+" \""+file+"\"",QIODevice::ReadOnly);
+	// Linux will use the more command to view the log file.
+	openProgram->start("more \""+file+"\"",QIODevice::ReadOnly);
 	QLOG_INFO() << "Opening" << static_cast<const char*>(LINUX_TXT_VIEWER) << "to load" << file;
 #endif
 
@@ -513,8 +515,8 @@ void Interface_Viewer::on_actionMode_Cinema_triggered(){
 // Open WoW Directory Manager
 void Interface_Viewer::on_actionManage_Directories_triggered()
 {
-	WoWDirectoryManager.init();
-	WoWDirectoryManager.show();
+	GameDirectoryManager.init();
+	GameDirectoryManager.show();
 }
 
 // Open About Window
@@ -534,48 +536,50 @@ void Interface_Viewer::on_actionAbout_Plugins_triggered()
 // Functions for the temporary radio buttons on the main window.
 void Interface_Viewer::on_rBtn_NoModel_clicked()
 {
-    ViewerInterfaceType = VIEWER_INTERFACETYPE_NONE;
+    ViewerInterfaceType = FILETYPE_NONE;
     UpdateViewerMenu();
 }
 
 void Interface_Viewer::on_rBtn_IsChar_clicked()
 {
-    ViewerInterfaceType = VIEWER_INTERFACETYPE_CHARACTER;
+    ViewerInterfaceType = FILETYPE_MODEL;
+	isNPC = false;
     UpdateViewerMenu();
 }
 
 void Interface_Viewer::on_rBtn_IsNPC_clicked()
 {
-    ViewerInterfaceType = VIEWER_INTERFACETYPE_CREATURE;
+    ViewerInterfaceType = FILETYPE_MODEL;
+	isNPC = true;
     UpdateViewerMenu();
 }
 
 void Interface_Viewer::on_rBtn_IsWMO_clicked()
 {
-    ViewerInterfaceType = VIEWER_INTERFACETYPE_SET;
+    ViewerInterfaceType = FILETYPE_SET;
     UpdateViewerMenu();
 }
 
 void Interface_Viewer::on_rBtn_IsADT_clicked()
 {
-    ViewerInterfaceType = VIEWER_INTERFACETYPE_LANDSCAPE;
+    ViewerInterfaceType = FILETYPE_LANDSCAPE;
     UpdateViewerMenu();
 }
 
 void Interface_Viewer::on_rBtn_IsTexture_clicked()
 {
-    ViewerInterfaceType = VIEWER_INTERFACETYPE_IMAGE;
+    ViewerInterfaceType = FILETYPE_IMAGE;
     UpdateViewerMenu();
 }
 
 void Interface_Viewer::on_rBtn_IsItem_clicked()
 {
-    ViewerInterfaceType = VIEWER_INTERFACETYPE_ITEM;
+    ViewerInterfaceType = FILETYPE_MODEL_STATIC;
     UpdateViewerMenu();
 }
 
 void Interface_Viewer::on_rBtn_IsSound_clicked()
 {
-    ViewerInterfaceType = VIEWER_INTERFACETYPE_SOUND;
+    ViewerInterfaceType = FILETYPE_SOUND;
     UpdateViewerMenu();
 }

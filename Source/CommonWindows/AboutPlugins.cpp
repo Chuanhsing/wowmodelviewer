@@ -42,11 +42,10 @@ void WindowAboutPlugins::UpdateList()
 	QLOG_INFO() << "Updating Plugin List...";
 
 	QLOG_INFO() << "Kernel Test Text:" << TheKernel.TestText;
-	QLOG_INFO() << "WMV::Kernel Test Text:" << WMVEngine::TheKernel.TestText;
 
-	DisplayServer ds = WMVEngine::TheKernel.getDisplayServer();
-	ModelExporterServer mes = WMVEngine::TheKernel.getModelExporterServer();
-	VideoExporterServer ves = WMVEngine::TheKernel.getVideoExporterServer();
+	DisplayServer ds = TheKernel.getDisplayServer();
+	ModelExporterServer mes = TheKernel.getModelExporterServer();
+	VideoExporterServer ves = TheKernel.getVideoExporterServer();
 
 	size_t totalcount = 0;
 	int dc = ds.getDisplayDriverCount();
