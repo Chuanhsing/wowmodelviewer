@@ -31,15 +31,6 @@
       <Filter>WorldofWarcraft</Filter>
     </ClInclude>
     <ClInclude Include="Game_Classes.h" />
-    <ClInclude Include="WorldofWarcraft\Model_ADT.h">
-      <Filter>WorldofWarcraft</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldofWarcraft\Model_M2.h">
-      <Filter>WorldofWarcraft</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldofWarcraft\Model_WMO.h">
-      <Filter>WorldofWarcraft</Filter>
-    </ClInclude>
     <ClInclude Include="WorldofWarcraft\Models\Model_ADT_v18.h">
       <Filter>WorldofWarcraft\ModelFormats</Filter>
     </ClInclude>
@@ -59,6 +50,15 @@
       <Filter>WorldofWarcraft\ModelFormats</Filter>
     </ClInclude>
     <ClInclude Include="WorldofWarcraft\Models\Model_M2_v09.h">
+      <Filter>WorldofWarcraft\ModelFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\Models\Model_ADT.h">
+      <Filter>WorldofWarcraft\ModelFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\Models\Model_M2.h">
+      <Filter>WorldofWarcraft\ModelFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldofWarcraft\Models\Model_WMO.h">
       <Filter>WorldofWarcraft\ModelFormats</Filter>
     </ClInclude>
   </ItemGroup>

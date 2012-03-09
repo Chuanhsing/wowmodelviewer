@@ -33,16 +33,16 @@
     <ClInclude Include="WorldofWarcraft\enums_WoW.h" />
     <ClInclude Include="WorldofWarcraft\FileReader_WoW.h" />
     <ClInclude Include="WorldofWarcraft\lists_WoW.h" />
+    <ClInclude Include="WorldofWarcraft\Models\Model_ADT.h" />
     <ClInclude Include="WorldofWarcraft\Models\Model_ADT_v18.h" />
+    <ClInclude Include="WorldofWarcraft\Models\Model_M2.h" />
     <ClInclude Include="WorldofWarcraft\Models\Model_M2_v00.h" />
     <ClInclude Include="WorldofWarcraft\Models\Model_M2_v04.h" />
     <ClInclude Include="WorldofWarcraft\Models\Model_M2_v08.h" />
     <ClInclude Include="WorldofWarcraft\Models\Model_M2_v09.h" />
     <ClInclude Include="WorldofWarcraft\Models\Model_M2_v10.h" />
+    <ClInclude Include="WorldofWarcraft\Models\Model_WMO.h" />
     <ClInclude Include="WorldofWarcraft\Models\Model_WMO_v17.h" />
-    <ClInclude Include="WorldofWarcraft\Model_ADT.h" />
-    <ClInclude Include="WorldofWarcraft\Model_M2.h" />
-    <ClInclude Include="WorldofWarcraft\Model_WMO.h" />
     <ClInclude Include="WorldofWarcraft\MPQ_WoW.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
