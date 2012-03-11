@@ -2393,9 +2393,14 @@ void CharControl::OnUpdateItem(int type, int id)
 		labels[choosingSlot]->SetLabel(CSConv(items.getById(cd.equipment[choosingSlot]).name));
 		labels[choosingSlot]->SetForegroundColour(ItemQualityColour(items.getById(cd.equipment[choosingSlot]).quality));
 
-		// Check if its a 'guild tabard [5976]'
-		if (choosingSlot == CS_TABARD) 
-			td.showCustom = labels[choosingSlot]->GetLabel().Contains(wxT("[5976]"));
+		// Check if it's one of the guild tabards (5976, 69209, or 69210)
+		if (choosingSlot == CS_TABARD) {
+			wxString label = labels[choosingSlot]->GetLabel();
+			bool isGTabard = false;
+			if (label.Contains(wxT("[5976]"))||label.Contains(wxT("[69209]"))||label.Contains(wxT("[69210]")))
+				isGTabard = true;
+			td.showCustom = isGTabard;
+		}
 
 		break;
 
@@ -2767,8 +2772,8 @@ void CharDetails::save(wxString fn, TabardDetails *td)
 		f << equipment[i] << endl;
 	}
 
-	// 5976 is the ID value for "Guild Tabard"
-	if (equipment[CS_TABARD] == 5976) {
+	// 5976 is the ID value for the Guild Tabard, 69209 for the Illustrious Guild Tabard, and 69210 for the Renowned Guild Tabard
+	if ((equipment[CS_TABARD] == 5976) || (equipment[CS_TABARD] == 69209) || (equipment[CS_TABARD] == 69210)) {
 		f << td->Background << wxT(" ") << td->Border << wxT(" ") << td->BorderColor << wxT(" ") << td->Icon << wxT(" ") << td->IconColor << endl;
 	}
 	output.Close();
@@ -2808,8 +2813,8 @@ bool CharDetails::load(wxString fn, TabardDetails *td)
 			equipment[i] = tmp;
 	}
 
-	// 5976 is the ID value for "Guild Tabard"
-	if (equipment[CS_TABARD] == 5976 && !input.Eof()) {
+	// 5976 is the ID value for the Guild Tabard, 69209 for the Illustrious Guild Tabard, and 69210 for the Renowned Guild Tabard
+	if (((equipment[CS_TABARD] == 5976) || (equipment[CS_TABARD] == 69209) || (equipment[CS_TABARD] == 69210)) && !input.Eof()) {
 		f >> td->Background >> td->Border >> td->BorderColor >> td->Icon >> td->IconColor;
 		td->showCustom = true;
 	}

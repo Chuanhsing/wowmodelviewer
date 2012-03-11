@@ -2238,8 +2238,8 @@ void ModelViewer::SaveChar(wxString fn)
 		f << charControl->cd.equipment[i] << endl;
 	}
 
-	// 5976 is the ID value for "Guild Tabard"
-	if (charControl->cd.equipment[CS_TABARD] == 5976) {
+	// 5976 is the ID value for the Guild Tabard, 69209 for the Illustrious Guild Tabard, and 69210 for the Renowned Guild Tabard
+	if ((charControl->cd.equipment[CS_TABARD] == 5976) || (charControl->cd.equipment[CS_TABARD] == 69209) || (charControl->cd.equipment[CS_TABARD] == 69210)) {
 		f << charControl->td.Background << " " << charControl->td.Border << " " << charControl->td.BorderColor << " " << charControl->td.Icon << " " << charControl->td.IconColor << endl;
 	}
 
@@ -2293,8 +2293,8 @@ void ModelViewer::LoadChar(wxString fn)
 		break;
 	}
 
-	// 5976 is the ID value for "Guild Tabard"
-	if (charControl->cd.equipment[CS_TABARD] == 5976 && !f.eof()) {
+	// 5976 is the ID value for the Guild Tabard, 69209 for the Illustrious Guild Tabard, and 69210 for the Renowned Guild Tabard
+	if (((charControl->cd.equipment[CS_TABARD] == 5976) || (charControl->cd.equipment[CS_TABARD] == 69209) || (charControl->cd.equipment[CS_TABARD] == 69210)) && !f.eof()) {
 		f >> charControl->td.Background >> charControl->td.Border >> charControl->td.BorderColor >> charControl->td.Icon >> charControl->td.IconColor;
 		charControl->td.showCustom = true;
 	}
