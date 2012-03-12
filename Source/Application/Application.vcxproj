@@ -82,9 +82,9 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(IntDir);..\Engine\$(IntDir);..\Interface_Viewer\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(IntDir);..\Foundation\$(IntDir);..\Engine\$(IntDir);..\Games\$(IntDir);..\CommonWindows\$(IntDir);..\Interface_Viewer\$(IntDir);..\Interface_Cinema\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;Interface_Viewer.lib;qtmaind.lib;QtCored4.lib;QtGuid4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;CommonWindows.lib;Interface_Viewer.lib;Interface_Cinema.lib;Foundation.lib;Games.lib;qtmaind.lib;QtCored4.lib;QtGuid4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>mkdir ..\$(OutDir)
@@ -108,9 +108,9 @@ copy $(QTDIR)\bin\QtGuid4.dll ..\$(OutDir)</Command>
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(IntDir);..\Engine\$(IntDir);..\Interface_Viewer\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(IntDir);..\Foundation\$(IntDir);..\Engine\$(IntDir);..\Games\$(IntDir);..\CommonWindows\$(IntDir);..\Interface_Viewer\$(IntDir);..\Interface_Cinema\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;Interface_Viewer.lib;qtmaind.lib;QtCored4.lib;QtGuid4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;CommonWindows.lib;Interface_Viewer.lib;Interface_Cinema.lib;Foundation.lib;Games.lib;qtmaind.lib;QtCored4.lib;QtGuid4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>mkdir ..\$(OutDir)
@@ -134,9 +134,9 @@ copy $(QTDIR)\bin\QtGuid4.dll ..\$(OutDir)</Command>
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(IntDir);..\Engine\$(IntDir);..\Interface_Viewer\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(IntDir);..\Foundation\$(IntDir);..\Engine\$(IntDir);..\Games\$(IntDir);..\CommonWindows\$(IntDir);..\Interface_Viewer\$(IntDir);..\Interface_Cinema\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;Interface_Viewer.lib;qtmain.lib;QtCore4.lib;QtGui4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;CommonWindows.lib;Interface_Viewer.lib;Interface_Cinema.lib;Foundation.lib;Games.lib;qtmain.lib;QtCore4.lib;QtGui4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>mkdir ..\$(OutDir)
@@ -160,9 +160,9 @@ copy $(QTDIR)\bin\QtGui4.dll ..\$(OutDir)</Command>
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(IntDir);..\Engine\$(IntDir);..\Interface_Viewer\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(IntDir);..\Foundation\$(IntDir);..\Engine\$(IntDir);..\Games\$(IntDir);..\CommonWindows\$(IntDir);..\Interface_Viewer\$(IntDir);..\Interface_Cinema\$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;Interface_Viewer.lib;qtmain.lib;QtCore4.lib;QtGui4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;CommonWindows.lib;Interface_Viewer.lib;Interface_Cinema.lib;Foundation.lib;Games.lib;qtmain.lib;QtCore4.lib;QtGui4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>mkdir ..\$(OutDir)

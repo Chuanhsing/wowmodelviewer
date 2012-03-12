@@ -17,7 +17,7 @@ enum GameSourceID{
 	GAME_STARWARSTHEOLDREPUBLIC
 	
 	*/
-}
+};
 
 enum ModelSource{
 	NOMODELSOURCE = 0,				// No Model source will declare the model invalid.

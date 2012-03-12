@@ -1,23 +1,32 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
 
+#include <QMutex>
+#include <QAtomicPointer>
+
+namespace WMVEngine
+{
+
 template<typename T>
 class Singleton
 {
-public:
-	static T& getInstance();
-	~Singleton();
+private:
+	static QMutex mutex;
 
-protected:
-	Singleton() {};
+public:
+	static T* getInstance();
 
 private:
-	// Protexted functions
+	// Protected functions
+	Singleton();
+	static void DestroySingleton();
 	Singleton(const Singleton&);
 	Singleton& operator=(const Singleton&);
 
 	// Data
-	static T* pInstance;
+	static QAtomicPointer<T>* pInstance;
 };
+
+}	// Namespace
 
 #endif

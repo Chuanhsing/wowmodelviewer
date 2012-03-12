@@ -7,7 +7,7 @@
 namespace WMVEngine {
 /*
 
-Currently causes an inaccessability error when compiling.
+Currently causes an inaccessibility error when compiling.
 
 class InterfaceController{
 	public:

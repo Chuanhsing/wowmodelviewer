@@ -7,6 +7,7 @@
 #include <QMap>
 
 // Primary Includes
+#include "../Foundation/Singleton.h"
 #include "wmv_engine.h"
 #include "version.h"
 
@@ -53,7 +54,7 @@ class Kernel{
 		VideoExporterServer		m_VideoExporterServer;		// Video Exporter Server
 };
 
-static Kernel TheKernel;
+#define TheKernel Singleton<Kernel>::getInstance()
 
 }	// End Namespace
 

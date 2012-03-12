@@ -29,18 +29,18 @@ int main(int argc, char *argv[])
 
 	// Scan for, and attempt to add any plugins...
 	// hacked for now, just attempt the OpenGL plugin...
-	//TheKernel.loadPlugin(QString("%1notaplugin").arg(PLUGIN_PATH));		// Debugging, Not a plugin
-	//TheKernel.loadPlugin(QString("%1oldrenderversion").arg(PLUGIN_PATH));	// Debugging, Old rendering plugin
-	//TheKernel.loadPlugin(QString("%1oldheaderversion").arg(PLUGIN_PATH));	// Debugging, Old Model Header Exporter plugin
-	//TheKernel.loadPlugin(QString("%1oldmvmversion").arg(PLUGIN_PATH));	// Debugging, Old Model Viewer Model Exporter plugin
-	TheKernel.loadPlugin(QString("%1renderer_opengl").arg(PLUGIN_PATH));	// OpenGL Plugin
+	//TheKernel->loadPlugin(QString("%1notaplugin").arg(PLUGIN_PATH));		// Debugging, Not a plugin
+	//TheKernel->loadPlugin(QString("%1oldrenderversion").arg(PLUGIN_PATH));	// Debugging, Old rendering plugin
+	//TheKernel->loadPlugin(QString("%1oldheaderversion").arg(PLUGIN_PATH));	// Debugging, Old Model Header Exporter plugin
+	//TheKernel->loadPlugin(QString("%1oldmvmversion").arg(PLUGIN_PATH));	// Debugging, Old Model Viewer Model Exporter plugin
+	TheKernel->loadPlugin(QString("%1renderer_opengl").arg(PLUGIN_PATH));	// OpenGL Plugin
 
-	TheKernel.TestText = "Main File Corrected!";
+	TheKernel->TestText = "Main File Corrected!";
 	
-	QLOG_INFO() << "Kernel Test Text:" << TheKernel.TestText;
+	QLOG_INFO() << "Kernel Test Text:" << TheKernel->TestText;
 
 	QLOG_INFO() << "--== Post Plugin Loading Test ==--";
-	QLOG_INFO() << "Number of Display Drivers:" << TheKernel.getDisplayServer().getDisplayDriverCount();
+	QLOG_INFO() << "Number of Display Drivers:" << TheKernel->getDisplayServer().getDisplayDriverCount();
 	QLOG_INFO() << "--== End Post Plugin Loading Test ==--";
 
 	// The interfaces.
