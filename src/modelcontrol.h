@@ -41,6 +41,7 @@ class ModelControl: public wxWindow
 	wxStaticText *lblGeosets, *lblLod, *lblScale, *lblAlpha, *lblXYZ, *rotXYZ;
 	wxTextCtrl *txtX, *txtY, *txtZ;
 	wxTextCtrl *rotX, *rotY, *rotZ;
+	wxTextCtrl *txtsize;
 
 	// List of models in the scene.
 	//std::vector<Model*> models;

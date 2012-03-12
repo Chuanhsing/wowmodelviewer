@@ -23,6 +23,7 @@ BEGIN_EVENT_TABLE(ModelControl, wxWindow)
 
 	EVT_COMMAND_SCROLL(ID_MODEL_ALPHA, ModelControl::OnSlider)
 	EVT_COMMAND_SCROLL(ID_MODEL_SCALE, ModelControl::OnSlider)
+	EVT_TEXT_ENTER(ID_MODEL_SIZE, ModelControl::OnEnter)
 
 	EVT_TEXT_ENTER(ID_MODEL_X, ModelControl::OnEnter)
 	EVT_TEXT_ENTER(ID_MODEL_Y, ModelControl::OnEnter)
@@ -70,25 +71,26 @@ ModelControl::ModelControl(wxWindow* parent, wxWindowID id)
 		
 		lblScale = new wxStaticText(this, wxID_ANY, wxT("Scale"), wxPoint(5,90), wxDefaultSize);
 		scale = new wxSlider(this, ID_MODEL_SCALE, 100, 10, 300, wxPoint(45, 90), wxSize(110, 30), wxSL_HORIZONTAL);
+		txtsize = new wxTextCtrl(this, ID_MODEL_SIZE, wxT("1.0"), wxPoint(30, 115), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
 
-		bones = new wxCheckBox(this, ID_MODEL_BONES, wxT("Bones"), wxPoint(5, 115), wxDefaultSize);
-		box = new wxCheckBox(this, ID_MODEL_BOUNDS, wxT("Bounds"), wxPoint(5, 135), wxDefaultSize);
-		render = new wxCheckBox(this, ID_MODEL_RENDER, wxT("Render"), wxPoint(5, 155), wxDefaultSize);
-		wireframe = new wxCheckBox(this, ID_MODEL_WIREFRAME, wxT("Wireframe"), wxPoint(75, 115), wxDefaultSize);
-		texture = new wxCheckBox(this, ID_MODEL_TEXTURE, wxT("Texture"), wxPoint(75, 135), wxDefaultSize);
-		particles = new wxCheckBox(this, ID_MODEL_PARTICLES, wxT("Particles"), wxPoint(75, 155), wxDefaultSize);
+		bones = new wxCheckBox(this, ID_MODEL_BONES, wxT("Bones"), wxPoint(5, 140), wxDefaultSize);
+		box = new wxCheckBox(this, ID_MODEL_BOUNDS, wxT("Bounds"), wxPoint(5, 160), wxDefaultSize);
+		render = new wxCheckBox(this, ID_MODEL_RENDER, wxT("Render"), wxPoint(5, 180), wxDefaultSize);
+		wireframe = new wxCheckBox(this, ID_MODEL_WIREFRAME, wxT("Wireframe"), wxPoint(75, 140), wxDefaultSize);
+		texture = new wxCheckBox(this, ID_MODEL_TEXTURE, wxT("Texture"), wxPoint(75, 160), wxDefaultSize);
+		particles = new wxCheckBox(this, ID_MODEL_PARTICLES, wxT("Particles"), wxPoint(75, 180), wxDefaultSize);
 
-		lblGeosets = new wxStaticText(this, wxID_ANY, wxT("Show Geosets"), wxPoint(5,175), wxDefaultSize);
-		clbGeosets = new wxCheckListBox(this, ID_MODEL_GEOSETS, wxPoint(5, 190), wxSize(150,120), 0, NULL, 0, wxDefaultValidator, wxT("GeosetsList"));
+		lblGeosets = new wxStaticText(this, wxID_ANY, wxT("Show Geosets"), wxPoint(5,200), wxDefaultSize);
+		clbGeosets = new wxCheckListBox(this, ID_MODEL_GEOSETS, wxPoint(5, 215), wxSize(150,120), 0, NULL, 0, wxDefaultValidator, wxT("GeosetsList"));
 		
-		lblXYZ = new wxStaticText(this, wxID_ANY, wxT("X\nY\nZ"), wxPoint(2,320), wxSize(30,60));
-		txtX = new wxTextCtrl(this, ID_MODEL_X, wxT("0.0"), wxPoint(30,320), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
-		txtY = new wxTextCtrl(this, ID_MODEL_Y, wxT("0.0"), wxPoint(30,340), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
-		txtZ = new wxTextCtrl(this, ID_MODEL_Z, wxT("0.0"), wxPoint(30,360), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
-		rotXYZ = new wxStaticText(this, wxID_ANY, wxT("rX\nrY\nrZ"), wxPoint(2,380), wxSize(30,60));
-		rotX = new wxTextCtrl(this, ID_MODEL_ROT_X, wxT("0.0"), wxPoint(30,380), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
-		rotY = new wxTextCtrl(this, ID_MODEL_ROT_Y, wxT("0.0"), wxPoint(30,400), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
-		rotZ = new wxTextCtrl(this, ID_MODEL_ROT_Z, wxT("0.0"), wxPoint(30,420), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		lblXYZ = new wxStaticText(this, wxID_ANY, wxT("X\nY\nZ"), wxPoint(2,345), wxSize(30,60));
+		txtX = new wxTextCtrl(this, ID_MODEL_X, wxT("0.0"), wxPoint(30,345), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		txtY = new wxTextCtrl(this, ID_MODEL_Y, wxT("0.0"), wxPoint(30,365), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		txtZ = new wxTextCtrl(this, ID_MODEL_Z, wxT("0.0"), wxPoint(30,385), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		rotXYZ = new wxStaticText(this, wxID_ANY, wxT("rX\nrY\nrZ"), wxPoint(2,405), wxSize(30,60));
+		rotX = new wxTextCtrl(this, ID_MODEL_ROT_X, wxT("0.0"), wxPoint(30,405), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		rotY = new wxTextCtrl(this, ID_MODEL_ROT_Y, wxT("0.0"), wxPoint(30,425), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
+		rotZ = new wxTextCtrl(this, ID_MODEL_ROT_Z, wxT("0.0"), wxPoint(30,445), wxDefaultSize, wxTE_PROCESS_ENTER, wxDefaultValidator);
 	} catch(...) {};
 }
 
@@ -111,6 +113,7 @@ ModelControl::~ModelControl()
 	rotX->Destroy();
 	rotY->Destroy();
 	rotZ->Destroy();
+	txtsize->Destroy();
 }
 
 // Iterates through all the models counting and creating a list
@@ -125,6 +128,7 @@ void ModelControl::RefreshModel(Attachment *root)
 			attachments.push_back(root);
 			if (!init)
 				UpdateModel(root);
+			wxLogMessage("ModelControl Refresh: Adding Model...");
 		}
 		
 		for (std::vector<Attachment *>::iterator it=root->children.begin(); it!=root->children.end(); ++it) {
@@ -134,6 +138,7 @@ void ModelControl::RefreshModel(Attachment *root)
 				attachments.push_back((*it));
 				if (!init)
 					UpdateModel((*it));
+				wxLogMessage("ModelControl Refresh: Adding Attachment Level 1...");
 			}
 
 			for (std::vector<Attachment *>::iterator it2=(*it)->children.begin(); it2!=(*it)->children.end(); ++it2) {
@@ -143,6 +148,7 @@ void ModelControl::RefreshModel(Attachment *root)
 					attachments.push_back((*it2));
 					if (!init)
 						UpdateModel((*it2));
+					wxLogMessage("ModelControl Refresh: Adding Attachment Level 2...");
 				}
 
 				for (std::vector<Attachment *>::iterator it3=(*it2)->children.begin(); it3!=(*it2)->children.end(); ++it3) {
@@ -152,6 +158,7 @@ void ModelControl::RefreshModel(Attachment *root)
 						attachments.push_back((*it3));
 						if (!init)
 							UpdateModel((*it3));
+						wxLogMessage("ModelControl Refresh: Adding Attachment Level 3...");
 					}
 				}
 			}
@@ -167,6 +174,7 @@ void ModelControl::RefreshModel(Attachment *root)
 				modelname->Append(tmp.AfterLast(MPQ_SLASH));
 			}
 		}
+		wxLogMessage("ModelControl Refresh: Found %i Models...",attachments.size());
 
 		if (modelname->GetCount() > 0)
 			modelname->SetSelection(0);
@@ -250,7 +258,7 @@ void ModelControl::Update()
 	texture->SetValue(model->showTexture);
 
 	alpha->SetValue(int(model->alpha * 100));
-	scale->SetValue(100);
+	scale->SetValue(att->scale*100);
 
 	txtX->SetValue(wxString::Format(wxT("%f"), model->pos.x));
 	txtY->SetValue(wxString::Format(wxT("%f"), model->pos.y));
@@ -258,6 +266,7 @@ void ModelControl::Update()
 	rotX->SetValue(wxString::Format(wxT("%f"), model->rot.x));
 	rotY->SetValue(wxString::Format(wxT("%f"), model->rot.y));
 	rotZ->SetValue(wxString::Format(wxT("%f"), model->rot.z));
+	txtsize->SetValue(wxString::Format(wxT("%f"), att->scale));
 }
 
 void ModelControl::OnCheck(wxCommandEvent &event)
@@ -350,6 +359,7 @@ void ModelControl::OnSlider(wxScrollEvent &event)
 		model->alpha = event.GetInt() / 100.0f;
 	} else if (id == ID_MODEL_SCALE) {
 		att->scale = event.GetInt() / 100.0f;
+		txtsize->SetValue(wxString::Format(wxT("%f"), att->scale));
 	}
 }
 
@@ -365,6 +375,10 @@ void ModelControl::OnEnter(wxCommandEvent &event)
 	model->rot.x = wxAtof(rotX->GetValue());
 	model->rot.y = wxAtof(rotY->GetValue());
 	model->rot.z = wxAtof(rotZ->GetValue());
+	att->scale = wxAtof(txtsize->GetValue());
+	if (event.GetId() == ID_MODEL_SIZE){
+		scale->SetValue(wxAtoi(txtsize->GetValue())*100);
+	}
 }
 
 /**************************************************************************
