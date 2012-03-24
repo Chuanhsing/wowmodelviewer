@@ -55,7 +55,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 		STIL	// 2 bytes, size of string, followed by image name.extention
 		FLAG	// Flags. 2 bytes, size of chunk. Not sure what the flag values are.
 		AMOD	// 2 bytes: What's changed, 2 bytes: value. 2-Alphas: 0-Enabled, 1-Disabled, 2-Alpha Only. AMOD is omitted if value is 0.
-	XREF	// Calls an instance of a CLIP. We'll avoid this for now.
+		XREF	// Calls an instance of a CLIP. We'll avoid this for now.
 
 	SURF	// Starts the surface's data. Not sure about the 4 bytes after it...
 		// Until BLOK, this just sets the default values
@@ -585,7 +585,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 			}
 
 			// --== Poly-Based Vertex Mapping ==--
-			if (cLyr.Polys[0].Normals.NormalMapName != wxEmptyString){
+			if (cLyr.Polys[0].NormalMapName != wxEmptyString){
 				g_modelViewer->SetStatusText(wxT("LWO Export: Writing Poly-Based Vertex Maps..."));
 				// ===================================================
 				//VMPA		// Vertex Map Parameters, Always Preceeds a VMAP & VMAD. 4bytes: Size, then Num Vars (2) * 4 bytes.
@@ -611,7 +611,7 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 				u16 = MSB2(3);
 				f.Write(reinterpret_cast<char *>(&u16), 2);
 				vmadSize += 6;
-				wxString NormMapName = cLyr.Polys[0].Normals.NormalMapName;
+				wxString NormMapName = cLyr.Polys[0].NormalMapName;
 				NormMapName += wxT('\0');
 				if (fmod((float)NormMapName.length(), 2.0f) > 0)
 					NormMapName.Append(wxT('\0'));
@@ -662,10 +662,14 @@ size_t WriteLWObject(wxString filename, LWObject Object) {
 			clipSize += 8;
 
 			wxString ImgName = wxEmptyString;
+			wxString ImgPath = wxEmptyString;
 			if (modelExport_LW_PreserveDir == true){
-				ImgName += wxT("Images/");
+				ImgName += wxT("Images") + SLASH;
 			}
-			ImgName += wxString(cImg.Source + SLASH + cImg.Filename + wxString(wxT(".tga")));
+			if (modelExport_PreserveDir == true){
+				ImgPath = cImg.Source.Append(SLASH);
+			}
+			ImgName += wxString(ImgPath + cImg.Filename + wxString(wxT(".tga")));
 			ImgName += wxT('\0');
 			ImgName.Replace(wxT("\\"),wxT("/"));
 
@@ -1897,7 +1901,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 				Poly.SurfTagID = (uint32)Object.PartNames.size() + SurfCounter;
 				//Poly.Normals.polygon = (uint32)Layer.Polys.size();
 				wxString NormName = wxEmptyString; //Layer.Name + wxString(wxT("_NormalMap"));
-				Poly.Normals.NormalMapName = NormName;
+				Poly.NormalMapName = NormName;
 				Surface.NormalMapName = NormName;
 				Layer.Polys.push_back(Poly);
 			}
@@ -2188,7 +2192,7 @@ LWObject GatherM2forLWO(Attachment *att, Model *m, bool init, wxString fn, LWSce
 								Poly.PartTagID = partID;
 								Poly.SurfTagID = (uint32)Object.PartNames.size() + SurfCounter;
 								//Poly.Normals.polygon = (uint32)Layer.Polys.size();
-								Poly.Normals.NormalMapName = wxEmptyString; //Layer.Name + wxString(wxT("_NormalMap"));
+								Poly.NormalMapName = wxEmptyString; //Layer.Name + wxString(wxT("_NormalMap"));
 								Layer.Polys.push_back(Poly);
 							}
 							SurfCounter++;
@@ -2605,8 +2609,9 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 	uint32 SurfCounter = 0;
 
 	// Process Groups
-	g_modelViewer->SetStatusText(wxT("Processing Groups..."));
+	g_modelViewer->SetStatusText(wxString::Format(wxT("Processing %i Groups..."), m->nGroups));
 	for (size_t g=0;g<m->nGroups; g++) {
+		g_modelViewer->SetStatusText(wxString::Format(wxT("Processing Group %i of %i..."), g, m->nGroups));
 		WMOGroup *group = &m->groups[g];
 		//uint32 GPolyCounter = 0;
 
@@ -2659,7 +2664,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 				LWFilename.Empty();
 				LWFilename << Path1<<SLASH<<Path2<<SLASH<<Name;
 			}
-			//LWFilename = LWFilename.BeforeLast('.') + wxT(".tga");
+			//LWFilename = LWFilename.AfterLast(SLASH);
 			SaveTexture2(Texture,RootDir.BeforeLast(SLASH),wxT("LWO"),wxT("tga"));
 
 			LWSurf_Image SurfColor_Image = LWSurf_Image(ClipImage.TagID,LW_TEXTUREAXIS_UV,0.0f,0.0f);
@@ -2729,17 +2734,20 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 					size_t b = group->IndiceToVerts[a];
 					//wxLogMessage(wxT("Group: %i, a: %i, b:%i, Final Indice: %i"),g,a,b,Vert2Point[b]);
 					Poly.PolyData.indice[x] = Vert2Point[b];
+					Poly.Normals.indice[x] = Vert2Point[b];
 
 					// Normal Indice
-					Poly.Normals.indice[x] = Vert2Point[b];
-					Poly.Normals.direction[x].x = group->normals[b].x;
-					Poly.Normals.direction[x].y = group->normals[b].z;
-					Poly.Normals.direction[x].z = -group->normals[b].y;
+					Vec3D nvdir;
+					nvdir.x = group->normals[b].x;
+					nvdir.y = group->normals[b].z;
+					nvdir.z = -group->normals[b].y;
+					Poly.Normals.direction[x] = nvdir;
 				}
 				Poly.PartTagID = g;
 				Poly.SurfTagID = m->nGroups + SurfCounter;
-				Poly.Normals.polygon = (uint32)Layer.Polys.size();
-				Poly.Normals.NormalMapName = Layer.Name + wxString(wxT("_NormalMap"));
+				Poly.Normals.polygon = Layer.Polys.size();
+				Poly.NormalMapName = Layer.Name + wxString(wxT("_NormalMap"));
+				//wxLogMessage(wxT("Normal Data: Poly %i, i1:%i, i2:%i, i3:%i\nND	VectorDir i1: X:%f, Y:%f, Z:%f\nND	VectorDir i2: X:%f, Y:%f, Z:%f\nND	VectorDir i3: X:%f, Y:%f, Z:%f"),Layer.Polys.size(),Poly.Normals.indice[0],Poly.Normals.indice[1],Poly.Normals.indice[2],Poly.Normals.direction[0].x,Poly.Normals.direction[0].y,Poly.Normals.direction[0].z,Poly.Normals.direction[1].x,Poly.Normals.direction[1].y,Poly.Normals.direction[1].z,Poly.Normals.direction[2].x,Poly.Normals.direction[2].y,Poly.Normals.direction[2].z);
 				Layer.Polys.push_back(Poly);
 			}
 			SurfCounter++;
@@ -2825,7 +2833,7 @@ LWObject GatherWMOforLWO(WMO *m, const char *fn, LWScene &scene){
 				scene.Objects.push_back(doodadset);
 
 				// Load the doodads
-				m->doodadset = ds;
+				m->doodadset = (int)ds;
 				m->updateModels();
 
 				wxLogMessage(wxT("Processing Doodadset %i: %s, Num Doodads in set: %i, Starts: %i"),ds, m->doodadsets[ds].name,m->doodadsets[ds].size,m->doodadsets[ds].start);

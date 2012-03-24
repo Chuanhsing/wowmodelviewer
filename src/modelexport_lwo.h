@@ -100,7 +100,6 @@ struct PolyChunk {
 
 // Polygon Normal
 struct PolyNormal {
-	wxString NormalMapName;
 	size_t indice[3];
 	size_t polygon;
 	Vec3D direction[3];		// This is the direction the polygon's normal should point towards.	
@@ -372,8 +371,12 @@ struct LWPoint {
 struct LWPoly {
 	PolyChunk PolyData;
 	PolyNormal Normals;
+	wxString NormalMapName;
 	size_t PartTagID;
 	size_t SurfTagID;
+	LWPoly(){
+		NormalMapName = wxEmptyString;
+	}
 };
 
 // -= Lightwave Chunk Structures =-
@@ -589,12 +592,14 @@ struct LWObject {
 // --== Writing Functions ==--
 // VX is Lightwave Shorthand for any Point Number, because Lightwave stores points differently if they're over a certain threshold.
 void LW_WriteVX(wxFFileOutputStream &f, size_t p, uint32 &Size){
+	// Mask the data if we're running 64-bit
 	uint32 q;
 	if (sizeof(p)>sizeof(uint32)){
-		q = (uint32)(p & 0x0000FFFFFFFF);
+		q = (uint32)(p & 0x00000000FFFFFFFF);
 	}else{
 		q = (uint32)p;
 	}
+	// Write the Point Data
 	if (q <= 0xFF00){
 		uint16 indice = MSB2(q & 0x0000FFFF);
 		f.Write(reinterpret_cast<char *>(&indice),2);

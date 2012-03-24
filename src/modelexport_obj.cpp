@@ -589,7 +589,7 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 			WMOBatch *batch = &m->groups[i].batches[j];
 			WMOMaterial *mat = &m->mat[batch->texture];
 
-			wxString outname = file;
+			wxString outname = file.AfterLast(SLASH).BeforeLast('.');
 
 			bool nomatch = true;
 			for (size_t t=0;t<=m->nTextures; t++) {
@@ -601,7 +601,6 @@ void ExportOBJ_WMO(WMO *m, wxString file)
 				}
 			}
 			if (nomatch == true){
-				outname = outname.AfterLast(SLASH);
 				texarray[mat->tex] = outname << wxString::Format(wxT("_Material_%03i"), mat->tex);
 			}
 		}

@@ -69,16 +69,24 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID = wxEmptyStr
 		return;
 	if (outdir == wxEmptyString)
 		return;
+	// Add a slash to our directory if it doesn't end with one.
+	if (outdir.Last() != SLASH)
+		outdir = outdir.Append(SLASH);
 
-	//wxLogMessage(wxT("Outdir: %s"),outdir);
+	//wxLogMessage(wxT("Starting Outdir: %s"),outdir);
+	//wxLogMessage(wxT("File Input: %s"),file);
 
 	wxFileName fn(file);
-	if (fn.GetExt().Lower() != wxT("blp"))
+	if (fn.GetExt().Lower() != wxT("blp")){
+		wxLogMessage(wxT("SaveTexture2 Error: Wrong Extension Found: %s"),fn.GetExt().Lower());
 		return;
+	}
 	TextureID temptex = texturemanager.add(file);
 	Texture &tex = *((Texture*)texturemanager.items[temptex]);
-	if (tex.w == 0 || tex.h == 0)
+	if (tex.w == 0 || tex.h == 0){
+		wxLogMessage(wxT("SaveTexture2 Error: Tex Width or Height == 0. W:%i, H:%i"),tex.w, tex.h);
 		return;
+	}
 
 	wxString temp;
 
@@ -108,10 +116,10 @@ void SaveTexture2(wxString file, wxString outdir, wxString ExportID = wxEmptyStr
 			outdir.Empty();
 			outdir = a;
 		}
+		//wxLogMessage(wxT("LWO Image Outdir: %s"),outdir);
 	// Wavefront OBJ
 	}else if (ExportID.IsSameAs(wxT("OBJ"))){
 	}
-	//wxLogMessage(wxT("LWO Image Outdir: %s"),outdir);
 
 	// Restore WoW's content directories for this image.
 	if (modelExport_PreserveDir == true){

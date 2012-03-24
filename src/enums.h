@@ -855,7 +855,8 @@ enum SheathTypes
 enum Version
 {
 	VERSION_WOTLK = 30000,
-	VERSION_CATACLYSM = 40000
+	VERSION_CATACLYSM = 40000,
+	VERSION_MOP = 50000
 };
 
 #endif
