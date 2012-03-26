@@ -370,17 +370,19 @@ void searchMPQs(bool firstTime)
 		// sets 0
 		wxT("enUS"), wxT("koKR"), wxT("frFR"), wxT("deDE"), 
 		wxT("zhCN"), wxT("zhTW"), wxT("esES"), wxT("esMX"), wxT("ruRU"),
-		wxT("jaJP"), wxT("ptBR"),
+		wxT("jaJP"), wxT("ptBR"), wxT("itIT"), 
 		// sets 1
 		wxT("enGB"), wxEmptyString, wxEmptyString, wxEmptyString, 
 		wxT("enCN"), wxT("enTW"), wxEmptyString, wxEmptyString, wxEmptyString,
-		wxEmptyString, wxEmptyString
+		wxEmptyString, wxT("ptPT"), wxEmptyString
 		};
 	const int localeSets = WXSIZEOF(locales) / 2;
 	const wxString defaultArchives[] = {wxT("patch-9.MPQ"),wxT("patch-8.MPQ"),wxT("patch-7.MPQ"),wxT("patch-6.MPQ"),
 		wxT("patch-5.MPQ"),wxT("patch-4.MPQ"),wxT("patch-3.MPQ"),wxT("patch-2.MPQ"),wxT("patch.MPQ"),wxT("alternate.MPQ"),
-		wxT("expansion3.MPQ"),wxT("expansion2.MPQ"),wxT("expansion1.MPQ"),wxT("lichking.MPQ"),wxT("expansion.MPQ"),
-		wxT("world.MPQ"),wxT("world2.MPQ"),wxT("sound.MPQ"),wxT("art.MPQ"),wxT("common-3.MPQ"),wxT("common-2.MPQ"), wxT("common.MPQ")};
+		wxT("expansion4.MPQ"),wxT("expansion3.MPQ"),wxT("expansion2.MPQ"),wxT("expansion1.MPQ"),wxT("lichking.MPQ"),wxT("expansion.MPQ"),
+		wxT("world.MPQ"),wxT("world2.MPQ"),wxT("sound.MPQ"),wxT("art.MPQ"),wxT("common-3.MPQ"),wxT("common-2.MPQ"), wxT("common.MPQ"),
+		wxT("interface.MPQ"),wxT("itemtexture.MPQ"),wxT("misc.MPQ"),wxT("model.MPQ"),wxT("texture.MPQ")
+		};
 	const wxString localeArchives[] = {wxT("patch-%s-9.MPQ"),wxT("patch-%s-8.MPQ"),wxT("patch-%s-7.MPQ"),
 		wxT("patch-%s-6.MPQ"),wxT("patch-%s-5.MPQ"),wxT("patch-%s-4.MPQ"),wxT("patch-%s-3.MPQ"), wxT("patch-%s-2.MPQ"), 
 		wxT("patch-%s.MPQ"), wxT("expansion3-locale-%s.MPQ"), wxT("expansion2-locale-%s.MPQ"), 
