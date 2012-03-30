@@ -33,22 +33,39 @@ struct CharRegionCoords {
 	int xpos, ypos, xsize, ysize;
 };
 
-#define	REGION_FAC	2
-#define	REGION_PX	(256*REGION_FAC)
+#define	REGION_FAC_X	2
+#define REGION_FAC_Y  2
+#define	REGION_PX_WIDTH	(256*REGION_FAC_X)
+#define REGION_PX_HEIGHT (256*REGION_FAC_Y)
 
 const CharRegionCoords regions[NUM_REGIONS] =
 {
-	{0, 0, 256*REGION_FAC, 256*REGION_FAC},	// base
-	{0, 0, 128*REGION_FAC, 64*REGION_FAC},	// arm upper
-	{0, 64*REGION_FAC, 128*REGION_FAC, 64*REGION_FAC},	// arm lower
-	{0, 128*REGION_FAC, 128*REGION_FAC, 32*REGION_FAC},	// hand
-	{0, 160*REGION_FAC, 128*REGION_FAC, 32*REGION_FAC},	// face upper
-	{0, 192*REGION_FAC, 128*REGION_FAC, 64*REGION_FAC},	// face lower
-	{128*REGION_FAC, 0, 128*REGION_FAC, 64*REGION_FAC},	// torso upper
-	{128*REGION_FAC, 64*REGION_FAC, 128*REGION_FAC, 32*REGION_FAC},	// torso lower
-	{128*REGION_FAC, 96*REGION_FAC, 128*REGION_FAC, 64*REGION_FAC}, // pelvis upper
-	{128*REGION_FAC, 160*REGION_FAC, 128*REGION_FAC, 64*REGION_FAC},// pelvis lower
-	{128*REGION_FAC, 224*REGION_FAC, 128*REGION_FAC, 32*REGION_FAC}	// foot
+	{0, 0, 256*REGION_FAC_X, 256*REGION_FAC_Y},	// base
+	{0, 0, 128*REGION_FAC_X, 64*REGION_FAC_Y},	// arm upper
+	{0, 64*REGION_FAC_Y, 128*REGION_FAC_X, 64*REGION_FAC_Y},	// arm lower
+	{0, 128*REGION_FAC_Y, 128*REGION_FAC_X, 32*REGION_FAC_Y},	// hand
+	{0, 160*REGION_FAC_Y, 128*REGION_FAC_X, 32*REGION_FAC_Y},	// face upper
+	{0, 192*REGION_FAC_Y, 128*REGION_FAC_X, 64*REGION_FAC_Y},	// face lower
+	{128*REGION_FAC_X, 0, 128*REGION_FAC_X, 64*REGION_FAC_Y},	// torso upper
+	{128*REGION_FAC_X, 64*REGION_FAC_Y, 128*REGION_FAC_X, 32*REGION_FAC_Y},	// torso lower
+	{128*REGION_FAC_X, 96*REGION_FAC_Y, 128*REGION_FAC_X, 64*REGION_FAC_Y}, // pelvis upper
+	{128*REGION_FAC_X, 160*REGION_FAC_Y, 128*REGION_FAC_X, 64*REGION_FAC_Y},// pelvis lower
+	{128*REGION_FAC_X, 224*REGION_FAC_Y, 128*REGION_FAC_X, 32*REGION_FAC_Y}	// foot
+};
+
+const CharRegionCoords pandaren_regions[NUM_REGIONS] =
+{
+  {0, 0, 256*REGION_FAC_X*2, 256*REGION_FAC_Y},	// base
+  {0, 0, 128*REGION_FAC_X, 64*REGION_FAC_Y},	// arm upper
+  {0, 64*REGION_FAC_Y, 128*REGION_FAC_X, 64*REGION_FAC_Y},	// arm lower
+  {0, 128*REGION_FAC_Y, 128*REGION_FAC_X, 32*REGION_FAC_Y},	// hand
+  {128*REGION_FAC_X*2, 0, 256*REGION_FAC_X, 256*REGION_FAC_Y},	// face upper
+  {0, 192*REGION_FAC_Y, 128*REGION_FAC_X, 64*REGION_FAC_Y},	// face lower
+  {128*REGION_FAC_X, 0, 128*REGION_FAC_X, 64*REGION_FAC_Y},	// torso upper
+  {128*REGION_FAC_X, 64*REGION_FAC_Y, 128*REGION_FAC_X, 32*REGION_FAC_Y},	// torso lower
+  {128*REGION_FAC_X, 96*REGION_FAC_Y, 128*REGION_FAC_X, 64*REGION_FAC_Y}, // pelvis upper
+  {128*REGION_FAC_X, 160*REGION_FAC_Y, 128*REGION_FAC_X, 64*REGION_FAC_Y},// pelvis lower
+  {128*REGION_FAC_X, 224*REGION_FAC_Y, 128*REGION_FAC_X, 32*REGION_FAC_Y}	// foot
 };
 
 struct CharTextureComponent
@@ -65,7 +82,13 @@ struct CharTextureComponent
 
 struct CharTexture
 {
+  size_t race;
 	std::vector<CharTextureComponent> components;
+
+  CharTexture(size_t _race)
+    : race(_race)
+  {}
+
 	void addLayer(wxString fn, int region, int layer)
 	{
 		if (!fn || fn.length()==0)

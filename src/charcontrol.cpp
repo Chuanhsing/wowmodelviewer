@@ -774,7 +774,7 @@ void CharControl::RefreshModel()
 	if (cd.showEars) 
 		cd.geosets[CG_EARS] = 2;
 
-	CharTexture tex;
+	CharTexture tex(cd.race);
 
 	CharSectionsDB::Record rec = chardb.getRecord(0);
 
@@ -1201,7 +1201,7 @@ void CharControl::RefreshNPCModel()
 	if (cd.showEars) 
 		cd.geosets[CG_EARS] = 2;
 
-	CharTexture tex;
+	CharTexture tex(cd.race);
 
 	// Open first record to declare var
 	CharSectionsDB::Record rec = chardb.getRecord(0);
@@ -1904,6 +1904,10 @@ wxString CharControl::makeItemTexture(int region, const wxString name)
 //static unsigned char destbuf[REGION_PX*REGION_PX*4], tempbuf[REGION_PX*REGION_PX*4];
 void CharTexture::compose(TextureID texID)
 {
+  // scale for pandaren race.
+  size_t x_scale = race == 24 ? 2 : 1;
+  size_t y_scale = 1;
+
 	// if we only have one texture then don't bother with compositing
 	if (components.size()==1) {
 		Texture temp(components[0].name);
@@ -1914,12 +1918,13 @@ void CharTexture::compose(TextureID texID)
 	std::sort(components.begin(), components.end());
 
 	unsigned char *destbuf, *tempbuf;
-	destbuf = (unsigned char*)malloc(REGION_PX*REGION_PX*4);
-	memset(destbuf, 0, REGION_PX*REGION_PX*4);
+	destbuf = (unsigned char*)malloc(REGION_PX_WIDTH*x_scale*REGION_PX_HEIGHT*y_scale*4);
+	memset(destbuf, 0, REGION_PX_WIDTH*x_scale*REGION_PX_HEIGHT*y_scale*4);
 
 	for (std::vector<CharTextureComponent>::iterator it = components.begin(); it != components.end(); ++it) {
 		CharTextureComponent &comp = *it;
-		const CharRegionCoords &coords = regions[comp.region];
+    // pandaren with different regions.
+		const CharRegionCoords &coords = race == 24 ? pandaren_regions[comp.region] : regions[comp.region];
 		TextureID temptex = texturemanager.add(comp.name);
 		Texture &tex = *((Texture*)texturemanager.items[temptex]);
 
@@ -1958,7 +1963,7 @@ void CharTexture::compose(TextureID texID)
 		for (ssize_t y=0, dy=coords.ypos; y<coords.ysize; y++,dy++) {
 			for (ssize_t x=0, dx=coords.xpos; x<coords.xsize; x++,dx++) {
 				unsigned char *src = tempbuf + y*coords.xsize*4 + x*4;
-				unsigned char *dest = destbuf + dy*REGION_PX*4 + dx*4;
+				unsigned char *dest = destbuf + dy*REGION_PX_WIDTH*x_scale*4 + dx*4;
 		
 				// this is slow and ugly but I don't care
 				float r = src[3] / 255.0f;
@@ -1977,7 +1982,7 @@ void CharTexture::compose(TextureID texID)
 
 	// good, upload this to video
 	glBindTexture(GL_TEXTURE_2D, texID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, REGION_PX, REGION_PX, 0, GL_RGBA, GL_UNSIGNED_BYTE, destbuf);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, REGION_PX_WIDTH*x_scale, REGION_PX_HEIGHT*y_scale, 0, GL_RGBA, GL_UNSIGNED_BYTE, destbuf);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 	free(destbuf);
