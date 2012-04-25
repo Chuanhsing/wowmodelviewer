@@ -50,7 +50,7 @@
 
 // defines
 #define APP_TITLE wxT("World of Warcraft Model Viewer")
-#define APP_VERSION wxT("v0.7.0.4")			// Revision number should match the revision number on GoogleCode.
+#define APP_VERSION wxT("v0.7.0.4 MoP TestBuild 2")
 #define APP_BUILDNAME wxT("Bouncing Baracuda")	// Fun thing for developers to play with. Should change with each Main Release. (Not counting DEV WORK editions)
 /*
 	--==List of Build Name ideas==--	(Feel free to add!)
