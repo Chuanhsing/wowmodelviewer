@@ -50,11 +50,10 @@
 
 // defines
 #define APP_TITLE wxT("World of Warcraft Model Viewer")
-#define APP_VERSION wxT("v0.7.0.4 MoP TestBuild 2")
-#define APP_BUILDNAME wxT("Bouncing Baracuda")	// Fun thing for developers to play with. Should change with each Main Release. (Not counting DEV WORK editions)
+#define APP_VERSION wxT("v0.7.0.5")
+#define APP_BUILDNAME wxT("Chen Stormstout")	// Fun thing for developers to play with. Should change with each Main Release. (Not counting DEV WORK editions)
 /*
 	--==List of Build Name ideas==--	(Feel free to add!)
-	Bouncing Baracuda
 	Hoppin Jalapeno
 	Stealthed Rogue
 	Deadly Druid
@@ -70,6 +69,7 @@
 	Perky Pug
 
 	--== Used Build Names ==--			(So we don't repeat...)
+	Bouncing Baracuda
 	Wascally Wabbit
 	Gnome Punter
 	Fickle Felguard

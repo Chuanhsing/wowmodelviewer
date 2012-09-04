@@ -190,15 +190,14 @@ public:
 
 	/// Fields
 	static const size_t CharHairGeosetID = 0;	// uint
-	static const size_t Race = 1;				// uint
-	static const size_t Gender = 2;				// uint, 0 = Male, 1 = Female
-	static const size_t Section = 3;			// uint, ID unique between race, and gender.
-	static const size_t Geoset = 4;				// uint, Defines hairstyle, each number should be unique for that race / gender combo.
-	//static const size_t Bald = 5;				// uint, If this hairstyle bald or not .
+ static const size_t Race = 1; // uint
+ static const size_t Gender = 2;       // uint, 0 = Male, 1 = Female
+ static const size_t Section = 3;   // uint, ID unique between race, and gender.
+ static const size_t Geoset = 5;       // uint, Defines hairstyle, each number should be unique for that race / gender combo.
+  static const size_t Bald = 7;
 
-	Record getByParams(unsigned int race, unsigned int gender, unsigned int section);
-	int getGeosetsFor(unsigned int race, unsigned int gender);
-};
+ Record getByParams(unsigned int race, unsigned int gender, unsigned int section);
+ int getGeosetsFor(unsigned int race, unsigned int gender);};
 
 // As specified in http://www.madx.dk/wowdev/wiki/index.php?title=CharSections.dbc
 class CharSectionsDB: public DBCFile

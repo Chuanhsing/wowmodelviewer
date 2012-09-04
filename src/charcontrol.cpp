@@ -894,23 +894,23 @@ void CharControl::RefreshModel()
 	
 	}
 
-	// select hairstyle geoset(s)
-	for (CharHairGeosetsDB::Iterator it = hairdb.begin(); it != hairdb.end(); ++it) {
-		if (it->getUInt(CharHairGeosetsDB::Race)==cd.race && it->getUInt(CharHairGeosetsDB::Gender)==cd.gender) {
-			unsigned int id = it->getUInt(CharHairGeosetsDB::Geoset);
-			unsigned int section = it->getUInt(CharHairGeosetsDB::Section);
+ // select hairstyle geoset(s)
+ for (CharHairGeosetsDB::Iterator it = hairdb.begin(); it != hairdb.end(); ++it) {
+  if (it->getUInt(CharHairGeosetsDB::Race)==cd.race &&
+               it->getUInt(CharHairGeosetsDB::Gender)==cd.gender &&
+               it->getUInt(CharHairGeosetsDB::Section)==cd.hairStyle)
+       {
+   unsigned int geosetId = it->getUInt(CharHairGeosetsDB::Geoset);
+         bald = it->getUInt(CharHairGeosetsDB::Bald) != 0;
 
-			if (id!=0) {
-				for (size_t j=0; j<model->geosets.size(); j++) {
-					if (model->geosets[j].id == id) 
-						model->showGeosets[j] = ((cd.hairStyle == section) && showHair);
-				}
-
-			} else if (cd.hairStyle==section) {
-				bald = true;
-			}
-		}
-	}
+         for (size_t j=0; j<model->geosets.size(); j++) {
+               if (model->geosets[j].id == geosetId)
+                 model->showGeosets[j] = showHair;
+               else if (model->geosets[j].id >= 1 && model->geosets[j].id <= cd.maxHairStyle)
+                 model->showGeosets[j] = false;
+         }
+  }
+ }
 #if 0 // for worgen female
 	if (gameVersion >= VERSION_CATACLYSM && cd.race == RACE_WORGEN && cd.gender == GENDER_FEMALE) { // female worgen 
 		for(unsigned int i=1; i<=21; i++) {
